@@ -21,6 +21,9 @@ func TestGenerateArchiveName(t *testing.T) {
 		{"", "2024-06-01-12-00", "", "", "", false, true, "ARCHIVE-2024-06-01-12-00", "ARCHIVE-2024-06-01-12-00_update=2024-06-01-12-00.zip", "incremental no git, no note"},
 		{"", "2024-06-01-12-00", "", "", "", false, false, "", "2024-06-01-12-00.zip", "full no git, no note"},
 		{"", "2024-06-01-12-00", "", "", "", true, false, "", "2024-06-01-12-00.zip", "full git, no branch/hash"},
+		{"", "2024-06-01-12-00", "", "", "test note", false, false, "", "2024-06-01-12-00=test note.zip", "full with note containing spaces"},
+		{"", "2024-06-01-12-00", "", "", "test-note", false, true, "ARCHIVE-2024-06-01-12-00", "ARCHIVE-2024-06-01-12-00_update=2024-06-01-12-00=test-note.zip", "incremental with note only"},
+		{"", "2024-06-01-12-00", "main", "abc123", "test note", true, false, "", "2024-06-01-12-00=main=abc123=test note.zip", "full with git and note with spaces"},
 	}
 	for _, tt := range tests {
 		got := GenerateArchiveName(tt.prefix, tt.timestamp, tt.gitBranch, tt.gitHash, tt.note, tt.isGit, tt.isIncremental, tt.baseName)

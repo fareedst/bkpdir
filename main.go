@@ -10,7 +10,6 @@ import (
 
 var (
 	dryRun bool
-	note   string
 )
 
 func main() {
@@ -20,7 +19,6 @@ func main() {
 	}
 
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "Show what would be done, but don't create archives")
-	rootCmd.PersistentFlags().StringVar(&note, "note", "", "Optional note for the archive name")
 
 	rootCmd.AddCommand(fullCmd())
 	rootCmd.AddCommand(incCmd())
@@ -33,9 +31,10 @@ func main() {
 }
 
 func fullCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "full",
+	cmd := &cobra.Command{
+		Use:   "full [NOTE]",
 		Short: "Create a full archive of the current directory",
+		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			cwd, err := os.Getwd()
 			if err != nil {
@@ -46,6 +45,10 @@ func fullCmd() *cobra.Command {
 			if err != nil {
 				fmt.Println("Error loading config:", err)
 				os.Exit(1)
+			}
+			note := ""
+			if len(args) > 0 {
+				note = args[0]
 			}
 			if err := CreateFullArchive(cfg, note, dryRun); err != nil {
 				fmt.Println("Error creating full archive:", err)
@@ -53,12 +56,14 @@ func fullCmd() *cobra.Command {
 			}
 		},
 	}
+	return cmd
 }
 
 func incCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "inc",
+	cmd := &cobra.Command{
+		Use:   "inc [NOTE]",
 		Short: "Create an incremental archive of the current directory",
+		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			cwd, err := os.Getwd()
 			if err != nil {
@@ -70,12 +75,17 @@ func incCmd() *cobra.Command {
 				fmt.Println("Error loading config:", err)
 				os.Exit(1)
 			}
+			note := ""
+			if len(args) > 0 {
+				note = args[0]
+			}
 			if err := CreateIncrementalArchive(cfg, note, dryRun); err != nil {
 				fmt.Println("Error creating incremental archive:", err)
 				os.Exit(1)
 			}
 		},
 	}
+	return cmd
 }
 
 func listCmd() *cobra.Command {
