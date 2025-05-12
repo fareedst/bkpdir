@@ -27,19 +27,14 @@
    - `GetGitShortHash(dir string) string`: Gets current commit hash
 
 3. **File System Operations**
-   - `ShouldExcludeFile(filePath string, patterns []string) bool`: Checks if file matches exclude patterns
-   - File listing is handled directly in `CreateFullArchive` and `CreateIncrementalArchive` using `filepath.Walk`
+   - `ShouldExcludeFile(filePath string, patterns []string) bool`: Checks if file matches exclude patterns using doublestar glob matching
+   - File walking is handled directly in `CreateFullArchive` and `CreateIncrementalArchive` using `filepath.Walk`
 
 4. **Archive Management**
    - `GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string, isGit, isIncremental bool, baseName string) string`: Generates archive filename
    - `ListArchives(archiveDir string) ([]Archive, error)`: Gets all archives in directory
    - `CreateFullArchive(cfg *Config, note string, dryRun bool) error`: Creates full archive
    - `CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error`: Creates incremental archive
-
-5. **Command Handlers**
-   - `fullCmd() *cobra.Command`: Handles full archive creation
-   - `incCmd() *cobra.Command`: Handles incremental archive creation
-   - `listCmd() *cobra.Command`: Lists all archives
 
 ## Main Application Structure
 
@@ -55,18 +50,20 @@
 2. **Workflow Implementation**
    - For full archive:
      1. Load config
-     2. Walk directory collecting files (excluding patterns)
-     3. Get git info if applicable
-     4. Generate archive name
-     5. Create zip archive (or simulate in dry-run)
+     2. Determine archive directory path
+     3. Walk directory collecting files (excluding patterns)
+     4. Get git info if applicable
+     5. Generate archive name
+     6. Create zip archive (or simulate in dry-run)
 
    - For incremental archive:
      1. Load config
-     2. Find most recent full archive
-     3. Get files changed since that archive
-     4. Get git info if applicable
-     5. Generate incremental archive name
-     6. Create zip archive (or simulate in dry-run)
+     2. Determine archive directory path
+     3. Find most recent full archive
+     4. Walk directory and collect files modified since the full archive
+     5. Get git info if applicable
+     6. Generate incremental archive name
+     7. Create zip archive (or simulate in dry-run)
 
    - For listing archives:
      1. Load config
@@ -80,9 +77,20 @@
      - Full: `[prefix-]timestamp[=branch=hash][=note].zip`
      - Incremental: `baseName_update=timestamp[=branch=hash][=note].zip`
 
-The main differences from the original architecture are:
-1. File listing is integrated into archive creation functions rather than being separate
-2. Configuration is simpler with just three fields
-3. Archive management functions are more focused on the specific needs of the application
-4. The CLI interface is implemented using `cobra` with a simpler structure
-5. File exclusion uses `doublestar` for more powerful glob pattern matching
+## Testing Architecture
+
+1. **Unit Tests**
+   - `TestGenerateArchiveName`: Verifies archive naming for various scenarios
+   - `TestShouldExcludeFile`: Tests file exclusion patterns
+   - `TestDefaultConfig` and `TestLoadConfig`: Verify configuration management
+
+2. **Integration Tests**
+   - `TestFullCmdWithNote`: Tests full archive command with various notes
+   - `TestIncCmdWithNote`: Tests incremental archive command with various notes
+   - `TestCmdArgsValidation`: Validates command-line argument handling
+
+3. **Test Approach**
+   - Uses temporary directories for testing
+   - Simulates user environment with test files and directories
+   - Tests both dry-run and actual execution modes
+   - Verifies correct behavior for edge cases and error conditions
