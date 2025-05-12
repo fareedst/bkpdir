@@ -99,8 +99,12 @@ func listCmd() *cobra.Command {
 			}
 			archives, err := ListArchives(archiveDir)
 			if err != nil {
-				fmt.Println("Error listing archives:", err)
+				fmt.Println("Error:", err)
 				os.Exit(1)
+			}
+			if len(archives) == 0 {
+				fmt.Println("No archives found in", archiveDir)
+				return
 			}
 			for _, a := range archives {
 				fmt.Println(a.Name)

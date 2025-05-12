@@ -11,6 +11,14 @@ import (
 func ShouldExcludeFile(filePath string, patterns []string) bool {
 	for _, pattern := range patterns {
 		if strings.HasSuffix(pattern, "/") {
+			// Special handling for node_modules and similar patterns
+			if strings.HasPrefix(pattern, "**/") && len(pattern) > 4 {
+				dir := pattern[3:] // remove '**/'
+				if strings.Contains(filePath, dir) {
+					return true
+				}
+				continue
+			}
 			if strings.HasPrefix(filePath, pattern) {
 				return true
 			}

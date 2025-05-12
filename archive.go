@@ -28,12 +28,12 @@ func GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string, isG
 		name += prefix + "-"
 	}
 	name += timestamp
-	if isGit {
+	if isGit && gitBranch != "" && gitHash != "" {
 		name += "=" + gitBranch + "=" + gitHash
 	}
 	if isIncremental && baseName != "" {
 		name = baseName + "_update=" + timestamp
-		if isGit {
+		if isGit && gitBranch != "" && gitHash != "" {
 			name += "=" + gitBranch + "=" + gitHash
 		}
 	}
@@ -46,6 +46,11 @@ func GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string, isG
 
 // ListArchives lists all archives in the archive directory for the current source.
 func ListArchives(archiveDir string) ([]Archive, error) {
+	// Create archive directory if it doesn't exist
+	if err := os.MkdirAll(archiveDir, 0o755); err != nil {
+		return nil, fmt.Errorf("failed to create archive directory: %w", err)
+	}
+
 	var archives []Archive
 	dirEntries, err := os.ReadDir(archiveDir)
 	if err != nil {
