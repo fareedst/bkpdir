@@ -1,0 +1,11 @@
+# bkpdir config file
+.bkpdir.yml
+
+# bkpdir archives
+**/.bkpdir/
+
+# local archives
+*.gz
+
+# testing executable
+bkpdir

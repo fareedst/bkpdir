@@ -11,14 +11,15 @@ import (
 )
 
 type Archive struct {
-	Name          string
-	Path          string
-	CreationTime  time.Time
-	IsIncremental bool
-	GitBranch     string
-	GitHash       string
-	Note          string
-	BaseArchive   string // for incremental
+	Name               string
+	Path               string
+	CreationTime       time.Time
+	IsIncremental      bool
+	GitBranch          string
+	GitHash            string
+	Note               string
+	BaseArchive        string // for incremental
+	VerificationStatus *VerificationStatus
 }
 
 // GenerateArchiveName creates an archive name according to the spec.
@@ -32,7 +33,7 @@ func GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string, isG
 		name += "=" + gitBranch + "=" + gitHash
 	}
 	if isIncremental && baseName != "" {
-		name = baseName + "_update=" + timestamp
+		name = strings.TrimSuffix(baseName, ".zip") + "_update=" + timestamp
 		if isGit && gitBranch != "" && gitHash != "" {
 			name += "=" + gitBranch + "=" + gitHash
 		}
@@ -46,7 +47,7 @@ func GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string, isG
 
 // ListArchives lists all archives in the archive directory for the current source.
 func ListArchives(archiveDir string) ([]Archive, error) {
-	// Create archive directory if it doesn't exist
+	// Create archive directory if it doesn't exist //
 	if err := os.MkdirAll(archiveDir, 0o755); err != nil {
 		return nil, fmt.Errorf("failed to create archive directory: %w", err)
 	}
@@ -60,16 +61,25 @@ func ListArchives(archiveDir string) ([]Archive, error) {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".zip") {
 			continue
 		}
-		archives = append(archives, Archive{
-			Name: entry.Name(),
-			Path: filepath.Join(archiveDir, entry.Name()),
-		})
+		archive := Archive{
+			Name:          entry.Name(),
+			Path:          filepath.Join(archiveDir, entry.Name()),
+			IsIncremental: strings.Contains(entry.Name(), "_update="),
+		}
+
+		// Load verification status if available
+		status, err := LoadVerificationStatus(&archive)
+		if err == nil && status != nil {
+			archive.VerificationStatus = status
+		}
+
+		archives = append(archives, archive)
 	}
 	return archives, nil
 }
 
-// Stub: CreateFullArchive creates a full archive (to be implemented)
-func CreateFullArchive(cfg *Config, note string, dryRun bool) error {
+// CreateFullArchive creates a full archive
+func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -100,6 +110,10 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool) error {
 			return nil
 		}
 		if ShouldExcludeFile(rel, cfg.ExcludePatterns) {
+			return nil
+		}
+		// Skip directories
+		if info.IsDir() {
 			return nil
 		}
 		files = append(files, rel)
@@ -172,12 +186,64 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool) error {
 			}
 		}
 	}
+
+	// Close the zip writer to ensure all data is written
+	zipw.Close()
+	f.Close()
+
+	// Create archive object for verification
+	archive := &Archive{
+		Name:          archiveName,
+		Path:          archivePath,
+		CreationTime:  time.Now(),
+		IsIncremental: false,
+		GitBranch:     gitBranch,
+		GitHash:       gitHash,
+		Note:          note,
+	}
+
+	// Generate and store checksums
+	if !dryRun {
+		// Prepare absolute paths for checksum calculation
+		var absFiles []string
+		for _, rel := range files {
+			absFiles = append(absFiles, filepath.Join(cwd, rel))
+		}
+		checksums, err := GenerateChecksums(absFiles, cfg.Verification.ChecksumAlgorithm)
+		if err != nil {
+			return fmt.Errorf("failed to generate checksums: %w", err)
+		}
+
+		if err := StoreChecksums(archive, checksums); err != nil {
+			return fmt.Errorf("failed to store checksums: %w", err)
+		}
+	}
+
+	// Verify the archive if requested
+	if verify || cfg.Verification.VerifyOnCreate {
+		status, err := VerifyArchive(archivePath)
+		if err != nil {
+			return fmt.Errorf("verification failed: %w", err)
+		}
+
+		if !status.IsVerified {
+			return fmt.Errorf("archive verification failed: %v", status.Errors)
+		}
+
+		// Store verification status
+		if err := StoreVerificationStatus(archive, status); err != nil {
+			return fmt.Errorf("failed to store verification status: %w", err)
+		}
+
+		fmt.Println("Archive verified successfully")
+	}
+
 	fmt.Println("Created archive:", archivePath)
 	return nil
 }
 
-// Stub: CreateIncrementalArchive creates an incremental archive (to be implemented)
-func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
+// CreateIncrementalArchive creates an incremental archive
+func CreateIncrementalArchive(cfg *Config, note string, dryRun bool, verify bool) error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -199,43 +265,31 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 	if err != nil {
 		return err
 	}
-	var lastFull Archive
-	var lastFullTime time.Time
-	for _, a := range archives {
-		if !strings.Contains(a.Name, "_update=") {
-			// Parse timestamp from name
-			parts := strings.Split(a.Name, "=")
-			base := parts[0]
-			base = strings.TrimSuffix(base, ".zip")
-			base = strings.TrimPrefix(base, filepath.Base(archiveDir)+"-")
-			// Try to parse time
-			ts := base
-			if dash := strings.LastIndex(ts, "-"); dash != -1 {
-				// Try to get YYYY-MM-DD-hh-mm
-				if len(ts) >= 16 {
-					ts = ts[len(ts)-16:]
-				}
-			}
-			t, err := time.Parse("2006-01-02-15-04", ts)
-			if err == nil && t.After(lastFullTime) {
-				lastFull = a
-				lastFullTime = t
-			}
-		}
-	}
-	if lastFull.Name == "" {
-		return fmt.Errorf("no full archive found; create a full archive first")
+	if len(archives) == 0 {
+		return fmt.Errorf("no archives found in %s", archiveDir)
 	}
 
-	// Get mod time of last full archive
-	lastFullInfo, err := os.Stat(lastFull.Path)
+	// Find the most recent full archive
+	var latestFullArchive *Archive
+	for i := len(archives) - 1; i >= 0; i-- {
+		if !archives[i].IsIncremental {
+			latestFullArchive = &archives[i]
+			break
+		}
+	}
+	if latestFullArchive == nil {
+		return fmt.Errorf("no full archive found in %s", archiveDir)
+	}
+
+	// Get the modification time of the latest full archive
+	latestFullInfo, err := os.Stat(latestFullArchive.Path)
 	if err != nil {
 		return err
 	}
-	lastFullMod := lastFullInfo.ModTime()
+	latestFullTime := latestFullInfo.ModTime()
 
-	// Walk directory and collect changed files
-	var changed []string
+	// Walk directory and collect modified files
+	var modifiedFiles []string
 	err = filepath.Walk(cwd, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -250,13 +304,18 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 		if ShouldExcludeFile(rel, cfg.ExcludePatterns) {
 			return nil
 		}
-		if info.ModTime().After(lastFullMod) {
-			changed = append(changed, rel)
+		if info.ModTime().After(latestFullTime) {
+			modifiedFiles = append(modifiedFiles, rel)
 		}
 		return nil
 	})
 	if err != nil {
 		return err
+	}
+
+	if len(modifiedFiles) == 0 {
+		fmt.Println("No files modified since last full archive")
+		return nil
 	}
 
 	// Git info
@@ -269,15 +328,15 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 
 	// Archive name
 	timestamp := time.Now().Format("2006-01-02-15-04")
-	archiveName := GenerateArchiveName("", timestamp, gitBranch, gitHash, note, isGit, true, strings.TrimSuffix(lastFull.Name, ".zip"))
+	archiveName := GenerateArchiveName("", timestamp, gitBranch, gitHash, note, isGit, true, latestFullArchive.Name)
 	archivePath := filepath.Join(archiveDir, archiveName)
 
 	if dryRun {
-		fmt.Println("[Dry Run] Files changed since last full archive:")
-		for _, f := range changed {
+		fmt.Println("[Dry Run] Files to include:")
+		for _, f := range modifiedFiles {
 			fmt.Println("  ", f)
 		}
-		fmt.Println("[Dry Run] Incremental archive would be:", archivePath)
+		fmt.Println("[Dry Run] Archive would be:", archivePath)
 		return nil
 	}
 
@@ -290,7 +349,7 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 	zipw := zip.NewWriter(f)
 	defer zipw.Close()
 
-	for _, rel := range changed {
+	for _, rel := range modifiedFiles {
 		abs := filepath.Join(cwd, rel)
 		info, err := os.Lstat(abs)
 		if err != nil {
@@ -318,6 +377,54 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 			}
 		}
 	}
+
+	// Close the zip writer to ensure all data is written
+	zipw.Close()
+	f.Close()
+
+	// Create archive object for verification
+	archive := &Archive{
+		Name:          archiveName,
+		Path:          archivePath,
+		CreationTime:  time.Now(),
+		IsIncremental: true,
+		GitBranch:     gitBranch,
+		GitHash:       gitHash,
+		Note:          note,
+		BaseArchive:   latestFullArchive.Name,
+	}
+
+	// Generate and store checksums
+	if !dryRun {
+		checksums, err := GenerateChecksums(modifiedFiles, cfg.Verification.ChecksumAlgorithm)
+		if err != nil {
+			return fmt.Errorf("failed to generate checksums: %w", err)
+		}
+
+		if err := StoreChecksums(archive, checksums); err != nil {
+			return fmt.Errorf("failed to store checksums: %w", err)
+		}
+	}
+
+	// Verify the archive if requested
+	if verify || cfg.Verification.VerifyOnCreate {
+		status, err := VerifyArchive(archivePath)
+		if err != nil {
+			return fmt.Errorf("verification failed: %w", err)
+		}
+
+		if !status.IsVerified {
+			return fmt.Errorf("archive verification failed: %v", status.Errors)
+		}
+
+		// Store verification status
+		if err := StoreVerificationStatus(archive, status); err != nil {
+			return fmt.Errorf("failed to store verification status: %w", err)
+		}
+
+		fmt.Println("Archive verified successfully")
+	}
+
 	fmt.Println("Created incremental archive:", archivePath)
 	return nil
 }

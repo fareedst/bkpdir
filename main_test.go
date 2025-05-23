@@ -14,7 +14,7 @@ func TestFullCmdWithNote(t *testing.T) {
 	os.Chdir(tmpDir)
 
 	// Create a test config file
-	cfgPath := filepath.Join(tmpDir, ".bkpdir.yaml")
+	cfgPath := filepath.Join(tmpDir, ".bkpdir.yml")
 	os.WriteFile(cfgPath, []byte("archive_dir_path: ../.bkpdir\nuse_current_dir_name: true\n"), 0644)
 
 	// Create a test file to archive
@@ -78,7 +78,7 @@ func TestIncCmdWithNote(t *testing.T) {
 	t.Logf("Temp dir: %s", tmpDir)
 
 	// Create a test config file
-	cfgPath := filepath.Join(tmpDir, ".bkpdir.yaml")
+	cfgPath := filepath.Join(tmpDir, ".bkpdir.yml")
 	os.WriteFile(cfgPath, []byte("archive_dir_path: ../.bkpdir\nuse_current_dir_name: true\n"), 0644)
 
 	// Create a test file to archive
@@ -180,7 +180,7 @@ func TestCmdArgsValidation(t *testing.T) {
 	os.Chdir(tmpDir)
 
 	// Create a test config file
-	cfgPath := filepath.Join(tmpDir, ".bkpdir.yaml")
+	cfgPath := filepath.Join(tmpDir, ".bkpdir.yml")
 	os.WriteFile(cfgPath, []byte("archive_dir_path: ../.bkpdir\nuse_current_dir_name: true\n"), 0644)
 
 	// Create a test file to archive

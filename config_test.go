@@ -31,7 +31,7 @@ func TestLoadConfig(t *testing.T) {
 	}
 	// Write a config file
 	configYAML := "archive_dir_path: /tmp/archives\nuse_current_dir_name: false\nexclude_patterns:\n  - node_modules/\n  - '*.log'\n"
-	os.WriteFile(filepath.Join(dir, ".bkpdir.yaml"), []byte(configYAML), 0644)
+	os.WriteFile(filepath.Join(dir, ".bkpdir.yml"), []byte(configYAML), 0644)
 	cfg2, err := LoadConfig(dir)
 	if err != nil {
 		t.Fatalf("LoadConfig error: %v", err)
