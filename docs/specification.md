@@ -122,3 +122,24 @@ BkpDir is a command-line application for macOS and Linux that archives directory
 - Uses platform-independent path handling
 - Preserves file permissions and ownership where applicable
 - Handles file system differences between platforms
+
+## Binary Compatibility Requirements
+- **macOS Support**:
+  - Must maintain two separate binaries:
+    - ARM64 (Apple Silicon) binary
+    - AMD64 (Intel) binary
+  - Both binaries must be built and tested for each release
+  - Binary naming format: `bkpdir-macos-[arch]`
+
+- **Ubuntu Support**:
+  - Single binary compatible with Ubuntu 20.04, 22.04, and 24.04
+  - Binary must be built on Ubuntu 20.04 to ensure maximum compatibility
+  - Binary naming format: `bkpdir-ubuntu20.04`
+  - No version-specific optimizations that would break compatibility
+  - Must maintain backward compatibility with Ubuntu 20.04 system libraries
+
+- **Build Requirements**:
+  - All binaries must be built with Go 1.21 or later
+  - Build process must be automated via Makefile
+  - Each binary must include compile date in version information
+  - All binaries must pass verification tests on their target platforms

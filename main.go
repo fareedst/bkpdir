@@ -14,6 +14,7 @@ const (
 
 var (
 	compileDate = "2024-03-20" // This is a placeholder - actual value is set during build via -ldflags
+	platform    = "unknown"    // This is a placeholder - actual value is set during build via -ldflags
 )
 
 var (
@@ -27,8 +28,8 @@ func main() {
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
 		Short:   "Directory archiving CLI for macOS and Linux",
-		Long:    fmt.Sprintf("bkpdir version %s (compiled %s)\n\nBkpDir is a command-line tool for archiving directories on macOS and Linux. It supports full and incremental backups, customizable exclusion patterns, Git-aware archive naming, and archive verification.", version, compileDate),
-		Version: fmt.Sprintf("%s (compiled %s)", version, compileDate),
+		Long:    fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n\nBkpDir is a command-line tool for archiving directories on macOS and Linux. It supports full and incremental backups, customizable exclusion patterns, Git-aware archive naming, and archive verification.", version, compileDate, platform),
+		Version: fmt.Sprintf("%s (compiled %s) [%s]", version, compileDate, platform),
 		Example: `  # Create a full backup
   bkpdir full -n "Initial backup"
 
@@ -43,7 +44,7 @@ func main() {
 	}
 
 	// Set the version template to show version in help output
-	rootCmd.SetVersionTemplate(fmt.Sprintf("bkpdir version %s (compiled %s)\n", version, compileDate))
+	rootCmd.SetVersionTemplate(fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n", version, compileDate, platform))
 
 	// Global flags
 	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Show what would be done without creating archives")
@@ -299,7 +300,7 @@ func versionCmd() *cobra.Command {
 		Use:   "version",
 		Short: "Print the version number",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("bkpdir version %s (compiled %s)\n", version, compileDate)
+			fmt.Printf("bkpdir version %s (compiled %s) [%s]\n", version, compileDate, platform)
 		},
 	}
 }
