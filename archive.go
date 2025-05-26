@@ -61,10 +61,24 @@ func ListArchives(archiveDir string) ([]Archive, error) {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".zip") {
 			continue
 		}
+
+		// Get file info to extract creation time
+		archivePath := filepath.Join(archiveDir, entry.Name())
+		fileInfo, err := entry.Info()
+		if err != nil {
+			// If we can't get file info, use zero time
+			fileInfo = nil
+		}
+
 		archive := Archive{
 			Name:          entry.Name(),
-			Path:          filepath.Join(archiveDir, entry.Name()),
+			Path:          archivePath,
 			IsIncremental: strings.Contains(entry.Name(), "_update="),
+		}
+
+		// Set creation time from file modification time
+		if fileInfo != nil {
+			archive.CreationTime = fileInfo.ModTime()
 		}
 
 		// Load verification status if available
@@ -82,8 +96,17 @@ func ListArchives(archiveDir string) ([]Archive, error) {
 func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error {
 	cwd, err := os.Getwd()
 	if err != nil {
+		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
+	}
+
+	// Validate directory
+	if err := ValidateDirectoryPath(cwd, cfg); err != nil {
 		return err
 	}
+
+	// Create resource manager for cleanup
+	rm := NewResourceManager()
+	defer rm.CleanupWithPanicRecovery()
 
 	// Determine archive directory
 	archiveDir := cfg.ArchiveDirPath
@@ -91,7 +114,7 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
 	}
 	if !dryRun {
-		if err := os.MkdirAll(archiveDir, 0o755); err != nil {
+		if err := SafeMkdirAll(archiveDir, 0755, cfg); err != nil {
 			return err
 		}
 	}
@@ -120,13 +143,13 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 		return nil
 	})
 	if err != nil {
-		return err
+		return NewArchiveErrorWithCause("Failed to scan directory", 1, err)
 	}
 
 	// Git info
 	isGit := IsGitRepository(cwd)
 	gitBranch, gitHash := "", ""
-	if isGit {
+	if isGit && cfg.IncludeGitInfo {
 		gitBranch = GetGitBranch(cwd)
 		gitHash = GetGitShortHash(cwd)
 	}
@@ -134,25 +157,33 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 	// Archive name
 	timestamp := time.Now().Format("2006-01-02-15-04")
 	prefix := ""
-	if !cfg.UseCurrentDirName {
+	if cfg.UseCurrentDirName {
 		prefix = filepath.Base(cwd)
 	}
-	archiveName := GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note, isGit, false, "")
+	archiveName := GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note, isGit && cfg.IncludeGitInfo, false, "")
 	archivePath := filepath.Join(archiveDir, archiveName)
 
 	if dryRun {
+		formatter := NewOutputFormatter(cfg)
 		fmt.Println("[Dry Run] Files to include:")
 		for _, f := range files {
 			fmt.Println("  ", f)
 		}
-		fmt.Println("[Dry Run] Archive would be:", archivePath)
+		formatter.PrintDryRunArchive(archivePath)
 		return nil
 	}
 
+	// Create temporary file for atomic operation
+	tempPath := archivePath + ".tmp"
+	rm.AddTempFile(tempPath)
+
 	// Create zip archive
-	f, err := os.Create(archivePath)
+	f, err := os.Create(tempPath)
 	if err != nil {
-		return err
+		if IsDiskFullError(err) {
+			return NewArchiveError("Insufficient disk space to create archive", cfg.StatusDiskFull)
+		}
+		return NewArchiveErrorWithCause("Failed to create archive file", 1, err)
 	}
 	defer f.Close()
 	zipw := zip.NewWriter(f)
@@ -162,27 +193,36 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 		abs := filepath.Join(cwd, rel)
 		info, err := os.Lstat(abs)
 		if err != nil {
-			return err
+			return NewArchiveErrorWithCause("Failed to read file info", 1, err)
 		}
 		hdr, err := zip.FileInfoHeader(info)
 		if err != nil {
-			return err
+			return NewArchiveErrorWithCause("Failed to create file header", 1, err)
 		}
 		hdr.Name = rel
 		hdr.Method = zip.Deflate
 		w, err := zipw.CreateHeader(hdr)
 		if err != nil {
-			return err
+			if IsDiskFullError(err) {
+				return NewArchiveError("Insufficient disk space to create archive", cfg.StatusDiskFull)
+			}
+			return NewArchiveErrorWithCause("Failed to create file in archive", 1, err)
 		}
 		if !info.IsDir() {
 			rf, err := os.Open(abs)
 			if err != nil {
-				return err
+				if IsPermissionError(err) {
+					return NewArchiveError("Permission denied reading file", cfg.StatusPermissionDenied)
+				}
+				return NewArchiveErrorWithCause("Failed to open file", 1, err)
 			}
 			_, err = io.Copy(w, rf)
 			rf.Close()
 			if err != nil {
-				return err
+				if IsDiskFullError(err) {
+					return NewArchiveError("Insufficient disk space to create archive", cfg.StatusDiskFull)
+				}
+				return NewArchiveErrorWithCause("Failed to write file to archive", 1, err)
 			}
 		}
 	}
@@ -190,6 +230,14 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 	// Close the zip writer to ensure all data is written
 	zipw.Close()
 	f.Close()
+
+	// Atomic rename
+	if err := os.Rename(tempPath, archivePath); err != nil {
+		return NewArchiveErrorWithCause("Failed to finalize archive", 1, err)
+	}
+
+	// Remove temp file from cleanup list since operation succeeded
+	rm.RemoveResource(&TempFile{Path: tempPath})
 
 	// Create archive object for verification
 	archive := &Archive{
@@ -203,42 +251,43 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 	}
 
 	// Generate and store checksums
-	if !dryRun {
-		// Prepare absolute paths for checksum calculation
-		var absFiles []string
-		for _, rel := range files {
-			absFiles = append(absFiles, filepath.Join(cwd, rel))
-		}
-		checksums, err := GenerateChecksums(absFiles, cfg.Verification.ChecksumAlgorithm)
-		if err != nil {
-			return fmt.Errorf("failed to generate checksums: %w", err)
-		}
+	// Prepare absolute paths for checksum calculation
+	var absFiles []string
+	for _, rel := range files {
+		absFiles = append(absFiles, filepath.Join(cwd, rel))
+	}
+	checksums, err := GenerateChecksums(absFiles, cfg.Verification.ChecksumAlgorithm)
+	if err != nil {
+		return NewArchiveErrorWithCause("Failed to generate checksums", 1, err)
+	}
 
-		if err := StoreChecksums(archive, checksums); err != nil {
-			return fmt.Errorf("failed to store checksums: %w", err)
-		}
+	if err := StoreChecksums(archive, checksums); err != nil {
+		return NewArchiveErrorWithCause("Failed to store checksums", 1, err)
 	}
 
 	// Verify the archive if requested
 	if verify || cfg.Verification.VerifyOnCreate {
 		status, err := VerifyArchive(archivePath)
 		if err != nil {
-			return fmt.Errorf("verification failed: %w", err)
+			return NewArchiveErrorWithCause("Verification failed", 1, err)
 		}
 
 		if !status.IsVerified {
-			return fmt.Errorf("archive verification failed: %v", status.Errors)
+			return NewArchiveErrorWithContext("Archive verification failed", 1, "verify", archivePath, fmt.Errorf("errors: %v", status.Errors))
 		}
 
 		// Store verification status
 		if err := StoreVerificationStatus(archive, status); err != nil {
-			return fmt.Errorf("failed to store verification status: %w", err)
+			// Don't fail if we can't store status, just warn
+			fmt.Printf("Warning: Could not store verification status: %v\n", err)
 		}
 
 		fmt.Println("Archive verified successfully")
 	}
 
-	fmt.Println("Created archive:", archivePath)
+	// Use formatter for output
+	formatter := NewOutputFormatter(cfg)
+	formatter.PrintCreatedArchive(archivePath)
 	return nil
 }
 
