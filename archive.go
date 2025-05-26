@@ -251,12 +251,12 @@ func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error
 	}
 
 	// Generate and store checksums
-	// Prepare absolute paths for checksum calculation
-	var absFiles []string
+	// Prepare file mapping for checksum calculation
+	fileMap := make(map[string]string)
 	for _, rel := range files {
-		absFiles = append(absFiles, filepath.Join(cwd, rel))
+		fileMap[rel] = filepath.Join(cwd, rel)
 	}
-	checksums, err := GenerateChecksums(absFiles, cfg.Verification.ChecksumAlgorithm)
+	checksums, err := GenerateChecksums(fileMap, cfg.Verification.ChecksumAlgorithm)
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to generate checksums", 1, err)
 	}
@@ -445,7 +445,12 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool, verify bool
 
 	// Generate and store checksums
 	if !dryRun {
-		checksums, err := GenerateChecksums(modifiedFiles, cfg.Verification.ChecksumAlgorithm)
+		// Prepare file mapping for checksum calculation
+		fileMap := make(map[string]string)
+		for _, rel := range modifiedFiles {
+			fileMap[rel] = filepath.Join(cwd, rel)
+		}
+		checksums, err := GenerateChecksums(fileMap, cfg.Verification.ChecksumAlgorithm)
 		if err != nil {
 			return fmt.Errorf("failed to generate checksums: %w", err)
 		}

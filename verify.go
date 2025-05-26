@@ -59,13 +59,13 @@ func VerifyArchive(archivePath string) (*VerificationStatus, error) {
 }
 
 // GenerateChecksums generates checksums for a list of files
-func GenerateChecksums(files []string, algorithm string) (map[string]string, error) {
+func GenerateChecksums(fileMap map[string]string, algorithm string) (map[string]string, error) {
 	checksums := make(map[string]string)
 
-	for _, file := range files {
-		info, err := os.Lstat(file)
+	for relPath, absPath := range fileMap {
+		info, err := os.Lstat(absPath)
 		if err != nil {
-			return nil, fmt.Errorf("failed to stat file %s: %w", file, err)
+			return nil, fmt.Errorf("failed to stat file %s: %w", absPath, err)
 		}
 
 		// Skip directories
@@ -73,19 +73,19 @@ func GenerateChecksums(files []string, algorithm string) (map[string]string, err
 			continue
 		}
 
-		f, err := os.Open(file)
+		f, err := os.Open(absPath)
 		if err != nil {
-			return nil, fmt.Errorf("failed to open file %s: %w", file, err)
+			return nil, fmt.Errorf("failed to open file %s: %w", absPath, err)
 		}
 		defer f.Close()
 
 		hash := sha256.New()
 		if _, err := io.Copy(hash, f); err != nil {
-			return nil, fmt.Errorf("failed to calculate checksum for %s: %w", file, err)
+			return nil, fmt.Errorf("failed to calculate checksum for %s: %w", absPath, err)
 		}
 
-		// Use the base name of the file as the key
-		checksums[filepath.Base(file)] = hex.EncodeToString(hash.Sum(nil))
+		// Use the relative path as the key
+		checksums[relPath] = hex.EncodeToString(hash.Sum(nil))
 	}
 
 	return checksums, nil

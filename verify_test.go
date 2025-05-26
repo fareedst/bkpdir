@@ -53,7 +53,10 @@ func TestVerifyArchive(t *testing.T) {
 	zipFile.Close()
 
 	// Generate checksums before verification
-	checksums, err := GenerateChecksums([]string{testFile}, "sha256")
+	fileMap := map[string]string{
+		"test.txt": testFile,
+	}
+	checksums, err := GenerateChecksums(fileMap, "sha256")
 	if err != nil {
 		t.Fatalf("GenerateChecksums failed: %v", err)
 	}
