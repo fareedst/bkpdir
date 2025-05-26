@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	version = "1.0.0"
+	version = "1.1.0"
 )
 
 var (
@@ -236,7 +236,7 @@ the archive name and its verification status (VERIFIED, UNVERIFIED, or FAILED).`
 }
 
 func verifyCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "verify [ARCHIVE_NAME]",
 		Short: "Verify archive integrity",
 		Long: `Verify the integrity of archives. If no archive name is provided, verifies all archives.
@@ -276,6 +276,8 @@ Use the --checksum flag to include content verification.`,
 			}
 		},
 	}
+	cmd.Flags().BoolVarP(&checksum, "checksum", "c", false, "Verify archive content with checksums")
+	return cmd
 }
 
 func versionCmd() *cobra.Command {
@@ -310,14 +312,10 @@ func CreateFullArchiveEnhanced(ctx context.Context, cfg *Config, formatter *Outp
 	identical, existingArchive, err := CheckForIdenticalArchive(cwd, archiveDir, cfg.ExcludePatterns)
 	if err != nil {
 		// If we can't check, continue with creation (might be first archive)
-		fmt.Printf("Debug: Error checking for identical archive: %v\n", err)
 	} else if identical {
 		// Directory is identical to existing archive
-		fmt.Printf("Debug: Directory is identical to existing archive: %s\n", existingArchive)
 		formatter.PrintIdenticalArchive(existingArchive)
 		os.Exit(cfg.StatusDirectoryIsIdenticalToExistingArchive)
-	} else {
-		fmt.Printf("Debug: Directory is not identical to existing archive: %s\n", existingArchive)
 	}
 
 	// Create resource manager for cleanup
