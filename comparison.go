@@ -1,3 +1,7 @@
+// This file is part of bkpdir
+//
+// Package main provides directory comparison functionality for the BkpDir application.
+// It handles comparing directories to detect changes and identical states.
 package main
 
 import (

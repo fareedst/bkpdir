@@ -1,7 +1,7 @@
-# BkpDir: Directory Archiving CLI Application
+# BkpDir: Directory Archiving and File Backup CLI Application
 
 ## Overview
-BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
+BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories and backups of individual files. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives and file backups, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
 
 > **Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
 
@@ -37,7 +37,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - All errors must be properly handled (no unhandled return values)
 
 ### Error Handling Standards
-- All archive operations return structured errors with status codes
+- All archive and backup operations return structured errors with status codes
 - Enhanced disk space detection for various storage conditions
 - Panic recovery mechanisms prevent application crashes
 - Context support for operation cancellation and timeouts
@@ -96,17 +96,29 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
    - When enabled, includes branch and commit hash in archive names
    - Example: `project-2024-03-21-15-30=main=abc123d.zip`
 
-5. **Verification Configuration**
+5. **File Backup Configuration**
+   - **Backup Directory Path**
+     - Specifies where file backups are stored
+     - Default: `../.bkpdir` relative to current directory
+     - YAML key: `backup_dir_path`
+     - Backups maintain the source file's directory structure in the backup path
+   - **Use Current Directory Name for Files**
+     - Controls whether to include current directory name in the file backup path
+     - Default: `true`
+     - YAML key: `use_current_dir_name_for_files`
+     - Example: With file 'cmd/bkpdir/main.go', backup path becomes '../.bkpdir/cmd/bkpdir/main.go-2025-05-12-13-49'
+
+6. **Verification Configuration**
    - Controls archive verification behavior
    - YAML key: `verification`
    - Sub-options:
      - `verify_on_create`: Automatically verify archives after creation (default: false)
      - `checksum_algorithm`: Algorithm used for checksums (default: "sha256")
 
-6. **Status Code Configuration**
+7. **Status Code Configuration**
    - Configures exit status codes returned for different application conditions
    - Status codes have specific defaults if not specified (see [Immutable Specifications](immutable.md#configuration-defaults))
-   - YAML keys for status codes:
+   - YAML keys for directory operation status codes:
      - `status_created_archive`: Exit code when a new archive is successfully created (default: 0)
      - `status_failed_to_create_archive_directory`: Exit code when archive directory creation fails (default: 31)
      - `status_directory_is_identical_to_existing_archive`: Exit code when directory is identical to most recent archive (default: 0)
@@ -115,34 +127,133 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      - `status_permission_denied`: Exit code when directory access is denied (default: 22)
      - `status_disk_full`: Exit code when disk space is insufficient (default: 30)
      - `status_config_error`: Exit code when configuration is invalid (default: 10)
+   - YAML keys for file operation status codes:
+     - `status_created_backup`: Exit code when a new file backup is successfully created (default: 0)
+     - `status_failed_to_create_backup_directory`: Exit code when backup directory creation fails (default: 31)
+     - `status_file_is_identical_to_existing_backup`: Exit code when file is identical to most recent backup (default: 0)
+     - `status_file_not_found`: Exit code when source file does not exist (default: 20)
+     - `status_invalid_file_type`: Exit code when source file is not a regular file (default: 21)
+   - Example configuration:
+     ```yaml
+     # Directory operation status codes
+     status_created_archive: 0
+     status_failed_to_create_archive_directory: 31
+     status_directory_is_identical_to_existing_archive: 0
+     status_directory_not_found: 20
+     status_invalid_directory_type: 21
+     status_permission_denied: 22
+     status_disk_full: 30
+     status_config_error: 10
+     
+     # File operation status codes
+     status_created_backup: 0
+     status_failed_to_create_backup_directory: 31
+     status_file_is_identical_to_existing_backup: 0
+     status_file_not_found: 20
+     status_invalid_file_type: 21
+     ```
 
-7. **Output Format Configuration**
+8. **Output Format Configuration**
    - Configures printf-style format strings for all standard output
    - Configures template-based formatting with named placeholders and regex patterns
    - Format strings support text highlighting and structure formatting
    - Templates support both Go text/template syntax ({{.name}}) and placeholder syntax (%{name})
    - All user-facing text is extracted from code into configuration data
    - Format strings have specific defaults if not specified (see [Immutable Specifications](immutable.md#configuration-defaults))
-   - YAML keys for printf-style format strings:
+   - YAML keys for printf-style format strings for directory operations:
      - `format_created_archive`: Format for successful archive creation messages (default: "Created archive: %s\n")
      - `format_identical_archive`: Format for identical directory messages (default: "Directory is identical to existing archive: %s\n")
      - `format_list_archive`: Format for archive listing entries (default: "%s (created: %s)\n")
      - `format_config_value`: Format for configuration value display (default: "%s: %s (source: %s)\n")
      - `format_dry_run_archive`: Format for dry-run archive messages (default: "Would create archive: %s\n")
      - `format_error`: Format for error messages (default: "Error: %s\n")
-   - YAML keys for template-based format strings:
+   - YAML keys for printf-style format strings for file operations:
+     - `format_created_backup`: Format for successful file backup creation messages (default: "Created backup: %s\n")
+     - `format_identical_backup`: Format for identical file messages (default: "File is identical to existing backup: %s\n")
+     - `format_list_backup`: Format for file backup listing entries (default: "%s (created: %s)\n")
+     - `format_dry_run_backup`: Format for dry-run file backup messages (default: "Would create backup: %s\n")
+   - YAML keys for template-based format strings for directory operations:
      - `template_created_archive`: Template for successful archive creation messages (default: "Created archive: %{path}\n")
      - `template_identical_archive`: Template for identical directory messages (default: "Directory is identical to existing archive: %{path}\n")
      - `template_list_archive`: Template for archive listing entries (default: "%{path} (created: %{creation_time})\n")
      - `template_config_value`: Template for configuration value display (default: "%{name}: %{value} (source: %{source})\n")
      - `template_dry_run_archive`: Template for dry-run archive messages (default: "Would create archive: %{path}\n")
      - `template_error`: Template for error messages (default: "Error: %{message}\n")
+   - YAML keys for template-based format strings for file operations:
+     - `template_created_backup`: Template for successful file backup creation messages (default: "Created backup: %{path}\n")
+     - `template_identical_backup`: Template for identical file messages (default: "File is identical to existing backup: %{path}\n")
+     - `template_list_backup`: Template for file backup listing entries (default: "%{path} (created: %{creation_time})\n")
+     - `template_dry_run_backup`: Template for dry-run file backup messages (default: "Would create backup: %{path}\n")
    - YAML keys for regex patterns:
      - `pattern_archive_filename`: Named regex for parsing archive filenames (default: `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-(?P<hour>\d{2})-(?P<minute>\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\.zip`)
+     - `pattern_backup_filename`: Named regex for parsing file backup filenames (default: `(?P<filename>[^/]+)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-(?P<hour>\d{2})-(?P<minute>\d{2})(?:=(?P<note>.+))?`)
      - `pattern_config_line`: Named regex for parsing configuration display lines (default: `(?P<name>[^:]+):\s*(?P<value>[^(]+)\s*\(source:\s*(?P<source>[^)]+)\)`)
      - `pattern_timestamp`: Named regex for parsing timestamps (default: `(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})\s+(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})`)
    - Format strings support ANSI color codes and text formatting for enhanced readability
    - Template strings support conditional formatting and advanced text processing
+   - Template-based formatting provides rich data extraction from filenames using named regex groups
+   - Templates support both Go text/template syntax for complex logic and simple placeholder replacement
+   - Error messages in templates can include operation context for enhanced debugging information
+   - Example configuration:
+     ```yaml
+     # Printf-style formatting for directory operations
+     format_created_archive: "\033[32m✓ Created archive:\033[0m %s\n"
+     format_identical_archive: "\033[33m≡ Directory is identical to existing archive:\033[0m %s\n"
+     format_list_archive: "\033[36m%s\033[0m (created: \033[90m%s\033[0m)\n"
+     format_config_value: "\033[1m%s:\033[0m %s \033[90m(source: %s)\033[0m\n"
+     format_dry_run_archive: "\033[35m⚠ Would create archive:\033[0m %s\n"
+     format_error: "\033[31m✗ Error:\033[0m %s\n"
+     
+     # Printf-style formatting for file operations
+     format_created_backup: "\033[32m✓ Created backup:\033[0m %s\n"
+     format_identical_backup: "\033[33m≡ File is identical to existing backup:\033[0m %s\n"
+     format_list_backup: "\033[36m%s\033[0m (created: \033[90m%s\033[0m)\n"
+     format_dry_run_backup: "\033[35m⚠ Would create backup:\033[0m %s\n"
+     
+     # Template-based formatting with named placeholders and data extraction
+     template_created_archive: "\033[32m✓ Created archive:\033[0m %{path}\n"
+     template_identical_archive: "\033[33m≡ Directory %{prefix} is identical to archive from %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_list_archive: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
+     template_config_value: "\033[1m%{name}:\033[0m %{value} \033[90m(from %{source})\033[0m\n"
+     template_dry_run_archive: "\033[35m⚠ Would create archive for %{prefix} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_error: "\033[31m✗ Error in %{operation}:\033[0m %{message}\n"
+     
+     # Template-based formatting for file operations
+     template_created_backup: "\033[32m✓ Created backup:\033[0m %{path}\n"
+     template_identical_backup: "\033[33m≡ File %{filename} is identical to backup from %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_list_backup: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
+     template_dry_run_backup: "\033[35m⚠ Would create backup for %{filename} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     
+           # Named regex patterns for data extraction
+      pattern_archive_filename: "(?P<prefix>[^-]*)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\\.zip"
+      pattern_backup_filename: "(?P<filename>[^/]+)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<note>.+))?"
+      pattern_timestamp: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
+     
+     # Printf-style formatting for file operations
+     format_created_backup: "\033[32m✓ Created backup:\033[0m %s\n"
+     format_identical_backup: "\033[33m≡ File is identical to existing backup:\033[0m %s\n"
+     format_list_backup: "\033[36m%s\033[0m (created: \033[90m%s\033[0m)\n"
+     format_dry_run_backup: "\033[35m⚠ Would create backup:\033[0m %s\n"
+     
+     # Template-based formatting for directory operations
+     template_created_archive: "\033[32m✓ Created archive:\033[0m %{path}\n"
+     template_identical_archive: "\033[33m≡ Directory %{prefix} is identical to archive from %{year}-%{month}-%{day} (%{branch}@%{hash}):\033[0m %{path}\n"
+     template_list_archive: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
+     template_config_value: "\033[1m%{name}:\033[0m %{value} \033[90m(from %{source})\033[0m\n"
+     template_dry_run_archive: "\033[35m⚠ Would create archive for %{prefix} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_error: "\033[31m✗ Error in %{operation}:\033[0m %{message}\n"
+     
+     # Template-based formatting for file operations
+     template_created_backup: "\033[32m✓ Created backup:\033[0m %{path}\n"
+     template_identical_backup: "\033[33m≡ File %{filename} is identical to backup from %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_list_backup: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
+     template_dry_run_backup: "\033[35m⚠ Would create backup for %{filename} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     
+     # Named regex patterns for data extraction
+     pattern_archive_filename: "(?P<prefix>[^-]*)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\\.zip"
+     pattern_backup_filename: "(?P<filename>[^/]+)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<note>.+))?"
+     pattern_timestamp: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
+     ```
 
 ## Commands
 
@@ -206,7 +317,55 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Reports verification status using configurable format strings
 - Uses appropriate status codes for verification results
 
-### 5. Display Configuration
+### 5. Create File Backup
+- Creates a backup of a single file with robust error handling and resource cleanup
+- Usage: `bkpdir backup [FILE_PATH] [NOTE]`
+- Before creating a backup:
+  - Compares the file with its most recent backup using byte comparison
+  - If the file is identical to the most recent backup:
+    - Reports the existing backup path using `format_identical_backup` or `template_identical_backup` configuration
+    - Template formatting can extract and display rich information from backup filename using `pattern_backup_filename`
+    - Default format: "File is identical to existing backup: [PATH]"
+    - Template format can show: "File [filename] is identical to backup from [year]-[month]-[day]: [path]"
+    - Exits with `status_file_is_identical_to_existing_backup` status code
+- When a new backup is created:
+  - Reports success using `format_created_backup` or `template_created_backup` configuration
+  - Default format: "Created backup: [PATH]"
+  - Template format can include extracted filename and timestamp information
+  - Exits with `status_created_backup` status code
+- Backup naming format: `SOURCE_FILENAME-YYYY-MM-DD-hh-mm[=NOTE]`
+  - SOURCE_FILENAME is the base name of the original file
+  - YYYY-MM-DD-hh-mm is the timestamp of the backup
+  - NOTE is an optional note appended with an equals sign
+- The backup maintains the original file's directory structure in the backup path
+- NOTE is an optional positional argument provided by the user
+- All output uses configurable printf-style format strings or template-based formatting for consistency and customization
+- Error messages use `format_error` or `template_error` configuration setting with optional operation context
+- Enhanced backup features:
+  - **Atomic Operations**: Uses temporary files to ensure backup integrity
+  - **Resource Cleanup**: Automatically cleans up temporary files on success or failure
+  - **Context Support**: Supports operation cancellation and timeouts
+  - **Enhanced Error Detection**: Detects various disk space and permission conditions
+  - **Panic Recovery**: Recovers from unexpected errors without leaving temporary files
+  - **Thread Safety**: Safe for concurrent operations
+  - **Template Formatting**: Rich data extraction from backup filenames for enhanced display
+  - **Operation Context**: Error messages include operation context for better debugging
+  - **Enhanced File Operations**: Complete file system operations with comprehensive error handling
+
+### 6. List File Backups
+- Displays all backups associated with the specified file
+- Usage: `bkpdir --list [FILE_PATH]`
+- Shows each backup with its path (relative to current directory) and creation time using configurable format string or template
+- Default format: `.bkpdir/path/to/file.txt-2024-03-21-15-30=note (created: 2024-03-21 15:30:00)`
+- Output formatting uses `format_list_backup` configuration setting with printf-style specifications
+- Alternative template formatting uses `template_list_backup` with named placeholders and `pattern_backup_filename` for data extraction
+- Supports text highlighting and color formatting through ANSI escape codes in format strings and templates
+- Template-based formatting allows rich data extraction from backup filenames using named regex groups
+- Backups are sorted by creation time (most recent first)
+- Backups are organized by their source file paths
+- Handles errors gracefully with appropriate status codes using `format_error` or `template_error` configuration
+
+### 7. Display Configuration
 - Displays computed configuration values after processing configuration files
 - Usage: `bkpdir --config`
 - Shows each configuration value with its name, computed value (including defaults), and source file
@@ -219,14 +378,19 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Configuration files are processed from the `BKPDIR_CONFIG` environment variable path list
 - If `BKPDIR_CONFIG` is not set, uses the default search path
 - Includes display of all format string configurations, template configurations, and regex patterns with their current values and sources
+- Shows both directory archiving and file backup configuration options
 
 ## Global Options
 - **Dry-Run Mode**: When enabled with `--dry-run` flag:
-  - Shows the archive filename that would be created using `format_dry_run_archive` or `template_dry_run_archive` configuration
-  - Default format: "Would create archive: [PATH]"
-  - Template format can show: "Would create archive for [prefix] on [year]-[month]-[day]: [path]"
-  - Template-based formatting can extract and display rich information about the planned archive
-  - No actual archive is created
+  - For directory operations: Shows the archive filename that would be created using `format_dry_run_archive` or `template_dry_run_archive` configuration
+    - Default format: "Would create archive: [PATH]"
+    - Template format can show: "Would create archive for [prefix] on [year]-[month]-[day]: [path]"
+    - Template-based formatting can extract and display rich information about the planned archive
+  - For file operations: Shows the backup filename that would be created using `format_dry_run_backup` or `template_dry_run_backup` configuration
+    - Default format: "Would create backup: [PATH]"
+    - Template format can show: "Would create backup for [filename] on [year]-[month]-[day]: [path]"
+    - Template-based formatting can extract and display rich information about the planned backup
+  - No actual archive or backup is created
   - Includes resource cleanup verification in dry-run mode
   - All output uses configurable printf-style format strings or template-based formatting
 

@@ -1,3 +1,7 @@
+// This file is part of bkpdir
+
+// Package main provides tests for archive verification functionality.
+// It verifies integrity checking and checksum validation.
 package main
 
 import (
@@ -7,17 +11,24 @@ import (
 	"testing"
 )
 
-func TestVerifyArchive(t *testing.T) {
+// TestArchiveData holds test archive setup data
+type TestArchiveData struct {
+	TestFile    string
+	ArchivePath string
+	Archive     *Archive
+}
+
+func setupTestArchive(t *testing.T) (*TestArchiveData, func()) {
 	// Create a temporary directory for testing
 	tempDir, err := os.MkdirTemp("", "bkpdir-test-*")
 	if err != nil {
 		t.Fatalf("Failed to create temp directory: %v", err)
 	}
-	defer os.RemoveAll(tempDir)
 
 	// Create a test file
 	testFile := filepath.Join(tempDir, "test.txt")
 	if err := os.WriteFile(testFile, []byte("test content"), 0644); err != nil {
+		os.RemoveAll(tempDir)
 		t.Fatalf("Failed to create test file: %v", err)
 	}
 
@@ -31,20 +42,23 @@ func TestVerifyArchive(t *testing.T) {
 	// Create a simple zip archive
 	zipFile, err := os.Create(archivePath)
 	if err != nil {
+		os.RemoveAll(tempDir)
 		t.Fatalf("Failed to create zip file: %v", err)
 	}
-	defer zipFile.Close()
 
 	// Add the test file to the archive
 	zipWriter := zip.NewWriter(zipFile)
-	defer zipWriter.Close()
-
 	fileWriter, err := zipWriter.Create("test.txt")
 	if err != nil {
+		zipFile.Close()
+		os.RemoveAll(tempDir)
 		t.Fatalf("Failed to create file in zip: %v", err)
 	}
 
 	if _, err := fileWriter.Write([]byte("test content")); err != nil {
+		zipWriter.Close()
+		zipFile.Close()
+		os.RemoveAll(tempDir)
 		t.Fatalf("Failed to write to zip: %v", err)
 	}
 
@@ -52,22 +66,35 @@ func TestVerifyArchive(t *testing.T) {
 	zipWriter.Close()
 	zipFile.Close()
 
-	// Generate checksums before verification
-	fileMap := map[string]string{
-		"test.txt": testFile,
-	}
-	checksums, err := GenerateChecksums(fileMap, "sha256")
-	if err != nil {
-		t.Fatalf("GenerateChecksums failed: %v", err)
+	cleanup := func() {
+		os.RemoveAll(tempDir)
 	}
 
-	// Store checksums in the archive
-	if err := StoreChecksums(archive, checksums); err != nil {
-		t.Fatalf("StoreChecksums failed: %v", err)
+	data := &TestArchiveData{
+		TestFile:    testFile,
+		ArchivePath: archivePath,
+		Archive:     archive,
 	}
 
-	// Test verification
-	status, err := VerifyArchive(archivePath)
+	return data, cleanup
+}
+
+func TestVerifyArchive(t *testing.T) {
+	data, cleanup := setupTestArchive(t)
+	defer cleanup()
+
+	// Test basic verification
+	testBasicVerification(t, data)
+
+	// Test checksum verification
+	testChecksumVerification(t, data)
+
+	// Test status storage and loading
+	testStatusStorageAndLoading(t, data)
+}
+
+func testBasicVerification(t *testing.T, data *TestArchiveData) {
+	status, err := VerifyArchive(data.ArchivePath)
 	if err != nil {
 		t.Fatalf("VerifyArchive failed: %v", err)
 	}
@@ -75,27 +102,25 @@ func TestVerifyArchive(t *testing.T) {
 	if !status.IsVerified {
 		t.Errorf("Archive verification failed: %v", status.Errors)
 	}
+}
 
-	// Test storing and loading verification status
-	if err := StoreVerificationStatus(archive, status); err != nil {
-		t.Fatalf("StoreVerificationStatus failed: %v", err)
+func testChecksumVerification(t *testing.T, data *TestArchiveData) {
+	// Generate checksums before verification
+	fileMap := map[string]string{
+		"test.txt": data.TestFile,
 	}
-
-	loadedStatus, err := LoadVerificationStatus(archive)
+	checksums, err := GenerateChecksums(fileMap, "sha256")
 	if err != nil {
-		t.Fatalf("LoadVerificationStatus failed: %v", err)
+		t.Fatalf("GenerateChecksums failed: %v", err)
 	}
 
-	if loadedStatus == nil {
-		t.Fatalf("Loaded status is nil")
-	}
-
-	if !loadedStatus.IsVerified {
-		t.Errorf("Loaded status indicates verification failed: %v", loadedStatus.Errors)
+	// Store checksums in the archive
+	if err := StoreChecksums(data.Archive, checksums); err != nil {
+		t.Fatalf("StoreChecksums failed: %v", err)
 	}
 
 	// Test checksum verification
-	checksumStatus, err := VerifyChecksums(archivePath)
+	checksumStatus, err := VerifyChecksums(data.ArchivePath)
 	if err != nil {
 		t.Fatalf("VerifyChecksums failed: %v", err)
 	}
@@ -106,6 +131,33 @@ func TestVerifyArchive(t *testing.T) {
 
 	if !checksumStatus.HasChecksums {
 		t.Errorf("HasChecksums should be true")
+	}
+}
+
+func testStatusStorageAndLoading(t *testing.T, data *TestArchiveData) {
+	// First verify the archive to get a status
+	status, err := VerifyArchive(data.ArchivePath)
+	if err != nil {
+		t.Fatalf("VerifyArchive failed: %v", err)
+	}
+
+	// Test storing verification status
+	if err := StoreVerificationStatus(data.Archive, status); err != nil {
+		t.Fatalf("StoreVerificationStatus failed: %v", err)
+	}
+
+	// Test loading verification status
+	loadedStatus, err := LoadVerificationStatus(data.Archive)
+	if err != nil {
+		t.Fatalf("LoadVerificationStatus failed: %v", err)
+	}
+
+	if loadedStatus == nil {
+		t.Fatalf("Loaded status is nil")
+	}
+
+	if !loadedStatus.IsVerified {
+		t.Errorf("Loaded status indicates verification failed: %v", loadedStatus.Errors)
 	}
 }
 

@@ -16,6 +16,13 @@ This document outlines the testing requirements, architecture, and approach for 
     - Archive naming with prefix
     - Incremental archive naming
     - Various timestamp formats
+- `TestGenerateBackupName`: Tests file backup naming
+  - Validates backup filename generation with timestamps and notes
+  - Test cases:
+    - Basic backup naming without notes
+    - Backup naming with notes
+    - Various source file paths and extensions
+    - Timestamp format validation
 - `TestDefaultConfig` and `TestLoadConfig`: Tests configuration
   - Validates configuration loading and defaults
   - Tests configuration discovery with `BKPDIR_CONFIG` environment variable
@@ -27,6 +34,8 @@ This document outlines the testing requirements, architecture, and approach for 
   - Tests exclude patterns configuration
   - Tests verification configuration
   - Tests Git integration configuration
+  - Tests format string configuration (printf-style and template-based)
+  - Tests regex pattern configuration
 - `TestGetConfigSearchPath`: Tests configuration path discovery
   - Validates environment variable parsing
   - Tests hard-coded default path when environment variable not set
@@ -39,6 +48,9 @@ This document outlines the testing requirements, architecture, and approach for 
   - Tests default value handling and source attribution
   - Tests output format with name, value, and source
   - Tests display of status code configuration values
+  - Tests display of format string configuration values
+  - Tests display of template configuration values
+  - Tests display of regex pattern configuration values
   - Test cases:
     - Configuration with default values only
     - Configuration from single file
@@ -49,6 +61,29 @@ This document outlines the testing requirements, architecture, and approach for 
     - Status code configuration display
     - Exclude patterns configuration display
     - Verification configuration display
+    - Format string configuration display
+    - Template configuration display
+    - Regex pattern configuration display
+- `TestConfigModification`: Tests configuration value modification
+  - Validates configuration setting and persistence
+  - Tests type-safe value conversion and validation
+  - Tests YAML file creation and updates
+  - Tests nested configuration structure handling
+  - Test cases:
+    - Setting string configuration values (archive_dir_path, backup_dir_path, checksum_algorithm)
+    - Setting boolean configuration values (use_current_dir_name, include_git_info, verify_on_create)
+    - Setting integer configuration values (status codes)
+    - Creating new configuration file when none exists
+    - Updating existing configuration file
+    - Preserving existing configuration values when setting new ones
+    - Handling nested verification section (verify_on_create, checksum_algorithm)
+    - Error handling for invalid configuration keys
+    - Error handling for invalid boolean values
+    - Error handling for invalid integer values
+    - Error handling for file I/O errors
+    - Error handling for YAML parsing errors
+    - Configuration persistence verification
+    - Type validation for all supported configuration types
 - `TestShouldExcludeFile`: Tests file exclusion patterns
   - Validates doublestar glob pattern matching
   - Test cases:
@@ -64,6 +99,14 @@ This document outlines the testing requirements, architecture, and approach for 
     - Copy cancelled via context
     - Copy with timeout
     - Copy with already cancelled context
+    - Large file copying with periodic cancellation checks
+- `TestCopyFile`: Tests standard file copying
+  - Validates file copying without context
+  - Test cases:
+    - Successful file copy
+    - Permission preservation
+    - Error handling for missing source
+    - Error handling for permission denied
 - `TestCompareDirectories`: Tests directory comparison
   - Validates directory tree comparison functionality
   - Test cases:
@@ -74,6 +117,16 @@ This document outlines the testing requirements, architecture, and approach for 
     - Large directories
     - Directories with special characters
     - Directories with excluded files
+- `TestCompareFiles`: Tests file comparison
+  - Validates byte-by-byte file comparison
+  - Test cases:
+    - Identical files
+    - Different files
+    - Files with different sizes
+    - Empty files
+    - Large files
+    - Binary files
+    - Files with special characters
 - `TestListArchives`: Tests archive listing
   - Validates archive listing and sorting
   - Tests verification status display
@@ -83,6 +136,15 @@ This document outlines the testing requirements, architecture, and approach for 
     - Archives with Git information
     - Archives with notes
     - Archives with verification status
+    - Incremental archives
+- `TestListFileBackups`: Tests file backup listing
+  - Validates backup listing and sorting for specific files
+  - Test cases:
+    - Empty backup directory
+    - Multiple backups with different timestamps
+    - Backups with notes
+    - Backups in nested directory structures
+    - Sorting by creation time
 - `TestCreateFullArchive`: Tests full archive creation
   - Validates full archive creation with various scenarios
   - Tests status code exit behavior for different conditions
@@ -112,6 +174,8 @@ This document outlines the testing requirements, architecture, and approach for 
     - Archive cancelled via context
     - Archive with timeout
     - Context cancellation at various stages
+    - Cancellation during file scanning
+    - Cancellation during ZIP creation
 - `TestCreateFullArchiveWithContextAndCleanup`: Tests context-aware archive with cleanup
   - Validates most robust archive creation functionality
   - Combines context support with resource cleanup
@@ -120,6 +184,135 @@ This document outlines the testing requirements, architecture, and approach for 
     - Cancelled archive with proper cleanup
     - Timeout scenarios with cleanup verification
     - No resource leaks on cancellation
+- `TestCreateFileBackup`: Tests file backup creation
+  - Validates file backup creation with various scenarios
+  - Tests status code exit behavior for different conditions
+  - Test cases:
+    - Successful backup creation (should exit with `cfg.StatusCreatedBackup`)
+    - File identical to existing backup (should exit with `cfg.StatusFileIsIdenticalToExistingBackup`)
+    - File not found (should exit with `cfg.StatusFileNotFound`)
+    - Invalid file type (should exit with `cfg.StatusInvalidFileType`)
+    - Permission denied (should exit with `cfg.StatusPermissionDenied`)
+    - Disk full scenarios (should exit with `cfg.StatusDiskFull`)
+    - Backup directory creation failure (should exit with `cfg.StatusFailedToCreateBackupDirectory`)
+    - Configuration errors (should exit with `cfg.StatusConfigError`)
+    - Panic recovery scenarios
+- `TestCreateFileBackupWithContext`: Tests context-aware file backup creation
+  - Validates file backup creation with cancellation support
+  - Test cases:
+    - Successful backup with context
+    - Backup cancelled via context
+    - Backup with timeout
+    - Context cancellation during file copying
+    - Context cancellation during file comparison
+    - Already cancelled context handling
+- `TestCreateFileBackupWithContextAndCleanup`: Tests context-aware backup with cleanup
+  - Validates most robust backup creation functionality
+  - Combines context support with resource cleanup
+  - Test cases:
+    - Successful backup with context and cleanup
+    - Cancelled backup with proper cleanup
+    - Timeout scenarios with cleanup verification
+    - No resource leaks on cancellation
+    - Atomic operations with temporary files
+    - Cleanup verification after panic recovery
+- `TestCheckForIdenticalFileBackup`: Tests file backup comparison
+  - Validates file comparison with existing backups
+  - Test cases:
+    - File identical to most recent backup
+    - File different from existing backups
+    - No existing backups
+    - Multiple backups with different content
+    - Backup comparison with various file sizes
+- `TestTemplateFormatter`: Tests template-based formatting
+  - Validates template formatting with regex extraction
+  - Tests both Go text/template and placeholder syntax
+  - Test cases:
+    - `FormatWithTemplate()` with valid regex patterns
+    - `FormatWithTemplate()` with invalid regex patterns
+    - `FormatWithPlaceholders()` with valid data
+    - `FormatWithPlaceholders()` with missing data
+    - Template formatting for archive operations
+    - Template formatting for backup operations
+    - Template formatting for configuration display
+    - Template formatting for error messages with operation context
+    - ANSI color code handling in templates
+    - Fallback to placeholder formatting on template errors
+    - Named regex group extraction for archives and backups
+- `TestTemplateFormatterArchiveOperations`: Tests archive template formatting
+  - Validates template formatting for directory operations
+  - Test cases:
+    - `TemplateCreatedArchive()` with archive filename extraction
+    - `TemplateIdenticalArchive()` with archive metadata
+    - `TemplateListArchive()` with creation time formatting
+    - `TemplateDryRunArchive()` with planned archive information
+    - Archive filename parsing with Git information
+    - Archive filename parsing with notes
+    - Archive filename parsing with branch and hash
+    - Template error handling and fallback
+- `TestTemplateFormatterBackupOperations`: Tests backup template formatting
+  - Validates template formatting for file operations
+  - Test cases:
+    - `TemplateCreatedBackup()` with backup filename extraction
+    - `TemplateIdenticalBackup()` with backup metadata
+    - `TemplateListBackup()` with creation time formatting
+    - `TemplateDryRunBackup()` with planned backup information
+    - Backup filename parsing with notes
+    - Backup filename parsing with timestamps
+    - Template error handling and fallback
+- `TestTemplateFormatterCommonOperations`: Tests common template formatting
+  - Validates template formatting for configuration and errors
+  - Test cases:
+    - `TemplateConfigValue()` with conditional formatting
+    - `TemplateError()` with operation context
+    - Configuration source-based formatting
+    - Error context integration
+    - Template validation and error handling
+- `TestOutputFormatter`: Tests printf-style formatting
+  - Validates centralized output formatting
+  - Test cases:
+    - Format methods for all directory operations
+    - Format methods for all file operations
+    - Format methods for configuration and errors
+    - ANSI color code handling
+    - Format string validation
+    - Print methods for stdout/stderr routing
+    - Integration with template formatting
+- `TestOutputFormatterArchiveOperations`: Tests archive output formatting
+  - Validates printf-style formatting for directory operations
+  - Test cases:
+    - `FormatCreatedArchive()` with various paths
+    - `FormatIdenticalArchive()` with archive paths
+    - `FormatListArchive()` with timestamps
+    - `FormatDryRunArchive()` with planned paths
+    - Color formatting and ANSI codes
+    - Format string customization
+- `TestOutputFormatterBackupOperations`: Tests backup output formatting
+  - Validates printf-style formatting for file operations
+  - Test cases:
+    - `FormatCreatedBackup()` with various paths
+    - `FormatIdenticalBackup()` with backup paths
+    - `FormatListBackup()` with timestamps
+    - `FormatDryRunBackup()` with planned paths
+    - Color formatting and ANSI codes
+    - Format string customization
+- `TestEnhancedErrorHandling`: Tests enhanced error handling
+  - Validates structured error handling with operation context
+  - Test cases:
+    - `ArchiveError` creation with operation context
+    - `BackupError` creation with operation context
+    - Enhanced disk space error detection
+    - Error context preservation
+    - Template error formatting with operation context
+    - Panic recovery with error context
+        - Status code extraction from structured errors
+    - File different from existing backups
+    - No existing backups
+    - Multiple backups with different content
+    - Large file comparison
+    - Binary file comparison
+    - Files with special characters
+    - Permission denied during comparison
 - `TestCreateIncrementalArchive`: Tests incremental archive creation
   - Validates incremental archive functionality
   - Test cases:
@@ -137,6 +330,7 @@ This document outlines the testing requirements, architecture, and approach for 
     - Cleanup of both files and directories
     - Error-resilient cleanup (continues on individual failures)
     - Cleanup warnings logged to stderr
+    - Panic recovery during cleanup
 - `TestArchiveError`: Tests structured error handling
   - Validates ArchiveError functionality
   - Test cases:
@@ -144,6 +338,8 @@ This document outlines the testing requirements, architecture, and approach for 
     - Error interface implementation
     - Status code extraction
     - Error message formatting
+    - Error context preservation
+    - Error unwrapping
 - `TestIsDiskFullError`: Tests enhanced disk space detection
   - Validates disk full error detection
   - Test cases:
@@ -152,6 +348,27 @@ This document outlines the testing requirements, architecture, and approach for 
     - Multiple disk space indicators
     - Non-disk-full errors (should return false)
     - Nil error handling
+- `TestIsPermissionError`: Tests permission error detection
+  - Validates permission error detection
+  - Test cases:
+    - Various permission error messages
+    - Case-insensitive matching
+    - Multiple permission indicators
+    - Non-permission errors (should return false)
+- `TestValidateDirectoryPath`: Tests directory validation
+  - Validates directory path validation functionality
+  - Test cases:
+    - Valid directory paths
+    - Non-existent directories
+    - Files instead of directories
+    - Permission denied scenarios
+- `TestValidateFilePath`: Tests file validation
+  - Validates file path validation functionality
+  - Test cases:
+    - Valid file paths
+    - Non-existent files
+    - Directories instead of files
+    - Permission denied scenarios
 - `TestConfigurationDiscovery`: Tests configuration file discovery
   - Tests multiple configuration files with different precedence
   - Tests environment variable override behavior
@@ -160,6 +377,9 @@ This document outlines the testing requirements, architecture, and approach for 
   - Tests invalid configuration file handling
   - Tests configuration merging with defaults
   - Tests status code configuration precedence and merging
+  - Tests format string configuration precedence and merging
+  - Tests template configuration precedence and merging
+  - Tests regex pattern configuration precedence and merging
 - `TestStatusCodeConfiguration`: Tests status code configuration
   - Validates status code loading from YAML
   - Tests status code defaults
@@ -199,6 +419,11 @@ This document outlines the testing requirements, architecture, and approach for 
     - Archive naming with Git info disabled
     - Archive naming in non-Git directory
     - Archive naming with special branch names
+- `TestGitIntegrationInBackupNaming`: Tests Git info in backup operations
+  - Test cases:
+    - Backup creation in Git repository
+    - Backup creation in non-Git directory
+    - Git info handling in backup workflows
 
 ### Archive Verification Tests
 **Implementation**: `verify_test.go`
@@ -263,8 +488,22 @@ This document outlines the testing requirements, architecture, and approach for 
     - Custom format string with colors
     - Format string with special characters
     - Various path lengths and characters
+- `TestFormatCreatedBackup`: Tests backup creation message formatting
+  - Validates format string application for successful backup messages
+  - Test cases:
+    - Default format string
+    - Custom format string with colors
+    - Format string with special characters
+    - Various path lengths and characters
 - `TestFormatIdenticalArchive`: Tests identical directory message formatting
   - Validates format string application for identical directory messages
+  - Test cases:
+    - Default format string
+    - Custom format string with highlighting
+    - Format string with symbols and colors
+    - Various path formats
+- `TestFormatIdenticalBackup`: Tests identical file message formatting
+  - Validates format string application for identical file messages
   - Test cases:
     - Default format string
     - Custom format string with highlighting
@@ -277,6 +516,13 @@ This document outlines the testing requirements, architecture, and approach for 
     - Custom format string with color coding
     - Format string with timestamp formatting
     - Various path and time combinations
+- `TestFormatListBackup`: Tests backup listing entry formatting
+  - Validates format string application for backup list entries
+  - Test cases:
+    - Default format string with two parameters
+    - Custom format string with color coding
+    - Format string with timestamp formatting
+    - Various path and time combinations
 - `TestFormatConfigValue`: Tests configuration value display formatting
   - Validates format string application for configuration display
   - Test cases:
@@ -284,8 +530,15 @@ This document outlines the testing requirements, architecture, and approach for 
     - Custom format string with highlighting
     - Format string with source emphasis
     - Various configuration name/value combinations
-- `TestFormatDryRunArchive`: Tests dry-run message formatting
-  - Validates format string application for dry-run messages
+- `TestFormatDryRunArchive`: Tests dry-run archive message formatting
+  - Validates format string application for dry-run archive messages
+  - Test cases:
+    - Default format string
+    - Custom format string with warning indicators
+    - Format string with visual emphasis
+    - Various path formats
+- `TestFormatDryRunBackup`: Tests dry-run backup message formatting
+  - Validates format string application for dry-run backup messages
   - Test cases:
     - Default format string
     - Custom format string with warning indicators
@@ -298,16 +551,54 @@ This document outlines the testing requirements, architecture, and approach for 
     - Custom format string with error highlighting
     - Format string with symbols and colors
     - Various error message types
+- `TestPrintFunctions`: Tests direct printing functions
+  - Validates output to stdout and stderr
+  - Test cases:
+    - PrintCreatedArchive outputs to stdout
+    - PrintCreatedBackup outputs to stdout
+    - PrintIdenticalArchive outputs to stdout
+    - PrintIdenticalBackup outputs to stdout
+    - PrintListArchive outputs to stdout
+    - PrintListBackup outputs to stdout
+    - PrintConfigValue outputs to stdout
+    - PrintDryRunArchive outputs to stdout
+    - PrintDryRunBackup outputs to stdout
+    - PrintError outputs to stderr
+    - Output matches formatted strings
+- `TestFormatStringConfiguration`: Tests format string configuration loading
+  - Validates format string loading from YAML
+  - Tests format string defaults
+  - Tests format string precedence with multiple configuration files
+  - Test cases:
+    - Default format strings (should match immutable specification defaults)
+    - Custom format strings from configuration file
+    - Format string precedence with multiple files
+    - Invalid format strings (should use safe defaults)
+    - Missing format string fields (should use defaults)
+    - Format strings with ANSI escape codes
+    - Format strings with special characters
+- `TestFormatStringValidation`: Tests format string validation
+  - Validates printf-style format string compatibility
+  - Test cases:
+    - Valid format strings with correct parameter counts
+    - Invalid format strings with wrong parameter counts
+    - Format strings with unsupported format specifiers
+    - Format strings with malformed syntax
+    - Empty or nil format strings
+    - Format strings with escape sequences
 - `TestTemplateFormatter`: Tests template formatter functionality
   - Validates template-based formatting with named placeholders
   - Tests regex pattern extraction and template application
+  - Tests both Go text/template syntax and %{name} placeholder syntax
   - Test cases:
-    - Basic template string application
-    - Template strings with named placeholders
-    - Regex pattern extraction with named groups
-    - Template strings with Go text/template syntax
+    - Basic template string application with {{.name}} syntax
+    - Placeholder formatting with %{name} syntax
+    - Template strings with ANSI color codes
+    - Template strings with conditional logic
     - Invalid template strings (should fall back to safe defaults)
-    - Template strings with conditional formatting
+    - Empty template strings
+    - Template strings with multiple parameters
+    - Regex pattern integration with template formatting
 - `TestTemplateCreatedArchive`: Tests template-based archive creation formatting
   - Validates template formatting for archive creation messages
   - Test cases:
@@ -315,6 +606,41 @@ This document outlines the testing requirements, architecture, and approach for 
     - Template with regex pattern extraction
     - Template with conditional formatting
     - Template with archive metadata
+    - Default template string with path extraction
+    - Custom template string with prefix and timestamp extraction
+    - Template string with ANSI color codes
+    - Archive paths with notes
+    - Archive paths without notes
+    - Invalid archive path formats (should fall back gracefully)
+- `TestTemplateCreatedBackup`: Tests template-based backup creation formatting
+  - Validates template formatting for backup creation messages
+  - Test cases:
+    - Template with named placeholders
+    - Template with regex pattern extraction
+    - Template with conditional formatting
+    - Template with backup metadata
+    - Default template string with path extraction
+    - Custom template string with filename and timestamp extraction
+    - Template string with ANSI color codes
+    - Backup paths with notes
+    - Backup paths without notes
+    - Invalid backup path formats (should fall back gracefully)
+- `TestTemplateIdenticalArchive`: Tests template-based identical directory formatting
+  - Validates template formatting for identical directory messages
+  - Test cases:
+    - Template with archive filename parsing
+    - Template with Git information extraction
+    - Template with conditional formatting based on extracted data
+    - Archive paths with and without notes
+    - Various archive filename formats
+- `TestTemplateIdenticalBackup`: Tests template-based identical file formatting
+  - Validates template formatting for identical file messages
+  - Test cases:
+    - Default template string with path extraction
+    - Custom template string with rich backup information
+    - Template string with conditional formatting based on extracted data
+    - Backup paths with and without notes
+    - Various backup filename formats
 - `TestTemplateListArchive`: Tests template-based archive listing formatting
   - Validates template formatting for archive list entries
   - Test cases:
@@ -322,13 +648,70 @@ This document outlines the testing requirements, architecture, and approach for 
     - Template with Git information extraction
     - Template with timestamp formatting
     - Template with note display
-- `TestFormatWithTemplate`: Tests template application with regex extraction
-  - Validates template formatting with named regex groups
+    - Default template string with path and time parameters
+    - Custom template string with extracted prefix and timestamp data
+    - Template string with note extraction and display
+    - Various timestamp formats
+    - Archive paths with special characters
+    - Template formatting with missing data (graceful degradation)
+- `TestTemplateListBackup`: Tests template-based backup listing formatting
+  - Validates template formatting for backup list entries
+  - Test cases:
+    - Template with backup filename parsing
+    - Template with timestamp formatting
+    - Template with note display
+    - Template with file metadata
+    - Default template string with path and time parameters
+    - Custom template string with extracted filename and timestamp data
+    - Template string with note extraction and display
+    - Various timestamp formats
+    - Backup paths with special characters
+    - Template formatting with missing data (graceful degradation)
+- `TestTemplateConfigValue`: Tests template-based configuration display formatting
+  - Validates template formatting for configuration display
+  - Test cases:
+    - Default template string with three parameters
+    - Custom template string with conditional formatting based on source
+    - Template string with value type detection
+    - Various configuration name/value combinations
+    - Source highlighting and emphasis
+- `TestTemplateDryRunArchive`: Tests template-based dry-run archive formatting
+  - Validates template formatting for dry-run archive messages
+  - Test cases:
+    - Default template string with path extraction
+    - Custom template string with planned archive information
+    - Template string with prefix and timestamp extraction
+    - Various planned archive path formats
+- `TestTemplateDryRunBackup`: Tests template-based dry-run backup formatting
+  - Validates template formatting for dry-run backup messages
+  - Test cases:
+    - Default template string with path extraction
+    - Custom template string with planned backup information
+    - Template string with filename and timestamp extraction
+    - Various planned backup path formats
+- `TestTemplateError`: Tests template-based error message formatting
+  - Validates template formatting for error messages
+  - Test cases:
+    - Default template string with message parameter
+    - Custom template string with operation context
+    - Template string with error categorization
+    - Various error message types
+    - Operation context integration
+- `TestFormatWithTemplate`: Tests Go text/template integration
+  - Validates template application with named regex groups
   - Test cases:
     - Archive filename pattern extraction
+    - Backup filename pattern extraction
     - Configuration line pattern extraction
     - Timestamp pattern extraction
     - Invalid patterns and templates
+    - Valid regex patterns with named groups
+    - Template strings with {{.name}} syntax
+    - Complex template logic with conditionals
+    - Invalid regex patterns (should return error)
+    - No regex matches (should return error)
+    - Invalid template syntax (should return error)
+    - Template execution errors
 - `TestFormatWithPlaceholders`: Tests placeholder replacement
   - Validates %{name} placeholder substitution
   - Test cases:
@@ -336,6 +719,62 @@ This document outlines the testing requirements, architecture, and approach for 
     - Multiple placeholders
     - Missing placeholders
     - Special characters in placeholders
+    - Multiple placeholders in single string
+    - Unmatched placeholders (should be left intact)
+    - Empty placeholder names
+    - Placeholders with special characters
+    - ANSI color codes in placeholder values
+    - Nested placeholder-like strings
+- `TestExtractArchiveFilenameData`: Tests archive filename data extraction
+  - Validates regex pattern extraction from archive filenames
+  - Test cases:
+    - Basic archive filename parsing
+    - Archive filename with Git information
+    - Archive filename with notes
+    - Invalid archive filenames
+- `TestExtractBackupFilenameData`: Tests backup filename data extraction
+  - Validates regex pattern extraction from backup filenames
+  - Test cases:
+    - Basic backup filename parsing
+    - Backup filename with notes
+    - Invalid backup filenames
+    - Various file extensions
+- `TestTemplateStringConfiguration`: Tests template string configuration loading
+  - Validates template string loading from YAML
+  - Tests template string defaults
+  - Tests template string precedence with multiple configuration files
+  - Test cases:
+    - Default template strings (should match immutable specification defaults)
+    - Custom template strings from configuration file
+    - Template string precedence with multiple files
+    - Invalid template strings (should use safe defaults)
+    - Missing template string fields (should use defaults)
+    - Template strings with Go text/template syntax
+    - Template strings with %{name} placeholder syntax
+    - Template strings with ANSI escape codes
+- `TestRegexPatternConfiguration`: Tests regex pattern configuration loading
+  - Validates regex pattern loading from YAML
+  - Tests regex pattern defaults
+  - Tests regex pattern precedence with multiple configuration files
+  - Test cases:
+    - Default regex patterns (should match immutable specification defaults)
+    - Custom regex patterns from configuration file
+    - Regex pattern precedence with multiple files
+    - Invalid regex patterns (should use safe defaults)
+    - Missing regex pattern fields (should use defaults)
+    - Named capture group validation
+    - Regex pattern compilation and performance
+- `TestTemplateRegexIntegration`: Tests integration between templates and regex patterns
+  - Validates data extraction and template application workflow
+  - Test cases:
+    - Archive filename parsing with template formatting
+    - Backup filename parsing with template formatting
+    - Timestamp parsing with template formatting
+    - Configuration line parsing with template formatting
+    - Complex data extraction scenarios
+    - Error handling when regex patterns don't match
+    - Fallback behavior for template formatting failures
+    - Performance with large datasets
 
 ### Integration Tests
 **Implementation**: `integration_test.go`
@@ -347,38 +786,141 @@ This document outlines the testing requirements, architecture, and approach for 
     - Create incremental archive and list
     - Verify archive after creation
     - Multiple archives with different configurations
+- `TestFileBackupWorkflow`: Tests complete file backup workflow
+  - Validates end-to-end file backup creation and listing
+  - Test cases:
+    - Create file backup and list
+    - Multiple backups with different configurations
+    - Backup with directory structure preservation
+    - Backup with notes and timestamps
+    - File backup with Git repository integration
+    - File backup with custom configuration paths
+    - File backup with environment variable configuration
+    - File backup error handling and recovery
+    - File backup with resource cleanup verification
+    - File backup with context cancellation
+    - File backup with template formatting
+    - File backup with printf-style formatting
 - `TestDryRunMode`: Tests dry-run functionality
   - Validates dry-run behavior across all commands
+  - **Updated for printf-style formatting**:
+    - Tests dry-run output with default format strings
+    - Tests dry-run output with custom format strings
+  - **Updated for template-based formatting**:
+    - Tests template formatting with default template strings
+    - Tests template formatting with custom template strings
+    - Validates regex pattern integration with template formatting
+    - Tests template string configuration loading and application
+    - Validates data extraction and rich formatting capabilities
   - Test cases:
     - Dry-run full archive creation
     - Dry-run incremental archive creation
+    - Dry-run file backup creation
     - No files created in dry-run mode
     - Proper output formatting in dry-run
+    - Dry run with identical file (using `format_identical_backup`)
+    - Dry run with modified file (using `format_dry_run_backup`)
+    - Dry run with list flag (using `format_list_backup`)
+    - Dry run with resource cleanup verification
+    - Dry run with custom format string configuration
 - `TestCLICommands`: Tests command-line interface
   - Validates all CLI commands and flags
+  - **Updated for printf-style formatting**:
+    - Tests error message formatting for invalid arguments
+  - **Updated for template-based formatting**:
+    - Tests template formatting with default template strings
+    - Tests template formatting with custom template strings
+    - Validates regex pattern integration with template formatting
+    - Tests template string configuration loading and application
+    - Validates data extraction and rich formatting capabilities
   - Test cases:
     - `bkpdir full` command
     - `bkpdir inc` command
     - `bkpdir list` command
     - `bkpdir verify` command
-    - `bkpdir --config` command
+    - `bkpdir backup` command
+    - `bkpdir --config` command (backward compatibility)
+    - `bkpdir config` command (display configuration)
+    - `bkpdir config KEY VALUE` command (set configuration)
+    - `bkpdir --list [FILE_PATH]` command
     - `--dry-run` flag
     - `--checksum` flag for verify
+    - Invalid flag combinations (using `format_error`)
+    - Missing file path (using `format_error`)
+    - Invalid file path (using `format_error`)
+    - Config flag with other arguments (should be ignored)
+    - Config set with invalid key (using `format_error`)
+    - Config set with invalid value type (using `format_error`)
+    - Config set with missing arguments (using `format_error`)
 - `TestConfigurationIntegration`: Tests configuration in real scenarios
   - Validates configuration loading and application
+  - **Updated for printf-style formatting**:
+    - Tests configuration display with default format strings
+    - Tests configuration display with custom format strings
+    - Validates format string configuration display
+  - **Updated for template-based formatting**:
+    - Tests template formatting with default template strings
+    - Tests template formatting with custom template strings
+    - Validates regex pattern integration with template formatting
+    - Tests template string configuration loading and application
+    - Validates data extraction and rich formatting capabilities
   - Test cases:
     - Default configuration behavior
     - Custom configuration files
     - Environment variable configuration
     - Configuration precedence
     - Invalid configuration handling
+    - Status code configuration integration
+    - Format string configuration integration
+    - Template configuration integration
+    - Regex pattern configuration integration
+    - Display config with default values only (including status codes and format strings)
+    - Display config with values from single configuration file
+    - Display config with values from multiple configuration files
+    - Display config with `BKPDIR_CONFIG` environment variable set
+    - Display config with hard-coded default path when environment variable not set
+    - Display config with invalid configuration files (error handling using `format_error`)
+    - Display config with custom status code values
+    - Display config with custom format string values
+    - Verify application exits after displaying configuration
+    - Verify format string configuration is displayed with proper formatting
+    - Tests backup operations with custom configuration paths
+    - Tests environment variable override in real scenarios
+    - Tests hard-coded default path behavior
+    - Tests configuration precedence with actual file operations
+    - Tests status code configuration in real application scenarios
+- `TestConfigCommandIntegration`: Tests config command in real application scenarios
+  - Validates configuration display and modification functionality
+  - Tests configuration persistence and file handling
+  - Tests error handling and validation in real scenarios
+  - Test cases:
+    - `bkpdir config` displays configuration correctly
+    - `bkpdir config KEY VALUE` sets configuration values
+    - Configuration changes persist across command invocations
+    - Setting string values (archive_dir_path, backup_dir_path, checksum_algorithm)
+    - Setting boolean values (use_current_dir_name, include_git_info, verify_on_create)
+    - Setting integer values (status codes)
+    - Creating new configuration file when none exists
+    - Updating existing configuration file preserves other values
+    - Nested configuration handling (verification section)
+    - Error handling for invalid configuration keys
+    - Error handling for invalid boolean values (not true/false)
+    - Error handling for invalid integer values (non-numeric)
+    - Error handling for file permission issues
+    - Error handling for YAML parsing errors
+    - Configuration sorting (alphabetical display)
+    - Backward compatibility with `bkpdir --config`
+    - Integration with other commands using modified configuration
+    - Configuration file creation with proper permissions
+    - YAML format preservation and readability
 - `TestGitIntegrationWorkflow`: Tests Git integration in workflows
-  - Validates Git information in archive creation
+  - Validates Git information in archive and backup creation
   - Test cases:
     - Archive creation in Git repository
     - Archive creation in non-Git directory
     - Archive creation with different branches
     - Archive creation with dirty working directory
+    - Backup creation in Git repository
 - `TestVerificationWorkflow`: Tests verification in complete workflows
   - Validates verification integration with archive creation
   - Test cases:
@@ -393,13 +935,98 @@ This document outlines the testing requirements, architecture, and approach for 
     - Disk full scenarios
     - Invalid input scenarios
     - Network interruption scenarios (if applicable)
-- `TestConcurrentOperations`: Tests concurrent archive operations
+    - Context cancellation scenarios
+- `TestConcurrentOperations`: Tests concurrent archive and backup operations
   - Validates thread safety and resource management
   - Test cases:
     - Multiple archive creations
+    - Multiple backup creations
     - Concurrent verification operations
     - Resource cleanup under concurrency
     - No race conditions
+- `TestContextIntegration`: Tests context-aware operations in workflows
+  - Validates context cancellation and timeout handling
+  - Test cases:
+    - Archive creation with context cancellation
+    - Backup creation with context cancellation
+    - Long-running operations with timeouts
+    - Resource cleanup after cancellation
+- `TestResourceManagementIntegration`: Tests resource management in workflows
+  - Validates resource cleanup across all operations
+  - Test cases:
+    - Archive creation with resource cleanup
+    - Backup creation with resource cleanup
+    - Error scenarios with cleanup verification
+    - No temporary files left after operations
+- `TestFormatStringIntegration`: Tests format string configuration in full application context
+  - Tests all operations with custom format string configurations
+  - Tests format string precedence with multiple configuration files
+  - Tests format string error handling and fallbacks
+  - Test cases:
+    - Archive creation with custom format strings
+    - Backup creation with custom format strings
+    - List operation with custom format strings
+    - Configuration display with custom format strings
+    - Error handling with custom error format strings
+    - Format string precedence with multiple configuration files
+    - Invalid format strings falling back to safe defaults
+    - ANSI color code rendering in various terminal environments
+    - Format string validation and error handling
+- `TestStatusCodeIntegration`: Tests status code configuration in full application context
+  - Validates application exit codes match configuration
+  - Tests status code behavior with various error conditions
+  - Test cases:
+    - Application exits with correct status code for successful archive
+    - Application exits with correct status code for successful backup
+    - Application exits with correct status code for identical directory
+    - Application exits with correct status code for identical file
+    - Application exits with correct status code for directory not found
+    - Application exits with correct status code for file not found
+    - Application exits with correct status code for permission denied
+    - Application exits with correct status code for invalid directory type
+    - Application exits with correct status code for invalid file type
+    - Status code configuration from multiple files with precedence
+    - Default status codes when no configuration provided
+- `TestResourceCleanupIntegration`: Tests resource cleanup in full application context
+  - Validates resource cleanup across entire application workflow
+  - Tests cleanup with various error scenarios
+  - Test cases:
+    - Successful operations with cleanup verification
+    - Failed operations with cleanup verification
+    - Interrupted operations with cleanup verification
+    - No temporary files left in any scenario
+- `TestTemplateFormattingIntegration`: Tests template formatting configuration in full application context
+  - Tests all operations with custom template string configurations
+  - Tests template string precedence with multiple configuration files
+  - Tests template string error handling and fallbacks
+  - Tests regex pattern integration with template formatting
+  - Test cases:
+    - Archive creation with custom template strings and regex patterns
+    - Backup creation with custom template strings and regex patterns
+    - List operation with custom template strings and data extraction
+    - Configuration display with custom template strings
+    - Error handling with custom error template strings
+    - Template string precedence with multiple configuration files
+    - Invalid template strings falling back to safe defaults
+    - Regex pattern matching and data extraction in various scenarios
+    - Template formatting with missing or incomplete data
+    - ANSI color code rendering in template-formatted output
+    - Template validation and error handling
+    - Performance with complex template strings and large datasets
+- `TestRegexPatternIntegration`: Tests regex pattern configuration in full application context
+  - Tests regex pattern loading and compilation
+  - Tests named capture group extraction and usage
+  - Tests pattern precedence with multiple configuration files
+  - Test cases:
+    - Archive filename parsing with custom regex patterns
+    - Backup filename parsing with custom regex patterns
+    - Timestamp parsing with custom regex patterns
+    - Configuration line parsing with custom regex patterns
+    - Invalid regex patterns falling back to safe defaults
+    - Regex pattern precedence with multiple configuration files
+    - Named capture group validation and extraction
+    - Performance with complex regex patterns and large datasets
+    - Error handling for malformed regex patterns
 
 ### Performance Tests
 **Implementation**: `performance_test.go`
@@ -411,6 +1038,17 @@ This document outlines the testing requirements, architecture, and approach for 
     - Medium directories (100-1000 files)
     - Large directories (> 1000 files)
     - Deep directory hierarchies
+- `BenchmarkFileBackupCreation`: Benchmarks file backup creation performance
+  - Measures performance with various file sizes
+  - Test cases:
+    - Small files (< 1MB)
+    - Medium files (1-100MB)
+    - Large files (> 100MB)
+    - Multiple file backups
+    - File backup with context cancellation overhead
+    - File backup with resource cleanup overhead
+    - File backup directory structure preservation
+    - File backup with notes and metadata
 - `BenchmarkDirectoryComparison`: Benchmarks directory comparison performance
   - Measures comparison speed for various scenarios
   - Test cases:
@@ -418,6 +1056,15 @@ This document outlines the testing requirements, architecture, and approach for 
     - Completely different directories
     - Directories with few changes
     - Large directories
+- `BenchmarkFileComparison`: Benchmarks file comparison performance
+  - Measures file comparison speed for various scenarios
+  - Test cases:
+    - Identical files
+    - Different files
+    - Large files
+    - Multiple file comparisons
+    - File comparison with size optimization
+    - File comparison with byte-by-byte verification
 - `BenchmarkVerification`: Benchmarks verification performance
   - Measures verification speed for various archive sizes
   - Test cases:
@@ -432,13 +1079,37 @@ This document outlines the testing requirements, architecture, and approach for 
     - Branch name extraction
     - Commit hash extraction
     - Large Git repositories
+- `BenchmarkTemplateFormatting`: Benchmarks template formatting performance
+  - Measures template processing speed
+  - Test cases:
+    - Simple template formatting
+    - Complex template with regex extraction
+    - Multiple template applications
+    - Large data sets
+- `BenchmarkResourceManagement`: Benchmarks resource management performance
+  - Measures resource tracking and cleanup speed
+  - Test cases:
+    - Resource registration
+    - Resource cleanup
+    - Concurrent resource operations
+    - Large resource sets
+- `BenchmarkCreateBackup`: Benchmarks backup creation performance
+  - Tests performance with various file sizes
+  - Measures resource cleanup overhead
+  - Validates memory usage patterns
+- `BenchmarkResourceManager`: Benchmarks resource management performance
+  - Tests performance with many temporary resources
+  - Measures cleanup time with large resource lists
+  - Validates thread-safe performance
 - `TestMemoryUsage`: Tests memory consumption
   - Validates memory usage stays within reasonable bounds
   - Test cases:
     - Large directory archiving
+    - Large file backup creation
     - Long-running operations
     - Multiple concurrent operations
     - Memory leak detection
+    - Resource cleanup memory impact
 
 ### Stress Tests
 **Implementation**: `stress_test.go`
@@ -450,13 +1121,28 @@ This document outlines the testing requirements, architecture, and approach for 
     - Deep directory hierarchies (> 20 levels)
     - Files with very long names
     - Directories with special characters
+- `TestLargeFiles`: Tests with very large files
+  - Validates handling of large file backups
+  - Test cases:
+    - Files > 1GB in size
+    - Multiple large files
+    - Large files with context cancellation
+    - Large file comparison operations
+    - Large file backup creation with resource cleanup
+    - Large file backup listing and sorting
+    - Memory usage during large file backup operations
+    - Disk space monitoring during large file backups
 - `TestLongRunningOperations`: Tests operations that take significant time
   - Validates timeout and cancellation handling
   - Test cases:
     - Archive creation with timeout
+    - Backup creation with timeout
     - Verification with timeout
     - Context cancellation during operations
     - Resource cleanup after cancellation
+    - Large file backup operations with timeout
+    - File comparison operations with timeout
+    - Backup listing operations with timeout
 - `TestResourceExhaustion`: Tests behavior under resource constraints
   - Validates graceful handling of resource limitations
   - Test cases:
@@ -468,9 +1154,47 @@ This document outlines the testing requirements, architecture, and approach for 
   - Validates thread safety under stress
   - Test cases:
     - Many concurrent archive operations
+    - Many concurrent backup operations
     - Concurrent read/write operations
     - Resource contention scenarios
     - Cleanup under high concurrency
+    - Concurrent file backup creation and listing
+    - Concurrent file comparison operations
+    - Mixed archive and backup operations under load
+    - Resource manager thread safety under stress
+- `TestContextStress`: Tests context handling under stress
+  - Validates context cancellation under high load
+  - Test cases:
+    - Many concurrent operations with cancellation
+    - Rapid context cancellation scenarios
+    - Context timeout under load
+    - Resource cleanup with context stress
+    - Concurrent backup operations with cancellation
+    - Mixed operation types with context cancellation
+    - Context timeout during file backup operations
+- Stress tests:
+  - Concurrent backup operations
+  - Large file handling
+  - Many temporary resources
+  - Resource cleanup under load
+
+### Linting and Code Quality Tests
+**Implementation**: `Makefile`, CI/CD pipeline
+**Requirements**:
+- `make lint`: Runs revive linter
+  - Validates all Go code passes linting standards
+  - Checks error handling compliance
+  - Validates code style and formatting
+  - Test cases:
+    - All source files pass revive checks
+    - No unhandled errors
+    - Proper function and variable naming
+    - Adequate documentation
+- Code quality validation:
+  - All `fmt.Printf`, `fmt.Fprintf` return values checked
+  - All file operations handle errors appropriately
+  - Consistent error handling patterns
+  - Proper resource cleanup in all code paths
 
 ## Test Infrastructure
 
@@ -478,14 +1202,27 @@ This document outlines the testing requirements, architecture, and approach for 
 **Implementation**: `testutil/` package
 **Requirements**:
 - `CreateTestDirectory()`: Creates temporary test directories with files
+- `CreateTestFile()`: Creates temporary test files with specified content
 - `CreateTestGitRepo()`: Creates temporary Git repositories for testing
 - `CreateTestArchive()`: Creates test ZIP archives
+- `CreateTestBackup()`: Creates test file backups
 - `AssertNoTempFiles()`: Verifies no temporary files remain
 - `AssertArchiveContents()`: Validates archive contents
+- `AssertBackupContents()`: Validates backup contents
 - `MockFileSystem()`: Provides file system mocking capabilities
 - `CaptureOutput()`: Captures stdout/stderr for testing
 - `SetupTestConfig()`: Creates test configuration files
+- `SetupTestConfigForModification()`: Creates test configuration files for modification testing
+- `SetupTestContext()`: Creates test contexts with timeouts
 - `CleanupTestResources()`: Ensures test cleanup
+- `VerifyConfigFileContents()`: Validates configuration file contents and structure
+- `CreateTestConfigFile()`: Creates test configuration files with specific values
+- `AssertConfigValue()`: Validates configuration values in files
+- `AssertConfigFileStructure()`: Validates YAML structure and formatting
+- `VerifyResourceCleanup()`: Verifies all resources are cleaned up
+- `CreateLargeTestFile()`: Creates large files for performance testing
+- `SimulateDiskFull()`: Simulates disk full conditions
+- `SimulatePermissionDenied()`: Simulates permission denied conditions
 
 ### Test Data Management
 **Requirements**:
@@ -493,8 +1230,34 @@ This document outlines the testing requirements, architecture, and approach for 
 - Test files with various sizes and types
 - Test Git repositories with different states
 - Test configuration files with various settings
+- Test backup scenarios with different file types
 - Cleanup verification after each test
 - No test artifacts left in file system
+- Resource tracking for all test operations
+- Test files use consistent naming patterns
+- Test data covers various file sizes and types
+- Test data includes special characters and edge cases
+- Test configuration files cover various YAML structures and edge cases
+- Test configuration files for modification testing with various initial states
+- Test configuration files with nested structures (verification section)
+- Test configuration files with missing sections for creation testing
+- Test configuration files with invalid YAML for error testing
+- **Test configuration files include various format string configurations**
+- **Test data includes format strings with ANSI color codes**
+- **Test data includes invalid format strings for error handling**
+- **Test data covers format string precedence scenarios**
+- **Test data includes template strings with Go text/template syntax**
+- **Test data includes template strings with %{name} placeholder syntax**
+- **Test data includes regex patterns with named capture groups**
+- **Test data includes invalid template strings for error handling**
+- **Test data includes invalid regex patterns for error handling**
+- **Test data covers template string precedence scenarios**
+- **Test data covers regex pattern precedence scenarios**
+- **Test data includes complex data extraction scenarios**
+- Temporary resources are tracked and verified for cleanup
+- Test data includes scenarios for context cancellation
+- Test files simulate various error conditions
+- Test data covers atomic operation scenarios
 
 ### Continuous Integration Requirements
 **Requirements**:
@@ -504,7 +1267,22 @@ This document outlines the testing requirements, architecture, and approach for 
 - Memory usage tests must pass
 - Concurrent operation tests must pass
 - Resource cleanup verification required
+- Context cancellation tests must pass
 - Cross-platform testing (Linux, macOS)
+- Linting must pass before code merge
+- Code coverage must meet minimum thresholds
+- Performance benchmarks must not regress
+- Resource cleanup must be verified in CI environment
+- Tests must run on multiple platforms
+- Memory leak detection must be performed
+- Static analysis must pass
+- **Format string validation must pass in CI environment**
+- **Output formatting tests must pass on all supported platforms**
+- **ANSI color code rendering must be tested in CI environment**
+- **Template string validation must pass in CI environment**
+- **Template formatting tests must pass on all supported platforms**
+- **Regex pattern compilation must be tested in CI environment**
+- **Data extraction and template integration must be validated in CI**
 
 ## Test Execution
 
@@ -526,6 +1304,32 @@ go test -race ./...
 
 # Run stress tests
 go test -tags=stress ./...
+
+# Run context tests
+go test -run TestContext ./...
+
+# Run resource management tests
+go test -run TestResource ./...
+
+# Run template formatting tests
+go test -run TestTemplate ./...
+
+# Run output formatting tests
+go test -run TestOutputFormatter ./...
+go test -run TestFormatString ./...
+
+# Run config command tests
+go test -run TestConfigModification ./...
+go test -run TestConfigCommand ./...
+
+# Run benchmarks
+go test -v -bench=.
+
+# Run linting
+make lint
+
+# Run all quality checks
+make test
 ```
 
 ### Test Categories by Build Tags
@@ -533,15 +1337,18 @@ go test -tags=stress ./...
 - **Integration Tests**: `-tags=integration`
 - **Performance Tests**: `-tags=performance`
 - **Stress Tests**: `-tags=stress`
+- **Context Tests**: `-tags=context`
 
 ### Test Environment Setup
 **Requirements**:
 - Temporary directory for test files
 - Mock Git repositories
 - Test configuration files
+- Test backup directories
 - Isolated test environment
 - Cleanup verification
 - Resource tracking
+- Context management
 
 ## Quality Gates
 
@@ -549,25 +1356,63 @@ go test -tags=stress ./...
 - **Minimum Coverage**: 90% overall
 - **Critical Functions**: 100% coverage required
   - Archive creation functions
+  - File backup creation functions
   - Error handling functions
   - Resource cleanup functions
   - Configuration loading functions
+  - Configuration modification functions
+  - Context-aware functions
+  - Template formatting functions
 - **Integration Tests**: Must cover all CLI commands
 - **Error Paths**: All error conditions must be tested
+- **Context Paths**: All cancellation scenarios must be tested
+- **Output formatting functionality must be comprehensively tested**
+- **Format string configuration must be thoroughly tested**
+- **Printf-style formatting must be validated for all output types**
+- **ANSI color code support must be verified**
+- **Format string validation and error handling must be tested**
+- **Format string precedence and merging must be tested**
+- **Default format string behavior must be verified**
+- **Text highlighting and structure formatting must be validated**
+- **Template-based formatting functionality must be comprehensively tested**
+- **Template string configuration must be thoroughly tested**
+- **Go text/template syntax must be validated for all output types**
+- **Placeholder syntax (%{name}) must be validated for all output types**
+- **Regex pattern integration must be verified**
+- **Named capture group extraction must be tested**
+- **Template string validation and error handling must be tested**
+- **Template string precedence and merging must be tested**
+- **Default template string behavior must be verified**
+- **Data extraction and rich formatting capabilities must be validated**
+- **Template formatting fallback behavior must be tested**
+- Resource cleanup must be tested in all scenarios
+- Context cancellation and timeout handling must be verified
+- Enhanced error handling must be thoroughly tested
+- Panic recovery must be validated
+- Atomic operations must be tested
+- Thread safety must be verified
+- Performance characteristics must be measured
+- Memory usage patterns must be validated
 
 ### Performance Requirements
 - **Archive Creation**: < 1 second for 1000 files
+- **File Backup Creation**: < 500ms for 100MB file
 - **Directory Comparison**: < 500ms for 1000 files
+- **File Comparison**: < 200ms for 100MB file
 - **Verification**: < 2 seconds for 100MB archive
+- **Template Formatting**: < 10ms for complex templates
 - **Memory Usage**: < 100MB for 10,000 files
 - **No Memory Leaks**: All resources properly cleaned up
+- **Context Cancellation**: < 100ms response time
 
 ### Reliability Requirements
 - **Resource Cleanup**: 100% cleanup verification
 - **Error Recovery**: All error scenarios tested
 - **Concurrent Safety**: No race conditions
-- **Data Integrity**: Archive corruption detection
+- **Data Integrity**: Archive and backup corruption detection
 - **Platform Compatibility**: Tests pass on Linux and macOS
+- **Context Handling**: All cancellation scenarios handled
+- **Template Robustness**: Invalid templates handled gracefully
 
 ## Test Maintenance
 
@@ -576,17 +1421,198 @@ go test -tags=stress ./...
 - Test cases must be documented with expected outcomes
 - Performance benchmarks must have baseline measurements
 - Error scenarios must be documented with expected behavior
+- Context scenarios must be documented with cancellation points
+- Resource cleanup must be documented and verified
 
 ### Test Data Management
 - Test data must be generated programmatically
 - No hardcoded file paths or system dependencies
 - Test isolation must be maintained
 - Cleanup must be verified for all tests
+- Resource tracking must be comprehensive
+- Context management must be consistent
 
 ### Regression Testing
 - All bug fixes must include regression tests
 - Performance regressions must be detected
 - Configuration changes must be tested
 - Backward compatibility must be verified
+- Context handling regressions must be detected
+- Resource leak regressions must be detected
 
-This testing architecture ensures comprehensive coverage of BkpDir functionality while maintaining high quality standards and reliable operation across different environments and use cases. 
+### Test Categories by Functionality
+
+#### Archive Tests
+- Archive creation (full and incremental)
+- Archive listing and verification
+- Archive naming with Git integration
+- Archive comparison and deduplication
+
+#### File Backup Tests
+- File backup creation and listing
+- File comparison and deduplication
+- Backup directory structure preservation
+- Backup naming with timestamps and notes
+
+#### Configuration Tests
+- Configuration loading and precedence
+- Environment variable support
+- Status code configuration
+- Format string and template configuration
+- Regex pattern configuration
+
+#### Error Handling Tests
+- Structured error creation and handling
+- Enhanced error detection (disk space, permissions)
+- Error context preservation
+- Panic recovery and cleanup
+
+#### Resource Management Tests
+- Automatic resource cleanup
+- Thread-safe resource tracking
+- Atomic operations with temporary files
+- Context-aware resource management
+
+#### Template Formatting Tests
+- Printf-style formatting
+- Template-based formatting with placeholders
+- Regex pattern extraction
+- ANSI color support and text highlighting
+
+#### Context Tests
+- Context cancellation support
+- Timeout handling
+- Resource cleanup with cancellation
+- Long-running operation cancellation
+
+## Test Approach
+**Implementation**: `*_test.go` files
+**Requirements**:
+- Uses temporary directories for testing
+- Simulates user environment with test files
+- Tests both dry-run and actual execution modes
+- Verifies correct behavior for edge cases and error conditions
+- Uses `CreateBackupWithTime` for consistent timestamps in tests
+- Tests path handling for both absolute and relative paths
+- Tests file comparison with various file types and sizes
+- Verifies correct exit behavior when files are identical
+- Tests flag-based command structure
+- Validates proper reporting of existing backup names
+- Tests environment variable handling with various configurations
+- Creates multiple temporary configuration files for precedence testing
+- Tests home directory expansion and path resolution
+- Tests configuration discovery error conditions and edge cases
+- Validates configuration display output format and source tracking
+- Tests application exit behavior after configuration display
+- Tests status code configuration loading and application
+- Validates application exit codes match configured values
+- Tests status code behavior with various error conditions and scenarios
+- Creates test configuration files with custom status code values
+- Verifies status code precedence with multiple configuration files
+- Tests resource cleanup in all scenarios including failures
+- Validates context cancellation and timeout handling
+- Tests panic recovery and error resilience
+- Verifies no resource leaks in any test scenario
+- Tests atomic operations and data integrity
+- Validates enhanced error detection and handling
+
+## Test Environment
+- Uses Go's testing package
+- Leverages temporary directories for file operations
+- Mocks time functions for consistent testing
+- Simulates file system operations
+- Tests on both macOS and Linux platforms
+- Mocks environment variables for configuration testing
+- Creates temporary configuration files with various content
+- Uses context with timeouts for cancellation testing
+- Simulates disk full and permission denied scenarios
+- Tests with various file sizes and types
+- Validates cleanup in all test scenarios
+
+This testing architecture ensures comprehensive coverage of BkpDir functionality while maintaining high quality standards and reliable operation across different environments and use cases, including the new file backup capabilities, context-aware operations, enhanced error handling, and advanced template formatting features. 
+
+### File Backup Integration Tests
+**Implementation**: `backup_test.go`
+**Requirements**:
+- `TestFileBackupWorkflow`: Tests complete file backup workflow
+  - Validates end-to-end file backup functionality
+  - Test cases:
+    - Complete backup creation workflow
+    - Backup listing workflow
+    - Identical file detection workflow
+    - Multiple backup creation and management
+    - Backup with various file types (text, binary, executable)
+- `TestFileBackupWithGitIntegration`: Tests file backup in Git repositories
+  - Validates Git integration with file backup operations
+  - Test cases:
+    - Backup creation in Git repository
+    - Backup creation in non-Git directory
+    - Git info handling in backup workflows
+    - Branch and hash information preservation
+- `TestFileBackupConcurrency`: Tests concurrent file backup operations
+  - Validates thread-safety of file backup operations
+  - Test cases:
+    - Concurrent backup creation for different files
+    - Concurrent backup creation for same file
+    - Resource manager thread safety
+    - No race conditions in backup listing
+- `TestFileBackupResourceCleanup`: Tests resource cleanup in file backup operations
+  - Validates comprehensive resource cleanup
+  - Test cases:
+    - Successful backup with cleanup verification
+    - Failed backup with cleanup verification
+    - Cancelled backup with cleanup verification
+    - No temporary files left after operations
+    - Atomic file operations verification
+- `TestFileBackupErrorScenarios`: Tests error handling in file backup operations
+  - Validates comprehensive error handling
+  - Test cases:
+    - Source file not found
+    - Source path is directory
+    - Permission denied on source file
+    - Permission denied on backup directory
+    - Disk full during backup creation
+    - Backup directory creation failure
+    - Invalid file types (devices, sockets, etc.)
+
+### New Tests
+- `TestGenerateBackupName`: Tests file backup naming
+  - Validates backup filename generation with timestamps and notes
+  - Test cases:
+    - Basic backup naming without notes
+    - Backup naming with notes
+    - Various source file paths and extensions
+    - Timestamp format validation
+    - Special characters in filenames
+    - Long filenames
+    - Files with multiple extensions
+- `TestListFileBackups`: Tests file backup listing
+  - Validates backup listing and sorting for specific files
+  - Test cases:
+    - Empty backup directory
+    - Multiple backups with different timestamps
+    - Backups with notes
+    - Backups in nested directory structures
+    - Sorting by creation time (most recent first)
+    - Files with special characters
+    - Large number of backups
+    - Permission denied scenarios
+- `TestBackupDirectoryStructure`: Tests backup directory structure preservation
+  - Validates that backup paths maintain source file directory structure
+  - Test cases:
+    - Files in root directory
+    - Files in nested subdirectories
+    - Files with complex directory paths
+    - Files with special characters in paths
+    - Absolute vs relative path handling
+    - Current directory name inclusion/exclusion
+- `TestBackupError`: Tests structured backup error handling
+  - Validates BackupError functionality
+  - Test cases:
+    - Error creation with message and status code
+    - Error interface implementation
+    - Status code extraction
+    - Error message formatting
+    - Error context preservation (operation, path)
+    - Error unwrapping
+    - Backup-specific error scenarios 

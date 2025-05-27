@@ -1,7 +1,15 @@
+// This file is part of bkpdir
+//
+// Package main provides error handling and resource management for BkpDir.
+// It includes error types, resource cleanup, and context-aware operations.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
 package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -46,7 +54,12 @@ func NewArchiveErrorWithCause(message string, statusCode int, err error) *Archiv
 }
 
 // NewArchiveErrorWithContext creates a new structured error with operation context
-func NewArchiveErrorWithContext(message string, statusCode int, operation, path string, err error) *ArchiveError {
+func NewArchiveErrorWithContext(
+	message string,
+	statusCode int,
+	operation, path string,
+	err error,
+) *ArchiveError {
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -56,7 +69,7 @@ func NewArchiveErrorWithContext(message string, statusCode int, operation, path 
 	}
 }
 
-// Enhanced error detection functions
+// IsDiskFullError reports whether the error is due to disk full or quota exceeded conditions.
 func IsDiskFullError(err error) bool {
 	if err == nil {
 		return false
@@ -82,6 +95,33 @@ func IsDiskFullError(err error) bool {
 	return false
 }
 
+// isDiskFullError provides enhanced disk space error detection with comprehensive pattern matching
+func isDiskFullError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	errStr := strings.ToLower(err.Error())
+	diskFullPatterns := []string{
+		"no space left",
+		"disk full",
+		"not enough space",
+		"insufficient disk space",
+		"device full",
+		"quota exceeded",
+		"file too large",
+	}
+
+	for _, pattern := range diskFullPatterns {
+		if strings.Contains(errStr, pattern) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsPermissionError reports whether the error is due to permission or access denied conditions.
 func IsPermissionError(err error) bool {
 	if err == nil {
 		return false
@@ -104,6 +144,7 @@ func IsPermissionError(err error) bool {
 	return false
 }
 
+// IsDirectoryNotFoundError reports whether the error is due to a missing directory.
 func IsDirectoryNotFoundError(err error) bool {
 	if err == nil {
 		return false
@@ -126,6 +167,7 @@ type TempFile struct {
 	Path string
 }
 
+// Cleanup removes the temporary file from the filesystem.
 func (tf *TempFile) Cleanup() error {
 	return os.Remove(tf.Path)
 }
@@ -139,6 +181,7 @@ type TempDir struct {
 	Path string
 }
 
+// Cleanup removes the temporary directory and its contents from the filesystem.
 func (td *TempDir) Cleanup() error {
 	return os.RemoveAll(td.Path)
 }
@@ -153,26 +196,31 @@ type ResourceManager struct {
 	mutex     sync.RWMutex
 }
 
+// NewResourceManager creates a new ResourceManager for tracking resources.
 func NewResourceManager() *ResourceManager {
 	return &ResourceManager{
 		resources: make([]Resource, 0),
 	}
 }
 
+// AddResource adds a resource to the ResourceManager for cleanup.
 func (rm *ResourceManager) AddResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 	rm.resources = append(rm.resources, resource)
 }
 
+// AddTempFile adds a temporary file resource to the ResourceManager.
 func (rm *ResourceManager) AddTempFile(path string) {
 	rm.AddResource(&TempFile{Path: path})
 }
 
+// AddTempDir adds a temporary directory resource to the ResourceManager.
 func (rm *ResourceManager) AddTempDir(path string) {
 	rm.AddResource(&TempDir{Path: path})
 }
 
+// RemoveResource removes a resource from the ResourceManager.
 func (rm *ResourceManager) RemoveResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -185,6 +233,7 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 	}
 }
 
+// Cleanup cleans up all tracked resources in the ResourceManager.
 func (rm *ResourceManager) Cleanup() error {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -201,6 +250,7 @@ func (rm *ResourceManager) Cleanup() error {
 	return lastError
 }
 
+// CleanupWithPanicRecovery cleans up all resources and recovers from panics during cleanup.
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -211,12 +261,13 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	return rm.Cleanup()
 }
 
-// Context-aware operations
+// ContextualOperation provides context and resource management for operations.
 type ContextualOperation struct {
 	ctx context.Context
 	rm  *ResourceManager
 }
 
+// NewContextualOperation creates a new ContextualOperation with the given context.
 func NewContextualOperation(ctx context.Context) *ContextualOperation {
 	return &ContextualOperation{
 		ctx: ctx,
@@ -224,14 +275,17 @@ func NewContextualOperation(ctx context.Context) *ContextualOperation {
 	}
 }
 
+// Context returns the context associated with the ContextualOperation.
 func (co *ContextualOperation) Context() context.Context {
 	return co.ctx
 }
 
+// ResourceManager returns the ResourceManager associated with the ContextualOperation.
 func (co *ContextualOperation) ResourceManager() *ResourceManager {
 	return co.rm
 }
 
+// IsCancelled checks if the operation has been cancelled.
 func (co *ContextualOperation) IsCancelled() bool {
 	select {
 	case <-co.ctx.Done():
@@ -241,100 +295,152 @@ func (co *ContextualOperation) IsCancelled() bool {
 	}
 }
 
+// CheckCancellation checks if the operation has been cancelled and returns an error if it has.
 func (co *ContextualOperation) CheckCancellation() error {
-	if co.IsCancelled() {
-		return co.ctx.Err()
-	}
-	return nil
+	return co.ctx.Err()
 }
 
+// Cleanup cleans up all resources associated with the operation.
 func (co *ContextualOperation) Cleanup() error {
-	return co.rm.CleanupWithPanicRecovery()
+	return co.rm.Cleanup()
 }
 
-// Error handling utilities
+// HandleArchiveError processes an archive error and returns the appropriate status code.
 func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int {
 	if err == nil {
 		return 0
 	}
 
-	// Check if it's already an ArchiveError
-	if archiveErr, ok := err.(*ArchiveError); ok {
-		formatter.PrintError(archiveErr.Message)
+	var archiveErr *ArchiveError
+	if errors.As(err, &archiveErr) {
+		formatter.PrintError(archiveErr.Error())
 		return archiveErr.StatusCode
 	}
 
-	// Detect error type and create appropriate ArchiveError
-	var statusCode int
-	var message string
-
-	if IsDiskFullError(err) {
-		statusCode = cfg.StatusDiskFull
-		message = "Insufficient disk space"
-	} else if IsPermissionError(err) {
-		statusCode = cfg.StatusPermissionDenied
-		message = "Permission denied"
-	} else if IsDirectoryNotFoundError(err) {
-		statusCode = cfg.StatusDirectoryNotFound
-		message = "Directory not found"
-	} else {
-		statusCode = 1 // Generic error
-		message = err.Error()
+	// Handle specific error types
+	switch {
+	case IsDiskFullError(err):
+		formatter.PrintError("Disk full or quota exceeded")
+		return cfg.StatusDiskFull
+	case IsPermissionError(err):
+		formatter.PrintError("Permission denied")
+		return cfg.StatusPermissionDenied
+	case IsDirectoryNotFoundError(err):
+		formatter.PrintError("Directory not found")
+		return cfg.StatusDirectoryNotFound
+	default:
+		formatter.PrintError(err.Error())
+		return 1
 	}
-
-	formatter.PrintError(message)
-	return statusCode
 }
 
-// Atomic file operations
+// AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
-	tempPath := path + ".tmp"
-	rm.AddTempFile(tempPath)
+	tempFile := path + ".tmp"
+	rm.AddTempFile(tempFile)
 
-	// Write to temporary file
-	if err := os.WriteFile(tempPath, data, 0644); err != nil {
-		return err
+	if err := os.WriteFile(tempFile, data, 0644); err != nil {
+		return NewArchiveErrorWithCause(
+			"Failed to write temporary file",
+			1,
+			err,
+		)
 	}
 
-	// Atomic rename
-	if err := os.Rename(tempPath, path); err != nil {
-		return err
+	if err := os.Rename(tempFile, path); err != nil {
+		return NewArchiveErrorWithCause(
+			"Failed to finalize file",
+			1,
+			err,
+		)
 	}
 
-	// Remove from cleanup list since operation succeeded
-	rm.RemoveResource(&TempFile{Path: tempPath})
+	rm.RemoveResource(&TempFile{Path: tempFile})
 	return nil
 }
 
-// Safe directory creation
+// SafeMkdirAll creates a directory and all necessary parent directories.
 func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsDiskFullError(err) {
-			return NewArchiveError("Failed to create archive directory: insufficient disk space", cfg.StatusDiskFull)
+			return NewArchiveErrorWithCause(
+				"Failed to create directory: disk full",
+				cfg.StatusDiskFull,
+				err,
+			)
 		}
-		if IsPermissionError(err) {
-			return NewArchiveError("Failed to create archive directory: permission denied", cfg.StatusPermissionDenied)
-		}
-		return NewArchiveErrorWithCause("Failed to create archive directory", cfg.StatusFailedToCreateArchiveDirectory, err)
+		return NewArchiveErrorWithCause(
+			"Failed to create directory",
+			cfg.StatusConfigError,
+			err,
+		)
 	}
 	return nil
 }
 
-// Validate directory path
+// ValidateDirectoryPath checks if a path is a valid directory.
 func ValidateDirectoryPath(path string, cfg *Config) error {
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return NewArchiveError("Directory does not exist", cfg.StatusDirectoryNotFound)
+			return NewArchiveError(
+				"Directory not found",
+				cfg.StatusDirectoryNotFound,
+			)
 		}
 		if IsPermissionError(err) {
-			return NewArchiveError("Permission denied accessing directory", cfg.StatusPermissionDenied)
+			return NewArchiveErrorWithCause(
+				"Permission denied",
+				cfg.StatusPermissionDenied,
+				err,
+			)
 		}
-		return NewArchiveErrorWithCause("Failed to access directory", cfg.StatusDirectoryNotFound, err)
+		return NewArchiveErrorWithCause(
+			"Failed to access directory",
+			cfg.StatusConfigError,
+			err,
+		)
 	}
 
 	if !info.IsDir() {
-		return NewArchiveError("Path is not a directory", cfg.StatusInvalidDirectoryType)
+		return NewArchiveError(
+			"Path is not a directory",
+			cfg.StatusInvalidDirectoryType,
+		)
+	}
+
+	return nil
+}
+
+// ValidateFilePath checks if a path is a valid file.
+func ValidateFilePath(path string, cfg *Config) error {
+	info, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return NewArchiveError(
+				"File not found",
+				cfg.StatusFileNotFound,
+			)
+		}
+		if IsPermissionError(err) {
+			return NewArchiveErrorWithCause(
+				"Permission denied",
+				cfg.StatusPermissionDenied,
+				err,
+			)
+		}
+		return NewArchiveErrorWithCause(
+			"Failed to access file",
+			cfg.StatusConfigError,
+			err,
+		)
+	}
+
+	if !info.Mode().IsRegular() {
+		return NewArchiveError(
+			"Path is not a regular file",
+			cfg.StatusInvalidFileType,
+		)
 	}
 
 	return nil

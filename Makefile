@@ -36,7 +36,7 @@
 
 # Variables
 BINARY_NAME := bkpdir
-VERSION := 1.1.1
+VERSION := 1.2.0
 BUILD_TIME := $(shell date -u +%Y-%m-%d\ %H:%M:%S\ UTC)
 PLATFORM := $(shell go env GOOS)-$(shell go env GOARCH)
 LDFLAGS := -X 'main.compileDate=$(BUILD_TIME)' -X 'main.platform=$(PLATFORM)'

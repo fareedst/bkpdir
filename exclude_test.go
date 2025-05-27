@@ -1,3 +1,7 @@
+// This file is part of bkpdir
+
+// Package main provides tests for file exclusion logic in BkpDir.
+// It verifies pattern matching and exclusion behavior.
 package main
 
 import "testing"

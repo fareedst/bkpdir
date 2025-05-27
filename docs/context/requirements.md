@@ -31,135 +31,439 @@ make lint
 
 # Build with linting
 make build
+
+# Run all tests
+make test
+
+# Clean build artifacts
+make clean
+```
+
+### Build System Integration
+**Implementation**: `Makefile`, CI/CD pipeline
+**Specification Requirements**:
+- **Quality Gates**: Build system enforces quality standards before compilation
+  - Spec: "All code must pass linting and testing before successful build"
+  - Implementation: `make build` depends on `make lint` and `make test` targets
+  - Behavior: Build fails if linting or testing fails
+  - Error Cases: Non-zero exit codes from linting or testing prevent build
+- **Dependency Management**: Proper ordering of build steps
+  - Spec: "Build system must enforce proper dependency order"
+  - Implementation: Makefile targets with proper dependencies
+  - Behavior: Linting runs before testing, testing runs before building
+  - Error Cases: Dependency failures prevent subsequent steps
+- **Artifact Management**: Clean build artifacts and temporary files
+  - Spec: "Build system must provide clean target for artifact removal"
+  - Implementation: `make clean` target removes all build artifacts
+  - Behavior: Removes compiled binaries and temporary files
+  - Error Cases: None (clean continues even if some files cannot be removed)
+- **Continuous Integration**: Automated quality checks in CI/CD
+  - Spec: "CI/CD pipeline must run all quality checks automatically"
+  - Implementation: CI configuration runs make targets in proper order
+  - Behavior: Automated testing and linting on code changes
+  - Error Cases: CI fails if any quality check fails
+
+**Example Usage**:
+```bash
+# Full build with all quality checks
+make build
+
+# Individual quality checks
+make lint
+make test
+
+# Clean all artifacts
+make clean
+
+# CI/CD pipeline commands
+make ci-lint
+make ci-test
+make ci-build
 ```
 
 ### Resource Management Requirements
-**Implementation**: `archive.go` - `ResourceManager`
+**Implementation**: `archive.go`, `backup.go` - `ResourceManager`
 **Specification Requirements**:
 - **Resource Cleanup**: All temporary resources must be cleaned up
   - Spec: "No temporary files or directories should remain after operations"
   - Implementation: `ResourceManager` struct with automatic cleanup
   - Thread-safe: Uses mutex for concurrent access
   - Error-resilient: Continues cleanup even if individual operations fail
-- **Atomic Operations**: Archive operations must be atomic
-  - Spec: "Archive creation must be atomic to prevent corruption"
+- **Atomic Operations**: Archive and backup operations must be atomic
+  - Spec: "Archive and backup creation must be atomic to prevent corruption"
   - Implementation: Temporary files with atomic rename operations
   - Cleanup: Temporary files registered for automatic cleanup
 - **Panic Recovery**: Operations must recover from panics
   - Spec: "Unexpected panics must not leave resources uncleaned"
   - Implementation: Defer functions with panic recovery
   - Logging: Panic information logged to stderr
+- **Thread Safety**: Resource manager must be thread-safe
+  - Spec: "Support concurrent operations with proper resource tracking"
+  - Implementation: Mutex-protected resource lists
+  - Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`
 
 **Example Usage**:
 ```go
 // Create resource manager
 rm := NewResourceManager()
-defer rm.Cleanup()
+defer rm.CleanupWithPanicRecovery()
 
 // Register temporary resources
 rm.AddTempFile("/tmp/archive.tmp")
 rm.AddTempDir("/tmp/archive_work")
+
+// Remove resource from tracking (successful operation)
+rm.RemoveResource(&TempFile{Path: "/tmp/archive.tmp"})
 ```
 
 ### Enhanced Error Handling Requirements
-**Implementation**: `archive.go` - Enhanced error handling
+**Implementation**: `archive.go`, `backup.go`, `errors.go` - Enhanced error handling
 **Specification Requirements**:
-- **Structured Errors**: Use `ArchiveError` for consistent error handling
-  - Spec: "All archive operations must return structured errors with status codes"
+- **Structured Errors**: Use `ArchiveError` and `BackupError` for consistent error handling
+  - Spec: "All operations must return structured errors with status codes"
   - Fields:
     - `Message`: Human-readable error description
     - `StatusCode`: Numeric exit code for application
+    - `Operation`: Context about what operation failed
+    - `Path`: File or directory path involved in the error
+    - `Err`: Underlying error for debugging
   - Implementation: Implements Go's `error` interface
   - Usage: Allows callers to extract both message and status code
+- **Enhanced Disk Space Detection**: Comprehensive disk space error detection
+  - Spec: "Detect various disk full conditions with case-insensitive matching"
+  - Function: `isDiskFullError(err error) bool`
+  - Detects: "no space left", "disk full", "not enough space", "insufficient disk space", "device full", "quota exceeded", "file too large"
+  - Implementation: Case-insensitive string matching on error messages
+- **Operation Context Support**: Enhanced error messages with operation context
+  - Spec: "Error messages must include operation context for better debugging"
+  - Implementation: Error types include operation field for context
+  - Usage: Template formatting can use operation context for rich error display
+  - Examples: "archive creation", "backup creation", "file listing", "directory scanning"
 
 **Example Usage**:
 ```go
-// Create structured error
-err := NewArchiveError("file not found", cfg.StatusFileNotFound)
+// Create structured archive error with operation context
+err := NewArchiveError("file not found", cfg.StatusFileNotFound, "archive creation", "/path/to/source")
+
+// Create structured backup error with operation context
+err := NewBackupError("permission denied", cfg.StatusPermissionDenied, "backup creation", "/path/to/file")
 
 // Check for ArchiveError type
 if archiveErr, ok := err.(*ArchiveError); ok {
     fmt.Fprintf(os.Stderr, "Error: %s\n", archiveErr.Message)
     os.Exit(archiveErr.StatusCode)
 }
+
+// Check for BackupError type
+if backupErr, ok := err.(*BackupError); ok {
+    fmt.Fprintf(os.Stderr, "Error: %s\n", backupErr.Message)
+    os.Exit(backupErr.StatusCode)
+}
+
+// Check for disk space errors
+if err := someFileOperation(); err != nil {
+    if isDiskFullError(err) {
+        return NewArchiveError("Disk full", cfg.StatusDiskFull, "archive creation", sourcePath)
+    }
+    return err
+}
+
+// Use with template formatting for rich error display
+templateFormatter := NewTemplateFormatter(cfg)
+if backupErr, ok := err.(*BackupError); ok {
+    templateFormatter.PrintTemplateError(backupErr.Message, backupErr.Operation)
+}
 ```
 
-### Output Formatting
+### Context Support Requirements
+**Implementation**: `archive.go`, `backup.go` - Context-aware operations
+**Specification Requirements**:
+- **Context-Aware Operations**: All long-running operations must support context cancellation
+  - Spec: "Support operation cancellation and timeouts"
+  - Functions: `CreateArchiveWithContext()`, `CreateFileBackupWithContext()`, `CopyFileWithContext()`
+  - Behavior: Check for cancellation at multiple operation points
+  - Error Handling: Return appropriate error on cancellation
+- **Timeout Support**: Operations must support configurable timeouts
+  - Spec: "Prevent operations from hanging indefinitely"
+  - Implementation: Context with timeout support
+  - Usage: `context.WithTimeout()` for operation limits
+- **Enhanced File Operations**: Context-aware file backup operations
+  - Spec: "All file backup operations must support context cancellation and timeouts"
+  - Functions: 
+    - `CreateFileBackupWithContext(ctx context.Context, cfg *Config, filePath, note string, dryRun bool) error`
+    - `CopyFileWithContext(ctx context.Context, src, dst string) error`
+    - `CompareFilesWithContext(ctx context.Context, file1, file2 string) (bool, error)`
+    - `ListFileBackupsWithContext(ctx context.Context, backupDir, sourceFile string) ([]*Backup, error)`
+  - Behavior: Check context cancellation during file I/O operations
+  - Error Handling: Return context.Canceled or context.DeadlineExceeded appropriately
+
+**Example Usage**:
+```go
+// Create context with timeout
+ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+defer cancel()
+
+// Use context-aware archive operations
+err := CreateArchiveWithContext(ctx, cfg, note, dryRun, verify)
+if err == context.Canceled {
+    log.Println("Archive operation was cancelled")
+} else if err == context.DeadlineExceeded {
+    log.Println("Archive operation timed out")
+}
+
+// File backup with context
+err = CreateFileBackupWithContext(ctx, cfg, filePath, note, dryRun)
+if err == context.Canceled {
+    log.Println("File backup was cancelled")
+} else if err == context.DeadlineExceeded {
+    log.Println("File backup timed out")
+}
+
+// File operations with context
+identical, err := CompareFilesWithContext(ctx, "file1.txt", "file2.txt")
+if err == context.Canceled {
+    log.Println("File comparison was cancelled")
+}
+
+// List backups with context
+backups, err := ListFileBackupsWithContext(ctx, cfg.BackupDirPath, "document.txt")
+if err == context.Canceled {
+    log.Println("Backup listing was cancelled")
+}
+```
+
+### File Backup Requirements
+**Implementation**: `backup.go`
+**Specification Requirements**:
+- **Individual File Backup**: Create backups of single files with comparison
+  - Spec: "Support backing up individual files with timestamp and note"
+  - Functions: `CreateFileBackup()`, `CreateFileBackupWithContext()`
+  - Features: Atomic operations, context support, identical file detection
+  - Naming: `filename-timestamp[=note]` format
+- **File Comparison**: Compare files to detect identical backups
+  - Spec: "Detect when file is identical to most recent backup"
+  - Function: `CheckForIdenticalFileBackup()`, `CompareFiles()`, `CompareFilesWithContext()`
+  - Implementation: Byte-by-byte comparison with existing backups
+  - Status: Return appropriate status code for identical files
+  - Context support: Cancellable file comparison operations
+- **Backup Listing**: List backups for specific files
+  - Spec: "List all backups for a given file path sorted by creation time"
+  - Function: `ListFileBackups()`, `ListFileBackupsWithContext()`
+  - Sorting: Most recent first
+  - Display: Configurable format strings and template formatting
+  - Context support: Cancellable backup listing operations
+- **Enhanced File Operations**: Complete file system operations for backup management
+  - Spec: "Provide comprehensive file operations with error handling and context support"
+  - Functions:
+    - `CopyFile(src, dst string) error`: Create exact copy with permissions preserved
+    - `CopyFileWithContext(ctx context.Context, src, dst string) error`: Context-aware file copying
+    - `GenerateBackupName(sourceFile, note string) string`: Generate backup filename
+    - `GetMostRecentBackup(backupDir, sourceFile string) (*Backup, error)`: Find latest backup
+    - `ValidateFileForBackup(filePath string) error`: Validate file can be backed up
+  - Features: Atomic operations, permission preservation, modification time handling
+  - Error handling: Structured errors with operation context
+
+**Example Usage**:
+```go
+// Create file backup
+err := CreateFileBackup(cfg, "document.txt", "before-changes", false)
+
+// Create file backup with context
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+err = CreateFileBackupWithContext(ctx, cfg, "script.sh", "working-version", false)
+
+// List file backups
+backups, err := ListFileBackups(cfg.BackupDirPath, "document.txt")
+for _, backup := range backups {
+    fmt.Printf("%s (created: %s)\n", backup.Name, backup.CreationTime)
+}
+
+// List file backups with context
+backups, err = ListFileBackupsWithContext(ctx, cfg.BackupDirPath, "document.txt")
+if err == context.Canceled {
+    log.Println("Backup listing was cancelled")
+}
+
+// Check for identical backup
+isIdentical, err := CheckForIdenticalFileBackup("document.txt", cfg)
+if isIdentical {
+    fmt.Println("File is identical to existing backup")
+}
+
+// Compare files with context
+identical, err := CompareFilesWithContext(ctx, "file1.txt", "file2.txt")
+if err == context.Canceled {
+    log.Println("File comparison was cancelled")
+}
+
+// Copy file with context
+err = CopyFileWithContext(ctx, "source.txt", "destination.txt")
+if err == context.Canceled {
+    log.Println("File copy was cancelled")
+}
+
+// Generate backup name
+backupName := GenerateBackupName("document.txt", "important-version")
+// Returns: "document.txt-2024-03-21-15-30=important-version"
+
+// Get most recent backup
+mostRecent, err := GetMostRecentBackup(cfg.BackupDirPath, "document.txt")
+if mostRecent != nil {
+    fmt.Printf("Most recent backup: %s\n", mostRecent.Path)
+}
+
+// Validate file for backup
+err = ValidateFileForBackup("document.txt")
+if err != nil {
+    log.Printf("File validation failed: %v", err)
+}
+```
+
+### Output Formatting Requirements
 **Implementation**: `formatter.go`
 **Specification Requirements**:
-- `NewOutputFormatter(cfg *Config) *OutputFormatter`
-  - Spec: "Creates new output formatter with configuration"
-  - Input: `cfg *Config` - Configuration containing format strings
-  - Output: `*OutputFormatter` - New formatter instance
-  - Behavior: Creates formatter with reference to configuration for format strings
-  - Error Cases: None
+- **Printf-Style Formatting**: Centralized printf-style formatting for all application output
+  - Spec: "All standard output must use configurable printf-style format specifications"
+  - Methods for directory operations: `FormatCreatedArchive()`, `FormatIdenticalArchive()`, `FormatListArchive()`, `FormatDryRunArchive()`
+  - Methods for file operations: `FormatCreatedBackup()`, `FormatIdenticalBackup()`, `FormatListBackup()`, `FormatDryRunBackup()`
+  - Print methods: `PrintCreatedArchive()`, `PrintIdenticalArchive()`, etc.
+  - Error handling: `FormatError()`, `PrintError()`
 
-- `FormatCreatedArchive(path string) string`
-  - Spec: "Formats successful archive creation message using printf-style format"
-  - Input: `path string` - Path to created archive
-  - Output: `string` - Formatted message
-  - Behavior: Uses `cfg.FormatCreatedArchive` format string with path parameter
-  - Error Cases: None (falls back to safe default on invalid format)
-
-- `FormatIdenticalArchive(path string) string`
-  - Spec: "Formats identical archive message using printf-style format"
-  - Input: `path string` - Path to existing archive
-  - Output: `string` - Formatted message
-  - Behavior: Uses `cfg.FormatIdenticalArchive` format string with path parameter
-  - Error Cases: None (falls back to safe default on invalid format)
-
-- `FormatListArchive(path, creationTime string) string`
-  - Spec: "Formats archive listing entry using printf-style format"
-  - Input:
-    - `path string` - Path to archive file
-    - `creationTime string` - Creation timestamp
-  - Output: `string` - Formatted message
-  - Behavior: Uses `cfg.FormatListArchive` format string with path and time parameters
-  - Error Cases: None (falls back to safe default on invalid format)
-
-- `FormatConfigValue(name, value, source string) string`
-  - Spec: "Formats configuration value display using printf-style format"
-  - Input:
-    - `name string` - Configuration parameter name
-    - `value string` - Configuration value
-    - `source string` - Source file or "default"
-  - Output: `string` - Formatted message
-  - Behavior: Uses `cfg.FormatConfigValue` format string with name, value, and source parameters
-  - Error Cases: None (falls back to safe default on invalid format)
-
-- `FormatDryRunArchive(path string) string`
-  - Spec: "Formats dry-run archive message using printf-style format"
-  - Input: `path string` - Path that would be created
-  - Output: `string` - Formatted message
-  - Behavior: Uses `cfg.FormatDryRunArchive` format string with path parameter
-  - Error Cases: None (falls back to safe default on invalid format)
-
-- `FormatError(message string) string`
-  - Spec: "Formats error message using printf-style format"
-  - Input: `message string` - Error message
-  - Output: `string` - Formatted message
-  - Behavior: Uses `cfg.FormatError` format string with message parameter
-  - Error Cases: None (falls back to safe default on invalid format)
+- **Template-Based Formatting**: Advanced template formatting with regex extraction
+  - Spec: "Support both Go text/template syntax and placeholder syntax with data extraction"
+  - Template methods: `FormatCreatedArchiveTemplate()`, `FormatIdenticalArchiveTemplate()`, etc.
+  - Regex extraction: `ExtractArchiveFilenameData()`, `ExtractBackupFilenameData()`
+  - Enhanced formatting: `FormatArchiveWithExtraction()`, `FormatListArchiveWithExtraction()`
 
 **Example Usage**:
 ```go
 // Create output formatter
 formatter := NewOutputFormatter(cfg)
 
-// Format messages
+// Printf-style formatting for archives
 createdMsg := formatter.FormatCreatedArchive("/path/to/archive")
-errorMsg := formatter.FormatError("File not found")
-
-// Print messages directly
 formatter.PrintCreatedArchive("/path/to/archive")
-formatter.PrintError("File not found")
 
-// Use in archive operations
-if archiveCreated {
-    formatter.PrintCreatedArchive(archivePath)
-} else {
-    formatter.PrintIdenticalArchive(existingArchivePath)
+// Printf-style formatting for file backups
+backupMsg := formatter.FormatCreatedBackup("/path/to/backup")
+formatter.PrintCreatedBackup("/path/to/backup")
+
+// Template-based formatting with extraction
+data := formatter.ExtractArchiveFilenameData("project-2024-03-21-15-30=main=abc123=note.zip")
+templateMsg := formatter.FormatCreatedArchiveTemplate(data)
+
+// Template-based formatting for file backups
+backupData := formatter.ExtractBackupFilenameData("document.txt-2024-03-21-15-30=important")
+backupTemplateMsg := formatter.FormatCreatedBackupTemplate(backupData)
+```
+
+### Template Formatting Requirements
+**Implementation**: `template_formatter.go` - `TemplateFormatter`
+**Specification Requirements**:
+- **Advanced Template Processing**: Support for both Go text/template and placeholder syntax
+  - Spec: "Provide rich template formatting with named placeholders and regex extraction"
+  - Methods:
+    - `NewTemplateFormatter(cfg *Config) *TemplateFormatter`: Create formatter with configuration
+    - `FormatWithTemplate(input, pattern, tmplStr string) (string, error)`: Apply Go text/template to named regex groups
+    - `FormatWithPlaceholders(format string, data map[string]string) string`: Replace %{name} placeholders
+  - Template syntax: Supports both `{{.name}}` (Go text/template) and `%{name}` (placeholder) syntax
+  - Regex integration: Extract named groups for template data
+  - Error handling: Graceful degradation on template errors
+
+- **Template Methods for Directory Operations**: Rich template formatting for archive operations
+  - Spec: "Provide template-based formatting for all directory archive operations"
+  - Methods:
+    - `TemplateCreatedArchive(path string) string`: Format archive creation using template with data extraction
+    - `TemplateIdenticalArchive(path string) string`: Format identical directory message using template
+    - `TemplateListArchive(path, creationTime string) string`: Format archive listing using template
+    - `TemplateDryRunArchive(path string) string`: Format dry-run message using template
+  - Data extraction: Uses `cfg.PatternArchiveFilename` for extracting archive information
+  - Fallback: Falls back to placeholder formatting on template errors
+
+- **Template Methods for File Operations**: Rich template formatting for file backup operations
+  - Spec: "Provide template-based formatting for all file backup operations"
+  - Methods:
+    - `TemplateCreatedBackup(path string) string`: Format backup creation using template with data extraction
+    - `TemplateIdenticalBackup(path string) string`: Format identical file message using template
+    - `TemplateListBackup(path, creationTime string) string`: Format backup listing using template
+    - `TemplateDryRunBackup(path string) string`: Format dry-run message using template
+  - Data extraction: Uses `cfg.PatternBackupFilename` for extracting backup information
+  - Fallback: Falls back to placeholder formatting on template errors
+
+- **Template Methods for Common Operations**: Template formatting for configuration and errors
+  - Spec: "Provide template-based formatting for configuration display and error messages"
+  - Methods:
+    - `TemplateConfigValue(name, value, source string) string`: Format configuration display using template
+    - `TemplateError(message, operation string) string`: Format error message using template with operation context
+  - Enhanced features: Supports conditional formatting based on source type and operation context
+  - Error context: Operation context enhances error information (e.g., "archive creation", "backup creation", "file listing")
+
+- **Template Print Methods**: Direct printing with template formatting
+  - Spec: "Provide direct printing methods for template-formatted output"
+  - Methods for directory operations:
+    - `PrintTemplateCreatedArchive(path string)`: Print template-formatted archive creation to stdout
+    - `PrintTemplateIdenticalArchive(path string)`: Print template-formatted identical directory to stdout
+    - `PrintTemplateListArchive(path, creationTime string)`: Print template-formatted archive listing to stdout
+    - `PrintTemplateDryRunArchive(path string)`: Print template-formatted dry-run to stdout
+  - Methods for file operations:
+    - `PrintTemplateCreatedBackup(path string)`: Print template-formatted backup creation to stdout
+    - `PrintTemplateIdenticalBackup(path string)`: Print template-formatted identical file to stdout
+    - `PrintTemplateListBackup(path, creationTime string)`: Print template-formatted backup listing to stdout
+    - `PrintTemplateDryRunBackup(path string)`: Print template-formatted dry-run to stdout
+  - Common methods:
+    - `PrintTemplateConfigValue(name, value, source string)`: Print template-formatted configuration to stdout
+    - `PrintTemplateError(message, operation string)`: Print template-formatted error to stderr
+
+- **Regex-Based Data Extraction**: Extract structured data from filenames and paths
+  - Spec: "Use named regex patterns to extract rich data for template formatting"
+  - Patterns: Archive filenames, backup filenames, timestamps, configuration lines
+  - Named groups: Extract prefix, year, month, day, hour, minute, branch, hash, note, filename, etc.
+  - Integration: Seamless integration with template formatting
+  - Error handling: Invalid regex patterns handled gracefully
+
+**Example Usage**:
+```go
+// Create template formatter
+templateFormatter := NewTemplateFormatter(cfg)
+
+// Template formatting with regex extraction for archives
+archivePath := "project-2024-03-21-15-30=main=abc123d=important.zip"
+formatted, err := templateFormatter.FormatWithTemplate(
+    archivePath,
+    cfg.PatternArchiveFilename,
+    "Archive of {{.prefix}} from {{.year}}-{{.month}}-{{.day}} ({{.branch}}/{{.hash}}) with note: {{.note}}",
+)
+
+// Template formatting with regex extraction for backups
+backupPath := "file.txt-2024-03-21-15-30=important"
+formatted, err := templateFormatter.FormatWithTemplate(
+    backupPath,
+    cfg.PatternBackupFilename,
+    "Backup of {{.filename}} from {{.year}}-{{.month}}-{{.day}} with note: {{.note}}",
+)
+
+// Placeholder formatting
+data := map[string]string{
+    "filename": "document.txt",
+    "year": "2024",
+    "month": "03",
+    "day": "21",
 }
+result := templateFormatter.FormatWithPlaceholders(
+    "File %{filename} backed up on %{year}-%{month}-%{day}",
+    data,
+)
+
+// Direct template formatting methods
+createdMsg := templateFormatter.TemplateCreatedArchive("/path/to/archive-2024-03-21-15-30=main=abc123d.zip")
+backupMsg := templateFormatter.TemplateCreatedBackup("/path/to/backup-2024-03-21-15-30=note")
+errorMsg := templateFormatter.TemplateError("File not found", "backup creation")
+
+// Print methods for direct output
+templateFormatter.PrintTemplateCreatedArchive("/path/to/archive")
+templateFormatter.PrintTemplateCreatedBackup("/path/to/backup")
+templateFormatter.PrintTemplateError("Operation failed", "archive creation")
 ```
 
 ## Data Objects
@@ -167,163 +471,119 @@ if archiveCreated {
 ### Config
 **Implementation**: `config.go`
 **Specification Requirements**:
-- Configuration stored in YAML file `.bkpdir.yml` at root directory
-- Default values used if file not present
-- Fields:
-  - `ArchiveDirPath`: `Config.ArchiveDirPath`
-    - Spec: "Specifies where archives are stored"
-    - Default: "../.bkpdir" relative to current directory
-    - YAML key: "archive_dir_path"
-  - `UseCurrentDirName`: `Config.UseCurrentDirName`
-    - Spec: "Controls whether to include current directory name in archive path"
-    - Default: true
-    - YAML key: "use_current_dir_name"
-  - `ExcludePatterns`: `Config.ExcludePatterns`
-    - Spec: "List of patterns to exclude from archiving"
-    - Default: [".git/", "vendor/"]
-    - YAML key: "exclude_patterns"
-  - `Verification`: `Config.Verification`
-    - Spec: "Controls archive verification behavior"
-  - `StatusCreatedArchive`: `Config.StatusCreatedArchive`
-    - Spec: "Exit code when a new archive is successfully created"
-    - Default: 0
-    - YAML key: "status_created_archive"
-  - `StatusFailedToCreateArchiveDirectory`: `Config.StatusFailedToCreateArchiveDirectory`
-    - Spec: "Exit code when archive directory creation fails"
-    - Default: 31
-    - YAML key: "status_failed_to_create_archive_directory"
-  - `StatusDirectoryIsIdenticalToExistingArchive`: `Config.StatusDirectoryIsIdenticalToExistingArchive`
-    - Spec: "Exit code when directory is identical to most recent archive"
-    - Default: 0
-    - YAML key: "status_directory_is_identical_to_existing_archive"
-  - `StatusDirectoryNotFound`: `Config.StatusDirectoryNotFound`
-    - Spec: "Exit code when source directory does not exist"
-    - Default: 20
-    - YAML key: "status_directory_not_found"
-  - `StatusInvalidDirectoryType`: `Config.StatusInvalidDirectoryType`
-    - Spec: "Exit code when source path is not a directory"
-    - Default: 21
-    - YAML key: "status_invalid_directory_type"
-  - `StatusPermissionDenied`: `Config.StatusPermissionDenied`
-    - Spec: "Exit code when directory access is denied"
-    - Default: 22
-    - YAML key: "status_permission_denied"
-  - `StatusDiskFull`: `Config.StatusDiskFull`
-    - Spec: "Exit code when disk space is insufficient"
-    - Default: 30
-    - YAML key: "status_disk_full"
-  - `StatusConfigError`: `Config.StatusConfigError`
-    - Spec: "Exit code when configuration is invalid"
-    - Default: 10
-    - YAML key: "status_config_error"
-  - `FormatCreatedArchive`: `Config.FormatCreatedArchive`
-    - Spec: "Printf-style format string for successful archive creation messages"
-    - Default: "Created archive: %s\n"
-    - YAML key: "format_created_archive"
-    - Supports: ANSI color codes and text formatting
-  - `FormatIdenticalArchive`: `Config.FormatIdenticalArchive`
-    - Spec: "Printf-style format string for identical directory messages"
-    - Default: "Directory is identical to existing archive: %s\n"
-    - YAML key: "format_identical_archive"
-    - Supports: ANSI color codes and text formatting
-  - `FormatListArchive`: `Config.FormatListArchive`
-    - Spec: "Printf-style format string for archive listing entries"
-    - Default: "%s (created: %s)\n"
-    - YAML key: "format_list_archive"
-    - Supports: ANSI color codes and text formatting
-  - `FormatConfigValue`: `Config.FormatConfigValue`
-    - Spec: "Printf-style format string for configuration value display"
-    - Default: "%s: %s (source: %s)\n"
-    - YAML key: "format_config_value"
-    - Supports: ANSI color codes and text formatting
-  - `FormatDryRunArchive`: `Config.FormatDryRunArchive`
-    - Spec: "Printf-style format string for dry-run archive messages"
-    - Default: "Would create archive: %s\n"
-    - YAML key: "format_dry_run_archive"
-    - Supports: ANSI color codes and text formatting
-  - `FormatError`: `Config.FormatError`
-    - Spec: "Printf-style format string for error messages"
-    - Default: "Error: %s\n"
-    - YAML key: "format_error"
-    - Supports: ANSI color codes and text formatting
-  - `TemplateCreatedArchive`: `Config.TemplateCreatedArchive`
-    - Spec: "Template string for successful archive creation messages with named placeholders"
-    - Default: "Created archive: %{path}\n"
-    - YAML key: "template_created_archive"
-    - Supports: Go text/template syntax and %{name} placeholders
-  - `TemplateIdenticalArchive`: `Config.TemplateIdenticalArchive`
-    - Spec: "Template string for identical directory messages with named placeholders"
-    - Default: "Directory is identical to existing archive: %{path}\n"
-    - YAML key: "template_identical_archive"
-    - Supports: Go text/template syntax and %{name} placeholders
-  - `TemplateListArchive`: `Config.TemplateListArchive`
-    - Spec: "Template string for archive listing entries with named placeholders"
-    - Default: "%{path} (created: %{creation_time})\n"
-    - YAML key: "template_list_archive"
-    - Supports: Go text/template syntax and %{name} placeholders
-  - `TemplateConfigValue`: `Config.TemplateConfigValue`
-    - Spec: "Template string for configuration value display with named placeholders"
-    - Default: "%{name}: %{value} (source: %{source})\n"
-    - YAML key: "template_config_value"
-    - Supports: Go text/template syntax and %{name} placeholders
-  - `TemplateDryRunArchive`: `Config.TemplateDryRunArchive`
-    - Spec: "Template string for dry-run archive messages with named placeholders"
-    - Default: "Would create archive: %{path}\n"
-    - YAML key: "template_dry_run_archive"
-    - Supports: Go text/template syntax and %{name} placeholders
-  - `TemplateError`: `Config.TemplateError`
-    - Spec: "Template string for error messages with named placeholders"
-    - Default: "Error: %{message}\n"
-    - YAML key: "template_error"
-    - Supports: Go text/template syntax and %{name} placeholders
-  - `PatternArchiveFilename`: `Config.PatternArchiveFilename`
-    - Spec: "Named regex pattern for parsing archive filenames"
-    - Default: "(?P<prefix>[^-]*)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\\.zip"
-    - YAML key: "pattern_archive_filename"
-    - Supports: Named capture groups for data extraction
-  - `PatternConfigLine`: `Config.PatternConfigLine`
-    - Spec: "Named regex pattern for parsing configuration display lines"
-    - Default: "(?P<name>[^:]+):\\s*(?P<value>[^(]+)\\s*\\(source:\\s*(?P<source>[^)]+)\\)"
-    - YAML key: "pattern_config_line"
-    - Supports: Named capture groups for data extraction
-  - `PatternTimestamp`: `Config.PatternTimestamp`
-    - Spec: "Named regex pattern for parsing timestamps"
-    - Default: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
-    - YAML key: "pattern_timestamp"
-    - Supports: Named capture groups for data extraction
+- Configuration stored in YAML files with configurable discovery
+- Environment variable support: `BKPDIR_CONFIG` for search paths
+- Default search path: `./.bkpdir.yml:~/.bkpdir.yml`
+- Home directory expansion support
+- Configuration precedence: Earlier files override later files
+
+**Directory Archiving Fields**:
+- `ArchiveDirPath`: Archive storage location (default: "../.bkpdir")
+- `UseCurrentDirName`: Include directory name in path (default: true)
+- `ExcludePatterns`: Glob patterns to exclude (default: [".git/", "vendor/"])
+- `IncludeGitInfo`: Include Git branch/hash in names (default: true)
+- `Verification`: Archive verification settings
+
+**File Backup Fields**:
+- `BackupDirPath`: File backup storage location (default: "../.bkpdir")
+- `UseCurrentDirNameForFiles`: Include directory structure in backup path (default: true)
+
+**Status Codes for Directory Operations**:
+- `StatusCreatedArchive`: New archive created (default: 0)
+- `StatusFailedToCreateArchiveDirectory`: Archive directory creation failed (default: 31)
+- `StatusDirectoryIsIdenticalToExistingArchive`: Directory unchanged (default: 0)
+- `StatusDirectoryNotFound`: Source directory missing (default: 20)
+- `StatusInvalidDirectoryType`: Source not a directory (default: 21)
+- `StatusPermissionDenied`: Access denied (default: 22)
+- `StatusDiskFull`: Insufficient disk space (default: 30)
+- `StatusConfigError`: Invalid configuration (default: 10)
+
+**Status Codes for File Operations**:
+- `StatusCreatedBackup`: New backup created (default: 0)
+- `StatusFailedToCreateBackupDirectory`: Backup directory creation failed (default: 31)
+- `StatusFileIsIdenticalToExistingBackup`: File unchanged (default: 0)
+- `StatusFileNotFound`: Source file missing (default: 20)
+- `StatusInvalidFileType`: Source not a regular file (default: 21)
+
+**Printf-Style Format Strings for Directory Operations**:
+- `FormatCreatedArchive`: Archive creation message (default: "Created archive: %s\n")
+- `FormatIdenticalArchive`: Identical directory message (default: "Directory is identical to existing archive: %s\n")
+- `FormatListArchive`: Archive listing format (default: "%s (created: %s)\n")
+- `FormatDryRunArchive`: Dry-run message (default: "Would create archive: %s\n")
+
+**Printf-Style Format Strings for File Operations**:
+- `FormatCreatedBackup`: Backup creation message (default: "Created backup: %s\n")
+- `FormatIdenticalBackup`: Identical file message (default: "File is identical to existing backup: %s\n")
+- `FormatListBackup`: Backup listing format (default: "%s (created: %s)\n")
+- `FormatDryRunBackup`: Dry-run message (default: "Would create backup: %s\n")
+
+**Common Format Strings**:
+- `FormatConfigValue`: Configuration display (default: "%s: %s (source: %s)\n")
+- `FormatError`: Error messages (default: "Error: %s\n")
+
+**Template-Based Format Strings for Directory Operations**:
+- `TemplateCreatedArchive`: Archive creation template (default: "Created archive: %{path}\n")
+- `TemplateIdenticalArchive`: Identical directory template (default: "Directory is identical to existing archive: %{path}\n")
+- `TemplateListArchive`: Archive listing template (default: "%{path} (created: %{creation_time})\n")
+- `TemplateDryRunArchive`: Dry-run template (default: "Would create archive: %{path}\n")
+
+**Template-Based Format Strings for File Operations**:
+- `TemplateCreatedBackup`: Backup creation template (default: "Created backup: %{path}\n")
+- `TemplateIdenticalBackup`: Identical file template (default: "File is identical to existing backup: %{path}\n")
+- `TemplateListBackup`: Backup listing template (default: "%{path} (created: %{creation_time})\n")
+- `TemplateDryRunBackup`: Dry-run template (default: "Would create backup: %{path}\n")
+
+**Common Template Strings**:
+- `TemplateConfigValue`: Configuration display template (default: "%{name}: %{value} (source: %{source})\n")
+- `TemplateError`: Error message template (default: "Error: %{message}\n")
+
+**Regex Patterns for Data Extraction**:
+- `PatternArchiveFilename`: Parse archive filenames with named groups
+- `PatternBackupFilename`: Parse backup filenames with named groups
+- `PatternConfigLine`: Parse configuration display lines
+- `PatternTimestamp`: Parse timestamp strings
 
 **Example Usage**:
 ```go
-// Load configuration from YAML or use defaults
+// Load configuration with environment variable support
 cfg, err := LoadConfig(".")
 if err != nil {
     log.Fatal(err)
 }
 
-// Access configuration values
+// Access directory archiving configuration
 archivePath := cfg.ArchiveDirPath
 excludePatterns := cfg.ExcludePatterns
+includeGit := cfg.IncludeGitInfo
 
-// Access status code configuration
-createdArchiveStatus := cfg.StatusCreatedArchive
-identicalDirectoryStatus := cfg.StatusDirectoryIsIdenticalToExistingArchive
-directoryNotFoundStatus := cfg.StatusDirectoryNotFound
+// Access file backup configuration
+backupPath := cfg.BackupDirPath
+useCurrentDir := cfg.UseCurrentDirNameForFiles
 
-// Access format string configuration
+// Access status codes
+createdStatus := cfg.StatusCreatedArchive
+identicalStatus := cfg.StatusDirectoryIsIdenticalToExistingArchive
+createdBackupStatus := cfg.StatusCreatedBackup
+identicalBackupStatus := cfg.StatusFileIsIdenticalToExistingBackup
+
+// Access format strings
 createdFormat := cfg.FormatCreatedArchive
-errorFormat := cfg.FormatError
+createdTemplate := cfg.TemplateCreatedArchive
+createdBackupFormat := cfg.FormatCreatedBackup
+createdBackupTemplate := cfg.TemplateCreatedBackup
+
+// Access regex patterns
+archivePattern := cfg.PatternArchiveFilename
+backupPattern := cfg.PatternBackupFilename
 ```
 
 ### ConfigValue
 **Implementation**: `config.go`
 **Specification Requirements**:
 - Fields:
-  - `Name`: `ConfigValue.Name`
-    - Spec: "Configuration parameter name"
-  - `Value`: `ConfigValue.Value`
-    - Spec: "Computed configuration value including defaults"
-  - `Source`: `ConfigValue.Source`
-    - Spec: "Source file path or 'default' for default values"
+  - `Name`: Configuration parameter name
+  - `Value`: Computed configuration value including defaults
+  - `Source`: Source file path or "default" for default values
 
 **Example Usage**:
 ```go
@@ -335,386 +595,307 @@ configValue := &ConfigValue{
 }
 ```
 
+### Backup
+**Implementation**: `backup.go`
+**Specification Requirements**:
+- **File Backup Representation**: Represents a single file backup with metadata
+  - Spec: "Provide structured representation of file backups with creation time and source information"
+  - Fields:
+    - `Name`: Backup filename (e.g., "file.txt-2024-03-21-15-30=note")
+    - `Path`: Full path to backup file
+    - `CreationTime`: Time when backup was created
+    - `SourceFile`: Path to original source file
+    - `Note`: Optional note extracted from backup filename
+  - Usage: Used for backup listing, comparison, and metadata operations
+  - Integration: Works with template formatting for rich display
+
+**Example Usage**:
+```go
+// Create a new backup object
+backup := &Backup{
+    Name: "file.txt-2024-03-20-15-30=important_backup",
+    Path: "/path/to/backup/file.txt-2024-03-20-15-30=important_backup",
+    CreationTime: time.Now(),
+    SourceFile: "/path/to/original/file.txt",
+    Note: "important_backup",
+}
+
+// Use in backup listing
+backups, err := ListFileBackups(cfg.BackupDirPath, "file.txt")
+for _, backup := range backups {
+    fmt.Printf("Backup: %s (created: %s)\n", backup.Name, backup.CreationTime.Format("2006-01-02 15:04:05"))
+    if backup.Note != "" {
+        fmt.Printf("  Note: %s\n", backup.Note)
+    }
+}
+
+// Use with template formatting
+templateFormatter := NewTemplateFormatter(cfg)
+for _, backup := range backups {
+    templateFormatter.PrintTemplateListBackup(backup.Path, backup.CreationTime.Format("2006-01-02 15:04:05"))
+}
+```
+
+### BackupError
+**Implementation**: `backup.go`
+**Specification Requirements**:
+- **Structured Error Handling**: Provides consistent error reporting for file backup operations
+  - Spec: "All backup operations return structured errors with status codes and operation context"
+  - Fields:
+    - `Message`: Human-readable error description
+    - `StatusCode`: Numeric exit code for application
+    - `Operation`: Context about what operation failed (e.g., "backup creation", "file listing")
+    - `Path`: File path involved in the error
+    - `Err`: Underlying error for debugging
+  - Implementation: Implements Go's `error` interface
+  - Usage: Allows callers to extract both message and status code
+  - Integration: Works with template formatting for rich error display
+
+**Example Usage**:
+```go
+// Create structured backup error with operation context
+err := NewBackupError("file not found", cfg.StatusFileNotFound, "backup creation", "/path/to/file")
+
+// Check for BackupError type
+if backupErr, ok := err.(*BackupError); ok {
+    fmt.Fprintf(os.Stderr, "Error: %s\n", backupErr.Message)
+    
+    // Use with template formatting for rich error display
+    templateFormatter := NewTemplateFormatter(cfg)
+    templateFormatter.PrintTemplateError(backupErr.Message, backupErr.Operation)
+    
+    os.Exit(backupErr.StatusCode)
+}
+
+// Create error with underlying cause
+underlyingErr := errors.New("permission denied")
+err = NewBackupErrorWithCause("cannot create backup", cfg.StatusPermissionDenied, "backup creation", "/path/to/file", underlyingErr)
+```
+
+### ArchiveError
+**Implementation**: `archive.go`
+**Specification Requirements**:
+- **Structured Error Handling**: Provides consistent error reporting for archive operations
+  - Spec: "All archive operations return structured errors with status codes and operation context"
+  - Fields:
+    - `Message`: Human-readable error description
+    - `StatusCode`: Numeric exit code for application
+    - `Operation`: Context about what operation failed (e.g., "archive creation", "directory scanning")
+    - `Path`: Directory path involved in the error
+    - `Err`: Underlying error for debugging
+  - Implementation: Implements Go's `error` interface
+  - Usage: Allows callers to extract both message and status code
+  - Integration: Works with template formatting for rich error display
+
+**Example Usage**:
+```go
+// Create structured archive error with operation context
+err := NewArchiveError("directory not found", cfg.StatusDirectoryNotFound, "archive creation", "/path/to/directory")
+
+// Check for ArchiveError type
+if archiveErr, ok := err.(*ArchiveError); ok {
+    fmt.Fprintf(os.Stderr, "Error: %s\n", archiveErr.Message)
+    
+    // Use with template formatting for rich error display
+    templateFormatter := NewTemplateFormatter(cfg)
+    templateFormatter.PrintTemplateError(archiveErr.Message, archiveErr.Operation)
+    
+    os.Exit(archiveErr.StatusCode)
+}
+
+// Create error with underlying cause
+underlyingErr := errors.New("permission denied")
+err = NewArchiveErrorWithCause("cannot access directory", cfg.StatusPermissionDenied, "archive creation", "/path/to/directory", underlyingErr)
+```
+
 ### VerificationConfig
 **Implementation**: `config.go`
 **Specification Requirements**:
 - Fields:
-  - `VerifyOnCreate`: `VerificationConfig.VerifyOnCreate`
-    - Spec: "Automatically verify archives after creation"
-    - Default: false
-    - YAML key: "verify_on_create"
-  - `ChecksumAlgorithm`: `VerificationConfig.ChecksumAlgorithm`
-    - Spec: "Algorithm used for checksums"
-    - Default: "sha256"
-    - YAML key: "checksum_algorithm"
-
-**Example Usage**:
-```go
-// Create verification config with custom settings
-verifCfg := &VerificationConfig{
-    VerifyOnCreate: true,
-    ChecksumAlgorithm: "sha256",
-}
-
-// Use in main config
-cfg.Verification = verifCfg
-```
+  - `VerifyOnCreate`: Automatically verify archives after creation (default: false)
+  - `ChecksumAlgorithm`: Algorithm used for checksums (default: "sha256")
 
 ### Archive
 **Implementation**: `archive.go`
 **Specification Requirements**:
 - Fields:
-  - `Name`: `Archive.Name`
-    - Spec: "Archive naming format for Git/non-Git repositories"
-  - `Path`: `Archive.Path`
-    - Spec: "Full path to archive file"
-  - `CreationTime`: `Archive.CreationTime`
-    - Spec: "When the archive was created"
-  - `IsIncremental`: `Archive.IsIncremental`
-    - Spec: "Whether this is an incremental archive"
-  - `GitBranch`: `Archive.GitBranch`
-    - Spec: "Current git branch (if in git repo)"
-  - `GitHash`: `Archive.GitHash`
-    - Spec: "Current git commit hash (if in git repo)"
-  - `Note`: `Archive.Note`
-    - Spec: "Optional note for the archive"
-  - `BaseArchive`: `Archive.BaseArchive`
-    - Spec: "Name of base archive for incremental backups"
-  - `VerificationStatus`: `Archive.VerificationStatus`
-    - Spec: "Result of last verification"
+  - `Name`: Archive filename with timestamp and optional Git info
+  - `Path`: Full path to archive file
+  - `CreationTime`: Archive creation timestamp
+  - `IsIncremental`: Whether this is an incremental archive
+  - `GitBranch`: Git branch name (if in Git repository)
+  - `GitHash`: Git commit hash (if in Git repository)
+  - `Note`: Optional user-provided note
+  - `BaseArchive`: Base archive name for incremental archives
+  - `VerificationStatus`: Result of last verification
 
-**Example Usage**:
-```go
-// Create a new archive object
-archive := &Archive{
-    Name: "2024-03-20-15-30=main=abc123=backup.zip",
-    Path: "/path/to/archive.zip",
-    CreationTime: time.Now(),
-    IsIncremental: false,
-    GitBranch: "main",
-    GitHash: "abc123",
-    Note: "backup",
-}
-```
-
-### VerificationStatus
-**Implementation**: `verify.go`
+### BackupInfo
+**Implementation**: `backup.go`
 **Specification Requirements**:
 - Fields:
-  - `VerifiedAt`: `VerificationStatus.VerifiedAt`
-    - Spec: "When the archive was last verified"
-  - `IsVerified`: `VerificationStatus.IsVerified`
-    - Spec: "Whether the archive passed verification"
-  - `HasChecksums`: `VerificationStatus.HasChecksums`
-    - Spec: "Whether checksums were verified"
-  - `Errors`: `VerificationStatus.Errors`
-    - Spec: "List of verification errors"
+  - `Name`: Backup filename with timestamp and optional note
+  - `Path`: Full path to backup file
+  - `CreationTime`: Backup creation timestamp
+  - `Size`: File size in bytes
 
-### ArchiveError
+### VerificationStatus
 **Implementation**: `archive.go`
 **Specification Requirements**:
-- **Structured Error Handling**: Provides consistent error reporting
-  - Spec: "All archive operations return structured errors with status codes"
-  - Fields:
-    - `Message`: Human-readable error description
-    - `StatusCode`: Numeric exit code for application
-  - Implementation: Implements Go's `error` interface
-  - Usage: Allows callers to extract both message and status code
-
-**Example Usage**:
-```go
-// Create structured error
-err := NewArchiveError("directory not found", cfg.StatusDirectoryNotFound)
-
-// Check for ArchiveError type
-if archiveErr, ok := err.(*ArchiveError); ok {
-    fmt.Fprintf(os.Stderr, "Error: %s\n", archiveErr.Message)
-    os.Exit(archiveErr.StatusCode)
-}
-```
+- Fields:
+  - `IsVerified`: Whether verification passed
+  - `ChecksumVerified`: Whether checksum verification was performed
+  - `Errors`: List of verification errors
+  - `VerifiedAt`: When verification was performed
 
 ### ResourceManager
-**Implementation**: `archive.go`
+**Implementation**: `archive.go`, `backup.go`
 **Specification Requirements**:
-- **Resource Tracking**: Thread-safe tracking of temporary resources
-  - Spec: "Track all temporary files and directories for cleanup"
+- **Thread-Safe Resource Tracking**: Mutex-protected resource management
   - Fields:
     - `tempFiles`: List of temporary files to clean up
     - `tempDirs`: List of temporary directories to clean up
     - `mutex`: Mutex for thread-safe access
   - Methods:
-    - `AddTempFile()`: Register temporary file for cleanup
-    - `AddTempDir()`: Register temporary directory for cleanup
-    - `Cleanup()`: Remove all registered resources
+    - `NewResourceManager()`: Create new resource manager
+    - `AddTempFile(path string)`: Register temporary file for cleanup
+    - `AddTempDir(path string)`: Register temporary directory for cleanup
+    - `RemoveResource(resource Resource)`: Remove resource from tracking
+    - `Cleanup()`: Clean up all registered resources
+    - `CleanupWithPanicRecovery()`: Clean up with panic recovery
 
 **Example Usage**:
 ```go
 // Create and use resource manager
 rm := NewResourceManager()
-defer rm.Cleanup()
+defer rm.CleanupWithPanicRecovery()
 
+// Register resources
 rm.AddTempFile("/tmp/archive.tmp")
-rm.AddTempDir("/tmp/archive_work")
+rm.AddTempDir("/tmp/work")
+
+// Remove successful resource
+rm.RemoveResource(&TempFile{Path: "/tmp/archive.tmp"})
 ```
 
 ### TemplateFormatter
 **Implementation**: `formatter.go`
 **Specification Requirements**:
-- **Template-Based Formatting**: Provides centralized template-based formatting using named placeholders
-  - Spec: "All standard output must support template-based formatting with named data extraction"
+- **Advanced Template Processing**: Template-based formatting with regex extraction
   - Fields:
-    - `config`: *Config - Reference to configuration for template strings and regex patterns
+    - `config`: Reference to configuration for template strings and patterns
   - Methods:
-    - `NewTemplateFormatter(cfg *Config) *TemplateFormatter`: Creates new template formatter
-    - `FormatWithTemplate(input, pattern, tmplStr string) (string, error)`: Applies text/template to named regex groups
-    - `FormatWithPlaceholders(format string, data map[string]string) string`: Replaces %{name} placeholders
-    - `TemplateCreatedArchive(path string) string`: Formats archive creation using template
-    - `TemplateIdenticalArchive(path string) string`: Formats identical directory message using template
-    - `TemplateListArchive(path, creationTime string) string`: Formats archive listing using template
-    - `TemplateConfigValue(name, value, source string) string`: Formats configuration display using template
-    - `TemplateDryRunArchive(path string) string`: Formats dry-run message using template
-    - `TemplateError(message, operation string) string`: Formats error message using template
-
-**Example Usage**:
-```go
-// Create template formatter with configuration
-templateFormatter := NewTemplateFormatter(cfg)
-
-// Format messages using templates
-createdMsg := templateFormatter.TemplateCreatedArchive("/path/to/archive")
-errorMsg := templateFormatter.TemplateError("Directory not found", "archive_creation")
-
-// Use template formatting with regex extraction
-archivePath := "project-2024-03-21-15-30=main=abc123=important.zip"
-formatted, err := templateFormatter.FormatWithTemplate(
-    archivePath,
-    cfg.PatternArchiveFilename,
-    "Archive of {{.prefix}} from {{.year}}-{{.month}}-{{.day}} ({{.branch}}@{{.hash}}) with note: {{.note}}",
-)
-
-// Use placeholder formatting
-data := map[string]string{
-    "prefix": "myproject",
-    "year": "2024",
-    "month": "03",
-    "day": "21",
-    "branch": "main",
-    "hash": "abc123",
-}
-result := templateFormatter.FormatWithPlaceholders(
-    "Directory %{prefix} archived on %{year}-%{month}-%{day} from %{branch}@%{hash}",
-    data,
-)
-```
+    - `NewTemplateFormatter(cfg *Config) *TemplateFormatter`: Create formatter
+    - `FormatWithTemplate(input, pattern, tmplStr string) (string, error)`: Apply template to regex groups
+    - `FormatWithPlaceholders(format string, data map[string]string) string`: Replace placeholders
+    - Template methods for all operations: `TemplateCreatedArchive()`, `TemplateCreatedBackup()`, etc.
 
 ## Core Functions
 
 ### Configuration Management
 **Implementation**: `config.go`
 **Specification Requirements**:
-- `DefaultConfig()`: `DefaultConfig()`
-  - Spec: "Creates default configuration with specified defaults"
-  - Input: None
-  - Output: `*Config` - Returns a new Config with default values
-  - Behavior: Creates a new Config struct with all fields set to their default values
-  - Default Values:
-    - ArchiveDirPath: "../.bkpdir"
-    - UseCurrentDirName: true
-    - ExcludePatterns: [".git/", "vendor/"]
-    - Verification.VerifyOnCreate: false
-    - Verification.ChecksumAlgorithm: "sha256"
-    - StatusCreatedArchive: 0
-    - StatusFailedToCreateArchiveDirectory: 31
-    - StatusDirectoryIsIdenticalToExistingArchive: 0
-    - StatusDirectoryNotFound: 20
-    - StatusInvalidDirectoryType: 21
-    - StatusPermissionDenied: 22
-    - StatusDiskFull: 30
-    - StatusConfigError: 10
 
-- `LoadConfig()`: `LoadConfig(root string) (*Config, error)`
-  - Spec: "Loads config from YAML or uses defaults"
-  - Input: `root string` - Path to root directory containing .bkpdir.yml
-  - Output: `(*Config, error)` - Returns config and any error encountered
-  - Behavior:
-    - Attempts to read .bkpdir.yml from root directory
-    - If file exists, merges with default values
-    - If file doesn't exist, returns default config
-    - Returns error if file exists but is invalid YAML
-  - Error Cases:
-    - Invalid YAML format
-    - Invalid configuration values
-    - File system errors
+- `DefaultConfig() *Config`
+  - Spec: "Creates default configuration with all specified defaults"
+  - Returns: New Config with all fields set to default values
+  - Behavior: Initializes all directory archiving and file backup settings
 
-- `GetConfigSearchPath()`: `GetConfigSearchPath() []string`
-  - Spec: "Returns list of configuration file paths to search"
-  - Input: None
-  - Output: `[]string` - List of configuration file paths
+- `LoadConfig(root string) (*Config, error)`
+  - Spec: "Loads configuration with environment variable support and precedence"
+  - Input: Root directory path
   - Behavior:
-    - Reads `BKPDIR_CONFIG` environment variable for configuration search path
-    - Returns default path if environment variable not set: `./.bkpdir.yml:~/.bkpdir.yml`
-    - Handles colon-separated path list parsing
+    - Reads `BKPDIR_CONFIG` environment variable for search paths
+    - Falls back to default search path if not set
+    - Processes files in order with precedence rules
     - Supports home directory expansion
+    - Merges with default values
+  - Error Cases: Invalid YAML, file system errors
 
-- `DisplayConfig()`: `DisplayConfig() error`
-  - Spec: "Displays computed configuration values and exits"
-  - Input: None
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - Processes configuration files from `BKPDIR_CONFIG` environment variable
-    - If `BKPDIR_CONFIG` not set, uses hard-coded default search path: `./.bkpdir.yml:~/.bkpdir.yml`
-    - Shows each configuration value with name, computed value, and source file
-    - Displays format: `name: value (source: source_file)`
-    - Default values show source as "default"
-    - Application exits after displaying values
-  - Error Cases:
-    - Configuration file read errors
-    - Invalid YAML format
-    - Environment variable parsing errors
+- `getConfigSearchPaths() []string`
+  - Spec: "Returns configuration file search paths from environment or defaults"
+  - Behavior: Checks `BKPDIR_CONFIG`, returns colon-separated paths or defaults
+  - Default: `./.bkpdir.yml:~/.bkpdir.yml`
+
+- `expandPath(path string) string`
+  - Spec: "Expands home directory (~) in configuration paths"
+  - Input: Path that may contain ~ prefix
+  - Output: Expanded absolute path
+
+- `mergeConfigs(dst, src *Config)`
+  - Spec: "Merges non-default values from source into destination config"
+  - Behavior: Only overwrites fields that differ from defaults
+
+- `GetConfigValues(cfg *Config) []ConfigValue`
+  - Spec: "Returns all configuration values with their sources for display"
+  - Output: List of configuration values showing name, value, and source
 
 **Example Usage**:
 ```go
-// Create default configuration
-cfg := DefaultConfig()
-
-// Load configuration from YAML file
+// Load configuration with environment support
 cfg, err := LoadConfig(".")
 if err != nil {
     log.Fatal(err)
 }
 
-// Display configuration values and exit
-err = DisplayConfig()
-if err != nil {
-    log.Fatal(err)
-}
-```
-
-### Git Integration
-**Implementation**: `git.go`
-**Specification Requirements**:
-- `IsGitRepository(dir string) bool`
-  - Spec: "Checks if directory is a git repo"
-  - Input: `dir string` - Path to directory to check
-  - Output: `bool` - True if directory is a git repository
-  - Behavior: Checks for .git directory or git configuration
-  - Error Cases: None (returns false for any error)
-
-- `GetGitBranch(dir string) string`
-  - Spec: "Gets current branch name"
-  - Input: `dir string` - Path to git repository
-  - Output: `string` - Current branch name or empty string
-  - Behavior: Executes git branch command to get current branch
-  - Error Cases: Returns empty string if not a git repo or error occurs
-
-- `GetGitShortHash(dir string) string`
-  - Spec: "Gets current commit hash"
-  - Input: `dir string` - Path to git repository
-  - Output: `string` - Short commit hash or empty string
-  - Behavior: Executes git rev-parse to get abbreviated commit hash
-  - Error Cases: Returns empty string if not a git repo or error occurs
-
-**Example Usage**:
-```go
-// Check if directory is a git repository
-if IsGitRepository(".") {
-    // Get git information
-    branch := GetGitBranch(".")
-    hash := GetGitShortHash(".")
-    fmt.Printf("Git: %s@%s\n", branch, hash)
+// Get configuration values for display
+values := GetConfigValues(cfg)
+for _, cv := range values {
+    fmt.Printf("%s: %s (source: %s)\n", cv.Name, cv.Value, cv.Source)
 }
 ```
 
 ### File System Operations
-**Implementation**: `archive.go`
+**Implementation**: `archive.go`, `backup.go`
 **Specification Requirements**:
-- `ShouldExcludeFile(filePath string, patterns []string) bool`
-  - Spec: "Checks if file matches exclude patterns using doublestar glob matching"
-  - Input:
-    - `filePath string` - Path to file to check
-    - `patterns []string` - List of glob patterns to match against
-  - Output: `bool` - True if file should be excluded
-  - Behavior: Matches file path against each pattern using doublestar glob matching
-  - Error Cases: None (returns false for any error)
+
+- `CopyFile(src, dst string) error`
+  - Spec: "Creates exact copy with permissions preserved"
+  - Behavior: Copies file content and preserves permissions
+  - Error Cases: Source not found, permission denied, disk full
 
 - `CopyFileWithContext(ctx context.Context, src, dst string) error`
   - Spec: "Context-aware file copying with cancellation support"
-  - Input:
-    - `ctx context.Context` - Context for cancellation
-    - `src string` - Path to source file
-    - `dst string` - Path to destination file
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - Creates destination directory if needed
-    - Copies file with all permissions preserved
-    - Preserves original file's modification time
-    - Checks for cancellation at multiple points during operation
-    - Returns context.Canceled if operation is cancelled
-  - Error Cases:
-    - Source file not found
-    - Permission denied
-    - Disk full
-    - Context cancellation
-    - Other file system errors
+  - Behavior: Same as CopyFile with cancellation checks
+  - Error Cases: All CopyFile errors plus context cancellation
 
-- `CompareDirectories(dir1, dir2 string) (bool, error)`
-  - Spec: "Performs comparison of two directory trees"
-  - Input:
-    - `dir1 string` - Path to first directory
-    - `dir2 string` - Path to second directory
-  - Output: `(bool, error)` - True if directories are identical, error if comparison fails
-  - Behavior:
-    - Walks both directory trees
-    - Compares file structure and content
-    - Excludes files matching configured patterns
-    - Returns false immediately if any difference found
-  - Error Cases:
-    - Directory not found
-    - Permission denied
-    - File system errors
+- `compareFiles(file1, file2 string) (bool, error)`
+  - Spec: "Performs byte-by-byte comparison of files"
+  - Behavior: Compares file sizes first, then content
+  - Returns: True if files are identical
+
+- `SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error`
+  - Spec: "Creates directory with enhanced error detection"
+  - Behavior: Creates directory structure with proper error handling
+  - Error Cases: Permission denied, disk full (detected via isDiskFullError)
 
 **Example Usage**:
 ```go
-// Check if file should be excluded
-patterns := []string{".git/", "vendor/", "*.tmp"}
-if ShouldExcludeFile("path/to/file.tmp", patterns) {
-    fmt.Println("File should be excluded")
-}
-
-// Copy with context and timeout
+// Copy file with context
 ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 defer cancel()
-err = CopyFileWithContext(ctx, "source.txt", "backup.txt")
-if err == context.Canceled {
-    log.Println("Copy operation was cancelled")
-}
+err := CopyFileWithContext(ctx, "source.txt", "backup.txt")
 
-// Compare two directories
-identical, err := CompareDirectories("source/", "backup/")
+// Compare files
+identical, err := compareFiles("file1.txt", "file2.txt")
 if err != nil {
     log.Fatal(err)
-}
-if identical {
-    fmt.Println("Directories are identical")
 }
 ```
 
 ### Enhanced Error Detection
-**Implementation**: `archive.go`
+**Implementation**: `archive.go`, `backup.go`
 **Specification Requirements**:
+
 - `isDiskFullError(err error) bool`
-  - Spec: "Enhanced disk space error detection"
-  - Input: `err error` - Error to check
-  - Output: `bool` - True if error indicates disk space issues
-  - Behavior:
-    - Checks error message for multiple disk space indicators
-    - Indicators: "no space left", "disk full", "not enough space", "insufficient disk space", "device full", "quota exceeded", "file too large"
-    - Case-insensitive matching
-  - Error Cases: None (returns false for nil or unrelated errors)
+  - Spec: "Enhanced disk space error detection with comprehensive pattern matching"
+  - Input: Error to check
+  - Behavior: Case-insensitive matching for multiple disk space indicators
+  - Patterns: "no space left", "disk full", "not enough space", "insufficient disk space", "device full", "quota exceeded", "file too large"
+  - Returns: True if error indicates disk space issues
 
 **Example Usage**:
 ```go
-// Check for disk space errors
+// Enhanced error detection
 if err := someFileOperation(); err != nil {
     if isDiskFullError(err) {
         return NewArchiveError("Disk full", cfg.StatusDiskFull)
@@ -726,252 +907,121 @@ if err := someFileOperation(); err != nil {
 ### Archive Management
 **Implementation**: `archive.go`
 **Specification Requirements**:
-- `GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string, isGit, isIncremental bool, baseName string) string`
-  - Spec: "Generates archive filename according to specified format"
-  - Input:
-    - `prefix string` - Optional prefix for archive name
-    - `timestamp string` - Creation timestamp
-    - `gitBranch string` - Current git branch
-    - `gitHash string` - Current git commit hash
-    - `note string` - Optional note for archive
-    - `isGit bool` - Whether in git repository
-    - `isIncremental bool` - Whether this is an incremental archive
-    - `baseName string` - Name of base archive for incremental backups
-  - Output: `string` - Generated archive filename
-  - Behavior: Constructs filename according to format:
-    - Full: `[prefix-]timestamp[=branch=hash][=note].zip`
-    - Incremental: `baseName_update=timestamp[=branch=hash][=note].zip`
-  - Error Cases: None
+
+- `CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error`
+  - Spec: "Creates complete directory archive with comparison"
+  - Behavior: Compares with existing archives, creates new archive if different
+  - Features: Git integration, exclusion patterns, verification
+
+- `CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error`
+  - Spec: "Context-aware archive creation with cancellation support"
+  - Behavior: Same as CreateFullArchive with context cancellation
+
+- `CreateIncrementalArchive(cfg *Config, note string, dryRun bool, verify bool) error`
+  - Spec: "Creates incremental archive with changed files only"
+  - Behavior: Requires existing full archive, includes only modified files
 
 - `ListArchives(archiveDir string) ([]Archive, error)`
-  - Spec: "Gets all archives in directory"
-  - Input: `archiveDir string` - Path to archive directory
-  - Output: `([]Archive, error)` - List of archives and any error
-  - Behavior:
-    - Scans directory for .zip files
-    - Creates Archive objects for each file
-    - Includes verification status if available
-    - Sorts archives by creation time (most recent first)
-  - Error Cases:
-    - Directory not found
-    - Permission denied
-    - Invalid archive files
+  - Spec: "Lists all archives with metadata extraction"
+  - Behavior: Scans directory, extracts Git info and notes from filenames
 
-- `CreateFullArchive(cfg *Config, note string, dryRun bool) error`
-  - Spec: "Creates full archive with specified behavior"
-  - Input:
-    - `cfg *Config` - Configuration to use
-    - `note string` - Optional note for archive
-    - `dryRun bool` - Whether to simulate creation
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - Walks directory collecting files
-    - Excludes files matching patterns
-    - Creates ZIP archive
-    - Optionally verifies after creation
-    - Uses configured status codes for different exit conditions
-    - Includes panic recovery for unexpected errors
-  - Error Cases:
-    - Invalid configuration (exits with `cfg.StatusConfigError`)
-    - Directory not found (exits with `cfg.StatusDirectoryNotFound`)
-    - Invalid directory type (exits with `cfg.StatusInvalidDirectoryType`)
-    - Permission denied (exits with `cfg.StatusPermissionDenied`)
-    - Disk full (exits with `cfg.StatusDiskFull`)
-    - Failed to create archive directory (exits with `cfg.StatusFailedToCreateArchiveDirectory`)
-    - Directory identical to existing archive (exits with `cfg.StatusDirectoryIsIdenticalToExistingArchive`)
-    - Successful archive creation (exits with `cfg.StatusCreatedArchive`)
-
-- `CreateFullArchiveWithCleanup(cfg *Config, note string, dryRun bool) error`
-  - Spec: "Creates full archive with automatic resource cleanup"
-  - Input: Same as CreateFullArchive
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - All CreateFullArchive functionality plus:
-    - Automatic resource cleanup via ResourceManager
-    - Atomic operations using temporary files
-    - Cleanup on errors or panics
-    - No temporary files left behind
-  - Error Cases: Same as CreateFullArchive
-
-- `CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool) error`
-  - Spec: "Context-aware full archive creation"
-  - Input:
-    - `ctx context.Context` - Context for cancellation
-    - Other inputs same as CreateFullArchive
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - All CreateFullArchive functionality plus:
-    - Context cancellation support
-    - Cancellation checks at multiple points
-    - Returns appropriate error on cancellation
-  - Error Cases: Same as CreateFullArchive plus context cancellation
-
-- `CreateFullArchiveWithContextAndCleanup(ctx context.Context, cfg *Config, note string, dryRun bool) error`
-  - Spec: "Context-aware full archive creation with resource cleanup"
-  - Input:
-    - `ctx context.Context` - Context for cancellation
-    - Other inputs same as CreateFullArchive
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - Combines all features of CreateFullArchiveWithCleanup and CreateFullArchiveWithContext
-    - Context cancellation support with automatic cleanup
-    - Atomic operations with cleanup on cancellation
-    - Most robust archive creation function
-  - Error Cases: Same as CreateFullArchive plus context cancellation
-
-- `CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error`
-  - Spec: "Creates incremental archive based on last full archive"
-  - Input:
-    - `cfg *Config` - Configuration to use
-    - `note string` - Optional note for archive
-    - `dryRun bool` - Whether to simulate creation
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - Finds most recent full archive
-    - Collects files modified since full archive
-    - Creates incremental ZIP archive
-    - Optionally verifies after creation
-    - Uses configured status codes for different exit conditions
-  - Error Cases:
-    - No full archive found
-    - Invalid configuration
-    - File system errors
-    - Archive creation errors
-    - Verification failures
+- `CheckForIdenticalArchive(sourceDir, archiveDir string, excludePatterns []string) (bool, string, error)`
+  - Spec: "Compares directory with most recent archive"
+  - Behavior: Directory tree comparison with exclusion patterns
 
 **Example Usage**:
 ```go
-// Generate archive name
-name := GenerateArchiveName("prefix", "2024-03-20-15-30", "main", "abc123", "backup", true, false, "")
-
-// List all archives
-archives, err := ListArchives("/path/to/archives")
-if err != nil {
-    log.Fatal(err)
-}
-
-// Create full archive (basic)
-err = CreateFullArchive(cfg, "backup note", false)
-
-// Create full archive with cleanup (recommended for production)
-err = CreateFullArchiveWithCleanup(cfg, "backup note", false)
-
-// Create full archive with context and cleanup (most robust)
-ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+// Create archive with context
+ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-err = CreateFullArchiveWithContextAndCleanup(ctx, cfg, "backup note", false)
+err := CreateFullArchiveWithContext(ctx, cfg, "backup note", false, true)
 
-// Create incremental archive
-err = CreateIncrementalArchive(cfg, "incremental update", false)
+// List archives
+archives, err := ListArchives("/path/to/archives")
 if err != nil {
     log.Fatal(err)
 }
 ```
 
-### Archive Verification
-**Implementation**: `verify.go`
+### File Backup Management
+**Implementation**: `backup.go`
 **Specification Requirements**:
-- `VerifyArchive(archivePath string) (*VerificationStatus, error)`
-  - Spec: "Verifies archive structure and integrity"
-  - Input: `archivePath string` - Path to archive file
-  - Output: `(*VerificationStatus, error)` - Verification status and any error
-  - Behavior:
-    - Validates ZIP file structure
-    - Checks for corruption
-    - Verifies file headers
-  - Error Cases:
-    - File not found
-    - Invalid ZIP format
-    - Corrupted archive
-    - Permission denied
 
-- `VerifyChecksums(archivePath string) (*VerificationStatus, error)`
-  - Spec: "Verifies file checksums against stored values"
-  - Input: `archivePath string` - Path to archive file
-  - Output: `(*VerificationStatus, error)` - Verification status and any error
-  - Behavior:
-    - Extracts files to temporary directory
-    - Generates checksums for extracted files
-    - Compares with stored checksums
-  - Error Cases:
-    - No checksums found
-    - Checksum mismatch
-    - Extraction errors
-    - File system errors
+- `CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error`
+  - Spec: "Creates backup of single file with comparison"
+  - Behavior: Compares with existing backups, creates new backup if different
 
-- `GenerateChecksums(files []string, algorithm string) (map[string]string, error)`
-  - Spec: "Generates checksums for files using specified algorithm"
-  - Input:
-    - `files []string` - List of file paths
-    - `algorithm string` - Checksum algorithm to use
-  - Output: `(map[string]string, error)` - Map of filename to checksum
-  - Behavior:
-    - Reads each file
-    - Generates checksum using specified algorithm
-    - Uses base filename as key
-  - Error Cases:
-    - Invalid algorithm
-    - File read errors
-    - Permission denied
+- `CreateFileBackupEnhanced(ctx context.Context, cfg *Config, formatter *OutputFormatter, filePath string, note string, dryRun bool) error`
+  - Spec: "Enhanced backup creation with context and formatting"
+  - Behavior: Context support, enhanced formatting, resource cleanup
 
-- `StoreChecksums(archive *Archive, checksums map[string]string) error`
-  - Spec: "Stores checksums in archive"
-  - Input:
-    - `archive *Archive` - Archive to store checksums in
-    - `checksums map[string]string` - Map of filename to checksum
-  - Output: `error` - Any error encountered
-  - Behavior:
-    - Creates .checksums file in archive
-    - Stores checksums as JSON
-  - Error Cases:
-    - Invalid archive
-    - Write errors
-    - JSON encoding errors
+- `CreateFileBackupWithContext(ctx context.Context, cfg *Config, filePath string, note string, dryRun bool) error`
+  - Spec: "Context-aware file backup creation"
+  - Behavior: Same as CreateFileBackup with cancellation support
 
-- `ReadChecksums(archive *Archive) (map[string]string, error)`
-  - Spec: "Reads checksums from archive"
-  - Input: `archive *Archive` - Archive to read checksums from
-  - Output: `(map[string]string, error)` - Map of filename to checksum
-  - Behavior:
-    - Reads .checksums file from archive
-    - Parses JSON into map
-  - Error Cases:
-    - No checksums file
-    - Invalid JSON
-    - Read errors
+- `CreateFileBackupWithCleanup(cfg *Config, filePath string, note string, dryRun bool) error`
+  - Spec: "File backup with automatic resource cleanup"
+  - Behavior: Uses ResourceManager for atomic operations and cleanup
+
+- `CreateFileBackupWithContextAndCleanup(ctx context.Context, cfg *Config, filePath string, note string, dryRun bool) error`
+  - Spec: "Most robust backup creation with context and cleanup"
+  - Behavior: Combines context support with resource management
+
+- `CheckForIdenticalFileBackup(filePath, backupDir, baseFilename string) (bool, string, error)`
+  - Spec: "Compares file with most recent backup using byte comparison"
+  - Behavior: Size check first, then byte-by-byte comparison
+
+- `ListFileBackups(backupDir, baseFilename string) ([]BackupInfo, error)`
+  - Spec: "Lists all backups for specific file"
+  - Behavior: Scans directory, extracts notes, sorts by creation time
+
+- `ListFileBackupsEnhanced(cfg *Config, formatter *OutputFormatter, filePath string) error`
+  - Spec: "Enhanced backup listing with formatting"
+  - Behavior: Uses enhanced formatting with template support
 
 **Example Usage**:
 ```go
-// Verify archive structure
-status, err := VerifyArchive("/path/to/archive.zip")
-if err != nil {
-    log.Fatal(err)
-}
+// Create backup with full features
+ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+defer cancel()
+err := CreateFileBackupWithContextAndCleanup(ctx, cfg, "/path/to/file.txt", "important", false)
 
-// Generate and store checksums
-files := []string{"file1.txt", "file2.txt"}
-checksums, err := GenerateChecksums(files, "sha256")
+// List backups
+backups, err := ListFileBackups("/backup/dir", "file.txt")
 if err != nil {
     log.Fatal(err)
 }
+```
 
-// Store checksums in archive
-err = StoreChecksums(archive, checksums)
-if err != nil {
-    log.Fatal(err)
-}
+### Utility Functions
+**Implementation**: Various files
+**Specification Requirements**:
 
-// Read and verify checksums
-storedChecksums, err := ReadChecksums(archive)
-if err != nil {
-    log.Fatal(err)
-}
+- `GenerateArchiveName(prefix, timestamp, gitBranch, gitHash, note string) string`
+  - Spec: "Generates archive filename with Git info and note"
+  - Format: `prefix-YYYY-MM-DD-hh-mm[=branch=hash][=note].zip`
 
-// Verify checksums
-status, err = VerifyChecksums("/path/to/archive.zip")
-if err != nil {
-    log.Fatal(err)
-}
+- `GenerateBackupName(sourcePath, timestamp, note string) string`
+  - Spec: "Generates backup filename with timestamp and note"
+  - Format: `filename-YYYY-MM-DD-hh-mm[=note]`
+
+- `ValidateDirectoryPath(path string, cfg *Config) error`
+  - Spec: "Validates directory exists and is accessible"
+  - Error Cases: Not found, not directory, permission denied
+
+- `ValidateFilePath(path string, cfg *Config) error`
+  - Spec: "Validates file exists and is regular file"
+  - Error Cases: Not found, not regular file, permission denied
+
+**Example Usage**:
+```go
+// Generate names
+archiveName := GenerateArchiveName("project", "2024-03-21-15-30", "main", "abc123", "backup")
+backupName := GenerateBackupName("/path/to/file.txt", "2024-03-21-15-30", "important")
+
+// Validate paths
+err := ValidateDirectoryPath("/path/to/dir", cfg)
+err = ValidateFilePath("/path/to/file.txt", cfg)
 ```
 
 ## Main Application Structure
@@ -980,355 +1030,63 @@ if err != nil {
 **Implementation**: `main.go`
 **Specification Requirements**:
 - Uses `cobra` for command-line interface
+- Supports both directory archiving and file backup operations
 - Global flags:
-  - `--dry-run`: Implemented in `main.go`
-    - Spec: "Show what would be done without creating archives"
-    - Shows paths relative to current directory
-  - `--config`: Implemented in `main.go`
-    - Spec: "Display computed configuration values and exit"
-    - Usage: `bkpdir --config`
+  - `--dry-run`: Show what would be done without creating archives/backups
+  - `--list`: List backups for specified file
+  - `--config`: Display computed configuration values and exit
 - Commands:
-  - `full [NOTE]`: `fullCmd()`
-    - Spec: "Create full archive with optional note"
-    - Usage: `bkpdir full [NOTE]`
-    - Output: Shows archive path (relative to current directory) and creation time
-    - When a new archive is created: Uses `FormatCreatedArchive` or `TemplateCreatedArchive` configuration
-    - When directory is identical to existing archive: Uses `FormatIdenticalArchive` or `TemplateIdenticalArchive` configuration
-    - Uses configured status codes for application exit
-  - `inc [NOTE]`: `incCmd()`
-    - Spec: "Create incremental archive with optional note"
-    - Usage: `bkpdir inc [NOTE]`
-    - Output: Shows archive path (relative to current directory) and creation time
-    - Uses configured status codes for application exit
-  - `list`: `listCmd()`
-    - Spec: "List all archives"
-    - Usage: `bkpdir list`
-    - Shows archive names with verification status if available
-    - Output formatting uses `FormatListArchive` or `TemplateListArchive` configuration
-    - Shows [VERIFIED], [FAILED], or [UNVERIFIED] status indicators
-  - `verify [ARCHIVE_NAME]`: `verifyCmd()`
-    - Spec: "Verify archive integrity"
-    - Usage: `bkpdir verify [ARCHIVE_NAME]`
-    - Flags:
-      - `--checksum`: Include checksum verification
-    - Performs archive structure and integrity verification
-    - With --checksum flag: verifies file contents against stored checksums
-    - Stores verification results for display in list command
-    - Uses configured status codes for application exit
+  - `full [NOTE]`: Create full directory archive
+  - `inc [NOTE]`: Create incremental directory archive
+  - `backup [FILE_PATH] [NOTE]`: Create file backup
+  - `list`: List directory archives
+  - `verify [ARCHIVE_NAME]`: Verify archive integrity
+  - `version`: Show version information
 
-### Workflow Implementation
-**Implementation**: `archive.go` and `verify.go`
+### Enhanced Workflow Implementation
+**Implementation**: `archive.go`, `backup.go`
 **Specification Requirements**:
-- Full archive workflow: `CreateFullArchive()` and enhanced variants
-  - Spec: "Compresses current directory tree into ZIP archive"
-  - Steps:
-    1. Load config
-    2. Initialize output formatter and template formatter with configuration
-    3. Validate source directory exists and is accessible
-    4. Convert directory path to relative path if needed
-    5. Compare directory with most recent archive
-       - If identical, use formatter to display existing archive message and exit with `cfg.StatusDirectoryIsIdenticalToExistingArchive`
-       - If different, proceed with archive creation
-    6. Generate archive name using directory name
-    7. Create archive directory structure
-    8. Walk directory collecting files (excluding patterns, skipping directories)
-    9. Get git info if applicable
-    10. Create ZIP archive (or simulate in dry-run) with atomic operations
-    11. Use formatter to display success message
-    12. Clean up temporary resources
-    13. If config.Verification.VerifyOnCreate is true, verify archive
-    14. Exit with `cfg.StatusCreatedArchive` on successful archive creation
-  - Error handling uses configured status codes and formatted error messages:
-    - Directory not found: exit with `cfg.StatusDirectoryNotFound`
-    - Invalid directory type: exit with `cfg.StatusInvalidDirectoryType`
-    - Permission denied: exit with `cfg.StatusPermissionDenied`
-    - Disk full: exit with `cfg.StatusDiskFull`
-    - Failed to create archive directory: exit with `cfg.StatusFailedToCreateArchiveDirectory`
-    - Configuration error: exit with `cfg.StatusConfigError`
-  - Enhanced error handling:
-    - Panic recovery with proper logging
-    - Context cancellation support
-    - Automatic resource cleanup on all error paths
-    - All error messages use configurable format strings or templates
 
-- Incremental archive workflow: `CreateIncrementalArchive()`
-  - Spec: "Creates update archive containing only changed files"
-  - Steps:
-    1. Load config
-    2. Initialize output formatter and template formatter with configuration
-    3. Determine archive directory path
-    4. Find most recent full archive
-    5. Walk directory and collect files modified since the full archive (skipping directories)
-    6. Get git info if applicable
-    7. Generate incremental archive name
-    8. Create zip archive (or simulate in dry-run)
-    9. Use formatter to display success message
-    10. Clean up temporary resources
-    11. If config.Verification.VerifyOnCreate is true, verify archive
+- **Directory Archive Workflow**: Enhanced with context and cleanup
+  - Steps: Load config, validate directory, check for identical archive, create with resource management
+  - Features: Git integration, exclusion patterns, verification
 
-- Archive listing workflow: `ListArchives()`
-  - Spec: "Displays all archives with verification status"
-  - Steps:
-    1. Load config
-    2. Initialize output formatter and template formatter with configuration
-    3. Get archive directory path
-    4. List all .zip files
-    5. Extract archive information and notes using regex patterns if template formatting is enabled
-    6. Sort archives by creation time
-    7. Use formatter to display archive names with verification status if available
-    8. Shows [VERIFIED], [FAILED], or [UNVERIFIED] status indicators
+- **File Backup Workflow**: Enhanced with context and cleanup
+  - Steps: Load config, validate file, check for identical backup, create with atomic operations
+  - Features: Directory structure preservation, byte comparison, resource management
 
-- Archive verification workflow: `VerifyArchive()` and `VerifyChecksums()`
-  - Spec: "Verifies archive integrity and optionally checksums"
-  - Steps:
-    1. Load config
-    2. Initialize output formatter and template formatter with configuration
-    3. Get archive path
-    4. Verify archive structure and integrity
-    5. If --checksum flag is set, verify file checksums
-    6. Store verification status
-    7. Use formatter to display verification results
+- **Configuration Display Workflow**: Enhanced with environment variable support
+  - Steps: Process BKPDIR_CONFIG, merge configurations, display with sources
 
-- Configuration display workflow: `DisplayConfig()`
-  - Spec: "Displays computed configuration values and exits"
-  - Steps:
-    1. Read `BKPDIR_CONFIG` environment variable or use default search path
-    2. Process configuration files in order with precedence rules
-    3. Merge configuration values with defaults
-    4. Track source file for each configuration value
-    5. Initialize output formatter and template formatter with configuration
-    6. Use formatter to display each configuration value with configurable format
-    7. Exit application after display
-
-### Utility Functions
-**Implementation**: Various files
-**Specification Requirements**:
-- File exclusion: `ShouldExcludeFile()` in `archive.go`
-  - Spec: "Uses doublestar glob pattern matching"
-- Archive naming: `GenerateArchiveName()` in `archive.go`
-  - Spec: "Follows specified naming format"
-- Checksum generation: `GenerateChecksums()` in `verify.go`
-  - Spec: "Uses SHA-256 by default"
-- Resource management: `ResourceManager` in `archive.go`
-  - Spec: "Tracks and cleans up temporary resources automatically"
-- Error handling: `ArchiveError` and related functions in `archive.go`
-  - Spec: "Provides structured error handling with status codes"
-- Directory comparison: `CompareDirectories()` in `archive.go`
-  - Spec: "Performs tree comparison to detect changes"
-  - Input: Source directory path and most recent archive path
-  - Output: Boolean indicating if directory is identical to archive
-  - Behavior: Compares directory tree with archive contents to detect changes
-
-## Build and Development Requirements
+### Build and Development Requirements
 
 ### Build System
 **Implementation**: `Makefile`
 **Specification Requirements**:
-- **Linting**: `make lint` command
-  - Spec: "Run revive linter on all Go code"
-  - Must pass before code can be committed
-  - Uses `.revive.toml` configuration file
-- **Testing**: `make test` command
-  - Spec: "Run all unit tests with verbose output"
-  - Must pass before code can be committed
-  - Includes resource cleanup tests
-- **Building**: `make build` command
-  - Spec: "Build the application binary"
-  - Depends on linting and testing passing
-- **Cleaning**: `make clean` command
-  - Spec: "Remove build artifacts"
+- **Enhanced Build System**: Comprehensive build pipeline with quality gates
+  - `make lint`: Run revive linter with `.revive.toml` configuration
+  - `make test`: Run all tests including resource cleanup verification
+  - `make build`: Build application (depends on lint and test)
+  - `make clean`: Remove build artifacts
+  - Quality gates: Linting and testing must pass before build
 
 ### Development Workflow
 **Specification Requirements**:
-- **Code Quality**: All code must pass linting before commit
-- **Testing**: All tests must pass before commit
-- **Error Handling**: All errors must be properly handled
+- **Code Quality**: All code must pass linting and testing
 - **Resource Management**: All temporary resources must be cleaned up
-- **Documentation**: All public functions must be documented
-- **Backward Compatibility**: New features must not break existing functionality
+- **Context Support**: Long-running operations must support cancellation
+- **Error Handling**: Enhanced error detection and structured error types
+- **Template Support**: Rich formatting with regex extraction
+- **Thread Safety**: Concurrent operations must be properly synchronized
 
-## Testing Architecture
+**Example Build Usage**:
+```bash
+# Full build pipeline
+make clean
+make lint
+make test
+make build
 
-### Unit Tests
-**Implementation**: `*_test.go` files
-**Specification Requirements**:
-- `TestGenerateArchiveName`: Tests archive naming
-  - Spec: "Validates naming format for Git/non-Git repositories"
-- `TestShouldExcludeFile`: Tests file exclusion
-  - Spec: "Validates pattern matching behavior"
-- `TestDefaultConfig` and `TestLoadConfig`: Tests configuration
-  - Spec: "Validates configuration loading and defaults"
-  - Tests configuration discovery with `BKPDIR_CONFIG` environment variable
-  - Tests multiple configuration file precedence
-  - Tests home directory expansion in paths
-  - Tests status code configuration loading and defaults
-  - Validates all status code fields are properly loaded from YAML
-  - Tests status code configuration with custom values
-- `TestGetConfigSearchPath`: Tests configuration path discovery
-  - Validates environment variable parsing
-  - Tests hard-coded default path when environment variable not set
-  - Tests colon-separated path list parsing
-  - Tests home directory expansion
-- `TestDisplayConfig`: Tests configuration value display
-  - Validates configuration value computation and source tracking
-  - Tests environment variable processing for configuration paths
-  - Tests hard-coded default path handling
-  - Tests default value handling and source attribution
-  - Tests output format with name, value, and source
-  - Tests display of status code configuration values
-- `TestVerifyArchive`: Tests archive verification
-  - Spec: "Validates archive structure verification"
-  - Tests verification status storage and loading
-  - Tests checksum verification using base filename as key
-- `TestVerifyChecksums`: Tests checksum verification
-  - Spec: "Validates file content verification"
-- `TestGenerateChecksums`: Tests checksum generation
-  - Spec: "Validates checksum generation and storage"
-  - Ensures directories are skipped
-- `TestVerifyCorruptedArchive`: Tests corruption detection
-  - Spec: "Validates error handling for corrupted archives"
-- `TestResourceManager`: Tests resource management functionality
-  - Validates thread-safe resource tracking
-  - Tests automatic cleanup mechanisms
-  - Test cases:
-    - Basic resource registration and cleanup
-    - Thread-safe concurrent access
-    - Cleanup of both files and directories
-    - Error-resilient cleanup (continues on individual failures)
-    - Cleanup warnings logged to stderr
-- `TestArchiveError`: Tests structured error handling
-  - Validates ArchiveError functionality
-  - Test cases:
-    - Error creation with message and status code
-    - Error interface implementation
-    - Status code extraction
-    - Error message formatting
-- `TestIsDiskFullError`: Tests enhanced disk space detection
-  - Validates disk full error detection
-  - Test cases:
-    - Various disk full error messages
-    - Case-insensitive matching
-    - Multiple disk space indicators
-    - Non-disk-full errors (should return false)
-    - Nil error handling
-- `TestCompareDirectories`: Tests directory comparison
-  - Validates directory tree comparison
-  - Test cases:
-    - Identical directories
-    - Different directories
-    - Directories with different file sizes
-    - Empty directories
-    - Large directories
-    - Directories with special characters
-- `TestConfigurationDiscovery`: Tests configuration file discovery
-  - Tests multiple configuration files with different precedence
-  - Tests environment variable override behavior
-  - Tests hard-coded default path behavior
-  - Tests missing configuration files handling
-  - Tests invalid configuration file handling
-  - Tests configuration merging with defaults
-  - Tests status code configuration precedence and merging
-- `TestStatusCodeConfiguration`: Tests status code configuration
-  - Validates status code loading from YAML
-  - Tests status code defaults
-  - Tests status code precedence with multiple configuration files
-  - Tests invalid status code values handling
-
-### Output Formatting Tests
-**Implementation**: `*_test.go` files
-**Specification Requirements**:
-- `TestOutputFormatter`: Tests output formatter functionality
-  - Validates printf-style formatting with various inputs
-  - Tests ANSI color code support
-  - Test cases:
-    - Basic format string application
-    - Format strings with ANSI color codes
-    - Format strings with special characters
-    - Invalid format strings (should fall back to safe defaults)
-    - Empty format strings
-    - Format strings with multiple parameters
-- `TestFormatCreatedArchive`: Tests archive creation message formatting
-  - Validates format string application for successful archive messages
-- `TestFormatIdenticalArchive`: Tests identical directory message formatting
-  - Validates format string application for identical directory messages
-- `TestFormatListArchive`: Tests archive listing entry formatting
-  - Validates format string application for archive list entries
-- `TestFormatConfigValue`: Tests configuration value display formatting
-  - Validates format string application for configuration display
-- `TestFormatDryRunArchive`: Tests dry-run message formatting
-  - Validates format string application for dry-run messages
-- `TestFormatError`: Tests error message formatting
-  - Validates format string application for error messages
-- `TestTemplateFormatter`: Tests template formatter functionality
-  - Validates template-based formatting with named placeholders
-  - Tests regex pattern extraction and template application
-  - Test cases:
-    - Basic template string application
-    - Template strings with named placeholders
-    - Regex pattern extraction with named groups
-    - Template strings with Go text/template syntax
-    - Invalid template strings (should fall back to safe defaults)
-    - Template strings with conditional formatting
-
-### Integration Tests
-**Implementation**: `*_test.go` files
-**Specification Requirements**:
-- `TestFullCmdWithNote`: Tests full archive command
-  - Spec: "Validates full archive creation with notes"
-  - Tests status code exit behavior for different conditions
-  - Tests panic recovery and error handling
-  - Test cases:
-    - Successful archive creation (should exit with `cfg.StatusCreatedArchive`)
-    - Directory identical to existing archive (should exit with `cfg.StatusDirectoryIsIdenticalToExistingArchive`)
-    - Directory not found (should exit with `cfg.StatusDirectoryNotFound`)
-    - Invalid directory type (should exit with `cfg.StatusInvalidDirectoryType`)
-    - Permission denied (should exit with `cfg.StatusPermissionDenied`)
-    - Disk full scenarios (should exit with `cfg.StatusDiskFull`)
-    - Archive directory creation failure (should exit with `cfg.StatusFailedToCreateArchiveDirectory`)
-    - Configuration errors (should exit with `cfg.StatusConfigError`)
-    - Panic recovery scenarios
-- `TestIncCmdWithNote`: Tests incremental archive command
-  - Spec: "Validates incremental archive creation with notes"
-- `TestCmdArgsValidation`: Tests command-line arguments
-  - Spec: "Validates command-line interface"
-- `TestVerifyCmdWithChecksums`: Tests verify command
-  - Spec: "Validates archive verification workflow"
-- `TestVerifyOnCreate`: Tests automatic verification
-  - Spec: "Validates automatic verification after creation"
-- `TestCreateArchiveWithCleanup`: Tests archive creation with resource cleanup
-  - Validates automatic resource cleanup functionality
-  - Tests atomic operations with temporary files
-  - Test cases:
-    - Successful archive with cleanup verification
-    - Archive failure with cleanup verification
-    - No temporary files left after operations
-    - Atomic file operations
-- `TestCreateArchiveWithContext`: Tests context-aware archive creation
-  - Validates archive creation with cancellation support
-  - Test cases:
-    - Successful archive with context
-    - Archive cancelled via context
-    - Archive with timeout
-    - Context cancellation at various stages
-- `TestCreateArchiveWithContextAndCleanup`: Tests context-aware archive with cleanup
-  - Validates most robust archive creation functionality
-  - Combines context support with resource cleanup
-  - Test cases:
-    - Successful archive with context and cleanup
-    - Cancelled archive with proper cleanup
-    - Timeout scenarios with cleanup verification
-    - No resource leaks on cancellation
-
-### Test Approach
-**Specification Requirements**:
-- Uses temporary directories for testing
-- Simulates user environment with test files and directories
-- Tests both dry-run and actual execution modes
-- Verifies correct behavior for edge cases and error conditions
-- Tests verification with both valid and corrupted archives
-- Ensures that checksum keys match archive file entries (base filename)
-- Ensures directories are not included in checksums and that corrupted archives are detected
-- **Resource cleanup verification in all test scenarios**
-- **Context cancellation and timeout handling testing**
-- **Performance benchmarks for critical operations**
-- **All code must pass linting before commit** 
+# Development workflow
+make lint && make test && make build
+```

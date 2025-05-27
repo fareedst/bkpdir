@@ -1,3 +1,10 @@
+// This file is part of bkpdir
+//
+// Package main provides archive verification for BkpDir.
+// It handles integrity checking and checksum verification of archives.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
 package main
 
 import (
@@ -38,122 +45,175 @@ func VerifyArchive(archivePath string) (*VerificationStatus, error) {
 
 	// Check each file in the archive
 	for _, file := range reader.File {
-		rc, err := file.Open()
-		if err != nil {
+		if err := verifyFile(file); err != nil {
 			status.IsVerified = false
-			status.Errors = append(status.Errors, fmt.Sprintf("Failed to open file %s: %v", file.Name, err))
-			continue
+			status.Errors = append(status.Errors, err.Error())
 		}
-
-		// Read a small portion to verify the file can be read
-		buf := make([]byte, 1024)
-		_, err = rc.Read(buf)
-		if err != nil && err != io.EOF {
-			status.IsVerified = false
-			status.Errors = append(status.Errors, fmt.Sprintf("Failed to read file %s: %v", file.Name, err))
-		}
-		rc.Close()
 	}
 
 	return status, nil
 }
 
-// GenerateChecksums generates checksums for a list of files
-func GenerateChecksums(fileMap map[string]string, algorithm string) (map[string]string, error) {
-	checksums := make(map[string]string)
+// verifyFile verifies a single file in the archive
+func verifyFile(file *zip.File) error {
+	rc, err := file.Open()
+	if err != nil {
+		return fmt.Errorf("failed to open file %s: %v", file.Name, err)
+	}
+	defer rc.Close()
 
-	for relPath, absPath := range fileMap {
-		info, err := os.Lstat(absPath)
-		if err != nil {
-			return nil, fmt.Errorf("failed to stat file %s: %w", absPath, err)
-		}
-
-		// Skip directories
-		if info.IsDir() {
-			continue
-		}
-
-		f, err := os.Open(absPath)
-		if err != nil {
-			return nil, fmt.Errorf("failed to open file %s: %w", absPath, err)
-		}
-		defer f.Close()
-
-		hash := sha256.New()
-		if _, err := io.Copy(hash, f); err != nil {
-			return nil, fmt.Errorf("failed to calculate checksum for %s: %w", absPath, err)
-		}
-
-		// Use the relative path as the key
-		checksums[relPath] = hex.EncodeToString(hash.Sum(nil))
+	// Read a small portion to verify the file can be read
+	buf := make([]byte, 1024)
+	_, err = rc.Read(buf)
+	if err != nil && err != io.EOF {
+		return fmt.Errorf("failed to read file %s: %v", file.Name, err)
 	}
 
+	return nil
+}
+
+// GenerateChecksums generates checksums for files in the map
+func GenerateChecksums(fileMap map[string]string, _ string) (map[string]string, error) {
+	checksums := make(map[string]string)
+	for relPath, absPath := range fileMap {
+		checksum, err := calculateFileChecksum(absPath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to calculate checksum for %s: %w", relPath, err)
+		}
+		checksums[relPath] = checksum
+	}
 	return checksums, nil
+}
+
+// calculateFileChecksum calculates the SHA-256 checksum of a file
+func calculateFileChecksum(filePath string) (string, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	hash := sha256.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return "", err
+	}
+
+	return hex.EncodeToString(hash.Sum(nil)), nil
 }
 
 // StoreChecksums stores checksums in the archive
 func StoreChecksums(archive *Archive, checksums map[string]string) error {
 	// Create a temporary file for checksums
-	tmpFile, err := os.CreateTemp("", "bkpdir-checksums-*.json")
+	tmpFile, err := createChecksumsTempFile(checksums)
 	if err != nil {
-		return fmt.Errorf("failed to create temporary file: %w", err)
+		return err
 	}
 	defer os.Remove(tmpFile.Name())
 
-	// Write checksums to the temporary file
+	// Create a new archive with the checksums file
+	newPath := archive.Path + ".new"
+	if err := createNewArchiveWithChecksums(archive.Path, newPath, tmpFile.Name()); err != nil {
+		return err
+	}
+	defer os.Remove(newPath)
+
+	// Replace the original archive with the new one
+	if err := os.Rename(newPath, archive.Path); err != nil {
+		return fmt.Errorf("failed to replace original archive: %w", err)
+	}
+
+	return nil
+}
+
+// createChecksumsTempFile creates a temporary file containing the checksums
+func createChecksumsTempFile(checksums map[string]string) (*os.File, error) {
+	tmpFile, err := os.CreateTemp("", "bkpdir-checksums-*.json")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create temporary file: %w", err)
+	}
+
 	encoder := json.NewEncoder(tmpFile)
 	if err := encoder.Encode(checksums); err != nil {
-		return fmt.Errorf("failed to encode checksums: %w", err)
+		tmpFile.Close()
+		os.Remove(tmpFile.Name())
+		return nil, fmt.Errorf("failed to encode checksums: %w", err)
 	}
-	tmpFile.Close()
 
-	// Open the archive for writing
-	reader, err := zip.OpenReader(archive.Path)
+	if err := tmpFile.Close(); err != nil {
+		os.Remove(tmpFile.Name())
+		return nil, fmt.Errorf("failed to close temporary file: %w", err)
+	}
+
+	return tmpFile, nil
+}
+
+// createNewArchiveWithChecksums creates a new archive with the checksums file
+func createNewArchiveWithChecksums(archivePath, newPath, checksumsPath string) error {
+	// Open the original archive
+	reader, err := zip.OpenReader(archivePath)
 	if err != nil {
 		return fmt.Errorf("failed to open archive: %w", err)
 	}
 	defer reader.Close()
 
-	// Create a new archive with the checksums file
-	newPath := archive.Path + ".new"
+	// Create the new archive
 	writer, err := os.Create(newPath)
 	if err != nil {
 		return fmt.Errorf("failed to create new archive: %w", err)
 	}
-	defer os.Remove(newPath)
+	defer writer.Close()
 
 	zipWriter := zip.NewWriter(writer)
 	defer zipWriter.Close()
 
 	// Copy all files from the original archive
-	for _, file := range reader.File {
-		rc, err := file.Open()
-		if err != nil {
-			return fmt.Errorf("failed to open file in archive: %w", err)
-		}
-
-		header, err := zip.FileInfoHeader(file.FileInfo())
-		if err != nil {
-			rc.Close()
-			return fmt.Errorf("failed to create header: %w", err)
-		}
-		header.Name = file.Name
-
-		w, err := zipWriter.CreateHeader(header)
-		if err != nil {
-			rc.Close()
-			return fmt.Errorf("failed to create file in new archive: %w", err)
-		}
-
-		_, err = io.Copy(w, rc)
-		rc.Close()
-		if err != nil {
-			return fmt.Errorf("failed to copy file to new archive: %w", err)
-		}
+	if err := copyArchiveFiles(reader, zipWriter); err != nil {
+		return err
 	}
 
 	// Add the checksums file
-	checksumFile, err := os.Open(tmpFile.Name())
+	return addChecksumsFile(zipWriter, checksumsPath)
+}
+
+// copyArchiveFiles copies all files from the original archive to the new one
+func copyArchiveFiles(reader *zip.ReadCloser, writer *zip.Writer) error {
+	for _, file := range reader.File {
+		if err := copyArchiveFile(file, writer); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// copyArchiveFile copies a single file from the original archive to the new one
+func copyArchiveFile(file *zip.File, writer *zip.Writer) error {
+	rc, err := file.Open()
+	if err != nil {
+		return fmt.Errorf("failed to open file in archive: %w", err)
+	}
+	defer rc.Close()
+
+	header, err := zip.FileInfoHeader(file.FileInfo())
+	if err != nil {
+		return fmt.Errorf("failed to create header: %w", err)
+	}
+	header.Name = file.Name
+
+	w, err := writer.CreateHeader(header)
+	if err != nil {
+		return fmt.Errorf("failed to create file in new archive: %w", err)
+	}
+
+	if _, err := io.Copy(w, rc); err != nil {
+		return fmt.Errorf("failed to copy file to new archive: %w", err)
+	}
+
+	return nil
+}
+
+// addChecksumsFile adds the checksums file to the archive
+func addChecksumsFile(writer *zip.Writer, checksumsPath string) error {
+	checksumFile, err := os.Open(checksumsPath)
 	if err != nil {
 		return fmt.Errorf("failed to open checksums file: %w", err)
 	}
@@ -163,22 +223,13 @@ func StoreChecksums(archive *Archive, checksums map[string]string) error {
 		Name:   ".checksums",
 		Method: zip.Deflate,
 	}
-	w, err := zipWriter.CreateHeader(header)
+	w, err := writer.CreateHeader(header)
 	if err != nil {
 		return fmt.Errorf("failed to create checksums file in archive: %w", err)
 	}
 
-	_, err = io.Copy(w, checksumFile)
-	if err != nil {
+	if _, err := io.Copy(w, checksumFile); err != nil {
 		return fmt.Errorf("failed to write checksums to archive: %w", err)
-	}
-
-	zipWriter.Close()
-	writer.Close()
-
-	// Replace the original archive with the new one
-	if err := os.Rename(newPath, archive.Path); err != nil {
-		return fmt.Errorf("failed to replace original archive: %w", err)
 	}
 
 	return nil
@@ -192,21 +243,27 @@ func ReadChecksums(archive *Archive) (map[string]string, error) {
 	}
 	defer reader.Close()
 
-	// Find the checksums file
-	var checksumFile *zip.File
+	checksumFile, err := findChecksumsFile(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	return readChecksumsFromFile(checksumFile)
+}
+
+// findChecksumsFile finds the checksums file in the archive
+func findChecksumsFile(reader *zip.ReadCloser) (*zip.File, error) {
 	for _, file := range reader.File {
 		if file.Name == ".checksums" {
-			checksumFile = file
-			break
+			return file, nil
 		}
 	}
+	return nil, fmt.Errorf("checksums file not found in archive")
+}
 
-	if checksumFile == nil {
-		return nil, fmt.Errorf("checksums file not found in archive")
-	}
-
-	// Read the checksums file
-	rc, err := checksumFile.Open()
+// readChecksumsFromFile reads checksums from a file in the archive
+func readChecksumsFromFile(file *zip.File) (map[string]string, error) {
+	rc, err := file.Open()
 	if err != nil {
 		return nil, fmt.Errorf("failed to open checksums file: %w", err)
 	}
@@ -228,83 +285,83 @@ func VerifyChecksums(archivePath string) (*VerificationStatus, error) {
 		IsVerified: true,
 	}
 
-	// Open the archive
 	reader, err := zip.OpenReader(archivePath)
 	if err != nil {
-		status.IsVerified = false
-		status.Errors = append(status.Errors, fmt.Sprintf("Failed to open archive: %v", err))
-		return status, nil
+		return handleVerificationError(status, "Failed to open archive: %v", err)
 	}
 	defer reader.Close()
 
-	// Find the checksums file
-	var checksumFile *zip.File
-	for _, file := range reader.File {
-		if file.Name == ".checksums" {
-			checksumFile = file
-			break
-		}
-	}
-
-	if checksumFile == nil {
-		status.IsVerified = false
-		status.Errors = append(status.Errors, "Checksums file not found in archive")
-		return status, nil
-	}
-
-	// Read the checksums
-	rc, err := checksumFile.Open()
+	checksumFile, err := findChecksumsFile(reader)
 	if err != nil {
-		status.IsVerified = false
-		status.Errors = append(status.Errors, fmt.Sprintf("Failed to open checksums file: %v", err))
-		return status, nil
-	}
-	defer rc.Close()
-
-	var storedChecksums map[string]string
-	decoder := json.NewDecoder(rc)
-	if err := decoder.Decode(&storedChecksums); err != nil {
-		status.IsVerified = false
-		status.Errors = append(status.Errors, fmt.Sprintf("Failed to decode checksums: %v", err))
-		return status, nil
+		return handleVerificationError(status, "Checksums file not found in archive")
 	}
 
-	// Verify each file's checksum
-	for _, file := range reader.File {
-		if file.Name == ".checksums" {
-			continue
-		}
+	storedChecksums, err := readChecksumsFromFile(checksumFile)
+	if err != nil {
+		return handleVerificationError(status, "Failed to read checksums: %v", err)
+	}
 
-		rc, err := file.Open()
-		if err != nil {
-			status.IsVerified = false
-			status.Errors = append(status.Errors, fmt.Sprintf("Failed to open file %s: %v", file.Name, err))
-			continue
-		}
-
-		hash := sha256.New()
-		if _, err := io.Copy(hash, rc); err != nil {
-			rc.Close()
-			status.IsVerified = false
-			status.Errors = append(status.Errors, fmt.Sprintf("Failed to calculate checksum for %s: %v", file.Name, err))
-			continue
-		}
-		rc.Close()
-
-		calculatedChecksum := hex.EncodeToString(hash.Sum(nil))
-		storedChecksum, exists := storedChecksums[file.Name]
-
-		if !exists {
-			status.IsVerified = false
-			status.Errors = append(status.Errors, fmt.Sprintf("No stored checksum for %s", file.Name))
-		} else if calculatedChecksum != storedChecksum {
-			status.IsVerified = false
-			status.Errors = append(status.Errors, fmt.Sprintf("Checksum mismatch for %s", file.Name))
-		}
+	if err := verifyArchiveChecksums(reader, storedChecksums, status); err != nil {
+		return handleVerificationError(status, err.Error())
 	}
 
 	status.HasChecksums = true
 	return status, nil
+}
+
+// handleVerificationError handles verification errors
+func handleVerificationError(
+	status *VerificationStatus,
+	format string,
+	args ...interface{},
+) (*VerificationStatus, error) {
+	status.IsVerified = false
+	status.Errors = append(status.Errors, fmt.Sprintf(format, args...))
+	return status, nil
+}
+
+// verifyArchiveChecksums verifies checksums for all files in the archive
+func verifyArchiveChecksums(
+	reader *zip.ReadCloser,
+	storedChecksums map[string]string,
+	status *VerificationStatus,
+) error {
+	for _, file := range reader.File {
+		if file.Name == ".checksums" {
+			continue
+		}
+
+		if err := verifyFileChecksum(file, storedChecksums, status); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// verifyFileChecksum verifies the checksum of a single file
+func verifyFileChecksum(file *zip.File, storedChecksums map[string]string, _ *VerificationStatus) error {
+	rc, err := file.Open()
+	if err != nil {
+		return fmt.Errorf("failed to open file %s: %v", file.Name, err)
+	}
+	defer rc.Close()
+
+	hash := sha256.New()
+	if _, err := io.Copy(hash, rc); err != nil {
+		return fmt.Errorf("failed to calculate checksum for %s: %v", file.Name, err)
+	}
+
+	calculatedChecksum := hex.EncodeToString(hash.Sum(nil))
+	storedChecksum, exists := storedChecksums[file.Name]
+
+	if !exists {
+		return fmt.Errorf("no stored checksum for %s", file.Name)
+	}
+	if calculatedChecksum != storedChecksum {
+		return fmt.Errorf("checksum mismatch for %s", file.Name)
+	}
+
+	return nil
 }
 
 // StoreVerificationStatus stores verification status in a metadata file

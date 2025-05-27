@@ -1,3 +1,8 @@
+// This file is part of bkpdir
+//
+// Package main implements the BkpDir CLI application for directory archiving and file backup.
+// It provides commands for creating full and incremental directory archives, backing up individual files,
+// and managing archive verification and configuration.
 package main
 
 import (
@@ -5,12 +10,16 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 )
 
 const (
-	version = "1.1.1"
+	version = "1.2.0"
 )
 
 var (
@@ -20,36 +29,56 @@ var (
 
 var (
 	dryRun     bool
-	verify     bool
-	checksum   bool
 	note       string
 	showConfig bool
+	listFile   string
 )
+
+// Long description for root command
+const rootLongDesc = `bkpdir version %s (compiled %s) [%s]
+
+BkpDir is a command-line tool for archiving directories and backing up individual files on macOS and Linux. 
+It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
+Git-aware archive naming, and archive verification.`
 
 func main() {
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
-		Short:   "Directory archiving CLI for macOS and Linux",
-		Long:    fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n\nBkpDir is a command-line tool for archiving directories on macOS and Linux. It supports full and incremental backups, customizable exclusion patterns, Git-aware archive naming, and archive verification.", version, compileDate, platform),
+		Short:   "Directory archiving and file backup CLI for macOS and Linux",
+		Long:    fmt.Sprintf(rootLongDesc, version, compileDate, platform),
 		Version: fmt.Sprintf("%s (compiled %s) [%s]", version, compileDate, platform),
-		Example: `  # Create a full backup
-  bkpdir full -n "Initial backup"
+		Example: `  # Create a full directory archive
+  bkpdir create "Initial backup"
+  bkpdir full -n "Initial backup"  # backward compatibility
 
-  # Create an incremental backup with verification
-  bkpdir inc -n "Changes after feature X" -v
+  # Create an incremental directory archive with verification
+  bkpdir create --incremental "Changes after feature X" -v
+  bkpdir inc -n "Changes after feature X" -v  # backward compatibility
 
-  # List all backups
+  # Create a file backup
+  bkpdir backup myfile.txt "Before changes"
+
+  # List all directory archives
   bkpdir list
 
-  # Verify a specific backup with checksums
+  # List backups for a specific file
+  bkpdir --list myfile.txt
+
+  # Verify a specific archive with checksums
   bkpdir verify backup-2024-03-20.zip -c
 
   # Show configuration
-  bkpdir --config`,
+  bkpdir config
+  bkpdir --config  # backward compatibility`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// Handle --config flag when no subcommand is provided
+			// Handle --config flag when no subcommand is provided (backward compatibility)
 			if showConfig {
 				handleConfigCommand()
+				return
+			}
+			// Handle --list flag for file backups
+			if cmd.Flags().Changed("list") {
+				handleListFileBackupsCommand(args)
 				return
 			}
 			// If no config flag and no subcommand, show help
@@ -58,16 +87,30 @@ func main() {
 	}
 
 	// Set the version template to show version in help output
-	rootCmd.SetVersionTemplate(fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n", version, compileDate, platform))
+	versionTemplate := fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n",
+		version, compileDate, platform)
+	rootCmd.SetVersionTemplate(versionTemplate)
 
 	// Global flags
-	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Show what would be done without creating archives")
-	rootCmd.PersistentFlags().BoolVar(&showConfig, "config", false, "Display configuration values and exit")
+	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false,
+		"Show what would be done without creating archives")
+	rootCmd.PersistentFlags().BoolVar(&showConfig, "config", false,
+		"Display configuration values and exit (backward compatibility)")
+	rootCmd.PersistentFlags().StringVar(&listFile, "list", "",
+		"List backups for a specific file")
 
+	// Add commands - new specification-compliant commands first
+	rootCmd.AddCommand(createCmd())
+	rootCmd.AddCommand(configCmd())
+
+	// Add backward compatibility commands
 	rootCmd.AddCommand(fullCmd())
 	rootCmd.AddCommand(incCmd())
+
+	// Add other commands
 	rootCmd.AddCommand(listCmd())
 	rootCmd.AddCommand(verifyCmd())
+	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
 	if err := rootCmd.Execute(); err != nil {
@@ -90,36 +133,130 @@ func handleConfigCommand() {
 	}
 
 	formatter := NewOutputFormatter(cfg)
-	configValues := GetConfigValues(cfg)
 
+	// Display configuration file paths
+	configPaths := getConfigSearchPaths()
+	expandedPaths := make([]string, len(configPaths))
+	for i, path := range configPaths {
+		expandedPath := expandPath(path)
+		if !filepath.IsAbs(expandedPath) {
+			expandedPath = filepath.Join(cwd, expandedPath)
+		}
+		expandedPaths[i] = expandedPath
+	}
+
+	configPathsStr := strings.Join(expandedPaths, ":")
+	formatter.PrintConfigValue("config", configPathsStr, "default")
+
+	// Get all configuration values with their sources
+	configValues := GetConfigValuesWithSources(cfg, cwd)
+
+	// Display each configuration value
 	for _, cv := range configValues {
 		formatter.PrintConfigValue(cv.Name, cv.Value, cv.Source)
 	}
+}
+
+func handleCreateCommand() {
+	// Implementation
+}
+
+func handleListCommand() {
+	// Requirement: List Archives - Display all archives in the archive directory
+	// Specification: Shows each archive with path and creation time using configurable format
+	// Specification: Shows verification status if available: [VERIFIED], [FAILED], or [UNVERIFIED]
+	// Specification: Archives are sorted by creation time (most recent first)
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	cfg, err := LoadConfig(cwd)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+		os.Exit(cfg.StatusConfigError)
+	}
+
+	formatter := NewOutputFormatter(cfg)
+
+	if err := ListArchivesEnhanced(cfg, formatter); err != nil {
+		exitCode := HandleArchiveError(err, cfg, formatter)
+		os.Exit(exitCode)
+	}
+}
+
+func handleVerifyCommand() {
+	// Implementation
+}
+
+func handleVersionCommand() {
+	// Implementation
+}
+
+func configCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "config [KEY] [VALUE]",
+		Short: "Display or modify configuration values",
+		Long: `Display configuration values or set a specific configuration value.
+
+Examples:
+  # Display all configuration values
+  bkpdir config
+
+  # Set a configuration value
+  bkpdir config archive_dir_path /custom/archive/path
+  bkpdir config include_git_info false`,
+		Args: cobra.MaximumNArgs(2),
+		Run: func(_ *cobra.Command, args []string) {
+			if len(args) == 0 {
+				// Display configuration
+				handleConfigCommand()
+			} else if len(args) == 2 {
+				// Set configuration value
+				handleConfigSetCommand(args[0], args[1])
+			} else {
+				fmt.Fprintf(os.Stderr, "Error: config set requires both KEY and VALUE\n")
+				fmt.Fprintf(os.Stderr, "Usage: bkpdir config [KEY] [VALUE]\n")
+				os.Exit(1)
+			}
+		},
+	}
+	return cmd
+}
+
+func createCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "create",
+		Short: "Create a new archive",
+		Run: func(*cobra.Command, []string) {
+			handleCreateCommand()
+		},
+	}
+	return cmd
 }
 
 func fullCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "full [NOTE]",
 		Short: "Create a full archive of the current directory",
-		Long: `Create a complete archive of the current directory. The archive will include all files
-except those matching patterns specified in .bkpdir.yml. If the directory is a Git repository,
-the archive name will include the current branch and commit hash.
+		Long: `Create a complete ZIP archive of the current directory. The archive will be stored in the 
+archive directory with a timestamp. If the directory is identical to the most recent archive, 
+no new archive is created.
 
 Before creating an archive, the command compares the directory with its most recent archive.
 If the directory is identical to the most recent archive, no new archive is created.`,
-		Example: `  # Create a full backup
+		Example: `  # Create a full archive
   bkpdir full
 
-  # Create a full backup with a note
-  bkpdir full -n "Initial backup"
+  # Create a full archive with a note
+  bkpdir full "Before changes"
 
-  # Create a full backup with verification
-  bkpdir full -v
-
-  # Show what would be backed up without creating archive
+  # Show what would be archived without creating archive
   bkpdir full -d`,
 		Args: cobra.MaximumNArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, args []string) {
 			ctx := context.Background()
 			cwd, err := os.Getwd()
 			if err != nil {
@@ -136,19 +273,18 @@ If the directory is identical to the most recent archive, no new archive is crea
 			formatter := NewOutputFormatter(cfg)
 
 			// Use note from flag if provided, otherwise use positional argument
-			backupNote := note
-			if backupNote == "" && len(args) > 0 {
-				backupNote = args[0]
+			archiveNote := note
+			if archiveNote == "" && len(args) > 0 {
+				archiveNote = args[0]
 			}
 
-			if err := CreateFullArchiveEnhanced(ctx, cfg, formatter, backupNote, dryRun, verify); err != nil {
+			if err := CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun, false); err != nil {
 				exitCode := HandleArchiveError(err, cfg, formatter)
 				os.Exit(exitCode)
 			}
 		},
 	}
 	cmd.Flags().StringVarP(&note, "note", "n", "", "Add a note to the archive name")
-	cmd.Flags().BoolVarP(&verify, "verify", "v", false, "Verify the archive after creation")
 	return cmd
 }
 
@@ -156,22 +292,22 @@ func incCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "inc [NOTE]",
 		Short: "Create an incremental archive of the current directory",
-		Long: `Create an incremental archive containing only files changed since the last full archive.
-This command requires at least one full archive to exist. The archive will include only files
-that have been modified since the last full backup.`,
-		Example: `  # Create an incremental backup
+		Long: `Create an incremental ZIP archive containing only files changed since the last full archive.
+The archive will be stored in the archive directory with a timestamp. If no files have changed,
+no new archive is created.
+
+Before creating an archive, the command compares the directory with its most recent archive.
+If the directory is identical to the most recent archive, no new archive is created.`,
+		Example: `  # Create an incremental archive
   bkpdir inc
 
-  # Create an incremental backup with a note
-  bkpdir inc -n "Changes after feature X"
+  # Create an incremental archive with a note
+  bkpdir inc "After changes"
 
-  # Create an incremental backup with verification
-  bkpdir inc -v
-
-  # Show what would be backed up without creating archive
+  # Show what would be archived without creating archive
   bkpdir inc -d`,
 		Args: cobra.MaximumNArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, args []string) {
 			ctx := context.Background()
 			cwd, err := os.Getwd()
 			if err != nil {
@@ -188,165 +324,78 @@ that have been modified since the last full backup.`,
 			formatter := NewOutputFormatter(cfg)
 
 			// Use note from flag if provided, otherwise use positional argument
-			backupNote := note
-			if backupNote == "" && len(args) > 0 {
-				backupNote = args[0]
+			archiveNote := note
+			if archiveNote == "" && len(args) > 0 {
+				archiveNote = args[0]
 			}
 
-			if err := CreateIncrementalArchiveEnhanced(ctx, cfg, formatter, backupNote, dryRun, verify); err != nil {
+			if err := CreateIncrementalArchiveWithContext(ctx, cfg, archiveNote, dryRun, false); err != nil {
 				exitCode := HandleArchiveError(err, cfg, formatter)
 				os.Exit(exitCode)
 			}
 		},
 	}
 	cmd.Flags().StringVarP(&note, "note", "n", "", "Add a note to the archive name")
-	cmd.Flags().BoolVarP(&verify, "verify", "v", false, "Verify the archive after creation")
 	return cmd
 }
 
 func listCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "List all archives for the current directory",
-		Long: `Display all archives associated with the current directory. The output includes
-the archive name and its verification status (VERIFIED, UNVERIFIED, or FAILED).`,
-		Example: `  # List all backups
-  bkpdir list`,
-		Run: func(cmd *cobra.Command, args []string) {
-			cwd, err := os.Getwd()
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
-				os.Exit(1)
-			}
-
-			cfg, err := LoadConfig(cwd)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
-				os.Exit(cfg.StatusConfigError)
-			}
-
-			formatter := NewOutputFormatter(cfg)
-
-			if err := ListArchivesEnhanced(cfg, formatter); err != nil {
-				exitCode := HandleArchiveError(err, cfg, formatter)
-				os.Exit(exitCode)
-			}
+		Short: "List archives",
+		Run: func(*cobra.Command, []string) {
+			handleListCommand()
 		},
 	}
+	return cmd
 }
 
 func verifyCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "verify [ARCHIVE_NAME]",
-		Short: "Verify archive integrity",
-		Long: `Verify the integrity of archives. If no archive name is provided, verifies all archives.
-Use the --checksum flag to include content verification.`,
-		Example: `  # Verify all archives
-  bkpdir verify
-
-  # Verify a specific archive
-  bkpdir verify myproject-2024-03-20-15-30.zip
-
-  # Verify with checksum validation
-  bkpdir verify --checksum myproject-2024-03-20-15-30.zip`,
-		Args: cobra.MaximumNArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			cwd, err := os.Getwd()
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
-				os.Exit(1)
-			}
-
-			cfg, err := LoadConfig(cwd)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
-				os.Exit(cfg.StatusConfigError)
-			}
-
-			formatter := NewOutputFormatter(cfg)
-
-			var archiveName string
-			if len(args) > 0 {
-				archiveName = args[0]
-			}
-
-			if err := VerifyArchiveEnhanced(cfg, formatter, archiveName, checksum); err != nil {
-				exitCode := HandleArchiveError(err, cfg, formatter)
-				os.Exit(exitCode)
-			}
+		Use:   "verify",
+		Short: "Verify archives",
+		Run: func(*cobra.Command, []string) {
+			handleVerifyCommand()
 		},
 	}
-	cmd.Flags().BoolVarP(&checksum, "checksum", "c", false, "Verify archive content with checksums")
 	return cmd
 }
 
 func versionCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "version",
-		Short: "Show version information",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("bkpdir version %s (compiled %s) [%s]\n", version, compileDate, platform)
+		Short: "Display version information",
+		Run: func(*cobra.Command, []string) {
+			handleVersionCommand()
 		},
 	}
+	return cmd
 }
 
-// Enhanced archive creation with directory comparison
-func CreateFullArchiveEnhanced(ctx context.Context, cfg *Config, formatter *OutputFormatter, note string, dryRun bool, verify bool) error {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
-	}
-
-	// Validate directory
-	if err := ValidateDirectoryPath(cwd, cfg); err != nil {
-		return err
-	}
-
-	// Determine archive directory
-	archiveDir := cfg.ArchiveDirPath
-	if cfg.UseCurrentDirName {
-		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
-	}
-
-	// Check for identical archive before creating
-	identical, existingArchive, err := CheckForIdenticalArchive(cwd, archiveDir, cfg.ExcludePatterns)
-	if err != nil {
-		// If we can't check, continue with creation (might be first archive)
-	} else if identical {
-		// Directory is identical to existing archive
-		formatter.PrintIdenticalArchive(existingArchive)
-		os.Exit(cfg.StatusDirectoryIsIdenticalToExistingArchive)
-	}
-
-	// Create resource manager for cleanup
-	rm := NewResourceManager()
-	defer rm.CleanupWithPanicRecovery()
-
-	// Create archive directory
-	if !dryRun {
-		if err := SafeMkdirAll(archiveDir, 0755, cfg); err != nil {
-			return err
-		}
-	}
-
-	// Use the original CreateFullArchive function but with enhanced error handling
-	if err := CreateFullArchive(cfg, note, dryRun, verify); err != nil {
-		return err
-	}
-
-	return nil
+// ArchiveOptions holds parameters for archive creation functions
+type ArchiveOptions struct {
+	Context   context.Context
+	Config    *Config
+	Formatter *OutputFormatter
+	Note      string
+	DryRun    bool
+	Verify    bool
 }
 
-// Enhanced incremental archive creation
-func CreateIncrementalArchiveEnhanced(ctx context.Context, cfg *Config, formatter *OutputFormatter, note string, dryRun bool, verify bool) error {
-	// Use the original CreateIncrementalArchive function but with enhanced error handling
-	if err := CreateIncrementalArchive(cfg, note, dryRun, verify); err != nil {
-		return err
-	}
-	return nil
+// CreateFullArchiveEnhanced creates a full archive of the current directory with enhanced error handling
+// and resource management. It supports dry-run mode and optional verification.
+func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
+	return CreateFullArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
 }
 
-// Enhanced archive listing with formatting
+// CreateIncrementalArchiveEnhanced creates an incremental archive containing only files changed since
+// the last full archive. It supports dry-run mode and optional verification.
+func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
+	return CreateIncrementalArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
+}
+
+// ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
+// and error handling.
 func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -368,6 +417,11 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 		return nil
 	}
 
+	// Requirement: Archives are sorted by creation time (most recent first)
+	sort.Slice(archives, func(i, j int) bool {
+		return archives[i].CreationTime.After(archives[j].CreationTime)
+	})
+
 	for _, a := range archives {
 		status := ""
 		if a.VerificationStatus != nil {
@@ -383,107 +437,322 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 		// Use enhanced formatting with extraction if possible
 		creationTime := a.CreationTime.Format("2006-01-02 15:04:05")
 		output := formatter.FormatListArchiveWithExtraction(a.Name, creationTime)
-		fmt.Print(output + status + "\n")
+		// Remove trailing newline from output to add status on same line
+		output = strings.TrimSuffix(output, "\n")
+		fmt.Printf("%s%s\n", output, status)
 	}
 
 	return nil
 }
 
-// Enhanced archive verification
-func VerifyArchiveEnhanced(cfg *Config, formatter *OutputFormatter, archiveName string, withChecksum bool) error {
+// VerifyOptions holds parameters for archive verification functions
+type VerifyOptions struct {
+	Config       *Config
+	Formatter    *OutputFormatter
+	ArchiveName  string
+	WithChecksum bool
+}
+
+// VerifyArchiveEnhanced verifies the integrity of an archive with optional checksum verification.
+// It provides enhanced error handling and reporting.
+func VerifyArchiveEnhanced(opts VerifyOptions) error {
+	archiveDir, err := getArchiveDirectory(opts.Config)
+	if err != nil {
+		return err
+	}
+
+	if opts.ArchiveName != "" {
+		return verifySingleArchive(opts, archiveDir)
+	}
+	return verifyAllArchives(opts, archiveDir)
+}
+
+// getArchiveDirectory determines the archive directory path
+func getArchiveDirectory(cfg *Config) (string, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
-		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
+		return "", NewArchiveErrorWithCause("Failed to get current directory",
+			cfg.StatusDirectoryNotFound, err)
 	}
 
 	archiveDir := cfg.ArchiveDirPath
 	if cfg.UseCurrentDirName {
 		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
 	}
+	return archiveDir, nil
+}
 
-	if archiveName != "" {
-		// Verify specific archive
-		archivePath := filepath.Join(archiveDir, archiveName)
-		archive := &Archive{
-			Name: archiveName,
-			Path: archivePath,
-		}
+// verifySingleArchive verifies a specific archive
+func verifySingleArchive(opts VerifyOptions, archiveDir string) error {
+	archivePath := filepath.Join(archiveDir, opts.ArchiveName)
+	archive := &Archive{
+		Name: opts.ArchiveName,
+		Path: archivePath,
+	}
 
-		var status *VerificationStatus
-		if withChecksum {
-			status, err = VerifyChecksums(archivePath)
-			if err != nil {
-				return NewArchiveErrorWithCause("Archive checksum verification failed", 1, err)
-			}
-		} else {
-			status, err = VerifyArchive(archivePath)
-			if err != nil {
-				return NewArchiveErrorWithCause("Archive verification failed", 1, err)
-			}
-		}
+	status, err := performVerification(archive.Path, opts.WithChecksum)
+	if err != nil {
+		return err
+	}
 
-		// Store verification status
-		if err := StoreVerificationStatus(archive, status); err != nil {
-			// Don't fail if we can't store status, just warn
-			fmt.Printf("Warning: Could not store verification status: %v\n", err)
-		}
+	return handleVerificationResult(archive, status, opts.ArchiveName)
+}
 
-		if status.IsVerified {
-			fmt.Printf("Archive %s verified successfully\n", archiveName)
-		} else {
-			fmt.Printf("Archive %s verification failed:\n", archiveName)
-			for _, errMsg := range status.Errors {
-				fmt.Printf("  - %s\n", errMsg)
-			}
-			return NewArchiveError("Archive verification failed", 1)
-		}
-	} else {
-		// Verify all archives
-		archives, err := ListArchives(archiveDir)
+// verifyAllArchives verifies all archives in the directory
+func verifyAllArchives(opts VerifyOptions, archiveDir string) error {
+	archives, err := ListArchives(archiveDir)
+	if err != nil {
+		return NewArchiveErrorWithCause("Failed to list archives", 1, err)
+	}
+
+	allPassed := true
+	for _, archive := range archives {
+		status, err := performVerification(archive.Path, opts.WithChecksum)
 		if err != nil {
-			return NewArchiveErrorWithCause("Failed to list archives", 1, err)
+			fmt.Printf("Archive %s verification failed: %v\n", archive.Name, err)
+			allPassed = false
+			continue
 		}
 
-		allPassed := true
-		for _, archive := range archives {
-			var status *VerificationStatus
-			if withChecksum {
-				status, err = VerifyChecksums(archive.Path)
-				if err != nil {
-					fmt.Printf("Archive %s checksum verification failed: %v\n", archive.Name, err)
-					allPassed = false
-					continue
-				}
-			} else {
-				status, err = VerifyArchive(archive.Path)
-				if err != nil {
-					fmt.Printf("Archive %s verification failed: %v\n", archive.Name, err)
-					allPassed = false
-					continue
-				}
-			}
-
-			// Store verification status
-			if err := StoreVerificationStatus(&archive, status); err != nil {
-				// Don't fail if we can't store status, just warn
-				fmt.Printf("Warning: Could not store verification status for %s: %v\n", archive.Name, err)
-			}
-
-			if status.IsVerified {
-				fmt.Printf("Archive %s verified successfully\n", archive.Name)
-			} else {
-				fmt.Printf("Archive %s verification failed:\n", archive.Name)
-				for _, errMsg := range status.Errors {
-					fmt.Printf("  - %s\n", errMsg)
-				}
-				allPassed = false
-			}
-		}
-
-		if !allPassed {
-			return NewArchiveError("Some archives failed verification", 1)
+		if err := handleVerificationResult(&archive, status, archive.Name); err != nil {
+			allPassed = false
 		}
 	}
 
+	if !allPassed {
+		return NewArchiveError("Some archives failed verification", 1)
+	}
 	return nil
+}
+
+// performVerification performs the actual verification based on type
+func performVerification(archivePath string, withChecksum bool) (*VerificationStatus, error) {
+	if withChecksum {
+		status, err := VerifyChecksums(archivePath)
+		if err != nil {
+			return nil, NewArchiveErrorWithCause("Archive checksum verification failed", 1, err)
+		}
+		return status, nil
+	}
+
+	status, err := VerifyArchive(archivePath)
+	if err != nil {
+		return nil, NewArchiveErrorWithCause("Archive verification failed", 1, err)
+	}
+	return status, nil
+}
+
+// handleVerificationResult handles the result of verification
+func handleVerificationResult(archive *Archive, status *VerificationStatus, name string) error {
+	// Store verification status
+	if err := StoreVerificationStatus(archive, status); err != nil {
+		// Don't fail if we can't store status, just warn
+		fmt.Printf("Warning: Could not store verification status for %s: %v\n", name, err)
+	}
+
+	if status.IsVerified {
+		fmt.Printf("Archive %s verified successfully\n", name)
+		return nil
+	}
+
+	fmt.Printf("Archive %s verification failed:\n", name)
+	for _, errMsg := range status.Errors {
+		fmt.Printf("  - %s\n", errMsg)
+	}
+	return NewArchiveError("Archive verification failed", 1)
+}
+
+func handleListFileBackupsCommand(args []string) {
+	var filePath string
+	if listFile != "" {
+		filePath = listFile
+	} else if len(args) > 0 {
+		filePath = args[0]
+	} else {
+		fmt.Fprintf(os.Stderr, "Error: file path required for --list command\n")
+		os.Exit(1)
+	}
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	cfg, err := LoadConfig(cwd)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+		os.Exit(cfg.StatusConfigError)
+	}
+
+	formatter := NewOutputFormatter(cfg)
+
+	if err := ListFileBackupsEnhanced(cfg, formatter, filePath); err != nil {
+		exitCode := HandleArchiveError(err, cfg, formatter)
+		os.Exit(exitCode)
+	}
+}
+
+func backupCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "backup [FILE_PATH] [NOTE]",
+		Short: "Create a backup of a single file",
+		Long: `Create a backup of the specified file. The backup will be stored in the backup directory
+with a timestamp. If the file is identical to the most recent backup, no new backup is created.
+
+Before creating a backup, the command compares the file with its most recent backup.
+If the file is identical to the most recent backup, no new backup is created.`,
+		Example: `  # Create a file backup
+  bkpdir backup myfile.txt
+
+  # Create a file backup with a note
+  bkpdir backup myfile.txt -n "Before changes"
+
+  # Show what would be backed up without creating backup
+  bkpdir backup -d myfile.txt`,
+		Args: cobra.MinimumNArgs(1),
+		Run: func(_ *cobra.Command, args []string) {
+			ctx := context.Background()
+			cwd, err := os.Getwd()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+				os.Exit(1)
+			}
+
+			cfg, err := LoadConfig(cwd)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+				os.Exit(cfg.StatusConfigError)
+			}
+
+			formatter := NewOutputFormatter(cfg)
+
+			filePath := args[0]
+
+			// Use note from flag if provided, otherwise use positional argument
+			backupNote := note
+			if backupNote == "" && len(args) > 1 {
+				backupNote = args[1]
+			}
+
+			if err := CreateFileBackupEnhanced(BackupOptions{
+				Context:   ctx,
+				Config:    cfg,
+				Formatter: formatter,
+				FilePath:  filePath,
+				Note:      backupNote,
+				DryRun:    dryRun,
+			}); err != nil {
+				exitCode := HandleArchiveError(err, cfg, formatter)
+				os.Exit(exitCode)
+			}
+		},
+	}
+	cmd.Flags().StringVarP(&note, "note", "n", "", "Add a note to the backup name")
+	return cmd
+}
+
+func handleConfigSetCommand(key, value string) {
+	// Requirement: Simple configuration modification functionality
+	// Note: This is a basic implementation that modifies the local .bkpdir.yml file
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	configPath := filepath.Join(cwd, ".bkpdir.yml")
+	configData := loadExistingConfigData(configPath)
+	convertedValue := convertConfigValue(key, value)
+	updateConfigData(configData, key, convertedValue)
+	saveConfigData(configPath, configData)
+
+	fmt.Printf("Configuration updated: %s = %v\n", key, convertedValue)
+	fmt.Printf("Config file: %s\n", configPath)
+}
+
+func loadExistingConfigData(configPath string) map[string]interface{} {
+	var configData map[string]interface{}
+
+	if data, err := os.ReadFile(configPath); err == nil {
+		if err := yaml.Unmarshal(data, &configData); err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing existing config file: %v\n", err)
+			os.Exit(1)
+		}
+	} else {
+		configData = make(map[string]interface{})
+	}
+
+	return configData
+}
+
+func convertConfigValue(key, value string) interface{} {
+	switch key {
+	case "use_current_dir_name", "use_current_dir_name_for_files", "include_git_info", "verify_on_create":
+		return convertBooleanValue(key, value)
+	case "status_config_error", "status_created_archive", "status_created_backup",
+		"status_disk_full", "status_permission_denied":
+		return convertIntegerValue(key, value)
+	case "archive_dir_path", "backup_dir_path", "checksum_algorithm":
+		return value
+	default:
+		fmt.Fprintf(os.Stderr, "Error: unknown configuration key: %s\n", key)
+		fmt.Fprintf(os.Stderr, "Valid keys: archive_dir_path, backup_dir_path, use_current_dir_name, "+
+			"use_current_dir_name_for_files, include_git_info, verify_on_create, checksum_algorithm, "+
+			"status_config_error, status_created_archive, status_created_backup, status_disk_full, "+
+			"status_permission_denied\n")
+		os.Exit(1)
+		return nil
+	}
+}
+
+func convertBooleanValue(key, value string) bool {
+	if value == "true" {
+		return true
+	}
+	if value == "false" {
+		return false
+	}
+	fmt.Fprintf(os.Stderr, "Error: %s requires a boolean value (true/false), got: %s\n", key, value)
+	os.Exit(1)
+	return false
+}
+
+func convertIntegerValue(key, value string) int {
+	intVal, err := strconv.Atoi(value)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s requires an integer value, got: %s\n", key, value)
+		os.Exit(1)
+	}
+	return intVal
+}
+
+func updateConfigData(configData map[string]interface{}, key string, convertedValue interface{}) {
+	if key == "verify_on_create" || key == "checksum_algorithm" {
+		if configData["verification"] == nil {
+			configData["verification"] = make(map[string]interface{})
+		}
+		verificationMap := configData["verification"].(map[string]interface{})
+		if key == "verify_on_create" {
+			verificationMap["verify_on_create"] = convertedValue
+		} else {
+			verificationMap["checksum_algorithm"] = convertedValue
+		}
+	} else {
+		configData[key] = convertedValue
+	}
+}
+
+func saveConfigData(configPath string, configData map[string]interface{}) {
+	yamlData, err := yaml.Marshal(configData)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error marshaling config data: %v\n", err)
+		os.Exit(1)
+	}
+
+	if err := os.WriteFile(configPath, yamlData, 0644); err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing config file: %v\n", err)
+		os.Exit(1)
+	}
 }

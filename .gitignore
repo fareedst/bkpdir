@@ -25,3 +25,4 @@ coverage.html
 # OS-specific files
 .DS_Store
 Thumbs.db
+docs/prompts

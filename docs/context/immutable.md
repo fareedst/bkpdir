@@ -3,55 +3,80 @@
 This document contains specifications that MUST NOT be changed without a major version bump. These are core behaviors that users and other systems depend on.
 
 ## Archive Naming Convention
-- Format: `[PREFIX-]YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip`
-- PREFIX is the current directory name (if `use_current_dir_name` is true)
-- BRANCH and HASH are Git information (if in a Git repository and `include_git_info` is true)
-- Optional note can be appended with equals sign
-- Incremental archives: `BASENAME_update=YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip`
+- Format: `{prefix}-{timestamp}-{git_info}-{note}.zip`
+- `prefix`: Optional prefix (default: "bkp")
+- `timestamp`: ISO 8601 format (YYYY-MM-DDTHHmmss)
+- `git_info`: Optional Git branch and short hash (e.g., "main-abc123")
+- `note`: Optional note (default: empty)
+- Example: `bkp-2024-03-20T143022-main-abc123-initial.zip`
+- This naming convention is fixed and must not be modified
+
+## File Backup Naming Convention
+- Format: `{filename}-{timestamp}[={note}]`
+- `filename`: Original filename without path
+- `timestamp`: YYYY-MM-DD-HH-MM format
+- `note`: Optional note appended with equals sign
+- Examples:
+  - `document.txt-2024-03-20-14-30`
+  - `config.yml-2024-03-20-14-30=before-changes`
+  - `script.sh-2024-03-20-14-30=working-version`
 - This naming convention is fixed and must not be modified
 
 ## Directory Operations
-- Use platform-independent path handling
-- Preserve file permissions and modification time in archives
-- Handle both absolute and relative directory paths
-- Source paths must be directories (not files or special files)
-- Create archive directories automatically if they don't exist
-- Display all paths relative to current directory
-- **Atomic Operations**: All archive operations must be atomic to prevent corruption
-- **Resource Cleanup**: All temporary files must be cleaned up automatically
-- **ZIP Format**: Archives must use ZIP format with compression
-- These directory operation rules are fundamental and must not be altered
+- **Platform Independence**: Use platform-independent path handling
+- **Permission Preservation**: Preserve file permissions and modification time
+- **Atomic Operations**: All operations must be atomic to prevent corruption
+- **Structure Preservation**: Maintain directory structure in archives
+- **Special File Handling**: Handle symbolic links, devices, sockets, etc.
+- **Automatic Creation**: Create archive directories if they don't exist
+- **Path Display**: Display all paths relative to current directory
+- These file operation rules are fundamental and must not be altered
+
+## File Backup Operations
+- **Atomic File Operations**: All file backup operations must be atomic
+- **Identical File Detection**: Must compare files byte-by-byte to detect identical backups
+- **Directory Structure Preservation**: Maintain source file's directory structure in backup path
+- **Timestamp Preservation**: Preserve original file modification times
+- **Permission Preservation**: Preserve file permissions where applicable
+- **Path Resolution**: Handle both absolute and relative file paths
+- **Backup Directory Creation**: Create backup directories if they don't exist
+- These file backup operation rules are fundamental and must not be altered
 
 ## File Exclusion Requirements
-- **Glob Pattern Matching**: Must use doublestar glob pattern matching
-- **Default Exclusions**: Default exclude patterns are `[".git/", "vendor/"]`
-- **Configurable Patterns**: Exclude patterns must be configurable via `exclude_patterns`
-- **Recursive Application**: Patterns must be applied recursively to directory tree
+- **Pattern Matching**: Doublestar glob pattern matching
+- **Configuration**: Configurable exclusion patterns
+- **System Files**: Default exclusions for system files
+- **Case Sensitivity**: Case-sensitive matching
+- **Directory Support**: Directory exclusion support
+- **Precedence**: Pattern precedence rules
 - These exclusion requirements are mandatory and must be preserved
 
 ## Git Integration Requirements
-- **Repository Detection**: Must automatically detect Git repositories
-- **Branch Information**: Must extract current branch name when available
-- **Commit Hash**: Must extract current commit hash when available
-- **Non-Git Handling**: Must gracefully handle non-Git directories
-- **Configurable**: Git integration must be configurable via `include_git_info`
-- **Archive Naming**: Git information must be included in archive names when enabled
-- These Git integration requirements are immutable and must be maintained
+- **Repository Detection**: Automatic Git repository detection
+- **Archive Naming**: Git information in archive names
+- **Info Extraction**: Git branch and commit hash extraction
+- **State Detection**: Dirty working directory detection
+- **Submodule Support**: Submodule handling
+- **Configuration**: Git configuration integration
+- These Git integration requirements are mandatory and must be preserved
 
 ## Archive Verification Requirements
-- **ZIP Structure**: Must verify ZIP file structure and integrity
-- **Checksum Support**: Must support SHA-256 checksum verification
-- **Status Tracking**: Must track and store verification status
-- **Optional Verification**: Verification must be optional and configurable
-- **Manual Verification**: Must support manual verification of existing archives
+- **Structure Check**: ZIP structure verification
+- **Checksum Support**: SHA-256 checksum verification
+- **Status Tracking**: Verification status tracking
+- **Atomic Operations**: Atomic verification operations
+- **Result Storage**: Verification result persistence
+- **Error Reporting**: Error reporting for verification failures
 - These verification requirements are mandatory and must be preserved
 
 ## Error Handling Requirements
-- **Structured Errors**: All archive operations must return structured errors with status codes
-- **No Resource Leaks**: No temporary files or directories may remain after any operation
+- **Structured Errors**: All operations must return structured errors with status codes
+- **Resource Cleanup**: No temporary files or directories may remain after any operation
 - **Panic Recovery**: Application must recover from panics without leaving temporary resources
 - **Context Support**: Long-running operations must support cancellation via context
 - **Enhanced Detection**: Must detect various disk space and permission error conditions
+- **Error Formatting**: Consistent error message formatting
+- **Error Logging**: Comprehensive error logging
 - These error handling requirements are mandatory and must be preserved
 
 ## Code Quality Standards
@@ -60,47 +85,87 @@ This document contains specifications that MUST NOT be changed without a major v
 - **Testing**: All code must have comprehensive test coverage
 - **Documentation**: All public functions must be documented
 - **Backward Compatibility**: New features must not break existing functionality
+- **Code Organization**: Consistent code organization and structure
+- **Naming Conventions**: Standard naming conventions
 - These quality standards are immutable and must be maintained
+
+## Build System Requirements
+- **Quality Gates**: Build system must enforce quality standards before compilation
+- **Dependency Management**: Proper ordering of build steps (lint → test → build)
+- **Artifact Management**: Clean target for removing build artifacts
+- **Continuous Integration**: Automated quality checks in CI/CD pipeline
+- **Build Dependencies**: `make build` must depend on `make lint` and `make test` passing
+- **Error Propagation**: Non-zero exit codes from linting or testing must prevent build
+- **CI/CD Commands**: Support for `make ci-lint`, `make ci-test`, `make ci-build`
+- These build system requirements are mandatory and must be preserved
 
 ## Output Formatting Requirements
 - **Printf-Style Formatting**: All standard output must use printf-style format specifications
-- **Template-Based Formatting**: Must support text/template and placeholder-based formatting for named data extraction
-- **Configuration-Driven**: Format strings and templates must be retrieved from application configuration
+- **Template-Based Formatting**: Must support text/template and placeholder-based formatting
+- **Configuration-Driven**: Format strings and templates must be retrieved from configuration
 - **Text Highlighting**: Must provide means to highlight/format text for structure and meaning
 - **Data Separation**: All user-facing text must be extracted from code into data files
 - **Named Placeholders**: Must support both Go text/template syntax ({{.name}}) and placeholder syntax (%{name})
-- **Regex Integration**: Must support named regex groups for data extraction and template formatting
+- **Regex Integration**: Must support named regex groups for data extraction
 - **Backward Compatibility**: Default format strings must preserve existing output appearance
 - **Immutable Defaults**: Default format specifications cannot be changed without major version bump
 - These output formatting requirements are mandatory and must be preserved
 
+## Template Formatting Requirements
+- **Dual Syntax Support**: Must support both Go text/template syntax ({{.name}}) and placeholder syntax (%{name})
+- **Regex Data Extraction**: Must extract named groups from filenames using configurable regex patterns
+- **Graceful Degradation**: Must fall back to placeholder formatting when template processing fails
+- **Operation Context**: Error messages must include operation context for enhanced debugging
+- **Rich Data Display**: Must extract and display rich information from archive and backup filenames
+- **ANSI Color Support**: Must support ANSI color codes and text formatting in templates
+- **Template Methods**: Must provide template methods for all operations (archives, backups, config, errors)
+- **Print Methods**: Must provide direct printing methods for template-formatted output
+- **Error Handling**: Must handle invalid regex patterns and template syntax gracefully
+- **Configuration Integration**: All template strings and regex patterns must be configurable
+- These template formatting requirements are mandatory and must be preserved
+
 ## Commands
-1. Create Full Archive:
-   - Command: `bkpdir full [NOTE]`
-   - Compare with most recent archive before creating
-   - Skip if identical to most recent archive
+1. Create Archive:
+   - Command: `bkpdir create`
+   - Create full archive of current directory
    - **Must use atomic operations with automatic cleanup**
    - **Must support context cancellation**
-   - **Output formatting must use configurable printf-style format strings**
-   - This archive creation logic must remain unchanged
+   - **Output formatting must use configurable format strings**
+   - This command structure must be preserved
 
 2. Create Incremental Archive:
-   - Command: `bkpdir inc [NOTE]`
-   - Requires existing full archive as base
-   - Only includes files modified since base archive
+   - Command: `bkpdir create --incremental`
+   - Create incremental archive of changes
    - **Must use atomic operations with automatic cleanup**
    - **Must support context cancellation**
-   - This incremental archive logic must remain unchanged
+   - **Output formatting must use configurable format strings**
+   - This command structure must be preserved
 
-3. List Archives:
+3. Create File Backup:
+   - Command: `bkpdir backup [FILE_PATH] [NOTE]`
+   - Create backup of single file with comparison
+   - **Must use atomic operations with automatic cleanup**
+   - **Must support context cancellation**
+   - **Must detect identical files and report appropriately**
+   - **Output formatting must use configurable format strings**
+   - This command structure must be preserved
+
+4. List Archives:
    - Command: `bkpdir list`
    - Sort by creation time (most recent first)
-   - Display format: `.bkpdir/project-2024-03-21-15-30=main=abc123=note.zip (created: 2024-03-21 15:30:00)`
+   - Display format: `{path} (created: {time})`
    - Show verification status: [VERIFIED], [FAILED], or [UNVERIFIED]
    - **Output formatting must use configurable printf-style format strings**
    - This command structure and output format must be preserved
 
-4. Verify Archive:
+5. List File Backups:
+   - Command: `bkpdir --list [FILE_PATH]`
+   - Sort by creation time (most recent first)
+   - Display format: `{path} (created: {time})`
+   - **Output formatting must use configurable printf-style format strings**
+   - This command structure and output format must be preserved
+
+6. Verify Archive:
    - Command: `bkpdir verify [ARCHIVE_NAME]`
    - Support `--checksum` flag for checksum verification
    - Verify ZIP structure and integrity
@@ -108,20 +173,28 @@ This document contains specifications that MUST NOT be changed without a major v
    - **Output formatting must use configurable printf-style format strings**
    - This verification behavior must remain unchanged
 
-5. Display Configuration:
-   - Command: `bkpdir --config`
+7. Display Configuration:
+   - Command: `bkpdir config`
    - Display computed configuration values with name, value, and source
    - Process configuration files from `BKPDIR_CONFIG` environment variable
    - Exit after displaying values
    - **Output formatting must use configurable printf-style format strings**
    - This command behavior must remain unchanged once implemented
 
+8. Backward Compatibility Commands:
+   - Command: `bkpdir full [NOTE]` (alias for `bkpdir create`)
+   - Command: `bkpdir inc [NOTE]` (alias for `bkpdir create --incremental`)
+   - Command: `bkpdir --config` (alias for `bkpdir config`)
+   - These backward compatibility commands must be preserved
+
 ## Configuration Defaults
 - Configuration discovery uses `BKPDIR_CONFIG` environment variable to specify search path
 - Default configuration search path is hard-coded as `./.bkpdir.yml:~/.bkpdir.yml` (if `BKPDIR_CONFIG` not set)
 - Configuration files are processed in order with earlier files taking precedence
 - Default archive directory: `../.bkpdir` relative to current directory
+- Default backup directory: `../.bkpdir` relative to current directory
 - Default use_current_dir_name: true
+- Default use_current_dir_name_for_files: true
 - Default include_git_info: true
 - Default exclude_patterns: `[".git/", "vendor/"]`
 - Default verification.verify_on_create: false
@@ -135,6 +208,11 @@ This document contains specifications that MUST NOT be changed without a major v
   - `status_directory_not_found`: 20
   - `status_invalid_directory_type`: 21
   - `status_permission_denied`: 22
+  - `status_created_backup`: 0
+  - `status_failed_to_create_backup_directory`: 31
+  - `status_file_is_identical_to_existing_backup`: 0
+  - `status_file_not_found`: 20
+  - `status_invalid_file_type`: 21
 - **Default output format strings**: All format strings default to preserve existing output appearance
   - `format_created_archive`: "Created archive: %s\n"
   - `format_identical_archive`: "Directory is identical to existing archive: %s\n"
@@ -142,25 +220,51 @@ This document contains specifications that MUST NOT be changed without a major v
   - `format_config_value`: "%s: %s (source: %s)\n"
   - `format_dry_run_archive`: "Would create archive: %s\n"
   - `format_error`: "Error: %s\n"
-- **Default template format strings**: Template-based formatting with named placeholders
+  - `format_created_backup`: "Created backup: %s\n"
+  - `format_identical_backup`: "File is identical to existing backup: %s\n"
+  - `format_list_backup`: "%s (created: %s)\n"
+  - `format_dry_run_backup`: "Would create backup: %s\n"
+- **Default template format strings**: All template strings default to preserve existing output appearance
   - `template_created_archive`: "Created archive: %{path}\n"
   - `template_identical_archive`: "Directory is identical to existing archive: %{path}\n"
   - `template_list_archive`: "%{path} (created: %{creation_time})\n"
   - `template_config_value`: "%{name}: %{value} (source: %{source})\n"
   - `template_dry_run_archive`: "Would create archive: %{path}\n"
   - `template_error`: "Error: %{message}\n"
+  - `template_created_backup`: "Created backup: %{path}\n"
+  - `template_identical_backup`: "File is identical to existing backup: %{path}\n"
+  - `template_list_backup`: "%{path} (created: %{creation_time})\n"
+  - `template_dry_run_backup`: "Would create backup: %{path}\n"
+- **Default regex patterns**: All regex patterns default to support data extraction
+  - `pattern_archive_filename`: "(?P<prefix>[^-]*)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\\.zip"
+  - `pattern_backup_filename`: "(?P<filename>[^/]+)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<note>.+))?"
+  - `pattern_config_line`: "(?P<name>[^:]+):\\s*(?P<value>[^(]+)\\s*\\(source:\\s*(?P<source>[^)]+)\\)"
+  - `pattern_timestamp`: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
+  - `template_identical_archive`: "Directory is identical to existing archive: %{path}\n"
+  - `template_list_archive`: "%{path} (created: %{creation_time})\n"
+  - `template_config_value`: "%{name}: %{value} (source: %{source})\n"
+  - `template_dry_run_archive`: "Would create archive: %{path}\n"
+  - `template_error`: "Error: %{message}\n"
+  - `template_created_backup`: "Created backup: %{path}\n"
+  - `template_identical_backup`: "File is identical to existing backup: %{path}\n"
+  - `template_list_backup`: "%{path} (created: %{creation_time})\n"
+  - `template_dry_run_backup`: "Would create backup: %{path}\n"
 - **Default regex patterns**: Named regex patterns for data extraction
   - `pattern_archive_filename`: `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-(?P<hour>\d{2})-(?P<minute>\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\.zip`
+  - `pattern_backup_filename`: `(?P<filename>[^/]+)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-(?P<hour>\d{2})-(?P<minute>\d{2})(?:=(?P<note>.+))?`
   - `pattern_config_line`: `(?P<name>[^:]+):\s*(?P<value>[^(]+)\s*\(source:\s*(?P<source>[^)]+)\)`
   - `pattern_timestamp`: `(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})\s+(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})`
 - These configuration defaults must never be changed without explicit user override
 
-## Platform Compatibility
-- Support macOS and Linux systems
-- Handle platform-specific file system differences
-- Preserve file permissions and ownership where applicable
-- **Thread-safe operations for concurrent access**
-- **Efficient resource management across platforms**
+## Platform Compatibility Requirements
+- **OS Support**: Support macOS and Linux systems
+- **File System**: Handle platform-specific file system differences
+- **Permissions**: Preserve file permissions and ownership where applicable
+- **Thread Safety**: Thread-safe operations for concurrent access
+- **Resource Management**: Efficient resource management across platforms
+- **Character Encoding**: Handle platform-specific character encodings
+- **Line Endings**: Handle platform-specific line endings
+- **Path Separators**: Handle platform-specific path separators
 - Platform support must never be reduced or modified
 
 ## Global Options
@@ -174,22 +278,38 @@ This document contains specifications that MUST NOT be changed without a major v
 - **Testing**: `make test` must pass with comprehensive coverage
 - **Building**: `make build` must depend on successful linting and testing
 - **Cleaning**: `make clean` must remove all build artifacts
+- **Dependencies**: Proper dependency management
+- **Version Info**: Version information in binaries
+- **Binary Compatibility**: Maintain binary compatibility
+- **Resource Embedding**: Proper resource embedding
+- **Documentation**: Documentation generation
+- **Release Packaging**: Proper release packaging
 - These build requirements are immutable and must be enforced
 
 ## Resource Management Requirements
 - **Automatic Cleanup**: All temporary resources must be cleaned up automatically
 - **Thread Safety**: Resource management must be thread-safe
-- **Atomic Operations**: Archive operations must use temporary files for atomicity
+- **Atomic Operations**: File operations must use temporary files for atomicity
 - **Leak Prevention**: No resource leaks allowed in any scenario
 - **Error Resilience**: Cleanup must continue even if individual operations fail
+- **Resource Tracking**: Comprehensive resource tracking
+- **Memory Management**: Efficient memory management
+- **Disk Space**: Efficient disk space management
+- **Cleanup Warnings**: Proper cleanup warnings
+- **Resource Limits**: Enforced resource limits
 - These resource management requirements are mandatory and cannot be relaxed
 
 ## Performance Requirements
 - **Minimal Overhead**: Resource tracking must have minimal performance impact
-- **Efficient Operations**: Directory comparison must use early termination for differences
-- **Scalability**: Must handle large directories and many archives efficiently
-- **Memory Management**: Must maintain low memory footprint for large directories
-- **Streaming Operations**: Must use streaming ZIP creation for memory efficiency
+- **Efficient Operations**: File comparison must check length before byte comparison
+- **Scalability**: Must handle large files and many archives efficiently
+- **Memory Management**: Must maintain low memory footprint
+- **CPU Usage**: Enforced CPU usage limits
+- **Disk I/O**: Enforced disk I/O limits
+- **Response Time**: Enforced response time limits
+- **Cleanup Timing**: Efficient resource cleanup timing
+- **Concurrency**: Enforced concurrent operation limits
+- **Verification**: Efficient verification speed
 - These performance characteristics must be preserved
 
 ## Feature Preservation Rules
