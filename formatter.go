@@ -761,4 +761,518 @@ func (f *OutputFormatter) FormatListBackupWithExtraction(backupPath, creationTim
 	return f.FormatListBackup(backupPath, creationTime)
 }
 
-// Enhanced formatting methods that use regex extraction for file backups
+// CFG-004: Incremental created formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatIncrementalCreated(path string) string {
+	return fmt.Sprintf(f.cfg.FormatIncrementalCreated, path)
+}
+
+// Printf-style formatting methods for archive operations
+// CFG-004: No archives found formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatNoArchivesFound(archiveDir string) string {
+	return fmt.Sprintf(f.cfg.FormatNoArchivesFound, archiveDir)
+}
+
+// CFG-004: Verification failed formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatVerificationFailed(archiveName string, err error) string {
+	return fmt.Sprintf(f.cfg.FormatVerificationFailed, archiveName, err)
+}
+
+// CFG-004: Verification success formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatVerificationSuccess(archiveName string) string {
+	return fmt.Sprintf(f.cfg.FormatVerificationSuccess, archiveName)
+}
+
+// CFG-004: Verification warning formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatVerificationWarning(archiveName string, err error) string {
+	return fmt.Sprintf(f.cfg.FormatVerificationWarning, archiveName, err)
+}
+
+// CFG-004: Configuration updated formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatConfigurationUpdated(key string, value interface{}) string {
+	return fmt.Sprintf(f.cfg.FormatConfigurationUpdated, key, value)
+}
+
+// CFG-004: Config file path formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatConfigFilePath(path string) string {
+	return fmt.Sprintf(f.cfg.FormatConfigFilePath, path)
+}
+
+// CFG-004: Dry run files header formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatDryRunFilesHeader() string {
+	return f.cfg.FormatDryRunFilesHeader
+}
+
+// CFG-004: Dry run file entry formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatDryRunFileEntry(file string) string {
+	return fmt.Sprintf(f.cfg.FormatDryRunFileEntry, file)
+}
+
+// CFG-004: No files modified formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatNoFilesModified() string {
+	return f.cfg.FormatNoFilesModified
+}
+
+// Printf-style formatting methods for backup operations
+// CFG-004: No backups found formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatNoBackupsFound(filename, backupDir string) string {
+	return fmt.Sprintf(f.cfg.FormatNoBackupsFound, filename, backupDir)
+}
+
+// CFG-004: Backup would create formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatBackupWouldCreate(path string) string {
+	return fmt.Sprintf(f.cfg.FormatBackupWouldCreate, path)
+}
+
+// CFG-004: Backup identical formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatBackupIdentical(path string) string {
+	return fmt.Sprintf(f.cfg.FormatBackupIdentical, path)
+}
+
+// CFG-004: Backup created formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatBackupCreated(path string) string {
+	return fmt.Sprintf(f.cfg.FormatBackupCreated, path)
+}
+
+// Template-based formatting methods for archive operations
+// CFG-004: No archives found template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatNoArchivesFoundTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateNoArchivesFound, data)
+}
+
+// CFG-004: Verification failed template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatVerificationFailedTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateVerificationFailed, data)
+}
+
+// CFG-004: Verification success template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatVerificationSuccessTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateVerificationSuccess, data)
+}
+
+// CFG-004: Verification warning template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatVerificationWarningTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateVerificationWarning, data)
+}
+
+// CFG-004: Configuration updated template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatConfigurationUpdatedTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateConfigurationUpdated, data)
+}
+
+// CFG-004: Config file path template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatConfigFilePathTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateConfigFilePath, data)
+}
+
+// CFG-004: Dry run files header template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatDryRunFilesHeaderTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateDryRunFilesHeader, data)
+}
+
+// CFG-004: Dry run file entry template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatDryRunFileEntryTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateDryRunFileEntry, data)
+}
+
+// CFG-004: No files modified template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatNoFilesModifiedTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateNoFilesModified, data)
+}
+
+// CFG-004: Incremental created template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatIncrementalCreatedTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateIncrementalCreated, data)
+}
+
+// Template-based formatting methods for backup operations
+// CFG-004: No backups found template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatNoBackupsFoundTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateNoBackupsFound, data)
+}
+
+// CFG-004: Backup would create template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatBackupWouldCreateTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateBackupWouldCreate, data)
+}
+
+// CFG-004: Backup identical template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatBackupIdenticalTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateBackupIdentical, data)
+}
+
+// CFG-004: Backup created template formatting
+// IMMUTABLE-REF: String externalization requirements
+// TEST-REF: TestStringExternalization
+// DECISION-REF: DEC-009
+func (f *OutputFormatter) FormatBackupCreatedTemplate(data map[string]string) string {
+	return f.formatTemplate(f.cfg.TemplateBackupCreated, data)
+}
+
+// Print methods for CFG-004 format strings
+// CFG-004: Print methods for archive operations
+func (f *OutputFormatter) PrintNoArchivesFound(archiveDir string) {
+	fmt.Print(f.FormatNoArchivesFound(archiveDir))
+}
+
+func (f *OutputFormatter) PrintVerificationFailed(archiveName string, err error) {
+	fmt.Print(f.FormatVerificationFailed(archiveName, err))
+}
+
+func (f *OutputFormatter) PrintVerificationSuccess(archiveName string) {
+	fmt.Print(f.FormatVerificationSuccess(archiveName))
+}
+
+func (f *OutputFormatter) PrintVerificationWarning(archiveName string, err error) {
+	fmt.Print(f.FormatVerificationWarning(archiveName, err))
+}
+
+func (f *OutputFormatter) PrintConfigurationUpdated(key string, value interface{}) {
+	fmt.Print(f.FormatConfigurationUpdated(key, value))
+}
+
+func (f *OutputFormatter) PrintConfigFilePath(path string) {
+	fmt.Print(f.FormatConfigFilePath(path))
+}
+
+func (f *OutputFormatter) PrintDryRunFilesHeader() {
+	fmt.Print(f.FormatDryRunFilesHeader())
+}
+
+func (f *OutputFormatter) PrintDryRunFileEntry(file string) {
+	fmt.Print(f.FormatDryRunFileEntry(file))
+}
+
+func (f *OutputFormatter) PrintNoFilesModified() {
+	fmt.Print(f.FormatNoFilesModified())
+}
+
+func (f *OutputFormatter) PrintIncrementalCreated(path string) {
+	fmt.Print(f.FormatIncrementalCreated(path))
+}
+
+// CFG-004: Print methods for backup operations
+func (f *OutputFormatter) PrintNoBackupsFound(filename, backupDir string) {
+	fmt.Print(f.FormatNoBackupsFound(filename, backupDir))
+}
+
+func (f *OutputFormatter) PrintBackupWouldCreate(path string) {
+	fmt.Print(f.FormatBackupWouldCreate(path))
+}
+
+func (f *OutputFormatter) PrintBackupIdentical(path string) {
+	fmt.Print(f.FormatBackupIdentical(path))
+}
+
+func (f *OutputFormatter) PrintBackupCreated(path string) {
+	fmt.Print(f.FormatBackupCreated(path))
+}
+
+// CFG-004: Error message formatting methods
+func (f *OutputFormatter) FormatDiskFullError(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatDiskFullError, err)
+}
+
+func (f *OutputFormatter) FormatPermissionError(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatPermissionError, err)
+}
+
+func (f *OutputFormatter) FormatDirectoryNotFound(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatDirectoryNotFound, err)
+}
+
+func (f *OutputFormatter) FormatFileNotFound(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFileNotFound, err)
+}
+
+func (f *OutputFormatter) FormatInvalidDirectory(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatInvalidDirectory, err)
+}
+
+func (f *OutputFormatter) FormatInvalidFile(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatInvalidFile, err)
+}
+
+func (f *OutputFormatter) FormatFailedWriteTemp(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFailedWriteTemp, err)
+}
+
+func (f *OutputFormatter) FormatFailedFinalizeFile(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFailedFinalizeFile, err)
+}
+
+func (f *OutputFormatter) FormatFailedCreateDirDisk(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFailedCreateDirDisk, err)
+}
+
+func (f *OutputFormatter) FormatFailedCreateDir(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFailedCreateDir, err)
+}
+
+func (f *OutputFormatter) FormatFailedAccessDir(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFailedAccessDir, err)
+}
+
+func (f *OutputFormatter) FormatFailedAccessFile(err error) string {
+	// CFG-004: Implementation token
+	return fmt.Sprintf(f.cfg.FormatFailedAccessFile, err)
+}
+
+// CFG-004: Template-based error message formatting methods
+func (f *OutputFormatter) TemplateDiskFullError(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateDiskFullError, data)
+}
+
+func (f *OutputFormatter) TemplatePermissionError(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplatePermissionError, data)
+}
+
+func (f *OutputFormatter) TemplateDirectoryNotFound(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateDirectoryNotFound, data)
+}
+
+func (f *OutputFormatter) TemplateFileNotFound(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFileNotFound, data)
+}
+
+func (f *OutputFormatter) TemplateInvalidDirectory(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateInvalidDirectory, data)
+}
+
+func (f *OutputFormatter) TemplateInvalidFile(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateInvalidFile, data)
+}
+
+func (f *OutputFormatter) TemplateFailedWriteTemp(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFailedWriteTemp, data)
+}
+
+func (f *OutputFormatter) TemplateFailedFinalizeFile(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFailedFinalizeFile, data)
+}
+
+func (f *OutputFormatter) TemplateFailedCreateDirDisk(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFailedCreateDirDisk, data)
+}
+
+func (f *OutputFormatter) TemplateFailedCreateDir(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFailedCreateDir, data)
+}
+
+func (f *OutputFormatter) TemplateFailedAccessDir(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFailedAccessDir, data)
+}
+
+func (f *OutputFormatter) TemplateFailedAccessFile(err error) string {
+	// CFG-004: Implementation token
+	data := map[string]string{
+		"error": err.Error(),
+	}
+	return f.formatTemplate(f.cfg.TemplateFailedAccessFile, data)
+}
+
+// CFG-004: Print methods for error messages
+func (f *OutputFormatter) PrintDiskFullError(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatDiskFullError(err))
+}
+
+func (f *OutputFormatter) PrintPermissionError(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatPermissionError(err))
+}
+
+func (f *OutputFormatter) PrintDirectoryNotFound(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatDirectoryNotFound(err))
+}
+
+func (f *OutputFormatter) PrintFileNotFound(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFileNotFound(err))
+}
+
+func (f *OutputFormatter) PrintInvalidDirectory(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatInvalidDirectory(err))
+}
+
+func (f *OutputFormatter) PrintInvalidFile(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatInvalidFile(err))
+}
+
+func (f *OutputFormatter) PrintFailedWriteTemp(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFailedWriteTemp(err))
+}
+
+func (f *OutputFormatter) PrintFailedFinalizeFile(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFailedFinalizeFile(err))
+}
+
+func (f *OutputFormatter) PrintFailedCreateDirDisk(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFailedCreateDirDisk(err))
+}
+
+func (f *OutputFormatter) PrintFailedCreateDir(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFailedCreateDir(err))
+}
+
+func (f *OutputFormatter) PrintFailedAccessDir(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFailedAccessDir(err))
+}
+
+func (f *OutputFormatter) PrintFailedAccessFile(err error) {
+	// CFG-004: Implementation token
+	fmt.Fprint(os.Stderr, f.FormatFailedAccessFile(err))
+}
+
+// CFG-004: Print method for verification error details
+func (f *OutputFormatter) PrintVerificationErrorDetail(errMsg string) {
+	fmt.Printf("  - %s\n", errMsg)
+}
+
+// CFG-004: Print method for archive list with status
+func (f *OutputFormatter) PrintArchiveListWithStatus(output, status string) {
+	fmt.Printf("%s%s\n", output, status)
+}

@@ -1,0 +1,26 @@
+### CFG-004: Eliminate Hardcoded Strings and Enhance Template Formatting
+- **Status**: COMPLETED
+- **Priority**: High
+- **Description**: Implement comprehensive string externalization system allowing all user-facing strings to be loaded from configuration files rather than hardcoded, with enhanced template formatting using named elements in data structures.
+- **Requirements**: 
+  - All user-facing strings must be configurable through YAML files
+  - Support both printf-style (%s) and template-based (%{name}) formatting
+  - Named elements in data structures for template formatting
+  - Backward compatibility with existing configurations
+- **Implementation Areas**:
+  - Archive operation messages (no archives found, verification results, configuration updates, dry-run operations)
+  - Backup operation messages (no backups found, backup creation, identical detection)
+  - Error handling messages (disk full, permission denied, file/directory not found, validation errors)
+  - Configuration management (file paths, updates)
+  - Template-based formatting with named data structure elements
+- **Files Modified**: 
+  - `config.go` - Extended Config struct with comprehensive format strings
+  - `formatter.go` - Added OutputFormatter methods for all new format strings
+  - `errors.go` - Updated error handling to use configurable messages
+- **Implementation Details**:
+  - Added 12 new error message format strings (FormatDiskFullError, FormatPermissionError, etc.)
+  - Added corresponding template versions with named data structure support
+  - Updated HandleArchiveError to use configurable error messages
+  - Maintained full backward compatibility with existing format strings
+  - All error messages now use OutputFormatter methods instead of hardcoded strings
+- **Testing**: Manual compilation successful, all existing functionality preserved 

@@ -340,6 +340,7 @@ func (co *ContextualOperation) Cleanup() error {
 func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int {
 	// CFG-002: Error handling with status code resolution
 	// CFG-003: Error output formatting
+	// CFG-004: Configurable error messages
 	// DECISION-REF: DEC-004
 	if err == nil {
 		return 0
@@ -351,16 +352,16 @@ func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int 
 		return archiveErr.StatusCode
 	}
 
-	// Handle specific error types
+	// Handle specific error types with configurable messages
 	switch {
 	case IsDiskFullError(err):
-		formatter.PrintError("Disk full or quota exceeded")
+		formatter.PrintDiskFullError(err)
 		return cfg.StatusDiskFull
 	case IsPermissionError(err):
-		formatter.PrintError("Permission denied")
+		formatter.PrintPermissionError(err)
 		return cfg.StatusPermissionDenied
 	case IsDirectoryNotFoundError(err):
-		formatter.PrintError("Directory not found")
+		formatter.PrintDirectoryNotFound(err)
 		return cfg.StatusDirectoryNotFound
 	default:
 		formatter.PrintError(err.Error())
@@ -371,6 +372,7 @@ func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int 
 // AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 	// DECISION-REF: DEC-006, DEC-008
+	// CFG-004: Configurable error messages
 	tempFile := path + ".tmp"
 	rm.AddTempFile(tempFile)
 
@@ -397,6 +399,7 @@ func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 // SafeMkdirAll creates a directory and all necessary parent directories.
 func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 	// Directory creation with error handling
+	// CFG-004: Configurable error messages
 	// DECISION-REF: DEC-004
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsDiskFullError(err) {
@@ -418,6 +421,7 @@ func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 // ValidateDirectoryPath checks if a path is a valid directory.
 func ValidateDirectoryPath(path string, cfg *Config) error {
 	// Directory path validation
+	// CFG-004: Configurable error messages
 	// DECISION-REF: DEC-004
 	info, err := os.Stat(path)
 	if err != nil {
@@ -454,6 +458,7 @@ func ValidateDirectoryPath(path string, cfg *Config) error {
 // ValidateFilePath checks if a path is a valid file.
 func ValidateFilePath(path string, cfg *Config) error {
 	// File path validation
+	// CFG-004: Configurable error messages
 	// DECISION-REF: DEC-004
 	info, err := os.Stat(path)
 	if err != nil {

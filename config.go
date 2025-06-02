@@ -101,6 +101,71 @@ type Config struct {
 	PatternBackupFilename  string `yaml:"pattern_backup_filename"`
 	PatternConfigLine      string `yaml:"pattern_config_line"`
 	PatternTimestamp       string `yaml:"pattern_timestamp"`
+
+	// CFG-004: Extended format strings for comprehensive string configuration
+	// Archive operation messages
+	FormatNoArchivesFound      string `yaml:"format_no_archives_found"`
+	FormatVerificationFailed   string `yaml:"format_verification_failed"`
+	FormatVerificationSuccess  string `yaml:"format_verification_success"`
+	FormatVerificationWarning  string `yaml:"format_verification_warning"`
+	FormatConfigurationUpdated string `yaml:"format_configuration_updated"`
+	FormatConfigFilePath       string `yaml:"format_config_file_path"`
+	FormatDryRunFilesHeader    string `yaml:"format_dry_run_files_header"`
+	FormatDryRunFileEntry      string `yaml:"format_dry_run_file_entry"`
+	FormatNoFilesModified      string `yaml:"format_no_files_modified"`
+	FormatIncrementalCreated   string `yaml:"format_incremental_created"`
+
+	// Backup operation messages
+	FormatNoBackupsFound    string `yaml:"format_no_backups_found"`
+	FormatBackupWouldCreate string `yaml:"format_backup_would_create"`
+	FormatBackupIdentical   string `yaml:"format_backup_identical"`
+	FormatBackupCreated     string `yaml:"format_backup_created"`
+
+	// CFG-004: Error message format strings
+	FormatDiskFullError       string `yaml:"format_disk_full_error"`
+	FormatPermissionError     string `yaml:"format_permission_error"`
+	FormatDirectoryNotFound   string `yaml:"format_directory_not_found"`
+	FormatFileNotFound        string `yaml:"format_file_not_found"`
+	FormatInvalidDirectory    string `yaml:"format_invalid_directory"`
+	FormatInvalidFile         string `yaml:"format_invalid_file"`
+	FormatFailedWriteTemp     string `yaml:"format_failed_write_temp"`
+	FormatFailedFinalizeFile  string `yaml:"format_failed_finalize_file"`
+	FormatFailedCreateDirDisk string `yaml:"format_failed_create_dir_disk"`
+	FormatFailedCreateDir     string `yaml:"format_failed_create_dir"`
+	FormatFailedAccessDir     string `yaml:"format_failed_access_dir"`
+	FormatFailedAccessFile    string `yaml:"format_failed_access_file"`
+
+	// Template-based extended format strings
+	TemplateNoArchivesFound      string `yaml:"template_no_archives_found"`
+	TemplateVerificationFailed   string `yaml:"template_verification_failed"`
+	TemplateVerificationSuccess  string `yaml:"template_verification_success"`
+	TemplateVerificationWarning  string `yaml:"template_verification_warning"`
+	TemplateConfigurationUpdated string `yaml:"template_configuration_updated"`
+	TemplateConfigFilePath       string `yaml:"template_config_file_path"`
+	TemplateDryRunFilesHeader    string `yaml:"template_dry_run_files_header"`
+	TemplateDryRunFileEntry      string `yaml:"template_dry_run_file_entry"`
+	TemplateNoFilesModified      string `yaml:"template_no_files_modified"`
+	TemplateIncrementalCreated   string `yaml:"template_incremental_created"`
+
+	// Template-based backup operation messages
+	TemplateNoBackupsFound    string `yaml:"template_no_backups_found"`
+	TemplateBackupWouldCreate string `yaml:"template_backup_would_create"`
+	TemplateBackupIdentical   string `yaml:"template_backup_identical"`
+	TemplateBackupCreated     string `yaml:"template_backup_created"`
+
+	// CFG-004: Template-based error message format strings
+	TemplateDiskFullError       string `yaml:"template_disk_full_error"`
+	TemplatePermissionError     string `yaml:"template_permission_error"`
+	TemplateDirectoryNotFound   string `yaml:"template_directory_not_found"`
+	TemplateFileNotFound        string `yaml:"template_file_not_found"`
+	TemplateInvalidDirectory    string `yaml:"template_invalid_directory"`
+	TemplateInvalidFile         string `yaml:"template_invalid_file"`
+	TemplateFailedWriteTemp     string `yaml:"template_failed_write_temp"`
+	TemplateFailedFinalizeFile  string `yaml:"template_failed_finalize_file"`
+	TemplateFailedCreateDirDisk string `yaml:"template_failed_create_dir_disk"`
+	TemplateFailedCreateDir     string `yaml:"template_failed_create_dir"`
+	TemplateFailedAccessDir     string `yaml:"template_failed_access_dir"`
+	TemplateFailedAccessFile    string `yaml:"template_failed_access_file"`
 }
 
 // CFG-003: Configuration value representation
@@ -204,6 +269,71 @@ func DefaultConfig() *Config {
 		PatternBackupFilename:  defaultBackupPattern,
 		PatternConfigLine:      defaultConfigPattern,
 		PatternTimestamp:       defaultTimestampPattern,
+
+		// CFG-004: Extended format strings for comprehensive string configuration
+		// Archive operation messages
+		FormatNoArchivesFound:      "No archives found in %s\n",
+		FormatVerificationFailed:   "Archive %s verification failed: %v\n",
+		FormatVerificationSuccess:  "Archive %s verified successfully\n",
+		FormatVerificationWarning:  "Warning: Could not store verification status for %s: %v\n",
+		FormatConfigurationUpdated: "Configuration updated: %s = %v\n",
+		FormatConfigFilePath:       "Config file: %s\n",
+		FormatDryRunFilesHeader:    "[Dry Run] Files to include:\n",
+		FormatDryRunFileEntry:      "  %s\n",
+		FormatNoFilesModified:      "No files modified since last full archive\n",
+		FormatIncrementalCreated:   "Created incremental archive: %s\n",
+
+		// Backup operation messages
+		FormatNoBackupsFound:    "No backups found for %s in %s\n",
+		FormatBackupWouldCreate: "Would create backup: %s\n",
+		FormatBackupIdentical:   "File is identical to existing backup: %s\n",
+		FormatBackupCreated:     "Created backup: %s\n",
+
+		// CFG-004: Error message format strings
+		FormatDiskFullError:       "Disk full error: %v\n",
+		FormatPermissionError:     "Permission error: %v\n",
+		FormatDirectoryNotFound:   "Directory not found: %v\n",
+		FormatFileNotFound:        "File not found: %v\n",
+		FormatInvalidDirectory:    "Invalid directory: %v\n",
+		FormatInvalidFile:         "Invalid file: %v\n",
+		FormatFailedWriteTemp:     "Failed to write temporary file: %v\n",
+		FormatFailedFinalizeFile:  "Failed to finalize file: %v\n",
+		FormatFailedCreateDirDisk: "Failed to create directory on disk: %v\n",
+		FormatFailedCreateDir:     "Failed to create directory: %v\n",
+		FormatFailedAccessDir:     "Failed to access directory: %v\n",
+		FormatFailedAccessFile:    "Failed to access file: %v\n",
+
+		// Template-based extended format strings
+		TemplateNoArchivesFound:      "No archives found in %{archive_dir}\n",
+		TemplateVerificationFailed:   "Archive %{name} verification failed: %{error}\n",
+		TemplateVerificationSuccess:  "Archive %{name} verified successfully\n",
+		TemplateVerificationWarning:  "Warning: Could not store verification status for %{name}: %{error}\n",
+		TemplateConfigurationUpdated: "Configuration updated: %{key} = %{value}\n",
+		TemplateConfigFilePath:       "Config file: %{path}\n",
+		TemplateDryRunFilesHeader:    "[Dry Run] Files to include:\n",
+		TemplateDryRunFileEntry:      "  %{file}\n",
+		TemplateNoFilesModified:      "No files modified since last full archive\n",
+		TemplateIncrementalCreated:   "Created incremental archive: %{path}\n",
+
+		// Template-based backup operation messages
+		TemplateNoBackupsFound:    "No backups found for %{filename} in %{backup_dir}\n",
+		TemplateBackupWouldCreate: "Would create backup: %{path}\n",
+		TemplateBackupIdentical:   "File is identical to existing backup: %{path}\n",
+		TemplateBackupCreated:     "Created backup: %{path}\n",
+
+		// CFG-004: Template-based error message format strings
+		TemplateDiskFullError:       "Disk full error: %v\n",
+		TemplatePermissionError:     "Permission error: %v\n",
+		TemplateDirectoryNotFound:   "Directory not found: %v\n",
+		TemplateFileNotFound:        "File not found: %v\n",
+		TemplateInvalidDirectory:    "Invalid directory: %v\n",
+		TemplateInvalidFile:         "Invalid file: %v\n",
+		TemplateFailedWriteTemp:     "Failed to write temporary file: %v\n",
+		TemplateFailedFinalizeFile:  "Failed to finalize file: %v\n",
+		TemplateFailedCreateDirDisk: "Failed to create directory on disk: %v\n",
+		TemplateFailedCreateDir:     "Failed to create directory: %v\n",
+		TemplateFailedAccessDir:     "Failed to access directory: %v\n",
+		TemplateFailedAccessFile:    "Failed to access file: %v\n",
 	}
 }
 
@@ -297,6 +427,8 @@ func mergeConfigs(dst, src *Config) {
 	mergeFormatStrings(dst, src)
 	mergeTemplates(dst, src)
 	mergePatterns(dst, src)
+	mergeExtendedFormatStrings(dst, src)
+	mergeExtendedTemplates(dst, src)
 }
 
 // CFG-001: Basic settings merging implementation
@@ -852,4 +984,108 @@ func mergeDirectoryStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Con
 // It handles file backup and verification status codes.
 func mergeFileStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) {
 	// Implementation of mergeFileStatusCodeValues function
+}
+
+// CFG-004: Extended format strings for comprehensive string configuration
+// mergeExtendedFormatStrings merges extended format string settings.
+func mergeExtendedFormatStrings(dst, src *Config) {
+	defaultCfg := DefaultConfig()
+
+	// Archive operation messages
+	if src.FormatNoArchivesFound != defaultCfg.FormatNoArchivesFound {
+		dst.FormatNoArchivesFound = src.FormatNoArchivesFound
+	}
+	if src.FormatVerificationFailed != defaultCfg.FormatVerificationFailed {
+		dst.FormatVerificationFailed = src.FormatVerificationFailed
+	}
+	if src.FormatVerificationSuccess != defaultCfg.FormatVerificationSuccess {
+		dst.FormatVerificationSuccess = src.FormatVerificationSuccess
+	}
+	if src.FormatVerificationWarning != defaultCfg.FormatVerificationWarning {
+		dst.FormatVerificationWarning = src.FormatVerificationWarning
+	}
+	if src.FormatConfigurationUpdated != defaultCfg.FormatConfigurationUpdated {
+		dst.FormatConfigurationUpdated = src.FormatConfigurationUpdated
+	}
+	if src.FormatConfigFilePath != defaultCfg.FormatConfigFilePath {
+		dst.FormatConfigFilePath = src.FormatConfigFilePath
+	}
+	if src.FormatDryRunFilesHeader != defaultCfg.FormatDryRunFilesHeader {
+		dst.FormatDryRunFilesHeader = src.FormatDryRunFilesHeader
+	}
+	if src.FormatDryRunFileEntry != defaultCfg.FormatDryRunFileEntry {
+		dst.FormatDryRunFileEntry = src.FormatDryRunFileEntry
+	}
+	if src.FormatNoFilesModified != defaultCfg.FormatNoFilesModified {
+		dst.FormatNoFilesModified = src.FormatNoFilesModified
+	}
+	if src.FormatIncrementalCreated != defaultCfg.FormatIncrementalCreated {
+		dst.FormatIncrementalCreated = src.FormatIncrementalCreated
+	}
+
+	// Backup operation messages
+	if src.FormatNoBackupsFound != defaultCfg.FormatNoBackupsFound {
+		dst.FormatNoBackupsFound = src.FormatNoBackupsFound
+	}
+	if src.FormatBackupWouldCreate != defaultCfg.FormatBackupWouldCreate {
+		dst.FormatBackupWouldCreate = src.FormatBackupWouldCreate
+	}
+	if src.FormatBackupIdentical != defaultCfg.FormatBackupIdentical {
+		dst.FormatBackupIdentical = src.FormatBackupIdentical
+	}
+	if src.FormatBackupCreated != defaultCfg.FormatBackupCreated {
+		dst.FormatBackupCreated = src.FormatBackupCreated
+	}
+}
+
+// CFG-004: Extended templates for comprehensive string configuration
+// mergeExtendedTemplates merges extended template settings.
+func mergeExtendedTemplates(dst, src *Config) {
+	defaultCfg := DefaultConfig()
+
+	// Archive operation templates
+	if src.TemplateNoArchivesFound != defaultCfg.TemplateNoArchivesFound {
+		dst.TemplateNoArchivesFound = src.TemplateNoArchivesFound
+	}
+	if src.TemplateVerificationFailed != defaultCfg.TemplateVerificationFailed {
+		dst.TemplateVerificationFailed = src.TemplateVerificationFailed
+	}
+	if src.TemplateVerificationSuccess != defaultCfg.TemplateVerificationSuccess {
+		dst.TemplateVerificationSuccess = src.TemplateVerificationSuccess
+	}
+	if src.TemplateVerificationWarning != defaultCfg.TemplateVerificationWarning {
+		dst.TemplateVerificationWarning = src.TemplateVerificationWarning
+	}
+	if src.TemplateConfigurationUpdated != defaultCfg.TemplateConfigurationUpdated {
+		dst.TemplateConfigurationUpdated = src.TemplateConfigurationUpdated
+	}
+	if src.TemplateConfigFilePath != defaultCfg.TemplateConfigFilePath {
+		dst.TemplateConfigFilePath = src.TemplateConfigFilePath
+	}
+	if src.TemplateDryRunFilesHeader != defaultCfg.TemplateDryRunFilesHeader {
+		dst.TemplateDryRunFilesHeader = src.TemplateDryRunFilesHeader
+	}
+	if src.TemplateDryRunFileEntry != defaultCfg.TemplateDryRunFileEntry {
+		dst.TemplateDryRunFileEntry = src.TemplateDryRunFileEntry
+	}
+	if src.TemplateNoFilesModified != defaultCfg.TemplateNoFilesModified {
+		dst.TemplateNoFilesModified = src.TemplateNoFilesModified
+	}
+	if src.TemplateIncrementalCreated != defaultCfg.TemplateIncrementalCreated {
+		dst.TemplateIncrementalCreated = src.TemplateIncrementalCreated
+	}
+
+	// Backup operation templates
+	if src.TemplateNoBackupsFound != defaultCfg.TemplateNoBackupsFound {
+		dst.TemplateNoBackupsFound = src.TemplateNoBackupsFound
+	}
+	if src.TemplateBackupWouldCreate != defaultCfg.TemplateBackupWouldCreate {
+		dst.TemplateBackupWouldCreate = src.TemplateBackupWouldCreate
+	}
+	if src.TemplateBackupIdentical != defaultCfg.TemplateBackupIdentical {
+		dst.TemplateBackupIdentical = src.TemplateBackupIdentical
+	}
+	if src.TemplateBackupCreated != defaultCfg.TemplateBackupCreated {
+		dst.TemplateBackupCreated = src.TemplateBackupCreated
+	}
 }

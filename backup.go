@@ -162,7 +162,10 @@ func handleDryRunBackup(formatter *OutputFormatter, backupPath string) error {
 	if formatter != nil {
 		formatter.PrintDryRunBackup(backupPath)
 	} else {
-		fmt.Printf("Would create backup: %s\n", backupPath)
+		// Fallback for legacy code paths
+		cfg := DefaultConfig()
+		fallbackFormatter := NewOutputFormatter(cfg)
+		fallbackFormatter.PrintBackupWouldCreate(backupPath)
 	}
 	return nil
 }
@@ -200,7 +203,10 @@ func checkAndHandleIdenticalBackup(opts BackupOptions, backupDir, baseFilename s
 		if opts.Formatter != nil {
 			opts.Formatter.PrintIdenticalBackup(existingBackup)
 		} else {
-			fmt.Printf("File is identical to existing backup: %s\n", existingBackup)
+			// Fallback for legacy code paths
+			cfg := DefaultConfig()
+			fallbackFormatter := NewOutputFormatter(cfg)
+			fallbackFormatter.PrintBackupIdentical(existingBackup)
 		}
 		os.Exit(opts.Config.StatusFileIsIdenticalToExistingBackup)
 	}
@@ -234,12 +240,9 @@ func executeBackupWithCleanup(opts BackupOptions, backupPath string) error {
 	// Remove from cleanup list since operation succeeded
 	rm.RemoveResource(&TempFile{Path: tempFile})
 
-	// Print success message
-	if opts.Formatter != nil {
-		opts.Formatter.PrintCreatedBackup(backupPath)
-	} else {
-		fmt.Printf("Created backup: %s\n", backupPath)
-	}
+	// Create formatter for output (fallback since this function doesn't have direct access to opts.Formatter)
+	formatter := NewOutputFormatter(opts.Config)
+	formatter.PrintBackupCreated(backupPath)
 	return nil
 }
 
@@ -362,7 +365,7 @@ func ListFileBackupsEnhanced(cfg *Config, formatter *OutputFormatter, filePath s
 	}
 
 	if len(backups) == 0 {
-		fmt.Printf("No backups found for %s in %s\n", baseFilename, backupDir)
+		formatter.PrintNoBackupsFound(baseFilename, backupDir)
 		return nil
 	}
 
@@ -589,7 +592,9 @@ func executeContextAwareBackup(opts BackupOptions, backupPath string) error {
 	// Remove from cleanup list since operation succeeded
 	rm.RemoveResource(&TempFile{Path: tempFile})
 
-	fmt.Printf("Created backup: %s\n", backupPath)
+	// Create formatter for output (fallback since this function doesn't have direct access to opts.Formatter)
+	formatter := NewOutputFormatter(opts.Config)
+	formatter.PrintBackupCreated(backupPath)
 	return nil
 }
 

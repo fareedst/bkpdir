@@ -439,7 +439,7 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 	}
 
 	if len(archives) == 0 {
-		fmt.Printf("No archives found in %s\n", archiveDir)
+		formatter.PrintNoArchivesFound(archiveDir)
 		return nil
 	}
 
@@ -465,7 +465,7 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 		output := formatter.FormatListArchiveWithExtraction(a.Name, creationTime)
 		// Remove trailing newline from output to add status on same line
 		output = strings.TrimSuffix(output, "\n")
-		fmt.Printf("%s%s\n", output, status)
+		formatter.PrintArchiveListWithStatus(output, status)
 	}
 
 	return nil
@@ -541,7 +541,7 @@ func verifyAllArchives(opts VerifyOptions, archiveDir string) error {
 	for _, archive := range archives {
 		status, err := performVerification(archive.Path, opts.WithChecksum)
 		if err != nil {
-			fmt.Printf("Archive %s verification failed: %v\n", archive.Name, err)
+			opts.Formatter.PrintVerificationFailed(archive.Name, err)
 			allPassed = false
 			continue
 		}
@@ -577,21 +577,25 @@ func performVerification(archivePath string, withChecksum bool) (*VerificationSt
 
 // handleVerificationResult handles the result of verification
 func handleVerificationResult(archive *Archive, status *VerificationStatus, name string) error {
-	// Verification result handling
+	// Get config and formatter for proper output formatting
+	cwd, _ := os.Getwd()
+	cfg, _ := LoadConfig(cwd)
+	formatter := NewOutputFormatter(cfg)
+
 	// Store verification status
 	if err := StoreVerificationStatus(archive, status); err != nil {
 		// Don't fail if we can't store status, just warn
-		fmt.Printf("Warning: Could not store verification status for %s: %v\n", name, err)
+		formatter.PrintVerificationWarning(name, err)
 	}
 
 	if status.IsVerified {
-		fmt.Printf("Archive %s verified successfully\n", name)
+		formatter.PrintVerificationSuccess(name)
 		return nil
 	}
 
-	fmt.Printf("Archive %s verification failed:\n", name)
+	formatter.PrintVerificationFailed(name, fmt.Errorf("verification failed"))
 	for _, errMsg := range status.Errors {
-		fmt.Printf("  - %s\n", errMsg)
+		formatter.PrintVerificationErrorDetail(errMsg)
 	}
 	return NewArchiveError("Archive verification failed", 1)
 }
@@ -700,14 +704,21 @@ func handleConfigSetCommand(key, value string) {
 		os.Exit(1)
 	}
 
+	cfg, err := LoadConfig(cwd)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+		os.Exit(cfg.StatusConfigError)
+	}
+
+	formatter := NewOutputFormatter(cfg)
 	configPath := filepath.Join(cwd, ".bkpdir.yml")
 	configData := loadExistingConfigData(configPath)
 	convertedValue := convertConfigValue(key, value)
 	updateConfigData(configData, key, convertedValue)
 	saveConfigData(configPath, configData)
 
-	fmt.Printf("Configuration updated: %s = %v\n", key, convertedValue)
-	fmt.Printf("Config file: %s\n", configPath)
+	formatter.PrintConfigurationUpdated(key, convertedValue)
+	formatter.PrintConfigFilePath(configPath)
 }
 
 func loadExistingConfigData(configPath string) map[string]interface{} {

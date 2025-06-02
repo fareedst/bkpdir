@@ -326,11 +326,11 @@ func prepareArchiveDirectory(cfg *Config, cwd string, dryRun bool) (string, erro
 
 // printDryRunInfo prints information about what would be archived.
 func printDryRunInfo(files []string, archivePath string, cfg *Config) {
-	fmt.Println("[Dry Run] Files to include:")
-	for _, f := range files {
-		fmt.Println("  ", f)
-	}
 	formatter := NewOutputFormatter(cfg)
+	formatter.PrintDryRunFilesHeader()
+	for _, f := range files {
+		formatter.PrintDryRunFileEntry(f)
+	}
 	formatter.PrintDryRunArchive(archivePath)
 }
 
@@ -442,7 +442,8 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 	}
 
 	if len(modifiedFiles) == 0 {
-		fmt.Println("No files modified since last full archive")
+		formatter := NewOutputFormatter(config.Config)
+		formatter.PrintNoFilesModified()
 		return nil
 	}
 
@@ -544,7 +545,8 @@ func createAndVerifyIncrementalArchive(cfg ArchiveCreationConfig) error {
 		}
 	}
 
-	fmt.Println("Created incremental archive:", cfg.Path)
+	formatter := NewOutputFormatter(cfg.Config)
+	formatter.PrintIncrementalCreated(cfg.Path)
 	return nil
 }
 
