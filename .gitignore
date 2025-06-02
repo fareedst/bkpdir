@@ -26,3 +26,4 @@ coverage.html
 .DS_Store
 Thumbs.db
 docs/prompts
+docs/cli-app-spec.zip
