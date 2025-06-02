@@ -1,12 +1,14 @@
 // This file is part of bkpdir
 //
-// Package main provides configuration loading, merging, and validation for BkpDir.
-// It handles loading, merging, and validating configuration from YAML files
-// and environment variables.
+// Package main provides configuration management for BkpDir.
+// It handles loading, merging, and managing configuration from multiple sources.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 package main
+
+// REFACTOR-005: Structure optimization - Clean configuration interface preparation
+// REFACTOR-005: Extraction preparation - Standardized naming conventions and decoupled interfaces
 
 import (
 	"fmt"
@@ -17,6 +19,14 @@ import (
 
 	yaml "gopkg.in/yaml.v3"
 )
+
+// REFACTOR-001: Configuration interface contracts defined
+// REFACTOR-001: Dependency analysis - clean boundary confirmed
+// REFACTOR-005: Structure optimization - Interface-based configuration access
+// Note: Interfaces defined in config_interfaces.go for clean separation
+
+// REFACTOR-005: Structure optimization - Standardized configuration structure
+// Separated concerns into logical groupings for better extraction boundaries
 
 // CFG-002: Verification configuration structure
 // IMMUTABLE-REF: Archive Verification Requirements

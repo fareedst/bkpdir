@@ -14,8 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package main provides tests for archive creation and management in BkpDir.
-// It verifies archive creation, naming, and verification behavior.
+// Package main provides comprehensive tests for archive creation, verification, and management.
+// It tests both full and incremental archive operations with various configurations.
 package main
 
 import (
@@ -25,157 +25,127 @@ import (
 	"testing"
 )
 
-// TestGenerateArchiveName tests archive naming functionality
+// Test archive name generation
 func TestGenerateArchiveName(t *testing.T) {
-	// ARCH-001: Archive naming convention validation
-	// TEST-REF: Feature tracking matrix ARCH-001
-	// IMMUTABLE-REF: Archive Naming Convention
 	tests := []struct {
-		cfg    ArchiveNameConfig
-		expect string
-		name   string
+		name     string
+		config   ArchiveConfig
+		expected string
 	}{
 		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "HOME",
-				Timestamp:     "2024-06-01-12-00",
+			name: "basic archive name",
+			config: ArchiveConfig{
+				Prefix:    "test",
+				Timestamp: "2024-01-01-12-00",
+			},
+			expected: "test-2024-01-01-12-00.zip",
+		},
+		{
+			name: "archive with git info",
+			config: ArchiveConfig{
+				Prefix:    "test",
+				Timestamp: "2024-01-01-12-00",
+				IsGit:     true,
+				GitBranch: "main",
+				GitHash:   "abc123",
+			},
+			expected: "test-2024-01-01-12-00=main=abc123.zip",
+		},
+		{
+			name: "archive with git info and note",
+			config: ArchiveConfig{
+				Prefix:    "test",
+				Timestamp: "2024-01-01-12-00",
+				IsGit:     true,
+				GitBranch: "main",
+				GitHash:   "abc123",
+				Note:      "backup",
+			},
+			expected: "test-2024-01-01-12-00=main=abc123=backup.zip",
+		},
+		{
+			name: "archive with dirty git status",
+			config: ArchiveConfig{
+				Prefix:             "test",
+				Timestamp:          "2024-01-01-12-00",
+				IsGit:              true,
+				GitBranch:          "main",
+				GitHash:            "abc123",
+				GitIsClean:         false,
+				ShowGitDirtyStatus: true,
+			},
+			expected: "test-2024-01-01-12-00=main=abc123-dirty.zip",
+		},
+		{
+			name: "archive with note only",
+			config: ArchiveConfig{
+				Prefix:    "test",
+				Timestamp: "2024-01-01-12-00",
+				Note:      "backup",
+			},
+			expected: "test-2024-01-01-12-00=backup.zip",
+		},
+		{
+			name: "archive without prefix",
+			config: ArchiveConfig{
+				Timestamp: "2024-01-01-12-00",
+			},
+			expected: "2024-01-01-12-00.zip",
+		},
+		{
+			name: "incremental archive",
+			config: ArchiveConfig{
+				Timestamp:     "2024-01-01-12-00",
+				IsIncremental: true,
+				BaseName:      "test-2024-01-01-10-00.zip",
+			},
+			expected: "test-2024-01-01-10-00_update=2024-01-01-12-00.zip",
+		},
+		{
+			name: "incremental archive with git info",
+			config: ArchiveConfig{
+				Timestamp:     "2024-01-01-12-00",
+				IsIncremental: true,
+				BaseName:      "test-2024-01-01-10-00.zip",
+				IsGit:         true,
 				GitBranch:     "main",
 				GitHash:       "abc123",
-				GitIsClean:    true,
-				Note:          "",
-				IsGit:         true,
-				IsIncremental: false,
-				BaseName:      "",
 			},
-			expect: "HOME-2024-06-01-12-00=main=abc123.zip",
-			name:   "full with git",
+			expected: "test-2024-01-01-10-00_update=2024-01-01-12-00=main=abc123.zip",
 		},
 		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "",
-				GitHash:       "",
-				GitIsClean:    true,
-				Note:          "note",
-				IsGit:         false,
-				IsIncremental: false,
-				BaseName:      "",
-			},
-			expect: "2024-06-01-12-00=note.zip",
-			name:   "full with note only",
-		},
-		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "dev",
-				GitHash:       "def456",
-				GitIsClean:    true,
-				Note:          "backup",
-				IsGit:         true,
+			name: "incremental archive with note",
+			config: ArchiveConfig{
+				Timestamp:     "2024-01-01-12-00",
 				IsIncremental: true,
-				BaseName:      "HOME-2024-06-01-12-00=main=abc123",
+				BaseName:      "test-2024-01-01-10-00.zip",
+				Note:          "update",
 			},
-			expect: "HOME-2024-06-01-12-00=main=abc123_update=2024-06-01-12-00=dev=def456=backup.zip",
-			name:   "incremental with git and note",
+			expected: "test-2024-01-01-10-00_update=2024-01-01-12-00=update.zip",
 		},
 		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "",
-				GitHash:       "",
-				GitIsClean:    true,
-				Note:          "",
-				IsGit:         false,
-				IsIncremental: true,
-				BaseName:      "ARCHIVE-2024-06-01-12-00",
+			name: "incremental archive with git dirty status",
+			config: ArchiveConfig{
+				Timestamp:          "2024-01-01-12-00",
+				IsIncremental:      true,
+				BaseName:           "test-2024-01-01-10-00.zip",
+				IsGit:              true,
+				GitBranch:          "main",
+				GitHash:            "abc123",
+				GitIsClean:         false,
+				ShowGitDirtyStatus: true,
 			},
-			expect: "ARCHIVE-2024-06-01-12-00_update=2024-06-01-12-00.zip",
-			name:   "incremental no git, no note",
-		},
-		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "",
-				GitHash:       "",
-				GitIsClean:    true,
-				Note:          "",
-				IsGit:         false,
-				IsIncremental: false,
-				BaseName:      "",
-			},
-			expect: "2024-06-01-12-00.zip",
-			name:   "full no git, no note",
-		},
-		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "",
-				GitHash:       "",
-				GitIsClean:    true,
-				Note:          "",
-				IsGit:         true,
-				IsIncremental: false,
-				BaseName:      "",
-			},
-			expect: "2024-06-01-12-00.zip",
-			name:   "full git, no branch/hash",
-		},
-		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "",
-				GitHash:       "",
-				GitIsClean:    true,
-				Note:          "test note",
-				IsGit:         false,
-				IsIncremental: false,
-				BaseName:      "",
-			},
-			expect: "2024-06-01-12-00=test note.zip",
-			name:   "full with note containing spaces",
-		},
-		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "",
-				GitHash:       "",
-				GitIsClean:    true,
-				Note:          "test-note",
-				IsGit:         false,
-				IsIncremental: true,
-				BaseName:      "ARCHIVE-2024-06-01-12-00",
-			},
-			expect: "ARCHIVE-2024-06-01-12-00_update=2024-06-01-12-00=test-note.zip",
-			name:   "incremental with note only",
-		},
-		{
-			cfg: ArchiveNameConfig{
-				Prefix:        "",
-				Timestamp:     "2024-06-01-12-00",
-				GitBranch:     "main",
-				GitHash:       "abc123",
-				GitIsClean:    true,
-				Note:          "test note",
-				IsGit:         true,
-				IsIncremental: false,
-				BaseName:      "",
-			},
-			expect: "2024-06-01-12-00=main=abc123=test note.zip",
-			name:   "full with git and note with spaces",
+			expected: "test-2024-01-01-10-00_update=2024-01-01-12-00=main=abc123-dirty.zip",
 		},
 	}
+
 	for _, tt := range tests {
-		got := GenerateArchiveName(tt.cfg)
-		if got != tt.expect {
-			t.Errorf("%s: GenerateArchiveName() = %q, want %q", tt.name, got, tt.expect)
-		}
+		t.Run(tt.name, func(t *testing.T) {
+			result := GenerateArchiveName(tt.config)
+			if result != tt.expected {
+				t.Errorf("GenerateArchiveName() = %v, want %v", result, tt.expected)
+			}
+		})
 	}
 }
 

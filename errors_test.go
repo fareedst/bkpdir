@@ -230,27 +230,42 @@ func TestIsDiskFullErrorInternal(t *testing.T) {
 			expected: false,
 		},
 		{
-			name:     "no space left",
-			err:      errors.New("no space left"),
+			name:     "no space left on device",
+			err:      errors.New("no space left on device"),
 			expected: true,
+		},
+		{
+			name:     "disk full",
+			err:      errors.New("disk full"),
+			expected: true,
+		},
+		{
+			name:     "not enough space",
+			err:      errors.New("not enough space available"),
+			expected: true,
+		},
+		{
+			name:     "quota exceeded",
+			err:      errors.New("disk quota exceeded"),
+			expected: true,
+		},
+		{
+			name:     "unrelated error",
+			err:      errors.New("permission denied"),
+			expected: false,
 		},
 		{
 			name:     "case insensitive matching",
-			err:      errors.New("NO SPACE LEFT on device"),
-			expected: true,
-		},
-		{
-			name:     "partial match in larger message",
-			err:      errors.New("operation failed: disk full - please free up space"),
+			err:      errors.New("DISK FULL ERROR"),
 			expected: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := isDiskFullError(tt.err)
+			result := IsDiskFullError(tt.err)
 			if result != tt.expected {
-				t.Errorf("isDiskFullError(%v) = %v, want %v", tt.err, result, tt.expected)
+				t.Errorf("IsDiskFullError(%v) = %v, want %v", tt.err, result, tt.expected)
 			}
 		})
 	}

@@ -20,9 +20,11 @@ import (
 
 // REFACTOR-001: Archive management interface contracts defined
 // REFACTOR-001: Multiple dependency interfaces required for extraction
+// REFACTOR-005: Structure optimization - Standardized naming and interface preparation
 
-// ArchiveNameConfig holds configuration for generating archive names.
-type ArchiveNameConfig struct {
+// REFACTOR-005: Extraction preparation - Standardized naming conventions
+// ArchiveConfig holds configuration for generating archive names.
+type ArchiveConfig struct {
 	Prefix             string
 	Timestamp          string
 	GitBranch          string
@@ -35,6 +37,7 @@ type ArchiveNameConfig struct {
 	BaseName           string
 }
 
+// REFACTOR-005: Structure optimization - Consistent naming pattern
 // Archive represents a directory archive with metadata including name, path,
 // creation time, Git information, and verification status. It supports both
 // full and incremental archives.
@@ -50,14 +53,16 @@ type Archive struct {
 	VerificationStatus *VerificationStatus
 }
 
-// ArchiveVerificationConfig holds configuration for archive verification
-type ArchiveVerificationConfig struct {
+// REFACTOR-005: Structure optimization - Interface-ready configuration
+// ArchiveVerificationOptions holds configuration for archive verification
+type ArchiveVerificationOptions struct {
 	Path   string
 	Config *Config
 }
 
-// ArchiveCreationConfig holds configuration for archive creation
-type ArchiveCreationConfig struct {
+// REFACTOR-005: Structure optimization - Interface-ready configuration
+// ArchiveCreationOptions holds configuration for archive creation
+type ArchiveCreationOptions struct {
 	Context     context.Context
 	CWD         string
 	Path        string
@@ -71,9 +76,10 @@ type ArchiveCreationConfig struct {
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
+// REFACTOR-005: Structure optimization - Standardized naming function
 // GenerateArchiveName creates an archive name according to the spec.
 // It handles both full and incremental archive naming based on the provided configuration.
-func GenerateArchiveName(cfg ArchiveNameConfig) string {
+func GenerateArchiveName(cfg ArchiveConfig) string {
 	if cfg.IsIncremental && cfg.BaseName != "" {
 		return generateIncrementalArchiveName(cfg)
 	}
@@ -84,8 +90,9 @@ func GenerateArchiveName(cfg ArchiveNameConfig) string {
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
+// REFACTOR-005: Structure optimization - Consistent internal naming
 // generateIncrementalArchiveName generates name for incremental archives
-func generateIncrementalArchiveName(cfg ArchiveNameConfig) string {
+func generateIncrementalArchiveName(cfg ArchiveConfig) string {
 	baseName := strings.TrimSuffix(cfg.BaseName, ".zip")
 	name := baseName + "_update=" + cfg.Timestamp
 	if cfg.IsGit && cfg.GitBranch != "" && cfg.GitHash != "" {
@@ -104,8 +111,9 @@ func generateIncrementalArchiveName(cfg ArchiveNameConfig) string {
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
+// REFACTOR-005: Structure optimization - Consistent internal naming
 // generateFullArchiveNameFromConfig generates name for full archives from config
-func generateFullArchiveNameFromConfig(cfg ArchiveNameConfig) string {
+func generateFullArchiveNameFromConfig(cfg ArchiveConfig) string {
 	var name string
 	if cfg.Prefix != "" {
 		name = cfg.Prefix + "-" + cfg.Timestamp
@@ -133,33 +141,37 @@ func generateFullArchiveNameFromConfig(cfg ArchiveNameConfig) string {
 // IMMUTABLE-REF: Archive Naming Convention, Git Integration Requirements
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
-// generateFullArchiveName generates the name for a full archive.
-func generateFullArchiveName(cfg *Config, cwd, note string) (string, error) {
-	isGit := IsGitRepository(cwd)
-	gitBranch, gitHash, gitIsClean := "", "", false
-	if isGit && cfg.IncludeGitInfo {
-		gitBranch, gitHash, gitIsClean = GetGitInfoWithStatus(cwd)
-	}
-
+// REFACTOR-005: Structure optimization - Standardized Git integration function
+// GenerateFullArchiveName creates a full archive name with optional Git integration and note.
+// It uses the current directory name as prefix and includes Git branch/hash if available.
+func GenerateFullArchiveName(cfg *Config, cwd string, note string) (string, error) {
 	timestamp := time.Now().Format("2006-01-02-15-04")
-	prefix := ""
-	if cfg.UseCurrentDirName {
-		prefix = filepath.Base(cwd)
-	}
+	prefix := filepath.Base(cwd)
 
-	nameCfg := ArchiveNameConfig{
+	archiveConfig := ArchiveConfig{
 		Prefix:             prefix,
 		Timestamp:          timestamp,
-		GitBranch:          gitBranch,
-		GitHash:            gitHash,
-		GitIsClean:         gitIsClean,
-		ShowGitDirtyStatus: cfg.ShowGitDirtyStatus,
 		Note:               note,
-		IsGit:              isGit && cfg.IncludeGitInfo,
-		IsIncremental:      false,
+		ShowGitDirtyStatus: cfg.ShowGitDirtyStatus,
 	}
 
-	return GenerateArchiveName(nameCfg), nil
+	if cfg.IncludeGitInfo {
+		if IsGitRepository(cwd) {
+			branch, hash, isClean := GetGitInfoWithStatus(cwd)
+			archiveConfig.IsGit = true
+			archiveConfig.GitBranch = branch
+			archiveConfig.GitHash = hash
+			archiveConfig.GitIsClean = isClean
+		}
+	}
+
+	return GenerateArchiveName(archiveConfig), nil
+}
+
+// REFACTOR-005: Structure optimization - Backward compatibility wrapper
+// generateFullArchiveName maintains backward compatibility while using new structure
+func generateFullArchiveName(cfg *Config, cwd string, note string) (string, error) {
+	return GenerateFullArchiveName(cfg, cwd, note)
 }
 
 // ARCH-002: Archive listing implementation
@@ -312,7 +324,7 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 		return nil
 	}
 
-	return createAndVerifyArchive(ArchiveCreationConfig{
+	return createAndVerifyArchive(ArchiveCreationOptions{
 		Context:     ctx,
 		CWD:         cwd,
 		Path:        archivePath,
@@ -348,7 +360,7 @@ func printDryRunInfo(files []string, archivePath string, cfg *Config) {
 }
 
 // createAndVerifyArchive creates and verifies an archive.
-func createAndVerifyArchive(cfg ArchiveCreationConfig) error {
+func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	tempFile := cfg.Path + ".tmp"
 	cfg.ResourceMgr.AddTempFile(tempFile)
 
@@ -371,7 +383,7 @@ func createAndVerifyArchive(cfg ArchiveCreationConfig) error {
 	cfg.ResourceMgr.RemoveResource(&TempFile{Path: tempFile})
 
 	if cfg.Verify {
-		verifyCfg := ArchiveVerificationConfig{
+		verifyCfg := ArchiveVerificationOptions{
 			Path:   cfg.Path,
 			Config: cfg.Config,
 		}
@@ -382,7 +394,7 @@ func createAndVerifyArchive(cfg ArchiveCreationConfig) error {
 }
 
 // verifyArchive verifies an archive.
-func verifyArchive(cfg ArchiveVerificationConfig) error {
+func verifyArchive(cfg ArchiveVerificationOptions) error {
 	status, err := VerifyArchive(cfg.Path)
 	if err != nil {
 		return NewArchiveErrorWithCause(
@@ -471,7 +483,7 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return nil
 	}
 
-	return createAndVerifyIncrementalArchive(ArchiveCreationConfig{
+	return createAndVerifyIncrementalArchive(ArchiveCreationOptions{
 		Context: config.Context,
 		CWD:     cwd,
 		Path:    archivePath,
@@ -522,7 +534,7 @@ func prepareIncrementalArchive(
 	}
 
 	timestamp := time.Now().Format("2006-01-02-15-04")
-	nameCfg := ArchiveNameConfig{
+	nameCfg := ArchiveConfig{
 		Prefix:             "",
 		Timestamp:          timestamp,
 		GitBranch:          gitBranch,
@@ -540,7 +552,7 @@ func prepareIncrementalArchive(
 }
 
 // createAndVerifyIncrementalArchive creates and verifies an incremental archive
-func createAndVerifyIncrementalArchive(cfg ArchiveCreationConfig) error {
+func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
 	if err := createZipArchiveWithContext(cfg.Context, cfg.CWD, cfg.Path, cfg.Files); err != nil {
 		return NewArchiveErrorWithCause(
 			"Failed to create archive",
@@ -550,7 +562,7 @@ func createAndVerifyIncrementalArchive(cfg ArchiveCreationConfig) error {
 	}
 
 	if cfg.Verify || cfg.Config.Verification.VerifyOnCreate {
-		verifyCfg := ArchiveVerificationConfig{
+		verifyCfg := ArchiveVerificationOptions{
 			Path:   cfg.Path,
 			Config: cfg.Config,
 		}

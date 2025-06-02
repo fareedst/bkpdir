@@ -16,6 +16,7 @@ import (
 
 // REFACTOR-001: Backup management interface contracts defined
 // REFACTOR-001: Multiple dependency interfaces required for extraction
+// REFACTOR-004: Error handling now standardized in errors.go
 
 // BackupInfo represents information about a file backup
 type BackupInfo struct {
@@ -44,63 +45,11 @@ type BackupOptions struct {
 	DryRun    bool
 }
 
-// FILE-002: Structured error handling for backup operations
-// IMMUTABLE-REF: Error Handling Requirements
-// TEST-REF: TestCreateFileBackup
-// DECISION-REF: DEC-004
-// BackupError represents a structured error with status code for backup operations
-type BackupError struct {
-	Message    string
-	StatusCode int
-	Operation  string
-	Path       string
-	Err        error
-}
-
-func (e *BackupError) Error() string {
-	if e.Err != nil {
-		return fmt.Sprintf("%s: %v", e.Message, e.Err)
-	}
-	return e.Message
-}
-
-func (e *BackupError) Unwrap() error {
-	return e.Err
-}
-
-// FILE-002: Backup error creation
-// IMMUTABLE-REF: Error Handling Requirements
-// TEST-REF: TestCreateFileBackup
-// DECISION-REF: DEC-004
-// NewBackupError creates a new structured backup error
-func NewBackupError(message string, statusCode int, operation, path string) *BackupError {
-	return &BackupError{
-		Message:    message,
-		StatusCode: statusCode,
-		Operation:  operation,
-		Path:       path,
-	}
-}
-
-// FILE-002: Backup error creation with cause
-// IMMUTABLE-REF: Error Handling Requirements
-// TEST-REF: TestCreateFileBackup
-// DECISION-REF: DEC-004
-// NewBackupErrorWithCause creates a new structured backup error with underlying cause
-func NewBackupErrorWithCause(message string, statusCode int, operation, path string, err error) *BackupError {
-	return &BackupError{
-		Message:    message,
-		StatusCode: statusCode,
-		Operation:  operation,
-		Path:       path,
-		Err:        err,
-	}
-}
-
 // FILE-002: File backup creation implementation
 // IMMUTABLE-REF: Commands - Create File Backup, File Backup Operations
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-002
+// REFACTOR-004: Error handling now uses standardized patterns from errors.go
 // CreateFileBackup creates a backup of a single file
 func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
 	opts := BackupOptions{
