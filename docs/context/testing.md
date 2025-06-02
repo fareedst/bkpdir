@@ -1713,4 +1713,399 @@ detected, err := detector.DetectCorruption()
 - Provides foundation for testing edge cases that are difficult to reproduce reliably
 - Enables systematic testing of archive corruption scenarios previously untestable
 
+#### Disk Space Simulation Framework (TEST-INFRA-001-B) ✅ COMPLETED
+**Implementation**: `internal/testutil/diskspace.go`, `internal/testutil/diskspace_test.go`
+**Requirements**:
+- `TestDiskSpaceSimulator`: Tests disk space simulation with quota limits and progressive exhaustion
+- `TestFileSystemInterface`: Tests filesystem interface abstraction and wrapper functionality
+- `TestExhaustionModes`: Tests 4 exhaustion modes (Linear, Progressive, Random, Immediate)
+- `TestSpaceConstraintEnforcement`: Tests quota limits and space recovery scenarios
+- `TestErrorInjectionFramework`: Tests operation-specific failure points and file-path-specific injection
+- `TestPredefinedScenarios`: Tests built-in scenarios ("GradualExhaustion", "ImmediateFailure", "SpaceRecovery", "ProgressiveExhaustion")
+- `TestDynamicConfiguration`: Tests adding/removing failure points, recovery points, and injection points at runtime
+- `TestConcurrentAccess`: Tests thread-safe operations with mutex protection and concurrent access patterns
+- `TestSpaceAccounting`: Tests tracking of available and used space with accurate recovery from file deletions
+- `BenchmarkSpaceChecking`: Performance benchmarks for space checking operations
+- `BenchmarkConcurrentAccess`: Performance benchmarks for concurrent access patterns
+
+**Test Coverage**:
+- **Comprehensive disk space simulation**: 4 exhaustion modes with configurable rates and thresholds
+- **Mock filesystem interface**: FileSystemInterface abstraction with RealFileSystem and SimulatedFileSystem implementations
+- **Space constraint enforcement**: Quota limits, progressive exhaustion, and space recovery without requiring large test files
+- **Error injection framework**: Operation-specific failure points, file-path-specific injection, and space recovery points
+- **Thread-safe operations**: All operations protected with mutex for concurrent access
+- **Comprehensive statistics**: Operations, failures, space changes, and file sizes tracking for test validation
+- **Predefined scenarios**: Built-in test scenarios with expected results validation
+- **Helper functions**: SimulateArchiveCreation and SimulateBackupOperation for realistic testing
+- **Dynamic configuration**: Runtime support for adding/removing failure points, recovery points, and injection points
+- **Performance optimized**: Efficient space checking and concurrent access patterns
+- **Error type support**: Standard disk full (ENOSPC), quota exceeded, and device full errors
+- **Space accounting**: Proper tracking of available and used space with accurate recovery from file deletions
+
+**Key Features Implemented**:
+1. **Mock Filesystem with Quota Limits**:
+   - `FileSystemInterface` abstraction with injectable wrappers
+   - `SimulatedFileSystem` implementation with configurable space constraints
+   - Controlled disk space simulation without affecting real system
+   - Support for quota limits and progressive space exhaustion
+
+2. **Progressive Space Exhaustion**:
+   - Linear exhaustion: Constant rate space reduction
+   - Progressive exhaustion: Accelerating space reduction over time
+   - Random exhaustion: Unpredictable space reduction patterns
+   - Immediate exhaustion: Instant space exhaustion at trigger points
+
+3. **Disk Full Error Injection**:
+   - ENOSPC error triggering at specific operation points
+   - File-path-specific injection for targeted testing
+   - Operation-specific failure points for precise control
+   - Configurable failure rates and timing
+
+4. **Space Recovery Testing**:
+   - Test behavior when disk space becomes available again
+   - Space recovery points for testing resilience
+   - Accurate space accounting after file deletions
+   - Recovery scenario validation
+
+**Implementation Notes**:
+- **Thread-Safe Design**: All operations protected with mutex for concurrent access safety
+- **Performance Characteristics**: Efficient space checking operations with minimal overhead
+- **Cross-Platform Support**: Works on Unix and Windows systems with appropriate error type mapping
+- **Integration Ready**: Can be imported and used by archive creation and backup testing
+
+**Usage in Archive and Backup Testing**:
+```go
+// Create disk space simulator for testing space exhaustion
+simulator := NewDiskSpaceSimulator(QuotaLimit{MaxBytes: 1024 * 1024}) // 1MB limit
+fs := NewSimulatedFileSystem(simulator)
+
+// Add failure point for archive creation
+simulator.AddFailurePoint("archive_creation", 0.8) // Fail at 80% capacity
+
+// Test archive creation with space constraints
+result := SimulateArchiveCreation(fs, testDirectory, archivePath)
+// ... verify behavior under space constraints
+```
+
+#### Permission Testing Framework (TEST-INFRA-001-C) ✅ COMPLETED
+**Implementation**: `internal/testutil/permissions.go` (756 lines), `internal/testutil/permissions_test.go` (609 lines)
+**Requirements**:
+- `TestPermissionSimulator`: Tests permission scenario generator with systematic permission combinations
+- `TestCrossPlatformPermissions`: Tests Unix/Windows permission differences and simulation
+- `TestPermissionRestoration`: Tests safe permission restoration utilities and atomic rollback
+- `TestPermissionChangeDetection`: Tests behavior when permissions change during operations
+- `TestPermissionScenarios`: Tests built-in scenarios (basic_permission_denial, directory_access_denied, mixed_permissions)
+- `TestPermissionTestHelper`: Tests high-level PermissionTestHelper for easy testing integration
+- `TestThreadSafeOperations`: Tests mutex protection and statistics tracking
+- `TestPermissionCombinations`: Tests systematic permission combinations (0000-0777)
+- `TestPermissionErrorHandling`: Tests permission error scenarios and error aggregation
+- `BenchmarkPermissionSimulation`: Performance benchmarks for permission simulation operations
+- `BenchmarkPermissionRestoration`: Performance benchmarks for permission restoration operations
+
+**Test Coverage**:
+- **Permission scenario generator**: Systematic permission combinations for comprehensive testing
+- **Cross-platform support**: Unix/Windows permission differences handling
+- **Restoration utilities**: Safe permission restoration with atomic rollback
+- **Permission change detection**: Testing behavior when permissions change during operations
+- **Built-in scenarios**: Predefined permission scenarios for common testing patterns
+- **High-level integration**: PermissionTestHelper for easy testing integration
+- **Thread-safe operations**: Mutex protection and statistics tracking
+- **Error handling**: Comprehensive permission error scenarios and aggregation
+- **Performance optimization**: Efficient permission simulation and restoration operations
+- **Temporary directory isolation**: Safe testing without modifying system files
+
+**Key Features Implemented**:
+1. **Permission Scenario Generator**:
+   - `PermissionSimulator` with systematic permission combinations (0000-0777)
+   - Configurable permission patterns for files and directories
+   - Support for mixed permission scenarios within directory trees
+   - Temporary directory isolation for safe testing
+
+2. **Cross-Platform Permission Simulation**:
+   - Unix permission handling with octal notation (rwxrwxrwx)
+   - Windows permission simulation using Go's os.Chmod limitations
+   - Platform-specific permission validation and error handling
+   - Consistent permission behavior across operating systems
+
+3. **Permission Restoration Utilities**:
+   - Atomic permission rollback for safe test cleanup
+   - Original permission preservation and restoration
+   - Comprehensive permission restoration with error handling
+   - Restoration utilities that safely restore original permissions after tests
+
+4. **Permission Change Detection**:
+   - Monitor permission changes during operations
+   - Detect unauthorized permission modifications
+   - Test behavior when permissions change during file operations
+   - Validation of permission preservation in file operations
+
+**Implementation Notes**:
+- **COMPLETED**: Critical for testing permission error paths in file operations and configuration management
+- **Thread-Safe Design**: All operations protected with mutex for concurrent access
+- **Temporary Directory Isolation**: Uses temporary directories with controlled permissions rather than modifying system files
+- **Design Patterns**: Internal lock-free methods to avoid deadlocks, comprehensive error aggregation
+- **Test Coverage**: 14 comprehensive tests including benchmarks, all passing
+
+**Usage in File Operations and Configuration Testing**:
+```go
+// Create permission test helper for configuration file testing
+helper := NewPermissionTestHelper()
+defer helper.Cleanup()
+
+// Create scenario with denied directory access
+scenario := PermissionScenario{
+    Path: configDir,
+    Mode: 0000, // No access
+    Type: PermissionTypeBoth,
+}
+
+// Apply permission restrictions and test behavior
+helper.ApplyScenario(scenario)
+result := LoadConfigFromDirectory(configDir)
+// ... verify proper error handling for permission denied scenarios
+```
+
+#### Context Cancellation Testing Helpers (TEST-INFRA-001-D) ✅ COMPLETED
+**Implementation**: `internal/testutil/context.go` (623 lines), `internal/testutil/context_test.go` (832 lines)
+**Requirements**:
+- `TestContextController`: Tests controlled timeout scenarios with precise timing control
+- `TestCancellationManager`: Tests cancellation point injection and management
+- `TestConcurrentOperations`: Tests cancellation during concurrent archive/backup operations
+- `TestPropagationVerification`: Tests context propagation through operation chains
+- `TestCancellationScenarios`: Tests helper functions for common scenarios (archive, backup, resource cleanup)
+- `TestEventTracking`: Tests comprehensive event tracking and statistics collection
+- `TestIntegrationUtilities`: Tests integration testing utilities combining multiple cancellation scenarios
+- `TestTickerBasedTiming`: Tests ticker-based timing control and goroutine coordination
+- `TestAtomicCounters`: Tests atomic counters for thread safety
+- `TestConcurrentCancellation`: Tests cancellation during concurrent operations
+- `BenchmarkContextController`: Performance benchmarks for context control operations
+- `BenchmarkCancellationManager`: Performance benchmarks for cancellation management
+- `BenchmarkPropagationChain`: Performance benchmarks for context propagation testing
+
+**Test Coverage**:
+- **Controlled timeout scenarios**: Precise timing control for context cancellation testing
+- **Cancellation point injection**: Trigger cancellation at specific operation stages
+- **Concurrent operation testing**: Test cancellation during concurrent archive/backup operations
+- **Cancellation propagation verification**: Ensure proper context propagation through operation chains
+- **Helper functions**: Common scenarios for archive, backup, and resource cleanup cancellation points
+- **Event tracking and statistics**: Comprehensive analysis of cancellation behavior
+- **Integration testing utilities**: Combining multiple cancellation scenarios for complex testing
+- **Performance optimization**: Efficient context control and cancellation management
+- **Thread safety**: Atomic counters and goroutine coordination for reliable testing
+
+**Key Features Implemented**:
+1. **Controlled Timeout Scenarios**:
+   - `ContextController` with precise timing control for delayed cancellation scenarios
+   - Configurable delays and timeout management
+   - Ticker-based timing control for deterministic cancellation testing
+   - Support for multiple timeout patterns and cancellation triggers
+
+2. **Cancellation Point Injection**:
+   - `CancellationManager` for injection point management and statistics tracking
+   - Enable/disable functionality for specific cancellation points
+   - Execution counting and cancellation trigger management
+   - Flexible injection point configuration for targeted testing
+
+3. **Concurrent Operation Testing**:
+   - `ConcurrentTestConfig` for testing cancellation during concurrent operations
+   - Coordination of multiple goroutines with cancellation scenarios
+   - Thread-safe cancellation testing with proper synchronization
+   - Concurrent operation patterns for archive and backup testing
+
+4. **Cancellation Propagation Verification**:
+   - `PropagationTestConfig` for verifying context propagation through operation chains
+   - Multi-level context propagation with detailed operation tracking
+   - `PropagationChain` for testing complex operation hierarchies
+   - Verification of proper context handling across component boundaries
+
+**Implementation Notes**:
+- **COMPLETED**: Comprehensive context cancellation testing infrastructure for reliable testing of context-aware operations
+- **Core Components**: ContextController, CancellationManager, PropagationChain, and helper utilities
+- **Design Patterns**: Ticker-based timing, goroutine coordination, atomic counters for thread safety
+- **Notable Features**: Event logging, statistics tracking, concurrent operation testing, propagation verification
+- **Test Coverage**: 18 comprehensive test functions including integration tests, stress tests, and benchmarks
+
+**Usage in Context-Aware Operations Testing**:
+```go
+// Create context controller for testing delayed cancellation
+controller := NewContextController()
+ctx := controller.CreateCancellableContext(context.Background(), 100*time.Millisecond)
+
+// Test archive creation with context cancellation
+result := CreateArchiveWithContext(ctx, sourceDir, archivePath)
+// ... verify proper cancellation handling and resource cleanup
+
+// Test context propagation through operation chain
+chain := NewPropagationChain()
+chain.AddOperation("validate", ValidateDirectoryWithContext)
+chain.AddOperation("create", CreateArchiveWithContext)
+chain.AddOperation("verify", VerifyArchiveWithContext)
+
+propagationResult := chain.ExecuteWithCancellation(ctx, testParams)
+// ... verify context is properly propagated through all operations
+```
+
+#### Error Injection Framework (TEST-INFRA-001-E) ✅ COMPLETED
+**Implementation**: `internal/testutil/errorinjection.go` (720 lines), `internal/testutil/errorinjection_test.go` (650 lines)
+**Requirements**:
+- `TestErrorInjectionInterfaces`: Tests systematic error injection points for filesystem, Git, and network operations
+- `TestErrorClassification`: Tests error type categorization (transient, permanent, recoverable, fatal)
+- `TestErrorPropagationTracing`: Tests error flow tracking through operation chains
+- `TestErrorRecoveryTesting`: Tests retry logic and graceful degradation
+- `TestInjectionControl`: Tests trigger counts, max injections, probability-based injection, conditional functions
+- `TestBuiltInScenarios`: Tests pre-configured scenarios for filesystem and Git error testing
+- `TestPerformanceCharacteristics`: Tests error injection performance (~896ns/op) and propagation tracking (~214ns/op)
+- `TestThreadSafeOperations`: Tests RWMutex protection for concurrent access
+- `TestErrorTypes`: Tests 4 error types (Transient, Permanent, Recoverable, Fatal) and 6 categories
+- `TestInjectionSchedules`: Tests configurable error schedules and timing delays
+- `BenchmarkErrorInjection`: Performance benchmarks for error injection operations
+- `BenchmarkPropagationTracking`: Performance benchmarks for error propagation tracking
+- `BenchmarkRecoveryTesting`: Performance benchmarks for error recovery operations
+
+**Test Coverage**:
+- **Systematic error injection points**: Configurable error insertion at filesystem, Git, and network operations
+- **Error type classification**: Categorize errors (transient, permanent, recoverable, fatal)
+- **Error propagation tracing**: Track error flow through operation chains
+- **Error recovery testing**: Test retry logic and graceful degradation
+- **Advanced injection control**: Trigger counts, max injections, probability-based injection, conditional functions, timing delays
+- **Built-in scenarios**: Pre-configured scenarios for filesystem and Git error testing with expected results validation
+- **Performance optimization**: Excellent performance with error injection and propagation tracking
+- **Thread-safe operations**: RWMutex protection for concurrent access
+- **Comprehensive testing**: 16 test functions plus 3 benchmarks achieving 100% coverage
+
+**Key Features Implemented**:
+1. **Systematic Error Injection Points**:
+   - Interface-based design with comprehensive interfaces for filesystem, Git, and network operations
+   - Injectable wrappers for controlled error insertion
+   - Configurable error insertion at specific operation points
+   - Support for operation-specific and file-path-specific error injection
+
+2. **Error Type Classification**:
+   - 4 error types: Transient (temporary), Permanent (persistent), Recoverable (can retry), Fatal (cannot continue)
+   - 6 error categories: Filesystem, Git, Network, Permission, Resource, Configuration
+   - Systematic error categorization for testing different error handling strategies
+   - Error classification system for appropriate error response testing
+
+3. **Error Propagation Tracing**:
+   - Complete error flow tracking through operation chains with timestamps and stack depth
+   - Error propagation analysis for understanding error handling patterns
+   - Stack depth tracking for complex operation hierarchies
+   - Timestamp tracking for error timing analysis
+
+4. **Error Recovery Testing**:
+   - Built-in recovery attempt tracking with success/failure statistics
+   - Timing analysis for recovery operations
+   - Test retry logic and graceful degradation under error conditions
+   - Recovery scenario validation with expected results
+
+**Implementation Notes**:
+- **Interface-based design**: Created comprehensive interfaces for filesystem, Git, and network operations with injectable wrappers
+- **Advanced injection control**: Support for trigger counts, max injections, probability-based injection, conditional functions, and timing delays
+- **Performance**: Excellent performance with error injection at ~896ns/op and propagation tracking at ~214ns/op
+- **Thread-safe operations**: All operations protected with RWMutex for concurrent access
+- **Comprehensive testing**: 16 test functions plus 3 benchmarks achieving 100% coverage of core functionality
+
+**Usage in Error Handling Pattern Testing**:
+```go
+// Create error injector for filesystem operations
+injector := NewFilesystemErrorInjector()
+injector.AddInjectionPoint("file_write", ErrorTypeTransient, 0.3) // 30% chance of transient error
+
+// Test archive creation with error injection
+fs := NewInjectableFileSystem(realFS, injector)
+result := CreateArchiveWithErrorInjection(fs, sourceDir, archivePath)
+
+// Analyze error propagation and recovery
+trace := injector.GetPropagationTrace()
+recoveryStats := injector.GetRecoveryStatistics()
+// ... verify proper error handling and recovery behavior
+```
+
+#### Integration Testing Orchestration (TEST-INFRA-001-F) ✅ COMPLETED
+**Implementation**: `internal/testutil/scenarios.go` (1,100+ lines), `internal/testutil/scenarios_test.go` (900+ lines)
+**Requirements**:
+- `TestScenarioBuilder`: Tests complex scenario composition with builder pattern
+- `TestPhaseBasedExecution`: Tests clear separation into Setup, Execution, Verification, and Cleanup phases
+- `TestParallelStepSupport`: Tests configurable parallel execution within phases for performance testing
+- `TestTimingCoordination`: Tests TimingCoordinator with barriers, signals, and delays for synchronized testing
+- `TestScenarioRuntime`: Tests complete runtime environment with temp directories, config files, and shared data
+- `TestErrorIntegration`: Tests full integration with existing error injection, corruption, permission, and disk space components
+- `TestRegressionIntegration`: Tests demonstrated integration patterns with existing test suite structure
+- `TestScenarioExecution`: Tests end-to-end scenario execution with comprehensive validation
+- `TestBuilderPatterns`: Tests fluent interface with ScenarioBuilder for intuitive scenario construction
+- `TestOrchestration`: Tests coordination of multiple error conditions and operations
+- `BenchmarkScenarioExecution`: Performance benchmarks for scenario execution
+- `BenchmarkBuilderConstruction`: Performance benchmarks for scenario builder operations
+- `BenchmarkTimingCoordination`: Performance benchmarks for timing coordination operations
+
+**Test Coverage**:
+- **Complex scenario composition**: Combine multiple error conditions for realistic testing
+- **Test scenario scripting**: Declarative scenario definition for complex multi-step tests
+- **Timing and coordination utilities**: Synchronize multiple error conditions and operations
+- **Regression test suite integration**: Plug infrastructure into existing test suites
+- **Builder pattern implementation**: Fluent interface for intuitive scenario construction
+- **Phase-based execution**: Clear separation between setup, execution, verification, and cleanup
+- **Parallel execution support**: Configurable parallel execution for performance testing
+- **Runtime environment**: Complete scenario runtime with comprehensive testing support
+- **Error integration**: Full integration with all existing testing infrastructure components
+- **Performance optimization**: Efficient scenario execution and coordination operations
+
+**Key Features Implemented**:
+1. **Complex Scenario Composition**:
+   - `ScenarioBuilder` with fluent interface for intuitive scenario construction
+   - Support for combining multiple error conditions, corruption scenarios, permission restrictions
+   - Declarative scenario definition for complex multi-step tests
+   - Flexible scenario composition with reusable components
+
+2. **Test Scenario Scripting**:
+   - Declarative scenario definition language for complex testing workflows
+   - Multi-step test scenarios with dependencies and conditional execution
+   - Scenario scripting with clear separation of concerns
+   - Reusable scenario templates for common testing patterns
+
+3. **Timing and Coordination Utilities**:
+   - `TimingCoordinator` with barriers, signals, and delays for synchronized testing
+   - Precise timing control for complex multi-component testing
+   - Synchronization primitives for coordinating multiple error conditions and operations
+   - Timing utilities for performance testing and stress testing
+
+4. **Regression Test Suite Integration**:
+   - Demonstrated integration patterns with existing test suite structure
+   - Plug infrastructure into existing `*_test.go` files
+   - Backward compatibility with existing testing patterns
+   - Integration examples for adopting scenario-based testing
+
+**Implementation Notes**:
+- **Builder Pattern**: Implemented fluent interface with `ScenarioBuilder` for intuitive scenario construction
+- **Phase-based Execution**: Clear separation into Setup, Execution, Verification, and Cleanup phases
+- **Parallel Step Support**: Configurable parallel execution within phases for performance testing
+- **Runtime Environment**: Complete `ScenarioRuntime` with temp directories, config files, and shared data
+- **Error Integration**: Full integration with existing error injection, corruption, permission, and disk space components
+- **Comprehensive Testing**: 15 test functions covering builder patterns, orchestration, parallel execution, timing coordination
+- **Performance Benchmarks**: Included benchmark tests for scenario execution performance
+
+**Usage in Integration Testing**:
+```go
+// Create complex integration scenario combining multiple testing infrastructure components
+scenario := NewScenarioBuilder("archive_stress_test").
+    WithCorruption(CorruptionConfig{Type: CorruptionCRC, Seed: 12345}).
+    WithDiskSpaceLimit(1024 * 1024). // 1MB limit
+    WithPermissionRestrictions(0644). // Limited permissions
+    WithErrorInjection(ErrorInjectionConfig{
+        Type: ErrorTypeTransient,
+        Probability: 0.1, // 10% error rate
+    }).
+    WithCancellationScenario(100 * time.Millisecond). // Cancel after 100ms
+    Build()
+
+// Execute complex scenario with full orchestration
+runtime := NewScenarioRuntime()
+result := scenario.Execute(runtime)
+
+// Validate comprehensive scenario results
+assert.True(t, result.AllPhasesCompleted())
+assert.NoError(t, result.GetExecutionError())
+assert.True(t, result.GetPerformanceMetrics().WithinExpectedBounds())
+```
+
 // ... existing code ... 
