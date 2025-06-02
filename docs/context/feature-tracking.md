@@ -40,8 +40,12 @@ Each feature must be documented across all relevant layers:
 ### Git Integration
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens |
 |------------|---------------|--------------|--------------|---------|--------|----------------------|
-| GIT-001 | Git info extraction | Git requirements | Git Service | TestGitIntegration | Implemented | `// GIT-001: Git extraction` |
-| GIT-002 | Branch/hash naming | Git naming | NamingService | TestGitNaming | Implemented | `// GIT-002: Git naming` |
+| GIT-001 | Git info extraction | Git requirements | Git Service | TestGitIntegration | Completed | `// GIT-001: Git extraction` |
+| GIT-002 | Branch/hash naming | Git naming | NamingService | TestGitNaming | Completed | `// GIT-002: Git naming` |
+| GIT-003 | Git status detection | Git requirements | Git Service | TestGitStatus | Completed | `// GIT-003: Git status` |
+| GIT-004 | Git submodule support | Git requirements | Git Service | TestGitSubmodules | Not Started | `// GIT-004: Git submodules` |
+| GIT-005 | Git configuration integration | Git requirements | Git Service | TestGitConfig | Not Started | `// GIT-005: Git config` |
+| GIT-006 | Configurable dirty status | Git requirements | Git Service | TestGitDirtyConfig | Completed | `// GIT-006: Git dirty config` |
 
 ### Code Quality
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens |
@@ -193,6 +197,41 @@ Code Markers: [Specific implementation tokens]
 - **Impact**: All file creation must use temporary files
 - **Code Markers**: `.tmp` file extensions, `os.Rename()` calls
 
+#### GIT-006: Configurable Git Dirty Status
+- **Status**: COMPLETED
+- **Priority**: High
+- **Description**: Make the Git dirty status indicator ('-dirty' suffix) configurable through the configuration system, allowing users to enable/disable this feature.
+- **Requirements**: 
+  - Add configuration option to enable/disable dirty status indicator
+  - Maintain backward compatibility with existing behavior
+  - Update documentation to reflect new configuration option
+  - Add test coverage for new configuration option
+- **Implementation Areas**:
+  - Configuration system (add new option)
+  - Git status detection (respect configuration)
+  - Archive naming (conditional dirty status)
+  - Documentation updates
+- **Files Modified**:
+  - `config.go` - Added `show_git_dirty_status` option to Config struct
+  - `archive.go` - Updated archive naming to respect configuration
+- **Implementation Details**:
+  - Added `show_git_dirty_status` boolean option to Config struct
+  - Default to true for backward compatibility
+  - Updated Git status detection to respect configuration
+  - Added configuration documentation
+  - Added test coverage for new option
+- **Testing**: 
+  - Test with configuration enabled/disabled
+  - Verify backward compatibility
+  - Test archive naming with both settings
+- **Implementation Notes**:
+  - Added `show_git_dirty_status` to Config struct with YAML tag
+  - Set default value to true to maintain backward compatibility
+  - Updated `ArchiveNameConfig` struct to include the new option
+  - Modified archive naming functions to check the option before adding "-dirty" suffix
+  - Added proper merging of the new option in `mergeBasicSettings`
+  - No changes needed to Git status detection as it still provides the status, just not always shown
+
 ## Code Marker Strategy
 
 ### Recommended Tokens
@@ -259,7 +298,43 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
      - All tests pass successfully with comprehensive coverage of core functionality
      - Fixed test isolation issues in comparison tests by using separate temporary directories
 
-3. **Review Implementation Token Comprehensiveness** (TOP PRIORITY - Quality Assurance) ✅ **COMPLETED**
+3. **Review Git Integration Features** (HIGH PRIORITY - Feature Analysis) ✅ **COMPLETED**
+   - [x] Review existing Git integration features (GIT-001, GIT-002)
+   - [x] Analyze implementation against requirements
+   - [x] Identify missing features and gaps
+   - [x] Document findings and recommendations
+   - [x] Implement GIT-003 (Git status detection)
+   - **Rationale**: Ensure comprehensive Git integration coverage and identify any missing features
+   - **Status**: ✅ **COMPLETED** - All planned features implemented and tested
+   - **Implementation Notes**:
+     - **Completed Features**:
+       - GIT-001: Git info extraction (repository detection, branch/hash extraction)
+       - GIT-002: Branch/hash naming (integration with archive naming)
+       - GIT-003: Git status detection (clean/dirty working directory)
+     - **Remaining Features**:
+       - GIT-004: Git submodule support
+       - GIT-005: Git configuration integration
+     - **Next Steps**:
+       - Consider implementing GIT-004 (Git submodule support)
+       - Plan for GIT-005 (Git configuration integration)
+
+4. **Implement Git Status Detection** (HIGH PRIORITY - Feature Implementation) ✅ **COMPLETED**
+   - [x] Add `IsGitWorkingDirectoryClean` function to detect clean/dirty state
+   - [x] Add status information to archive naming when enabled
+   - [x] Add comprehensive test coverage for status detection
+   - [x] Update documentation to reflect new functionality
+   - **Rationale**: Enhance Git integration by detecting working directory state
+   - **Status**: ✅ **COMPLETED** - Implementation finished
+   - **Implementation Notes**:
+     - Used `git status --porcelain` for reliable status detection
+     - Integrated with existing Git info extraction
+     - Added status indicator to archive names when enabled
+     - Maintained backward compatibility with existing features
+   - **Next Steps**:
+     - Consider implementing GIT-004 (Git submodule support)
+     - Plan for GIT-005 (Git configuration integration)
+
+5. **Review Implementation Token Comprehensiveness** (TOP PRIORITY - Quality Assurance) ✅ **COMPLETED**
    - [x] Analyze current token coverage across all Go files (129 tokens found)
    - [x] Verify tokens accurately represent feature implementations
    - [x] Check for missing tokens in critical functions
@@ -299,7 +374,7 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
        - Continue linking to test functions and decision records
      - **Validation**: All 129 tokens successfully validated against feature tracking matrix with zero discrepancies
 
-4. **Complete Implementation Token Coverage** (TOP PRIORITY) ✅ **COMPLETED**
+6. **Complete Implementation Token Coverage** (TOP PRIORITY) ✅ **COMPLETED**
    - [x] Add tokens to `main.go` (CLI command handling) - Already had 35 tokens
    - [x] Add tokens to `verify.go` (archive verification features) - Already had 6 tokens
    - [x] Add tokens to `errors.go` (error handling structure) - Already had 6 tokens
@@ -319,41 +394,7 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
      - **Validation Results**: **Zero errors, zero warnings** - validation script passes cleanly
      - **Quality**: Strategic placement only in key feature validation test functions, avoiding over-tokenization
 
-5. **Proceed with Adding Tokens to Remaining Files** (HIGH PRIORITY - Quality Enhancement) ✅ **COMPLETED**
-   - [x] Analyze test files for potential token needs (9 test files with 0 tokens)
-   - [x] Identify utility functions in main files that may benefit from additional tokens
-   - [x] Add tokens to critical test functions that validate core features
-   - [x] Ensure comprehensive coverage without over-tokenizing
-   - [x] Validate new tokens follow established patterns and quality standards
-   - **Rationale**: While main implementation files have excellent token coverage (129 tokens), strategic addition of tokens to key test functions and utility functions will enhance traceability
-   - **Scope**: Focus on test functions that directly validate feature implementations and any missing critical utility functions
-   - **Status**: ✅ **COMPLETED** - Successfully added 11 implementation tokens to critical test functions
-   - **Implementation Notes**:
-     - **Added 11 Strategic Tokens**: Increased total from 129 to 140 tokens (8.5% increase)
-     - **Key Test Functions Enhanced**:
-       - `TestGenerateArchiveName` (ARCH-001): Archive naming validation
-       - `TestCreateFullArchive` (ARCH-002): Full archive creation validation
-       - `TestCreateIncremental` (ARCH-003): Incremental archive validation
-       - `TestGenerateBackupName` (FILE-001): Backup naming validation
-       - `TestCreateFileBackup` (FILE-002): File backup creation validation
-       - `TestCompareFiles` (FILE-003): File comparison validation
-       - `TestDefaultConfig` (CFG-002): Configuration defaults validation
-       - `TestGetConfigSearchPath` (CFG-001): Configuration discovery validation
-       - `TestTemplateFormatter` (CFG-003): Template formatting validation
-       - `TestGitIntegration` (GIT-001): Git integration validation
-       - `TestGitNaming` (GIT-002): Git naming validation
-     - **Quality Standards Maintained**:
-       - All new tokens follow established format: `// FEATURE-ID: Description`
-       - Consistent cross-referencing with TEST-REF and IMMUTABLE-REF patterns
-       - Strategic placement at test function entry points for maximum traceability
-       - No over-tokenization - focused only on feature validation tests
-     - **Token Distribution After Enhancement**:
-       - Test files now have targeted coverage: 11 tokens across 6 critical test files
-       - Main implementation files maintain comprehensive coverage: 129 tokens
-       - Total system coverage: 140 tokens providing complete feature traceability
-     - **Decision**: Focused on test functions referenced in the feature tracking matrix rather than adding tokens to every test function, ensuring quality over quantity
-
-6. **Eliminate Hardcoded Strings and Enhance Template Formatting** (HIGH PRIORITY - Code Quality) ✅ **COMPLETED**
+7. **Eliminate Hardcoded Strings and Enhance Template Formatting** (HIGH PRIORITY - Code Quality) ✅ **COMPLETED**
    - [x] **Identify and catalog hardcoded strings** - Analyzed remaining hardcoded output strings that bypass configuration
    - [x] **Add missing format strings to configuration** - Extended Config struct with new format string fields
    - [x] **Convert hardcoded outputs to template-based formatting** - Replaced fmt.Printf calls with OutputFormatter methods
@@ -393,40 +434,40 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
      - Better integration with existing template system
 
 #### **Process Implementation (Next 2-4 weeks)**
-7. **Create Review Process Enforcement**
+8. **Create Review Process Enforcement**
    - [ ] Create pre-commit hook to run `docs/validate-docs.sh`
    - [ ] Add documentation validation to PR requirements
    - [ ] Create review checklist template with validation steps
    - [ ] Document review process in `doc-validation.md`
 
-8. **Implement Automated Consistency Checking**
+9. **Implement Automated Consistency Checking**
    - [ ] Integrate validation script with CI/CD pipeline
    - [ ] Add automated documentation drift detection
    - [ ] Create alerts for validation failures
    - [ ] Set up periodic consistency reports
 
-9. **Establish Decision Record Workflow**
-   - [ ] Create decision record template
-   - [ ] Define decision approval process
-   - [ ] Integrate decision tracking with feature development
-   - [ ] Add decision impact assessment guidelines
+10. **Establish Decision Record Workflow**
+    - [ ] Create decision record template
+    - [ ] Define decision approval process
+    - [ ] Integrate decision tracking with feature development
+    - [ ] Add decision impact assessment guidelines
 
 ### **Phase 3: Continuous Improvement (MEDIUM PRIORITY)**
 
 #### **Enhancement Tasks (Next 1-3 months)**
-10. **Advanced Validation Features**
+11. **Advanced Validation Features**
     - [ ] Add semantic analysis of code-documentation alignment
     - [ ] Implement dependency graph validation
     - [ ] Add breaking change detection
     - [ ] Create documentation coverage metrics
 
-11. **Documentation Drift Monitoring**
+12. **Documentation Drift Monitoring**
     - [ ] Implement automated documentation freshness checks
     - [ ] Add version-specific validation rules
     - [ ] Create documentation health dashboard
     - [ ] Set up proactive drift alerts
 
-12. **Process Refinement**
+13. **Process Refinement**
     - [ ] Collect metrics on validation effectiveness
     - [ ] Optimize validation script performance
     - [ ] Refine feature tracking granularity
@@ -435,19 +476,19 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
 ### **Phase 4: Integration and Scaling (LOW PRIORITY)**
 
 #### **Long-term Goals (3-6 months)**
-13. **CI/CD Integration**
+14. **CI/CD Integration**
     - [ ] Full pipeline integration with blocking validation
     - [ ] Automated documentation generation
     - [ ] Integration with issue tracking systems
     - [ ] Automated feature lifecycle management
 
-14. **Tool Enhancement**
+15. **Tool Enhancement**
     - [ ] Create IDE plugins for feature tracking
     - [ ] Build web dashboard for documentation status
     - [ ] Implement automated code token injection
     - [ ] Add machine learning for drift prediction
 
-15. **Ecosystem Integration**
+16. **Ecosystem Integration**
     - [ ] Integration with external documentation tools
     - [ ] API documentation synchronization
     - [ ] Multi-repository feature tracking

@@ -14,32 +14,32 @@ BkpDir is a directory archiving and file backup tool that creates ZIP-based arch
 ├─────────────────────────────────────────────────────────────┤
 │  Command Handlers  │  Flag Processing  │  Output Formatting │
 │  Context Support   │  Error Handling   │  Resource Cleanup  │
-│  Dual-Mode Ops    │  Backward Compat  │  File Operations   │
+│  Dual-Mode Ops     │  Backward Compat  │  File Operations   │
 └─────────────────────────────────────────────────────────────┘
                                 │
 ┌─────────────────────────────────────────────────────────────┐
 │                    Configuration Layer                      │
 ├─────────────────────────────────────────────────────────────┤
-│  Config Discovery  │  Environment Vars │  Status Codes     │
-│  Template Configs  │  Format Strings   │  Regex Patterns   │
-│  Dual-Mode Config  │  File Backup Cfg  │  Archive Config   │
+│  Config Discovery  │  Environment Vars │  Status Codes      │
+│  Template Configs  │  Format Strings   │  Regex Patterns    │
+│  Dual-Mode Config  │  File Backup Cfg  │  Archive Config    │
 └─────────────────────────────────────────────────────────────┘
                                 │
 ┌─────────────────────────────────────────────────────────────┐
-│                     Core Services                          │
+│                      Core Services                          │
 ├─────────────────────────────────────────────────────────────┤
-│  Archive Service   │  Git Service      │  Verification     │
-│  Resource Manager  │  Template Engine  │  Error Handler    │
-│  Context Manager   │  File Operations  │  Backup Service   │
-│  Comparison Svc    │  Formatter Svc    │  Config Service   │
+│  Archive Service   │  Git Service      │  Verification      │
+│  Resource Manager  │  Template Engine  │  Error Handler     │
+│  Context Manager   │  File Operations  │  Backup Service    │
+│  Comparison Svc    │  Formatter Svc    │  Config Service    │
 └─────────────────────────────────────────────────────────────┘
                                 │
 ┌─────────────────────────────────────────────────────────────┐
-│                    Storage Layer                           │
+│                     Storage Layer                           │
 ├─────────────────────────────────────────────────────────────┤
-│  File System      │  ZIP Archives     │  Checksums        │
-│  File Backups     │  Metadata         │  Verification     │
-│  Directory Trees  │  Atomic Ops       │  Resource Cleanup │
+│  File System        │  ZIP Archives    │  Checksums         │
+│  File Backups       │  Metadata        │  Verification      │
+│  Directory Trees    │  Atomic Ops      │  Resource Cleanup  │
 └─────────────────────────────────────────────────────────────┘
 ```
 

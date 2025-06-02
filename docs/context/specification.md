@@ -90,11 +90,13 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
    - Example: `["*.tmp", "node_modules/", ".DS_Store"]`
 
 4. **Git Integration**
-   - Controls Git repository information inclusion in archive names
-   - Default: `true`
-   - YAML key: `include_git_info`
-   - When enabled, includes branch and commit hash in archive names
-   - Example: `project-2024-03-21-15-30=main=abc123d.zip`
+   - Automatically detects Git repositories using `git rev-parse --is-inside-work-tree`
+   - Extracts current branch name using `git rev-parse --abbrev-ref HEAD`
+   - Extracts commit hash using `git rev-parse --short HEAD`
+   - Includes Git information in archive names when `include_git_info` is enabled
+   - Gracefully handles non-Git directories by returning empty Git info
+   - Configurable via `include_git_info` setting in configuration
+   - Works with both clean and dirty working directories
 
 5. **File Backup Configuration**
    - **Backup Directory Path**
@@ -397,11 +399,13 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 ## Archive Features
 
 ### Git Integration
-- Automatically detects Git repositories
-- Includes current branch name and commit hash in archive names
-- Configurable via `include_git_info` setting
+- Automatically detects Git repositories using `git rev-parse --is-inside-work-tree`
+- Extracts current branch name using `git rev-parse --abbrev-ref HEAD`
+- Extracts commit hash using `git rev-parse --short HEAD`
+- Includes Git information in archive names when `include_git_info` is enabled
+- Gracefully handles non-Git directories by returning empty Git info
+- Configurable via `include_git_info` setting in configuration
 - Works with both clean and dirty working directories
-- Gracefully handles non-Git directories
 
 ### File Exclusion
 - Supports glob patterns for excluding files and directories

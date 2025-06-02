@@ -481,7 +481,7 @@ templateFormatter.PrintTemplateError("Operation failed", "archive creation")
 - `ArchiveDirPath`: Archive storage location (default: "../.bkpdir")
 - `UseCurrentDirName`: Include directory name in path (default: true)
 - `ExcludePatterns`: Glob patterns to exclude (default: [".git/", "vendor/"])
-- `IncludeGitInfo`: Include Git branch/hash in names (default: true)
+- `IncludeGitInfo`: Include Git branch/hash in names (default: false)
 - `Verification`: Archive verification settings
 
 **File Backup Fields**:
@@ -1090,3 +1090,13 @@ make build
 # Development workflow
 make lint && make test && make build
 ```
+
+## Git Integration Requirements
+- **Repository Detection**: Automatic Git repository detection using `git rev-parse --is-inside-work-tree`
+- **Info Extraction**: Git branch and commit hash extraction using `git rev-parse` commands
+- **Archive Naming**: Git information in archive names when enabled via configuration
+- **Error Handling**: Graceful handling of non-Git directories and Git command failures
+- **Configuration**: Git integration toggle via `include_git_info` setting
+These Git integration requirements are mandatory and must be preserved
+
+## Archive Verification Requirements

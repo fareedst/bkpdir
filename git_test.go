@@ -222,6 +222,139 @@ func TestGitNaming(t *testing.T) {
 	})
 }
 
+// TestGitStatus tests the Git status detection functionality for GIT-003 feature
+func TestGitStatus(t *testing.T) {
+	// GIT-003: Git status validation
+	// TEST-REF: Feature tracking matrix GIT-003
+	// IMMUTABLE-REF: Git Integration Requirements
+
+	// Create temporary directory for testing
+	tmpDir, err := ioutil.TempDir("", "git_status_test_")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	t.Run("NonGitRepository", func(t *testing.T) {
+		// Test with a non-git directory
+		if IsGitWorkingDirectoryClean(tmpDir) {
+			t.Error("Expected non-git directory to return false")
+		}
+
+		branch, hash, isClean := GetGitInfoWithStatus(tmpDir)
+		if branch != "" || hash != "" || isClean {
+			t.Errorf("Expected empty git info for non-git directory, got branch=%s, hash=%s, isClean=%v", branch, hash, isClean)
+		}
+	})
+
+	t.Run("CleanGitRepository", func(t *testing.T) {
+		// Skip if git is not available
+		if !isGitAvailable() {
+			t.Skip("Git not available, skipping git status tests")
+		}
+
+		// Initialize git repository
+		gitDir := filepath.Join(tmpDir, "clean_repo")
+		if err := os.MkdirAll(gitDir, 0755); err != nil {
+			t.Fatal(err)
+		}
+
+		// Initialize git repo
+		runGitCommand(t, gitDir, "init")
+		runGitCommand(t, gitDir, "config", "user.email", "test@example.com")
+		runGitCommand(t, gitDir, "config", "user.name", "Test User")
+
+		// Create a test file and make initial commit
+		testFile := filepath.Join(gitDir, "test.txt")
+		if err := ioutil.WriteFile(testFile, []byte("test content"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		runGitCommand(t, gitDir, "add", "test.txt")
+		runGitCommand(t, gitDir, "commit", "-m", "Initial commit")
+
+		// Test clean working directory
+		if !IsGitWorkingDirectoryClean(gitDir) {
+			t.Error("Expected clean working directory to return true")
+		}
+
+		// Test git info with status
+		branch, hash, isClean := GetGitInfoWithStatus(gitDir)
+		if branch == "" {
+			t.Error("Expected non-empty branch name")
+		}
+		if hash == "" {
+			t.Error("Expected non-empty commit hash")
+		}
+		if !isClean {
+			t.Error("Expected clean working directory")
+		}
+	})
+
+	t.Run("DirtyGitRepository", func(t *testing.T) {
+		// Skip if git is not available
+		if !isGitAvailable() {
+			t.Skip("Git not available, skipping git status tests")
+		}
+
+		// Initialize git repository
+		gitDir := filepath.Join(tmpDir, "dirty_repo")
+		if err := os.MkdirAll(gitDir, 0755); err != nil {
+			t.Fatal(err)
+		}
+
+		// Initialize git repo
+		runGitCommand(t, gitDir, "init")
+		runGitCommand(t, gitDir, "config", "user.email", "test@example.com")
+		runGitCommand(t, gitDir, "config", "user.name", "Test User")
+
+		// Create a test file and make initial commit
+		testFile := filepath.Join(gitDir, "test.txt")
+		if err := ioutil.WriteFile(testFile, []byte("test content"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		runGitCommand(t, gitDir, "add", "test.txt")
+		runGitCommand(t, gitDir, "commit", "-m", "Initial commit")
+
+		// Modify the file to create dirty state
+		if err := ioutil.WriteFile(testFile, []byte("modified content"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		// Test dirty working directory
+		if IsGitWorkingDirectoryClean(gitDir) {
+			t.Error("Expected dirty working directory to return false")
+		}
+
+		// Test git info with status
+		branch, hash, isClean := GetGitInfoWithStatus(gitDir)
+		if branch == "" {
+			t.Error("Expected non-empty branch name")
+		}
+		if hash == "" {
+			t.Error("Expected non-empty commit hash")
+		}
+		if isClean {
+			t.Error("Expected dirty working directory")
+		}
+	})
+
+	t.Run("ErrorHandling", func(t *testing.T) {
+		// Test error handling with invalid directory
+		invalidDir := filepath.Join(tmpDir, "nonexistent")
+
+		if IsGitWorkingDirectoryClean(invalidDir) {
+			t.Error("Expected nonexistent directory to return false")
+		}
+
+		branch, hash, isClean := GetGitInfoWithStatus(invalidDir)
+		if branch != "" || hash != "" || isClean {
+			t.Errorf("Expected empty git info for invalid directory, got branch=%s, hash=%s, isClean=%v", branch, hash, isClean)
+		}
+	})
+}
+
 // Helper functions
 
 // isGitAvailable checks if git command is available in the system

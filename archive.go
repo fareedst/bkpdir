@@ -20,14 +20,16 @@ import (
 
 // ArchiveNameConfig holds configuration for generating archive names.
 type ArchiveNameConfig struct {
-	Prefix        string
-	Timestamp     string
-	GitBranch     string
-	GitHash       string
-	Note          string
-	IsGit         bool
-	IsIncremental bool
-	BaseName      string
+	Prefix             string
+	Timestamp          string
+	GitBranch          string
+	GitHash            string
+	GitIsClean         bool
+	ShowGitDirtyStatus bool
+	Note               string
+	IsGit              bool
+	IsIncremental      bool
+	BaseName           string
 }
 
 // Archive represents a directory archive with metadata including name, path,
@@ -85,6 +87,9 @@ func generateIncrementalArchiveName(cfg ArchiveNameConfig) string {
 	name := baseName + "_update=" + cfg.Timestamp
 	if cfg.IsGit && cfg.GitBranch != "" && cfg.GitHash != "" {
 		name += "=" + cfg.GitBranch + "=" + cfg.GitHash
+		if !cfg.GitIsClean && cfg.ShowGitDirtyStatus {
+			name += "-dirty"
+		}
 	}
 	if cfg.Note != "" {
 		name += "=" + cfg.Note
@@ -107,6 +112,9 @@ func generateFullArchiveNameFromConfig(cfg ArchiveNameConfig) string {
 
 	if cfg.IsGit && cfg.GitBranch != "" && cfg.GitHash != "" {
 		name += "=" + cfg.GitBranch + "=" + cfg.GitHash
+		if !cfg.GitIsClean && cfg.ShowGitDirtyStatus {
+			name += "-dirty"
+		}
 	}
 
 	if cfg.Note != "" {
@@ -118,16 +126,16 @@ func generateFullArchiveNameFromConfig(cfg ArchiveNameConfig) string {
 
 // ARCH-001: Archive naming with Git integration
 // GIT-001: Git information extraction for naming
+// GIT-003: Git status detection for naming
 // IMMUTABLE-REF: Archive Naming Convention, Git Integration Requirements
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
 // generateFullArchiveName generates the name for a full archive.
 func generateFullArchiveName(cfg *Config, cwd, note string) (string, error) {
 	isGit := IsGitRepository(cwd)
-	gitBranch, gitHash := "", ""
+	gitBranch, gitHash, gitIsClean := "", "", false
 	if isGit && cfg.IncludeGitInfo {
-		gitBranch = GetGitBranch(cwd)
-		gitHash = GetGitShortHash(cwd)
+		gitBranch, gitHash, gitIsClean = GetGitInfoWithStatus(cwd)
 	}
 
 	timestamp := time.Now().Format("2006-01-02-15-04")
@@ -137,13 +145,15 @@ func generateFullArchiveName(cfg *Config, cwd, note string) (string, error) {
 	}
 
 	nameCfg := ArchiveNameConfig{
-		Prefix:        prefix,
-		Timestamp:     timestamp,
-		GitBranch:     gitBranch,
-		GitHash:       gitHash,
-		Note:          note,
-		IsGit:         isGit && cfg.IncludeGitInfo,
-		IsIncremental: false,
+		Prefix:             prefix,
+		Timestamp:          timestamp,
+		GitBranch:          gitBranch,
+		GitHash:            gitHash,
+		GitIsClean:         gitIsClean,
+		ShowGitDirtyStatus: cfg.ShowGitDirtyStatus,
+		Note:               note,
+		IsGit:              isGit && cfg.IncludeGitInfo,
+		IsIncremental:      false,
 	}
 
 	return GenerateArchiveName(nameCfg), nil
@@ -503,22 +513,23 @@ func collectModifiedFiles(cwd string, latestFullArchive *Archive, excludePattern
 func prepareIncrementalArchive(
 	cwd string, latestFullArchive *Archive, cfg *Config, note string) (string, error) {
 	isGit := IsGitRepository(cwd)
-	gitBranch, gitHash := "", ""
+	gitBranch, gitHash, gitIsClean := "", "", false
 	if isGit && cfg.IncludeGitInfo {
-		gitBranch = GetGitBranch(cwd)
-		gitHash = GetGitShortHash(cwd)
+		gitBranch, gitHash, gitIsClean = GetGitInfoWithStatus(cwd)
 	}
 
 	timestamp := time.Now().Format("2006-01-02-15-04")
 	nameCfg := ArchiveNameConfig{
-		Prefix:        "",
-		Timestamp:     timestamp,
-		GitBranch:     gitBranch,
-		GitHash:       gitHash,
-		Note:          note,
-		IsGit:         isGit && cfg.IncludeGitInfo,
-		IsIncremental: true,
-		BaseName:      latestFullArchive.Name,
+		Prefix:             "",
+		Timestamp:          timestamp,
+		GitBranch:          gitBranch,
+		GitHash:            gitHash,
+		GitIsClean:         gitIsClean,
+		ShowGitDirtyStatus: cfg.ShowGitDirtyStatus,
+		Note:               note,
+		IsGit:              isGit && cfg.IncludeGitInfo,
+		IsIncremental:      true,
+		BaseName:           latestFullArchive.Name,
 	}
 	archiveName := GenerateArchiveName(nameCfg)
 	archivePath := filepath.Join(cfg.ArchiveDirPath, archiveName)

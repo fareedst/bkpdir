@@ -41,11 +41,12 @@ type VerificationConfig struct {
 // The configuration can be loaded from YAML files and environment variables.
 type Config struct {
 	// Basic settings
-	ArchiveDirPath    string              `yaml:"archive_dir_path"`
-	UseCurrentDirName bool                `yaml:"use_current_dir_name"`
-	ExcludePatterns   []string            `yaml:"exclude_patterns"`
-	IncludeGitInfo    bool                `yaml:"include_git_info"`
-	Verification      *VerificationConfig `yaml:"verification"`
+	ArchiveDirPath     string              `yaml:"archive_dir_path"`
+	UseCurrentDirName  bool                `yaml:"use_current_dir_name"`
+	ExcludePatterns    []string            `yaml:"exclude_patterns"`
+	IncludeGitInfo     bool                `yaml:"include_git_info"`
+	ShowGitDirtyStatus bool                `yaml:"show_git_dirty_status"`
+	Verification       *VerificationConfig `yaml:"verification"`
 
 	// File backup settings
 	BackupDirPath             string `yaml:"backup_dir_path"`
@@ -206,10 +207,11 @@ const (
 func DefaultConfig() *Config {
 	return &Config{
 		// Basic settings
-		ArchiveDirPath:    "../.bkpdir",
-		UseCurrentDirName: true,
-		ExcludePatterns:   []string{".git/", "vendor/"},
-		IncludeGitInfo:    true,
+		ArchiveDirPath:     "../.bkpdir",
+		UseCurrentDirName:  true,
+		ExcludePatterns:    []string{".git/", "vendor/"},
+		IncludeGitInfo:     false,
+		ShowGitDirtyStatus: true,
 		Verification: &VerificationConfig{
 			VerifyOnCreate:    false,
 			ChecksumAlgorithm: "sha256",
@@ -449,6 +451,9 @@ func mergeBasicSettings(dst, src *Config) {
 	}
 	if src.IncludeGitInfo != DefaultConfig().IncludeGitInfo {
 		dst.IncludeGitInfo = src.IncludeGitInfo
+	}
+	if src.ShowGitDirtyStatus != DefaultConfig().ShowGitDirtyStatus {
+		dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
 	}
 	if src.Verification != nil {
 		dst.Verification = src.Verification

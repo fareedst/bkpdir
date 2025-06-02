@@ -32,7 +32,7 @@ func TestDefaultConfig(t *testing.T) {
 		assertStringEqual(t, "ArchiveDirPath", cfg.ArchiveDirPath, defaultArchiveDir)
 		assertBoolEqual(t, "UseCurrentDirName", cfg.UseCurrentDirName, true)
 		assertStringSliceEqual(t, "ExcludePatterns", cfg.ExcludePatterns, defaultExcludePatterns)
-		assertBoolEqual(t, "IncludeGitInfo", cfg.IncludeGitInfo, true)
+		assertBoolEqual(t, "IncludeGitInfo", cfg.IncludeGitInfo, false)
 
 		// Test verification config
 		if cfg.Verification == nil {

@@ -85,3 +85,37 @@ func GetGitInfo(dir string) (branch, hash string) {
 	}
 	return GetGitBranch(dir), GetGitShortHash(dir)
 }
+
+// GIT-003: Git working directory state detection
+// IMMUTABLE-REF: Git Integration Requirements
+// TEST-REF: TestGitStatus
+// DECISION-REF: DEC-005
+// IsGitWorkingDirectoryClean checks if the Git working directory is clean (no uncommitted changes).
+// It returns true if the working directory is clean, false if there are changes or not in a Git repository.
+func IsGitWorkingDirectoryClean(dir string) bool {
+	if !IsGitRepository(dir) {
+		return false
+	}
+
+	cmd := exec.Command("git", "status", "--porcelain")
+	cmd.Dir = dir
+	out, err := cmd.Output()
+	if err != nil {
+		return false
+	}
+
+	return len(strings.TrimSpace(string(out))) == 0
+}
+
+// GIT-003: Combined Git information extraction with status
+// IMMUTABLE-REF: Git Integration Requirements
+// TEST-REF: TestGitStatus
+// DECISION-REF: DEC-005
+// GetGitInfoWithStatus returns branch name, commit hash, and working directory status.
+// It returns empty strings and false for status if not in a Git repository or on error.
+func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
+	if !IsGitRepository(dir) {
+		return "", "", false
+	}
+	return GetGitBranch(dir), GetGitShortHash(dir), IsGitWorkingDirectoryClean(dir)
+}
