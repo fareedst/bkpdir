@@ -15,14 +15,109 @@ import (
 	"text/template"
 )
 
+// OUT-001: Delayed output management
+// OutputMessage represents a message that can be displayed later
+type OutputMessage struct {
+	Content     string
+	Destination string // "stdout" or "stderr"
+	Type        string // "info", "error", "warning", etc.
+}
+
+// OutputCollector collects output messages for delayed display
+type OutputCollector struct {
+	messages []OutputMessage
+}
+
+// NewOutputCollector creates a new OutputCollector
+func NewOutputCollector() *OutputCollector {
+	return &OutputCollector{
+		messages: make([]OutputMessage, 0),
+	}
+}
+
+// AddStdout adds a stdout message to the collector
+func (oc *OutputCollector) AddStdout(content, messageType string) {
+	// OUT-001: Delayed output implementation
+	oc.messages = append(oc.messages, OutputMessage{
+		Content:     content,
+		Destination: "stdout",
+		Type:        messageType,
+	})
+}
+
+// AddStderr adds a stderr message to the collector
+func (oc *OutputCollector) AddStderr(content, messageType string) {
+	// OUT-001: Delayed output implementation
+	oc.messages = append(oc.messages, OutputMessage{
+		Content:     content,
+		Destination: "stderr",
+		Type:        messageType,
+	})
+}
+
+// GetMessages returns all collected messages
+func (oc *OutputCollector) GetMessages() []OutputMessage {
+	// OUT-001: Delayed output implementation
+	return oc.messages
+}
+
+// FlushAll displays all collected messages and clears the collector
+func (oc *OutputCollector) FlushAll() {
+	// OUT-001: Delayed output implementation
+	for _, msg := range oc.messages {
+		if msg.Destination == "stderr" {
+			fmt.Fprint(os.Stderr, msg.Content)
+		} else {
+			fmt.Print(msg.Content)
+		}
+	}
+	oc.messages = make([]OutputMessage, 0)
+}
+
+// FlushStdout displays only stdout messages and removes them from the collector
+func (oc *OutputCollector) FlushStdout() {
+	// OUT-001: Delayed output implementation
+	remaining := make([]OutputMessage, 0)
+	for _, msg := range oc.messages {
+		if msg.Destination == "stdout" {
+			fmt.Print(msg.Content)
+		} else {
+			remaining = append(remaining, msg)
+		}
+	}
+	oc.messages = remaining
+}
+
+// FlushStderr displays only stderr messages and removes them from the collector
+func (oc *OutputCollector) FlushStderr() {
+	// OUT-001: Delayed output implementation
+	remaining := make([]OutputMessage, 0)
+	for _, msg := range oc.messages {
+		if msg.Destination == "stderr" {
+			fmt.Fprint(os.Stderr, msg.Content)
+		} else {
+			remaining = append(remaining, msg)
+		}
+	}
+	oc.messages = remaining
+}
+
+// Clear removes all collected messages without displaying them
+func (oc *OutputCollector) Clear() {
+	// OUT-001: Delayed output implementation
+	oc.messages = make([]OutputMessage, 0)
+}
+
 // CFG-003: Output formatting interface
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // OutputFormatter provides methods for formatting and printing output for BkpDir operations.
-// It supports both printf-style and template-based formatting.
+// It supports both printf-style and template-based formatting, with optional delayed output.
 type OutputFormatter struct {
-	cfg *Config
+	cfg       *Config
+	collector *OutputCollector // OUT-001: Optional output collector for delayed display
 }
 
 // CFG-003: Output formatter constructor
@@ -32,7 +127,32 @@ type OutputFormatter struct {
 // NewOutputFormatter creates a new OutputFormatter with the given configuration.
 // It initializes the formatter with the provided config for use in formatting operations.
 func NewOutputFormatter(cfg *Config) *OutputFormatter {
-	return &OutputFormatter{cfg: cfg}
+	return &OutputFormatter{cfg: cfg, collector: nil}
+}
+
+// OUT-001: Output formatter constructor with collector
+// NewOutputFormatterWithCollector creates a new OutputFormatter with delayed output support.
+// Messages will be collected in the provided OutputCollector instead of being printed immediately.
+func NewOutputFormatterWithCollector(cfg *Config, collector *OutputCollector) *OutputFormatter {
+	return &OutputFormatter{cfg: cfg, collector: collector}
+}
+
+// OUT-001: Check if formatter is in delayed output mode
+// IsDelayedMode returns true if the formatter is collecting output instead of printing immediately.
+func (f *OutputFormatter) IsDelayedMode() bool {
+	return f.collector != nil
+}
+
+// OUT-001: Get the output collector
+// GetCollector returns the OutputCollector if in delayed mode, nil otherwise.
+func (f *OutputFormatter) GetCollector() *OutputCollector {
+	return f.collector
+}
+
+// OUT-001: Set or remove the output collector
+// SetCollector sets the output collector for delayed output, or removes it if nil.
+func (f *OutputFormatter) SetCollector(collector *OutputCollector) {
+	f.collector = collector
 }
 
 // CFG-003: Printf-style archive creation formatting
@@ -99,100 +219,180 @@ func (f *OutputFormatter) FormatError(message string) string {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintCreatedArchive prints a created archive message to stdout.
 // It formats the message using FormatCreatedArchive and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintCreatedArchive(path string) {
-	fmt.Print(f.FormatCreatedArchive(path))
+	message := f.FormatCreatedArchive(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Output printing for identical archives
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintIdenticalArchive prints an identical archive message to stdout.
 // It formats the message using FormatIdenticalArchive and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintIdenticalArchive(path string) {
-	fmt.Print(f.FormatIdenticalArchive(path))
+	message := f.FormatIdenticalArchive(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Output printing for archive listings
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintListArchive prints a list archive message to stdout.
 // It formats the message using FormatListArchive and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintListArchive(path, creationTime string) {
-	fmt.Print(f.FormatListArchive(path, creationTime))
+	message := f.FormatListArchive(path, creationTime)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Output printing for configuration values
 // IMMUTABLE-REF: Output Formatting Requirements, Commands - Display Configuration
 // TEST-REF: TestDisplayConfig
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintConfigValue prints a config value message to stdout.
 // It formats the message using FormatConfigValue and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintConfigValue(name, value, source string) {
-	fmt.Print(f.FormatConfigValue(name, value, source))
+	message := f.FormatConfigValue(name, value, source)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "config")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Output printing for dry run operations
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintDryRunArchive prints a dry-run archive message to stdout.
 // It formats the message using FormatDryRunArchive and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintDryRunArchive(path string) {
-	fmt.Print(f.FormatDryRunArchive(path))
+	message := f.FormatDryRunArchive(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "dry-run")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Error output printing
 // IMMUTABLE-REF: Output Formatting Requirements, Error Handling Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintError prints an error message to stderr.
 // It formats the message using FormatError and writes it to stderr.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintError(message string) {
-	fmt.Fprint(os.Stderr, f.FormatError(message))
+	errorMessage := f.FormatError(message)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(errorMessage, "error")
+	} else {
+		fmt.Fprint(os.Stderr, errorMessage)
+	}
 }
 
 // CFG-003: Printf-style backup creation formatting
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintCreatedBackup prints a created backup message to stdout.
 // It formats the message using FormatCreatedBackup and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintCreatedBackup(path string) {
-	fmt.Print(f.FormatCreatedBackup(path))
+	message := f.FormatCreatedBackup(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Printf-style identical backup formatting
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintIdenticalBackup prints an identical backup message to stdout.
 // It formats the message using FormatIdenticalBackup and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintIdenticalBackup(path string) {
-	fmt.Print(f.FormatIdenticalBackup(path))
+	message := f.FormatIdenticalBackup(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Printf-style backup listing formatting
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintListBackup prints a list backup message to stdout.
 // It formats the message using FormatListBackup and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintListBackup(path, creationTime string) {
-	fmt.Print(f.FormatListBackup(path, creationTime))
+	message := f.FormatListBackup(path, creationTime)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Printf-style backup dry run formatting
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// OUT-001: Enhanced with delayed output support
 // PrintDryRunBackup prints a dry-run backup message to stdout.
 // It formats the message using FormatDryRunBackup and writes it to stdout.
+// If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintDryRunBackup(path string) {
-	fmt.Print(f.FormatDryRunBackup(path))
+	message := f.FormatDryRunBackup(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "dry-run")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-003: Regex pattern data extraction for archives
@@ -991,61 +1191,159 @@ func (f *OutputFormatter) FormatBackupCreatedTemplate(data map[string]string) st
 
 // Print methods for CFG-004 format strings
 // CFG-004: Print methods for archive operations
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintNoArchivesFound(archiveDir string) {
-	fmt.Print(f.FormatNoArchivesFound(archiveDir))
+	message := f.FormatNoArchivesFound(archiveDir)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintVerificationFailed(archiveName string, err error) {
-	fmt.Print(f.FormatVerificationFailed(archiveName, err))
+	message := f.FormatVerificationFailed(archiveName, err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "error")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintVerificationSuccess(archiveName string) {
-	fmt.Print(f.FormatVerificationSuccess(archiveName))
+	message := f.FormatVerificationSuccess(archiveName)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintVerificationWarning(archiveName string, err error) {
-	fmt.Print(f.FormatVerificationWarning(archiveName, err))
+	message := f.FormatVerificationWarning(archiveName, err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "warning")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintConfigurationUpdated(key string, value interface{}) {
-	fmt.Print(f.FormatConfigurationUpdated(key, value))
+	message := f.FormatConfigurationUpdated(key, value)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "config")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintConfigFilePath(path string) {
-	fmt.Print(f.FormatConfigFilePath(path))
+	message := f.FormatConfigFilePath(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "config")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintDryRunFilesHeader() {
-	fmt.Print(f.FormatDryRunFilesHeader())
+	message := f.FormatDryRunFilesHeader()
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "dry-run")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintDryRunFileEntry(file string) {
-	fmt.Print(f.FormatDryRunFileEntry(file))
+	message := f.FormatDryRunFileEntry(file)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "dry-run")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintNoFilesModified() {
-	fmt.Print(f.FormatNoFilesModified())
+	message := f.FormatNoFilesModified()
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintIncrementalCreated(path string) {
-	fmt.Print(f.FormatIncrementalCreated(path))
+	message := f.FormatIncrementalCreated(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-004: Print methods for backup operations
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintNoBackupsFound(filename, backupDir string) {
-	fmt.Print(f.FormatNoBackupsFound(filename, backupDir))
+	message := f.FormatNoBackupsFound(filename, backupDir)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintBackupWouldCreate(path string) {
-	fmt.Print(f.FormatBackupWouldCreate(path))
+	message := f.FormatBackupWouldCreate(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "dry-run")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintBackupIdentical(path string) {
-	fmt.Print(f.FormatBackupIdentical(path))
+	message := f.FormatBackupIdentical(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintBackupCreated(path string) {
-	fmt.Print(f.FormatBackupCreated(path))
+	message := f.FormatBackupCreated(path)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-004: Error message formatting methods
@@ -1207,72 +1505,170 @@ func (f *OutputFormatter) TemplateFailedAccessFile(err error) string {
 }
 
 // CFG-004: Print methods for error messages
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintDiskFullError(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatDiskFullError(err))
+	message := f.FormatDiskFullError(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintPermissionError(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatPermissionError(err))
+	message := f.FormatPermissionError(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintDirectoryNotFound(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatDirectoryNotFound(err))
+	message := f.FormatDirectoryNotFound(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFileNotFound(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFileNotFound(err))
+	message := f.FormatFileNotFound(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintInvalidDirectory(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatInvalidDirectory(err))
+	message := f.FormatInvalidDirectory(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintInvalidFile(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatInvalidFile(err))
+	message := f.FormatInvalidFile(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFailedWriteTemp(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFailedWriteTemp(err))
+	message := f.FormatFailedWriteTemp(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFailedFinalizeFile(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFailedFinalizeFile(err))
+	message := f.FormatFailedFinalizeFile(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFailedCreateDirDisk(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFailedCreateDirDisk(err))
+	message := f.FormatFailedCreateDirDisk(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFailedCreateDir(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFailedCreateDir(err))
+	message := f.FormatFailedCreateDir(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFailedAccessDir(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFailedAccessDir(err))
+	message := f.FormatFailedAccessDir(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintFailedAccessFile(err error) {
 	// CFG-004: Implementation token
-	fmt.Fprint(os.Stderr, f.FormatFailedAccessFile(err))
+	message := f.FormatFailedAccessFile(err)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStderr(message, "error")
+	} else {
+		fmt.Fprint(os.Stderr, message)
+	}
 }
 
 // CFG-004: Print method for verification error details
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintVerificationErrorDetail(errMsg string) {
-	fmt.Printf("  - %s\n", errMsg)
+	message := fmt.Sprintf("  - %s\n", errMsg)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "error")
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // CFG-004: Print method for archive list with status
+// OUT-001: Enhanced with delayed output support
 func (f *OutputFormatter) PrintArchiveListWithStatus(output, status string) {
-	fmt.Printf("%s%s\n", output, status)
+	message := fmt.Sprintf("%s%s\n", output, status)
+	if f.collector != nil {
+		// OUT-001: Delayed output implementation
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
 }

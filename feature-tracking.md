@@ -24,3 +24,35 @@
   - Maintained full backward compatibility with existing format strings
   - All error messages now use OutputFormatter methods instead of hardcoded strings
 - **Testing**: Manual compilation successful, all existing functionality preserved 
+
+### OUT-001: Delayed Output Management
+- **Status**: COMPLETED
+- **Priority**: Medium
+- **Description**: Implement delayed output functionality by returning output messages to calling functions instead of direct stdout/stderr printing, enabling better control over when and how output is displayed.
+- **Requirements**: 
+  - Return formatted messages from formatter methods instead of direct printing
+  - Maintain backward compatibility with existing Print methods
+  - Support buffering of multiple output messages
+  - Enable calling functions to control output timing and destination
+- **Implementation Areas**:
+  - OutputFormatter methods - modify to return strings instead of direct printing
+  - Command handlers - collect and manage output messages
+  - Error handling - return error messages for delayed display
+  - Archive and backup operations - return operation result messages
+- **Design Decisions**:
+  - Dual-mode approach: keep existing Print methods for backward compatibility
+  - Add new Format methods that return strings without printing
+  - Calling functions decide when to display collected messages
+  - Preserve current error vs stdout routing behavior
+- **Files Modified**:
+  - `formatter.go` - Added OutputCollector and OutputMessage types, enhanced OutputFormatter with delayed output support
+- **Implementation Details**:
+  - Added OutputMessage struct with Content, Destination, and Type fields
+  - Added OutputCollector with methods: AddStdout, AddStderr, FlushAll, FlushStdout, FlushStderr, Clear
+  - Enhanced OutputFormatter with optional collector field and delayed mode support
+  - Added NewOutputFormatterWithCollector constructor for delayed output mode
+  - Updated all Print methods to check for collector and route messages accordingly
+  - Maintained full backward compatibility - existing code works unchanged
+  - Added utility methods: IsDelayedMode, GetCollector, SetCollector
+- **Testing**: Manual compilation successful, application runs correctly with delayed output functionality
+- **Implementation Tokens**: `// OUT-001: Delayed output` 
