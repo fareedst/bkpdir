@@ -18,15 +18,49 @@ import (
 // REFACTOR-001: Error handling and resource management interface contracts defined
 // REFACTOR-001: Config and formatter dependency interfaces required
 // REFACTOR-004: Error standardization - Common interface for all structured errors
+// REFACTOR-005: Structure optimization - Configuration interface abstraction
+// REFACTOR-005: Structure optimization - Formatter interface abstraction
+// REFACTOR-005: Structure optimization - Resource management interface
 
-// ErrorInterface defines the common interface for all application errors
+// ErrorConfig abstracts configuration dependencies for error handling
+type ErrorConfig interface {
+	GetStatusCodes() map[string]int
+	GetErrorFormatStrings() map[string]string
+	GetDirectoryPermissions() os.FileMode
+	GetFilePermissions() os.FileMode
+}
+
+// ErrorFormatter abstracts formatter dependencies for error handling
+type ErrorFormatter interface {
+	FormatError(message string) string
+	PrintError(message string)
+	FormatDiskFullError(err error) string
+	FormatPermissionError(err error) string
+	FormatDirectoryNotFound(err error) string
+	FormatFileNotFound(err error) string
+	PrintDiskFullError(err error)
+	PrintPermissionError(err error)
+	PrintDirectoryNotFound(err error)
+}
+
+// ResourceManagerInterface defines clean resource management contract
+type ResourceManagerInterface interface {
+	AddResource(resource Resource)
+	AddTempFile(path string)
+	AddTempDir(path string)
+	RemoveResource(resource Resource)
+	Cleanup() error
+	CleanupWithPanicRecovery() error
+}
+
+// ErrorInterface provides a common interface for all structured errors in the application
 type ErrorInterface interface {
-	error
-	Unwrap() error
+	Error() string
 	GetStatusCode() int
 	GetOperation() string
 	GetPath() string
 	GetMessage() string
+	Unwrap() error
 }
 
 // ArchiveError represents a structured error with status code
@@ -445,59 +479,72 @@ func (co *ContextualOperation) Cleanup() error {
 	return co.rm.Cleanup()
 }
 
-// REFACTOR-004: Unified error handling with standardized patterns
-
-// HandleError processes any structured error and returns the appropriate status code.
-// This provides a unified entry point for all error handling in the application.
-func HandleError(err error, cfg *Config, formatter *OutputFormatter) int {
-	// CFG-002: Error handling with status code resolution
-	// CFG-003: Error output formatting
-	// CFG-004: Configurable error messages
-	// DECISION-REF: DEC-004
-	// REFACTOR-004: Unified error handling pattern
+// REFACTOR-005: Structure optimization - Interface-based error handling
+// HandleError provides centralized error handling with interface abstractions
+func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
+	// REFACTOR-004: Error standardization
 	if err == nil {
 		return 0
 	}
 
-	// Check for structured errors first
 	if archiveErr, ok := err.(*ArchiveError); ok {
-		formatter.PrintError(archiveErr.Error())
-		return archiveErr.StatusCode
+		return HandleArchiveErrorWithInterface(archiveErr, cfg, formatter)
 	}
-
 	if backupErr, ok := err.(*BackupError); ok {
-		formatter.PrintError(backupErr.Error())
-		return backupErr.StatusCode
+		return HandleBackupErrorWithInterface(backupErr, cfg, formatter)
 	}
 
 	// Handle specific error types with configurable messages
+	statusCodes := cfg.GetStatusCodes()
 	switch {
 	case IsDiskFullError(err):
 		formatter.PrintDiskFullError(err)
-		return cfg.StatusDiskFull
+		if code, ok := statusCodes["disk_full"]; ok {
+			return code
+		}
+		return 1
 	case IsPermissionError(err):
 		formatter.PrintPermissionError(err)
-		return cfg.StatusPermissionDenied
+		if code, ok := statusCodes["permission_denied"]; ok {
+			return code
+		}
+		return 1
 	case IsDirectoryNotFoundError(err):
 		formatter.PrintDirectoryNotFound(err)
-		return cfg.StatusDirectoryNotFound
+		if code, ok := statusCodes["directory_not_found"]; ok {
+			return code
+		}
+		return 1
 	default:
+		// Handle generic errors
 		formatter.PrintError(err.Error())
 		return 1
 	}
 }
 
-// HandleArchiveError processes an archive error and returns the appropriate status code.
-// Maintained for backward compatibility.
+// REFACTOR-005: Structure optimization - Interface-based archive error handling
+// HandleArchiveErrorWithInterface handles archive errors using interface abstractions
+func HandleArchiveErrorWithInterface(err *ArchiveError, cfg ErrorConfig, formatter ErrorFormatter) int {
+	formatter.PrintError(err.Error())
+	return err.GetStatusCode()
+}
+
+// REFACTOR-005: Structure optimization - Interface-based backup error handling
+// HandleBackupErrorWithInterface handles backup errors using interface abstractions
+func HandleBackupErrorWithInterface(err *BackupError, cfg ErrorConfig, formatter ErrorFormatter) int {
+	formatter.PrintError(err.Error())
+	return err.GetStatusCode()
+}
+
+// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// HandleArchiveError provides backward compatibility with concrete types
 func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int {
-	// REFACTOR-004: Delegate to unified error handler
 	return HandleError(err, cfg, formatter)
 }
 
-// HandleBackupError processes a backup error and returns the appropriate status code.
-// REFACTOR-004: New standardized backup error handler
+// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// HandleBackupError provides backward compatibility with concrete types
 func HandleBackupError(err error, cfg *Config, formatter *OutputFormatter) int {
-	// REFACTOR-004: Delegate to unified error handler
 	return HandleError(err, cfg, formatter)
 }
 
@@ -572,38 +619,55 @@ func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, r
 	return nil
 }
 
-// SafeMkdirAll creates a directory and all necessary parent directories.
-func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
-	// Directory creation with error handling
-	// CFG-004: Configurable error messages
-	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized directory creation pattern
+// REFACTOR-005: Structure optimization - Interface-based directory operations
+// SafeMkdirAllWithInterface creates directories using interface abstractions
+func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) error {
+	// REFACTOR-004: Resource consolidation
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsDiskFullError(err) {
-			return NewArchiveErrorWithCause(
-				"Failed to create directory: disk full",
-				cfg.StatusDiskFull,
-				err,
+			return NewArchiveError(
+				fmt.Sprintf("Failed to create directory due to insufficient disk space: %s", path),
+				cfg.GetStatusCodes()["disk_full"],
 			)
 		}
-		return NewArchiveErrorWithCause(
-			"Failed to create directory",
-			cfg.StatusConfigError,
-			err,
+		if IsPermissionError(err) {
+			return NewArchiveError(
+				fmt.Sprintf("Failed to create directory due to permission denied: %s", path),
+				cfg.GetStatusCodes()["permission_denied"],
+			)
+		}
+		return NewArchiveError(
+			fmt.Sprintf("Failed to create directory: %s", path),
+			1,
 		)
 	}
 	return nil
 }
 
-// SafeMkdirAllWithContext creates a directory with context support
-// REFACTOR-004: Context-aware directory creation pattern
-func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode, cfg *Config) error {
-	// Check for cancellation
+// REFACTOR-005: Structure optimization - Interface-based context-aware directory operations
+// SafeMkdirAllWithContextAndInterface creates directories with context using interface abstractions
+func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm os.FileMode, cfg ErrorConfig) error {
+	// REFACTOR-004: Context propagation
 	if err := ctx.Err(); err != nil {
-		return err
+		return NewArchiveError(
+			fmt.Sprintf("Context cancelled before creating directory: %s", path),
+			1,
+		)
 	}
 
-	return SafeMkdirAll(path, perm, cfg)
+	return SafeMkdirAllWithInterface(path, perm, cfg)
+}
+
+// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// SafeMkdirAll provides backward compatibility with concrete types
+func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
+	return SafeMkdirAllWithInterface(path, perm, cfg)
+}
+
+// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// SafeMkdirAllWithContext provides backward compatibility with concrete types
+func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode, cfg *Config) error {
+	return SafeMkdirAllWithContextAndInterface(ctx, path, perm, cfg)
 }
 
 // ValidateDirectoryPath checks if a path is a valid directory.

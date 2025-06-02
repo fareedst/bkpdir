@@ -57,7 +57,22 @@ type Archive struct {
 // ArchiveVerificationOptions holds configuration for archive verification
 type ArchiveVerificationOptions struct {
 	Path   string
-	Config *Config
+	Config ArchiveConfigInterface
+}
+
+// REFACTOR-005: Structure optimization - Interface-based configuration abstraction
+// ArchiveConfigInterface abstracts configuration dependencies for archive operations
+type ArchiveConfigInterface interface {
+	GetArchiveDirPath() string
+	GetUseCurrentDirName() bool
+	GetExcludePatterns() []string
+	GetIncludeGitInfo() bool
+	GetShowGitDirtyStatus() bool
+	GetVerification() *VerificationConfig
+	GetStatusCodes() map[string]int
+	GetStatusDirectoryNotFound() int
+	GetStatusDiskFull() int
+	GetStatusConfigError() int
 }
 
 // REFACTOR-005: Structure optimization - Interface-ready configuration
@@ -67,9 +82,95 @@ type ArchiveCreationOptions struct {
 	CWD         string
 	Path        string
 	Files       []string
-	Config      *Config
+	Config      ArchiveConfigInterface
 	Verify      bool
 	ResourceMgr *ResourceManager
+}
+
+// REFACTOR-005: Structure optimization - Interface-based formatter abstraction
+// ArchiveFormatterInterface abstracts formatter dependencies for archive operations
+type ArchiveFormatterInterface interface {
+	PrintDryRunFilesHeader()
+	PrintDryRunFileEntry(file string)
+	PrintDryRunArchive(path string)
+	PrintIncrementalCreated(path string)
+}
+
+// REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility
+// ConfigToArchiveConfigAdapter adapts Config to ArchiveConfigInterface
+type ConfigToArchiveConfigAdapter struct {
+	cfg *Config
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetArchiveDirPath() string {
+	return a.cfg.ArchiveDirPath
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetUseCurrentDirName() bool {
+	return a.cfg.UseCurrentDirName
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetExcludePatterns() []string {
+	return a.cfg.ExcludePatterns
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetIncludeGitInfo() bool {
+	return a.cfg.IncludeGitInfo
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetShowGitDirtyStatus() bool {
+	return a.cfg.ShowGitDirtyStatus
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetVerification() *VerificationConfig {
+	return a.cfg.Verification
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetStatusCodes() map[string]int {
+	return a.cfg.GetStatusCodes()
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetStatusDirectoryNotFound() int {
+	return a.cfg.StatusDirectoryNotFound
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetStatusDiskFull() int {
+	return a.cfg.StatusDiskFull
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetStatusConfigError() int {
+	return a.cfg.StatusConfigError
+}
+
+// REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility
+// OutputFormatterToArchiveFormatterAdapter adapts OutputFormatter to ArchiveFormatterInterface
+type OutputFormatterToArchiveFormatterAdapter struct {
+	formatter *OutputFormatter
+}
+
+func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunFilesHeader() {
+	a.formatter.PrintDryRunFilesHeader()
+}
+
+func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunFileEntry(file string) {
+	a.formatter.PrintDryRunFileEntry(file)
+}
+
+func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunArchive(path string) {
+	a.formatter.PrintDryRunArchive(path)
+}
+
+func (a *OutputFormatterToArchiveFormatterAdapter) PrintIncrementalCreated(path string) {
+	a.formatter.PrintIncrementalCreated(path)
+}
+
+// REFACTOR-005: Extraction preparation - Interface-based archive name generation
+// GenerateArchiveNameWithInterface creates an archive name using interface abstractions
+func GenerateArchiveNameWithInterface(cfg ArchiveConfig) string {
+	if cfg.IsIncremental && cfg.BaseName != "" {
+		return generateIncrementalArchiveName(cfg)
+	}
+	return generateFullArchiveNameFromConfig(cfg)
 }
 
 // ARCH-001: Archive naming convention implementation
@@ -302,17 +403,20 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 	rm := NewResourceManager()
 	defer rm.CleanupWithPanicRecovery()
 
-	archiveDir, err := prepareArchiveDirectory(cfg, cwd, dryRun)
+	// REFACTOR-005: Structure optimization - Use interface adapter for reduced coupling
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+
+	archiveDir, err := prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)
 	if err != nil {
 		return err
 	}
 
-	files, err := collectFilesToArchive(ctx, cwd, cfg.ExcludePatterns)
+	files, err := collectFilesToArchiveWithInterface(ctx, cwd, archiveConfig.GetExcludePatterns())
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to scan directory", 1, err)
 	}
 
-	archiveName, err := generateFullArchiveName(cfg, cwd, note)
+	archiveName, err := generateFullArchiveNameWithInterface(archiveConfig, cwd, note)
 	if err != nil {
 		return err
 	}
@@ -320,7 +424,7 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 	archivePath := filepath.Join(archiveDir, archiveName)
 
 	if dryRun {
-		printDryRunInfo(files, archivePath, cfg)
+		printDryRunInfoWithInterface(files, archivePath, archiveConfig)
 		return nil
 	}
 
@@ -329,34 +433,138 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 		CWD:         cwd,
 		Path:        archivePath,
 		Files:       files,
-		Config:      cfg,
+		Config:      archiveConfig,
 		Verify:      verify,
 		ResourceMgr: rm,
 	})
 }
 
-// prepareArchiveDirectory prepares the archive directory.
-func prepareArchiveDirectory(cfg *Config, cwd string, dryRun bool) (string, error) {
-	archiveDir := cfg.ArchiveDirPath
-	if cfg.UseCurrentDirName {
+// REFACTOR-005: Structure optimization - Interface-based directory preparation
+// prepareArchiveDirectoryWithInterface prepares the archive directory using interface abstractions
+func prepareArchiveDirectoryWithInterface(cfg ArchiveConfigInterface, cwd string, dryRun bool) (string, error) {
+	archiveDir := cfg.GetArchiveDirPath()
+	if cfg.GetUseCurrentDirName() {
 		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
 	}
 	if !dryRun {
-		if err := SafeMkdirAll(archiveDir, 0755, cfg); err != nil {
-			return "", err
+		// Use the interface's config for SafeMkdirAll
+		if concreteCfg, ok := cfg.(*ConfigToArchiveConfigAdapter); ok {
+			if err := SafeMkdirAll(archiveDir, 0755, concreteCfg.cfg); err != nil {
+				return "", err
+			}
+		} else {
+			// Fallback: create directory without config-specific error handling
+			if err := os.MkdirAll(archiveDir, 0755); err != nil {
+				return "", NewArchiveError(fmt.Sprintf("Failed to create directory: %s", archiveDir), 1)
+			}
 		}
 	}
 	return archiveDir, nil
 }
 
-// printDryRunInfo prints information about what would be archived.
-func printDryRunInfo(files []string, archivePath string, cfg *Config) {
-	formatter := NewOutputFormatter(cfg)
-	formatter.PrintDryRunFilesHeader()
-	for _, f := range files {
-		formatter.PrintDryRunFileEntry(f)
+// REFACTOR-005: Structure optimization - Interface-based file collection
+// collectFilesToArchiveWithInterface walks the directory and collects files to archive using interface abstractions
+func collectFilesToArchiveWithInterface(ctx context.Context, cwd string, excludePatterns []string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(cwd, func(path string, info os.FileInfo, err error) error {
+		if err := checkContextCancellation(ctx); err != nil {
+			return err
+		}
+
+		if err != nil {
+			return err
+		}
+
+		rel, err := filepath.Rel(cwd, path)
+		if err != nil {
+			return err
+		}
+
+		if rel == "." || info.IsDir() || ShouldExcludeFile(rel, excludePatterns) {
+			return nil
+		}
+
+		files = append(files, rel)
+		return nil
+	})
+	return files, err
+}
+
+// REFACTOR-005: Structure optimization - Interface-based archive name generation
+// generateFullArchiveNameWithInterface creates a full archive name using interface abstractions
+func generateFullArchiveNameWithInterface(cfg ArchiveConfigInterface, cwd string, note string) (string, error) {
+	timestamp := time.Now().Format("2006-01-02-15-04")
+	prefix := filepath.Base(cwd)
+
+	archiveConfig := ArchiveConfig{
+		Prefix:             prefix,
+		Timestamp:          timestamp,
+		Note:               note,
+		ShowGitDirtyStatus: cfg.GetShowGitDirtyStatus(),
 	}
-	formatter.PrintDryRunArchive(archivePath)
+
+	if cfg.GetIncludeGitInfo() {
+		if IsGitRepository(cwd) {
+			branch, hash, isClean := GetGitInfoWithStatus(cwd)
+			archiveConfig.IsGit = true
+			archiveConfig.GitBranch = branch
+			archiveConfig.GitHash = hash
+			archiveConfig.GitIsClean = isClean
+		}
+	}
+
+	return GenerateArchiveNameWithInterface(archiveConfig), nil
+}
+
+// REFACTOR-005: Structure optimization - Interface-based dry run printing
+// printDryRunInfoWithInterface prints information about what would be archived using interface abstractions
+func printDryRunInfoWithInterface(files []string, archivePath string, cfg ArchiveConfigInterface) {
+	// Use the adapter to get the original config for OutputFormatter
+	if concreteCfg, ok := cfg.(*ConfigToArchiveConfigAdapter); ok {
+		formatter := NewOutputFormatter(concreteCfg.cfg)
+		archiveFormatter := &OutputFormatterToArchiveFormatterAdapter{formatter: formatter}
+
+		archiveFormatter.PrintDryRunFilesHeader()
+		for _, f := range files {
+			archiveFormatter.PrintDryRunFileEntry(f)
+		}
+		archiveFormatter.PrintDryRunArchive(archivePath)
+	}
+}
+
+// REFACTOR-005: Structure optimization - Interface-based verification
+// verifyArchiveWithInterface verifies an archive using interface abstractions
+func verifyArchiveWithInterface(cfg ArchiveVerificationOptions) error {
+	status, err := VerifyArchive(cfg.Path)
+	if err != nil {
+		return NewArchiveErrorWithCause(
+			"Archive verification failed",
+			cfg.Config.GetStatusConfigError(),
+			err,
+		)
+	}
+	if !status.IsVerified {
+		return NewArchiveErrorWithCause(
+			"Archive verification failed",
+			cfg.Config.GetStatusConfigError(),
+			fmt.Errorf("verification errors: %v", status.Errors),
+		)
+	}
+	return nil
+}
+
+// prepareArchiveDirectory prepares the archive directory (backward compatibility).
+func prepareArchiveDirectory(cfg *Config, cwd string, dryRun bool) (string, error) {
+	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+	return prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)
+}
+
+// printDryRunInfo prints information about what would be archived (backward compatibility).
+func printDryRunInfo(files []string, archivePath string, cfg *Config) {
+	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+	printDryRunInfoWithInterface(files, archivePath, archiveConfig)
 }
 
 // createAndVerifyArchive creates and verifies an archive.
@@ -367,7 +575,7 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	if err := createZipArchiveWithContext(cfg.Context, cfg.CWD, tempFile, cfg.Files); err != nil {
 		return NewArchiveErrorWithCause(
 			"Failed to create archive",
-			cfg.Config.StatusDiskFull,
+			cfg.Config.GetStatusDiskFull(),
 			err,
 		)
 	}
@@ -375,7 +583,7 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	if err := os.Rename(tempFile, cfg.Path); err != nil {
 		return NewArchiveErrorWithCause(
 			"Failed to finalize archive",
-			cfg.Config.StatusDiskFull,
+			cfg.Config.GetStatusDiskFull(),
 			err,
 		)
 	}
@@ -387,30 +595,16 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 			Path:   cfg.Path,
 			Config: cfg.Config,
 		}
-		return verifyArchive(verifyCfg)
+		return verifyArchiveWithInterface(verifyCfg)
 	}
 
 	return nil
 }
 
-// verifyArchive verifies an archive.
+// verifyArchive verifies an archive (backward compatibility).
 func verifyArchive(cfg ArchiveVerificationOptions) error {
-	status, err := VerifyArchive(cfg.Path)
-	if err != nil {
-		return NewArchiveErrorWithCause(
-			"Archive verification failed",
-			cfg.Config.StatusConfigError,
-			err,
-		)
-	}
-	if !status.IsVerified {
-		return NewArchiveErrorWithCause(
-			"Archive verification failed",
-			cfg.Config.StatusConfigError,
-			fmt.Errorf("verification errors: %v", status.Errors),
-		)
-	}
-	return nil
+	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	return verifyArchiveWithInterface(cfg)
 }
 
 // CreateFullArchive creates a full archive without context (backward compatibility)
@@ -451,7 +645,10 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
-	archiveDir, err := prepareArchiveDirectory(config.Config, cwd, config.DryRun)
+	// REFACTOR-005: Structure optimization - Use interface adapter for reduced coupling
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: config.Config}
+
+	archiveDir, err := prepareArchiveDirectoryWithInterface(archiveConfig, cwd, config.DryRun)
 	if err != nil {
 		return err
 	}
@@ -461,25 +658,26 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
-	modifiedFiles, err := collectModifiedFiles(cwd, latestFullArchive, config.Config.ExcludePatterns)
+	modifiedFiles, err := collectModifiedFiles(cwd, latestFullArchive, archiveConfig.GetExcludePatterns())
 	if err != nil {
 		return err
 	}
 
 	if len(modifiedFiles) == 0 {
+		// Use the adapter to get the original config for OutputFormatter
 		formatter := NewOutputFormatter(config.Config)
 		formatter.PrintNoFilesModified()
 		return nil
 	}
 
-	archivePath, err := prepareIncrementalArchive(
-		cwd, latestFullArchive, config.Config, config.Note)
+	archivePath, err := prepareIncrementalArchiveWithInterface(
+		cwd, latestFullArchive, archiveConfig, config.Note)
 	if err != nil {
 		return err
 	}
 
 	if config.DryRun {
-		printDryRunInfo(modifiedFiles, archivePath, config.Config)
+		printDryRunInfoWithInterface(modifiedFiles, archivePath, archiveConfig)
 		return nil
 	}
 
@@ -488,9 +686,74 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		CWD:     cwd,
 		Path:    archivePath,
 		Files:   modifiedFiles,
-		Config:  config.Config,
+		Config:  archiveConfig,
 		Verify:  config.Verify,
 	})
+}
+
+// REFACTOR-005: Structure optimization - Interface-based incremental archive preparation
+// prepareIncrementalArchiveWithInterface prepares the archive name and path using interface abstractions
+func prepareIncrementalArchiveWithInterface(
+	cwd string, latestFullArchive *Archive, cfg ArchiveConfigInterface, note string) (string, error) {
+	isGit := IsGitRepository(cwd)
+	gitBranch, gitHash, gitIsClean := "", "", false
+	if isGit && cfg.GetIncludeGitInfo() {
+		gitBranch, gitHash, gitIsClean = GetGitInfoWithStatus(cwd)
+	}
+
+	timestamp := time.Now().Format("2006-01-02-15-04")
+	nameCfg := ArchiveConfig{
+		Prefix:             "",
+		Timestamp:          timestamp,
+		GitBranch:          gitBranch,
+		GitHash:            gitHash,
+		GitIsClean:         gitIsClean,
+		ShowGitDirtyStatus: cfg.GetShowGitDirtyStatus(),
+		Note:               note,
+		IsGit:              isGit && cfg.GetIncludeGitInfo(),
+		IsIncremental:      true,
+		BaseName:           latestFullArchive.Name,
+	}
+	archiveName := GenerateArchiveNameWithInterface(nameCfg)
+	archivePath := filepath.Join(cfg.GetArchiveDirPath(), archiveName)
+	return archivePath, nil
+}
+
+// createAndVerifyIncrementalArchive creates and verifies an incremental archive
+func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
+	if err := createZipArchiveWithContext(cfg.Context, cfg.CWD, cfg.Path, cfg.Files); err != nil {
+		return NewArchiveErrorWithCause(
+			"Failed to create archive",
+			cfg.Config.GetStatusDiskFull(),
+			err,
+		)
+	}
+
+	verificationConfig := cfg.Config.GetVerification()
+	if cfg.Verify || verificationConfig.VerifyOnCreate {
+		verifyCfg := ArchiveVerificationOptions{
+			Path:   cfg.Path,
+			Config: cfg.Config,
+		}
+		if err := verifyArchiveWithInterface(verifyCfg); err != nil {
+			return err
+		}
+	}
+
+	// Use the adapter to get the original config for OutputFormatter
+	if concreteCfg, ok := cfg.Config.(*ConfigToArchiveConfigAdapter); ok {
+		formatter := NewOutputFormatter(concreteCfg.cfg)
+		formatter.PrintIncrementalCreated(cfg.Path)
+	}
+	return nil
+}
+
+// prepareIncrementalArchive prepares the archive name and path (backward compatibility)
+func prepareIncrementalArchive(
+	cwd string, latestFullArchive *Archive, cfg *Config, note string) (string, error) {
+	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+	return prepareIncrementalArchiveWithInterface(cwd, latestFullArchive, archiveConfig, note)
 }
 
 // collectModifiedFiles collects files modified since the last full archive
@@ -524,69 +787,40 @@ func collectModifiedFiles(cwd string, latestFullArchive *Archive, excludePattern
 	return modifiedFiles, err
 }
 
-// prepareIncrementalArchive prepares the archive name and path
-func prepareIncrementalArchive(
-	cwd string, latestFullArchive *Archive, cfg *Config, note string) (string, error) {
-	isGit := IsGitRepository(cwd)
-	gitBranch, gitHash, gitIsClean := "", "", false
-	if isGit && cfg.IncludeGitInfo {
-		gitBranch, gitHash, gitIsClean = GetGitInfoWithStatus(cwd)
+// findLatestFullArchive finds the most recent full archive in the archive directory.
+func findLatestFullArchive(archiveDir string) (*Archive, error) {
+	archives, err := ListArchives(archiveDir)
+	if err != nil {
+		return nil, err
+	}
+	if len(archives) == 0 {
+		return nil, NewArchiveError("No archives found", 1)
 	}
 
-	timestamp := time.Now().Format("2006-01-02-15-04")
-	nameCfg := ArchiveConfig{
-		Prefix:             "",
-		Timestamp:          timestamp,
-		GitBranch:          gitBranch,
-		GitHash:            gitHash,
-		GitIsClean:         gitIsClean,
-		ShowGitDirtyStatus: cfg.ShowGitDirtyStatus,
-		Note:               note,
-		IsGit:              isGit && cfg.IncludeGitInfo,
-		IsIncremental:      true,
-		BaseName:           latestFullArchive.Name,
+	// Find the most recent full archive
+	var latestFullArchive *Archive
+	for i := len(archives) - 1; i >= 0; i-- {
+		if !archives[i].IsIncremental {
+			latestFullArchive = &archives[i]
+			break
+		}
 	}
-	archiveName := GenerateArchiveName(nameCfg)
-	archivePath := filepath.Join(cfg.ArchiveDirPath, archiveName)
-	return archivePath, nil
-}
+	if latestFullArchive == nil {
+		return nil, NewArchiveError("No full archive found", 1)
+	}
 
-// createAndVerifyIncrementalArchive creates and verifies an incremental archive
-func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
-	if err := createZipArchiveWithContext(cfg.Context, cfg.CWD, cfg.Path, cfg.Files); err != nil {
-		return NewArchiveErrorWithCause(
-			"Failed to create archive",
-			cfg.Config.StatusDiskFull,
+	// Get the modification time of the latest full archive
+	latestFullInfo, err := os.Stat(latestFullArchive.Path)
+	if err != nil {
+		return nil, NewArchiveErrorWithCause(
+			"Failed to stat latest full archive",
+			1,
 			err,
 		)
 	}
+	latestFullArchive.CreationTime = latestFullInfo.ModTime()
 
-	if cfg.Verify || cfg.Config.Verification.VerifyOnCreate {
-		verifyCfg := ArchiveVerificationOptions{
-			Path:   cfg.Path,
-			Config: cfg.Config,
-		}
-		if err := verifyArchive(verifyCfg); err != nil {
-			return err
-		}
-	}
-
-	formatter := NewOutputFormatter(cfg.Config)
-	formatter.PrintIncrementalCreated(cfg.Path)
-	return nil
-}
-
-// CreateIncrementalArchiveWithContext creates an incremental archive with context support
-func CreateIncrementalArchiveWithContext(
-	ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error {
-	config := IncrementalArchiveConfig{
-		Config:  cfg,
-		Note:    note,
-		DryRun:  dryRun,
-		Verify:  verify,
-		Context: ctx,
-	}
-	return createIncrementalArchive(config)
+	return latestFullArchive, nil
 }
 
 // createZipArchiveWithContext creates a ZIP archive with context cancellation support
@@ -656,38 +890,15 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 	return nil
 }
 
-// findLatestFullArchive finds the most recent full archive in the archive directory.
-func findLatestFullArchive(archiveDir string) (*Archive, error) {
-	archives, err := ListArchives(archiveDir)
-	if err != nil {
-		return nil, err
+// CreateIncrementalArchiveWithContext creates an incremental archive with context support
+func CreateIncrementalArchiveWithContext(
+	ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error {
+	config := IncrementalArchiveConfig{
+		Config:  cfg,
+		Note:    note,
+		DryRun:  dryRun,
+		Verify:  verify,
+		Context: ctx,
 	}
-	if len(archives) == 0 {
-		return nil, NewArchiveError("No archives found", 1)
-	}
-
-	// Find the most recent full archive
-	var latestFullArchive *Archive
-	for i := len(archives) - 1; i >= 0; i-- {
-		if !archives[i].IsIncremental {
-			latestFullArchive = &archives[i]
-			break
-		}
-	}
-	if latestFullArchive == nil {
-		return nil, NewArchiveError("No full archive found", 1)
-	}
-
-	// Get the modification time of the latest full archive
-	latestFullInfo, err := os.Stat(latestFullArchive.Path)
-	if err != nil {
-		return nil, NewArchiveErrorWithCause(
-			"Failed to stat latest full archive",
-			1,
-			err,
-		)
-	}
-	latestFullArchive.CreationTime = latestFullInfo.ModTime()
-
-	return latestFullArchive, nil
+	return createIncrementalArchive(config)
 }

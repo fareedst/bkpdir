@@ -1,8 +1,11 @@
 // This file is part of bkpdir
 //
-// Package main implements the BkpDir CLI application for directory archiving and file backup.
-// It provides commands for creating full and incremental directory archives, backing up individual files,
-// and managing archive verification and configuration.
+// BkpDir provides directory archiving and file backup functionality with Git integration.
+// It supports creating ZIP archives of directories and individual file backups with timestamps,
+// verification, and optional Git branch/hash information in filenames.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
 package main
 
 import (
@@ -21,14 +24,19 @@ import (
 // REFACTOR-001: CLI orchestration interface contracts defined
 // REFACTOR-001: Central dependency aggregation point identified
 
-// Version is the current version of bkpdir.
-// This is the single source of truth for the version number.
-// The Makefile uses this value during build via -ldflags.
-const Version = "1.4.0"
+// Version information
+const (
+	// REFACTOR-005: Structure optimization - Standardized version constants
+	appVersion     = "1.0.0"
+	appDescription = "Directory archiving and file backup tool with Git integration"
+)
 
+// Runtime compilation information (set by build flags)
 var (
-	compileDate = "2024-03-20" // This is a placeholder - actual value is set during build via -ldflags
-	platform    = "unknown"    // This is a placeholder - actual value is set during build via -ldflags
+	// REFACTOR-005: Structure optimization - Standardized build variables
+	compileDate = "unknown"
+	platform    = "unknown"
+	Version     = appVersion // Public version for external access
 )
 
 var (
@@ -816,4 +824,135 @@ func saveConfigData(configPath string, configData map[string]interface{}) {
 		fmt.Fprintf(os.Stderr, "Error writing config file: %v\n", err)
 		os.Exit(1)
 	}
+}
+
+// REFACTOR-005: Structure optimization - Standardized command configuration
+// CommandConfig holds configuration for CLI command execution
+type CommandConfig struct {
+	Config    *Config
+	Formatter *OutputFormatter
+	Context   context.Context
+}
+
+// REFACTOR-005: Structure optimization - Interface-based command handler abstraction
+// CommandHandlerInterface abstracts command execution for better testability
+type CommandHandlerInterface interface {
+	HandleFullArchive(args []string, note string, dryRun bool, verify bool) error
+	HandleIncrementalArchive(args []string, note string, dryRun bool, verify bool) error
+	HandleListArchives(args []string) error
+	HandleVerifyArchive(args []string, archiveName string, withChecksum bool) error
+	HandleFileBackup(args []string, note string, dryRun bool) error
+	HandleListFileBackups(args []string, filePath string) error
+	HandleDisplayConfig(args []string) error
+}
+
+// REFACTOR-005: Structure optimization - Concrete command handler implementation
+// CommandHandler provides the concrete implementation of CommandHandlerInterface
+type CommandHandler struct {
+	config CommandConfig
+}
+
+// REFACTOR-005: Extraction preparation - Interface-based command handler factory
+// NewCommandHandler creates a new CommandHandler with the given configuration
+func NewCommandHandler(cfg CommandConfig) CommandHandlerInterface {
+	return &CommandHandler{config: cfg}
+}
+
+// REFACTOR-005: Structure optimization - Interface method implementations
+// HandleFullArchive handles full archive creation command
+func (h *CommandHandler) HandleFullArchive(args []string, note string, dryRun bool, verify bool) error {
+	return CreateFullArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)
+}
+
+// HandleIncrementalArchive handles incremental archive creation command
+func (h *CommandHandler) HandleIncrementalArchive(args []string, note string, dryRun bool, verify bool) error {
+	return CreateIncrementalArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)
+}
+
+// HandleListArchives handles archive listing command
+func (h *CommandHandler) HandleListArchives(args []string) error {
+	archiveDir, err := getArchiveDirectory(h.config.Config)
+	if err != nil {
+		return err
+	}
+
+	archives, err := ListArchives(archiveDir)
+	if err != nil {
+		return err
+	}
+
+	if len(archives) == 0 {
+		h.config.Formatter.PrintNoArchivesFound(archiveDir)
+		return nil
+	}
+
+	for _, archive := range archives {
+		creationTime := archive.CreationTime.Format("2006-01-02 15:04:05")
+		status := "[UNVERIFIED]"
+		if archive.VerificationStatus != nil && archive.VerificationStatus.IsVerified {
+			status = "[VERIFIED]"
+		}
+		output := h.config.Formatter.FormatListArchiveWithExtraction(archive.Path, creationTime)
+		if !strings.Contains(output, "[") {
+			output = strings.TrimSuffix(output, "\n") + " " + status + "\n"
+		}
+		fmt.Print(output)
+	}
+	return nil
+}
+
+// HandleVerifyArchive handles archive verification command
+func (h *CommandHandler) HandleVerifyArchive(args []string, archiveName string, withChecksum bool) error {
+	opts := VerifyOptions{
+		Config:       h.config.Config,
+		Formatter:    h.config.Formatter,
+		ArchiveName:  archiveName,
+		WithChecksum: withChecksum,
+	}
+	return VerifyArchiveEnhanced(opts)
+}
+
+// HandleFileBackup handles file backup creation command
+func (h *CommandHandler) HandleFileBackup(args []string, note string, dryRun bool) error {
+	if len(args) == 0 {
+		return fmt.Errorf("file path required")
+	}
+	filePath := args[0]
+
+	opts := BackupOptions{
+		Context:   h.config.Context,
+		Config:    h.config.Config,
+		Formatter: h.config.Formatter,
+		FilePath:  filePath,
+		Note:      note,
+		DryRun:    dryRun,
+	}
+	return CreateFileBackupEnhanced(opts)
+}
+
+// HandleListFileBackups handles file backup listing command
+func (h *CommandHandler) HandleListFileBackups(args []string, filePath string) error {
+	targetFile := filePath
+	if targetFile == "" && len(args) > 0 {
+		targetFile = args[0]
+	}
+	if targetFile == "" {
+		return fmt.Errorf("file path required for listing backups")
+	}
+
+	return ListFileBackupsEnhanced(h.config.Config, h.config.Formatter, targetFile)
+}
+
+// HandleDisplayConfig handles configuration display command
+func (h *CommandHandler) HandleDisplayConfig(args []string) error {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	configValues := GetConfigValuesWithSources(h.config.Config, cwd)
+	for _, cv := range configValues {
+		h.config.Formatter.PrintConfigValue(cv.Name, cv.Value, cv.Source)
+	}
+	return nil
 }

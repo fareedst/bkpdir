@@ -1129,3 +1129,54 @@ func mergeExtendedTemplates(dst, src *Config) {
 		dst.TemplateBackupCreated = src.TemplateBackupCreated
 	}
 }
+
+// REFACTOR-005: Structure optimization - ErrorConfig interface implementation
+// GetStatusCodes returns a map of status code names to values
+func (c *Config) GetStatusCodes() map[string]int {
+	return map[string]int{
+		"disk_full":                               c.StatusDiskFull,
+		"permission_denied":                       c.StatusPermissionDenied,
+		"directory_not_found":                     c.StatusDirectoryNotFound,
+		"file_not_found":                          c.StatusFileNotFound,
+		"invalid_directory":                       c.StatusInvalidDirectoryType,
+		"invalid_file":                            c.StatusInvalidFileType,
+		"created_archive":                         c.StatusCreatedArchive,
+		"created_backup":                          c.StatusCreatedBackup,
+		"failed_create_archive_directory":         c.StatusFailedToCreateArchiveDirectory,
+		"failed_create_backup_directory":          c.StatusFailedToCreateBackupDirectory,
+		"directory_identical_to_existing_archive": c.StatusDirectoryIsIdenticalToExistingArchive,
+		"file_identical_to_existing_backup":       c.StatusFileIsIdenticalToExistingBackup,
+		"config_error":                            c.StatusConfigError,
+	}
+}
+
+// REFACTOR-005: Structure optimization - ErrorConfig interface implementation
+// GetErrorFormatStrings returns a map of error format string names to values
+func (c *Config) GetErrorFormatStrings() map[string]string {
+	return map[string]string{
+		"disk_full":              c.FormatDiskFullError,
+		"permission":             c.FormatPermissionError,
+		"directory_not_found":    c.FormatDirectoryNotFound,
+		"file_not_found":         c.FormatFileNotFound,
+		"invalid_directory":      c.FormatInvalidDirectory,
+		"invalid_file":           c.FormatInvalidFile,
+		"failed_write_temp":      c.FormatFailedWriteTemp,
+		"failed_finalize_file":   c.FormatFailedFinalizeFile,
+		"failed_create_dir_disk": c.FormatFailedCreateDirDisk,
+		"failed_create_dir":      c.FormatFailedCreateDir,
+		"failed_access_dir":      c.FormatFailedAccessDir,
+		"failed_access_file":     c.FormatFailedAccessFile,
+	}
+}
+
+// REFACTOR-005: Structure optimization - ErrorConfig interface implementation
+// GetDirectoryPermissions returns the default directory permissions
+func (c *Config) GetDirectoryPermissions() os.FileMode {
+	return 0755 // Standard directory permissions
+}
+
+// REFACTOR-005: Structure optimization - ErrorConfig interface implementation
+// GetFilePermissions returns the default file permissions
+func (c *Config) GetFilePermissions() os.FileMode {
+	return 0644 // Standard file permissions
+}

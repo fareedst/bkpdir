@@ -17,6 +17,84 @@ import (
 // REFACTOR-001: Backup management interface contracts defined
 // REFACTOR-001: Multiple dependency interfaces required for extraction
 // REFACTOR-004: Error handling now standardized in errors.go
+// REFACTOR-005: Structure optimization - Interface-based backup operations
+
+// REFACTOR-005: Structure optimization - Interface-based configuration abstraction
+// BackupConfigInterface abstracts configuration dependencies for backup operations
+type BackupConfigInterface interface {
+	GetBackupDirPath() string
+	GetUseCurrentDirNameForFiles() bool
+	GetStatusFileNotFound() int
+	GetStatusPermissionDenied() int
+	GetStatusInvalidFileType() int
+	GetStatusDiskFull() int
+	GetStatusFileIsIdenticalToExistingBackup() int
+}
+
+// REFACTOR-005: Structure optimization - Interface-based formatter abstraction
+// BackupFormatterInterface abstracts formatter dependencies for backup operations
+type BackupFormatterInterface interface {
+	PrintDryRunBackup(path string)
+	PrintIdenticalBackup(path string)
+	PrintBackupCreated(path string)
+	PrintNoBackupsFound(filename, backupDir string)
+}
+
+// REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility
+// ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
+type ConfigToBackupConfigAdapter struct {
+	cfg *Config
+}
+
+func (a *ConfigToBackupConfigAdapter) GetBackupDirPath() string {
+	return a.cfg.BackupDirPath
+}
+
+func (a *ConfigToBackupConfigAdapter) GetUseCurrentDirNameForFiles() bool {
+	return a.cfg.UseCurrentDirNameForFiles
+}
+
+func (a *ConfigToBackupConfigAdapter) GetStatusFileNotFound() int {
+	return a.cfg.StatusFileNotFound
+}
+
+func (a *ConfigToBackupConfigAdapter) GetStatusPermissionDenied() int {
+	return a.cfg.StatusPermissionDenied
+}
+
+func (a *ConfigToBackupConfigAdapter) GetStatusInvalidFileType() int {
+	return a.cfg.StatusInvalidFileType
+}
+
+func (a *ConfigToBackupConfigAdapter) GetStatusDiskFull() int {
+	return a.cfg.StatusDiskFull
+}
+
+func (a *ConfigToBackupConfigAdapter) GetStatusFileIsIdenticalToExistingBackup() int {
+	return a.cfg.StatusFileIsIdenticalToExistingBackup
+}
+
+// REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility
+// OutputFormatterToBackupFormatterAdapter adapts OutputFormatter to BackupFormatterInterface
+type OutputFormatterToBackupFormatterAdapter struct {
+	formatter *OutputFormatter
+}
+
+func (a *OutputFormatterToBackupFormatterAdapter) PrintDryRunBackup(path string) {
+	a.formatter.PrintDryRunBackup(path)
+}
+
+func (a *OutputFormatterToBackupFormatterAdapter) PrintIdenticalBackup(path string) {
+	a.formatter.PrintIdenticalBackup(path)
+}
+
+func (a *OutputFormatterToBackupFormatterAdapter) PrintBackupCreated(path string) {
+	a.formatter.PrintBackupCreated(path)
+}
+
+func (a *OutputFormatterToBackupFormatterAdapter) PrintNoBackupsFound(filename, backupDir string) {
+	a.formatter.PrintNoBackupsFound(filename, backupDir)
+}
 
 // BackupInfo represents information about a file backup
 type BackupInfo struct {
