@@ -56,35 +56,7 @@ See the detailed [Enforcement Mechanisms](enforcement-mechanisms.md) for compreh
 
 ### 📁 CONTEXT FILE RESPONSIBILITIES
 
-#### **feature-tracking.md** (THIS FILE)
-- **ALWAYS UPDATE**: Must be updated for every code change
-- **Content**: Feature registry, implementation tokens, status tracking, decision records
-- **Triggers**: Any code modification, new features, status changes, architectural decisions
-
-#### **specification.md** 
-- **UPDATE WHEN**: User-facing behavior changes, new commands, configuration options, output format changes
-- **Content**: User interface specifications, command behaviors, configuration schemas
-- **Triggers**: New CLI commands, configuration changes, output modifications, user-visible behavior changes
-
-#### **requirements.md**
-- **UPDATE WHEN**: Implementation requirements change, new functional requirements, non-functional requirement modifications
-- **Content**: Implementation requirements, traceability matrices, acceptance criteria
-- **Triggers**: New features, requirement modifications, acceptance criteria changes
-
-#### **architecture.md**
-- **UPDATE WHEN**: Technical implementation changes, new components, interface modifications, design decisions
-- **Content**: System architecture, component interactions, design patterns, technical decisions
-- **Triggers**: Code structure changes, new components, interface modifications, architectural decisions
-
-#### **testing.md**
-- **UPDATE WHEN**: New tests added, test strategies change, coverage requirements modified
-- **Content**: Test strategies, coverage requirements, test descriptions, validation approaches
-- **Triggers**: New test files, test strategy changes, coverage modifications
-
-#### **immutable.md**
-- **UPDATE WHEN**: Never (immutable requirements), but must CHECK for violations
-- **Content**: Unchangeable requirements, backward compatibility constraints
-- **Triggers**: Check only - never modify
+See the detailed [Context File Responsibilities](context-file-responsibilities.md) for comprehensive guidelines on when and how to update each context file.
 
 ### 🚫 CHANGE REJECTION CRITERIA
 
