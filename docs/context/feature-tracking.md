@@ -326,6 +326,16 @@ Each feature must be documented across all relevant layers:
 | DOC-004 | Automated validation | Validation requirements | ValidationEngine | TestAutomatedValidation | Far Future (Unlikely) | `// DOC-004: Automated validation` |
 | DOC-005 | Change impact analysis | Impact analysis requirements | ImpactAnalyzer | TestChangeImpact | Far Future (Unlikely) | `// DOC-005: Change impact` |
 
+### Pre-Extraction Refactoring
+| Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens |
+|------------|---------------|--------------|--------------|---------|--------|----------------------|
+| REFACTOR-001 | Dependency analysis and interface standardization | Pre-extraction requirements | Component interfaces | TestDependencyAnalysis | Not Started | `// REFACTOR-001: Dependency analysis` |
+| REFACTOR-002 | Large file decomposition preparation | Code structure requirements | Component boundaries | TestFormatterDecomposition | Not Started | `// REFACTOR-002: Formatter decomposition` |
+| REFACTOR-003 | Configuration schema abstraction | Configuration extraction requirements | Config interfaces | TestConfigAbstraction | Not Started | `// REFACTOR-003: Config abstraction` |
+| REFACTOR-004 | Error handling consolidation | Error handling standards | Error type patterns | TestErrorStandardization | Not Started | `// REFACTOR-004: Error standardization` |
+| REFACTOR-005 | Code structure optimization | Extraction preparation requirements | Structure optimization | TestStructureOptimization | Not Started | `// REFACTOR-005: Structure optimization` |
+| REFACTOR-006 | Refactoring impact validation | Quality assurance requirements | Validation framework | TestRefactoringValidation | Not Started | `// REFACTOR-006: Validation` |
+
 ## Feature Change Protocol
 
 ### 🔥 ENHANCED ACTIONABLE CHANGE PROCESS
@@ -842,6 +852,98 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
 - ✅ **Zero-Error Validation Achieved** - Validation script now passes with 0 errors, 0 warnings
 - ✅ **Complete Implementation Token Coverage** - Achieved 144 total tokens with comprehensive coverage
 - ✅ **Strategic Test Token Enhancement** - Added targeted tokens to key feature validation functions
+
+### Phase 3: Pre-Extraction Refactoring (CRITICAL FOUNDATION - MUST COMPLETE FIRST)
+
+#### **⚠️ CRITICAL PATH: NO EXTRACTION WITHOUT REFACTORING**
+**All EXTRACT-001 through EXTRACT-010 tasks are BLOCKED until refactoring phase completes successfully.**
+
+**Week 0: Foundation Preparation (CRITICAL)**
+1. **REFACTOR-001: Dependency Analysis and Interface Standardization** - **CRITICAL BLOCKER**
+2. **REFACTOR-002: Large File Decomposition Preparation** - **HIGH PRIORITY**  
+3. **REFACTOR-003: Configuration Schema Abstraction** - **HIGH PRIORITY**
+
+**Week 0.5: Consolidation and Validation (HIGH PRIORITY)**
+4. **REFACTOR-004: Error Handling and Resource Management Consolidation** - **MEDIUM PRIORITY**
+5. **REFACTOR-005: Code Structure Optimization for Extraction** - **MEDIUM PRIORITY**
+6. **REFACTOR-006: Refactoring Impact Validation** - **HIGH PRIORITY**
+
+#### **🎯 REFACTORING SUCCESS GATES**
+Before proceeding to Phase 4 (Component Extraction), ALL of these must be completed:
+- ✅ Complete dependency analysis with zero circular dependency risks
+- ✅ Formatter decomposition strategy validated
+- ✅ Configuration abstraction interfaces defined
+- ✅ Error handling patterns standardized
+- ✅ All refactoring changes validated with zero test failures
+- ✅ Pre-extraction validation checklist passed
+
+### **Phase 4: Component Extraction and Generalization (BLOCKED - READY AFTER PHASE 3)**
+
+#### **🚫 EXTRACTION AUTHORIZATION REQUIRED**
+**These tasks require explicit authorization after Phase 3 completion:**
+
+**Weeks 1-2: Core Infrastructure Extraction (IMMEDIATE - After Refactoring)**
+- **EXTRACT-001: Configuration Management System** (CRITICAL) - Requires REFACTOR-003 completion
+- **EXTRACT-002: Error Handling and Resource Management** (CRITICAL) - Requires REFACTOR-004 completion
+
+**Weeks 3-4: User Experience Layer (HIGH PRIORITY)**
+- **EXTRACT-003: Output Formatting System** (HIGH) - Requires REFACTOR-002 completion
+- **EXTRACT-004: Git Integration System** (MEDIUM) - Ready after dependency analysis
+
+**Weeks 5-6: CLI Framework (HIGH PRIORITY)**  
+- **EXTRACT-005: CLI Command Framework** (HIGH) - Requires core infrastructure completion
+- **EXTRACT-006: File Operations and Utilities** (HIGH) - Ready after core infrastructure
+
+**Weeks 7-8: Application Patterns and Quality (HIGH PRIORITY)**
+- **EXTRACT-007: Data Processing Patterns** (MEDIUM) - Ready after framework completion
+- **EXTRACT-008: CLI Application Template** (HIGH) - Requires all components
+- **EXTRACT-009: Testing Patterns and Utilities** (HIGH) - Critical for quality
+- **EXTRACT-010: Package Documentation and Examples** (HIGH) - Essential for adoption
+
+#### **📋 EXTRACTION DEPENDENCY CHAIN**
+```
+REFACTOR-001 (Dependency Analysis) → ALL extraction tasks
+REFACTOR-002 (Formatter Decomposition) → EXTRACT-003 (Formatting)
+REFACTOR-003 (Config Abstraction) → EXTRACT-001 (Configuration)
+REFACTOR-004 (Error Consolidation) → EXTRACT-002 (Error Handling)
+REFACTOR-006 (Validation) → Extraction Authorization
+
+EXTRACT-001, EXTRACT-002 → EXTRACT-003, EXTRACT-004
+EXTRACT-003, EXTRACT-004 → EXTRACT-005, EXTRACT-006
+EXTRACT-005, EXTRACT-006 → EXTRACT-007, EXTRACT-008
+EXTRACT-008 → EXTRACT-009, EXTRACT-010
+```
+
+### **⚠️ REVISED TIMELINE AND CRITICAL PATH**
+
+#### **UPDATED TIMELINE (Total: 9 weeks)**
+- **Week 0**: REFACTOR-001, REFACTOR-002, REFACTOR-003 (Parallel)
+- **Week 0.5**: REFACTOR-004, REFACTOR-005, REFACTOR-006 (Sequential validation)
+- **Week 1**: Extraction authorization and EXTRACT-001, EXTRACT-002 start
+- **Weeks 1-8**: Original extraction timeline proceeds as planned
+
+#### **CRITICAL SUCCESS FACTORS**
+1. **Zero Compromise on Refactoring Quality**: All refactoring tasks must be completed to full specification
+2. **Comprehensive Validation**: Each refactoring step must be validated before proceeding
+3. **Interface Stability**: All interfaces must be finalized before extraction begins
+4. **Dependency Clarity**: Complete dependency mapping prevents extraction failures
+5. **Backward Compatibility**: All refactoring must preserve existing functionality
+
+#### **RISK MITIGATION**
+- **Parallel Refactoring**: REFACTOR-001, 002, 003 can proceed in parallel with coordination
+- **Incremental Validation**: REFACTOR-006 validates each step to prevent compound failures  
+- **Rollback Plan**: Each refactoring step includes rollback procedures if validation fails
+- **Extraction Gate**: Hard stop before extraction until all criteria met
+
+**🎯 FINAL RECOMMENDATION: PROCEED WITH REFACTORING PHASE IMMEDIATELY**
+
+The codebase has excellent test coverage (73.5%) and comprehensive testing infrastructure, making it ideal for safe refactoring. The pre-extraction refactoring will ensure:
+- **Clean Architecture**: Well-defined component boundaries
+- **Maintainable Code**: Reduced complexity and improved organization  
+- **Reliable Extraction**: Zero risk of circular dependencies or architectural issues
+- **Future-Proof Design**: Extracted components will be robust and reusable
+
+**Start with REFACTOR-001 (Dependency Analysis) immediately to begin the foundation for successful component extraction.**
 
 ## Prioritized Task List
 
@@ -1952,3 +2054,316 @@ Every function, method, and significant code block must include `// TOKEN-ID: De
 5. **Zero Tolerance**: No code changes without token references
 
 **This document serves as the authoritative source for feature tracking and token management. Any AI assistant working with this codebase must comply with these requirements.**
+
+### **🔧 PHASE 4: PRE-EXTRACTION REFACTORING (CRITICAL FOUNDATION)**
+
+**Priority Summary:**
+- **Code structure preparation**: Essential before extraction to ensure clean package boundaries
+- **Interface stabilization**: Must be completed before extraction to prevent breaking changes
+- **Dependency cleanup**: Critical for avoiding circular dependencies in extracted packages
+- **Architecture preparation**: Required for successful component extraction
+
+#### **IMMEDIATE PRE-EXTRACTION TASKS (Week 0 - Before Extraction Begins)**
+
+**10. Dependency Analysis and Interface Standardization** (REFACTOR-001) - **CRITICAL BLOCKER**
+   - [ ] **Complete dependency mapping analysis** - Map all current dependencies between major components
+   - [ ] **Identify circular dependency risks** - Find potential circular imports before extraction
+   - [ ] **Standardize interface contracts** - Define clear interfaces for all major components
+   - [ ] **Create interface compatibility layer** - Ensure backward compatibility during extraction
+   - [ ] **Validate package boundary design** - Confirm clean separation between future packages
+   - **Rationale**: Must identify and resolve dependency issues before extraction to prevent circular imports and ensure clean package boundaries
+   - **Status**: Not Started
+   - **Priority**: CRITICAL - BLOCKS ALL EXTRACTION WORK ⚠️
+   - **Blocking**: All EXTRACT-001 through EXTRACT-010 tasks
+   - **Implementation Areas**:
+     - Complete dependency graph analysis across all core files
+     - Interface definition for Config, OutputFormatter, ResourceManager, Git integration
+     - Cross-cutting concern identification (logging, error handling, context management)
+     - Package boundary validation using Go module dependency analysis
+   - **Dependencies**: None (foundational pre-extraction work)
+   - **Implementation Tokens**: `// REFACTOR-001: Dependency analysis`, `// REFACTOR-001: Interface standardization`
+   - **Expected Outcomes**:
+     - Clear dependency map showing extraction order requirements
+     - Standardized interfaces preventing tight coupling
+     - Validated package boundaries ensuring clean extraction
+     - Zero circular dependency risks identified
+   - **Deliverables**:
+     - `docs/extraction-dependencies.md` - Complete dependency analysis
+     - Interface definitions for all major components
+     - Package boundary validation report
+     - Circular dependency risk assessment
+
+**11. Large File Decomposition Preparation** (REFACTOR-002) - **HIGH PRIORITY**
+   - [ ] **Analyze formatter.go structure** (1675 lines) - Break down large file for extraction readiness
+   - [ ] **Identify component boundaries in formatter.go** - Separate template engine, printf formatter, output collector
+   - [ ] **Create internal interfaces within large files** - Prepare for clean extraction
+   - [ ] **Validate decomposition strategy** - Ensure each component can be extracted independently
+   - [ ] **Prepare extraction interfaces** - Define contracts for extracted formatter components
+   - **Rationale**: The 1675-line formatter.go needs decomposition analysis before extraction to ensure proper package boundaries
+   - **Status**: Not Started  
+   - **Priority**: HIGH - Required for EXTRACT-003 (Output Formatting System)
+   - **Blocking**: EXTRACT-003 (Output Formatting System)
+   - **Implementation Areas**:
+     - OutputFormatter component analysis and interface definition
+     - TemplateFormatter separation and interface design
+     - OutputCollector isolation and contract definition
+     - ANSI color support component identification
+     - Pattern extraction engine component boundaries
+   - **Dependencies**: REFACTOR-001 (dependency analysis must be completed first)
+   - **Implementation Tokens**: `// REFACTOR-002: Formatter decomposition`, `// REFACTOR-002: Component boundary`
+   - **Expected Outcomes**:
+     - Clear component boundaries within formatter.go
+     - Interface contracts for each formatter component
+     - Validated extraction strategy for large file
+     - Reduced complexity through logical separation
+   - **Deliverables**:
+     - `docs/formatter-decomposition.md` - Component analysis and extraction plan
+     - Interface definitions for formatter components
+     - Extraction strategy document
+
+**12. Configuration Schema Abstraction** (REFACTOR-003) - **HIGH PRIORITY**
+   - [ ] **Create configuration loader interface** - Abstract configuration loading from specific schema
+   - [ ] **Separate configuration logic from backup-specific schema** - Enable schema-agnostic configuration
+   - [ ] **Design pluggable configuration validation** - Allow different applications to define their own schemas
+   - [ ] **Create configuration source abstraction** - Abstract file, environment, and default sources
+   - [ ] **Prepare configuration merging interfaces** - Enable generic configuration merging logic
+   - **Rationale**: Current configuration is tightly coupled to backup application schema; must be abstracted for reuse
+   - **Status**: Not Started
+   - **Priority**: HIGH - Required for EXTRACT-001 (Configuration Management System)
+   - **Blocking**: EXTRACT-001 (Configuration Management System)
+   - **Implementation Areas**:
+     - ConfigLoader interface definition
+     - ConfigValidator interface for pluggable validation
+     - ConfigSource interface for different configuration sources
+     - ConfigMerger interface for generic merging logic
+     - Schema abstraction layer for different application types
+   - **Dependencies**: REFACTOR-001 (dependency analysis must identify config coupling)
+   - **Implementation Tokens**: `// REFACTOR-003: Config abstraction`, `// REFACTOR-003: Schema separation`
+   - **Expected Outcomes**:
+     - Schema-agnostic configuration loading
+     - Pluggable validation system
+     - Reusable configuration merging logic
+     - Source-independent configuration management
+   - **Deliverables**:
+     - Configuration interface definitions
+     - Schema abstraction design document
+     - Configuration extraction plan
+
+**13. Error Handling and Resource Management Consolidation** (REFACTOR-004) - **MEDIUM PRIORITY**
+   - [ ] **Standardize error type patterns** - Ensure consistent error handling across components
+   - [ ] **Consolidate resource management patterns** - Standardize ResourceManager usage
+   - [ ] **Create context propagation standards** - Ensure consistent context handling
+   - [ ] **Validate atomic operation patterns** - Confirm consistent atomic file operations
+   - [ ] **Prepare error handling for extraction** - Design extractable error handling patterns
+   - **Rationale**: Error handling and resource management must be consistent before extraction to ensure reliable extracted components
+   - **Status**: Not Started
+   - **Priority**: MEDIUM - Required for EXTRACT-002 (Error Handling and Resource Management)
+   - **Blocking**: EXTRACT-002 (Error Handling and Resource Management)
+   - **Implementation Areas**:
+     - Error type standardization across ArchiveError, BackupError patterns
+     - ResourceManager usage pattern validation
+     - Context propagation consistency checking
+     - Atomic operation pattern validation
+     - Panic recovery standardization
+   - **Dependencies**: REFACTOR-001 (dependency analysis must identify error handling patterns)
+   - **Implementation Tokens**: `// REFACTOR-004: Error standardization`, `// REFACTOR-004: Resource consolidation`
+   - **Expected Outcomes**:
+     - Consistent error handling patterns
+     - Standardized resource management
+     - Reliable context propagation
+     - Uniform atomic operations
+   - **Deliverables**:
+     - Error handling standardization report
+     - Resource management pattern documentation
+     - Context propagation guidelines
+
+**14. Code Structure Optimization for Extraction** (REFACTOR-005) - **MEDIUM PRIORITY**
+   - [ ] **Remove tight coupling between components** - Identify and resolve unnecessary dependencies
+   - [ ] **Standardize naming conventions** - Ensure consistent naming across extractable components
+   - [ ] **Optimize import structure** - Prepare for clean package imports after extraction
+   - [ ] **Validate function signatures for extraction** - Ensure extractable functions have clean signatures
+   - [ ] **Prepare backward compatibility layer** - Plan compatibility preservation during extraction
+   - **Rationale**: Code structure must be optimized for clean extraction without breaking existing functionality
+   - **Status**: Not Started
+   - **Priority**: MEDIUM - Enhances extraction quality but not blocking
+   - **Implementation Areas**:
+     - Component coupling analysis and reduction
+     - Naming convention standardization across codebase
+     - Import optimization for future package structure
+     - Function signature validation for extractability
+     - Backward compatibility planning
+   - **Dependencies**: REFACTOR-001, REFACTOR-002, REFACTOR-003 (prior refactoring must be completed)
+   - **Implementation Tokens**: `// REFACTOR-005: Structure optimization`, `// REFACTOR-005: Extraction preparation`
+   - **Expected Outcomes**:
+     - Reduced coupling between components
+     - Consistent naming conventions
+     - Optimized import structure
+     - Clean function signatures
+     - Preserved backward compatibility
+   - **Deliverables**:
+     - Code structure optimization report
+     - Naming convention guidelines
+     - Extraction compatibility assessment
+
+#### **REFACTORING VALIDATION AND QUALITY ASSURANCE (Week 0.5)**
+
+**15. Refactoring Impact Validation** (REFACTOR-006) - **HIGH PRIORITY**
+   - [ ] **Run comprehensive test suite after each refactoring** - Ensure no functionality regression
+   - [ ] **Validate performance impact** - Confirm refactoring doesn't degrade performance
+   - [ ] **Check implementation token consistency** - Verify all tokens remain valid after refactoring
+   - [ ] **Validate documentation synchronization** - Ensure context files reflect refactoring changes
+   - [ ] **Run extraction readiness assessment** - Confirm codebase is ready for component extraction
+   - **Rationale**: All refactoring must be validated to ensure it improves extraction readiness without breaking functionality
+   - **Status**: Not Started
+   - **Priority**: HIGH - Must validate each refactoring step
+   - **Implementation Areas**:
+     - Automated test suite execution after each refactoring
+     - Performance benchmarking and comparison
+     - Implementation token validation and updating
+     - Documentation synchronization checking
+     - Extraction readiness criteria validation
+   - **Dependencies**: All REFACTOR-001 through REFACTOR-005 tasks
+   - **Implementation Tokens**: `// REFACTOR-006: Validation`, `// REFACTOR-006: Quality assurance`
+   - **Expected Outcomes**:
+     - Zero functional regressions from refactoring
+     - Maintained or improved performance
+     - Consistent implementation tokens
+     - Synchronized documentation
+     - Validated extraction readiness
+   - **Deliverables**:
+     - Refactoring validation report
+     - Performance impact assessment
+     - Extraction readiness certification
+
+### **🎯 REFACTORING SUCCESS CRITERIA**
+
+#### **MANDATORY PRE-EXTRACTION REQUIREMENTS**
+Before proceeding with any EXTRACT-001 through EXTRACT-010 tasks, these criteria must be met:
+
+1. **✅ Dependency Analysis Complete** (REFACTOR-001)
+   - Complete dependency map created
+   - Zero circular dependency risks identified
+   - Clean package boundaries validated
+   - Interface contracts defined
+
+2. **✅ Large File Analysis Complete** (REFACTOR-002)  
+   - Formatter.go decomposition strategy defined
+   - Component boundaries identified
+   - Extraction interfaces prepared
+
+3. **✅ Configuration Abstraction Ready** (REFACTOR-003)
+   - Schema-agnostic configuration interfaces defined
+   - Pluggable validation system designed
+   - Configuration extraction plan created
+
+4. **✅ Error Handling Standardized** (REFACTOR-004)
+   - Consistent error patterns across codebase
+   - Standardized resource management
+   - Uniform context propagation
+
+5. **✅ Refactoring Validated** (REFACTOR-006)
+   - All tests pass after refactoring
+   - Performance maintained or improved
+   - Documentation synchronized
+
+#### **REFACTORING QUALITY GATES**
+
+**Technical Quality Gates:**
+- Zero test failures after each refactoring step
+- <5% performance impact from refactoring changes
+- 100% implementation token consistency maintained
+- All context documentation updated to reflect changes
+
+**Extraction Readiness Gates:**
+- Clear component interfaces defined
+- Zero circular dependency risks
+- Clean package boundary validation
+- Backward compatibility preservation plan
+
+#### **REFACTORING ENFORCEMENT**
+
+**Pre-Extraction Validation Checklist:**
+```bash
+# MANDATORY: Run before any extraction work
+echo "🔧 Pre-Extraction Refactoring Validation"
+
+# 1. Verify dependency analysis completion
+[ -f "docs/extraction-dependencies.md" ] && echo "✅ Dependency analysis complete" || echo "❌ BLOCKER: Dependency analysis missing"
+
+# 2. Verify large file decomposition analysis  
+[ -f "docs/formatter-decomposition.md" ] && echo "✅ Formatter decomposition complete" || echo "❌ BLOCKER: Formatter analysis missing"
+
+# 3. Verify configuration abstraction
+grep -q "ConfigLoader interface" *.go && echo "✅ Config abstraction ready" || echo "❌ BLOCKER: Config abstraction missing"
+
+# 4. Run all tests
+go test ./... && echo "✅ All tests pass" || echo "❌ BLOCKER: Test failures"
+
+# 5. Check implementation tokens
+./scripts/validate-docs.sh && echo "✅ Documentation consistent" || echo "❌ WARNING: Documentation sync needed"
+```
+
+**Extraction Authorization:**
+Component extraction is ONLY authorized after:
+- All REFACTOR-001 through REFACTOR-005 tasks completed
+- REFACTOR-006 validation passed
+- Pre-extraction validation checklist passed
+- Zero critical blockers remaining
+
+### **📋 REFACTORING TASK INTEGRATION**
+
+#### **Context File Update Requirements**
+Each refactoring task MUST update:
+- **feature-tracking.md**: Task status and implementation tokens
+- **architecture.md**: Component interface changes and design decisions  
+- **requirements.md**: Any requirement impacts from refactoring
+- **testing.md**: Test coverage for refactored components
+
+#### **AI Assistant Integration**
+AI assistants working on refactoring MUST:
+- Reference existing REFACTOR-XXX tokens when making changes
+- Update dependency documentation when modifying component relationships
+- Validate extraction readiness after each refactoring step
+- Ensure backward compatibility preservation
+
+#### **Implementation Decision Tracking**
+Add new decision records for refactoring:
+
+#### DEC-013: Pre-Extraction Refactoring Strategy
+- **Feature IDs**: REFACTOR-001, REFACTOR-002, REFACTOR-003, REFACTOR-004, REFACTOR-005
+- **Date**: 2024-12-19
+- **Decision**: Implement comprehensive pre-extraction refactoring to ensure clean component boundaries
+- **Rationale**:
+  - Prevents circular dependencies in extracted packages
+  - Ensures clean interfaces and minimal coupling
+  - Preserves backward compatibility during extraction
+  - Enables reliable, maintainable extracted components
+- **Alternatives**: Extract components as-is and refactor later, minimal refactoring approach
+- **Impact**: Establishes foundation for successful component extraction with clean architecture
+- **Code Markers**: `// REFACTOR-XXX: Preparation for extraction` tokens
+
+#### DEC-014: Interface-First Extraction Approach
+- **Feature IDs**: REFACTOR-001, REFACTOR-003
+- **Date**: 2024-12-19
+- **Decision**: Define all component interfaces before extraction begins
+- **Rationale**:
+  - Prevents tight coupling between extracted packages
+  - Enables independent testing and development of components
+  - Provides clear contracts for component interaction
+  - Facilitates future evolution of implementations
+- **Alternatives**: Extract implementations first and define interfaces later
+- **Impact**: All extracted packages will have well-defined, stable interfaces
+- **Code Markers**: Interface definitions with `// REFACTOR-001: Interface standardization`
+
+#### DEC-015: Large File Decomposition Strategy
+- **Feature IDs**: REFACTOR-002
+- **Date**: 2024-12-19  
+- **Decision**: Decompose large files (>1000 lines) before extraction for better package boundaries
+- **Rationale**:
+  - 1675-line formatter.go contains multiple logical components
+  - Clean separation enables focused extracted packages
+  - Reduces complexity and improves maintainability
+  - Enables independent evolution of formatter components
+- **Alternatives**: Extract large files as single packages, post-extraction decomposition
+- **Impact**: Extracted packages will be focused and maintainable rather than monolithic
+- **Code Markers**: `// REFACTOR-002: Component boundary` markings for logical separations
