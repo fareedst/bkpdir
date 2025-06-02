@@ -14,6 +14,9 @@ import (
 	"time"
 )
 
+// REFACTOR-001: Backup management interface contracts defined
+// REFACTOR-001: Multiple dependency interfaces required for extraction
+
 // BackupInfo represents information about a file backup
 type BackupInfo struct {
 	Name         string

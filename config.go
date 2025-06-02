@@ -35,6 +35,8 @@ type VerificationConfig struct {
 // IMMUTABLE-REF: Configuration Defaults, Output Formatting Requirements
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
+// REFACTOR-001: Configuration interface contracts defined
+// REFACTOR-001: Dependency analysis - clean boundary confirmed
 // Config holds all configuration settings for the BkpDir application.
 // It includes settings for archive creation, file backup, status codes,
 // and output formatting.

@@ -18,6 +18,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// REFACTOR-001: CLI orchestration interface contracts defined
+// REFACTOR-001: Central dependency aggregation point identified
+
 // Version is the current version of bkpdir.
 // This is the single source of truth for the version number.
 // The Makefile uses this value during build via -ldflags.

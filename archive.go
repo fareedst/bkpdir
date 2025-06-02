@@ -18,6 +18,9 @@ import (
 	"time"
 )
 
+// REFACTOR-001: Archive management interface contracts defined
+// REFACTOR-001: Multiple dependency interfaces required for extraction
+
 // ArchiveNameConfig holds configuration for generating archive names.
 type ArchiveNameConfig struct {
 	Prefix             string

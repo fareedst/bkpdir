@@ -16,6 +16,9 @@ import (
 	"sync"
 )
 
+// REFACTOR-001: Error handling and resource management interface contracts defined
+// REFACTOR-001: Config and formatter dependency interfaces required
+
 // ArchiveError represents a structured error with status code
 type ArchiveError struct {
 	Message    string

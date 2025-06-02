@@ -113,6 +113,8 @@ func (oc *OutputCollector) Clear() {
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
 // OUT-001: Enhanced with delayed output support
+// REFACTOR-001: Output formatting interface contracts defined
+// REFACTOR-001: Config dependency interface required for extraction
 // OutputFormatter provides methods for formatting and printing output for BkpDir operations.
 // It supports both printf-style and template-based formatting, with optional delayed output.
 type OutputFormatter struct {

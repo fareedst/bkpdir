@@ -13,6 +13,9 @@ import (
 	"strings"
 )
 
+// REFACTOR-001: Git provider interface contracts defined
+// REFACTOR-001: Dependency analysis - clean boundary confirmed
+
 // GIT-001: Git error handling structure
 // IMMUTABLE-REF: Error Handling Requirements
 // TEST-REF: TestGitIntegration

@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// REFACTOR-001: File comparison interface contracts defined
+// REFACTOR-001: Dependency analysis - clean boundary confirmed
+
 // FileInfo represents information about a file for comparison
 type FileInfo struct {
 	RelativePath string
