@@ -28,15 +28,9 @@ See the detailed [Context File Responsibilities](context-file-responsibilities.m
 
 See the detailed [Change Rejection Criteria](change-rejection-criteria.md) for comprehensive guidelines on common rejection scenarios and how to avoid them.
 
-## Feature Tracking Format
+## Documentation Standards
 
-Each feature must be documented across all relevant layers:
-- **Immutable ID**: Unique identifier (e.g., `ARCH-001`, `CMD-001`, `CFG-001`)
-- **Specification Reference**: Link to spec section
-- **Requirements Reference**: Link to requirements section  
-- **Architecture Reference**: Link to architecture section
-- **Test Reference**: Link to test coverage
-- **Implementation Tokens**: Code markers for traceability
+For detailed guidelines on how to document and track features, please refer to [Feature Documentation Standards](feature-documentation-standards.md).
 
 ## Current Feature Registry
 
@@ -115,43 +109,10 @@ Each feature must be documented across all relevant layers:
 ## Feature Change Protocol
 
 See the detailed [Feature Change Protocol](feature-change-protocol.md) for comprehensive guidelines on managing feature additions, modifications, bug fixes, and other changes.
-```
 
-#### **For Bug Fixes:**
-```
-1. Check if bug affects documented behavior
-2. If YES: Update specification.md to clarify correct behavior
-3. Update feature-tracking.md if implementation tokens change
-4. Update testing.md if new tests are added
-5. Add implementation tokens to fix code
-```
+### 🚀 Enforcement and Best Practices
 
-### ⚠️ COMMON MISTAKES TO AVOID
-
-1. **❌ Updating code without updating context files**
-   - ALWAYS update context files BEFORE or DURING code changes
-
-2. **❌ Forgetting to check immutable.md**
-   - ALWAYS verify no immutable requirements are violated
-
-3. **❌ Inconsistent feature status across documents**
-   - ALWAYS ensure all documents show the same feature status
-
-4. **❌ Missing implementation tokens**
-   - ALWAYS add tokens to every modified function/method
-
-5. **❌ Broken cross-references**
-   - ALWAYS verify links between documents after changes
-
-6. **❌ Incomplete impact analysis**
-   - ALWAYS search all context files for feature references
-
-### 🚀 ENFORCEMENT REMINDERS
-
-- **NO CODE REVIEW** without context file updates
-- **NO MERGE** without feature tracking matrix updates  
-- **NO DEPLOYMENT** without documentation validation
-- **NO EXCEPTIONS** - context files are as important as code
+For enforcement mechanisms, common mistakes to avoid, and important reminders, please refer to [Enforcement Mechanisms](enforcement-mechanisms.md).
 
 ## Implementation Status Summary
 

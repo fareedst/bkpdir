@@ -43,3 +43,30 @@
    - Ensure changes preserve documented compatibility
    - Verify no breaking changes for existing users
    - Document any necessary migration guidance
+
+## Common Mistakes to Avoid
+
+1. **❌ Updating code without updating context files**
+   - ALWAYS update context files BEFORE or DURING code changes
+
+2. **❌ Forgetting to check immutable.md**
+   - ALWAYS verify no immutable requirements are violated
+
+3. **❌ Inconsistent feature status across documents**
+   - ALWAYS ensure all documents show the same feature status
+
+4. **❌ Missing implementation tokens**
+   - ALWAYS add tokens to every modified function/method
+
+5. **❌ Broken cross-references**
+   - ALWAYS verify links between documents after changes
+
+6. **❌ Incomplete impact analysis**
+   - ALWAYS search all context files for feature references
+
+## Enforcement Reminders
+
+- **NO CODE REVIEW** without context file updates
+- **NO MERGE** without feature tracking matrix updates  
+- **NO DEPLOYMENT** without documentation validation
+- **NO EXCEPTIONS** - context files are as important as code
