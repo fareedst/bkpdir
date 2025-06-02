@@ -36,7 +36,7 @@
 
 # Variables
 BINARY_NAME := bkpdir
-VERSION := 1.3.0
+VERSION := $(shell grep -o 'Version = "[^"]*"' main.go | cut -d'"' -f2)
 BUILD_TIME := $(shell date -u +%Y-%m-%d\ %H:%M:%S\ UTC)
 PLATFORM := $(shell go env GOOS)-$(shell go env GOARCH)
 LDFLAGS := -X 'main.compileDate=$(BUILD_TIME)' -X 'main.platform=$(PLATFORM)'

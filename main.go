@@ -18,9 +18,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const (
-	version = "1.3.0"
-)
+// Version is the current version of bkpdir.
+// This is the single source of truth for the version number.
+// The Makefile uses this value during build via -ldflags.
+const Version = "1.4.0"
 
 var (
 	compileDate = "2024-03-20" // This is a placeholder - actual value is set during build via -ldflags
@@ -47,8 +48,8 @@ func main() {
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
 		Short:   "Directory archiving and file backup CLI for macOS and Linux",
-		Long:    fmt.Sprintf(rootLongDesc, version, compileDate, platform),
-		Version: fmt.Sprintf("%s (compiled %s) [%s]", version, compileDate, platform),
+		Long:    fmt.Sprintf(rootLongDesc, Version, compileDate, platform),
+		Version: fmt.Sprintf("%s (compiled %s) [%s]", Version, compileDate, platform),
 		Example: `  # Create a full directory archive
   bkpdir create "Initial backup"
   bkpdir full -n "Initial backup"  # backward compatibility
@@ -90,7 +91,7 @@ func main() {
 
 	// Set the version template to show version in help output
 	versionTemplate := fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n",
-		version, compileDate, platform)
+		Version, compileDate, platform)
 	rootCmd.SetVersionTemplate(versionTemplate)
 
 	// Global flags
