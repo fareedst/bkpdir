@@ -22,6 +22,7 @@ import (
 // IMMUTABLE-REF: Archive Verification Requirements
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
+// REFACTOR-003: Schema separation - Backup-specific verification config
 // VerificationConfig defines settings for archive verification.
 // It controls whether archives are verified on creation and which checksum algorithm to use.
 type VerificationConfig struct {
@@ -37,11 +38,13 @@ type VerificationConfig struct {
 // DECISION-REF: DEC-002
 // REFACTOR-001: Configuration interface contracts defined
 // REFACTOR-001: Dependency analysis - clean boundary confirmed
+// REFACTOR-003: Schema separation - Backup application specific schema
 // Config holds all configuration settings for the BkpDir application.
 // It includes settings for archive creation, file backup, status codes,
 // and output formatting.
 // The configuration can be loaded from YAML files and environment variables.
 type Config struct {
+	// REFACTOR-003: Schema separation - Basic backup settings
 	// Basic settings
 	ArchiveDirPath     string              `yaml:"archive_dir_path"`
 	UseCurrentDirName  bool                `yaml:"use_current_dir_name"`
@@ -50,10 +53,12 @@ type Config struct {
 	ShowGitDirtyStatus bool                `yaml:"show_git_dirty_status"`
 	Verification       *VerificationConfig `yaml:"verification"`
 
+	// REFACTOR-003: Schema separation - File backup specific settings
 	// File backup settings
 	BackupDirPath             string `yaml:"backup_dir_path"`
 	UseCurrentDirNameForFiles bool   `yaml:"use_current_dir_name_for_files"`
 
+	// REFACTOR-003: Schema separation - Backup application status codes
 	// Status codes for directory operations
 	StatusCreatedArchive                        int `yaml:"status_created_archive"`
 	StatusFailedToCreateArchiveDirectory        int `yaml:"status_failed_to_create_archive_directory"`
@@ -71,6 +76,7 @@ type Config struct {
 	StatusFileNotFound                    int `yaml:"status_file_not_found"`
 	StatusInvalidFileType                 int `yaml:"status_invalid_file_type"`
 
+	// REFACTOR-003: Schema separation - Backup application format strings
 	// Printf-style format strings for directory operations
 	FormatCreatedArchive   string `yaml:"format_created_archive"`
 	FormatIdenticalArchive string `yaml:"format_identical_archive"`
@@ -85,6 +91,7 @@ type Config struct {
 	FormatListBackup      string `yaml:"format_list_backup"`
 	FormatDryRunBackup    string `yaml:"format_dry_run_backup"`
 
+	// REFACTOR-003: Schema separation - Backup application template strings
 	// Template-based format strings for directory operations
 	TemplateCreatedArchive   string `yaml:"template_created_archive"`
 	TemplateIdenticalArchive string `yaml:"template_identical_archive"`
@@ -99,6 +106,7 @@ type Config struct {
 	TemplateListBackup      string `yaml:"template_list_backup"`
 	TemplateDryRunBackup    string `yaml:"template_dry_run_backup"`
 
+	// REFACTOR-003: Schema separation - Backup application regex patterns
 	// Regex patterns
 	PatternArchiveFilename string `yaml:"pattern_archive_filename"`
 	PatternBackupFilename  string `yaml:"pattern_backup_filename"`
@@ -106,6 +114,7 @@ type Config struct {
 	PatternTimestamp       string `yaml:"pattern_timestamp"`
 
 	// CFG-004: Extended format strings for comprehensive string configuration
+	// REFACTOR-003: Schema separation - Extended backup operation messages
 	// Archive operation messages
 	FormatNoArchivesFound      string `yaml:"format_no_archives_found"`
 	FormatVerificationFailed   string `yaml:"format_verification_failed"`
@@ -125,6 +134,7 @@ type Config struct {
 	FormatBackupCreated     string `yaml:"format_backup_created"`
 
 	// CFG-004: Error message format strings
+	// REFACTOR-003: Schema separation - Backup application error messages
 	FormatDiskFullError       string `yaml:"format_disk_full_error"`
 	FormatPermissionError     string `yaml:"format_permission_error"`
 	FormatDirectoryNotFound   string `yaml:"format_directory_not_found"`
@@ -138,6 +148,7 @@ type Config struct {
 	FormatFailedAccessDir     string `yaml:"format_failed_access_dir"`
 	FormatFailedAccessFile    string `yaml:"format_failed_access_file"`
 
+	// REFACTOR-003: Schema separation - Extended backup template strings
 	// Template-based extended format strings
 	TemplateNoArchivesFound      string `yaml:"template_no_archives_found"`
 	TemplateVerificationFailed   string `yaml:"template_verification_failed"`
@@ -157,6 +168,7 @@ type Config struct {
 	TemplateBackupCreated     string `yaml:"template_backup_created"`
 
 	// CFG-004: Template-based error message format strings
+	// REFACTOR-003: Schema separation - Backup application error templates
 	TemplateDiskFullError       string `yaml:"template_disk_full_error"`
 	TemplatePermissionError     string `yaml:"template_permission_error"`
 	TemplateDirectoryNotFound   string `yaml:"template_directory_not_found"`
@@ -175,6 +187,7 @@ type Config struct {
 // IMMUTABLE-REF: Commands - Display Configuration
 // TEST-REF: TestDisplayConfig
 // DECISION-REF: DEC-002
+// REFACTOR-003: Config abstraction - Generic configuration value representation
 // ConfigValue represents a single configuration value with its source.
 // It is used for displaying configuration values and their origins.
 type ConfigValue struct {
@@ -187,6 +200,7 @@ type ConfigValue struct {
 // IMMUTABLE-REF: Template Formatting Requirements, Configuration Defaults
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
+// REFACTOR-003: Schema separation - Backup application default patterns
 // Default regex patterns
 const (
 	defaultArchivePattern = `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-` +
@@ -204,6 +218,7 @@ const (
 // IMMUTABLE-REF: Configuration Defaults
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
+// REFACTOR-003: Schema separation - Backup application default configuration
 // DefaultConfig returns a new Config instance with default values.
 // These values are used when no configuration is provided or when merging configurations.
 func DefaultConfig() *Config {
@@ -378,14 +393,18 @@ func expandPath(path string) string {
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
+// REFACTOR-003: Config abstraction - Schema-specific configuration loading
 // LoadConfig loads configuration from YAML files and environment variables.
 // It searches for configuration files in the standard locations and merges them with defaults.
 func LoadConfig(root string) (*Config, error) {
+	// REFACTOR-003: Schema separation - Backup application default config
 	cfg := DefaultConfig()
+	// REFACTOR-003: Config abstraction - Hardcoded search paths need abstraction
 	searchPaths := getConfigSearchPaths()
 
 	// Process configuration files in order (earlier files take precedence)
 	for _, configPath := range searchPaths {
+		// REFACTOR-003: Config abstraction - Path expansion needs abstraction
 		expandedPath := expandPath(configPath)
 
 		// Make relative paths relative to root directory
@@ -400,6 +419,7 @@ func LoadConfig(root string) (*Config, error) {
 			}
 			defer f.Close()
 
+			// REFACTOR-003: Schema separation - Hardcoded Config struct unmarshaling
 			// Create a temporary config to load into
 			tempCfg := DefaultConfig()
 			d := yaml.NewDecoder(f)
@@ -409,6 +429,7 @@ func LoadConfig(root string) (*Config, error) {
 			}
 			f.Close()
 
+			// REFACTOR-003: Config abstraction - Schema-specific merging logic
 			// Merge non-zero values from tempCfg into cfg
 			mergeConfigs(cfg, tempCfg)
 			break // Use first valid config file found
@@ -422,9 +443,11 @@ func LoadConfig(root string) (*Config, error) {
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
+// REFACTOR-003: Config abstraction - Schema-specific merging needs abstraction
 // mergeConfigs merges source configuration into destination configuration.
 // It preserves non-zero values from the source configuration.
 func mergeConfigs(dst, src *Config) {
+	// REFACTOR-003: Schema separation - Backup application specific merge functions
 	mergeBasicSettings(dst, src)
 	mergeFileBackupSettings(dst, src)
 	mergeStatusCodes(dst, src)

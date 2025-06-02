@@ -5,6 +5,10 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// REFACTOR-002: Formatter decomposition analysis complete
+// Component boundaries identified: OutputCollector, PrintfFormatter, TemplateFormatter, PatternExtractor, ErrorFormatter
+// Ready for EXTRACT-003 (Output Formatting System) with config interface abstraction
 package main
 
 import (
@@ -15,7 +19,55 @@ import (
 	"text/template"
 )
 
-// OUT-001: Delayed output management
+// REFACTOR-002: Component boundary - Internal interfaces for extraction preparation
+// These interfaces define contracts for clean component extraction
+
+// REFACTOR-002: Component boundary - Format provider interface
+// Abstracts configuration dependency for formatter components
+type FormatProvider interface {
+	GetFormatString(formatType string) string
+	GetTemplateString(templateType string) string
+	GetPattern(patternType string) string
+	GetErrorFormat(errorType string) string
+}
+
+// REFACTOR-002: Component boundary - Output destination interface
+// Abstracts output handling for formatter components
+type OutputDestination interface {
+	Print(message string)
+	PrintError(message string)
+	IsDelayedMode() bool
+	SetCollector(collector *OutputCollector)
+}
+
+// REFACTOR-002: Component boundary - Pattern extractor interface
+// Defines contract for regex-based data extraction
+type PatternExtractor interface {
+	ExtractArchiveFilenameData(filename string) map[string]string
+	ExtractBackupFilenameData(filename string) map[string]string
+	ExtractPatternData(pattern, text string) map[string]string
+}
+
+// REFACTOR-002: Component boundary - Formatter interface
+// Primary formatter interface for printf-style formatting
+type FormatterInterface interface {
+	FormatCreatedArchive(path string) string
+	FormatIdenticalArchive(path string) string
+	FormatListArchive(path, creationTime string) string
+	FormatConfigValue(name, value, source string) string
+	FormatError(message string) string
+}
+
+// REFACTOR-002: Component boundary - Template formatter interface
+// Interface for template-based formatting operations
+type TemplateFormatterInterface interface {
+	FormatWithTemplate(input, pattern, tmplStr string) (string, error)
+	FormatWithPlaceholders(format string, data map[string]string) string
+	TemplateCreatedArchive(data map[string]string) string
+	TemplateIdenticalArchive(data map[string]string) string
+}
+
+// REFACTOR-002: Component boundary - Output Collector Component (Lines 20-111)
 // OutputMessage represents a message that can be displayed later
 type OutputMessage struct {
 	Content     string
@@ -23,6 +75,7 @@ type OutputMessage struct {
 	Type        string // "info", "error", "warning", etc.
 }
 
+// REFACTOR-002: Component boundary - Output collector ready for immediate extraction
 // OutputCollector collects output messages for delayed display
 type OutputCollector struct {
 	messages []OutputMessage
@@ -108,13 +161,8 @@ func (oc *OutputCollector) Clear() {
 	oc.messages = make([]OutputMessage, 0)
 }
 
-// CFG-003: Output formatting interface
-// IMMUTABLE-REF: Output Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
-// OUT-001: Enhanced with delayed output support
-// REFACTOR-001: Output formatting interface contracts defined
-// REFACTOR-001: Config dependency interface required for extraction
+// REFACTOR-002: Component boundary - Printf Formatter Component (Lines 120-610)
+// Configuration dependency requires interface abstraction for extraction
 // OutputFormatter provides methods for formatting and printing output for BkpDir operations.
 // It supports both printf-style and template-based formatting, with optional delayed output.
 type OutputFormatter struct {
@@ -157,10 +205,8 @@ func (f *OutputFormatter) SetCollector(collector *OutputCollector) {
 	f.collector = collector
 }
 
-// CFG-003: Printf-style archive creation formatting
-// IMMUTABLE-REF: Output Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
+// REFACTOR-002: Component boundary - Core Printf Formatters (Lines 166-226)
+// Direct config dependency - format string access needs interface abstraction
 // FormatCreatedArchive formats a message for a created archive.
 // It uses the configured format string to create the output message.
 func (f *OutputFormatter) FormatCreatedArchive(path string) string {
@@ -217,14 +263,10 @@ func (f *OutputFormatter) FormatError(message string) string {
 	return fmt.Sprintf(f.cfg.FormatError, message)
 }
 
-// CFG-003: Output printing for archives
-// IMMUTABLE-REF: Output Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
-// OUT-001: Enhanced with delayed output support
-// PrintCreatedArchive prints a created archive message to stdout.
-// It formats the message using FormatCreatedArchive and writes it to stdout.
-// If in delayed mode, the message is collected instead of printed immediately.
+// REFACTOR-002: Component boundary - Print Output Methods (Lines 228-405)
+// Format + Print with optional delayed output via collector
+// PrintCreatedArchive prints a message for a created archive.
+// Uses delayed output if collector is set, otherwise prints immediately.
 func (f *OutputFormatter) PrintCreatedArchive(path string) {
 	message := f.FormatCreatedArchive(path)
 	if f.collector != nil {
@@ -397,12 +439,9 @@ func (f *OutputFormatter) PrintDryRunBackup(path string) {
 	}
 }
 
-// CFG-003: Regex pattern data extraction for archives
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
-// ExtractArchiveFilenameData extracts data from an archive filename using a regex pattern.
-// It returns a map of named capture groups from the configured pattern.
+// REFACTOR-002: Component boundary - Pattern Extraction Methods (Lines 406-482)
+// Regex-based data extraction - shared functionality
+// ExtractArchiveFilenameData extracts data from archive filename patterns.
 func (f *OutputFormatter) ExtractArchiveFilenameData(filename string) map[string]string {
 	return f.extractPatternData(f.cfg.PatternArchiveFilename, filename)
 }
@@ -524,11 +563,9 @@ func (f *OutputFormatter) FormatDryRunBackup(path string) string {
 	return fmt.Sprintf(f.cfg.FormatDryRunBackup, path)
 }
 
-// CFG-003: Template-based archive creation formatting
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
-// FormatCreatedArchiveTemplate formats a created archive message using a template.
+// REFACTOR-002: Component boundary - Template Integration Methods (Lines 532-609)
+// Bridge between printf and template systems
+// FormatCreatedArchiveTemplate formats using template with extracted data.
 func (f *OutputFormatter) FormatCreatedArchiveTemplate(data map[string]string) string {
 	return f.formatTemplate(f.cfg.TemplateCreatedArchive, data)
 }
@@ -606,7 +643,9 @@ func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]str
 	return buf.String()
 }
 
-// Regex pattern extraction methods
+// REFACTOR-002: Component boundary - Pattern Extraction Methods (Lines 406-482)
+// Regex-based data extraction - shared functionality
+// ExtractArchiveFilenameData extracts data from archive filename patterns.
 func (f *OutputFormatter) extractPatternData(pattern, text string) map[string]string {
 	re, err := regexp.Compile(pattern)
 	if err != nil {
@@ -628,30 +667,22 @@ func (f *OutputFormatter) extractPatternData(pattern, text string) map[string]st
 	return result
 }
 
-// CFG-003: Template-based formatting interface
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
+// REFACTOR-002: Component boundary - Template Formatter Component (Lines 637-928)
+// Configuration dependency requires interface abstraction for extraction
 // TemplateFormatter provides methods for template-based output formatting.
 // It supports both pattern-based and placeholder-based template formatting.
 type TemplateFormatter struct {
 	config *Config
 }
 
-// CFG-003: Template formatter constructor
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
 // NewTemplateFormatter creates a new TemplateFormatter with the given configuration.
 // It initializes the formatter with the provided config for use in template operations.
 func NewTemplateFormatter(cfg *Config) *TemplateFormatter {
 	return &TemplateFormatter{config: cfg}
 }
 
-// CFG-003: Pattern-based template formatting
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
+// REFACTOR-002: Component boundary - Template Engine Core (Lines 657-717)
+// Self-contained template processing with pattern extraction
 // FormatWithTemplate formats input using a pattern and template string.
 // It extracts data using the pattern and applies the template to the extracted data.
 func (tf *TemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
@@ -678,10 +709,6 @@ func (tf *TemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) 
 	return tf.FormatWithPlaceholders(tmplStr, data), nil
 }
 
-// CFG-003: Placeholder-based template formatting
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
 // FormatWithPlaceholders formats a string using placeholder-based template formatting.
 // It replaces placeholders in the format string with values from the data map.
 func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
@@ -709,10 +736,8 @@ func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[stri
 	return buf.String()
 }
 
-// CFG-003: Template-based archive creation formatting
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
+// REFACTOR-002: Component boundary - Template Method Series (Lines 718-817)
+// Direct config template dependency - needs interface abstraction
 // TemplateCreatedArchive formats a created archive message using a template.
 // It applies the configured template to the provided data map.
 func (tf *TemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
@@ -920,12 +945,8 @@ func (tf *TemplateFormatter) extractBackupData(filename string) map[string]strin
 	return result
 }
 
-// CFG-003: Template-based backup formatting
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
-// FormatBackupWithExtraction formats a backup message using template-based formatting.
-// It extracts data from the backup filename and applies the configured template.
+// REFACTOR-002: Component boundary - Extended Printf Formatters (Lines 929-1084)
+// Complex formatting requiring data extraction - extends core printf functionality
 func (f *OutputFormatter) FormatBackupWithExtraction(backupPath string) string {
 	// Extract data from backup filename
 	filename := getFilenameFromPath(backupPath)
@@ -941,10 +962,6 @@ func (f *OutputFormatter) FormatBackupWithExtraction(backupPath string) string {
 	return f.FormatCreatedBackup(backupPath)
 }
 
-// CFG-003: Template-based backup listing formatting
-// IMMUTABLE-REF: Template Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
 // FormatListBackupWithExtraction formats a list backup message using template-based formatting.
 // It extracts data from the backup filename and applies the configured template.
 func (f *OutputFormatter) FormatListBackupWithExtraction(backupPath, creationTime string) string {
