@@ -52,17 +52,7 @@ Before implementing ANY code change, developers MUST complete this checklist:
 
 ### 🔒 ENFORCEMENT MECHANISMS
 
-#### **Automated Validation Rules**
-1. **Feature ID Consistency**: All implementation tokens must correspond to feature matrix entries
-2. **Cross-Reference Integrity**: All document links must resolve correctly
-3. **Status Synchronization**: Feature status must be consistent across all documents
-4. **Test Traceability**: All features must have corresponding test references
-
-#### **Manual Review Requirements**
-1. **Context Documentation Review**: Every code change must include review of context file updates
-2. **Feature Impact Assessment**: Verify that all affected features are properly documented
-3. **Immutable Requirement Check**: Confirm no immutable requirements are violated
-4. **Backward Compatibility Verification**: Ensure changes preserve documented compatibility
+See the detailed [Enforcement Mechanisms](enforcement-mechanisms.md) for comprehensive validation rules and manual review requirements.
 
 ### 📁 CONTEXT FILE RESPONSIBILITIES
 
