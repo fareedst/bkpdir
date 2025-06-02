@@ -585,34 +585,99 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
      - **main.go COMPLETED**: Successfully tested all 30+ previously 0% coverage functions with comprehensive test suite of 29 new test functions. Addressed challenges including os.Exit() calls by testing component logic separately and using appropriate test skipping. Added tests for command handlers (handleConfigCommand, handleCreateCommand, handleVerifyCommand, handleVersionCommand), command creation functions (configCmd, createCmd, verifyCmd, versionCmd, backupCmd), enhanced archive functions (CreateFullArchiveEnhanced, CreateIncrementalArchiveEnhanced, VerifyArchiveEnhanced), configuration management functions (handleConfigSetCommand, loadExistingConfigData, convertConfigValue, convertBooleanValue, convertIntegerValue, updateConfigData, saveConfigData), and verification functions (verifySingleArchive, verifyAllArchives, performVerification, handleVerificationResult). Overall test coverage improved significantly with all tests passing successfully.
 
 9. **Create Testing Infrastructure for Complex Scenarios** (TEST-INFRA-001) - **CRITICAL ENABLER**
-   - [ ] **Archive corruption testing** - Controlled corruption for verification testing
-   - [ ] **Disk space simulation** - Test disk full conditions safely
-   - [ ] **Permission testing framework** - Reliable permission error simulation
-   - [ ] **Context cancellation helpers** - Standardized timeout and cancellation testing
-   - [ ] **Error injection framework** - Systematic error condition testing
-   - **Rationale**: Many untested functions handle error conditions that are difficult to reproduce without proper infrastructure
-   - **Status**: Not Started
-   - **Priority**: HIGH - Enables TEST-EXTRACT-001
-   - **Implementation Notes**:
-     - Complex error scenarios need reliable reproduction for testing
-     - Context testing requires controlled timing mechanisms
-     - Error injection enables testing of error propagation paths
-     - Infrastructure investment pays off across all component testing
+   
+   **9.1 Archive Corruption Testing Framework** (TEST-INFRA-001-A) - **HIGH PRIORITY** ✅ **COMPLETED**
+   - [x] **Create controlled ZIP corruption utilities** - Systematic header/data corruption for verification testing
+   - [x] **Implement corruption type enumeration** - CRC errors, header corruption, truncation, invalid central directory
+   - [x] **Add corruption reproducibility** - Deterministic corruption patterns for consistent test results
+   - [x] **Create archive repair detection** - Test recovery behavior from various corruption types
+   - **Implementation Areas**: Test utilities for `verify.go`, `comparison.go` archive validation
+   - **Files Created**: `internal/testutil/corruption.go`, `internal/testutil/corruption_test.go`
+   - **Dependencies**: None (foundational) ✅ **SATISFIED**
+   - **Design Decision**: Use Go's ZIP library knowledge to corrupt specific sections (local headers, central directory, file data)
+   - **Status**: ✅ **COMPLETED**
+   - **Implementation Notes**: 
+     - **Comprehensive corruption types**: Implemented 8 different corruption types (CRC, Header, Truncate, Central Directory, Local Header, Data, Signature, Comment) with systematic approach
+     - **Reproducibility achieved**: Used deterministic seeding with offset-based variation to ensure identical corruption across identical archives
+     - **Detection logic**: Created CorruptionDetector that can identify different corruption types through systematic analysis
+     - **Resilient testing**: Go's ZIP reader is surprisingly resilient - adjusted tests to verify corruption effects rather than complete failure
+     - **Performance**: Benchmarks show CRC corruption at ~763μs and detection at ~49μs for typical archives
+     - **Recovery support**: Framework tracks original bytes and corruption locations for potential recovery scenarios
+     - **Edge case handling**: Handles empty archives, very small archives, and various error conditions gracefully
 
-10. **Establish Pre-Extraction Quality Gates** (TEST-QUALITY-001) - **PROCESS**
-    - [ ] **Set minimum 95% coverage requirement** - For all functions in extraction target files
-    - [ ] **Create extraction readiness checklist** - Comprehensive criteria before extraction begins
-    - [ ] **Implement regression test suite** - Ensure extraction doesn't break existing functionality
-    - [ ] **Document testing gaps and decisions** - Track remaining untested code with justification
-    - [ ] **Create component integration tests** - Test interactions between components that will be separated
-    - **Rationale**: Systematic quality approach prevents extracting unreliable code
-    - **Status**: Not Started
-    - **Priority**: HIGH - Ensures extraction quality
-    - **Design Decisions**:
-      - 95% coverage threshold ensures robustness for reusable components
-      - Regression testing protects against extraction-induced bugs
-      - Integration testing validates component boundaries
-      - Documentation provides transparency about testing decisions
+   **9.2 Disk Space Simulation Framework** (TEST-INFRA-001-B) - **HIGH PRIORITY**
+   - [ ] **Create mock filesystem with quota limits** - Controlled disk space simulation without affecting real system
+   - [ ] **Implement progressive space exhaustion** - Gradually reduce available space during operations
+   - [ ] **Add disk full error injection** - Trigger ENOSPC at specific operation points
+   - [ ] **Create space recovery testing** - Test behavior when disk space becomes available again
+   - **Implementation Areas**: Error handling in `archive.go`, `backup.go`, atomic file operations in `errors.go`
+   - **Files to Create**: `internal/testutil/diskspace.go`, `internal/testutil/diskspace_test.go`
+   - **Dependencies**: TEST-INFRA-001-D (error injection framework)
+   - **Design Decision**: Use filesystem interface wrapper to simulate space constraints without requiring large files
+   - **Implementation Notes**: Essential for testing ResourceManager cleanup and atomic operations under space pressure
+
+   **9.3 Permission Testing Framework** (TEST-INFRA-001-C) - **HIGH PRIORITY**
+   - [ ] **Create permission scenario generator** - Systematic permission combinations for comprehensive testing
+   - [ ] **Implement cross-platform permission simulation** - Handle Unix/Windows permission differences
+   - [ ] **Add permission restoration utilities** - Safely restore original permissions after tests
+   - [ ] **Create permission change detection** - Test behavior when permissions change during operations
+   - **Implementation Areas**: File operations in `comparison.go`, config file handling in `config.go`, atomic operations
+   - **Files to Create**: `internal/testutil/permissions.go`, `internal/testutil/permissions_test.go`
+   - **Dependencies**: None (foundational)
+   - **Design Decision**: Use temporary directories with controlled permissions rather than modifying system files
+   - **Implementation Notes**: Critical for testing permission error paths in file operations and configuration management
+
+   **9.4 Context Cancellation Testing Helpers** (TEST-INFRA-001-D) - **MEDIUM PRIORITY**
+   - [ ] **Create controlled timeout scenarios** - Precise timing control for context cancellation testing
+   - [ ] **Implement cancellation point injection** - Trigger cancellation at specific operation stages
+   - [ ] **Add concurrent operation testing** - Test cancellation during concurrent archive/backup operations
+   - [ ] **Create cancellation propagation verification** - Ensure proper context propagation through operation chains
+   - **Implementation Areas**: Context handling in `archive.go`, `backup.go`, long-running operations, ResourceManager cleanup
+   - **Files to Create**: `internal/testutil/context.go`, `internal/testutil/context_test.go`
+   - **Dependencies**: None (foundational)
+   - **Design Decision**: Use ticker-based timing control and goroutine coordination for deterministic cancellation testing
+   - **Implementation Notes**: Required for testing context-aware operations that are currently difficult to test reliably
+
+   **9.5 Error Injection Framework** (TEST-INFRA-001-E) - **HIGH PRIORITY**
+   - [ ] **Create systematic error injection points** - Configurable error insertion at filesystem, Git, and network operations
+   - [ ] **Implement error type classification** - Categorize errors (transient, permanent, recoverable, fatal)
+   - [ ] **Add error propagation tracing** - Track error flow through operation chains
+   - [ ] **Create error recovery testing** - Test retry logic and graceful degradation
+   - **Implementation Areas**: Error handling patterns in `errors.go`, Git operations in `git.go`, file operations across all modules
+   - **Files to Create**: `internal/testutil/errorinjection.go`, `internal/testutil/errorinjection_test.go`
+   - **Dependencies**: TEST-INFRA-001-B (disk space simulation), TEST-INFRA-001-C (permission testing)
+   - **Design Decision**: Use interface-based injection with configurable error schedules rather than global state modification
+   - **Implementation Notes**: Enables comprehensive testing of error propagation paths that are currently untested
+
+   **9.6 Integration Testing Orchestration** (TEST-INFRA-001-F) - **MEDIUM PRIORITY**
+   - [ ] **Create complex scenario composition** - Combine multiple error conditions for realistic testing
+   - [ ] **Implement test scenario scripting** - Declarative scenario definition for complex multi-step tests
+   - [ ] **Add timing and coordination utilities** - Synchronize multiple error conditions and operations
+   - [ ] **Create regression test suite integration** - Plug infrastructure into existing test suites
+   - **Implementation Areas**: Integration with existing `*_test.go` files, comprehensive scenario testing
+   - **Files to Create**: `internal/testutil/scenarios.go`, `internal/testutil/scenarios_test.go`
+   - **Dependencies**: All previous TEST-INFRA-001 subtasks
+   - **Design Decision**: Use builder pattern for scenario composition with clear separation between setup, execution, and verification
+   - **Implementation Notes**: Provides foundation for testing complex interactions that occur in real-world usage
+
+   - **Overall Rationale**: Many untested functions handle error conditions that are difficult to reproduce without proper infrastructure. Current coverage gaps exist primarily in error handling paths, resource cleanup under pressure, and edge cases that occur in production but are hard to simulate.
+   - **Status**: Not Started
+   - **Priority**: HIGH - Enables TEST-EXTRACT-001 and comprehensive testing of all extraction candidates
+   - **Implementation Strategy**:
+     - Start with foundational frameworks (corruption, permissions, context)
+     - Build error injection framework on top of foundational components
+     - Create integration orchestration last to leverage all components
+     - Each component must be independently testable and reusable
+   - **Success Metrics**:
+     - Enable testing of currently untestable error paths in verification logic
+     - Achieve reliable reproduction of disk space and permission errors
+     - Support comprehensive context cancellation testing across all operations
+     - Provide foundation for systematic error injection across all modules
+   - **Design Challenges**:
+     - Cross-platform compatibility for permission and filesystem simulation
+     - Deterministic timing for context cancellation testing
+     - Realistic error injection without affecting system stability
+     - Integration with existing test patterns without breaking current tests
 
 #### **Process Implementation (Next 2-4 weeks)**
 

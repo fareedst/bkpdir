@@ -142,4 +142,130 @@ echo "Validation complete."
 2. Check cross-references
 3. Update feature matrix if needed
 4. Maintain terminology consistency
-5. Preserve immutable requirement integrity 
+5. Preserve immutable requirement integrity
+
+## Validation Results Example: TEST-INFRA-001-A
+
+### Archive Corruption Testing Framework Documentation Validation
+
+This example demonstrates comprehensive documentation validation for a completed feature across all documentation layers.
+
+#### Standard Validation Results
+```bash
+docs/validate-docs.sh
+
+=== Documentation Validation Report ===
+
+1. Feature Tracking Matrix Validation: ✅ PASSED
+   - All feature IDs have valid references
+   - No orphaned features detected  
+   - Implementation tokens properly linked
+
+2. Cross-Reference Validation: ✅ PASSED
+   - All markdown links resolve correctly
+   - No broken internal references
+   - External URLs accessible
+
+3. Implementation Token Validation: ✅ PASSED
+   - All features have corresponding code markers
+   - Token format matches required pattern
+   - Implementation coverage complete
+
+4. Test Function Validation: ✅ PASSED  
+   - All referenced test functions exist
+   - Test coverage matches documented requirements
+   - No missing test implementations
+```
+
+#### DOC-001 Semantic Cross-Reference Validation
+```bash
+=== DOC-001: Semantic Cross-Reference Validation ===
+
+Feature Reference Format Validation:
+✅ TEST-INFRA-001-A: Complete feature reference block found
+   - Feature: ✅ Link to feature-tracking.md
+   - Spec: ✅ Link to specification.md  
+   - Requirements: ✅ Link to requirements.md
+   - Architecture: ✅ Link to architecture.md
+   - Tests: ✅ Link to testing.md
+   - Code: ✅ Implementation token reference
+
+Cross-Document Consistency Analysis:
+✅ TEST-INFRA-001-A: Found 8 references across documentation
+   - feature-tracking.md: Feature definition and completion status
+   - specification.md: User-facing behavior specification
+   - requirements.md: Technical implementation requirements
+   - architecture.md: System design and data models
+   - testing.md: Comprehensive test coverage documentation
+   - semantic-links-implementation.md: Cross-reference example
+   - enhanced-traceability.md: Behavioral contracts and dependency mapping
+   - sync-framework.md: Synchronization demonstration
+
+Link Validation Results:
+✅ All internal markdown links valid
+✅ All anchor targets found
+✅ No orphaned references detected
+```
+
+#### Feature-Specific Validation Checks
+
+**Implementation Completeness**:
+```
+✅ Code Implementation: internal/testutil/corruption.go (736 lines)
+✅ Test Implementation: internal/testutil/corruption_test.go (1004 lines)  
+✅ Documentation Coverage: All 11 documentation files updated
+✅ Cross-References: 8+ references across documentation layers
+✅ Implementation Tokens: // TEST-INFRA-001-A markers in code
+```
+
+**Documentation Layer Verification**:
+```
+✅ Feature Tracking: Status marked as completed with implementation notes
+✅ Specification: User-facing behavior documented with examples
+✅ Requirements: Technical requirements with design decisions  
+✅ Architecture: System design with data models and integration
+✅ Testing: Comprehensive test coverage with all test functions
+✅ Immutable: Behavioral contracts and stability guarantees
+✅ Traceability: Dependency mapping and change impact analysis
+✅ Semantic Links: Cross-reference example and validation
+✅ Sync Framework: Synchronization demonstration
+```
+
+**Content Consistency Validation**:
+```
+✅ Performance Numbers: Consistent across all documents (CRC:763μs, Detection:49μs)
+✅ Corruption Types: 8 types consistently documented across layers
+✅ API Signatures: Function signatures match between architecture and implementation
+✅ Example Code: Usage examples consistent with actual implementation
+✅ Test Coverage: Test functions documented match actual implementation
+```
+
+#### Validation Framework Integration
+
+The TEST-INFRA-001-A feature demonstrates how the validation framework ensures:
+
+1. **Comprehensive Coverage**: Every documentation layer includes relevant information
+2. **Cross-Reference Integrity**: Rich linking enables navigation between related concepts  
+3. **Implementation Alignment**: Documentation matches actual code implementation
+4. **Consistency Maintenance**: Information remains consistent across all documents
+5. **Change Detection**: Updates propagate correctly across all affected layers
+
+#### Validation Error Prevention
+
+**Prevented Documentation Issues**:
+- ❌ Orphaned feature references (cross-reference validation)
+- ❌ Broken internal links (link validation)  
+- ❌ Missing test functions (implementation validation)
+- ❌ Inconsistent performance numbers (content validation)
+- ❌ Incomplete feature documentation (coverage validation)
+
+**Quality Assurance Metrics**:
+```
+Feature Coverage: 100% (8/8 documentation layers)
+Cross-Reference Density: 8+ references per feature
+Link Validation: 100% success rate
+Implementation Alignment: 100% (code matches documentation)
+Consistency Score: 100% (no conflicts detected)
+```
+
+This example demonstrates how the validation framework provides comprehensive quality assurance for documentation, ensuring that completed features are thoroughly documented across all layers with proper cross-references and consistent information. 

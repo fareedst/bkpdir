@@ -351,4 +351,34 @@ This document contains specifications that MUST NOT be changed without a major v
    - **No temporary files may remain after any operation**
    - **Memory leaks are strictly prohibited**
    - **Archive integrity must be guaranteed**
-   - **Git integration must be reliable** 
+   - **Git integration must be reliable**
+
+## Testing Infrastructure Immutable Requirements
+
+### Archive Corruption Testing Framework (TEST-INFRA-001-A)
+
+#### Corruption Type Enumeration Stability
+- **Immutable**: The 8 corruption types (CRC, Header, Truncate, CentralDir, LocalHeader, Data, Signature, Comment) must remain stable across versions
+- **Rationale**: Test code depends on these specific corruption types for systematic verification testing
+- **Impact**: New corruption types may be added but existing types cannot be renamed or removed
+- **Version**: Established in initial implementation, immutable from v1.0.0
+
+#### Deterministic Corruption Behavior  
+- **Immutable**: Identical seeds must produce identical corruption across versions
+- **Rationale**: CI/CD systems depend on reproducible test results for regression detection
+- **Impact**: Corruption algorithms cannot be changed in ways that break reproducibility
+- **Version**: Established in initial implementation, immutable from v1.0.0
+- **Exception**: Bug fixes that improve correctness may change behavior if documented in release notes
+
+#### Safe Testing Guarantees
+- **Immutable**: Backup/restore functionality must prevent data loss during corruption testing
+- **Rationale**: Testing infrastructure must never risk data integrity
+- **Impact**: Any changes to backup/restore logic must maintain safety guarantees
+- **Version**: Established in initial implementation, immutable from v1.0.0
+
+#### Performance Baseline Stability
+- **Immutable**: Performance characteristics must not degrade by more than 20% across versions
+- **Rationale**: Testing infrastructure performance affects overall test suite execution time
+- **Baseline**: CRC corruption ~763μs, detection ~49μs (±20% acceptable variance)
+- **Impact**: Performance optimizations welcome, but regressions require justification
+- **Version**: Established in initial implementation, immutable from v1.0.0 

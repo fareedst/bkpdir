@@ -41,3 +41,24 @@ Each document should contain:
 - **Forward Links**: "This requirement is implemented by [Architecture Component](architecture.md#component)"
 - **Backward Links**: "This component implements [Requirement REQ-001](requirements.md#REQ-001)"
 - **Sibling Links**: "Related to [Feature FILE-001](feature-tracking.md#FILE-001)" 
+
+## Additional Cross-Reference Example
+
+### TEST-INFRA-001-A: Archive Corruption Testing Framework
+**Feature**: [TEST-INFRA-001-A: Archive Corruption Testing Framework](feature-tracking.md#TEST-INFRA-001-A)
+**Spec**: [Testing Infrastructure - Archive Corruption Testing Framework](specification.md#archive-corruption-testing-framework)  
+**Requirements**: [Testing Infrastructure Requirements - Archive Corruption Testing Framework](requirements.md#archive-corruption-testing-framework)
+**Architecture**: [Testing Infrastructure Architecture - Archive Corruption Testing Framework](architecture.md#archive-corruption-testing-framework)
+**Tests**: [TestCorruptionType, TestCreateTestArchive, TestCorruptionCRC, TestCorruptionReproducibility, BenchmarkCorruptionCRC](testing.md#archive-corruption-testing-framework)
+**Code**: `// TEST-INFRA-001-A: Archive corruption testing framework` tokens
+
+This example demonstrates a completed feature with comprehensive cross-references across all documentation layers. The Archive Corruption Testing Framework shows how features can have rich documentation coverage including:
+
+- **Feature tracking** with completion status and implementation notes
+- **User-facing specification** with behavior description and examples
+- **Technical requirements** with design decisions and implementation constraints  
+- **System architecture** with data models and integration patterns
+- **Comprehensive testing** with detailed test coverage and performance benchmarks
+- **Implementation tokens** linking documentation to actual code
+
+The cross-reference density (8+ references across documentation layers) demonstrates the value of rich linking for LLM consumption and change impact analysis. 

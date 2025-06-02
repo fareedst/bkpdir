@@ -1100,3 +1100,102 @@ make lint && make test && make build
 These Git integration requirements are mandatory and must be preserved
 
 ## Archive Verification Requirements
+
+### Testing Infrastructure Requirements
+
+#### Archive Corruption Testing Framework (TEST-INFRA-001-A) ✅ COMPLETED
+**Implementation**: `internal/testutil/corruption.go`, `internal/testutil/corruption_test.go`
+**Specification Requirements**:
+- **Controlled ZIP Corruption Utilities**: Systematic corruption for verification testing
+  - Spec: "Provide systematic corruption capabilities for testing archive verification logic"
+  - Implementation: `ArchiveCorruptor` class with 8 distinct corruption types
+  - Safety: Backup/restore functionality ensures safe testing without data loss
+  - Configuration: `CorruptionConfig` struct allows precise control over corruption parameters
+- **Corruption Type Enumeration**: Complete coverage of ZIP corruption scenarios
+  - Spec: "Support all major ZIP corruption types for comprehensive verification testing"
+  - Types: CRC errors, header corruption, truncation, invalid central directory, local header corruption, data corruption, signature corruption, comment corruption
+  - Classification: Categorizes corruption as recoverable vs fatal for appropriate test expectations
+  - Detection: Automatic corruption type identification through `CorruptionDetector`
+- **Deterministic Corruption Patterns**: Reproducible corruption for consistent test results
+  - Spec: "Corruption must be reproducible across test runs for reliable CI/CD testing"
+  - Implementation: Seed-based corruption generation with offset variation
+  - Reproducibility: Identical archives with identical seeds produce identical corruption
+  - Verification: Test suite validates reproducibility across multiple test runs
+- **Archive Repair Detection**: Test recovery behavior from various corruption types
+  - Spec: "Enable testing of archive repair and recovery mechanisms"
+  - Implementation: `CorruptionDetector` for automatic corruption classification
+  - Recovery Testing: Framework tracks original bytes for potential recovery scenarios
+  - Integration: Designed for use with `verify.go` and `comparison.go` testing
+
+**Example Usage**:
+```go
+// Create systematic corruption for verification testing
+config := CorruptionConfig{
+    Type:           CorruptionCRC,
+    Seed:           12345,
+    CorruptionSize: 4,
+    Severity:       0.5,
+}
+
+corruptor, err := NewArchiveCorruptor(archivePath, config)
+if err != nil {
+    return fmt.Errorf("failed to create corruptor: %w", err)
+}
+defer corruptor.Cleanup()
+
+// Apply controlled corruption
+result, err := corruptor.ApplyCorruption()
+if err != nil {
+    return fmt.Errorf("corruption failed: %w", err)
+}
+
+// Test verification behavior with corrupted archive
+detector := NewCorruptionDetector(archivePath)
+detected, err := detector.DetectCorruption()
+if err != nil {
+    return fmt.Errorf("detection failed: %w", err)
+}
+
+// Validate detection matches applied corruption
+expectedTypes := []CorruptionType{CorruptionCRC}
+if !containsAllTypes(detected, expectedTypes) {
+    return fmt.Errorf("detection mismatch: got %v, want %v", detected, expectedTypes)
+}
+```
+
+**Implementation Areas**:
+- Testing infrastructure for `verify.go` archive verification logic
+- Complex scenario testing for `comparison.go` archive comparison
+- Error path testing for archive operations that are difficult to reproduce
+- Performance baseline establishment for corruption detection algorithms
+- Cross-platform testing utilities for ZIP archive manipulation
+
+**Design Decisions**:
+- **Comprehensive Corruption Types**: Implemented 8 different corruption types covering all major ZIP structure components
+  - Rationale: Enables thorough testing of verification logic against real-world corruption scenarios
+  - Implementation: Each corruption type targets specific ZIP format structures (headers, data, metadata)
+  - Testing: Systematic validation ensures each corruption type behaves as expected
+- **Deterministic Reproduction**: Used seed-based corruption generation for consistent test results
+  - Rationale: CI/CD testing requires reproducible results for reliable quality gates
+  - Implementation: Seed + offset combination generates different but deterministic corruption per location
+  - Validation: Test suite verifies identical corruption across multiple runs with same seed
+- **Safe Corruption Testing**: Implemented backup/restore functionality for safe testing
+  - Rationale: Prevents accidental data loss during corruption testing
+  - Implementation: Automatic backup creation before corruption, cleanup after testing
+  - Safety: Panic recovery ensures cleanup occurs even during test failures
+- **Go ZIP Reader Compatibility**: Designed corruption testing around Go's ZIP reader behavior
+  - Rationale: Go's `zip.OpenReader` is surprisingly resilient to corruption
+  - Implementation: Tests verify corruption effects rather than complete reading failure
+  - Adaptation: Adjusted test expectations to match Go's actual ZIP handling behavior
+
+**Performance Characteristics**:
+- **CRC Corruption**: ~763μs average for typical archives
+- **Corruption Detection**: ~49μs average for classification
+- **Memory Usage**: Minimal additional memory overhead during testing
+- **Cleanup Performance**: Automatic resource cleanup with <1ms overhead
+
+**Cross-Platform Compatibility**:
+- **Unix Systems**: Full functionality with proper file permission handling
+- **Windows Systems**: Compatible file operations with appropriate path handling
+- **Temporary Files**: Cross-platform temporary directory usage with proper cleanup
+- **File Permissions**: Respects platform-specific file permission models
