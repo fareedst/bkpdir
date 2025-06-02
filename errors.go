@@ -26,6 +26,8 @@ type ArchiveError struct {
 }
 
 func (e *ArchiveError) Error() string {
+	// CFG-002: Structured error message formatting
+	// DECISION-REF: DEC-004
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
@@ -38,6 +40,8 @@ func (e *ArchiveError) Unwrap() error {
 
 // NewArchiveError creates a new structured error
 func NewArchiveError(message string, statusCode int) *ArchiveError {
+	// CFG-002: Basic structured error creation
+	// DECISION-REF: DEC-004
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -46,6 +50,8 @@ func NewArchiveError(message string, statusCode int) *ArchiveError {
 
 // NewArchiveErrorWithCause creates a new structured error with underlying cause
 func NewArchiveErrorWithCause(message string, statusCode int, err error) *ArchiveError {
+	// CFG-002: Error creation with cause chain
+	// DECISION-REF: DEC-004
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -60,6 +66,8 @@ func NewArchiveErrorWithContext(
 	operation, path string,
 	err error,
 ) *ArchiveError {
+	// CFG-002: Error creation with operation context
+	// DECISION-REF: DEC-004
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -71,6 +79,8 @@ func NewArchiveErrorWithContext(
 
 // IsDiskFullError reports whether the error is due to disk full or quota exceeded conditions.
 func IsDiskFullError(err error) bool {
+	// Error classification for disk space issues
+	// DECISION-REF: DEC-004
 	if err == nil {
 		return false
 	}
@@ -97,6 +107,8 @@ func IsDiskFullError(err error) bool {
 
 // isDiskFullError provides enhanced disk space error detection with comprehensive pattern matching
 func isDiskFullError(err error) bool {
+	// Enhanced disk space error detection
+	// DECISION-REF: DEC-004
 	if err == nil {
 		return false
 	}
@@ -123,6 +135,8 @@ func isDiskFullError(err error) bool {
 
 // IsPermissionError reports whether the error is due to permission or access denied conditions.
 func IsPermissionError(err error) bool {
+	// Error classification for permission issues
+	// DECISION-REF: DEC-004
 	if err == nil {
 		return false
 	}
@@ -146,6 +160,8 @@ func IsPermissionError(err error) bool {
 
 // IsDirectoryNotFoundError reports whether the error is due to a missing directory.
 func IsDirectoryNotFoundError(err error) bool {
+	// Error classification for directory not found
+	// DECISION-REF: DEC-004
 	if err == nil {
 		return false
 	}
@@ -169,6 +185,7 @@ type TempFile struct {
 
 // Cleanup removes the temporary file from the filesystem.
 func (tf *TempFile) Cleanup() error {
+	// DECISION-REF: DEC-006
 	return os.Remove(tf.Path)
 }
 
@@ -183,6 +200,7 @@ type TempDir struct {
 
 // Cleanup removes the temporary directory and its contents from the filesystem.
 func (td *TempDir) Cleanup() error {
+	// DECISION-REF: DEC-006
 	return os.RemoveAll(td.Path)
 }
 
@@ -198,6 +216,7 @@ type ResourceManager struct {
 
 // NewResourceManager creates a new ResourceManager for tracking resources.
 func NewResourceManager() *ResourceManager {
+	// DECISION-REF: DEC-006
 	return &ResourceManager{
 		resources: make([]Resource, 0),
 	}
@@ -205,6 +224,7 @@ func NewResourceManager() *ResourceManager {
 
 // AddResource adds a resource to the ResourceManager for cleanup.
 func (rm *ResourceManager) AddResource(resource Resource) {
+	// DECISION-REF: DEC-006
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 	rm.resources = append(rm.resources, resource)
@@ -212,16 +232,19 @@ func (rm *ResourceManager) AddResource(resource Resource) {
 
 // AddTempFile adds a temporary file resource to the ResourceManager.
 func (rm *ResourceManager) AddTempFile(path string) {
+	// DECISION-REF: DEC-006
 	rm.AddResource(&TempFile{Path: path})
 }
 
 // AddTempDir adds a temporary directory resource to the ResourceManager.
 func (rm *ResourceManager) AddTempDir(path string) {
+	// DECISION-REF: DEC-006
 	rm.AddResource(&TempDir{Path: path})
 }
 
 // RemoveResource removes a resource from the ResourceManager.
 func (rm *ResourceManager) RemoveResource(resource Resource) {
+	// DECISION-REF: DEC-006
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 
@@ -235,6 +258,7 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 
 // Cleanup cleans up all tracked resources in the ResourceManager.
 func (rm *ResourceManager) Cleanup() error {
+	// DECISION-REF: DEC-006
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 
@@ -252,6 +276,7 @@ func (rm *ResourceManager) Cleanup() error {
 
 // CleanupWithPanicRecovery cleans up all resources and recovers from panics during cleanup.
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
+	// DECISION-REF: DEC-006
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic during cleanup: %v", r)
@@ -269,6 +294,7 @@ type ContextualOperation struct {
 
 // NewContextualOperation creates a new ContextualOperation with the given context.
 func NewContextualOperation(ctx context.Context) *ContextualOperation {
+	// DECISION-REF: DEC-006, DEC-007
 	return &ContextualOperation{
 		ctx: ctx,
 		rm:  NewResourceManager(),
@@ -277,16 +303,19 @@ func NewContextualOperation(ctx context.Context) *ContextualOperation {
 
 // Context returns the context associated with the ContextualOperation.
 func (co *ContextualOperation) Context() context.Context {
+	// DECISION-REF: DEC-007
 	return co.ctx
 }
 
 // ResourceManager returns the ResourceManager associated with the ContextualOperation.
 func (co *ContextualOperation) ResourceManager() *ResourceManager {
+	// DECISION-REF: DEC-006
 	return co.rm
 }
 
 // IsCancelled checks if the operation has been cancelled.
 func (co *ContextualOperation) IsCancelled() bool {
+	// DECISION-REF: DEC-007
 	select {
 	case <-co.ctx.Done():
 		return true
@@ -297,16 +326,21 @@ func (co *ContextualOperation) IsCancelled() bool {
 
 // CheckCancellation checks if the operation has been cancelled and returns an error if it has.
 func (co *ContextualOperation) CheckCancellation() error {
+	// DECISION-REF: DEC-007
 	return co.ctx.Err()
 }
 
 // Cleanup cleans up all resources associated with the operation.
 func (co *ContextualOperation) Cleanup() error {
+	// DECISION-REF: DEC-006
 	return co.rm.Cleanup()
 }
 
 // HandleArchiveError processes an archive error and returns the appropriate status code.
 func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int {
+	// CFG-002: Error handling with status code resolution
+	// CFG-003: Error output formatting
+	// DECISION-REF: DEC-004
 	if err == nil {
 		return 0
 	}
@@ -336,6 +370,7 @@ func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int 
 
 // AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
+	// DECISION-REF: DEC-006, DEC-008
 	tempFile := path + ".tmp"
 	rm.AddTempFile(tempFile)
 
@@ -361,6 +396,8 @@ func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 
 // SafeMkdirAll creates a directory and all necessary parent directories.
 func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
+	// Directory creation with error handling
+	// DECISION-REF: DEC-004
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsDiskFullError(err) {
 			return NewArchiveErrorWithCause(
@@ -380,6 +417,8 @@ func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 
 // ValidateDirectoryPath checks if a path is a valid directory.
 func ValidateDirectoryPath(path string, cfg *Config) error {
+	// Directory path validation
+	// DECISION-REF: DEC-004
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -414,6 +453,8 @@ func ValidateDirectoryPath(path string, cfg *Config) error {
 
 // ValidateFilePath checks if a path is a valid file.
 func ValidateFilePath(path string, cfg *Config) error {
+	// File path validation
+	// DECISION-REF: DEC-004
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {

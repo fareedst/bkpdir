@@ -12,6 +12,9 @@ import (
 )
 
 func TestGenerateBackupName(t *testing.T) {
+	// FILE-001: Backup naming convention validation
+	// TEST-REF: Feature tracking matrix FILE-001
+	// IMMUTABLE-REF: File Backup Naming Convention
 	t.Run("basic backup naming without notes", func(t *testing.T) {
 		testBasicBackupNaming(t)
 	})
@@ -417,6 +420,9 @@ func testBackupPermissionDenied(t *testing.T) {
 }
 
 func TestCreateFileBackup(t *testing.T) {
+	// FILE-002: File backup creation validation
+	// TEST-REF: Feature tracking matrix FILE-002
+	// IMMUTABLE-REF: File Backup Operations
 	t.Run("successful backup creation", func(t *testing.T) {
 		testSuccessfulBackupCreation(t)
 	})

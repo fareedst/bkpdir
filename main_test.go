@@ -19,6 +19,8 @@ const (
 	dryRunFlagDesc = "Show what would be done, but don't create archives"
 )
 
+// ARCH-002: Full archive command validation
+// TEST-REF: TestFullCmdWithNote
 func TestFullCmdWithNote(t *testing.T) {
 	// Create a temporary directory for testing
 	tmpDir := t.TempDir()
@@ -73,6 +75,8 @@ func TestFullCmdWithNote(t *testing.T) {
 	}
 }
 
+// ARCH-003: Incremental archive command validation
+// TEST-REF: TestIncCmdWithNote
 func TestIncCmdWithNote(t *testing.T) {
 	// Setup test environment
 	tmpDir, archiveDir := setupIncTestEnvironment(t)

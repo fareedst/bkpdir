@@ -6,6 +6,8 @@ package main
 
 import "testing"
 
+// FILE-003: File exclusion pattern validation
+// TEST-REF: TestShouldExcludeFile
 func TestShouldExcludeFile(t *testing.T) {
 	patterns := []string{".git/", "vendor/", "*.tmp", "foo/bar/*", "*.log", "build/*", "**/node_modules/", "*.DS_Store"}
 	tests := []struct {

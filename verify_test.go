@@ -79,6 +79,8 @@ func setupTestArchive(t *testing.T) (*TestArchiveData, func()) {
 	return data, cleanup
 }
 
+// ARCH-002: Archive verification functionality validation
+// TEST-REF: TestVerifyArchive
 func TestVerifyArchive(t *testing.T) {
 	data, cleanup := setupTestArchive(t)
 	defer cleanup()

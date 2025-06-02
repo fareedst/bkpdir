@@ -41,6 +41,10 @@ type BackupOptions struct {
 	DryRun    bool
 }
 
+// FILE-002: Structured error handling for backup operations
+// IMMUTABLE-REF: Error Handling Requirements
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-004
 // BackupError represents a structured error with status code for backup operations
 type BackupError struct {
 	Message    string
@@ -61,6 +65,10 @@ func (e *BackupError) Unwrap() error {
 	return e.Err
 }
 
+// FILE-002: Backup error creation
+// IMMUTABLE-REF: Error Handling Requirements
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-004
 // NewBackupError creates a new structured backup error
 func NewBackupError(message string, statusCode int, operation, path string) *BackupError {
 	return &BackupError{
@@ -71,6 +79,10 @@ func NewBackupError(message string, statusCode int, operation, path string) *Bac
 	}
 }
 
+// FILE-002: Backup error creation with cause
+// IMMUTABLE-REF: Error Handling Requirements
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-004
 // NewBackupErrorWithCause creates a new structured backup error with underlying cause
 func NewBackupErrorWithCause(message string, statusCode int, operation, path string, err error) *BackupError {
 	return &BackupError{
@@ -82,6 +94,10 @@ func NewBackupErrorWithCause(message string, statusCode int, operation, path str
 	}
 }
 
+// FILE-002: File backup creation implementation
+// IMMUTABLE-REF: Commands - Create File Backup, File Backup Operations
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-002
 // CreateFileBackup creates a backup of a single file
 func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
 	opts := BackupOptions{
@@ -95,6 +111,10 @@ func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) er
 	return createFileBackupInternal(opts)
 }
 
+// FILE-002: Core backup logic implementation
+// IMMUTABLE-REF: File Backup Operations, Atomic Operations
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-002
 // createFileBackupInternal handles the core backup logic
 func createFileBackupInternal(opts BackupOptions) error {
 	// Validate file
@@ -115,6 +135,10 @@ func createFileBackupInternal(opts BackupOptions) error {
 	return performBackupOperation(opts, backupPath)
 }
 
+// FILE-001: Backup path generation implementation
+// IMMUTABLE-REF: File Backup Naming Convention
+// TEST-REF: TestGenerateBackupName
+// DECISION-REF: DEC-002
 // generateBackupPath creates the full backup path including note
 func generateBackupPath(cfg *Config, filePath, note string) (string, error) {
 	backupPath, err := determineBackupPath(cfg, filePath)
@@ -129,6 +153,10 @@ func generateBackupPath(cfg *Config, filePath, note string) (string, error) {
 	return backupPath, nil
 }
 
+// CFG-003: Dry run output formatting
+// IMMUTABLE-REF: Output Formatting Requirements
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-003
 // handleDryRunBackup handles dry run mode output
 func handleDryRunBackup(formatter *OutputFormatter, backupPath string) error {
 	if formatter != nil {
@@ -139,6 +167,10 @@ func handleDryRunBackup(formatter *OutputFormatter, backupPath string) error {
 	return nil
 }
 
+// FILE-002: Backup operation coordination
+// IMMUTABLE-REF: File Backup Operations, Atomic Operations
+// TEST-REF: TestCreateFileBackup
+// DECISION-REF: DEC-002
 // performBackupOperation performs the actual backup operation
 func performBackupOperation(opts BackupOptions, backupPath string) error {
 	backupDir := filepath.Dir(backupPath)
@@ -157,6 +189,10 @@ func performBackupOperation(opts BackupOptions, backupPath string) error {
 	return executeBackupWithCleanup(opts, backupPath)
 }
 
+// FILE-003: Identical file backup detection
+// IMMUTABLE-REF: File Backup Operations, Identical File Detection
+// TEST-REF: TestCheckForIdenticalFileBackup
+// DECISION-REF: DEC-002
 // checkAndHandleIdenticalBackup checks if file is identical to existing backup
 func checkAndHandleIdenticalBackup(opts BackupOptions, backupDir, baseFilename string) error {
 	identical, existingBackup, err := CheckForIdenticalFileBackup(opts.FilePath, backupDir, baseFilename)
@@ -171,6 +207,10 @@ func checkAndHandleIdenticalBackup(opts BackupOptions, backupDir, baseFilename s
 	return nil
 }
 
+// FILE-002: Atomic backup execution with cleanup
+// IMMUTABLE-REF: File Backup Operations, Atomic Operations, Resource Cleanup
+// TEST-REF: TestCreateFileBackupWithCleanup
+// DECISION-REF: DEC-002
 // executeBackupWithCleanup performs backup with resource cleanup
 func executeBackupWithCleanup(opts BackupOptions, backupPath string) error {
 	// Create resource manager for cleanup

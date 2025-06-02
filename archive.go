@@ -62,7 +62,12 @@ type ArchiveCreationConfig struct {
 	ResourceMgr *ResourceManager
 }
 
+// ARCH-001: Archive naming convention implementation
+// IMMUTABLE-REF: Archive Naming Convention
+// TEST-REF: TestGenerateArchiveName
+// DECISION-REF: DEC-001
 // GenerateArchiveName creates an archive name according to the spec.
+// It handles both full and incremental archive naming based on the provided configuration.
 func GenerateArchiveName(cfg ArchiveNameConfig) string {
 	if cfg.IsIncremental && cfg.BaseName != "" {
 		return generateIncrementalArchiveName(cfg)
@@ -70,6 +75,10 @@ func GenerateArchiveName(cfg ArchiveNameConfig) string {
 	return generateFullArchiveNameFromConfig(cfg)
 }
 
+// ARCH-003: Incremental archive naming implementation
+// IMMUTABLE-REF: Archive Naming Convention
+// TEST-REF: TestGenerateArchiveName
+// DECISION-REF: DEC-001
 // generateIncrementalArchiveName generates name for incremental archives
 func generateIncrementalArchiveName(cfg ArchiveNameConfig) string {
 	baseName := strings.TrimSuffix(cfg.BaseName, ".zip")
@@ -83,6 +92,10 @@ func generateIncrementalArchiveName(cfg ArchiveNameConfig) string {
 	return name + ".zip"
 }
 
+// ARCH-001: Full archive naming implementation
+// IMMUTABLE-REF: Archive Naming Convention
+// TEST-REF: TestGenerateArchiveName
+// DECISION-REF: DEC-001
 // generateFullArchiveNameFromConfig generates name for full archives from config
 func generateFullArchiveNameFromConfig(cfg ArchiveNameConfig) string {
 	var name string
@@ -103,6 +116,11 @@ func generateFullArchiveNameFromConfig(cfg ArchiveNameConfig) string {
 	return name + ".zip"
 }
 
+// ARCH-001: Archive naming with Git integration
+// GIT-001: Git information extraction for naming
+// IMMUTABLE-REF: Archive Naming Convention, Git Integration Requirements
+// TEST-REF: TestGenerateArchiveName
+// DECISION-REF: DEC-001
 // generateFullArchiveName generates the name for a full archive.
 func generateFullArchiveName(cfg *Config, cwd, note string) (string, error) {
 	isGit := IsGitRepository(cwd)
@@ -131,7 +149,12 @@ func generateFullArchiveName(cfg *Config, cwd, note string) (string, error) {
 	return GenerateArchiveName(nameCfg), nil
 }
 
+// ARCH-002: Archive listing implementation
+// IMMUTABLE-REF: Commands - List Archives
+// TEST-REF: TestListArchives
+// DECISION-REF: DEC-001
 // ListArchives lists all archives in the archive directory for the current source.
+// It returns a slice of Archive structs containing metadata for each archive found.
 func ListArchives(archiveDir string) ([]Archive, error) {
 	if err := os.MkdirAll(archiveDir, 0o755); err != nil {
 		return nil, fmt.Errorf("failed to create archive directory: %w", err)
@@ -157,6 +180,10 @@ func ListArchives(archiveDir string) ([]Archive, error) {
 	return archives, nil
 }
 
+// ARCH-002: Archive metadata extraction
+// IMMUTABLE-REF: Archive Naming Convention
+// TEST-REF: TestListArchives
+// DECISION-REF: DEC-001
 // createArchiveFromEntry creates an Archive from a directory entry.
 func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, error) {
 	archivePath := filepath.Join(archiveDir, entry.Name())
@@ -181,11 +208,20 @@ func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, erro
 	return archive, nil
 }
 
-// CreateArchiveWithContext creates an archive with context support for cancellation
+// ARCH-002: Archive creation with context
+// IMMUTABLE-REF: Commands - Create Archive
+// TEST-REF: TestCreateFullArchive
+// DECISION-REF: DEC-001
+// CreateArchiveWithContext creates a new archive with the given configuration and note.
+// It supports both dry-run mode and verification of the created archive.
 func CreateArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error {
 	return CreateFullArchiveWithContext(ctx, cfg, note, dryRun, verify)
 }
 
+// ARCH-002: File collection for archiving
+// IMMUTABLE-REF: Directory Operations, File Exclusion Requirements
+// TEST-REF: TestCreateFullArchive
+// DECISION-REF: DEC-001
 // collectFilesToArchive walks the directory and collects files to archive
 func collectFilesToArchive(ctx context.Context, cwd string, excludePatterns []string) ([]string, error) {
 	var files []string

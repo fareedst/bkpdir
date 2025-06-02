@@ -5,6 +5,7 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"gopkg.in/yaml.v3"
@@ -22,9 +23,12 @@ var (
 )
 
 func TestDefaultConfig(t *testing.T) {
-	t.Run("default values", func(t *testing.T) {
-		cfg := DefaultConfig()
+	// CFG-002: Configuration defaults validation
+	// TEST-REF: Feature tracking matrix CFG-002
+	// IMMUTABLE-REF: Configuration System
+	cfg := DefaultConfig()
 
+	t.Run("default values", func(t *testing.T) {
 		assertStringEqual(t, "ArchiveDirPath", cfg.ArchiveDirPath, defaultArchiveDir)
 		assertBoolEqual(t, "UseCurrentDirName", cfg.UseCurrentDirName, true)
 		assertStringSliceEqual(t, "ExcludePatterns", cfg.ExcludePatterns, defaultExcludePatterns)
@@ -121,6 +125,98 @@ func TestGetConfigValues(t *testing.T) {
 			if _, exists := valueMap[key]; !exists {
 				t.Errorf("Expected config key %q not found", key)
 			}
+		}
+	})
+}
+
+// TestGetConfigSearchPath tests the configuration search path functionality for CFG-001 feature
+func TestGetConfigSearchPath(t *testing.T) {
+	// CFG-001: Configuration discovery validation
+	// TEST-REF: Feature tracking matrix CFG-001
+	// IMMUTABLE-REF: Configuration Discovery
+	// Test basic path retrieval
+
+	// Save original environment
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("default search paths", func(t *testing.T) {
+		// Clear environment variable
+		os.Unsetenv("BKPDIR_CONFIG")
+
+		paths := getConfigSearchPaths()
+		expectedPaths := []string{"./.bkpdir.yml", "~/.bkpdir.yml"}
+
+		if len(paths) != len(expectedPaths) {
+			t.Errorf("Expected %d paths, got %d", len(expectedPaths), len(paths))
+		}
+
+		for i, expected := range expectedPaths {
+			if i < len(paths) && paths[i] != expected {
+				t.Errorf("Expected path[%d] = %s, got %s", i, expected, paths[i])
+			}
+		}
+	})
+
+	t.Run("custom environment paths", func(t *testing.T) {
+		customPaths := "/custom/config.yml:/another/config.yml"
+		os.Setenv("BKPDIR_CONFIG", customPaths)
+
+		paths := getConfigSearchPaths()
+		expectedPaths := []string{"/custom/config.yml", "/another/config.yml"}
+
+		if len(paths) != len(expectedPaths) {
+			t.Errorf("Expected %d paths, got %d", len(expectedPaths), len(paths))
+		}
+
+		for i, expected := range expectedPaths {
+			if i < len(paths) && paths[i] != expected {
+				t.Errorf("Expected path[%d] = %s, got %s", i, expected, paths[i])
+			}
+		}
+	})
+
+	t.Run("single custom path", func(t *testing.T) {
+		customPath := "/single/config.yml"
+		os.Setenv("BKPDIR_CONFIG", customPath)
+
+		paths := getConfigSearchPaths()
+		expectedPaths := []string{"/single/config.yml"}
+
+		if len(paths) != len(expectedPaths) {
+			t.Errorf("Expected %d paths, got %d", len(expectedPaths), len(paths))
+		}
+
+		if len(paths) > 0 && paths[0] != expectedPaths[0] {
+			t.Errorf("Expected path[0] = %s, got %s", expectedPaths[0], paths[0])
+		}
+	})
+
+	t.Run("path expansion", func(t *testing.T) {
+		// Test home directory expansion
+		testPath := "~/test-config.yml"
+		expandedPath := expandPath(testPath)
+
+		if expandedPath == testPath {
+			// If expandPath didn't change the path, check if it's because home dir wasn't available
+			home, err := os.UserHomeDir()
+			if err == nil && home != "" {
+				t.Errorf("Expected path expansion for %s, but got unchanged path", testPath)
+			}
+		} else if !strings.Contains(expandedPath, "test-config.yml") {
+			t.Errorf("Expected expanded path to contain 'test-config.yml', got %s", expandedPath)
+		}
+
+		// Test non-home path (should remain unchanged)
+		regularPath := "/regular/path.yml"
+		if expandPath(regularPath) != regularPath {
+			t.Errorf("Expected regular path to remain unchanged, got %s", expandPath(regularPath))
 		}
 	})
 }

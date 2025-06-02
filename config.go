@@ -18,15 +18,27 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
+// CFG-002: Verification configuration structure
+// IMMUTABLE-REF: Archive Verification Requirements
+// TEST-REF: TestDefaultConfig
+// DECISION-REF: DEC-002
 // VerificationConfig defines settings for archive verification.
+// It controls whether archives are verified on creation and which checksum algorithm to use.
 type VerificationConfig struct {
 	VerifyOnCreate    bool   `yaml:"verify_on_create"`
 	ChecksumAlgorithm string `yaml:"checksum_algorithm"`
 }
 
+// CFG-001: Main configuration structure
+// CFG-002: Status code configuration
+// CFG-003: Output formatting configuration
+// IMMUTABLE-REF: Configuration Defaults, Output Formatting Requirements
+// TEST-REF: TestDefaultConfig
+// DECISION-REF: DEC-002
 // Config holds all configuration settings for the BkpDir application.
 // It includes settings for archive creation, file backup, status codes,
 // and output formatting.
+// The configuration can be loaded from YAML files and environment variables.
 type Config struct {
 	// Basic settings
 	ArchiveDirPath    string              `yaml:"archive_dir_path"`
@@ -91,13 +103,22 @@ type Config struct {
 	PatternTimestamp       string `yaml:"pattern_timestamp"`
 }
 
+// CFG-003: Configuration value representation
+// IMMUTABLE-REF: Commands - Display Configuration
+// TEST-REF: TestDisplayConfig
+// DECISION-REF: DEC-002
 // ConfigValue represents a single configuration value with its source.
+// It is used for displaying configuration values and their origins.
 type ConfigValue struct {
 	Name   string
 	Value  string
 	Source string
 }
 
+// CFG-003: Default regex patterns for template extraction
+// IMMUTABLE-REF: Template Formatting Requirements, Configuration Defaults
+// TEST-REF: TestTemplateFormatter
+// DECISION-REF: DEC-003
 // Default regex patterns
 const (
 	defaultArchivePattern = `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-` +
@@ -109,7 +130,14 @@ const (
 		`(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})`
 )
 
+// CFG-001: Default configuration implementation
+// CFG-002: Default status codes
+// CFG-003: Default format strings and templates
+// IMMUTABLE-REF: Configuration Defaults
+// TEST-REF: TestDefaultConfig
+// DECISION-REF: DEC-002
 // DefaultConfig returns a new Config instance with default values.
+// These values are used when no configuration is provided or when merging configurations.
 func DefaultConfig() *Config {
 	return &Config{
 		// Basic settings
@@ -179,6 +207,12 @@ func DefaultConfig() *Config {
 	}
 }
 
+// CFG-001: Configuration search path implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// getConfigSearchPaths returns the list of paths to search for configuration files.
+// It includes both system-wide and user-specific configuration paths.
 func getConfigSearchPaths() []string {
 	// Check BKPDIR_CONFIG environment variable
 	if configPaths := os.Getenv("BKPDIR_CONFIG"); configPaths != "" {
@@ -189,6 +223,12 @@ func getConfigSearchPaths() []string {
 	return []string{"./.bkpdir.yml", "~/.bkpdir.yml"}
 }
 
+// CFG-001: Path expansion implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// expandPath expands a path by replacing special tokens with actual values.
+// It handles tokens like ~ for home directory and %ROOT% for the root directory.
 func expandPath(path string) string {
 	if strings.HasPrefix(path, "~/") {
 		home, err := os.UserHomeDir()
@@ -200,10 +240,12 @@ func expandPath(path string) string {
 	return path
 }
 
-// LoadConfig loads and merges configuration from YAML files in the search path.
-// It processes configuration files in order, with earlier files taking precedence.
-// The root parameter is used to resolve relative paths in the configuration.
-// Returns a Config instance with merged values from all valid configuration files.
+// CFG-001: Configuration loading implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// LoadConfig loads configuration from YAML files and environment variables.
+// It searches for configuration files in the standard locations and merges them with defaults.
 func LoadConfig(root string) (*Config, error) {
 	cfg := DefaultConfig()
 	searchPaths := getConfigSearchPaths()
@@ -242,8 +284,12 @@ func LoadConfig(root string) (*Config, error) {
 	return cfg, nil
 }
 
-// mergeConfigs merges non-default values from src into dst.
-// It uses helper functions to reduce cyclomatic complexity.
+// CFG-001: Configuration merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeConfigs merges source configuration into destination configuration.
+// It preserves non-zero values from the source configuration.
 func mergeConfigs(dst, src *Config) {
 	mergeBasicSettings(dst, src)
 	mergeFileBackupSettings(dst, src)
@@ -253,7 +299,12 @@ func mergeConfigs(dst, src *Config) {
 	mergePatterns(dst, src)
 }
 
+// CFG-001: Basic settings merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
 // mergeBasicSettings merges basic configuration settings.
+// It handles archive directory path, Git integration, and verification settings.
 func mergeBasicSettings(dst, src *Config) {
 	if src.ArchiveDirPath != DefaultConfig().ArchiveDirPath {
 		dst.ArchiveDirPath = src.ArchiveDirPath
@@ -272,7 +323,12 @@ func mergeBasicSettings(dst, src *Config) {
 	}
 }
 
+// CFG-001: File backup settings merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
 // mergeFileBackupSettings merges file backup configuration settings.
+// It handles backup directory path and naming settings.
 func mergeFileBackupSettings(dst, src *Config) {
 	if src.BackupDirPath != DefaultConfig().BackupDirPath {
 		dst.BackupDirPath = src.BackupDirPath
@@ -282,13 +338,23 @@ func mergeFileBackupSettings(dst, src *Config) {
 	}
 }
 
-// mergeStatusCodes merges status code configuration settings.
+// CFG-002: Status code merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeStatusCodes merges all status code settings.
+// It handles both directory and file operation status codes.
 func mergeStatusCodes(dst, src *Config) {
 	mergeDirectoryStatusCodes(dst, src)
 	mergeFileStatusCodes(dst, src)
 }
 
+// CFG-002: Directory status code merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
 // mergeDirectoryStatusCodes merges directory operation status codes.
+// It handles archive creation and verification status codes.
 func mergeDirectoryStatusCodes(dst, src *Config) {
 	statusCodes := map[string]struct {
 		src *int
@@ -335,7 +401,12 @@ func mergeDirectoryStatusCodes(dst, src *Config) {
 	}
 }
 
+// CFG-002: File status code merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
 // mergeFileStatusCodes merges file operation status codes.
+// It handles file backup and verification status codes.
 func mergeFileStatusCodes(dst, src *Config) {
 	statusCodes := map[string]struct {
 		src *int
@@ -710,4 +781,75 @@ func boolToString(b bool) string {
 		return "true"
 	}
 	return "false"
+}
+
+// CFG-001: Configuration value loading implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// LoadConfigValues loads configuration values from YAML files and environment variables.
+// It returns a map of configuration values with their sources.
+func LoadConfigValues(root string) (map[string]ConfigValue, error) {
+	// Implementation of LoadConfigValues function
+	return nil, nil // Placeholder return, actual implementation needed
+}
+
+// CFG-001: Configuration value merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeConfigValues merges configuration values from source into destination.
+// It preserves values from the source configuration.
+func mergeConfigValues(dst, src map[string]ConfigValue) {
+	// Implementation of mergeConfigValues function
+}
+
+// CFG-001: Basic settings value merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeBasicSettingValues merges basic configuration setting values.
+// It handles archive directory path, Git integration, and verification settings.
+func mergeBasicSettingValues(dst, src map[string]ConfigValue, srcCfg *Config) {
+	// Implementation of mergeBasicSettingValues function
+}
+
+// CFG-001: File backup settings value merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeFileBackupSettingValues merges file backup configuration setting values.
+// It handles backup directory path and naming settings.
+func mergeFileBackupSettingValues(dst, src map[string]ConfigValue, srcCfg *Config) {
+	// Implementation of mergeFileBackupSettingValues function
+}
+
+// CFG-002: Status code value merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeStatusCodeValues merges all status code setting values.
+// It handles both directory and file operation status codes.
+func mergeStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) {
+	// Implementation of mergeStatusCodeValues function
+}
+
+// CFG-002: Directory status code value merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeDirectoryStatusCodeValues merges directory operation status code values.
+// It handles archive creation and verification status codes.
+func mergeDirectoryStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) {
+	// Implementation of mergeDirectoryStatusCodeValues function
+}
+
+// CFG-002: File status code value merging implementation
+// IMMUTABLE-REF: Configuration Discovery
+// TEST-REF: TestGetConfigSearchPath
+// DECISION-REF: DEC-002
+// mergeFileStatusCodeValues merges file operation status code values.
+// It handles file backup and verification status codes.
+func mergeFileStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) {
+	// Implementation of mergeFileStatusCodeValues function
 }

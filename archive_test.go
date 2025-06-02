@@ -18,9 +18,18 @@
 // It verifies archive creation, naming, and verification behavior.
 package main
 
-import "testing"
+import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"testing"
+)
 
+// TestGenerateArchiveName tests archive naming functionality
 func TestGenerateArchiveName(t *testing.T) {
+	// ARCH-001: Archive naming convention validation
+	// TEST-REF: Feature tracking matrix ARCH-001
+	// IMMUTABLE-REF: Archive Naming Convention
 	tests := []struct {
 		cfg    ArchiveNameConfig
 		expect string
@@ -159,4 +168,207 @@ func TestGenerateArchiveName(t *testing.T) {
 			t.Errorf("%s: GenerateArchiveName() = %q, want %q", tt.name, got, tt.expect)
 		}
 	}
+}
+
+// TestCreateFullArchive tests the full archive creation functionality for ARCH-002 feature
+func TestCreateFullArchive(t *testing.T) {
+	// ARCH-002: Full archive creation validation
+	// TEST-REF: Feature tracking matrix ARCH-002
+	// IMMUTABLE-REF: Commands - Create Archive
+	tempDir := t.TempDir()
+
+	sourceDir := filepath.Join(tempDir, "source")
+	archiveDir := filepath.Join(tempDir, "archives")
+
+	// Create source directory with test files
+	if err := os.MkdirAll(sourceDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(archiveDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create test files
+	testFiles := map[string]string{
+		"file1.txt":          "content1",
+		"file2.txt":          "content2",
+		"subdir/file3.txt":   "content3",
+		"subdir/subfile.txt": "subcontent",
+	}
+
+	for filePath, content := range testFiles {
+		fullPath := filepath.Join(sourceDir, filePath)
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := ioutil.WriteFile(fullPath, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Save current directory and change to source directory
+	origDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(origDir)
+
+	if err := os.Chdir(sourceDir); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a test config with our test archive directory
+	cfg := DefaultConfig()
+	cfg.ArchiveDirPath = archiveDir
+	cfg.UseCurrentDirName = false // Don't create subdirectory
+
+	// Test archive creation with valid config
+	err = CreateFullArchive(cfg, "test-note", false, false)
+	if err != nil {
+		t.Fatalf("CreateFullArchive failed: %v", err)
+	}
+
+	// Verify archive was created
+	archives, err := ListArchives(archiveDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(archives) == 0 {
+		t.Error("No archives were created")
+	}
+
+	// Test with exclusion patterns
+	t.Run("WithExclusion", func(t *testing.T) {
+		// Create config with exclusion patterns
+		cfgExclude := DefaultConfig()
+		cfgExclude.ArchiveDirPath = archiveDir
+		cfgExclude.UseCurrentDirName = false
+		cfgExclude.ExcludePatterns = []string{"subdir/*.txt"}
+
+		// Create archive with exclusion
+		err = CreateFullArchive(cfgExclude, "exclude-test", false, false)
+		if err != nil {
+			t.Fatalf("CreateFullArchive with exclusion failed: %v", err)
+		}
+
+		// Verify more archives were created
+		newArchives, err := ListArchives(archiveDir)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(newArchives) <= len(archives) {
+			t.Error("Expected more archives after exclusion test")
+		}
+	})
+}
+
+// TestCreateIncremental tests the incremental archive creation functionality for ARCH-003 feature
+func TestCreateIncremental(t *testing.T) {
+	// ARCH-003: Incremental archive creation validation
+	// TEST-REF: Feature tracking matrix ARCH-003
+	// IMMUTABLE-REF: Commands - Create Incremental Archive
+	tempDir := t.TempDir()
+
+	sourceDir := filepath.Join(tempDir, "source")
+	archiveDir := filepath.Join(tempDir, "archives")
+
+	// Create directories
+	if err := os.MkdirAll(sourceDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(archiveDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create initial files
+	initialFiles := map[string]string{
+		"file1.txt": "content1",
+		"file2.txt": "content2",
+	}
+
+	for filePath, content := range initialFiles {
+		fullPath := filepath.Join(sourceDir, filePath)
+		if err := ioutil.WriteFile(fullPath, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Save current directory and change to source directory
+	origDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(origDir)
+
+	if err := os.Chdir(sourceDir); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create initial full archive
+	cfg := DefaultConfig()
+	cfg.ArchiveDirPath = archiveDir
+	cfg.UseCurrentDirName = false
+
+	err = CreateFullArchive(cfg, "base-archive", false, false)
+	if err != nil {
+		t.Fatalf("CreateFullArchive failed: %v", err)
+	}
+
+	// Add new files for incremental
+	newFiles := map[string]string{
+		"file3.txt":        "content3",
+		"subdir/file4.txt": "content4",
+	}
+
+	for filePath, content := range newFiles {
+		fullPath := filepath.Join(sourceDir, filePath)
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := ioutil.WriteFile(fullPath, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Get initial archive count
+	initialArchives, err := ListArchives(archiveDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create incremental archive
+	err = CreateIncrementalArchive(cfg, "incremental-test", false, false)
+	if err != nil {
+		t.Fatalf("CreateIncrementalArchive failed: %v", err)
+	}
+
+	// Verify more archives exist
+	finalArchives, err := ListArchives(archiveDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(finalArchives) <= len(initialArchives) {
+		t.Error("Expected more archives after incremental creation")
+	}
+
+	// Test when no changes are needed
+	t.Run("NoChangesNeeded", func(t *testing.T) {
+		// Reset directory to match base archive state by removing new files
+		for filePath := range newFiles {
+			fullPath := filepath.Join(sourceDir, filePath)
+			os.Remove(fullPath)
+		}
+		// Remove empty subdirectory
+		os.Remove(filepath.Join(sourceDir, "subdir"))
+
+		// This should detect that no incremental is needed
+		err = CreateIncrementalArchive(cfg, "no-change-test", false, false)
+		// The function should handle this case gracefully
+		if err != nil {
+			t.Logf("CreateIncrementalArchive with no changes: %v", err)
+		}
+	})
 }

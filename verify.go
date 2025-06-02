@@ -29,6 +29,8 @@ type VerificationStatus struct {
 
 // VerifyArchive verifies the integrity of an archive
 func VerifyArchive(archivePath string) (*VerificationStatus, error) {
+	// Archive verification implementation
+	// DECISION-REF: DEC-001
 	status := &VerificationStatus{
 		VerifiedAt: time.Now(),
 		IsVerified: true,
@@ -56,6 +58,8 @@ func VerifyArchive(archivePath string) (*VerificationStatus, error) {
 
 // verifyFile verifies a single file in the archive
 func verifyFile(file *zip.File) error {
+	// Individual file verification
+	// DECISION-REF: DEC-001
 	rc, err := file.Open()
 	if err != nil {
 		return fmt.Errorf("failed to open file %s: %v", file.Name, err)
@@ -74,6 +78,8 @@ func verifyFile(file *zip.File) error {
 
 // GenerateChecksums generates checksums for files in the map
 func GenerateChecksums(fileMap map[string]string, _ string) (map[string]string, error) {
+	// Checksum generation for verification
+	// DECISION-REF: DEC-001
 	checksums := make(map[string]string)
 	for relPath, absPath := range fileMap {
 		checksum, err := calculateFileChecksum(absPath)
@@ -87,6 +93,7 @@ func GenerateChecksums(fileMap map[string]string, _ string) (map[string]string, 
 
 // calculateFileChecksum calculates the SHA-256 checksum of a file
 func calculateFileChecksum(filePath string) (string, error) {
+	// SHA-256 checksum calculation
 	file, err := os.Open(filePath)
 	if err != nil {
 		return "", err
@@ -103,6 +110,8 @@ func calculateFileChecksum(filePath string) (string, error) {
 
 // StoreChecksums stores checksums in the archive
 func StoreChecksums(archive *Archive, checksums map[string]string) error {
+	// Checksum storage in archive
+	// DECISION-REF: DEC-001, DEC-008
 	// Create a temporary file for checksums
 	tmpFile, err := createChecksumsTempFile(checksums)
 	if err != nil {
@@ -127,6 +136,8 @@ func StoreChecksums(archive *Archive, checksums map[string]string) error {
 
 // createChecksumsTempFile creates a temporary file containing the checksums
 func createChecksumsTempFile(checksums map[string]string) (*os.File, error) {
+	// Temporary checksum file creation
+	// DECISION-REF: DEC-008
 	tmpFile, err := os.CreateTemp("", "bkpdir-checksums-*.json")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create temporary file: %w", err)
@@ -149,6 +160,8 @@ func createChecksumsTempFile(checksums map[string]string) (*os.File, error) {
 
 // createNewArchiveWithChecksums creates a new archive with the checksums file
 func createNewArchiveWithChecksums(archivePath, newPath, checksumsPath string) error {
+	// Archive reconstruction with checksums
+	// DECISION-REF: DEC-001, DEC-008
 	// Open the original archive
 	reader, err := zip.OpenReader(archivePath)
 	if err != nil {
@@ -177,6 +190,7 @@ func createNewArchiveWithChecksums(archivePath, newPath, checksumsPath string) e
 
 // copyArchiveFiles copies all files from the original archive to the new one
 func copyArchiveFiles(reader *zip.ReadCloser, writer *zip.Writer) error {
+	// Archive file copying during reconstruction
 	for _, file := range reader.File {
 		if err := copyArchiveFile(file, writer); err != nil {
 			return err
@@ -187,6 +201,7 @@ func copyArchiveFiles(reader *zip.ReadCloser, writer *zip.Writer) error {
 
 // copyArchiveFile copies a single file from the original archive to the new one
 func copyArchiveFile(file *zip.File, writer *zip.Writer) error {
+	// Individual file copying in archive
 	rc, err := file.Open()
 	if err != nil {
 		return fmt.Errorf("failed to open file in archive: %w", err)
@@ -213,6 +228,8 @@ func copyArchiveFile(file *zip.File, writer *zip.Writer) error {
 
 // addChecksumsFile adds the checksums file to the archive
 func addChecksumsFile(writer *zip.Writer, checksumsPath string) error {
+	// ARCH-002: Checksum file addition to archive
+	// DECISION-REF: DEC-001
 	checksumFile, err := os.Open(checksumsPath)
 	if err != nil {
 		return fmt.Errorf("failed to open checksums file: %w", err)
@@ -237,6 +254,8 @@ func addChecksumsFile(writer *zip.Writer, checksumsPath string) error {
 
 // ReadChecksums reads checksums from an archive
 func ReadChecksums(archive *Archive) (map[string]string, error) {
+	// ARCH-002: Checksum reading from archive
+	// DECISION-REF: DEC-001
 	reader, err := zip.OpenReader(archive.Path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open archive: %w", err)
@@ -253,6 +272,7 @@ func ReadChecksums(archive *Archive) (map[string]string, error) {
 
 // findChecksumsFile finds the checksums file in the archive
 func findChecksumsFile(reader *zip.ReadCloser) (*zip.File, error) {
+	// Checksum file location in archive
 	for _, file := range reader.File {
 		if file.Name == ".checksums" {
 			return file, nil
@@ -263,6 +283,7 @@ func findChecksumsFile(reader *zip.ReadCloser) (*zip.File, error) {
 
 // readChecksumsFromFile reads checksums from a file in the archive
 func readChecksumsFromFile(file *zip.File) (map[string]string, error) {
+	// Checksum data extraction from file
 	rc, err := file.Open()
 	if err != nil {
 		return nil, fmt.Errorf("failed to open checksums file: %w", err)
@@ -280,6 +301,8 @@ func readChecksumsFromFile(file *zip.File) (map[string]string, error) {
 
 // VerifyChecksums verifies file checksums against stored values
 func VerifyChecksums(archivePath string) (*VerificationStatus, error) {
+	// ARCH-002: Complete checksum verification process
+	// DECISION-REF: DEC-001
 	status := &VerificationStatus{
 		VerifiedAt: time.Now(),
 		IsVerified: true,
@@ -315,6 +338,8 @@ func handleVerificationError(
 	format string,
 	args ...interface{},
 ) (*VerificationStatus, error) {
+	// CFG-002: Verification error handling
+	// DECISION-REF: DEC-004
 	status.IsVerified = false
 	status.Errors = append(status.Errors, fmt.Sprintf(format, args...))
 	return status, nil
@@ -326,6 +351,7 @@ func verifyArchiveChecksums(
 	storedChecksums map[string]string,
 	status *VerificationStatus,
 ) error {
+	// Archive-wide checksum verification
 	for _, file := range reader.File {
 		if file.Name == ".checksums" {
 			continue
@@ -340,6 +366,7 @@ func verifyArchiveChecksums(
 
 // verifyFileChecksum verifies the checksum of a single file
 func verifyFileChecksum(file *zip.File, storedChecksums map[string]string, _ *VerificationStatus) error {
+	// Individual file checksum verification
 	rc, err := file.Open()
 	if err != nil {
 		return fmt.Errorf("failed to open file %s: %v", file.Name, err)
@@ -366,6 +393,8 @@ func verifyFileChecksum(file *zip.File, storedChecksums map[string]string, _ *Ve
 
 // StoreVerificationStatus stores verification status in a metadata file
 func StoreVerificationStatus(archive *Archive, status *VerificationStatus) error {
+	// ARCH-002: Verification status persistence
+	// DECISION-REF: DEC-008
 	metadataDir := filepath.Join(filepath.Dir(archive.Path), ".metadata")
 	if err := os.MkdirAll(metadataDir, 0o755); err != nil {
 		return fmt.Errorf("failed to create metadata directory: %w", err)
@@ -388,6 +417,7 @@ func StoreVerificationStatus(archive *Archive, status *VerificationStatus) error
 
 // LoadVerificationStatus loads verification status from a metadata file
 func LoadVerificationStatus(archive *Archive) (*VerificationStatus, error) {
+	// ARCH-002: Verification status loading
 	metadataDir := filepath.Join(filepath.Dir(archive.Path), ".metadata")
 	metadataPath := filepath.Join(metadataDir, archive.Name+".json")
 
