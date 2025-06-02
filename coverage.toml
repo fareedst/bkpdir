@@ -1,0 +1,87 @@
+# Coverage Configuration for bkpdir
+# COV-001: Coverage exclusion configuration for legacy code
+#
+# This file defines which parts of the codebase should be excluded from 
+# coverage metrics to focus on new development while preserving test execution
+# for existing functionality.
+
+[coverage]
+# Coverage baseline established on 2025-06-02
+# Main package: 73.5%
+# Internal testutil: 75.6%
+baseline_date = "2025-06-02"
+baseline_main_coverage = 73.5
+baseline_testutil_coverage = 75.6
+
+[exclusions]
+# Build tags for excluding legacy code from coverage
+# Files marked with these build tags will be excluded from coverage metrics
+build_tags = [
+    "legacy",
+    "exclude_coverage"
+]
+
+# File patterns to exclude (glob patterns)
+# These patterns match files that should be excluded from coverage reporting
+file_patterns = [
+    "*_legacy.go",
+    "*_deprecated.go"
+]
+
+# Function patterns to exclude from coverage
+# Use regex patterns to match function names
+function_patterns = [
+    # Legacy initialization functions
+    "^.*Legacy.*$",
+    # Deprecated functions
+    "^.*Deprecated.*$",
+    # Main function (difficult to test comprehensively)
+    "^main$"
+]
+
+# Package-level exclusions
+# Packages listed here will have different coverage thresholds
+[packages]
+# Apply exclusion rules to main package only for now
+# This focuses coverage metrics on new development
+[packages.main]
+apply_exclusions = true
+minimum_new_code_coverage = 85.0
+
+[packages."internal/testutil"]
+apply_exclusions = false
+minimum_new_code_coverage = 80.0
+
+# New code identification
+# Files created or modified after this date are considered "new code"
+[new_code]
+cutoff_date = "2025-06-02"
+
+# Files that should always be considered new code regardless of date
+# This allows focusing on specific areas for improvement
+always_new = []
+
+# Files that should always be considered legacy code
+# This protects stable code from coverage requirements
+always_legacy = [
+    "main.go",
+    "config.go",
+    "formatter.go",
+    "backup.go",
+    "archive.go"
+]
+
+# Coverage reporting configuration
+[reporting]
+# Generate separate reports for new vs legacy code
+separate_reports = true
+
+# HTML output configuration
+html_output = "coverage.html"
+new_code_html_output = "coverage_new.html"
+legacy_code_html_output = "coverage_legacy.html"
+
+# Console output configuration
+show_legacy_coverage = false
+show_new_code_coverage = true
+show_overall_coverage = true 

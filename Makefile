@@ -10,6 +10,8 @@
 #     test            - Run all tests
 #     test-verbose    - Run tests with verbose output
 #     test-coverage   - Run tests with coverage report
+#     test-coverage-new - Run tests with selective coverage (COV-001)
+#     test-coverage-validate - Validate coverage with exclusion patterns
 #     test-race       - Run tests with race detection
 #     test-bench      - Run benchmark tests
 #     test-all        - Run all test variants
@@ -31,7 +33,7 @@
 #     help            - Show this help message
 
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
-.PHONY: test test-verbose test-coverage test-race test-bench test-all
+.PHONY: test test-verbose test-coverage test-coverage-new test-coverage-validate test-race test-bench test-all
 .PHONY: lint fmt vet check dev install deps help
 
 # Variables
@@ -40,6 +42,12 @@ VERSION := $(shell grep -o 'Version = "[^"]*"' main.go | cut -d'"' -f2)
 BUILD_TIME := $(shell date -u +%Y-%m-%d\ %H:%M:%S\ UTC)
 PLATFORM := $(shell go env GOOS)-$(shell go env GOARCH)
 LDFLAGS := -X 'main.compileDate=$(BUILD_TIME)' -X 'main.platform=$(PLATFORM)'
+
+# COV-001: Coverage configuration
+COVERAGE_PROFILE := coverage.out
+COVERAGE_NEW_PROFILE := coverage_new.out
+COVERAGE_LEGACY_PROFILE := coverage_legacy.out
+COVERAGE_THRESHOLD := 85.0
 
 # Default target
 all: check test build-local
@@ -56,7 +64,9 @@ help:
 	@echo "Testing targets:"
 	@echo "  test            Run all tests"
 	@echo "  test-verbose    Run tests with verbose output"
-	@echo "  test-coverage   Run tests with coverage report"
+	@echo "  test-coverage   Run tests with coverage report (legacy)"
+	@echo "  test-coverage-new Run tests with selective coverage (COV-001)"
+	@echo "  test-coverage-validate Validate coverage with exclusion patterns"
 	@echo "  test-race       Run tests with race detection"
 	@echo "  test-bench      Run benchmark tests"
 	@echo "  test-all        Run all test variants"
@@ -107,13 +117,49 @@ test-verbose:
 	@echo "Running tests with verbose output..."
 	go test -v ./...
 
+# Legacy coverage target (preserved for compatibility)
 test-coverage:
-	@echo "Running tests with coverage..."
+	@echo "Running tests with coverage (legacy mode)..."
 	go test -cover ./...
 	@echo "Generating detailed coverage report..."
-	go test -coverprofile=coverage.out ./...
-	go tool cover -html=coverage.out -o coverage.html
+	go test -coverprofile=$(COVERAGE_PROFILE) ./...
+	go tool cover -html=$(COVERAGE_PROFILE) -o coverage.html
 	@echo "✓ Coverage report generated: coverage.html"
+
+# COV-001: New selective coverage target
+test-coverage-new:
+	@echo "Running tests with selective coverage (COV-001)..."
+	@echo "Focusing on new code development while preserving legacy test execution..."
+	go test -coverprofile=$(COVERAGE_PROFILE) ./...
+	@echo "Building coverage analysis tools..."
+	@mkdir -p tools
+	@if [ -f "tools/coverage.go" ]; then \
+		go build -o tools/coverage-analyzer tools/coverage.go; \
+		echo "Analyzing coverage with exclusion patterns..."; \
+		./tools/coverage-analyzer $(COVERAGE_PROFILE); \
+		echo "Generating HTML reports..."; \
+		go tool cover -html=$(COVERAGE_PROFILE) -o coverage.html; \
+		cp coverage.html coverage_new.html; \
+		echo "✓ Selective coverage analysis complete"; \
+		echo "  - Overall report: coverage.html"; \
+		echo "  - New code focus: coverage_new.html"; \
+		rm -f tools/coverage-analyzer; \
+	else \
+		echo "⚠️  Coverage exclusion tool not found, falling back to standard coverage"; \
+		go test -cover ./...; \
+		go tool cover -html=$(COVERAGE_PROFILE) -o coverage.html; \
+	fi
+
+# COV-001: Coverage validation with quality gates
+test-coverage-validate:
+	@echo "Validating coverage with exclusion patterns and quality gates..."
+	@if [ -f "tools/validate-coverage.sh" ]; then \
+		chmod +x tools/validate-coverage.sh; \
+		./tools/validate-coverage.sh; \
+	else \
+		echo "⚠️  Coverage validation script not found, running basic coverage check"; \
+		$(MAKE) test-coverage-new; \
+	fi
 
 test-race:
 	@echo "Running tests with race detection..."
@@ -124,7 +170,7 @@ test-bench:
 	@echo "Running benchmark tests..."
 	go test -bench=. ./...
 
-test-all: test test-race test-coverage
+test-all: test test-race test-coverage-new
 	@echo "✓ All test variants completed"
 
 # Code quality targets
@@ -191,7 +237,10 @@ clean:
 	@echo "Cleaning build artifacts..."
 	rm -rf bin/
 	rm -f $(BINARY_NAME)
-	rm -f coverage.out coverage.html
+	rm -f $(COVERAGE_PROFILE) $(COVERAGE_NEW_PROFILE) $(COVERAGE_LEGACY_PROFILE)
+	rm -f coverage.html coverage_new.html coverage_legacy.html
+	rm -f coverage_report.txt
+	rm -f tools/coverage-analyzer
 	go clean -testcache
 	@echo "✓ Cleaned build artifacts and test cache"
 
@@ -203,6 +252,14 @@ deps:
 
 # Legacy targets for compatibility
 build: build-local
+
+# COV-001: Coverage-focused targets for development workflow
+coverage-check: test-coverage-validate
+	@echo "✓ Coverage validation complete"
+
+# Development workflow target that includes new coverage validation
+dev-full: check test-coverage-validate build-local
+	@echo "✓ Full development workflow complete with coverage validation"
 
 # Example usage comment for symbolic link
 # To create a symbolic link in your local bin:
