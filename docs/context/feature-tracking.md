@@ -88,13 +88,7 @@ See the detailed [Enforcement Mechanisms](enforcement-mechanisms.md) for compreh
 
 ### 🚫 CHANGE REJECTION CRITERIA
 
-Changes will be rejected if:
-- [ ] Context files are not updated to reflect code changes
-- [ ] Feature tracking matrix is not updated with new features or status changes
-- [ ] Implementation tokens are missing from modified code
-- [ ] Cross-references between documents are broken
-- [ ] Immutable requirements are violated
-- [ ] Test coverage documentation doesn't match actual tests
+See the detailed [Change Rejection Criteria](change-rejection-criteria.md) for comprehensive guidelines on common rejection scenarios and how to avoid them.
 
 ## Feature Tracking Format
 
