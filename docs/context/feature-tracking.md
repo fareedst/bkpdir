@@ -155,6 +155,7 @@ Each feature must be documented across all relevant layers:
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens |
 |------------|---------------|--------------|--------------|---------|--------|----------------------|
 | TEST-001 | Comprehensive formatter testing | Test coverage requirements | Test Infrastructure | TestFormatterCoverage | Completed | `// TEST-001: Formatter testing` |
+| TEST-INFRA-001-B | Disk space simulation framework | Testing infrastructure requirements | Test Infrastructure | TestDiskSpaceSimulation | Completed | `// TEST-INFRA-001-B: Disk space simulation framework` |
 
 ### Code Quality
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens |
@@ -858,15 +859,28 @@ func GenerateArchiveName(prefix string, timestamp time.Time, gitInfo *GitInfo, n
      - **Edge case handling**: Handles empty archives, very small archives, and various error conditions gracefully
 
    **9.2 Disk Space Simulation Framework** (TEST-INFRA-001-B) - **HIGH PRIORITY**
-   - [ ] **Create mock filesystem with quota limits** - Controlled disk space simulation without affecting real system
-   - [ ] **Implement progressive space exhaustion** - Gradually reduce available space during operations
-   - [ ] **Add disk full error injection** - Trigger ENOSPC at specific operation points
-   - [ ] **Create space recovery testing** - Test behavior when disk space becomes available again
+   - [x] **Create mock filesystem with quota limits** - Controlled disk space simulation without affecting real system
+   - [x] **Implement progressive space exhaustion** - Gradually reduce available space during operations
+   - [x] **Add disk full error injection** - Trigger ENOSPC at specific operation points
+   - [x] **Create space recovery testing** - Test behavior when disk space becomes available again
    - **Implementation Areas**: Error handling in `archive.go`, `backup.go`, atomic file operations in `errors.go`
    - **Files to Create**: `internal/testutil/diskspace.go`, `internal/testutil/diskspace_test.go`
    - **Dependencies**: TEST-INFRA-001-D (error injection framework)
    - **Design Decision**: Use filesystem interface wrapper to simulate space constraints without requiring large files
-   - **Implementation Notes**: Essential for testing ResourceManager cleanup and atomic operations under space pressure
+   - **Status**: ✅ **COMPLETED**
+   - **Implementation Notes**: 
+     - **Comprehensive disk space simulation**: Implemented 4 exhaustion modes (Linear, Progressive, Random, Immediate) with configurable rates and thresholds
+     - **Mock filesystem interface**: Created FileSystemInterface abstraction with RealFileSystem and SimulatedFileSystem implementations
+     - **Space constraint enforcement**: Implements quota limits, progressive exhaustion, and space recovery without requiring large test files
+     - **Error injection framework**: Supports operation-specific failure points, file-path-specific injection, and space recovery points
+     - **Thread-safe operations**: All operations protected with mutex for concurrent access
+     - **Comprehensive statistics**: Tracks operations, failures, space changes, and file sizes for test validation
+     - **Predefined scenarios**: Includes "GradualExhaustion", "ImmediateFailure", "SpaceRecovery", and "ProgressiveExhaustion" test scenarios
+     - **Helper functions**: SimulateArchiveCreation and SimulateBackupOperation for realistic testing
+     - **Dynamic configuration**: Support for adding/removing failure points, recovery points, and injection points at runtime
+     - **Performance optimized**: Benchmarks show efficient space checking and concurrent access patterns
+     - **Error type support**: Creates standard disk full (ENOSPC), quota exceeded, and device full errors
+     - **Space accounting**: Proper tracking of available and used space with accurate recovery from file deletions
 
    **9.3 Permission Testing Framework** (TEST-INFRA-001-C) - **HIGH PRIORITY**
    - [ ] **Create permission scenario generator** - Systematic permission combinations for comprehensive testing
