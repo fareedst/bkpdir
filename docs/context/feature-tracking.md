@@ -1,5 +1,80 @@
 # Feature Tracking Matrix
 
+## ⚡ AI ASSISTANT INSTRUCTIONS - MANDATORY TOKEN REFERENCING
+
+### 🚨 CRITICAL AI DIRECTIVE: ALWAYS REFERENCE CONTEXT FILE TOKENS WITH CODE CHANGES
+
+**IMMEDIATE ACTION REQUIRED FOR ALL AI ASSISTANTS:**
+
+When making ANY code changes, you MUST:
+
+1. **🔍 SEARCH FOR EXISTING TOKENS**: Before making code changes, search the context directory files for relevant implementation tokens:
+   - Use grep or search for patterns like `// ARCH-001:`, `// FILE-002:`, `// CFG-003:`, etc.
+   - Look for feature IDs in the feature tracking tables below
+   - Check all context files: `specification.md`, `requirements.md`, `architecture.md`, `testing.md`
+
+2. **📋 REFERENCE RELEVANT TOKENS**: For every code change, explicitly mention related tokens:
+   ```
+   Example: "This change affects ARCH-001 (Archive naming), FILE-002 (File backup), and CFG-003 (Format strings)"
+   ```
+
+3. **🔗 LINK TO DOCUMENTATION**: Reference the specific sections in context files:
+   ```
+   Example: "See ARCH-001 in feature-tracking.md line 119, specification.md section 'Archive Naming', architecture.md 'Archive Service'"
+   ```
+
+4. **📝 UPDATE TOKEN REGISTRY**: Add new implementation tokens for new features:
+   - Format: `// FEATURE-ID: Brief description`
+   - Register in the feature tracking tables below
+   - Update all affected context files
+
+5. **✅ VALIDATE CROSS-REFERENCES**: Ensure all token references are consistent across:
+   - feature-tracking.md (this file)
+   - specification.md
+   - requirements.md
+   - architecture.md
+   - testing.md
+
+### 🎯 TOKEN SEARCH PATTERNS FOR AI ASSISTANTS
+
+**Search these patterns in context files:**
+- `ARCH-[0-9]+` (Archive operations)
+- `FILE-[0-9]+` (File operations)
+- `CFG-[0-9]+` (Configuration)
+- `GIT-[0-9]+` (Git integration)
+- `OUT-[0-9]+` (Output management)
+- `TEST-[0-9]+` (Testing infrastructure)
+- `DOC-[0-9]+` (Documentation system)
+- `LINT-[0-9]+` (Code quality)
+- `COV-[0-9]+` (Coverage)
+
+**Token Reference Template for AI:**
+```
+This code change relates to:
+- Primary token: [TOKEN-ID] ([Description])
+- Secondary tokens: [TOKEN-ID], [TOKEN-ID] ([Brief descriptions])
+- Documentation references:
+  - feature-tracking.md: [Line numbers or sections]
+  - specification.md: [Relevant sections]
+  - requirements.md: [Requirement sections]
+  - architecture.md: [Architecture components]
+  - testing.md: [Test coverage areas]
+```
+
+### 🚨 AI ENFORCEMENT RULES
+
+**REJECT code changes that do not:**
+- Reference at least one existing feature token when modifying related functionality
+- Propose new tokens for genuinely new features
+- Link to relevant documentation sections
+- Update the feature tracking tables when adding new tokens
+
+**ACCEPT code changes that:**
+- Clearly state which tokens are affected
+- Reference specific documentation sections
+- Propose updates to context files when needed
+- Follow the token naming conventions
+
 ## Purpose
 This document serves as a master index linking features across all documentation layers to ensure no unplanned changes occur during development.
 
@@ -59,6 +134,81 @@ Before implementing ANY code change, developers MUST complete this checklist:
 2. **Feature Impact Assessment**: Verify that all affected features are properly documented
 3. **Immutable Requirement Check**: Confirm no immutable requirements are violated
 4. **Backward Compatibility Verification**: Ensure changes preserve documented compatibility
+
+#### **🤖 AI ASSISTANT ENFORCEMENT RULES**
+
+**MANDATORY AI VALIDATION CHECKLIST:**
+
+Before any AI assistant provides code changes, it MUST validate:
+
+1. **🔍 TOKEN SEARCH PERFORMED**
+   - [ ] Searched all context files for existing feature tokens
+   - [ ] Identified all relevant feature IDs using grep patterns: `ARCH-[0-9]+`, `FILE-[0-9]+`, `CFG-[0-9]+`, etc.
+   - [ ] Listed affected tokens in response
+
+2. **📋 TOKEN IMPACT DOCUMENTED**
+   - [ ] Clearly stated which existing tokens are affected
+   - [ ] Proposed new tokens for new functionality
+   - [ ] Referenced specific line numbers in feature-tracking.md
+   - [ ] Linked to relevant sections in other context files
+
+3. **📄 DOCUMENTATION CROSS-REFERENCES**
+   - [ ] Referenced specification.md sections
+   - [ ] Referenced requirements.md areas
+   - [ ] Referenced architecture.md components
+   - [ ] Referenced testing.md coverage areas
+
+4. **🔄 UPDATE REQUIREMENTS IDENTIFIED**
+   - [ ] Listed which context files need updates
+   - [ ] Specified what changes are needed in each file
+   - [ ] Provided update templates or examples
+
+**AI RESPONSE TEMPLATE (REQUIRED FORMAT):**
+
+```
+## Token Impact Analysis
+
+### 🔍 Affected Tokens:
+- **Primary**: [TOKEN-ID] - [Description of impact]
+- **Secondary**: [TOKEN-ID], [TOKEN-ID] - [Brief descriptions]
+
+### 📚 Documentation References:
+- **feature-tracking.md**: Lines [X], [Y], [Z]
+- **specification.md**: Section "[Section Name]"
+- **requirements.md**: "[Requirement area]"
+- **architecture.md**: "[Component name]"
+- **testing.md**: "[Test coverage area]"
+
+### 🔄 Required Context File Updates:
+- [ ] feature-tracking.md: [Specific changes]
+- [ ] specification.md: [Specific changes]
+- [ ] requirements.md: [Specific changes]
+- [ ] architecture.md: [Specific changes]
+- [ ] testing.md: [Specific changes]
+
+### 💻 Implementation Details:
+- **New tokens**: [TOKEN-ID: Description]
+- **Modified tokens**: [TOKEN-ID: Updated description]
+- **Code files affected**: [List of files]
+```
+
+**🚨 AI REJECTION CRITERIA (ZERO TOLERANCE)**
+
+AI assistants MUST REJECT their own responses if they:
+- Fail to search for existing tokens before proposing changes
+- Make code changes without referencing related feature tokens
+- Don't identify which context files need updates
+- Propose changes that conflict with immutable requirements
+- Don't follow the required response template format
+
+**✅ AI APPROVAL CRITERIA**
+
+AI assistants should ONLY PROVIDE responses that:
+- Include complete token impact analysis
+- Reference specific documentation sections with line numbers
+- Propose concrete updates to all affected context files
+- Follow established naming conventions for new tokens
+- Include implementation token placement in code changes
 
 ### 📁 CONTEXT FILE RESPONSIBILITIES
 
@@ -1492,3 +1642,233 @@ function weekly_audit() {
 5. **Compliance Dashboard**: Web interface showing documentation health
 
 This comprehensive validation framework ensures that the context documentation remains synchronized with code changes and maintains the high quality standards established in this feature tracking system. 
+
+### 📝 IMPLEMENTATION TOKEN REQUIREMENTS (DETAILED)
+
+#### **Token Format Standards**
+- **Standard Format**: `// FEATURE-ID: Brief description`
+- **Examples**:
+  ```go
+  // ARCH-001: Archive naming convention implementation
+  func GenerateArchiveName(cfg *Config, dir string) string {
+      // ARCH-001: Include timestamp in archive name
+      timestamp := time.Now().Format("2006-01-02-15-04")
+      
+      // GIT-002: Add Git branch and hash if available
+      gitInfo := getGitInfo()
+      if gitInfo.Branch != "" {
+          return fmt.Sprintf("%s-%s=%s=%s.zip", dir, timestamp, gitInfo.Branch, gitInfo.Hash)
+      }
+      
+      return fmt.Sprintf("%s-%s.zip", dir, timestamp)
+  }
+  
+  // CFG-001: Configuration discovery implementation
+  func GetConfigSearchPath() []string {
+      // CFG-001: Check environment variable first
+      if envPath := os.Getenv("BKPDIR_CONFIG"); envPath != "" {
+          return strings.Split(envPath, ":")
+      }
+      
+      // CFG-001: Use default search path
+      return []string{"./.bkpdir.yml", "~/.bkpdir.yml"}
+  }
+  ```
+
+#### **Token Placement Requirements**
+1. **Function Level**: Every public function must have a feature token comment
+2. **Method Level**: Every method must reference the relevant feature
+3. **Code Block Level**: Significant logic blocks within functions should have tokens
+4. **Error Handling**: Error paths should include tokens for traceability
+5. **Configuration Handling**: All config reading/writing must have tokens
+
+#### **AI ASSISTANT TOKEN HANDLING INSTRUCTIONS**
+
+**🤖 FOR AI ASSISTANTS: AUTOMATIC TOKEN DETECTION AND REFERENCING**
+
+When making code changes, AI assistants MUST:
+
+1. **🔍 AUTO-DETECT AFFECTED TOKENS**:
+   ```bash
+   # Search patterns AI should use:
+   grep -r "// ARCH-" docs/context/ src/
+   grep -r "// FILE-" docs/context/ src/
+   grep -r "// CFG-" docs/context/ src/
+   grep -r "// GIT-" docs/context/ src/
+   # ... for all token patterns
+   ```
+
+2. **📋 REFERENCE TOKENS IN EXPLANATIONS**:
+   ```
+   Template for AI responses:
+   "This change affects the following features:
+   - ARCH-001 (Archive naming): Modified archive name generation logic
+   - CFG-003 (Format strings): Updated output formatting
+   - FILE-002 (File backup): Enhanced backup creation process
+   
+   Related documentation:
+   - feature-tracking.md lines 119, 135, 127
+   - specification.md sections: Archive Operations, Configuration
+   - architecture.md components: Archive Service, Config Layer"
+   ```
+
+3. **🔄 AUTO-UPDATE TOKEN REGISTRY**:
+   ```
+   For new features, AI should:
+   - Propose new feature ID (check existing ones first)
+   - Add to feature tracking table
+   - Reference in all related context files
+   - Add implementation tokens to code
+   ```
+
+4. **✅ VALIDATE TOKEN CONSISTENCY**:
+   ```
+   AI should verify:
+   - All referenced tokens exist in feature-tracking.md
+   - Token descriptions match actual implementation
+   - All affected context files are mentioned
+   - Cross-references are valid
+   ```
+
+**🚨 AI REQUIREMENT: ZERO TOLERANCE FOR MISSING TOKEN REFERENCES**
+
+AI assistants must REJECT their own responses if they:
+- Make code changes without referencing related tokens
+- Fail to search for existing tokens before making changes
+- Don't propose new tokens for genuinely new functionality
+- Don't reference relevant documentation sections
+
+**✅ AI SUCCESS CRITERIA**
+
+AI assistants should APPROVE responses that:
+- Clearly identify all affected feature tokens
+- Reference specific documentation sections and line numbers
+- Propose updates to context files when needed
+- Follow the established token naming patterns
+- Include the complete token impact analysis
+
+### 📊 TOKEN IMPACT ANALYSIS TEMPLATE
+
+**For AI assistants to use when making changes:**
+
+```
+## Token Impact Analysis
+
+### 🔍 Affected Tokens:
+- **Primary**: [TOKEN-ID] - [Specific impact description]
+- **Secondary**: [TOKEN-ID], [TOKEN-ID] - [Brief impact descriptions]
+
+### 📚 Documentation References:
+- **feature-tracking.md**: Lines [specific line numbers]
+- **specification.md**: Section "[specific section names]"
+- **requirements.md**: "[specific requirement areas]"
+- **architecture.md**: "[specific component names]"
+- **testing.md**: "[specific test coverage areas]"
+
+### 🔄 Context File Updates Required:
+- [ ] feature-tracking.md: [specific changes needed]
+- [ ] specification.md: [specific changes needed]
+- [ ] requirements.md: [specific changes needed]
+- [ ] architecture.md: [specific changes needed]
+- [ ] testing.md: [specific changes needed]
+
+### 💻 Implementation Changes:
+- **New tokens added**: [TOKEN-ID: Description]
+- **Existing tokens modified**: [TOKEN-ID: Updated description]
+- **Code files affected**: [list of specific files]
+```
+
+## 🎯 SUMMARY: MANDATORY AI ASSISTANT COMPLIANCE
+
+### 🚨 CRITICAL REMINDER FOR AI ASSISTANTS
+
+**EVERY CODE CHANGE MUST INCLUDE TOKEN ANALYSIS**
+
+This document establishes ZERO TOLERANCE for code changes without proper token documentation. AI assistants are required to:
+
+#### **🔍 STEP 1: MANDATORY TOKEN SEARCH**
+```bash
+# REQUIRED: Search for ALL existing tokens before making changes
+grep -r "// ARCH-" docs/context/
+grep -r "// FILE-" docs/context/
+grep -r "// CFG-" docs/context/
+grep -r "// GIT-" docs/context/
+grep -r "// OUT-" docs/context/
+grep -r "// TEST-" docs/context/
+grep -r "// DOC-" docs/context/
+grep -r "// LINT-" docs/context/
+grep -r "// COV-" docs/context/
+```
+
+#### **📋 STEP 2: MANDATORY TOKEN IMPACT STATEMENT**
+Every AI response with code changes MUST include:
+
+```
+## Token Impact Analysis
+
+### 🔍 Affected Tokens:
+- **Primary**: [TOKEN-ID] - [Specific impact description]
+- **Secondary**: [TOKEN-ID], [TOKEN-ID] - [Brief impact descriptions]
+
+### 📚 Documentation References:
+- **feature-tracking.md**: Lines [specific line numbers]
+- **specification.md**: Section "[specific section names]"
+- **requirements.md**: "[specific requirement areas]"
+- **architecture.md**: "[specific component names]"
+- **testing.md**: "[specific test coverage areas]"
+
+### 🔄 Context File Updates Required:
+- [ ] feature-tracking.md: [specific changes needed]
+- [ ] specification.md: [specific changes needed]
+- [ ] requirements.md: [specific changes needed]
+- [ ] architecture.md: [specific changes needed]
+- [ ] testing.md: [specific changes needed]
+
+### 💻 Implementation Changes:
+- **New tokens added**: [TOKEN-ID: Description]
+- **Existing tokens modified**: [TOKEN-ID: Updated description]
+- **Code files affected**: [list of specific files]
+```
+
+#### **🚫 STEP 3: MANDATORY REJECTION CRITERIA**
+
+AI assistants MUST REFUSE to provide code changes if:
+- No token search was performed
+- No existing tokens are referenced for related functionality
+- No new tokens are proposed for new functionality
+- Context file updates are not specified
+- Documentation cross-references are missing
+
+#### **✅ STEP 4: MANDATORY APPROVAL CRITERIA**
+
+AI assistants should ONLY proceed if their response:
+- Includes complete token impact analysis using the required template
+- References specific line numbers in feature-tracking.md
+- Links to relevant sections in all context files
+- Proposes concrete updates to affected documentation
+- Follows established token naming conventions (ARCH-, FILE-, CFG-, etc.)
+
+### 🔄 ENFORCEMENT SUMMARY
+
+**REMEMBER: THIS IS NOT OPTIONAL**
+
+The feature-tracking system is designed to prevent unplanned changes and maintain documentation synchronization. AI assistants that fail to follow these requirements undermine the entire system integrity.
+
+**Key Success Metrics:**
+- 100% of code changes must reference related tokens
+- 100% of new features must have new tokens
+- 100% of responses must include context file update plans
+- 0% tolerance for undocumented changes
+
+**Implementation Tokens Are Mandatory:**
+Every function, method, and significant code block must include `// TOKEN-ID: Description` comments that trace back to this feature tracking matrix.
+
+### 📞 QUICK REFERENCE FOR AI ASSISTANTS
+
+1. **Search Pattern**: `grep -r "// [A-Z]+-[0-9]+" docs/context/`
+2. **Token Format**: `// FEATURE-ID: Brief description`
+3. **Required Template**: Use the Token Impact Analysis template above
+4. **Context Files**: feature-tracking.md, specification.md, requirements.md, architecture.md, testing.md
+5. **Zero Tolerance**: No code changes without token references
+
+**This document serves as the authoritative source for feature tracking and token management. Any AI assistant working with this codebase must comply with these requirements.**
