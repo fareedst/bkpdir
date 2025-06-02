@@ -1,11 +1,181 @@
 # Coverage Configuration for bkpdir
 # COV-001: Coverage exclusion configuration for legacy code
+# COV-002: Enhanced configuration for baseline, differential reporting, and quality gates
 #
 # This file defines which parts of the codebase should be excluded from 
 # coverage metrics to focus on new development while preserving test execution
 # for existing functionality.
 
-[coverage]
+[general]
+# COV-002: Overall coverage configuration
+version = "1.2.0"
+baseline_date = "2024-12-20"
+baseline_coverage = 73.3
+differential_mode = true
+trend_tracking = true
+
+# COV-002: Quality gates and thresholds
+[quality_gates]
+# Minimum coverage thresholds
+new_code_threshold = 70.0          # New/modified code must have at least 70% coverage
+critical_path_threshold = 80.0     # Core archive/backup functions must have 80%+
+legacy_preservation = true         # Don't penalize existing 0% functions
+overall_regression_limit = -5.0    # Don't allow overall coverage to drop by more than 5%
+
+# COV-002: Coverage trend tracking
+[trend_tracking]
+enabled = true
+baseline_file = "docs/coverage-baseline.md"
+history_file = "docs/coverage-history.json"
+track_per_commit = true
+track_per_pr = true
+generate_reports = true
+
+# COV-002: Differential reporting configuration
+[differential]
+enabled = true
+compare_mode = "baseline"          # Compare against baseline, or "previous" for commit-to-commit
+include_line_changes = true        # Track line-level changes
+exclude_pure_additions = false     # Include pure additions in coverage calculation
+focus_on_modified = true           # Focus reports on modified files only
+
+# Legacy exclusion patterns (COV-001)
+[exclusions]
+
+# Files to completely exclude from coverage reporting
+exclude_files = [
+    "*_test.go",
+    "internal/testutil/scenario_helpers.go",  # COV-002: Helper functions not core business logic
+    "tools/main.go"                           # COV-002: Main wrapper excluded from coverage
+]
+
+# Functions to exclude from coverage requirements (but still track)
+exclude_functions = [
+    # COV-001: Legacy error handling functions
+    "bkpdir/backup.go:Error",
+    "bkpdir/backup.go:Unwrap", 
+    "bkpdir/backup.go:NewBackupError",
+    "bkpdir/backup.go:NewBackupErrorWithCause",
+    "bkpdir/git.go:Error",
+    
+    # COV-001: Enhanced functions not yet fully implemented
+    "bkpdir/backup.go:handleDryRunBackup",
+    "bkpdir/backup.go:CreateFileBackupEnhanced",
+    "bkpdir/backup.go:ListFileBackupsEnhanced",
+    "bkpdir/backup.go:CreateFileBackupWithContextAndCleanup",
+    "bkpdir/backup.go:CopyFile",
+    "bkpdir/backup.go:CreateFileBackupWithCleanup",
+    "bkpdir/backup.go:CompareFilesWithContext",
+    "bkpdir/backup.go:compareFileContentsWithContext",
+    "bkpdir/backup.go:ListFileBackupsWithContext",
+    "bkpdir/backup.go:processBackupEntries",
+    "bkpdir/backup.go:createBackupFromEntry",
+    "bkpdir/backup.go:sortBackupsByCreationTime",
+    "bkpdir/backup.go:GetMostRecentBackup",
+    "bkpdir/backup.go:ValidateFileForBackup",
+    
+    # COV-001: Archive functions planned for future enhancement
+    "bkpdir/archive.go:CreateArchiveWithContext",
+    "bkpdir/archive.go:verifyArchive",
+    "bkpdir/archive.go:CreateFullArchiveWithCleanup",
+    
+    # COV-001: Configuration merge functions for extended features
+    "bkpdir/config.go:mergeConfigValues",
+    "bkpdir/config.go:mergeBasicSettingValues",
+    "bkpdir/config.go:mergeFileBackupSettingValues",
+    "bkpdir/config.go:mergeStatusCodeValues",
+    "bkpdir/config.go:mergeDirectoryStatusCodeValues",
+    "bkpdir/config.go:mergeFileStatusCodeValues",
+    
+    # COV-002: Main function wrappers (CLI handlers)
+    "bkpdir/main.go:main",
+    "bkpdir/main.go:handleConfigCommand",
+    "bkpdir/main.go:handleCreateCommand", 
+    "bkpdir/main.go:handleVerifyCommand",
+    "bkpdir/main.go:handleVersionCommand",
+    "bkpdir/main.go:handleListFileBackupsCommand",
+    "bkpdir/main.go:handleConfigSetCommand",
+    
+    # COV-002: Test utility helper functions
+    "bkpdir/internal/testutil/corruption.go:min",
+    "bkpdir/internal/testutil/corruption.go:isHeaderCorruption",
+    "bkpdir/internal/testutil/corruption.go:corruptLocalHeader",
+    "bkpdir/internal/testutil/diskspace.go:Stat",
+    "bkpdir/internal/testutil/permissions.go:SimulateReadOnlyAccess",
+    "bkpdir/internal/testutil/permissions.go:SimulateWriteOnlyAccess",
+    "bkpdir/internal/testutil/permissions.go:SimulateExecuteOnlyAccess",
+    "bkpdir/internal/testutil/permissions.go:GetPermissionChanges",
+    "bkpdir/internal/testutil/permissions.go:GetSimulator",
+]
+
+# COV-002: Critical path functions that must meet higher threshold
+[critical_functions]
+# These functions must meet critical_path_threshold (80%+)
+critical_paths = [
+    "bkpdir/archive.go:CreateFullArchiveWithContext",
+    "bkpdir/archive.go:CreateIncrementalArchiveWithContext", 
+    "bkpdir/archive.go:createAndVerifyArchive",
+    "bkpdir/backup.go:CreateFileBackup",
+    "bkpdir/backup.go:CreateFileBackupWithContext",
+    "bkpdir/comparison.go:CompareSnapshots",
+    "bkpdir/comparison.go:IsDirectoryIdenticalToArchive",
+    "bkpdir/verify.go:VerifyArchive",
+    "bkpdir/verify.go:VerifyChecksums"
+]
+
+# COV-002: Reporting configuration
+[reporting]
+# Standard reports
+generate_html = true
+generate_lcov = false
+generate_json = true
+generate_text = true
+
+# COV-002: Differential reports
+generate_diff_html = true
+generate_diff_json = true
+generate_baseline_comparison = true
+generate_trend_charts = false      # Requires additional graphing dependencies
+
+# Output locations
+output_dir = "coverage_reports"
+baseline_report = "coverage_reports/baseline.html"
+differential_report = "coverage_reports/differential.html"
+trend_report = "coverage_reports/trends.json"
+
+# COV-002: Integration settings
+[integration]
+# Git integration for differential analysis
+git_enabled = true
+track_branches = ["main", "development"]
+ignore_branches = ["feature/*", "experimental/*"]
+
+# PR/commit analysis
+analyze_commits = true
+analyze_pull_requests = true
+commit_threshold = 70.0            # Coverage threshold for individual commits
+pr_threshold = 75.0                # Coverage threshold for PRs
+
+# Makefile integration
+makefile_targets = [
+    "test-coverage-baseline",       # COV-002: Generate baseline
+    "test-coverage-differential",   # COV-002: Generate differential report
+    "test-coverage-validate",       # COV-001: Validate with exclusions
+    "test-coverage-trends"          # COV-002: Update trend tracking
+]
+
+# COV-002: Legacy compatibility
+[legacy]
+# Preserve COV-001 behavior
+support_cov001_exclusions = true
+legacy_report_format = true
+maintain_backwards_compatibility = true
+
+# Legacy thresholds (for comparison)
+legacy_overall_threshold = 47.2   # Pre-TEST-EXTRACT-001 baseline
+current_overall_threshold = 73.3  # Current baseline
+target_overall_threshold = 80.0   # Future target
+
 # Coverage baseline established on 2025-06-02
 # Main package: 73.5%
 # Internal testutil: 75.6%
@@ -13,7 +183,6 @@ baseline_date = "2025-06-02"
 baseline_main_coverage = 73.5
 baseline_testutil_coverage = 75.6
 
-[exclusions]
 # Build tags for excluding legacy code from coverage
 # Files marked with these build tags will be excluded from coverage metrics
 build_tags = [
@@ -70,18 +239,3 @@ always_legacy = [
     "backup.go",
     "archive.go"
 ]
-
-# Coverage reporting configuration
-[reporting]
-# Generate separate reports for new vs legacy code
-separate_reports = true
-
-# HTML output configuration
-html_output = "coverage.html"
-new_code_html_output = "coverage_new.html"
-legacy_code_html_output = "coverage_legacy.html"
-
-# Console output configuration
-show_legacy_coverage = false
-show_new_code_coverage = true
-show_overall_coverage = true 

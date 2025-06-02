@@ -1,104 +1,576 @@
-# Coverage Baseline Documentation
+# Coverage Baseline Documentation (COV-002)
 
-> **COV-001**: Baseline coverage levels established before implementing selective coverage reporting
+> **Generated on:** `2025-06-02 17:02:58\ UTC`
+> **Overall Coverage:** `74.4%` of statements
 
-## Baseline Information
+## Detailed Coverage by File
 
-- **Date Established**: 2025-06-02
-- **Go Version**: go1.24.3 darwin/arm64
-- **Measurement Method**: `go test -cover ./...`
-
-## Current Coverage Levels
-
-### Main Package Coverage: 73.5%
-
-**Test Command**: `go test -cover .`
-**Result**: `coverage: 73.5% of statements`
-
-### Internal/Testutil Package Coverage: 75.6%
-
-**Test Command**: `go test -cover ./internal/testutil`
-**Result**: `coverage: 75.6% of statements`
-
-## Coverage Analysis by File
-
-### Files with High Coverage (>80%)
-- Most test utility functions in `internal/testutil/`
-- Core error handling in `errors.go`
-- Configuration management functions
-- Archive verification utilities
-
-### Files with Medium Coverage (60-80%)
-- Main application logic in `main.go`
-- Archive creation functions in `archive.go`
-- Backup management in `backup.go`
-
-### Files with Lower Coverage (<60%)
-- Complex formatting logic in `formatter.go`
-- Git integration in `git.go`
-- Configuration edge cases in `config.go`
-
-## Testing Infrastructure Status
-
-### Completed Testing Infrastructure
-- **Archive Corruption Testing**: ✅ Complete (75.6% coverage)
-- **Disk Space Simulation**: ✅ Complete 
-- **Permission Testing**: ✅ Complete
-- **Context Cancellation**: ✅ Complete
-- **Error Injection Framework**: ✅ Complete
-
-### Test Coverage Improvements Made
-- **errors.go**: Achieved 100% coverage for most functions (87.5-100%)
-- **comparison.go**: Achieved excellent coverage (88-100% for all functions)
-- **config.go**: Successfully achieved 100% coverage for all previously untested functions
-- **main.go**: Comprehensive test suite covering 30+ previously 0% coverage functions
-
-## Exclusion Strategy
-
-### Files Marked as Legacy (Stable)
-These files have stable functionality and should be excluded from new coverage requirements:
-
-1. **main.go** - CLI interface, well-tested through integration
-2. **config.go** - Configuration management, comprehensive existing tests
-3. **formatter.go** - Output formatting, complex template logic
-4. **backup.go** - Backup operations, stable functionality
-5. **archive.go** - Archive creation, core stable functions
-
-### New Development Focus Areas
-Coverage requirements will apply strictly to:
-
-- New features added after 2025-06-02
-- Bug fixes that modify existing logic
-- Performance improvements
-- API changes or extensions
-
-## Coverage Quality Gates
-
-### For New Code
-- **Minimum Coverage**: 85%
-- **Test Types Required**: Unit tests, integration tests
-- **Edge Case Coverage**: Required for error paths
-
-### For Modified Legacy Code
-- **Minimum Coverage**: 70%
-- **Preserve Existing Tests**: All existing tests must continue to pass
-- **Document Changes**: Coverage impact must be documented
-
-## Implementation Notes
-
-### Build Tags Strategy
-- Use `//go:build legacy` for legacy code exclusion
-- Use `//go:build exclude_coverage` for specific function exclusion
-- Maintain test execution while hiding from coverage metrics
-
-### Coverage Tooling
-- `go test -coverpkg` for selective package coverage
-- HTML reports with exclusion highlighting
-- Differential coverage for pull requests
-
-## Next Steps
-
-1. ✅ **Baseline Established**: Current coverage levels documented
-2. 🔄 **Implement Exclusion**: Modify Makefile coverage targets
-3. ⏳ **Validate System**: Test selective coverage reporting
-4. ⏳ **Document Standards**: Update development documentation 
+| File | Function | Coverage |
+|------|----------|----------|
+| bkpdir/archive.go:73: | GenerateArchiveName | 100.0% |
+| bkpdir/archive.go:85: | generateIncrementalArchiveName | 88.9% |
+| bkpdir/archive.go:105: | generateFullArchiveNameFromConfig | 90.9% |
+| bkpdir/archive.go:134: | generateFullArchiveName | 90.0% |
+| bkpdir/archive.go:168: | ListArchives | 78.6% |
+| bkpdir/archive.go:198: | createArchiveFromEntry | 77.8% |
+| bkpdir/archive.go:227: | CreateArchiveWithContext | 0.0% |
+| bkpdir/archive.go:236: | collectFilesToArchive | 78.6% |
+| bkpdir/archive.go:263: | checkContextCancellation | 66.7% |
+| bkpdir/archive.go:273: | CreateFullArchiveWithContext | 73.9% |
+| bkpdir/archive.go:324: | prepareArchiveDirectory | 85.7% |
+| bkpdir/archive.go:338: | printDryRunInfo | 100.0% |
+| bkpdir/archive.go:348: | createAndVerifyArchive | 63.6% |
+| bkpdir/archive.go:382: | verifyArchive | 0.0% |
+| bkpdir/archive.go:402: | CreateFullArchive | 100.0% |
+| bkpdir/archive.go:407: | CreateFullArchiveWithCleanup | 0.0% |
+| bkpdir/archive.go:421: | CreateIncrementalArchive | 100.0% |
+| bkpdir/archive.go:433: | createIncrementalArchive | 69.6% |
+| bkpdir/archive.go:482: | collectModifiedFiles | 78.9% |
+| bkpdir/archive.go:513: | prepareIncrementalArchive | 88.9% |
+| bkpdir/archive.go:540: | createAndVerifyIncrementalArchive | 55.6% |
+| bkpdir/archive.go:565: | CreateIncrementalArchiveWithContext | 100.0% |
+| bkpdir/archive.go:578: | createZipArchiveWithContext | 77.8% |
+| bkpdir/archive.go:596: | addFilesToZip | 66.7% |
+| bkpdir/archive.go:610: | addFileToZip | 76.2% |
+| bkpdir/archive.go:645: | findLatestFullArchive | 76.5% |
+| bkpdir/backup.go:57: | Error | 0.0% |
+| bkpdir/backup.go:64: | Unwrap | 0.0% |
+| bkpdir/backup.go:73: | NewBackupError | 0.0% |
+| bkpdir/backup.go:87: | NewBackupErrorWithCause | 0.0% |
+| bkpdir/backup.go:102: | CreateFileBackup | 100.0% |
+| bkpdir/backup.go:119: | createFileBackupInternal | 75.0% |
+| bkpdir/backup.go:143: | generateBackupPath | 83.3% |
+| bkpdir/backup.go:161: | handleDryRunBackup | 0.0% |
+| bkpdir/backup.go:178: | performBackupOperation | 71.4% |
+| bkpdir/backup.go:200: | checkAndHandleIdenticalBackup | 33.3% |
+| bkpdir/backup.go:221: | executeBackupWithCleanup | 83.3% |
+| bkpdir/backup.go:250: | CreateFileBackupEnhanced | 0.0% |
+| bkpdir/backup.go:255: | CheckForIdenticalFileBackup | 81.2% |
+| bkpdir/backup.go:290: | ListFileBackups | 87.5% |
+| bkpdir/backup.go:342: | ListFileBackupsEnhanced | 0.0% |
+| bkpdir/backup.go:382: | copyFile | 73.3% |
+| bkpdir/backup.go:410: | compareFiles | 88.9% |
+| bkpdir/backup.go:427: | compareFileContents | 90.9% |
+| bkpdir/backup.go:452: | handleFileComparisonErrors | 40.0% |
+| bkpdir/backup.go:463: | compareBuffers | 100.0% |
+| bkpdir/backup.go:473: | validateFileForBackup | 87.5% |
+| bkpdir/backup.go:490: | determineBackupPath | 46.2% |
+| bkpdir/backup.go:517: | CreateFileBackupWithContext | 100.0% |
+| bkpdir/backup.go:530: | createFileBackupWithContextInternal | 70.0% |
+| bkpdir/backup.go:555: | performContextAwareBackup | 71.4% |
+| bkpdir/backup.go:573: | executeContextAwareBackup | 83.3% |
+| bkpdir/backup.go:602: | CreateFileBackupWithContextAndCleanup | 0.0% |
+| bkpdir/backup.go:608: | CopyFileWithContext | 72.7% |
+| bkpdir/backup.go:630: | copyWithContextChecks | 75.0% |
+| bkpdir/backup.go:663: | CopyFile | 0.0% |
+| bkpdir/backup.go:668: | GenerateBackupName | 100.0% |
+| bkpdir/backup.go:680: | CreateFileBackupWithCleanup | 0.0% |
+| bkpdir/backup.go:685: | CompareFilesWithContext | 0.0% |
+| bkpdir/backup.go:707: | compareFileContentsWithContext | 0.0% |
+| bkpdir/backup.go:737: | ListFileBackupsWithContext | 0.0% |
+| bkpdir/backup.go:767: | processBackupEntries | 0.0% |
+| bkpdir/backup.go:802: | createBackupFromEntry | 0.0% |
+| bkpdir/backup.go:829: | sortBackupsByCreationTime | 0.0% |
+| bkpdir/backup.go:840: | GetMostRecentBackup | 0.0% |
+| bkpdir/backup.go:854: | ValidateFileForBackup | 0.0% |
+| bkpdir/comparison.go:34: | CreateDirectorySnapshot | 88.5% |
+| bkpdir/comparison.go:96: | CreateArchiveSnapshot | 88.2% |
+| bkpdir/comparison.go:140: | CompareSnapshots | 100.0% |
+| bkpdir/comparison.go:166: | IsDirectoryIdenticalToArchive | 100.0% |
+| bkpdir/comparison.go:186: | FindMostRecentArchive | 94.7% |
+| bkpdir/comparison.go:227: | CheckForIdenticalArchive | 77.8% |
+| bkpdir/comparison.go:251: | calculateFileHash | 75.0% |
+| bkpdir/comparison.go:268: | calculateArchiveFileHash | 75.0% |
+| bkpdir/comparison.go:286: | GetDirectoryTreeSummary | 100.0% |
+| bkpdir/comparison.go:310: | GetArchiveTreeSummary | 100.0% |
+| bkpdir/config.go:207: | DefaultConfig | 100.0% |
+| bkpdir/config.go:348: | getConfigSearchPaths | 100.0% |
+| bkpdir/config.go:364: | expandPath | 83.3% |
+| bkpdir/config.go:381: | LoadConfig | 95.0% |
+| bkpdir/config.go:425: | mergeConfigs | 100.0% |
+| bkpdir/config.go:442: | mergeBasicSettings | 91.7% |
+| bkpdir/config.go:469: | mergeFileBackupSettings | 75.0% |
+| bkpdir/config.go:484: | mergeStatusCodes | 100.0% |
+| bkpdir/config.go:495: | mergeDirectoryStatusCodes | 100.0% |
+| bkpdir/config.go:547: | mergeFileStatusCodes | 75.0% |
+| bkpdir/config.go:582: | mergeFormatStrings | 100.0% |
+| bkpdir/config.go:588: | mergeDirectoryFormatStrings | 75.0% |
+| bkpdir/config.go:627: | mergeFileFormatStrings | 75.0% |
+| bkpdir/config.go:658: | mergeTemplates | 100.0% |
+| bkpdir/config.go:664: | mergeDirectoryTemplates | 75.0% |
+| bkpdir/config.go:703: | mergeFileTemplates | 75.0% |
+| bkpdir/config.go:734: | mergePatterns | 50.0% |
+| bkpdir/config.go:749: | equalStringSlices | 83.3% |
+| bkpdir/config.go:763: | GetConfigValues | 100.0% |
+| bkpdir/config.go:780: | GetConfigValuesWithSources | 100.0% |
+| bkpdir/config.go:799: | determineConfigSource | 100.0% |
+| bkpdir/config.go:814: | createSourceDeterminer | 100.0% |
+| bkpdir/config.go:839: | getBasicConfigValues | 100.0% |
+| bkpdir/config.go:870: | getStatusCodeValues | 100.0% |
+| bkpdir/config.go:901: | getVerificationValues | 100.0% |
+| bkpdir/config.go:916: | boolToString | 100.0% |
+| bkpdir/config.go:929: | LoadConfigValues | 100.0% |
+| bkpdir/config.go:940: | mergeConfigValues | 0.0% |
+| bkpdir/config.go:950: | mergeBasicSettingValues | 0.0% |
+| bkpdir/config.go:960: | mergeFileBackupSettingValues | 0.0% |
+| bkpdir/config.go:970: | mergeStatusCodeValues | 0.0% |
+| bkpdir/config.go:980: | mergeDirectoryStatusCodeValues | 0.0% |
+| bkpdir/config.go:990: | mergeFileStatusCodeValues | 0.0% |
+| bkpdir/config.go:996: | mergeExtendedFormatStrings | 100.0% |
+| bkpdir/config.go:1048: | mergeExtendedTemplates | 100.0% |
+| bkpdir/errors.go:28: | Error | 100.0% |
+| bkpdir/errors.go:37: | Unwrap | 100.0% |
+| bkpdir/errors.go:42: | NewArchiveError | 100.0% |
+| bkpdir/errors.go:52: | NewArchiveErrorWithCause | 100.0% |
+| bkpdir/errors.go:63: | NewArchiveErrorWithContext | 100.0% |
+| bkpdir/errors.go:81: | IsDiskFullError | 100.0% |
+| bkpdir/errors.go:109: | isDiskFullError | 87.5% |
+| bkpdir/errors.go:137: | IsPermissionError | 100.0% |
+| bkpdir/errors.go:162: | IsDirectoryNotFoundError | 100.0% |
+| bkpdir/errors.go:187: | Cleanup | 100.0% |
+| bkpdir/errors.go:192: | String | 100.0% |
+| bkpdir/errors.go:202: | Cleanup | 100.0% |
+| bkpdir/errors.go:207: | String | 100.0% |
+| bkpdir/errors.go:218: | NewResourceManager | 100.0% |
+| bkpdir/errors.go:226: | AddResource | 100.0% |
+| bkpdir/errors.go:234: | AddTempFile | 100.0% |
+| bkpdir/errors.go:240: | AddTempDir | 100.0% |
+| bkpdir/errors.go:246: | RemoveResource | 100.0% |
+| bkpdir/errors.go:260: | Cleanup | 100.0% |
+| bkpdir/errors.go:278: | CleanupWithPanicRecovery | 100.0% |
+| bkpdir/errors.go:296: | NewContextualOperation | 100.0% |
+| bkpdir/errors.go:305: | Context | 100.0% |
+| bkpdir/errors.go:311: | ResourceManager | 100.0% |
+| bkpdir/errors.go:317: | IsCancelled | 100.0% |
+| bkpdir/errors.go:328: | CheckCancellation | 100.0% |
+| bkpdir/errors.go:334: | Cleanup | 100.0% |
+| bkpdir/errors.go:340: | HandleArchiveError | 100.0% |
+| bkpdir/errors.go:373: | AtomicWriteFile | 87.5% |
+| bkpdir/errors.go:400: | SafeMkdirAll | 80.0% |
+| bkpdir/errors.go:422: | ValidateDirectoryPath | 90.0% |
+| bkpdir/errors.go:459: | ValidateFilePath | 90.0% |
+| bkpdir/exclude.go:23: | NewPatternMatcher | 100.0% |
+| bkpdir/exclude.go:30: | ShouldExclude | 100.0% |
+| bkpdir/exclude.go:44: | matchesPattern | 83.3% |
+| bkpdir/exclude.go:60: | matchesDirectoryPattern | 100.0% |
+| bkpdir/exclude.go:79: | matchesGlobPattern | 75.0% |
+| bkpdir/exclude.go:97: | matchesRootLevelPattern | 100.0% |
+| bkpdir/exclude.go:114: | matchesDirectoryLevelPattern | 100.0% |
+| bkpdir/exclude.go:127: | ShouldExcludeFile | 100.0% |
+| bkpdir/formatter.go:32: | NewOutputCollector | 100.0% |
+| bkpdir/formatter.go:39: | AddStdout | 100.0% |
+| bkpdir/formatter.go:49: | AddStderr | 100.0% |
+| bkpdir/formatter.go:59: | GetMessages | 100.0% |
+| bkpdir/formatter.go:65: | FlushAll | 100.0% |
+| bkpdir/formatter.go:78: | FlushStdout | 100.0% |
+| bkpdir/formatter.go:92: | FlushStderr | 100.0% |
+| bkpdir/formatter.go:106: | Clear | 100.0% |
+| bkpdir/formatter.go:129: | NewOutputFormatter | 100.0% |
+| bkpdir/formatter.go:136: | NewOutputFormatterWithCollector | 100.0% |
+| bkpdir/formatter.go:142: | IsDelayedMode | 100.0% |
+| bkpdir/formatter.go:148: | GetCollector | 100.0% |
+| bkpdir/formatter.go:154: | SetCollector | 100.0% |
+| bkpdir/formatter.go:164: | FormatCreatedArchive | 100.0% |
+| bkpdir/formatter.go:174: | FormatIdenticalArchive | 100.0% |
+| bkpdir/formatter.go:184: | FormatListArchive | 100.0% |
+| bkpdir/formatter.go:194: | FormatConfigValue | 100.0% |
+| bkpdir/formatter.go:204: | FormatDryRunArchive | 100.0% |
+| bkpdir/formatter.go:214: | FormatError | 100.0% |
+| bkpdir/formatter.go:226: | PrintCreatedArchive | 75.0% |
+| bkpdir/formatter.go:244: | PrintIdenticalArchive | 75.0% |
+| bkpdir/formatter.go:262: | PrintListArchive | 75.0% |
+| bkpdir/formatter.go:280: | PrintConfigValue | 75.0% |
+| bkpdir/formatter.go:298: | PrintDryRunArchive | 100.0% |
+| bkpdir/formatter.go:316: | PrintError | 100.0% |
+| bkpdir/formatter.go:334: | PrintCreatedBackup | 75.0% |
+| bkpdir/formatter.go:352: | PrintIdenticalBackup | 75.0% |
+| bkpdir/formatter.go:370: | PrintListBackup | 75.0% |
+| bkpdir/formatter.go:388: | PrintDryRunBackup | 75.0% |
+| bkpdir/formatter.go:404: | ExtractArchiveFilenameData | 100.0% |
+| bkpdir/formatter.go:414: | ExtractBackupFilenameData | 100.0% |
+| bkpdir/formatter.go:424: | ExtractConfigLineData | 100.0% |
+| bkpdir/formatter.go:434: | ExtractTimestampData | 100.0% |
+| bkpdir/formatter.go:444: | FormatArchiveWithExtraction | 83.3% |
+| bkpdir/formatter.go:465: | FormatListArchiveWithExtraction | 85.7% |
+| bkpdir/formatter.go:481: | getFilenameFromPath | 75.0% |
+| bkpdir/formatter.go:494: | FormatCreatedBackup | 100.0% |
+| bkpdir/formatter.go:503: | FormatIdenticalBackup | 100.0% |
+| bkpdir/formatter.go:512: | FormatListBackup | 100.0% |
+| bkpdir/formatter.go:521: | FormatDryRunBackup | 100.0% |
+| bkpdir/formatter.go:530: | FormatCreatedArchiveTemplate | 100.0% |
+| bkpdir/formatter.go:539: | FormatIdenticalArchiveTemplate | 100.0% |
+| bkpdir/formatter.go:548: | FormatListArchiveTemplate | 100.0% |
+| bkpdir/formatter.go:553: | FormatConfigValueTemplate | 100.0% |
+| bkpdir/formatter.go:558: | FormatDryRunArchiveTemplate | 100.0% |
+| bkpdir/formatter.go:563: | FormatCreatedBackupTemplate | 100.0% |
+| bkpdir/formatter.go:568: | FormatIdenticalBackupTemplate | 100.0% |
+| bkpdir/formatter.go:573: | FormatListBackupTemplate | 100.0% |
+| bkpdir/formatter.go:578: | FormatDryRunBackupTemplate | 100.0% |
+| bkpdir/formatter.go:583: | formatTemplate | 81.8% |
+| bkpdir/formatter.go:608: | extractPatternData | 81.8% |
+| bkpdir/formatter.go:645: | NewTemplateFormatter | 100.0% |
+| bkpdir/formatter.go:655: | FormatWithTemplate | 81.8% |
+| bkpdir/formatter.go:685: | FormatWithPlaceholders | 81.8% |
+| bkpdir/formatter.go:716: | TemplateCreatedArchive | 100.0% |
+| bkpdir/formatter.go:726: | TemplateIdenticalArchive | 100.0% |
+| bkpdir/formatter.go:736: | TemplateListArchive | 100.0% |
+| bkpdir/formatter.go:746: | TemplateConfigValue | 100.0% |
+| bkpdir/formatter.go:756: | TemplateDryRunArchive | 100.0% |
+| bkpdir/formatter.go:766: | TemplateError | 100.0% |
+| bkpdir/formatter.go:776: | TemplateCreatedBackup | 100.0% |
+| bkpdir/formatter.go:786: | TemplateIdenticalBackup | 100.0% |
+| bkpdir/formatter.go:796: | TemplateListBackup | 100.0% |
+| bkpdir/formatter.go:806: | TemplateDryRunBackup | 100.0% |
+| bkpdir/formatter.go:816: | PrintTemplateCreatedArchive | 100.0% |
+| bkpdir/formatter.go:830: | PrintTemplateCreatedBackup | 100.0% |
+| bkpdir/formatter.go:844: | PrintTemplateListBackup | 100.0% |
+| bkpdir/formatter.go:859: | PrintTemplateError | 100.0% |
+| bkpdir/formatter.go:873: | extractArchiveData | 90.9% |
+| bkpdir/formatter.go:900: | extractBackupData | 90.9% |
+| bkpdir/formatter.go:927: | FormatBackupWithExtraction | 83.3% |
+| bkpdir/formatter.go:948: | FormatListBackupWithExtraction | 85.7% |
+| bkpdir/formatter.go:968: | FormatIncrementalCreated | 100.0% |
+| bkpdir/formatter.go:977: | FormatNoArchivesFound | 100.0% |
+| bkpdir/formatter.go:985: | FormatVerificationFailed | 100.0% |
+| bkpdir/formatter.go:993: | FormatVerificationSuccess | 100.0% |
+| bkpdir/formatter.go:1001: | FormatVerificationWarning | 100.0% |
+| bkpdir/formatter.go:1009: | FormatConfigurationUpdated | 100.0% |
+| bkpdir/formatter.go:1017: | FormatConfigFilePath | 100.0% |
+| bkpdir/formatter.go:1025: | FormatDryRunFilesHeader | 100.0% |
+| bkpdir/formatter.go:1033: | FormatDryRunFileEntry | 100.0% |
+| bkpdir/formatter.go:1041: | FormatNoFilesModified | 100.0% |
+| bkpdir/formatter.go:1050: | FormatNoBackupsFound | 100.0% |
+| bkpdir/formatter.go:1058: | FormatBackupWouldCreate | 100.0% |
+| bkpdir/formatter.go:1066: | FormatBackupIdentical | 100.0% |
+| bkpdir/formatter.go:1074: | FormatBackupCreated | 100.0% |
+| bkpdir/formatter.go:1083: | FormatNoArchivesFoundTemplate | 100.0% |
+| bkpdir/formatter.go:1091: | FormatVerificationFailedTemplate | 100.0% |
+| bkpdir/formatter.go:1099: | FormatVerificationSuccessTemplate | 100.0% |
+| bkpdir/formatter.go:1107: | FormatVerificationWarningTemplate | 100.0% |
+| bkpdir/formatter.go:1115: | FormatConfigurationUpdatedTemplate | 100.0% |
+| bkpdir/formatter.go:1123: | FormatConfigFilePathTemplate | 100.0% |
+| bkpdir/formatter.go:1131: | FormatDryRunFilesHeaderTemplate | 100.0% |
+| bkpdir/formatter.go:1139: | FormatDryRunFileEntryTemplate | 100.0% |
+| bkpdir/formatter.go:1147: | FormatNoFilesModifiedTemplate | 100.0% |
+| bkpdir/formatter.go:1155: | FormatIncrementalCreatedTemplate | 100.0% |
+| bkpdir/formatter.go:1164: | FormatNoBackupsFoundTemplate | 100.0% |
+| bkpdir/formatter.go:1172: | FormatBackupWouldCreateTemplate | 100.0% |
+| bkpdir/formatter.go:1180: | FormatBackupIdenticalTemplate | 100.0% |
+| bkpdir/formatter.go:1188: | FormatBackupCreatedTemplate | 100.0% |
+| bkpdir/formatter.go:1195: | PrintNoArchivesFound | 75.0% |
+| bkpdir/formatter.go:1206: | PrintVerificationFailed | 100.0% |
+| bkpdir/formatter.go:1217: | PrintVerificationSuccess | 100.0% |
+| bkpdir/formatter.go:1228: | PrintVerificationWarning | 75.0% |
+| bkpdir/formatter.go:1239: | PrintConfigurationUpdated | 75.0% |
+| bkpdir/formatter.go:1250: | PrintConfigFilePath | 75.0% |
+| bkpdir/formatter.go:1261: | PrintDryRunFilesHeader | 100.0% |
+| bkpdir/formatter.go:1272: | PrintDryRunFileEntry | 100.0% |
+| bkpdir/formatter.go:1283: | PrintNoFilesModified | 100.0% |
+| bkpdir/formatter.go:1294: | PrintIncrementalCreated | 100.0% |
+| bkpdir/formatter.go:1306: | PrintNoBackupsFound | 75.0% |
+| bkpdir/formatter.go:1317: | PrintBackupWouldCreate | 75.0% |
+| bkpdir/formatter.go:1328: | PrintBackupIdentical | 75.0% |
+| bkpdir/formatter.go:1339: | PrintBackupCreated | 100.0% |
+| bkpdir/formatter.go:1350: | FormatDiskFullError | 100.0% |
+| bkpdir/formatter.go:1355: | FormatPermissionError | 100.0% |
+| bkpdir/formatter.go:1360: | FormatDirectoryNotFound | 100.0% |
+| bkpdir/formatter.go:1365: | FormatFileNotFound | 100.0% |
+| bkpdir/formatter.go:1370: | FormatInvalidDirectory | 100.0% |
+| bkpdir/formatter.go:1375: | FormatInvalidFile | 100.0% |
+| bkpdir/formatter.go:1380: | FormatFailedWriteTemp | 100.0% |
+| bkpdir/formatter.go:1385: | FormatFailedFinalizeFile | 100.0% |
+| bkpdir/formatter.go:1390: | FormatFailedCreateDirDisk | 100.0% |
+| bkpdir/formatter.go:1395: | FormatFailedCreateDir | 100.0% |
+| bkpdir/formatter.go:1400: | FormatFailedAccessDir | 100.0% |
+| bkpdir/formatter.go:1405: | FormatFailedAccessFile | 100.0% |
+| bkpdir/formatter.go:1411: | TemplateDiskFullError | 100.0% |
+| bkpdir/formatter.go:1419: | TemplatePermissionError | 100.0% |
+| bkpdir/formatter.go:1427: | TemplateDirectoryNotFound | 100.0% |
+| bkpdir/formatter.go:1435: | TemplateFileNotFound | 100.0% |
+| bkpdir/formatter.go:1443: | TemplateInvalidDirectory | 100.0% |
+| bkpdir/formatter.go:1451: | TemplateInvalidFile | 100.0% |
+| bkpdir/formatter.go:1459: | TemplateFailedWriteTemp | 100.0% |
+| bkpdir/formatter.go:1467: | TemplateFailedFinalizeFile | 100.0% |
+| bkpdir/formatter.go:1475: | TemplateFailedCreateDirDisk | 100.0% |
+| bkpdir/formatter.go:1483: | TemplateFailedCreateDir | 100.0% |
+| bkpdir/formatter.go:1491: | TemplateFailedAccessDir | 100.0% |
+| bkpdir/formatter.go:1499: | TemplateFailedAccessFile | 100.0% |
+| bkpdir/formatter.go:1509: | PrintDiskFullError | 100.0% |
+| bkpdir/formatter.go:1521: | PrintPermissionError | 100.0% |
+| bkpdir/formatter.go:1533: | PrintDirectoryNotFound | 100.0% |
+| bkpdir/formatter.go:1545: | PrintFileNotFound | 75.0% |
+| bkpdir/formatter.go:1557: | PrintInvalidDirectory | 75.0% |
+| bkpdir/formatter.go:1569: | PrintInvalidFile | 75.0% |
+| bkpdir/formatter.go:1581: | PrintFailedWriteTemp | 75.0% |
+| bkpdir/formatter.go:1593: | PrintFailedFinalizeFile | 75.0% |
+| bkpdir/formatter.go:1605: | PrintFailedCreateDirDisk | 75.0% |
+| bkpdir/formatter.go:1617: | PrintFailedCreateDir | 75.0% |
+| bkpdir/formatter.go:1629: | PrintFailedAccessDir | 75.0% |
+| bkpdir/formatter.go:1641: | PrintFailedAccessFile | 75.0% |
+| bkpdir/formatter.go:1654: | PrintVerificationErrorDetail | 100.0% |
+| bkpdir/formatter.go:1666: | PrintArchiveListWithStatus | 100.0% |
+| bkpdir/git.go:27: | Error | 0.0% |
+| bkpdir/git.go:37: | IsGitRepository | 100.0% |
+| bkpdir/git.go:50: | GetGitBranch | 100.0% |
+| bkpdir/git.go:66: | GetGitShortHash | 100.0% |
+| bkpdir/git.go:82: | GetGitInfo | 100.0% |
+| bkpdir/git.go:95: | IsGitWorkingDirectoryClean | 87.5% |
+| bkpdir/git.go:116: | GetGitInfoWithStatus | 100.0% |
+| bkpdir/internal/testutil/context.go:181: | NewContextController | 100.0% |
+| bkpdir/internal/testutil/context.go:199: | SetCancellationDelay | 100.0% |
+| bkpdir/internal/testutil/context.go:206: | StartControlledCancellation | 100.0% |
+| bkpdir/internal/testutil/context.go:237: | cancellationTimer | 50.0% |
+| bkpdir/internal/testutil/context.go:248: | triggerCancellation | 100.0% |
+| bkpdir/internal/testutil/context.go:260: | Stop | 100.0% |
+| bkpdir/internal/testutil/context.go:278: | recordEvent | 100.0% |
+| bkpdir/internal/testutil/context.go:290: | GetEvents | 100.0% |
+| bkpdir/internal/testutil/context.go:300: | GetStats | 100.0% |
+| bkpdir/internal/testutil/context.go:317: | NewCancellationManager | 100.0% |
+| bkpdir/internal/testutil/context.go:327: | RegisterCancellationPoint | 100.0% |
+| bkpdir/internal/testutil/context.go:336: | InjectCancellation | 100.0% |
+| bkpdir/internal/testutil/context.go:361: | EnableGlobal | 100.0% |
+| bkpdir/internal/testutil/context.go:368: | EnablePoint | 100.0% |
+| bkpdir/internal/testutil/context.go:379: | GetStats | 100.0% |
+| bkpdir/internal/testutil/context.go:394: | RunConcurrentTest | 98.0% |
+| bkpdir/internal/testutil/context.go:511: | TestPropagation | 87.5% |
+| bkpdir/internal/testutil/context.go:537: | executePropagationChain | 76.9% |
+| bkpdir/internal/testutil/context.go:600: | CreateTimeoutContext | 100.0% |
+| bkpdir/internal/testutil/context.go:605: | CreateCancelledContext | 100.0% |
+| bkpdir/internal/testutil/context.go:612: | CreateDeadlineContext | 100.0% |
+| bkpdir/internal/testutil/context.go:619: | SimulateSlowOperation | 100.0% |
+| bkpdir/internal/testutil/context.go:638: | VerifyContextPropagation | 100.0% |
+| bkpdir/internal/testutil/context.go:668: | CreateArchiveCancellationPoint | 100.0% |
+| bkpdir/internal/testutil/context.go:682: | CreateBackupCancellationPoint | 100.0% |
+| bkpdir/internal/testutil/context.go:696: | CreateResourceCleanupCancellationPoint | 50.0% |
+| bkpdir/internal/testutil/corruption.go:75: | NewArchiveCorruptor | 100.0% |
+| bkpdir/internal/testutil/corruption.go:90: | CreateBackup | 80.0% |
+| bkpdir/internal/testutil/corruption.go:108: | RestoreFromBackup | 100.0% |
+| bkpdir/internal/testutil/corruption.go:117: | Cleanup | 100.0% |
+| bkpdir/internal/testutil/corruption.go:125: | ApplyCorruption | 83.3% |
+| bkpdir/internal/testutil/corruption.go:154: | findLocalHeaderOffsets | 100.0% |
+| bkpdir/internal/testutil/corruption.go:168: | corruptCRC | 88.9% |
+| bkpdir/internal/testutil/corruption.go:226: | corruptHeader | 92.6% |
+| bkpdir/internal/testutil/corruption.go:279: | corruptTruncate | 73.3% |
+| bkpdir/internal/testutil/corruption.go:315: | corruptCentralDirectory | 85.7% |
+| bkpdir/internal/testutil/corruption.go:362: | corruptLocalHeader | 0.0% |
+| bkpdir/internal/testutil/corruption.go:413: | corruptData | 83.9% |
+| bkpdir/internal/testutil/corruption.go:480: | corruptSignature | 87.5% |
+| bkpdir/internal/testutil/corruption.go:516: | corruptComment | 90.0% |
+| bkpdir/internal/testutil/corruption.go:560: | min | 0.0% |
+| bkpdir/internal/testutil/corruption.go:573: | NewCorruptionDetector | 100.0% |
+| bkpdir/internal/testutil/corruption.go:578: | DetectCorruption | 90.5% |
+| bkpdir/internal/testutil/corruption.go:623: | isSignatureCorruption | 88.9% |
+| bkpdir/internal/testutil/corruption.go:648: | isHeaderCorruption | 0.0% |
+| bkpdir/internal/testutil/corruption.go:664: | isTruncated | 81.8% |
+| bkpdir/internal/testutil/corruption.go:687: | max | 66.7% |
+| bkpdir/internal/testutil/corruption.go:695: | CreateTestArchive | 78.6% |
+| bkpdir/internal/testutil/corruption.go:721: | CreateCorruptedTestArchive | 71.4% |
+| bkpdir/internal/testutil/diskspace.go:96: | WriteFile | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:100: | Create | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:104: | OpenFile | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:108: | MkdirAll | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:112: | Stat | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:116: | Remove | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:120: | RemoveAll | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:130: | WriteFile | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:137: | Create | 66.7% |
+| bkpdir/internal/testutil/diskspace.go:144: | OpenFile | 75.0% |
+| bkpdir/internal/testutil/diskspace.go:154: | MkdirAll | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:161: | Stat | 0.0% |
+| bkpdir/internal/testutil/diskspace.go:165: | Remove | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:180: | RemoveAll | 91.7% |
+| bkpdir/internal/testutil/diskspace.go:207: | NewDiskSpaceSimulator | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:241: | GetFileSystem | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:249: | checkSpaceAndInject | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:311: | calculateSpaceReduction | 93.3% |
+| bkpdir/internal/testutil/diskspace.go:343: | reduceAvailableSpace | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:356: | recoverSpaceUnlocked | 50.0% |
+| bkpdir/internal/testutil/diskspace.go:372: | recoverSpace | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:379: | GetAvailableSpace | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:386: | GetUsedSpace | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:393: | GetTotalSpace | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:400: | GetStats | 83.3% |
+| bkpdir/internal/testutil/diskspace.go:412: | Reset | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:425: | SetEnabled | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:432: | IsEnabled | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:439: | AddFailurePoint | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:450: | AddRecoveryPoint | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:461: | AddInjectionPoint | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:472: | RemoveFailurePoint | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:479: | RemoveRecoveryPoint | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:486: | RemoveInjectionPoint | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:493: | GetOperationCount | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:509: | Error | 66.7% |
+| bkpdir/internal/testutil/diskspace.go:518: | Unwrap | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:523: | NewDiskSpaceError | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:534: | CreateDiskFullError | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:543: | CreateQuotaExceededError | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:552: | CreateDeviceFullError | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:639: | GetScenario | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:645: | GetAllScenarioNames | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:655: | RunScenario | 100.0% |
+| bkpdir/internal/testutil/diskspace.go:670: | SimulateArchiveCreation | 90.0% |
+| bkpdir/internal/testutil/diskspace.go:693: | SimulateBackupOperation | 87.5% |
+| bkpdir/internal/testutil/errorinjection.go:70: | Error | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:77: | Unwrap | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:81: | TypeString | 33.3% |
+| bkpdir/internal/testutil/errorinjection.go:96: | CategoryString | 37.5% |
+| bkpdir/internal/testutil/errorinjection.go:245: | NewErrorInjector | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:265: | AddInjectionPoint | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:278: | RemoveInjectionPoint | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:285: | ShouldInjectError | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:357: | TrackErrorPropagation | 85.7% |
+| bkpdir/internal/testutil/errorinjection.go:380: | TrackRecoveryAttempt | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:416: | GetStats | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:423: | GetPropagationTraces | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:435: | GetRecoveryAttempts | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:445: | Enable | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:452: | IsEnabled | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:459: | Reset | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:477: | matchesInjectionPoint | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:500: | shouldInjectBasedOnProbability | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:506: | startPropagationTrace | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:520: | getCurrentStackDepth | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:526: | getDefaultRetryPolicies | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:548: | CreateFilesystemError | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:561: | CreateGitError | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:574: | CreatePermissionError | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:587: | CreateResourceError | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:600: | CreateNetworkError | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:634: | GetFilesystemErrorScenario | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:664: | GetGitErrorScenario | 100.0% |
+| bkpdir/internal/testutil/errorinjection.go:695: | RunErrorInjectionScenario | 66.7% |
+| bkpdir/internal/testutil/permissions.go:108: | NewPermissionSimulator | 68.4% |
+| bkpdir/internal/testutil/permissions.go:157: | GetTempDir | 100.0% |
+| bkpdir/internal/testutil/permissions.go:164: | CreateFile | 80.0% |
+| bkpdir/internal/testutil/permissions.go:188: | CreateDir | 87.5% |
+| bkpdir/internal/testutil/permissions.go:206: | SetPermission | 100.0% |
+| bkpdir/internal/testutil/permissions.go:213: | setPermissionLocked | 80.0% |
+| bkpdir/internal/testutil/permissions.go:243: | RestorePermissions | 100.0% |
+| bkpdir/internal/testutil/permissions.go:250: | restorePermissionsLocked | 72.7% |
+| bkpdir/internal/testutil/permissions.go:272: | SimulatePermissionDenied | 80.0% |
+| bkpdir/internal/testutil/permissions.go:288: | SimulateReadOnlyAccess | 0.0% |
+| bkpdir/internal/testutil/permissions.go:293: | SimulateWriteOnlyAccess | 0.0% |
+| bkpdir/internal/testutil/permissions.go:302: | SimulateExecuteOnlyAccess | 0.0% |
+| bkpdir/internal/testutil/permissions.go:311: | RunScenario | 64.3% |
+| bkpdir/internal/testutil/permissions.go:365: | DetectPermissionChange | 81.2% |
+| bkpdir/internal/testutil/permissions.go:405: | GetPermissionError | 66.7% |
+| bkpdir/internal/testutil/permissions.go:423: | IsPermissionError | 92.3% |
+| bkpdir/internal/testutil/permissions.go:460: | GeneratePermissionScenarios | 100.0% |
+| bkpdir/internal/testutil/permissions.go:524: | GetStats | 100.0% |
+| bkpdir/internal/testutil/permissions.go:531: | GetPermissionChanges | 0.0% |
+| bkpdir/internal/testutil/permissions.go:543: | Cleanup | 72.7% |
+| bkpdir/internal/testutil/permissions.go:570: | containsIgnoreCase | 100.0% |
+| bkpdir/internal/testutil/permissions.go:579: | containsSubstring | 75.0% |
+| bkpdir/internal/testutil/permissions.go:589: | getBuiltinScenarios | 100.0% |
+| bkpdir/internal/testutil/permissions.go:694: | NewPermissionTestHelper | 80.0% |
+| bkpdir/internal/testutil/permissions.go:713: | WithPermissionDenied | 63.6% |
+| bkpdir/internal/testutil/permissions.go:742: | Cleanup | 100.0% |
+| bkpdir/internal/testutil/permissions.go:747: | GetSimulator | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:25: | errorTypeToString | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:46: | NewCommonScenarioTemplates | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:53: | CreateBasicArchiveScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:87: | CreateErrorInjectionScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:128: | CreatePermissionScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:193: | CreateConcurrentScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:256: | NewTestingHelpers | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:263: | RunScenarioTest | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:309: | RunScenarioSubtest | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:318: | CreateQuickScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:331: | CreateFileOperationScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:373: | CreateBenchmarkScenario | 0.0% |
+| bkpdir/internal/testutil/scenario_helpers.go:429: | ValidateScenarioIntegration | 0.0% |
+| bkpdir/internal/testutil/scenarios.go:250: | NewScenarioBuilder | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:270: | WithDescription | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:276: | WithTags | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:282: | WithTimeout | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:288: | WithFailFast | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:294: | WithDependencies | 0.0% |
+| bkpdir/internal/testutil/scenarios.go:300: | WithRequiredFeatures | 0.0% |
+| bkpdir/internal/testutil/scenarios.go:306: | AddSetupStep | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:322: | AddExecutionStep | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:338: | AddVerificationStep | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:354: | AddCleanupStep | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:370: | WithStepTimeout | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:378: | WithStepPrerequisites | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:386: | WithStepValidation | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:394: | WithStepCallbacks | 0.0% |
+| bkpdir/internal/testutil/scenarios.go:405: | EnableParallelExecution | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:415: | WithExpectation | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:421: | Build | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:430: | validateScenario | 85.7% |
+| bkpdir/internal/testutil/scenarios.go:459: | NewScenarioOrchestrator | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:492: | RegisterScenario | 83.3% |
+| bkpdir/internal/testutil/scenarios.go:505: | ExecuteScenario | 93.5% |
+| bkpdir/internal/testutil/scenarios.go:594: | createScenarioRuntime | 68.8% |
+| bkpdir/internal/testutil/scenarios.go:641: | executePhase | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:681: | executeStepsSequentially | 81.8% |
+| bkpdir/internal/testutil/scenarios.go:703: | executeStepsInParallel | 78.1% |
+| bkpdir/internal/testutil/scenarios.go:765: | executeStep | 90.9% |
+| bkpdir/internal/testutil/scenarios.go:857: | arePrerequisitesMet | 85.7% |
+| bkpdir/internal/testutil/scenarios.go:871: | cleanupRuntime | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:886: | NewTimingCoordinator | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:897: | CreateBarrier | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:907: | WaitForBarrier | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:919: | SetDelay | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:926: | ApplyDelay | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:937: | CreateSignal | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:944: | WaitForSignal | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:955: | SendSignal | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:969: | recordEvent | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:988: | SetSharedData | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:995: | GetSharedData | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:1003: | CreateTestFile | 77.8% |
+| bkpdir/internal/testutil/scenarios.go:1023: | CreateTestDirectory | 85.7% |
+| bkpdir/internal/testutil/scenarios.go:1038: | GetCreatedFiles | 100.0% |
+| bkpdir/internal/testutil/scenarios.go:1048: | GetExecutionSummary | 66.7% |
+| bkpdir/main.go:45: | main | 0.0% |
+| bkpdir/main.go:125: | handleConfigCommand | 0.0% |
+| bkpdir/main.go:165: | handleCreateCommand | 0.0% |
+| bkpdir/main.go:169: | handleListCommand | 50.0% |
+| bkpdir/main.go:197: | handleVerifyCommand | 0.0% |
+| bkpdir/main.go:201: | handleVersionCommand | 0.0% |
+| bkpdir/main.go:205: | configCmd | 22.2% |
+| bkpdir/main.go:238: | createCmd | 66.7% |
+| bkpdir/main.go:251: | fullCmd | 68.4% |
+| bkpdir/main.go:304: | incCmd | 68.4% |
+| bkpdir/main.go:357: | listCmd | 100.0% |
+| bkpdir/main.go:370: | verifyCmd | 66.7% |
+| bkpdir/main.go:383: | versionCmd | 66.7% |
+| bkpdir/main.go:408: | CreateFullArchiveEnhanced | 100.0% |
+| bkpdir/main.go:416: | CreateIncrementalArchiveEnhanced | 100.0% |
+| bkpdir/main.go:424: | ListArchivesEnhanced | 73.1% |
+| bkpdir/main.go:485: | VerifyArchiveEnhanced | 66.7% |
+| bkpdir/main.go:500: | getArchiveDirectory | 85.7% |
+| bkpdir/main.go:517: | verifySingleArchive | 83.3% |
+| bkpdir/main.go:534: | verifyAllArchives | 40.0% |
+| bkpdir/main.go:562: | performVerification | 77.8% |
+| bkpdir/main.go:580: | handleVerificationResult | 91.7% |
+| bkpdir/main.go:604: | handleListFileBackupsCommand | 0.0% |
+| bkpdir/main.go:637: | backupCmd | 15.0% |
+| bkpdir/main.go:698: | handleConfigSetCommand | 0.0% |
+| bkpdir/main.go:725: | loadExistingConfigData | 71.4% |
+| bkpdir/main.go:742: | convertConfigValue | 50.0% |
+| bkpdir/main.go:763: | convertBooleanValue | 57.1% |
+| bkpdir/main.go:776: | convertIntegerValue | 60.0% |
+| bkpdir/main.go:786: | updateConfigData | 100.0% |
+| bkpdir/main.go:803: | saveConfigData | 42.9% |
+| bkpdir/verify.go:31: | VerifyArchive | 83.3% |
+| bkpdir/verify.go:60: | verifyFile | 77.8% |
+| bkpdir/verify.go:80: | GenerateChecksums | 85.7% |
+| bkpdir/verify.go:95: | calculateFileChecksum | 75.0% |
+| bkpdir/verify.go:112: | StoreChecksums | 72.7% |
+| bkpdir/verify.go:138: | createChecksumsTempFile | 50.0% |
+| bkpdir/verify.go:162: | createNewArchiveWithChecksums | 76.9% |
+| bkpdir/verify.go:192: | copyArchiveFiles | 75.0% |
+| bkpdir/verify.go:203: | copyArchiveFile | 71.4% |
+| bkpdir/verify.go:230: | addChecksumsFile | 72.7% |
+| bkpdir/verify.go:256: | ReadChecksums | 0.0% |
+| bkpdir/verify.go:274: | findChecksumsFile | 75.0% |
+| bkpdir/verify.go:285: | readChecksumsFromFile | 77.8% |
+| bkpdir/verify.go:303: | VerifyChecksums | 80.0% |
+| bkpdir/verify.go:336: | handleVerificationError | 100.0% |
+| bkpdir/verify.go:349: | verifyArchiveChecksums | 83.3% |
+| bkpdir/verify.go:368: | verifyFileChecksum | 71.4% |
+| bkpdir/verify.go:395: | StoreVerificationStatus | 75.0% |
+| bkpdir/verify.go:419: | LoadVerificationStatus | 84.6% |

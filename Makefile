@@ -49,6 +49,12 @@ COVERAGE_NEW_PROFILE := coverage_new.out
 COVERAGE_LEGACY_PROFILE := coverage_legacy.out
 COVERAGE_THRESHOLD := 85.0
 
+# COV-002: Enhanced coverage configuration
+COVERAGE_BASELINE_FILE := docs/coverage-baseline.md
+COVERAGE_HISTORY_FILE := docs/coverage-history.json
+COVERAGE_REPORTS_DIR := coverage_reports
+DIFFERENTIAL_TOOL := tools/coverage-differential
+
 # Default target
 all: check test build-local
 
@@ -67,6 +73,11 @@ help:
 	@echo "  test-coverage   Run tests with coverage report (legacy)"
 	@echo "  test-coverage-new Run tests with selective coverage (COV-001)"
 	@echo "  test-coverage-validate Validate coverage with exclusion patterns"
+	@echo "  test-coverage-baseline Generate coverage baseline documentation (COV-002)"
+	@echo "  test-coverage-differential Generate differential coverage report (COV-002)"
+	@echo "  test-coverage-trends Update coverage trends and history (COV-002)"
+	@echo "  test-coverage-full Run full coverage suite with COV-002 features"
+	@echo "  test-coverage-quality-gates Validate quality gates with enhanced reporting (COV-002)"
 	@echo "  test-race       Run tests with race detection"
 	@echo "  test-bench      Run benchmark tests"
 	@echo "  test-all        Run all test variants"
@@ -160,6 +171,71 @@ test-coverage-validate:
 		echo "⚠️  Coverage validation script not found, running basic coverage check"; \
 		$(MAKE) test-coverage-new; \
 	fi
+
+# COV-002: Generate coverage baseline documentation
+test-coverage-baseline:
+	@echo "Generating coverage baseline (COV-002)..."
+	@echo "Capturing current coverage metrics..."
+	go test -coverprofile=$(COVERAGE_PROFILE) . ./internal/testutil
+	@echo "Updating baseline documentation..."
+	@mkdir -p docs
+	@echo "# Coverage Baseline Documentation (COV-002)" > $(COVERAGE_BASELINE_FILE)
+	@echo "" >> $(COVERAGE_BASELINE_FILE)
+	@echo "> **Generated on:** \`$(shell date -u +%Y-%m-%d\ %H:%M:%S)\ UTC\`" >> $(COVERAGE_BASELINE_FILE)
+	@echo "> **Overall Coverage:** \`$(shell go tool cover -func=$(COVERAGE_PROFILE) | tail -n 1 | awk '{print $$3}')\` of statements" >> $(COVERAGE_BASELINE_FILE)
+	@echo "" >> $(COVERAGE_BASELINE_FILE)
+	@echo "## Detailed Coverage by File" >> $(COVERAGE_BASELINE_FILE)
+	@echo "" >> $(COVERAGE_BASELINE_FILE)
+	@go tool cover -func=$(COVERAGE_PROFILE) | grep -v "total:" | awk 'BEGIN{print "| File | Function | Coverage |"; print "|------|----------|----------|"} {print "| " $$1 " | " $$2 " | " $$3 " |"}' >> $(COVERAGE_BASELINE_FILE)
+	@echo "✓ Baseline documentation updated: $(COVERAGE_BASELINE_FILE)"
+
+# COV-002: Generate differential coverage report
+test-coverage-differential:
+	@echo "Generating differential coverage report (COV-002)..."
+	@echo "Building differential coverage tool..."
+	@mkdir -p $(COVERAGE_REPORTS_DIR)
+	@cd tools && go build -o ../$(DIFFERENTIAL_TOOL) coverage-differential.go
+	@echo "Running current coverage analysis..."
+	go test -coverprofile=$(COVERAGE_PROFILE) . ./internal/testutil
+	@echo "Generating differential report..."
+	@./$(DIFFERENTIAL_TOOL)
+	@echo "✓ Differential coverage analysis complete"
+
+# COV-002: Update coverage trends and history
+test-coverage-trends:
+	@echo "Updating coverage trends and history (COV-002)..."
+	@echo "Running coverage analysis..."
+	go test -coverprofile=$(COVERAGE_PROFILE) . ./internal/testutil
+	@echo "Building trend tracking tool..."
+	@mkdir -p $(COVERAGE_REPORTS_DIR)
+	@cd tools && go build -o ../$(DIFFERENTIAL_TOOL) coverage-differential.go
+	@echo "Updating coverage history..."
+	@./$(DIFFERENTIAL_TOOL)
+	@if [ -f "$(COVERAGE_HISTORY_FILE)" ]; then \
+		echo "✓ Coverage history updated: $(COVERAGE_HISTORY_FILE)"; \
+	else \
+		echo "⚠️  Coverage history file not found"; \
+	fi
+
+# COV-002: Full coverage suite including baseline, differential, and trends
+test-coverage-full:
+	@echo "Running full coverage suite (COV-002)..."
+	$(MAKE) test-coverage-baseline
+	$(MAKE) test-coverage-differential
+	$(MAKE) test-coverage-trends
+	@echo "✓ Full coverage analysis complete"
+
+# COV-002: Quality gate validation with enhanced reporting
+test-coverage-quality-gates:
+	@echo "Validating quality gates with enhanced reporting (COV-002)..."
+	@echo "Building differential coverage tool..."
+	@mkdir -p $(COVERAGE_REPORTS_DIR)
+	@cd tools && go build -o ../$(DIFFERENTIAL_TOOL) coverage-differential.go
+	@echo "Running coverage analysis..."
+	go test -coverprofile=$(COVERAGE_PROFILE) . ./internal/testutil
+	@echo "Checking quality gates..."
+	@./$(DIFFERENTIAL_TOOL)
+	@echo "Quality gate validation complete"
 
 test-race:
 	@echo "Running tests with race detection..."

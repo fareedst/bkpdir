@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-06-02T10:03:51.391753-07:00",
+  "baseline_commit": "",
+  "current_commit": "",
+  "modified_files": [
+    "tools/coverage.go"
+  ],
+  "overall_change": 0,
+  "new_code_coverage": 0,
+  "quality_gates_passed": false,
+  "file_changes": {
+    "tools/coverage.go": {
+      "file": "tools/coverage.go",
+      "baseline_coverage": 0,
+      "current_coverage": 0,
+      "change": 0,
+      "is_new_file": false,
+      "is_modified": true,
+      "meets_threshold": false
+    }
+  },
+  "critical_path_status": {},
+  "recommendations": [
+    "New code coverage (0.0%) is below threshold (70.0%). Add tests for modified functions.",
+    "1 modified files have coverage below threshold. Focus testing efforts on these files."
+  ]
+}
