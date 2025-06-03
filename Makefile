@@ -22,6 +22,11 @@
 #     vet             - Run go vet
 #     check           - Run all code quality checks
 #   
+#   Icon Validation:
+#     validate-icons  - Validate implementation token icon consistency (DOC-007)
+#     validate-icon-enforcement - Comprehensive icon validation and enforcement (DOC-008)
+#     validate-icons-strict - Run DOC-008 validation in strict mode for CI/CD
+#   
 #   Production Builds:
 #     build-all       - Build for all platforms
 #     build-macos     - Build for macOS (ARM64 and AMD64)
@@ -34,7 +39,7 @@
 
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
 .PHONY: test test-verbose test-coverage test-coverage-new test-coverage-validate test-race test-bench test-all
-.PHONY: lint fmt vet check dev install deps help
+.PHONY: lint validate-icons validate-icon-enforcement validate-icons-strict fmt vet check dev install deps help
 
 # Variables
 BINARY_NAME := bkpdir
@@ -83,7 +88,10 @@ help:
 	@echo "  test-all        Run all test variants"
 	@echo ""
 	@echo "Code quality targets:"
-	@echo "  lint            Run linter (revive)"
+	@echo "  lint            Run linter (revive) with icon validation"
+	@echo "  validate-icons  Validate implementation token icon consistency (DOC-007)"
+	@echo "  validate-icon-enforcement Comprehensive icon validation and enforcement (DOC-008)"
+	@echo "  validate-icons-strict Run DOC-008 validation in strict mode for CI/CD"
 	@echo "  fmt             Format code with gofmt"
 	@echo "  vet             Run go vet"
 	@echo "  check           Run all code quality checks"
@@ -251,27 +259,65 @@ test-all: test test-race test-coverage-new
 
 # Code quality targets
 fmt:
-	@echo "Formatting code..."
-	go fmt ./...
-	@echo "✓ Code formatted"
+	@echo "Formatting code with gofmt..."
+	gofmt -w .
+	@echo "✓ Code formatting completed"
 
 vet:
 	@echo "Running go vet..."
 	go vet ./...
-	@echo "✓ go vet passed"
+	@echo "✓ go vet completed"
 
-lint:
-	@echo "Running linter..."
+lint: validate-icon-enforcement
+	@echo "Running linter (revive)..."
 	@if command -v revive >/dev/null 2>&1; then \
-		revive -config .revive.toml ./...; \
-		echo "✓ Linter passed"; \
+		revive -config revive.toml -formatter friendly ./...; \
+		echo "✓ Linting completed"; \
 	else \
-		echo "⚠ revive not installed, skipping lint check"; \
+		echo "⚠️  revive not installed, skipping linting"; \
 		echo "  Install with: go install github.com/mgechev/revive@latest"; \
 	fi
 
-check: fmt vet lint
-	@echo "✓ All code quality checks passed"
+# 🔺 DOC-007: Implementation token icon consistency validation
+validate-icons:
+	@echo "🔧 DOC-007: Validating implementation token icon consistency..."
+	@if [ -f "scripts/validate-icon-consistency.sh" ]; then \
+		chmod +x scripts/validate-icon-consistency.sh; \
+		./scripts/validate-icon-consistency.sh; \
+	else \
+		echo "❌ Icon consistency validation script not found"; \
+		echo "   Expected: scripts/validate-icon-consistency.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-008: Comprehensive icon validation and enforcement
+validate-icon-enforcement:
+	@echo "🛡️ DOC-008: Running comprehensive icon validation and enforcement..."
+	@if [ -f "scripts/validate-icon-enforcement.sh" ]; then \
+		chmod +x scripts/validate-icon-enforcement.sh; \
+		./scripts/validate-icon-enforcement.sh; \
+		echo "✓ DOC-008 validation completed - see icon-validation-report.md for details"; \
+	else \
+		echo "❌ DOC-008 icon enforcement script not found"; \
+		echo "   Expected: scripts/validate-icon-enforcement.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-008: Strict mode validation for CI/CD pipelines
+validate-icons-strict:
+	@echo "🛡️ DOC-008: Running icon validation in strict mode (CI/CD)..."
+	@if [ -f "scripts/validate-icon-enforcement.sh" ]; then \
+		chmod +x scripts/validate-icon-enforcement.sh; \
+		./scripts/validate-icon-enforcement.sh --strict; \
+		echo "✓ DOC-008 strict validation passed"; \
+	else \
+		echo "❌ DOC-008 icon enforcement script not found"; \
+		echo "   Expected: scripts/validate-icon-enforcement.sh"; \
+		exit 1; \
+	fi
+
+check: fmt vet lint validate-icon-enforcement
+	@echo "✓ All code quality checks completed (including DOC-008 icon validation)"
 
 # Production build targets
 build-all: build-local build-macos build-ubuntu
