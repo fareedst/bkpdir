@@ -283,7 +283,7 @@ func (gw *AIValidationGateway) validateRequest(request ValidationRequest) error 
 		request.ValidationMode = "standard"
 	}
 
-	validModes := []string{"standard", "strict", "legacy"}
+	validModes := []string{"standard", "strict", "legacy", "realtime"}
 	isValid := false
 	for _, mode := range validModes {
 		if request.ValidationMode == mode {

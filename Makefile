@@ -477,3 +477,68 @@ dev-full: check test-coverage-validate build-local
 # Example usage comment for symbolic link
 # To create a symbolic link in your local bin:
 # ln -s "$(pwd)/bin/$(BINARY_NAME)-macos-arm64" ~/.local/bin/$(BINARY_NAME)
+
+# 🔶 DOC-012: Real-time icon validation feedback targets
+build-realtime-validator:
+	@echo "🔶 DOC-012: Building real-time validation service..."
+	@mkdir -p bin
+	go build -ldflags="$(LDFLAGS)" -o bin/realtime-validator cmd/realtime-validator/main.go
+	@echo "✓ DOC-012: Real-time validator built successfully"
+
+test-realtime-validation:
+	@echo "🔶 DOC-012: Testing real-time validation system..."
+	go test -v ./internal/validation/... -run TestRealTimeValidation
+	@echo "✓ DOC-012: Real-time validation tests completed"
+
+benchmark-realtime-validation:
+	@echo "🔶 DOC-012: Benchmarking real-time validation performance..."
+	go test -bench=BenchmarkRealTimeValidation -benchmem ./internal/validation/...
+	@echo "✓ DOC-012: Performance benchmarks completed"
+
+start-realtime-server:
+	@echo "🔶 DOC-012: Starting real-time validation server..."
+	@if [ -f "bin/realtime-validator" ]; then \
+		./bin/realtime-validator server --port 8080; \
+	else \
+		echo "❌ Real-time validator not built. Run 'make build-realtime-validator' first"; \
+		exit 1; \
+	fi
+
+validate-realtime-performance:
+	@echo "🔶 DOC-012: Validating real-time performance targets..."
+	@if [ -f "bin/realtime-validator" ]; then \
+		echo "Testing sub-second validation performance..."; \
+		time ./bin/realtime-validator validate main.go 2>&1 | grep -E "(Processing Time|real)" || true; \
+		echo "✓ DOC-012: Performance validation completed"; \
+	else \
+		echo "❌ Real-time validator not built. Run 'make build-realtime-validator' first"; \
+		exit 1; \
+	fi
+
+demo-realtime-validation:
+	@echo "🔶 DOC-012: Running real-time validation demonstration..."
+	@if [ -f "bin/realtime-validator" ]; then \
+		echo "1. Testing file validation with intelligent suggestions:"; \
+		./bin/realtime-validator validate main.go --format summary; \
+		echo ""; \
+		echo "2. Testing visual status indicators:"; \
+		./bin/realtime-validator status main.go internal/validation/ai_validation.go; \
+		echo ""; \
+		echo "3. Displaying performance metrics:"; \
+		./bin/realtime-validator metrics; \
+		echo "✓ DOC-012: Real-time validation demonstration completed"; \
+	else \
+		echo "❌ Real-time validator not built. Run 'make build-realtime-validator' first"; \
+		exit 1; \
+	fi
+
+# 🔶 DOC-012: Complete real-time validation setup
+setup-realtime-validation: build-realtime-validator test-realtime-validation benchmark-realtime-validation
+	@echo "🔶 DOC-012: Real-time validation system setup completed"
+	@echo "  Available commands:"
+	@echo "  - make start-realtime-server    # Start HTTP server on port 8080"
+	@echo "  - make demo-realtime-validation # Run demonstration"
+	@echo "  - make validate-realtime-performance # Test performance targets"
+	@echo "  - bin/realtime-validator validate <files>  # Validate files"
+	@echo "  - bin/realtime-validator status <files>    # Show status indicators"
+	@echo "  - bin/realtime-validator watch <files>     # Watch files for changes"

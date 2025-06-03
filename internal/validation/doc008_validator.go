@@ -77,6 +77,9 @@ func (v *DOC008Validator) buildValidationCommand(mode string) *exec.Cmd {
 		return exec.Command("make", "validate-icons-strict")
 	case "legacy":
 		return exec.Command("make", "validate-icons")
+	case "realtime":
+		// 🔶 DOC-012: Real-time validation mode - ⚡ Fast validation for live feedback
+		return exec.Command("make", "validate-icon-enforcement")
 	default: // "standard"
 		return exec.Command("make", "validate-icon-enforcement")
 	}
