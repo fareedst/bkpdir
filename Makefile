@@ -62,7 +62,7 @@ COVERAGE_REPORTS_DIR := coverage_reports
 DIFFERENTIAL_TOOL := tools/coverage-differential
 
 # Default target
-all: check test build-local
+all: check test build-local token-suggester
 
 # Help target
 help:
@@ -447,15 +447,15 @@ build-macos-amd64:
 
 # Utility targets
 clean:
-	@echo "Cleaning build artifacts..."
-	rm -rf bin/
-	rm -f $(BINARY_NAME)
-	rm -f $(COVERAGE_PROFILE) $(COVERAGE_NEW_PROFILE) $(COVERAGE_LEGACY_PROFILE)
-	rm -f coverage.html coverage_new.html coverage_legacy.html
-	rm -f coverage_report.txt
-	rm -f tools/coverage-analyzer
-	go clean -testcache
-	@echo "✓ Cleaned build artifacts and test cache"
+	@echo "🧹 Cleaning build artifacts..."
+	@rm -rf bin/
+	@rm -f $(BINARY_NAME)
+	@rm -f $(COVERAGE_PROFILE) $(COVERAGE_NEW_PROFILE) $(COVERAGE_LEGACY_PROFILE)
+	@rm -f coverage.html coverage_new.html coverage_legacy.html
+	@rm -f coverage_report.txt
+	@rm -f tools/coverage-analyzer
+	@go clean -testcache
+	@echo "✓ Clean completed"
 
 deps:
 	@echo "Downloading and verifying dependencies..."
@@ -471,8 +471,8 @@ coverage-check: test-coverage-validate
 	@echo "✓ Coverage validation complete"
 
 # Development workflow target that includes new coverage validation
-dev-full: check test-coverage-validate build-local
-	@echo "✓ Full development workflow complete with coverage validation"
+dev-full: check test-coverage-validate build-local token-suggester
+	@echo "🚀 Full development workflow completed with token suggestion integration"
 
 # Example usage comment for symbolic link
 # To create a symbolic link in your local bin:
@@ -542,3 +542,56 @@ setup-realtime-validation: build-realtime-validator test-realtime-validation ben
 	@echo "  - bin/realtime-validator validate <files>  # Validate files"
 	@echo "  - bin/realtime-validator status <files>    # Show status indicators"
 	@echo "  - bin/realtime-validator watch <files>     # Watch files for changes"
+
+# 🔶 DOC-010: Token suggestion engine - 🔧 Automated token format suggestion system
+token-suggester:
+	@echo "🔶 DOC-010: Building token suggestion engine..."
+	@cd cmd/token-suggester && go build -o ../../bin/token-suggester .
+	@echo "✓ DOC-010 token-suggester built successfully"
+
+token-suggester-test:
+	@echo "🔶 DOC-010: Running token suggestion engine tests..."
+	@cd cmd/token-suggester && go test -v ./...
+	@echo "✓ DOC-010 token suggestion tests completed"
+
+token-suggester-benchmark:
+	@echo "🔶 DOC-010: Running token suggestion benchmarks..."
+	@cd cmd/token-suggester && go test -bench=. -benchmem
+	@echo "✓ DOC-010 token suggestion benchmarks completed"
+
+# 🔶 DOC-010: Token analysis commands - 💡 Suggestion generation
+analyze-tokens:
+	@echo "🔶 DOC-010: Analyzing codebase for token suggestions..."
+	@if [ -f "bin/token-suggester" ]; then \
+		./bin/token-suggester analyze . --verbose; \
+	else \
+		echo "❌ token-suggester not built. Run 'make token-suggester' first"; \
+		exit 1; \
+	fi
+
+suggest-tokens-batch:
+	@echo "🔶 DOC-010: Generating batch token suggestions..."
+	@if [ -f "bin/token-suggester" ]; then \
+		./bin/token-suggester batch-suggest . --json > token-suggestions.json; \
+		echo "✓ DOC-010 batch suggestions saved to token-suggestions.json"; \
+	else \
+		echo "❌ token-suggester not built. Run 'make token-suggester' first"; \
+		exit 1; \
+	fi
+
+validate-token-formats:
+	@echo "🔶 DOC-010: Validating existing token formats..."
+	@if [ -f "bin/token-suggester" ]; then \
+		./bin/token-suggester validate-tokens . --verbose; \
+	else \
+		echo "❌ token-suggester not built. Run 'make token-suggester' first"; \
+		exit 1; \
+	fi
+
+# 🔶 DOC-010: Comprehensive token workflow - 🚀 Complete suggestion pipeline
+token-workflow: token-suggester analyze-tokens validate-token-formats
+	@echo "🔶 DOC-010: Complete token suggestion workflow completed"
+
+# 🔶 DOC-010: Development targets - 🔧 Development utilities
+token-dev: token-suggester-test token-suggester analyze-tokens
+	@echo "🔶 DOC-010: Development workflow completed"

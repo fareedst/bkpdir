@@ -1,315 +1,194 @@
 // This file is part of bkpdir
 //
-// Package main provides configuration abstraction interfaces for schema-agnostic
-// configuration management. These interfaces enable the configuration system
-// to be reused across different applications with different schemas.
+// Package main provides configuration interface abstractions for BkpDir.
+// These interfaces enable schema-agnostic configuration management for extraction.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 package main
 
-// 🔶 REFACTOR-003: Config abstraction - Core configuration loading interface - 🔍
-// ConfigLoader provides schema-agnostic configuration loading capabilities.
-// It abstracts the loading process from specific configuration schemas.
-type ConfigLoader interface {
-	// LoadConfig loads configuration using default schema detection
-	LoadConfig(root string) (interface{}, error)
+import (
+	"os"
+)
 
-	// LoadConfigWithSchema loads configuration with a specific schema
-	LoadConfigWithSchema(root string, schema ConfigSchema) (interface{}, error)
+// 🔻 REFACTOR-003: Config abstraction - Schema-agnostic configuration loading interface - 🔧
+// ConfigLoader provides schema-agnostic configuration management operations.
+// This interface abstracts configuration loading from specific application schemas.
+type ConfigLoader interface {
+	// LoadConfig loads configuration from the specified root directory
+	LoadConfig(root string) (*Config, error)
+
+	// LoadConfigValues loads configuration values with source tracking
+	LoadConfigValues(root string) (map[string]ConfigValue, error)
+
+	// GetConfigValues extracts configuration values from a Config struct
+	GetConfigValues(cfg *Config) []ConfigValue
+
+	// GetConfigValuesWithSources extracts configuration values with source information
+	GetConfigValuesWithSources(cfg *Config, root string) []ConfigValue
+
+	// ValidateConfig validates a configuration structure
+	ValidateConfig(cfg *Config) error
+}
+
+// 🔻 REFACTOR-003: Config abstraction - Configuration merging and composition interface - 🔧
+// ConfigMerger provides schema-agnostic configuration merging and composition operations.
+// This interface enables reusable configuration merging logic across different schemas.
+type ConfigMerger interface {
+	// MergeConfigs merges source configuration into destination configuration
+	MergeConfigs(dst, src *Config)
+
+	// MergeConfigValues merges configuration value maps
+	MergeConfigValues(dst, src map[string]ConfigValue)
 
 	// GetConfigSearchPaths returns the search paths for configuration files
 	GetConfigSearchPaths() []string
 
-	// ExpandPath expands environment variables and tildes in paths
+	// ExpandPath expands path variables and returns absolute path
 	ExpandPath(path string) string
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Pluggable validation interface - 🔍
-// ConfigValidator provides pluggable validation for different configuration schemas.
-// It allows applications to define their own validation rules.
-type ConfigValidator interface {
-	// ValidateConfig validates an entire configuration object
-	ValidateConfig(config interface{}) error
-
-	// ValidateField validates a specific field value
-	ValidateField(fieldName string, value interface{}) error
-
-	// GetValidationRules returns all validation rules for the schema
-	GetValidationRules() map[string]ValidationRule
-
-	// AddValidationRule adds a new validation rule
-	AddValidationRule(fieldName string, rule ValidationRule) error
-}
-
-// 🔶 REFACTOR-003: Config abstraction - Validation rule definition - 🔧
-// ValidationRule defines validation constraints for configuration fields.
-type ValidationRule struct {
-	Required     bool                    // Whether the field is required
-	Type         string                  // Expected type (string, bool, int, etc.)
-	Validator    func(interface{}) error // Custom validation function
-	DefaultValue interface{}             // Default value if not provided
-	Description  string                  // Human-readable description
-}
-
-// 🔶 REFACTOR-003: Schema separation - Configuration source abstraction - 🔧
-// ConfigSource abstracts different configuration sources (files, environment, etc.).
-// It enables loading configuration from multiple sources with consistent interface.
+// 🔻 REFACTOR-003: Config abstraction - Configuration source abstraction interface - 🔧
+// ConfigSource abstracts different configuration sources (file, environment, defaults).
+// This interface enables pluggable configuration sources for different environments.
 type ConfigSource interface {
-	// Load loads configuration data from the source
-	Load(path string) (map[string]interface{}, error)
+	// LoadFromFile loads configuration from a file source
+	LoadFromFile(path string) (*Config, error)
 
-	// Save saves configuration data to the source
-	Save(path string, data map[string]interface{}) error
+	// LoadFromEnvironment loads configuration from environment variables
+	LoadFromEnvironment() (*Config, error)
 
-	// Exists checks if the configuration source exists
-	Exists(path string) bool
+	// LoadDefaults returns the default configuration
+	LoadDefaults() *Config
 
-	// GetSourceType returns the type of source (file, env, default)
-	GetSourceType() string
+	// GetSourceName returns the name of this configuration source
+	GetSourceName() string
 
-	// GetPriority returns the priority of this source for merging
-	GetPriority() int
+	// IsAvailable checks if this configuration source is available
+	IsAvailable() bool
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Generic configuration merging - 🔍
-// ConfigMerger provides generic configuration merging logic that works
-// with any configuration schema.
-type ConfigMerger interface {
-	// MergeConfigs merges two configuration objects
-	MergeConfigs(dst, src interface{}) error
+// 🔻 REFACTOR-003: Config abstraction - Pluggable configuration validation interface - 🔧
+// ConfigValidator enables different applications to define their own configuration schemas.
+// This interface allows for schema-specific validation while maintaining common validation logic.
+type ConfigValidator interface {
+	// ValidateSchema validates the configuration against the expected schema
+	ValidateSchema(cfg *Config) error
 
-	// MergeWithPriority merges multiple configurations with priority ordering
-	MergeWithPriority(configs []interface{}, priorities []int) (interface{}, error)
+	// ValidateValues validates individual configuration values
+	ValidateValues(values map[string]ConfigValue) error
 
-	// GetMergeStrategy returns the current merge strategy
-	GetMergeStrategy() MergeStrategy
-
-	// SetMergeStrategy sets the merge strategy
-	SetMergeStrategy(strategy MergeStrategy)
-}
-
-// 🔶 REFACTOR-003: Config abstraction - Merge strategy enumeration - 📝
-// MergeStrategy defines how configuration values should be merged.
-type MergeStrategy int
-
-const (
-	// OverwriteStrategy overwrites destination values with source values
-	OverwriteStrategy MergeStrategy = iota
-
-	// PreserveStrategy preserves destination values, ignoring source values
-	PreserveStrategy
-
-	// AppendStrategy appends source values to destination (for slices/arrays)
-	AppendStrategy
-)
-
-// 🔶 REFACTOR-003: Schema separation - Schema definition interface - 🔍
-// ConfigSchema defines the structure and validation rules for a specific
-// application's configuration schema.
-type ConfigSchema interface {
-	// GetSchemaName returns the unique name of this schema
-	GetSchemaName() string
-
-	// GetSchemaVersion returns the version of this schema
-	GetSchemaVersion() string
-
-	// GetDefaultConfig returns a default configuration instance
-	GetDefaultConfig() interface{}
-
-	// GetFieldDefinitions returns field definitions for all schema fields
-	GetFieldDefinitions() map[string]FieldDefinition
-
-	// ValidateSchema validates a configuration against this schema
-	ValidateSchema(config interface{}) error
-
-	// MigrateSchema migrates configuration from old version to new version
-	MigrateSchema(oldVersion, newVersion string, config interface{}) (interface{}, error)
-
-	// GetRequiredFields returns a list of required field names
+	// GetRequiredFields returns the list of required configuration fields
 	GetRequiredFields() []string
+
+	// GetValidationRules returns validation rules for configuration fields
+	GetValidationRules() map[string]ValidationRule
 }
 
-// 🔶 REFACTOR-003: Schema separation - Field definition structure - 🔍
-// FieldDefinition describes a single configuration field within a schema.
-type FieldDefinition struct {
-	Name         string                  // Field name
-	Type         string                  // Field type (string, bool, int, []string, etc.)
-	Required     bool                    // Whether the field is required
-	DefaultValue interface{}             // Default value for the field
-	Description  string                  // Human-readable description
-	Validator    func(interface{}) error // Custom validation function
-	Tags         map[string]string       // Additional metadata tags
+// 🔻 REFACTOR-003: Schema separation - Application-specific configuration interface - 🔧
+// ApplicationConfig provides access to application-specific configuration settings.
+// This interface abstracts the backup-specific schema from generic configuration operations.
+type ApplicationConfig interface {
+	// GetArchiveSettings returns archive-related configuration
+	GetArchiveSettings() ArchiveSettings
+
+	// GetBackupSettings returns backup-related configuration
+	GetBackupSettings() BackupSettings
+
+	// GetStatusCodes returns application status codes
+	GetStatusCodes() map[string]int
+
+	// GetFormatSettings returns output formatting configuration
+	GetFormatSettings() FormatSettings
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Generic configuration provider - 🔍
-// ConfigProvider provides type-safe access to configuration values
-// without exposing the underlying configuration structure.
-type ConfigProvider interface {
-	// GetString returns a string configuration value
-	GetString(key string) string
-
-	// GetBool returns a boolean configuration value
-	GetBool(key string) bool
-
-	// GetInt returns an integer configuration value
-	GetInt(key string) int
-
-	// GetStringSlice returns a string slice configuration value
-	GetStringSlice(key string) []string
-
-	// GetDefault returns the default value for a key
-	GetDefault(key string) interface{}
-
-	// HasKey checks if a configuration key exists
-	HasKey(key string) bool
-
-	// GetAllKeys returns all available configuration keys
-	GetAllKeys() []string
-
-	// GetWithDefault returns a value with a fallback default
-	GetWithDefault(key string, defaultValue interface{}) interface{}
+// 🔻 REFACTOR-003: Schema separation - Backup-specific archive settings structure - 📝
+// ArchiveSettings contains archive-specific configuration settings.
+// This structure separates archive concerns from generic configuration.
+type ArchiveSettings struct {
+	DirectoryPath      string
+	UseCurrentDirName  bool
+	ExcludePatterns    []string
+	IncludeGitInfo     bool
+	ShowGitDirtyStatus bool
+	Verification       *VerificationConfig
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Configuration format provider interface - 🔍
-// ConfigFormatProvider provides access to format strings and templates
-// used for output formatting (renamed to avoid conflict with existing FormatProvider).
-type ConfigFormatProvider interface {
-	// GetFormatString returns a printf-style format string
-	GetFormatString(operation string) string
-
-	// GetTemplateString returns a template-based format string
-	GetTemplateString(operation string) string
-
-	// GetPattern returns a regex pattern for data extraction
-	GetPattern(patternType string) string
-
-	// HasFormat checks if a format string exists for an operation
-	HasFormat(operation string) bool
-
-	// HasTemplate checks if a template exists for an operation
-	HasTemplate(operation string) bool
-
-	// HasPattern checks if a pattern exists for a type
-	HasPattern(patternType string) bool
+// 🔻 REFACTOR-003: Schema separation - Backup-specific file backup settings structure - 📝
+// BackupSettings contains file backup-specific configuration settings.
+// This structure separates backup concerns from generic configuration.
+type BackupSettings struct {
+	DirectoryPath             string
+	UseCurrentDirNameForFiles bool
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Status code provider interface - 🔍
-// StatusProvider provides access to status codes used for exit codes
-// and error handling.
-type StatusProvider interface {
-	// GetStatusCode returns a status code for a successful operation
-	GetStatusCode(operation string) int
-
-	// GetErrorStatusCode returns a status code for an error type
-	GetErrorStatusCode(errorType string) int
-
-	// HasStatusCode checks if a status code exists for an operation
-	HasStatusCode(operation string) bool
-
-	// HasErrorStatusCode checks if an error status code exists
-	HasErrorStatusCode(errorType string) bool
-
-	// GetAllStatusCodes returns all available status codes
-	GetAllStatusCodes() map[string]int
+// 🔻 REFACTOR-003: Schema separation - Application-specific format settings structure - 📝
+// FormatSettings contains output formatting configuration settings.
+// This structure separates formatting concerns from generic configuration.
+type FormatSettings struct {
+	FormatStrings      map[string]string
+	TemplateStrings    map[string]string
+	PatternStrings     map[string]string
+	ErrorFormatStrings map[string]string
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Path provider interface - 🔍
-// PathProvider provides access to path configuration values
-// used throughout the application.
-type PathProvider interface {
-	// GetArchivePath returns the archive directory path
-	GetArchivePath() string
-
-	// GetBackupPath returns the backup directory path
-	GetBackupPath() string
-
-	// GetConfigPath returns the configuration file path
-	GetConfigPath() string
-
-	// GetTempPath returns the temporary directory path
-	GetTempPath() string
-
-	// HasPath checks if a path configuration exists
-	HasPath(pathType string) bool
-
-	// GetPath returns a generic path by type
-	GetPath(pathType string) string
+// 🔻 REFACTOR-003: Config abstraction - Configuration validation rule structure - 📝
+// ValidationRule defines validation criteria for configuration fields.
+// This structure enables flexible validation rules for different application schemas.
+type ValidationRule struct {
+	Required     bool
+	Type         string
+	MinLength    int
+	MaxLength    int
+	Pattern      string
+	ValidValues  []string
+	Dependencies []string
 }
 
-// 🔶 REFACTOR-003: Backward compatibility - Configuration adapter interface - 🔍
-// ConfigAdapter provides backward compatibility by converting between
-// generic configuration providers and legacy configuration structures.
-type ConfigAdapter interface {
-	// ToLegacyConfig converts to the legacy Config struct
-	ToLegacyConfig() *Config
+// 🔻 REFACTOR-003: Config abstraction - Configuration source determination interface - 🔧
+// SourceDeterminer provides methods to determine configuration value sources.
+// This interface enables source tracking across different configuration providers.
+type SourceDeterminer interface {
+	// DetermineSource determines the source of a configuration value
+	DetermineSource(current, defaultValue interface{}) string
 
-	// FromLegacyConfig creates an adapter from a legacy Config struct
-	FromLegacyConfig(cfg *Config) ConfigAdapter
+	// GetConfigSource returns the primary configuration source
+	GetConfigSource() string
 
-	// GetProvider returns the underlying configuration provider
-	GetProvider() ConfigProvider
-
-	// GetSchema returns the configuration schema
-	GetSchema() ConfigSchema
+	// GetSourcePriority returns the priority order of configuration sources
+	GetSourcePriority() []string
 }
 
-// 🔶 REFACTOR-003: Migration support - Configuration migrator interface - 🔍
-// ConfigMigrator handles migration of configuration between different
-// schema versions.
-type ConfigMigrator interface {
-	// CanMigrate checks if migration is possible between versions
-	CanMigrate(fromVersion, toVersion string) bool
+// 🔻 REFACTOR-003: Config abstraction - Generic configuration value extractor interface - 🔧
+// ValueExtractor provides methods to extract configuration values from different structures.
+// This interface enables schema-agnostic value extraction for different application types.
+type ValueExtractor interface {
+	// ExtractBasicValues extracts basic configuration values
+	ExtractBasicValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
 
-	// Migrate performs the migration from one version to another
-	Migrate(fromVersion, toVersion string, config interface{}) (interface{}, error)
+	// ExtractStatusCodeValues extracts status code configuration values
+	ExtractStatusCodeValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
 
-	// GetSupportedVersions returns all supported schema versions
-	GetSupportedVersions() []string
+	// ExtractVerificationValues extracts verification configuration values
+	ExtractVerificationValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
 
-	// GetMigrationPath returns the migration path between versions
-	GetMigrationPath(fromVersion, toVersion string) ([]string, error)
+	// ExtractFormatValues extracts format string configuration values
+	ExtractFormatValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
 }
 
-// 🔶 REFACTOR-003: Config abstraction - Configuration factory interface - 🔍
-// ConfigFactory creates configuration objects and their associated
-// providers, validators, and other components.
-type ConfigFactory interface {
-	// CreateLoader creates a configuration loader for a schema
-	CreateLoader(schema ConfigSchema) ConfigLoader
+// 🔻 REFACTOR-003: Config abstraction - File operation interface for configuration - 🔧
+// ConfigFileOperations provides file system operations for configuration management.
+// This interface abstracts file operations to enable testing and different storage backends.
+type ConfigFileOperations interface {
+	// FileExists checks if a configuration file exists
+	FileExists(path string) bool
 
-	// CreateValidator creates a validator for a schema
-	CreateValidator(schema ConfigSchema) ConfigValidator
+	// ReadFile reads configuration file contents
+	ReadFile(path string) ([]byte, error)
 
-	// CreateProvider creates a provider for a configuration
-	CreateProvider(config interface{}, schema ConfigSchema) ConfigProvider
+	// WriteFile writes configuration file contents
+	WriteFile(path string, data []byte, perm os.FileMode) error
 
-	// CreateAdapter creates an adapter for backward compatibility
-	CreateAdapter(provider ConfigProvider, schema ConfigSchema) ConfigAdapter
-
-	// CreateMigrator creates a migrator for a schema
-	CreateMigrator(schema ConfigSchema) ConfigMigrator
-}
-
-// 🔶 REFACTOR-003: Config abstraction - Configuration registry interface - 🔍
-// ConfigRegistry manages multiple configuration schemas and provides
-// schema discovery and registration capabilities.
-type ConfigRegistry interface {
-	// RegisterSchema registers a new configuration schema
-	RegisterSchema(schema ConfigSchema) error
-
-	// GetSchema returns a schema by name
-	GetSchema(name string) (ConfigSchema, error)
-
-	// GetSchemaByVersion returns a schema by name and version
-	GetSchemaByVersion(name, version string) (ConfigSchema, error)
-
-	// ListSchemas returns all registered schema names
-	ListSchemas() []string
-
-	// HasSchema checks if a schema is registered
-	HasSchema(name string) bool
-
-	// UnregisterSchema removes a schema from the registry
-	UnregisterSchema(name string) error
+	// GetFileInfo returns file information for configuration files
+	GetFileInfo(path string) (os.FileInfo, error)
 }
