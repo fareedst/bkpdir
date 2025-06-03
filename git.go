@@ -13,10 +13,10 @@ import (
 	"strings"
 )
 
-// REFACTOR-001: Git provider interface contracts defined
-// REFACTOR-001: Dependency analysis - clean boundary confirmed
+// 🔶 REFACTOR-001: Git provider interface contracts defined - 🔧
+// 🔶 REFACTOR-001: Dependency analysis - clean boundary confirmed - 🔧
 
-// GIT-001: Git error handling structure
+// 🔺 GIT-001: Git error handling structure - 🔧
 // IMMUTABLE-REF: Error Handling Requirements
 // TEST-REF: TestGitIntegration
 // DECISION-REF: DEC-005
@@ -31,7 +31,7 @@ func (e *GitError) Error() string {
 	return fmt.Sprintf("git %s failed: %v", e.Operation, e.Err)
 }
 
-// GIT-001: Git repository detection implementation
+// 🔺 GIT-001: Git repository detection implementation - 🔍
 // IMMUTABLE-REF: Git Integration Requirements
 // TEST-REF: TestGitIntegration
 // DECISION-REF: DEC-005
@@ -44,7 +44,7 @@ func IsGitRepository(dir string) bool {
 	return err == nil && strings.TrimSpace(string(out)) == "true"
 }
 
-// GIT-002: Git branch extraction implementation
+// 🔺 GIT-002: Git branch extraction implementation - 🔍
 // IMMUTABLE-REF: Git Integration Requirements, Archive Naming Convention
 // TEST-REF: TestGitNaming
 // DECISION-REF: DEC-005
@@ -60,7 +60,7 @@ func GetGitBranch(dir string) string {
 	return strings.TrimSpace(string(out))
 }
 
-// GIT-002: Git commit hash extraction implementation
+// 🔺 GIT-002: Git commit hash extraction implementation - 🔍
 // IMMUTABLE-REF: Git Integration Requirements, Archive Naming Convention
 // TEST-REF: TestGitNaming
 // DECISION-REF: DEC-005
@@ -76,7 +76,7 @@ func GetGitShortHash(dir string) string {
 	return strings.TrimSpace(string(out))
 }
 
-// GIT-001: Combined Git information extraction
+// 🔺 GIT-001: Combined Git information extraction - 🔍
 // IMMUTABLE-REF: Git Integration Requirements
 // TEST-REF: TestGitIntegration
 // DECISION-REF: DEC-005
@@ -89,7 +89,7 @@ func GetGitInfo(dir string) (branch, hash string) {
 	return GetGitBranch(dir), GetGitShortHash(dir)
 }
 
-// GIT-003: Git working directory state detection
+// 🔺 GIT-003: Git working directory state detection - 🔍
 // IMMUTABLE-REF: Git Integration Requirements
 // TEST-REF: TestGitStatus
 // DECISION-REF: DEC-005
@@ -110,7 +110,7 @@ func IsGitWorkingDirectoryClean(dir string) bool {
 	return len(strings.TrimSpace(string(out))) == 0
 }
 
-// GIT-003: Combined Git information extraction with status
+// 🔺 GIT-003: Combined Git information extraction with status - 🔍
 // IMMUTABLE-REF: Git Integration Requirements
 // TEST-REF: TestGitStatus
 // DECISION-REF: DEC-005

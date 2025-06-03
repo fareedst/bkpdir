@@ -15,12 +15,12 @@ import (
 	"sync"
 )
 
-// REFACTOR-001: Error handling and resource management interface contracts defined
-// REFACTOR-001: Config and formatter dependency interfaces required
-// REFACTOR-004: Error standardization - Common interface for all structured errors
-// REFACTOR-005: Structure optimization - Configuration interface abstraction
-// REFACTOR-005: Structure optimization - Formatter interface abstraction
-// REFACTOR-005: Structure optimization - Resource management interface
+// 🔶 REFACTOR-001: Error handling and resource management interface contracts defined - 📝
+// 🔶 REFACTOR-001: Config and formatter dependency interfaces required - 📝
+// 🔶 REFACTOR-004: Error standardization - Common interface for all structured errors - 📝
+// 🔶 REFACTOR-005: Structure optimization - Configuration interface abstraction - 📝
+// 🔶 REFACTOR-005: Structure optimization - Formatter interface abstraction - 🔍
+// 🔶 REFACTOR-005: Structure optimization - Resource management interface - 🔍
 
 // ErrorConfig abstracts configuration dependencies for error handling
 type ErrorConfig interface {
@@ -73,9 +73,9 @@ type ArchiveError struct {
 }
 
 func (e *ArchiveError) Error() string {
-	// CFG-002: Structured error message formatting
+	// 🔺 CFG-002: Structured error message formatting - 📝
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized error message format
+	// 🔶 REFACTOR-004: Standardized error message format - 📝
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
@@ -86,7 +86,7 @@ func (e *ArchiveError) Unwrap() error {
 	return e.Err
 }
 
-// REFACTOR-004: Standardized error interface implementation
+// 🔶 REFACTOR-004: Standardized error interface implementation - 🔍
 func (e *ArchiveError) GetStatusCode() int {
 	return e.StatusCode
 }
@@ -104,7 +104,7 @@ func (e *ArchiveError) GetMessage() string {
 }
 
 // BackupError represents a structured error with status code for backup operations
-// REFACTOR-004: Unified error pattern with ArchiveError
+// 🔶 REFACTOR-004: Unified error pattern with ArchiveError - 🔍
 type BackupError struct {
 	Message    string
 	StatusCode int
@@ -114,7 +114,7 @@ type BackupError struct {
 }
 
 func (e *BackupError) Error() string {
-	// REFACTOR-004: Consistent error message formatting across all error types
+	// 🔶 REFACTOR-004: Consistent error message formatting across all error types - 📝
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
@@ -125,7 +125,7 @@ func (e *BackupError) Unwrap() error {
 	return e.Err
 }
 
-// REFACTOR-004: Standardized error interface implementation
+// 🔶 REFACTOR-004: Standardized error interface implementation - 🔍
 func (e *BackupError) GetStatusCode() int {
 	return e.StatusCode
 }
@@ -142,13 +142,13 @@ func (e *BackupError) GetMessage() string {
 	return e.Message
 }
 
-// REFACTOR-004: Standardized error constructors with consistent patterns
+// 🔶 REFACTOR-004: Standardized error constructors with consistent patterns - 🔍
 
 // NewArchiveError creates a new structured error
 func NewArchiveError(message string, statusCode int) *ArchiveError {
-	// CFG-002: Basic structured error creation
+	// 🔺 CFG-002: Basic structured error creation - 🔧
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized constructor pattern
+	// 🔶 REFACTOR-004: Standardized constructor pattern - 🔧
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -157,9 +157,9 @@ func NewArchiveError(message string, statusCode int) *ArchiveError {
 
 // NewArchiveErrorWithCause creates a new structured error with underlying cause
 func NewArchiveErrorWithCause(message string, statusCode int, err error) *ArchiveError {
-	// CFG-002: Error creation with cause chain
+	// 🔺 CFG-002: Error creation with cause chain - 🔧
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized constructor with cause pattern
+	// 🔶 REFACTOR-004: Standardized constructor with cause pattern - 🔧
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -174,9 +174,9 @@ func NewArchiveErrorWithContext(
 	operation, path string,
 	err error,
 ) *ArchiveError {
-	// CFG-002: Error creation with operation context
+	// 🔺 CFG-002: Error creation with operation context - 🔧
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized constructor with full context pattern
+	// 🔶 REFACTOR-004: Standardized constructor with full context pattern - 🔧
 	return &ArchiveError{
 		Message:    message,
 		StatusCode: statusCode,
@@ -187,7 +187,7 @@ func NewArchiveErrorWithContext(
 }
 
 // NewBackupError creates a new structured backup error
-// REFACTOR-004: Standardized constructor pattern matching ArchiveError
+// 🔶 REFACTOR-004: Standardized constructor pattern matching ArchiveError - 🔧
 func NewBackupError(message string, statusCode int, operation, path string) *BackupError {
 	return &BackupError{
 		Message:    message,
@@ -198,7 +198,7 @@ func NewBackupError(message string, statusCode int, operation, path string) *Bac
 }
 
 // NewBackupErrorWithCause creates a new structured backup error with underlying cause
-// REFACTOR-004: Standardized constructor with cause pattern matching ArchiveError
+// 🔶 REFACTOR-004: Standardized constructor with cause pattern matching ArchiveError - 🔧
 func NewBackupErrorWithCause(message string, statusCode int, operation, path string, err error) *BackupError {
 	return &BackupError{
 		Message:    message,
@@ -209,13 +209,13 @@ func NewBackupErrorWithCause(message string, statusCode int, operation, path str
 	}
 }
 
-// REFACTOR-004: Enhanced error classification with standardized patterns
+// 🔶 REFACTOR-004: Enhanced error classification with standardized patterns - 🔍
 
 // IsDiskFullError checks if an error indicates disk space issues
 func IsDiskFullError(err error) bool {
 	// Enhanced disk space error detection
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized error classification pattern
+	// 🔶 REFACTOR-004: Standardized error classification pattern - 🔍
 	if err == nil {
 		return false
 	}
@@ -246,7 +246,7 @@ func IsDiskFullError(err error) bool {
 func IsPermissionError(err error) bool {
 	// Permission error classification
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized error classification pattern
+	// 🔶 REFACTOR-004: Standardized error classification pattern - 🔍
 	if err == nil {
 		return false
 	}
@@ -273,7 +273,7 @@ func IsPermissionError(err error) bool {
 func IsDirectoryNotFoundError(err error) bool {
 	// Error classification for directory not found
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized error classification pattern
+	// 🔶 REFACTOR-004: Standardized error classification pattern - 🔧
 	if err == nil {
 		return false
 	}
@@ -295,7 +295,7 @@ func IsDirectoryNotFoundError(err error) bool {
 	return false
 }
 
-// REFACTOR-004: Standardized resource management patterns
+// 🔶 REFACTOR-004: Standardized resource management patterns - 🔧
 
 // Resource represents a resource that needs cleanup
 type Resource interface {
@@ -311,7 +311,7 @@ type TempFile struct {
 // Cleanup removes the temporary file from the filesystem.
 func (tf *TempFile) Cleanup() error {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized cleanup pattern
+	// 🔶 REFACTOR-004: Standardized cleanup pattern - 📝
 	return os.Remove(tf.Path)
 }
 
@@ -327,7 +327,7 @@ type TempDir struct {
 // Cleanup removes the temporary directory and its contents from the filesystem.
 func (td *TempDir) Cleanup() error {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized cleanup pattern
+	// 🔶 REFACTOR-004: Standardized cleanup pattern - 📝
 	return os.RemoveAll(td.Path)
 }
 
@@ -336,7 +336,7 @@ func (td *TempDir) String() string {
 }
 
 // ResourceManager manages automatic cleanup of resources
-// REFACTOR-004: Standardized resource management implementation
+// 🔶 REFACTOR-004: Standardized resource management implementation - 📝
 type ResourceManager struct {
 	resources []Resource
 	mutex     sync.RWMutex
@@ -345,7 +345,7 @@ type ResourceManager struct {
 // NewResourceManager creates a new ResourceManager for tracking resources.
 func NewResourceManager() *ResourceManager {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized resource manager constructor
+	// 🔶 REFACTOR-004: Standardized resource manager constructor - 🔧
 	return &ResourceManager{
 		resources: make([]Resource, 0),
 	}
@@ -354,7 +354,7 @@ func NewResourceManager() *ResourceManager {
 // AddResource adds a resource to the ResourceManager for cleanup.
 func (rm *ResourceManager) AddResource(resource Resource) {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Thread-safe resource management pattern
+	// 🔶 REFACTOR-004: Thread-safe resource management pattern - 🔧
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 	rm.resources = append(rm.resources, resource)
@@ -363,21 +363,21 @@ func (rm *ResourceManager) AddResource(resource Resource) {
 // AddTempFile adds a temporary file resource to the ResourceManager.
 func (rm *ResourceManager) AddTempFile(path string) {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized temp file pattern
+	// 🔶 REFACTOR-004: Standardized temp file pattern - 🔧
 	rm.AddResource(&TempFile{Path: path})
 }
 
 // AddTempDir adds a temporary directory resource to the ResourceManager.
 func (rm *ResourceManager) AddTempDir(path string) {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized temp directory pattern
+	// 🔶 REFACTOR-004: Standardized temp directory pattern - 🔧
 	rm.AddResource(&TempDir{Path: path})
 }
 
 // RemoveResource removes a resource from the ResourceManager.
 func (rm *ResourceManager) RemoveResource(resource Resource) {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Thread-safe resource removal pattern
+	// 🔶 REFACTOR-004: Thread-safe resource removal pattern - 🔧
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 
@@ -392,7 +392,7 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 // Cleanup cleans up all tracked resources in the ResourceManager.
 func (rm *ResourceManager) Cleanup() error {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized cleanup error handling pattern
+	// 🔶 REFACTOR-004: Standardized cleanup error handling pattern - 🔧
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 
@@ -411,7 +411,7 @@ func (rm *ResourceManager) Cleanup() error {
 // CleanupWithPanicRecovery cleans up all resources and recovers from panics during cleanup.
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized panic recovery pattern
+	// 🔶 REFACTOR-004: Standardized panic recovery pattern - 🔧
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("panic during cleanup: %v", r)
@@ -421,7 +421,7 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	return rm.Cleanup()
 }
 
-// REFACTOR-004: Standardized context propagation patterns
+// 🔶 REFACTOR-004: Standardized context propagation patterns - 🔧
 
 // ContextualOperation provides context and resource management for operations.
 type ContextualOperation struct {
@@ -432,7 +432,7 @@ type ContextualOperation struct {
 // NewContextualOperation creates a new ContextualOperation with the given context.
 func NewContextualOperation(ctx context.Context) *ContextualOperation {
 	// DECISION-REF: DEC-006, DEC-007
-	// REFACTOR-004: Standardized contextual operation pattern
+	// 🔶 REFACTOR-004: Standardized contextual operation pattern - 🔧
 	return &ContextualOperation{
 		ctx: ctx,
 		rm:  NewResourceManager(),
@@ -442,21 +442,21 @@ func NewContextualOperation(ctx context.Context) *ContextualOperation {
 // Context returns the context associated with the ContextualOperation.
 func (co *ContextualOperation) Context() context.Context {
 	// DECISION-REF: DEC-007
-	// REFACTOR-004: Standardized context access pattern
+	// 🔶 REFACTOR-004: Standardized context access pattern - 🔧
 	return co.ctx
 }
 
 // ResourceManager returns the ResourceManager associated with the ContextualOperation.
 func (co *ContextualOperation) ResourceManager() *ResourceManager {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized resource manager access pattern
+	// 🔶 REFACTOR-004: Standardized resource manager access pattern - 🔍
 	return co.rm
 }
 
 // IsCancelled checks if the operation has been cancelled.
 func (co *ContextualOperation) IsCancelled() bool {
 	// DECISION-REF: DEC-007
-	// REFACTOR-004: Standardized cancellation check pattern
+	// 🔶 REFACTOR-004: Standardized cancellation check pattern - 🔍
 	select {
 	case <-co.ctx.Done():
 		return true
@@ -468,21 +468,21 @@ func (co *ContextualOperation) IsCancelled() bool {
 // CheckCancellation checks if the operation has been cancelled and returns an error if it has.
 func (co *ContextualOperation) CheckCancellation() error {
 	// DECISION-REF: DEC-007
-	// REFACTOR-004: Standardized cancellation error pattern
+	// 🔶 REFACTOR-004: Standardized cancellation error pattern - 🔍
 	return co.ctx.Err()
 }
 
 // Cleanup cleans up all resources associated with the operation.
 func (co *ContextualOperation) Cleanup() error {
 	// DECISION-REF: DEC-006
-	// REFACTOR-004: Standardized contextual cleanup pattern
+	// 🔶 REFACTOR-004: Standardized contextual cleanup pattern - 🛡️
 	return co.rm.Cleanup()
 }
 
-// REFACTOR-005: Structure optimization - Interface-based error handling
+// 🔶 REFACTOR-005: Structure optimization - Interface-based error handling - 📝
 // HandleError provides centralized error handling with interface abstractions
 func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
-	// REFACTOR-004: Error standardization
+	// 🔶 REFACTOR-004: Error standardization - 📝
 	if err == nil {
 		return 0
 	}
@@ -522,39 +522,39 @@ func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
 	}
 }
 
-// REFACTOR-005: Structure optimization - Interface-based archive error handling
+// 🔶 REFACTOR-005: Structure optimization - Interface-based archive error handling - 🔍
 // HandleArchiveErrorWithInterface handles archive errors using interface abstractions
 func HandleArchiveErrorWithInterface(err *ArchiveError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	formatter.PrintError(err.Error())
 	return err.GetStatusCode()
 }
 
-// REFACTOR-005: Structure optimization - Interface-based backup error handling
+// 🔶 REFACTOR-005: Structure optimization - Interface-based backup error handling - 🔍
 // HandleBackupErrorWithInterface handles backup errors using interface abstractions
 func HandleBackupErrorWithInterface(err *BackupError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	formatter.PrintError(err.Error())
 	return err.GetStatusCode()
 }
 
-// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 🔍
 // HandleArchiveError provides backward compatibility with concrete types
 func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int {
 	return HandleError(err, cfg, formatter)
 }
 
-// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 📝
 // HandleBackupError provides backward compatibility with concrete types
 func HandleBackupError(err error, cfg *Config, formatter *OutputFormatter) int {
 	return HandleError(err, cfg, formatter)
 }
 
-// REFACTOR-004: Standardized atomic operation patterns
+// 🔶 REFACTOR-004: Standardized atomic operation patterns - 📝
 
 // AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 	// DECISION-REF: DEC-006, DEC-008
-	// CFG-004: Configurable error messages
-	// REFACTOR-004: Standardized atomic operation pattern
+	// 🔺 CFG-004: Configurable error messages - 📝
+	// 🔶 REFACTOR-004: Standardized atomic operation pattern - 📝
 	tempFile := path + ".tmp"
 	rm.AddTempFile(tempFile)
 
@@ -579,7 +579,7 @@ func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 }
 
 // AtomicWriteFileWithContext writes data to a file atomically with context support
-// REFACTOR-004: Context-aware atomic operation pattern
+// 🔶 REFACTOR-004: Context-aware atomic operation pattern - 🔍
 func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, rm *ResourceManager) error {
 	// Check for cancellation before starting
 	if err := ctx.Err(); err != nil {
@@ -619,10 +619,10 @@ func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, r
 	return nil
 }
 
-// REFACTOR-005: Structure optimization - Interface-based directory operations
+// 🔶 REFACTOR-005: Structure optimization - Interface-based directory operations - 🔧
 // SafeMkdirAllWithInterface creates directories using interface abstractions
 func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) error {
-	// REFACTOR-004: Resource consolidation
+	// 🔶 REFACTOR-004: Resource consolidation - 🔍
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsDiskFullError(err) {
 			return NewArchiveError(
@@ -644,10 +644,10 @@ func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) e
 	return nil
 }
 
-// REFACTOR-005: Structure optimization - Interface-based context-aware directory operations
+// 🔶 REFACTOR-005: Structure optimization - Interface-based context-aware directory operations - 🔧
 // SafeMkdirAllWithContextAndInterface creates directories with context using interface abstractions
 func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm os.FileMode, cfg ErrorConfig) error {
-	// REFACTOR-004: Context propagation
+	// 🔶 REFACTOR-004: Context propagation - 📝
 	if err := ctx.Err(); err != nil {
 		return NewArchiveError(
 			fmt.Sprintf("Context cancelled before creating directory: %s", path),
@@ -658,13 +658,13 @@ func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm 
 	return SafeMkdirAllWithInterface(path, perm, cfg)
 }
 
-// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 🔧
 // SafeMkdirAll provides backward compatibility with concrete types
 func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 	return SafeMkdirAllWithInterface(path, perm, cfg)
 }
 
-// REFACTOR-005: Extraction preparation - Backward compatibility layer
+// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 🔧
 // SafeMkdirAllWithContext provides backward compatibility with concrete types
 func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode, cfg *Config) error {
 	return SafeMkdirAllWithContextAndInterface(ctx, path, perm, cfg)
@@ -673,9 +673,9 @@ func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode,
 // ValidateDirectoryPath checks if a path is a valid directory.
 func ValidateDirectoryPath(path string, cfg *Config) error {
 	// Directory path validation
-	// CFG-004: Configurable error messages
+	// 🔺 CFG-004: Configurable error messages - 🔍
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized validation pattern
+	// 🔶 REFACTOR-004: Standardized validation pattern - 🔍
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -711,9 +711,9 @@ func ValidateDirectoryPath(path string, cfg *Config) error {
 // ValidateFilePath checks if a path is a valid file.
 func ValidateFilePath(path string, cfg *Config) error {
 	// File path validation
-	// CFG-004: Configurable error messages
+	// 🔺 CFG-004: Configurable error messages - 🔍
 	// DECISION-REF: DEC-004
-	// REFACTOR-004: Standardized validation pattern
+	// 🔶 REFACTOR-004: Standardized validation pattern - 🔍
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -746,18 +746,18 @@ func ValidateFilePath(path string, cfg *Config) error {
 	return nil
 }
 
-// REFACTOR-004: Context propagation utilities
+// 🔶 REFACTOR-004: Context propagation utilities - 🔧
 
 // WithResourceManager creates a new context with an embedded resource manager
 func WithResourceManager(ctx context.Context) (context.Context, *ResourceManager) {
-	// REFACTOR-004: Standardized context enhancement pattern
+	// 🔶 REFACTOR-004: Standardized context enhancement pattern - 🔍
 	rm := NewResourceManager()
 	return ctx, rm
 }
 
 // CheckContextAndCleanup checks context cancellation and performs cleanup if needed
 func CheckContextAndCleanup(ctx context.Context, rm *ResourceManager) error {
-	// REFACTOR-004: Standardized context check with cleanup pattern
+	// 🔶 REFACTOR-004: Standardized context check with cleanup pattern - 🔍
 	if err := ctx.Err(); err != nil {
 		// Cleanup resources on cancellation
 		if cleanupErr := rm.CleanupWithPanicRecovery(); cleanupErr != nil {

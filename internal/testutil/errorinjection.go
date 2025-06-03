@@ -6,7 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-E: Error injection framework
+// 🔺 TEST-INFRA-001-E: Error injection framework - 🔧
 // DECISION-REF: DEC-004 (Error handling)
 // IMPLEMENTATION-NOTES: Uses interface-based injection with configurable error schedules rather than global state modification
 

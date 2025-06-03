@@ -19,7 +19,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// REFACTOR-003: Config abstraction - Generic configuration loader implementation
+// 🔶 REFACTOR-003: Config abstraction - Generic configuration loader implementation - 🔧
 // GenericConfigLoader implements ConfigLoader for schema-agnostic configuration loading.
 type GenericConfigLoader struct {
 	sources []ConfigSource
@@ -182,7 +182,7 @@ func (loader *GenericConfigLoader) setFieldValue(fieldValue reflect.Value, value
 	return nil
 }
 
-// REFACTOR-003: Schema separation - YAML configuration source implementation
+// 🔶 REFACTOR-003: Schema separation - YAML configuration source implementation - 🔧
 // YAMLConfigSource implements ConfigSource for YAML files.
 type YAMLConfigSource struct{}
 
@@ -232,7 +232,7 @@ func (source *YAMLConfigSource) GetPriority() int {
 	return 100 // High priority
 }
 
-// REFACTOR-003: Config abstraction - Environment variable configuration source
+// 🔶 REFACTOR-003: Config abstraction - Environment variable configuration source - 🔍
 // EnvConfigSource implements ConfigSource for environment variables.
 type EnvConfigSource struct{}
 
@@ -280,7 +280,7 @@ func (source *EnvConfigSource) GetPriority() int {
 	return 50 // Medium priority
 }
 
-// REFACTOR-003: Config abstraction - Default configuration source
+// 🔶 REFACTOR-003: Config abstraction - Default configuration source - 🔍
 // DefaultConfigSource implements ConfigSource for default values.
 type DefaultConfigSource struct{}
 
@@ -315,7 +315,7 @@ func (source *DefaultConfigSource) GetPriority() int {
 	return 10 // Low priority
 }
 
-// REFACTOR-003: Config abstraction - Generic configuration merger implementation
+// 🔶 REFACTOR-003: Config abstraction - Generic configuration merger implementation - 🔍
 // GenericConfigMerger implements ConfigMerger for schema-agnostic merging.
 type GenericConfigMerger struct {
 	strategy MergeStrategy
@@ -460,7 +460,7 @@ func (merger *GenericConfigMerger) mergeValues(dst, src reflect.Value) error {
 	return nil
 }
 
-// REFACTOR-003: Backward compatibility - Configuration adapter implementation
+// 🔶 REFACTOR-003: Backward compatibility - Configuration adapter implementation - 🔧
 // ConfigAdapterImpl implements ConfigAdapter for backward compatibility.
 type ConfigAdapterImpl struct {
 	provider ConfigProvider
@@ -518,7 +518,7 @@ func (adapter *ConfigAdapterImpl) GetSchema() ConfigSchema {
 	return adapter.schema
 }
 
-// REFACTOR-003: Backward compatibility - Legacy configuration loading wrapper
+// 🔶 REFACTOR-003: Backward compatibility - Legacy configuration loading wrapper - 🔍
 // LoadConfigLegacy provides backward compatible configuration loading.
 func LoadConfigLegacy(root string) (*Config, error) {
 	loader := NewGenericConfigLoader()

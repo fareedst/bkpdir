@@ -1,5 +1,5 @@
 // This file is part of bkpdir
-// LINT-001: Lint compliance
+// 🔺 LINT-001: Lint compliance - 🔧
 
 package main
 
@@ -933,7 +933,7 @@ func BenchmarkGetDirectoryTreeSummary(b *testing.B) {
 
 // TestCompareFiles tests the file comparison functionality for FILE-003 feature
 func TestCompareFiles(t *testing.T) {
-	// FILE-003: File comparison validation
+	// ⭐ FILE-003: File comparison validation - 🔍
 	// TEST-REF: Feature tracking matrix FILE-003
 	// IMMUTABLE-REF: Identical File Detection
 

@@ -1,5 +1,5 @@
 // This file is part of bkpdir
-// LINT-001: Lint compliance
+// 🔺 LINT-001: Lint compliance - 🔧
 
 package main
 
@@ -12,7 +12,7 @@ import (
 
 // TestTemplateFormatter tests the template formatting functionality for CFG-003 feature
 func TestTemplateFormatter(t *testing.T) {
-	// CFG-003: Template formatting validation
+	// 🔺 CFG-003: Template formatting validation - 📝
 	// TEST-REF: Feature tracking matrix CFG-003
 	// IMMUTABLE-REF: Output Formatting Requirements
 	cfg := DefaultConfig()
@@ -1250,7 +1250,7 @@ func TestTemplateFormattingWithData(t *testing.T) {
 	})
 }
 
-// TEST-001: Comprehensive formatter testing - OutputCollector flush methods
+// 🔺 TEST-001: Comprehensive formatter testing - OutputCollector flush methods - 📝
 func TestOutputCollectorFlushMethods(t *testing.T) {
 	// Capture stdout and stderr for testing flush methods
 	originalStdout := os.Stdout
@@ -1422,7 +1422,7 @@ func TestOutputCollectorFlushMethods(t *testing.T) {
 	})
 }
 
-// TEST-001: Test Print methods in delayed output mode to achieve 100% coverage
+// 🔺 TEST-001: Test Print methods in delayed output mode to achieve 100% coverage - 📝
 func TestPrintMethodsDelayedMode(t *testing.T) {
 	cfg := DefaultConfig()
 	collector := NewOutputCollector()

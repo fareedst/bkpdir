@@ -12,7 +12,7 @@ import (
 	"fmt"
 )
 
-// REFACTOR-003: Schema separation - Backup application schema implementation
+// 🔶 REFACTOR-003: Schema separation - Backup application schema implementation - 🔧
 // BackupConfigSchema implements ConfigSchema for the backup application.
 // It defines the structure, validation rules, and default values for backup configuration.
 type BackupConfigSchema struct {
@@ -26,7 +26,7 @@ func NewBackupConfigSchema() *BackupConfigSchema {
 	}
 }
 
-// REFACTOR-003: Schema separation - Schema identification
+// 🔶 REFACTOR-003: Schema separation - Schema identification - 🔍
 // GetSchemaName returns the unique name of the backup application schema.
 func (s *BackupConfigSchema) GetSchemaName() string {
 	return "backup-application"
@@ -37,13 +37,13 @@ func (s *BackupConfigSchema) GetSchemaVersion() string {
 	return s.version
 }
 
-// REFACTOR-003: Schema separation - Default configuration provision
+// 🔶 REFACTOR-003: Schema separation - Default configuration provision - 🔍
 // GetDefaultConfig returns a default configuration instance for the backup application.
 func (s *BackupConfigSchema) GetDefaultConfig() interface{} {
 	return DefaultConfig()
 }
 
-// REFACTOR-003: Schema separation - Field definitions for backup application
+// 🔶 REFACTOR-003: Schema separation - Field definitions for backup application - 🔍
 // GetFieldDefinitions returns field definitions for all backup application configuration fields.
 func (s *BackupConfigSchema) GetFieldDefinitions() map[string]FieldDefinition {
 	return map[string]FieldDefinition{
@@ -142,7 +142,7 @@ func (s *BackupConfigSchema) GetFieldDefinitions() map[string]FieldDefinition {
 	}
 }
 
-// REFACTOR-003: Schema separation - Configuration validation
+// 🔶 REFACTOR-003: Schema separation - Configuration validation - 🔍
 // ValidateSchema validates a configuration against the backup application schema.
 func (s *BackupConfigSchema) ValidateSchema(config interface{}) error {
 	cfg, ok := config.(*Config)
@@ -185,7 +185,7 @@ func (s *BackupConfigSchema) ValidateSchema(config interface{}) error {
 	return nil
 }
 
-// REFACTOR-003: Migration support - Schema migration for backup application
+// 🔶 REFACTOR-003: Migration support - Schema migration for backup application - 🔧
 // MigrateSchema migrates backup configuration from old version to new version.
 func (s *BackupConfigSchema) MigrateSchema(oldVersion, newVersion string, config interface{}) (interface{}, error) {
 	// For now, no migration is needed as this is version 1.0.0
@@ -207,7 +207,7 @@ func (s *BackupConfigSchema) GetRequiredFields() []string {
 	return required
 }
 
-// REFACTOR-003: Provider pattern - Backup application configuration provider
+// 🔶 REFACTOR-003: Provider pattern - Backup application configuration provider - 🔧
 // BackupConfigProvider implements ConfigProvider for the backup application.
 // It provides type-safe access to backup configuration values.
 type BackupConfigProvider struct {
@@ -223,7 +223,7 @@ func NewBackupConfigProvider(config *Config, schema *BackupConfigSchema) *Backup
 	}
 }
 
-// REFACTOR-003: Config abstraction - Type-safe configuration access
+// 🔶 REFACTOR-003: Config abstraction - Type-safe configuration access - 🔍
 // GetString returns a string configuration value.
 func (p *BackupConfigProvider) GetString(key string) string {
 	switch key {
@@ -336,7 +336,7 @@ func (p *BackupConfigProvider) GetWithDefault(key string, defaultValue interface
 	return defaultValue
 }
 
-// REFACTOR-003: Config abstraction - Validation functions for backup application
+// 🔶 REFACTOR-003: Config abstraction - Validation functions for backup application - 🔍
 // Validation functions for backup application configuration fields
 
 func validateDirectoryPath(value interface{}) error {

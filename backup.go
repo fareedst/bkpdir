@@ -14,12 +14,12 @@ import (
 	"time"
 )
 
-// REFACTOR-001: Backup management interface contracts defined
-// REFACTOR-001: Multiple dependency interfaces required for extraction
-// REFACTOR-004: Error handling now standardized in errors.go
-// REFACTOR-005: Structure optimization - Interface-based backup operations
+// 🔶 REFACTOR-001: Backup management interface contracts defined - 🔧
+// 🔶 REFACTOR-001: Multiple dependency interfaces required for extraction - 🔧
+// 🔶 REFACTOR-004: Error handling now standardized in errors.go - 🔧
+// 🔶 REFACTOR-005: Structure optimization - Interface-based backup operations - 🔍
 
-// REFACTOR-005: Structure optimization - Interface-based configuration abstraction
+// 🔶 REFACTOR-005: Structure optimization - Interface-based configuration abstraction - 🔍
 // BackupConfigInterface abstracts configuration dependencies for backup operations
 type BackupConfigInterface interface {
 	GetBackupDirPath() string
@@ -31,7 +31,7 @@ type BackupConfigInterface interface {
 	GetStatusFileIsIdenticalToExistingBackup() int
 }
 
-// REFACTOR-005: Structure optimization - Interface-based formatter abstraction
+// 🔶 REFACTOR-005: Structure optimization - Interface-based formatter abstraction - 🔍
 // BackupFormatterInterface abstracts formatter dependencies for backup operations
 type BackupFormatterInterface interface {
 	PrintDryRunBackup(path string)
@@ -40,7 +40,7 @@ type BackupFormatterInterface interface {
 	PrintNoBackupsFound(filename, backupDir string)
 }
 
-// REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility
+// 🔶 REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility - 📝
 // ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
 type ConfigToBackupConfigAdapter struct {
 	cfg *Config
@@ -74,7 +74,7 @@ func (a *ConfigToBackupConfigAdapter) GetStatusFileIsIdenticalToExistingBackup()
 	return a.cfg.StatusFileIsIdenticalToExistingBackup
 }
 
-// REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility
+// 🔶 REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility - 🔍
 // OutputFormatterToBackupFormatterAdapter adapts OutputFormatter to BackupFormatterInterface
 type OutputFormatterToBackupFormatterAdapter struct {
 	formatter *OutputFormatter
@@ -123,11 +123,11 @@ type BackupOptions struct {
 	DryRun    bool
 }
 
-// FILE-002: File backup creation implementation
+// ⭐ FILE-002: File backup creation implementation - 🔧
 // IMMUTABLE-REF: Commands - Create File Backup, File Backup Operations
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-002
-// REFACTOR-004: Error handling now uses standardized patterns from errors.go
+// 🔶 REFACTOR-004: Error handling now uses standardized patterns from errors.go - 🔧
 // CreateFileBackup creates a backup of a single file
 func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
 	opts := BackupOptions{
@@ -141,7 +141,7 @@ func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) er
 	return createFileBackupInternal(opts)
 }
 
-// FILE-002: Core backup logic implementation
+// ⭐ FILE-002: Core backup logic implementation - 📝
 // IMMUTABLE-REF: File Backup Operations, Atomic Operations
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-002
@@ -165,7 +165,7 @@ func createFileBackupInternal(opts BackupOptions) error {
 	return performBackupOperation(opts, backupPath)
 }
 
-// FILE-001: Backup path generation implementation
+// ⭐ FILE-001: Backup path generation implementation - 🔧
 // IMMUTABLE-REF: File Backup Naming Convention
 // TEST-REF: TestGenerateBackupName
 // DECISION-REF: DEC-002
@@ -183,7 +183,7 @@ func generateBackupPath(cfg *Config, filePath, note string) (string, error) {
 	return backupPath, nil
 }
 
-// CFG-003: Dry run output formatting
+// 🔺 CFG-003: Dry run output formatting - 📝
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-003
@@ -200,7 +200,7 @@ func handleDryRunBackup(formatter *OutputFormatter, backupPath string) error {
 	return nil
 }
 
-// FILE-002: Backup operation coordination
+// ⭐ FILE-002: Backup operation coordination - 📝
 // IMMUTABLE-REF: File Backup Operations, Atomic Operations
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-002
@@ -222,7 +222,7 @@ func performBackupOperation(opts BackupOptions, backupPath string) error {
 	return executeBackupWithCleanup(opts, backupPath)
 }
 
-// FILE-003: Identical file backup detection
+// ⭐ FILE-003: Identical file backup detection - 🔍
 // IMMUTABLE-REF: File Backup Operations, Identical File Detection
 // TEST-REF: TestCheckForIdenticalFileBackup
 // DECISION-REF: DEC-002
@@ -243,7 +243,7 @@ func checkAndHandleIdenticalBackup(opts BackupOptions, backupDir, baseFilename s
 	return nil
 }
 
-// FILE-002: Atomic backup execution with cleanup
+// ⭐ FILE-002: Atomic backup execution with cleanup - 🔧
 // IMMUTABLE-REF: File Backup Operations, Atomic Operations, Resource Cleanup
 // TEST-REF: TestCreateFileBackupWithCleanup
 // DECISION-REF: DEC-002

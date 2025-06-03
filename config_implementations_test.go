@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-// REFACTOR-003: Config abstraction - Test configuration abstraction implementations
+// 🔶 REFACTOR-003: Config abstraction - Test configuration abstraction implementations - 🔧
 func TestConfigAbstraction(t *testing.T) {
 	t.Run("GenericConfigLoader", func(t *testing.T) {
 		// Test generic configuration loading
@@ -365,7 +365,7 @@ exclude_patterns:
 	})
 }
 
-// REFACTOR-003: Config abstraction - Test configuration provider implementation
+// 🔶 REFACTOR-003: Config abstraction - Test configuration provider implementation - 🔍
 func TestBackupConfigProvider(t *testing.T) {
 	t.Run("GetMethods", func(t *testing.T) {
 		cfg := &Config{
@@ -427,7 +427,7 @@ func TestBackupConfigProvider(t *testing.T) {
 	})
 }
 
-// REFACTOR-003: Schema separation - Test backup config schema implementation
+// 🔶 REFACTOR-003: Schema separation - Test backup config schema implementation - 🔍
 func TestBackupConfigSchema(t *testing.T) {
 	t.Run("SchemaProperties", func(t *testing.T) {
 		schema := NewBackupConfigSchema()

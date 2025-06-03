@@ -7,7 +7,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-D: Context cancellation testing helpers
+// 🔺 TEST-INFRA-001-D: Context cancellation testing helpers - 🔧
 // DECISION-REF: DEC-007 (Context-aware operations)
 // IMPLEMENTATION-NOTES: Use ticker-based timing control and goroutine coordination for deterministic cancellation testing
 
@@ -216,7 +216,10 @@ func (cc *ContextController) StartControlledCancellation() context.Context {
 	// Create context with timeout if specified
 	var ctx context.Context
 	if cc.timeout > 0 {
-		ctx, _ = context.WithTimeout(cc.baseContext, cc.timeout)
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(cc.baseContext, cc.timeout)
+		// Store the cancel function so it can be called in Stop()
+		cc.cancelFunc = cancel
 	} else {
 		ctx = cc.baseContext
 	}
@@ -611,7 +614,10 @@ func CreateCancelledContext() context.Context {
 // CreateDeadlineContext creates a context with a deadline in the past for testing
 func CreateDeadlineContext() context.Context {
 	deadline := time.Now().Add(-1 * time.Second)
-	ctx, _ := context.WithDeadline(context.Background(), deadline)
+	ctx, cancel := context.WithDeadline(context.Background(), deadline)
+	// Call cancel immediately to avoid leak, since this is a test function
+	// and the context is meant to be already expired
+	cancel()
 	return ctx
 }
 

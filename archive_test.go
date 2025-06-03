@@ -151,7 +151,7 @@ func TestGenerateArchiveName(t *testing.T) {
 
 // TestCreateFullArchive tests the full archive creation functionality for ARCH-002 feature
 func TestCreateFullArchive(t *testing.T) {
-	// ARCH-002: Full archive creation validation
+	// ⭐ ARCH-002: Full archive creation validation - 🔧
 	// TEST-REF: Feature tracking matrix ARCH-002
 	// IMMUTABLE-REF: Commands - Create Archive
 	tempDir := t.TempDir()
@@ -245,7 +245,7 @@ func TestCreateFullArchive(t *testing.T) {
 
 // TestCreateIncremental tests the incremental archive creation functionality for ARCH-003 feature
 func TestCreateIncremental(t *testing.T) {
-	// ARCH-003: Incremental archive creation validation
+	// ⭐ ARCH-003: Incremental archive creation validation - 🔧
 	// TEST-REF: Feature tracking matrix ARCH-003
 	// IMMUTABLE-REF: Commands - Create Incremental Archive
 	tempDir := t.TempDir()

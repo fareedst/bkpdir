@@ -22,7 +22,7 @@ var (
 )
 
 func TestDefaultConfig(t *testing.T) {
-	// CFG-002: Configuration defaults validation
+	// 🔺 CFG-002: Configuration defaults validation - 📝
 	// TEST-REF: Feature tracking matrix CFG-002
 	// IMMUTABLE-REF: Configuration System
 	cfg := DefaultConfig()
@@ -130,7 +130,7 @@ func TestGetConfigValues(t *testing.T) {
 
 // TestGetConfigSearchPath tests the configuration search path functionality for CFG-001 feature
 func TestGetConfigSearchPath(t *testing.T) {
-	// CFG-001: Configuration discovery validation
+	// 🔺 CFG-001: Configuration discovery validation - 🔍
 	// TEST-REF: Feature tracking matrix CFG-001
 	// IMMUTABLE-REF: Configuration Discovery
 	// Test basic path retrieval
@@ -215,7 +215,7 @@ func TestGetConfigSearchPath(t *testing.T) {
 	})
 }
 
-// CFG-001: Test GetConfigValuesWithSources for comprehensive configuration value extraction
+// 🔺 CFG-001: Test GetConfigValuesWithSources for comprehensive configuration value extraction - 🔍
 func TestGetConfigValuesWithSources(t *testing.T) {
 	t.Run("default configuration sources", func(t *testing.T) {
 		dir := t.TempDir()
@@ -347,7 +347,7 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 	})
 }
 
-// CFG-001: Test determineConfigSource for config file source detection
+// 🔺 CFG-001: Test determineConfigSource for config file source detection - 🔍
 func TestDetermineConfigSource(t *testing.T) {
 	t.Run("no config file returns default", func(t *testing.T) {
 		dir := t.TempDir()
@@ -397,7 +397,7 @@ func TestDetermineConfigSource(t *testing.T) {
 	})
 }
 
-// CFG-001: Test createSourceDeterminer for config value source determination
+// 🔺 CFG-001: Test createSourceDeterminer for config value source determination - 🔧
 func TestCreateSourceDeterminer(t *testing.T) {
 	t.Run("string value comparison", func(t *testing.T) {
 		determiner := createSourceDeterminer("/test/config.yml")
@@ -472,7 +472,7 @@ func TestCreateSourceDeterminer(t *testing.T) {
 	})
 }
 
-// CFG-001: Test helper functions for config value extraction
+// 🔺 CFG-001: Test helper functions for config value extraction - 🔍
 func TestGetBasicConfigValues(t *testing.T) {
 	cfg := DefaultConfig()
 	defaultCfg := DefaultConfig()
@@ -518,7 +518,7 @@ func TestGetBasicConfigValues(t *testing.T) {
 	}
 }
 
-// CFG-002: Test status code value extraction
+// 🔺 CFG-002: Test status code value extraction - 🔍
 func TestGetStatusCodeValues(t *testing.T) {
 	cfg := DefaultConfig()
 	defaultCfg := DefaultConfig()
@@ -564,7 +564,7 @@ func TestGetStatusCodeValues(t *testing.T) {
 	}
 }
 
-// CFG-001: Test verification value extraction
+// 🔺 CFG-001: Test verification value extraction - 🔍
 func TestGetVerificationValues(t *testing.T) {
 	cfg := DefaultConfig()
 	defaultCfg := DefaultConfig()
@@ -610,7 +610,7 @@ func TestGetVerificationValues(t *testing.T) {
 	}
 }
 
-// CFG-004: Test mergeExtendedFormatStrings for extended string configuration
+// 🔺 CFG-004: Test mergeExtendedFormatStrings for extended string configuration - 📝
 func TestMergeExtendedFormatStrings(t *testing.T) {
 	t.Run("merge non-default format strings", func(t *testing.T) {
 		dst := DefaultConfig()
@@ -724,7 +724,7 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 	})
 }
 
-// CFG-004: Test mergeExtendedTemplates for extended template configuration
+// 🔺 CFG-004: Test mergeExtendedTemplates for extended template configuration - 📝
 func TestMergeExtendedTemplates(t *testing.T) {
 	t.Run("merge non-default template strings", func(t *testing.T) {
 		dst := DefaultConfig()
@@ -838,7 +838,7 @@ func TestMergeExtendedTemplates(t *testing.T) {
 	})
 }
 
-// TEST-CONFIG-001: Test placeholder functions with basic implementation
+// 🔺 TEST-CONFIG-001: Test placeholder functions with basic implementation - 🔧
 func TestPlaceholderConfigFunctions(t *testing.T) {
 	t.Run("LoadConfigValues placeholder", func(t *testing.T) {
 		dir := t.TempDir()

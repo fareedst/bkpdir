@@ -1,5 +1,5 @@
 // This file is part of bkpdir
-// LINT-001: Lint compliance
+// 🔺 LINT-001: Lint compliance - 🔧
 
 package main
 
@@ -14,7 +14,7 @@ import (
 
 // TestGitIntegration tests the Git integration functionality for GIT-001 feature
 func TestGitIntegration(t *testing.T) {
-	// GIT-001: Git integration validation
+	// 🔺 GIT-001: Git integration validation - 🔧
 	// TEST-REF: Feature tracking matrix GIT-001
 	// IMMUTABLE-REF: Git Integration Requirements
 
@@ -105,7 +105,7 @@ func TestGitIntegration(t *testing.T) {
 
 // TestGitNaming tests the Git naming functionality for GIT-002 feature
 func TestGitNaming(t *testing.T) {
-	// GIT-002: Git naming validation
+	// 🔺 GIT-002: Git naming validation - 🔧
 	// TEST-REF: Feature tracking matrix GIT-002
 	// IMMUTABLE-REF: Git Integration Requirements
 
@@ -224,7 +224,7 @@ func TestGitNaming(t *testing.T) {
 
 // TestGitStatus tests the Git status detection functionality for GIT-003 feature
 func TestGitStatus(t *testing.T) {
-	// GIT-003: Git status validation
+	// 🔺 GIT-003: Git status validation - 🔍
 	// TEST-REF: Feature tracking matrix GIT-003
 	// IMMUTABLE-REF: Git Integration Requirements
 

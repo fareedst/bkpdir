@@ -6,7 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-B: Disk space simulation framework
+// 🔺 TEST-INFRA-001-B: Disk space simulation framework - 🔧
 // DECISION-REF: DEC-004 (Error handling)
 // IMPLEMENTATION-NOTES: Uses filesystem interface wrapper to simulate space constraints without requiring large files
 

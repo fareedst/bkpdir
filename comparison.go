@@ -16,8 +16,8 @@ import (
 	"time"
 )
 
-// REFACTOR-001: File comparison interface contracts defined
-// REFACTOR-001: Dependency analysis - clean boundary confirmed
+// 🔶 REFACTOR-001: File comparison interface contracts defined - 📝
+// 🔶 REFACTOR-001: Dependency analysis - clean boundary confirmed - 📝
 
 // FileInfo represents information about a file for comparison
 type FileInfo struct {
@@ -35,8 +35,8 @@ type DirectorySnapshot struct {
 
 // CreateDirectorySnapshot creates a snapshot of the given directory
 func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-	// ARCH-003: Directory snapshot creation for incremental comparison
-	// FILE-003: Directory comparison implementation
+	// ⭐ ARCH-003: Directory snapshot creation for incremental comparison - 🔧
+	// ⭐ FILE-003: Directory comparison implementation - 🔧
 	var files []FileInfo
 
 	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
@@ -97,8 +97,8 @@ func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*Direct
 
 // CreateArchiveSnapshot creates a snapshot from a ZIP archive
 func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
-	// ARCH-003: Archive snapshot creation for incremental comparison
-	// FILE-003: Archive comparison implementation
+	// ⭐ ARCH-003: Archive snapshot creation for incremental comparison - 🔧
+	// ⭐ FILE-003: Archive comparison implementation - 🔧
 	// DECISION-REF: DEC-001
 	reader, err := zip.OpenReader(archivePath)
 	if err != nil {
@@ -141,7 +141,7 @@ func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
 
 // CompareSnapshots compares two directory snapshots
 func CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
-	// FILE-003: Snapshot comparison implementation
+	// ⭐ FILE-003: Snapshot comparison implementation - 🔧
 	if len(snapshot1.Files) != len(snapshot2.Files) {
 		return false
 	}
@@ -167,8 +167,8 @@ func CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
 
 // IsDirectoryIdenticalToArchive checks if a directory is identical to an archive
 func IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns []string) (bool, error) {
-	// ARCH-003: Directory-to-archive comparison for incremental detection
-	// FILE-003: Identical state detection
+	// ⭐ ARCH-003: Directory-to-archive comparison for incremental detection - 🔍
+	// ⭐ FILE-003: Identical state detection - 🔍
 	// Create snapshot of directory
 	dirSnapshot, err := CreateDirectorySnapshot(dirPath, excludePatterns)
 	if err != nil {
@@ -187,7 +187,7 @@ func IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns 
 
 // FindMostRecentArchive finds the most recent archive in the archive directory
 func FindMostRecentArchive(archiveDir string) (string, error) {
-	// ARCH-003: Most recent archive detection for incremental comparison
+	// ⭐ ARCH-003: Most recent archive detection for incremental comparison - 🔍
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
 		return "", err
@@ -228,8 +228,8 @@ func FindMostRecentArchive(archiveDir string) (string, error) {
 
 // CheckForIdenticalArchive checks if the directory is identical to the most recent archive
 func CheckForIdenticalArchive(dirPath, archiveDir string, excludePatterns []string) (bool, string, error) {
-	// ARCH-003: Identical archive detection
-	// FILE-003: Duplicate detection logic
+	// ⭐ ARCH-003: Identical archive detection - 🔍
+	// ⭐ FILE-003: Duplicate detection logic - 🔍
 	// Find most recent archive
 	mostRecentArchive, err := FindMostRecentArchive(archiveDir)
 	if err != nil {
@@ -252,7 +252,7 @@ func CheckForIdenticalArchive(dirPath, archiveDir string, excludePatterns []stri
 
 // Helper function to calculate SHA-256 hash of a file
 func calculateFileHash(filePath string) (string, error) {
-	// FILE-003: File hash calculation for comparison
+	// ⭐ FILE-003: File hash calculation for comparison - 🔧
 	file, err := os.Open(filePath)
 	if err != nil {
 		return "", err
@@ -269,7 +269,7 @@ func calculateFileHash(filePath string) (string, error) {
 
 // Helper function to calculate SHA-256 hash of a file in a ZIP archive
 func calculateArchiveFileHash(file *zip.File) (string, error) {
-	// FILE-003: Archive file hash calculation for comparison
+	// ⭐ FILE-003: Archive file hash calculation for comparison - 📝
 	// DECISION-REF: DEC-001
 	reader, err := file.Open()
 	if err != nil {

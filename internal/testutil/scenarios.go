@@ -7,7 +7,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-F: Integration testing orchestration
+// 🔺 TEST-INFRA-001-F: Integration testing orchestration - 🔧
 // DECISION-REF: DEC-008 (Testing infrastructure), DEC-004 (Error handling)
 // IMPLEMENTATION-NOTES: Uses builder pattern for scenario composition with clear separation between setup, execution, and verification
 

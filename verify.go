@@ -228,7 +228,7 @@ func copyArchiveFile(file *zip.File, writer *zip.Writer) error {
 
 // addChecksumsFile adds the checksums file to the archive
 func addChecksumsFile(writer *zip.Writer, checksumsPath string) error {
-	// ARCH-002: Checksum file addition to archive
+	// ⭐ ARCH-002: Checksum file addition to archive - 🔍
 	// DECISION-REF: DEC-001
 	checksumFile, err := os.Open(checksumsPath)
 	if err != nil {
@@ -254,7 +254,7 @@ func addChecksumsFile(writer *zip.Writer, checksumsPath string) error {
 
 // ReadChecksums reads checksums from an archive
 func ReadChecksums(archive *Archive) (map[string]string, error) {
-	// ARCH-002: Checksum reading from archive
+	// ⭐ ARCH-002: Checksum reading from archive - 🔍
 	// DECISION-REF: DEC-001
 	reader, err := zip.OpenReader(archive.Path)
 	if err != nil {
@@ -301,7 +301,7 @@ func readChecksumsFromFile(file *zip.File) (map[string]string, error) {
 
 // VerifyChecksums verifies file checksums against stored values
 func VerifyChecksums(archivePath string) (*VerificationStatus, error) {
-	// ARCH-002: Complete checksum verification process
+	// ⭐ ARCH-002: Complete checksum verification process - 🔍
 	// DECISION-REF: DEC-001
 	status := &VerificationStatus{
 		VerifiedAt: time.Now(),
@@ -338,7 +338,7 @@ func handleVerificationError(
 	format string,
 	args ...interface{},
 ) (*VerificationStatus, error) {
-	// CFG-002: Verification error handling
+	// 🔺 CFG-002: Verification error handling - 📝
 	// DECISION-REF: DEC-004
 	status.IsVerified = false
 	status.Errors = append(status.Errors, fmt.Sprintf(format, args...))
@@ -393,7 +393,7 @@ func verifyFileChecksum(file *zip.File, storedChecksums map[string]string, _ *Ve
 
 // StoreVerificationStatus stores verification status in a metadata file
 func StoreVerificationStatus(archive *Archive, status *VerificationStatus) error {
-	// ARCH-002: Verification status persistence
+	// ⭐ ARCH-002: Verification status persistence - 🔧
 	// DECISION-REF: DEC-008
 	metadataDir := filepath.Join(filepath.Dir(archive.Path), ".metadata")
 	if err := os.MkdirAll(metadataDir, 0o755); err != nil {
@@ -417,7 +417,7 @@ func StoreVerificationStatus(archive *Archive, status *VerificationStatus) error
 
 // LoadVerificationStatus loads verification status from a metadata file
 func LoadVerificationStatus(archive *Archive) (*VerificationStatus, error) {
-	// ARCH-002: Verification status loading
+	// ⭐ ARCH-002: Verification status loading - 🔧
 	metadataDir := filepath.Join(filepath.Dir(archive.Path), ".metadata")
 	metadataPath := filepath.Join(metadataDir, archive.Name+".json")
 

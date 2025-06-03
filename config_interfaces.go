@@ -8,7 +8,7 @@
 // Licensed under the MIT License
 package main
 
-// REFACTOR-003: Config abstraction - Core configuration loading interface
+// 🔶 REFACTOR-003: Config abstraction - Core configuration loading interface - 🔍
 // ConfigLoader provides schema-agnostic configuration loading capabilities.
 // It abstracts the loading process from specific configuration schemas.
 type ConfigLoader interface {
@@ -25,7 +25,7 @@ type ConfigLoader interface {
 	ExpandPath(path string) string
 }
 
-// REFACTOR-003: Config abstraction - Pluggable validation interface
+// 🔶 REFACTOR-003: Config abstraction - Pluggable validation interface - 🔍
 // ConfigValidator provides pluggable validation for different configuration schemas.
 // It allows applications to define their own validation rules.
 type ConfigValidator interface {
@@ -42,7 +42,7 @@ type ConfigValidator interface {
 	AddValidationRule(fieldName string, rule ValidationRule) error
 }
 
-// REFACTOR-003: Config abstraction - Validation rule definition
+// 🔶 REFACTOR-003: Config abstraction - Validation rule definition - 🔧
 // ValidationRule defines validation constraints for configuration fields.
 type ValidationRule struct {
 	Required     bool                    // Whether the field is required
@@ -52,7 +52,7 @@ type ValidationRule struct {
 	Description  string                  // Human-readable description
 }
 
-// REFACTOR-003: Schema separation - Configuration source abstraction
+// 🔶 REFACTOR-003: Schema separation - Configuration source abstraction - 🔧
 // ConfigSource abstracts different configuration sources (files, environment, etc.).
 // It enables loading configuration from multiple sources with consistent interface.
 type ConfigSource interface {
@@ -72,7 +72,7 @@ type ConfigSource interface {
 	GetPriority() int
 }
 
-// REFACTOR-003: Config abstraction - Generic configuration merging
+// 🔶 REFACTOR-003: Config abstraction - Generic configuration merging - 🔍
 // ConfigMerger provides generic configuration merging logic that works
 // with any configuration schema.
 type ConfigMerger interface {
@@ -89,7 +89,7 @@ type ConfigMerger interface {
 	SetMergeStrategy(strategy MergeStrategy)
 }
 
-// REFACTOR-003: Config abstraction - Merge strategy enumeration
+// 🔶 REFACTOR-003: Config abstraction - Merge strategy enumeration - 📝
 // MergeStrategy defines how configuration values should be merged.
 type MergeStrategy int
 
@@ -104,7 +104,7 @@ const (
 	AppendStrategy
 )
 
-// REFACTOR-003: Schema separation - Schema definition interface
+// 🔶 REFACTOR-003: Schema separation - Schema definition interface - 🔍
 // ConfigSchema defines the structure and validation rules for a specific
 // application's configuration schema.
 type ConfigSchema interface {
@@ -130,7 +130,7 @@ type ConfigSchema interface {
 	GetRequiredFields() []string
 }
 
-// REFACTOR-003: Schema separation - Field definition structure
+// 🔶 REFACTOR-003: Schema separation - Field definition structure - 🔍
 // FieldDefinition describes a single configuration field within a schema.
 type FieldDefinition struct {
 	Name         string                  // Field name
@@ -142,7 +142,7 @@ type FieldDefinition struct {
 	Tags         map[string]string       // Additional metadata tags
 }
 
-// REFACTOR-003: Config abstraction - Generic configuration provider
+// 🔶 REFACTOR-003: Config abstraction - Generic configuration provider - 🔍
 // ConfigProvider provides type-safe access to configuration values
 // without exposing the underlying configuration structure.
 type ConfigProvider interface {
@@ -171,7 +171,7 @@ type ConfigProvider interface {
 	GetWithDefault(key string, defaultValue interface{}) interface{}
 }
 
-// REFACTOR-003: Config abstraction - Configuration format provider interface
+// 🔶 REFACTOR-003: Config abstraction - Configuration format provider interface - 🔍
 // ConfigFormatProvider provides access to format strings and templates
 // used for output formatting (renamed to avoid conflict with existing FormatProvider).
 type ConfigFormatProvider interface {
@@ -194,7 +194,7 @@ type ConfigFormatProvider interface {
 	HasPattern(patternType string) bool
 }
 
-// REFACTOR-003: Config abstraction - Status code provider interface
+// 🔶 REFACTOR-003: Config abstraction - Status code provider interface - 🔍
 // StatusProvider provides access to status codes used for exit codes
 // and error handling.
 type StatusProvider interface {
@@ -214,7 +214,7 @@ type StatusProvider interface {
 	GetAllStatusCodes() map[string]int
 }
 
-// REFACTOR-003: Config abstraction - Path provider interface
+// 🔶 REFACTOR-003: Config abstraction - Path provider interface - 🔍
 // PathProvider provides access to path configuration values
 // used throughout the application.
 type PathProvider interface {
@@ -237,7 +237,7 @@ type PathProvider interface {
 	GetPath(pathType string) string
 }
 
-// REFACTOR-003: Backward compatibility - Configuration adapter interface
+// 🔶 REFACTOR-003: Backward compatibility - Configuration adapter interface - 🔍
 // ConfigAdapter provides backward compatibility by converting between
 // generic configuration providers and legacy configuration structures.
 type ConfigAdapter interface {
@@ -254,7 +254,7 @@ type ConfigAdapter interface {
 	GetSchema() ConfigSchema
 }
 
-// REFACTOR-003: Migration support - Configuration migrator interface
+// 🔶 REFACTOR-003: Migration support - Configuration migrator interface - 🔍
 // ConfigMigrator handles migration of configuration between different
 // schema versions.
 type ConfigMigrator interface {
@@ -271,7 +271,7 @@ type ConfigMigrator interface {
 	GetMigrationPath(fromVersion, toVersion string) ([]string, error)
 }
 
-// REFACTOR-003: Config abstraction - Configuration factory interface
+// 🔶 REFACTOR-003: Config abstraction - Configuration factory interface - 🔍
 // ConfigFactory creates configuration objects and their associated
 // providers, validators, and other components.
 type ConfigFactory interface {
@@ -291,7 +291,7 @@ type ConfigFactory interface {
 	CreateMigrator(schema ConfigSchema) ConfigMigrator
 }
 
-// REFACTOR-003: Config abstraction - Configuration registry interface
+// 🔶 REFACTOR-003: Config abstraction - Configuration registry interface - 🔍
 // ConfigRegistry manages multiple configuration schemas and provides
 // schema discovery and registration capabilities.
 type ConfigRegistry interface {

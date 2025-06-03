@@ -40,6 +40,7 @@
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
 .PHONY: test test-verbose test-coverage test-coverage-new test-coverage-validate test-race test-bench test-all
 .PHONY: lint validate-icons validate-icon-enforcement validate-icons-strict fmt vet check dev install deps help
+.PHONY: token-migration-dry-run token-migration token-migration-rollback
 
 # Variables
 BINARY_NAME := bkpdir
@@ -95,6 +96,15 @@ help:
 	@echo "  fmt             Format code with gofmt"
 	@echo "  vet             Run go vet"
 	@echo "  check           Run all code quality checks"
+	@echo ""
+	@echo "Token standardization targets (DOC-009):"
+	@echo "  standardize-tokens Complete token standardization workflow (analysis + dry run)"
+	@echo "  token-migration-dry-run Run DOC-009 token migration in dry-run mode"
+	@echo "  token-migration Run DOC-009 mass token standardization"
+	@echo "  token-migration-rollback Rollback DOC-009 token migration"
+	@echo "  analyze-priority-icons Generate priority icon mappings from feature tracking"
+	@echo "  validate-token-priorities Validate token priorities against feature tracking"
+	@echo "  suggest-action-icons Generate action icon suggestions for tokens"
 	@echo ""
 	@echo "Production build targets:"
 	@echo "  build-all       Build for all platforms"
@@ -315,6 +325,87 @@ validate-icons-strict:
 		echo "   Expected: scripts/validate-icon-enforcement.sh"; \
 		exit 1; \
 	fi
+
+# 🔺 DOC-009: Mass implementation token standardization targets
+token-migration-dry-run:
+	@echo "🔺 DOC-009: Running token migration in dry-run mode..."
+	@if [ -f "scripts/token-migration.sh" ]; then \
+		chmod +x scripts/token-migration.sh; \
+		./scripts/token-migration.sh true; \
+	else \
+		echo "❌ Token migration script not found"; \
+		echo "   Expected: scripts/token-migration.sh"; \
+		exit 1; \
+	fi
+
+token-migration:
+	@echo "🔺 DOC-009: Running mass token standardization..."
+	@if [ -f "scripts/token-migration.sh" ]; then \
+		chmod +x scripts/token-migration.sh; \
+		./scripts/token-migration.sh false; \
+	else \
+		echo "❌ Token migration script not found"; \
+		echo "   Expected: scripts/token-migration.sh"; \
+		exit 1; \
+	fi
+
+token-migration-rollback:
+	@echo "🔺 DOC-009: Rolling back token migration..."
+	@if [ -f "scripts/token-migration.sh" ]; then \
+		chmod +x scripts/token-migration.sh; \
+		./scripts/token-migration.sh rollback; \
+	else \
+		echo "❌ Token migration script not found"; \
+		echo "   Expected: scripts/token-migration.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-009: Priority icon analysis and mapping
+analyze-priority-icons:
+	@echo "🔺 DOC-009: Analyzing priority icon mappings..."
+	@if [ -f "scripts/priority-icon-inference.sh" ]; then \
+		chmod +x scripts/priority-icon-inference.sh; \
+		./scripts/priority-icon-inference.sh mapping; \
+		echo "✓ DOC-009 priority mapping generated"; \
+	else \
+		echo "❌ DOC-009 priority inference script not found"; \
+		echo "   Expected: scripts/priority-icon-inference.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-009: Validate token priorities against feature tracking
+validate-token-priorities:
+	@echo "🔺 DOC-009: Validating token priorities against feature tracking..."
+	@if [ -f "scripts/priority-icon-inference.sh" ]; then \
+		chmod +x scripts/priority-icon-inference.sh; \
+		./scripts/priority-icon-inference.sh validate; \
+		echo "✓ DOC-009 priority validation completed"; \
+	else \
+		echo "❌ DOC-009 priority inference script not found"; \
+		echo "   Expected: scripts/priority-icon-inference.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-009: Generate action icon suggestions
+suggest-action-icons:
+	@echo "🔺 DOC-009: Generating action icon suggestions..."
+	@if [ -f "scripts/priority-icon-inference.sh" ]; then \
+		chmod +x scripts/priority-icon-inference.sh; \
+		./scripts/priority-icon-inference.sh suggest; \
+		echo "✓ DOC-009 action icon suggestions generated"; \
+	else \
+		echo "❌ DOC-009 priority inference script not found"; \
+		echo "   Expected: scripts/priority-icon-inference.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-009: Complete token standardization workflow
+standardize-tokens: analyze-priority-icons validate-token-priorities migrate-tokens-dry-run
+	@echo "🔺 DOC-009: Token standardization workflow completed"
+	@echo "  Next steps:"
+	@echo "  1. Review dry run output above"
+	@echo "  2. Run 'make migrate-tokens' to execute actual migration"
+	@echo "  3. Run 'make validate-icon-enforcement' to verify results"
 
 check: fmt vet lint validate-icon-enforcement
 	@echo "✓ All code quality checks completed (including DOC-008 icon validation)"

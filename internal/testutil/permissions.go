@@ -6,7 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-C: Permission testing framework
+// 🔺 TEST-INFRA-001-C: Permission testing framework - 🔧
 // DECISION-REF: DEC-004 (Error handling)
 // IMPLEMENTATION-NOTES: Uses temporary directories with controlled permissions for safe testing
 

@@ -29,8 +29,8 @@ func NewPatternMatcher(patterns []string) *PatternMatcher {
 // ShouldExclude checks if a path should be excluded based on patterns
 func (pm *PatternMatcher) ShouldExclude(path string) bool {
 	// File exclusion logic implementation
-	// ARCH-002: Archive file exclusion
-	// FILE-002: Backup file exclusion
+	// ⭐ ARCH-002: Archive file exclusion - 🔍
+	// ⭐ FILE-002: Backup file exclusion - 🔍
 	normalizedPath := filepath.ToSlash(path)
 	for _, pattern := range pm.patterns {
 		if pm.matchesPattern(normalizedPath, pattern) {
@@ -126,8 +126,8 @@ func (pm *PatternMatcher) matchesDirectoryLevelPattern(
 // ShouldExcludeFile checks if a file should be excluded based on patterns
 func ShouldExcludeFile(path string, patterns []string) bool {
 	// Public file exclusion interface
-	// ARCH-002: Archive file exclusion
-	// FILE-002: Backup file exclusion
+	// ⭐ ARCH-002: Archive file exclusion - 🔍
+	// ⭐ FILE-002: Backup file exclusion - 🔍
 	matcher := NewPatternMatcher(patterns)
 	return matcher.ShouldExclude(path)
 }

@@ -6,7 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-A: Archive corruption testing framework
+// 🔺 TEST-INFRA-001-A: Archive corruption testing framework - 📝
 // DECISION-REF: DEC-001 (ZIP format)
 // IMPLEMENTATION-NOTES: Provides systematic corruption for verification testing
 

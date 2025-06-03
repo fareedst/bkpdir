@@ -1,4 +1,4 @@
-// COV-002: Differential coverage reporting tool
+// 🔺 COV-002: Differential coverage reporting tool - 🔧
 // Compares current coverage against baseline and reports changes for modified code only
 package main
 
@@ -18,7 +18,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-// COV-002: Configuration structure for differential reporting
+// 🔺 COV-002: Configuration structure for differential reporting - 🔧
 type DifferentialConfig struct {
 	General struct {
 		Version          string  `toml:"version"`
@@ -64,7 +64,7 @@ type DifferentialConfig struct {
 	} `toml:"reporting"`
 }
 
-// COV-002: Coverage data structures for differential analysis
+// 🔺 COV-002: Coverage data structures for differential analysis - 🔧
 type FunctionCoverage struct {
 	File       string  `json:"file"`
 	Function   string  `json:"function"`
@@ -123,7 +123,7 @@ type FunctionChange struct {
 	MeetsThreshold   bool    `json:"meets_threshold"`
 }
 
-// COV-002: Git integration for detecting modified files
+// 🔺 COV-002: Git integration for detecting modified files - 🔍
 func getModifiedFiles() ([]string, error) {
 	// Get list of modified files since last commit
 	cmd := exec.Command("git", "diff", "--name-only", "HEAD~1")
@@ -148,7 +148,7 @@ func getModifiedFiles() ([]string, error) {
 	return goFiles, nil
 }
 
-// COV-002: Parse current coverage profile
+// 🔺 COV-002: Parse current coverage profile - 🔍
 func parseCurrentCoverage(profilePath string) (map[string]FileCoverage, error) {
 	file, err := os.Open(profilePath)
 	if err != nil {
@@ -206,7 +206,7 @@ func parseCurrentCoverage(profilePath string) (map[string]FileCoverage, error) {
 	return files, scanner.Err()
 }
 
-// COV-002: Load baseline coverage from baseline file
+// 🔺 COV-002: Load baseline coverage from baseline file - 🔧
 func loadBaselineCoverage() (BaselineCoverage, error) {
 	var baseline BaselineCoverage
 
@@ -243,7 +243,7 @@ func loadBaselineCoverage() (BaselineCoverage, error) {
 	return baseline, nil
 }
 
-// COV-002: Generate differential report
+// 🔺 COV-002: Generate differential report - 🔧
 func generateDifferentialReport(config DifferentialConfig, currentCoverage map[string]FileCoverage, baseline BaselineCoverage, modifiedFiles []string) DifferentialReport {
 	report := DifferentialReport{
 		Timestamp:          time.Now(),
@@ -328,7 +328,7 @@ func generateDifferentialReport(config DifferentialConfig, currentCoverage map[s
 	return report
 }
 
-// COV-002: Calculate overall coverage from file coverage data
+// 🔺 COV-002: Calculate overall coverage from file coverage data - 🔧
 func calculateOverallCoverage(files map[string]FileCoverage) float64 {
 	if len(files) == 0 {
 		return 0.0
@@ -341,7 +341,7 @@ func calculateOverallCoverage(files map[string]FileCoverage) float64 {
 	return total / float64(len(files))
 }
 
-// COV-002: Analyze function-level changes
+// 🔺 COV-002: Analyze function-level changes - 🔍
 func analyzeFunctionChanges(currentFile FileCoverage, baselineFile FileCoverage, criticalPaths []string) []FunctionChange {
 	var changes []FunctionChange
 
@@ -388,7 +388,7 @@ func analyzeFunctionChanges(currentFile FileCoverage, baselineFile FileCoverage,
 	return changes
 }
 
-// COV-002: Evaluate quality gates
+// 🔺 COV-002: Evaluate quality gates - 🔍
 func evaluateQualityGates(config DifferentialConfig, report DifferentialReport) bool {
 	// Check overall regression limit
 	if report.OverallChange < config.QualityGates.OverallRegressionLimit {
@@ -417,7 +417,7 @@ func evaluateQualityGates(config DifferentialConfig, report DifferentialReport) 
 	return true
 }
 
-// COV-002: Generate recommendations based on analysis
+// 🔺 COV-002: Generate recommendations based on analysis - 📝
 func generateRecommendations(config DifferentialConfig, report DifferentialReport) []string {
 	var recommendations []string
 
@@ -453,7 +453,7 @@ func generateRecommendations(config DifferentialConfig, report DifferentialRepor
 	return recommendations
 }
 
-// COV-002: Generate HTML differential report
+// 🔺 COV-002: Generate HTML differential report - 📝
 func generateHTMLReport(report DifferentialReport, outputPath string) error {
 	htmlContent := fmt.Sprintf(`<!DOCTYPE html>
 <html>
@@ -561,7 +561,7 @@ func getStatusText(passed bool) string {
 	return "FAIL"
 }
 
-// COV-002: Save coverage history for trend tracking
+// 🔺 COV-002: Save coverage history for trend tracking - 🔧
 func saveCoverageHistory(baseline BaselineCoverage) error {
 	historyPath := "docs/coverage-history.json"
 
@@ -592,7 +592,7 @@ func saveCoverageHistory(baseline BaselineCoverage) error {
 	return os.WriteFile(historyPath, data, 0644)
 }
 
-// COV-002: Main function
+// 🔺 COV-002: Main function - 📝
 func main() {
 	fmt.Println("# Differential Coverage Report (COV-002: Baseline and Selective Reporting)")
 	fmt.Println()

@@ -20,7 +20,7 @@ const (
 	dryRunFlagDesc = "Show what would be done, but don't create archives"
 )
 
-// ARCH-002: Full archive command validation
+// ⭐ ARCH-002: Full archive command validation - 🔧
 // TEST-REF: TestFullCmdWithNote
 func TestFullCmdWithNote(t *testing.T) {
 	// Create a temporary directory for testing
@@ -76,7 +76,7 @@ func TestFullCmdWithNote(t *testing.T) {
 	}
 }
 
-// ARCH-003: Incremental archive command validation
+// ⭐ ARCH-003: Incremental archive command validation - 🔧
 // TEST-REF: TestIncCmdWithNote
 func TestIncCmdWithNote(t *testing.T) {
 	// Setup test environment
@@ -422,7 +422,7 @@ func verifyVerificationStatus(t *testing.T, archives []Archive) {
 
 // TEST-REF: TestMain_HandleConfigCommand
 func TestMain_HandleConfigCommand(t *testing.T) {
-	// TEST-MAIN-001: Test handleConfigCommand function
+	// 🔺 TEST-MAIN-001: Test handleConfigCommand function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -460,7 +460,7 @@ include_git_info: false
 
 // TEST-REF: TestMain_HandleCreateCommand
 func TestMain_HandleCreateCommand(t *testing.T) {
-	// TEST-MAIN-002: Test handleCreateCommand function
+	// 🔺 TEST-MAIN-002: Test handleCreateCommand function - 🔧
 	// This is a placeholder function, so we just verify it doesn't panic
 	defer func() {
 		if r := recover(); r != nil {
@@ -472,7 +472,7 @@ func TestMain_HandleCreateCommand(t *testing.T) {
 
 // TEST-REF: TestMain_HandleVerifyCommand
 func TestMain_HandleVerifyCommand(t *testing.T) {
-	// TEST-MAIN-003: Test handleVerifyCommand function
+	// 🔺 TEST-MAIN-003: Test handleVerifyCommand function - 🔧
 	// This is a placeholder function, so we just verify it doesn't panic
 	defer func() {
 		if r := recover(); r != nil {
@@ -484,7 +484,7 @@ func TestMain_HandleVerifyCommand(t *testing.T) {
 
 // TEST-REF: TestMain_HandleVersionCommand
 func TestMain_HandleVersionCommand(t *testing.T) {
-	// TEST-MAIN-004: Test handleVersionCommand function
+	// 🔺 TEST-MAIN-004: Test handleVersionCommand function - 🛡️
 	// This is a placeholder function, so we just verify it doesn't panic
 	defer func() {
 		if r := recover(); r != nil {
@@ -496,7 +496,7 @@ func TestMain_HandleVersionCommand(t *testing.T) {
 
 // TEST-REF: TestMain_ConfigCmd
 func TestMain_ConfigCmd(t *testing.T) {
-	// TEST-MAIN-005: Test configCmd function
+	// 🔺 TEST-MAIN-005: Test configCmd function - 🔧
 	cmd := configCmd()
 
 	if cmd.Use != "config [KEY] [VALUE]" {
@@ -512,7 +512,7 @@ func TestMain_ConfigCmd(t *testing.T) {
 
 // TEST-REF: TestMain_CreateCmd
 func TestMain_CreateCmd(t *testing.T) {
-	// TEST-MAIN-006: Test createCmd function
+	// 🔺 TEST-MAIN-006: Test createCmd function - 🔧
 	cmd := createCmd()
 
 	if cmd.Use != "create" {
@@ -525,7 +525,7 @@ func TestMain_CreateCmd(t *testing.T) {
 
 // TEST-REF: TestMain_VerifyCmd
 func TestMain_VerifyCmd(t *testing.T) {
-	// TEST-MAIN-007: Test verifyCmd function
+	// 🔺 TEST-MAIN-007: Test verifyCmd function - 🛡️
 	cmd := verifyCmd()
 
 	if cmd.Use != "verify" {
@@ -538,7 +538,7 @@ func TestMain_VerifyCmd(t *testing.T) {
 
 // TEST-REF: TestMain_VersionCmd
 func TestMain_VersionCmd(t *testing.T) {
-	// TEST-MAIN-008: Test versionCmd function
+	// 🔺 TEST-MAIN-008: Test versionCmd function - 🔧
 	cmd := versionCmd()
 
 	if cmd.Use != "version" {
@@ -551,7 +551,7 @@ func TestMain_VersionCmd(t *testing.T) {
 
 // TEST-REF: TestMain_CreateFullArchiveEnhanced
 func TestMain_CreateFullArchiveEnhanced(t *testing.T) {
-	// TEST-MAIN-009: Test CreateFullArchiveEnhanced function
+	// 🔺 TEST-MAIN-009: Test CreateFullArchiveEnhanced function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -578,7 +578,7 @@ func TestMain_CreateFullArchiveEnhanced(t *testing.T) {
 
 // TEST-REF: TestMain_CreateIncrementalArchiveEnhanced
 func TestMain_CreateIncrementalArchiveEnhanced(t *testing.T) {
-	// TEST-MAIN-010: Test CreateIncrementalArchiveEnhanced function
+	// 🔺 TEST-MAIN-010: Test CreateIncrementalArchiveEnhanced function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -650,7 +650,7 @@ include_git_info: false
 
 // TEST-REF: TestMain_VerifyArchiveEnhanced
 func TestMain_VerifyArchiveEnhanced(t *testing.T) {
-	// TEST-MAIN-011: Test VerifyArchiveEnhanced function
+	// 🔺 TEST-MAIN-011: Test VerifyArchiveEnhanced function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -682,7 +682,7 @@ func TestMain_VerifyArchiveEnhanced(t *testing.T) {
 
 // TEST-REF: TestMain_GetArchiveDirectory
 func TestMain_GetArchiveDirectory(t *testing.T) {
-	// TEST-MAIN-012: Test getArchiveDirectory function
+	// 🔺 TEST-MAIN-012: Test getArchiveDirectory function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -703,7 +703,7 @@ func TestMain_GetArchiveDirectory(t *testing.T) {
 
 // TEST-REF: TestMain_HandleListFileBackupsCommand
 func TestMain_HandleListFileBackupsCommand(t *testing.T) {
-	// TEST-MAIN-013: Test handleListFileBackupsCommand function
+	// 🔺 TEST-MAIN-013: Test handleListFileBackupsCommand function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -734,7 +734,7 @@ func TestMain_HandleListFileBackupsCommand(t *testing.T) {
 
 // TEST-REF: TestMain_BackupCmd
 func TestMain_BackupCmd(t *testing.T) {
-	// TEST-MAIN-014: Test backupCmd function
+	// 🔺 TEST-MAIN-014: Test backupCmd function - 🔧
 	cmd := backupCmd()
 
 	if cmd.Use != "backup [FILE_PATH] [NOTE]" {
@@ -750,7 +750,7 @@ func TestMain_BackupCmd(t *testing.T) {
 
 // TEST-REF: TestMain_HandleConfigSetCommand
 func TestMain_HandleConfigSetCommand(t *testing.T) {
-	// TEST-MAIN-015: Test handleConfigSetCommand function
+	// 🔺 TEST-MAIN-015: Test handleConfigSetCommand function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -795,7 +795,7 @@ func TestMain_HandleConfigSetCommand(t *testing.T) {
 
 // TEST-REF: TestMain_LoadExistingConfigData
 func TestMain_LoadExistingConfigData(t *testing.T) {
-	// TEST-MAIN-016: Test loadExistingConfigData function
+	// 🔺 TEST-MAIN-016: Test loadExistingConfigData function - 🔧
 	tmpDir := t.TempDir()
 	configPath := filepath.Join(tmpDir, ".bkpdir.yml")
 
@@ -833,7 +833,7 @@ use_current_dir_name: true
 
 // TEST-REF: TestMain_ConvertConfigValue
 func TestMain_ConvertConfigValue(t *testing.T) {
-	// TEST-MAIN-017: Test convertConfigValue function
+	// 🔺 TEST-MAIN-017: Test convertConfigValue function - 🔧
 	tests := []struct {
 		name       string
 		key        string
@@ -868,7 +868,7 @@ func TestMain_ConvertConfigValue(t *testing.T) {
 
 // TEST-REF: TestMain_ConvertBooleanValue
 func TestMain_ConvertBooleanValue(t *testing.T) {
-	// TEST-MAIN-018: Test convertBooleanValue function
+	// 🔺 TEST-MAIN-018: Test convertBooleanValue function - 🔧
 	tests := []struct {
 		name       string
 		key        string
@@ -900,7 +900,7 @@ func TestMain_ConvertBooleanValue(t *testing.T) {
 
 // TEST-REF: TestMain_ConvertIntegerValue
 func TestMain_ConvertIntegerValue(t *testing.T) {
-	// TEST-MAIN-019: Test convertIntegerValue function
+	// 🔺 TEST-MAIN-019: Test convertIntegerValue function - 🔧
 	tests := []struct {
 		name       string
 		key        string
@@ -934,7 +934,7 @@ func TestMain_ConvertIntegerValue(t *testing.T) {
 
 // TEST-REF: TestMain_UpdateConfigData
 func TestMain_UpdateConfigData(t *testing.T) {
-	// TEST-MAIN-020: Test updateConfigData function
+	// 🔺 TEST-MAIN-020: Test updateConfigData function - 📝
 	tests := []struct {
 		name     string
 		key      string
@@ -995,7 +995,7 @@ func TestMain_UpdateConfigData(t *testing.T) {
 
 // TEST-REF: TestMain_SaveConfigData
 func TestMain_SaveConfigData(t *testing.T) {
-	// TEST-MAIN-021: Test saveConfigData function
+	// 🔺 TEST-MAIN-021: Test saveConfigData function - 🔧
 	tmpDir := t.TempDir()
 	configPath := filepath.Join(tmpDir, "test-config.yml")
 
@@ -1039,7 +1039,7 @@ func TestMain_SaveConfigData(t *testing.T) {
 
 // TEST-REF: TestMain_VerifySingleArchive
 func TestMain_VerifySingleArchive(t *testing.T) {
-	// TEST-MAIN-022: Test verifySingleArchive function
+	// 🔺 TEST-MAIN-022: Test verifySingleArchive function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -1068,7 +1068,7 @@ func TestMain_VerifySingleArchive(t *testing.T) {
 
 // TEST-REF: TestMain_VerifyAllArchives
 func TestMain_VerifyAllArchives(t *testing.T) {
-	// TEST-MAIN-023: Test verifyAllArchives function
+	// 🔺 TEST-MAIN-023: Test verifyAllArchives function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -1097,7 +1097,7 @@ func TestMain_VerifyAllArchives(t *testing.T) {
 
 // TEST-REF: TestMain_PerformVerification
 func TestMain_PerformVerification(t *testing.T) {
-	// TEST-MAIN-024: Test performVerification function
+	// 🔺 TEST-MAIN-024: Test performVerification function - 🔧
 	tmpDir := t.TempDir()
 	archivePath := filepath.Join(tmpDir, "nonexistent.zip")
 
@@ -1122,7 +1122,7 @@ func TestMain_PerformVerification(t *testing.T) {
 
 // TEST-REF: TestMain_HandleVerificationResult
 func TestMain_HandleVerificationResult(t *testing.T) {
-	// TEST-MAIN-025: Test handleVerificationResult function
+	// 🔺 TEST-MAIN-025: Test handleVerificationResult function - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -1160,7 +1160,7 @@ func TestMain_HandleVerificationResult(t *testing.T) {
 
 // TEST-REF: TestMain_Integration_ConfigCommands
 func TestMain_Integration_ConfigCommands(t *testing.T) {
-	// TEST-MAIN-026: Integration test for config command creation and validation
+	// 🔺 TEST-MAIN-026: Integration test for config command creation and validation - 🔍
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
@@ -1187,7 +1187,7 @@ func TestMain_Integration_ConfigCommands(t *testing.T) {
 
 // TEST-REF: TestMain_Integration_CreateCommands
 func TestMain_Integration_CreateCommands(t *testing.T) {
-	// TEST-MAIN-027: Integration test for create command
+	// 🔺 TEST-MAIN-027: Integration test for create command - 🔧
 	cmd := createCmd()
 	if cmd == nil {
 		t.Fatalf("createCmd() returned nil")
@@ -1204,7 +1204,7 @@ func TestMain_Integration_CreateCommands(t *testing.T) {
 
 // TEST-REF: TestMain_Integration_BackupCommandStructure
 func TestMain_Integration_BackupCommandStructure(t *testing.T) {
-	// TEST-MAIN-028: Integration test for backup command structure
+	// 🔺 TEST-MAIN-028: Integration test for backup command structure - 🔧
 	cmd := backupCmd()
 	if cmd == nil {
 		t.Fatalf("backupCmd() returned nil")
@@ -1223,7 +1223,7 @@ func TestMain_Integration_BackupCommandStructure(t *testing.T) {
 
 // TEST-REF: TestMain_Integration_CommandValidation
 func TestMain_Integration_CommandValidation(t *testing.T) {
-	// TEST-MAIN-029: Integration test for command validation
+	// 🔺 TEST-MAIN-029: Integration test for command validation - 🔧
 	tests := []struct {
 		name        string
 		cmdFunc     func() *cobra.Command

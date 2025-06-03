@@ -21,19 +21,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// REFACTOR-001: CLI orchestration interface contracts defined
-// REFACTOR-001: Central dependency aggregation point identified
+// 🔶 REFACTOR-001: CLI orchestration interface contracts defined - 📝
+// 🔶 REFACTOR-001: Central dependency aggregation point identified - 📝
 
 // Version information
 const (
-	// REFACTOR-005: Structure optimization - Standardized version constants
+	// 🔶 REFACTOR-005: Structure optimization - Standardized version constants - 📝
 	appVersion     = "1.0.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
 // Runtime compilation information (set by build flags)
 var (
-	// REFACTOR-005: Structure optimization - Standardized build variables
+	// 🔶 REFACTOR-005: Structure optimization - Standardized build variables - 📝
 	compileDate = "unknown"
 	platform    = "unknown"
 	Version     = appVersion // Public version for external access
@@ -54,7 +54,7 @@ It supports full and incremental directory backups, individual file backups, cus
 Git-aware archive naming, and archive verification.`
 
 func main() {
-	// CFG-001: CLI application initialization and command structure
+	// 🔺 CFG-001: CLI application initialization and command structure - 📝
 	// DECISION-REF: DEC-002
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
@@ -134,8 +134,8 @@ func main() {
 }
 
 func handleConfigCommand() {
-	// CFG-001: Configuration display handling
-	// CFG-003: Configuration output formatting
+	// 🔺 CFG-001: Configuration display handling - 🔍
+	// 🔺 CFG-003: Configuration output formatting - 🔍
 	cwd, err := os.Getwd()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
@@ -178,8 +178,8 @@ func handleCreateCommand() {
 }
 
 func handleListCommand() {
-	// ARCH-002: Archive listing command implementation
-	// CFG-003: Archive listing output formatting
+	// ⭐ ARCH-002: Archive listing command implementation - 📝
+	// 🔺 CFG-003: Archive listing output formatting - 📝
 	// Requirement: List Archives - Display all archives in the archive directory
 	// Specification: Shows each archive with path and creation time using configurable format
 	// Specification: Shows verification status if available: [VERIFIED], [FAILED], or [UNVERIFIED]
@@ -214,8 +214,8 @@ func handleVersionCommand() {
 }
 
 func configCmd() *cobra.Command {
-	// CFG-001: Configuration command implementation
-	// CFG-003: Configuration command interface
+	// 🔺 CFG-001: Configuration command implementation - 📝
+	// 🔺 CFG-003: Configuration command interface - 📝
 	cmd := &cobra.Command{
 		Use:   "config [KEY] [VALUE]",
 		Short: "Display or modify configuration values",
@@ -247,8 +247,8 @@ Examples:
 }
 
 func createCmd() *cobra.Command {
-	// ARCH-002: Archive creation command implementation
-	// CFG-003: Command interface for archive creation
+	// ⭐ ARCH-002: Archive creation command implementation - 🔧
+	// 🔺 CFG-003: Command interface for archive creation - 🔧
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a new archive",
@@ -260,8 +260,8 @@ func createCmd() *cobra.Command {
 }
 
 func fullCmd() *cobra.Command {
-	// ARCH-002: Full archive creation command (backward compatibility)
-	// CFG-003: Backward compatibility command interface
+	// ⭐ ARCH-002: Full archive creation command (backward compatibility) - 🔧
+	// 🔺 CFG-003: Backward compatibility command interface - 🔧
 	cmd := &cobra.Command{
 		Use:   "full [NOTE]",
 		Short: "Create a full archive of the current directory",
@@ -313,8 +313,8 @@ If the directory is identical to the most recent archive, no new archive is crea
 }
 
 func incCmd() *cobra.Command {
-	// ARCH-003: Incremental archive creation command
-	// CFG-003: Incremental command interface
+	// ⭐ ARCH-003: Incremental archive creation command - 🔧
+	// 🔺 CFG-003: Incremental command interface - 🔧
 	cmd := &cobra.Command{
 		Use:   "inc [NOTE]",
 		Short: "Create an incremental archive of the current directory",
@@ -366,8 +366,8 @@ If the directory is identical to the most recent archive, no new archive is crea
 }
 
 func listCmd() *cobra.Command {
-	// ARCH-002: Archive listing command
-	// CFG-003: List command interface
+	// ⭐ ARCH-002: Archive listing command - 🔧
+	// 🔺 CFG-003: List command interface - 🔧
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List archives",
@@ -380,7 +380,7 @@ func listCmd() *cobra.Command {
 
 func verifyCmd() *cobra.Command {
 	// Archive verification command
-	// CFG-003: Verify command interface
+	// 🔺 CFG-003: Verify command interface - 🛡️
 	cmd := &cobra.Command{
 		Use:   "verify",
 		Short: "Verify archives",
@@ -393,7 +393,7 @@ func verifyCmd() *cobra.Command {
 
 func versionCmd() *cobra.Command {
 	// Version display command
-	// CFG-003: Version command interface
+	// 🔺 CFG-003: Version command interface - 📝
 	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "Display version information",
@@ -417,7 +417,7 @@ type ArchiveOptions struct {
 // CreateFullArchiveEnhanced creates a full archive of the current directory with enhanced error handling
 // and resource management. It supports dry-run mode and optional verification.
 func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
-	// ARCH-002: Enhanced full archive creation
+	// ⭐ ARCH-002: Enhanced full archive creation - 🔧
 	// DECISION-REF: DEC-006, DEC-007
 	return CreateFullArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
 }
@@ -425,7 +425,7 @@ func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
 // CreateIncrementalArchiveEnhanced creates an incremental archive containing only files changed since
 // the last full archive. It supports dry-run mode and optional verification.
 func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
-	// ARCH-003: Enhanced incremental archive creation
+	// ⭐ ARCH-003: Enhanced incremental archive creation - 📝
 	// DECISION-REF: DEC-006, DEC-007
 	return CreateIncrementalArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
 }
@@ -433,8 +433,8 @@ func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
 // ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
 // and error handling.
 func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
-	// ARCH-002: Enhanced archive listing with formatting
-	// CFG-003: Template-based archive listing
+	// ⭐ ARCH-002: Enhanced archive listing with formatting - 🔍
+	// 🔺 CFG-003: Template-based archive listing - 🔍
 	cwd, err := os.Getwd()
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
@@ -495,7 +495,7 @@ type VerifyOptions struct {
 // It provides enhanced error handling and reporting.
 func VerifyArchiveEnhanced(opts VerifyOptions) error {
 	// Archive verification implementation
-	// CFG-003: Verification output formatting
+	// 🔺 CFG-003: Verification output formatting - 🔍
 	archiveDir, err := getArchiveDirectory(opts.Config)
 	if err != nil {
 		return err
@@ -509,7 +509,7 @@ func VerifyArchiveEnhanced(opts VerifyOptions) error {
 
 // getArchiveDirectory determines the archive directory path
 func getArchiveDirectory(cfg *Config) (string, error) {
-	// CFG-001: Archive directory resolution
+	// 🔺 CFG-001: Archive directory resolution - 🔍
 	// DECISION-REF: DEC-002
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -613,8 +613,8 @@ func handleVerificationResult(archive *Archive, status *VerificationStatus, name
 }
 
 func handleListFileBackupsCommand(args []string) {
-	// FILE-002: File backup listing command implementation
-	// CFG-003: File backup listing output formatting
+	// ⭐ FILE-002: File backup listing command implementation - 📝
+	// 🔺 CFG-003: File backup listing output formatting - 📝
 	var filePath string
 	if listFile != "" {
 		filePath = listFile
@@ -646,8 +646,8 @@ func handleListFileBackupsCommand(args []string) {
 }
 
 func backupCmd() *cobra.Command {
-	// FILE-002: File backup command implementation
-	// CFG-003: Backup command interface
+	// ⭐ FILE-002: File backup command implementation - 🔧
+	// 🔺 CFG-003: Backup command interface - 🔧
 	cmd := &cobra.Command{
 		Use:   "backup [FILE_PATH] [NOTE]",
 		Short: "Create a backup of a single file",
@@ -707,8 +707,8 @@ If the file is identical to the most recent backup, no new backup is created.`,
 }
 
 func handleConfigSetCommand(key, value string) {
-	// CFG-001: Configuration modification command
-	// CFG-002: Configuration value setting
+	// 🔺 CFG-001: Configuration modification command - 🔍
+	// 🔺 CFG-002: Configuration value setting - 🔍
 	// DECISION-REF: DEC-002
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -734,7 +734,7 @@ func handleConfigSetCommand(key, value string) {
 }
 
 func loadExistingConfigData(configPath string) map[string]interface{} {
-	// CFG-001: Configuration file loading
+	// 🔺 CFG-001: Configuration file loading - 📝
 	// DECISION-REF: DEC-002
 	var configData map[string]interface{}
 
@@ -751,7 +751,7 @@ func loadExistingConfigData(configPath string) map[string]interface{} {
 }
 
 func convertConfigValue(key, value string) interface{} {
-	// CFG-002: Configuration value type conversion
+	// 🔺 CFG-002: Configuration value type conversion - 🔧
 	switch key {
 	case "use_current_dir_name", "use_current_dir_name_for_files", "include_git_info", "verify_on_create":
 		return convertBooleanValue(key, value)
@@ -772,7 +772,7 @@ func convertConfigValue(key, value string) interface{} {
 }
 
 func convertBooleanValue(key, value string) bool {
-	// CFG-002: Boolean configuration value conversion
+	// 🔺 CFG-002: Boolean configuration value conversion - 🔧
 	if value == "true" {
 		return true
 	}
@@ -785,7 +785,7 @@ func convertBooleanValue(key, value string) bool {
 }
 
 func convertIntegerValue(key, value string) int {
-	// CFG-002: Integer configuration value conversion
+	// 🔺 CFG-002: Integer configuration value conversion - 📝
 	intVal, err := strconv.Atoi(value)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %s requires an integer value, got: %s\n", key, value)
@@ -795,7 +795,7 @@ func convertIntegerValue(key, value string) int {
 }
 
 func updateConfigData(configData map[string]interface{}, key string, convertedValue interface{}) {
-	// CFG-001: Configuration data updating
+	// 🔺 CFG-001: Configuration data updating - 🔍
 	if key == "verify_on_create" || key == "checksum_algorithm" {
 		if configData["verification"] == nil {
 			configData["verification"] = make(map[string]interface{})
@@ -812,7 +812,7 @@ func updateConfigData(configData map[string]interface{}, key string, convertedVa
 }
 
 func saveConfigData(configPath string, configData map[string]interface{}) {
-	// CFG-001: Configuration data persistence
+	// 🔺 CFG-001: Configuration data persistence - 📝
 	// DECISION-REF: DEC-002, DEC-008
 	yamlData, err := yaml.Marshal(configData)
 	if err != nil {
@@ -826,7 +826,7 @@ func saveConfigData(configPath string, configData map[string]interface{}) {
 	}
 }
 
-// REFACTOR-005: Structure optimization - Standardized command configuration
+// 🔶 REFACTOR-005: Structure optimization - Standardized command configuration - 📝
 // CommandConfig holds configuration for CLI command execution
 type CommandConfig struct {
 	Config    *Config
@@ -834,7 +834,7 @@ type CommandConfig struct {
 	Context   context.Context
 }
 
-// REFACTOR-005: Structure optimization - Interface-based command handler abstraction
+// 🔶 REFACTOR-005: Structure optimization - Interface-based command handler abstraction - 📝
 // CommandHandlerInterface abstracts command execution for better testability
 type CommandHandlerInterface interface {
 	HandleFullArchive(args []string, note string, dryRun bool, verify bool) error
@@ -846,19 +846,19 @@ type CommandHandlerInterface interface {
 	HandleDisplayConfig(args []string) error
 }
 
-// REFACTOR-005: Structure optimization - Concrete command handler implementation
+// 🔶 REFACTOR-005: Structure optimization - Concrete command handler implementation - 📝
 // CommandHandler provides the concrete implementation of CommandHandlerInterface
 type CommandHandler struct {
 	config CommandConfig
 }
 
-// REFACTOR-005: Extraction preparation - Interface-based command handler factory
+// 🔶 REFACTOR-005: Extraction preparation - Interface-based command handler factory - 🔧
 // NewCommandHandler creates a new CommandHandler with the given configuration
 func NewCommandHandler(cfg CommandConfig) CommandHandlerInterface {
 	return &CommandHandler{config: cfg}
 }
 
-// REFACTOR-005: Structure optimization - Interface method implementations
+// 🔶 REFACTOR-005: Structure optimization - Interface method implementations - 🔧
 // HandleFullArchive handles full archive creation command
 func (h *CommandHandler) HandleFullArchive(args []string, note string, dryRun bool, verify bool) error {
 	return CreateFullArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)

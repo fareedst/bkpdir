@@ -5,7 +5,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-INFRA-001-B: Disk space simulation framework tests
+// 🔺 TEST-INFRA-001-B: Disk space simulation framework tests - 🔧
 // DECISION-REF: DEC-004 (Error handling)
 // IMPLEMENTATION-NOTES: Comprehensive test coverage for disk space simulation utilities
 

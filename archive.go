@@ -18,11 +18,11 @@ import (
 	"time"
 )
 
-// REFACTOR-001: Archive management interface contracts defined
-// REFACTOR-001: Multiple dependency interfaces required for extraction
-// REFACTOR-005: Structure optimization - Standardized naming and interface preparation
+// 🔶 REFACTOR-001: Archive management interface contracts defined - 🔧
+// 🔶 REFACTOR-001: Multiple dependency interfaces required for extraction - 🔧
+// 🔶 REFACTOR-005: Structure optimization - Standardized naming and interface preparation - 🔧
 
-// REFACTOR-005: Extraction preparation - Standardized naming conventions
+// 🔶 REFACTOR-005: Extraction preparation - Standardized naming conventions - 🔧
 // ArchiveConfig holds configuration for generating archive names.
 type ArchiveConfig struct {
 	Prefix             string
@@ -37,7 +37,7 @@ type ArchiveConfig struct {
 	BaseName           string
 }
 
-// REFACTOR-005: Structure optimization - Consistent naming pattern
+// 🔶 REFACTOR-005: Structure optimization - Consistent naming pattern - 📝
 // Archive represents a directory archive with metadata including name, path,
 // creation time, Git information, and verification status. It supports both
 // full and incremental archives.
@@ -53,14 +53,14 @@ type Archive struct {
 	VerificationStatus *VerificationStatus
 }
 
-// REFACTOR-005: Structure optimization - Interface-ready configuration
+// 🔶 REFACTOR-005: Structure optimization - Interface-ready configuration - 🔍
 // ArchiveVerificationOptions holds configuration for archive verification
 type ArchiveVerificationOptions struct {
 	Path   string
 	Config ArchiveConfigInterface
 }
 
-// REFACTOR-005: Structure optimization - Interface-based configuration abstraction
+// 🔶 REFACTOR-005: Structure optimization - Interface-based configuration abstraction - 🔍
 // ArchiveConfigInterface abstracts configuration dependencies for archive operations
 type ArchiveConfigInterface interface {
 	GetArchiveDirPath() string
@@ -75,7 +75,7 @@ type ArchiveConfigInterface interface {
 	GetStatusConfigError() int
 }
 
-// REFACTOR-005: Structure optimization - Interface-ready configuration
+// 🔶 REFACTOR-005: Structure optimization - Interface-ready configuration - 🔍
 // ArchiveCreationOptions holds configuration for archive creation
 type ArchiveCreationOptions struct {
 	Context     context.Context
@@ -87,7 +87,7 @@ type ArchiveCreationOptions struct {
 	ResourceMgr *ResourceManager
 }
 
-// REFACTOR-005: Structure optimization - Interface-based formatter abstraction
+// 🔶 REFACTOR-005: Structure optimization - Interface-based formatter abstraction - 📝
 // ArchiveFormatterInterface abstracts formatter dependencies for archive operations
 type ArchiveFormatterInterface interface {
 	PrintDryRunFilesHeader()
@@ -96,7 +96,7 @@ type ArchiveFormatterInterface interface {
 	PrintIncrementalCreated(path string)
 }
 
-// REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility
+// 🔶 REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility - 📝
 // ConfigToArchiveConfigAdapter adapts Config to ArchiveConfigInterface
 type ConfigToArchiveConfigAdapter struct {
 	cfg *Config
@@ -142,7 +142,7 @@ func (a *ConfigToArchiveConfigAdapter) GetStatusConfigError() int {
 	return a.cfg.StatusConfigError
 }
 
-// REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility
+// 🔶 REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility - 🔍
 // OutputFormatterToArchiveFormatterAdapter adapts OutputFormatter to ArchiveFormatterInterface
 type OutputFormatterToArchiveFormatterAdapter struct {
 	formatter *OutputFormatter
@@ -164,7 +164,7 @@ func (a *OutputFormatterToArchiveFormatterAdapter) PrintIncrementalCreated(path 
 	a.formatter.PrintIncrementalCreated(path)
 }
 
-// REFACTOR-005: Extraction preparation - Interface-based archive name generation
+// 🔶 REFACTOR-005: Extraction preparation - Interface-based archive name generation - 📝
 // GenerateArchiveNameWithInterface creates an archive name using interface abstractions
 func GenerateArchiveNameWithInterface(cfg ArchiveConfig) string {
 	if cfg.IsIncremental && cfg.BaseName != "" {
@@ -173,11 +173,11 @@ func GenerateArchiveNameWithInterface(cfg ArchiveConfig) string {
 	return generateFullArchiveNameFromConfig(cfg)
 }
 
-// ARCH-001: Archive naming convention implementation
+// ⭐ ARCH-001: Archive naming convention implementation - 🔧
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
-// REFACTOR-005: Structure optimization - Standardized naming function
+// 🔶 REFACTOR-005: Structure optimization - Standardized naming function - 🔧
 // GenerateArchiveName creates an archive name according to the spec.
 // It handles both full and incremental archive naming based on the provided configuration.
 func GenerateArchiveName(cfg ArchiveConfig) string {
@@ -187,11 +187,11 @@ func GenerateArchiveName(cfg ArchiveConfig) string {
 	return generateFullArchiveNameFromConfig(cfg)
 }
 
-// ARCH-003: Incremental archive naming implementation
+// ⭐ ARCH-003: Incremental archive naming implementation - 🔧
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
-// REFACTOR-005: Structure optimization - Consistent internal naming
+// 🔶 REFACTOR-005: Structure optimization - Consistent internal naming - 📝
 // generateIncrementalArchiveName generates name for incremental archives
 func generateIncrementalArchiveName(cfg ArchiveConfig) string {
 	baseName := strings.TrimSuffix(cfg.BaseName, ".zip")
@@ -208,11 +208,11 @@ func generateIncrementalArchiveName(cfg ArchiveConfig) string {
 	return name + ".zip"
 }
 
-// ARCH-001: Full archive naming implementation
+// ⭐ ARCH-001: Full archive naming implementation - 🔧
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
-// REFACTOR-005: Structure optimization - Consistent internal naming
+// 🔶 REFACTOR-005: Structure optimization - Consistent internal naming - 🔧
 // generateFullArchiveNameFromConfig generates name for full archives from config
 func generateFullArchiveNameFromConfig(cfg ArchiveConfig) string {
 	var name string
@@ -236,13 +236,13 @@ func generateFullArchiveNameFromConfig(cfg ArchiveConfig) string {
 	return name + ".zip"
 }
 
-// ARCH-001: Archive naming with Git integration
-// GIT-001: Git information extraction for naming
-// GIT-003: Git status detection for naming
+// ⭐ ARCH-001: Archive naming with Git integration - 🔍
+// 🔺 GIT-001: Git information extraction for naming - 🔍
+// 🔺 GIT-003: Git status detection for naming - 🔍
 // IMMUTABLE-REF: Archive Naming Convention, Git Integration Requirements
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
-// REFACTOR-005: Structure optimization - Standardized Git integration function
+// 🔶 REFACTOR-005: Structure optimization - Standardized Git integration function - 🔍
 // GenerateFullArchiveName creates a full archive name with optional Git integration and note.
 // It uses the current directory name as prefix and includes Git branch/hash if available.
 func GenerateFullArchiveName(cfg *Config, cwd string, note string) (string, error) {
@@ -269,13 +269,13 @@ func GenerateFullArchiveName(cfg *Config, cwd string, note string) (string, erro
 	return GenerateArchiveName(archiveConfig), nil
 }
 
-// REFACTOR-005: Structure optimization - Backward compatibility wrapper
+// 🔶 REFACTOR-005: Structure optimization - Backward compatibility wrapper - 🔧
 // generateFullArchiveName maintains backward compatibility while using new structure
 func generateFullArchiveName(cfg *Config, cwd string, note string) (string, error) {
 	return GenerateFullArchiveName(cfg, cwd, note)
 }
 
-// ARCH-002: Archive listing implementation
+// ⭐ ARCH-002: Archive listing implementation - 🔧
 // IMMUTABLE-REF: Commands - List Archives
 // TEST-REF: TestListArchives
 // DECISION-REF: DEC-001
@@ -306,7 +306,7 @@ func ListArchives(archiveDir string) ([]Archive, error) {
 	return archives, nil
 }
 
-// ARCH-002: Archive metadata extraction
+// ⭐ ARCH-002: Archive metadata extraction - 🔧
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestListArchives
 // DECISION-REF: DEC-001
@@ -334,7 +334,7 @@ func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, erro
 	return archive, nil
 }
 
-// ARCH-002: Archive creation with context
+// ⭐ ARCH-002: Archive creation with context - 🔧
 // IMMUTABLE-REF: Commands - Create Archive
 // TEST-REF: TestCreateFullArchive
 // DECISION-REF: DEC-001
@@ -344,7 +344,7 @@ func CreateArchiveWithContext(ctx context.Context, cfg *Config, note string, dry
 	return CreateFullArchiveWithContext(ctx, cfg, note, dryRun, verify)
 }
 
-// ARCH-002: File collection for archiving
+// ⭐ ARCH-002: File collection for archiving - 🔧
 // IMMUTABLE-REF: Directory Operations, File Exclusion Requirements
 // TEST-REF: TestCreateFullArchive
 // DECISION-REF: DEC-001
@@ -403,7 +403,7 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 	rm := NewResourceManager()
 	defer rm.CleanupWithPanicRecovery()
 
-	// REFACTOR-005: Structure optimization - Use interface adapter for reduced coupling
+	// 🔶 REFACTOR-005: Structure optimization - Use interface adapter for reduced coupling - 🔧
 	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
 
 	archiveDir, err := prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)
@@ -439,7 +439,7 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 	})
 }
 
-// REFACTOR-005: Structure optimization - Interface-based directory preparation
+// 🔶 REFACTOR-005: Structure optimization - Interface-based directory preparation - 🔍
 // prepareArchiveDirectoryWithInterface prepares the archive directory using interface abstractions
 func prepareArchiveDirectoryWithInterface(cfg ArchiveConfigInterface, cwd string, dryRun bool) (string, error) {
 	archiveDir := cfg.GetArchiveDirPath()
@@ -462,7 +462,7 @@ func prepareArchiveDirectoryWithInterface(cfg ArchiveConfigInterface, cwd string
 	return archiveDir, nil
 }
 
-// REFACTOR-005: Structure optimization - Interface-based file collection
+// 🔶 REFACTOR-005: Structure optimization - Interface-based file collection - 🔍
 // collectFilesToArchiveWithInterface walks the directory and collects files to archive using interface abstractions
 func collectFilesToArchiveWithInterface(ctx context.Context, cwd string, excludePatterns []string) ([]string, error) {
 	var files []string
@@ -490,7 +490,7 @@ func collectFilesToArchiveWithInterface(ctx context.Context, cwd string, exclude
 	return files, err
 }
 
-// REFACTOR-005: Structure optimization - Interface-based archive name generation
+// 🔶 REFACTOR-005: Structure optimization - Interface-based archive name generation - 📝
 // generateFullArchiveNameWithInterface creates a full archive name using interface abstractions
 func generateFullArchiveNameWithInterface(cfg ArchiveConfigInterface, cwd string, note string) (string, error) {
 	timestamp := time.Now().Format("2006-01-02-15-04")
@@ -516,7 +516,7 @@ func generateFullArchiveNameWithInterface(cfg ArchiveConfigInterface, cwd string
 	return GenerateArchiveNameWithInterface(archiveConfig), nil
 }
 
-// REFACTOR-005: Structure optimization - Interface-based dry run printing
+// 🔶 REFACTOR-005: Structure optimization - Interface-based dry run printing - 🔍
 // printDryRunInfoWithInterface prints information about what would be archived using interface abstractions
 func printDryRunInfoWithInterface(files []string, archivePath string, cfg ArchiveConfigInterface) {
 	// Use the adapter to get the original config for OutputFormatter
@@ -532,7 +532,7 @@ func printDryRunInfoWithInterface(files []string, archivePath string, cfg Archiv
 	}
 }
 
-// REFACTOR-005: Structure optimization - Interface-based verification
+// 🔶 REFACTOR-005: Structure optimization - Interface-based verification - 📝
 // verifyArchiveWithInterface verifies an archive using interface abstractions
 func verifyArchiveWithInterface(cfg ArchiveVerificationOptions) error {
 	status, err := VerifyArchive(cfg.Path)
@@ -555,14 +555,14 @@ func verifyArchiveWithInterface(cfg ArchiveVerificationOptions) error {
 
 // prepareArchiveDirectory prepares the archive directory (backward compatibility).
 func prepareArchiveDirectory(cfg *Config, cwd string, dryRun bool) (string, error) {
-	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility wrapper - 📝
 	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
 	return prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)
 }
 
 // printDryRunInfo prints information about what would be archived (backward compatibility).
 func printDryRunInfo(files []string, archivePath string, cfg *Config) {
-	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility wrapper - 📝
 	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
 	printDryRunInfoWithInterface(files, archivePath, archiveConfig)
 }
@@ -603,7 +603,7 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 
 // verifyArchive verifies an archive (backward compatibility).
 func verifyArchive(cfg ArchiveVerificationOptions) error {
-	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility wrapper - 🔧
 	return verifyArchiveWithInterface(cfg)
 }
 
@@ -645,7 +645,7 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
-	// REFACTOR-005: Structure optimization - Use interface adapter for reduced coupling
+	// 🔶 REFACTOR-005: Structure optimization - Use interface adapter for reduced coupling - 🔍
 	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: config.Config}
 
 	archiveDir, err := prepareArchiveDirectoryWithInterface(archiveConfig, cwd, config.DryRun)
@@ -691,7 +691,7 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 	})
 }
 
-// REFACTOR-005: Structure optimization - Interface-based incremental archive preparation
+// 🔶 REFACTOR-005: Structure optimization - Interface-based incremental archive preparation - 🔧
 // prepareIncrementalArchiveWithInterface prepares the archive name and path using interface abstractions
 func prepareIncrementalArchiveWithInterface(
 	cwd string, latestFullArchive *Archive, cfg ArchiveConfigInterface, note string) (string, error) {
@@ -751,7 +751,7 @@ func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
 // prepareIncrementalArchive prepares the archive name and path (backward compatibility)
 func prepareIncrementalArchive(
 	cwd string, latestFullArchive *Archive, cfg *Config, note string) (string, error) {
-	// REFACTOR-005: Extraction preparation - Backward compatibility wrapper
+	// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility wrapper - 🔧
 	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
 	return prepareIncrementalArchiveWithInterface(cwd, latestFullArchive, archiveConfig, note)
 }
