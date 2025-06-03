@@ -423,12 +423,23 @@ func verifyVerificationStatus(t *testing.T, archives []Archive) {
 // TEST-REF: TestMain_HandleConfigCommand
 func TestMain_HandleConfigCommand(t *testing.T) {
 	// 🔺 TEST-MAIN-001: Test handleConfigCommand function - 🔍
+	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// Save original environment
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
 	defer os.Chdir(originalWd)
 	os.Chdir(tmpDir)
 
-	// Create test config file
+	// Create test config file and set BKPDIR_CONFIG to use only this file
 	cfgPath := filepath.Join(tmpDir, ".bkpdir.yml")
 	configContent := `archive_dir_path: ../.bkpdir
 use_current_dir_name: true
@@ -437,6 +448,7 @@ include_git_info: false
 	if err := os.WriteFile(cfgPath, []byte(configContent), 0644); err != nil {
 		t.Fatalf("Failed to create config file: %v", err)
 	}
+	os.Setenv("BKPDIR_CONFIG", cfgPath)
 
 	// Test should run without error
 	defer func() {
@@ -626,6 +638,7 @@ func TestMain_CreateIncrementalArchiveEnhanced(t *testing.T) {
 func createTestConfig(t *testing.T, tmpDir string) *Config {
 	t.Helper()
 
+	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
 	cfgPath := filepath.Join(tmpDir, ".bkpdir.yml")
 	configContent := `archive_dir_path: ../.bkpdir
 use_current_dir_name: true
@@ -634,6 +647,9 @@ include_git_info: false
 	if err := os.WriteFile(cfgPath, []byte(configContent), 0644); err != nil {
 		t.Fatalf("Failed to create config file: %v", err)
 	}
+
+	// Set BKPDIR_CONFIG to use only this test config file
+	os.Setenv("BKPDIR_CONFIG", cfgPath)
 
 	// Create test file
 	testFile := filepath.Join(tmpDir, "test.txt")

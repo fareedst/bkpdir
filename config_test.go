@@ -44,7 +44,21 @@ func TestDefaultConfig(t *testing.T) {
 }
 
 func TestLoadConfig(t *testing.T) {
+	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// Save original environment and set to non-existent path to avoid personal config
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
 	t.Run("no config file uses defaults", func(t *testing.T) {
+		// Set BKPDIR_CONFIG to non-existent path to ensure only defaults are used
+		os.Setenv("BKPDIR_CONFIG", "/nonexistent/path/config.yml")
+
 		dir := t.TempDir()
 
 		cfg, err := LoadConfig(dir)
@@ -59,8 +73,10 @@ func TestLoadConfig(t *testing.T) {
 	t.Run("config file overrides defaults", func(t *testing.T) {
 		dir := t.TempDir()
 
-		// Create test config file
+		// Create test config file and set BKPDIR_CONFIG to use only this file
 		createTestConfigFile(t, dir)
+		configPath := filepath.Join(dir, ".bkpdir.yml")
+		os.Setenv("BKPDIR_CONFIG", configPath)
 
 		cfg, err := LoadConfig(dir)
 		if err != nil {
@@ -76,13 +92,14 @@ func TestLoadConfig(t *testing.T) {
 	t.Run("invalid config file returns error", func(t *testing.T) {
 		dir := t.TempDir()
 
-		// Create invalid YAML file
+		// Create invalid YAML file and set BKPDIR_CONFIG to use only this file
 		invalidYAML := "invalid: yaml: content: ["
 		configPath := filepath.Join(dir, ".bkpdir.yml")
 		err := os.WriteFile(configPath, []byte(invalidYAML), 0644)
 		if err != nil {
 			t.Fatalf("Failed to write invalid config: %v", err)
 		}
+		os.Setenv("BKPDIR_CONFIG", configPath)
 
 		// Should still return a config (with defaults) even if YAML is invalid
 		cfg, err := LoadConfig(dir)
@@ -217,7 +234,21 @@ func TestGetConfigSearchPath(t *testing.T) {
 
 // 🔺 CFG-001: Test GetConfigValuesWithSources for comprehensive configuration value extraction - 🔍
 func TestGetConfigValuesWithSources(t *testing.T) {
+	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// Save original environment and set to non-existent path to avoid personal config
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
 	t.Run("default configuration sources", func(t *testing.T) {
+		// Set BKPDIR_CONFIG to non-existent path to ensure only defaults are used
+		os.Setenv("BKPDIR_CONFIG", "/nonexistent/path/config.yml")
+
 		dir := t.TempDir()
 		cfg := DefaultConfig()
 
@@ -271,7 +302,7 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 	t.Run("configuration with custom file", func(t *testing.T) {
 		dir := t.TempDir()
 
-		// Create custom config file
+		// Create custom config file and set BKPDIR_CONFIG to use only this file
 		configPath := filepath.Join(dir, ".bkpdir.yml")
 		configData := map[string]interface{}{
 			"archive_dir_path":       "/custom/archives",
@@ -282,6 +313,7 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 			"status_disk_full":       99,
 		}
 		createTestConfigFileWithData(t, configPath, configData)
+		os.Setenv("BKPDIR_CONFIG", configPath)
 
 		// Load config and get values with sources
 		cfg, err := LoadConfig(dir)
@@ -333,6 +365,9 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 	})
 
 	t.Run("values are sorted alphabetically", func(t *testing.T) {
+		// Set BKPDIR_CONFIG to non-existent path to ensure only defaults are used
+		os.Setenv("BKPDIR_CONFIG", "/nonexistent/path/config.yml")
+
 		dir := t.TempDir()
 		cfg := DefaultConfig()
 
@@ -349,7 +384,21 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 
 // 🔺 CFG-001: Test determineConfigSource for config file source detection - 🔍
 func TestDetermineConfigSource(t *testing.T) {
+	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// Save original environment and set to non-existent path to avoid personal config
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
 	t.Run("no config file returns default", func(t *testing.T) {
+		// Set BKPDIR_CONFIG to non-existent path to ensure defaults are used
+		os.Setenv("BKPDIR_CONFIG", "/nonexistent/path/config.yml")
+
 		dir := t.TempDir()
 
 		source := determineConfigSource(dir)
@@ -362,12 +411,13 @@ func TestDetermineConfigSource(t *testing.T) {
 	t.Run("existing config file returns path", func(t *testing.T) {
 		dir := t.TempDir()
 
-		// Create config file
+		// Create config file and set BKPDIR_CONFIG to use only this file
 		configPath := filepath.Join(dir, ".bkpdir.yml")
 		err := os.WriteFile(configPath, []byte("archive_dir_path: /test"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create config file: %v", err)
 		}
+		os.Setenv("BKPDIR_CONFIG", configPath)
 
 		source := determineConfigSource(dir)
 
@@ -386,6 +436,8 @@ func TestDetermineConfigSource(t *testing.T) {
 		}
 
 		homeConfigPath := filepath.Join(homeDir, ".bkpdir.yml")
+		// Set BKPDIR_CONFIG to check home config path
+		os.Setenv("BKPDIR_CONFIG", homeConfigPath)
 
 		// Only test if home config doesn't exist to avoid interfering with real config
 		if _, err := os.Stat(homeConfigPath); os.IsNotExist(err) {

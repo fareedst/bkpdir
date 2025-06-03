@@ -106,6 +106,7 @@ For detailed guidelines on how to document and track features, please refer to [
 |------------|---------------|--------------|--------------|---------|--------|----------------------|-------------|
 | TEST-001 | Comprehensive formatter testing | Test coverage requirements | Test Infrastructure | TestFormatterCoverage | ✅ Completed | `// TEST-001: Formatter testing` | 🎯 HIGH |
 | TEST-002 | Tools directory test coverage | Test coverage requirements | Test Infrastructure | TestToolsCoverage | ✅ Completed | `// TEST-002: Tools directory testing` | 🎯 HIGH |
+| TEST-FIX-001 | Personal config isolation in tests | Test reliability requirements | Test Infrastructure | TestConfigIsolation | ✅ Completed | `// TEST-FIX-001: Config isolation` | 🎯 HIGH |
 | TEST-INFRA-001-B | Disk space simulation framework | Testing infrastructure requirements | Test Infrastructure | TestDiskSpaceSimulation | ✅ Completed | `// TEST-INFRA-001-B: Disk space simulation framework` | 🎯 HIGH |
 | TEST-INFRA-001-E | Error injection framework | Testing infrastructure requirements | Test Infrastructure | TestErrorInjection | ✅ Completed | `// TEST-INFRA-001-E: Error injection framework` | 🎯 HIGH |
 
@@ -228,6 +229,34 @@ The codebase has excellent test coverage (73.5%) and comprehensive testing infra
      - Ensure proper error handling in critical quality assurance tools
      - **Coverage Achievement**: Eliminated the `[no test files]` warning and achieved comprehensive test coverage for critical quality assurance tools
      - **Test Integration**: Successfully integrated with existing test infrastructure (TEST-INFRA-001 components) for robust testing patterns
+
+2.2. **Personal Configuration Isolation in Tests** (TEST-FIX-001) - **HIGH PRIORITY** ✅ **COMPLETED**
+   - [x] **Identify failing tests affected by personal config** - Tests that fail when `~/.bkpdir.yml` exists with non-default values
+   - [x] **Fix TestLoadConfig function** - Set BKPDIR_CONFIG to avoid personal config interference
+   - [x] **Fix TestDetermineConfigSource function** - Ensure tests use only test-specific config files
+   - [x] **Fix TestGetConfigValuesWithSources function** - Isolate configuration source testing
+   - [x] **Fix TestMain_HandleConfigCommand function** - Prevent personal config from affecting main tests
+   - [x] **Update createTestConfig helper function** - Ensure helper functions set proper environment isolation
+   - [x] **Validate all tests pass with personal config present** - Comprehensive testing with personal config interference
+   - **Rationale**: Tests should be deterministic and not affected by developer's personal configuration files
+   - **Status**: ✅ **COMPLETED** - All affected tests now properly isolated from personal configuration
+   - **Priority**: High - Essential for reliable test execution across different development environments
+   - **Implementation Areas**:
+     - Configuration test functions in `config_test.go` ✅ **COMPLETED**
+     - Main test functions in `main_test.go` ✅ **COMPLETED**
+     - Test helper functions for configuration setup ✅ **COMPLETED**
+   - **Dependencies**: None (test infrastructure improvement)
+   - **Implementation Tokens**: `// TEST-FIX-001: Config isolation`
+   - **Expected Outcomes**:
+     - Tests pass consistently regardless of personal config file presence ✅ **ACHIEVED**
+     - Deterministic test behavior across development environments ✅ **ACHIEVED**
+     - Proper isolation using BKPDIR_CONFIG environment variable ✅ **ACHIEVED**
+   - **Implementation Notes**:
+     - **Fixed Functions**: TestLoadConfig, TestDetermineConfigSource, TestGetConfigValuesWithSources, TestMain_HandleConfigCommand, createTestConfig helper
+     - **Environment Variable Strategy**: Set BKPDIR_CONFIG to non-existent paths for default testing, specific test config paths for custom testing
+     - **Comprehensive Testing**: Verified fixes work by creating temporary personal config with non-default values and confirming all tests pass
+     - **Backward Compatibility**: All existing test functionality preserved while adding proper isolation
+     - **Test Coverage**: All affected test functions now include proper environment variable setup and cleanup
 
 3. **Review Git Integration Features** (HIGH PRIORITY - Feature Analysis) ✅ **COMPLETED**
    - [x] Review existing Git integration features (GIT-001, GIT-002)
