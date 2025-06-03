@@ -28,6 +28,8 @@ This checklist helps AI assistants determine which context documentation files n
 🏁 COMPLETION: Change status to "Completed" when done
 ```
 
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
+
 ### 🔍 ai-assistant-compliance.md [MANDATORY CHECK]
 **When to Check**: Before ANY code change
 **AI Action**: ✅ Always review for token requirements
@@ -202,5 +204,8 @@ Before marking any task complete:
 - [ ] 🧪 All tests pass (`make test`)
 - [ ] 🔧 All lint checks pass (`make lint`)
 - [ ] 🏁 Marked Feature ID as "Completed" in feature-tracking.md
+- [ ] 🚨 **CRITICAL**: Updated BOTH feature registry table AND detailed subtask blocks with completion status
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
 **🤖 Remember: Better to update too much documentation than too little. When in doubt, include the update!**

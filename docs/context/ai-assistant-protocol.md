@@ -20,6 +20,8 @@ After ALL code changes are complete:
 3. **📝 Documentation Updates**: All required documentation files updated per this protocol
 4. **🏁 Task Completion**: Update task status to "Completed" in `feature-tracking.md`
 
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
+
 ## 🤖 AI Assistant Decision Engine
 
 ### 🔍 Step 1: Task Identification and Validation (EXECUTE FIRST)
@@ -394,6 +396,16 @@ make lint || echo "❌ CRITICAL: Lint failures"
 echo "🏁 Task marked complete in feature-tracking.md"
 ```
 
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
+
+### ✅ After Code Changes [PRIORITY 3]
+1. **🧪 Full Test Validation**: All tests must pass
+2. **🔧 Lint Compliance**: All lint checks must pass  
+3. **📊 Documentation Validation**: Run validation scripts
+4. **🏁 Task Completion**: Mark task complete in `feature-tracking.md`
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
+
 ## 🚨 AI Assistant Mandatory Compliance
 
 ### 🛡️ Before ANY Code Change [PRIORITY 1]
@@ -412,6 +424,8 @@ echo "🏁 Task marked complete in feature-tracking.md"
 2. **🔧 Lint Compliance**: All lint checks must pass  
 3. **📊 Documentation Validation**: Run validation scripts
 4. **🏁 Task Completion**: Mark task complete in `feature-tracking.md`
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
 ### 🎯 Validation Commands
 ```bash

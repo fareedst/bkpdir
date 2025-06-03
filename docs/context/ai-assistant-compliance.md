@@ -176,6 +176,9 @@ When making ANY code changes, you MUST:
 - **🆕 DOC-007**: Include appropriate action category icons
 - **🆕 DOC-008**: Pass comprehensive icon validation (`make validate-icon-enforcement`)
 - **🆕 DOC-008**: Generate clean validation report with zero critical errors
+- **🚨 DOC-008**: Update BOTH feature registry table AND detailed subtask blocks when marking tasks completed
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
 **✅ ACCEPT code changes that:**
 - Clearly state which tokens are affected
@@ -186,6 +189,7 @@ When making ANY code changes, you MUST:
 - **🆕 DOC-007**: Maintain icon consistency between code and documentation
 - **🆕 DOC-008**: Pass all validation categories in DOC-008 comprehensive system
 - **🆕 DOC-008**: Include validation report summary in change description
+- **🚨 DOC-008**: Demonstrate completion consistency between registry table and subtask blocks
 
 ## 🤖 MANDATORY AI VALIDATION CHECKLIST
 
@@ -226,6 +230,14 @@ Before any AI assistant provides code changes, it MUST validate:
    - [ ] Listed which context files need updates
    - [ ] Specified what changes are needed in each file
    - [ ] Provided update templates or examples
+
+7. **🏁 TASK COMPLETION CONSISTENCY** [PRIORITY: CRITICAL]
+   - [ ] Updated feature registry table status to "Completed"
+   - [ ] Updated ALL detailed subtask blocks with checkmarks [x]
+   - [ ] Verified consistency between table and subtask completion status
+   - [ ] Ensured DOC-008 enforcement compliance
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
 ## 📋 AI RESPONSE TEMPLATE (REQUIRED FORMAT)
 

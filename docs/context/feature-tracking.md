@@ -7,6 +7,8 @@ This document serves as a master index linking features across all documentation
 > 
 > **🔧 For Validation Tools**: See [`validation-automation.md`](validation-automation.md) for comprehensive validation scripts, automation tools, and AI assistant compliance requirements.
 
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
+
 ## ⚡ AI ASSISTANT PRIORITY SYSTEM
 
 ### 🚨 CRITICAL PRIORITY ICONS [AI Must Execute FIRST]
@@ -37,6 +39,8 @@ This document serves as a master index linking features across all documentation
 
 ### 🚨 CRITICAL RULE: NO CODE CHANGES WITHOUT CONTEXT UPDATES
 **ALL code modifications MUST include corresponding updates to relevant context documentation files. Failure to update context files invalidates the change.**
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
 ### 📋 MANDATORY CONTEXT FILE CHECKLIST
 

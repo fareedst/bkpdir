@@ -496,6 +496,9 @@ AI assistants MUST REFUSE to provide code changes if:
 - No new tokens are proposed for new functionality
 - Context file updates are not specified
 - Documentation cross-references are missing
+- **🚨 NEW**: Feature registry table and detailed subtask blocks show inconsistent completion status
+
+> **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
 #### **✅ STEP 4: MANDATORY APPROVAL CRITERIA**
 
@@ -505,6 +508,7 @@ AI assistants should ONLY proceed if their response:
 - Links to relevant sections in all context files
 - Proposes concrete updates to affected documentation
 - Follows established token naming conventions (ARCH-, FILE-, CFG-, etc.)
+- **🚨 NEW**: Demonstrates consistency between feature registry table and detailed subtask completion status
 
 ### 🔄 ENFORCEMENT SUMMARY
 
