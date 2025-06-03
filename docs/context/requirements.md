@@ -1236,6 +1236,52 @@ if !containsAllTypes(detected, expectedTypes) {
 
 ## 🔻 AI-First Documentation and Code Maintenance Requirements
 
+### DOC-011: Token Validation Integration for AI Assistants Requirements
+**Priority**: 🔺 HIGH  
+**Implementation Tokens**: `// DOC-011: AI validation integration`
+
+#### Core AI Workflow Integration Requirements
+- **R-DOC-011-1**: AI workflow validation hooks MUST integrate seamlessly with existing DOC-008 validation framework
+- **R-DOC-011-2**: Pre-submission validation MUST prevent non-compliant changes from being submitted
+- **R-DOC-011-3**: Validation feedback MUST be optimized for AI assistant comprehension and remediation
+- **R-DOC-011-4**: Integration MUST provide zero-friction validation without disrupting AI workflows
+- **R-DOC-011-5**: All validation processes MUST support automated execution by AI assistants
+
+#### AI-Optimized Error Reporting Requirements
+- **R-DOC-011-6**: Error messages MUST be structured for AI assistant parsing and understanding
+- **R-DOC-011-7**: Validation feedback MUST include clear remediation steps and context
+- **R-DOC-011-8**: Error formatting MUST be consistent and machine-readable
+- **R-DOC-011-9**: Validation results MUST include specific file and line references for AI navigation
+- **R-DOC-011-10**: Error categorization MUST enable AI assistants to prioritize remediation actions
+
+#### Pre-submission Validation API Requirements
+- **R-DOC-011-11**: API endpoints MUST provide real-time validation before code submission
+- **R-DOC-011-12**: Validation checks MUST be executable via command-line interfaces for AI automation
+- **R-DOC-011-13**: API responses MUST include comprehensive validation results and status
+- **R-DOC-011-14**: Pre-submission hooks MUST integrate with existing Makefile validation targets
+- **R-DOC-011-15**: Validation API MUST support batch processing for multiple file changes
+
+#### Bypass Mechanism Requirements
+- **R-DOC-011-16**: Safe bypass mechanisms MUST require explicit documentation and justification
+- **R-DOC-011-17**: Bypass workflows MUST maintain comprehensive audit trails for compliance monitoring
+- **R-DOC-011-18**: Override mechanisms MUST be restricted to exceptional cases with appropriate controls
+- **R-DOC-011-19**: Bypass documentation MUST be automatically generated and tracked
+- **R-DOC-011-20**: All bypass actions MUST be reversible and include rollback procedures
+
+#### Compliance Monitoring Requirements
+- **R-DOC-011-21**: Comprehensive tracking MUST monitor AI assistant adherence to validation requirements
+- **R-DOC-011-22**: Compliance dashboards MUST provide visibility into AI assistant validation behavior
+- **R-DOC-011-23**: Monitoring data MUST enable identification of validation bottlenecks and issues
+- **R-DOC-011-24**: Compliance reporting MUST integrate with feature-tracking.md status updates
+- **R-DOC-011-25**: Monitoring infrastructure MUST support real-time compliance assessment
+
+#### Integration and Dependency Requirements
+- **R-DOC-011-26**: Integration MUST depend on DOC-008 comprehensive validation system as foundation
+- **R-DOC-011-27**: Implementation MUST require DOC-009 clean baseline for optimal effectiveness
+- **R-DOC-011-28**: Validation hooks MUST integrate with ai-assistant-protocol.md compliance requirements
+- **R-DOC-011-29**: System MUST leverage existing DOC-007 implementation token standardization
+- **R-DOC-011-30**: Integration MUST maintain backward compatibility with existing validation workflows
+
 ### DOC-013: AI-First Documentation and Code Maintenance Requirements
 **Priority**: 🔻 LOW  
 **Implementation Tokens**: `// DOC-013: AI-first maintenance`
