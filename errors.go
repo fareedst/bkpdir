@@ -188,18 +188,31 @@ func NewArchiveErrorWithContext(
 
 // NewBackupError creates a new structured backup error
 // 🔶 REFACTOR-004: Standardized constructor pattern matching ArchiveError - 🔧
-func NewBackupError(message string, statusCode int, operation, path string) *BackupError {
+func NewBackupError(message string, statusCode int) *BackupError {
 	return &BackupError{
 		Message:    message,
 		StatusCode: statusCode,
-		Operation:  operation,
-		Path:       path,
 	}
 }
 
 // NewBackupErrorWithCause creates a new structured backup error with underlying cause
 // 🔶 REFACTOR-004: Standardized constructor with cause pattern matching ArchiveError - 🔧
-func NewBackupErrorWithCause(message string, statusCode int, operation, path string, err error) *BackupError {
+func NewBackupErrorWithCause(message string, statusCode int, err error) *BackupError {
+	return &BackupError{
+		Message:    message,
+		StatusCode: statusCode,
+		Err:        err,
+	}
+}
+
+// NewBackupErrorWithContext creates a new structured backup error with operation context
+// 🔶 REFACTOR-004: Standardized constructor with full context pattern matching ArchiveError - 🔧
+func NewBackupErrorWithContext(
+	message string,
+	statusCode int,
+	operation, path string,
+	err error,
+) *BackupError {
 	return &BackupError{
 		Message:    message,
 		StatusCode: statusCode,
