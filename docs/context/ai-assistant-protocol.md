@@ -4,7 +4,7 @@
 
 ## 🚨 CRITICAL COMPLIANCE REQUIREMENTS
 
-### **MANDATORY PRE-WORK VALIDATION**
+### **🛡️ MANDATORY PRE-WORK VALIDATION** (Priority 1 - Must Execute First)
 Before making ANY code changes:
 
 1. **📋 Task Verification**: The task MUST exist in `feature-tracking.md` with a valid Feature ID
@@ -12,17 +12,17 @@ Before making ANY code changes:
 3. **📁 File Impact Analysis**: Use this guide to determine which documentation files require updates
 4. **🛡️ Immutable Check**: Verify no changes violate requirements in `immutable.md`
 
-### **MANDATORY POST-WORK COMPLETION**
+### **✅ MANDATORY POST-WORK COMPLETION** (Priority 2 - Must Execute Last)
 After ALL code changes are complete:
 
-1. **✅ Full Test Suite**: All tests must pass (`make test`)
+1. **🧪 Full Test Suite**: All tests must pass (`make test`)
 2. **🔧 Lint Compliance**: All lint checks must pass (`make lint`)
 3. **📝 Documentation Updates**: All required documentation files updated per this protocol
 4. **🏁 Task Completion**: Update task status to "Completed" in `feature-tracking.md`
 
 ## 🤖 AI Assistant Decision Engine
 
-### Step 1: Task Identification and Validation
+### 🔍 Step 1: Task Identification and Validation (EXECUTE FIRST)
 ```
 REQUIRED: Before any code modification
 ├─ 📋 Does Feature ID exist in feature-tracking.md? → YES: Continue | NO: STOP - Create task first
@@ -31,74 +31,86 @@ REQUIRED: Before any code modification
 └─ 🛡️ Any immutable requirement conflicts? → Check immutable.md
 ```
 
-### Step 2: Change Type Classification
+### 🎯 Step 2: Change Type Classification (EXECUTE SECOND)
 ```
 What type of change are you making?
-├─ 🆕 NEW FEATURE → Execute: NEW FEATURE Protocol
-├─ 🔧 MODIFY EXISTING → Execute: MODIFICATION Protocol  
-├─ 🐛 BUG FIX → Execute: BUG FIX Protocol
-├─ ⚙️ CONFIG CHANGE → Execute: CONFIG CHANGE Protocol
-├─ 🔌 API/INTERFACE → Execute: API CHANGE Protocol
-├─ 🧪 TEST ONLY → Execute: TEST ADDITION Protocol
-├─ 🚀 PERFORMANCE → Execute: PERFORMANCE Protocol
-└─ 🔄 REFACTORING → Execute: REFACTORING Protocol
+├─ 🆕 NEW FEATURE → Execute: NEW FEATURE Protocol [Priority: HIGH]
+├─ 🔧 MODIFY EXISTING → Execute: MODIFICATION Protocol [Priority: HIGH]
+├─ 🐛 BUG FIX → Execute: BUG FIX Protocol [Priority: MEDIUM]
+├─ ⚙️ CONFIG CHANGE → Execute: CONFIG CHANGE Protocol [Priority: MEDIUM]
+├─ 🔌 API/INTERFACE → Execute: API CHANGE Protocol [Priority: HIGH]
+├─ 🧪 TEST ONLY → Execute: TEST ADDITION Protocol [Priority: LOW]
+├─ 🚀 PERFORMANCE → Execute: PERFORMANCE Protocol [Priority: MEDIUM]
+└─ 🔄 REFACTORING → Execute: REFACTORING Protocol [Priority: LOW]
 ```
 
-### Step 3: Execute Protocol and Validate
+### ✅ Step 3: Execute Protocol and Validate (EXECUTE THIRD)
 ```
 For each protocol:
-├─ 📝 Update REQUIRED files (marked with ✅)
-├─ 📊 Evaluate CONDITIONAL files (marked with ⚠️)
-├─ ❌ Skip files marked as SKIP
-├─ 🔧 Add implementation tokens to code
-├─ ✅ Run validation checks
-└─ 🏁 Mark task complete in feature-tracking.md
+├─ 📝 Update REQUIRED files (marked with ✅ HIGH PRIORITY)
+├─ 📊 Evaluate CONDITIONAL files (marked with ⚠️ MEDIUM PRIORITY)
+├─ ❌ Skip files marked as SKIP (NO ACTION)
+├─ 🔧 Add implementation tokens to code (MANDATORY)
+├─ ✅ Run validation checks (MANDATORY)
+└─ 🏁 Mark task complete in feature-tracking.md (MANDATORY)
 ```
 
 ## 🔧 AI Assistant Change Protocols
 
-### 🆕 NEW FEATURE Protocol
-**🚨 MANDATORY ACTIONS:**
-1. **Verify Feature ID exists in feature-tracking.md** - Must have valid `FEATURE-001` format
-2. **Update REQUIRED files:**
+### 🆕 NEW FEATURE Protocol [PRIORITY: CRITICAL]
+**🚨 MANDATORY ACTIONS (Execute in Order):**
+
+**Phase 1: Pre-Implementation Validation 🔍**
+1. **📋 Feature ID Verification**: Must exist in feature-tracking.md with valid `FEATURE-001` format
+2. **🛡️ Immutable Check**: Verify no conflicts with immutable.md requirements
+
+**Phase 2: Documentation Updates 📝**
+3. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Add feature entry with status "In Progress"
    - ✅ `specification.md` - Document user-facing behavior
    - ✅ `requirements.md` - Add implementation requirements
    - ✅ `architecture.md` - Document technical implementation
    - ✅ `testing.md` - Add test coverage requirements
 
-3. **Evaluate CONDITIONAL files:**
+4. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
    - ⚠️ `implementation-decisions.md` - IF making significant architectural decisions
    - ⚠️ `validation-automation.md` - IF adding new validation processes
    - ⚠️ `sync-framework.md` - IF feature affects data synchronization
    - ⚠️ `ai-assistant-compliance.md` - IF feature involves AI assistant guidance
 
-4. **Add implementation tokens:**
+**Phase 3: Implementation 💻**
+5. **🏷️ Add implementation tokens:**
    ```go
    // FEATURE-ID: Brief description of implementation
    ```
 
-5. **NEVER modify these files:**
+**Phase 4: Quality Assurance ✅**
+6. **🚫 NEVER modify these files:**
    - ❌ `immutable.md` - Only check for conflicts
    - ❌ `enforcement-mechanisms.md` - Reference only
    - ❌ Process files (`feature-change-protocol.md`, etc.) - Reference only
 
-**🏁 COMPLETION CRITERIA:**
-- All tests pass
-- All lint checks pass
-- All required documentation updated
-- Feature status set to "Completed" in `feature-tracking.md`
+**🏁 COMPLETION CRITERIA (All Must Pass):**
+- ✅ All tests pass
+- ✅ All lint checks pass
+- ✅ All required documentation updated
+- ✅ Feature status set to "Completed" in `feature-tracking.md`
 
-### 🔧 MODIFICATION Protocol
-**🚨 MANDATORY ACTIONS:**
-1. **Lookup existing Feature ID in feature-tracking.md**
-2. **Create modification entry** - Add `-MOD-001` suffix to Feature ID
-3. **Impact Analysis:**
+### 🔧 MODIFICATION Protocol [PRIORITY: CRITICAL]
+**🚨 MANDATORY ACTIONS (Execute in Order):**
+
+**Phase 1: Feature Discovery 🔍**
+1. **📋 Lookup existing Feature ID** in feature-tracking.md
+2. **🆔 Create modification entry** - Add `-MOD-001` suffix to Feature ID
+
+**Phase 2: Impact Analysis 📊**
+3. **🔍 Impact Analysis:**
    - Find "Implementation Tokens" for the feature
    - Identify all files listed in the feature's registry entry
    - Update ALL files containing the modified feature
 
-4. **Update files based on impact:**
+**Phase 3: Documentation Updates 📝**
+4. **✅ HIGH PRIORITY - Update files based on impact:**
    - ✅ `feature-tracking.md` - Update feature entry with modification suffix
    - ⚠️ `specification.md` - IF user-facing behavior changes
    - ⚠️ `requirements.md` - IF implementation requirements change
@@ -106,115 +118,197 @@ For each protocol:
    - ⚠️ `testing.md` - IF test requirements change
    - ⚠️ `implementation-decisions.md` - IF architectural decisions change
 
-5. **Update implementation tokens:**
+**Phase 4: Implementation 💻**
+5. **🏷️ Update implementation tokens:**
    ```go
    // FEATURE-ID-MOD-001: Modification description
    ```
 
 **🏁 COMPLETION CRITERIA:**
-- All affected files updated per feature registry
-- All tests pass
-- All lint checks pass
-- Modification documented in `feature-tracking.md`
+- ✅ All affected files updated per feature registry
+- ✅ All tests pass
+- ✅ All lint checks pass
+- ✅ Modification documented in `feature-tracking.md`
 
-### 🐛 BUG FIX Protocol
-**🚨 MINIMAL ACTIONS (Most changes skip documentation):**
-1. **Check if bug affects documented behavior**
-2. **Update files ONLY if necessary:**
+### 🐛 BUG FIX Protocol [PRIORITY: MEDIUM]
+**🚨 MINIMAL ACTIONS (Streamlined Process):**
+
+**Phase 1: Impact Assessment 🔍**
+1. **📊 Check if bug affects documented behavior**
+
+**Phase 2: Selective Updates 📝**
+2. **⚠️ Update files ONLY if necessary:**
    - ⚠️ `feature-tracking.md` - ONLY if fix affects documented behavior
    - ❌ SKIP: `specification.md` - Unless bug affects documented behavior
    - ❌ SKIP: `requirements.md` - Unless bug reveals requirement gap
    - ❌ SKIP: `architecture.md` - Unless architectural issue
    - ❌ SKIP: `testing.md` - Unless adding regression tests
 
-3. **Add implementation tokens to code changes**
+**Phase 3: Implementation 💻**
+3. **🏷️ Add implementation tokens** to code changes
 
 **🏁 COMPLETION CRITERIA:**
-- All tests pass
-- All lint checks pass
-- Minimal documentation updates only
+- ✅ All tests pass
+- ✅ All lint checks pass
+- ✅ Minimal documentation updates only
 
-### ⚙️ CONFIG CHANGE Protocol
+### ⚙️ CONFIG CHANGE Protocol [PRIORITY: MEDIUM]
 **🚨 MANDATORY ACTIONS:**
-1. **Update REQUIRED files:**
+
+**Phase 1: Documentation Updates 📝**
+1. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update configuration-related features
    - ✅ `specification.md` - IF user-visible configuration changes
    - ✅ `requirements.md` - Update configuration requirements
 
-2. **Usually SKIP:**
+**Phase 2: Optional Updates 📋**
+2. **❌ Usually SKIP:**
    - ❌ `architecture.md` - Unless configuration architecture changes
    - ❌ `testing.md` - Unless configuration testing changes
 
 **🏁 COMPLETION CRITERIA:**
-- Configuration changes documented
-- All tests pass
-- All lint checks pass
+- ✅ Configuration changes documented
+- ✅ All tests pass
+- ✅ All lint checks pass
 
-### 🔌 API CHANGE Protocol
+### 🔌 API CHANGE Protocol [PRIORITY: CRITICAL]
 **🚨 MANDATORY ACTIONS:**
-1. **Update REQUIRED files:**
+
+**Phase 1: Core Documentation 📝**
+1. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update API-related features
    - ✅ `specification.md` - Document API behavior changes
    - ✅ `architecture.md` - Update interface documentation
 
-2. **Evaluate CONDITIONAL files:**
+**Phase 2: Impact Evaluation 📊**
+2. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
    - ⚠️ `sync-framework.md` - IF changes affect synchronization
    - ⚠️ `requirements.md` - IF API requirements change
    - ⚠️ `testing.md` - IF API testing requirements change
 
 **🏁 COMPLETION CRITERIA:**
-- API changes fully documented
-- All interface changes reflected in architecture
-- All tests pass
-- All lint checks pass
+- ✅ API changes fully documented
+- ✅ All interface changes reflected in architecture
+- ✅ All tests pass
+- ✅ All lint checks pass
 
-### 🧪 TEST ADDITION Protocol
+### 🧪 TEST ADDITION Protocol [PRIORITY: LOW]
 **🚨 MANDATORY ACTIONS:**
-1. **Update REQUIRED files:**
+
+**Phase 1: Documentation Updates 📝**
+1. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update test-related features
    - ✅ `testing.md` - Document new test coverage
 
-2. **Usually SKIP:**
+**Phase 2: Usually Skip 📋**
+2. **❌ Usually SKIP:**
    - ❌ `specification.md` - Unless tests reveal specification gaps
    - ❌ `requirements.md` - Unless tests reveal requirement gaps
    - ❌ `architecture.md` - Unless test infrastructure changes
 
 **🏁 COMPLETION CRITERIA:**
-- New tests documented
-- All tests pass (including new ones)
-- All lint checks pass
+- ✅ New tests documented
+- ✅ All tests pass (including new ones)
+- ✅ All lint checks pass
 
-### 🚀 PERFORMANCE Protocol
+### 🚀 PERFORMANCE Protocol [PRIORITY: MEDIUM]
 **🚨 MANDATORY ACTIONS:**
-1. **Update REQUIRED files:**
+
+**Phase 1: Core Documentation 📝**
+1. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update performance-related features
    - ✅ `architecture.md` - Document performance improvements
 
-2. **Evaluate CONDITIONAL files:**
+**Phase 2: Impact Evaluation 📊**
+2. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
    - ⚠️ `requirements.md` - IF performance requirements change
    - ⚠️ `testing.md` - IF performance testing requirements change
    - ⚠️ `specification.md` - IF user-visible performance characteristics change
 
 **🏁 COMPLETION CRITERIA:**
-- Performance improvements documented
-- All tests pass
-- All lint checks pass
+- ✅ Performance improvements documented
+- ✅ All tests pass
 
-### 🔄 REFACTORING Protocol
+### 🔄 REFACTORING Protocol [PRIORITY: LOW]
 **🚨 MANDATORY ACTIONS:**
-1. **Update REQUIRED files:**
+
+**Phase 1: Core Documentation 📝**
+1. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update refactoring-related features
    - ✅ `architecture.md` - Document structural changes
 
-2. **Usually SKIP:**
+**Phase 2: Usually Skip 📋**
+2. **❌ Usually SKIP:**
    - ❌ `specification.md` - Unless user-facing behavior changes
    - ❌ `requirements.md` - Unless requirements are clarified
    - ❌ `testing.md` - Unless test structure changes
 
 **🏁 COMPLETION CRITERIA:**
-- Structural changes documented
-- All tests pass (no regressions)
-- All lint checks pass
+- ✅ Structural changes documented
+- ✅ All tests pass (no regressions)
+- ✅ All lint checks pass
+
+## 🎯 AI Assistant Priority Matrix & Execution Order
+
+### 🚨 CRITICAL PRIORITY [Execute IMMEDIATELY]
+```
+┌─ 🛡️ IMMUTABLE CHECK
+├─ 📋 TASK VERIFICATION  
+├─ 🔍 COMPLIANCE REVIEW
+└─ 📁 IMPACT ANALYSIS
+   ↓
+PROCEED TO IMPLEMENTATION
+```
+
+### ⚡ HIGH PRIORITY [Execute FIRST in Implementation]
+```
+🆕 NEW FEATURE.......... CRITICAL - Full documentation cascade
+🔧 MODIFY EXISTING...... CRITICAL - Impact analysis required  
+🔌 API/INTERFACE........ CRITICAL - Interface documentation required
+```
+
+### 📊 MEDIUM PRIORITY [Execute with Evaluation]
+```
+🐛 BUG FIX.............. MEDIUM - Minimal documentation
+⚙️ CONFIG CHANGE........ MEDIUM - Configuration documentation
+🚀 PERFORMANCE.......... MEDIUM - Architecture documentation
+```
+
+### 📝 LOW PRIORITY [Execute Last]
+```
+🧪 TEST ONLY............ LOW - Testing documentation only
+🔄 REFACTORING.......... LOW - Structural documentation only
+```
+
+## 🤖 AI Decision Tree for File Updates
+
+### 🔍 PRIMARY EVALUATION (Execute for ALL Changes)
+```
+Does this change affect:
+├─ User-facing behavior? → UPDATE: specification.md
+├─ Technical implementation? → UPDATE: architecture.md  
+├─ New requirements? → UPDATE: requirements.md
+├─ Test coverage? → UPDATE: testing.md
+└─ Feature registry? → UPDATE: feature-tracking.md (ALWAYS)
+```
+
+### 📊 SECONDARY EVALUATION (Execute Conditionally)
+```
+Does this change involve:
+├─ Architectural decisions? → EVALUATE: implementation-decisions.md
+├─ Validation processes? → EVALUATE: validation-automation.md
+├─ Data synchronization? → EVALUATE: sync-framework.md
+└─ AI assistant guidance? → EVALUATE: ai-assistant-compliance.md
+```
+
+### ❌ SKIP EVALUATION (Never Update These)
+```
+Process files (Reference Only):
+├─ immutable.md
+├─ enforcement-mechanisms.md
+├─ feature-change-protocol.md
+└─ context-file-checklist.md
+```
 
 ## 📊 AI Assistant File Priority Matrix
 
@@ -249,7 +343,7 @@ For each protocol:
 
 ## 🤖 AI Assistant Implementation Checklist
 
-### Pre-Change Validation
+### 🛡️ Pre-Change Validation [MANDATORY - Execute FIRST]
 ```bash
 # MANDATORY: Execute before any code modification
 echo "🤖 AI Assistant Pre-Change Validation"
@@ -267,7 +361,7 @@ echo "🛡️ Verify no immutable.md conflicts"
 echo "📁 Files requiring updates determined"
 ```
 
-### During Implementation
+### 🔧 During Implementation [MANDATORY - Execute SECOND]
 ```bash
 # MANDATORY: Execute during code changes
 echo "🔧 AI Assistant Implementation Phase"
@@ -282,7 +376,7 @@ echo "📝 Documentation updates in progress"
 echo "🔗 Cross-references maintained"
 ```
 
-### Post-Change Validation
+### ✅ Post-Change Validation [MANDATORY - Execute LAST]
 ```bash
 # MANDATORY: Execute after all changes complete
 echo "✅ AI Assistant Post-Change Validation"
@@ -302,24 +396,24 @@ echo "🏁 Task marked complete in feature-tracking.md"
 
 ## 🚨 AI Assistant Mandatory Compliance
 
-### Before ANY Code Change
-1. **Task Verification**: Feature ID must exist in `feature-tracking.md`
-2. **Compliance Review**: Check `ai-assistant-compliance.md` for specific requirements
-3. **Impact Analysis**: Use appropriate protocol from this guide
-4. **Immutable Check**: Verify no conflicts with `immutable.md`
+### 🛡️ Before ANY Code Change [PRIORITY 1]
+1. **📋 Task Verification**: Feature ID must exist in `feature-tracking.md`
+2. **🔍 Compliance Review**: Check `ai-assistant-compliance.md` for specific requirements
+3. **📊 Impact Analysis**: Use appropriate protocol from this guide
+4. **🛡️ Immutable Check**: Verify no conflicts with `immutable.md`
 
-### During Code Changes
-1. **Implementation Tokens**: Add to ALL modified code sections
-2. **Incremental Documentation**: Update documentation as changes are made
-3. **Cross-Reference Maintenance**: Keep links between documents valid
+### 🔧 During Code Changes [PRIORITY 2]
+1. **🏷️ Implementation Tokens**: Add to ALL modified code sections
+2. **📝 Incremental Documentation**: Update documentation as changes are made
+3. **🔗 Cross-Reference Maintenance**: Keep links between documents valid
 
-### After Code Changes
-1. **Full Test Validation**: All tests must pass
-2. **Lint Compliance**: All lint checks must pass  
-3. **Documentation Validation**: Run validation scripts
-4. **Task Completion**: Mark task complete in `feature-tracking.md`
+### ✅ After Code Changes [PRIORITY 3]
+1. **🧪 Full Test Validation**: All tests must pass
+2. **🔧 Lint Compliance**: All lint checks must pass  
+3. **📊 Documentation Validation**: Run validation scripts
+4. **🏁 Task Completion**: Mark task complete in `feature-tracking.md`
 
-### Validation Commands
+### 🎯 Validation Commands
 ```bash
 # Pre-change validation
 grep "FEATURE-ID" docs/context/feature-tracking.md
@@ -336,26 +430,26 @@ make lint
 
 ## 🔧 AI Assistant Quick Reference
 
-### Feature ID Format
+### 🆔 Feature ID Format
 ```
 PREFIX-###
 Where PREFIX = ARCH|CMD|CFG|API|TEST|GIT|FILE|OUT
 ```
 
-### Implementation Token Format
+### 🏷️ Implementation Token Format
 ```go
 // FEATURE-ID: Brief description
 // FEATURE-ID-MOD-001: Modification description (for changes)
 ```
 
-### Required Status Updates in feature-tracking.md
+### 📊 Required Status Updates in feature-tracking.md
 ```
 Status Options:
 - "Not Started" → "In Progress" → "Completed"
 - "Not Started" → "BLOCKED" (if dependencies missing)
 ```
 
-### Critical Validation Gates
+### ✅ Critical Validation Gates [Execute in Order]
 1. ✅ Task exists in feature-tracking.md
 2. ✅ All required files updated per protocol
 3. ✅ Implementation tokens added to code

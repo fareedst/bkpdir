@@ -1,49 +1,70 @@
 # BkpDir: Directory Archiving and File Backup CLI Application
 
-## Overview
+## 🎯 Overview
 BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories and backups of individual files. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives and file backups, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
 
-> **Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
+> **🛡️ Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
 
-## Documentation Navigation
+## 🤖 AI Assistant Navigation Guide
 
-### For Users
+### 🚨 CRITICAL PRIORITY [AI Must Read First]
+- **🛡️ [Immutable Specifications](immutable.md)** - Core behaviors that cannot change
+- **📋 [Feature Tracking](feature-tracking.md)** - Master feature registry with tokens
+- **🔍 [AI Assistant Compliance](ai-assistant-compliance.md)** - Mandatory token requirements
+
+### 🎯 HIGH PRIORITY [AI Core References]
+- **🏗️ [Architecture](architecture.md)** - System design and technical implementation
+- **📝 [Requirements](requirements.md)** - Implementation details and constraints
+- **🧪 [Testing](testing.md)** - Test coverage requirements and validation
+
+### 📊 MEDIUM PRIORITY [AI Conditional References]
+- **⚙️ Configuration System** - See sections below for user-facing config
+- **🔌 API Integration** - See Git Integration and Output Management sections
+- **🚀 Performance Specifications** - See Quality Assurance section
+
+### 📝 LOW PRIORITY [AI Reference Only]
+- **📚 Documentation Standards** - Reference for formatting only
+- **🔧 Implementation Examples** - Code examples for understanding
+
+## 📋 Documentation Navigation
+
+### 👥 For Users
 - Start with this [Specification](specification.md) document
 - Refer to [Immutable Specifications](immutable.md) for core behaviors that cannot change
 
-### For Developers
+### 👩‍💻 For Developers
 - Begin with [Architecture](architecture.md) for system design
 - Follow [Requirements](requirements.md) for implementation details
 - Use [Testing](testing.md) for test coverage requirements
 
-### For Contributors
+### 🤝 For Contributors
 - Review [Immutable Specifications](immutable.md) first to understand constraints
 - Follow [Testing](testing.md) requirements for all changes
 - Ensure all code passes linting requirements before submission
 
-### Document Maintenance
+### 🔧 Document Maintenance
 - Keep [Specification](specification.md) and [Immutable Specifications](immutable.md) in sync
 - Update [Requirements](requirements.md) with new features
 - Maintain test coverage as per [Testing](testing.md)
 - All changes must preserve existing functionality per [Immutable Specifications](immutable.md)
 
-## Quality Assurance and Code Standards
+## ✅ Quality Assurance and Code Standards
 
-### Linting Requirements
+### 🔧 Linting Requirements
 - All Go code must pass `revive` linter checks before commit
 - Linting configuration is maintained in `.revive.toml`
 - Run linting with `make lint` command
 - Code must follow Go best practices and naming conventions
 - All errors must be properly handled (no unhandled return values)
 
-### Error Handling Standards
+### 🚨 Error Handling Standards
 - All archive and backup operations return structured errors with status codes
 - Enhanced disk space detection for various storage conditions
 - Panic recovery mechanisms prevent application crashes
 - Context support for operation cancellation and timeouts
 - Comprehensive error logging without exposing sensitive information
 
-### Resource Management
+### 🛡️ Resource Management
 - Automatic cleanup of temporary files and directories
 - Thread-safe resource tracking for concurrent operations
 - Atomic file operations to prevent data corruption
