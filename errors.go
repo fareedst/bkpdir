@@ -8,6 +8,7 @@
 package main
 
 import (
+	"bkpdir/pkg/formatter"
 	"context"
 	"fmt"
 	"os"
@@ -549,10 +550,16 @@ func HandleBackupErrorWithInterface(err *BackupError, cfg ErrorConfig, formatter
 	return err.GetStatusCode()
 }
 
-// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 🔍
+// 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 🔧
 // HandleArchiveError provides backward compatibility with concrete types
-func HandleArchiveError(err error, cfg *Config, formatter *OutputFormatter) int {
-	return HandleError(err, cfg, formatter)
+func HandleArchiveError(err error, cfg *Config, formatter formatter.OutputFormatterInterface) int {
+	// Cast to ErrorFormatter interface for HandleError
+	if errorFormatter, ok := formatter.(ErrorFormatter); ok {
+		return HandleError(err, cfg, errorFormatter)
+	}
+	// Fallback: use basic error formatting
+	formatter.PrintError(err.Error())
+	return 1
 }
 
 // 🔶 REFACTOR-005: Extraction preparation - Backward compatibility layer - 📝

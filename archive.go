@@ -9,6 +9,7 @@ package main
 
 import (
 	"archive/zip"
+	"bkpdir/pkg/formatter"
 	"context"
 	"fmt"
 	"io"
@@ -145,23 +146,43 @@ func (a *ConfigToArchiveConfigAdapter) GetStatusConfigError() int {
 // 🔶 REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility - 🔍
 // OutputFormatterToArchiveFormatterAdapter adapts OutputFormatter to ArchiveFormatterInterface
 type OutputFormatterToArchiveFormatterAdapter struct {
-	formatter *OutputFormatter
+	formatter formatter.OutputFormatterInterface
 }
 
 func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunFilesHeader() {
-	a.formatter.PrintDryRunFilesHeader()
+	// Cast to FormatterAdapter to access extended methods
+	if formatterAdapter, ok := a.formatter.(*FormatterAdapter); ok {
+		formatterAdapter.PrintDryRunFilesHeader()
+	} else {
+		a.formatter.PrintError("Dry run files header")
+	}
 }
 
 func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunFileEntry(file string) {
-	a.formatter.PrintDryRunFileEntry(file)
+	// Cast to FormatterAdapter to access extended methods
+	if formatterAdapter, ok := a.formatter.(*FormatterAdapter); ok {
+		formatterAdapter.PrintDryRunFileEntry(file)
+	} else {
+		a.formatter.PrintError(fmt.Sprintf("Would archive: %s", file))
+	}
 }
 
 func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunArchive(path string) {
-	a.formatter.PrintDryRunArchive(path)
+	// Cast to FormatterAdapter to access extended methods
+	if formatterAdapter, ok := a.formatter.(*FormatterAdapter); ok {
+		formatterAdapter.PrintDryRunArchive(path)
+	} else {
+		a.formatter.PrintError(fmt.Sprintf("Would create archive: %s", path))
+	}
 }
 
 func (a *OutputFormatterToArchiveFormatterAdapter) PrintIncrementalCreated(path string) {
-	a.formatter.PrintIncrementalCreated(path)
+	// Cast to FormatterAdapter to access extended methods
+	if formatterAdapter, ok := a.formatter.(*FormatterAdapter); ok {
+		formatterAdapter.PrintIncrementalCreated(path)
+	} else {
+		a.formatter.PrintError(fmt.Sprintf("Created incremental archive: %s", path))
+	}
 }
 
 // 🔶 REFACTOR-005: Extraction preparation - Interface-based archive name generation - 📝

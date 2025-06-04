@@ -351,18 +351,18 @@ func DefaultConfig() *Config {
 		TemplateBackupCreated:     "Created backup: %{path}\n",
 
 		// 🔺 CFG-004: Template-based error message format strings - 📝
-		TemplateDiskFullError:       "Disk full error: %v\n",
-		TemplatePermissionError:     "Permission error: %v\n",
-		TemplateDirectoryNotFound:   "Directory not found: %v\n",
-		TemplateFileNotFound:        "File not found: %v\n",
-		TemplateInvalidDirectory:    "Invalid directory: %v\n",
-		TemplateInvalidFile:         "Invalid file: %v\n",
-		TemplateFailedWriteTemp:     "Failed to write temporary file: %v\n",
-		TemplateFailedFinalizeFile:  "Failed to finalize file: %v\n",
-		TemplateFailedCreateDirDisk: "Failed to create directory on disk: %v\n",
-		TemplateFailedCreateDir:     "Failed to create directory: %v\n",
-		TemplateFailedAccessDir:     "Failed to access directory: %v\n",
-		TemplateFailedAccessFile:    "Failed to access file: %v\n",
+		TemplateDiskFullError:       "Disk full error: %{error}\n",
+		TemplatePermissionError:     "Permission error: %{error}\n",
+		TemplateDirectoryNotFound:   "Directory not found: %{error}\n",
+		TemplateFileNotFound:        "File not found: %{error}\n",
+		TemplateInvalidDirectory:    "Invalid directory: %{error}\n",
+		TemplateInvalidFile:         "Invalid file: %{error}\n",
+		TemplateFailedWriteTemp:     "Failed to write temporary file: %{error}\n",
+		TemplateFailedFinalizeFile:  "Failed to finalize file: %{error}\n",
+		TemplateFailedCreateDirDisk: "Failed to create directory on disk: %{error}\n",
+		TemplateFailedCreateDir:     "Failed to create directory: %{error}\n",
+		TemplateFailedAccessDir:     "Failed to access directory: %{error}\n",
+		TemplateFailedAccessFile:    "Failed to access file: %{error}\n",
 	}
 }
 

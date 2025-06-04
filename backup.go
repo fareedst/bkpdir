@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bkpdir/pkg/formatter"
 	"context"
 	"fmt"
 	"io"
@@ -117,7 +118,7 @@ type Backup struct {
 type BackupOptions struct {
 	Context   context.Context
 	Config    *Config
-	Formatter *OutputFormatter
+	Formatter formatter.OutputFormatterInterface
 	FilePath  string
 	Note      string
 	DryRun    bool
@@ -188,7 +189,7 @@ func generateBackupPath(cfg *Config, filePath, note string) (string, error) {
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-003
 // handleDryRunBackup handles dry run mode output
-func handleDryRunBackup(formatter *OutputFormatter, backupPath string) error {
+func handleDryRunBackup(formatter formatter.OutputFormatterInterface, backupPath string) error {
 	if formatter != nil {
 		formatter.PrintDryRunBackup(backupPath)
 	} else {
@@ -369,7 +370,7 @@ func ListFileBackups(backupDir, baseFilename string) ([]BackupInfo, error) {
 }
 
 // ListFileBackupsEnhanced lists backups with enhanced formatting
-func ListFileBackupsEnhanced(cfg *Config, formatter *OutputFormatter, filePath string) error {
+func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, filePath string) error {
 	baseFilename := filepath.Base(filePath)
 
 	backupDir := cfg.BackupDirPath
@@ -395,14 +396,24 @@ func ListFileBackupsEnhanced(cfg *Config, formatter *OutputFormatter, filePath s
 	}
 
 	if len(backups) == 0 {
-		formatter.PrintNoBackupsFound(baseFilename, backupDir)
+		// Cast to FormatterAdapter to access extended methods
+		if formatterAdapter, ok := formatter.(*FormatterAdapter); ok {
+			formatterAdapter.PrintNoBackupsFound(baseFilename, backupDir)
+		} else {
+			formatter.PrintError(fmt.Sprintf("No backups found for %s in %s", baseFilename, backupDir))
+		}
 		return nil
 	}
 
 	for _, backup := range backups {
 		creationTime := backup.CreationTime.Format("2006-01-02 15:04:05")
-		output := formatter.FormatListBackupWithExtraction(backup.Path, creationTime)
-		fmt.Print(output)
+		if formatterAdapter, ok := formatter.(*FormatterAdapter); ok {
+			output := formatterAdapter.FormatListBackupWithExtraction(backup.Path, creationTime)
+			fmt.Print(output)
+		} else {
+			output := formatter.FormatListBackup(backup.Path, creationTime)
+			fmt.Print(output)
+		}
 	}
 
 	return nil

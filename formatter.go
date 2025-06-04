@@ -171,23 +171,6 @@ type OutputFormatter struct {
 	collector *OutputCollector
 }
 
-// 🔺 CFG-003: Output formatter constructor - 📝
-// IMMUTABLE-REF: Output Formatting Requirements
-// TEST-REF: TestTemplateFormatter
-// DECISION-REF: DEC-003
-// NewOutputFormatter creates a new OutputFormatter with the given configuration.
-// It initializes the formatter with the provided config for use in formatting operations.
-func NewOutputFormatter(cfg *Config) *OutputFormatter {
-	return &OutputFormatter{cfg: cfg, collector: nil}
-}
-
-// 🔶 OUT-001: Output formatter constructor with collector - 📝
-// NewOutputFormatterWithCollector creates a new OutputFormatter with delayed output support.
-// Messages will be collected in the provided OutputCollector instead of being printed immediately.
-func NewOutputFormatterWithCollector(cfg *Config, collector *OutputCollector) *OutputFormatter {
-	return &OutputFormatter{cfg: cfg, collector: collector}
-}
-
 // 🔶 OUT-001: Check if formatter is in delayed output mode - 🔍
 // IsDelayedMode returns true if the formatter is collecting output instead of printing immediately.
 func (f *OutputFormatter) IsDelayedMode() bool {

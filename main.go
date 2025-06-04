@@ -19,10 +19,35 @@ import (
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
+
+	"bkpdir/pkg/formatter"
 )
 
 // 🔶 REFACTOR-001: CLI orchestration interface contracts defined - 📝
 // 🔶 REFACTOR-001: Central dependency aggregation point identified - 📝
+
+// Version, date, and commit are set at build time via ldflags
+var version = "dev"
+var date = "unknown"
+var commit = "unknown"
+
+// 🔺 CFG-003: Global variables for command configuration - 📝
+var (
+	createNote   string
+	createDryRun bool
+	createVerify bool
+	listFile     string
+	archiveName  string
+	withChecksum bool
+)
+
+// Short description for the main application
+var shortDesc = `bkpdir is a comprehensive backup and archiving solution for directories and files.`
+
+// Long description for the main application
+var longDesc = `bkpdir is a comprehensive backup and archiving solution for directories and files.
+It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
+Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
@@ -43,7 +68,6 @@ var (
 	dryRun     bool
 	note       string
 	showConfig bool
-	listFile   string
 )
 
 // Long description for root command
@@ -408,7 +432,7 @@ func versionCmd() *cobra.Command {
 type ArchiveOptions struct {
 	Context   context.Context
 	Config    *Config
-	Formatter *OutputFormatter
+	Formatter formatter.OutputFormatterInterface
 	Note      string
 	DryRun    bool
 	Verify    bool
@@ -432,7 +456,7 @@ func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
 
 // ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
 // and error handling.
-func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
+func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface) error {
 	// ⭐ ARCH-002: Enhanced archive listing with formatting - 🔍
 	// 🔺 CFG-003: Template-based archive listing - 🔍
 	cwd, err := os.Getwd()
@@ -451,7 +475,12 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 	}
 
 	if len(archives) == 0 {
-		formatter.PrintNoArchivesFound(archiveDir)
+		// Cast to FormatterAdapter to access extended methods
+		if formatterAdapter, ok := formatter.(*FormatterAdapter); ok {
+			formatterAdapter.PrintNoArchivesFound(archiveDir)
+		} else {
+			formatter.PrintError(fmt.Sprintf("No archives found in %s", archiveDir))
+		}
 		return nil
 	}
 
@@ -474,10 +503,15 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 
 		// Use enhanced formatting with extraction if possible
 		creationTime := a.CreationTime.Format("2006-01-02 15:04:05")
-		output := formatter.FormatListArchiveWithExtraction(a.Name, creationTime)
-		// Remove trailing newline from output to add status on same line
-		output = strings.TrimSuffix(output, "\n")
-		formatter.PrintArchiveListWithStatus(output, status)
+		if formatterAdapter, ok := formatter.(*FormatterAdapter); ok {
+			output := formatterAdapter.FormatListArchiveWithExtraction(a.Name, creationTime)
+			// Remove trailing newline from output to add status on same line
+			output = strings.TrimSuffix(output, "\n")
+			formatterAdapter.PrintArchiveListWithStatus(output, status)
+		} else {
+			output := formatter.FormatListArchive(a.Name, creationTime)
+			fmt.Printf("%s%s\n", strings.TrimSuffix(output, "\n"), status)
+		}
 	}
 
 	return nil
@@ -486,7 +520,7 @@ func ListArchivesEnhanced(cfg *Config, formatter *OutputFormatter) error {
 // VerifyOptions holds parameters for archive verification functions
 type VerifyOptions struct {
 	Config       *Config
-	Formatter    *OutputFormatter
+	Formatter    formatter.OutputFormatterInterface
 	ArchiveName  string
 	WithChecksum bool
 }
@@ -553,7 +587,12 @@ func verifyAllArchives(opts VerifyOptions, archiveDir string) error {
 	for _, archive := range archives {
 		status, err := performVerification(archive.Path, opts.WithChecksum)
 		if err != nil {
-			opts.Formatter.PrintVerificationFailed(archive.Name, err)
+			// Cast to FormatterAdapter to access extended methods
+			if formatterAdapter, ok := opts.Formatter.(*FormatterAdapter); ok {
+				formatterAdapter.PrintVerificationFailed(archive.Name, err)
+			} else {
+				opts.Formatter.PrintError(fmt.Sprintf("Verification failed for %s: %v", archive.Name, err))
+			}
 			allPassed = false
 			continue
 		}
@@ -830,7 +869,7 @@ func saveConfigData(configPath string, configData map[string]interface{}) {
 // CommandConfig holds configuration for CLI command execution
 type CommandConfig struct {
 	Config    *Config
-	Formatter *OutputFormatter
+	Formatter formatter.OutputFormatterInterface
 	Context   context.Context
 }
 
@@ -882,22 +921,26 @@ func (h *CommandHandler) HandleListArchives(args []string) error {
 	}
 
 	if len(archives) == 0 {
-		h.config.Formatter.PrintNoArchivesFound(archiveDir)
+		// Cast to FormatterAdapter to access extended methods
+		if formatterAdapter, ok := h.config.Formatter.(*FormatterAdapter); ok {
+			formatterAdapter.PrintNoArchivesFound(archiveDir)
+		} else {
+			h.config.Formatter.PrintError(fmt.Sprintf("No archives found in %s", archiveDir))
+		}
 		return nil
 	}
 
 	for _, archive := range archives {
 		creationTime := archive.CreationTime.Format("2006-01-02 15:04:05")
-		status := "[UNVERIFIED]"
-		if archive.VerificationStatus != nil && archive.VerificationStatus.IsVerified {
-			status = "[VERIFIED]"
+		if formatterAdapter, ok := h.config.Formatter.(*FormatterAdapter); ok {
+			output := formatterAdapter.FormatListArchiveWithExtraction(archive.Name, creationTime)
+			fmt.Print(output)
+		} else {
+			output := h.config.Formatter.FormatListArchive(archive.Name, creationTime)
+			fmt.Print(output)
 		}
-		output := h.config.Formatter.FormatListArchiveWithExtraction(archive.Path, creationTime)
-		if !strings.Contains(output, "[") {
-			output = strings.TrimSuffix(output, "\n") + " " + status + "\n"
-		}
-		fmt.Print(output)
 	}
+
 	return nil
 }
 
