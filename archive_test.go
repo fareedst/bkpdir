@@ -19,6 +19,8 @@
 package main
 
 import (
+	"archive/zip"
+	"bytes"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -350,4 +352,62 @@ func TestCreateIncremental(t *testing.T) {
 			t.Logf("CreateIncrementalArchive with no changes: %v", err)
 		}
 	})
+}
+
+func TestSkipBrokenSymlinks(t *testing.T) {
+	// Create a temporary directory for testing
+	tempDir, err := os.MkdirTemp("", "bkpdir_symlink_test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create a regular file
+	regularFile := filepath.Join(tempDir, "regular.txt")
+	if err := os.WriteFile(regularFile, []byte("test content"), 0644); err != nil {
+		t.Fatalf("Failed to create regular file: %v", err)
+	}
+
+	// Create a broken symlink
+	brokenSymlink := filepath.Join(tempDir, "broken_link")
+	if err := os.Symlink("/nonexistent/path", brokenSymlink); err != nil {
+		t.Fatalf("Failed to create broken symlink: %v", err)
+	}
+
+	// Test with SkipBrokenSymlinks = true
+	cfg := &Config{
+		SkipBrokenSymlinks: true,
+	}
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+
+	// Create a zip writer for testing
+	var buf bytes.Buffer
+	zipw := zip.NewWriter(&buf)
+
+	// Test adding the broken symlink - should not fail
+	err = addFileToZipWithConfig(tempDir, "broken_link", zipw, archiveConfig)
+	if err != nil {
+		t.Errorf("Expected no error when skipping broken symlinks, got: %v", err)
+	}
+
+	// Test adding the regular file - should work
+	err = addFileToZipWithConfig(tempDir, "regular.txt", zipw, archiveConfig)
+	if err != nil {
+		t.Errorf("Failed to add regular file: %v", err)
+	}
+
+	zipw.Close()
+
+	// Test with SkipBrokenSymlinks = false
+	cfg.SkipBrokenSymlinks = false
+	var buf2 bytes.Buffer
+	zipw2 := zip.NewWriter(&buf2)
+
+	// Test adding the broken symlink - should fail
+	err = addFileToZipWithConfig(tempDir, "broken_link", zipw2, archiveConfig)
+	if err == nil {
+		t.Error("Expected error when not skipping broken symlinks, got nil")
+	}
+
+	zipw2.Close()
 }

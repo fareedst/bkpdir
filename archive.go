@@ -69,6 +69,7 @@ type ArchiveConfigInterface interface {
 	GetExcludePatterns() []string
 	GetIncludeGitInfo() bool
 	GetShowGitDirtyStatus() bool
+	GetSkipBrokenSymlinks() bool
 	GetVerification() *VerificationConfig
 	GetStatusCodes() map[string]int
 	GetStatusDirectoryNotFound() int
@@ -121,6 +122,10 @@ func (a *ConfigToArchiveConfigAdapter) GetIncludeGitInfo() bool {
 
 func (a *ConfigToArchiveConfigAdapter) GetShowGitDirtyStatus() bool {
 	return a.cfg.ShowGitDirtyStatus
+}
+
+func (a *ConfigToArchiveConfigAdapter) GetSkipBrokenSymlinks() bool {
+	return a.cfg.SkipBrokenSymlinks
 }
 
 func (a *ConfigToArchiveConfigAdapter) GetVerification() *VerificationConfig {
@@ -594,7 +599,7 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	tempFile := cfg.Path + ".tmp"
 	cfg.ResourceMgr.AddTempFile(tempFile)
 
-	if err := createZipArchiveWithContext(cfg.Context, cfg.CWD, tempFile, cfg.Files); err != nil {
+	if err := createZipArchiveWithContextAndConfig(cfg.Context, cfg.CWD, tempFile, cfg.Files, cfg.Config); err != nil {
 		return NewArchiveErrorWithCause(
 			"Failed to create archive",
 			cfg.Config.GetStatusDiskFull(),
@@ -743,7 +748,7 @@ func prepareIncrementalArchiveWithInterface(
 
 // createAndVerifyIncrementalArchive creates and verifies an incremental archive
 func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
-	if err := createZipArchiveWithContext(cfg.Context, cfg.CWD, cfg.Path, cfg.Files); err != nil {
+	if err := createZipArchiveWithContextAndConfig(cfg.Context, cfg.CWD, cfg.Path, cfg.Files, cfg.Config); err != nil {
 		return NewArchiveErrorWithCause(
 			"Failed to create archive",
 			cfg.Config.GetStatusDiskFull(),
@@ -863,6 +868,24 @@ func createZipArchiveWithContext(ctx context.Context, sourceDir, archivePath str
 	return addFilesToZip(ctx, sourceDir, files, zipw)
 }
 
+// createZipArchiveWithContextAndConfig creates a ZIP archive with context cancellation support and configuration
+func createZipArchiveWithContextAndConfig(ctx context.Context, sourceDir, archivePath string, files []string, cfg ArchiveConfigInterface) error {
+	if err := checkContextCancellation(ctx); err != nil {
+		return err
+	}
+
+	f, err := os.Create(archivePath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	zipw := zip.NewWriter(f)
+	defer zipw.Close()
+
+	return addFilesToZipWithConfig(ctx, sourceDir, files, zipw, cfg)
+}
+
 // addFilesToZip adds files to a zip archive
 func addFilesToZip(ctx context.Context, sourceDir string, files []string, zipw *zip.Writer) error {
 	for _, rel := range files {
@@ -871,6 +894,20 @@ func addFilesToZip(ctx context.Context, sourceDir string, files []string, zipw *
 		}
 
 		if err := addFileToZip(sourceDir, rel, zipw); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// addFilesToZipWithConfig adds files to a zip archive with configuration support
+func addFilesToZipWithConfig(ctx context.Context, sourceDir string, files []string, zipw *zip.Writer, cfg ArchiveConfigInterface) error {
+	for _, rel := range files {
+		if err := checkContextCancellation(ctx); err != nil {
+			return err
+		}
+
+		if err := addFileToZipWithConfig(sourceDir, rel, zipw, cfg); err != nil {
 			return err
 		}
 	}
@@ -898,6 +935,85 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 	}
 
 	if !info.IsDir() {
+		// Handle symbolic links specially
+		if info.Mode()&os.ModeSymlink != 0 {
+			// For symlinks, we store the link target, not the file content
+			linkTarget, err := os.Readlink(abs)
+			if err != nil {
+				return err
+			}
+			_, err = w.Write([]byte(linkTarget))
+			return err
+		}
+
+		// Regular file - open and copy content
+		rf, err := os.Open(abs)
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(w, rf)
+		rf.Close()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// addFileToZipWithConfig adds a single file to a zip archive with configuration support for handling broken symlinks
+func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg ArchiveConfigInterface) error {
+	abs := filepath.Join(sourceDir, rel)
+	info, err := os.Lstat(abs)
+	if err != nil {
+		return err
+	}
+
+	hdr, err := zip.FileInfoHeader(info)
+	if err != nil {
+		return err
+	}
+
+	hdr.Name = rel
+	hdr.Method = zip.Deflate
+	w, err := zipw.CreateHeader(hdr)
+	if err != nil {
+		return err
+	}
+
+	if !info.IsDir() {
+		// Handle symbolic links specially
+		if info.Mode()&os.ModeSymlink != 0 {
+			// For symlinks, we store the link target, not the file content
+			linkTarget, err := os.Readlink(abs)
+			if err != nil {
+				// If we can't read the symlink and SkipBrokenSymlinks is enabled, skip this file
+				if cfg.GetSkipBrokenSymlinks() {
+					return nil
+				}
+				return err
+			}
+
+			// Check if the symlink target exists (to detect broken symlinks)
+			targetPath := linkTarget
+			if !filepath.IsAbs(linkTarget) {
+				targetPath = filepath.Join(filepath.Dir(abs), linkTarget)
+			}
+			if _, err := os.Stat(targetPath); os.IsNotExist(err) {
+				// This is a broken symlink
+				if cfg.GetSkipBrokenSymlinks() {
+					// Skip broken symlink
+					return nil
+				}
+				// Return error for broken symlink when not skipping
+				return fmt.Errorf("broken symlink: %s -> %s", abs, linkTarget)
+			}
+
+			_, err = w.Write([]byte(linkTarget))
+			return err
+		}
+
+		// Regular file - open and copy content
 		rf, err := os.Open(abs)
 		if err != nil {
 			return err

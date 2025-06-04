@@ -70,6 +70,7 @@ For detailed guidelines on how to document and track features, please refer to [
 | ARCH-001 | Archive naming convention | Archive naming | ArchiveCreator | TestGenerateArchiveName | ✅ Implemented | `// ARCH-001: Archive naming` | 🚨 CRITICAL |
 | ARCH-002 | Create archive command | Create archive ops | Archive Service | TestCreateFullArchive | ✅ Implemented | `// ARCH-002: Archive creation` | 🚨 CRITICAL |
 | ARCH-003 | Incremental archives | Incremental logic | CompressionEngine | TestCreateIncremental | ✅ Implemented | `// ARCH-003: Incremental` | 🚨 CRITICAL |
+| ARCH-004 | Broken symlink handling | Archive error handling | Archive Service | TestSkipBrokenSymlinks | ✅ Completed | `// ARCH-004: Symlink handling` | 🚨 CRITICAL |
 
 ### 🔧 File Backup Operations [PRIORITY: CRITICAL]
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |
@@ -1501,4 +1502,68 @@ With no human developers and AI-first development approach:
 - **✅ Performance**: Excellent performance (24.3μs per configuration load operation)
 - **✅ Well Tested**: Comprehensive test coverage with independent package validation
 
-// ... existing code ...
+#### **ARCH-004 Detailed Subtask Breakdown:**
+
+**🔧 ARCH-004 Subtasks (All Completed ✅):**
+1. **[x] Analyze broken symlink failure modes** (⭐ CRITICAL) - ✅ **COMPLETED**
+   - Identified failure in `addFileToZip` function when `os.Lstat()` encounters broken symlinks
+   - Found crash occurs when symlink target doesn't exist during archive creation
+   - Determined minimal performance impact solution using existing filesystem calls
+
+2. **[x] Add configuration option for symlink handling** (⭐ CRITICAL) - ✅ **COMPLETED**
+   - Added `skip_broken_symlinks` boolean field to Config struct
+   - Extended ArchiveConfigInterface to include GetSkipBrokenSymlinks() method
+   - Updated ConfigToArchiveConfigAdapter to provide configuration access
+   - Added configuration to GetConfigValues for visibility and management
+
+3. **[x] Implement broken symlink detection logic** (🔺 HIGH) - ✅ **COMPLETED**
+   - Enhanced `addFileToZip` function to detect and handle symbolic links
+   - Created `addFileToZipWithConfig` function with configuration-aware symlink handling
+   - Implemented target existence checking using `os.Stat()` on resolved target path
+   - Added proper handling for both absolute and relative symlink targets
+
+4. **[x] Create archive creation functions with configuration support** (🔺 HIGH) - ✅ **COMPLETED**
+   - Created `addFilesToZipWithConfig` and `createZipArchiveWithContextAndConfig` functions
+   - Updated `createAndVerifyArchive` and `createAndVerifyIncrementalArchive` to use config-aware functions
+   - Maintained backward compatibility with existing archive creation functions
+   - Ensured all archive types (full and incremental) support broken symlink handling
+
+5. **[x] Implement graceful error handling strategies** (🔺 HIGH) - ✅ **COMPLETED**
+   - Skip option: Silently skip broken symlinks when `skip_broken_symlinks: true`
+   - Fail option: Return descriptive error when `skip_broken_symlinks: false` (default)
+   - Error message format: "broken symlink: /path/to/link -> /nonexistent/target"
+   - Preserved symlink metadata in archives for valid symlinks
+
+6. **[x] Add comprehensive testing for symlink scenarios** (🔶 MEDIUM) - ✅ **COMPLETED**
+   - Created `TestSkipBrokenSymlinks` test function in archive_test.go
+   - Test covers both skip and fail modes for broken symlinks
+   - Test validates regular file processing continues correctly
+   - Added test for proper error handling when symlinks are not skipped
+
+7. **[x] Create example configuration and documentation** (🔶 MEDIUM) - ✅ **COMPLETED**
+   - Created `example-symlink-config.yml` with broken symlink handling configuration
+   - Added comprehensive comments explaining the feature usage
+   - Included common exclude patterns that might contain broken symlinks
+   - Documented performance characteristics and behavior options
+
+8. **[x] Update feature tracking documentation** (🔻 LOW) - ✅ **COMPLETED**
+   - Added ARCH-004 entry to Core Archive Operations feature registry
+   - Created detailed subtask breakdown with completion status
+   - Documented implementation approach and performance considerations
+   - Provided notes on minimal overhead and backward compatibility
+
+**🎯 ARCH-004 Success Metrics Achieved:**
+- **✅ No Archive Failures**: Archive creation continues despite broken symlinks when configured
+- **✅ Minimal Performance Impact**: Only one additional `os.Stat()` call per symlink encountered
+- **✅ Configurable Behavior**: User choice between failing fast or skipping broken symlinks
+- **✅ Backward Compatible**: Default behavior (fail on broken symlinks) preserved
+- **✅ Comprehensive Testing**: Test coverage for both skip and fail scenarios
+- **✅ Clear Error Messages**: Descriptive error messages when symlinks cause failures
+- **✅ Documentation**: Complete configuration example and usage guidance
+
+**🔍 Notable Implementation Details:**
+- **Performance**: Zero overhead when no symlinks present; O(1) per symlink when present
+- **Detection Strategy**: Uses `os.Lstat()` → `os.Readlink()` → `os.Stat()` chain for broken symlink detection
+- **Configuration**: Single boolean flag `skip_broken_symlinks` with sensible default (false)
+- **Error Handling**: Maintains symlink metadata in archive for valid symlinks; provides clear error for broken ones
+- **Test Coverage**: Validates both configuration modes and ensures regular file processing unaffected

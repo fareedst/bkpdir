@@ -1,0 +1,25 @@
+# Example configuration for handling broken symbolic links
+# This configuration enables skipping broken symlinks during archive creation
+
+# Basic archive settings
+archive_dir_path: "../.bkpdir"
+use_current_dir_name: true
+
+# Symlink handling - set to true to skip broken symlinks instead of failing
+skip_broken_symlinks: true
+
+# Include Git information in archive names
+include_git_info: true
+show_git_dirty_status: true
+
+# Exclude common directories that might contain broken symlinks
+exclude_patterns:
+  - ".git/"
+  - "vendor/"
+  - "node_modules/"
+  - ".tmp/"
+
+# Verification settings
+verification:
+  verify_on_create: false
+  checksum_algorithm: "sha256" 

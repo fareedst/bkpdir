@@ -61,6 +61,7 @@ type Config struct {
 	ExcludePatterns    []string            `yaml:"exclude_patterns"`
 	IncludeGitInfo     bool                `yaml:"include_git_info"`
 	ShowGitDirtyStatus bool                `yaml:"show_git_dirty_status"`
+	SkipBrokenSymlinks bool                `yaml:"skip_broken_symlinks"`
 	Verification       *VerificationConfig `yaml:"verification"`
 
 	// 🔶 REFACTOR-003: Schema separation - File backup specific settings - 🔧
@@ -239,6 +240,7 @@ func DefaultConfig() *Config {
 		ExcludePatterns:    []string{".git/", "vendor/"},
 		IncludeGitInfo:     false,
 		ShowGitDirtyStatus: true,
+		SkipBrokenSymlinks: false,
 		Verification: &VerificationConfig{
 			VerifyOnCreate:    false,
 			ChecksumAlgorithm: "sha256",
@@ -489,6 +491,9 @@ func mergeBasicSettings(dst, src *Config) {
 	}
 	if src.ShowGitDirtyStatus != DefaultConfig().ShowGitDirtyStatus {
 		dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
+	}
+	if src.SkipBrokenSymlinks != DefaultConfig().SkipBrokenSymlinks {
+		dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
 	}
 	if src.Verification != nil {
 		dst.Verification = src.Verification
@@ -897,6 +902,11 @@ func getBasicConfigValues(cfg, defaultCfg *Config, getSource func(interface{}, i
 			Name:   "include_git_info",
 			Value:  boolToString(cfg.IncludeGitInfo),
 			Source: getSource(cfg.IncludeGitInfo, defaultCfg.IncludeGitInfo),
+		},
+		{
+			Name:   "skip_broken_symlinks",
+			Value:  boolToString(cfg.SkipBrokenSymlinks),
+			Source: getSource(cfg.SkipBrokenSymlinks, defaultCfg.SkipBrokenSymlinks),
 		},
 	}
 }
