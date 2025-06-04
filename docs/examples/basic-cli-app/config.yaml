@@ -1,0 +1,38 @@
+# EXTRACT-010: Basic CLI Application Example Configuration - Sample configuration demonstrating pkg/config integration - 🔺
+
+# Output configuration
+output_format: table  # Options: table, json, yaml, template
+verbose: false
+dry_run: false
+
+# Processing configuration
+processing:
+  batch_size: 100
+  timeout: 10m
+  concurrency: 4
+
+# Output configuration
+output:
+  directory: ./output
+  template: "{{.name}}: {{.status}} ({{.duration}})"
+
+# Advanced configuration examples
+advanced:
+  # Error handling configuration
+  error_handling:
+    continue_on_error: false
+    max_retries: 3
+    retry_delay: 1s
+  
+  # Formatting options
+  formatting:
+    table_headers: true
+    json_indent: true
+    yaml_flow: false
+    template_delims: ["{{", "}}"]
+  
+  # Feature flags
+  features:
+    enable_progress: true
+    enable_colors: true
+    enable_icons: false 
