@@ -1,0 +1,45 @@
+# CLI Template Example File
+
+This file was created by the CLI template application to demonstrate:
+
+1. File Operations (pkg/fileops)
+   - Safe file creation and manipulation
+   - File comparison and verification
+   - Path handling and validation
+
+2. Error Handling (pkg/errors)
+   - Structured error types
+   - Error context and details
+   - Recovery patterns
+
+3. Resource Management (pkg/resources)
+   - Automatic cleanup
+   - Resource tracking
+   - Leak prevention
+
+4. Configuration (pkg/config)
+   - Schema-agnostic loading
+   - Multiple configuration sources
+   - Value merging and validation
+
+5. Output Formatting (pkg/formatter)
+   - Template-based formatting
+   - Printf-style formatting
+   - Structured output
+
+6. Git Integration (pkg/git)
+   - Repository detection
+   - Branch and commit information
+   - Status tracking
+
+7. CLI Framework (pkg/cli)
+   - Command patterns
+   - Flag handling
+   - Context management
+
+8. Concurrent Processing (pkg/processing)
+   - Worker pool patterns
+   - Progress tracking
+   - Context cancellation
+
+Generated at: 2025-01-02

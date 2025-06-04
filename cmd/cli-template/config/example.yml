@@ -1,0 +1,66 @@
+# ⭐ EXTRACT-008: CLI Application Template - Example configuration with custom settings
+# Example configuration showing different options
+
+# Application settings
+app:
+  name: "my-cli-app"
+  version: "2.0.0"
+  description: "My custom CLI application built with extracted packages"
+
+# Output formatting settings (pkg/formatter)
+output:
+  verbose: true
+  color: true
+  format: "json"  # Use JSON output format
+  template_dir: "./custom-templates"
+
+# File operations settings (pkg/fileops)
+files:
+  backup_dir: "./backups"
+  temp_dir: "./tmp"
+  max_file_size: "50MB"
+  allowed_extensions: [".txt", ".md", ".yml", ".yaml", ".json", ".go", ".py"]
+
+# Processing settings (pkg/processing)
+processing:
+  worker_count: 8  # More workers for better performance
+  batch_size: 50
+  timeout: "60s"   # Longer timeout for complex operations
+  retry_count: 5
+
+# Git integration settings (pkg/git)
+git:
+  auto_detect: true
+  include_status: true
+  include_branch: true
+  include_commit: true
+
+# Error handling settings (pkg/errors)
+errors:
+  detailed: true      # Show detailed error information
+  stack_trace: true   # Include stack traces in errors
+  log_file: "./logs/app.log"
+
+# Resource management settings (pkg/resources)
+resources:
+  cleanup_timeout: "30s"
+  max_memory: "1GB"
+  temp_cleanup: true
+
+# CLI framework settings (pkg/cli)
+cli:
+  auto_completion: true
+  help_template: "detailed"
+  command_timeout: "10m"
+
+# Custom application-specific settings
+custom:
+  feature_flags:
+    experimental_features: true
+    beta_processing: false
+  integrations:
+    webhook_url: "https://example.com/webhook"
+    api_key: "${API_KEY}"  # Environment variable
+  notifications:
+    email: "admin@example.com"
+    slack_channel: "#alerts" 

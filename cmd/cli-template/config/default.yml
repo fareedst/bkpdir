@@ -1,0 +1,54 @@
+# ⭐ EXTRACT-008: CLI Application Template - Default configuration template
+# Default configuration for CLI Template Application
+
+# Application settings
+app:
+  name: "cli-template"
+  version: "1.0.0"
+  description: "CLI Template demonstrating extracted packages"
+
+# Output formatting settings (pkg/formatter)
+output:
+  verbose: false
+  color: true
+  format: "text"  # text, json, yaml
+  template_dir: "./templates"
+
+# File operations settings (pkg/fileops)
+files:
+  backup_dir: "./.backups"
+  temp_dir: "/tmp/cli-template"
+  max_file_size: "100MB"
+  allowed_extensions: [".txt", ".md", ".yml", ".yaml", ".json"]
+
+# Processing settings (pkg/processing)
+processing:
+  worker_count: 4
+  batch_size: 100
+  timeout: "30s"
+  retry_count: 3
+
+# Git integration settings (pkg/git)
+git:
+  auto_detect: true
+  include_status: true
+  include_branch: true
+  include_commit: true
+
+# Error handling settings (pkg/errors)
+errors:
+  detailed: false
+  stack_trace: false
+  log_file: "./cli-template.log"
+
+# Resource management settings (pkg/resources)
+resources:
+  cleanup_timeout: "10s"
+  max_memory: "512MB"
+  temp_cleanup: true
+
+# CLI framework settings (pkg/cli)
+cli:
+  auto_completion: true
+  help_template: "default"
+  command_timeout: "5m" 
