@@ -612,14 +612,14 @@ Extract components from the backup application to create reusable CLI building b
 
 **🔧 PHASE 5B: CLI Framework Extraction (Weeks 3-4)**
 
-26. **Extract CLI Command Framework** (EXTRACT-005)
-    - [ ] **Create `pkg/cli` package** - Extract cobra command patterns and flag handling
-    - [ ] **Generalize command structure** - Template for common CLI patterns
-    - [ ] **Extract dry-run implementation** - Generic dry-run operation support
-    - [ ] **Create context-aware command execution** - Cancellation support for commands
-    - [ ] **Extract version and build info handling** - Standard version command support
+26. **Extract CLI Command Framework** (EXTRACT-005) ✅ **COMPLETED** (2025-01-02)
+    - [x] **Create `pkg/cli` package** - Extract cobra command patterns and flag handling
+    - [x] **Generalize command structure** - Template for common CLI patterns
+    - [x] **Extract dry-run implementation** - Generic dry-run operation support
+    - [x] **Create context-aware command execution** - Cancellation support for commands
+    - [x] **Extract version and build info handling** - Standard version command support
     - **Priority**: HIGH - Accelerates new CLI development
-    - **Files to Extract**: `main.go` (816 lines) → `pkg/cli/`
+    - **Files to Extract**: `main.go` (816 lines) → `pkg/cli/` ✅ **COMPLETED**
     - **Design Decision**: Extract command patterns while leaving application-specific logic
     - **Implementation Notes**:
       - Rich command structure with backward compatibility patterns
@@ -727,13 +727,13 @@ Extract components from the backup application to create reusable CLI building b
 #### **Timeline and Dependencies**
 
 **Week 1-2 (Foundation)**: EXTRACT-001 ✅ **COMPLETED** (2025-01-02), EXTRACT-002 ✅ **COMPLETED** (2025-06-03)
-**Week 3-4 (Framework)**: EXTRACT-003 ✅ **COMPLETED** (2025-06-04), EXTRACT-004 ✅ **COMPLETED** (2025-01-02) → EXTRACT-005 (cli framework)
+**Week 3-4 (Framework)**: EXTRACT-003 ✅ **COMPLETED** (2025-06-04), EXTRACT-004 ✅ **COMPLETED** (2025-01-02), EXTRACT-005 ✅ **COMPLETED** (2025-01-02)
 **Week 5-6 (Patterns)**: EXTRACT-006, EXTRACT-007 (file ops, processing) → EXTRACT-008 (template)
 **Week 7-8 (Quality)**: EXTRACT-009, EXTRACT-010 (testing, documentation)
 
-**Critical Path**: Configuration ✅ **COMPLETED** → Output Formatting ✅ **COMPLETED** → Git Integration ✅ **COMPLETED** - All core infrastructure components now ready for CLI framework extraction. Foundation established for template application creation.
+**Critical Path**: Configuration ✅ **COMPLETED** → Output Formatting ✅ **COMPLETED** → Git Integration ✅ **COMPLETED** → CLI Framework ✅ **COMPLETED** - All core infrastructure components now ready for file operations and data processing extraction. Foundation established for template application creation.
 
-**Current Status**: EXTRACT-001 (Configuration), EXTRACT-002 (Error Handling and Resource Management), EXTRACT-003 (Output Formatting), and EXTRACT-004 (Git Integration) successfully completed. Four major packages extracted: pkg/config (schema-agnostic design, 24.3μs performance), pkg/errors and pkg/resources (interface-based error handling and resource management), pkg/formatter (comprehensive formatting system with template engine, pattern extraction, and output collection), and pkg/git (flexible Git operation framework with repository interface, configuration support, and comprehensive status detection). Foundation, error handling, resource management, formatting, and Git integration systems established for continued extraction work.
+**Current Status**: EXTRACT-001 (Configuration), EXTRACT-002 (Error Handling and Resource Management), EXTRACT-003 (Output Formatting), EXTRACT-004 (Git Integration), and EXTRACT-005 (CLI Command Framework) successfully completed. Five major packages extracted: pkg/config (schema-agnostic design, 24.3μs performance), pkg/errors and pkg/resources (interface-based error handling and resource management), pkg/formatter (comprehensive formatting system with template engine, pattern extraction, and output collection), pkg/git (flexible Git operation framework with repository interface, configuration support, and comprehensive status detection), and pkg/cli (complete CLI framework with command patterns, dry-run support, context management, and version handling). Foundation, error handling, resource management, formatting, Git integration, and CLI framework systems established for continued extraction work.
 
 **Risk Mitigation**: Each phase includes validation that existing application continues to work unchanged. Comprehensive testing ensures extraction doesn't introduce regressions.
 
