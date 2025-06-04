@@ -1,6 +1,6 @@
 # Icon Validation and Enforcement Report (DOC-008)
 
-> **Generated on:** `2025-06-04 05:30:59 UTC`
+> **Generated on:** `2025-06-04 05:55:45 UTC`
 > **Script:** `scripts/validate-icon-enforcement.sh`
 > **Mode:** Standard
 
@@ -8,8 +8,8 @@
 
 | Metric | Count |
 |--------|-------|
-| Files Checked | 88 |
-| Successes | 2362 |
+| Files Checked | 94 |
+| Successes | 2470 |
 | Warnings | 222 |
 | Errors | 1 |
 
@@ -54,8 +54,8 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Tokens | 1268 |
-| Standardized | 1264 |
+| Total Tokens | 1322 |
+| Standardized | 1318 |
 | Legacy Format | 4 |
 | Standardization Rate | 99% |
 

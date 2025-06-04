@@ -180,7 +180,7 @@ func TestCreateArchiveSnapshot_ErrorCases(t *testing.T) {
 	}
 }
 
-// TestCalculateArchiveFileHash tests the calculateArchiveFileHash function - 0% coverage
+// TestCalculateArchiveFileHash tests the archive file hash calculation through CreateArchiveSnapshot - 0% coverage
 func TestCalculateArchiveFileHash(t *testing.T) {
 	tempDir := t.TempDir()
 	archivePath := filepath.Join(tempDir, "test.zip")
@@ -195,22 +195,18 @@ func TestCalculateArchiveFileHash(t *testing.T) {
 		t.Fatalf("Failed to create test archive: %v", err)
 	}
 
-	// Open the archive and get the file
-	reader, err := zip.OpenReader(archivePath)
+	// Test hash calculation through CreateArchiveSnapshot
+	snapshot, err := CreateArchiveSnapshot(archivePath)
 	if err != nil {
-		t.Fatalf("Failed to open archive: %v", err)
-	}
-	defer reader.Close()
-
-	if len(reader.File) == 0 {
-		t.Fatalf("No files in archive")
+		t.Errorf("CreateArchiveSnapshot failed: %v", err)
 	}
 
-	file := reader.File[0]
-	hash, err := calculateArchiveFileHash(file)
-	if err != nil {
-		t.Errorf("calculateArchiveFileHash failed: %v", err)
+	if len(snapshot.Files) == 0 {
+		t.Fatalf("No files in snapshot")
 	}
+
+	file := snapshot.Files[0]
+	hash := file.Hash
 
 	if hash == "" {
 		t.Errorf("Expected non-empty hash")
@@ -222,10 +218,16 @@ func TestCalculateArchiveFileHash(t *testing.T) {
 	}
 
 	// Test consistency - same content should produce same hash
-	hash2, err := calculateArchiveFileHash(file)
+	snapshot2, err := CreateArchiveSnapshot(archivePath)
 	if err != nil {
-		t.Errorf("Second calculateArchiveFileHash failed: %v", err)
+		t.Errorf("Second CreateArchiveSnapshot failed: %v", err)
 	}
+
+	if len(snapshot2.Files) == 0 {
+		t.Fatalf("No files in second snapshot")
+	}
+
+	hash2 := snapshot2.Files[0].Hash
 
 	if hash != hash2 {
 		t.Errorf("Hash inconsistency: %s != %s", hash, hash2)
