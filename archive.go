@@ -195,6 +195,7 @@ func GenerateArchiveNameWithInterface(cfg ArchiveConfig) string {
 }
 
 // ⭐ ARCH-001: Archive naming convention implementation - 🔧
+// ⭐ EXTRACT-007: Naming conventions - Archive naming patterns extracted to pkg/processing/naming.go - 🔧
 // IMMUTABLE-REF: Archive Naming Convention
 // TEST-REF: TestGenerateArchiveName
 // DECISION-REF: DEC-001
