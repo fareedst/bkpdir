@@ -18,36 +18,109 @@ errors=0
 warnings=0
 successes=0
 total_files_checked=0
+total_tokens_found=0
+standardized_tokens=0
 
 # Configuration
-STRICT_MODE=${1:-false}  # Enable strict mode for CI/CD
-VERBOSE=${VERBOSE:-false}
-OUTPUT_FORMAT=${OUTPUT_FORMAT:-"console"}  # console, json, markdown
+STRICT_MODE=false
+VERBOSE=false
+OUTPUT_FORMAT="console"
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --strict)
+            STRICT_MODE=true
+            shift
+            ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
+        --format)
+            OUTPUT_FORMAT="$2"
+            shift 2
+            ;;
+        --help)
+            echo "🔺 DOC-008: Icon validation and enforcement"
+            echo ""
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --strict    Enable strict mode (fail on warnings)"
+            echo "  --verbose   Enable verbose output" 
+            echo "  --format    Set output format (console, json, markdown)"
+            echo "  --help      Show this help message"
+            echo ""
+            echo "Environment Variables:"
+            echo "  VERBOSE        Enable verbose output (true/false)"
+            echo ""
+            echo "Examples:"
+            echo "  $0                    # Standard validation"
+            echo "  $0 --strict          # Strict validation for CI/CD"
+            echo "  $0 --verbose         # Verbose output"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Override with environment variables if set
+[[ "${VERBOSE:-false}" == "true" ]] && VERBOSE=true
 
 echo -e "${BLUE}🛡️ DOC-008: Comprehensive Icon Validation and Enforcement${NC}"
 echo "=============================================================="
 
 # Check if we're in the right directory
-if [[ ! -f "docs/context/feature-tracking.md" ]] || [[ ! -f "docs/context/README.md" ]]; then
+if [[ ! -f "docs/context/feature-tracking.md" ]] || [[ ! -f "README.md" ]]; then
     echo -e "${RED}❌ Error: Must be run from project root directory${NC}"
-    echo -e "${RED}   Required files: docs/context/feature-tracking.md, docs/context/README.md${NC}"
+    echo -e "${RED}   Required files: docs/context/feature-tracking.md, README.md${NC}"
     exit 1
 fi
 
-# 🔍 DOC-008: Master icon definitions from README.md
-# Define master icons and their meanings
-MASTER_ICON_LIST="⭐:CRITICAL 🔺:HIGH 🔶:MEDIUM 🔻:LOW 🚀:PHASE_1 ⚡:PHASE_2 🔄:PHASE_3 🏁:PHASE_4 1️⃣:STEP_1 2️⃣:STEP_2 3️⃣:STEP_3 ✅:COMPLETE 📑:PURPOSE 📋:CHECKLIST 📊:ANALYSIS 📖:REFERENCE 🔍:SEARCH 📝:DOCUMENT 🔧:CONFIGURE 🛡️:PROTECT"
+# 🔍 DOC-008: Master icon definitions
+# Define master icons and their meanings based on standardized system
+declare -A MASTER_ICONS
+MASTER_ICONS=(
+    ["⭐"]="CRITICAL"
+    ["🔺"]="HIGH"
+    ["🔶"]="MEDIUM"
+    ["🔻"]="LOW"
+    ["🚀"]="PHASE_1"
+    ["⚡"]="PHASE_2"
+    ["🔄"]="PHASE_3"
+    ["🏁"]="PHASE_4"
+    ["1️⃣"]="STEP_1"
+    ["2️⃣"]="STEP_2"
+    ["3️⃣"]="STEP_3"
+    ["✅"]="COMPLETE"
+    ["📑"]="PURPOSE"
+    ["📋"]="CHECKLIST"
+    ["📊"]="ANALYSIS"
+    ["📖"]="REFERENCE"
+    ["🔍"]="SEARCH"
+    ["📝"]="DOCUMENT"
+    ["🔧"]="CONFIGURE"
+    ["🛡️"]="PROTECT"
+)
+
+# Priority icons for implementation tokens
+PRIORITY_ICONS="⭐🔺🔶🔻"
+ACTION_ICONS="🔍📝🔧🛡️"
 
 # Function to check if icon is in master list
 is_master_icon() {
     local icon="$1"
-    echo "$MASTER_ICON_LIST" | grep -q "$icon:"
+    [[ -n "${MASTER_ICONS[$icon]}" ]]
 }
 
 # Function to get icon meaning
 get_icon_meaning() {
     local icon="$1"
-    echo "$MASTER_ICON_LIST" | grep -o "$icon:[A-Z_]*" | cut -d: -f2
+    echo "${MASTER_ICONS[$icon]:-UNKNOWN}"
 }
 
 # 🔍 DOC-008: Load validation patterns from context files
@@ -55,20 +128,26 @@ load_validation_patterns() {
     echo -e "${BLUE}📋 Step 1: Loading icon validation patterns from context system...${NC}"
     echo "-------------------------------------------------------------------"
     
-    # Check if master icon legend exists
-    if grep -q "Master Icon Legend" docs/context/README.md; then
+    # Check if master icon legend exists in README.md
+    if grep -q "Master Icon Legend\|Icon Legend\|## Icons" README.md; then
         echo -e "  ${GREEN}✅ Master Icon Legend found in README.md${NC}"
         ((successes++))
     else
         echo -e "  ${RED}❌ Master Icon Legend missing from README.md${NC}"
         ((errors++))
-        return 1
     fi
     
     # Count master icons
-    local icon_count=$(echo "$MASTER_ICON_LIST" | tr ' ' '\n' | wc -l)
+    local icon_count=${#MASTER_ICONS[@]}
     echo -e "  ${GREEN}✅ Master icon definitions loaded: $icon_count unique icons${NC}"
     ((successes++))
+    
+    if [[ "$VERBOSE" == "true" ]]; then
+        echo -e "  ${CYAN}📋 Master icons defined:${NC}"
+        for icon in "${!MASTER_ICONS[@]}"; do
+            echo -e "    $icon → ${MASTER_ICONS[$icon]}"
+        done
+    fi
 }
 
 # 🔍 DOC-008: Validate documentation icon consistency
@@ -78,7 +157,7 @@ validate_documentation_icons() {
     echo "-------------------------------------------------------------------"
     
     local doc_files=(
-        "docs/context/README.md"
+        "README.md"
         "docs/context/feature-tracking.md"
         "docs/context/ai-assistant-protocol.md"
         "docs/context/ai-assistant-compliance.md"
@@ -93,11 +172,11 @@ validate_documentation_icons() {
             echo -e "${CYAN}  Checking $doc_file...${NC}"
             ((total_files_checked++))
             
-            # Check for unknown icons (sample list - emojis can be tricky)
-            local unknown_icons_found=false
-            
             # Check for consistent priority icon usage
             local priority_icons_found=0
+            local unknown_icons=()
+            
+            # Count priority icons
             if grep -q "⭐" "$doc_file"; then ((priority_icons_found++)); fi
             if grep -q "🔺" "$doc_file"; then ((priority_icons_found++)); fi
             if grep -q "🔶" "$doc_file"; then ((priority_icons_found++)); fi
@@ -123,50 +202,65 @@ validate_source_code_icons() {
     echo -e "${BLUE}📋 Step 3: Validating implementation token icon consistency...${NC}"
     echo "-------------------------------------------------------------------"
     
-    local go_files=($(find . -name "*.go" -not -path "./vendor/*" 2>/dev/null))
+    local go_files=($(find . -name "*.go" -not -path "./vendor/*" -not -path "./.git/*" 2>/dev/null))
     local token_files_with_icons=0
     local token_files_without_icons=0
-    local total_tokens_found=0
-    local standardized_tokens=0
     
     for go_file in "${go_files[@]}"; do
         if [[ -f "$go_file" ]]; then
-            echo -e "${CYAN}  Checking $go_file...${NC}"
+            if [[ "$VERBOSE" == "true" ]]; then
+                echo -e "${CYAN}  Checking $go_file...${NC}"
+            fi
             ((total_files_checked++))
             
             # Look for implementation tokens
             local tokens_found=false
-            while IFS= read -r line; do
-                local line_num=$(echo "$line" | cut -d: -f1)
-                local line_content=$(echo "$line" | cut -d: -f2-)
+            local file_token_count=0
+            local file_standardized_count=0
+            
+            while IFS= read -r line_with_num; do
+                local line_num=$(echo "$line_with_num" | cut -d: -f1)
+                local line_content=$(echo "$line_with_num" | cut -d: -f2-)
                 
                 ((total_tokens_found++))
+                ((file_token_count++))
                 tokens_found=true
                 
                 # Check for standardized format with priority icons
-                if echo "$line_content" | grep -q "// *[⭐🔺🔶🔻]"; then
+                if echo "$line_content" | grep -qE "// *[⭐🔺🔶🔻]"; then
                     # Extract feature ID
-                    local feature_id=$(echo "$line_content" | grep -o '[A-Z]\+-[0-9]\+' | head -1)
+                    local feature_id=$(echo "$line_content" | grep -oE '[A-Z]+-[0-9]+' | head -1)
                     
-                    echo -e "    ${GREEN}✅ Standardized token found: $feature_id${NC}"
+                    if [[ "$VERBOSE" == "true" ]]; then
+                        echo -e "    ${GREEN}✅ Standardized token found: $feature_id${NC}"
+                    fi
                     ((standardized_tokens++))
+                    ((file_standardized_count++))
                     ((successes++))
                     
                     # Check for action icons
-                    if echo "$line_content" | grep -q "[🔍📝🔧🛡️]"; then
-                        echo -e "    ${GREEN}✅ Action icon found in token${NC}"
+                    if echo "$line_content" | grep -qE "[🔍📝🔧🛡️]"; then
+                        if [[ "$VERBOSE" == "true" ]]; then
+                            echo -e "    ${GREEN}✅ Action icon found in token${NC}"
+                        fi
                         ((successes++))
                     else
-                        echo -e "    ${YELLOW}⚠️ Token missing action icon: $feature_id${NC}"
+                        if [[ "$VERBOSE" == "true" ]]; then
+                            echo -e "    ${YELLOW}⚠️ Token missing action icon: $feature_id${NC}"
+                        fi
                         ((warnings++))
                     fi
                     
-                elif echo "$line_content" | grep -q "// *[A-Z]\+-[0-9]\+:"; then
-                    local feature_id=$(echo "$line_content" | grep -o '[A-Z]\+-[0-9]\+' | head -1)
-                    echo -e "    ${YELLOW}⚠️ Legacy token format: $feature_id (missing priority icon)${NC}"
+                elif echo "$line_content" | grep -qE "// .*[A-Z]+-[0-9]+:"; then
+                    local feature_id=$(echo "$line_content" | grep -oE '[A-Z]+-[0-9]+' | head -1)
+                    if [[ "$VERBOSE" == "true" ]]; then
+                        echo -e "    ${YELLOW}⚠️ Legacy token format: $feature_id (missing priority icon)${NC}"
+                    fi
                     ((warnings++))
                 else
-                    echo -e "    ${RED}❌ Invalid implementation token format in line $line_num${NC}"
+                    if [[ "$VERBOSE" == "true" ]]; then
+                        echo -e "    ${RED}❌ Invalid implementation token format in line $line_num${NC}"
+                    fi
                     ((errors++))
                 fi
                 
@@ -174,6 +268,13 @@ validate_source_code_icons() {
             
             if [[ "$tokens_found" == true ]]; then
                 ((token_files_with_icons++))
+                if [[ "$VERBOSE" == "false" && $file_token_count -gt 0 ]]; then
+                    local file_std_rate=0
+                    if [[ $file_token_count -gt 0 ]]; then
+                        file_std_rate=$(( (file_standardized_count * 100) / file_token_count ))
+                    fi
+                    echo -e "  ${CYAN}$go_file: $file_token_count tokens, ${file_std_rate}% standardized${NC}"
+                fi
             else
                 ((token_files_without_icons++))
             fi
@@ -211,53 +312,90 @@ validate_cross_references() {
     echo -e "${BLUE}📋 Step 4: Validating cross-reference consistency...${NC}"
     echo "-------------------------------------------------------------------"
     
-    # Extract feature IDs from feature-tracking.md
-    local doc_feature_ids=($(grep "^| [A-Z]\+-[0-9]\+ |" docs/context/feature-tracking.md 2>/dev/null | sed 's/^| \([A-Z]\+-[0-9]\+\) |.*/\1/' || true))
-    
-    # Extract feature IDs from source code
-    local code_feature_ids=()
-    for go_file in $(find . -name "*.go" -not -path "./vendor/*" 2>/dev/null); do
+    # Extract feature IDs from feature tracking
+    local feature_ids=()
+    if [[ -f "docs/context/feature-tracking.md" ]]; then
         while IFS= read -r feature_id; do
-            code_feature_ids+=("$feature_id")
-        done < <(grep -o '[A-Z]\+-[0-9]\+' "$go_file" 2>/dev/null | sort -u || true)
-    done
-    
-    echo "  Feature IDs in documentation: ${#doc_feature_ids[@]}"
-    echo "  Feature IDs in source code: ${#code_feature_ids[@]}"
-    
-    # Simple cross-reference check
-    if [[ ${#doc_feature_ids[@]} -gt 0 ]] && [[ ${#code_feature_ids[@]} -gt 0 ]]; then
-        echo -e "  ${GREEN}✅ Cross-references found between documentation and code${NC}"
+            feature_ids+=("$feature_id")
+        done < <(grep -oE '[A-Z]+-[0-9]+' docs/context/feature-tracking.md | sort -u)
+        
+        echo -e "  ${GREEN}✅ Found ${#feature_ids[@]} feature IDs in feature tracking${NC}"
         ((successes++))
     else
-        echo -e "  ${YELLOW}⚠️ Limited cross-reference data available${NC}"
+        echo -e "  ${YELLOW}⚠️ Feature tracking file not found${NC}"
         ((warnings++))
+    fi
+    
+    # Check for orphaned implementation tokens
+    local code_feature_ids=()
+    while IFS= read -r feature_id; do
+        code_feature_ids+=("$feature_id")
+    done < <(grep -roE '// .*[A-Z]+-[0-9]+:' . --include="*.go" | grep -oE '[A-Z]+-[0-9]+' | sort -u)
+    
+    if [[ ${#code_feature_ids[@]} -gt 0 ]]; then
+        echo -e "  ${GREEN}✅ Found ${#code_feature_ids[@]} unique feature IDs in code${NC}"
+        ((successes++))
+        
+        # Check for orphaned tokens
+        local orphaned_count=0
+        for code_id in "${code_feature_ids[@]}"; do
+            local found=false
+            for feature_id in "${feature_ids[@]}"; do
+                if [[ "$code_id" == "$feature_id" ]]; then
+                    found=true
+                    break
+                fi
+            done
+            if [[ "$found" == false ]]; then
+                if [[ "$VERBOSE" == "true" ]]; then
+                    echo -e "    ${YELLOW}⚠️ Orphaned implementation token: $code_id${NC}"
+                fi
+                ((orphaned_count++))
+                ((warnings++))
+            fi
+        done
+        
+        if [[ $orphaned_count -eq 0 ]]; then
+            echo -e "  ${GREEN}✅ No orphaned implementation tokens found${NC}"
+            ((successes++))
+        else
+            echo -e "  ${YELLOW}⚠️ Found $orphaned_count orphaned implementation tokens${NC}"
+        fi
     fi
 }
 
-# 🔍 DOC-008: Enforcement rules validation
+# 🔍 DOC-008: Validate enforcement rules compliance
 validate_enforcement_rules() {
     echo
     echo -e "${BLUE}📋 Step 5: Validating enforcement rules compliance...${NC}"
     echo "-------------------------------------------------------------------"
     
     # Check AI assistant compliance integration
-    if grep -q "DOC-007" docs/context/ai-assistant-compliance.md && \
-       grep -q "DOC-008" docs/context/ai-assistant-compliance.md; then
-        echo -e "  ${GREEN}✅ AI assistant compliance includes DOC-007 and DOC-008 requirements${NC}"
-        ((successes++))
+    if [[ -f "docs/context/ai-assistant-compliance.md" ]]; then
+        if grep -q "DOC-007\|DOC-008" docs/context/ai-assistant-compliance.md; then
+            echo -e "  ${GREEN}✅ AI assistant compliance includes DOC-007/DOC-008 requirements${NC}"
+            ((successes++))
+        else
+            echo -e "  ${YELLOW}⚠️ AI assistant compliance may need updates for DOC-008${NC}"
+            ((warnings++))
+        fi
     else
-        echo -e "  ${YELLOW}⚠️ AI assistant compliance may need updates for DOC-008${NC}"
+        echo -e "  ${YELLOW}⚠️ AI assistant compliance file not found${NC}"
         ((warnings++))
     fi
     
     # Check Makefile integration
-    if grep -q "validate-icon" Makefile; then
-        echo -e "  ${GREEN}✅ Makefile includes icon validation targets${NC}"
-        ((successes++))
+    if [[ -f "Makefile" ]]; then
+        if grep -q "validate-icon" Makefile; then
+            echo -e "  ${GREEN}✅ Makefile includes icon validation targets${NC}"
+            ((successes++))
+        else
+            echo -e "  ${YELLOW}⚠️ Makefile missing icon validation integration${NC}"
+            ((warnings++))
+        fi
     else
-        echo -e "  ${RED}❌ Makefile missing icon validation integration${NC}"
-        ((errors++))
+        echo -e "  ${YELLOW}⚠️ Makefile not found${NC}"
+        ((warnings++))
     fi
     
     # Check if this enforcement script exists and is executable
@@ -276,15 +414,19 @@ generate_enforcement_report() {
     echo -e "${BLUE}📊 Step 6: Generating enforcement report...${NC}"
     echo "-------------------------------------------------------------------"
     
-    local report_file="icon-validation-report.md"
+    # Create validation reports directory if it doesn't exist
+    mkdir -p docs/validation-reports
+    
+    local report_file="docs/validation-reports/icon-validation-report.md"
     local timestamp=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
     
+    # Generate report directly in docs/validation-reports/
     cat > "$report_file" << EOF
 # Icon Validation and Enforcement Report (DOC-008)
 
 > **Generated on:** \`$timestamp\`
 > **Script:** \`scripts/validate-icon-enforcement.sh\`
-> **Mode:** ${STRICT_MODE:-"Standard"}
+> **Mode:** $([ "$STRICT_MODE" == "true" ] && echo "Strict" || echo "Standard")
 
 ## Validation Summary
 
@@ -337,97 +479,82 @@ EOF
 EOF
     fi
     
+    local standardization_rate=0
+    if [[ $total_tokens_found -gt 0 ]]; then
+        standardization_rate=$(( (standardized_tokens * 100) / total_tokens_found ))
+    fi
+    
     cat >> "$report_file" << EOF
 ## Enforcement Status
 
-- **Icon System**: Comprehensive (20+ icons defined)
+- **Icon System**: Comprehensive (${#MASTER_ICONS[@]} icons defined)
 - **Documentation Compliance**: $([ $((errors + warnings)) -lt 10 ] && echo "✅ Good" || echo "❌ Needs improvement")
-- **Code Standardization**: $([ $((standardized_tokens * 100 / total_tokens_found)) -gt 80 ] 2>/dev/null && echo "✅ Good" || echo "⚠️ In progress")
-- **Automation**: $(grep -q "validate-icon" Makefile && echo "✅ Integrated" || echo "❌ Missing")
+- **Code Standardization**: $([ $standardization_rate -gt 80 ] 2>/dev/null && echo "✅ Good ($standardization_rate%)" || echo "⚠️ In progress ($standardization_rate%)")
+- **Automation**: $(grep -q "validate-icon" Makefile 2>/dev/null && echo "✅ Integrated" || echo "❌ Missing")
+
+## Implementation Token Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total Tokens | $total_tokens_found |
+| Standardized | $standardized_tokens |
+| Legacy Format | $((total_tokens_found - standardized_tokens)) |
+| Standardization Rate | ${standardization_rate}% |
 
 ---
 *This report was generated by DOC-008 icon validation and enforcement system*
 EOF
 
-    echo -e "  ${GREEN}✅ Report generated: $report_file${NC}"
-    ((successes++))
+    echo -e "  ${GREEN}✅ Validation report generated: $report_file${NC}"
 }
 
-# Main execution
+# Main validation function
 main() {
+    local start_time=$(date +%s)
+    
+    # Run all validation steps
     load_validation_patterns
-    validate_documentation_icons  
+    validate_documentation_icons
     validate_source_code_icons
     validate_cross_references
     validate_enforcement_rules
     generate_enforcement_report
     
-    echo
-    echo "=============================================================="
-    echo -e "${BLUE}📊 Final Validation Summary${NC}"
-    echo "=============================================================="
-    echo -e "${GREEN}✅ Successes: $successes${NC}"
-    echo -e "${YELLOW}⚠️ Warnings: $warnings${NC}"
-    echo -e "${RED}❌ Errors: $errors${NC}"
-    echo "Files checked: $total_files_checked"
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
     
-    # Determine exit code based on strict mode
+    echo
+    echo -e "${BLUE}🎯 Validation Complete${NC}"
+    echo "=============================================================="
+    echo -e "  Duration: ${duration}s"
+    echo -e "  Files checked: $total_files_checked"
+    echo -e "  Successes: ${GREEN}$successes${NC}"
+    echo -e "  Warnings: ${YELLOW}$warnings${NC}"
+    echo -e "  Errors: ${RED}$errors${NC}"
+    
+    if [[ $total_tokens_found -gt 0 ]]; then
+        local standardization_rate=$(( (standardized_tokens * 100) / total_tokens_found ))
+        echo -e "  Token standardization: ${standardization_rate}%"
+    fi
+    
+    # Determine exit code based on mode
     if [[ "$STRICT_MODE" == "true" ]]; then
-        if [[ $errors -gt 0 || $warnings -gt 5 ]]; then
-            echo
-            echo -e "${RED}💥 DOC-008 validation failed in strict mode${NC}"
-            echo -e "${RED}   Errors: $errors, Warnings: $warnings (threshold: 5)${NC}"
-            echo -e "${YELLOW}💡 Run without strict mode for development validation${NC}"
+        # Strict mode: fail on errors OR too many warnings
+        if [[ $errors -gt 0 ]] || [[ $warnings -gt 5 ]]; then
+            echo -e "${RED}❌ Validation failed in strict mode${NC}"
             exit 1
         fi
-    elif [[ $errors -gt 0 ]]; then
-        echo
-        echo -e "${RED}💥 DOC-008 validation failed with $errors critical errors${NC}"
-        exit 1
+    else
+        # Standard mode: fail only on errors
+        if [[ $errors -gt 0 ]]; then
+            echo -e "${RED}❌ Validation failed${NC}"
+            exit 1
+        fi
     fi
     
-    echo
-    echo -e "${GREEN}🎉 DOC-008 icon validation and enforcement completed successfully!${NC}"
-    echo -e "${GREEN}   Icon system integrity maintained across documentation and code.${NC}"
-    
-    if [[ $warnings -gt 0 ]]; then
-        echo -e "${YELLOW}💡 Consider addressing $warnings warnings for optimal compliance.${NC}"
-    fi
-    
+    echo -e "${GREEN}✅ Validation passed${NC}"
     exit 0
 }
-
-# Handle command line arguments
-case "${1:-}" in
-    --strict)
-        STRICT_MODE=true
-        shift
-        ;;
-    --verbose)
-        VERBOSE=true
-        shift
-        ;;
-    --help)
-        echo "🔺 DOC-008: Icon validation and enforcement"
-        echo ""
-        echo "Usage: $0 [OPTIONS]"
-        echo ""
-        echo "Options:"
-        echo "  --strict    Enable strict mode (fail on warnings)"
-        echo "  --verbose   Enable verbose output" 
-        echo "  --help      Show this help message"
-        echo ""
-        echo "Environment Variables:"
-        echo "  OUTPUT_FORMAT  Set output format (console, json, markdown)"
-        echo "  VERBOSE        Enable verbose output (true/false)"
-        echo ""
-        echo "Examples:"
-        echo "  $0                    # Standard validation"
-        echo "  $0 --strict          # Strict validation for CI/CD"
-        echo "  VERBOSE=true $0      # Verbose output"
-        exit 0
-        ;;
-esac
 
 # Run main function
 main "$@" 

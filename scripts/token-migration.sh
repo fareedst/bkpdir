@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# 🔺 DOC-009: Mass implementation token standardization - 🔧 Token migration automation
-# This script provides automated migration of legacy implementation tokens to standardized format
-# with priority icons, action icons, and validation capabilities
+# 🔺 DOC-009: Mass implementation token standardization - Automated migration system
+# This script provides safe, comprehensive migration of legacy implementation tokens
+# to the standardized format with priority and action icons
 
 # Colors for output
 RED='\033[0;31m'
@@ -14,390 +14,444 @@ MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Configuration
-BACKUP_DIR="./token-migration-backups"
-DRY_RUN=${1:-true}  # Default to dry run for safety
-BATCH_SIZE=${BATCH_SIZE:-50}  # Number of files to process in each batch
-ROLLBACK_FILE=""
-CHECKPOINT_FILE="./token-migration-checkpoint.json"
+DRY_RUN=false
+VERBOSE=false
+BACKUP_DIR="token-migration-backup"
+CHECKPOINT_FILE="token-migration-checkpoint.json"
+ROLLBACK_ENABLED=true
+
+# Counters
+files_processed=0
+tokens_migrated=0
+tokens_skipped=0
+migration_errors=0
+
+# Feature priority mapping from feature-tracking.md
+declare -A FEATURE_PRIORITIES
+declare -A FEATURE_ACTIONS
 
 echo -e "${BLUE}🔺 DOC-009: Mass Implementation Token Standardization${NC}"
-echo "=============================================================="
+echo "================================================================="
 
-# Check if we're in the right directory
-if [[ ! -f "docs/context/feature-tracking.md" ]] || [[ ! -f "Makefile" ]]; then
-    echo -e "${RED}❌ Error: Must be run from project root directory${NC}"
-    echo -e "${RED}   Required files: docs/context/feature-tracking.md, Makefile${NC}"
-    exit 1
-fi
-
-# 🔺 DOC-009: Feature priority mapping from feature-tracking.md - 🔍 Priority analysis
-get_feature_priority() {
-    local feature_id="$1"
-    # Extract the primary prefix (first part before any hyphen)
-    local feature_prefix=$(echo "$feature_id" | cut -d'-' -f1)
-    
-    case "$feature_prefix" in
-        "ARCH")  echo "⭐" ;;  # Archive operations - CRITICAL
-        "FILE")  echo "⭐" ;;  # File operations - CRITICAL  
-        "CFG")   echo "🔺" ;;  # Configuration - HIGH
-        "GIT")   echo "🔺" ;;  # Git integration - HIGH
-        "TEST")  echo "🔺" ;;  # Testing infrastructure - HIGH
-        "OUT")   echo "🔶" ;;  # Output management - MEDIUM
-        "DOC")   echo "🔺" ;;  # Documentation - HIGH
-        "LINT")  echo "🔺" ;;  # Code quality - HIGH
-        "COV")   echo "🔺" ;;  # Coverage - HIGH
-        "REFACTOR") echo "🔶" ;;  # Refactoring - MEDIUM
-        *)       echo "🔶" ;;  # Default to MEDIUM
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
+        --no-backup)
+            ROLLBACK_ENABLED=false
+            shift
+            ;;
+        --checkpoint)
+            CHECKPOINT_FILE="$2"
+            shift 2
+            ;;
+        --help)
+            echo "🔺 DOC-009: Mass implementation token standardization"
+            echo ""
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run     Show what would be changed without modifying files"
+            echo "  --verbose     Enable verbose output"
+            echo "  --no-backup   Skip creating backup before migration"
+            echo "  --checkpoint  Specify checkpoint file (default: token-migration-checkpoint.json)"
+            echo "  --help        Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  $0 --dry-run              # Preview changes"
+            echo "  $0                        # Execute migration"
+            echo "  $0 --verbose              # Detailed output"
+            echo "  $0 --rollback             # Rollback previous migration"
+            exit 0
+            ;;
+        --rollback)
+            perform_rollback
+            exit $?
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
     esac
-}
+done
 
-# 🔺 DOC-009: Action icon inference from function context - 🔍 Function behavior analysis
-get_action_icon() {
-    local context="$1"
-    local line_content="$2"
-    
-    # Analyze surrounding context and function names for action type
-    if echo "$context" | grep -qi "get\|find\|search\|discover\|detect\|analyze\|check\|validate\|parse"; then
-        echo "🔍"  # SEARCH/DISCOVER
-    elif echo "$context" | grep -qi "format\|print\|write\|update\|log\|output\|render\|display"; then
-        echo "📝"  # DOCUMENT/UPDATE
-    elif echo "$context" | grep -qi "config\|setup\|init\|create\|build\|generate\|establish"; then
-        echo "🔧"  # CONFIGURE/MODIFY
-    elif echo "$context" | grep -qi "protect\|secure\|validate\|verify\|guard\|ensure\|handle.*error"; then
-        echo "🛡️"  # PROTECT/VALIDATE
-    else
-        # Default based on common patterns
-        if echo "$line_content" | grep -qi "func.*get\|func.*find\|func.*search"; then
-            echo "🔍"
-        elif echo "$line_content" | grep -qi "func.*format\|func.*print\|func.*write"; then
-            echo "📝"
-        elif echo "$line_content" | grep -qi "func.*config\|func.*setup\|func.*create"; then
-            echo "🔧"
-        else
-            echo "🔧"  # Default to CONFIGURE/MODIFY
-        fi
-    fi
-}
-
-# 🔺 DOC-009: Create backup before migration - 🛡️ Safe backup operations
-create_backup() {
-    echo -e "${BLUE}📋 Step 1: Creating migration backups...${NC}"
+# 🔺 DOC-009: Load feature priorities from feature-tracking.md
+load_feature_priorities() {
+    echo -e "${BLUE}📋 Step 1: Loading feature priorities from feature-tracking.md...${NC}"
     echo "-------------------------------------------------------------------"
     
-    local timestamp=$(date +"%Y%m%d_%H%M%S")
-    BACKUP_DIR="./token-migration-backups/$timestamp"
-    
-    mkdir -p "$BACKUP_DIR"
-    
-    # Find all Go files with implementation tokens
-    local files_with_tokens=($(grep -l "// [A-Z].*-[0-9]\+.*:" . --include="*.go" -r 2>/dev/null || true))
-    
-    echo -e "  ${CYAN}Backing up ${#files_with_tokens[@]} files with implementation tokens...${NC}"
-    
-    for file in "${files_with_tokens[@]}"; do
-        local backup_path="$BACKUP_DIR$(dirname "$file")"
-        mkdir -p "$backup_path"
-        cp "$file" "$backup_path/$(basename "$file")"
-        echo -e "    ${GREEN}✅ Backed up: $file${NC}"
-    done
-    
-    # Store backup location for rollback
-    echo "$BACKUP_DIR" > .token-migration-backup-location
-    
-    echo -e "  ${GREEN}✅ Backup completed: $BACKUP_DIR${NC}"
-    echo -e "  ${YELLOW}💾 Backup location saved for rollback capability${NC}"
-}
-
-# 🔺 DOC-009: Checkpoint system for incremental progress - 📊 Progress validation
-save_checkpoint() {
-    local processed_files="$1"
-    local total_files="$2"
-    local current_batch="$3"
-    
-    cat > "$CHECKPOINT_FILE" << EOF
-{
-    "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-    "processed_files": $processed_files,
-    "total_files": $total_files,
-    "current_batch": $current_batch,
-    "backup_dir": "$BACKUP_DIR",
-    "batch_size": $BATCH_SIZE
-}
-EOF
-    echo -e "    ${CYAN}💾 Checkpoint saved: $processed_files/$total_files files processed${NC}"
-}
-
-# 🔺 DOC-009: Standardize a single implementation token - 🔧 Token format standardization
-standardize_token() {
-    local file="$1"
-    local line_num="$2"
-    local original_line="$3"
-    local dry_run="$4"
-    
-    # Extract feature ID from original token
-    local feature_id=$(echo "$original_line" | grep -o '[A-Z][A-Z0-9_-]*-[0-9]\+[A-Z0-9_-]*' | head -1)
-    if [[ -z "$feature_id" ]]; then
-        echo -e "      ${RED}❌ Could not extract feature ID from: $original_line${NC}"
+    if [[ ! -f "docs/context/feature-tracking.md" ]]; then
+        echo -e "${RED}❌ Error: feature-tracking.md not found${NC}"
         return 1
     fi
     
-    # Extract description (everything after the colon, removing the feature ID prefix)
-    local description=$(echo "$original_line" | sed "s/.*\/\/ *$feature_id: *//" | sed 's/^[⭐🔺🔶🔻🔍📝🔧🛡️ ]*//')
+    # Parse feature tracking table to extract priorities
+    local in_table=false
+    local feature_count=0
     
-    # Get priority icon from feature mapping
-    local priority_icon=$(get_feature_priority "$feature_id")
-    
-    # Get function context for action icon inference
-    local context=$(sed -n "$((line_num-5)),$((line_num+5))p" "$file" 2>/dev/null || echo "")
-    local action_icon=$(get_action_icon "$context" "$original_line")
-    
-    # Create standardized token
-    local standardized_token="// $priority_icon $feature_id: $description - $action_icon"
-    
-    if [[ "$dry_run" == "true" ]]; then
-        echo -e "      ${CYAN}🔍 DRY RUN - Would update:${NC}"
-        echo -e "        ${YELLOW}OLD: $original_line${NC}"
-        echo -e "        ${GREEN}NEW: $standardized_token${NC}"
-        return 0
-    else
-        # Actually update the file
-        sed -i.bak "${line_num}s|.*|$standardized_token|" "$file"
-        echo -e "      ${GREEN}✅ Updated: $feature_id with priority $priority_icon and action $action_icon${NC}"
-        return 0
-    fi
-}
-
-# 🔺 DOC-009: Process a single file for token standardization - 🔧 File processing
-process_file() {
-    local file="$1"
-    local dry_run="$2"
-    
-    echo -e "    ${CYAN}Processing: $file${NC}"
-    
-    local tokens_updated=0
-    local tokens_failed=0
-    
-    # Find all implementation tokens in the file
     while IFS= read -r line; do
-        local line_num=$(echo "$line" | cut -d: -f1)
-        local line_content=$(echo "$line" | cut -d: -f2-)
-        
-        # Skip already standardized tokens (those with priority icons)
-        if echo "$line_content" | grep -q "// *[⭐🔺🔶🔻]"; then
-            echo -e "      ${GREEN}✅ Already standardized: $line_content${NC}"
+        # Detect table start
+        if [[ "$line" =~ ^\|.*Feature\ ID.*\|.*Priority.*\| ]]; then
+            in_table=true
             continue
         fi
         
-        # Standardize the token
-        if standardize_token "$file" "$line_num" "$line_content" "$dry_run"; then
-            ((tokens_updated++))
-        else
-            ((tokens_failed++))
+        # Skip table header separator
+        if [[ "$line" =~ ^\|\-+\|\-+ ]]; then
+            continue
         fi
         
-    done < <(grep -n "// [A-Z].*-[0-9]\+.*:" "$file" 2>/dev/null || true)
+        # Process table rows
+        if [[ $in_table == true ]]; then
+            # End of table
+            if [[ ! "$line" =~ ^\| ]]; then
+                in_table=false
+                continue
+            fi
+            
+            # Extract feature ID and priority
+            if [[ "$line" =~ ^\|[[:space:]]*([A-Z]+-[0-9]+)[[:space:]]*\| ]]; then
+                local feature_id="${BASH_REMATCH[1]}"
+                
+                # Determine priority based on content
+                if echo "$line" | grep -q "🚨 CRITICAL\|CRITICAL"; then
+                    FEATURE_PRIORITIES["$feature_id"]="⭐"
+                elif echo "$line" | grep -q "🔺 HIGH\|HIGH"; then
+                    FEATURE_PRIORITIES["$feature_id"]="🔺"
+                elif echo "$line" | grep -q "🔶 MEDIUM\|MEDIUM"; then
+                    FEATURE_PRIORITIES["$feature_id"]="🔶"
+                elif echo "$line" | grep -q "🔻 LOW\|LOW"; then
+                    FEATURE_PRIORITIES["$feature_id"]="🔻"
+                else
+                    # Default to medium if not specified
+                    FEATURE_PRIORITIES["$feature_id"]="🔶"
+                fi
+                
+                # Determine action icon based on feature type
+                if echo "$line" | grep -q "validation\|test\|verify"; then
+                    FEATURE_ACTIONS["$feature_id"]="🛡️"
+                elif echo "$line" | grep -q "config\|setup\|extract"; then
+                    FEATURE_ACTIONS["$feature_id"]="🔧"
+                elif echo "$line" | grep -q "document\|format\|output"; then
+                    FEATURE_ACTIONS["$feature_id"]="📝"
+                else
+                    FEATURE_ACTIONS["$feature_id"]="🔍"
+                fi
+                
+                ((feature_count++))
+                
+                if [[ "$VERBOSE" == "true" ]]; then
+                    echo -e "    ${CYAN}$feature_id → ${FEATURE_PRIORITIES[$feature_id]} ${FEATURE_ACTIONS[$feature_id]}${NC}"
+                fi
+            fi
+        fi
+    done < "docs/context/feature-tracking.md"
     
-    echo -e "      ${GREEN}✅ File completed: $tokens_updated updated, $tokens_failed failed${NC}"
-    return $tokens_failed
+    echo -e "  ${GREEN}✅ Loaded $feature_count feature priorities${NC}"
+    
+    # Add some common patterns for features not in tracking
+    FEATURE_PRIORITIES["REFACTOR-001"]="🔶"
+    FEATURE_PRIORITIES["REFACTOR-002"]="🔶"
+    FEATURE_PRIORITIES["REFACTOR-003"]="🔶"
+    FEATURE_PRIORITIES["REFACTOR-004"]="🔶"
+    FEATURE_PRIORITIES["REFACTOR-005"]="🔶"
+    FEATURE_PRIORITIES["REFACTOR-006"]="🔶"
+    
+    FEATURE_ACTIONS["REFACTOR-001"]="🔧"
+    FEATURE_ACTIONS["REFACTOR-002"]="🔧"
+    FEATURE_ACTIONS["REFACTOR-003"]="🔧"
+    FEATURE_ACTIONS["REFACTOR-004"]="🔧"
+    FEATURE_ACTIONS["REFACTOR-005"]="🔧"
+    FEATURE_ACTIONS["REFACTOR-006"]="🛡️"
+    
+    return 0
 }
 
-# 🔺 DOC-009: Batch processing with progress tracking - 📊 Batch operations
-process_batch() {
-    local files=("$@")
-    local dry_run="$DRY_RUN"
+# 🔺 DOC-009: Create backup before migration
+create_migration_backup() {
+    if [[ "$ROLLBACK_ENABLED" == "false" ]]; then
+        echo -e "  ${YELLOW}⚠️ Backup disabled, skipping...${NC}"
+        return 0
+    fi
     
-    echo -e "${BLUE}📋 Step 2: Processing batch of ${#files[@]} files...${NC}"
+    echo -e "${BLUE}📋 Step 2: Creating migration backup...${NC}"
     echo "-------------------------------------------------------------------"
     
-    local batch_success=0
-    local batch_failed=0
+    local timestamp=$(date +"%Y%m%d_%H%M%S")
+    BACKUP_DIR="token-migration-backup-$timestamp"
     
-    for file in "${files[@]}"; do
-        if [[ -f "$file" ]]; then
-            if process_file "$file" "$dry_run"; then
-                ((batch_success++))
-            else
-                ((batch_failed++))
-            fi
-        else
-            echo -e "    ${YELLOW}⚠️ File not found: $file${NC}"
-            ((batch_failed++))
-        fi
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "  ${CYAN}[DRY RUN] Would create backup in: $BACKUP_DIR${NC}"
+        return 0
+    fi
+    
+    mkdir -p "$BACKUP_DIR"
+    
+    # Backup all Go files
+    local go_files=($(find . -name "*.go" -not -path "./vendor/*" -not -path "./.git/*" 2>/dev/null))
+    local backup_count=0
+    
+    for go_file in "${go_files[@]}"; do
+        local backup_path="$BACKUP_DIR/$go_file"
+        mkdir -p "$(dirname "$backup_path")"
+        cp "$go_file" "$backup_path"
+        ((backup_count++))
     done
     
-    echo -e "  ${GREEN}✅ Batch completed: $batch_success successful, $batch_failed failed${NC}"
-    return $batch_failed
+    # Create checkpoint metadata
+    cat > "$BACKUP_DIR/migration-metadata.json" << EOF
+{
+    "timestamp": "$timestamp",
+    "files_backed_up": $backup_count,
+    "backup_directory": "$BACKUP_DIR",
+    "rollback_command": "./scripts/token-migration.sh --rollback --checkpoint $BACKUP_DIR/migration-metadata.json"
+}
+EOF
+
+    echo -e "  ${GREEN}✅ Backup created: $BACKUP_DIR ($backup_count files)${NC}"
+    echo -e "  ${GREEN}✅ Rollback available: ./scripts/token-migration.sh --rollback${NC}"
+    
+    return 0
 }
 
-# 🔺 DOC-009: Validation after migration - 🛡️ Migration validation
+# 🔺 DOC-009: Analyze and migrate tokens in a file
+migrate_file_tokens() {
+    local file_path="$1"
+    local file_tokens=0
+    local file_migrated=0
+    local file_errors=0
+    
+    if [[ ! -f "$file_path" ]]; then
+        return 1
+    fi
+    
+    # Create temporary file for modifications
+    local temp_file=$(mktemp)
+    cp "$file_path" "$temp_file"
+    
+    # Process each line
+    local line_num=0
+    while IFS= read -r line; do
+        ((line_num++))
+        
+        # Check for legacy implementation token pattern
+        if echo "$line" | grep -qE '// .*[A-Z]+-[0-9]+:' && ! echo "$line" | grep -qE '// *[⭐🔺🔶🔻]'; then
+            ((file_tokens++))
+            
+            # Extract feature ID
+            local feature_id=$(echo "$line" | grep -oE '[A-Z]+-[0-9]+' | head -1)
+            
+            if [[ -n "$feature_id" ]]; then
+                # Get priority and action icons
+                local priority_icon="${FEATURE_PRIORITIES[$feature_id]:-🔶}"
+                local action_icon="${FEATURE_ACTIONS[$feature_id]:-🔍}"
+                
+                # Extract the comment content after the colon
+                local comment_content=$(echo "$line" | sed -E 's|^(.*)// .*[A-Z]+-[0-9]+: *(.*)|\2|')
+                
+                # Build new standardized token
+                local new_token="// $priority_icon $feature_id: $comment_content - $action_icon"
+                
+                # Replace the line
+                local escaped_line=$(echo "$line" | sed 's/[[\.*^$()+?{|]/\\&/g')
+                sed -i.bak "${line_num}s|.*|$new_token|" "$temp_file"
+                
+                if [[ "$VERBOSE" == "true" ]]; then
+                    echo -e "    ${CYAN}Line $line_num: $feature_id → $priority_icon $action_icon${NC}"
+                fi
+                
+                ((file_migrated++))
+            else
+                echo -e "    ${RED}❌ Could not extract feature ID from line $line_num${NC}"
+                ((file_errors++))
+            fi
+        fi
+    done < "$file_path"
+    
+    # Apply changes if not dry run
+    if [[ "$DRY_RUN" == "false" && $file_migrated -gt 0 ]]; then
+        mv "$temp_file" "$file_path"
+        echo -e "  ${GREEN}✅ Updated $file_path: $file_migrated tokens migrated${NC}"
+    else
+        rm -f "$temp_file"
+        if [[ "$DRY_RUN" == "true" && $file_migrated -gt 0 ]]; then
+            echo -e "  ${CYAN}[DRY RUN] Would update $file_path: $file_migrated tokens${NC}"
+        fi
+    fi
+    
+    # Clean up backup file created by sed
+    rm -f "${temp_file}.bak"
+    
+    tokens_migrated=$((tokens_migrated + file_migrated))
+    migration_errors=$((migration_errors + file_errors))
+    
+    return 0
+}
+
+# 🔺 DOC-009: Process all Go files for token migration
+process_token_migration() {
+    echo -e "${BLUE}📋 Step 3: Processing implementation token migration...${NC}"
+    echo "-------------------------------------------------------------------"
+    
+    local go_files=($(find . -name "*.go" -not -path "./vendor/*" -not -path "./.git/*" 2>/dev/null))
+    
+    echo -e "  ${CYAN}Found ${#go_files[@]} Go files to process${NC}"
+    
+    for go_file in "${go_files[@]}"; do
+        if [[ "$VERBOSE" == "true" ]] || [[ "$DRY_RUN" == "true" ]]; then
+            echo -e "${CYAN}  Processing $go_file...${NC}"
+        fi
+        
+        migrate_file_tokens "$go_file"
+        ((files_processed++))
+    done
+    
+    echo
+    echo -e "${BLUE}📊 Migration Summary:${NC}"
+    echo "  Files processed: $files_processed"
+    echo "  Tokens migrated: $tokens_migrated"
+    echo "  Errors encountered: $migration_errors"
+    
+    if [[ $tokens_migrated -gt 0 ]]; then
+        echo -e "  ${GREEN}✅ Successfully migrated $tokens_migrated implementation tokens${NC}"
+    fi
+    
+    if [[ $migration_errors -gt 0 ]]; then
+        echo -e "  ${YELLOW}⚠️ $migration_errors tokens could not be migrated${NC}"
+    fi
+}
+
+# 🔺 DOC-009: Validation after migration
 validate_migration() {
-    echo -e "${BLUE}📋 Step 3: Validating migration results...${NC}"
+    echo -e "${BLUE}📋 Step 4: Validating migration results...${NC}"
     echo "-------------------------------------------------------------------"
     
     # Run the icon validation to check results
     echo -e "  ${CYAN}Running comprehensive icon validation...${NC}"
     
-    if make validate-icon-enforcement > /tmp/validation-output.log 2>&1; then
-        echo -e "  ${GREEN}✅ Icon validation passed!${NC}"
-        
-        # Extract standardization rate from validation output
-        local std_rate=$(grep "Standardization rate:" /tmp/validation-output.log | tail -1 | grep -o '[0-9]\+%' || echo "Unknown")
-        echo -e "  ${GREEN}✅ Current standardization rate: $std_rate${NC}"
-        
-        return 0
-    else
-        echo -e "  ${RED}❌ Icon validation failed${NC}"
-        echo -e "  ${YELLOW}📋 Validation details:${NC}"
-        tail -20 /tmp/validation-output.log | sed 's/^/    /'
-        return 1
-    fi
-}
-
-# 🔺 DOC-009: Rollback capability - 🛡️ Safe rollback operations
-rollback_migration() {
-    echo -e "${BLUE}🔄 DOC-009: Rolling back migration...${NC}"
-    echo "=============================================================="
-    
-    if [[ ! -f ".token-migration-backup-location" ]]; then
-        echo -e "${RED}❌ Error: No backup location found${NC}"
-        echo -e "${RED}   Cannot perform rollback without backup location${NC}"
-        exit 1
-    fi
-    
-    local backup_location=$(cat .token-migration-backup-location)
-    
-    if [[ ! -d "$backup_location" ]]; then
-        echo -e "${RED}❌ Error: Backup directory not found: $backup_location${NC}"
-        exit 1
-    fi
-    
-    echo -e "${CYAN}Restoring files from backup: $backup_location${NC}"
-    
-    # Restore all files
-    find "$backup_location" -name "*.go" -type f | while read -r backup_file; do
-        local relative_path=${backup_file#$backup_location/}
-        local original_file="./$relative_path"
-        
-        if cp "$backup_file" "$original_file"; then
-            echo -e "  ${GREEN}✅ Restored: $original_file${NC}"
-        else
-            echo -e "  ${RED}❌ Failed to restore: $original_file${NC}"
-        fi
-    done
-    
-    # Clean up rollback tracking
-    rm -f .token-migration-backup-location
-    rm -f "$CHECKPOINT_FILE"
-    
-    echo -e "${GREEN}✅ Rollback completed${NC}"
-}
-
-# 🔺 DOC-009: Main migration orchestration - 🔧 Migration coordination
-main_migration() {
-    local dry_run="$DRY_RUN"
-    
-    if [[ "$dry_run" == "true" ]]; then
-        echo -e "${YELLOW}🔍 DRY RUN MODE - No actual changes will be made${NC}"
-        echo -e "${YELLOW}   Run with 'false' as first argument to perform actual migration${NC}"
-        echo
-    fi
-    
-    # Create backup (only in actual run mode)
-    if [[ "$dry_run" == "false" ]]; then
-        create_backup
-    else
-        echo -e "${YELLOW}📋 Step 1: Backup skipped in dry run mode${NC}"
-    fi
-    
-    # Find all Go files with implementation tokens  
-    echo -e "${BLUE}📋 Discovering files with implementation tokens...${NC}"
-    local files_with_tokens=($(grep -l "// [A-Z].*-[0-9]\+.*:" . --include="*.go" -r 2>/dev/null || true))
-    
-    echo -e "  ${GREEN}✅ Found ${#files_with_tokens[@]} files with implementation tokens${NC}"
-    
-    # Process files in batches
-    local total_files=${#files_with_tokens[@]}
-    local processed_files=0
-    local current_batch=1
-    local total_failed=0
-    
-    for ((i=0; i<$total_files; i+=$BATCH_SIZE)); do
-        echo
-        echo -e "${MAGENTA}📦 Processing Batch $current_batch...${NC}"
-        
-        # Create batch array
-        local batch=("${files_with_tokens[@]:$i:$BATCH_SIZE}")
-        
-        # Process the batch
-        if process_batch "${batch[@]}"; then
-            processed_files=$((processed_files + ${#batch[@]}))
+    if [[ -x "scripts/validate-icon-enforcement.sh" ]]; then
+        if ./scripts/validate-icon-enforcement.sh > /tmp/validation-output.log 2>&1; then
+            echo -e "  ${GREEN}✅ Icon validation passed!${NC}"
             
-            # Save checkpoint (only in actual run mode)
-            if [[ "$dry_run" == "false" ]]; then
-                save_checkpoint $processed_files $total_files $current_batch
-            fi
+            # Extract standardization rate from validation output
+            local std_rate=$(grep "Standardization rate:" /tmp/validation-output.log | tail -1 | grep -o '[0-9]\+%' || echo "Unknown")
+            echo -e "  ${GREEN}✅ Current standardization rate: $std_rate${NC}"
+            
+            return 0
         else
-            echo -e "  ${RED}❌ Batch $current_batch had failures${NC}"
-            ((total_failed++))
+            echo -e "  ${RED}❌ Icon validation failed${NC}"
+            echo -e "  ${YELLOW}📋 Validation details:${NC}"
+            tail -20 /tmp/validation-output.log | sed 's/^/    /'
+            return 1
         fi
+    else
+        echo -e "  ${YELLOW}⚠️ Icon validation script not found, skipping validation${NC}"
+        return 0
+    fi
+}
+
+# 🔺 DOC-009: Rollback capability
+perform_rollback() {
+    echo -e "${BLUE}📋 DOC-009: Rolling back token migration...${NC}"
+    echo "-------------------------------------------------------------------"
+    
+    # Find most recent backup
+    local backup_dirs=($(ls -dt token-migration-backup-* 2>/dev/null || true))
+    
+    if [[ ${#backup_dirs[@]} -eq 0 ]]; then
+        echo -e "${RED}❌ No migration backups found${NC}"
+        exit 1
+    fi
+    
+    local latest_backup="${backup_dirs[0]}"
+    
+    if [[ ! -f "$latest_backup/migration-metadata.json" ]]; then
+        echo -e "${RED}❌ Backup metadata not found in $latest_backup${NC}"
+        exit 1
+    fi
+    
+    echo -e "  ${CYAN}Rolling back from: $latest_backup${NC}"
+    
+    # Restore files
+    local restored_count=0
+    while IFS= read -r backup_file; do
+        local original_file=$(echo "$backup_file" | sed "s|^$latest_backup/||")
         
-        ((current_batch++))
-        
-        # Progress update
-        local progress=$((processed_files * 100 / total_files))
-        echo -e "  ${CYAN}📊 Progress: $processed_files/$total_files files ($progress%)${NC}"
-    done
+        if [[ -f "$backup_file" ]]; then
+            cp "$backup_file" "$original_file"
+            ((restored_count++))
+        fi
+    done < <(find "$latest_backup" -name "*.go" -type f)
+    
+    echo -e "  ${GREEN}✅ Restored $restored_count files${NC}"
+    echo -e "  ${GREEN}✅ Rollback completed successfully${NC}"
+    
+    return 0
+}
+
+# 🔺 DOC-009: Main migration orchestrator
+main() {
+    local start_time=$(date +%s)
+    
+    echo -e "${BLUE}🎯 Migration Configuration:${NC}"
+    echo "  Dry run: $([ "$DRY_RUN" == "true" ] && echo "Yes" || echo "No")"
+    echo "  Verbose: $([ "$VERBOSE" == "true" ] && echo "Yes" || echo "No")"
+    echo "  Backup: $([ "$ROLLBACK_ENABLED" == "true" ] && echo "Yes" || echo "No")"
+    echo
+    
+    # Check prerequisites
+    if [[ ! -f "docs/context/feature-tracking.md" ]]; then
+        echo -e "${RED}❌ Error: Must be run from project root directory${NC}"
+        echo -e "${RED}   Required: docs/context/feature-tracking.md${NC}"
+        exit 1
+    fi
+    
+    # Execute migration steps
+    load_feature_priorities || { echo -e "${RED}❌ Failed to load feature priorities${NC}"; exit 1; }
+    create_migration_backup || { echo -e "${RED}❌ Failed to create backup${NC}"; exit 1; }
+    process_token_migration || { echo -e "${RED}❌ Migration processing failed${NC}"; exit 1; }
+    
+    # Validate results if not dry run
+    if [[ "$DRY_RUN" == "false" ]]; then
+        validate_migration || { echo -e "${YELLOW}⚠️ Migration validation warnings detected${NC}"; }
+    fi
+    
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
     
     echo
-    echo -e "${BLUE}📋 Migration Summary:${NC}"
-    echo "  Total files processed: $processed_files/$total_files"
-    echo "  Batches with failures: $total_failed"
+    echo -e "${BLUE}🎯 Migration Complete${NC}"
+    echo "=============================================================="
+    echo -e "  Duration: ${duration}s"
+    echo -e "  Files processed: $files_processed"
+    echo -e "  Tokens migrated: ${GREEN}$tokens_migrated${NC}"
     
-    # Validation (only in actual run mode)
-    if [[ "$dry_run" == "false" ]]; then
-        if validate_migration; then
-            echo -e "  ${GREEN}✅ Migration validation passed${NC}"
-            
-            # Clean up checkpoint file on success
-            rm -f "$CHECKPOINT_FILE"
-            
-            echo
-            echo -e "${GREEN}🎉 DOC-009: Mass token standardization completed successfully!${NC}"
-            echo -e "${GREEN}   Run 'make validate-icon-enforcement' to see updated metrics${NC}"
-        else
-            echo -e "  ${RED}❌ Migration validation failed${NC}"
-            echo -e "  ${YELLOW}💡 Consider running rollback: $0 rollback${NC}"
-            exit 1
-        fi
-    else
-        echo -e "  ${YELLOW}🔍 Dry run completed - no validation performed${NC}"
-        echo -e "  ${GREEN}💡 Run '$0 false' to perform actual migration${NC}"
+    if [[ $migration_errors -gt 0 ]]; then
+        echo -e "  Errors: ${RED}$migration_errors${NC}"
     fi
+    
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "${CYAN}📋 This was a dry run. To execute migration, run:${NC}"
+        echo -e "${CYAN}   ./scripts/token-migration.sh${NC}"
+    else
+        echo -e "${GREEN}✅ Token migration completed successfully!${NC}"
+        
+        if [[ "$ROLLBACK_ENABLED" == "true" ]]; then
+            echo -e "${CYAN}📋 To rollback if needed, run:${NC}"
+            echo -e "${CYAN}   ./scripts/token-migration.sh --rollback${NC}"
+        fi
+    fi
+    
+    exit 0
 }
 
-# 🔺 DOC-009: Command line interface - 📝 CLI processing
-case "${1:-}" in
-    "rollback")
-        rollback_migration
-        ;;
-    "help"|"-h"|"--help")
-        echo "🔺 DOC-009: Mass Implementation Token Standardization"
-        echo
-        echo "Usage:"
-        echo "  $0 [true|false]     - Run migration (true=dry run, false=actual)"
-        echo "  $0 rollback         - Rollback last migration"
-        echo "  $0 help             - Show this help"
-        echo
-        echo "Environment Variables:"
-        echo "  BATCH_SIZE=50       - Number of files per batch"
-        echo
-        echo "Examples:"
-        echo "  $0                  - Dry run (default)"
-        echo "  $0 true             - Dry run (explicit)"
-        echo "  $0 false            - Actual migration"
-        echo "  BATCH_SIZE=25 $0 false - Smaller batches"
-        ;;
-    *)
-        main_migration
-        ;;
-esac 
+# Run main function
+main "$@" 

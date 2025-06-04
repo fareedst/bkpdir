@@ -306,7 +306,7 @@ validate-icon-enforcement:
 	@if [ -f "scripts/validate-icon-enforcement.sh" ]; then \
 		chmod +x scripts/validate-icon-enforcement.sh; \
 		./scripts/validate-icon-enforcement.sh; \
-		echo "✓ DOC-008 validation completed - see icon-validation-report.md for details"; \
+		echo "✓ DOC-008 validation completed - see docs/validation-reports/icon-validation-report.md for details"; \
 	else \
 		echo "❌ DOC-008 icon enforcement script not found"; \
 		echo "   Expected: scripts/validate-icon-enforcement.sh"; \

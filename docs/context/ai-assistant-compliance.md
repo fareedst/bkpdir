@@ -102,7 +102,7 @@ When making ANY code changes, you MUST:
 
 1. **🔍 Run Icon Consistency Check**: Execute `make validate-icons` (DOC-007 basic validation)
 2. **🛡️ Run Comprehensive Validation**: Execute `make validate-icon-enforcement` (DOC-008 full validation)
-3. **📊 Review Validation Report**: Check `icon-validation-report.md` for warnings and errors
+3. **📊 Review Validation Report**: Check `docs/validation-reports/icon-validation-report.md` for warnings and errors
 4. **✅ Achieve Zero Errors**: Fix all critical errors before proceeding
 
 #### 🆕 **DOC-009 THROUGH DOC-012: AI ASSISTANT OPTIMIZATION TASKS**
@@ -154,7 +154,7 @@ When making ANY code changes, you MUST:
 - ✅ Makefile integration: `validate-icon-enforcement` target exists and works
 - ✅ Script accessibility: `scripts/validate-icon-enforcement.sh` is executable
 - ✅ CI/CD readiness: `make validate-icons-strict` passes in strict mode
-- ✅ Report generation: `icon-validation-report.md` created after validation
+- ✅ Report generation: `docs/validation-reports/icon-validation-report.md` created after validation
 
 #### 🔧 **DOC-008 Enforcement Levels**
 
@@ -215,7 +215,7 @@ Before any AI assistant provides code changes, it MUST validate:
 4. **🛡️ DOC-008 COMPREHENSIVE VALIDATION** [PRIORITY: CRITICAL]
    - [ ] Executed `make validate-icons` for basic DOC-007 validation
    - [ ] Executed `make validate-icon-enforcement` for comprehensive DOC-008 validation
-   - [ ] Reviewed generated `icon-validation-report.md` for issues
+   - [ ] Reviewed generated `docs/validation-reports/icon-validation-report.md` for issues
    - [ ] Achieved zero critical errors in validation report
    - [ ] Addressed all warnings or documented acceptable risk
    - [ ] Verified all icons conform to master legend in README.md
@@ -260,7 +260,7 @@ Before any AI assistant provides code changes, it MUST validate:
 - **Comprehensive Validation (DOC-008)**: [✅ PASSED | ❌ FAILED - Details] 
 - **Critical Errors**: [Count and brief description]
 - **Warnings**: [Count and action plan]
-- **Validation Report**: [Reference to icon-validation-report.md]
+- **Validation Report**: [Reference to docs/validation-reports/icon-validation-report.md]
 
 ### 🔄 Required Context File Updates:
 - [ ] feature-tracking.md: [Specific changes]

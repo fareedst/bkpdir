@@ -39,7 +39,7 @@ make validate-icon-enforcement
 - **Purpose**: Development-time validation
 - **Fail Condition**: Critical errors > 0
 - **Output**: Detailed report with warnings and errors
-- **Report**: Generates `icon-validation-report.md`
+- **Report**: Generates `docs/validation-reports/icon-validation-report.md`
 
 ### Strict Validation (CI/CD)
 ```bash
@@ -98,7 +98,7 @@ make validate-icons
 
 ## 📋 Validation Report Structure
 
-### Generated Report (`icon-validation-report.md`)
+### Generated Report (`docs/validation-reports/icon-validation-report.md`)
 ```markdown
 # Icon Validation and Enforcement Report (DOC-008)
 
