@@ -115,6 +115,16 @@ help:
 	@echo "  enhance-tokens-all Enhance all tokens with decision context"
 	@echo "  validate-enhanced-tokens Validate enhanced token format compliance"
 	@echo ""
+	@echo "Decision validation targets (DOC-014):"
+	@echo "  decision-framework-workflow Complete Decision Framework validation and monitoring"
+	@echo "  decision-validation-suite Comprehensive decision framework compliance validation"
+	@echo "  decision-validation-strict Strict validation for CI/CD integration (zero tolerance)"
+	@echo "  decision-validation-ci JSON output validation for automated processing"
+	@echo "  validate-decision-framework Validate Decision Framework implementation"
+	@echo "  validate-decision-context Validate decision context in enhanced tokens"
+	@echo "  track-decision-metrics Collect and analyze decision quality metrics"
+	@echo "  decision-quality-monitor Generate decision quality dashboard with trends"
+	@echo ""
 	@echo "Production build targets:"
 	@echo "  build-all       Build for all platforms"
 	@echo "  build-macos     Build for macOS (ARM64 and AMD64)"
@@ -688,3 +698,85 @@ token-workflow: token-suggester analyze-tokens validate-token-formats
 # 🔶 DOC-010: Development targets - 🔧 Development utilities
 token-dev: token-suggester-test token-suggester analyze-tokens
 	@echo "🔶 DOC-010: Development workflow completed"
+
+# 🔶 DOC-014: Decision validation tools - Automated compliance checking
+validate-decision-framework:
+	@echo "🔶 DOC-014: Validating Decision Framework compliance"
+	./scripts/validate-decision-framework.sh
+
+validate-decision-framework-strict:
+	@echo "🔶 DOC-014: Strict Decision Framework validation"
+	./scripts/validate-decision-framework.sh --mode strict
+
+validate-decision-framework-json:
+	@echo "🔶 DOC-014: Decision Framework validation (JSON output)"
+	./scripts/validate-decision-framework.sh --format json
+
+validate-decision-context:
+	@echo "🔶 DOC-014: Validating decision context in enhanced tokens"
+	./scripts/validate-decision-context.sh
+
+validate-decision-context-strict:
+	@echo "🔶 DOC-014: Strict decision context validation"
+	./scripts/validate-decision-context.sh --mode strict
+
+validate-decision-context-json:
+	@echo "🔶 DOC-014: Decision context validation (JSON output)"
+	./scripts/validate-decision-context.sh --format json
+
+track-decision-metrics:
+	@echo "🔶 DOC-014: Collecting decision quality metrics"
+	./scripts/track-decision-metrics.sh
+
+track-decision-metrics-dashboard:
+	@echo "🔶 DOC-014: Generating decision metrics dashboard"
+	./scripts/track-decision-metrics.sh --format dashboard
+
+track-decision-metrics-json:
+	@echo "🔶 DOC-014: Decision metrics collection (JSON output)"
+	./scripts/track-decision-metrics.sh --format json
+
+# 🔶 DOC-014: Decision validation workflows - Complete validation suites
+decision-validation-suite: validate-decision-framework validate-decision-context track-decision-metrics
+	@echo "🔶 DOC-014: Complete decision validation suite completed"
+	@echo "  ✅ Decision Framework validation: COMPLETED"
+	@echo "  ✅ Decision context validation: COMPLETED"
+	@echo "  ✅ Decision quality metrics: COLLECTED"
+	@echo "  📄 Reports available in docs/validation-reports/"
+	@echo "  📊 Dashboard available in docs/decision-metrics/"
+
+decision-validation-strict: validate-decision-framework-strict validate-decision-context-strict
+	@echo "🔶 DOC-014: Strict decision validation completed"
+	@echo "  🚨 Use for pre-commit validation and CI/CD integration"
+	@echo "  🔍 Zero tolerance for decision framework violations"
+
+decision-validation-ci: validate-decision-framework-json validate-decision-context-json track-decision-metrics-json
+	@echo "🔶 DOC-014: CI/CD decision validation completed"
+	@echo "  📄 JSON reports generated for automated processing"
+	@echo "  🔗 Integrate with CI/CD pipeline for automated compliance checking"
+
+# 🔶 DOC-014: Decision quality monitoring - Continuous improvement
+decision-quality-monitor: track-decision-metrics-dashboard
+	@echo "🔶 DOC-014: Decision quality monitoring dashboard updated"
+	@echo "  📊 Real-time metrics tracking activated"
+	@echo "  🎯 Goal alignment and rework rates monitored"
+	@echo "  📈 Trend analysis available"
+	@echo "  💡 Recommendations for improvement provided"
+
+# 🔶 DOC-014: Complete decision framework workflow
+decision-framework-workflow: decision-validation-suite decision-quality-monitor
+	@echo "🔶 DOC-014: Complete Decision Framework workflow completed"
+	@echo ""
+	@echo "🎯 Decision Framework Status:"
+	@echo "  ✅ Framework validation: ACTIVE"
+	@echo "  ✅ Context validation: ACTIVE"  
+	@echo "  ✅ Quality monitoring: ACTIVE"
+	@echo "  ✅ Automated compliance: ENABLED"
+	@echo ""
+	@echo "📋 Available targets:"
+	@echo "  - make decision-validation-suite    # Complete validation"
+	@echo "  - make decision-validation-strict   # Strict validation for CI/CD"
+	@echo "  - make decision-quality-monitor     # Update quality dashboard"
+	@echo "  - make track-decision-metrics       # Collect current metrics"
+	@echo ""
+	@echo "🚀 DOC-014 Decision Framework fully operational!"
