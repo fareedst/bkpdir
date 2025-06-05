@@ -5,6 +5,7 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"gopkg.in/yaml.v3"
@@ -1030,5 +1031,327 @@ func createTestConfigFileWithData(t *testing.T, configPath string, data map[stri
 
 	if err := os.WriteFile(configPath, yamlData, 0644); err != nil {
 		t.Fatalf("Failed to write config file: %v", err)
+	}
+}
+
+// ⭐ CFG-005: Configuration inheritance testing - 🧪 Comprehensive inheritance test coverage
+
+// TestConfigInheritance tests basic configuration inheritance functionality
+func TestConfigInheritance(t *testing.T) {
+	// Create temporary test directory
+	tempDir, err := os.MkdirTemp("", "config_inheritance_test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create base configuration file
+	baseConfig := `
+archive_dir_path: "/base/archives"
+exclude_patterns:
+  - "*.log"
+  - "*.tmp"
+include_git_info: true
+skip_broken_symlinks: true
+`
+	baseConfigPath := filepath.Join(tempDir, "base.yml")
+	err = os.WriteFile(baseConfigPath, []byte(baseConfig), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write base config: %v", err)
+	}
+
+	// Create child configuration file that inherits from base
+	childConfig := `
+inherit:
+  - "base.yml"
+archive_dir_path: "/child/archives"
++exclude_patterns:
+  - "*.cache"
+include_git_info: false
+`
+	childConfigPath := filepath.Join(tempDir, "child.yml")
+	err = os.WriteFile(childConfigPath, []byte(childConfig), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write child config: %v", err)
+	}
+
+	// Test inheritance chain building
+	fileOps := &configFileOperations{}
+	pathResolver := newPathResolver(fileOps)
+	chainBuilder := newInheritanceChainBuilder(fileOps)
+
+	chain, err := chainBuilder.buildChain(childConfigPath, pathResolver)
+	if err != nil {
+		t.Fatalf("Failed to build inheritance chain: %v", err)
+	}
+
+	// Verify chain contains both files in correct order
+	if len(chain.files) != 2 {
+		t.Errorf("Expected 2 files in chain, got %d", len(chain.files))
+	}
+
+	// Base file should come first (parent before child)
+	if !strings.HasSuffix(chain.files[0], "base.yml") {
+		t.Errorf("Expected base.yml to be first in chain, got %s", chain.files[0])
+	}
+	if !strings.HasSuffix(chain.files[1], "child.yml") {
+		t.Errorf("Expected child.yml to be second in chain, got %s", chain.files[1])
+	}
+}
+
+// TestMergeStrategies tests different merge strategies for configuration inheritance
+func TestMergeStrategies(t *testing.T) {
+	// Test merge strategy extraction
+	processor := newMergeStrategyProcessor()
+
+	tests := []struct {
+		key      string
+		expected string
+		cleanKey string
+	}{
+		{"normal_key", "override", "normal_key"},
+		{"+merge_key", "merge", "merge_key"},
+		{"^prepend_key", "prepend", "prepend_key"},
+		{"!replace_key", "replace", "replace_key"},
+		{"=default_key", "default", "default_key"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.key, func(t *testing.T) {
+			config := map[string]interface{}{
+				test.key: "test_value",
+			}
+
+			processed, err := processor.processKeys(config)
+			if err != nil {
+				t.Fatalf("Failed to process keys: %v", err)
+			}
+
+			operation, exists := processed.operations[test.cleanKey]
+			if !exists {
+				t.Errorf("Expected operation for key %s", test.cleanKey)
+				return
+			}
+
+			if operation.strategy != test.expected {
+				t.Errorf("Expected strategy %s, got %s", test.expected, operation.strategy)
+			}
+		})
+	}
+}
+
+// TestArrayMergeStrategies tests array-specific merge strategies
+func TestArrayMergeStrategies(t *testing.T) {
+	// Create test configuration with array fields
+	result := DefaultConfig()
+	result.ExcludePatterns = []string{"base1", "base2"}
+
+	tests := []struct {
+		name     string
+		strategy string
+		srcValue []string
+		expected []string
+	}{
+		{
+			name:     "merge strategy appends",
+			strategy: "merge",
+			srcValue: []string{"child1", "child2"},
+			expected: []string{"base1", "base2", "child1", "child2"},
+		},
+		{
+			name:     "prepend strategy prepends",
+			strategy: "prepend",
+			srcValue: []string{"child1", "child2"},
+			expected: []string{"child1", "child2", "base1", "base2"},
+		},
+		{
+			name:     "replace strategy replaces",
+			strategy: "replace",
+			srcValue: []string{"child1", "child2"},
+			expected: []string{"child1", "child2"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			// Reset result for each test
+			testResult := DefaultConfig()
+			testResult.ExcludePatterns = []string{"base1", "base2"}
+
+			operation := &mergeOperation{
+				strategy: test.strategy,
+				value:    test.srcValue,
+				key:      "exclude_patterns",
+			}
+
+			dstValue := testResult.ExcludePatterns
+			err := applyMergeOperation(testResult, "exclude_patterns", operation, dstValue)
+			if err != nil {
+				t.Fatalf("Failed to apply merge operation: %v", err)
+			}
+
+			if !equalStringSlices(testResult.ExcludePatterns, test.expected) {
+				t.Errorf("Expected %v, got %v", test.expected, testResult.ExcludePatterns)
+			}
+		})
+	}
+}
+
+// TestCircularDependencyDetection tests detection of circular inheritance dependencies
+func TestCircularDependencyDetection(t *testing.T) {
+	// Create temporary test directory
+	tempDir, err := os.MkdirTemp("", "circular_dependency_test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create file A that inherits from B
+	configA := `
+inherit:
+  - "config_b.yml"
+archive_dir_path: "/a/archives"
+`
+	configAPath := filepath.Join(tempDir, "config_a.yml")
+	err = os.WriteFile(configAPath, []byte(configA), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write config A: %v", err)
+	}
+
+	// Create file B that inherits from A (circular dependency)
+	configB := `
+inherit:
+  - "config_a.yml"
+archive_dir_path: "/b/archives"
+`
+	configBPath := filepath.Join(tempDir, "config_b.yml")
+	err = os.WriteFile(configBPath, []byte(configB), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write config B: %v", err)
+	}
+
+	// Test that circular dependency is detected
+	fileOps := &configFileOperations{}
+	pathResolver := newPathResolver(fileOps)
+	chainBuilder := newInheritanceChainBuilder(fileOps)
+
+	_, err = chainBuilder.buildChain(configAPath, pathResolver)
+	if err == nil {
+		t.Error("Expected circular dependency error, but got nil")
+	}
+
+	if !strings.Contains(err.Error(), "circular dependency detected") {
+		t.Errorf("Expected circular dependency error, got: %v", err)
+	}
+}
+
+// TestDefaultValueStrategy tests the default value merge strategy
+func TestDefaultValueStrategy(t *testing.T) {
+	result := DefaultConfig()
+	result.ArchiveDirPath = "" // Zero value
+
+	// Test that default strategy only applies when destination is zero value
+	operation := &mergeOperation{
+		strategy: "default",
+		value:    "/new/path",
+		key:      "archive_dir_path",
+	}
+
+	err := applyMergeOperation(result, "archive_dir_path", operation, "")
+	if err != nil {
+		t.Fatalf("Failed to apply default operation: %v", err)
+	}
+
+	if result.ArchiveDirPath != "/new/path" {
+		t.Errorf("Expected /new/path, got %s", result.ArchiveDirPath)
+	}
+
+	// Test that default strategy doesn't override non-zero values
+	result.ArchiveDirPath = "/existing/path"
+	operation.value = "/should/not/apply"
+
+	err = applyMergeOperation(result, "archive_dir_path", operation, "/existing/path")
+	if err != nil {
+		t.Fatalf("Failed to apply default operation: %v", err)
+	}
+
+	if result.ArchiveDirPath != "/existing/path" {
+		t.Errorf("Expected /existing/path to remain, got %s", result.ArchiveDirPath)
+	}
+}
+
+// TestComplexInheritanceChain tests a complex multi-level inheritance chain
+func TestComplexInheritanceChain(t *testing.T) {
+	// Create temporary test directory
+	tempDir, err := os.MkdirTemp("", "complex_inheritance_test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create grandparent configuration
+	grandparentConfig := `
+archive_dir_path: "/grandparent/archives"
+exclude_patterns:
+  - "*.log"
+include_git_info: true
+`
+	grandparentPath := filepath.Join(tempDir, "grandparent.yml")
+	err = os.WriteFile(grandparentPath, []byte(grandparentConfig), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write grandparent config: %v", err)
+	}
+
+	// Create parent configuration that inherits from grandparent
+	parentConfig := `
+inherit:
+  - "grandparent.yml"
+archive_dir_path: "/parent/archives"
++exclude_patterns:
+  - "*.tmp"
+skip_broken_symlinks: true
+`
+	parentPath := filepath.Join(tempDir, "parent.yml")
+	err = os.WriteFile(parentPath, []byte(parentConfig), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write parent config: %v", err)
+	}
+
+	// Create child configuration that inherits from parent
+	childConfig := `
+inherit:
+  - "parent.yml"
++exclude_patterns:
+  - "*.cache"
+include_git_info: false
+=show_git_dirty_status: true
+`
+	childPath := filepath.Join(tempDir, "child.yml")
+	err = os.WriteFile(childPath, []byte(childConfig), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write child config: %v", err)
+	}
+
+	// Test that complex inheritance chain builds correctly
+	fileOps := &configFileOperations{}
+	pathResolver := newPathResolver(fileOps)
+	chainBuilder := newInheritanceChainBuilder(fileOps)
+
+	chain, err := chainBuilder.buildChain(childPath, pathResolver)
+	if err != nil {
+		t.Fatalf("Failed to build complex inheritance chain: %v", err)
+	}
+
+	// Verify chain contains all files in correct order
+	if len(chain.files) != 3 {
+		t.Errorf("Expected 3 files in chain, got %d", len(chain.files))
+	}
+
+	// Files should be in order: grandparent, parent, child
+	expectedOrder := []string{"grandparent.yml", "parent.yml", "child.yml"}
+	for i, expected := range expectedOrder {
+		if !strings.HasSuffix(chain.files[i], expected) {
+			t.Errorf("Expected %s at position %d, got %s", expected, i, chain.files[i])
+		}
 	}
 }

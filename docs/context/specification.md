@@ -278,6 +278,93 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      pattern_timestamp: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
      ```
 
+9. **⭐ Layered Configuration Inheritance** (CFG-005)
+   - Configuration files can inherit from other configuration files using explicit declarations
+   - Supports flexible merge strategies for different data types (arrays, objects, primitives)
+   - Prevents circular inheritance through automatic dependency tracking
+   - Maintains backward compatibility with existing single-file configurations
+   - YAML key: `inherit` - specifies parent configuration file(s) to inherit from
+   - Inheritance paths can be absolute, relative, or use home directory expansion (~)
+   - Multiple inheritance sources supported via array syntax: `inherit: ["~/.bkpdir.yml", "/etc/bkpdir.yml"]`
+   
+   **Merge Strategy Syntax:**
+   - **Standard Override** (no prefix): Child values replace parent values completely
+     ```yaml
+     archive_dir_path: "./local-archive"  # overrides parent value
+     ```
+   - **Array Merge** (`+` prefix): Child array elements are appended to parent array
+     ```yaml
+     +exclude_patterns:
+       - "node_modules/"  # added to parent patterns
+       - "dist/"
+     ```
+   - **Array Prepend** (`^` prefix): Child array elements are prepended to parent array (higher priority)
+     ```yaml
+     ^exclude_patterns:
+       - "*.secret"  # inserted before parent patterns
+     ```
+   - **Array Replace** (`!` prefix): Child array completely replaces parent array
+     ```yaml
+     !exclude_patterns:
+       - "only_this.tmp"  # replaces all parent patterns
+     ```
+   - **Default Strategy** (`=` prefix): Use child value only if not already set by parent
+     ```yaml
+     =include_git_info: false  # use only if parent doesn't specify
+     ```
+   
+   **Inheritance Processing:**
+   - Configuration files are loaded in dependency order (parent before child)
+   - Circular inheritance is detected and prevented with descriptive error messages
+   - Source tracking maintains visibility into where each configuration value originates
+   - Inheritance chain depth is unlimited but must be acyclic
+   
+   **Example Configuration:**
+   ```yaml
+   # ~/.bkpdir.yml (global base configuration)
+   archive_dir_path: "~/Archives"
+   backup_dir_path: "~/Backups"
+   exclude_patterns:
+     - "*.tmp"
+     - "*.log"
+     - ".DS_Store"
+   include_git_info: true
+   
+   # /project/.bkpdir.yml (project-specific configuration)
+   inherit: "~/.bkpdir.yml"
+   
+   # Override specific settings
+   archive_dir_path: "./project-archives"
+   backup_dir_path: "./project-backups"
+   
+   # Extend exclude patterns (merge strategy)
+   +exclude_patterns:
+     - "node_modules/"
+     - "dist/"
+     - "*.secret"
+   
+   # High-priority excludes (prepend strategy)
+   ^exclude_patterns:
+     - "*.private"
+   
+   # Use base setting if not already defined
+   =verification:
+     verify_on_create: true
+   ```
+   
+   **Configuration Value Resolution:**
+   - `archive_dir_path`: "./project-archives" (overridden by child)
+   - `backup_dir_path`: "./project-backups" (overridden by child)
+   - `exclude_patterns`: ["*.private", "*.tmp", "*.log", ".DS_Store", "node_modules/", "dist/", "*.secret"] (merged with prepend + append)
+   - `include_git_info`: true (inherited from parent)
+   - `verification.verify_on_create`: true (set by child using default strategy)
+   
+   **Error Handling:**
+   - Missing inheritance files result in descriptive error messages
+   - Circular inheritance dependencies are detected and reported with the full cycle path
+   - Invalid merge strategy prefixes are ignored with warning messages
+   - Malformed inheritance declarations provide helpful correction suggestions
+
 ## Commands
 
 ### 1. Create Full Archive

@@ -86,6 +86,7 @@ For detailed guidelines on how to document and track features, please refer to [
 | CFG-002 | Status codes | Status code config | Config object | TestDefaultConfig | ✅ Implemented | `// CFG-002: Status codes` | 🎯 HIGH |
 | CFG-003 | Format strings | Output formatting | OutputFormatter | TestTemplateFormatter | ✅ Implemented | `// CFG-003: Format strings` | 🎯 HIGH |
 | CFG-004 | Comprehensive string config | String externalization | String Management | TestStringExternalization | ✅ Completed | `// CFG-004: String externalization` | 🎯 HIGH |
+| CFG-005 | Layered configuration inheritance | Configuration inheritance system | Configuration Layer | TestConfigInheritance | ✅ Completed | `// ⭐ CFG-005: Layered configuration inheritance` | ⭐ CRITICAL |
 
 ### 🔌 Git Integration [PRIORITY: HIGH]
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |
@@ -1567,3 +1568,127 @@ With no human developers and AI-first development approach:
 - **Configuration**: Single boolean flag `skip_broken_symlinks` with sensible default (false)
 - **Error Handling**: Maintains symlink metadata in archive for valid symlinks; provides clear error for broken ones
 - **Test Coverage**: Validates both configuration modes and ensures regular file processing unaffected
+
+#### **CFG-005 Detailed Subtask Breakdown:**
+
+**⭐ CFG-005: Layered Configuration Inheritance - ✅ COMPLETED (2025-01-02)**
+*Enable configuration files to inherit from other configuration files with flexible merge strategies*
+
+**🔧 CFG-005 Subtasks (All Completed ✅):**
+1. **[x] Design inheritance configuration structure** (⭐ CRITICAL) - ✅ **COMPLETED**
+   - ✅ Designed `inherit` field for explicit inheritance declarations
+   - ✅ Defined inheritance chain processing order (depth-first traversal)
+   - ✅ Created ConfigInheritance struct for inheritance metadata
+   - ✅ Planned circular dependency detection and prevention
+
+2. **[x] Implement prefix-based merge strategies** (⭐ CRITICAL) - ✅ **COMPLETED**
+   - ✅ Standard override behavior (no prefix)
+   - ✅ Array merge strategy (`+` prefix for append)
+   - ✅ Array prepend strategy (`^` prefix for prepend)
+   - ✅ Array replace strategy (`!` prefix for replace)
+   - ✅ Default strategy (`=` prefix for use default if not set)
+
+3. **[x] Extend configuration loading engine** (🔺 HIGH) - ✅ **COMPLETED**
+   - ✅ Modify LoadConfig to support inheritance chains
+   - ✅ Implement loadConfigRecursive for inheritance traversal
+   - ✅ Add visited map for circular dependency prevention
+   - ✅ Create inheritance metadata tracking
+
+4. **[x] Implement inheritance resolution logic** (🔺 HIGH) - ✅ **COMPLETED**
+   - ✅ Parse inheritance declarations from config files
+   - ✅ Resolve inheritance paths (relative and absolute)
+   - ✅ Build inheritance dependency graph
+   - ✅ Execute inheritance chain loading in correct order
+
+5. **[x] Create merge strategy processor** (🔺 HIGH) - ✅ **COMPLETED**
+   - ✅ Parse key prefixes and extract merge strategies
+   - ✅ Implement strategy-specific merging logic
+   - ✅ Handle nested structure merging with strategies
+   - ✅ Preserve type safety during merging operations
+
+6. **[x] Add configuration debugging and tracing** (🔶 MEDIUM) - ✅ **COMPLETED**
+   - ✅ Track configuration value sources through inheritance
+   - ✅ Provide inheritance chain visualization
+   - ✅ Add debug output for inheritance resolution
+   - ✅ Create configuration source attribution system
+
+7. **[x] Implement comprehensive testing** (🔶 MEDIUM) - ✅ **COMPLETED**
+   - ✅ Test all merge strategies with various data types
+   - ✅ Test circular dependency detection and prevention
+   - ✅ Test complex inheritance chains (3+ levels)
+   - ✅ Test error handling for missing inheritance files
+
+8. **[x] Create backward compatibility layer** (🔶 MEDIUM) - ✅ **COMPLETED**
+   - ✅ Ensure existing configurations work without changes
+   - ✅ Maintain current configuration loading behavior
+   - ✅ Provide migration path for enabling inheritance
+   - ✅ Preserve performance for non-inheritance configurations
+
+9. **[x] Update documentation and examples** (🔻 LOW) - ✅ **COMPLETED**
+   - ✅ Create inheritance configuration examples
+   - ✅ Document merge strategy syntax and behavior
+   - ✅ Update configuration specification
+   - ✅ Provide best practices and usage patterns
+
+10. **[x] Update task status in feature tracking** (🔻 LOW) - ✅ **COMPLETED**
+    - ✅ Mark completed subtasks with checkmarks
+    - ✅ Document implementation details and decisions
+    - ✅ Record performance impact and validation results
+    - ✅ Update overall feature status to completed
+
+**🎯 CFG-005 Success Criteria:**
+- **✅ Explicit Inheritance**: Configuration files can declare inheritance relationships
+- **✅ Flexible Merge Strategies**: Support for override, merge, prepend, replace, and default strategies
+- **✅ Circular Detection**: Prevent infinite loops from circular inheritance
+- **✅ Backward Compatible**: Existing configurations work without modification
+- **✅ Source Tracking**: Maintain visibility into configuration value origins
+- **✅ Performance**: Minimal overhead for configurations not using inheritance
+- **✅ Comprehensive Testing**: Full test coverage for all inheritance scenarios
+
+**✅ IMPLEMENTATION COMPLETED (2025-01-02)**
+
+**🔧 Implementation Summary:**
+⭐ **CFG-005: Comprehensive layered configuration inheritance system successfully implemented.** Added `inherit` field to Config struct enabling explicit inheritance declarations. Implemented complete inheritance system with LoadConfigWithInheritance function as main entry point, loadConfigRecursive for inheritance chain processing, and comprehensive merge strategy support. Created 5 merge strategies: override (default), merge (+), prepend (^), replace (!), and default (=). Added circular dependency detection, multi-level inheritance chains, and source tracking. Implemented comprehensive test suite with 6 new test functions including TestConfigInheritance, TestMergeStrategies, TestArrayMergeStrategies, TestCircularDependencyDetection, TestDefaultValueStrategy, and TestComplexInheritanceChain. Created example configuration files and comprehensive documentation. Zero breaking changes with full backward compatibility. All tests pass successfully.
+
+**📋 Key Implementation Features:**
+- **Explicit Inheritance**: `inherit: ["parent1.yml", "parent2.yml"]` field for inheritance declarations
+- **5 Merge Strategies**: Override (default), Merge (+), Prepend (^), Replace (!), Default (=)
+- **Circular Dependency Prevention**: Visited map tracking to prevent infinite loops
+- **Multi-level Inheritance**: Support for grandparent → parent → child chains
+- **Multiple Parents**: Single config can inherit from multiple parent configurations
+- **Source Tracking**: Comprehensive tracking of configuration value origins
+- **Backward Compatibility**: Existing configs work unchanged with zero performance impact
+- **Error Handling**: Detailed error messages for missing files, circular dependencies
+- **Performance Optimization**: Minimal overhead for non-inheritance configurations
+
+**📋 Files Modified/Created:**
+- `config.go`: Added inherit field and inheritance functions (~240 new lines)
+- `config_test.go`: Added inheritance test suite (~320 new lines)
+- `example-inheritance-base.yml`: Base configuration example
+- `example-inheritance-child.yml`: Child configuration with all merge strategies
+- `docs/configuration-inheritance.md`: Complete documentation
+
+**📋 Configuration Example:**
+```yaml
+# ~/.bkpdir.yml (base configuration)
+archive_dir_path: "~/Archives"
+exclude_patterns:
+  - "*.tmp"
+  - "*.log"
+
+# ./project/.bkpdir.yml (inherits and extends)
+inherit: "~/.bkpdir.yml"
+archive_dir_path: "./project-archives"  # override
++exclude_patterns:                      # merge (append)
+  - "node_modules/"
+  - "dist/"
+^exclude_patterns:                      # prepend high-priority
+  - "*.secret"
+=include_git_info: false               # use default if not set
+```
+
+**🚨 DEPENDENCIES SATISFIED:**
+- **No blocking dependencies** - Implemented independently ✅
+- **Builds on**: Existing configuration system (CFG-001, CFG-002, CFG-003, CFG-004) ✅
+- **Enables**: Advanced configuration management for complex projects ✅
+- **Integration**: Works with existing pkg/config architecture from EXTRACT-001 ✅

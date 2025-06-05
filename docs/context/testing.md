@@ -2429,3 +2429,280 @@ func TestValidationRequestProcessing(t *testing.T) {
     assert.NotNil(t, response.RemediationSteps)
     assert.GreaterOrEqual(t, response.ComplianceScore, 0.0)
 }
+```
+
+## ⭐ Configuration System Enhancement Testing
+
+### CFG-005: Layered Configuration Inheritance Testing
+**Priority**: ⭐ CRITICAL  
+**Implementation Tokens**: `// ⭐ CFG-005: Layered configuration inheritance`  
+**Test Function**: `TestConfigInheritance`
+
+#### Core Testing Requirements
+
+**🔧 Inheritance Mechanism Testing**
+- **Test Coverage**: All inheritance declaration parsing and chain building functionality
+- **Circular Dependency Detection**: Comprehensive cycle detection with various inheritance patterns
+- **Path Resolution Testing**: Absolute, relative, and home directory expansion validation
+- **Backward Compatibility**: Non-inheritance configuration loading preserved
+
+**🛡️ Merge Strategy Testing**
+- **Standard Override Testing**: Child values completely replace parent values
+- **Array Merge Testing**: Child arrays append to parent arrays (`+` prefix)
+- **Array Prepend Testing**: Child arrays prepend to parent arrays (`^` prefix)
+- **Array Replace Testing**: Child arrays replace parent arrays (`!` prefix)
+- **Default Value Testing**: Child values used only if parent not set (`=` prefix)
+
+**📊 Configuration Processing Testing**
+- **Dependency Order Testing**: Parent configurations loaded before children
+- **Type Safety Testing**: Configuration merging preserves all data types
+- **Source Tracking Testing**: Value origin visibility throughout inheritance chain
+- **Error Handling Testing**: Missing files, malformed syntax, invalid declarations
+
+**🔍 Performance and Reliability Testing**
+- **Performance Testing**: O(n) complexity validation for inheritance processing
+- **Thread Safety Testing**: Concurrent configuration loading verification
+- **Memory Usage Testing**: Linear scaling with inheritance chain depth
+- **Cache Testing**: Inheritance caching functionality and invalidation
+
+#### Test Implementation Strategy
+
+**📋 Test Categories**
+```go
+// ⭐ CFG-005: Configuration inheritance testing - 🧪 Test infrastructure
+func TestConfigInheritance(t *testing.T) {
+    // Test suite for layered configuration inheritance system
+}
+
+func TestInheritanceChainBuilding(t *testing.T) {
+    // Verify inheritance dependency graph construction and ordering
+}
+
+func TestMergeStrategyProcessing(t *testing.T) {
+    // Test all merge strategies with complex data structures
+}
+
+func TestCircularDependencyDetection(t *testing.T) {
+    // Validate cycle detection with various inheritance patterns
+}
+
+func TestInheritancePathResolution(t *testing.T) {
+    // Test absolute, relative, and home directory path expansion
+}
+
+func TestConfigurationSourceTracking(t *testing.T) {
+    // Verify value origin tracking throughout inheritance chains
+}
+
+func TestInheritanceErrorHandling(t *testing.T) {
+    // Test error scenarios and recovery mechanisms
+}
+
+func TestInheritancePerformance(t *testing.T) {
+    // Validate O(n) complexity and memory usage characteristics
+}
+```
+
+**🔍 Inheritance Test Scenarios**
+- **Simple Inheritance**: Parent-child configuration relationships
+- **Multi-level Inheritance**: Deep inheritance chains (3+ levels)
+- **Multiple Parents**: Configuration inheriting from multiple sources
+- **Complex Merge Scenarios**: Nested structures with various merge strategies
+
+**📊 Merge Strategy Validation Requirements**
+- **Array Operations**: All array merge strategies with complex nested arrays
+- **Object Merging**: Nested object inheritance with strategy application
+- **Primitive Overrides**: String, boolean, and numeric value inheritance
+- **Mixed Type Handling**: Configuration with diverse data type combinations
+
+#### Configuration Test Data
+
+**🚀 Test Configuration Hierarchy**
+```yaml
+# test/configs/base.yml (root configuration)
+archive_dir_path: "~/Archives"
+backup_dir_path: "~/Backups"
+exclude_patterns:
+  - "*.tmp"
+  - "*.log"
+include_git_info: true
+verification:
+  verify_on_create: false
+  checksum_algorithm: "sha256"
+
+# test/configs/development.yml (inherits from base)
+inherit: "base.yml"
+archive_dir_path: "./dev-archives"
++exclude_patterns:
+  - "node_modules/"
+  - "dist/"
+=verification:
+  verify_on_create: true
+
+# test/configs/project.yml (inherits from development)
+inherit: "development.yml"
+^exclude_patterns:
+  - "*.secret"
+!status_codes:
+  - created: 0
+  - identical: 0
+```
+
+**Expected Resolution Result Testing**
+```go
+func TestConfigurationResolution(t *testing.T) {
+    loader := NewInheritanceConfigLoader()
+    config, err := loader.LoadConfigWithInheritance("test/configs/project.yml")
+    
+    assert.NoError(t, err)
+    assert.Equal(t, "./dev-archives", config.ArchiveDirPath)
+    
+    expectedPatterns := []string{
+        "*.secret",        // ^ prepend strategy
+        "*.tmp",           // base configuration
+        "*.log",           // base configuration
+        "node_modules/",   // + merge strategy
+        "dist/",           // + merge strategy
+    }
+    assert.Equal(t, expectedPatterns, config.ExcludePatterns)
+    
+    assert.True(t, config.Verification.VerifyOnCreate) // = default strategy
+}
+```
+
+#### Error Handling Test Cases
+
+**🚨 Error Scenario Testing**
+```go
+func TestInheritanceErrorScenarios(t *testing.T) {
+    testCases := []struct {
+        name          string
+        configFile    string
+        expectedError string
+    }{
+        {
+            name:          "Circular Dependency",
+            configFile:    "circular-a.yml",
+            expectedError: "circular inheritance detected: a.yml -> b.yml -> a.yml",
+        },
+        {
+            name:          "Missing Parent File",
+            configFile:    "missing-parent.yml",
+            expectedError: "inheritance file not found: nonexistent.yml",
+        },
+        {
+            name:          "Invalid Syntax",
+            configFile:    "invalid-syntax.yml",
+            expectedError: "invalid inheritance declaration",
+        },
+        {
+            name:          "Invalid Merge Prefix",
+            configFile:    "invalid-prefix.yml",
+            expectedError: "unknown merge strategy prefix: @",
+        },
+    }
+    
+    for _, tc := range testCases {
+        t.Run(tc.name, func(t *testing.T) {
+            loader := NewInheritanceConfigLoader()
+            _, err := loader.LoadConfigWithInheritance(tc.configFile)
+            
+            assert.Error(t, err)
+            assert.Contains(t, err.Error(), tc.expectedError)
+        })
+    }
+}
+```
+
+#### Performance and Scalability Testing
+
+**⚡ Performance Validation**
+```go
+func TestInheritancePerformanceCharacteristics(t *testing.T) {
+    // Test inheritance chain depth scaling
+    depths := []int{1, 5, 10, 20, 50}
+    
+    for _, depth := range depths {
+        t.Run(fmt.Sprintf("depth_%d", depth), func(t *testing.T) {
+            configs := createInheritanceChain(depth)
+            
+            start := time.Now()
+            loader := NewInheritanceConfigLoader()
+            _, err := loader.LoadConfigWithInheritance(configs[depth-1])
+            duration := time.Since(start)
+            
+            assert.NoError(t, err)
+            
+            // Verify O(n) complexity - processing time should scale linearly
+            expectedMaxDuration := time.Duration(depth) * 10 * time.Millisecond
+            assert.Less(t, duration, expectedMaxDuration,
+                "Inheritance processing time exceeded O(n) expectations")
+        })
+    }
+}
+
+func TestInheritanceMemoryUsage(t *testing.T) {
+    // Verify memory usage scales linearly with chain depth
+    var memBefore, memAfter runtime.MemStats
+    
+    runtime.GC()
+    runtime.ReadMemStats(&memBefore)
+    
+    // Load deep inheritance chain
+    loader := NewInheritanceConfigLoader()
+    configs := createInheritanceChain(100)
+    _, err := loader.LoadConfigWithInheritance(configs[99])
+    
+    runtime.ReadMemStats(&memAfter)
+    
+    assert.NoError(t, err)
+    
+    memUsage := memAfter.Alloc - memBefore.Alloc
+    maxExpectedUsage := uint64(1024 * 1024) // 1MB max for 100-level chain
+    
+    assert.Less(t, memUsage, maxExpectedUsage,
+        "Memory usage exceeded linear scaling expectations")
+}
+```
+
+#### Integration Testing with Existing Features
+
+**🔗 Feature Integration Testing**
+```go
+func TestInheritanceWithEnvironmentVariables(t *testing.T) {
+    // Test inheritance combined with environment variable overrides
+    os.Setenv("BKPDIR_ARCHIVE_DIR", "/env/override")
+    defer os.Unsetenv("BKPDIR_ARCHIVE_DIR")
+    
+    loader := NewInheritanceConfigLoader()
+    config, err := loader.LoadConfigWithInheritance("inherit-test.yml")
+    
+    assert.NoError(t, err)
+    assert.Equal(t, "/env/override", config.ArchiveDirPath,
+        "Environment variables should override inheritance chain")
+}
+
+func TestInheritanceWithConfigDiscovery(t *testing.T) {
+    // Test inheritance with existing configuration discovery system (CFG-001)
+    os.Setenv("BKPDIR_CONFIG", "base.yml:child.yml")
+    defer os.Unsetenv("BKPDIR_CONFIG")
+    
+    loader := NewInheritanceConfigLoader()
+    config, err := loader.LoadConfigWithInheritance(".")
+    
+    assert.NoError(t, err)
+    // Verify inheritance works with discovery system
+}
+
+func TestInheritanceBackwardCompatibility(t *testing.T) {
+    // Verify non-inheritance configurations continue working
+    loader := NewInheritanceConfigLoader()
+    config, err := loader.LoadConfigWithInheritance("legacy-config.yml")
+    
+    assert.NoError(t, err)
+    assert.Equal(t, "legacy-behavior", config.SomeField,
+        "Legacy configurations must continue working without inheritance")
+}
+```
+
+This comprehensive testing framework ensures the layered configuration inheritance system works reliably across all scenarios while maintaining backward compatibility and performance characteristics.

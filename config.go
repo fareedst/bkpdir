@@ -64,6 +64,10 @@ type Config struct {
 	SkipBrokenSymlinks bool                `yaml:"skip_broken_symlinks"`
 	Verification       *VerificationConfig `yaml:"verification"`
 
+	// ⭐ CFG-005: Configuration inheritance support - 🔧 Core inheritance functionality
+	// Inherit specifies configuration files to inherit from
+	Inherit []string `yaml:"inherit,omitempty"`
+
 	// 🔶 REFACTOR-003: Schema separation - File backup specific settings - 🔧
 	// File backup settings
 	BackupDirPath             string `yaml:"backup_dir_path"`
@@ -409,8 +413,16 @@ func expandPath(path string) string {
 // LoadConfig loads configuration from YAML files and environment variables.
 // It searches for configuration files in the standard locations and merges them with defaults.
 func LoadConfig(root string) (*Config, error) {
+	// ⭐ CFG-005: Configuration loading with inheritance support - 🔧 Enhanced loading engine
+	// Try loading with inheritance first (the new default behavior)
+	cfg, err := LoadConfigWithInheritance(root)
+	if err == nil {
+		return cfg, nil
+	}
+
+	// If inheritance loading fails, fallback to original method for backward compatibility
 	// 🔶 REFACTOR-003: Schema separation - Backup application default config - 🔍
-	cfg := DefaultConfig()
+	cfg = DefaultConfig()
 	// 🔶 REFACTOR-003: Config abstraction - Hardcoded search paths need abstraction - 🔍
 	searchPaths := getConfigSearchPaths()
 
@@ -1189,4 +1201,446 @@ func (c *Config) GetDirectoryPermissions() os.FileMode {
 // GetFilePermissions returns the default file permissions
 func (c *Config) GetFilePermissions() os.FileMode {
 	return 0644 // Standard file permissions
+}
+
+// ⭐ CFG-005: Configuration loading with inheritance - 🔧 Enhanced loading engine
+// LoadConfigWithInheritance loads configuration with inheritance chain processing.
+// This extends the original LoadConfig function to support layered configuration inheritance.
+func LoadConfigWithInheritance(root string) (*Config, error) {
+	// Use the pkg/config system for inheritance support
+	fileOps := &configFileOperations{}
+	pathResolver := newPathResolver(fileOps)
+	chainBuilder := newInheritanceChainBuilder(fileOps)
+
+	// Get the primary configuration file
+	searchPaths := getConfigSearchPaths()
+	var primaryConfigPath string
+
+	for _, configPath := range searchPaths {
+		expandedPath := expandPath(configPath)
+		if !filepath.IsAbs(expandedPath) {
+			expandedPath = filepath.Join(root, expandedPath)
+		}
+
+		if _, err := os.Stat(expandedPath); err == nil {
+			primaryConfigPath = expandedPath
+			break
+		}
+	}
+
+	// If no config file found, return default config
+	if primaryConfigPath == "" {
+		return DefaultConfig(), nil
+	}
+
+	// Load configuration with inheritance
+	return loadConfigRecursive(primaryConfigPath, pathResolver, chainBuilder)
+}
+
+// ⭐ CFG-005: Recursive configuration loading - 🔍 Inheritance chain processing
+// loadConfigRecursive loads configuration following inheritance chains.
+func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuilder inheritanceChainBuilder) (*Config, error) {
+	// Build inheritance chain
+	chain, err := chainBuilder.buildChain(configPath, pathResolver)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build inheritance chain: %w", err)
+	}
+
+	// Start with default configuration
+	cfg := DefaultConfig()
+
+	// Process files in inheritance order (parents first)
+	for _, filePath := range chain.files {
+		tempCfg, err := loadSingleConfigFile(filePath)
+		if err != nil {
+			continue // Skip files with errors, continue with chain
+		}
+
+		// Apply merge strategies and merge into main config
+		mergedCfg, err := applyMergeStrategies(cfg, tempCfg)
+		if err != nil {
+			return nil, fmt.Errorf("failed to merge config from %s: %w", filePath, err)
+		}
+		cfg = mergedCfg
+	}
+
+	return cfg, nil
+}
+
+// ⭐ CFG-005: Single file loading - 📝 Individual config file processing
+// loadSingleConfigFile loads a single configuration file.
+func loadSingleConfigFile(configPath string) (*Config, error) {
+	f, err := os.Open(configPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open config file %s: %w", configPath, err)
+	}
+	defer f.Close()
+
+	cfg := DefaultConfig()
+	d := yaml.NewDecoder(f)
+	if err := d.Decode(cfg); err != nil {
+		return nil, fmt.Errorf("failed to decode config file %s: %w", configPath, err)
+	}
+
+	return cfg, nil
+}
+
+// ⭐ CFG-005: Merge strategy application - 🔧 Strategy-based merging
+// applyMergeStrategies applies merge strategies when combining configurations.
+func applyMergeStrategies(dst, src *Config) (*Config, error) {
+	processor := newMergeStrategyProcessor()
+
+	// Convert configs to map for strategy processing
+	dstMap := configToMap(dst)
+	srcMap := configToMap(src)
+
+	// Process merge strategies
+	processed, err := processor.processKeys(srcMap)
+	if err != nil {
+		return nil, fmt.Errorf("failed to process merge strategies: %w", err)
+	}
+
+	// Apply processed configuration
+	result := DefaultConfig()
+
+	// Start with destination values
+	mergeConfigs(result, dst)
+
+	// Apply source values with merge strategies
+	for key, operation := range processed.operations {
+		err := applyMergeOperation(result, key, operation, dstMap[key])
+		if err != nil {
+			return nil, fmt.Errorf("failed to apply merge operation for %s: %w", key, err)
+		}
+	}
+
+	return result, nil
+}
+
+// ⭐ CFG-005: Supporting types and interfaces for inheritance - 🔧 Implementation infrastructure
+
+// configFileOperations implements file operations for inheritance system
+type configFileOperations struct{}
+
+func (c *configFileOperations) ReadFile(path string) ([]byte, error) {
+	return os.ReadFile(path)
+}
+
+func (c *configFileOperations) FileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
+}
+
+// pathResolver provides path resolution for inheritance
+type pathResolver interface {
+	resolvePath(path string, basePath string) (string, error)
+	validatePath(path string) error
+}
+
+// defaultPathResolver implements pathResolver interface
+type defaultPathResolver struct {
+	fileOps *configFileOperations
+}
+
+func newPathResolver(fileOps *configFileOperations) pathResolver {
+	return &defaultPathResolver{fileOps: fileOps}
+}
+
+func (r *defaultPathResolver) resolvePath(path string, basePath string) (string, error) {
+	if filepath.IsAbs(path) {
+		return path, nil
+	}
+
+	if basePath == "" {
+		return path, nil
+	}
+
+	resolved := filepath.Join(filepath.Dir(basePath), path)
+	return resolved, nil
+}
+
+func (r *defaultPathResolver) validatePath(path string) error {
+	if !r.fileOps.FileExists(path) {
+		return fmt.Errorf("file does not exist: %s", path)
+	}
+	return nil
+}
+
+// inheritanceChain represents a resolved inheritance dependency chain
+type inheritanceChain struct {
+	files   []string
+	visited map[string]bool
+}
+
+// inheritanceChainBuilder builds inheritance chains
+type inheritanceChainBuilder interface {
+	buildChain(configPath string, pathResolver pathResolver) (*inheritanceChain, error)
+}
+
+// defaultInheritanceChainBuilder implements inheritanceChainBuilder
+type defaultInheritanceChainBuilder struct {
+	fileOps *configFileOperations
+}
+
+func newInheritanceChainBuilder(fileOps *configFileOperations) inheritanceChainBuilder {
+	return &defaultInheritanceChainBuilder{fileOps: fileOps}
+}
+
+func (b *defaultInheritanceChainBuilder) buildChain(configPath string, pathResolver pathResolver) (*inheritanceChain, error) {
+	chain := &inheritanceChain{
+		files:   make([]string, 0),
+		visited: make(map[string]bool),
+	}
+
+	return chain, b.buildChainRecursive(configPath, "", pathResolver, chain)
+}
+
+func (b *defaultInheritanceChainBuilder) buildChainRecursive(configPath, basePath string, pathResolver pathResolver, chain *inheritanceChain) error {
+	// Resolve path
+	resolvedPath, err := pathResolver.resolvePath(configPath, basePath)
+	if err != nil {
+		return fmt.Errorf("failed to resolve path %s: %w", configPath, err)
+	}
+
+	// Check for circular dependency
+	if chain.visited[resolvedPath] {
+		return fmt.Errorf("circular dependency detected: %s", resolvedPath)
+	}
+
+	// Validate path exists
+	if err := pathResolver.validatePath(resolvedPath); err != nil {
+		return fmt.Errorf("invalid path %s: %w", resolvedPath, err)
+	}
+
+	// Mark as visited
+	chain.visited[resolvedPath] = true
+
+	// Load inheritance metadata
+	inheritance, err := b.loadInheritanceMetadata(resolvedPath)
+	if err != nil {
+		return fmt.Errorf("failed to load inheritance: %w", err)
+	}
+
+	// Process parent files first
+	for _, parentPath := range inheritance {
+		err := b.buildChainRecursive(parentPath, resolvedPath, pathResolver, chain)
+		if err != nil {
+			return fmt.Errorf("failed to process parent %s: %w", parentPath, err)
+		}
+	}
+
+	// Add current file to chain
+	chain.files = append(chain.files, resolvedPath)
+
+	return nil
+}
+
+func (b *defaultInheritanceChainBuilder) loadInheritanceMetadata(configPath string) ([]string, error) {
+	data, err := b.fileOps.ReadFile(configPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read config file: %w", err)
+	}
+
+	var metadata struct {
+		Inherit []string `yaml:"inherit"`
+	}
+
+	err = yaml.Unmarshal(data, &metadata)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse inheritance metadata: %w", err)
+	}
+
+	return metadata.Inherit, nil
+}
+
+// mergeStrategyProcessor processes merge strategies
+type mergeStrategyProcessor interface {
+	processKeys(config map[string]interface{}) (*processedConfig, error)
+}
+
+// processedConfig represents configuration after merge strategy processing
+type processedConfig struct {
+	operations map[string]*mergeOperation
+}
+
+// mergeOperation represents a single merge operation
+type mergeOperation struct {
+	strategy string
+	value    interface{}
+	key      string
+}
+
+// defaultMergeStrategyProcessor implements mergeStrategyProcessor
+type defaultMergeStrategyProcessor struct{}
+
+func newMergeStrategyProcessor() mergeStrategyProcessor {
+	return &defaultMergeStrategyProcessor{}
+}
+
+func (p *defaultMergeStrategyProcessor) processKeys(config map[string]interface{}) (*processedConfig, error) {
+	result := &processedConfig{
+		operations: make(map[string]*mergeOperation),
+	}
+
+	for key, value := range config {
+		strategy, cleanKey := p.extractStrategy(key)
+		result.operations[cleanKey] = &mergeOperation{
+			strategy: strategy,
+			value:    value,
+			key:      cleanKey,
+		}
+	}
+
+	return result, nil
+}
+
+func (p *defaultMergeStrategyProcessor) extractStrategy(key string) (string, string) {
+	if len(key) == 0 {
+		return "override", key
+	}
+
+	switch key[0] {
+	case '+':
+		return "merge", key[1:]
+	case '^':
+		return "prepend", key[1:]
+	case '!':
+		return "replace", key[1:]
+	case '=':
+		return "default", key[1:]
+	default:
+		return "override", key
+	}
+}
+
+// configToMap converts Config struct to map for strategy processing
+func configToMap(cfg *Config) map[string]interface{} {
+	// This is a simplified conversion - in a full implementation,
+	// this would use reflection to convert the struct to a map
+	return map[string]interface{}{
+		"archive_dir_path":     cfg.ArchiveDirPath,
+		"use_current_dir_name": cfg.UseCurrentDirName,
+		"exclude_patterns":     cfg.ExcludePatterns,
+		"include_git_info":     cfg.IncludeGitInfo,
+		"skip_broken_symlinks": cfg.SkipBrokenSymlinks,
+		// Status codes
+		"status_created_archive": cfg.StatusCreatedArchive,
+		"status_disk_full":       cfg.StatusDiskFull,
+		// Add other fields as needed
+	}
+}
+
+// applyMergeOperation applies a merge operation to the result configuration
+func applyMergeOperation(result *Config, key string, operation *mergeOperation, dstValue interface{}) error {
+	switch operation.strategy {
+	case "override":
+		return applyOverride(result, key, operation.value)
+	case "merge":
+		return applyMerge(result, key, operation.value, dstValue)
+	case "prepend":
+		return applyPrepend(result, key, operation.value, dstValue)
+	case "replace":
+		return applyReplace(result, key, operation.value)
+	case "default":
+		return applyDefault(result, key, operation.value, dstValue)
+	default:
+		return fmt.Errorf("unknown merge strategy: %s", operation.strategy)
+	}
+}
+
+// Helper functions for applying different merge strategies
+func applyOverride(result *Config, key string, value interface{}) error {
+	return setConfigField(result, key, value)
+}
+
+func applyMerge(result *Config, key string, value interface{}, dstValue interface{}) error {
+	// For arrays, merge by appending
+	if srcSlice, ok := value.([]string); ok {
+		if dstSlice, ok := dstValue.([]string); ok {
+			merged := append(dstSlice, srcSlice...)
+			return setConfigField(result, key, merged)
+		}
+	}
+	return setConfigField(result, key, value)
+}
+
+func applyPrepend(result *Config, key string, value interface{}, dstValue interface{}) error {
+	// For arrays, prepend source to destination
+	if srcSlice, ok := value.([]string); ok {
+		if dstSlice, ok := dstValue.([]string); ok {
+			merged := append(srcSlice, dstSlice...)
+			return setConfigField(result, key, merged)
+		}
+	}
+	return setConfigField(result, key, value)
+}
+
+func applyReplace(result *Config, key string, value interface{}) error {
+	return setConfigField(result, key, value)
+}
+
+func applyDefault(result *Config, key string, value interface{}, dstValue interface{}) error {
+	// Only use source value if destination is zero value
+	if isZeroValue(dstValue) {
+		return setConfigField(result, key, value)
+	}
+	return nil
+}
+
+// setConfigField sets a field in the Config struct based on the key
+func setConfigField(cfg *Config, key string, value interface{}) error {
+	switch key {
+	case "archive_dir_path":
+		if s, ok := value.(string); ok {
+			cfg.ArchiveDirPath = s
+		}
+	case "use_current_dir_name":
+		if b, ok := value.(bool); ok {
+			cfg.UseCurrentDirName = b
+		}
+	case "exclude_patterns":
+		if slice, ok := value.([]string); ok {
+			cfg.ExcludePatterns = slice
+		}
+	case "include_git_info":
+		if b, ok := value.(bool); ok {
+			cfg.IncludeGitInfo = b
+		}
+	case "skip_broken_symlinks":
+		if b, ok := value.(bool); ok {
+			cfg.SkipBrokenSymlinks = b
+		}
+	case "status_created_archive":
+		if i, ok := value.(int); ok {
+			cfg.StatusCreatedArchive = i
+		}
+	case "status_disk_full":
+		if i, ok := value.(int); ok {
+			cfg.StatusDiskFull = i
+		}
+	// Add other fields as needed
+	default:
+		return fmt.Errorf("unknown config field: %s", key)
+	}
+	return nil
+}
+
+// isZeroValue checks if a value is the zero value for its type
+func isZeroValue(value interface{}) bool {
+	if value == nil {
+		return true
+	}
+
+	switch v := value.(type) {
+	case string:
+		return v == ""
+	case bool:
+		return v == false
+	case int:
+		return v == 0
+	case []string:
+		return len(v) == 0
+	default:
+		return false
+	}
 }

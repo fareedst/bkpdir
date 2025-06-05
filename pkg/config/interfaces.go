@@ -192,3 +192,154 @@ type ConfigValue struct {
 	Source string      // Source of the configuration value
 	Type   string      // Type of the configuration value
 }
+
+// ⭐ CFG-005: Configuration inheritance interfaces - 🔧 Core inheritance functionality
+
+// InheritanceLoader extends ConfigLoader with inheritance support.
+// This interface enables configuration files to inherit from other configuration files.
+type InheritanceLoader interface {
+	ConfigLoader
+
+	// LoadConfigWithInheritance loads configuration with inheritance chain processing
+	LoadConfigWithInheritance(root string, defaultConfig interface{}) (interface{}, error)
+
+	// GetInheritanceChain returns the inheritance chain for a configuration file
+	GetInheritanceChain(configPath string) (*InheritanceChain, error)
+
+	// ValidateInheritanceChain validates the inheritance chain for circular dependencies
+	ValidateInheritanceChain(chain *InheritanceChain) error
+}
+
+// MergeStrategy defines how configuration values should be merged during inheritance.
+// This interface enables flexible merge strategies for different data types.
+type MergeStrategy interface {
+	// Merge applies the merge strategy to destination and source values
+	Merge(dest, src interface{}) (interface{}, error)
+
+	// GetPrefix returns the prefix that triggers this merge strategy
+	GetPrefix() string
+
+	// GetDescription returns a human-readable description of the merge strategy
+	GetDescription() string
+
+	// SupportsType checks if the strategy supports the given data type
+	SupportsType(valueType string) bool
+}
+
+// InheritanceChainBuilder builds and validates inheritance dependency chains.
+// This interface abstracts the process of building inheritance hierarchies.
+type InheritanceChainBuilder interface {
+	// BuildChain builds the inheritance chain starting from the given configuration file
+	BuildChain(configPath string, pathResolver PathResolver) (*InheritanceChain, error)
+
+	// ValidateChain validates the inheritance chain for circular dependencies
+	ValidateChain(chain *InheritanceChain) error
+
+	// GetChainMetadata returns metadata about the inheritance chain
+	GetChainMetadata(chain *InheritanceChain) *InheritanceChainMetadata
+}
+
+// PathResolver resolves and expands configuration file paths.
+// This interface handles path resolution for inheritance hierarchies.
+type PathResolver interface {
+	// ResolvePath resolves a configuration file path (absolute, relative, ~)
+	ResolvePath(path string, basePath string) (string, error)
+
+	// ExpandPath expands variables in configuration file paths
+	ExpandPath(path string) (string, error)
+
+	// ValidatePath validates that a configuration file path is safe and accessible
+	ValidatePath(path string) error
+}
+
+// CircularDependencyDetector detects circular dependencies in inheritance chains.
+// This interface provides cycle detection for configuration inheritance.
+type CircularDependencyDetector interface {
+	// DetectCycle performs cycle detection on an inheritance chain
+	DetectCycle(startFile string, resolver PathResolver) error
+
+	// GetCyclePath returns the path of detected circular dependency
+	GetCyclePath() []string
+
+	// Reset resets the detector state for new cycle detection
+	Reset()
+}
+
+// MergeStrategyProcessor processes configuration keys with merge strategy prefixes.
+// This interface handles prefix-based merge strategy application.
+type MergeStrategyProcessor interface {
+	// ProcessKeys processes configuration keys and applies appropriate merge strategies
+	ProcessKeys(config map[string]interface{}) (*ProcessedConfig, error)
+
+	// RegisterStrategy registers a new merge strategy
+	RegisterStrategy(strategy MergeStrategy) error
+
+	// GetAvailableStrategies returns all available merge strategies
+	GetAvailableStrategies() map[string]MergeStrategy
+}
+
+// InheritanceSourceTracker tracks the source of configuration values through inheritance.
+// This interface provides enhanced source tracking for inherited configurations.
+type InheritanceSourceTracker interface {
+	SourceDeterminer
+
+	// TrackInheritanceSource tracks the source of a value through inheritance chain
+	TrackInheritanceSource(key string, value interface{}, sourceFile string, strategy string) *ValueOrigin
+
+	// GetValueOrigin returns detailed origin information for a configuration value
+	GetValueOrigin(key string) *ValueOrigin
+
+	// GetChainSources returns all source files in the inheritance chain
+	GetChainSources() []string
+}
+
+// ⭐ CFG-005: Configuration inheritance data structures - 📝 Core data models
+
+// InheritanceChain represents a configuration inheritance dependency chain.
+type InheritanceChain struct {
+	Files        []string            // Configuration files in dependency order
+	Visited      map[string]bool     // Circular dependency prevention
+	Sources      map[string]string   // Source tracking for debugging
+	Dependencies map[string][]string // File dependencies mapping
+}
+
+// InheritanceChainMetadata provides metadata about an inheritance chain.
+type InheritanceChainMetadata struct {
+	ChainLength  int                 // Total files in chain
+	MaxDepth     int                 // Maximum inheritance depth
+	SourceFiles  []string            // All source files
+	Dependencies map[string][]string // Dependency mapping
+	BuildTime    int64               // Time to build chain (nanoseconds)
+}
+
+// ProcessedConfig represents configuration after merge strategy processing.
+type ProcessedConfig struct {
+	Config     map[string]interface{} // Processed configuration
+	MergeOps   []MergeOperation       // Applied merge operations
+	SourceMap  map[string]string      // Value source mapping
+	Strategies map[string]string      // Applied strategies per key
+}
+
+// MergeOperation represents a single merge operation applied during inheritance.
+type MergeOperation struct {
+	Key        string        // Configuration key
+	Value      interface{}   // Configuration value
+	Strategy   MergeStrategy // Applied merge strategy
+	SourceFile string        // Source file for this operation
+	TargetType string        // Target data type
+}
+
+// ValueOrigin provides detailed origin information for configuration values.
+type ValueOrigin struct {
+	SourceFile    string // Configuration file containing the value
+	SourceType    string // "inherit", "override", "merge", "prepend", "replace", "default"
+	MergeStrategy string // Merge strategy applied
+	LineNumber    int    // Line number in source file (if available)
+	ChainDepth    int    // Depth in inheritance chain
+	Resolution    string // How the value was resolved
+}
+
+// ConfigInheritance represents inheritance metadata in configuration files.
+type ConfigInheritance struct {
+	Inherit []string `yaml:"inherit"` // List of parent configuration files
+}

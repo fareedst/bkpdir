@@ -1,0 +1,35 @@
+# Example base configuration for inheritance demonstration
+# This file serves as a parent configuration that other configs can inherit from
+
+# Basic archive settings
+archive_dir_path: "~/Archives"
+use_current_dir_name: true
+
+# Basic exclusion patterns
+exclude_patterns:
+  - ".git/"
+  - "vendor/"
+  - "node_modules/"
+  - "*.log"
+
+# Git integration settings
+include_git_info: false
+show_git_dirty_status: true
+
+# File handling
+skip_broken_symlinks: false
+
+# Verification settings
+verification:
+  verify_on_create: false
+  checksum_algorithm: "sha256"
+
+# Basic status codes
+status_created_archive: 0
+status_directory_not_found: 1
+status_permission_denied: 2
+
+# Basic format strings
+format_created_archive: "Created archive: %s"
+format_identical_archive: "Directory identical to existing archive: %s"
+format_error: "Error: %s" 

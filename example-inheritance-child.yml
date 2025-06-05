@@ -1,0 +1,38 @@
+# Example child configuration demonstrating inheritance and merge strategies
+# This file inherits from example-inheritance-base.yml and demonstrates various merge strategies
+
+# Inherit from base configuration
+inherit:
+  - "example-inheritance-base.yml"
+
+# Override: Child value completely replaces parent value
+archive_dir_path: "./project-archives"
+
+# Merge (+): Child array elements are appended to parent array elements
++exclude_patterns:
+  - "*.tmp"
+  - "*.cache"
+  - "dist/"
+  - "build/"
+
+# Prepend (^): Child array elements are prepended (higher priority)
+^exclude_patterns:
+  - "*.secret"
+  - "*.env"
+
+# Override: Child value replaces parent value
+include_git_info: true
+
+# Default (=): Child value only used if parent value is not set or is zero value
+=skip_broken_symlinks: true
+
+# Override status codes
+status_created_archive: 10
+status_permission_denied: 13
+
+# Override format strings with more detailed messages
+format_created_archive: "✓ Successfully created archive: %s (size: %d bytes)"
+format_error: "✗ Operation failed: %s"
+
+# Add new format strings not in parent
+format_list_archive: "Archive: %s (created: %s)" 

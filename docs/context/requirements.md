@@ -1313,3 +1313,65 @@ if !containsAllTypes(detected, expectedTypes) {
 - **R-DOC-013-18**: Documentation hierarchy MUST be clearly defined for AI navigation
 - **R-DOC-013-19**: Content organization MUST follow predictable patterns for AI assistant processing
 - **R-DOC-013-20**: Maintenance procedures MUST be documented in AI-executable formats
+
+## ⭐ Configuration System Enhancement Requirements
+
+### CFG-005: Layered Configuration Inheritance Requirements
+**Priority**: ⭐ CRITICAL  
+**Implementation Tokens**: `// ⭐ CFG-005: Layered configuration inheritance`
+
+#### Core Inheritance Requirements
+- **R-CFG-005-1**: Configuration files MUST support explicit inheritance declarations using `inherit` field
+- **R-CFG-005-2**: Inheritance system MUST prevent circular dependencies with descriptive error messages
+- **R-CFG-005-3**: Configuration loading MUST process inheritance chains in correct dependency order
+- **R-CFG-005-4**: System MUST maintain backward compatibility with existing single-file configurations
+- **R-CFG-005-5**: Inheritance paths MUST support absolute, relative, and home directory (~) expansion
+
+#### Merge Strategy Requirements
+- **R-CFG-005-6**: Standard override behavior MUST replace parent values with child values (no prefix)
+- **R-CFG-005-7**: Array merge strategy MUST append child elements to parent arrays (`+` prefix)
+- **R-CFG-005-8**: Array prepend strategy MUST insert child elements before parent arrays (`^` prefix)
+- **R-CFG-005-9**: Array replace strategy MUST completely replace parent arrays (`!` prefix)
+- **R-CFG-005-10**: Default strategy MUST use child values only if not set by parent (`=` prefix)
+
+#### Configuration Processing Requirements
+- **R-CFG-005-11**: System MUST load parent configurations before processing child configurations
+- **R-CFG-005-12**: Configuration merging MUST preserve type safety for all data types
+- **R-CFG-005-13**: Source tracking MUST maintain visibility into configuration value origins
+- **R-CFG-005-14**: Error handling MUST provide clear messages for missing inheritance files
+- **R-CFG-005-15**: Invalid merge strategy prefixes MUST be ignored with warning messages
+
+#### Performance and Reliability Requirements
+- **R-CFG-005-16**: Inheritance processing MUST have minimal performance overhead for non-inheriting configurations
+- **R-CFG-005-17**: Circular dependency detection MUST complete in O(n) time complexity
+- **R-CFG-005-18**: Configuration loading MUST be thread-safe for concurrent access
+- **R-CFG-005-19**: Memory usage MUST scale linearly with inheritance chain depth
+- **R-CFG-005-20**: Error recovery MUST gracefully handle malformed inheritance declarations
+
+#### Integration Requirements
+- **R-CFG-005-21**: System MUST integrate with existing pkg/config architecture from EXTRACT-001
+- **R-CFG-005-22**: Implementation MUST work with existing configuration discovery system (CFG-001)
+- **R-CFG-005-23**: Inheritance MUST preserve existing configuration validation requirements
+- **R-CFG-005-24**: System MUST maintain compatibility with environment variable overrides
+- **R-CFG-005-25**: Implementation MUST support existing configuration debugging and tracing
+
+#### Testing and Validation Requirements
+- **R-CFG-005-26**: Test suite MUST validate all merge strategies with complex data structures
+- **R-CFG-005-27**: Tests MUST verify circular dependency detection with various cycle patterns
+- **R-CFG-005-28**: Performance tests MUST validate O(n) complexity for inheritance chain processing
+- **R-CFG-005-29**: Integration tests MUST verify compatibility with existing configuration features
+- **R-CFG-005-30**: Error handling tests MUST cover all failure modes with appropriate messages
+
+#### Documentation and Examples Requirements
+- **R-CFG-005-31**: Documentation MUST provide comprehensive examples of all merge strategies
+- **R-CFG-005-32**: Examples MUST demonstrate real-world inheritance patterns and use cases
+- **R-CFG-005-33**: Error documentation MUST include troubleshooting guidance for common issues
+- **R-CFG-005-34**: Best practices MUST be documented for effective inheritance hierarchies
+- **R-CFG-005-35**: Migration guide MUST explain enabling inheritance for existing configurations
+
+#### Security and Safety Requirements
+- **R-CFG-005-36**: Path resolution MUST prevent directory traversal attacks via inheritance paths
+- **R-CFG-005-37**: File access MUST respect filesystem permissions and access controls
+- **R-CFG-005-38**: Configuration parsing MUST handle malicious YAML input safely
+- **R-CFG-005-39**: Inheritance chain depth MUST be limited to prevent resource exhaustion
+- **R-CFG-005-40**: System MUST validate inheritance file existence before processing
