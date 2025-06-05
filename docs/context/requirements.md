@@ -1373,5 +1373,47 @@ if !containsAllTypes(detected, expectedTypes) {
 - **R-CFG-005-36**: Path resolution MUST prevent directory traversal attacks via inheritance paths
 - **R-CFG-005-37**: File access MUST respect filesystem permissions and access controls
 - **R-CFG-005-38**: Configuration parsing MUST handle malicious YAML input safely
+
+### CFG-006: Complete Configuration Reflection and Visibility Requirements
+
+**Implementation Tokens**: `// 🔺 CFG-006: Complete config visibility`
+
+#### Core Configuration Inspection Requirements
+- **R-CFG-006-1**: Configuration command MUST display ALL configuration parameters automatically without manual maintenance
+- **R-CFG-006-2**: Field discovery MUST use Go reflection to enumerate all Config struct fields automatically
+- **R-CFG-006-3**: System MUST handle nested structs, embedded fields, slices, maps, and complex types
+- **R-CFG-006-4**: New configuration parameters MUST appear in config command without code changes
+
+#### Source Attribution and Inheritance Visibility Requirements  
+- **R-CFG-006-5**: Configuration display MUST show complete inheritance chain for each parameter
+- **R-CFG-006-6**: Source tracking MUST integrate with CFG-005 inheritance system
+- **R-CFG-006-7**: Display MUST show merge strategy application (override, append, prepend, replace, default)
+- **R-CFG-006-8**: System MUST identify source conflict points where values were overridden
+- **R-CFG-006-9**: Hierarchical display MUST show environment → inheritance chain → defaults resolution
+
+#### Configuration Command Interface Requirements
+- **R-CFG-006-10**: Config command MUST support multiple output formats (table, tree, JSON)
+- **R-CFG-006-11**: System MUST provide filtering options: --all, --overrides-only, --sources, --filter
+- **R-CFG-006-12**: Display MUST support type-aware formatting for different configuration data types
+- **R-CFG-006-13**: Interface MUST preserve existing config command functionality for backward compatibility
+
+#### Performance and Optimization Requirements
+- **R-CFG-006-14**: Reflection results MUST be cached for performance
+- **R-CFG-006-15**: Source evaluation MUST be lazy (only for displayed fields)
+- **R-CFG-006-16**: Configuration inspection MUST remain responsive for development workflow usage
+- **R-CFG-006-17**: System MUST support incremental resolution for partial configuration inspection
+
+#### Integration and Compatibility Requirements  
+- **R-CFG-006-18**: Implementation MUST integrate with existing CFG-005 inheritance system
+- **R-CFG-006-19**: System MUST work with EXTRACT-001 pkg/config architecture
+- **R-CFG-006-20**: Implementation MUST preserve existing CLI framework integration
+- **R-CFG-006-21**: Solution MUST maintain zero breaking changes to existing configuration code
+
+#### Quality and Testing Requirements
+- **R-CFG-006-22**: Field discovery accuracy MUST be validated for all Go types
+- **R-CFG-006-23**: Source attribution MUST be tested for complex inheritance scenarios  
+- **R-CFG-006-24**: Display formatting MUST handle edge cases and malformed data gracefully
+- **R-CFG-006-25**: Performance characteristics MUST be benchmarked and validated
+- **R-CFG-006-26**: Integration tests MUST verify compatibility with all existing configuration features
 - **R-CFG-005-39**: Inheritance chain depth MUST be limited to prevent resource exhaustion
 - **R-CFG-005-40**: System MUST validate inheritance file existence before processing

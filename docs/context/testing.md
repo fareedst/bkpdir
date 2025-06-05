@@ -2706,3 +2706,528 @@ func TestInheritanceBackwardCompatibility(t *testing.T) {
 ```
 
 This comprehensive testing framework ensures the layered configuration inheritance system works reliably across all scenarios while maintaining backward compatibility and performance characteristics.
+
+### CFG-006: Complete Configuration Reflection and Visibility Testing
+**Priority**: 🔺 HIGH  
+**Implementation Tokens**: `// 🔺 CFG-006: Complete config visibility`  
+**Test Function**: `TestConfigReflection`
+
+#### Core Testing Requirements
+
+**🔍 Automatic Field Discovery Testing**
+- **Reflection Accuracy**: Comprehensive validation of Go struct field enumeration for all data types
+- **Nested Structure Handling**: Deep nested structs, embedded fields, slices, maps, and complex types
+- **Type Safety Testing**: Correct Go type information extraction and preservation
+- **Performance Testing**: Field discovery caching and reflection optimization validation
+- **Edge Case Handling**: Anonymous fields, unexported fields, and circular references
+
+**📊 Source Attribution and Integration Testing**
+- **CFG-005 Integration**: Complete integration with inheritance system source tracking
+- **Source Chain Accuracy**: Correct attribution of configuration values to their sources
+- **Merge Strategy Visibility**: Display of applied merge strategies and resolution paths
+- **Conflict Detection**: Identification and reporting of configuration value conflicts
+- **Hierarchical Resolution**: Environment → inheritance chain → defaults resolution tracking
+
+**🎛️ Configuration Command Interface Testing**
+- **Multiple Output Formats**: Table, tree, JSON, and YAML output format validation
+- **Filtering Functionality**: All filtering options (--all, --overrides-only, --sources, --filter)
+- **Type-Aware Formatting**: Correct display formatting for different configuration data types
+- **Backward Compatibility**: Existing config command functionality preservation
+- **CLI Flag Processing**: Command-line flag parsing and validation
+
+**⚡ Performance and Optimization Testing**
+- **Reflection Caching**: Field metadata caching accuracy and invalidation
+- **Lazy Evaluation**: Source evaluation performance for displayed fields only
+- **Memory Usage**: Configuration inspection memory efficiency validation
+- **Incremental Resolution**: Partial configuration inspection performance
+
+#### Test Implementation Strategy
+
+**📋 Test Categories**
+```go
+// 🔺 CFG-006: Complete config visibility testing - 🧪 Test infrastructure  
+func TestConfigReflection(t *testing.T) {
+    // Test suite for complete configuration reflection and visibility system
+}
+
+func TestFieldDiscoveryAccuracy(t *testing.T) {
+    // Verify Go reflection field enumeration for all data types
+}
+
+func TestSourceAttributionIntegration(t *testing.T) {
+    // Test integration with CFG-005 inheritance source tracking
+}
+
+func TestConfigurationDisplayFormats(t *testing.T) {
+    // Validate all output formats (table, tree, JSON, YAML)
+}
+
+func TestFilteringAndDisplayOptions(t *testing.T) {
+    // Test all configuration filtering and display options
+}
+
+func TestTypeAwareFormatting(t *testing.T) {
+    // Verify correct display formatting for different data types
+}
+
+func TestConfigurationCaching(t *testing.T) {
+    // Validate field metadata and source attribution caching
+}
+
+func TestLazyEvaluationPerformance(t *testing.T) {
+    // Test performance of lazy source evaluation
+}
+
+func TestConfigInspectionErrorHandling(t *testing.T) {
+    // Test error scenarios and graceful recovery mechanisms
+}
+```
+
+**🔬 Field Discovery Validation Tests**
+```go
+func TestComplexTypeReflection(t *testing.T) {
+    // Test configuration with all Go data types
+    testConfig := &TestConfig{
+        StringField:    "test",
+        IntField:      42,
+        BoolField:     true,
+        SliceField:    []string{"a", "b", "c"},
+        MapField:      map[string]int{"key": 1},
+        StructField:   NestedStruct{Value: "nested"},
+        EmbeddedField: EmbeddedStruct{EmbeddedValue: "embedded"},
+        PointerField:  &SomeStruct{PointerValue: "pointer"},
+    }
+    
+    inspector := NewConfigurationInspector()
+    fields, err := inspector.GetAllConfigFields(testConfig)
+    
+    assert.NoError(t, err)
+    assert.Len(t, fields, 8) // All fields discovered
+    
+    // Verify specific field metadata
+    stringField := findField(fields, "StringField")
+    assert.Equal(t, reflect.String, stringField.Kind)
+    assert.Equal(t, "test", stringField.CurrentValue)
+    
+    sliceField := findField(fields, "SliceField")
+    assert.Equal(t, reflect.Slice, sliceField.Kind)
+    assert.Equal(t, []string{"a", "b", "c"}, sliceField.CurrentValue)
+    
+    mapField := findField(fields, "MapField")
+    assert.Equal(t, reflect.Map, mapField.Kind)
+    assert.Equal(t, map[string]int{"key": 1}, mapField.CurrentValue)
+}
+
+func TestNestedStructReflection(t *testing.T) {
+    testConfig := &Config{
+        Archive: ArchiveConfig{
+            DirPath: "/archives",
+            Settings: ArchiveSettings{
+                VerifyOnCreate: true,
+                Compression: CompressionConfig{
+                    Level:     9,
+                    Algorithm: "gzip",
+                },
+            },
+        },
+    }
+    
+    inspector := NewConfigurationInspector()
+    fields, err := inspector.GetAllConfigFields(testConfig)
+    
+    assert.NoError(t, err)
+    
+    // Verify nested field paths
+    archiveDirField := findFieldByPath(fields, "Archive.DirPath")
+    assert.NotNil(t, archiveDirField)
+    assert.Equal(t, "/archives", archiveDirField.CurrentValue)
+    
+    compressionLevelField := findFieldByPath(fields, "Archive.Settings.Compression.Level")
+    assert.NotNil(t, compressionLevelField)
+    assert.Equal(t, 9, compressionLevelField.CurrentValue)
+}
+```
+
+**🔗 Source Attribution Integration Tests**
+```go
+func TestInheritanceSourceIntegration(t *testing.T) {
+    // Create inheritance chain for testing
+    createTestInheritanceChain(t)
+    
+    inspector := NewConfigurationInspector()
+    configValue, err := inspector.GetConfigValueWithCompleteSource("exclude_patterns")
+    
+    assert.NoError(t, err)
+    assert.Len(t, configValue.Sources, 3) // Base + Development + Project
+    
+    // Verify source chain attribution
+    sources := configValue.Sources
+    assert.Equal(t, "config_file", sources[0].Type)
+    assert.Contains(t, sources[0].Location, "base.yml")
+    assert.Equal(t, []string{"*.tmp", "*.log"}, sources[0].Value)
+    
+    assert.Equal(t, "inheritance", sources[1].Type)
+    assert.Contains(t, sources[1].Location, "development.yml")
+    assert.Equal(t, "+", sources[1].MergeStrategy) // Append strategy
+    
+    assert.Equal(t, "inheritance", sources[2].Type)
+    assert.Contains(t, sources[2].Location, "project.yml")
+    assert.Equal(t, "^", sources[2].MergeStrategy) // Prepend strategy
+    
+    // Verify final resolved value
+    expectedValue := []string{
+        "*.secret",      // ^ prepend from project.yml
+        "*.tmp",         // base from base.yml
+        "*.log",         // base from base.yml
+        "node_modules/", // + append from development.yml
+        "dist/",         // + append from development.yml
+    }
+    assert.Equal(t, expectedValue, configValue.CurrentValue)
+}
+
+func TestResolutionPathTracking(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    configValue, err := inspector.GetConfigValueWithCompleteSource("archive_dir_path")
+    
+    assert.NoError(t, err)
+    assert.Len(t, configValue.ResolutionPath, 2) // Base → Override
+    
+    steps := configValue.ResolutionPath
+    assert.Equal(t, "~/Archives", steps[0].PreviousValue)
+    assert.Equal(t, "./project-archives", steps[0].NewValue)
+    assert.Equal(t, "override", steps[0].Operation)
+    assert.Contains(t, steps[0].Explanation, "Child configuration overrides parent value")
+}
+```
+
+**🎨 Display Format Validation Tests**
+```go
+func TestTableFormatOutput(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    displayEngine := NewConfigurationDisplayEngine()
+    
+    tree, err := inspector.GetConfigurationTree(&DisplayFilter{
+        ShowAll:      true,
+        ShowSources:  true,
+        OutputFormat: "table",
+    })
+    
+    assert.NoError(t, err)
+    
+    output := displayEngine.RenderTable(tree)
+    
+    // Verify table format structure
+    lines := strings.Split(output, "\n")
+    assert.Contains(t, lines[0], "Field Name") // Header row
+    assert.Contains(t, lines[0], "Current Value")
+    assert.Contains(t, lines[0], "Source")
+    
+    // Verify data rows
+    assert.Contains(t, output, "archive_dir_path")
+    assert.Contains(t, output, "./project-archives")  
+    assert.Contains(t, output, "project.yml")
+}
+
+func TestTreeFormatOutput(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    displayEngine := NewConfigurationDisplayEngine()
+    
+    tree, err := inspector.GetConfigurationTree(&DisplayFilter{
+        ShowAll:      true,
+        ShowSources:  true,
+        OutputFormat: "tree",
+    })
+    
+    assert.NoError(t, err)
+    
+    output := displayEngine.RenderTree(tree)
+    
+    // Verify tree structure symbols
+    assert.Contains(t, output, "├─") // Tree branch symbols
+    assert.Contains(t, output, "└─") // Tree end symbols
+    assert.Contains(t, output, "│ ") // Tree continuation symbols
+    
+    // Verify hierarchical structure
+    lines := strings.Split(output, "\n")
+    archiveLine := findLineContaining(lines, "archive_dir_path")
+    sourceLine := findLineContaining(lines, "Source:")
+    
+    // Source lines should be indented more than field lines
+    archiveIndent := len(archiveLine) - len(strings.TrimLeft(archiveLine, " │├└─"))
+    sourceIndent := len(sourceLine) - len(strings.TrimLeft(sourceLine, " │├└─"))
+    assert.Greater(t, sourceIndent, archiveIndent)
+}
+
+func TestJSONFormatOutput(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    displayEngine := NewConfigurationDisplayEngine()
+    
+    tree, err := inspector.GetConfigurationTree(&DisplayFilter{
+        ShowAll:      true,
+        OutputFormat: "json",
+    })
+    
+    assert.NoError(t, err)
+    
+    output := displayEngine.RenderJSON(tree)
+    
+    // Verify valid JSON structure
+    var jsonResult map[string]interface{}
+    err = json.Unmarshal([]byte(output), &jsonResult)
+    assert.NoError(t, err)
+    
+    // Verify JSON content structure
+    assert.Contains(t, jsonResult, "fields")
+    assert.Contains(t, jsonResult, "sources")
+    
+    fields := jsonResult["fields"].([]interface{})
+    assert.Greater(t, len(fields), 0)
+    
+    firstField := fields[0].(map[string]interface{})
+    assert.Contains(t, firstField, "name")
+    assert.Contains(t, firstField, "value")
+    assert.Contains(t, firstField, "type")
+}
+```
+
+**🎯 Filtering and Display Option Tests**
+```go
+func TestOverridesOnlyFilter(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    tree, err := inspector.GetConfigurationTree(&DisplayFilter{
+        OverridesOnly: true,
+        ShowSources:   true,
+    })
+    
+    assert.NoError(t, err)
+    
+    // Should only show fields that have been overridden from defaults
+    for _, node := range tree.Root.Children {
+        hasOverride := false
+        for _, source := range node.Value.Sources {
+            if source.Type != "default" {
+                hasOverride = true
+                break
+            }
+        }
+        assert.True(t, hasOverride, 
+            "OverridesOnly filter should only show non-default values")
+    }
+}
+
+func TestFieldPatternFilter(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    tree, err := inspector.GetConfigurationTree(&DisplayFilter{
+        FieldPattern: "exclude_*",
+        ShowAll:      true,
+    })
+    
+    assert.NoError(t, err)
+    
+    // Should only show fields matching the pattern
+    for _, node := range tree.Root.Children {
+        assert.True(t, strings.HasPrefix(node.Field.Name, "exclude_"),
+            "Field pattern filter should only show matching fields")
+    }
+}
+
+func TestMaxDepthFilter(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    tree, err := inspector.GetConfigurationTree(&DisplayFilter{
+        MaxDepth: 2,
+        ShowAll:  true,
+    })
+    
+    assert.NoError(t, err)
+    
+    // Verify depth limitation
+    maxDepthFound := calculateTreeDepth(tree.Root)
+    assert.LessOrEqual(t, maxDepthFound, 2,
+        "MaxDepth filter should limit tree depth")
+}
+```
+
+**⚡ Performance and Caching Tests**
+```go
+func TestFieldMetadataCaching(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    // First call - should populate cache
+    start1 := time.Now()
+    fields1, err1 := inspector.GetAllConfigFields(&Config{})
+    duration1 := time.Since(start1)
+    
+    assert.NoError(t, err1)
+    
+    // Second call - should use cache
+    start2 := time.Now()
+    fields2, err2 := inspector.GetAllConfigFields(&Config{})
+    duration2 := time.Since(start2)
+    
+    assert.NoError(t, err2)
+    assert.Equal(t, fields1, fields2)
+    
+    // Cached call should be significantly faster
+    assert.Less(t, duration2, duration1/2,
+        "Cached field discovery should be at least 2x faster")
+}
+
+func TestLazySourceEvaluation(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    // Request only specific field - should not evaluate others
+    start := time.Now()
+    configValue, err := inspector.GetConfigValueWithCompleteSource("archive_dir_path")
+    duration := time.Since(start)
+    
+    assert.NoError(t, err)
+    assert.NotNil(t, configValue)
+    
+    // Should be fast since only one field was evaluated
+    maxExpectedDuration := 50 * time.Millisecond
+    assert.Less(t, duration, maxExpectedDuration,
+        "Lazy evaluation should be fast for single field requests")
+}
+
+func TestIncrementalResolution(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    resolver := NewIncrementalResolver(&Config{})
+    
+    // Request fields incrementally
+    fields := []string{"archive_dir_path", "backup_dir_path", "exclude_patterns"}
+    
+    for i, field := range fields {
+        configValue, err := resolver.ResolveField(field)
+        assert.NoError(t, err)
+        assert.NotNil(t, configValue)
+        
+        // Verify cache grows incrementally
+        assert.Equal(t, i+1, len(resolver.resolvedFields))
+    }
+}
+```
+
+**🔧 Error Handling and Recovery Tests**
+```go
+func TestConfigInspectionErrorRecovery(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    // Test with malformed configuration
+    malformedConfig := &MalformedConfig{
+        BrokenField: make(chan int), // Unsupported type
+    }
+    
+    fields, err := inspector.GetAllConfigFields(malformedConfig)
+    
+    // Should recover gracefully and provide partial results
+    assert.Error(t, err)
+    assert.NotNil(t, fields) // Partial results should be available
+    
+    // Error should be descriptive
+    configErr, ok := err.(*ConfigInspectionError)
+    assert.True(t, ok)
+    assert.Equal(t, "reflection_error", configErr.Type)
+    assert.Contains(t, configErr.Recovery, "Skip unsupported field types")
+}
+
+func TestPartialSuccessHandling(t *testing.T) {
+    inspector := NewConfigurationInspector()
+    
+    // Configuration with mix of valid and problematic fields
+    mixedConfig := &MixedConfig{
+        ValidField:   "valid",
+        InvalidField: func() {}, // Unsupported function type
+        AnotherValid: 42,
+    }
+    
+    fields, err := inspector.GetAllConfigFields(mixedConfig)
+    
+    // Should succeed with warnings
+    assert.Error(t, err) // Error for problematic fields
+    assert.Len(t, fields, 2) // Should get valid fields
+    
+    // Check for specific valid fields
+    validField := findField(fields, "ValidField")
+    assert.NotNil(t, validField)
+    assert.Equal(t, "valid", validField.CurrentValue)
+    
+    anotherValidField := findField(fields, "AnotherValid")
+    assert.NotNil(t, anotherValidField)
+    assert.Equal(t, 42, anotherValidField.CurrentValue)
+}
+```
+
+#### Integration Testing with Existing Systems
+
+**🔗 System Integration Tests**
+```go
+func TestCFG005IntegrationCompliance(t *testing.T) {
+    // Verify complete integration with CFG-005 inheritance system
+    inspector := NewConfigurationInspector()
+    
+    // Load configuration with inheritance
+    configValue, err := inspector.GetConfigValueWithCompleteSource("exclude_patterns")
+    
+    assert.NoError(t, err)
+    
+    // Verify CFG-005 source tracking integration
+    assert.Greater(t, len(configValue.Sources), 1) // Multiple sources from inheritance
+    assert.NotEmpty(t, configValue.MergeHistory)   // Merge operations recorded
+    assert.NotEmpty(t, configValue.ResolutionPath) // Resolution steps tracked
+    
+    // Verify inheritance chain visibility
+    for _, source := range configValue.Sources {
+        assert.NotEmpty(t, source.Location)     // Source file identified
+        assert.NotEmpty(t, source.MergeStrategy) // Merge strategy recorded
+        assert.GreaterOrEqual(t, source.ChainDepth, 0) // Chain depth tracked
+    }
+}
+
+func TestEXTRACT001PkgConfigIntegration(t *testing.T) {
+    // Verify integration with EXTRACT-001 pkg/config architecture
+    inspector := NewConfigurationInspector()
+    
+    // Should work with existing pkg/config structures
+    fields, err := inspector.GetAllConfigFields(&pkg.Config{})
+    
+    assert.NoError(t, err)
+    assert.Greater(t, len(fields), 0)
+    
+    // Verify pkg/config field compatibility
+    for _, field := range fields {
+        assert.NotEmpty(t, field.Name)
+        assert.NotNil(t, field.Type)
+        // Should handle pkg/config specific types correctly
+    }
+}
+
+func TestCLIFrameworkIntegration(t *testing.T) {
+    // Test CLI command integration
+    cmd := NewConfigCommand()
+    
+    // Test various command flag combinations
+    testCases := []struct {
+        args     []string
+        expected string
+    }{
+        {[]string{"config", "--all"}, "all fields"},
+        {[]string{"config", "--overrides-only"}, "overridden values only"},
+        {[]string{"config", "--format=json"}, "JSON format"},
+        {[]string{"config", "--filter=exclude_*"}, "filtered fields"},
+    }
+    
+    for _, tc := range testCases {
+        t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
+            output, err := executeCommand(cmd, tc.args...)
+            
+            assert.NoError(t, err)
+            assert.Contains(t, output, tc.expected)
+        })
+    }
+}
+```
+
+This comprehensive testing framework ensures the complete configuration reflection and visibility system provides accurate, performant, and reliable configuration inspection capabilities while maintaining full integration with existing systems.

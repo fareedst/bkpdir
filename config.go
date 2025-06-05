@@ -12,10 +12,15 @@ package main
 
 import (
 	"fmt"
+	"hash"
+	"hash/fnv"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
+	"sync"
+	"time"
 
 	yaml "gopkg.in/yaml.v3"
 )
@@ -829,22 +834,20 @@ func GetConfigValues(cfg *Config) []ConfigValue {
 // GetConfigValuesWithSources returns a slice of ConfigValue containing all configuration
 // values with their actual sources (default, config file, etc.).
 // The returned values are sorted alphabetically by configuration name.
+// 🔺 CFG-006: Backward compatibility update - 🔍
+// IMPLEMENTATION-REF: CFG-006 Step 4.5: Preserve backward compatibility
+// GetConfigValuesWithSources maintains backward compatibility while using the new reflection system.
+// This function now uses automatic field discovery instead of manual enumeration.
 func GetConfigValuesWithSources(cfg *Config, root string) []ConfigValue {
-	defaultCfg := DefaultConfig()
-	configSource := determineConfigSource(root)
-	getSource := createSourceDeterminer(configSource)
+	// Use the new reflection-based system and convert to legacy format
+	enhancedValues := GetAllConfigValuesWithSources(cfg, root)
 
-	var configValues []ConfigValue
-	configValues = append(configValues, getBasicConfigValues(cfg, defaultCfg, getSource)...)
-	configValues = append(configValues, getStatusCodeValues(cfg, defaultCfg, getSource)...)
-	configValues = append(configValues, getVerificationValues(cfg, defaultCfg, getSource)...)
+	var legacyValues []ConfigValue
+	for _, enhanced := range enhancedValues {
+		legacyValues = append(legacyValues, enhanced.ConfigValue)
+	}
 
-	// Requirement: Sort configuration values alphabetically by name
-	sort.Slice(configValues, func(i, j int) bool {
-		return configValues[i].Name < configValues[j].Name
-	})
-
-	return configValues
+	return legacyValues
 }
 
 // determineConfigSource finds which config file was actually loaded
@@ -1643,4 +1646,757 @@ func isZeroValue(value interface{}) bool {
 	default:
 		return false
 	}
+}
+
+// 🔺 CFG-006: Configuration field metadata structure - 🔍
+// IMPLEMENTATION-REF: CFG-006 Automatic field discovery
+// configFieldInfo represents metadata about a configuration field discovered through reflection.
+// It provides complete information about field structure, type, and documentation.
+type configFieldInfo struct {
+	Name      string       // Field name in Go struct
+	YAMLName  string       // YAML tag name for configuration file
+	Type      string       // Go type as string
+	Kind      reflect.Kind // Reflect kind for type handling
+	Value     interface{}  // Current field value
+	IsPointer bool         // Whether field is a pointer type
+	IsSlice   bool         // Whether field is a slice type
+	IsStruct  bool         // Whether field is a struct type
+	Category  string       // Field category (basic, status, format, template, etc.)
+	Path      string       // Full path for nested fields (e.g., "verification.verify_on_create")
+}
+
+// 🔺 CFG-006: Enhanced configuration value with field metadata - 🔍
+// IMPLEMENTATION-REF: CFG-006 Source tracking extension
+// ConfigValueWithMetadata extends ConfigValue with complete field information and inheritance tracking.
+type ConfigValueWithMetadata struct {
+	ConfigValue
+	FieldInfo        configFieldInfo
+	InheritanceChain []string // Chain of files that contributed to this value
+	MergeStrategy    string   // Strategy used to merge this value (override, append, prepend, etc.)
+	IsOverridden     bool     // Whether this value was overridden from default
+	ConflictSources  []string // Sources that had conflicting values
+}
+
+// 🔺 CFG-006: Automatic field discovery implementation - 🔍
+// 🔶 CFG-006: Performance optimization - Reflection result caching
+// IMPLEMENTATION-REF: CFG-006 Subtask 1: Automatic Field Discovery System
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+// GetAllConfigFields discovers all configuration fields using reflection.
+// It provides comprehensive field enumeration without manual maintenance.
+// Performance optimized with caching to reduce reflection overhead.
+func GetAllConfigFields(cfg *Config) []configFieldInfo {
+	// Try to get cached results first for performance
+	if cachedFields := globalFieldCache.getCachedFields(); cachedFields != nil {
+		// Update values in cached fields with current config values
+		return updateFieldValues(cachedFields, cfg)
+	}
+
+	// Cache miss - perform expensive reflection
+	var fields []configFieldInfo
+
+	// Get reflection information about the Config struct
+	configType := reflect.TypeOf(*cfg)
+	configValue := reflect.ValueOf(*cfg)
+
+	// Recursively discover all fields
+	fields = append(fields, reflectConfigFields(configType, configValue, "", "")...)
+
+	// Sort fields by name for consistent output
+	sort.Slice(fields, func(i, j int) bool {
+		return fields[i].Name < fields[j].Name
+	})
+
+	// Cache the field metadata (without values) for future use
+	fieldMetadata := make([]configFieldInfo, len(fields))
+	for i, field := range fields {
+		// Store field metadata without specific values for caching
+		fieldMetadata[i] = configFieldInfo{
+			Name:      field.Name,
+			YAMLName:  field.YAMLName,
+			Type:      field.Type,
+			Kind:      field.Kind,
+			Value:     nil, // Values will be updated per call
+			IsPointer: field.IsPointer,
+			IsSlice:   field.IsSlice,
+			IsStruct:  field.IsStruct,
+			Category:  field.Category,
+			Path:      field.Path,
+		}
+	}
+	globalFieldCache.setCachedFields(fieldMetadata)
+
+	return fields
+}
+
+// 🔶 CFG-006: Performance optimization - Field value updating for cached metadata
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+// updateFieldValues updates cached field metadata with current config values.
+// This avoids expensive reflection while keeping values current.
+func updateFieldValues(cachedFields []configFieldInfo, cfg *Config) []configFieldInfo {
+	result := make([]configFieldInfo, len(cachedFields))
+	configValue := reflect.ValueOf(*cfg)
+
+	for i, field := range cachedFields {
+		// Copy cached metadata
+		result[i] = field
+
+		// Update value using field path
+		if fieldValue, err := getFieldValueByPath(configValue, field.Path); err == nil {
+			result[i].Value = fieldValue
+		} else {
+			// Fallback to zero value if path resolution fails
+			result[i].Value = getZeroValueForKind(field.Kind)
+		}
+	}
+
+	return result
+}
+
+// 🔶 CFG-006: Performance optimization - Field value resolution by path
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+// getFieldValueByPath retrieves a field value from a struct using dot-separated path.
+func getFieldValueByPath(structValue reflect.Value, path string) (interface{}, error) {
+	parts := strings.Split(path, ".")
+	currentValue := structValue
+
+	for _, part := range parts {
+		// Handle pointer dereferencing
+		if currentValue.Kind() == reflect.Ptr {
+			if currentValue.IsNil() {
+				return nil, fmt.Errorf("nil pointer in path %s at %s", path, part)
+			}
+			currentValue = currentValue.Elem()
+		}
+
+		// Get field by name
+		if currentValue.Kind() != reflect.Struct {
+			return nil, fmt.Errorf("expected struct in path %s at %s, got %s", path, part, currentValue.Kind())
+		}
+
+		field := currentValue.FieldByName(part)
+		if !field.IsValid() {
+			return nil, fmt.Errorf("field %s not found in path %s", part, path)
+		}
+
+		currentValue = field
+	}
+
+	// Handle final value extraction
+	if currentValue.Kind() == reflect.Ptr {
+		if currentValue.IsNil() {
+			return nil, nil
+		}
+		return currentValue.Elem().Interface(), nil
+	}
+
+	return currentValue.Interface(), nil
+}
+
+// 🔺 CFG-006: Recursive field reflection implementation - 🔍
+// IMPLEMENTATION-REF: CFG-006 Step 1.2: Implement reflectConfigFields() function
+// reflectConfigFields recursively discovers fields in structs, handling nested types.
+func reflectConfigFields(structType reflect.Type, structValue reflect.Value, prefix string, category string) []configFieldInfo {
+	var fields []configFieldInfo
+
+	for i := 0; i < structType.NumField(); i++ {
+		field := structType.Field(i)
+		fieldValue := structValue.Field(i)
+
+		// Skip unexported fields
+		if !field.IsExported() {
+			continue
+		}
+
+		// Build field path for nested structures
+		fieldPath := field.Name
+		if prefix != "" {
+			fieldPath = prefix + "." + field.Name
+		}
+
+		// Get YAML tag name
+		yamlTag := field.Tag.Get("yaml")
+		yamlName := strings.Split(yamlTag, ",")[0] // Remove options like "omitempty"
+		if yamlName == "" {
+			yamlName = strings.ToLower(field.Name) // Default to lowercase field name
+		}
+
+		// Determine field category
+		fieldCategory := determineFieldCategory(field.Name, category)
+
+		// Check if this is a struct type (including pointer to struct)
+		isStruct := field.Type.Kind() == reflect.Struct || (field.Type.Kind() == reflect.Ptr && field.Type.Elem().Kind() == reflect.Struct)
+
+		// Handle nested structs
+		if isStruct && field.Type != reflect.TypeOf(yaml.Node{}) {
+			// For pointer to struct, get the actual struct
+			var nestedType reflect.Type
+			var nestedValue reflect.Value
+
+			if field.Type.Kind() == reflect.Ptr {
+				if !fieldValue.IsNil() {
+					nestedType = field.Type.Elem()
+					nestedValue = fieldValue.Elem()
+				} else {
+					// Create zero value for nil pointer
+					nestedType = field.Type.Elem()
+					nestedValue = reflect.Zero(nestedType)
+				}
+			} else {
+				nestedType = field.Type
+				nestedValue = fieldValue
+			}
+
+			// Recursively process nested struct fields
+			nestedFields := reflectConfigFields(nestedType, nestedValue, fieldPath, fieldCategory)
+			fields = append(fields, nestedFields...)
+		} else {
+			// For non-struct fields, create field info with proper type detection
+			var actualType string
+			var actualKind reflect.Kind
+			var actualValue interface{}
+
+			// Handle pointer types properly
+			if field.Type.Kind() == reflect.Ptr {
+				actualType = field.Type.Elem().String()
+				actualKind = field.Type.Elem().Kind()
+				if !fieldValue.IsNil() {
+					actualValue = fieldValue.Elem().Interface()
+				} else {
+					actualValue = nil
+				}
+			} else {
+				actualType = field.Type.String()
+				actualKind = field.Type.Kind()
+				actualValue = fieldValue.Interface()
+			}
+
+			fieldInfo := configFieldInfo{
+				Name:      field.Name,
+				YAMLName:  yamlName,
+				Type:      actualType,
+				Kind:      actualKind,
+				Value:     actualValue,
+				IsPointer: field.Type.Kind() == reflect.Ptr,
+				IsSlice:   field.Type.Kind() == reflect.Slice,
+				IsStruct:  isStruct,
+				Category:  fieldCategory,
+				Path:      fieldPath,
+			}
+
+			fields = append(fields, fieldInfo)
+		}
+	}
+
+	return fields
+}
+
+// 🔺 CFG-006: Field categorization implementation - 🔍
+// IMPLEMENTATION-REF: CFG-006 Step 1.5: Create field filtering and categorization
+// determineFieldCategory categorizes configuration fields by their purpose and type.
+func determineFieldCategory(fieldName string, parentCategory string) string {
+	if parentCategory != "" {
+		return parentCategory
+	}
+
+	// Categorize based on field name patterns
+	switch {
+	case strings.HasPrefix(fieldName, "Status"):
+		return "status_codes"
+	case strings.HasPrefix(fieldName, "Format"):
+		return "format_strings"
+	case strings.HasPrefix(fieldName, "Template"):
+		return "template_strings"
+	case strings.HasPrefix(fieldName, "Pattern"):
+		return "regex_patterns"
+	case fieldName == "Verification":
+		return "verification"
+	case fieldName == "Inherit":
+		return "inheritance"
+	case strings.Contains(fieldName, "Backup"):
+		return "backup_settings"
+	case strings.Contains(fieldName, "Archive"):
+		return "archive_settings"
+	default:
+		return "basic_settings"
+	}
+}
+
+// 🔺 CFG-006: Enhanced source tracking implementation - 🔍
+// IMPLEMENTATION-REF: CFG-006 Subtask 2: Enhanced Source Tracking Extension
+// GetAllConfigValuesWithSources provides comprehensive configuration visibility using reflection.
+// It replaces the manual field enumeration with automatic discovery and enhanced source tracking.
+func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {
+	// Get all fields using reflection
+	fields := GetAllConfigFields(cfg)
+	defaultCfg := DefaultConfig()
+	defaultFields := GetAllConfigFields(defaultCfg)
+
+	// Create mapping of field names to default values
+	defaultValues := make(map[string]interface{})
+	for _, field := range defaultFields {
+		defaultValues[field.Path] = field.Value
+	}
+
+	// Determine configuration source
+	configSource := determineConfigSource(root)
+	getSource := createSourceDeterminer(configSource)
+
+	var results []ConfigValueWithMetadata
+
+	for _, field := range fields {
+		// Skip struct fields themselves (keep their children)
+		if field.IsStruct && !field.IsPointer {
+			continue
+		}
+
+		// Get default value for comparison
+		defaultValue, hasDefault := defaultValues[field.Path]
+		if !hasDefault {
+			defaultValue = getZeroValueForKind(field.Kind)
+		}
+
+		// Determine source of this field
+		source := getSource(field.Value, defaultValue)
+
+		// Format value as string
+		valueStr := formatFieldValue(field.Value, field.Kind)
+
+		// Create enhanced config value
+		configValue := ConfigValueWithMetadata{
+			ConfigValue: ConfigValue{
+				Name:   field.YAMLName,
+				Value:  valueStr,
+				Source: source,
+			},
+			FieldInfo:        field,
+			InheritanceChain: []string{source}, // TODO: Implement full inheritance chain tracking
+			MergeStrategy:    "override",       // TODO: Implement merge strategy tracking
+			IsOverridden:     source != "default",
+			ConflictSources:  []string{}, // TODO: Implement conflict detection
+		}
+
+		results = append(results, configValue)
+	}
+
+	// Sort results alphabetically by YAML name
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].ConfigValue.Name < results[j].ConfigValue.Name
+	})
+
+	return results
+}
+
+// 🔺 CFG-006: Value formatting implementation - 🔍
+// IMPLEMENTATION-REF: CFG-006 Step 3.2: Implement type-aware value formatting
+// formatFieldValue formats configuration values based on their Go type.
+func formatFieldValue(value interface{}, kind reflect.Kind) string {
+	if value == nil {
+		return "<nil>"
+	}
+
+	switch kind {
+	case reflect.Bool:
+		return boolToString(value.(bool))
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return fmt.Sprintf("%d", value)
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return fmt.Sprintf("%d", value)
+	case reflect.String:
+		return value.(string)
+	case reflect.Slice:
+		// Handle string slices specifically
+		if slice, ok := value.([]string); ok {
+			if len(slice) == 0 {
+				return "[]"
+			}
+			return fmt.Sprintf("[%s]", strings.Join(slice, ", "))
+		}
+		return fmt.Sprintf("%v", value)
+	case reflect.Ptr:
+		// For pointers, format the pointed-to value
+		ptrValue := reflect.ValueOf(value)
+		if ptrValue.IsNil() {
+			return "<nil>"
+		}
+		return formatFieldValue(ptrValue.Elem().Interface(), ptrValue.Elem().Kind())
+	default:
+		return fmt.Sprintf("%v", value)
+	}
+}
+
+// 🔺 CFG-006: Zero value helper implementation - 🔍
+// IMPLEMENTATION-REF: CFG-006 Helper functions for reflection system
+// getZeroValueForKind returns the appropriate zero value for a given reflect.Kind.
+func getZeroValueForKind(kind reflect.Kind) interface{} {
+	switch kind {
+	case reflect.Bool:
+		return false
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return uint(0)
+	case reflect.String:
+		return ""
+	case reflect.Slice:
+		return []string{}
+	case reflect.Ptr:
+		return nil
+	default:
+		return nil
+	}
+}
+
+// 🔶 CFG-006: Performance optimization - Reflection result caching infrastructure
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+
+// ConfigFieldCache provides thread-safe caching of configuration field discovery results.
+// It significantly reduces reflection overhead for repeated GetAllConfigFields() calls.
+type ConfigFieldCache struct {
+	mu         sync.RWMutex
+	fields     []configFieldInfo
+	structHash uint64    // Hash of Config struct to detect schema changes
+	lastUpdate time.Time // When cache was last updated
+	valid      bool      // Whether cached data is valid
+}
+
+// ConfigFilter provides filtering options for configuration field enumeration.
+// It enables lazy evaluation by only processing fields that match filter criteria.
+type ConfigFilter struct {
+	FieldPatterns []string // Field name patterns to include (glob patterns)
+	Categories    []string // Field categories to include
+	OverridesOnly bool     // Show only non-default values
+	SourceTypes   []string // Show only specific source types (environment, config, default)
+}
+
+// Global cache instance for configuration field discovery
+var globalFieldCache = &ConfigFieldCache{}
+
+// getConfigStructHash computes a hash of the Config struct type to detect schema changes.
+// This enables cache invalidation when the struct definition is modified.
+func getConfigStructHash() uint64 {
+	h := fnv.New64a()
+	configType := reflect.TypeOf(Config{})
+	writeTypeToHash(h, configType)
+	return h.Sum64()
+}
+
+// writeTypeToHash recursively writes type information to hash for cache validation.
+func writeTypeToHash(h hash.Hash64, t reflect.Type) {
+	// Write type name and kind
+	h.Write([]byte(t.String()))
+	h.Write([]byte{byte(t.Kind())})
+
+	// For struct types, hash all field information
+	if t.Kind() == reflect.Struct {
+		for i := 0; i < t.NumField(); i++ {
+			field := t.Field(i)
+			h.Write([]byte(field.Name))
+			h.Write([]byte(field.Tag))
+			writeTypeToHash(h, field.Type)
+		}
+	}
+
+	// For pointer and slice types, hash element type
+	if t.Kind() == reflect.Ptr || t.Kind() == reflect.Slice {
+		writeTypeToHash(h, t.Elem())
+	}
+}
+
+// getCachedFields retrieves fields from cache if valid, otherwise returns nil.
+// Thread-safe read operation with minimal lock contention.
+func (c *ConfigFieldCache) getCachedFields() []configFieldInfo {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	if !c.valid {
+		return nil
+	}
+
+	// Validate cache against current struct hash
+	currentHash := getConfigStructHash()
+	if c.structHash != currentHash {
+		// Struct has changed, cache is invalid
+		return nil
+	}
+
+	// Return copy of cached fields to prevent modification
+	result := make([]configFieldInfo, len(c.fields))
+	copy(result, c.fields)
+	return result
+}
+
+// setCachedFields stores fields in cache with current struct hash.
+// Thread-safe write operation that invalidates and repopulates cache.
+func (c *ConfigFieldCache) setCachedFields(fields []configFieldInfo) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	// Store copy of fields to prevent external modification
+	c.fields = make([]configFieldInfo, len(fields))
+	copy(c.fields, fields)
+
+	c.structHash = getConfigStructHash()
+	c.lastUpdate = time.Now()
+	c.valid = true
+}
+
+// invalidateCache marks the cache as invalid, forcing refresh on next access.
+func (c *ConfigFieldCache) invalidateCache() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.valid = false
+}
+
+// 🔶 CFG-006: Performance optimization - Lazy source evaluation
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.2: Implement lazy source evaluation
+// GetConfigValuesWithSourcesFiltered provides configuration visibility with filtering.
+// It only resolves sources for fields that match the filter criteria for better performance.
+func GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {
+	// Get all fields using reflection
+	fields := GetAllConfigFields(cfg)
+
+	// Pre-filter fields to avoid expensive source resolution for unwanted fields
+	filteredFields := applyConfigFilter(fields, filter)
+
+	if len(filteredFields) == 0 {
+		return []ConfigValueWithMetadata{}
+	}
+
+	// Only resolve sources for filtered fields
+	defaultCfg := DefaultConfig()
+	defaultFields := GetAllConfigFields(defaultCfg)
+
+	// Create mapping of field names to default values (for all fields for comparison)
+	defaultValues := make(map[string]interface{})
+	for _, defaultField := range defaultFields {
+		defaultValues[defaultField.Path] = defaultField.Value
+	}
+
+	// Determine configuration source
+	configSource := determineConfigSource(root)
+	getSource := createSourceDeterminer(configSource)
+
+	var results []ConfigValueWithMetadata
+
+	for _, field := range filteredFields {
+		// Skip struct fields themselves (keep their children)
+		if field.IsStruct && !field.IsPointer {
+			continue
+		}
+
+		// Get default value for comparison
+		defaultValue, hasDefault := defaultValues[field.Path]
+		if !hasDefault {
+			defaultValue = getZeroValueForKind(field.Kind)
+		}
+
+		// Determine source of this field
+		source := getSource(field.Value, defaultValue)
+
+		// Apply overrides-only filter if specified
+		if filter != nil && filter.OverridesOnly {
+			if source == "default" {
+				continue // Skip default values when only showing overrides
+			}
+		}
+
+		// Apply source type filter if specified
+		if filter != nil && len(filter.SourceTypes) > 0 {
+			sourceMatches := false
+			for _, allowedSource := range filter.SourceTypes {
+				if source == allowedSource {
+					sourceMatches = true
+					break
+				}
+			}
+			if !sourceMatches {
+				continue // Skip sources not in the allowed list
+			}
+		}
+
+		// Format value as string
+		valueStr := formatFieldValue(field.Value, field.Kind)
+
+		// Create enhanced config value
+		configValue := ConfigValueWithMetadata{
+			ConfigValue: ConfigValue{
+				Name:   field.YAMLName,
+				Value:  valueStr,
+				Source: source,
+			},
+			FieldInfo: field,
+			// TODO: Add inheritance chain and merge strategy tracking
+			InheritanceChain: []string{}, // Placeholder for future CFG-005 integration
+			MergeStrategy:    "override", // Placeholder for future merge strategy tracking
+			IsOverridden:     source != "default",
+			ConflictSources:  []string{}, // Placeholder for conflict detection
+		}
+
+		results = append(results, configValue)
+	}
+
+	return results
+}
+
+// 🔶 CFG-006: Performance optimization - Configuration field filtering
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.2: Implement lazy source evaluation
+// applyConfigFilter filters configuration fields based on filter criteria.
+func applyConfigFilter(fields []configFieldInfo, filter *ConfigFilter) []configFieldInfo {
+	if filter == nil {
+		return fields // No filtering
+	}
+
+	var filtered []configFieldInfo
+
+	for _, field := range fields {
+		// Apply field pattern filter
+		if len(filter.FieldPatterns) > 0 {
+			patternMatches := false
+			for _, pattern := range filter.FieldPatterns {
+				if matched, err := filepath.Match(pattern, field.Name); err == nil && matched {
+					patternMatches = true
+					break
+				}
+				// Also check YAML name and path
+				if matched, err := filepath.Match(pattern, field.YAMLName); err == nil && matched {
+					patternMatches = true
+					break
+				}
+				if matched, err := filepath.Match(pattern, field.Path); err == nil && matched {
+					patternMatches = true
+					break
+				}
+			}
+			if !patternMatches {
+				continue
+			}
+		}
+
+		// Apply category filter
+		if len(filter.Categories) > 0 {
+			categoryMatches := false
+			for _, allowedCategory := range filter.Categories {
+				if field.Category == allowedCategory {
+					categoryMatches = true
+					break
+				}
+			}
+			if !categoryMatches {
+				continue
+			}
+		}
+
+		filtered = append(filtered, field)
+	}
+
+	return filtered
+}
+
+// 🔶 CFG-006: Performance optimization - Incremental resolution support
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
+// GetConfigFieldByPattern retrieves specific configuration fields matching a pattern.
+// This enables efficient single-field or pattern-based queries without full enumeration.
+func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {
+	// Use caching for performance
+	allFields := GetAllConfigFields(cfg)
+
+	var matchingFields []configFieldInfo
+
+	for _, field := range allFields {
+		// Check if field matches pattern
+		if matched, err := filepath.Match(pattern, field.Name); err != nil {
+			return nil, fmt.Errorf("invalid pattern %s: %v", pattern, err)
+		} else if matched {
+			matchingFields = append(matchingFields, field)
+			continue
+		}
+
+		// Also check YAML name
+		if matched, err := filepath.Match(pattern, field.YAMLName); err == nil && matched {
+			matchingFields = append(matchingFields, field)
+			continue
+		}
+
+		// Also check field path for nested field access
+		if matched, err := filepath.Match(pattern, field.Path); err == nil && matched {
+			matchingFields = append(matchingFields, field)
+		}
+	}
+
+	return matchingFields, nil
+}
+
+// 🔶 CFG-006: Performance optimization - Single field access
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
+// GetConfigFieldValue retrieves a single configuration field value with complete metadata.
+// This is the most efficient way to access a specific configuration field.
+func GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {
+	// Try to get the field value directly using path resolution
+	configValue := reflect.ValueOf(*cfg)
+	fieldValue, err := getFieldValueByPath(configValue, fieldPath)
+	if err != nil {
+		return ConfigValueWithMetadata{}, fmt.Errorf("field path %s not found: %v", fieldPath, err)
+	}
+
+	// Get field metadata from cache or reflection
+	allFields := GetAllConfigFields(cfg)
+	var targetField *configFieldInfo
+
+	for _, field := range allFields {
+		if field.Path == fieldPath {
+			targetField = &field
+			break
+		}
+	}
+
+	if targetField == nil {
+		return ConfigValueWithMetadata{}, fmt.Errorf("field metadata not found for path %s", fieldPath)
+	}
+
+	// Get default value for source determination
+	defaultCfg := DefaultConfig()
+	defaultValue := getZeroValueForKind(targetField.Kind)
+
+	if defaultConfigValue, err := getFieldValueByPath(reflect.ValueOf(*defaultCfg), fieldPath); err == nil {
+		defaultValue = defaultConfigValue
+	}
+
+	// Determine source (simplified for single field access)
+	var source string
+	if reflect.DeepEqual(fieldValue, defaultValue) {
+		source = "default"
+	} else {
+		// Check if environment variable exists
+		envVarName := strings.ToUpper(strings.ReplaceAll(fieldPath, ".", "_"))
+		if _, exists := os.LookupEnv(envVarName); exists {
+			source = "environment"
+		} else {
+			source = "config"
+		}
+	}
+
+	// Format value
+	valueStr := formatFieldValue(fieldValue, targetField.Kind)
+
+	return ConfigValueWithMetadata{
+		ConfigValue: ConfigValue{
+			Name:   targetField.YAMLName,
+			Value:  valueStr,
+			Source: source,
+		},
+		FieldInfo:        *targetField,
+		InheritanceChain: []string{}, // Simplified for single field access
+		MergeStrategy:    "override",
+		IsOverridden:     source != "default",
+		ConflictSources:  []string{},
+	}, nil
+}
+
+// 🔶 CFG-006: Performance optimization - Efficient field existence check
+// IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
+// HasConfigField checks if a configuration field exists without full field enumeration.
+func HasConfigField(cfg *Config, fieldPath string) bool {
+	configValue := reflect.ValueOf(*cfg)
+	_, err := getFieldValueByPath(configValue, fieldPath)
+	return err == nil
 }
