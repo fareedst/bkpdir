@@ -15,10 +15,11 @@ Before making ANY code changes:
 ### **✅ MANDATORY POST-WORK COMPLETION** (Priority 2 - Must Execute Last)
 After ALL code changes are complete:
 
-1. **🧪 Full Test Suite**: All tests must pass (`make test`)
-2. **🔧 Lint Compliance**: All lint checks must pass (`make lint`)
-3. **📝 Documentation Updates**: All required documentation files updated per this protocol
-4. **🏁 Task Completion**: Update task status to "Completed" in `feature-tracking.md`
+1. **⭐ Decision Framework Validation**: All changes must comply with DOC-014 Decision Framework (see [`ai-decision-framework.md`](ai-decision-framework.md))
+2. **🧪 Full Test Suite**: All tests must pass (`make test`)
+3. **🔧 Lint Compliance**: All lint checks must pass (`make lint`)
+4. **📝 Documentation Updates**: All required documentation files updated per this protocol
+5. **🏁 Task Completion**: Update task status to "Completed" in `feature-tracking.md`
 
 > **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
@@ -63,8 +64,9 @@ For each protocol:
 **🚨 MANDATORY ACTIONS (Execute in Order):**
 
 **Phase 1: Pre-Implementation Validation 🔍**
-1. **📋 Feature ID Verification**: Must exist in feature-tracking.md with valid `FEATURE-001` format
-2. **🛡️ Immutable Check**: Verify no conflicts with immutable.md requirements
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I implement this feature request?" with safety gates and scope boundaries validation
+2. **📋 Feature ID Verification**: Must exist in feature-tracking.md with valid `FEATURE-001` format
+3. **🛡️ Immutable Check**: Verify no conflicts with immutable.md requirements
 
 **Phase 2: Documentation Updates 📝**
 3. **✅ HIGH PRIORITY - Update REQUIRED files:**
@@ -102,8 +104,9 @@ For each protocol:
 **🚨 MANDATORY ACTIONS (Execute in Order):**
 
 **Phase 1: Feature Discovery 🔍**
-1. **📋 Lookup existing Feature ID** in feature-tracking.md
-2. **🆔 Create modification entry** - Add `-MOD-001` suffix to Feature ID
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I modify this existing functionality?" with safety gates and scope boundaries validation
+2. **📋 Lookup existing Feature ID** in feature-tracking.md
+3. **🆔 Create modification entry** - Add `-MOD-001` suffix to Feature ID
 
 **Phase 2: Impact Analysis 📊**
 3. **🔍 Impact Analysis:**
@@ -136,7 +139,8 @@ For each protocol:
 **🚨 MINIMAL ACTIONS (Streamlined Process):**
 
 **Phase 1: Impact Assessment 🔍**
-1. **📊 Check if bug affects documented behavior**
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I fix this test failure?" with safety gates and scope boundaries validation
+2. **📊 Check if bug affects documented behavior**
 
 **Phase 2: Selective Updates 📝**
 2. **⚠️ Update files ONLY if necessary:**
@@ -157,14 +161,17 @@ For each protocol:
 ### ⚙️ CONFIG CHANGE Protocol [PRIORITY: MEDIUM]
 **🚨 MANDATORY ACTIONS:**
 
-**Phase 1: Documentation Updates 📝**
-1. **✅ HIGH PRIORITY - Update REQUIRED files:**
+**Phase 1: Pre-Implementation Validation 🔍**
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I make this configuration change?" with safety gates and scope boundaries validation
+
+**Phase 2: Documentation Updates 📝**
+2. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update configuration-related features
    - ✅ `specification.md` - IF user-visible configuration changes
    - ✅ `requirements.md` - Update configuration requirements
 
-**Phase 2: Optional Updates 📋**
-2. **❌ Usually SKIP:**
+**Phase 3: Optional Updates 📋**
+3. **❌ Usually SKIP:**
    - ❌ `architecture.md` - Unless configuration architecture changes
    - ❌ `testing.md` - Unless configuration testing changes
 
@@ -176,14 +183,17 @@ For each protocol:
 ### 🔌 API CHANGE Protocol [PRIORITY: CRITICAL]
 **🚨 MANDATORY ACTIONS:**
 
-**Phase 1: Core Documentation 📝**
-1. **✅ HIGH PRIORITY - Update REQUIRED files:**
+**Phase 1: Pre-Implementation Validation 🔍**
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I make this API/interface change?" with safety gates and scope boundaries validation
+
+**Phase 2: Core Documentation 📝**
+2. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update API-related features
    - ✅ `specification.md` - Document API behavior changes
    - ✅ `architecture.md` - Update interface documentation
 
-**Phase 2: Impact Evaluation 📊**
-2. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
+**Phase 3: Impact Evaluation 📊**
+3. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
    - ⚠️ `sync-framework.md` - IF changes affect synchronization
    - ⚠️ `requirements.md` - IF API requirements change
    - ⚠️ `testing.md` - IF API testing requirements change
@@ -197,13 +207,16 @@ For each protocol:
 ### 🧪 TEST ADDITION Protocol [PRIORITY: LOW]
 **🚨 MANDATORY ACTIONS:**
 
-**Phase 1: Documentation Updates 📝**
-1. **✅ HIGH PRIORITY - Update REQUIRED files:**
+**Phase 1: Pre-Implementation Validation 🔍**
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I add these tests?" with safety gates and scope boundaries validation
+
+**Phase 2: Documentation Updates 📝**
+2. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update test-related features
    - ✅ `testing.md` - Document new test coverage
 
-**Phase 2: Usually Skip 📋**
-2. **❌ Usually SKIP:**
+**Phase 3: Usually Skip 📋**
+3. **❌ Usually SKIP:**
    - ❌ `specification.md` - Unless tests reveal specification gaps
    - ❌ `requirements.md` - Unless tests reveal requirement gaps
    - ❌ `architecture.md` - Unless test infrastructure changes
@@ -216,13 +229,16 @@ For each protocol:
 ### 🚀 PERFORMANCE Protocol [PRIORITY: MEDIUM]
 **🚨 MANDATORY ACTIONS:**
 
-**Phase 1: Core Documentation 📝**
-1. **✅ HIGH PRIORITY - Update REQUIRED files:**
+**Phase 1: Pre-Implementation Validation 🔍**
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I make this performance optimization?" with safety gates and scope boundaries validation
+
+**Phase 2: Core Documentation 📝**
+2. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update performance-related features
    - ✅ `architecture.md` - Document performance improvements
 
-**Phase 2: Impact Evaluation 📊**
-2. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
+**Phase 3: Impact Evaluation 📊**
+3. **⚠️ MEDIUM PRIORITY - Evaluate CONDITIONAL files:**
    - ⚠️ `requirements.md` - IF performance requirements change
    - ⚠️ `testing.md` - IF performance testing requirements change
    - ⚠️ `specification.md` - IF user-visible performance characteristics change
@@ -234,13 +250,16 @@ For each protocol:
 ### 🔄 REFACTORING Protocol [PRIORITY: LOW]
 **🚨 MANDATORY ACTIONS:**
 
-**Phase 1: Core Documentation 📝**
-1. **✅ HIGH PRIORITY - Update REQUIRED files:**
+**Phase 1: Pre-Implementation Validation 🔍**
+1. **⭐ Decision Framework Validation**: Execute DOC-014 decision tree "Should I refactor this code?" with safety gates and scope boundaries validation
+
+**Phase 2: Core Documentation 📝**
+2. **✅ HIGH PRIORITY - Update REQUIRED files:**
    - ✅ `feature-tracking.md` - Update refactoring-related features
    - ✅ `architecture.md` - Document structural changes
 
-**Phase 2: Usually Skip 📋**
-2. **❌ Usually SKIP:**
+**Phase 3: Usually Skip 📋**
+3. **❌ Usually SKIP:**
    - ❌ `specification.md` - Unless user-facing behavior changes
    - ❌ `requirements.md` - Unless requirements are clarified
    - ❌ `testing.md` - Unless test structure changes
@@ -350,16 +369,20 @@ Process files (Reference Only):
 # MANDATORY: Execute before any code modification
 echo "🤖 AI Assistant Pre-Change Validation"
 
-# 1. Verify task exists in feature tracking
+# 1. Execute Decision Framework validation (DOC-014)
+echo "⭐ Decision Framework: Selecting appropriate decision tree"
+echo "⭐ Decision Framework: Validating safety gates and scope boundaries"
+
+# 2. Verify task exists in feature tracking
 grep -q "FEATURE-ID" docs/context/feature-tracking.md || echo "❌ CRITICAL: Task not found in feature-tracking.md"
 
-# 2. Check ai-assistant-compliance requirements
+# 3. Check ai-assistant-compliance requirements
 echo "📋 Review ai-assistant-compliance.md for token requirements"
 
-# 3. Check immutable requirements
+# 4. Check immutable requirements
 echo "🛡️ Verify no immutable.md conflicts"
 
-# 4. Determine file impact using this guide
+# 5. Determine file impact using this guide
 echo "📁 Files requiring updates determined"
 ```
 
@@ -383,16 +406,20 @@ echo "🔗 Cross-references maintained"
 # MANDATORY: Execute after all changes complete
 echo "✅ AI Assistant Post-Change Validation"
 
-# 1. Run full test suite
+# 1. Execute Decision Framework post-implementation validation (DOC-014)
+echo "⭐ Decision Framework: Validating quality thresholds and goal alignment"
+echo "⭐ Decision Framework: Confirming >95% goal alignment rate and 100% traceability"
+
+# 2. Run full test suite
 make test || echo "❌ CRITICAL: Tests failing"
 
-# 2. Run lint checks
+# 3. Run lint checks
 make lint || echo "❌ CRITICAL: Lint failures"
 
-# 3. Validate documentation consistency
+# 4. Validate documentation consistency
 ./scripts/validate-docs.sh || echo "⚠️ WARNING: Documentation inconsistencies"
 
-# 4. Update task status in feature-tracking.md
+# 5. Update task status in feature-tracking.md
 echo "🏁 Task marked complete in feature-tracking.md"
 ```
 

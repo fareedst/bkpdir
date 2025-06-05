@@ -164,6 +164,74 @@ When making ANY code changes, you MUST:
 | **Strict** | `make validate-icons-strict` | CI/CD pipelines | Errors > 0 OR Warnings > 5 |
 | **Legacy** | `make validate-icons` | DOC-007 compatibility | DOC-007 specific checks |
 
+### 🔺 DOC-014: MANDATORY AI ASSISTANT DECISION FRAMEWORK
+
+> **⭐ CRITICAL**: All AI assistants MUST use the AI Assistant Decision Framework (DOC-014) for ALL code changes. The framework provides explicit decision-making principles to ensure AI assistant alignment with project goals.
+
+#### 🚨 **Mandatory Decision Framework Usage**
+**AI assistants MUST follow the Decision Framework defined in [`ai-decision-framework.md`](ai-decision-framework.md) for every code change:**
+
+1. **🛡️ Safety Gates**: Check test validation, backward compatibility, token compliance, validation scripts
+2. **📑 Scope Boundaries**: Verify feature scope, dependency satisfaction, architecture alignment, context updates
+3. **📊 Quality Thresholds**: Ensure test coverage, error pattern consistency, performance stability, traceability
+4. **🎯 Goal Alignment**: Confirm phase progress, priority order, future impact, reusability preservation
+
+#### 🧠 **Decision Tree Compliance**
+**AI assistants MUST use appropriate decision trees for common scenarios:**
+
+| Scenario | Decision Tree | Required Validation |
+|----------|---------------|-------------------|
+| **Feature Implementation** | "Should I implement this feature request?" | Feature exists in feature-tracking.md, dependencies satisfied, architecture alignment |
+| **Code Refactoring** | "Should I refactor this code?" | Part of planned tasks, improves extraction goals, enhances AI comprehension |
+| **Test Failures** | "Should I fix this test failure?" | Blocking work, critical component, minimal scope change |
+| **Documentation Updates** | "Should I update documentation?" | Required by protocol, affects behavior, impacts architecture |
+
+#### 🎯 **Decision Validation Requirements**
+**AI assistants MUST execute decision validation checklists:**
+
+**Pre-Implementation Validation**:
+```bash
+# 🛡️ Safety Gates Validation
+make test                    # All tests must pass
+make lint                    # All lint checks must pass  
+make validate-icons          # Icon validation must pass
+git status                   # Working directory must be clean
+
+# 📋 Scope Validation  
+grep -r "FEATURE-ID" docs/context/feature-tracking.md  # Feature must exist
+# Check dependencies in feature-tracking.md are "✅ Completed"
+# Verify change aligns with current extraction/refactoring phase
+```
+
+**Post-Implementation Validation**:
+```bash
+# 📊 Quality Validation
+make test-coverage-validate  # Coverage thresholds must be met
+make test                    # All tests must still pass
+make validate-icons          # Token format must be compliant
+
+# 📝 Documentation Validation
+# Verify all required context files updated per protocol
+# Check implementation tokens added to all modified code
+# Confirm feature status updated in feature-tracking.md
+```
+
+#### 🔧 **Framework Integration with Existing Systems**
+**Decision Framework MUST integrate with:**
+
+- **🔗 Feature Tracking**: Respect ⭐🔺🔶🔻 priority hierarchy, check blocking dependencies
+- **🔧 Change Protocols**: Use decision trees to select appropriate ai-assistant-protocol.md workflow
+- **🛡️ Validation Systems**: Leverage DOC-008/DOC-011 for compliance checking and real-time feedback
+- **🏷️ Token System**: Include decision context in implementation tokens using DOC-007 standardized format
+
+#### 📊 **Decision Quality Metrics**
+**AI assistants MUST achieve:**
+
+- **🎯 Goal Alignment Rate**: >95% of changes advance documented project goals
+- **🔗 Traceability Compliance**: 100% of changes have Feature IDs and implementation tokens
+- **📋 Protocol Adherence**: 100% of changes follow appropriate ai-assistant-protocol.md workflows
+- **🛡️ Regression Prevention**: Zero test failures introduced by AI assistant changes
+
 ### 🚨 AI ENFORCEMENT RULES
 
 **❌ REJECT code changes that do not:**
@@ -177,6 +245,10 @@ When making ANY code changes, you MUST:
 - **🆕 DOC-008**: Pass comprehensive icon validation (`make validate-icon-enforcement`)
 - **🆕 DOC-008**: Generate clean validation report with zero critical errors
 - **🚨 DOC-008**: Update BOTH feature registry table AND detailed subtask blocks when marking tasks completed
+- **⭐ DOC-014**: Follow the AI Assistant Decision Framework for all code changes
+- **⭐ DOC-014**: Execute pre-implementation validation checklists (safety gates, scope boundaries)
+- **⭐ DOC-014**: Use appropriate decision trees for implementation scenarios
+- **⭐ DOC-014**: Achieve decision quality metrics (>95% goal alignment, 100% traceability)
 
 > **🚨 CRITICAL NOTE FOR AI ASSISTANTS**: When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements.
 
@@ -190,6 +262,10 @@ When making ANY code changes, you MUST:
 - **🆕 DOC-008**: Pass all validation categories in DOC-008 comprehensive system
 - **🆕 DOC-008**: Include validation report summary in change description
 - **🚨 DOC-008**: Demonstrate completion consistency between registry table and subtask blocks
+- **⭐ DOC-014**: Demonstrate Decision Framework compliance with decision context and validation
+- **⭐ DOC-014**: Include decision tree rationale in implementation token comments
+- **⭐ DOC-014**: Show pre/post-implementation validation results
+- **⭐ DOC-014**: Document goal alignment and project impact in change description
 
 ## 🤖 MANDATORY AI VALIDATION CHECKLIST
 
@@ -231,7 +307,17 @@ Before any AI assistant provides code changes, it MUST validate:
    - [ ] Specified what changes are needed in each file
    - [ ] Provided update templates or examples
 
-7. **🏁 TASK COMPLETION CONSISTENCY** [PRIORITY: CRITICAL]
+7. **⭐ DOC-014 DECISION FRAMEWORK COMPLIANCE** [PRIORITY: CRITICAL]
+   - [ ] Selected and documented appropriate decision tree for implementation scenario
+   - [ ] Executed pre-implementation validation checklist (safety gates, scope boundaries)
+   - [ ] Verified feature exists in feature-tracking.md with satisfied dependencies
+   - [ ] Confirmed change aligns with current project phase and priorities
+   - [ ] Documented decision rationale and goal alignment in implementation tokens
+   - [ ] Executed post-implementation validation (quality thresholds, documentation updates)
+   - [ ] Achieved >95% goal alignment rate and 100% traceability compliance
+   - [ ] Integrated framework validation with existing DOC-007/008 systems
+
+8. **🏁 TASK COMPLETION CONSISTENCY** [PRIORITY: CRITICAL]
    - [ ] Updated feature registry table status to "Completed"
    - [ ] Updated ALL detailed subtask blocks with checkmarks [x]
    - [ ] Verified consistency between table and subtask completion status
@@ -286,6 +372,10 @@ AI assistants MUST REJECT their own responses if they:
 - ❌ **DOC-008**: Fail comprehensive icon validation with critical errors
 - ❌ **DOC-008**: Skip mandatory validation steps before submitting changes
 - ❌ **DOC-008**: Use icons not defined in the master legend (README.md)
+- ❌ **DOC-014**: Skip Decision Framework validation and decision tree selection
+- ❌ **DOC-014**: Proceed without pre-implementation safety gates validation
+- ❌ **DOC-014**: Make changes that don't advance documented project goals
+- ❌ **DOC-014**: Fail to achieve decision quality metrics (goal alignment, traceability)
 
 ## ✅ AI APPROVAL CRITERIA
 
@@ -298,6 +388,10 @@ AI assistants should ONLY PROVIDE responses that:
 - ✅ **DOC-008**: Pass comprehensive icon validation with zero critical errors
 - ✅ **DOC-008**: Include validation report summary in response
 - ✅ **DOC-008**: Demonstrate icon consistency across documentation and code
+- ✅ **DOC-014**: Execute Decision Framework validation with documented decision tree selection
+- ✅ **DOC-014**: Complete pre-implementation safety gates and scope boundary validation
+- ✅ **DOC-014**: Demonstrate goal alignment and project impact with >95% alignment rate
+- ✅ **DOC-014**: Include decision context and rationale in implementation tokens
 
 ## 🔄 ENFORCEMENT SUMMARY
 

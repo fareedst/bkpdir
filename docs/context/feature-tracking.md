@@ -137,6 +137,7 @@ For detailed guidelines on how to document and track features, please refer to [
 | DOC-011 | Token validation integration for AI assistants | ✅ Completed | 2024-12-30 | 🔺 HIGH | **🔺 DOC-011: Complete AI validation integration system implemented.** Comprehensive zero-friction validation workflow for AI assistants with DOC-008 integration, AI-optimized error reporting and intelligent remediation guidance, pre-submission validation APIs, bypass mechanisms with audit trails, compliance monitoring, and complete CLI interface. Created AIValidationGateway with 6 validation modes, intelligent error formatting with step-by-step remediation, compliance tracking with detailed reports, bypass system with mandatory documentation, and ai-validation CLI with 6 commands (validate, pre-submit, bypass, compliance, audit, strict). System provides seamless integration for AI assistant workflows with multiple output formats (detailed, summary, JSON), strict validation for critical changes, and comprehensive audit trails. All tests pass, build successful, and pre-submission validation working correctly. Foundation ready for AI-first development with zero-friction validation integration. **Notable**: Full 390-line CLI implementation with cobra framework, comprehensive 400+ line validation gateway, successful JSON/summary/detailed output testing, moved validation reports to docs/validation-reports/ for better organization. Task ID 82cf567f completed with production-ready AI validation system. | 🔺 HIGH |
 | DOC-012 | Real-time icon validation feedback | ✅ Completed | 2025-01-02 | 🔶 MEDIUM | **🔶 DOC-012: Complete real-time icon validation feedback system implemented.** Comprehensive live validation service with sub-second response times, intelligent caching using SHA-256 content hashing, real-time subscription system with 30-minute cleanup, visual status indicators with compliance levels (excellent/good/needs_work/poor), intelligent suggestion engine with confidence scoring (0.5-0.9). Created complete CLI interface with 5 commands (server, validate, status, watch, metrics), HTTP API with 5 endpoints, comprehensive test suite with 12 test functions and performance benchmarks. Makefile integration with 7 new targets for building, testing, and demonstration. Real-time validator provides editor integration foundation, proactive compliance maintenance, and enhanced developer experience with visual feedback elements (status colors, icons, progress bars, tooltips). Performance optimized for sub-second validation with intelligent caching and subscription management. Foundation ready for code editor plugins and live development feedback integration. | 🔶 MEDIUM |
 | DOC-013 | AI-first documentation and code maintenance | ✅ Completed | 2025-01-02 | 🔻 LOW | **🔻 DOC-013: Comprehensive AI-first documentation and code maintenance system implemented.** Created complete AI-first development strategy (`ai-first-development-strategy.md`) with 400+ lines covering AI documentation standards, workflow integration, quality assurance framework, and success metrics. Implemented comprehensive documentation templates (`ai-documentation-templates.md`) with 600+ lines including feature templates, code comment templates, technical documentation templates, and template selection guidelines. Established detailed code maintenance standards (`ai-code-maintenance-standards.md`) with 800+ lines covering implementation token formats, priority/action icon systems, AI-friendly code structure, error handling patterns, testing standards, and quality monitoring. Updated architecture.md with complete DOC-013 section defining 4-layer AI-First Documentation Framework. All 5 subtasks completed: AI documentation strategy created, AI-centric development practices implemented, AI documentation standards established, AI documentation templates created, and AI-first code review process implemented. System provides foundation for enhanced AI assistant code comprehension, maintenance efficiency, and development workflow optimization through standardized approaches. | 🔻 LOW |
+| DOC-014 | AI Assistant Decision Framework | AI decision making requirements | Decision Framework Engine | TestDecisionFramework | ⚡ In Progress | `// DOC-014: AI decision framework` | ⭐ CRITICAL |
 
 ### 🔧 Pre-Extraction Refactoring [PRIORITY: MEDIUM]
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |
@@ -1857,3 +1858,147 @@ archive_dir_path: "./project-archives"  # override
 
 **🔍 Notable Implementation Approach:**
 This feature transforms the config command from a manually-maintained list to a comprehensive, automatically-updating view of the entire configuration system with full inheritance chain visibility. The reflection-based approach ensures zero maintenance overhead while providing complete configuration transparency.
+
+#### **DOC-014 Detailed Subtask Breakdown:**
+
+**⭐ DOC-014: AI Assistant Decision Framework - ⚡ In Progress**
+*Codify explicit decision-making principles to keep AI assistants aligned with project goals when working on implementation details*
+
+**🔧 DOC-014 Subtasks:**
+
+1. **[x] Create core decision framework document** (⭐ CRITICAL) - ✅ **COMPLETED**
+   - [x] **Document decision hierarchy** - Safety gates, scope boundaries, quality thresholds, goal alignment ✅
+   - [x] **Create decision trees** - Common scenarios for feature implementation, refactoring, bug fixes ✅
+   - [x] **Define validation checklists** - Pre/post implementation validation steps ✅
+   - [x] **Establish integration points** - Integration with existing feature tracking and validation systems ✅
+   - **Rationale**: Explicit decision framework prevents AI assistants from making choices that conflict with project goals ✅
+   - **Status**: ✅ **COMPLETED** - Core framework document created with comprehensive decision guidance
+   - **Priority**: CRITICAL - Foundation for AI assistant compliance ⭐ ✅
+   - **Implementation Areas**: Decision logic, validation processes, integration patterns ✅
+   - **Dependencies**: None (foundational improvement) ✅
+   - **Implementation Tokens**: `// ⭐ DOC-014: Core decision framework` ✅
+   - **Expected Outcomes**: Clear decision criteria, reduced scope creep, aligned AI assistant behavior ✅
+
+2. **[x] Update feature tracking integration** (⭐ CRITICAL) - ✅ **COMPLETED**
+   - [x] **Add DOC-014 entry to feature registry** - Register new feature with proper classification ✅
+   - [x] **Update priority system documentation** - Ensure decision framework respects priority hierarchy ✅
+   - [x] **Document dependency checking** - Integrate with blocking dependency validation ✅
+   - [x] **Create status tracking guidelines** - Ensure both registry and subtask updates ✅
+   - **Rationale**: Decision framework must integrate seamlessly with existing feature tracking system ✅
+   - **Status**: ✅ **COMPLETED** - Feature entry added with comprehensive subtask breakdown and integration documentation
+   - **Priority**: CRITICAL - Required for framework adoption ⭐ ✅
+   - **Implementation Areas**: feature-tracking.md updates, priority system integration ✅
+   - **Dependencies**: Subtask 1 (core framework document) ✅
+   - **Implementation Tokens**: `// ⭐ DOC-014: Feature tracking integration` ✅
+   - **Expected Outcomes**: Seamless integration with existing tracking, proper priority enforcement ✅
+
+3. **[x] Update AI assistant compliance requirements** (🔺 HIGH) - ✅ **COMPLETED**
+   - [x] **Reference decision framework in ai-assistant-compliance.md** - Make framework usage mandatory ✅
+   - [x] **Update protocol requirements** - Integrate decision validation into change protocols ✅
+   - [x] **Create compliance checklist** - Add decision framework validation to submission requirements ✅
+   - [x] **Document enforcement mechanisms** - Define consequences for framework non-compliance ✅
+   - **Rationale**: Framework must be mandatory for all AI assistants to ensure consistent decision making ✅
+   - **Status**: ✅ **COMPLETED** - Decision framework successfully integrated as mandatory requirement for all AI assistants
+   - **Priority**: HIGH - Essential for framework adoption 🔺 ✅
+   - **Implementation Areas**: ai-assistant-compliance.md updates, protocol integration ✅
+   - **Dependencies**: Subtasks 1-2 (framework and tracking integration) ✅
+   - **Implementation Tokens**: `// 🔺 DOC-014: Compliance integration` ✅
+   - **Expected Outcomes**: Mandatory framework adoption, integrated compliance checking ✅
+   - **🔧 Implementation Notes**: **Successfully integrated DOC-014 Decision Framework as mandatory requirement across all AI assistant compliance systems.** Added comprehensive Decision Framework section to ai-assistant-compliance.md with mandatory usage requirements, decision tree compliance, validation checklists, and integration with existing DOC-007/008 systems. **COMPLETED Subtask 3.2**: Updated ai-assistant-protocol.md to include Decision Framework validation in ALL 8 change protocols (NEW FEATURE, MODIFICATION, BUG FIX, CONFIG CHANGE, API CHANGE, TEST ADDITION, PERFORMANCE, REFACTORING) with Phase 1 pre-implementation validation for each protocol. Enhanced AI validation checklist with decision framework compliance items, updated enforcement rules with framework-specific acceptance/rejection criteria, and integrated with existing validation infrastructure. All AI assistants now required to execute pre-implementation validation (safety gates, scope boundaries) and post-implementation validation (quality thresholds, goal alignment) with >95% goal alignment rate and 100% traceability compliance.
+
+4. **[x] Enhance implementation token system** (🔺 HIGH) - ✅ **COMPLETED**
+   - [x] **Define decision context syntax** - Standardize decision rationale format in tokens ✅
+   - [x] **Create decision categories** - Impact level, dependencies, constraints classification ✅
+   - [x] **Update token guidelines** - Extend DOC-007 with decision context requirements ✅
+   - [x] **Create migration strategy** - Plan for upgrading existing tokens with decision context ✅
+   - **Rationale**: Enhanced tokens provide better AI assistant guidance and decision traceability ✅
+   - **Status**: ✅ **COMPLETED** - Enhanced implementation token system with decision context implemented
+   - **Priority**: HIGH - Improves token system effectiveness 🔺 ✅
+   - **Implementation Areas**: Token format enhancement, validation updates ✅
+   - **Dependencies**: Subtask 1 (core framework defines decision categories) ✅
+   - **Implementation Tokens**: `// 🔺 DOC-014: Enhanced tokens`
+   - **Expected Outcomes**: Richer token context, improved AI assistant guidance ✅
+   - **🔧 Implementation Notes**: **Successfully implemented enhanced implementation token system with decision context integration.** Created comprehensive enhanced token syntax specification (`enhanced-token-syntax-specification.md`) with 15 decision context categories across 3 dimensions (Impact Level, Dependencies, Constraints). Updated DOC-007 source code icon guidelines with complete decision context integration including usage guidelines, migration examples, and context selection process. Implemented enhanced token migration script (`scripts/enhance-tokens.sh`) with intelligent decision context inference, phase-based migration (Phase 1: ⭐ CRITICAL, Phase 2: 🔺 HIGH, Phase 3: 🔶🔻 MEDIUM/LOW), dry-run capabilities, and comprehensive validation. Added 7 new Makefile targets for enhanced token workflow including `enhance-tokens-workflow`, `enhance-tokens-phase1/2/3`, `enhance-tokens-dry-run`, `enhance-tokens-all`, and `validate-enhanced-tokens`. Enhanced token format: `// [PRIORITY_ICON] FEATURE-ID: Brief description [DECISION: context1, context2, context3]` provides AI assistants with richer guidance for code comprehension and decision-making while maintaining backward compatibility with existing DOC-007/008/009 systems.
+
+5. **[ ] Create decision validation tools** (🔶 MEDIUM) - **NOT STARTED**
+   - [ ] **Implement decision checklist validation** - Automated checking of decision criteria
+   - [ ] **Create decision quality metrics** - Track goal alignment and rework rates
+   - [ ] **Add decision context validation** - Check enhanced token format compliance
+   - [ ] **Integrate with existing validation** - Extend DOC-008/DOC-011 systems
+   - **Rationale**: Automated validation ensures consistent application of decision framework
+   - **Status**: Not Started
+   - **Priority**: MEDIUM - Automation enhancement 🔶
+   - **Implementation Areas**: Validation tooling, metrics collection
+   - **Dependencies**: Subtasks 1-4 (framework and enhanced tokens)
+   - **Implementation Tokens**: `// 🔶 DOC-014: Decision validation`
+   - **Expected Outcomes**: Automated compliance checking, decision quality tracking
+
+6. **[ ] Integration testing and validation** (🔶 MEDIUM) - **NOT STARTED**
+   - [ ] **Test framework with existing systems** - Validate integration with feature tracking and protocols
+   - [ ] **Create decision scenario testing** - Test decision trees with realistic scenarios
+   - [ ] **Validate metric collection** - Ensure decision quality metrics work correctly
+   - [ ] **Performance impact assessment** - Verify framework doesn't slow development
+   - **Rationale**: Comprehensive testing ensures framework works reliably in practice
+   - **Status**: Not Started
+   - **Priority**: MEDIUM - Quality assurance 🔶
+   - **Implementation Areas**: Integration testing, performance validation
+   - **Dependencies**: Subtasks 1-5 (all framework components)
+   - **Implementation Tokens**: `// 🔶 DOC-014: Integration testing`
+   - **Expected Outcomes**: Validated framework reliability, confirmed performance impact
+
+7. **[ ] Documentation and training materials** (🔻 LOW) - **NOT STARTED**
+   - [ ] **Create framework usage guide** - Comprehensive guide for AI assistants
+   - [ ] **Add troubleshooting scenarios** - Common decision situations and solutions
+   - [ ] **Update help documentation** - Integrate framework guidance into existing help
+   - [ ] **Create training examples** - Real-world decision-making examples
+   - **Rationale**: Good documentation ensures AI assistants can effectively use the decision framework
+   - **Status**: Not Started
+   - **Priority**: LOW - Documentation support 🔻
+   - **Implementation Areas**: Documentation, training materials, examples
+   - **Dependencies**: Subtasks 1-6 (completed framework implementation)
+   - **Implementation Tokens**: `// 🔻 DOC-014: Documentation`
+   - **Expected Outcomes**: Comprehensive framework documentation, effective training materials
+
+8. **[ ] Update task status and completion** (🔻 LOW) - **NOT STARTED**
+   - [ ] **Mark completed subtasks with checkmarks** - Track progress through implementation
+   - [ ] **Document implementation decisions** - Record design choices and rationale
+   - [ ] **Record effectiveness metrics** - Document impact on AI assistant decision quality
+   - [ ] **Update overall feature status** - Mark DOC-014 as completed when all subtasks done
+   - **Rationale**: Maintain accurate tracking and document implementation success
+   - **Status**: Not Started
+   - **Priority**: LOW - Administrative completion 🔻
+   - **Implementation Areas**: Documentation maintenance, progress tracking
+   - **Dependencies**: All other subtasks (1-7)
+   - **Implementation Tokens**: `// 🔻 DOC-014: Task completion`
+   - **Expected Outcomes**: Complete implementation tracking, success documentation
+
+**🎯 DOC-014 Success Criteria:**
+- **Explicit Decision Making**: All AI assistants follow documented decision criteria
+- **Goal Alignment**: >95% of AI assistant changes advance documented project goals
+- **Reduced Rework**: <5% of changes require rework due to scope/goal misalignment
+- **Integrated Compliance**: Framework seamlessly integrated with existing validation systems
+- **Enhanced Tokens**: Implementation tokens include decision context for better guidance
+- **Measurable Impact**: Decision quality metrics demonstrate improved AI assistant effectiveness
+
+**🔧 Implementation Strategy:**
+1. **Phase 1 (Foundation)**: Core framework + Feature tracking integration (Subtasks 1-2)
+2. **Phase 2 (Integration)**: Compliance requirements + Enhanced tokens (Subtasks 3-4)
+3. **Phase 3 (Validation)**: Decision validation tools + Integration testing (Subtasks 5-6)
+4. **Phase 4 (Documentation)**: Training materials + Completion tracking (Subtasks 7-8)
+
+**🚨 DEPENDENCIES:**
+- **Builds on**: Existing feature tracking system (feature-tracking.md) ✅
+- **Integrates**: AI assistant protocols (ai-assistant-protocol.md) ✅
+- **Leverages**: Token validation systems (DOC-007/008/009/011) ✅
+- **Enhances**: AI assistant compliance (ai-assistant-compliance.md) ✅
+
+**📋 Key Benefits:**
+- **Explicit Decision Criteria**: Removes ambiguity from AI assistant decision making
+- **Goal Alignment**: Ensures all AI assistant work advances project objectives
+- **Reduced Scope Creep**: Clear boundaries prevent work outside documented scope
+- **Quality Assurance**: Decision validation maintains high standards
+- **Knowledge Preservation**: Decision rationale captured in enhanced implementation tokens
+- **Scalable Process**: Framework scales with project complexity and AI assistant adoption
+
+**🔍 Notable Implementation Approach:**
+This framework transforms implicit decision-making patterns into explicit, teachable processes. By codifying the decision logic already present in the documentation system, it provides AI assistants with clear guidance while preserving the flexibility needed for complex technical decisions.

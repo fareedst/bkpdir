@@ -106,6 +106,15 @@ help:
 	@echo "  validate-token-priorities Validate token priorities against feature tracking"
 	@echo "  suggest-action-icons Generate action icon suggestions for tokens"
 	@echo ""
+	@echo "Enhanced token system targets (DOC-014):"
+	@echo "  enhance-tokens-workflow Complete enhanced token workflow (dry run + Phase 1)"
+	@echo "  enhance-tokens-dry-run Preview enhanced token migration with decision context"
+	@echo "  enhance-tokens-phase1 Enhance Phase 1 tokens (⭐ CRITICAL priority)"
+	@echo "  enhance-tokens-phase2 Enhance Phase 2 tokens (🔺 HIGH priority)"
+	@echo "  enhance-tokens-phase3 Enhance Phase 3 tokens (🔶🔻 MEDIUM/LOW priority)"
+	@echo "  enhance-tokens-all Enhance all tokens with decision context"
+	@echo "  validate-enhanced-tokens Validate enhanced token format compliance"
+	@echo ""
 	@echo "Production build targets:"
 	@echo "  build-all       Build for all platforms"
 	@echo "  build-macos     Build for macOS (ARM64 and AMD64)"
@@ -406,6 +415,90 @@ standardize-tokens: analyze-priority-icons validate-token-priorities migrate-tok
 	@echo "  1. Review dry run output above"
 	@echo "  2. Run 'make migrate-tokens' to execute actual migration"
 	@echo "  3. Run 'make validate-icon-enforcement' to verify results"
+
+# 🔺 DOC-014: Enhanced implementation token system with decision context
+enhance-tokens-phase1:
+	@echo "🔺 DOC-014: Enhancing Phase 1 tokens (⭐ CRITICAL priority)..."
+	@if [ -f "scripts/enhance-tokens.sh" ]; then \
+		chmod +x scripts/enhance-tokens.sh; \
+		./scripts/enhance-tokens.sh --phase 1; \
+		echo "✓ DOC-014: Phase 1 token enhancement completed"; \
+	else \
+		echo "❌ Enhanced token migration script not found"; \
+		echo "   Expected: scripts/enhance-tokens.sh"; \
+		exit 1; \
+	fi
+
+enhance-tokens-phase2:
+	@echo "🔺 DOC-014: Enhancing Phase 2 tokens (🔺 HIGH priority)..."
+	@if [ -f "scripts/enhance-tokens.sh" ]; then \
+		chmod +x scripts/enhance-tokens.sh; \
+		./scripts/enhance-tokens.sh --phase 2; \
+		echo "✓ DOC-014: Phase 2 token enhancement completed"; \
+	else \
+		echo "❌ Enhanced token migration script not found"; \
+		echo "   Expected: scripts/enhance-tokens.sh"; \
+		exit 1; \
+	fi
+
+enhance-tokens-phase3:
+	@echo "🔺 DOC-014: Enhancing Phase 3 tokens (🔶🔻 MEDIUM/LOW priority)..."
+	@if [ -f "scripts/enhance-tokens.sh" ]; then \
+		chmod +x scripts/enhance-tokens.sh; \
+		./scripts/enhance-tokens.sh --phase 3; \
+		echo "✓ DOC-014: Phase 3 token enhancement completed"; \
+	else \
+		echo "❌ Enhanced token migration script not found"; \
+		echo "   Expected: scripts/enhance-tokens.sh"; \
+		exit 1; \
+	fi
+
+enhance-tokens-dry-run:
+	@echo "🔺 DOC-014: Preview enhanced token migration (dry run)..."
+	@if [ -f "scripts/enhance-tokens.sh" ]; then \
+		chmod +x scripts/enhance-tokens.sh; \
+		./scripts/enhance-tokens.sh --dry-run --verbose; \
+		echo "✓ DOC-014: Enhanced token preview completed"; \
+	else \
+		echo "❌ Enhanced token migration script not found"; \
+		echo "   Expected: scripts/enhance-tokens.sh"; \
+		exit 1; \
+	fi
+
+enhance-tokens-all:
+	@echo "🔺 DOC-014: Enhancing all implementation tokens with decision context..."
+	@if [ -f "scripts/enhance-tokens.sh" ]; then \
+		chmod +x scripts/enhance-tokens.sh; \
+		./scripts/enhance-tokens.sh --verbose; \
+		echo "✓ DOC-014: All token enhancement completed"; \
+	else \
+		echo "❌ Enhanced token migration script not found"; \
+		echo "   Expected: scripts/enhance-tokens.sh"; \
+		exit 1; \
+	fi
+
+validate-enhanced-tokens:
+	@echo "🔺 DOC-014: Validating enhanced token format compliance..."
+	@if [ -f "scripts/enhance-tokens.sh" ]; then \
+		chmod +x scripts/enhance-tokens.sh; \
+		./scripts/enhance-tokens.sh --dry-run --format summary; \
+		echo "Running DOC-008 validation on enhanced tokens..."; \
+		$(MAKE) validate-icon-enforcement; \
+		echo "✓ DOC-014: Enhanced token validation completed"; \
+	else \
+		echo "❌ Enhanced token migration script not found"; \
+		echo "   Expected: scripts/enhance-tokens.sh"; \
+		exit 1; \
+	fi
+
+# 🔺 DOC-014: Complete enhanced token workflow
+enhance-tokens-workflow: enhance-tokens-dry-run enhance-tokens-phase1 validate-enhanced-tokens
+	@echo "🔺 DOC-014: Enhanced token workflow completed"
+	@echo "  Phase 1 (⭐ CRITICAL) tokens enhanced with decision context"
+	@echo "  Next steps:"
+	@echo "  1. Run 'make enhance-tokens-phase2' for 🔺 HIGH priority tokens"
+	@echo "  2. Run 'make enhance-tokens-phase3' for 🔶🔻 MEDIUM/LOW priority tokens"
+	@echo "  3. Run 'make validate-enhanced-tokens' to verify all enhancements"
 
 check: fmt vet lint validate-icon-enforcement
 	@echo "✓ All code quality checks completed (including DOC-008 icon validation)"

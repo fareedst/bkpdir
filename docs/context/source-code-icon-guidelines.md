@@ -10,12 +10,82 @@ This document establishes the official guidelines for using standardized icons i
 // [PRIORITY_ICON] FEATURE-ID: Brief description [- DETAIL_ICON Context]
 ```
 
-**Examples:**
+### 🆕 **Enhanced Format with Decision Context** (DOC-014)
+```go
+// [PRIORITY_ICON] FEATURE-ID: Brief description [DECISION: context1, context2, context3]
+// [PRIORITY_ICON] FEATURE-ID: Brief description - [ACTION_ICON] Context [DECISION: context1, context2, context3]
+```
+
+**Standard Examples:**
 ```go
 // ⭐ ARCH-001: Archive naming convention implementation - 🔧 Core functionality
 // 🔺 CFG-003: Template formatting logic - 📝 Format string processing  
 // 🔶 GIT-004: Git submodule support - 🔍 Discovery and validation
 // 🔻 REFACTOR-001: Interface standardization - 🏗️ Architecture preparation
+```
+
+**Enhanced Examples with Decision Context:**
+```go
+// ⭐ ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
+// 🔺 CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
+// 🔶 DOC-010: Token format suggestions [DECISION: developer-experience, independent]
+// 🔻 TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
+```
+
+#### 🏷️ **Decision Context Categories** (DOC-014 Integration)
+
+**Impact Level Categories:**
+- **`core-functionality`**: Essential system operations (archive creation, data integrity, critical error handling)
+- **`enhancement`**: Feature improvements and extensions (Git integration, template formatting, configuration inheritance)  
+- **`developer-experience`**: Tools and utilities for development workflow (testing infrastructure, validation tools, debugging)
+- **`infrastructure`**: Build system, CI/CD, project structure (test framework, linting, coverage analysis)
+
+**Dependency Categories:**
+- **`blocks-extraction`**: Required for component extraction work (EXTRACT-001-010 series)
+- **`enables-flexibility`**: Enables future feature development and system extensibility
+- **`prerequisite-for-X`**: Required for specific feature X implementation (replace X with feature ID)
+- **`independent`**: No blocking dependencies, can be implemented standalone
+
+**Constraint Categories:**
+- **`user-facing`**: Affects UI, command behavior, or visible functionality (CLI commands, output formatting, error messages)
+- **`backward-compatible`**: Preserves existing functionality, doesn't break current behavior
+- **`breaking-change`**: May break existing functionality, requires major version bump
+- **`performance-critical`**: Significant performance impact, requires optimization consideration
+
+#### 📋 **Decision Context Usage Guidelines**
+
+**Mandatory Decision Context:**
+- ⭐ CRITICAL priority implementations
+- Components involved in extraction planning (EXTRACT-001-010)
+- User-facing functionality changes
+- Breaking changes or major architectural decisions
+
+**Recommended Decision Context:**
+- 🔺 HIGH priority implementations
+- Features that enable future development
+- Performance-critical implementations
+- Infrastructure and tooling improvements
+
+**Optional Decision Context:**
+- 🔶 MEDIUM priority implementations
+- 🔻 LOW priority implementations
+- Straightforward bug fixes
+- Routine maintenance tasks
+
+#### 🔧 **Migration to Enhanced Format**
+
+**Context Selection Process:**
+1. **Identify Impact Level**: Core/enhancement/developer-experience/infrastructure
+2. **Assess Dependencies**: Blocks-extraction/enables-flexibility/prerequisite-for-X/independent
+3. **Evaluate Constraints**: User-facing/backward-compatible/breaking-change/performance-critical
+
+**Enhanced Migration Examples:**
+```go
+// Before: Standard format
+// ⭐ ARCH-002: Archive creation with context handling
+
+// After: Enhanced format with decision context
+// ⭐ ARCH-002: Archive creation with context handling [DECISION: core-functionality, performance-critical, backward-compatible]
 ```
 
 ### 🔥 Priority Icon Integration
@@ -198,6 +268,142 @@ func VerifyArchiveIntegrity(archivePath string) error {
     }
     defer zipReader.Close()
     
+    // ⭐ ARCH-002: Archive integrity verification - 🛡️ Data protection
+    return validateArchiveStructure(zipReader)
+}
+```
+
+## 🆕 Enhanced Token Format with Decision Context (DOC-014)
+
+### 🎯 **Purpose of Decision Context**
+
+Decision context enhances implementation tokens by providing explicit rationale for implementation decisions. This improves AI assistant guidance by clarifying:
+- **Why** the implementation was chosen
+- **What** constraints influenced the decision  
+- **How** the implementation fits into the overall architecture
+
+### 🏷️ **Decision Context Categories**
+
+#### **Impact Level Categories**
+- **`core-functionality`**: Essential system operations fundamental to application purpose
+- **`enhancement`**: Feature improvements that add value but aren't core requirements
+- **`developer-experience`**: Tools and utilities that improve development workflow
+- **`infrastructure`**: Build system, CI/CD, project structure, foundational support
+
+#### **Dependency Categories**  
+- **`blocks-extraction`**: Required for component extraction work (EXTRACT-001-010)
+- **`enables-flexibility`**: Enables future feature development and extensibility
+- **`prerequisite-for-X`**: Required for specific feature X implementation
+- **`independent`**: No blocking dependencies, can be implemented standalone
+
+#### **Constraint Categories**
+- **`user-facing`**: Affects user interface, command behavior, or visible functionality
+- **`backward-compatible`**: Preserves existing functionality and behavior
+- **`breaking-change`**: May break existing functionality (requires major version)
+- **`performance-critical`**: Impacts system performance significantly
+
+### 📝 **Decision Context Usage Guidelines**
+
+#### **Mandatory Decision Context**
+```go
+// ⭐ ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
+func GenerateArchiveName(cfg *Config, timestamp time.Time) string {
+    // ⭐ ARCH-001: Core naming logic with user-facing implications
+    return fmt.Sprintf("%s-%s.zip", cfg.Prefix, timestamp.Format("2006-01-02T150405"))
+}
+```
+
+#### **Recommended Decision Context**
+```go
+// 🔺 CFG-005: Configuration inheritance system [DECISION: enhancement, enables-flexibility]
+func LoadConfigWithInheritance(configPath string) (*Config, error) {
+    // 🔺 CFG-005: Enhanced config loading enabling future extensibility
+    return loadConfigRecursive(configPath, make(map[string]bool))
+}
+```
+
+#### **Optional Decision Context**
+```go
+// 🔶 DOC-010: Token format suggestions [DECISION: developer-experience]
+func SuggestTokenFormat(functionName string) (*TokenSuggestion, error) {
+    // 🔶 DOC-010: AI assistant guidance utility
+    return analyzeFunction(functionName)
+}
+```
+
+### 🔧 **Integration with Existing Token Systems**
+
+#### **Compatibility with Action Icons**
+```go
+// 🔺 CFG-003: Template formatting - 📝 Output generation [DECISION: enhancement, user-facing, backward-compatible]
+func ProcessTemplateFormat(template string, data interface{}) (string, error) {
+    // 🔺 CFG-003: Template parsing with backward compatibility - 📝 Format processing
+    tmpl, err := template.New("format").Parse(template)
+    return executeTemplate(tmpl, data)
+}
+```
+
+#### **Migration from Standard Format**
+**Before (Standard Format):**
+```go
+// 🔺 GIT-001: Git info extraction - 🔍 Repository analysis
+```
+
+**After (Enhanced Format):**
+```go
+// 🔺 GIT-001: Git info extraction [DECISION: enhancement, independent, user-facing]
+```
+
+### 🚨 **Validation Requirements**
+
+#### **Format Validation**
+- Decision context must use square brackets: `[DECISION: ...]`
+- Context tags must be comma-separated with single spaces
+- Maximum 3 context tags per token
+- All context tags must be from approved categories
+
+#### **Quality Assurance**
+- Priority icon must match implementation complexity (⭐ for core, 🔻 for infrastructure)
+- Feature ID must exist in feature-tracking.md
+- Decision context must add meaningful information for AI assistance
+- Context tags must accurately reflect implementation purpose
+
+### 📊 **Example Decision Context Applications**
+
+#### **Core Functionality with Extraction Blocking**
+```go
+// ⭐ REFACTOR-001: Interface standardization [DECISION: core-functionality, blocks-extraction]
+func CreateStandardizedInterface() InterfaceContract {
+    // ⭐ REFACTOR-001: Critical interface prep blocking component extraction
+    return defineComponentBoundaries()
+}
+```
+
+#### **Enhancement Enabling Future Development** 
+```go
+// 🔺 CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
+func ProcessConfigInheritance(configs []string) (*Config, error) {
+    // 🔺 CFG-005: Flexible config system enabling future extensibility
+    return mergeConfigurationChain(configs)
+}
+```
+
+#### **Developer Experience with Independence**
+```go
+// 🔶 DOC-012: Real-time validation feedback [DECISION: developer-experience, independent]
+func ProvideRealTimeValidation(code string) (*ValidationResult, error) {
+    // 🔶 DOC-012: Standalone development experience enhancement
+    return validateInRealTime(code)
+}
+```
+
+#### **Infrastructure with Testing Prerequisites**
+```go
+// 🔻 TEST-FIX-001: Personal config isolation [DECISION: infrastructure, prerequisite-for-testing]
+func IsolateTestConfiguration() error {
+    // 🔻 TEST-FIX-001: Test infrastructure foundation for reliable testing
+    return setupConfigurationIsolation()
+}
     // ⭐ ARCH-002: Checksum verification - 🛡️ Data integrity
     return validateArchiveChecksums(zipReader)
 }
