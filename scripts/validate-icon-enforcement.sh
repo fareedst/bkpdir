@@ -3,6 +3,7 @@
 # 🔺 DOC-008: Icon validation and enforcement - Comprehensive validation system
 # This script provides automated validation and enforcement of icon consistency
 # across all documentation and source code files
+# Integrated with DOC-014: AI Assistant Decision Framework
 
 # Colors for output
 RED='\033[0;31m'

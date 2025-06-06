@@ -1,4 +1,5 @@
 // 🔺 DOC-011: AI validation integration - Core validation framework for AI assistants
+// Integrated with DOC-014: AI Assistant Decision Framework
 package validation
 
 import (

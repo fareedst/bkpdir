@@ -1,4 +1,5 @@
 // 🔺 DOC-011: AI validation CLI - Command-line interface for AI assistant validation
+// Integrated with DOC-014: AI Assistant Decision Framework
 package main
 
 import (

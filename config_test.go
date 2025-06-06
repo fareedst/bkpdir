@@ -2635,6 +2635,14 @@ func TestDisplayFormatting(t *testing.T) {
 		if !foundNestedFields {
 			t.Error("Expected to find nested fields for tree structure")
 		}
+
+		// Verify we found fields from both expected nested structures
+		if !foundVerificationFields {
+			t.Error("Expected to find Verification.* nested fields")
+		}
+		if !foundGitFields {
+			t.Error("Expected to find Git.* nested fields")
+		}
 	})
 
 	t.Run("JSON format structure", func(t *testing.T) {
