@@ -2615,12 +2615,19 @@ func TestDisplayFormatting(t *testing.T) {
 
 		// Test nested field paths for tree structure
 		foundNestedFields := false
+		foundVerificationFields := false
+		foundGitFields := false
+
 		for _, field := range fields {
 			if strings.Contains(field.Path, ".") {
 				foundNestedFields = true
-				// Verify nested field path format
-				if !strings.HasPrefix(field.Path, "Verification.") {
-					t.Errorf("Unexpected nested field path format: %s", field.Path)
+				// Verify nested field path format - should be from known nested structures
+				if strings.HasPrefix(field.Path, "Verification.") {
+					foundVerificationFields = true
+				} else if strings.HasPrefix(field.Path, "Git.") {
+					foundGitFields = true
+				} else {
+					t.Errorf("Unexpected nested field path format: %s (expected Verification.* or Git.*)", field.Path)
 				}
 			}
 		}
