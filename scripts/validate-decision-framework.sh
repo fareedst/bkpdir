@@ -289,10 +289,16 @@ validate_enhanced_tokens() {
     for file in "${go_files[@]}"; do
         # Count total implementation tokens
         local file_tokens=$(grep -c "^[[:space:]]*//[[:space:]]*[⭐🔺🔶🔻]" "$file" 2>/dev/null || echo "0")
+        # Clean any whitespace/newlines from command substitution
+        file_tokens=$(echo "$file_tokens" | tr -d '\n\r' | head -1)
+        [[ "$file_tokens" =~ ^[0-9]+$ ]] || file_tokens=0
         total_tokens=$((total_tokens + file_tokens))
         
         # Count tokens with decision context
         local file_enhanced_tokens=$(grep -c "\[DECISION:" "$file" 2>/dev/null || echo "0")
+        # Clean any whitespace/newlines from command substitution
+        file_enhanced_tokens=$(echo "$file_enhanced_tokens" | tr -d '\n\r' | head -1)
+        [[ "$file_enhanced_tokens" =~ ^[0-9]+$ ]] || file_enhanced_tokens=0
         enhanced_tokens=$((enhanced_tokens + file_enhanced_tokens))
         
         log_verbose "File $file: $file_tokens tokens, $file_enhanced_tokens enhanced"

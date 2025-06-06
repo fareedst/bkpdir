@@ -15,6 +15,31 @@ bin/
 coverage.out
 coverage.html
 
+# Test and benchmark output files
+coverage_new.out
+coverage_legacy.out
+coverage_new.html
+coverage_legacy.html
+coverage_report.txt
+*.test
+*.prof
+*.pprof
+*.bench
+*.coverage
+
+# Test directories with generated files
+test/performance/benchmark_results/
+coverage_reports/
+
+# Token suggestion engine outputs
+token-suggestions.json
+
+# Decision validation outputs
+docs/validation-reports/
+docs/decision-metrics/
+docs/coverage-baseline.md
+docs/coverage-history.json
+
 # IDE and editor files
 .vscode/
 .idea/

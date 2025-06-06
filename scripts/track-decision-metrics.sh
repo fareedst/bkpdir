@@ -71,29 +71,29 @@ usage() {
 
 # Logging functions
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${BLUE}[INFO]${NC} $*"
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${GREEN}[SUCCESS]${NC} $*"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${YELLOW}[WARNING]${NC} $*"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $*"
+    echo -e "${RED}[ERROR]${NC} $*" >&2
 }
 
 log_verbose() {
-    if [[ "$VERBOSE" == "true" ]]; then
+    if [[ "$VERBOSE" == "true" && "$OUTPUT_FORMAT" != "json" ]]; then
         echo -e "${CYAN}[VERBOSE]${NC} $*"
     fi
 }
 
 log_metric() {
-    echo -e "${PURPLE}[METRIC]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${PURPLE}[METRIC]${NC} $*"
 }
 
 # Initialize metrics tracking
@@ -197,6 +197,7 @@ collect_current_metrics() {
     calculate_decision_compliance_rate
     calculate_validation_pass_rate
     calculate_framework_adoption_rate
+    calculate_protocol_coverage
     
     log_verbose "Current metrics collected successfully"
 }
@@ -233,8 +234,16 @@ estimate_current_metrics() {
     local total_tokens=0
     
     while IFS= read -r -d '' file; do
-        local file_tokens=$(grep -c "^[[:space:]]*//[[:space:]]*[⭐🔺🔶🔻]" "$file" 2>/dev/null || echo "0")
-        local file_enhanced=$(grep -c "\[DECISION:" "$file" 2>/dev/null || echo "0")
+        local file_tokens
+        local file_enhanced
+        file_tokens=$(grep -c "^[[:space:]]*//[[:space:]]*[⭐🔺🔶🔻]" "$file" 2>/dev/null || echo "0")
+        file_enhanced=$(grep -c "\[DECISION:" "$file" 2>/dev/null || echo "0")
+        # Clean any whitespace/newlines from command substitution
+        file_tokens=$(echo "$file_tokens" | tr -d '\n\r' | head -1)
+        file_enhanced=$(echo "$file_enhanced" | tr -d '\n\r' | head -1)
+        # Ensure we have valid numbers
+        [[ "$file_tokens" =~ ^[0-9]+$ ]] || file_tokens=0
+        [[ "$file_enhanced" =~ ^[0-9]+$ ]] || file_enhanced=0
         total_tokens=$((total_tokens + file_tokens))
         enhanced_tokens=$((enhanced_tokens + file_enhanced))
     done < <(find "$PROJECT_ROOT" -name "*.go" -type f -print0)
@@ -258,10 +267,12 @@ calculate_rework_rate() {
     local total_commits=0
     
     if recent_commits=$(git log --oneline --since="30 days ago" 2>/dev/null); then
-        total_commits=$(echo "$recent_commits" | wc -l)
+        total_commits=$(echo "$recent_commits" | wc -l | tr -d ' \n\r')
+        [[ "$total_commits" =~ ^[0-9]+$ ]] || total_commits=0
         
         # Look for rework indicators in commit messages
-        rework_commits=$(echo "$recent_commits" | grep -i -E "(fix|rework|correct|undo|revert)" | wc -l)
+        rework_commits=$(echo "$recent_commits" | grep -i -E "(fix|rework|correct|undo|revert)" | wc -l | tr -d ' \n\r')
+        [[ "$rework_commits" =~ ^[0-9]+$ ]] || rework_commits=0
         
         if [[ $total_commits -gt 0 ]]; then
             CURRENT_METRICS[rework_rate]=$((rework_commits * 100 / total_commits))
@@ -294,12 +305,14 @@ calculate_decision_compliance_rate() {
     
     # Check 3: Protocols integrated
     if [[ -f "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" ]]; then
-        local integrated_protocols=$(grep -c "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" || echo "0")
+        local integrated_protocols=$(grep -c "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" 2>/dev/null | tr -d ' \n\r' || echo "0")
+        [[ "$integrated_protocols" =~ ^[0-9]+$ ]] || integrated_protocols=0
         [[ $integrated_protocols -ge 6 ]] && ((compliance_score++))  # At least 75% of protocols
     fi
     
     # Check 4: Enhanced tokens present
-    local enhanced_tokens=$(find "$PROJECT_ROOT" -name "*.go" -exec grep -l "\[DECISION:" {} \; | wc -l)
+    local enhanced_tokens=$(find "$PROJECT_ROOT" -name "*.go" -exec grep -l "\[DECISION:" {} \; 2>/dev/null | wc -l | tr -d ' \n\r')
+    [[ "$enhanced_tokens" =~ ^[0-9]+$ ]] || enhanced_tokens=0
     [[ $enhanced_tokens -gt 0 ]] && ((compliance_score++))
     
     # Check 5: Validation tools present
@@ -329,12 +342,14 @@ calculate_validation_pass_rate() {
         # Check each component individually
         [[ -f "$PROJECT_ROOT/docs/context/ai-decision-framework.md" ]] && ((passing_components++))
         
-        local protocols_integrated=$(grep -c "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" 2>/dev/null || echo "0")
+        local protocols_integrated=$(grep -c "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" 2>/dev/null | tr -d ' \n\r' || echo "0")
+        [[ "$protocols_integrated" =~ ^[0-9]+$ ]] || protocols_integrated=0
         [[ $protocols_integrated -ge 4 ]] && ((passing_components++))
         
         grep -q "DOC-014" "$PROJECT_ROOT/docs/context/ai-assistant-compliance.md" 2>/dev/null && ((passing_components++))
         
-        local enhanced_tokens=$(find "$PROJECT_ROOT" -name "*.go" -exec grep -l "\[DECISION:" {} \; | wc -l 2>/dev/null || echo "0")
+        local enhanced_tokens=$(find "$PROJECT_ROOT" -name "*.go" -exec grep -l "\[DECISION:" {} \; 2>/dev/null | wc -l | tr -d ' \n\r' || echo "0")
+        [[ "$enhanced_tokens" =~ ^[0-9]+$ ]] || enhanced_tokens=0
         [[ $enhanced_tokens -gt 0 ]] && ((passing_components++))
         
         [[ -f "$SCRIPT_DIR/validate-decision-framework.sh" ]] && ((passing_components++))
@@ -361,14 +376,16 @@ calculate_framework_adoption_rate() {
     fi
     
     # Area 3: Protocol integration (>75%)
-    local integrated_protocols=$(grep -c "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" 2>/dev/null || echo "0")
+    local integrated_protocols=$(grep -c "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" 2>/dev/null | tr -d ' \n\r' || echo "0")
+    [[ "$integrated_protocols" =~ ^[0-9]+$ ]] || integrated_protocols=0
     [[ $integrated_protocols -ge 6 ]] && ((adoption_score++))
     
     # Area 4: Compliance requirements updated
     grep -q "DOC-014" "$PROJECT_ROOT/docs/context/ai-assistant-compliance.md" 2>/dev/null && ((adoption_score++))
     
     # Area 5: Enhanced tokens in use
-    local enhanced_tokens=$(find "$PROJECT_ROOT" -name "*.go" -exec grep -l "\[DECISION:" {} \; | wc -l 2>/dev/null || echo "0")
+    local enhanced_tokens=$(find "$PROJECT_ROOT" -name "*.go" -exec grep -l "\[DECISION:" {} \; 2>/dev/null | wc -l | tr -d ' \n\r' || echo "0")
+    [[ "$enhanced_tokens" =~ ^[0-9]+$ ]] || enhanced_tokens=0
     [[ $enhanced_tokens -gt 0 ]] && ((adoption_score++))
     
     # Area 6: Validation tools operational
@@ -377,6 +394,34 @@ calculate_framework_adoption_rate() {
     CURRENT_METRICS[framework_adoption_rate]=$((adoption_score * 100 / total_areas))
     
     log_verbose "Framework adoption rate: ${CURRENT_METRICS[framework_adoption_rate]}% ($adoption_score/$total_areas areas)"
+}
+
+# Calculate protocol coverage metrics
+calculate_protocol_coverage() {
+    log_verbose "Calculating protocol coverage metrics..."
+    
+    # Define expected protocols
+    local protocols=("NEW_FEATURE" "MODIFICATION" "BUG_FIX" "CONFIG_CHANGE" "API_CHANGE" "TEST_ADDITION" "PERFORMANCE" "REFACTORING")
+    local total_protocols=${#protocols[@]}
+    local covered_protocols=0
+    
+    # Check protocol integration in ai-assistant-protocol.md
+    if [[ -f "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" ]]; then
+        for protocol in "${protocols[@]}"; do
+            if grep -q "Decision Framework Validation" "$PROJECT_ROOT/docs/context/ai-assistant-protocol.md" 2>/dev/null; then
+                ((covered_protocols++))
+            fi
+        done
+    fi
+    
+    # Calculate overall coverage percentage
+    if [[ $total_protocols -gt 0 ]]; then
+        CURRENT_METRICS[protocol_coverage]=$((covered_protocols * 100 / total_protocols))
+    else
+        CURRENT_METRICS[protocol_coverage]=0
+    fi
+    
+    log_verbose "Protocol coverage: ${CURRENT_METRICS[protocol_coverage]}% ($covered_protocols/$total_protocols protocols)"
 }
 
 # Store metrics in history
@@ -443,7 +488,11 @@ analyze_trends() {
     
     # Get recent entries (last week)
     local cutoff_date
-    cutoff_date=$(date -u -d "$trend_window days ago" +"%Y-%m-%d" 2>/dev/null || date -u -v-"$trend_window"d +"%Y-%m-%d" 2>/dev/null || echo "1970-01-01")
+    if command -v gdate >/dev/null 2>&1; then
+        cutoff_date=$(gdate -u -d "$trend_window days ago" +"%Y-%m-%d" 2>/dev/null || echo "1970-01-01")
+    else
+        cutoff_date=$(date -u -d "$trend_window days ago" +"%Y-%m-%d" 2>/dev/null || date -u -v-"$trend_window"d +"%Y-%m-%d" 2>/dev/null || echo "1970-01-01")
+    fi
     
     # Extract trend data for each metric
     for metric in goal_alignment_rate rework_rate framework_adoption_rate; do
@@ -721,7 +770,9 @@ output_json_results() {
     "token_enhancement_rate": ${CURRENT_METRICS[token_enhancement_rate]},
     "decision_compliance_rate": ${CURRENT_METRICS[decision_compliance_rate]},
     "validation_pass_rate": ${CURRENT_METRICS[validation_pass_rate]},
-    "rework_rate": ${CURRENT_METRICS[rework_rate]}
+    "rework_rate": ${CURRENT_METRICS[rework_rate]},
+    "framework_maturity_score": ${CURRENT_METRICS[framework_maturity]:-0},
+    "protocol_coverage": ${CURRENT_METRICS[protocol_coverage]:-0}
   },
   "success_criteria": {
     "goal_alignment_target": 95,
@@ -789,29 +840,40 @@ done
 
 # Main execution
 main() {
-    log_info "🔶 DOC-014: Decision Quality Metrics Tracker"
-    log_info "Mode: $COLLECTION_MODE | Format: $OUTPUT_FORMAT | Range: $TIME_RANGE"
-    echo ""
+    # Only show log messages if not in JSON mode
+    if [[ "$OUTPUT_FORMAT" != "json" ]]; then
+        log_info "🔶 DOC-014: Decision Quality Metrics Tracker"
+        log_info "Mode: $COLLECTION_MODE | Format: $OUTPUT_FORMAT | Range: $TIME_RANGE"
+        echo ""
+    fi
     
     # Initialize
     init_metrics
     
     # Collect metrics unless analysis-only
     if [[ "$COLLECTION_MODE" != "analysis-only" ]]; then
-        collect_current_metrics
-        store_metrics_history
+        if ! collect_current_metrics; then
+            [[ "$OUTPUT_FORMAT" != "json" ]] && log_warning "Metrics collection failed, using default values"
+        fi
+        if ! store_metrics_history; then
+            [[ "$OUTPUT_FORMAT" != "json" ]] && log_warning "Failed to store metrics history"
+        fi
     fi
     
     # Analyze trends
-    analyze_trends
+    if ! analyze_trends; then
+        [[ "$OUTPUT_FORMAT" != "json" ]] && log_warning "Trend analysis failed"
+    fi
     
     # Generate dashboard
-    generate_dashboard
+    if ! generate_dashboard; then
+        [[ "$OUTPUT_FORMAT" != "json" ]] && log_warning "Dashboard generation failed"
+    fi
     
     # Output results
     output_results
     
-    log_success "Decision quality metrics tracking completed"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && log_success "Decision quality metrics tracking completed"
 }
 
 # Execute main function

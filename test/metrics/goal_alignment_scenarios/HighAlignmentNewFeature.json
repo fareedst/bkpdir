@@ -1,0 +1,110 @@
+{
+  "name": "HighAlignmentNewFeature",
+  "description": "New feature development with high goal alignment",
+  "project_objectives": [
+    {
+      "objective_id": "OBJ001",
+      "objective_name": "Improve AI decision quality",
+      "priority": "HIGH",
+      "success_metric": "Decision accuracy",
+      "target_value": "≥95%",
+      "weight": 0.3,
+      "alignment_score": 98
+    },
+    {
+      "objective_id": "OBJ002",
+      "objective_name": "Reduce rework rates",
+      "priority": "HIGH",
+      "success_metric": "Rework percentage",
+      "target_value": "≤5%",
+      "weight": 0.25,
+      "alignment_score": 95
+    },
+    {
+      "objective_id": "OBJ003",
+      "objective_name": "Enhance documentation",
+      "priority": "MEDIUM",
+      "success_metric": "Documentation coverage",
+      "target_value": "≥90%",
+      "weight": 0.2,
+      "alignment_score": 92
+    },
+    {
+      "objective_id": "OBJ004",
+      "objective_name": "Strengthen validation",
+      "priority": "HIGH",
+      "success_metric": "Validation coverage",
+      "target_value": "≥95%",
+      "weight": 0.25,
+      "alignment_score": 97
+    }
+  ],
+  "decision_outcomes": [
+    {
+      "decision_id": "DEC001",
+      "decision_type": "NEW_FEATURE",
+      "hierarchy_level": "Safety Gates",
+      "outcome_result": "APPROVED",
+      "goal_impact": "POSITIVE",
+      "alignment_score": 95
+    },
+    {
+      "decision_id": "DEC002",
+      "decision_type": "NEW_FEATURE",
+      "hierarchy_level": "Scope Boundaries",
+      "outcome_result": "APPROVED",
+      "goal_impact": "POSITIVE",
+      "alignment_score": 93
+    },
+    {
+      "decision_id": "DEC003",
+      "decision_type": "NEW_FEATURE",
+      "hierarchy_level": "Quality Thresholds",
+      "outcome_result": "APPROVED",
+      "goal_impact": "POSITIVE",
+      "alignment_score": 96
+    },
+    {
+      "decision_id": "DEC004",
+      "decision_type": "NEW_FEATURE",
+      "hierarchy_level": "Goal Alignment",
+      "outcome_result": "APPROVED",
+      "goal_impact": "POSITIVE",
+      "alignment_score": 98
+    }
+  ],
+  "alignment_criteria": [
+    {
+      "criterion_id": "CRIT001",
+      "criterion_name": "Objective Achievement",
+      "measurement_type": "OBJECTIVE_BASED",
+      "required_value": "≥95%",
+      "actual_value": "96%",
+      "weight": 0.4,
+      "alignment_score": 96,
+      "validation_pass": true
+    },
+    {
+      "criterion_id": "CRIT002",
+      "criterion_name": "Outcome Quality",
+      "measurement_type": "OUTCOME_BASED",
+      "required_value": "HIGH",
+      "actual_value": "HIGH",
+      "weight": 0.3,
+      "alignment_score": 95,
+      "validation_pass": true
+    },
+    {
+      "criterion_id": "CRIT003",
+      "criterion_name": "Impact Assessment",
+      "measurement_type": "IMPACT_BASED",
+      "required_value": "POSITIVE",
+      "actual_value": "POSITIVE",
+      "weight": 0.3,
+      "alignment_score": 97,
+      "validation_pass": true
+    }
+  ],
+  "expected_alignment": 95.8,
+  "alignment_type": "HIGH_ALIGNMENT"
+}
