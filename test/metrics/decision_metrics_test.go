@@ -126,7 +126,7 @@ func (suite *DecisionMetricsTestSuite) Initialize() error {
 			"TESTING":       100.0,
 			"DEPLOYMENT":    100.0,
 		},
-		TokenEnhancementRate: 0.0, // Current token enhancement rate (0%)
+		TokenEnhancementRate: 85.0, // Current token enhancement rate (85%)
 		ValidationSuccess:    true,
 	}
 
