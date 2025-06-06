@@ -1,6 +1,6 @@
 # Icon Validation and Enforcement Report (DOC-008)
 
-> **Generated on:** `2025-06-05 22:17:37 UTC`
+> **Generated on:** `2025-06-06 05:30:26 UTC`
 > **Script:** `scripts/validate-icon-enforcement.sh`
 > **Mode:** Standard
 
@@ -8,9 +8,9 @@
 
 | Metric | Count |
 |--------|-------|
-| Files Checked | 130 |
-| Successes | 2887 |
-| Warnings | 260 |
+| Files Checked | 136 |
+| Successes | 2946 |
+| Warnings | 275 |
 | Errors | 1 |
 
 ## Validation Categories
@@ -34,7 +34,7 @@
 ## Recommendations
 
 ### Priority Actions Needed
-1. **Update Legacy Tokens**: 260 legacy implementation tokens need standardization
+1. **Update Legacy Tokens**: 275 legacy implementation tokens need standardization
 2. **Add Action Icons**: Include appropriate action icons (🔍📝🔧🛡️) in implementation tokens
 3. **Review Documentation**: Ensure all icons conform to master legend in README.md
 
@@ -54,9 +54,9 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Tokens | 1550 |
-| Standardized | 1544 |
-| Legacy Format | 6 |
+| Total Tokens | 1588 |
+| Standardized | 1580 |
+| Legacy Format | 8 |
 | Standardization Rate | 99% |
 
 ---
