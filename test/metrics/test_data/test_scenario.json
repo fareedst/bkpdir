@@ -1,0 +1,24 @@
+{
+  "name": "TestScenario",
+  "description": "Test scenario for compliance analysis",
+  "expected_compliance": 85.0,
+  "decision_components": [
+    {
+      "hierarchy_level": "Safety Gates",
+      "component_name": "Test Validation",
+      "compliance_status": "COMPLIANT",
+      "validation_result": true,
+      "compliance_score": 90.0
+    }
+  ],
+  "validation_criteria": [
+    {
+      "criterion_name": "Test Coverage",
+      "required_value": ">=90%",
+      "actual_value": "95%", 
+      "compliance_weight": 1.0,
+      "validation_passed": true
+    }
+  ],
+  "scenario_type": "fully_compliant"
+} 

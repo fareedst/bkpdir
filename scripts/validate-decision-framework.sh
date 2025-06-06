@@ -77,29 +77,29 @@ usage() {
 
 # Logging functions
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${BLUE}[INFO]${NC} $*"
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${GREEN}[SUCCESS]${NC} $*"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${YELLOW}[WARNING]${NC} $*"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $*"
+    echo -e "${RED}[ERROR]${NC} $*" >&2
 }
 
 log_verbose() {
-    if [[ "$VERBOSE" == "true" ]]; then
+    if [[ "$VERBOSE" == "true" && "$OUTPUT_FORMAT" != "json" ]]; then
         echo -e "${CYAN}[VERBOSE]${NC} $*"
     fi
 }
 
 log_metric() {
-    echo -e "${PURPLE}[METRIC]${NC} $*"
+    [[ "$OUTPUT_FORMAT" != "json" ]] && echo -e "${PURPLE}[METRIC]${NC} $*"
 }
 
 # Initialize validation results
@@ -820,9 +820,12 @@ done
 
 # Main validation execution
 main() {
-    log_info "🔶 DOC-014: Decision Framework Validation"
-    log_info "Mode: $VALIDATION_MODE | Format: $OUTPUT_FORMAT"
-    echo ""
+    # Only show log messages if not in JSON mode
+    if [[ "$OUTPUT_FORMAT" != "json" ]]; then
+        log_info "🔶 DOC-014: Decision Framework Validation"
+        log_info "Mode: $VALIDATION_MODE | Format: $OUTPUT_FORMAT"
+        echo ""
+    fi
     
     # Initialize validation
     init_validation
@@ -874,7 +877,9 @@ main() {
     generate_validation_report
     
     # Output results
-    echo ""
+    if [[ "$OUTPUT_FORMAT" != "json" ]]; then
+        echo ""
+    fi
     output_results
     
     # Exit with appropriate status
