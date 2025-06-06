@@ -66,3 +66,24 @@ func IsGitWorkingDirectoryClean(dir string) bool {
 func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
 	return git.GetGitInfoWithStatus(dir)
 }
+
+// 🔶 GIT-004: Git submodule support functions - 🔧
+// These functions provide Git submodule detection and management capabilities.
+
+// IsGitSubmodule checks if the given directory is a Git submodule.
+// It returns true if the directory is a submodule, false otherwise.
+func IsGitSubmodule(dir string) bool {
+	return git.IsGitSubmodule(dir)
+}
+
+// GetGitSubmodules returns information about all submodules in the given directory.
+// It returns an empty slice if there are no submodules or if not in a Git repository.
+func GetGitSubmodules(dir string) []git.SubmoduleInfo {
+	return git.GetGitSubmodules(dir)
+}
+
+// GetGitSubmoduleStatus returns the status of a specific submodule.
+// It returns "unknown" if the submodule doesn't exist or if not in a Git repository.
+func GetGitSubmoduleStatus(dir, path string) string {
+	return git.GetGitSubmoduleStatus(dir, path)
+}

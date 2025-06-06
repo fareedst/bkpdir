@@ -374,3 +374,98 @@ func runGitCommand(t *testing.T, dir string, args ...string) {
 		t.Fatalf("Git command failed: %s\nOutput: %s\nError: %v", strings.Join(args, " "), string(out), err)
 	}
 }
+
+// 🔶 GIT-004: Git submodule functionality tests - 🧪
+// TestGitSubmoduleIntegration tests the Git submodule integration functionality
+func TestGitSubmoduleIntegration(t *testing.T) {
+	// 🔶 GIT-004: Git submodule validation - 🔧
+	// TEST-REF: Feature tracking matrix GIT-004
+	// IMMUTABLE-REF: Git Integration Requirements
+
+	// Create temporary directory for testing
+	tmpDir, err := ioutil.TempDir("", "git_submodule_integration_test_")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	t.Run("NonGitRepository", func(t *testing.T) {
+		// Test with a non-git directory
+		if IsGitSubmodule(tmpDir) {
+			t.Error("Expected non-git directory to not be a submodule")
+		}
+
+		submodules := GetGitSubmodules(tmpDir)
+		if len(submodules) != 0 {
+			t.Errorf("Expected no submodules for non-git directory, got %d", len(submodules))
+		}
+
+		status := GetGitSubmoduleStatus(tmpDir, "test")
+		if status != "unknown" {
+			t.Errorf("Expected unknown status for non-git directory, got %q", status)
+		}
+	})
+
+	t.Run("GitRepositoryWithoutSubmodules", func(t *testing.T) {
+		// Skip if git is not available
+		if !isGitAvailable() {
+			t.Skip("Git not available, skipping git repository tests")
+		}
+
+		// Initialize git repository
+		gitDir := filepath.Join(tmpDir, "git_repo")
+		if err := os.MkdirAll(gitDir, 0755); err != nil {
+			t.Fatal(err)
+		}
+
+		// Initialize git repo
+		runGitCommand(t, gitDir, "init")
+		runGitCommand(t, gitDir, "config", "user.email", "test@example.com")
+		runGitCommand(t, gitDir, "config", "user.name", "Test User")
+
+		// Create a test file and make initial commit
+		testFile := filepath.Join(gitDir, "test.txt")
+		if err := ioutil.WriteFile(testFile, []byte("test content"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		runGitCommand(t, gitDir, "add", "test.txt")
+		runGitCommand(t, gitDir, "commit", "-m", "Initial commit")
+
+		// Test submodule detection
+		if IsGitSubmodule(gitDir) {
+			t.Error("Expected regular git repository to not be a submodule")
+		}
+
+		// Test submodule listing (should return empty list)
+		submodules := GetGitSubmodules(gitDir)
+		if len(submodules) != 0 {
+			t.Errorf("Expected no submodules, got %d", len(submodules))
+		}
+
+		// Test submodule status for non-existent submodule
+		status := GetGitSubmoduleStatus(gitDir, "nonexistent")
+		if status != "unknown" {
+			t.Errorf("Expected unknown status for non-existent submodule, got %q", status)
+		}
+	})
+
+	t.Run("ErrorHandling", func(t *testing.T) {
+		// Test error handling for invalid paths
+		invalidDir := filepath.Join(tmpDir, "nonexistent")
+
+		if IsGitSubmodule(invalidDir) {
+			t.Error("Expected non-existent directory to not be a submodule")
+		}
+
+		submodules := GetGitSubmodules(invalidDir)
+		if len(submodules) != 0 {
+			t.Errorf("Expected no submodules for non-existent directory, got %d", len(submodules))
+		}
+
+		status := GetGitSubmoduleStatus(invalidDir, "test")
+		if status != "unknown" {
+			t.Errorf("Expected unknown status for non-existent directory, got %q", status)
+		}
+	})
+}

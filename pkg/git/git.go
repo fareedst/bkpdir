@@ -17,22 +17,57 @@ import (
 )
 
 // ⭐ EXTRACT-004: Git operation context and configuration - 🔧
+// 🔶 GIT-005: Enhanced Git integration configuration - 📝
 // Config represents Git integration configuration options
 type Config struct {
-	// Directory to operate in (defaults to current directory)
-	WorkingDirectory string
-	// Whether to include dirty status in operations
-	IncludeDirtyStatus bool
-	// Custom Git command path (defaults to "git")
-	GitCommand string
+	// Basic Git integration settings
+	Enabled         bool // Enable/disable Git integration (default: true)
+	IncludeInfo     bool // Include Git info in operations (default: false)
+	ShowDirtyStatus bool // Show dirty status indicator (default: false)
+
+	// Git command configuration
+	Command          string // Git command path (default: "git")
+	WorkingDirectory string // Working directory for Git operations (default: ".")
+
+	// Git behavior settings
+	RequireCleanRepo  bool // Fail operations if repository is dirty (default: false)
+	AutoDetectRepo    bool // Automatically detect Git repositories (default: true)
+	IncludeSubmodules bool // Include submodule information (default: false)
+
+	// Git information inclusion
+	IncludeBranch bool // Include branch name in operations (default: true)
+	IncludeHash   bool // Include commit hash in operations (default: true)
+	IncludeStatus bool // Include working directory status (default: true)
+
+	// Git command timeouts and limits
+	CommandTimeout    string // Timeout for Git commands (default: "30s")
+	MaxSubmoduleDepth int    // Maximum submodule recursion depth (default: 3)
+
+	// Legacy compatibility fields (to be deprecated)
+	IncludeDirtyStatus bool   // Legacy: use ShowDirtyStatus instead
+	GitCommand         string // Legacy: use Command instead
 }
 
 // DefaultConfig returns a Config with sensible defaults
+// 🔶 GIT-005: Enhanced default configuration - 📝
 func DefaultConfig() *Config {
 	return &Config{
-		WorkingDirectory:   ".",
-		IncludeDirtyStatus: true,
-		GitCommand:         "git",
+		Enabled:           true,
+		IncludeInfo:       false,
+		ShowDirtyStatus:   false,
+		Command:           "git",
+		WorkingDirectory:  ".",
+		RequireCleanRepo:  false,
+		AutoDetectRepo:    true,
+		IncludeSubmodules: false,
+		IncludeBranch:     true,
+		IncludeHash:       true,
+		IncludeStatus:     true,
+		CommandTimeout:    "30s",
+		MaxSubmoduleDepth: 3,
+		// Legacy compatibility
+		IncludeDirtyStatus: true,  // Legacy default
+		GitCommand:         "git", // Legacy default
 	}
 }
 
@@ -51,10 +86,22 @@ func (e *GitError) Error() string {
 // ⭐ EXTRACT-004: Git information structure - 🔧
 // Info represents Git repository information
 type Info struct {
-	Branch  string
-	Hash    string
-	IsClean bool
-	IsRepo  bool
+	Branch      string
+	Hash        string
+	IsClean     bool
+	IsRepo      bool
+	IsSubmodule bool
+	Submodules  []SubmoduleInfo
+}
+
+// 🔶 GIT-004: Git submodule information structure - 🔧
+// SubmoduleInfo represents information about a Git submodule
+type SubmoduleInfo struct {
+	Name   string // Submodule name
+	Path   string // Submodule path relative to repository root
+	URL    string // Submodule remote URL
+	Hash   string // Current commit hash of the submodule
+	Status string // Submodule status (e.g., "clean", "dirty", "uninitialized")
 }
 
 // ⭐ EXTRACT-004: Git repository interface definition - 🔧
@@ -72,6 +119,13 @@ type Repository interface {
 	GetInfo() (*Info, error)
 	// GetInfoWithStatus returns Git information including status
 	GetInfoWithStatus() (*Info, error)
+	// 🔶 GIT-004: Git submodule interface methods - 🔧
+	// IsSubmodule checks if the directory is a Git submodule
+	IsSubmodule() (bool, error)
+	// GetSubmodules returns information about all submodules
+	GetSubmodules() ([]SubmoduleInfo, error)
+	// GetSubmoduleStatus returns the status of a specific submodule
+	GetSubmoduleStatus(path string) (string, error)
 }
 
 // ⭐ EXTRACT-004: Git repository implementation - 🔧
@@ -91,9 +145,19 @@ func NewRepositoryWithConfig(config *Config) Repository {
 }
 
 // ⭐ EXTRACT-004: Generalized Git command execution framework - 🔧
+// 🔶 GIT-005: Enhanced Git command execution with new configuration - 📝
 // executeGitCommand runs a Git command with the configured parameters
 func (r *Repo) executeGitCommand(args ...string) (string, error) {
-	cmd := exec.Command(r.config.GitCommand, args...)
+	// 🔶 GIT-005: Use new Command field with legacy GitCommand fallback
+	gitCmd := r.config.Command
+	if gitCmd == "" {
+		gitCmd = r.config.GitCommand // Legacy fallback
+	}
+	if gitCmd == "" {
+		gitCmd = "git" // Ultimate fallback
+	}
+
+	cmd := exec.Command(gitCmd, args...)
 	cmd.Dir = r.config.WorkingDirectory
 	out, err := cmd.Output()
 	if err != nil {
@@ -175,14 +239,176 @@ func (r *Repo) GetInfoWithStatus() (*Info, error) {
 		return info, err
 	}
 
-	if r.config.IncludeDirtyStatus {
+	// 🔶 GIT-005: Use new ShowDirtyStatus field with legacy IncludeDirtyStatus fallback
+	includeDirtyStatus := r.config.ShowDirtyStatus || r.config.IncludeDirtyStatus
+	if includeDirtyStatus {
 		info.IsClean, err = r.IsWorkingDirectoryClean()
 		if err != nil {
 			return info, err
 		}
 	}
 
+	// 🔶 GIT-004: Add submodule information to Git info - 🔧
+	// 🔶 GIT-005: Use IncludeSubmodules configuration option
+	if r.config.IncludeSubmodules {
+		info.IsSubmodule, err = r.IsSubmodule()
+		if err != nil {
+			return info, err
+		}
+
+		info.Submodules, err = r.GetSubmodules()
+		if err != nil {
+			return info, err
+		}
+	}
+
 	return info, nil
+}
+
+// 🔶 GIT-004: Git submodule detection implementation - 🔍
+// IsSubmodule checks if the current directory is a Git submodule
+func (r *Repo) IsSubmodule() (bool, error) {
+	if !r.IsRepository() {
+		return false, nil
+	}
+
+	// Check if we're in a submodule by looking for .git file (not directory)
+	// and checking if the parent directory has a .gitmodules file
+	out, err := r.executeGitCommand("rev-parse", "--show-superproject-working-tree")
+	if err != nil {
+		// If this command fails, we're not in a submodule
+		return false, nil
+	}
+
+	// If output is non-empty, we're in a submodule
+	return strings.TrimSpace(out) != "", nil
+}
+
+// 🔶 GIT-004: Git submodule listing implementation - 🔍
+// GetSubmodules returns information about all submodules in the repository
+func (r *Repo) GetSubmodules() ([]SubmoduleInfo, error) {
+	if !r.IsRepository() {
+		return nil, &GitError{Operation: "submodule listing", Err: fmt.Errorf("not a git repository")}
+	}
+
+	// Get submodule information using git submodule status
+	out, err := r.executeGitCommand("submodule", "status", "--recursive")
+	if err != nil {
+		// If submodule command fails, there might be no submodules
+		return []SubmoduleInfo{}, nil
+	}
+
+	var submodules []SubmoduleInfo
+	lines := strings.Split(strings.TrimSpace(out), "\n")
+
+	for _, line := range lines {
+		if line == "" {
+			continue
+		}
+
+		submodule, err := r.parseSubmoduleStatusLine(line)
+		if err != nil {
+			continue // Skip malformed lines
+		}
+
+		submodules = append(submodules, submodule)
+	}
+
+	return submodules, nil
+}
+
+// 🔶 GIT-004: Git submodule status implementation - 🔍
+// GetSubmoduleStatus returns the status of a specific submodule
+func (r *Repo) GetSubmoduleStatus(path string) (string, error) {
+	if !r.IsRepository() {
+		return "", &GitError{Operation: "submodule status", Err: fmt.Errorf("not a git repository")}
+	}
+
+	out, err := r.executeGitCommand("submodule", "status", path)
+	if err != nil {
+		return "", &GitError{Operation: "submodule status", Err: err}
+	}
+
+	// Parse the status from the first character of the output
+	if len(out) == 0 {
+		return "unknown", nil
+	}
+
+	switch out[0] {
+	case ' ':
+		return "clean", nil
+	case '+':
+		return "dirty", nil
+	case '-':
+		return "uninitialized", nil
+	case 'U':
+		return "conflict", nil
+	default:
+		return "unknown", nil
+	}
+}
+
+// 🔶 GIT-004: Git submodule status line parser - 🔧
+// parseSubmoduleStatusLine parses a line from git submodule status output
+func (r *Repo) parseSubmoduleStatusLine(line string) (SubmoduleInfo, error) {
+	// Git submodule status format: [status][hash] [path] [(description)]
+	// Status characters: ' ' (clean), '+' (dirty), '-' (uninitialized), 'U' (conflict)
+
+	if len(line) < 2 {
+		return SubmoduleInfo{}, fmt.Errorf("invalid submodule status line: %s", line)
+	}
+
+	status := "unknown"
+	switch line[0] {
+	case ' ':
+		status = "clean"
+	case '+':
+		status = "dirty"
+	case '-':
+		status = "uninitialized"
+	case 'U':
+		status = "conflict"
+	}
+
+	// Remove status character and parse the rest
+	line = line[1:]
+	parts := strings.Fields(line)
+	if len(parts) < 2 {
+		return SubmoduleInfo{}, fmt.Errorf("invalid submodule status format: %s", line)
+	}
+
+	hash := parts[0]
+	path := parts[1]
+
+	// Extract submodule name from path (last component)
+	name := path
+	if idx := strings.LastIndex(path, "/"); idx != -1 {
+		name = path[idx+1:]
+	}
+
+	// Get submodule URL if possible
+	url, err := r.getSubmoduleURL(path)
+	if err != nil {
+		url = "" // URL is optional
+	}
+
+	return SubmoduleInfo{
+		Name:   name,
+		Path:   path,
+		URL:    url,
+		Hash:   hash,
+		Status: status,
+	}, nil
+}
+
+// 🔶 GIT-004: Git submodule URL extraction - 🔧
+// getSubmoduleURL gets the remote URL for a submodule
+func (r *Repo) getSubmoduleURL(path string) (string, error) {
+	out, err := r.executeGitCommand("config", "--file", ".gitmodules", "--get", "submodule."+path+".url")
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(out), nil
 }
 
 // ⭐ EXTRACT-004: Convenience functions for backward compatibility - 🔧
@@ -252,4 +478,39 @@ func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
 		return "", "", false
 	}
 	return info.Branch, info.Hash, info.IsClean
+}
+
+// 🔶 GIT-004: Convenience functions for Git submodule operations - 🔧
+
+// IsGitSubmodule checks if the given directory is a Git submodule
+func IsGitSubmodule(dir string) bool {
+	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
+	repo := &Repo{config: config}
+	isSubmodule, err := repo.IsSubmodule()
+	if err != nil {
+		return false
+	}
+	return isSubmodule
+}
+
+// GetGitSubmodules returns information about all submodules in the given directory
+func GetGitSubmodules(dir string) []SubmoduleInfo {
+	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
+	repo := &Repo{config: config}
+	submodules, err := repo.GetSubmodules()
+	if err != nil {
+		return []SubmoduleInfo{}
+	}
+	return submodules
+}
+
+// GetGitSubmoduleStatus returns the status of a specific submodule
+func GetGitSubmoduleStatus(dir, path string) string {
+	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
+	repo := &Repo{config: config}
+	status, err := repo.GetSubmoduleStatus(path)
+	if err != nil {
+		return "unknown"
+	}
+	return status
 }

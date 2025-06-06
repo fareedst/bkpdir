@@ -11,6 +11,7 @@ Package `git` provides Git integration for repository detection, metadata extrac
 - **Repository Detection**: Automatic Git repository detection
 - **Metadata Extraction**: Branch name and commit hash extraction
 - **Status Management**: Working directory clean/dirty status detection
+- **Submodule Support**: Submodule detection, listing, and status checking
 - **Configurable Operations**: Customizable Git command execution
 - **Error Handling**: Structured error handling for Git operations
 - **Interface-Based Design**: Clean abstractions for testing and mocking
@@ -118,10 +119,26 @@ Git repository information:
 
 ```go
 type Info struct {
-    Branch  string // Current branch name
-    Hash    string // Short commit hash
-    IsClean bool   // Whether working directory is clean
-    IsRepo  bool   // Whether directory is a Git repository
+    Branch      string          // Current branch name
+    Hash        string          // Short commit hash
+    IsClean     bool            // Whether working directory is clean
+    IsRepo      bool            // Whether directory is a Git repository
+    IsSubmodule bool            // Whether directory is a Git submodule
+    Submodules  []SubmoduleInfo // Information about submodules
+}
+```
+
+#### SubmoduleInfo
+
+Git submodule information:
+
+```go
+type SubmoduleInfo struct {
+    Name   string // Submodule name
+    Path   string // Submodule path relative to repository root
+    URL    string // Submodule remote URL
+    Hash   string // Current commit hash of the submodule
+    Status string // Submodule status (e.g., "clean", "dirty", "uninitialized")
 }
 ```
 
@@ -150,6 +167,10 @@ type Repository interface {
     IsWorkingDirectoryClean() (bool, error)
     GetInfo() (*Info, error)
     GetInfoWithStatus() (*Info, error)
+    // Submodule operations
+    IsSubmodule() (bool, error)
+    GetSubmodules() ([]SubmoduleInfo, error)
+    GetSubmoduleStatus(path string) (string, error)
 }
 ```
 
@@ -160,6 +181,9 @@ type Repository interface {
 - `IsWorkingDirectoryClean()` - Checks if working directory is clean
 - `GetInfo()` - Returns basic Git information
 - `GetInfoWithStatus()` - Returns Git information including status
+- `IsSubmodule()` - Checks if directory is a Git submodule
+- `GetSubmodules()` - Returns information about all submodules
+- `GetSubmoduleStatus(path)` - Returns status of a specific submodule
 
 ### Factory Functions
 
@@ -185,6 +209,10 @@ func GetGitShortHash(dir string) string
 func GetGitInfo(dir string) (branch, hash string)
 func IsGitWorkingDirectoryClean(dir string) bool
 func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool)
+// Submodule convenience functions
+func IsGitSubmodule(dir string) bool
+func GetGitSubmodules(dir string) []SubmoduleInfo
+func GetGitSubmoduleStatus(dir, path string) string
 ```
 
 ## Examples

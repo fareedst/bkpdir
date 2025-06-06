@@ -64,14 +64,18 @@ type Config struct {
 	ArchiveDirPath     string              `yaml:"archive_dir_path"`
 	UseCurrentDirName  bool                `yaml:"use_current_dir_name"`
 	ExcludePatterns    []string            `yaml:"exclude_patterns"`
-	IncludeGitInfo     bool                `yaml:"include_git_info"`
-	ShowGitDirtyStatus bool                `yaml:"show_git_dirty_status"`
+	IncludeGitInfo     bool                `yaml:"include_git_info"`      // Legacy - use Git.IncludeInfo
+	ShowGitDirtyStatus bool                `yaml:"show_git_dirty_status"` // Legacy - use Git.ShowDirtyStatus
 	SkipBrokenSymlinks bool                `yaml:"skip_broken_symlinks"`
 	Verification       *VerificationConfig `yaml:"verification"`
 
 	// ⭐ CFG-005: Configuration inheritance support - 🔧 Core inheritance functionality
 	// Inherit specifies configuration files to inherit from
 	Inherit []string `yaml:"inherit,omitempty"`
+
+	// 🔶 GIT-005: Git integration configuration - 📝
+	// Git configuration for repository detection and information extraction
+	Git *GitConfig `yaml:"git,omitempty"`
 
 	// 🔶 REFACTOR-003: Schema separation - File backup specific settings - 🔧
 	// File backup settings
@@ -254,6 +258,9 @@ func DefaultConfig() *Config {
 			VerifyOnCreate:    false,
 			ChecksumAlgorithm: "sha256",
 		},
+
+		// 🔶 GIT-005: Git configuration integration - default configuration
+		Git: DefaultGitConfig(),
 
 		// File backup settings
 		BackupDirPath:             "../.bkpdir",
@@ -485,6 +492,8 @@ func mergeConfigs(dst, src *Config) {
 	mergePatterns(dst, src)
 	mergeExtendedFormatStrings(dst, src)
 	mergeExtendedTemplates(dst, src)
+	// 🔶 GIT-005: Git configuration merging
+	mergeGitSettings(dst, src)
 }
 
 // 🔺 CFG-001: Basic settings merging implementation - 🔍
@@ -514,6 +523,92 @@ func mergeBasicSettings(dst, src *Config) {
 	}
 	if src.Verification != nil {
 		dst.Verification = src.Verification
+	}
+	// 🔶 GIT-005: Git configuration integration - legacy Git field support
+	// Support legacy Git fields for backward compatibility
+	if src.Git != nil {
+		if dst.Git == nil {
+			dst.Git = DefaultGitConfig()
+		}
+		// Merge explicit Git configuration over defaults
+		if src.Git.IncludeInfo != dst.Git.IncludeInfo {
+			dst.Git.IncludeInfo = src.Git.IncludeInfo
+		}
+		if src.Git.ShowDirtyStatus != dst.Git.ShowDirtyStatus {
+			dst.Git.ShowDirtyStatus = src.Git.ShowDirtyStatus
+		}
+	}
+}
+
+// 🔶 GIT-005: Git configuration merging implementation - 📝
+// mergeGitSettings merges Git configuration settings between configs.
+// It handles both the new Git configuration and legacy fields for backward compatibility.
+func mergeGitSettings(dst, src *Config) {
+	defaultGit := DefaultGitConfig()
+
+	// Initialize destination Git config if needed
+	if dst.Git == nil {
+		dst.Git = DefaultGitConfig()
+	}
+
+	// If source has Git configuration, merge it
+	if src.Git != nil {
+		mergeGitConfigStruct(dst.Git, src.Git, defaultGit)
+	}
+
+	// Handle legacy fields for backward compatibility
+	// Legacy fields take precedence over Git struct for compatibility
+	if src.IncludeGitInfo != defaultGit.IncludeInfo {
+		dst.Git.IncludeInfo = src.IncludeGitInfo
+		dst.IncludeGitInfo = src.IncludeGitInfo // Keep legacy field in sync
+	}
+	if src.ShowGitDirtyStatus != defaultGit.ShowDirtyStatus {
+		dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
+		dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus // Keep legacy field in sync
+	}
+}
+
+// 🔶 GIT-005: Git configuration struct merging - 📝
+// mergeGitConfigStruct merges GitConfig struct fields
+func mergeGitConfigStruct(dst, src, defaultCfg *GitConfig) {
+	if src.Enabled != defaultCfg.Enabled {
+		dst.Enabled = src.Enabled
+	}
+	if src.IncludeInfo != defaultCfg.IncludeInfo {
+		dst.IncludeInfo = src.IncludeInfo
+	}
+	if src.ShowDirtyStatus != defaultCfg.ShowDirtyStatus {
+		dst.ShowDirtyStatus = src.ShowDirtyStatus
+	}
+	if src.Command != defaultCfg.Command {
+		dst.Command = src.Command
+	}
+	if src.WorkingDirectory != defaultCfg.WorkingDirectory {
+		dst.WorkingDirectory = src.WorkingDirectory
+	}
+	if src.RequireCleanRepo != defaultCfg.RequireCleanRepo {
+		dst.RequireCleanRepo = src.RequireCleanRepo
+	}
+	if src.AutoDetectRepo != defaultCfg.AutoDetectRepo {
+		dst.AutoDetectRepo = src.AutoDetectRepo
+	}
+	if src.IncludeSubmodules != defaultCfg.IncludeSubmodules {
+		dst.IncludeSubmodules = src.IncludeSubmodules
+	}
+	if src.IncludeBranch != defaultCfg.IncludeBranch {
+		dst.IncludeBranch = src.IncludeBranch
+	}
+	if src.IncludeHash != defaultCfg.IncludeHash {
+		dst.IncludeHash = src.IncludeHash
+	}
+	if src.IncludeStatus != defaultCfg.IncludeStatus {
+		dst.IncludeStatus = src.IncludeStatus
+	}
+	if src.CommandTimeout != defaultCfg.CommandTimeout {
+		dst.CommandTimeout = src.CommandTimeout
+	}
+	if src.MaxSubmoduleDepth != defaultCfg.MaxSubmoduleDepth {
+		dst.MaxSubmoduleDepth = src.MaxSubmoduleDepth
 	}
 }
 
@@ -2399,4 +2494,52 @@ func HasConfigField(cfg *Config, fieldPath string) bool {
 	configValue := reflect.ValueOf(*cfg)
 	_, err := getFieldValueByPath(configValue, fieldPath)
 	return err == nil
+}
+
+// 🔶 GIT-005: Git configuration integration - 📝
+// GitConfig defines Git integration configuration options.
+// It controls Git repository detection, information extraction, and behavior.
+type GitConfig struct {
+	// Basic Git integration settings
+	Enabled         bool `yaml:"enabled"`           // Enable/disable Git integration
+	IncludeInfo     bool `yaml:"include_info"`      // Include Git info in operations (legacy: include_git_info)
+	ShowDirtyStatus bool `yaml:"show_dirty_status"` // Show dirty status indicator (legacy: show_git_dirty_status)
+
+	// Git command configuration
+	Command          string `yaml:"command"`           // Git command path (default: "git")
+	WorkingDirectory string `yaml:"working_directory"` // Working directory for Git operations (default: ".")
+
+	// Git behavior settings
+	RequireCleanRepo  bool `yaml:"require_clean_repo"` // Fail operations if repository is dirty
+	AutoDetectRepo    bool `yaml:"auto_detect_repo"`   // Automatically detect Git repositories
+	IncludeSubmodules bool `yaml:"include_submodules"` // Include submodule information
+
+	// Git information inclusion
+	IncludeBranch bool `yaml:"include_branch"` // Include branch name in operations
+	IncludeHash   bool `yaml:"include_hash"`   // Include commit hash in operations
+	IncludeStatus bool `yaml:"include_status"` // Include working directory status
+
+	// Git command timeouts and limits
+	CommandTimeout    string `yaml:"command_timeout"`     // Timeout for Git commands (default: "30s")
+	MaxSubmoduleDepth int    `yaml:"max_submodule_depth"` // Maximum submodule recursion depth
+}
+
+// 🔶 GIT-005: Git configuration defaults - 📝
+// DefaultGitConfig returns a GitConfig with sensible defaults
+func DefaultGitConfig() *GitConfig {
+	return &GitConfig{
+		Enabled:           true,
+		IncludeInfo:       false, // Legacy compatibility
+		ShowDirtyStatus:   false, // Legacy compatibility
+		Command:           "git",
+		WorkingDirectory:  ".",
+		RequireCleanRepo:  false,
+		AutoDetectRepo:    true,
+		IncludeSubmodules: false,
+		IncludeBranch:     true,
+		IncludeHash:       true,
+		IncludeStatus:     true,
+		CommandTimeout:    "30s",
+		MaxSubmoduleDepth: 3,
+	}
 }

@@ -511,3 +511,214 @@ func runGitCommand(t *testing.T, dir string, args ...string) {
 		t.Fatalf("Git command failed: git %s in %s: %v", strings.Join(args, " "), dir, err)
 	}
 }
+
+// 🔶 GIT-004: Git submodule functionality tests - 🧪
+// TestGitSubmodules tests the Git submodule functionality
+func TestGitSubmodules(t *testing.T) {
+	// Create temporary directory for testing
+	tmpDir, err := ioutil.TempDir("", "git_submodule_test_")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	t.Run("NonGitRepository", func(t *testing.T) {
+		repo := NewRepositoryWithConfig(&Config{
+			WorkingDirectory: tmpDir,
+			GitCommand:       "git",
+		})
+
+		// Test submodule detection on non-git repository
+		isSubmodule, err := repo.IsSubmodule()
+		if err != nil {
+			t.Errorf("IsSubmodule should not return error for non-git directory: %v", err)
+		}
+		if isSubmodule {
+			t.Error("Expected non-git directory to not be a submodule")
+		}
+
+		// Test submodule listing on non-git repository
+		_, err = repo.GetSubmodules()
+		if err == nil {
+			t.Error("Expected error for GetSubmodules on non-git repository")
+		}
+
+		// Test submodule status on non-git repository
+		_, err = repo.GetSubmoduleStatus("test")
+		if err == nil {
+			t.Error("Expected error for GetSubmoduleStatus on non-git repository")
+		}
+	})
+
+	t.Run("GitRepositoryWithoutSubmodules", func(t *testing.T) {
+		// Skip if git is not available
+		if !isGitAvailable() {
+			t.Skip("Git not available, skipping git repository tests")
+		}
+
+		// Initialize git repository
+		gitDir := filepath.Join(tmpDir, "git_repo_no_submodules")
+		if err := os.MkdirAll(gitDir, 0755); err != nil {
+			t.Fatal(err)
+		}
+
+		// Initialize git repo
+		runGitCommand(t, gitDir, "init")
+		runGitCommand(t, gitDir, "config", "user.email", "test@example.com")
+		runGitCommand(t, gitDir, "config", "user.name", "Test User")
+
+		// Create a test file and make initial commit
+		testFile := filepath.Join(gitDir, "test.txt")
+		if err := ioutil.WriteFile(testFile, []byte("test content"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		runGitCommand(t, gitDir, "add", "test.txt")
+		runGitCommand(t, gitDir, "commit", "-m", "Initial commit")
+
+		repo := NewRepositoryWithConfig(&Config{
+			WorkingDirectory: gitDir,
+			GitCommand:       "git",
+		})
+
+		// Test submodule detection
+		isSubmodule, err := repo.IsSubmodule()
+		if err != nil {
+			t.Errorf("IsSubmodule failed: %v", err)
+		}
+		if isSubmodule {
+			t.Error("Expected regular git repository to not be a submodule")
+		}
+
+		// Test submodule listing (should return empty list)
+		submodules, err := repo.GetSubmodules()
+		if err != nil {
+			t.Errorf("GetSubmodules failed: %v", err)
+		}
+		if len(submodules) != 0 {
+			t.Errorf("Expected no submodules, got %d", len(submodules))
+		}
+
+		// Test GetInfoWithStatus includes submodule information
+		info, err := repo.GetInfoWithStatus()
+		if err != nil {
+			t.Errorf("GetInfoWithStatus failed: %v", err)
+		}
+		if info.IsSubmodule {
+			t.Error("Expected IsSubmodule to be false")
+		}
+		if len(info.Submodules) != 0 {
+			t.Errorf("Expected no submodules in info, got %d", len(info.Submodules))
+		}
+	})
+
+	t.Run("SubmoduleStatusParsing", func(t *testing.T) {
+		repo := &Repo{config: DefaultConfig()}
+
+		// Test parsing various submodule status lines
+		testCases := []struct {
+			line     string
+			expected SubmoduleInfo
+			hasError bool
+		}{
+			{
+				line: " 1234567890abcdef path/to/submodule (v1.0.0)",
+				expected: SubmoduleInfo{
+					Name:   "submodule",
+					Path:   "path/to/submodule",
+					Hash:   "1234567890abcdef",
+					Status: "clean",
+					URL:    "", // URL will be empty since we can't get it in test
+				},
+				hasError: false,
+			},
+			{
+				line: "+abcdef1234567890 another/submodule",
+				expected: SubmoduleInfo{
+					Name:   "submodule",
+					Path:   "another/submodule",
+					Hash:   "abcdef1234567890",
+					Status: "dirty",
+					URL:    "",
+				},
+				hasError: false,
+			},
+			{
+				line: "-fedcba0987654321 uninitialized/sub",
+				expected: SubmoduleInfo{
+					Name:   "sub",
+					Path:   "uninitialized/sub",
+					Hash:   "fedcba0987654321",
+					Status: "uninitialized",
+					URL:    "",
+				},
+				hasError: false,
+			},
+			{
+				line: "U1111111111111111 conflict/submodule",
+				expected: SubmoduleInfo{
+					Name:   "submodule",
+					Path:   "conflict/submodule",
+					Hash:   "1111111111111111",
+					Status: "conflict",
+					URL:    "",
+				},
+				hasError: false,
+			},
+			{
+				line:     "invalid",
+				hasError: true,
+			},
+			{
+				line:     "",
+				hasError: true,
+			},
+		}
+
+		for i, tc := range testCases {
+			result, err := repo.parseSubmoduleStatusLine(tc.line)
+
+			if tc.hasError {
+				if err == nil {
+					t.Errorf("Test case %d: expected error for line %q", i, tc.line)
+				}
+				continue
+			}
+
+			if err != nil {
+				t.Errorf("Test case %d: unexpected error for line %q: %v", i, tc.line, err)
+				continue
+			}
+
+			if result.Name != tc.expected.Name {
+				t.Errorf("Test case %d: expected name %q, got %q", i, tc.expected.Name, result.Name)
+			}
+			if result.Path != tc.expected.Path {
+				t.Errorf("Test case %d: expected path %q, got %q", i, tc.expected.Path, result.Path)
+			}
+			if result.Hash != tc.expected.Hash {
+				t.Errorf("Test case %d: expected hash %q, got %q", i, tc.expected.Hash, result.Hash)
+			}
+			if result.Status != tc.expected.Status {
+				t.Errorf("Test case %d: expected status %q, got %q", i, tc.expected.Status, result.Status)
+			}
+		}
+	})
+
+	t.Run("BackwardCompatibilityFunctions", func(t *testing.T) {
+		// Test convenience functions
+		if IsGitSubmodule(tmpDir) {
+			t.Error("Expected non-git directory to not be a submodule")
+		}
+
+		submodules := GetGitSubmodules(tmpDir)
+		if len(submodules) != 0 {
+			t.Errorf("Expected no submodules for non-git directory, got %d", len(submodules))
+		}
+
+		status := GetGitSubmoduleStatus(tmpDir, "test")
+		if status != "unknown" {
+			t.Errorf("Expected unknown status for non-git directory, got %q", status)
+		}
+	})
+}

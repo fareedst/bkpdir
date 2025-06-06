@@ -95,8 +95,8 @@ For detailed guidelines on how to document and track features, please refer to [
 | GIT-001 | Git info extraction | Git requirements | Git Service | TestGitIntegration | ✅ Completed | `// GIT-001: Git extraction` | 🎯 HIGH |
 | GIT-002 | Branch/hash naming | Git naming | NamingService | TestGitNaming | ✅ Completed | `// GIT-002: Git naming` | 🎯 HIGH |
 | GIT-003 | Git status detection | Git requirements | Git Service | TestGitStatus | ✅ Completed | `// GIT-003: Git status` | 🎯 HIGH |
-| GIT-004 | Git submodule support | Git requirements | Git Service | TestGitSubmodules | 📝 Not Started | `// GIT-004: Git submodules` | 📊 MEDIUM |
-| GIT-005 | Git configuration integration | Git requirements | Git Service | TestGitConfig | 📝 Not Started | `// GIT-005: Git config` | 📊 MEDIUM |
+| GIT-004 | Git submodule support | Git requirements | Git Service | TestGitSubmodules | ✅ Completed | `// GIT-004: Git submodules` | 📊 MEDIUM |
+| GIT-005 | Git configuration integration | Git requirements | Git Service | TestGitConfigIntegration | ✅ Completed | `// 🔶 GIT-005: Git config` | 📊 MEDIUM |
 | GIT-006 | Configurable dirty status | Git requirements | Git Service | TestGitDirtyConfig | ✅ Completed | `// GIT-006: Git dirty config` | 🎯 HIGH |
 
 ### 📊 Output Management [PRIORITY: MEDIUM]

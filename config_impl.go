@@ -14,6 +14,9 @@ import (
 	"strings"
 
 	yaml "gopkg.in/yaml.v3"
+
+	// 🔶 GIT-005: Import Git package for configuration integration
+	"bkpdir/pkg/git"
 )
 
 // 🔻 REFACTOR-003: Config abstraction - Default configuration loader implementation - 🔧
@@ -175,6 +178,31 @@ func (f *FileConfigSource) LoadFromEnvironment() (*Config, error) {
 	}
 	if includeGit := os.Getenv("BKPDIR_INCLUDE_GIT"); includeGit != "" {
 		cfg.IncludeGitInfo = strings.ToLower(includeGit) == "true"
+	}
+
+	// 🔶 GIT-005: Git configuration environment variable support - 📝
+	// Git configuration overrides from environment variables
+	if cfg.Git == nil {
+		cfg.Git = DefaultGitConfig()
+	}
+
+	if enabled := os.Getenv("BKPDIR_GIT_ENABLED"); enabled != "" {
+		cfg.Git.Enabled = strings.ToLower(enabled) == "true"
+	}
+	if includeInfo := os.Getenv("BKPDIR_GIT_INCLUDE_INFO"); includeInfo != "" {
+		cfg.Git.IncludeInfo = strings.ToLower(includeInfo) == "true"
+	}
+	if showDirty := os.Getenv("BKPDIR_GIT_SHOW_DIRTY_STATUS"); showDirty != "" {
+		cfg.Git.ShowDirtyStatus = strings.ToLower(showDirty) == "true"
+	}
+	if command := os.Getenv("BKPDIR_GIT_COMMAND"); command != "" {
+		cfg.Git.Command = command
+	}
+	if workingDir := os.Getenv("BKPDIR_GIT_WORKING_DIRECTORY"); workingDir != "" {
+		cfg.Git.WorkingDirectory = workingDir
+	}
+	if includeSubmodules := os.Getenv("BKPDIR_GIT_INCLUDE_SUBMODULES"); includeSubmodules != "" {
+		cfg.Git.IncludeSubmodules = strings.ToLower(includeSubmodules) == "true"
 	}
 
 	return cfg, nil
@@ -505,4 +533,59 @@ func (d *DefaultValueExtractor) ExtractFormatValues(cfg, defaultCfg *Config, get
 	// This would extract format strings - implementation depends on schema
 	// For now, return empty slice as format extraction is complex
 	return []ConfigValue{}
+}
+
+// 🔶 GIT-005: Git configuration conversion - 📝
+// ToGitConfig converts the main application's GitConfig to pkg/git Config
+func (gc *GitConfig) ToGitConfig() *git.Config {
+	if gc == nil {
+		return git.DefaultConfig()
+	}
+
+	gitConfig := &git.Config{
+		// Basic Git integration settings
+		Enabled:         gc.Enabled,
+		IncludeInfo:     gc.IncludeInfo,
+		ShowDirtyStatus: gc.ShowDirtyStatus,
+
+		// Git command configuration
+		Command:          gc.Command,
+		WorkingDirectory: gc.WorkingDirectory,
+
+		// Git behavior settings
+		RequireCleanRepo:  gc.RequireCleanRepo,
+		AutoDetectRepo:    gc.AutoDetectRepo,
+		IncludeSubmodules: gc.IncludeSubmodules,
+
+		// Git information inclusion
+		IncludeBranch: gc.IncludeBranch,
+		IncludeHash:   gc.IncludeHash,
+		IncludeStatus: gc.IncludeStatus,
+
+		// Git command timeouts and limits
+		CommandTimeout:    gc.CommandTimeout,
+		MaxSubmoduleDepth: gc.MaxSubmoduleDepth,
+
+		// Legacy compatibility fields
+		IncludeDirtyStatus: gc.ShowDirtyStatus, // Map to legacy field
+		GitCommand:         gc.Command,         // Map to legacy field
+	}
+
+	return gitConfig
+}
+
+// 🔶 GIT-005: Git configuration integration helper - 📝
+// GetGitConfig returns a properly configured pkg/git Config from the application config
+func GetGitConfig(cfg *Config) *git.Config {
+	if cfg.Git != nil {
+		return cfg.Git.ToGitConfig()
+	}
+
+	// Fallback to legacy configuration fields
+	gitConfig := git.DefaultConfig()
+	gitConfig.IncludeInfo = cfg.IncludeGitInfo
+	gitConfig.ShowDirtyStatus = cfg.ShowGitDirtyStatus
+	gitConfig.IncludeDirtyStatus = cfg.ShowGitDirtyStatus
+
+	return gitConfig
 }

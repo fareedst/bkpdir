@@ -3645,3 +3645,180 @@ func TestConfigReflectionStressTest(t *testing.T) {
 		t.Logf("Concurrent access test completed: %d goroutines × %d operations", numGoroutines, operationsPerGoroutine)
 	})
 }
+
+// 🔶 GIT-005: Git configuration integration test - 📝
+func TestGitConfigIntegration(t *testing.T) {
+	t.Run("GitConfig to pkg/git Config conversion", func(t *testing.T) {
+		// Create a GitConfig with all fields set
+		gitConfig := &GitConfig{
+			Enabled:           true,
+			IncludeInfo:       true,
+			ShowDirtyStatus:   true,
+			Command:           "/usr/local/bin/git",
+			WorkingDirectory:  "/test/repo",
+			RequireCleanRepo:  true,
+			AutoDetectRepo:    false,
+			IncludeSubmodules: true,
+			IncludeBranch:     true,
+			IncludeHash:       true,
+			IncludeStatus:     true,
+			CommandTimeout:    "30s",
+			MaxSubmoduleDepth: 3,
+		}
+
+		// Convert to pkg/git Config
+		pkgGitConfig := gitConfig.ToGitConfig()
+
+		// Verify all fields are properly mapped
+		if pkgGitConfig.Enabled != gitConfig.Enabled {
+			t.Errorf("Expected Enabled=%v, got %v", gitConfig.Enabled, pkgGitConfig.Enabled)
+		}
+		if pkgGitConfig.IncludeInfo != gitConfig.IncludeInfo {
+			t.Errorf("Expected IncludeInfo=%v, got %v", gitConfig.IncludeInfo, pkgGitConfig.IncludeInfo)
+		}
+		if pkgGitConfig.ShowDirtyStatus != gitConfig.ShowDirtyStatus {
+			t.Errorf("Expected ShowDirtyStatus=%v, got %v", gitConfig.ShowDirtyStatus, pkgGitConfig.ShowDirtyStatus)
+		}
+		if pkgGitConfig.Command != gitConfig.Command {
+			t.Errorf("Expected Command=%s, got %s", gitConfig.Command, pkgGitConfig.Command)
+		}
+		if pkgGitConfig.WorkingDirectory != gitConfig.WorkingDirectory {
+			t.Errorf("Expected WorkingDirectory=%s, got %s", gitConfig.WorkingDirectory, pkgGitConfig.WorkingDirectory)
+		}
+		if pkgGitConfig.IncludeSubmodules != gitConfig.IncludeSubmodules {
+			t.Errorf("Expected IncludeSubmodules=%v, got %v", gitConfig.IncludeSubmodules, pkgGitConfig.IncludeSubmodules)
+		}
+		if pkgGitConfig.CommandTimeout != gitConfig.CommandTimeout {
+			t.Errorf("Expected CommandTimeout=%s, got %s", gitConfig.CommandTimeout, pkgGitConfig.CommandTimeout)
+		}
+
+		// Verify legacy field mapping
+		if pkgGitConfig.IncludeDirtyStatus != gitConfig.ShowDirtyStatus {
+			t.Errorf("Expected IncludeDirtyStatus=%v, got %v", gitConfig.ShowDirtyStatus, pkgGitConfig.IncludeDirtyStatus)
+		}
+		if pkgGitConfig.GitCommand != gitConfig.Command {
+			t.Errorf("Expected GitCommand=%s, got %s", gitConfig.Command, pkgGitConfig.GitCommand)
+		}
+	})
+
+	t.Run("GetGitConfig with GitConfig", func(t *testing.T) {
+		cfg := &Config{
+			Git: &GitConfig{
+				Enabled:         true,
+				IncludeInfo:     true,
+				ShowDirtyStatus: false,
+				Command:         "custom-git",
+			},
+		}
+
+		pkgGitConfig := GetGitConfig(cfg)
+
+		if pkgGitConfig.Enabled != true {
+			t.Errorf("Expected Enabled=true, got %v", pkgGitConfig.Enabled)
+		}
+		if pkgGitConfig.IncludeInfo != true {
+			t.Errorf("Expected IncludeInfo=true, got %v", pkgGitConfig.IncludeInfo)
+		}
+		if pkgGitConfig.ShowDirtyStatus != false {
+			t.Errorf("Expected ShowDirtyStatus=false, got %v", pkgGitConfig.ShowDirtyStatus)
+		}
+		if pkgGitConfig.Command != "custom-git" {
+			t.Errorf("Expected Command=custom-git, got %s", pkgGitConfig.Command)
+		}
+	})
+
+	t.Run("GetGitConfig with legacy fields", func(t *testing.T) {
+		cfg := &Config{
+			IncludeGitInfo:     true,
+			ShowGitDirtyStatus: false,
+		}
+
+		pkgGitConfig := GetGitConfig(cfg)
+
+		if pkgGitConfig.IncludeInfo != true {
+			t.Errorf("Expected IncludeInfo=true, got %v", pkgGitConfig.IncludeInfo)
+		}
+		if pkgGitConfig.ShowDirtyStatus != false {
+			t.Errorf("Expected ShowDirtyStatus=false, got %v", pkgGitConfig.ShowDirtyStatus)
+		}
+		if pkgGitConfig.IncludeDirtyStatus != false {
+			t.Errorf("Expected IncludeDirtyStatus=false, got %v", pkgGitConfig.IncludeDirtyStatus)
+		}
+	})
+
+	t.Run("Environment variable override for Git config", func(t *testing.T) {
+		// Set up environment variables
+		originalEnv := map[string]string{
+			"BKPDIR_GIT_ENABLED":            os.Getenv("BKPDIR_GIT_ENABLED"),
+			"BKPDIR_GIT_INCLUDE_INFO":       os.Getenv("BKPDIR_GIT_INCLUDE_INFO"),
+			"BKPDIR_GIT_SHOW_DIRTY_STATUS":  os.Getenv("BKPDIR_GIT_SHOW_DIRTY_STATUS"),
+			"BKPDIR_GIT_COMMAND":            os.Getenv("BKPDIR_GIT_COMMAND"),
+			"BKPDIR_GIT_WORKING_DIRECTORY":  os.Getenv("BKPDIR_GIT_WORKING_DIRECTORY"),
+			"BKPDIR_GIT_INCLUDE_SUBMODULES": os.Getenv("BKPDIR_GIT_INCLUDE_SUBMODULES"),
+		}
+
+		// Clean up environment variables after test
+		defer func() {
+			for key, value := range originalEnv {
+				if value == "" {
+					os.Unsetenv(key)
+				} else {
+					os.Setenv(key, value)
+				}
+			}
+		}()
+
+		// Set test environment variables
+		os.Setenv("BKPDIR_GIT_ENABLED", "true")
+		os.Setenv("BKPDIR_GIT_INCLUDE_INFO", "false")
+		os.Setenv("BKPDIR_GIT_SHOW_DIRTY_STATUS", "true")
+		os.Setenv("BKPDIR_GIT_COMMAND", "/custom/git")
+		os.Setenv("BKPDIR_GIT_WORKING_DIRECTORY", "/custom/repo")
+		os.Setenv("BKPDIR_GIT_INCLUDE_SUBMODULES", "true")
+
+		// Create FileConfigSource and load from environment
+		fileSource := NewFileConfigSource("")
+		cfg, err := fileSource.LoadFromEnvironment()
+		if err != nil {
+			t.Fatalf("LoadFromEnvironment failed: %v", err)
+		}
+
+		// Verify Git configuration was set from environment
+		if cfg.Git == nil {
+			t.Fatal("Expected Git config to be initialized, got nil")
+		}
+
+		if cfg.Git.Enabled != true {
+			t.Errorf("Expected Git.Enabled=true, got %v", cfg.Git.Enabled)
+		}
+		if cfg.Git.IncludeInfo != false {
+			t.Errorf("Expected Git.IncludeInfo=false, got %v", cfg.Git.IncludeInfo)
+		}
+		if cfg.Git.ShowDirtyStatus != true {
+			t.Errorf("Expected Git.ShowDirtyStatus=true, got %v", cfg.Git.ShowDirtyStatus)
+		}
+		if cfg.Git.Command != "/custom/git" {
+			t.Errorf("Expected Git.Command=/custom/git, got %s", cfg.Git.Command)
+		}
+		if cfg.Git.WorkingDirectory != "/custom/repo" {
+			t.Errorf("Expected Git.WorkingDirectory=/custom/repo, got %s", cfg.Git.WorkingDirectory)
+		}
+		if cfg.Git.IncludeSubmodules != true {
+			t.Errorf("Expected Git.IncludeSubmodules=true, got %v", cfg.Git.IncludeSubmodules)
+		}
+	})
+
+	t.Run("Nil GitConfig handling", func(t *testing.T) {
+		var gitConfig *GitConfig
+		pkgGitConfig := gitConfig.ToGitConfig()
+
+		// Should return default config when nil
+		defaultConfig := DefaultGitConfig()
+		if pkgGitConfig.Enabled != defaultConfig.Enabled {
+			t.Errorf("Expected default Enabled=%v, got %v", defaultConfig.Enabled, pkgGitConfig.Enabled)
+		}
+		if pkgGitConfig.Command != defaultConfig.Command {
+			t.Errorf("Expected default Command=%s, got %s", defaultConfig.Command, pkgGitConfig.Command)
+		}
+	})
+}
