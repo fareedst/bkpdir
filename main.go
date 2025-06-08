@@ -54,7 +54,7 @@ Git-aware archive naming, and archive verification.`
 // Version information
 const (
 	// 🔶 REFACTOR-005: Structure optimization - Standardized version constants - 📝
-	appVersion     = "1.0.0"
+	appVersion     = "1.5.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
