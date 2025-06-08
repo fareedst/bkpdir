@@ -13,6 +13,9 @@ type ConfigProvider interface {
 	GetTemplateString(templateType string) string
 	GetPattern(patternType string) string
 	GetErrorFormat(errorType string) string
+	// Enhanced configuration support
+	GetDetailedFormatString(formatType string) string
+	GetDetailedTemplateString(templateType string) string
 }
 
 // ⭐ EXTRACT-003: Core interfaces - 🔧 Output destination abstraction
@@ -46,6 +49,9 @@ type Formatter interface {
 	FormatIdenticalBackup(path string) string
 	FormatListBackup(path, creationTime string) string
 	FormatDryRunBackup(path string) string
+	// Enhanced formatting operations with file statistics
+	FormatCreatedArchiveWithStats(path string) string
+	FormatIncrementalCreatedWithStats(path string) string
 }
 
 // ⭐ EXTRACT-003: Core interfaces - 🔧 Template formatter interface
@@ -60,6 +66,9 @@ type TemplateFormatter interface {
 	TemplateConfigValue(data map[string]string) string
 	TemplateDryRunArchive(data map[string]string) string
 	TemplateError(data map[string]string) string
+	// Enhanced template operations with file statistics
+	TemplateCreatedArchiveWithStats(path string) string
+	TemplateIncrementalCreatedWithStats(path string) string
 }
 
 // ⭐ EXTRACT-003: Core interfaces - 🔧 Error formatter interface
@@ -92,6 +101,9 @@ type PrintFormatter interface {
 	PrintIdenticalBackup(path string)
 	PrintListBackup(path, creationTime string)
 	PrintDryRunBackup(path string)
+	// Enhanced print operations with file statistics
+	PrintCreatedArchiveWithStats(path string)
+	PrintIncrementalCreatedWithStats(path string)
 }
 
 // ⭐ EXTRACT-003: Core interfaces - 🔧 Comprehensive formatter interface

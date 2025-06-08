@@ -151,6 +151,11 @@ type Config struct {
 	FormatNoFilesModified      string `yaml:"format_no_files_modified"`
 	FormatIncrementalCreated   string `yaml:"format_incremental_created"`
 
+	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// Enhanced format strings with stat information support
+	FormatCreatedArchiveDetailed     string `yaml:"format_created_archive_detailed"`
+	FormatIncrementalCreatedDetailed string `yaml:"format_incremental_created_detailed"`
+
 	// Backup operation messages
 	FormatNoBackupsFound    string `yaml:"format_no_backups_found"`
 	FormatBackupWouldCreate string `yaml:"format_backup_would_create"`
@@ -184,6 +189,11 @@ type Config struct {
 	TemplateDryRunFileEntry      string `yaml:"template_dry_run_file_entry"`
 	TemplateNoFilesModified      string `yaml:"template_no_files_modified"`
 	TemplateIncrementalCreated   string `yaml:"template_incremental_created"`
+
+	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// Enhanced template strings with stat information support
+	TemplateCreatedArchiveDetailed     string `yaml:"template_created_archive_detailed"`
+	TemplateIncrementalCreatedDetailed string `yaml:"template_incremental_created_detailed"`
 
 	// Template-based backup operation messages
 	TemplateNoBackupsFound    string `yaml:"template_no_backups_found"`
@@ -330,6 +340,11 @@ func DefaultConfig() *Config {
 		FormatNoFilesModified:      "No files modified since last full archive\n",
 		FormatIncrementalCreated:   "Created incremental archive: %s\n",
 
+		// ⭐ OUT-002: Enhanced format configuration - 📝
+		// Enhanced format strings with stat information (backward compatible defaults)
+		FormatCreatedArchiveDetailed:     "Created archive: %s (%s, %s)\n",
+		FormatIncrementalCreatedDetailed: "Created incremental archive: %s (%s, %s)\n",
+
 		// Backup operation messages
 		FormatNoBackupsFound:    "No backups found for %s in %s\n",
 		FormatBackupWouldCreate: "Would create backup: %s\n",
@@ -361,6 +376,11 @@ func DefaultConfig() *Config {
 		TemplateDryRunFileEntry:      "  %{file}\n",
 		TemplateNoFilesModified:      "No files modified since last full archive\n",
 		TemplateIncrementalCreated:   "Created incremental archive: %{path}\n",
+
+		// ⭐ OUT-002: Enhanced format configuration - 📝
+		// Enhanced template strings with stat information support
+		TemplateCreatedArchiveDetailed:     "Created archive: %{path} (size: %{size_human}, modified: %{mtime})\n",
+		TemplateIncrementalCreatedDetailed: "Created incremental archive: %{path} (size: %{size_human}, modified: %{mtime})\n",
 
 		// Template-based backup operation messages
 		TemplateNoBackupsFound:    "No backups found for %{filename} in %{backup_dir}\n",
@@ -1183,6 +1203,15 @@ func mergeExtendedFormatStrings(dst, src *Config) {
 		dst.FormatIncrementalCreated = src.FormatIncrementalCreated
 	}
 
+	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// Merge enhanced format strings
+	if src.FormatCreatedArchiveDetailed != defaultCfg.FormatCreatedArchiveDetailed {
+		dst.FormatCreatedArchiveDetailed = src.FormatCreatedArchiveDetailed
+	}
+	if src.FormatIncrementalCreatedDetailed != defaultCfg.FormatIncrementalCreatedDetailed {
+		dst.FormatIncrementalCreatedDetailed = src.FormatIncrementalCreatedDetailed
+	}
+
 	// Backup operation messages
 	if src.FormatNoBackupsFound != defaultCfg.FormatNoBackupsFound {
 		dst.FormatNoBackupsFound = src.FormatNoBackupsFound
@@ -1233,6 +1262,15 @@ func mergeExtendedTemplates(dst, src *Config) {
 	}
 	if src.TemplateIncrementalCreated != defaultCfg.TemplateIncrementalCreated {
 		dst.TemplateIncrementalCreated = src.TemplateIncrementalCreated
+	}
+
+	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// Merge enhanced template strings
+	if src.TemplateCreatedArchiveDetailed != defaultCfg.TemplateCreatedArchiveDetailed {
+		dst.TemplateCreatedArchiveDetailed = src.TemplateCreatedArchiveDetailed
+	}
+	if src.TemplateIncrementalCreatedDetailed != defaultCfg.TemplateIncrementalCreatedDetailed {
+		dst.TemplateIncrementalCreatedDetailed = src.TemplateIncrementalCreatedDetailed
 	}
 
 	// Backup operation templates

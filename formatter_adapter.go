@@ -27,7 +27,9 @@ func NewFormatterConfigProvider(config *Config) *FormatterConfigProvider {
 func (fcp *FormatterConfigProvider) GetFormatString(formatType string) string {
 	switch formatType {
 	case "created_archive":
-		return fcp.config.FormatCreatedArchive
+		result := fcp.config.FormatCreatedArchive
+		fmt.Fprintf(os.Stderr, "DEBUG: GetFormatString(created_archive) = %q\n", result)
+		return result
 	case "identical_archive":
 		return fcp.config.FormatIdenticalArchive
 	case "list_archive":
@@ -118,6 +120,31 @@ func (fcp *FormatterConfigProvider) GetErrorFormat(errorType string) string {
 		return fcp.config.FormatInvalidDirectory
 	case "invalid_file":
 		return fcp.config.FormatInvalidFile
+	default:
+		return ""
+	}
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Enhanced configuration support
+// GetDetailedFormatString returns detailed format strings with file statistics
+func (fcp *FormatterConfigProvider) GetDetailedFormatString(formatType string) string {
+	switch formatType {
+	case "created_archive":
+		return fcp.config.FormatCreatedArchiveDetailed
+	case "incremental_created":
+		return fcp.config.FormatIncrementalCreatedDetailed
+	default:
+		return ""
+	}
+}
+
+// GetDetailedTemplateString returns detailed template strings with file statistics
+func (fcp *FormatterConfigProvider) GetDetailedTemplateString(templateType string) string {
+	switch templateType {
+	case "created_archive":
+		return fcp.config.TemplateCreatedArchiveDetailed
+	case "incremental_created":
+		return fcp.config.TemplateIncrementalCreatedDetailed
 	default:
 		return ""
 	}
@@ -712,4 +739,37 @@ func (fa *FormatterAdapter) PrintFailedAccessFile(err error) {
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Enhanced formatting methods
+// Enhanced methods using file statistics for detailed output
+
+// FormatCreatedArchiveWithStats delegates to the enhanced formatter method
+func (fa *FormatterAdapter) FormatCreatedArchiveWithStats(path string) string {
+	return fa.formatter.FormatCreatedArchiveWithStats(path)
+}
+
+// FormatIncrementalCreatedWithStats delegates to the enhanced formatter method
+func (fa *FormatterAdapter) FormatIncrementalCreatedWithStats(path string) string {
+	return fa.formatter.FormatIncrementalCreatedWithStats(path)
+}
+
+// TemplateCreatedArchiveWithStats delegates to the enhanced template method
+func (fa *FormatterAdapter) TemplateCreatedArchiveWithStats(path string) string {
+	return fa.formatter.TemplateCreatedArchiveWithStats(path)
+}
+
+// TemplateIncrementalCreatedWithStats delegates to the enhanced template method
+func (fa *FormatterAdapter) TemplateIncrementalCreatedWithStats(path string) string {
+	return fa.formatter.TemplateIncrementalCreatedWithStats(path)
+}
+
+// PrintCreatedArchiveWithStats delegates to the enhanced print method
+func (fa *FormatterAdapter) PrintCreatedArchiveWithStats(path string) {
+	fa.formatter.PrintCreatedArchiveWithStats(path)
+}
+
+// PrintIncrementalCreatedWithStats delegates to the enhanced print method
+func (fa *FormatterAdapter) PrintIncrementalCreatedWithStats(path string) {
+	fa.formatter.PrintIncrementalCreatedWithStats(path)
 }

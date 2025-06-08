@@ -8,6 +8,7 @@ package formatter
 
 import (
 	"fmt"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
@@ -277,4 +278,95 @@ func (stf *SimpleTemplateFormatter) TemplateDryRunArchive(data map[string]string
 // TemplateError formats an error message using default template
 func (stf *SimpleTemplateFormatter) TemplateError(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Error: %{message}", data)
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Enhanced template methods
+// Enhanced template operations using file statistics for detailed output
+
+// TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics (DefaultTemplateFormatter)
+func (tf *DefaultTemplateFormatter) TemplateCreatedArchiveWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat fails
+		data := map[string]string{"path": path, "name": filepath.Base(path)}
+		return tf.TemplateCreatedArchive(data)
+	}
+
+	templateStr := tf.configProvider.GetDetailedTemplateString("created_archive")
+	if templateStr == "" {
+		templateStr = "Created archive: {path} ({size_human}, {mtime})"
+	}
+
+	data := buildStatsTemplateData(stats)
+	return formatTemplate(templateStr, data)
+}
+
+// TemplateIncrementalCreatedWithStats formats an incremental created message using templates with file statistics (DefaultTemplateFormatter)
+func (tf *DefaultTemplateFormatter) TemplateIncrementalCreatedWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat fails
+		data := map[string]string{"path": path, "name": filepath.Base(path)}
+		return tf.TemplateCreatedArchive(data) // Use same as full archive for now
+	}
+
+	templateStr := tf.configProvider.GetDetailedTemplateString("incremental_created")
+	if templateStr == "" {
+		templateStr = "Created incremental archive: {path} ({size_human}, {mtime})"
+	}
+
+	data := buildStatsTemplateData(stats)
+	return formatTemplate(templateStr, data)
+}
+
+// TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics (SimpleTemplateFormatter)
+func (stf *SimpleTemplateFormatter) TemplateCreatedArchiveWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat fails
+		data := map[string]string{"path": path, "name": filepath.Base(path)}
+		return stf.TemplateCreatedArchive(data)
+	}
+
+	data := buildStatsTemplateData(stats)
+	return formatTemplate("Created archive: {path} ({size_human}, {mtime})", data)
+}
+
+// TemplateIncrementalCreatedWithStats formats an incremental created message using templates with file statistics (SimpleTemplateFormatter)
+func (stf *SimpleTemplateFormatter) TemplateIncrementalCreatedWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat fails
+		data := map[string]string{"path": path, "name": filepath.Base(path)}
+		return stf.TemplateCreatedArchive(data) // Use same as full archive for now
+	}
+
+	data := buildStatsTemplateData(stats)
+	return formatTemplate("Created incremental archive: {path} ({size_human}, {mtime})", data)
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Helper functions for template formatting
+
+// buildStatsTemplateData builds template data from file statistics
+func buildStatsTemplateData(stats *FileStatInfo) map[string]string {
+	return map[string]string{
+		"path":       stats.Path,
+		"name":       stats.Name,
+		"size":       fmt.Sprintf("%d", stats.Size),
+		"size_human": stats.SizeHuman,
+		"mtime":      stats.MTime.Format("2006-01-02 15:04:05"),
+		"mtime_unix": fmt.Sprintf("%d", stats.MTimeUnix),
+		"mode":       stats.Mode.String(),
+		"type":       stats.Type,
+	}
+}
+
+// formatTemplate processes template strings with {placeholder} format
+func formatTemplate(template string, data map[string]string) string {
+	result := template
+	for key, value := range data {
+		placeholder := "{" + key + "}"
+		result = strings.ReplaceAll(result, placeholder, value)
+	}
+	return result
 }

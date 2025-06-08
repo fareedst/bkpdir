@@ -182,9 +182,10 @@ func (a *OutputFormatterToArchiveFormatterAdapter) PrintDryRunArchive(path strin
 }
 
 func (a *OutputFormatterToArchiveFormatterAdapter) PrintIncrementalCreated(path string) {
-	// Cast to FormatterAdapter to access extended methods
+	// ⭐ OUT-002: Enhanced output with file statistics - Use enhanced method
+	// Cast to FormatterAdapter to access extended methods including enhanced stats
 	if formatterAdapter, ok := a.formatter.(*FormatterAdapter); ok {
-		formatterAdapter.PrintIncrementalCreated(path)
+		formatterAdapter.PrintIncrementalCreatedWithStats(path)
 	} else {
 		a.formatter.PrintError(fmt.Sprintf("Created incremental archive: %s", path))
 	}
@@ -622,7 +623,16 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 			Path:   cfg.Path,
 			Config: cfg.Config,
 		}
-		return verifyArchiveWithInterface(verifyCfg)
+		if err := verifyArchiveWithInterface(verifyCfg); err != nil {
+			return err
+		}
+	}
+
+	// ⭐ OUT-002: Enhanced full archive success output with file statistics
+	// Use the adapter to get the original config for FormatterAdapter
+	if concreteCfg, ok := cfg.Config.(*ConfigToArchiveConfigAdapter); ok {
+		formatter := NewFormatterAdapter(concreteCfg.cfg)
+		formatter.PrintCreatedArchiveWithStats(cfg.Path)
 	}
 
 	return nil
@@ -767,10 +777,11 @@ func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
 		}
 	}
 
-	// Use the adapter to get the original config for OutputFormatter
+	// ⭐ OUT-002: Enhanced incremental archive success output with file statistics
+	// Use the adapter to get the original config for FormatterAdapter
 	if concreteCfg, ok := cfg.Config.(*ConfigToArchiveConfigAdapter); ok {
-		formatter := NewOutputFormatter(concreteCfg.cfg)
-		formatter.PrintIncrementalCreated(cfg.Path)
+		formatter := NewFormatterAdapter(concreteCfg.cfg)
+		formatter.PrintIncrementalCreatedWithStats(cfg.Path)
 	}
 	return nil
 }

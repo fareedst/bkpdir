@@ -9,6 +9,8 @@ package formatter
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 // ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Main formatter combining all components
@@ -409,4 +411,144 @@ func (f *DefaultOutputFormatter) TemplateFileNotFound(err error) string {
 		templateStr = "Error: File not found - %{error}"
 	}
 	return f.FormatWithPlaceholders(templateStr, data)
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Enhanced format operations
+// Enhanced formatting operations using file statistics for detailed output
+
+// FormatCreatedArchiveWithStats formats a created archive message with detailed file statistics
+func (f *DefaultOutputFormatter) FormatCreatedArchiveWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic format if stat fails
+		return f.FormatCreatedArchive(path)
+	}
+
+	// Check if template-style formatting is configured
+	templateStr := f.configProvider.GetDetailedTemplateString("created_archive")
+	if templateStr != "" {
+		data := f.buildStatsTemplateData(stats)
+		return f.FormatWithPlaceholders(templateStr, data)
+	}
+
+	// Use printf-style formatting
+	formatStr := f.configProvider.GetDetailedFormatString("created_archive")
+	if formatStr == "" {
+		formatStr = "Created archive: %s (%s, %s)\n"
+	}
+	return fmt.Sprintf(formatStr, stats.Path, stats.SizeHuman, stats.MTime.Format("2006-01-02 15:04:05"))
+}
+
+// FormatIncrementalCreatedWithStats formats an incremental created message with detailed file statistics
+func (f *DefaultOutputFormatter) FormatIncrementalCreatedWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic format if stat fails
+		return f.FormatCreatedArchive(path) // Use same as full archive for now
+	}
+
+	// Check if template-style formatting is configured
+	templateStr := f.configProvider.GetDetailedTemplateString("incremental_created")
+	if templateStr != "" {
+		data := f.buildStatsTemplateData(stats)
+		return f.FormatWithPlaceholders(templateStr, data)
+	}
+
+	// Use printf-style formatting
+	formatStr := f.configProvider.GetDetailedFormatString("incremental_created")
+	if formatStr == "" {
+		formatStr = "Created incremental archive: %s (%s, %s)\n"
+	}
+	return fmt.Sprintf(formatStr, stats.Path, stats.SizeHuman, stats.MTime.Format("2006-01-02 15:04:05"))
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Template-based format operations
+
+// TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics
+func (f *DefaultOutputFormatter) TemplateCreatedArchiveWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat fails
+		data := map[string]string{"path": path, "name": filepath.Base(path)}
+		return f.TemplateCreatedArchive(data)
+	}
+
+	templateStr := f.configProvider.GetDetailedTemplateString("created_archive")
+	if templateStr == "" {
+		templateStr = "Created archive: {path} ({size_human}, {mtime})"
+	}
+
+	data := f.buildStatsTemplateData(stats)
+	return f.formatTemplate(templateStr, data)
+}
+
+// TemplateIncrementalCreatedWithStats formats an incremental created message using templates with file statistics
+func (f *DefaultOutputFormatter) TemplateIncrementalCreatedWithStats(path string) string {
+	stats, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat fails
+		data := map[string]string{"path": path, "name": filepath.Base(path)}
+		return f.TemplateCreatedArchive(data) // Use same as full archive for now
+	}
+
+	templateStr := f.configProvider.GetDetailedTemplateString("incremental_created")
+	if templateStr == "" {
+		templateStr = "Created incremental archive: {path} ({size_human}, {mtime})"
+	}
+
+	data := f.buildStatsTemplateData(stats)
+	return f.formatTemplate(templateStr, data)
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Print operations with stats
+
+// PrintCreatedArchiveWithStats prints a created archive message with detailed file statistics
+func (f *DefaultOutputFormatter) PrintCreatedArchiveWithStats(path string) {
+	message := f.FormatCreatedArchiveWithStats(path)
+	if f.IsDelayedMode() {
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
+}
+
+// PrintIncrementalCreatedWithStats prints an incremental created message with detailed file statistics
+func (f *DefaultOutputFormatter) PrintIncrementalCreatedWithStats(path string) {
+	message := f.FormatIncrementalCreatedWithStats(path)
+	if f.IsDelayedMode() {
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
+}
+
+// ⭐ OUT-002: Enhanced output with file statistics - Helper methods
+
+// buildStatsTemplateData builds template data from file statistics
+func (f *DefaultOutputFormatter) buildStatsTemplateData(stats *FileStatInfo) map[string]string {
+	return map[string]string{
+		"path":       stats.Path,
+		"name":       stats.Name,
+		"size":       fmt.Sprintf("%d", stats.Size),
+		"size_human": stats.SizeHuman,
+		"mtime":      stats.MTime.Format("2006-01-02 15:04:05"),
+		"mtime_unix": fmt.Sprintf("%d", stats.MTimeUnix),
+		"mode":       stats.Mode.String(),
+		"type":       stats.Type,
+	}
+}
+
+// formatTemplate processes template strings with {placeholder} format
+func (f *DefaultOutputFormatter) formatTemplate(template string, data map[string]string) string {
+	result := template
+	for key, value := range data {
+		placeholder := "{" + key + "}"
+		result = strings.ReplaceAll(result, placeholder, value)
+	}
+	return result
+}
+
+// containsTemplateFormat checks if a format string contains template-style placeholders
+func (f *DefaultOutputFormatter) containsTemplateFormat(format string) bool {
+	return strings.Contains(format, "{") && strings.Contains(format, "}")
 }

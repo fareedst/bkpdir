@@ -194,7 +194,12 @@ func (f *OutputFormatter) SetCollector(collector *OutputCollector) {
 // FormatCreatedArchive formats a message for a created archive.
 // It uses the configured format string to create the output message.
 func (f *OutputFormatter) FormatCreatedArchive(path string) string {
-	return fmt.Sprintf(f.cfg.FormatCreatedArchive, path)
+	// ⭐ OUT-002: Debug - Check format string
+	result := fmt.Sprintf(f.cfg.FormatCreatedArchive, path)
+	fmt.Fprintf(os.Stderr, "DEBUG: FormatCreatedArchive called with path: %s\n", path)
+	fmt.Fprintf(os.Stderr, "DEBUG: Format string: %q\n", f.cfg.FormatCreatedArchive)
+	fmt.Fprintf(os.Stderr, "DEBUG: Result: %q\n", result)
+	return result
 }
 
 // 🔺 CFG-003: Printf-style identical archive formatting - 📝
@@ -972,7 +977,139 @@ func (f *OutputFormatter) FormatIncrementalCreated(path string) string {
 	return fmt.Sprintf(f.cfg.FormatIncrementalCreated, path)
 }
 
-// Printf-style formatting methods for archive operations
+// ⭐ OUT-002: Enhanced stat-aware formatting methods - 🔧
+// FormatCreatedArchiveWithStats formats a created archive message with file statistics using named replacements
+func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
+	// Gather file statistics
+	statInfo, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic format if stat gathering fails
+		return f.FormatCreatedArchive(path)
+	}
+
+	// Create data map for named replacements
+	data := map[string]string{
+		"path":       statInfo.Path,
+		"name":       statInfo.Name,
+		"size":       fmt.Sprintf("%d", statInfo.Size),
+		"size_human": statInfo.SizeHuman,
+		"mtime":      statInfo.MTime.Format("2006-01-02 15:04:05"),
+		"mtime_unix": fmt.Sprintf("%d", statInfo.MTimeUnix),
+		"mode":       statInfo.Mode.String(),
+		"type":       statInfo.Type,
+	}
+
+	// Use detailed template string with named replacements
+	result := f.formatTemplate(f.cfg.TemplateCreatedArchiveDetailed, data)
+	// ⭐ OUT-002: Debug - Check if template processing worked
+	if strings.Contains(result, "%{") {
+		fmt.Fprintf(os.Stderr, "DEBUG: Template not processed correctly: %q\n", result)
+		fmt.Fprintf(os.Stderr, "DEBUG: Template input was: %q\n", f.cfg.TemplateCreatedArchiveDetailed)
+		fmt.Fprintf(os.Stderr, "DEBUG: Data was: %+v\n", data)
+	}
+	return result
+}
+
+// FormatIncrementalCreatedWithStats formats an incremental archive message with file statistics using named replacements
+func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string {
+	// Gather file statistics
+	statInfo, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic format if stat gathering fails
+		return f.FormatIncrementalCreated(path)
+	}
+
+	// Create data map for named replacements
+	data := map[string]string{
+		"path":       statInfo.Path,
+		"name":       statInfo.Name,
+		"size":       fmt.Sprintf("%d", statInfo.Size),
+		"size_human": statInfo.SizeHuman,
+		"mtime":      statInfo.MTime.Format("2006-01-02 15:04:05"),
+		"mtime_unix": fmt.Sprintf("%d", statInfo.MTimeUnix),
+		"mode":       statInfo.Mode.String(),
+		"type":       statInfo.Type,
+	}
+
+	// Use detailed format string with named replacements
+	return f.formatTemplate(f.cfg.FormatIncrementalCreatedDetailed, data)
+}
+
+// PrintCreatedArchiveWithStats prints a created archive message with file statistics
+func (f *OutputFormatter) PrintCreatedArchiveWithStats(path string) {
+	message := f.FormatCreatedArchiveWithStats(path)
+	if f.collector != nil {
+		// 🔶 OUT-001: Delayed output implementation - 📝
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
+}
+
+// PrintIncrementalCreatedWithStats prints an incremental archive message with file statistics
+func (f *OutputFormatter) PrintIncrementalCreatedWithStats(path string) {
+	message := f.FormatIncrementalCreatedWithStats(path)
+	if f.collector != nil {
+		// 🔶 OUT-001: Delayed output implementation - 📝
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
+}
+
+// ⭐ OUT-002: Template-based stat-aware formatting methods - 🔧
+// TemplateCreatedArchiveWithStats formats a created archive message using template with file statistics
+func (f *OutputFormatter) TemplateCreatedArchiveWithStats(path string) string {
+	// Gather file statistics
+	statInfo, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat gathering fails
+		data := map[string]string{"path": path}
+		return f.formatTemplate(f.cfg.TemplateCreatedArchive, data)
+	}
+
+	// Create data map for template processing
+	data := map[string]string{
+		"path":       statInfo.Path,
+		"name":       statInfo.Name,
+		"size":       fmt.Sprintf("%d", statInfo.Size),
+		"size_human": statInfo.SizeHuman,
+		"mtime":      statInfo.MTime.Format("2006-01-02 15:04:05"),
+		"mtime_unix": fmt.Sprintf("%d", statInfo.MTimeUnix),
+		"mode":       statInfo.Mode.String(),
+		"type":       statInfo.Type,
+	}
+
+	// Use detailed template with named replacements
+	return f.formatTemplate(f.cfg.TemplateCreatedArchiveDetailed, data)
+}
+
+// TemplateIncrementalCreatedWithStats formats an incremental archive message using template with file statistics
+func (f *OutputFormatter) TemplateIncrementalCreatedWithStats(path string) string {
+	// Gather file statistics
+	statInfo, err := GatherFileStatInfo(path)
+	if err != nil {
+		// Fallback to basic template if stat gathering fails
+		data := map[string]string{"path": path}
+		return f.formatTemplate(f.cfg.TemplateIncrementalCreated, data)
+	}
+
+	// Create data map for template processing
+	data := map[string]string{
+		"path":       statInfo.Path,
+		"name":       statInfo.Name,
+		"size":       fmt.Sprintf("%d", statInfo.Size),
+		"size_human": statInfo.SizeHuman,
+		"mtime":      statInfo.MTime.Format("2006-01-02 15:04:05"),
+		"mtime_unix": fmt.Sprintf("%d", statInfo.MTimeUnix),
+		"mode":       statInfo.Mode.String(),
+		"type":       statInfo.Type,
+	}
+
+	// Use detailed template string with named replacements
+	return f.formatTemplate(f.cfg.TemplateIncrementalCreatedDetailed, data)
+}
+
 // 🔺 CFG-004: No archives found formatting - 📝
 // IMMUTABLE-REF: String externalization requirements
 // TEST-REF: TestStringExternalization
@@ -1045,156 +1182,11 @@ func (f *OutputFormatter) FormatNoFilesModified() string {
 	return f.cfg.FormatNoFilesModified
 }
 
-// Printf-style formatting methods for backup operations
-// 🔺 CFG-004: No backups found formatting - 📝
+// Printf-style formatting methods for archive operations
+// 🔺 CFG-004: No archives found formatting - 📝
 // IMMUTABLE-REF: String externalization requirements
 // TEST-REF: TestStringExternalization
 // DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatNoBackupsFound(filename, backupDir string) string {
-	return fmt.Sprintf(f.cfg.FormatNoBackupsFound, filename, backupDir)
-}
-
-// 🔺 CFG-004: Backup would create formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatBackupWouldCreate(path string) string {
-	return fmt.Sprintf(f.cfg.FormatBackupWouldCreate, path)
-}
-
-// 🔺 CFG-004: Backup identical formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatBackupIdentical(path string) string {
-	return fmt.Sprintf(f.cfg.FormatBackupIdentical, path)
-}
-
-// 🔺 CFG-004: Backup created formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatBackupCreated(path string) string {
-	return fmt.Sprintf(f.cfg.FormatBackupCreated, path)
-}
-
-// Template-based formatting methods for archive operations
-// 🔺 CFG-004: No archives found template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatNoArchivesFoundTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateNoArchivesFound, data)
-}
-
-// 🔺 CFG-004: Verification failed template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatVerificationFailedTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateVerificationFailed, data)
-}
-
-// 🔺 CFG-004: Verification success template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatVerificationSuccessTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateVerificationSuccess, data)
-}
-
-// 🔺 CFG-004: Verification warning template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatVerificationWarningTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateVerificationWarning, data)
-}
-
-// 🔺 CFG-004: Configuration updated template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatConfigurationUpdatedTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateConfigurationUpdated, data)
-}
-
-// 🔺 CFG-004: Config file path template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatConfigFilePathTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateConfigFilePath, data)
-}
-
-// 🔺 CFG-004: Dry run files header template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatDryRunFilesHeaderTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateDryRunFilesHeader, data)
-}
-
-// 🔺 CFG-004: Dry run file entry template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatDryRunFileEntryTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateDryRunFileEntry, data)
-}
-
-// 🔺 CFG-004: No files modified template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatNoFilesModifiedTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateNoFilesModified, data)
-}
-
-// 🔺 CFG-004: Incremental created template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatIncrementalCreatedTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateIncrementalCreated, data)
-}
-
-// Template-based formatting methods for backup operations
-// 🔺 CFG-004: No backups found template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatNoBackupsFoundTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateNoBackupsFound, data)
-}
-
-// 🔺 CFG-004: Backup would create template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatBackupWouldCreateTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateBackupWouldCreate, data)
-}
-
-// 🔺 CFG-004: Backup identical template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatBackupIdenticalTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateBackupIdentical, data)
-}
-
-// 🔺 CFG-004: Backup created template formatting - 📝
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatBackupCreatedTemplate(data map[string]string) string {
-	return f.formatTemplate(f.cfg.TemplateBackupCreated, data)
-}
-
-// Print methods for CFG-004 format strings
-// 🔺 CFG-004: Print methods for archive operations - 📝
-// 🔶 OUT-001: Enhanced with delayed output support - 📝
 func (f *OutputFormatter) PrintNoArchivesFound(archiveDir string) {
 	message := f.FormatNoArchivesFound(archiveDir)
 	if f.collector != nil {
@@ -1302,6 +1294,23 @@ func (f *OutputFormatter) PrintIncrementalCreated(path string) {
 	} else {
 		fmt.Print(message)
 	}
+}
+
+// ⭐ OUT-002: Missing backup format methods for OutputFormatter - 🔧
+func (f *OutputFormatter) FormatNoBackupsFound(filename, backupDir string) string {
+	return fmt.Sprintf(f.cfg.FormatNoBackupsFound, filename, backupDir)
+}
+
+func (f *OutputFormatter) FormatBackupWouldCreate(path string) string {
+	return fmt.Sprintf(f.cfg.FormatBackupWouldCreate, path)
+}
+
+func (f *OutputFormatter) FormatBackupIdentical(path string) string {
+	return fmt.Sprintf(f.cfg.FormatBackupIdentical, path)
+}
+
+func (f *OutputFormatter) FormatBackupCreated(path string) string {
+	return fmt.Sprintf(f.cfg.FormatBackupCreated, path)
 }
 
 // 🔺 CFG-004: Print methods for backup operations - 📝

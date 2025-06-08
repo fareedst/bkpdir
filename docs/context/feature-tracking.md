@@ -227,6 +227,114 @@ This feature leverages existing configuration infrastructure (CFG-005, CFG-006) 
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |
 |------------|---------------|--------------|--------------|---------|--------|----------------------|-------------|
 | OUT-001 | Delayed output management | Output control requirements | Output System | TestDelayedOutput | ✅ Completed | `// OUT-001: Delayed output` | 📊 MEDIUM |
+| OUT-002 | Enhanced command output with file statistics | Command output requirements | Output formatting system | TestStatOutputFormatting | 🔄 In Progress | `// OUT-002: Stat-based output formatting` | 🔺 HIGH |
+
+#### **🔄 OUT-002: Enhanced Command Output with File Statistics - 🔄 In Progress**
+
+**Status**: 🔄 **IN PROGRESS (0/6 Subtasks)** - 2025-01-02
+
+**📑 Purpose**: Enhance backup commands to output formatted file information with stat-like details. All commands must output to stdout a single line about any files generated or existing to satisfy a backup request, using format strings with named replacements for stat information.
+
+**🔧 Implementation Summary**: **🔺 OUT-002: Enhanced command output formatting system with file statistics integration.** Modify inc and full commands to consistently output file information using configurable format strings with stat-like named replacements. Currently inc command displays only filename, full command displays nothing. Implementation will add file stat gathering capabilities, enhance format strings with named replacements for file properties, and ensure both commands provide consistent formatted output to stdout.
+
+**🔧 OUT-002 Subtasks:**
+
+1. **[ ] File Stat Information Gathering** (⭐ CRITICAL) - **NOT STARTED**
+   - [ ] **Create FileStatInfo struct** - Define structure for file statistics data
+   - [ ] **Implement GatherFileStatInfo function** - Gather stat-like info for files
+   - [ ] **Add human-readable size formatting** - Convert bytes to KB/MB/GB format
+   - [ ] **Add file type detection** - Determine file type (regular, directory, symlink)
+   - **Rationale**: Core functionality to gather file statistics for output formatting
+   - **Status**: NOT STARTED
+   - **Priority**: CRITICAL - Foundation for enhanced output ⭐
+   - **Implementation Areas**: Utility functions, file system operations
+   - **Dependencies**: None (uses standard Go os package)
+   - **Implementation Tokens**: `// ⭐ OUT-002: File stat information gathering`
+   - **Expected Outcomes**: FileStatInfo struct with path, size, modification time, permissions, type
+
+2. **[ ] Enhanced Format String Configuration** (⭐ CRITICAL) - **NOT STARTED**
+   - [ ] **Add detailed format string options** - format_archive_created_detailed, format_incremental_created_detailed
+   - [ ] **Implement named replacement support** - {path}, {name}, {size}, {size_human}, {mtime}, {mode}, {type}
+   - [ ] **Update DefaultConfig() with new format strings** - Maintain backward compatibility
+   - [ ] **Add template-based formatting support** - Enhanced template processing for stat data
+   - **Rationale**: Configuration infrastructure for stat-based output formatting
+   - **Status**: NOT STARTED
+   - **Priority**: CRITICAL - Core formatting capability ⭐
+   - **Implementation Areas**: Configuration system, format string processing
+   - **Dependencies**: Subtask 1 (stat gathering for format design)
+   - **Implementation Tokens**: `// ⭐ OUT-002: Enhanced format configuration`
+   - **Expected Outcomes**: New format strings with named replacement support
+
+3. **[ ] OutputFormatter Enhancement** (🔺 HIGH) - **NOT STARTED**
+   - [ ] **Add stat-aware formatting methods** - FormatCreatedArchiveWithStats, FormatIncrementalCreatedWithStats
+   - [ ] **Implement named replacement processing** - Template engine for {name} style replacements
+   - [ ] **Add print methods for enhanced formatting** - PrintCreatedArchiveWithStats, PrintIncrementalCreatedWithStats
+   - [ ] **Maintain backward compatibility** - Preserve existing format methods unchanged
+   - **Rationale**: Core output formatting enhancement with stat information support
+   - **Status**: NOT STARTED
+   - **Priority**: HIGH - Primary formatting implementation 🔺
+   - **Implementation Areas**: OutputFormatter methods, template processing
+   - **Dependencies**: Subtasks 1-2 (stat gathering and configuration)
+   - **Implementation Tokens**: `// 🔺 OUT-002: OutputFormatter enhancement`
+   - **Expected Outcomes**: Enhanced formatting methods with stat support
+
+4. **[ ] Archive Creation Function Updates** (🔺 HIGH) - **NOT STARTED**
+   - [ ] **Add success output to CreateFullArchiveWithContext** - Output when archive created successfully
+   - [ ] **Enhance createAndVerifyIncrementalArchive output** - Use stat-based formatting
+   - [ ] **Ensure consistent behavior** - Both inc and full commands output file info
+   - [ ] **Integrate with error handling** - Proper error handling for stat gathering
+   - **Rationale**: Integration of enhanced output into existing archive creation workflows
+   - **Status**: NOT STARTED
+   - **Priority**: HIGH - Core command integration 🔺
+   - **Implementation Areas**: Archive creation functions, command integration
+   - **Dependencies**: Subtasks 1-3 (stat gathering, configuration, formatting)
+   - **Implementation Tokens**: `// 🔺 OUT-002: Archive creation integration`
+   - **Expected Outcomes**: Both inc and full commands output formatted file information
+
+5. **[ ] Testing and Validation** (🔶 MEDIUM) - **NOT STARTED**
+   - [ ] **Add unit tests for stat gathering** - Test FileStatInfo function and error handling
+   - [ ] **Test format string processing** - Verify named replacement functionality
+   - [ ] **Test command output behavior** - Validate inc and full command output
+   - [ ] **Verify backward compatibility** - Ensure existing format strings work unchanged
+   - **Rationale**: Comprehensive testing ensures reliable functionality and backward compatibility
+   - **Status**: NOT STARTED
+   - **Priority**: MEDIUM - Quality assurance 🔶
+   - **Implementation Areas**: Test infrastructure, integration testing
+   - **Dependencies**: Subtasks 1-4 (all implementation components)
+   - **Implementation Tokens**: `// 🔶 OUT-002: Testing and validation`
+   - **Expected Outcomes**: Comprehensive test coverage for enhanced output functionality
+
+6. **[ ] Documentation Updates** (🔶 MEDIUM) - **NOT STARTED**
+   - [ ] **Update specification.md** - Document new output behavior with examples
+   - [ ] **Update architecture.md** - Add stat-based output formatting system documentation
+   - [ ] **Update requirements.md** - Add file statistics and format string requirements
+   - [ ] **Update configuration documentation** - Document new format string options and named replacements
+   - **Rationale**: Documentation must reflect enhanced output capabilities and configuration options
+   - **Status**: NOT STARTED
+   - **Priority**: MEDIUM - Documentation compliance 🔶
+   - **Implementation Areas**: Context documentation updates, user documentation
+   - **Dependencies**: Subtasks 1-5 (implementation and testing)
+   - **Implementation Tokens**: `// 🔶 OUT-002: Documentation updates`
+   - **Expected Outcomes**: Complete documentation of enhanced output functionality
+
+**🎯 OUT-002 Success Criteria:**
+- **Full command output**: Single line to stdout when archive created successfully with file info
+- **Inc command enhancement**: Output includes stat-like information, not just path
+- **Format string support**: Named replacements for file statistics ({path}, {size}, {mtime}, etc.)
+- **Backward compatibility**: Existing format strings continue to work unchanged
+- **Consistent behavior**: Both inc and full commands behave similarly
+- **Configuration control**: Users can customize output format via configuration
+
+**🔧 Implementation Strategy:**
+1. **Phase 1 (Foundation)**: File stat gathering + Enhanced format configuration (Subtasks 1-2)
+2. **Phase 2 (Core Implementation)**: OutputFormatter enhancement + Archive function updates (Subtasks 3-4)
+3. **Phase 3 (Quality Assurance)**: Testing and validation + Documentation updates (Subtasks 5-6)
+
+**🚨 DEPENDENCIES:**
+- **Builds on**: CFG-003 (format strings system for configuration infrastructure)
+- **Leverages**: Existing OutputFormatter architecture and template processing
+- **Integrates**: Archive creation functions (CreateFullArchiveWithContext, createAndVerifyIncrementalArchive)
+- **Requires**: Standard Go os package for file statistics gathering
 
 ### 🧪 Testing Infrastructure [PRIORITY: HIGH]
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |
