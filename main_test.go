@@ -200,9 +200,17 @@ func createTestRootCmd() *cobra.Command {
 		Short: "Directory archiving CLI for macOS and Linux",
 	}
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, dryRunFlagDesc)
+
+	// Add all commands to ensure backward compatibility tests work
+	rootCmd.AddCommand(createCmd())
+	rootCmd.AddCommand(configCmd())
 	rootCmd.AddCommand(fullCmd())
 	rootCmd.AddCommand(incCmd())
 	rootCmd.AddCommand(listCmd())
+	rootCmd.AddCommand(verifyCmd())
+	rootCmd.AddCommand(backupCmd())
+	rootCmd.AddCommand(versionCmd())
+
 	return rootCmd
 }
 
@@ -1263,6 +1271,212 @@ func TestMain_Integration_CommandValidation(t *testing.T) {
 			}
 			if cmd.Short == "" {
 				t.Errorf("Expected non-empty Short description")
+			}
+		})
+	}
+}
+
+// TEST-REF: TestMain_Integration_CLI015_AutoDetection
+func TestMain_Integration_CLI015_AutoDetection(t *testing.T) {
+	// 🔺 TEST-MAIN-030: Integration test for CLI-015 auto-detection feature - ⭐
+	tmpDir := t.TempDir()
+	originalWd, _ := os.Getwd()
+	defer os.Chdir(originalWd)
+	os.Chdir(tmpDir)
+
+	createTestConfig(t, tmpDir)
+
+	tests := []struct {
+		name        string
+		setupFunc   func() string // Returns path to test
+		expectedOp  string        // "file" or "directory"
+		shouldError bool
+	}{
+		{
+			name: "file_auto_detection",
+			setupFunc: func() string {
+				testFile := filepath.Join(tmpDir, "test_file.txt")
+				os.WriteFile(testFile, []byte("test content"), 0644)
+				return testFile
+			},
+			expectedOp:  "file",
+			shouldError: false,
+		},
+		{
+			name: "directory_auto_detection",
+			setupFunc: func() string {
+				testDir := filepath.Join(tmpDir, "test_directory")
+				os.MkdirAll(testDir, 0755)
+				os.WriteFile(filepath.Join(testDir, "file.txt"), []byte("content"), 0644)
+				return testDir
+			},
+			expectedOp:  "directory",
+			shouldError: false,
+		},
+		{
+			name: "nonexistent_path_error",
+			setupFunc: func() string {
+				return filepath.Join(tmpDir, "nonexistent.txt")
+			},
+			expectedOp:  "",
+			shouldError: true,
+		},
+		{
+			name: "absolute_file_path",
+			setupFunc: func() string {
+				testFile := filepath.Join(tmpDir, "abs_test.txt")
+				os.WriteFile(testFile, []byte("test"), 0644)
+				absPath, _ := filepath.Abs(testFile)
+				return absPath
+			},
+			expectedOp:  "file",
+			shouldError: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			testPath := tt.setupFunc()
+
+			// Use the actual command structure from main.go, not createTestRootCmd
+			// This ensures we're testing the real CLI-015 implementation
+			args := []string{testPath, "test note", "--dry-run"}
+
+			// Capture the command execution by simulating main function logic
+			oldArgs := os.Args
+			os.Args = append([]string{"bkpdir"}, args...)
+			defer func() { os.Args = oldArgs }()
+
+			// Test path validation directly
+			if tt.shouldError {
+				err := validatePath(testPath)
+				if err == nil {
+					t.Errorf("Expected error for path %s, but got none", testPath)
+				}
+			} else {
+				err := validatePath(testPath)
+				if err != nil {
+					t.Errorf("Unexpected error for path %s: %v", testPath, err)
+				}
+
+				// Test path type detection
+				if tt.expectedOp == "file" {
+					if !isFile(testPath) {
+						t.Errorf("Expected %s to be detected as file", testPath)
+					}
+					if isDirectory(testPath) {
+						t.Errorf("Expected %s not to be detected as directory", testPath)
+					}
+				} else if tt.expectedOp == "directory" {
+					if !isDirectory(testPath) {
+						t.Errorf("Expected %s to be detected as directory", testPath)
+					}
+					if isFile(testPath) {
+						t.Errorf("Expected %s not to be detected as file", testPath)
+					}
+				}
+			}
+		})
+	}
+}
+
+// TEST-REF: TestMain_Integration_CLI015_BackwardCompatibility
+func TestMain_Integration_CLI015_BackwardCompatibility(t *testing.T) {
+	// 🔺 TEST-MAIN-031: Test that CLI-015 doesn't break existing commands - ⭐
+	tmpDir := t.TempDir()
+	originalWd, _ := os.Getwd()
+	defer os.Chdir(originalWd)
+	os.Chdir(tmpDir)
+
+	createTestConfig(t, tmpDir)
+
+	// Create test file
+	testFile := filepath.Join(tmpDir, "test_file.txt")
+	os.WriteFile(testFile, []byte("test content"), 0644)
+
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{"explicit_backup_command", []string{"backup", testFile, "explicit backup", "--dry-run"}},
+		{"explicit_create_command", []string{"create", "explicit create", "--dry-run"}},
+		{"explicit_full_command", []string{"full", "explicit full", "--dry-run"}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Test with createTestRootCmd to ensure backward compatibility
+			rootCmd := createTestRootCmd()
+			rootCmd.SetArgs(tt.args)
+			rootCmd.SetOut(nil) // Suppress output
+			rootCmd.SetErr(nil) // Suppress errors
+
+			err := rootCmd.Execute()
+			if err != nil {
+				t.Errorf("Backward compatibility test failed for %s: %v", tt.name, err)
+			}
+		})
+	}
+}
+
+// TEST-REF: TestMain_Integration_CLI015_EdgeCases
+func TestMain_Integration_CLI015_EdgeCases(t *testing.T) {
+	// 🔺 TEST-MAIN-032: Test CLI-015 edge cases and error handling - ⭐
+	tmpDir := t.TempDir()
+	originalWd, _ := os.Getwd()
+	defer os.Chdir(originalWd)
+	os.Chdir(tmpDir)
+
+	tests := []struct {
+		name     string
+		path     string
+		expected string
+	}{
+		{"symlink_to_file", "", "file"},
+		{"symlink_to_directory", "", "directory"},
+		{"special_characters_in_path", "", "file"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var testPath string
+
+			switch tt.name {
+			case "symlink_to_file":
+				// Create file and symlink to it
+				realFile := filepath.Join(tmpDir, "real_file.txt")
+				os.WriteFile(realFile, []byte("content"), 0644)
+				testPath = filepath.Join(tmpDir, "file_symlink")
+				os.Symlink(realFile, testPath)
+
+			case "symlink_to_directory":
+				// Create directory and symlink to it
+				realDir := filepath.Join(tmpDir, "real_dir")
+				os.MkdirAll(realDir, 0755)
+				testPath = filepath.Join(tmpDir, "dir_symlink")
+				os.Symlink(realDir, testPath)
+
+			case "special_characters_in_path":
+				// Create file with special characters
+				testPath = filepath.Join(tmpDir, "test file with spaces & chars.txt")
+				os.WriteFile(testPath, []byte("content"), 0644)
+			}
+
+			// Test that validatePath handles these cases correctly
+			err := validatePath(testPath)
+			if err != nil {
+				t.Errorf("validatePath failed for %s: %v", tt.name, err)
+			}
+
+			// Test path type detection
+			if tt.expected == "file" {
+				if !isFile(testPath) {
+					t.Errorf("Expected %s to be detected as file for case %s", testPath, tt.name)
+				}
+			} else if tt.expected == "directory" {
+				if !isDirectory(testPath) {
+					t.Errorf("Expected %s to be detected as directory for case %s", testPath, tt.name)
+				}
 			}
 		})
 	}

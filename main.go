@@ -71,12 +71,246 @@ var (
 	showConfig bool
 )
 
+// ⭐ CLI-015: Path type detection for automatic command routing - 🔍
+// isFile checks if the given path is a regular file
+func isFile(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return info.Mode().IsRegular()
+}
+
+// ⭐ CLI-015: Path type detection for automatic command routing - 🔍
+// isDirectory checks if the given path is a directory
+func isDirectory(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return info.IsDir()
+}
+
+// ⭐ CLI-015: Path validation for automatic command routing - 🛡️
+// validatePath checks if the path exists and returns appropriate error message
+func validatePath(path string) error {
+	_, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("path does not exist: %s", path)
+		}
+		if os.IsPermission(err) {
+			return fmt.Errorf("permission denied accessing path: %s", path)
+		}
+		return fmt.Errorf("error accessing path %s: %v", path, err)
+	}
+	return nil
+}
+
+// ⭐ CLI-015: Automatic command routing based on path type - 🔧
+// handleAutoDetectedCommand routes to appropriate command based on first argument type
+func handleAutoDetectedCommand(args []string) {
+	if len(args) == 0 {
+		fmt.Fprintf(os.Stderr, "Error: no path provided\n")
+		os.Exit(1)
+	}
+
+	path := args[0]
+
+	// Validate path exists and is accessible
+	if err := validatePath(path); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Determine operation type based on path type
+	if isFile(path) {
+		// Route to file backup operation
+		handleAutoDetectedFileBackup(args)
+	} else if isDirectory(path) {
+		// Route to directory archive operation
+		handleAutoDetectedDirectoryArchive(args)
+	} else {
+		// Handle special file types (symlinks, devices, etc.)
+		fmt.Fprintf(os.Stderr, "Error: unsupported file type for path: %s\n", path)
+		fmt.Fprintf(os.Stderr, "Supported types: regular files and directories\n")
+		os.Exit(1)
+	}
+}
+
+// ⭐ CLI-015: Auto-detected file backup operation - 📝
+// handleAutoDetectedFileBackup handles file backup when auto-detected
+func handleAutoDetectedFileBackup(args []string) {
+	ctx := context.Background()
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	cfg, err := LoadConfig(cwd)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+		os.Exit(cfg.StatusConfigError)
+	}
+
+	formatter := NewOutputFormatter(cfg)
+	filePath := args[0]
+
+	// Extract note from second argument if provided
+	backupNote := note // Use global note flag if set
+	if backupNote == "" && len(args) > 1 {
+		backupNote = args[1]
+	}
+
+	// Create file backup using existing functionality
+	if err := CreateFileBackupEnhanced(BackupOptions{
+		Context:   ctx,
+		Config:    cfg,
+		Formatter: formatter,
+		FilePath:  filePath,
+		Note:      backupNote,
+		DryRun:    dryRun,
+	}); err != nil {
+		exitCode := HandleArchiveError(err, cfg, formatter)
+		os.Exit(exitCode)
+	}
+}
+
+// ⭐ CLI-015: Auto-detected directory archive operation - 📝
+// handleAutoDetectedDirectoryArchive handles directory archive when auto-detected
+func handleAutoDetectedDirectoryArchive(args []string) {
+	ctx := context.Background()
+
+	// Change to the specified directory for archiving
+	dirPath := args[0]
+	originalDir, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	if err := os.Chdir(dirPath); err != nil {
+		fmt.Fprintf(os.Stderr, "Error changing to directory %s: %v\n", dirPath, err)
+		os.Exit(1)
+	}
+
+	// Restore original directory on exit
+	defer func() {
+		if err := os.Chdir(originalDir); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: failed to restore original directory: %v\n", err)
+		}
+	}()
+
+	cfg, err := LoadConfig(".")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+		os.Exit(1) // Use default exit code since cfg might be nil
+	}
+
+	formatter := NewOutputFormatter(cfg)
+
+	// Extract note from second argument if provided
+	archiveNote := note // Use global note flag if set
+	if archiveNote == "" && len(args) > 1 {
+		archiveNote = args[1]
+	}
+
+	// Create full archive using existing functionality
+	if err := CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun, false); err != nil {
+		exitCode := HandleArchiveError(err, cfg, formatter)
+		os.Exit(exitCode)
+	}
+}
+
 // Long description for root command
 const rootLongDesc = `bkpdir version %s (compiled %s) [%s]
 
 BkpDir is a command-line tool for archiving directories and backing up individual files on macOS and Linux. 
 It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
 Git-aware archive naming, and archive verification.`
+
+// ⭐ CLI-015: Custom command execution with auto-detection fallback - 🔧
+// executeWithAutoDetection handles Cobra command resolution issues by implementing
+// custom argument parsing that allows auto-detection to work alongside existing commands
+func executeWithAutoDetection(rootCmd *cobra.Command) error {
+	args := os.Args[1:] // Skip program name
+
+	// If no arguments, execute normally (will show help)
+	if len(args) == 0 {
+		return rootCmd.Execute()
+	}
+
+	// Check if first argument is a known command
+	firstArg := args[0]
+
+	// List of known commands that should be handled by Cobra normally
+	knownCommands := []string{
+		"create", "config", "full", "inc", "list", "verify", "backup", "version",
+		"help", "--help", "-h", "--version", "-v",
+	}
+
+	// Check for global flags that should be handled normally
+	globalFlags := []string{
+		"--config", "--dry-run", "-d", "--list",
+	}
+
+	// If first argument is a known command or global flag, execute normally
+	for _, cmd := range knownCommands {
+		if firstArg == cmd {
+			return rootCmd.Execute()
+		}
+	}
+
+	for _, flag := range globalFlags {
+		if firstArg == flag {
+			return rootCmd.Execute()
+		}
+	}
+
+	// Check if first argument starts with a flag (-)
+	if strings.HasPrefix(firstArg, "-") {
+		return rootCmd.Execute()
+	}
+
+	// At this point, we assume it's a path for auto-detection
+	// Let handleAutoDetectedCommand handle path validation and provide appropriate errors
+	// We need to manually handle the global flags that might be present
+	var filteredArgs []string
+	var dryRunFlag bool
+	var noteFlag string
+
+	// Parse arguments to extract global flags
+	i := 0
+	for i < len(args) {
+		arg := args[i]
+		if arg == "--dry-run" || arg == "-d" {
+			dryRunFlag = true
+		} else if arg == "--note" || arg == "-n" {
+			if i+1 < len(args) {
+				noteFlag = args[i+1]
+				i++ // Skip the next argument as it's the note value
+			}
+		} else if strings.HasPrefix(arg, "--note=") {
+			noteFlag = strings.TrimPrefix(arg, "--note=")
+		} else if strings.HasPrefix(arg, "-n=") {
+			noteFlag = strings.TrimPrefix(arg, "-n=")
+		} else {
+			filteredArgs = append(filteredArgs, arg)
+		}
+		i++
+	}
+
+	// Set global variables for the handlers to use
+	dryRun = dryRunFlag
+	if noteFlag != "" {
+		note = noteFlag
+	}
+
+	// Execute auto-detection with filtered arguments
+	handleAutoDetectedCommand(filteredArgs)
+	return nil
+}
 
 func main() {
 	// 🔺 CFG-001: CLI application initialization and command structure - 📝
@@ -86,7 +320,15 @@ func main() {
 		Short:   "Directory archiving and file backup CLI for macOS and Linux",
 		Long:    fmt.Sprintf(rootLongDesc, Version, compileDate, platform),
 		Version: fmt.Sprintf("%s (compiled %s) [%s]", Version, compileDate, platform),
-		Example: `  # Create a full directory archive
+		// ⭐ CLI-015: Disable default command suggestions to enable auto-detection - 🔧
+		DisableSuggestions: true,
+		Example: `  # Auto-detect operation based on path type (NEW)
+  bkpdir myfile.txt "Before changes"        # Creates file backup automatically
+  bkpdir mydirectory "Initial backup"       # Creates directory archive automatically
+  bkpdir /path/to/file.txt                  # Auto-detects file backup
+  bkpdir /path/to/directory                 # Auto-detects directory archive
+
+  # Create a full directory archive (explicit commands)
   bkpdir create "Initial backup"
   bkpdir full -n "Initial backup"  # backward compatibility
 
@@ -94,7 +336,7 @@ func main() {
   bkpdir create --incremental "Changes after feature X" -v
   bkpdir inc -n "Changes after feature X" -v  # backward compatibility
 
-  # Create a file backup
+  # Create a file backup (explicit command)
   bkpdir backup myfile.txt "Before changes"
 
   # List all directory archives
@@ -120,6 +362,14 @@ func main() {
 				handleListFileBackupsCommand(args)
 				return
 			}
+
+			// ⭐ CLI-015: Automatic file/directory command detection - 🔧
+			// If positional arguments provided, auto-detect operation type
+			if len(args) > 0 {
+				handleAutoDetectedCommand(args)
+				return
+			}
+
 			// If no config flag and no subcommand, show help
 			cmd.Help()
 		},
@@ -152,7 +402,8 @@ func main() {
 	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
-	if err := rootCmd.Execute(); err != nil {
+	// ⭐ CLI-015: Custom command execution with auto-detection fallback - 🔧
+	if err := executeWithAutoDetection(rootCmd); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
