@@ -129,6 +129,7 @@ For detailed guidelines on how to document and track features, please refer to [
 ### 📚 Documentation Enhancement System [PRIORITY: HIGH]
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |
 |------------|---------------|--------------|--------------|---------|--------|----------------------|-------------|
+| INSTALL-001 | Binary installation instructions | User installation requirements | Documentation structure | Installation validation | ✅ Completed | `// INSTALL-001: Binary installation` | ⭐ CRITICAL |
 | DOC-001 | Semantic linking system | Cross-reference requirements | LinkingEngine | TestSemanticLinks | ✅ Completed | `// DOC-001: Semantic linking` | 🎯 HIGH |
 | DOC-002 | Sync framework | Synchronization requirements | SyncFramework | TestDocumentSync | 🔮 Far Future (Unlikely) | `// DOC-002: Document sync` | 📝 LOW |
 | DOC-003 | Enhanced traceability | Traceability requirements | TraceabilitySystem | TestEnhancedTrace | 🔮 Far Future (Unlikely) | `// DOC-003: Enhanced traceability` | 📝 LOW |
@@ -2288,5 +2289,36 @@ This feature enhances the CLI interface by adding intelligence to command detect
 - **Integration Tests Fixed**: Resolved "unknown command" errors in test suite by fixing path validation logic and test infrastructure
 - **Comprehensive Test Coverage**: Added TestMain_Integration_CLI015_* tests covering auto-detection, backward compatibility, and edge cases
 - **Intuitive UX**: Users can now use `bkpdir file.txt "note"` or `bkpdir directory "note"` without remembering command names
+
+#### **📚 INSTALL-001: Binary Installation Instructions - ✅ Completed**
+
+**Status**: ✅ **COMPLETED (4/4 Subtasks)** - 2025-01-03
+
+**📑 Purpose**: Add instructions for end users to install pre-compiled binaries from the repository as the primary installation method, recommending processes with curl, wget, or best options for both Ubuntu and macOS.
+
+**🔧 Implementation Summary**: **⭐ INSTALL-001: Comprehensive binary installation instructions implemented successfully.** Restructured README.md installation section to prioritize pre-compiled binary installation as the primary and recommended method. Added platform-specific installation instructions for Ubuntu (20.04, 22.04, 24.04) and macOS (Intel and Apple Silicon) with automatic architecture detection. Included curl and wget download options, user-specific installation without sudo, verification steps, and comprehensive troubleshooting guide. Maintained backward compatibility with existing installation methods (Go install, Homebrew, manual build) while making binary installation the most prominent option. Enhanced user experience with copy-paste commands, error handling, and fallback instructions.
+
+**🔧 Subtasks Completed:**
+- [x] **README.md installation section restructure** - Made binary installation primary with platform-specific instructions ✅ **COMPLETED**
+- [x] **Ubuntu installation instructions** - Added support for Ubuntu 20.04, 22.04, 24.04 with curl/wget options ✅ **COMPLETED** 
+- [x] **macOS installation instructions** - Added Intel/Apple Silicon support with auto-detection scripts ✅ **COMPLETED**
+- [x] **Documentation compliance updates** - Updated feature tracking matrix and maintained documentation standards ✅ **COMPLETED**
+
+**🎯 Installation Methods Added:**
+- **Ubuntu Support**: Quick install commands for Ubuntu 20.04, 22.04, 24.04
+- **macOS Support**: Separate binaries for Intel (amd64) and Apple Silicon (arm64)
+- **Auto-Detection**: Automatic architecture detection script for macOS
+- **User Installation**: Sudo-free installation to `~/bin` directory
+- **Verification**: Post-installation verification commands
+- **Troubleshooting**: Comprehensive troubleshooting guide
+
+**🏷️ Implementation Locations:**
+- `README.md` - Complete installation section restructure with binary installation as primary method
+- `bin/` directory - Pre-compiled binaries available for all supported platforms
+
+**📋 Documentation Updates:**
+- `docs/context/feature-tracking.md` - Added INSTALL-001 feature entry and detailed subtask breakdown
+- README.md installation section prioritizes binary installation over other methods
+- Maintained backward compatibility with existing installation documentation
 
 ### 🔧 Pre-Extraction Refactoring [PRIORITY: MEDIUM]

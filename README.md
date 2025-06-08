@@ -13,12 +13,103 @@ BkpDir is a command-line tool for archiving directories on macOS and Linux. It s
 
 ## Installation
 
-### Using Go (Recommended)
+### Using Pre-compiled Binaries (Recommended)
+
+BkpDir provides pre-compiled binaries for Ubuntu and macOS. This is the fastest and easiest installation method.
+
+#### Ubuntu (20.04, 22.04, 24.04)
+
+**Quick install for Ubuntu 24.04:**
+```bash
+# Download and install in one command
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-ubuntu24.04 -o bkpdir && \
+chmod +x bkpdir && \
+sudo mv bkpdir /usr/local/bin/
+```
+
+**For other Ubuntu versions:**
+```bash
+# Ubuntu 22.04
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-ubuntu22.04 -o bkpdir && \
+chmod +x bkpdir && sudo mv bkpdir /usr/local/bin/
+
+# Ubuntu 20.04  
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-ubuntu20.04 -o bkpdir && \
+chmod +x bkpdir && sudo mv bkpdir /usr/local/bin/
+```
+
+**Alternative with wget:**
+```bash
+# Replace 'ubuntu24.04' with your Ubuntu version (ubuntu20.04, ubuntu22.04, ubuntu24.04)
+wget https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-ubuntu24.04 -O bkpdir && \
+chmod +x bkpdir && \
+sudo mv bkpdir /usr/local/bin/
+```
+
+#### macOS (Intel and Apple Silicon)
+
+**For Apple Silicon (M1/M2) Macs:**
+```bash
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-macos-arm64 -o bkpdir && \
+chmod +x bkpdir && \
+sudo mv bkpdir /usr/local/bin/
+```
+
+**For Intel Macs:**
+```bash
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-macos-amd64 -o bkpdir && \
+chmod +x bkpdir && \
+sudo mv bkpdir /usr/local/bin/
+```
+
+**Auto-detect macOS architecture:**
+```bash
+# This script automatically detects your Mac architecture
+arch=$(uname -m)
+if [[ "$arch" == "arm64" ]]; then
+    binary="bkpdir-macos-arm64"
+else
+    binary="bkpdir-macos-amd64"
+fi
+curl -L "https://github.com/fareedst/bkpdir/raw/main/bin/$binary" -o bkpdir && \
+chmod +x bkpdir && \
+sudo mv bkpdir /usr/local/bin/
+```
+
+#### User-specific Installation (No sudo required)
+
+If you prefer to install without sudo access, you can install to your personal bin directory:
+
+```bash
+# Create personal bin directory if it doesn't exist
+mkdir -p ~/bin
+
+# For Ubuntu (replace with your version)
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-ubuntu24.04 -o ~/bin/bkpdir && chmod +x ~/bin/bkpdir
+
+# For macOS (replace with your architecture)  
+curl -L https://github.com/fareedst/bkpdir/raw/main/bin/bkpdir-macos-arm64 -o ~/bin/bkpdir && chmod +x ~/bin/bkpdir
+
+# Add ~/bin to your PATH (add this to your ~/.bashrc or ~/.zshrc)
+export PATH="$HOME/bin:$PATH"
+```
+
+#### Verify Installation
+
+After installation, verify bkpdir is working:
+```bash
+bkpdir --help
+bkpdir --version  # If version flag is supported
+```
+
+### Alternative Installation Methods
+
+#### Using Go
 ```bash
 go install github.com/fareedst/bkpdir@latest
 ```
 
-### Manual Installation
+#### Manual Build from Source
 1. Clone the repository:
 ```bash
 git clone https://github.com/fareedst/bkpdir.git
@@ -36,12 +127,30 @@ go build -o bkpdir
 sudo mv bkpdir /usr/local/bin/
 ```
 
-### Using Homebrew (macOS)
+#### Using Homebrew (macOS)
 ```bash
 brew untap fareedst/bkpdir
-brew tap fareedst/bkpdir
+brew tap fareedst/bkpdir  
 brew install bkpdir
 ```
+
+### Troubleshooting
+
+**Permission denied when running bkpdir:**
+```bash
+chmod +x /usr/local/bin/bkpdir
+# or if installed in ~/bin
+chmod +x ~/bin/bkpdir
+```
+
+**Command not found:**
+- For system-wide installation: Ensure `/usr/local/bin` is in your PATH
+- For user installation: Ensure `~/bin` is in your PATH with `export PATH="$HOME/bin:$PATH"`
+
+**Download fails:**
+- Check your internet connection
+- Try using `wget` instead of `curl`
+- Manually download from: https://github.com/fareedst/bkpdir/tree/main/bin
 
 ## Usage
 
