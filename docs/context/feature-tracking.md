@@ -93,6 +93,125 @@ For detailed guidelines on how to document and track features, please refer to [
 | CFG-004 | Comprehensive string config | String externalization | String Management | TestStringExternalization | ✅ Completed | `// CFG-004: String externalization` | 🎯 HIGH |
 | CFG-005 | Layered configuration inheritance | Configuration inheritance system | Configuration Layer | TestConfigInheritance | ✅ Completed | `// ⭐ CFG-005: Layered configuration inheritance` | ⭐ CRITICAL |
 | CFG-006 | Complete configuration reflection and visibility | ✅ Completed | 2025-01-02 | 🔺 HIGH | **🔺 CFG-006: Complete configuration reflection and visibility system with comprehensive testing implemented successfully.** Automatic field discovery using Go reflection discovers 100+ configuration fields with zero maintenance. Enhanced config command with comprehensive filtering options: --all, --overrides-only, --sources, --format (table/tree/json), --filter pattern. Hierarchical display with category grouping and inheritance chain visualization. Complete source tracking with CFG-005 integration showing environment → inheritance → defaults resolution. Enhanced CLI interface with GetAllConfigFields() and GetAllConfigValuesWithSources() providing structured metadata. **Performance optimization system with reflection result caching (60%+ overhead reduction), lazy source evaluation, incremental resolution (sub-100ms single field access), and comprehensive benchmark validation framework.** **Comprehensive testing suite with 13 test functions covering 5-phase testing strategy: advanced field discovery, source attribution accuracy, display formatting validation, filtering functionality, and performance optimization validation including stress testing and concurrent access safety.** All 7 CFG-006 subtasks completed with production-ready configuration inspection, performance optimization, and comprehensive testing system. | 🔺 HIGH |
+| CFG-TEMPLATE-001 | Configuration template generation command | ✅ Completed | 2025-01-02 | 🔺 HIGH | **✅ CFG-TEMPLATE-001: Configuration template generation command for user-friendly configuration setup.** CLI command to generate comprehensive configuration template files with all available options. Smart file naming with conflict resolution (.bkpdir.yml or .bkpdir.default-YYYY-MM-DD.yml). Template includes all Config struct fields organized by category with values from loaded configuration. Provides user-friendly way to discover and configure all available options. Leverages CFG-006 reflection system for zero-maintenance field discovery. | ✅ COMPLETED |
+
+#### **✅ CFG-TEMPLATE-001: Configuration Template Generation Command - ✅ Completed**
+
+**Status**: ✅ **COMPLETED (6/6 Subtasks)** - 2025-01-02
+
+**📑 Purpose**: Add a command to make an empty configuration YAML file in the current directory as a template for the user to select applicable options.
+
+**🔧 Implementation Summary**: **🔺 CFG-TEMPLATE-001: Configuration template generation command for user-friendly configuration setup.** CLI command to generate comprehensive configuration template files with all available options. Smart file naming with conflict resolution (.bkpdir.yml or .bkpdir.default-YYYY-MM-DD.yml). Template includes all Config struct fields organized by category with values from loaded configuration. Provides user-friendly way to discover and configure all available options. Leverages existing GetAllConfigFields() function from CFG-006 for comprehensive field discovery and CFG-005 inheritance system for value population.
+
+**🔧 CFG-TEMPLATE-001 Subtasks:**
+
+1. **[x] CLI Command Implementation** (⭐ CRITICAL) - **COMPLETED**
+   - [x] **Add template command to main.go CLI structure** - Integrate with existing cobra CLI framework
+   - [x] **Implement command flags and help text** - Support for custom filename/path and dry-run mode
+   - [x] **Add command to rootCmd** - Register with existing command structure
+   - [x] **Create handleTemplateCommand function** - Main command handler with error handling
+   - **Rationale**: Core CLI infrastructure required for template generation functionality
+   - **Status**: COMPLETED
+   - **Priority**: CRITICAL - Foundation for feature implementation ⭐
+   - **Implementation Areas**: main.go CLI integration, cobra command setup
+   - **Dependencies**: None (uses existing CLI framework)
+   - **Implementation Tokens**: `// ⭐ CFG-TEMPLATE-001: CLI command implementation`
+   - **Expected Outcomes**: `bkpdir template` command available and functional
+
+2. **[x] Configuration Reflection System** (⭐ CRITICAL) - **COMPLETED**
+   - [x] **Leverage existing GetAllConfigFields() function** - Use CFG-006 field discovery system
+   - [x] **Implement category-based organization** - Match existing documentation structure
+   - [x] **Extract YAML tag information** - Proper field naming for template generation
+   - [x] **Handle nested structs (Git, Verification)** - Complete field enumeration
+   - **Rationale**: Need comprehensive field discovery system for complete template generation
+   - **Status**: COMPLETED
+   - **Priority**: CRITICAL - Core template generation capability ⭐
+   - **Implementation Areas**: Configuration reflection, field enumeration
+   - **Dependencies**: CFG-006 (existing field discovery system)
+   - **Implementation Tokens**: `// ⭐ CFG-TEMPLATE-001: Configuration reflection`
+   - **Expected Outcomes**: Complete Config struct field enumeration with categories
+
+3. **[x] Template Generation Engine** (🔺 HIGH) - **COMPLETED**
+   - [x] **Create YAML template generator** - Generate commented YAML with all fields
+   - [x] **Implement value population from loaded configuration** - Use current config values in template
+   - [x] **Add category headers and organization** - Logical grouping of configuration fields
+   - [x] **Ensure proper indentation and formatting** - User-friendly YAML structure
+   - **Rationale**: Core template generation logic with proper formatting and value population
+   - **Status**: COMPLETED
+   - **Priority**: HIGH - Primary functionality implementation 🔺
+   - **Implementation Areas**: YAML generation, template formatting, value extraction
+   - **Dependencies**: Subtasks 1-2 (CLI and reflection systems)
+   - **Implementation Tokens**: `// 🔺 CFG-TEMPLATE-001: Template generation`
+   - **Expected Outcomes**: Well-formatted YAML template with all configuration options
+
+4. **[x] File Naming and Management** (🔺 HIGH) - **COMPLETED**
+   - [x] **Check for existing .bkpdir.yml** - Detect configuration file conflicts
+   - [x] **Generate date-based names for existing files** - .bkpdir.default-YYYY-MM-DD.yml format
+   - [x] **Safe file writing with error handling** - Prevent data loss and handle permissions
+   - [x] **Add confirmation prompts for overwrite scenarios** - User-friendly conflict resolution
+   - **Rationale**: Smart file management to prevent conflicts and data loss
+   - **Status**: COMPLETED
+   - **Priority**: HIGH - Essential for safe operation 🔺
+   - **Implementation Areas**: File operations, conflict resolution, error handling
+   - **Dependencies**: Subtask 3 (template generation)
+   - **Implementation Tokens**: `// 🔺 CFG-TEMPLATE-001: File management`
+   - **Expected Outcomes**: Safe file creation with intelligent naming and conflict resolution
+
+5. **[x] Integration Testing** (🔶 MEDIUM) - **COMPLETED**
+   - [x] **Test with empty configuration** - Validate template generation with defaults
+   - [x] **Test with existing configuration files** - Verify value population from loaded config
+   - [x] **Test with BKPDIR_CONFIG environment variable** - Ensure proper configuration loading
+   - [x] **Validate generated template structure** - Verify completeness and correctness
+   - **Rationale**: Comprehensive testing ensures reliable template generation across scenarios
+   - **Status**: COMPLETED
+   - **Priority**: MEDIUM - Quality assurance 🔶
+   - **Implementation Areas**: Test infrastructure, scenario testing, validation
+   - **Dependencies**: Subtasks 1-4 (all implementation components)
+   - **Implementation Tokens**: `// 🔶 CFG-TEMPLATE-001: Integration testing`
+   - **Expected Outcomes**: Reliable template generation tested across all scenarios
+
+6. **[x] Documentation Updates** (🔶 MEDIUM) - **COMPLETED**
+   - [x] **Update specification.md** - Document new template command functionality
+   - [x] **Update architecture.md** - Add template generation system documentation
+   - [x] **Update requirements.md** - Add template generation requirements
+   - [x] **Update testing.md** - Add test coverage requirements for template generation
+   - **Rationale**: Documentation must reflect new template generation capability
+   - **Status**: COMPLETED
+   - **Priority**: MEDIUM - Documentation compliance 🔶
+   - **Implementation Areas**: Context documentation updates
+   - **Dependencies**: Subtasks 1-5 (implementation and testing)
+   - **Implementation Tokens**: `// 🔶 CFG-TEMPLATE-001: Documentation updates`
+   - **Expected Outcomes**: Complete documentation of template generation feature
+
+**🎯 CFG-TEMPLATE-001 Success Criteria:**
+- **Command Availability**: `bkpdir template` command available and functional
+- **Template Generation**: Generates comprehensive configuration template with all available options
+- **File Management**: Handles naming conflicts appropriately with date-based naming
+- **Value Population**: Uses actual configuration values from loaded config in template
+- **Documentation**: All keys properly commented and organized by category
+- **User Experience**: User-friendly way to discover and configure all available options
+
+**🔧 Implementation Strategy:**
+1. **Phase 1 (Foundation)**: CLI command implementation + Configuration reflection (Subtasks 1-2)
+2. **Phase 2 (Core Functionality)**: Template generation + File management (Subtasks 3-4)
+3. **Phase 3 (Quality)**: Integration testing + Documentation updates (Subtasks 5-6)
+
+**🚨 DEPENDENCIES:**
+- **Builds on**: CFG-006 (configuration reflection system for field discovery)
+- **Leverages**: CFG-005 (inheritance system for value population)
+- **Integrates**: Existing CLI framework and configuration loading system
+- **Requires**: Existing cobra CLI infrastructure and YAML marshaling capabilities
+
+**📋 Key Benefits:**
+- **User-Friendly Configuration**: Easy way to discover all available configuration options
+- **Complete Coverage**: Template includes all Config struct fields with proper organization
+- **Smart File Management**: Intelligent naming to prevent conflicts and data loss
+- **Value Pre-Population**: Shows current configuration values for reference
+- **Category Organization**: Logical grouping matches documentation structure
+- **Zero Maintenance**: Leverages CFG-006 automatic field discovery for future compatibility
+
+**🔍 Notable Implementation Approach:**
+This feature leverages existing configuration infrastructure (CFG-005, CFG-006) to provide a comprehensive template generation system. The implementation builds upon proven reflection-based field discovery and inheritance-aware value population to create user-friendly configuration templates.
 
 ### 🔌 Git Integration [PRIORITY: HIGH]
 | Feature ID | Specification | Requirements | Architecture | Testing | Status | Implementation Tokens | AI Priority |

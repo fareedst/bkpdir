@@ -17,6 +17,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
@@ -246,7 +247,7 @@ func executeWithAutoDetection(rootCmd *cobra.Command) error {
 
 	// List of known commands that should be handled by Cobra normally
 	knownCommands := []string{
-		"create", "config", "full", "inc", "list", "verify", "backup", "version",
+		"create", "config", "template", "full", "inc", "list", "verify", "backup", "version",
 		"help", "--help", "-h", "--version", "-v",
 	}
 
@@ -391,6 +392,7 @@ func main() {
 	// Add commands - new specification-compliant commands first
 	rootCmd.AddCommand(createCmd())
 	rootCmd.AddCommand(configCmd())
+	rootCmd.AddCommand(templateCmd())
 
 	// Add backward compatibility commands
 	rootCmd.AddCommand(fullCmd())
@@ -629,6 +631,67 @@ func handleCreateCommand() {
 	// Implementation
 }
 
+// ⭐ CFG-TEMPLATE-001: Template command implementation - 🔧
+func handleTemplateCommand(cmd *cobra.Command, args []string) {
+	// Get flag values
+	outputFile, _ := cmd.Flags().GetString("output")
+	dryRun, _ := cmd.Flags().GetBool("dry-run")
+	force, _ := cmd.Flags().GetBool("force")
+
+	// Get current working directory
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	// ⭐ CFG-TEMPLATE-001: Configuration reflection - 🔧
+	// Load current configuration to populate template values
+	cfg, err := LoadConfig(cwd)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading configuration: %v\n", err)
+		os.Exit(1)
+	}
+
+	// ⭐ CFG-TEMPLATE-001: File management - 🔧
+	// Determine output filename
+	targetFile := determineTemplateFileName(outputFile)
+
+	// Check if file exists and handle conflicts
+	if !force && !dryRun {
+		if _, err := os.Stat(targetFile); err == nil {
+			fmt.Printf("File %s already exists. Use --force to overwrite or choose a different name.\n", targetFile)
+			os.Exit(1)
+		}
+	}
+
+	// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+	// Generate template content
+	templateContent, err := generateConfigurationTemplate(cfg)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error generating template: %v\n", err)
+		os.Exit(1)
+	}
+
+	if dryRun {
+		fmt.Printf("Would create file: %s\n", targetFile)
+		fmt.Printf("Template content:\n")
+		fmt.Printf("=================\n")
+		fmt.Print(templateContent)
+		return
+	}
+
+	// Write template to file
+	err = writeTemplateToFile(targetFile, templateContent)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error writing template file: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("✅ Configuration template created: %s\n", targetFile)
+	fmt.Printf("📝 Edit the file to customize your configuration options\n")
+}
+
 func handleListCommand() {
 	// ⭐ ARCH-002: Archive listing command implementation - 📝
 	// 🔺 CFG-003: Archive listing output formatting - 📝
@@ -771,6 +834,41 @@ func createCmd() *cobra.Command {
 			handleCreateCommand()
 		},
 	}
+	return cmd
+}
+
+func templateCmd() *cobra.Command {
+	// ⭐ CFG-TEMPLATE-001: CLI command implementation - 🔧
+	cmd := &cobra.Command{
+		Use:   "template",
+		Short: "Generate configuration template file",
+		Long: `Generate a comprehensive configuration template with all available options.
+
+Creates a YAML configuration file with all possible configuration keys, properly 
+commented and organized by category. Values are populated from the current 
+configuration after loading BKPDIR_CONFIG.
+
+File naming:
+- Creates .bkpdir.yml if it doesn't exist
+- Creates .bkpdir.default-YYYY-MM-DD.yml if .bkpdir.yml already exists`,
+		Example: `  # Generate template in current directory
+  bkpdir template
+
+  # Generate template with custom filename
+  bkpdir template --output custom-config.yml
+
+  # Preview template without creating file
+  bkpdir template --dry-run`,
+		Run: func(cmd *cobra.Command, args []string) {
+			handleTemplateCommand(cmd, args)
+		},
+	}
+
+	// Add flags
+	cmd.Flags().StringP("output", "o", "", "Custom output filename (default: .bkpdir.yml or .bkpdir.default-YYYY-MM-DD.yml)")
+	cmd.Flags().BoolP("dry-run", "d", false, "Show what would be written without creating the file")
+	cmd.Flags().BoolP("force", "f", false, "Overwrite existing files without confirmation")
+
 	return cmd
 }
 
@@ -1488,5 +1586,176 @@ func (h *CommandHandler) HandleDisplayConfig(args []string) error {
 	for _, cv := range configValues {
 		h.config.Formatter.PrintConfigValue(cv.Name, cv.Value, cv.Source)
 	}
+	return nil
+}
+
+// ⭐ CFG-TEMPLATE-001: File management - 🔧
+// determineTemplateFileName decides the target filename for the template based on user input and existing files
+func determineTemplateFileName(customOutput string) string {
+	if customOutput != "" {
+		return customOutput
+	}
+
+	// Check if .bkpdir.yml exists
+	defaultFile := ".bkpdir.yml"
+	if _, err := os.Stat(defaultFile); os.IsNotExist(err) {
+		return defaultFile
+	}
+
+	// Generate date-based filename if default exists
+	currentTime := time.Now()
+	dateBasedFile := fmt.Sprintf(".bkpdir.default-%s.yml", currentTime.Format("2006-01-02"))
+	return dateBasedFile
+}
+
+// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// generateConfigurationTemplate creates a comprehensive YAML template with all Config fields
+func generateConfigurationTemplate(cfg *Config) (string, error) {
+	var template strings.Builder
+
+	// Add header
+	template.WriteString("# BkpDir Configuration Template\n")
+	template.WriteString("# Generated on: " + time.Now().Format("2006-01-02 15:04:05") + "\n")
+	template.WriteString("#\n")
+	template.WriteString("# This template includes all available configuration options organized by category.\n")
+	template.WriteString("# Uncomment and modify the values you want to customize.\n")
+	template.WriteString("# Values shown are the current effective configuration after loading BKPDIR_CONFIG.\n")
+	template.WriteString("#\n")
+	template.WriteString("# For more information, see: docs/configuration.md\n")
+	template.WriteString("\n")
+
+	// ⭐ CFG-TEMPLATE-001: Configuration reflection - 🔧
+	// Use existing CFG-006 field discovery system
+	allFields := GetAllConfigFields(cfg)
+
+	// Group fields by category
+	categories := make(map[string][]configFieldInfo)
+	for _, field := range allFields {
+		category := field.Category
+		if category == "" {
+			category = "other"
+		}
+		categories[category] = append(categories[category], field)
+	}
+
+	// Define category order for better organization
+	categoryOrder := []string{
+		"basic_settings", "archive_settings", "backup_settings", "verification", "inheritance",
+		"status_codes", "format_strings", "template_strings", "regex_patterns",
+	}
+
+	// Generate template sections by category
+	for _, categoryName := range categoryOrder {
+		fields, exists := categories[categoryName]
+		if !exists || len(fields) == 0 {
+			continue
+		}
+
+		// Category header
+		categoryTitle := strings.Title(strings.ReplaceAll(categoryName, "_", " "))
+		template.WriteString(fmt.Sprintf("# %s Configuration\n", categoryTitle))
+		template.WriteString(strings.Repeat("#", len(categoryTitle)+16) + "\n")
+
+		// Add category description
+		addCategoryDescription(&template, categoryName)
+		template.WriteString("\n")
+
+		// Generate fields for this category
+		for _, field := range fields {
+			generateFieldTemplate(&template, field, cfg)
+		}
+
+		template.WriteString("\n")
+	}
+
+	return template.String(), nil
+}
+
+// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// addCategoryDescription adds helpful descriptions for each configuration category
+func addCategoryDescription(template *strings.Builder, categoryName string) {
+	descriptions := map[string]string{
+		"basic_settings":   "# Basic backup and archive settings including paths, patterns, and file handling",
+		"archive_settings": "# Directory archive specific settings for archive creation and management",
+		"backup_settings":  "# File backup specific settings for individual file backup operations",
+		"verification":     "# Archive verification settings including checksum algorithms and validation",
+		"inheritance":      "# Configuration inheritance settings for loading configuration from multiple files",
+		"status_codes":     "# Exit status codes for various operation outcomes and error conditions",
+		"format_strings":   "# Printf-style format strings for output messages and display formatting",
+		"template_strings": "# Template-based format strings with placeholders for dynamic content",
+		"regex_patterns":   "# Regular expression patterns for filename parsing and data extraction",
+	}
+
+	if desc, exists := descriptions[categoryName]; exists {
+		template.WriteString(desc + "\n")
+	}
+}
+
+// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// generateFieldTemplate creates a commented YAML entry for a single configuration field
+func generateFieldTemplate(template *strings.Builder, field configFieldInfo, cfg *Config) {
+	// Get current value
+	currentValue := formatFieldValue(field.Value, field.Kind)
+
+	// Format the field with proper indentation
+	yamlKey := field.YAMLName
+
+	// Handle nested fields (like git.enabled)
+	if strings.Contains(field.Path, ".") {
+		// For nested fields, we need special handling
+		parts := strings.Split(field.Path, ".")
+		if len(parts) == 2 {
+			parentKey := parts[0]
+			childKey := field.YAMLName
+
+			// Check if this is the first field of a nested struct
+			if field.Name == getFirstFieldOfStruct(field.Path) {
+				template.WriteString(fmt.Sprintf("# %s:\n", parentKey))
+			}
+			template.WriteString(fmt.Sprintf("#   %s: %s\n", childKey, currentValue))
+			return
+		}
+	}
+
+	// Regular field
+	template.WriteString(fmt.Sprintf("# %s: %s\n", yamlKey, currentValue))
+}
+
+// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// getFirstFieldOfStruct determines if this is the first field of a nested struct (for proper formatting)
+func getFirstFieldOfStruct(fieldPath string) string {
+	parts := strings.Split(fieldPath, ".")
+	if len(parts) != 2 {
+		return ""
+	}
+
+	parent := parts[0]
+	switch parent {
+	case "verification":
+		return "VerifyOnCreate"
+	case "git":
+		return "Enabled"
+	default:
+		return ""
+	}
+}
+
+// ⭐ CFG-TEMPLATE-001: File management - 🔧
+// writeTemplateToFile safely writes the template content to the specified file
+func writeTemplateToFile(filename, content string) error {
+	// Create backup of existing file if it exists
+	if _, err := os.Stat(filename); err == nil {
+		backupName := filename + ".backup"
+		if err := copyFile(filename, backupName); err != nil {
+			return fmt.Errorf("failed to create backup: %v", err)
+		}
+	}
+
+	// Write template content
+	err := os.WriteFile(filename, []byte(content), 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write template file: %v", err)
+	}
+
 	return nil
 }
