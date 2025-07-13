@@ -88,6 +88,13 @@ help:
 	@echo "  test-bench      Run benchmark tests"
 	@echo "  test-all        Run all test variants"
 	@echo ""
+	@echo "Performance testing targets:"
+	@echo "  test-performance Run smoke performance tests (< 30s)"
+	@echo "  test-performance-smoke Run smoke performance tests (< 30s)"
+	@echo "  test-performance-integration Run integration performance tests (< 5m)"
+	@echo "  test-performance-full Run full performance tests (< 30m)"
+	@echo "  test-performance-comprehensive Run original comprehensive tests (15+ min)"
+	@echo ""
 	@echo "Code quality targets:"
 	@echo "  lint            Run linter (revive) with icon validation"
 	@echo "  validate-icons  Validate implementation token icon consistency (DOC-007)"
@@ -159,11 +166,34 @@ install: build-local
 test:
 	@echo "Running tests..."
 	go test ./...
+	@echo "Running smoke performance tests..."
+	@$(MAKE) test-performance-smoke
 	@echo "✓ All tests passed"
 
 test-verbose:
 	@echo "Running tests with verbose output..."
 	go test -v ./...
+
+# Performance test tiers for different contexts
+test-performance-smoke:
+	@echo "🚀 Running smoke performance tests (< 30s)..."
+	@go test -short -run TestPerformanceByTier ./test/performance/
+
+test-performance-integration:
+	@echo "🔄 Running integration performance tests (< 5m)..."
+	@PERFORMANCE_TEST_TIER=integration go test -run TestPerformanceByTier ./test/performance/
+
+test-performance-full:
+	@echo "🎯 Running full performance tests (< 30m)..."
+	@PERFORMANCE_TEST_TIER=full go test -run TestPerformanceByTier ./test/performance/
+
+# Default performance test for regular development
+test-performance: test-performance-smoke
+
+# Run original comprehensive performance tests (opt-in)
+test-performance-comprehensive:
+	@echo "🎯 Running comprehensive performance tests (may take 15+ minutes)..."
+	@RUN_FULL_PERFORMANCE_TESTS=1 go test -run TestDOC014ValidationPerformanceFull ./test/performance/
 
 # Legacy coverage target (preserved for compatibility)
 test-coverage:
@@ -300,7 +330,7 @@ vet:
 lint: validate-icon-enforcement
 	@echo "Running linter (revive)..."
 	@if command -v revive >/dev/null 2>&1; then \
-		revive -config revive.toml -formatter friendly ./...; \
+		revive -config .revive.toml -formatter friendly ./...; \
 		echo "✓ Linting completed"; \
 	else \
 		echo "⚠️  revive not installed, skipping linting"; \

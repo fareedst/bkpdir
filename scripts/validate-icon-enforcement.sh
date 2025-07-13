@@ -84,29 +84,9 @@ fi
 
 # 🔍 DOC-008: Master icon definitions
 # Define master icons and their meanings based on standardized system
-declare -A MASTER_ICONS
-MASTER_ICONS=(
-    ["⭐"]="CRITICAL"
-    ["🔺"]="HIGH"
-    ["🔶"]="MEDIUM"
-    ["🔻"]="LOW"
-    ["🚀"]="PHASE_1"
-    ["⚡"]="PHASE_2"
-    ["🔄"]="PHASE_3"
-    ["🏁"]="PHASE_4"
-    ["1️⃣"]="STEP_1"
-    ["2️⃣"]="STEP_2"
-    ["3️⃣"]="STEP_3"
-    ["✅"]="COMPLETE"
-    ["📑"]="PURPOSE"
-    ["📋"]="CHECKLIST"
-    ["📊"]="ANALYSIS"
-    ["📖"]="REFERENCE"
-    ["🔍"]="SEARCH"
-    ["📝"]="DOCUMENT"
-    ["🔧"]="CONFIGURE"
-    ["🛡️"]="PROTECT"
-)
+# Using arrays instead of associative arrays for better bash compatibility
+MASTER_ICONS_SYMBOLS=("⭐" "🔺" "🔶" "🔻" "🚀" "⚡" "🔄" "🏁" "1️⃣" "2️⃣" "3️⃣" "✅" "📑" "📋" "📊" "📖" "🔍" "📝" "🔧" "🛡️")
+MASTER_ICONS_MEANINGS=("CRITICAL" "HIGH" "MEDIUM" "LOW" "PHASE_1" "PHASE_2" "PHASE_3" "PHASE_4" "STEP_1" "STEP_2" "STEP_3" "COMPLETE" "PURPOSE" "CHECKLIST" "ANALYSIS" "REFERENCE" "SEARCH" "DOCUMENT" "CONFIGURE" "PROTECT")
 
 # Priority icons for implementation tokens
 PRIORITY_ICONS="⭐🔺🔶🔻"
@@ -115,13 +95,26 @@ ACTION_ICONS="🔍📝🔧🛡️"
 # Function to check if icon is in master list
 is_master_icon() {
     local icon="$1"
-    [[ -n "${MASTER_ICONS[$icon]}" ]]
+    local i
+    for i in "${!MASTER_ICONS_SYMBOLS[@]}"; do
+        if [[ "${MASTER_ICONS_SYMBOLS[$i]}" == "$icon" ]]; then
+            return 0
+        fi
+    done
+    return 1
 }
 
 # Function to get icon meaning
 get_icon_meaning() {
     local icon="$1"
-    echo "${MASTER_ICONS[$icon]:-UNKNOWN}"
+    local i
+    for i in "${!MASTER_ICONS_SYMBOLS[@]}"; do
+        if [[ "${MASTER_ICONS_SYMBOLS[$i]}" == "$icon" ]]; then
+            echo "${MASTER_ICONS_MEANINGS[$i]}"
+            return
+        fi
+    done
+    echo "UNKNOWN"
 }
 
 # 🔍 DOC-008: Load validation patterns from context files
@@ -139,14 +132,15 @@ load_validation_patterns() {
     fi
     
     # Count master icons
-    local icon_count=${#MASTER_ICONS[@]}
+    local icon_count=${#MASTER_ICONS_SYMBOLS[@]}
     echo -e "  ${GREEN}✅ Master icon definitions loaded: $icon_count unique icons${NC}"
     ((successes++))
     
     if [[ "$VERBOSE" == "true" ]]; then
         echo -e "  ${CYAN}📋 Master icons defined:${NC}"
-        for icon in "${!MASTER_ICONS[@]}"; do
-            echo -e "    $icon → ${MASTER_ICONS[$icon]}"
+        local i
+        for i in "${!MASTER_ICONS_SYMBOLS[@]}"; do
+            echo -e "    ${MASTER_ICONS_SYMBOLS[$i]} → ${MASTER_ICONS_MEANINGS[$i]}"
         done
     fi
 }
@@ -178,10 +172,18 @@ validate_documentation_icons() {
             local unknown_icons=()
             
             # Count priority icons
-            if grep -q "⭐" "$doc_file"; then ((priority_icons_found++)); fi
-            if grep -q "🔺" "$doc_file"; then ((priority_icons_found++)); fi
-            if grep -q "🔶" "$doc_file"; then ((priority_icons_found++)); fi
-            if grep -q "🔻" "$doc_file"; then ((priority_icons_found++)); fi
+            if grep -q "⭐" "$doc_file"; then 
+                priority_icons_found=$((priority_icons_found + 1))
+            fi
+            if grep -q "🔺" "$doc_file"; then 
+                priority_icons_found=$((priority_icons_found + 1))
+            fi
+            if grep -q "🔶" "$doc_file"; then 
+                priority_icons_found=$((priority_icons_found + 1))
+            fi
+            if grep -q "🔻" "$doc_file"; then 
+                priority_icons_found=$((priority_icons_found + 1))
+            fi
             
             if [[ $priority_icons_found -gt 0 ]]; then
                 echo -e "    ${GREEN}✅ Priority icons found: $priority_icons_found types${NC}"
@@ -488,7 +490,7 @@ EOF
     cat >> "$report_file" << EOF
 ## Enforcement Status
 
-- **Icon System**: Comprehensive (${#MASTER_ICONS[@]} icons defined)
+- **Icon System**: Comprehensive (${#MASTER_ICONS_SYMBOLS[@]} icons defined)
 - **Documentation Compliance**: $([ $((errors + warnings)) -lt 10 ] && echo "✅ Good" || echo "❌ Needs improvement")
 - **Code Standardization**: $([ $standardization_rate -gt 80 ] 2>/dev/null && echo "✅ Good ($standardization_rate%)" || echo "⚠️ In progress ($standardization_rate%)")
 - **Automation**: $(grep -q "validate-icon" Makefile 2>/dev/null && echo "✅ Integrated" || echo "❌ Missing")
