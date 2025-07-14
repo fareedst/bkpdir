@@ -1,6 +1,6 @@
 # 📖 BkpDir Package Reference
 
-> **🔺 EXTRACT-008: Package reference documentation - 📖 API and configuration reference**
+> **[HIGH] EXTRACT-008: Package reference documentation - 📖 API and configuration reference**
 
 ## 🎯 Overview
 
@@ -49,11 +49,11 @@ type Loader interface {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Load Configuration
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Config API examples
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Config API examples
 func Load() (*Config, error)
 func LoadFrom(path string) (*Config, error)
 func LoadWithDefaults(defaults map[string]interface{}) (*Config, error)
@@ -153,11 +153,11 @@ type Collector interface {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Error Creation
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Error handling patterns
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Error handling patterns
 func New(message string) Error
 func Wrap(err error, message string) Error
 func Wrapf(err error, format string, args ...interface{}) Error
@@ -245,11 +245,11 @@ type Manager interface {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Resource Management
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Resource management patterns
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Resource management patterns
 func Acquire(resourceType string) (Resource, error)
 func AcquireWithTimeout(resourceType string, timeout time.Duration) (Resource, error)
 func Release(resource Resource) error
@@ -321,11 +321,11 @@ type Template interface {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Formatter Creation
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Formatter API examples
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Formatter API examples
 func New(format string) Formatter
 func NewWithOptions(format string, options Options) Formatter
 
@@ -428,11 +428,11 @@ type FileStatus struct {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Repository Discovery
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Git API examples
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Git API examples
 func Discover(path string) (Repository, error)
 func Init(path string) (Repository, error)
 func Clone(url, path string) (Repository, error)
@@ -536,11 +536,11 @@ type Flag struct {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Application Setup
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 CLI API examples
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 CLI API examples
 func NewApp(name, description string) App
 func (a App) AddCommand(cmd *Command) error
 func (a App) Run(ctx context.Context, args []string) error
@@ -633,11 +633,11 @@ type Comparer interface {
 }
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### File Operations
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 File operations examples
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 File operations examples
 func Exists(path string) bool
 func IsAccessible(path string) bool
 func Stat(path string) (*FileInfo, error)
@@ -698,7 +698,7 @@ if same {
 }
 ```
 
-### 🛡️ Safety Features
+### [ACTION:validation] Safety Features
 
 | Feature | Description | Benefit |
 |---------|-------------|---------|
@@ -737,11 +737,11 @@ type ProcessFunc func(item string) error
 type CallbackFunc func(item string, err error)
 ```
 
-### 🔧 Core Functions
+### [ACTION:core-functionality] Core Functions
 
 #### Pool Management
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Processing API examples
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Processing API examples
 func NewPool(workers int) Pool
 func NewPoolWithResources(workers int, resources []Resource) Pool
 func (p Pool) Process(ctx context.Context, items []string, fn ProcessFunc) error
@@ -811,7 +811,7 @@ pool.SetProgressCallback(func(progress *Progress) {
 
 ### Error Handling Across Packages
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Cross-package error handling
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Cross-package error handling
 func IntegratedOperation() error {
     // Load configuration
     cfg, err := config.Load()
@@ -842,7 +842,7 @@ func IntegratedOperation() error {
 
 ### Testing Utilities
 ```go
-// 🔺 EXTRACT-008: Package reference documentation - 📖 Testing utilities
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 Testing utilities
 func TestIntegration(t *testing.T) {
     // Create test configuration
     cfg := &config.Config{
@@ -885,4 +885,4 @@ Each package is designed to work independently while providing seamless integrat
 
 ---
 
-**🔺 EXTRACT-008: Package reference documentation - 📖 Comprehensive API and configuration reference** 
+**[HIGH] EXTRACT-008: Package reference documentation - 📖 Comprehensive API and configuration reference** 

@@ -1,4 +1,4 @@
-// 🔶 DOC-012: Real-time validation service - ⚡ Live validation with sub-second response times
+// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 
 import (
@@ -122,7 +122,7 @@ func NewValidationCache(ttl time.Duration) *ValidationCache {
 		ttl:     ttl,
 	}
 
-	// 🔶 DOC-012: Performance optimization - ⚡ Automatic cache cleanup
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	go cache.cleanupWorker()
 
 	return cache
@@ -132,13 +132,13 @@ func NewValidationCache(ttl time.Duration) *ValidationCache {
 func (rtv *RealTimeValidator) ValidateRealtimeFile(ctx context.Context, filePath string, content string) (*RealTimeValidationUpdate, error) {
 	startTime := time.Now()
 
-	// 🔶 DOC-012: Performance optimization - 🔍 Cache lookup for speed
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if cached := rtv.cache.Get(filePath, content); cached != nil {
 		rtv.metricsTracker.RecordCacheHit()
 		return rtv.createUpdateFromResponse(filePath, cached, time.Since(startTime)), nil
 	}
 
-	// 🔶 DOC-012: Live validation processing - 🔧 Real-time validation execution
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	request := ValidationRequest{
 		SourceFiles:    []string{filePath},
 		ValidationMode: "realtime", // Special mode for real-time validation
@@ -151,7 +151,7 @@ func (rtv *RealTimeValidator) ValidateRealtimeFile(ctx context.Context, filePath
 
 	response, err := rtv.gateway.ProcessValidationRequest(ctx, request)
 	if err != nil {
-		return nil, fmt.Errorf("🔶 DOC-012: Real-time validation failed: %w", err)
+		return nil, fmt.Errorf("[MEDIUM] DOC-012: Real-time validation failed: %w", err)
 	}
 
 	// Cache the result for performance optimization
@@ -189,7 +189,7 @@ func (rtv *RealTimeValidator) SubscribeToValidation(subscriberID string, files [
 	rtv.mu.Lock()
 	defer rtv.mu.Unlock()
 
-	// 🔶 DOC-012: Editor integration - 🔧 Real-time subscription management
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	subscriber := &ValidationSubscriber{
 		ID:       subscriberID,
 		Channel:  make(chan *RealTimeValidationUpdate, 100),
@@ -224,7 +224,7 @@ func (rtv *RealTimeValidator) UnsubscribeFromValidation(subscriberID string) {
 
 // GetValidationStatusIndicator provides current validation status for display
 func (rtv *RealTimeValidator) GetValidationStatusIndicator(files []string) *ValidationStatusIndicator {
-	// 🔶 DOC-012: Status indicators - 📊 Visual compliance status
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	fileStatus := make(map[string]string)
 	totalErrors := 0
 	totalWarnings := 0
@@ -254,7 +254,7 @@ func (rtv *RealTimeValidator) GetValidationStatusIndicator(files []string) *Vali
 
 // StartValidationServer starts the real-time validation HTTP server
 func (rtv *RealTimeValidator) StartValidationServer(port int) error {
-	// 🔶 DOC-012: Live validation service - 🔧 HTTP API for real-time validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	http.HandleFunc("/validate", rtv.handleValidationRequest)
 	http.HandleFunc("/subscribe", rtv.handleSubscriptionRequest)
 	http.HandleFunc("/status", rtv.handleStatusRequest)
@@ -262,14 +262,14 @@ func (rtv *RealTimeValidator) StartValidationServer(port int) error {
 	http.HandleFunc("/metrics", rtv.handleMetricsRequest)
 
 	serverAddr := fmt.Sprintf(":%d", port)
-	fmt.Printf("🔶 DOC-012: Real-time validation server starting on %s\n", serverAddr)
+	fmt.Printf("[MEDIUM] DOC-012: Real-time validation server starting on %s\n", serverAddr)
 
 	return http.ListenAndServe(serverAddr, nil)
 }
 
 // generateIntelligentSuggestions creates intelligent correction suggestions
 func (rtv *RealTimeValidator) generateIntelligentSuggestions(filePath string, content string, response *ValidationResponse) []IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 📝 Smart suggestions based on validation results
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	var suggestions []IntelligentSuggestion
 
 	for _, err := range response.Errors {
@@ -293,7 +293,7 @@ func (rtv *RealTimeValidator) generateIntelligentSuggestions(filePath string, co
 
 // createSuggestionFromError creates a suggestion from a validation error
 func (rtv *RealTimeValidator) createSuggestionFromError(filePath string, content string, error AIOptimizedError) *IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 🔧 Error-based suggestions
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	switch error.Category {
 	case "icon_format":
 		return rtv.createIconFormatSuggestion(filePath, error)
@@ -308,7 +308,7 @@ func (rtv *RealTimeValidator) createSuggestionFromError(filePath string, content
 
 // createSuggestionFromWarning creates a suggestion from a validation warning
 func (rtv *RealTimeValidator) createSuggestionFromWarning(filePath string, content string, warning AIOptimizedWarning) *IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 📝 Warning-based suggestions
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return &IntelligentSuggestion{
 		SuggestionID: fmt.Sprintf("warn-%s-%d", filepath.Base(filePath), time.Now().UnixNano()),
 		Type:         "improvement",
@@ -448,7 +448,7 @@ func (pm *PerformanceMetrics) DecrementActiveSubscribers() {
 
 // Real-time validator helper methods
 func (rtv *RealTimeValidator) createUpdateFromResponse(filePath string, response *ValidationResponse, processingTime time.Duration) *RealTimeValidationUpdate {
-	// 🔶 DOC-012: Performance optimization - 🔧 Cached response processing
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestions := rtv.generateIntelligentSuggestions(filePath, "", response)
 	statusIndicator := rtv.createStatusIndicator(response)
 
@@ -466,7 +466,7 @@ func (rtv *RealTimeValidator) createUpdateFromResponse(filePath string, response
 }
 
 func (rtv *RealTimeValidator) createStatusIndicator(response *ValidationResponse) *ValidationStatusIndicator {
-	// 🔶 DOC-012: Status indicators - 📊 Visual feedback creation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	errorCount := len(response.Errors)
 	warningCount := len(response.Warnings)
 
@@ -495,7 +495,7 @@ func (rtv *RealTimeValidator) createStatusIndicator(response *ValidationResponse
 }
 
 func (rtv *RealTimeValidator) notifySubscribers(filePath string, update *RealTimeValidationUpdate) {
-	// 🔶 DOC-012: Editor integration - 📝 Real-time notification system
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	rtv.mu.RLock()
 	defer rtv.mu.RUnlock()
 
@@ -528,7 +528,7 @@ func (rtv *RealTimeValidator) cleanupInactiveSubscriber(subscriberID string) {
 }
 
 func (rtv *RealTimeValidator) determineOverallStatus(fileStatus map[string]string) string {
-	// 🔶 DOC-012: Status indicators - 🔍 Overall status calculation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	hasErrors := false
 	hasWarnings := false
 
@@ -551,7 +551,7 @@ func (rtv *RealTimeValidator) determineOverallStatus(fileStatus map[string]strin
 }
 
 func (rtv *RealTimeValidator) calculateComplianceLevel(errorCount, warningCount, fileCount int) string {
-	// 🔶 DOC-012: Status indicators - 📊 Compliance level calculation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if errorCount == 0 && warningCount == 0 {
 		return "excellent"
 	}
@@ -565,13 +565,13 @@ func (rtv *RealTimeValidator) calculateComplianceLevel(errorCount, warningCount,
 }
 
 func (rtv *RealTimeValidator) createVisualElements(overallStatus, complianceLevel string) *VisualElements {
-	// 🔶 DOC-012: Status indicators - 🎨 Visual element creation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	elements := &VisualElements{}
 
 	switch overallStatus {
 	case "pass":
 		elements.StatusColor = "#28a745" // Green
-		elements.StatusIcon = "✅"
+		elements.StatusIcon = "[SUCCESS]"
 		elements.AnimationType = "pulse-success"
 	case "warning":
 		elements.StatusColor = "#ffc107" // Yellow
@@ -610,7 +610,7 @@ func (rtv *RealTimeValidator) createVisualElements(overallStatus, complianceLeve
 
 // Intelligent suggestion creation methods
 func (rtv *RealTimeValidator) createIconFormatSuggestion(filePath string, error AIOptimizedError) *IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 🔧 Icon format suggestions
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return &IntelligentSuggestion{
 		SuggestionID: fmt.Sprintf("icon-%s-%d", filepath.Base(filePath), time.Now().UnixNano()),
 		Type:         "icon_fix",
@@ -625,7 +625,7 @@ func (rtv *RealTimeValidator) createIconFormatSuggestion(filePath string, error 
 }
 
 func (rtv *RealTimeValidator) createTokenFormatSuggestion(filePath string, error AIOptimizedError) *IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 📝 Token format suggestions
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return &IntelligentSuggestion{
 		SuggestionID: fmt.Sprintf("token-%s-%d", filepath.Base(filePath), time.Now().UnixNano()),
 		Type:         "token_format",
@@ -640,7 +640,7 @@ func (rtv *RealTimeValidator) createTokenFormatSuggestion(filePath string, error
 }
 
 func (rtv *RealTimeValidator) createPriorityMismatchSuggestion(filePath string, error AIOptimizedError) *IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - ⭐ Priority correction suggestions
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return &IntelligentSuggestion{
 		SuggestionID: fmt.Sprintf("priority-%s-%d", filepath.Base(filePath), time.Now().UnixNano()),
 		Type:         "priority_correct",
@@ -655,7 +655,7 @@ func (rtv *RealTimeValidator) createPriorityMismatchSuggestion(filePath string, 
 }
 
 func (rtv *RealTimeValidator) createGenericSuggestion(filePath string, error AIOptimizedError) *IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 🔧 Generic suggestions
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return &IntelligentSuggestion{
 		SuggestionID: fmt.Sprintf("generic-%s-%d", filepath.Base(filePath), time.Now().UnixNano()),
 		Type:         "improvement",
@@ -670,7 +670,7 @@ func (rtv *RealTimeValidator) createGenericSuggestion(filePath string, error AIO
 }
 
 func (rtv *RealTimeValidator) generateProactiveSuggestions(filePath string, content string) []IntelligentSuggestion {
-	// 🔶 DOC-012: Intelligent corrections - 🔍 Proactive suggestion generation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	var suggestions []IntelligentSuggestion
 
 	// Look for potential improvements in token format
@@ -681,12 +681,12 @@ func (rtv *RealTimeValidator) generateProactiveSuggestions(filePath string, cont
 		for _, match := range matches {
 			if len(match) >= 3 {
 				// Check if token could be enhanced with icons
-				if !strings.Contains(match[0], "🔶") && !strings.Contains(match[0], "⭐") {
+				if !strings.Contains(match[0], "[MEDIUM]") && !strings.Contains(match[0], "[CRITICAL]") {
 					suggestions = append(suggestions, IntelligentSuggestion{
 						SuggestionID: fmt.Sprintf("proactive-%s-%d", filepath.Base(filePath), time.Now().UnixNano()),
 						Type:         "icon_enhancement",
 						Original:     match[0],
-						Suggested:    fmt.Sprintf("// 🔶 %s:%s", match[1], match[2]),
+						Suggested:    fmt.Sprintf("// %s:%s", match[1], match[2]),
 						Confidence:   0.7,
 						Reason:       "Add priority icon for better visibility",
 						FileLocation: nil, // Would need line number detection
@@ -703,31 +703,31 @@ func (rtv *RealTimeValidator) generateProactiveSuggestions(filePath string, cont
 
 // Fix generation helper methods
 func (rtv *RealTimeValidator) generateIconFormatFix(error AIOptimizedError) string {
-	// 🔶 DOC-012: Intelligent corrections - 🔧 Icon format fixes
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(error.Message, "missing priority icon") {
-		return "Add appropriate priority icon (⭐🔺🔶🔻) based on feature importance"
+		return "Add appropriate priority icon ([CRITICAL][HIGH][MEDIUM][LOW]) based on feature importance"
 	}
 	if strings.Contains(error.Message, "missing action icon") {
-		return "Add appropriate action icon (🔍📝🔧🛡️) based on function behavior"
+		return "Add appropriate action icon ([CHECK][NOTE][ACTION][ACTION:validation]) based on function behavior"
 	}
 	return "Review icon format requirements in documentation"
 }
 
 func (rtv *RealTimeValidator) generateTokenFormatFix(error AIOptimizedError) string {
-	// 🔶 DOC-012: Intelligent corrections - 📝 Token format fixes
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(error.Message, "token format") {
-		return "Use format: // 🔶 FEATURE-ID: Description - 🔧 Action description"
+		return "Use format: // FEATURE-ID: Description Action description"
 	}
 	return "Review token format requirements in DOC-008 documentation"
 }
 
 func (rtv *RealTimeValidator) generatePriorityFix(error AIOptimizedError) string {
-	// 🔶 DOC-012: Intelligent corrections - ⭐ Priority alignment fixes
-	return "Review feature priority in feature-tracking.md and use appropriate icon: ⭐ Critical, 🔺 High, 🔶 Medium, 🔻 Low"
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+	return "Review feature priority in requirements.md and use appropriate token: [CRITICAL], [HIGH], [MEDIUM], [LOW]"
 }
 
 func (rtv *RealTimeValidator) generateSuggestionFromWarning(warning AIOptimizedWarning) string {
-	// 🔶 DOC-012: Intelligent corrections - 📝 Warning-based improvements
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	switch warning.Category {
 	case "token_consistency":
 		return "Consider standardizing token format for better consistency"
@@ -740,7 +740,7 @@ func (rtv *RealTimeValidator) generateSuggestionFromWarning(warning AIOptimizedW
 
 // HTTP handlers for the real-time validation server
 func (rtv *RealTimeValidator) handleValidationRequest(w http.ResponseWriter, r *http.Request) {
-	// 🔶 DOC-012: Live validation service - 🔧 HTTP validation endpoint
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -770,7 +770,7 @@ func (rtv *RealTimeValidator) handleValidationRequest(w http.ResponseWriter, r *
 }
 
 func (rtv *RealTimeValidator) handleSubscriptionRequest(w http.ResponseWriter, r *http.Request) {
-	// 🔶 DOC-012: Editor integration - 🔧 WebSocket subscription endpoint
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "WebSocket subscription endpoint - implement WebSocket upgrade here",
@@ -779,7 +779,7 @@ func (rtv *RealTimeValidator) handleSubscriptionRequest(w http.ResponseWriter, r
 }
 
 func (rtv *RealTimeValidator) handleStatusRequest(w http.ResponseWriter, r *http.Request) {
-	// 🔶 DOC-012: Status indicators - 📊 Status endpoint
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	files := r.URL.Query()["files"]
 	if len(files) == 0 {
 		http.Error(w, "No files specified", http.StatusBadRequest)
@@ -792,7 +792,7 @@ func (rtv *RealTimeValidator) handleStatusRequest(w http.ResponseWriter, r *http
 }
 
 func (rtv *RealTimeValidator) handleSuggestionsRequest(w http.ResponseWriter, r *http.Request) {
-	// 🔶 DOC-012: Intelligent corrections - 📝 Suggestions endpoint
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Intelligent suggestions endpoint",
@@ -801,7 +801,7 @@ func (rtv *RealTimeValidator) handleSuggestionsRequest(w http.ResponseWriter, r 
 }
 
 func (rtv *RealTimeValidator) handleMetricsRequest(w http.ResponseWriter, r *http.Request) {
-	// 🔶 DOC-012: Performance optimization - 📊 Metrics endpoint
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	rtv.metricsTracker.mu.RLock()
 	defer rtv.metricsTracker.mu.RUnlock()
 

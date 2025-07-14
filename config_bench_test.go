@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// 🔶 CFG-006: Performance optimization - Benchmark validation
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.4: Add benchmark validation
 
 // BenchmarkGetAllConfigFields benchmarks field discovery performance.

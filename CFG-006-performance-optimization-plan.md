@@ -2,9 +2,9 @@
 
 **Task ID**: CFG-006 Subtask 6  
 **Feature ID**: CFG-006  
-**Priority**: 🔶 MEDIUM  
+**Priority**: [MEDIUM] MEDIUM  
 **Protocol**: PERFORMANCE Protocol [PRIORITY: MEDIUM]  
-**Implementation Tokens**: `// 🔶 CFG-006: Performance optimization`
+**Implementation Tokens**: `// [MEDIUM] CFG-006: Performance optimization`
 **Status**: ✅ COMPLETED SUCCESSFULLY
 
 ## 🎯 PERFORMANCE RESULTS ACHIEVED
@@ -17,19 +17,19 @@
 
 ## 🚀 PHASE 1: Pre-Implementation Validation ✅ COMPLETED
 
-### 🛡️ MANDATORY PRE-WORK VALIDATION
+### [ACTION:validation] MANDATORY PRE-WORK VALIDATION
 - [x] **📋 Task Verification**: CFG-006 exists in `feature-tracking.md` with valid Feature ID
-- [x] **🔍 Compliance Check**: Reviewed `ai-assistant-compliance.md` for token requirements  
+- [x] **[ACTION:discovery] Compliance Check**: Reviewed `ai-assistant-compliance.md` for token requirements  
 - [x] **📁 File Impact Analysis**: Determined required documentation updates per PERFORMANCE Protocol
-- [x] **🛡️ Immutable Check**: No conflicts with `immutable.md` requirements
+- [x] **[ACTION:validation] Immutable Check**: No conflicts with `immutable.md` requirements
 
-### 🔍 Current Implementation Analysis ✅ COMPLETED
+### [ACTION:discovery] Current Implementation Analysis ✅ COMPLETED
 - **Status**: CFG-006 all subtasks COMPLETED including performance optimization
 - **Implemented Features**: Complete configuration reflection system with performance optimization
 - **Performance State**: **EXCEPTIONAL** - All targets significantly exceeded
 - **Critical Gap**: **RESOLVED** - Performance optimization successfully implemented
 
-## 🔧 PHASE 2: Implementation Execution ✅ COMPLETED
+## [ACTION:core-functionality] PHASE 2: Implementation Execution ✅ COMPLETED
 
 ### Step 1: Reflection Result Caching ✅ COMPLETED
 - [x] **ConfigFieldCache Implementation** - Thread-safe caching with schema validation
@@ -90,13 +90,13 @@
 
 ### 📊 Performance Optimization Approach
 
-#### 🔶 CFG-006-6.1: Add Reflection Result Caching
+#### [MEDIUM] CFG-006-6.1: Add Reflection Result Caching
 **Implementation Areas**: Caching system for field discovery results
 **Files to Modify**: `config.go`
 **Performance Target**: Reduce reflection overhead by 90%+ for repeated calls
 
 ```go
-// 🔶 CFG-006: Performance optimization - Reflection result caching
+// [MEDIUM] CFG-006: Performance optimization - Reflection result caching
 type configFieldCache struct {
     mu     sync.RWMutex
     fields []configFieldInfo
@@ -106,40 +106,40 @@ type configFieldCache struct {
 var globalFieldCache = &configFieldCache{}
 ```
 
-#### 🔶 CFG-006-6.2: Implement Lazy Source Evaluation  
+#### [MEDIUM] CFG-006-6.2: Implement Lazy Source Evaluation  
 **Implementation Areas**: Source evaluation only for displayed/filtered fields
 **Files to Modify**: `config.go`, `main.go`
 **Performance Target**: 50%+ reduction in processing time when filtering enabled
 
 ```go
-// 🔶 CFG-006: Performance optimization - Lazy source evaluation
+// [MEDIUM] CFG-006: Performance optimization - Lazy source evaluation
 func GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata
 ```
 
-#### 🔶 CFG-006-6.3: Create Incremental Resolution Support
+#### [MEDIUM] CFG-006-6.3: Create Incremental Resolution Support
 **Implementation Areas**: Partial configuration inspection for specific field patterns
 **Files to Modify**: `config.go`, `main.go`  
 **Performance Target**: Sub-10ms response for single field queries
 
 ```go
-// 🔶 CFG-006: Performance optimization - Incremental resolution
+// [MEDIUM] CFG-006: Performance optimization - Incremental resolution
 func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error)
 ```
 
-#### 🔶 CFG-006-6.4: Add Benchmark Validation
+#### [MEDIUM] CFG-006-6.4: Add Benchmark Validation
 **Implementation Areas**: Performance benchmarks and validation framework
 **Files to Create**: `config_bench_test.go`
 **Performance Target**: Establish baseline and validate <100ms config command response
 
-### 📝 Detailed Implementation Plan
+### [ACTION:format-processing] Detailed Implementation Plan
 
-#### **Step 1: Reflection Result Caching (🔶 CFG-006-6.1)**
+#### **Step 1: Reflection Result Caching ([MEDIUM] CFG-006-6.1)**
 **Estimated Time**: 2-3 hours
 **Priority**: HIGH - Biggest performance impact
 
 1. **Add Caching Infrastructure**:
    ```go
-   // 🔶 CFG-006: Performance optimization - Caching infrastructure
+   // [MEDIUM] CFG-006: Performance optimization - Caching infrastructure
    type ConfigFieldCache struct {
        mu          sync.RWMutex
        fields      []configFieldInfo
@@ -159,13 +159,13 @@ func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, er
    - Populate cache on cache miss
    - Return cached results when valid
 
-#### **Step 2: Lazy Source Evaluation (🔶 CFG-006-6.2)**  
+#### **Step 2: Lazy Source Evaluation ([MEDIUM] CFG-006-6.2)**  
 **Estimated Time**: 3-4 hours
 **Priority**: HIGH - Significant filtering performance gain
 
 1. **Create Filtering Infrastructure**:
    ```go
-   // 🔶 CFG-006: Performance optimization - Filtering support
+   // [MEDIUM] CFG-006: Performance optimization - Filtering support
    type ConfigFilter struct {
        FieldPatterns   []string  // Field name patterns to include
        Categories      []string  // Field categories to include  
@@ -183,13 +183,13 @@ func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, er
    - Only resolve sources for fields passing filter
    - Skip expensive source tracking for filtered-out fields
 
-#### **Step 3: Incremental Resolution (🔶 CFG-006-6.3)**
+#### **Step 3: Incremental Resolution ([MEDIUM] CFG-006-6.3)**
 **Estimated Time**: 2-3 hours  
 **Priority**: MEDIUM - Developer experience enhancement
 
 1. **Single Field Resolution**:
    ```go
-   // 🔶 CFG-006: Performance optimization - Single field access
+   // [MEDIUM] CFG-006: Performance optimization - Single field access
    func GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error)
    ```
 
@@ -198,13 +198,13 @@ func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, er
    - Efficient field lookup without full enumeration
    - Targeted source resolution
 
-#### **Step 4: Benchmark Validation (🔶 CFG-006-6.4)**
+#### **Step 4: Benchmark Validation ([MEDIUM] CFG-006-6.4)**
 **Estimated Time**: 2-3 hours
 **Priority**: HIGH - Essential for validation
 
 1. **Create Performance Benchmarks**:
    ```go
-   // 🔶 CFG-006: Performance optimization - Benchmark validation
+   // [MEDIUM] CFG-006: Performance optimization - Benchmark validation
    func BenchmarkGetAllConfigFields(b *testing.B)
    func BenchmarkGetConfigValuesWithSources(b *testing.B)  
    func BenchmarkConfigCommandResponse(b *testing.B)
@@ -215,12 +215,12 @@ func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, er
    - Performance regression detection
    - Config command end-to-end timing
 
-## 🔧 PHASE 3: Implementation Details
+## [ACTION:core-functionality] PHASE 3: Implementation Details
 
 ### 🏷️ Implementation Token Strategy
-All code changes will be marked with: `// 🔶 CFG-006: Performance optimization`
+All code changes will be marked with: `// [MEDIUM] CFG-006: Performance optimization`
 
-### 📝 Documentation Updates Required (PERFORMANCE Protocol)
+### [ACTION:format-processing] Documentation Updates Required (PERFORMANCE Protocol)
 
 #### ✅ HIGH PRIORITY - Update REQUIRED files:
 - ✅ `feature-tracking.md` - Update CFG-006 subtask 6 status to "Completed"
@@ -257,8 +257,8 @@ All code changes will be marked with: `// 🔶 CFG-006: Performance optimization
 
 ### 🚨 MANDATORY POST-WORK COMPLETION
 1. **🧪 Full Test Suite**: All tests must pass (`make test`)
-2. **🔧 Lint Compliance**: All lint checks must pass (`make lint`)  
-3. **📝 Documentation Updates**: All required files updated per PERFORMANCE Protocol
+2. **[ACTION:core-functionality] Lint Compliance**: All lint checks must pass (`make lint`)  
+3. **[ACTION:format-processing] Documentation Updates**: All required files updated per PERFORMANCE Protocol
 4. **🏁 Task Completion**: Update subtask 6 status to "Completed" in `feature-tracking.md`
 
 ## 📊 Risk Assessment and Mitigation
@@ -279,4 +279,4 @@ All code changes will be marked with: `// 🔶 CFG-006: Performance optimization
 
 ---
 
-**📝 Next Steps**: Execute implementation plan following PERFORMANCE Protocol requirements, starting with reflection result caching (highest impact optimization). 
+**[ACTION:format-processing] Next Steps**: Execute implementation plan following PERFORMANCE Protocol requirements, starting with reflection result caching (highest impact optimization). 

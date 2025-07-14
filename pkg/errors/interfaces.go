@@ -15,7 +15,7 @@ import (
 	"os"
 )
 
-// ⭐ EXTRACT-002: Error interfaces and types - 🔍 Core error handling contracts
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorInterface provides a common interface for all structured errors in CLI applications
 type ErrorInterface interface {
 	Error() string
@@ -26,7 +26,7 @@ type ErrorInterface interface {
 	Unwrap() error
 }
 
-// ⭐ EXTRACT-002: Error configuration interface - 🔧 Configuration abstraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorConfig abstracts configuration dependencies for error handling
 type ErrorConfig interface {
 	GetStatusCodes() map[string]int
@@ -35,7 +35,7 @@ type ErrorConfig interface {
 	GetFilePermissions() os.FileMode
 }
 
-// ⭐ EXTRACT-002: Error formatter interface - 📝 Formatter abstraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorFormatter abstracts formatter dependencies for error handling
 type ErrorFormatter interface {
 	FormatError(message string) string
@@ -49,7 +49,7 @@ type ErrorFormatter interface {
 	PrintDirectoryNotFound(err error)
 }
 
-// ⭐ EXTRACT-002: Generic ApplicationError type - 🔧 Generalized error structure
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ApplicationError represents a structured error with status code and operation context
 // This generalizes the ArchiveError/BackupError pattern for any CLI application
 type ApplicationError struct {
@@ -60,7 +60,7 @@ type ApplicationError struct {
 	Err        error  // Underlying error for debugging and error chaining
 }
 
-// ⭐ EXTRACT-002: Error interface implementation - 📝 Standard error interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (e *ApplicationError) Error() string {
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
@@ -68,32 +68,32 @@ func (e *ApplicationError) Error() string {
 	return e.Message
 }
 
-// ⭐ EXTRACT-002: Error unwrapping support - 🔍 Error chain access
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (e *ApplicationError) Unwrap() error {
 	return e.Err
 }
 
-// ⭐ EXTRACT-002: Status code access - 🔍 Exit code retrieval
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (e *ApplicationError) GetStatusCode() int {
 	return e.StatusCode
 }
 
-// ⭐ EXTRACT-002: Operation context access - 🔍 Operation tracking
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (e *ApplicationError) GetOperation() string {
 	return e.Operation
 }
 
-// ⭐ EXTRACT-002: Path context access - 🔍 Path information
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (e *ApplicationError) GetPath() string {
 	return e.Path
 }
 
-// ⭐ EXTRACT-002: Message access - 🔍 Error message retrieval
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (e *ApplicationError) GetMessage() string {
 	return e.Message
 }
 
-// ⭐ EXTRACT-002: Error factory functions - 🔧 Error creation utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // NewApplicationError creates a new structured error with message and status code
 func NewApplicationError(message string, statusCode int) *ApplicationError {
@@ -128,7 +128,7 @@ func NewApplicationErrorWithContext(
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification framework - 🔍 Error categorization
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // ErrorClassifier defines an interface for classifying different types of errors
 type ErrorClassifier interface {
@@ -173,7 +173,7 @@ const (
 	ErrorSeverityFatal
 )
 
-// ⭐ EXTRACT-002: Error context abstraction - 🔧 Operation context
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorContext provides context information for error handling operations
 type ErrorContext struct {
 	Operation string                 // The operation being performed

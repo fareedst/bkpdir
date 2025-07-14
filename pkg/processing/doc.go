@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Processing package structure - Package documentation and overview - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // Package processing provides generalized data processing patterns extracted from BkpDir.
 //
 // This package contains reusable patterns for:

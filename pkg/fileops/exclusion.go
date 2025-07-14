@@ -10,7 +10,7 @@ import (
 	doublestar "github.com/bmatcuk/doublestar/v4"
 )
 
-// ⭐ EXTRACT-006: File exclusion system extracted - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 
 // PatternMatcher handles matching paths against exclusion patterns
 type PatternMatcher struct {
@@ -24,13 +24,13 @@ type Excluder interface {
 
 // NewPatternMatcher creates a new PatternMatcher with the given patterns
 func NewPatternMatcher(patterns []string) *PatternMatcher {
-	// ⭐ EXTRACT-006: Pattern matcher initialization extracted - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return &PatternMatcher{patterns: patterns}
 }
 
 // ShouldExclude checks if a path should be excluded based on patterns
 func (pm *PatternMatcher) ShouldExclude(path string) bool {
-	// ⭐ EXTRACT-006: File exclusion logic implementation extracted - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	normalizedPath := filepath.ToSlash(path)
 	for _, pattern := range pm.patterns {
 		if pm.matchesPattern(normalizedPath, pattern) {
@@ -42,7 +42,7 @@ func (pm *PatternMatcher) ShouldExclude(path string) bool {
 
 // matchesPattern checks if a path matches a single pattern
 func (pm *PatternMatcher) matchesPattern(path, pattern string) bool {
-	// ⭐ EXTRACT-006: Pattern matching logic extracted - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	normalizedPattern := filepath.ToSlash(pattern)
 
 	if strings.HasSuffix(normalizedPattern, "/") {
@@ -58,7 +58,7 @@ func (pm *PatternMatcher) matchesPattern(path, pattern string) bool {
 
 // matchesDirectoryPattern handles patterns ending with /
 func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
-	// ⭐ EXTRACT-006: Directory pattern matching extracted - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	patternsToTry := []string{
 		pattern,                // e.g., node_modules/
 		pattern + "**",         // e.g., node_modules/**
@@ -77,7 +77,7 @@ func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 
 // matchesGlobPattern handles patterns containing *
 func (pm *PatternMatcher) matchesGlobPattern(path, pattern string) bool {
-	// ⭐ EXTRACT-006: Glob pattern matching extracted - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if strings.Contains(pattern, "**") {
 		matched, err := doublestar.Match(pattern, path)
 		return err == nil && matched
@@ -95,7 +95,7 @@ func (pm *PatternMatcher) matchesGlobPattern(path, pattern string) bool {
 
 // matchesRootLevelPattern handles patterns without directory parts
 func (pm *PatternMatcher) matchesRootLevelPattern(path, pattern string) bool {
-	// ⭐ EXTRACT-006: Root-level pattern matching extracted - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	patternsToTry := []string{pattern}
 	if !strings.HasPrefix(pattern, "**/") {
 		patternsToTry = append(patternsToTry, "**/"+pattern)
@@ -115,7 +115,7 @@ func (pm *PatternMatcher) matchesDirectoryLevelPattern(
 	path, pattern string,
 	pathParts, patternParts []string,
 ) bool {
-	// ⭐ EXTRACT-006: Directory-level pattern matching extracted - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if len(pathParts) == len(patternParts) {
 		matched, err := doublestar.Match(pattern, path)
 		return err == nil && matched
@@ -126,7 +126,7 @@ func (pm *PatternMatcher) matchesDirectoryLevelPattern(
 // ShouldExcludeFile checks if a file should be excluded based on patterns
 // This is the main public interface for file exclusion
 func ShouldExcludeFile(path string, patterns []string) bool {
-	// ⭐ EXTRACT-006: Public file exclusion interface extracted - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	matcher := NewPatternMatcher(patterns)
 	return matcher.ShouldExclude(path)
 }

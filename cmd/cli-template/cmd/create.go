@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-008: CLI Application Template - Create command demonstrating pkg/fileops and integration
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package cmd
 
 import (
@@ -103,7 +103,7 @@ Generated at: %s
 			return
 		}
 
-		fmt.Printf("✅ Successfully created %s\n", target)
+		fmt.Printf("[SUCCESS] Successfully created %s\n", target)
 
 		if verbose {
 			fmt.Println("\nFile contents preview:")

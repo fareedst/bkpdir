@@ -1,11 +1,11 @@
-// 🔶 DOC-010: Core data types - 🔧 Token suggestion data structures
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
 import (
 	"time"
 )
 
-// 🔶 DOC-010: Function signature analysis - 🔍 Code structure representation
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type FunctionSignature struct {
 	Name       string      `json:"name"`
 	ReturnType string      `json:"return_type"`
@@ -14,13 +14,13 @@ type FunctionSignature struct {
 	IsExported bool        `json:"is_exported"`
 }
 
-// 🔶 DOC-010: Function parameter analysis - 📝 Parameter representation
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type Parameter struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
 
-// 🔶 DOC-010: Token suggestion structure - 💡 Core suggestion data
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type TokenSuggestion struct {
 	FilePath          string            `json:"file_path"`
 	LineNumber        int               `json:"line_number"`
@@ -38,7 +38,7 @@ type TokenSuggestion struct {
 	Timestamp         time.Time         `json:"timestamp"`
 }
 
-// 🔶 DOC-010: Analysis results container - 📊 Comprehensive analysis output
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type AnalysisResults struct {
 	Target            string            `json:"target"`
 	FunctionsAnalyzed int               `json:"functions_analyzed"`
@@ -50,7 +50,7 @@ type AnalysisResults struct {
 	ConfidenceStats   ConfidenceStats   `json:"confidence_stats"`
 }
 
-// 🔶 DOC-010: Confidence statistics - 📈 Quality metrics
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type ConfidenceStats struct {
 	AverageConfidence float64 `json:"average_confidence"`
 	MinConfidence     float64 `json:"min_confidence"`
@@ -60,7 +60,7 @@ type ConfidenceStats struct {
 	LowConfidence     int     `json:"low_confidence_count"`    // <0.5
 }
 
-// 🔶 DOC-010: Token validation violation - 🛡️ Standards compliance tracking
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type TokenViolation struct {
 	FilePath      string `json:"file_path"`
 	LineNumber    int    `json:"line_number"`
@@ -72,7 +72,7 @@ type TokenViolation struct {
 	Description   string `json:"description"`
 }
 
-// 🔶 DOC-010: Batch processing results - 🚀 Mass analysis output
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type BatchResults struct {
 	Directory         string                `json:"directory"`
 	FilesProcessed    int                   `json:"files_processed"`
@@ -86,23 +86,23 @@ type BatchResults struct {
 	FileResults       map[string]FileResult `json:"file_results"`
 }
 
-// 🔶 DOC-010: Priority categorization - ⭐ Priority distribution tracking
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type PriorityBreakdown struct {
-	Critical int `json:"critical"` // ⭐
-	High     int `json:"high"`     // 🔺
-	Medium   int `json:"medium"`   // 🔶
-	Low      int `json:"low"`      // 🔻
+	Critical int `json:"critical"` // [CRITICAL]
+	High     int `json:"high"`     // [HIGH]
+	Medium   int `json:"medium"`   // [MEDIUM]
+	Low      int `json:"low"`      // [LOW]
 }
 
-// 🔶 DOC-010: Action categorization - 🔧 Action type distribution
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type ActionBreakdown struct {
-	Analysis      int `json:"analysis"`      // 🔍
-	Documentation int `json:"documentation"` // 📝
-	Configuration int `json:"configuration"` // 🔧
-	Protection    int `json:"protection"`    // 🛡️
+	Analysis      int `json:"analysis"`      // [DECISION:discovery]
+	Documentation int `json:"documentation"` // [DECISION:format-processing]
+	Configuration int `json:"configuration"` // [DECISION:core-functionality]
+	Protection    int `json:"protection"`    // [DECISION:validation]
 }
 
-// 🔶 DOC-010: Individual file results - 📁 Per-file analysis data
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type FileResult struct {
 	FilePath         string            `json:"file_path"`
 	FunctionsFound   int               `json:"functions_found"`
@@ -113,7 +113,7 @@ type FileResult struct {
 	ProcessingTime   time.Duration     `json:"processing_time"`
 }
 
-// 🔶 DOC-010: Feature mapping entry - 🎯 Feature tracking integration
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type FeatureMapping struct {
 	FeatureID   string `json:"feature_id"`
 	Priority    string `json:"priority"`
@@ -122,9 +122,9 @@ type FeatureMapping struct {
 	Category    string `json:"category"`
 }
 
-// 🔶 DOC-010: Analysis configuration - ⚙️ Suggestion engine settings
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type AnalysisConfig struct {
-	// 🔶 DOC-010: Priority assignment settings - ⭐ Priority determination
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	PriorityRules struct {
 		CriticalPatterns []string `json:"critical_patterns"`
 		HighPatterns     []string `json:"high_patterns"`
@@ -132,7 +132,7 @@ type AnalysisConfig struct {
 		LowPatterns      []string `json:"low_patterns"`
 	} `json:"priority_rules"`
 
-	// 🔶 DOC-010: Action assignment settings - 🔧 Action determination
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	ActionRules struct {
 		AnalysisPatterns      []string `json:"analysis_patterns"`
 		DocumentationPatterns []string `json:"documentation_patterns"`
@@ -140,11 +140,11 @@ type AnalysisConfig struct {
 		ProtectionPatterns    []string `json:"protection_patterns"`
 	} `json:"action_rules"`
 
-	// 🔶 DOC-010: Feature tracking integration - 🎯 Feature ID mapping
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	FeatureTrackingFile string                    `json:"feature_tracking_file"`
 	FeatureMappings     map[string]FeatureMapping `json:"feature_mappings"`
 
-	// 🔶 DOC-010: Confidence calculation settings - 📊 Quality thresholds
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	ConfidenceWeights struct {
 		SignatureMatch   float64 `json:"signature_match"`
 		PatternMatch     float64 `json:"pattern_match"`
@@ -153,7 +153,7 @@ type AnalysisConfig struct {
 		ComplexityFactor float64 `json:"complexity_factor"`
 	} `json:"confidence_weights"`
 
-	// 🔶 DOC-010: Validation settings - 🛡️ Quality control
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	ValidationRules struct {
 		RequiredTokenFormat string   `json:"required_token_format"`
 		ValidPriorityIcons  []string `json:"valid_priority_icons"`
@@ -162,7 +162,7 @@ type AnalysisConfig struct {
 		MaxSuggestions      int      `json:"max_suggestions"`
 	} `json:"validation_rules"`
 
-	// 🔶 DOC-010: Output formatting settings - 📝 Display preferences
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	OutputSettings struct {
 		VerboseOutput    bool `json:"verbose_output"`
 		IncludeContext   bool `json:"include_context"`
@@ -172,7 +172,7 @@ type AnalysisConfig struct {
 	} `json:"output_settings"`
 }
 
-// 🔶 DOC-010: Function complexity analysis - 📊 Complexity metrics
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type ComplexityMetrics struct {
 	CyclomaticComplexity int     `json:"cyclomatic_complexity"`
 	LinesOfCode          int     `json:"lines_of_code"`
@@ -183,7 +183,7 @@ type ComplexityMetrics struct {
 	ComplexityScore      float64 `json:"complexity_score"`
 }
 
-// 🔶 DOC-010: Pattern matching result - 🔍 Pattern recognition output
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type PatternMatch struct {
 	Pattern     string  `json:"pattern"`
 	MatchType   string  `json:"match_type"` // "function_name", "parameter", "return_type", "context"
@@ -191,7 +191,7 @@ type PatternMatch struct {
 	Description string  `json:"description"`
 }
 
-// 🔶 DOC-010: Context analysis result - 🔍 Surrounding code analysis
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type ContextAnalysis struct {
 	SurroundingLines   []string       `json:"surrounding_lines"`
 	ImportStatements   []string       `json:"import_statements"`
@@ -202,7 +202,7 @@ type ContextAnalysis struct {
 	PatternMatches     []PatternMatch `json:"pattern_matches"`
 }
 
-// 🔶 DOC-010: Suggestion generation metadata - 📊 Generation tracking
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type SuggestionMetadata struct {
 	GenerationRules        []string           `json:"generation_rules"`
 	AppliedPatterns        []string           `json:"applied_patterns"`
@@ -212,7 +212,7 @@ type SuggestionMetadata struct {
 	GenerationTime         time.Duration      `json:"generation_time"`
 }
 
-// 🔶 DOC-010: Default analysis configuration - ⚙️ Standard configuration
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func DefaultAnalysisConfig() *AnalysisConfig {
 	return &AnalysisConfig{
 		PriorityRules: struct {
@@ -237,7 +237,7 @@ func DefaultAnalysisConfig() *AnalysisConfig {
 			ConfigurationPatterns: []string{"set", "config", "init", "setup", "create", "build", "generate", "make"},
 			ProtectionPatterns:    []string{"protect", "secure", "validate", "verify", "guard", "ensure", "handle", "recover"},
 		},
-		FeatureTrackingFile: "docs/context/feature-tracking.md",
+		FeatureTrackingFile: "docs/context/specification.md",
 		ConfidenceWeights: struct {
 			SignatureMatch   float64 `json:"signature_match"`
 			PatternMatch     float64 `json:"pattern_match"`
@@ -258,9 +258,9 @@ func DefaultAnalysisConfig() *AnalysisConfig {
 			MinConfidence       float64  `json:"min_confidence"`
 			MaxSuggestions      int      `json:"max_suggestions"`
 		}{
-			RequiredTokenFormat: `^// [⭐🔺🔶🔻] [A-Z]+-[0-9]+: .+ - [🔍📝🔧🛡️] .+$`,
-			ValidPriorityIcons:  []string{"⭐", "🔺", "🔶", "🔻"},
-			ValidActionIcons:    []string{"🔍", "📝", "🔧", "🛡️"},
+			RequiredTokenFormat: `^// \[(CRITICAL|HIGH|MEDIUM|LOW)\] [A-Z]+-[0-9]+: .+ \[DECISION:[a-z-]+\] .+$`,
+			ValidPriorityIcons:  []string{"[CRITICAL]", "[HIGH]", "[MEDIUM]", "[LOW]"},
+			ValidActionIcons:    []string{"[DECISION:discovery]", "[DECISION:format-processing]", "[DECISION:core-functionality]", "[DECISION:validation]"},
 			MinConfidence:       0.5,
 			MaxSuggestions:      100,
 		},

@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Main formatter combining all components
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // DefaultOutputFormatter provides comprehensive output formatting functionality
 type DefaultOutputFormatter struct {
 	configProvider    ConfigProvider
@@ -22,7 +22,7 @@ type DefaultOutputFormatter struct {
 	collector         *OutputCollector
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Constructor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewDefaultOutputFormatter creates a new DefaultOutputFormatter
 func NewDefaultOutputFormatter(configProvider ConfigProvider) *DefaultOutputFormatter {
 	return &DefaultOutputFormatter{
@@ -33,7 +33,7 @@ func NewDefaultOutputFormatter(configProvider ConfigProvider) *DefaultOutputForm
 	}
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Constructor with collector
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewDefaultOutputFormatterWithCollector creates a formatter with delayed output support
 func NewDefaultOutputFormatterWithCollector(configProvider ConfigProvider, collector *OutputCollector) *DefaultOutputFormatter {
 	return &DefaultOutputFormatter{
@@ -44,25 +44,25 @@ func NewDefaultOutputFormatterWithCollector(configProvider ConfigProvider, colle
 	}
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔍 Delayed output mode check
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsDelayedMode returns true if the formatter is collecting output instead of printing immediately
 func (f *DefaultOutputFormatter) IsDelayedMode() bool {
 	return f.collector != nil
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔍 Get collector
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetCollector returns the OutputCollector if in delayed mode, nil otherwise
 func (f *DefaultOutputFormatter) GetCollector() *OutputCollector {
 	return f.collector
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Set collector
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // SetCollector sets the OutputCollector for delayed output mode
 func (f *DefaultOutputFormatter) SetCollector(collector *OutputCollector) {
 	f.collector = collector
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Printf-style formatting operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // FormatCreatedArchive formats a created archive message using printf-style formatting
 func (f *DefaultOutputFormatter) FormatCreatedArchive(path string) string {
@@ -154,7 +154,7 @@ func (f *DefaultOutputFormatter) FormatDryRunBackup(path string) string {
 	return fmt.Sprintf(formatStr, path)
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 📝 Print operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // PrintCreatedArchive prints a created archive message
 func (f *DefaultOutputFormatter) PrintCreatedArchive(path string) {
@@ -256,7 +256,7 @@ func (f *DefaultOutputFormatter) PrintDryRunBackup(path string) {
 	}
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Delegate template operations to TemplateFormatter
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // FormatWithTemplate delegates to the template formatter
 func (f *DefaultOutputFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
@@ -298,7 +298,7 @@ func (f *DefaultOutputFormatter) TemplateError(data map[string]string) string {
 	return f.templateFormatter.TemplateError(data)
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Delegate pattern extraction to PatternExtractor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // ExtractArchiveFilenameData delegates to the pattern extractor
 func (f *DefaultOutputFormatter) ExtractArchiveFilenameData(filename string) map[string]string {
@@ -315,7 +315,7 @@ func (f *DefaultOutputFormatter) ExtractPatternData(pattern, text string) map[st
 	return f.patternExtractor.ExtractPatternData(pattern, text)
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Error formatting operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // FormatDiskFullError formats a disk full error message
 func (f *DefaultOutputFormatter) FormatDiskFullError(err error) string {
@@ -371,7 +371,7 @@ func (f *DefaultOutputFormatter) FormatInvalidFile(err error) string {
 	return fmt.Sprintf(formatStr, err.Error())
 }
 
-// ⭐ EXTRACT-003: OutputFormatter implementation - 🔧 Template error formatting
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // TemplateDiskFullError formats a disk full error using template
 func (f *DefaultOutputFormatter) TemplateDiskFullError(err error) string {
@@ -413,7 +413,7 @@ func (f *DefaultOutputFormatter) TemplateFileNotFound(err error) string {
 	return f.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Enhanced format operations
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // Enhanced formatting operations using file statistics for detailed output
 
 // FormatCreatedArchiveWithStats formats a created archive message with detailed file statistics
@@ -462,7 +462,7 @@ func (f *DefaultOutputFormatter) FormatIncrementalCreatedWithStats(path string) 
 	return fmt.Sprintf(formatStr, stats.Path, stats.SizeHuman, stats.MTime.Format("2006-01-02 15:04:05"))
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Template-based format operations
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 
 // TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics
 func (f *DefaultOutputFormatter) TemplateCreatedArchiveWithStats(path string) string {
@@ -500,7 +500,7 @@ func (f *DefaultOutputFormatter) TemplateIncrementalCreatedWithStats(path string
 	return f.formatTemplate(templateStr, data)
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Print operations with stats
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 
 // PrintCreatedArchiveWithStats prints a created archive message with detailed file statistics
 func (f *DefaultOutputFormatter) PrintCreatedArchiveWithStats(path string) {
@@ -522,7 +522,7 @@ func (f *DefaultOutputFormatter) PrintIncrementalCreatedWithStats(path string) {
 	}
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Helper methods
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 
 // buildStatsTemplateData builds template data from file statistics
 func (f *DefaultOutputFormatter) buildStatsTemplateData(stats *FileStatInfo) map[string]string {

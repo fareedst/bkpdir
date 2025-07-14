@@ -76,7 +76,7 @@ func TestDOC014MetricsValidationSuite(t *testing.T) {
 	}
 
 	t.Logf("🧪 Starting DOC-014 Metrics Validation Test Suite")
-	t.Logf("📊 Workspace: %s", suite.WorkspaceRoot)
+	t.Logf("[INFO] Workspace: %s", suite.WorkspaceRoot)
 	t.Logf("📈 Metrics Script: %s", suite.MetricsScriptPath)
 
 	// Run comprehensive metrics validation tests
@@ -89,7 +89,7 @@ func TestDOC014MetricsValidationSuite(t *testing.T) {
 	t.Run("DashboardGeneration", suite.TestDashboardGeneration)
 	t.Run("MetricsConsistency", suite.TestMetricsConsistency)
 
-	t.Logf("✅ DOC-014 Metrics Validation Test Suite Completed")
+	t.Logf("[SUCCESS] DOC-014 Metrics Validation Test Suite Completed")
 }
 
 // Initialize sets up the metrics test environment
@@ -136,7 +136,7 @@ func (suite *DecisionMetricsTestSuite) Initialize() error {
 
 // TestComplianceRateAccuracy validates decision compliance rate calculation
 func (suite *DecisionMetricsTestSuite) TestComplianceRateAccuracy(t *testing.T) {
-	t.Logf("🔍 Testing compliance rate calculation accuracy")
+	t.Logf("[CHECK] Testing compliance rate calculation accuracy")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -166,7 +166,7 @@ func (suite *DecisionMetricsTestSuite) TestComplianceRateAccuracy(t *testing.T) 
 		t.Errorf("Compliance rate validation failed: %s", result.ValidationMessage)
 	}
 
-	t.Logf("✅ Compliance Rate: %.1f%% (Expected: %.1f%%, Accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Compliance Rate: %.1f%% (Expected: %.1f%%, Accuracy: %.1f%%)",
 		result.ActualValue, result.ExpectedValue, result.AccuracyPercentage)
 }
 
@@ -207,13 +207,13 @@ func (suite *DecisionMetricsTestSuite) TestGoalAlignmentMeasurement(t *testing.T
 		t.Errorf("Goal alignment measurement validation failed: %s", result.ValidationMessage)
 	}
 
-	t.Logf("✅ Goal Alignment Rate: %.1f%% (Target: ≥95%%, Accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Goal Alignment Rate: %.1f%% (Target: ≥95%%, Accuracy: %.1f%%)",
 		result.ActualValue, result.AccuracyPercentage)
 }
 
 // TestReworkRateTracking validates rework rate calculation and tracking
 func (suite *DecisionMetricsTestSuite) TestReworkRateTracking(t *testing.T) {
-	t.Logf("🔄 Testing rework rate tracking accuracy")
+	t.Logf("[PROCESS] Testing rework rate tracking accuracy")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -248,13 +248,13 @@ func (suite *DecisionMetricsTestSuite) TestReworkRateTracking(t *testing.T) {
 		t.Errorf("Rework rate tracking validation failed: %s", result.ValidationMessage)
 	}
 
-	t.Logf("✅ Rework Rate: %.1f%% (Target: ≤5%%, Accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Rework Rate: %.1f%% (Target: ≤5%%, Accuracy: %.1f%%)",
 		result.ActualValue, result.AccuracyPercentage)
 }
 
 // TestFrameworkMaturityScore validates framework maturity score calculation
 func (suite *DecisionMetricsTestSuite) TestFrameworkMaturityScore(t *testing.T) {
-	t.Logf("📊 Testing framework maturity score calculation")
+	t.Logf("[INFO] Testing framework maturity score calculation")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -289,13 +289,13 @@ func (suite *DecisionMetricsTestSuite) TestFrameworkMaturityScore(t *testing.T) 
 		t.Errorf("Framework maturity score validation failed: %s", result.ValidationMessage)
 	}
 
-	t.Logf("✅ Framework Maturity Score: %.0f (Expected: %d, Accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Framework Maturity Score: %.0f (Expected: %d, Accuracy: %.1f%%)",
 		actualMetrics.CurrentMetrics.FrameworkMaturityScore, suite.ExpectedMetrics.FrameworkMaturityScore, result.AccuracyPercentage)
 }
 
 // TestProtocolCoverageMetrics validates protocol coverage measurement
 func (suite *DecisionMetricsTestSuite) TestProtocolCoverageMetrics(t *testing.T) {
-	t.Logf("🔗 Testing protocol coverage metrics")
+	t.Logf("[LINK] Testing protocol coverage metrics")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -317,7 +317,7 @@ func (suite *DecisionMetricsTestSuite) TestProtocolCoverageMetrics(t *testing.T)
 
 	// Note: ProtocolCoverage in CurrentMetrics is a single float64, not a map
 	// So we'll validate it differently
-	t.Logf("📊 Protocol Coverage (overall): %.1f%%", actualMetrics.CurrentMetrics.ProtocolCoverage)
+	t.Logf("[INFO] Protocol Coverage (overall): %.1f%%", actualMetrics.CurrentMetrics.ProtocolCoverage)
 
 	// Validate overall protocol coverage meets target (≥75%)
 	if actualMetrics.CurrentMetrics.ProtocolCoverage < 75.0 {
@@ -334,7 +334,7 @@ func (suite *DecisionMetricsTestSuite) TestProtocolCoverageMetrics(t *testing.T)
 		t.Errorf("Protocol coverage validation failed: %s", result.ValidationMessage)
 	}
 
-	t.Logf("✅ Average Protocol Coverage: %.1f%% (Expected: %.1f%%, Accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Average Protocol Coverage: %.1f%% (Expected: %.1f%%, Accuracy: %.1f%%)",
 		avgActual, avgExpected, result.AccuracyPercentage)
 }
 
@@ -375,13 +375,13 @@ func (suite *DecisionMetricsTestSuite) TestTokenEnhancementTracking(t *testing.T
 		t.Errorf("Token enhancement tracking validation failed: %s", result.ValidationMessage)
 	}
 
-	t.Logf("✅ Token Enhancement Rate: %.1f%% (Target: ≥80%%, Accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Token Enhancement Rate: %.1f%% (Target: ≥80%%, Accuracy: %.1f%%)",
 		result.ActualValue, result.AccuracyPercentage)
 }
 
 // TestDashboardGeneration validates metrics dashboard generation
 func (suite *DecisionMetricsTestSuite) TestDashboardGeneration(t *testing.T) {
-	t.Logf("📊 Testing metrics dashboard generation")
+	t.Logf("[INFO] Testing metrics dashboard generation")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Second)
 	defer cancel()
@@ -428,13 +428,13 @@ func (suite *DecisionMetricsTestSuite) TestDashboardGeneration(t *testing.T) {
 		t.Errorf("Dashboard content suspiciously small: %d bytes", len(dashboardContent))
 	}
 
-	t.Logf("✅ Dashboard generated successfully: %s (%d bytes)", dashboardPath, len(dashboardContent))
-	t.Logf("📊 Dashboard execution output: %s", string(output))
+	t.Logf("[SUCCESS] Dashboard generated successfully: %s (%d bytes)", dashboardPath, len(dashboardContent))
+	t.Logf("[INFO] Dashboard execution output: %s", string(output))
 }
 
 // TestMetricsConsistency validates metrics consistency across multiple runs
 func (suite *DecisionMetricsTestSuite) TestMetricsConsistency(t *testing.T) {
-	t.Logf("🔄 Testing metrics consistency across multiple runs")
+	t.Logf("[PROCESS] Testing metrics consistency across multiple runs")
 
 	const numRuns = 3
 	var metricsList []ActualMetricsData
@@ -487,7 +487,7 @@ func (suite *DecisionMetricsTestSuite) TestMetricsConsistency(t *testing.T) {
 		}
 	}
 
-	t.Logf("✅ Metrics consistency validated across %d runs", numRuns)
+	t.Logf("[SUCCESS] Metrics consistency validated across %d runs", numRuns)
 }
 
 // ValidateMetricAccuracy validates metric accuracy within tolerance
@@ -506,7 +506,7 @@ func (suite *DecisionMetricsTestSuite) ValidateMetricAccuracy(metricName string,
 	// Generate validation message
 	var message string
 	if withinTolerance {
-		message = fmt.Sprintf("✅ %s validation passed: %.2f vs %.2f (%.1f%% accuracy)",
+		message = fmt.Sprintf("[SUCCESS] %s validation passed: %.2f vs %.2f (%.1f%% accuracy)",
 			metricName, actual, expected, accuracy)
 	} else {
 		message = fmt.Sprintf("❌ %s validation failed: %.2f vs %.2f (%.1f%% accuracy, tolerance: %.1f)",

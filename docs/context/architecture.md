@@ -6,6 +6,24 @@ BkpDir is a directory archiving and file backup tool that creates ZIP-based arch
 
 ## Core Architecture
 
+### ARCH-001: Core Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Core Architecture section
+**Impact**: Core system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
+### CORE-ARCH-001: Core Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Core Architecture section
+**Impact**: Core system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
+### SYSTEM-COMPONENTS-001: System Components Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - System Components section
+**Impact**: System component architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### System Components
 
 ```
@@ -44,6 +62,18 @@ BkpDir is a directory archiving and file backup tool that creates ZIP-based arch
 ```
 
 ## Data Models
+
+### ARCH-004: Data Models Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Data Models section
+**Impact**: Data models architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
+### DATA-MODELS-001: Data Models Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Data Models section
+**Impact**: Data model architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Core Configuration Object
 
@@ -201,6 +231,24 @@ type BackupOptions struct {
 
 ## Service Architecture
 
+### ARCH-006: Service Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Service Architecture section
+**Impact**: Service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
+### SERVICE-ARCH-001: Service Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Service Architecture section
+**Impact**: Service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
+### SERVICE-ARCHIVE-001: Archive Service Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Archive Service section
+**Impact**: Archive service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Archive Service
 
 **Responsibilities:**
@@ -222,6 +270,12 @@ type BackupOptions struct {
 - `CreateFullArchiveWithContext()`: Full archive with context and resource cleanup
 - `createZipArchiveWithContext()`: ZIP creation with periodic cancellation checks
 
+### SERVICE-BACKUP-001: File Backup Service Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - File Backup Service section
+**Impact**: File backup service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### File Backup Service
 
 **Responsibilities:**
@@ -242,6 +296,12 @@ type BackupOptions struct {
 - `CopyFileWithContext()`: File copying with periodic cancellation checks
 - `CheckForIdenticalFileBackup()`: Backup comparison with existing files
 
+### SERVICE-GIT-001: Git Integration Service Architecture Decision [ACTION:discovery]
+**Source**: docs/context/architecture.md - Git Integration Service section
+**Impact**: Git integration service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Git Integration Service
 
 **Responsibilities:**
@@ -255,6 +315,12 @@ type BackupOptions struct {
 - `BranchExtractor`: Current branch identification
 - `HashExtractor`: Commit hash retrieval
 - `StatusChecker`: Working directory state analysis
+
+### SERVICE-RESOURCE-001: Resource Management Service Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Resource Management Service section
+**Impact**: Resource management service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Resource Management Service
 
@@ -275,6 +341,12 @@ type BackupOptions struct {
 - `TempFile`: Temporary file resource with cleanup
 - `TempDir`: Temporary directory resource with recursive cleanup
 - `Resource`: Interface for all cleanable resources
+
+### SERVICE-TEMPLATE-001: Template Formatting Service Architecture Decision [ACTION:format-processing]
+**Source**: docs/context/architecture.md - Template Formatting Service section
+**Impact**: Template formatting service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Template Formatting Service
 
@@ -317,6 +389,12 @@ type BackupOptions struct {
 - Stdout and stderr routing based on message type
 - Consistent formatting across all output types
 
+### SERVICE-OUTPUT-001: Output Formatting Service Architecture Decision [ACTION:format-processing]
+**Source**: docs/context/architecture.md - Output Formatting Service section
+**Impact**: Output formatting service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Output Formatting Service
 
 **Responsibilities:**
@@ -349,6 +427,12 @@ type BackupOptions struct {
 - `FormatError()`: Format error messages
 - Print methods for all operations: `PrintCreatedArchive()`, `PrintError()`, etc.
 
+### SERVICE-ERROR-001: Error Handling Service Architecture Decision [ACTION:validation]
+**Source**: docs/context/architecture.md - Error Handling Service section
+**Impact**: Error handling service architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Error Handling Service
 
 **Responsibilities:**
@@ -371,6 +455,12 @@ type BackupOptions struct {
 - `IsDirectoryNotFoundError()`: Directory existence error detection
 
 ## Configuration Architecture
+
+### ARCH-002: Configuration Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Configuration Architecture section
+**Impact**: Configuration system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Configuration Discovery
 
@@ -406,9 +496,9 @@ type BackupOptions struct {
 - Default values preserved when not explicitly overridden
 - Status codes, format strings, and templates all configurable
 
-### ⭐ Layered Configuration Inheritance Architecture (CFG-005)
+### [CRITICAL] Layered Configuration Inheritance Architecture (CFG-005)
 
-**🔻 CFG-005: Layered Configuration Inheritance Implementation**
+**[LOW] CFG-005: Layered Configuration Inheritance Implementation**
 
 The configuration system supports layered inheritance enabling configuration files to inherit from other configuration files with flexible merge strategies. This provides hierarchical configuration management for complex project structures.
 
@@ -686,6 +776,12 @@ This architecture provides comprehensive inheritance capabilities while maintain
 
 ## Archive Format Architecture
 
+### ARCH-003: Archive Format Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Archive Format Architecture section
+**Impact**: Archive format and structure architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Archive Naming Convention
 
 ```
@@ -745,6 +841,12 @@ archive.zip
 
 ## Output Formatting Architecture
 
+### ARCH-008: Output Formatting Architecture Decision [ACTION:format-processing]
+**Source**: docs/context/architecture.md - Output Formatting Architecture section
+**Impact**: Output formatting system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Printf-Style Formatting
 
 ```go
@@ -802,6 +904,12 @@ Patterns: map[string]string{
 ```
 
 ## Error Handling Architecture
+
+### ARCH-005: Error Handling Architecture Decision [ACTION:validation]
+**Source**: docs/context/architecture.md - Error Handling Architecture section
+**Impact**: Error handling system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Error Categories
 
@@ -869,6 +977,12 @@ func IsPermissionError(err error) bool {
 
 ## Concurrency Architecture
 
+### ARCH-007: Concurrency Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Concurrency Architecture section
+**Impact**: Concurrency and thread safety architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### Thread Safety
 
 - **Resource Manager**: Thread-safe resource tracking with mutex protection
@@ -891,6 +1005,12 @@ func IsPermissionError(err error) bool {
 - **Cleanup**: Background resource cleanup with panic recovery
 
 ## Testing Architecture
+
+### ARCH-014: Testing Architecture Decision [ACTION:validation]
+**Source**: docs/context/architecture.md - Testing Architecture section
+**Impact**: Testing system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Unit Testing
 
@@ -917,6 +1037,12 @@ func IsPermissionError(err error) bool {
 - **Verification Speed**: Checksum calculation with context support
 
 ## Testing Infrastructure Architecture
+
+### ARCH-015: Testing Infrastructure Architecture Decision [ACTION:validation]
+**Source**: docs/context/architecture.md - Testing Infrastructure Architecture section
+**Impact**: Testing infrastructure architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Archive Corruption Testing Framework (TEST-INFRA-001-A) ✅ COMPLETED
 
@@ -1144,6 +1270,12 @@ This architecture provides comprehensive testing capabilities while maintaining 
 
 ## Security Architecture
 
+### ARCH-013: Security Architecture Decision [ACTION:validation]
+**Source**: docs/context/architecture.md - Security Architecture section
+**Impact**: Security system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 ### File System Security
 
 - **Path Validation**: Prevent directory traversal with enhanced validation
@@ -1159,6 +1291,12 @@ This architecture provides comprehensive testing capabilities while maintaining 
 - **Metadata Validation**: Archive metadata verification with structured errors
 
 ## Extensibility Architecture
+
+### ARCH-016: Extensibility Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Extensibility Architecture section
+**Impact**: Extensibility system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: MEDIUM
 
 ### Plugin Interface
 
@@ -1201,6 +1339,12 @@ type TemplateFormatter interface {
 
 ## Deployment Architecture
 
+### ARCH-017: Deployment Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Deployment Architecture section
+**Impact**: Deployment system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: MEDIUM
+
 ### Binary Distribution
 
 - **Single Binary**: Self-contained executable with embedded defaults
@@ -1216,6 +1360,12 @@ type TemplateFormatter interface {
 - **Environment Integration**: Container-friendly configuration with BKPDIR_CONFIG
 
 ## Performance Considerations
+
+### ARCH-012: Performance Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Performance Considerations section
+**Impact**: Performance optimization architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: MEDIUM
 
 ### Memory Management
 
@@ -1239,6 +1389,12 @@ type TemplateFormatter interface {
 - **Long-Running Operations**: Progress reporting with context cancellation
 
 ## CLI Commands Architecture
+
+### ARCH-018: CLI Commands Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - CLI Commands Architecture section
+**Impact**: CLI commands system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Command Structure
 
@@ -1306,10 +1462,16 @@ bkpdir
 
 This architecture provides a robust foundation for BkpDir's directory archiving and file backup capabilities while incorporating advanced features for enhanced error handling, resource management, context-aware operations, and comprehensive output formatting.
 
-## 🔻 CI/CD Pipeline Architecture for AI Development
+## [LOW] CI/CD Pipeline Architecture for AI Development
+
+### ARCH-019: CI/CD Pipeline Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - CI/CD Pipeline Architecture section
+**Impact**: CI/CD pipeline system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: LOW
 
 ### CICD-001: AI-Optimized Pipeline Architecture
-**Priority**: 🔻 LOW  
+**Priority**: [LOW] LOW  
 **Implementation Tokens**: `// CICD-001: AI-first CI/CD optimization`
 
 #### Pipeline Architecture Overview
@@ -1335,7 +1497,7 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 │  └─ Build Verification (make build)                       │
 ├─────────────────────────────────────────────────────────────┤
 │  Phase 3: AI-Optimized Reporting                          │
-│  ├─ Standardized Icon Output (⭐🔺🔶🔻)                    │
+│  ├─ Standardized Icon Output ([CRITICAL][HIGH][MEDIUM][LOW])                    │
 │  ├─ Token-Based Traceability                              │
 │  ├─ AI-Readable Status Messages                           │
 │  └─ Automated Documentation Updates                       │
@@ -1349,13 +1511,13 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 
 #### Technical Components
 
-**🔧 Pipeline Orchestration Layer**
+**[ACTION:core-functionality] Pipeline Orchestration Layer**
 - **Priority Queue Management**: Low-priority task scheduling
 - **Resource Allocation**: Background CPU/memory usage optimization
 - **Parallel Processing**: Multi-stage validation execution
 - **Context Awareness**: AI assistant workflow state tracking
 
-**🛡️ AI Protocol Validation Engine**
+**[ACTION:validation] AI Protocol Validation Engine**
 - **Token Validation**: Integration with DOC-008 comprehensive validation
 - **Documentation Sync**: Cross-reference consistency checking
 - **Protocol Compliance**: ai-assistant-protocol.md adherence verification
@@ -1367,7 +1529,7 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 - **Failure Recovery**: Self-healing pipeline configurations
 - **Metrics Collection**: AI workflow performance analytics
 
-**🔍 AI-Optimized Reporting System**
+**[ACTION:discovery] AI-Optimized Reporting System**
 - **Structured Output**: Machine-readable status reports
 - **Icon Integration**: Standardized visual indicators for AI comprehension
 - **Token Attribution**: Change traceability through implementation tokens
@@ -1380,12 +1542,12 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 - Token-based change attribution
 - Cross-reference validation with documentation
 
-**🔧 Build System Integration**
+**[ACTION:core-functionality] Build System Integration**
 - Enhanced Makefile targets for AI workflows
 - Automated dependency resolution
 - Background build artifact management
 
-**📝 Documentation Pipeline**
+**[ACTION:format-processing] Documentation Pipeline**
 - Automatic documentation consistency checking
 - Cross-file reference validation
 - AI-friendly documentation formatting
@@ -1404,10 +1566,16 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 - Automated optimization recommendations
 - Resource utilization monitoring
 
-## 🔻 AI-First Documentation and Code Maintenance Architecture
+## [LOW] AI-First Documentation and Code Maintenance Architecture
+
+### ARCH-020: AI-First Documentation Architecture Decision [ACTION:document-update]
+**Source**: docs/context/architecture.md - AI-First Documentation Architecture section
+**Impact**: AI-first documentation system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: LOW
 
 ### DOC-011: AI Validation Framework Architecture
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Implementation Tokens**: `// DOC-011: AI validation integration`
 
 #### AI Validation Framework Overview
@@ -1449,13 +1617,13 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 
 #### Core Validation Components
 
-**🔧 AI Workflow Integration Engine**
+**[ACTION:core-functionality] AI Workflow Integration Engine**
 - **DOC-008 Framework Bridge**: Seamless integration with existing comprehensive validation system
 - **Pre-submission API Gateway**: Real-time validation endpoints for AI assistant workflows
 - **Workflow Hook Manager**: Non-intrusive validation integration that preserves AI assistant flow
 - **Context-Aware Validation**: Validation behavior adapted to AI assistant operation context
 
-**🛡️ AI-Optimized Error Processing System**
+**[ACTION:validation] AI-Optimized Error Processing System**
 - **Error Message Formatter**: AI-readable error message structure and formatting
 - **Remediation Guide Generator**: Context-aware guidance for AI assistant error resolution
 - **Error Categorization Engine**: Priority-based error classification for AI assistant action prioritization
@@ -1467,7 +1635,7 @@ This architecture provides a robust foundation for BkpDir's directory archiving 
 - **Approval Workflow Engine**: Automated approval processes with proper authorization controls
 - **Rollback System**: Reversible bypass actions with automated rollback capabilities
 
-**🔍 Compliance Monitoring Infrastructure**
+**[ACTION:discovery] Compliance Monitoring Infrastructure**
 - **AI Behavior Analytics**: Comprehensive tracking of AI assistant validation behavior patterns
 - **Adherence Metrics Collector**: Real-time monitoring of AI assistant compliance with validation requirements
 - **Dashboard Generator**: Visual compliance dashboards for monitoring AI assistant validation adherence
@@ -1510,7 +1678,7 @@ type AIOptimizedError struct {
 }
 ```
 
-**🔧 Validation Integration Layer**
+**[ACTION:core-functionality] Validation Integration Layer**
 ```go
 type DOC008ValidationBridge struct {
     validationEngine    *ValidationEngine
@@ -1568,7 +1736,7 @@ type BypassController struct {
 - API endpoint integration: `/api/v1/validation/ai-submission`
 - Pre-commit hook integration for seamless workflow inclusion
 
-**🛡️ Feature Tracking Integration**
+**[ACTION:validation] Feature Tracking Integration**
 - Automatic compliance status updates in `feature-tracking.md`
 - Integration with ai-assistant-protocol.md requirements
 - Cross-reference validation with ai-assistant-compliance.md
@@ -1589,7 +1757,7 @@ type BypassController struct {
 - Efficient resource utilization for background validation processing
 
 ### DOC-013: AI-First Documentation Strategy Architecture
-**Priority**: 🔻 LOW  
+**Priority**: [LOW] LOW  
 **Implementation Tokens**: `// DOC-013: AI-first maintenance`
 
 #### AI-First Documentation Framework Overview
@@ -1637,7 +1805,7 @@ type BypassController struct {
 
 #### Core AI Documentation Components
 
-**📝 AI Documentation Standards Engine**
+**[ACTION:format-processing] AI Documentation Standards Engine**
 - **Implementation Token Manager**: Standardized token format with priority and action icons
 - **Cross-Reference Validator**: Automated link validation and bidirectional reference checking
 - **Content Structure Optimizer**: AI-friendly formatting and hierarchy management
@@ -1665,7 +1833,7 @@ type BypassController struct {
 
 **📋 AI Documentation Standards Layer**
 ```go
-// 🔻 DOC-013: AI documentation standards architecture - 🏗️ Documentation framework
+// [LOW] DOC-013: AI documentation standards architecture - 🏗️ Documentation framework
 type AIDocumentationStandardsEngine struct {
     tokenManager         *ImplementationTokenManager
     crossRefValidator    *CrossReferenceValidator  
@@ -1697,9 +1865,9 @@ type DocumentationTemplateManager struct {
 }
 ```
 
-**🔧 AI Code Maintenance Layer**
+**[ACTION:core-functionality] AI Code Maintenance Layer**
 ```go
-// 🔻 DOC-013: AI code maintenance architecture - 🔧 Code standards framework
+// [LOW] DOC-013: AI code maintenance architecture - [ACTION:core-functionality] Code standards framework
 type AICodeMaintenanceFramework struct {
     commentStandardizer  *AICodeCommentStandardizer
     errorHandlingFramework *AIErrorHandlingFramework
@@ -1732,7 +1900,7 @@ type AINamingOptimizer struct {
 
 **📊 AI Quality Assurance Layer**
 ```go
-// 🔻 DOC-013: AI quality assurance architecture - 📊 Quality framework
+// [LOW] DOC-013: AI quality assurance architecture - 📊 Quality framework
 type AIQualityAssuranceSystem struct {
     comprehensibilityAnalyzer *AIComprehensibilityAnalyzer
     qualityMetricsEngine     *AICodeQualityMetricsEngine
@@ -1766,7 +1934,7 @@ type AIQualityRecommendationEngine struct {
 
 **🚀 AI Workflow Integration Layer**
 ```go
-// 🔻 DOC-013: AI workflow integration architecture - 🚀 Workflow framework
+// [LOW] DOC-013: AI workflow integration architecture - 🚀 Workflow framework
 type AIWorkflowIntegrationEngine struct {
     documentationWorkflowManager *AIDocumentationWorkflowManager
     codeMaintenanceAutomation   *AICodeMaintenanceAutomation
@@ -1806,7 +1974,7 @@ Validation (DOC-008) → Cross-Reference Update → Feature Tracking Update →
 Quality Verification → Documentation Publication
 ```
 
-**🔧 AI Code Maintenance Workflow Integration**
+**[ACTION:core-functionality] AI Code Maintenance Workflow Integration**
 ```
 Code Change Request → Token Analysis → Comment Standardization → 
 Error Handling Validation → Naming Optimization → Quality Assessment → 
@@ -1835,7 +2003,7 @@ Performance Tracking → Feedback Loop Integration
 - Priority icon assignment based on feature priority in feature registry
 - Bidirectional relationship maintenance between documentation and code
 
-**🛡️ AI Assistant Compliance Integration**
+**[ACTION:validation] AI Assistant Compliance Integration**
 - Integration with ai-assistant-compliance.md validation requirements
 - Token referencing and cross-reference requirement enforcement
 - Validation workflow integration with DOC-008 comprehensive system
@@ -1855,7 +2023,7 @@ Performance Tracking → Feedback Loop Integration
 - **Quality Monitoring**: Real-time quality metrics collection and analysis
 - **Knowledge Management**: Centralized knowledge repository for AI assistant collaboration
 
-**🔧 Integration Efficiency**
+**[ACTION:core-functionality] Integration Efficiency**
 - **Workflow Automation**: >95% automated workflow completion rate
 - **Quality Compliance**: >99% automated compliance checking accuracy
 - **Cross-Reference Integrity**: >99% link validation success rate
@@ -1869,7 +2037,7 @@ Performance Tracking → Feedback Loop Integration
 - **Quality Monitoring**: Real-time metrics collection with automated recommendation generation
 - **Workflow Management**: Automated AI assistant workflow integration with feature tracking
 
-**🔧 Development Infrastructure**
+**[ACTION:core-functionality] Development Infrastructure**
 - **Template Management**: Version-controlled template library with validation rules
 - **Quality Assurance**: Automated quality gates integrated with development workflow
 - **Performance Monitoring**: AI assistant productivity analytics and optimization feedback
@@ -1877,11 +2045,17 @@ Performance Tracking → Feedback Loop Integration
 
 This architecture provides the comprehensive foundation for AI-first development where AI assistants can efficiently create, maintain, and optimize both code and documentation following consistent, machine-readable standards that enable optimal AI assistant collaboration and long-term maintainability.
 
-## 🔧 Configuration Management System
+## [ACTION:core-functionality] Configuration Management System
+
+### ARCH-021: Configuration Management Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Configuration Management System section
+**Impact**: Configuration management system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Configuration Architecture
 
-**🔻 REFACTOR-003: Configuration Schema Abstraction Implementation**
+**[LOW] REFACTOR-003: Configuration Schema Abstraction Implementation**
 
 The configuration system has been enhanced with schema abstraction to prepare for extraction while maintaining complete backward compatibility. The new architecture introduces clean interface boundaries and separation of concerns.
 
@@ -2005,9 +2179,9 @@ The configuration system supports multiple sources with a clear priority hierarc
 - Default values preserved when not explicitly overridden
 - Status codes, format strings, and templates all configurable
 
-### ⭐ Layered Configuration Inheritance Architecture (CFG-005)
+### [CRITICAL] Layered Configuration Inheritance Architecture (CFG-005)
 
-**🔻 CFG-005: Layered Configuration Inheritance Implementation**
+**[LOW] CFG-005: Layered Configuration Inheritance Implementation**
 
 The configuration system supports layered inheritance enabling configuration files to inherit from other configuration files with flexible merge strategies. This provides hierarchical configuration management for complex project structures.
 
@@ -2283,9 +2457,9 @@ verification:                           # = default strategy applied
 
 This architecture provides comprehensive inheritance capabilities while maintaining backward compatibility, performance, and robust error handling for complex configuration scenarios.
 
-### 🔺 Complete Configuration Reflection and Visibility Architecture (CFG-006)
+### [HIGH] Complete Configuration Reflection and Visibility Architecture (CFG-006)
 
-**🔺 CFG-006: Complete Configuration Reflection and Visibility Implementation**
+**[HIGH] CFG-006: Complete Configuration Reflection and Visibility Implementation**
 
 The configuration system provides comprehensive visibility of all configuration parameters through automatic field discovery and hierarchical source attribution. This transforms the config command from a manually-maintained list to a comprehensive, automatically-updating view of the entire configuration system with full inheritance chain visibility.
 
@@ -2625,9 +2799,9 @@ Configuration Tree:
    └─ Source: ~/.bkpdir.yml (inherited unchanged)
 ```
 
-### 🔶 Performance Optimization Architecture (CFG-006 Subtask 6)
+### [MEDIUM] Performance Optimization Architecture (CFG-006 Subtask 6)
 
-**🔶 CFG-006: Performance optimization system implementation**
+**[MEDIUM] CFG-006: Performance optimization system implementation**
 
 The configuration reflection system includes comprehensive performance optimization to ensure fast, responsive configuration inspection suitable for development workflows.
 
@@ -2686,7 +2860,7 @@ type ConfigFilter struct {
 func GetConfigValuesWithSourcesFiltered(config *Config, root string, filter ConfigFilter) ([]ConfigValue, error) {
     allFields, err := GetAllConfigFields(config)
     if err != nil {
-        return nil, fmt.Errorf("🔶 CFG-006: Performance optimization - field discovery failed: %w", err)
+        return nil, fmt.Errorf("[MEDIUM] CFG-006: Performance optimization - field discovery failed: %w", err)
     }
     
     // Filter fields before expensive source resolution
@@ -2725,7 +2899,7 @@ func GetConfigFieldValue(config *Config, fieldPath string, root string) (*Config
     // Use path traversal for efficient field access
     value, err := getFieldValueByPath(config, fieldPath)
     if err != nil {
-        return nil, fmt.Errorf("🔶 CFG-006: Performance optimization - field access failed: %w", err)
+        return nil, fmt.Errorf("[MEDIUM] CFG-006: Performance optimization - field access failed: %w", err)
     }
     
     // Resolve source only for requested field
@@ -2846,6 +3020,12 @@ func BenchmarkConfigFieldCaching(b *testing.B) {
 This performance optimization system ensures that configuration inspection remains fast and responsive even for complex configurations with deep inheritance chains, making it suitable for interactive development workflows.
 
 ## PERF-001: Validation Performance Optimization Architecture
+
+### ARCH-022: Performance Optimization Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - PERF-001 Validation Performance Optimization Architecture section
+**Impact**: Performance optimization system architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: MEDIUM
 
 ### Overview
 
@@ -3061,5 +3241,11 @@ func TestValidationCaching(t *testing.T) {
 This performance optimization architecture transforms the DOC-014 validation system from a development bottleneck into a fast, efficient, production-ready validation framework suitable for CI/CD integration and large-scale development workflows.
 
 ## Archive Format Architecture
+
+### ARCH-009: Archive Format Architecture Decision [ACTION:core-functionality]
+**Source**: docs/context/architecture.md - Archive Format Architecture section (duplicate)
+**Impact**: Archive format architecture decision
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: MEDIUM
 
 This architecture provides comprehensive configuration visibility with zero maintenance overhead while maintaining excellent performance and full backward compatibility with existing configuration systems.

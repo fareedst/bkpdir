@@ -4,6 +4,14 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// TEST-ERRORS-PKG-001: Errors package test validation - Error handling and resource management testing [ACTION:validation]
+// Source: pkg/errors/classification.go - Error handling implementation
+// Impact: Core functionality validation for errors package
+
+// TEST-SERVICE-ERRORS-PKG-001: Errors package service test validation - Error service implementation testing [ACTION:validation]
+// Source: pkg/errors/handlers.go - Error service implementation
+// Impact: Error service validation for errors package service implementation
 package errors
 
 import (
@@ -14,7 +22,7 @@ import (
 	"testing"
 )
 
-// ⭐ EXTRACT-002: Error interface testing - 🧪 ApplicationError functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestApplicationError(t *testing.T) {
 	// Test basic error creation
 	err := NewApplicationError("test error", 42)
@@ -48,7 +56,7 @@ func TestApplicationError(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification testing - 🧪 Error detection functions
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestErrorClassification(t *testing.T) {
 	// Test disk full error detection
 	diskFullErrors := []error{
@@ -95,7 +103,7 @@ func TestErrorClassification(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification framework testing - 🧪 Classifier functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestDefaultErrorClassifier(t *testing.T) {
 	classifier := NewDefaultErrorClassifier()
 
@@ -130,7 +138,7 @@ func TestDefaultErrorClassifier(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Error context testing - 🧪 Error context functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestErrorContext(t *testing.T) {
 	ctx := context.Background()
 	errorCtx := NewErrorContext("test_operation", "/test/path", ctx)
@@ -153,7 +161,7 @@ func TestErrorContext(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Path validation testing - 🧪 Validation functions
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestPathValidation(t *testing.T) {
 	// Mock configuration for testing
 	mockConfig := &mockErrorConfig{}
@@ -181,7 +189,7 @@ func TestPathValidation(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Error handler testing - 🧪 Handler functions
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestHandleError(t *testing.T) {
 	mockConfig := &mockErrorConfig{}
 	mockFormatter := &mockErrorFormatter{}
@@ -209,7 +217,7 @@ func TestHandleError(t *testing.T) {
 
 // Mock implementations for testing
 
-// ⭐ EXTRACT-002: Mock configuration for testing - 🧪 Test utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 type mockErrorConfig struct{}
 
 func (m *mockErrorConfig) GetStatusCodes() map[string]int {
@@ -236,7 +244,7 @@ func (m *mockErrorConfig) GetFilePermissions() os.FileMode {
 	return 0644
 }
 
-// ⭐ EXTRACT-002: Mock formatter for testing - 🧪 Test utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 type mockErrorFormatter struct {
 	lastMessage string
 }

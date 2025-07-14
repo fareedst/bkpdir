@@ -6,6 +6,10 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// CORE-ARCH-001: Core Application Architecture Decision - Core application architecture implementation [ACTION:core-functionality]
+// Source: docs/context/architecture.md - Core Architecture section
+// Impact: Core application architecture decision
 package main
 
 import (
@@ -25,15 +29,15 @@ import (
 	"bkpdir/pkg/formatter"
 )
 
-// 🔶 REFACTOR-001: CLI orchestration interface contracts defined - 📝
-// 🔶 REFACTOR-001: Central dependency aggregation point identified - 📝
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // Version, date, and commit are set at build time via ldflags
 var version = "dev"
 var date = "unknown"
 var commit = "unknown"
 
-// 🔺 CFG-003: Global variables for command configuration - 📝
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 var (
 	createNote   string
 	createDryRun bool
@@ -53,14 +57,14 @@ Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
-	// 🔶 REFACTOR-005: Structure optimization - Standardized version constants - 📝
+	// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 	appVersion     = "1.5.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
 // Runtime compilation information (set by build flags)
 var (
-	// 🔶 REFACTOR-005: Structure optimization - Standardized build variables - 📝
+	// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 	compileDate = "unknown"
 	platform    = "unknown"
 	Version     = appVersion // Public version for external access
@@ -72,8 +76,9 @@ var (
 	showConfig bool
 )
 
-// ⭐ CLI-015: Path type detection for automatic command routing - 🔍
-// isFile checks if the given path is a regular file
+// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options implementation [ACTION:core-functionality]
+// Source: docs/context/specification.md - Global Options section
+// Impact: Core functionality requirement for CLI global options
 func isFile(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -82,8 +87,9 @@ func isFile(path string) bool {
 	return info.Mode().IsRegular()
 }
 
-// ⭐ CLI-015: Path type detection for automatic command routing - 🔍
-// isDirectory checks if the given path is a directory
+// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options implementation [ACTION:core-functionality]
+// Source: docs/context/specification.md - Global Options section
+// Impact: Core functionality requirement for CLI global options
 func isDirectory(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -92,8 +98,9 @@ func isDirectory(path string) bool {
 	return info.IsDir()
 }
 
-// ⭐ CLI-015: Path validation for automatic command routing - 🛡️
-// validatePath checks if the path exists and returns appropriate error message
+// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options validation [ACTION:validation]
+// Source: docs/context/specification.md - Global Options section
+// Impact: Validation requirement for CLI global options
 func validatePath(path string) error {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -108,8 +115,9 @@ func validatePath(path string) error {
 	return nil
 }
 
-// ⭐ CLI-015: Automatic command routing based on path type - 🔧
-// handleAutoDetectedCommand routes to appropriate command based on first argument type
+// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options implementation [ACTION:core-functionality]
+// Source: docs/context/specification.md - Global Options section
+// Impact: Core functionality requirement for CLI global options
 func handleAutoDetectedCommand(args []string) {
 	if len(args) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: no path provided\n")
@@ -139,7 +147,7 @@ func handleAutoDetectedCommand(args []string) {
 	}
 }
 
-// ⭐ CLI-015: Auto-detected file backup operation - 📝
+// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 // handleAutoDetectedFileBackup handles file backup when auto-detected
 func handleAutoDetectedFileBackup(args []string) {
 	ctx := context.Background()
@@ -155,6 +163,7 @@ func handleAutoDetectedFileBackup(args []string) {
 		os.Exit(cfg.StatusConfigError)
 	}
 
+	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(cfg)
 	filePath := args[0]
 
@@ -178,7 +187,7 @@ func handleAutoDetectedFileBackup(args []string) {
 	}
 }
 
-// ⭐ CLI-015: Auto-detected directory archive operation - 📝
+// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 // handleAutoDetectedDirectoryArchive handles directory archive when auto-detected
 func handleAutoDetectedDirectoryArchive(args []string) {
 	ctx := context.Background()
@@ -231,7 +240,7 @@ BkpDir is a command-line tool for archiving directories and backing up individua
 It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
 Git-aware archive naming, and archive verification.`
 
-// ⭐ CLI-015: Custom command execution with auto-detection fallback - 🔧
+// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 // executeWithAutoDetection handles Cobra command resolution issues by implementing
 // custom argument parsing that allows auto-detection to work alongside existing commands
 func executeWithAutoDetection(rootCmd *cobra.Command) error {
@@ -314,14 +323,14 @@ func executeWithAutoDetection(rootCmd *cobra.Command) error {
 }
 
 func main() {
-	// 🔺 CFG-001: CLI application initialization and command structure - 📝
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// DECISION-REF: DEC-002
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
 		Short:   "Directory archiving and file backup CLI for macOS and Linux",
 		Long:    fmt.Sprintf(rootLongDesc, Version, compileDate, platform),
 		Version: fmt.Sprintf("%s (compiled %s) [%s]", Version, compileDate, platform),
-		// ⭐ CLI-015: Disable default command suggestions to enable auto-detection - 🔧
+		// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 		DisableSuggestions: true,
 		Example: `  # Auto-detect operation based on path type (NEW)
   bkpdir myfile.txt "Before changes"        # Creates file backup automatically
@@ -364,7 +373,7 @@ func main() {
 				return
 			}
 
-			// ⭐ CLI-015: Automatic file/directory command detection - 🔧
+			// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 			// If positional arguments provided, auto-detect operation type
 			if len(args) > 0 {
 				handleAutoDetectedCommand(args)
@@ -404,7 +413,7 @@ func main() {
 	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
-	// ⭐ CLI-015: Custom command execution with auto-detection fallback - 🔧
+	// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 	if err := executeWithAutoDetection(rootCmd); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -412,8 +421,8 @@ func main() {
 }
 
 func handleConfigCommand() {
-	// 🔺 CFG-001: Configuration display handling - 🔍
-	// 🔺 CFG-003: Configuration output formatting - 🔍
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cwd, err := os.Getwd()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
@@ -426,6 +435,7 @@ func handleConfigCommand() {
 		os.Exit(cfg.StatusConfigError)
 	}
 
+	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(cfg)
 
 	// Display configuration file paths
@@ -451,7 +461,7 @@ func handleConfigCommand() {
 	}
 }
 
-// 🔺 CFG-006: Enhanced config command interface implementation - 🔧
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 4: Enhanced config command interface
 // handleEnhancedConfigCommand provides comprehensive configuration inspection with filtering options.
 func handleEnhancedConfigCommand(showAll, showOverrides, showSources bool, outputFormat, filterPattern string) {
@@ -484,7 +494,7 @@ func handleEnhancedConfigCommand(showAll, showOverrides, showSources bool, outpu
 	}
 }
 
-// 🔺 CFG-006: Configuration filtering implementation - 🔧
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 5: Command-line options and filtering
 // applyConfigFiltering filters configuration values based on user criteria.
 func applyConfigFiltering(values []ConfigValueWithMetadata, showOverridesOnly bool, filterPattern string) []ConfigValueWithMetadata {
@@ -510,7 +520,7 @@ func applyConfigFiltering(values []ConfigValueWithMetadata, showOverridesOnly bo
 	return filtered
 }
 
-// 🔺 CFG-006: Hierarchical value resolution display - 🔧
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 3: Hierarchical value resolution display
 // displayConfigTree shows configuration in tree format with inheritance chains.
 func displayConfigTree(values []ConfigValueWithMetadata, showSources bool) {
@@ -523,7 +533,7 @@ func displayConfigTree(values []ConfigValueWithMetadata, showSources bool) {
 
 	// Display each category as a tree branch
 	for category, categoryValues := range categories {
-		fmt.Printf("📁 %s\n", strings.Title(strings.ReplaceAll(category, "_", " ")))
+		fmt.Printf("[DIR] %s\n", strings.Title(strings.ReplaceAll(category, "_", " ")))
 
 		for i, value := range categoryValues {
 			prefix := "├── "
@@ -545,7 +555,7 @@ func displayConfigTree(values []ConfigValueWithMetadata, showSources bool) {
 	}
 }
 
-// 🔺 CFG-006: JSON output format implementation - 🔧
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 4: Multiple display formats
 // displayConfigJSON outputs configuration in JSON format for programmatic use.
 func displayConfigJSON(values []ConfigValueWithMetadata, showSources bool) {
@@ -589,7 +599,7 @@ func displayConfigJSON(values []ConfigValueWithMetadata, showSources bool) {
 	fmt.Println(string(jsonData))
 }
 
-// 🔺 CFG-006: Table display format implementation - 🔧
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 4: Enhanced display with source attribution
 // displayConfigTable shows configuration in traditional table format with enhanced metadata.
 func displayConfigTable(values []ConfigValueWithMetadata, showSources bool) {
@@ -631,7 +641,7 @@ func handleCreateCommand() {
 	// Implementation
 }
 
-// ⭐ CFG-TEMPLATE-001: Template command implementation - 🔧
+// CFG-TEMPLATE-001: Template command implementation [DECISION:core-functionality]
 func handleTemplateCommand(cmd *cobra.Command, args []string) {
 	// Get flag values
 	outputFile, _ := cmd.Flags().GetString("output")
@@ -645,7 +655,7 @@ func handleTemplateCommand(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	// ⭐ CFG-TEMPLATE-001: Configuration reflection - 🔧
+	// CFG-TEMPLATE-001: Configuration reflection [DECISION:core-functionality]
 	// Load current configuration to populate template values
 	cfg, err := LoadConfig(cwd)
 	if err != nil {
@@ -653,7 +663,7 @@ func handleTemplateCommand(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	// ⭐ CFG-TEMPLATE-001: File management - 🔧
+	// CFG-TEMPLATE-001: File management [DECISION:core-functionality]
 	// Determine output filename
 	targetFile := determineTemplateFileName(outputFile)
 
@@ -665,7 +675,7 @@ func handleTemplateCommand(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+	// CFG-TEMPLATE-001: Template generation [DECISION:core-functionality]
 	// Generate template content
 	templateContent, err := generateConfigurationTemplate(cfg)
 	if err != nil {
@@ -688,13 +698,13 @@ func handleTemplateCommand(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("✅ Configuration template created: %s\n", targetFile)
-	fmt.Printf("📝 Edit the file to customize your configuration options\n")
+	fmt.Printf("[SUCCESS] Configuration template created: %s\n", targetFile)
+	fmt.Printf("[NOTE] Edit the file to customize your configuration options\n")
 }
 
 func handleListCommand() {
-	// ⭐ ARCH-002: Archive listing command implementation - 📝
-	// 🔺 CFG-003: Archive listing output formatting - 📝
+	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	// Requirement: List Archives - Display all archives in the archive directory
 	// Specification: Shows each archive with path and creation time using configurable format
 	// Specification: Shows verification status if available: [VERIFIED], [FAILED], or [UNVERIFIED]
@@ -712,6 +722,7 @@ func handleListCommand() {
 		os.Exit(cfg.StatusConfigError)
 	}
 
+	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(cfg)
 
 	if err := ListArchivesEnhanced(cfg, formatter); err != nil {
@@ -729,10 +740,10 @@ func handleVersionCommand() {
 }
 
 func configCmd() *cobra.Command {
-	// 🔺 CFG-001: Configuration command implementation - 📝
-	// 🔺 CFG-003: Configuration command interface - 📝
-	// 🔺 CFG-006: Enhanced config command interface - 🔧
-	// 🔻 CFG-006: Documentation - 📝 Enhanced help text
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+	// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+	// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 
 	var (
 		showAll       bool
@@ -814,7 +825,7 @@ For detailed documentation, see docs/configuration-inspection-guide.md`,
 		},
 	}
 
-	// 🔺 CFG-006: Command-line options and filtering - 🔧
+	// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 	cmd.Flags().BoolVar(&showAll, "all", true, "Show all configuration fields")
 	cmd.Flags().BoolVar(&showOverrides, "overrides-only", false, "Display only non-default values")
 	cmd.Flags().BoolVar(&showSources, "sources", false, "Show detailed source attribution")
@@ -825,8 +836,8 @@ For detailed documentation, see docs/configuration-inspection-guide.md`,
 }
 
 func createCmd() *cobra.Command {
-	// ⭐ ARCH-002: Archive creation command implementation - 🔧
-	// 🔺 CFG-003: Command interface for archive creation - 🔧
+	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create a new archive",
@@ -838,7 +849,7 @@ func createCmd() *cobra.Command {
 }
 
 func templateCmd() *cobra.Command {
-	// ⭐ CFG-TEMPLATE-001: CLI command implementation - 🔧
+	// CFG-TEMPLATE-001: CLI command implementation [DECISION:core-functionality]
 	cmd := &cobra.Command{
 		Use:   "template",
 		Short: "Generate configuration template file",
@@ -873,8 +884,8 @@ File naming:
 }
 
 func fullCmd() *cobra.Command {
-	// ⭐ ARCH-002: Full archive creation command (backward compatibility) - 🔧
-	// 🔺 CFG-003: Backward compatibility command interface - 🔧
+	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "full [NOTE]",
 		Short: "Create a full archive of the current directory",
@@ -926,8 +937,8 @@ If the directory is identical to the most recent archive, no new archive is crea
 }
 
 func incCmd() *cobra.Command {
-	// ⭐ ARCH-003: Incremental archive creation command - 🔧
-	// 🔺 CFG-003: Incremental command interface - 🔧
+	// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:core-functionality]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "inc [NOTE]",
 		Short: "Create an incremental archive of the current directory",
@@ -979,8 +990,8 @@ If the directory is identical to the most recent archive, no new archive is crea
 }
 
 func listCmd() *cobra.Command {
-	// ⭐ ARCH-002: Archive listing command - 🔧
-	// 🔺 CFG-003: List command interface - 🔧
+	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List archives",
@@ -993,7 +1004,7 @@ func listCmd() *cobra.Command {
 
 func verifyCmd() *cobra.Command {
 	// Archive verification command
-	// 🔺 CFG-003: Verify command interface - 🛡️
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "verify",
 		Short: "Verify archives",
@@ -1006,7 +1017,7 @@ func verifyCmd() *cobra.Command {
 
 func versionCmd() *cobra.Command {
 	// Version display command
-	// 🔺 CFG-003: Version command interface - 📝
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "Display version information",
@@ -1030,7 +1041,7 @@ type ArchiveOptions struct {
 // CreateFullArchiveEnhanced creates a full archive of the current directory with enhanced error handling
 // and resource management. It supports dry-run mode and optional verification.
 func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
-	// ⭐ ARCH-002: Enhanced full archive creation - 🔧
+	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// DECISION-REF: DEC-006, DEC-007
 	return CreateFullArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
 }
@@ -1038,7 +1049,7 @@ func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
 // CreateIncrementalArchiveEnhanced creates an incremental archive containing only files changed since
 // the last full archive. It supports dry-run mode and optional verification.
 func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
-	// ⭐ ARCH-003: Enhanced incremental archive creation - 📝
+	// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:core-functionality]
 	// DECISION-REF: DEC-006, DEC-007
 	return CreateIncrementalArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
 }
@@ -1046,8 +1057,8 @@ func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
 // ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
 // and error handling.
 func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface) error {
-	// ⭐ ARCH-002: Enhanced archive listing with formatting - 🔍
-	// 🔺 CFG-003: Template-based archive listing - 🔍
+	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cwd, err := os.Getwd()
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
@@ -1118,7 +1129,7 @@ type VerifyOptions struct {
 // It provides enhanced error handling and reporting.
 func VerifyArchiveEnhanced(opts VerifyOptions) error {
 	// Archive verification implementation
-	// 🔺 CFG-003: Verification output formatting - 🔍
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	archiveDir, err := getArchiveDirectory(opts.Config)
 	if err != nil {
 		return err
@@ -1132,7 +1143,7 @@ func VerifyArchiveEnhanced(opts VerifyOptions) error {
 
 // getArchiveDirectory determines the archive directory path
 func getArchiveDirectory(cfg *Config) (string, error) {
-	// 🔺 CFG-001: Archive directory resolution - 🔍
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// DECISION-REF: DEC-002
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -1241,8 +1252,8 @@ func handleVerificationResult(archive *Archive, status *VerificationStatus, name
 }
 
 func handleListFileBackupsCommand(args []string) {
-	// ⭐ FILE-002: File backup listing command implementation - 📝
-	// 🔺 CFG-003: File backup listing output formatting - 📝
+	// FILE-002: See specification.md - File Backup Listing [DECISION:format-processing]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	var filePath string
 	if listFile != "" {
 		filePath = listFile
@@ -1274,8 +1285,8 @@ func handleListFileBackupsCommand(args []string) {
 }
 
 func backupCmd() *cobra.Command {
-	// ⭐ FILE-002: File backup command implementation - 🔧
-	// 🔺 CFG-003: Backup command interface - 🔧
+	// FILE-002: See specification.md - File Backup Listing [DECISION:format-processing]
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	cmd := &cobra.Command{
 		Use:   "backup [FILE_PATH] [NOTE]",
 		Short: "Create a backup of a single file",
@@ -1335,8 +1346,8 @@ If the file is identical to the most recent backup, no new backup is created.`,
 }
 
 func handleConfigSetCommand(key, value string) {
-	// 🔺 CFG-001: Configuration modification command - 🔍
-	// 🔺 CFG-002: Configuration value setting - 🔍
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
+	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	// DECISION-REF: DEC-002
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -1362,7 +1373,7 @@ func handleConfigSetCommand(key, value string) {
 }
 
 func loadExistingConfigData(configPath string) map[string]interface{} {
-	// 🔺 CFG-001: Configuration file loading - 📝
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// DECISION-REF: DEC-002
 	var configData map[string]interface{}
 
@@ -1379,7 +1390,7 @@ func loadExistingConfigData(configPath string) map[string]interface{} {
 }
 
 func convertConfigValue(key, value string) interface{} {
-	// 🔺 CFG-002: Configuration value type conversion - 🔧
+	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	switch key {
 	case "use_current_dir_name", "use_current_dir_name_for_files", "include_git_info", "verify_on_create":
 		return convertBooleanValue(key, value)
@@ -1400,7 +1411,7 @@ func convertConfigValue(key, value string) interface{} {
 }
 
 func convertBooleanValue(key, value string) bool {
-	// 🔺 CFG-002: Boolean configuration value conversion - 🔧
+	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	if value == "true" {
 		return true
 	}
@@ -1413,7 +1424,7 @@ func convertBooleanValue(key, value string) bool {
 }
 
 func convertIntegerValue(key, value string) int {
-	// 🔺 CFG-002: Integer configuration value conversion - 📝
+	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	intVal, err := strconv.Atoi(value)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %s requires an integer value, got: %s\n", key, value)
@@ -1423,7 +1434,7 @@ func convertIntegerValue(key, value string) int {
 }
 
 func updateConfigData(configData map[string]interface{}, key string, convertedValue interface{}) {
-	// 🔺 CFG-001: Configuration data updating - 🔍
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	if key == "verify_on_create" || key == "checksum_algorithm" {
 		if configData["verification"] == nil {
 			configData["verification"] = make(map[string]interface{})
@@ -1440,7 +1451,7 @@ func updateConfigData(configData map[string]interface{}, key string, convertedVa
 }
 
 func saveConfigData(configPath string, configData map[string]interface{}) {
-	// 🔺 CFG-001: Configuration data persistence - 📝
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// DECISION-REF: DEC-002, DEC-008
 	yamlData, err := yaml.Marshal(configData)
 	if err != nil {
@@ -1454,7 +1465,7 @@ func saveConfigData(configPath string, configData map[string]interface{}) {
 	}
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Standardized command configuration - 📝
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // CommandConfig holds configuration for CLI command execution
 type CommandConfig struct {
 	Config    *Config
@@ -1462,7 +1473,7 @@ type CommandConfig struct {
 	Context   context.Context
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Interface-based command handler abstraction - 📝
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // CommandHandlerInterface abstracts command execution for better testability
 type CommandHandlerInterface interface {
 	HandleFullArchive(args []string, note string, dryRun bool, verify bool) error
@@ -1474,19 +1485,19 @@ type CommandHandlerInterface interface {
 	HandleDisplayConfig(args []string) error
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Concrete command handler implementation - 📝
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // CommandHandler provides the concrete implementation of CommandHandlerInterface
 type CommandHandler struct {
 	config CommandConfig
 }
 
-// 🔶 REFACTOR-005: Extraction preparation - Interface-based command handler factory - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // NewCommandHandler creates a new CommandHandler with the given configuration
 func NewCommandHandler(cfg CommandConfig) CommandHandlerInterface {
 	return &CommandHandler{config: cfg}
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Interface method implementations - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // HandleFullArchive handles full archive creation command
 func (h *CommandHandler) HandleFullArchive(args []string, note string, dryRun bool, verify bool) error {
 	return CreateFullArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)
@@ -1589,7 +1600,7 @@ func (h *CommandHandler) HandleDisplayConfig(args []string) error {
 	return nil
 }
 
-// ⭐ CFG-TEMPLATE-001: File management - 🔧
+// CFG-TEMPLATE-001: File management [DECISION:core-functionality]
 // determineTemplateFileName decides the target filename for the template based on user input and existing files
 func determineTemplateFileName(customOutput string) string {
 	if customOutput != "" {
@@ -1608,7 +1619,7 @@ func determineTemplateFileName(customOutput string) string {
 	return dateBasedFile
 }
 
-// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// CFG-TEMPLATE-001: Template generation [DECISION:core-functionality]
 // generateConfigurationTemplate creates a comprehensive YAML template with all Config fields
 func generateConfigurationTemplate(cfg *Config) (string, error) {
 	var template strings.Builder
@@ -1624,7 +1635,7 @@ func generateConfigurationTemplate(cfg *Config) (string, error) {
 	template.WriteString("# For more information, see: docs/configuration.md\n")
 	template.WriteString("\n")
 
-	// ⭐ CFG-TEMPLATE-001: Configuration reflection - 🔧
+	// CFG-TEMPLATE-001: Configuration reflection [DECISION:core-functionality]
 	// Use existing CFG-006 field discovery system
 	allFields := GetAllConfigFields(cfg)
 
@@ -1671,7 +1682,7 @@ func generateConfigurationTemplate(cfg *Config) (string, error) {
 	return template.String(), nil
 }
 
-// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// CFG-TEMPLATE-001: Template generation [DECISION:core-functionality]
 // addCategoryDescription adds helpful descriptions for each configuration category
 func addCategoryDescription(template *strings.Builder, categoryName string) {
 	descriptions := map[string]string{
@@ -1691,7 +1702,7 @@ func addCategoryDescription(template *strings.Builder, categoryName string) {
 	}
 }
 
-// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// CFG-TEMPLATE-001: Template generation [DECISION:core-functionality]
 // generateFieldTemplate creates a commented YAML entry for a single configuration field
 func generateFieldTemplate(template *strings.Builder, field configFieldInfo, cfg *Config) {
 	// Get current value
@@ -1721,7 +1732,7 @@ func generateFieldTemplate(template *strings.Builder, field configFieldInfo, cfg
 	template.WriteString(fmt.Sprintf("# %s: %s\n", yamlKey, currentValue))
 }
 
-// ⭐ CFG-TEMPLATE-001: Template generation - 🔧
+// CFG-TEMPLATE-001: Template generation [DECISION:core-functionality]
 // getFirstFieldOfStruct determines if this is the first field of a nested struct (for proper formatting)
 func getFirstFieldOfStruct(fieldPath string) string {
 	parts := strings.Split(fieldPath, ".")
@@ -1740,7 +1751,7 @@ func getFirstFieldOfStruct(fieldPath string) string {
 	}
 }
 
-// ⭐ CFG-TEMPLATE-001: File management - 🔧
+// CFG-TEMPLATE-001: File management [DECISION:core-functionality]
 // writeTemplateToFile safely writes the template content to the specified file
 func writeTemplateToFile(filename, content string) error {
 	// Create backup of existing file if it exists

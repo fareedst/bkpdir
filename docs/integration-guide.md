@@ -1,6 +1,6 @@
 # 📚 BkpDir Package Integration Guide
 
-> **🔺 EXTRACT-008: Integration documentation system - 📝 Comprehensive usage guides**
+> **[HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Comprehensive usage guides**
 
 ## 🎯 Overview
 
@@ -41,7 +41,7 @@ pkg/processing ───────┘
 Here's a minimal CLI application using the core packages:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Basic CLI example
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Basic CLI example
 package main
 
 import (
@@ -80,13 +80,13 @@ func main() {
     }
 }
 
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Command implementation example
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Command implementation example
 func backupHandler(cfg *config.Config) cli.HandlerFunc {
     return func(ctx context.Context, args []string) error {
         // Use formatter for output
         formatter := formatter.New(cfg.OutputFormat)
         
-        // 🔺 EXTRACT-008: Integration documentation system - 📝 Command implementation example
+        // [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Command implementation example
         result := map[string]interface{}{
             "status": "success",
             "files":  42,
@@ -98,14 +98,14 @@ func backupHandler(cfg *config.Config) cli.HandlerFunc {
 }
 ```
 
-## 🔧 Integration Patterns
+## [ACTION:core-functionality] Integration Patterns
 
 ### 1. Configuration-Driven Pattern
 
 Use configuration to drive application behavior across all packages:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Configuration-driven pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Configuration-driven pattern
 type Application struct {
     config    *config.Config
     formatter *formatter.Formatter
@@ -149,7 +149,7 @@ func (a *Application) Process(files []string) error {
 Maintain error context across package boundaries:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Error propagation pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Error propagation pattern
 func (a *Application) BackupFile(path string) error {
     // File operations with error context
     info, err := fileops.Stat(path)
@@ -192,7 +192,7 @@ func (a *Application) BackupFile(path string) error {
 Consistent output formatting across operations:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Output formatting pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Output formatting pattern
 type BackupResult struct {
     Path     string    `json:"path"`
     Size     int64     `json:"size"`
@@ -202,7 +202,7 @@ type BackupResult struct {
 
 func (a *Application) FormatResults(results []BackupResult) error {
     // Progress formatting
-    // 🔺 EXTRACT-008: Integration documentation system - 📝 Progress formatting
+    // [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Progress formatting
     progress := map[string]interface{}{
         "completed": len(results),
         "total":     a.totalFiles,
@@ -214,7 +214,7 @@ func (a *Application) FormatResults(results []BackupResult) error {
     }
 
     // Results formatting
-    // 🔺 EXTRACT-008: Integration documentation system - 📝 Results formatting
+    // [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Results formatting
     summary := map[string]interface{}{
         "results":    results,
         "total_size": a.calculateTotalSize(results),
@@ -231,7 +231,7 @@ func (a *Application) FormatResults(results []BackupResult) error {
 Leverage Git information across the application:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Git integration pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Git integration pattern
 func (a *Application) EnhanceWithGitInfo(files []string) ([]FileInfo, error) {
     var enhanced []FileInfo
     
@@ -264,7 +264,7 @@ func (a *Application) EnhanceWithGitInfo(files []string) ([]FileInfo, error) {
     return enhanced, nil
 }
 
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Context display
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Context display
 func (a *Application) DisplayContext() error {
     if a.git == nil {
         return a.formatter.Print(map[string]interface{}{
@@ -277,7 +277,7 @@ func (a *Application) DisplayContext() error {
         return errors.Wrap(err, "failed to get git info")
     }
 
-    // 🔺 EXTRACT-008: Integration documentation system - 📝 Git-aware naming
+    // [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Git-aware naming
     context := map[string]interface{}{
         "git_branch":     info.Branch,
         "git_commit":     info.Commit[:8],
@@ -294,7 +294,7 @@ func (a *Application) DisplayContext() error {
 Coordinate multiple packages within CLI commands:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 CLI orchestration pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] CLI orchestration pattern
 func (a *Application) SetupCommands() {
     a.cli.AddCommand(&cli.Command{
         Name:        "backup",
@@ -339,7 +339,7 @@ func (a *Application) backupCommand(ctx context.Context, args []string) error {
 Coordinate resource cleanup across packages:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Resource creation pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Resource creation pattern
 func (a *Application) ProcessWithResources(ctx context.Context, files []string) error {
     // Acquire processing resources
     procResource, err := resources.Acquire("processing")
@@ -371,7 +371,7 @@ func (a *Application) ProcessWithResources(ctx context.Context, files []string) 
 Safe file operations with error handling and resource management:
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 File operations pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] File operations pattern
 func (a *Application) SafeFileOperations(files []string) error {
     for _, file := range files {
         // Check file accessibility
@@ -408,12 +408,12 @@ func (a *Application) SafeFileOperations(files []string) error {
 }
 ```
 
-## 🔄 Advanced Integration Patterns
+## [ACTION:migration] Advanced Integration Patterns
 
 ### Concurrent Processing with Error Aggregation
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Concurrent processing pattern
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Concurrent processing pattern
 func (a *Application) ProcessConcurrently(ctx context.Context, files []string) error {
     // Create error collector
     var errorCollector errors.Collector
@@ -445,12 +445,12 @@ func (a *Application) ProcessConcurrently(ctx context.Context, files []string) e
 }
 ```
 
-## 🛡️ Error Handling Best Practices
+## [ACTION:validation] Error Handling Best Practices
 
 ### Structured Error Context
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Error handling patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Error handling patterns
 func (a *Application) HandleOperationError(operation string, err error) error {
     // Wrap with operation context
     wrappedErr := errors.Wrap(err, "operation failed").
@@ -474,7 +474,7 @@ func (a *Application) HandleOperationError(operation string, err error) error {
     return wrappedErr
 }
 
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Error context patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Error context patterns
 func (a *Application) RecoverableOperation(fn func() error) error {
     const maxRetries = 3
     
@@ -510,7 +510,7 @@ func (a *Application) RecoverableOperation(fn func() error) error {
 ### Memory Management
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Memory management patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Memory management patterns
 func (a *Application) OptimizedProcessing(files []string) error {
     // Use buffered processing for large file sets
     const batchSize = 100
@@ -535,7 +535,7 @@ func (a *Application) OptimizedProcessing(files []string) error {
     return nil
 }
 
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Performance optimization patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Performance optimization patterns
 func (a *Application) processBatch(files []string) error {
     // Create batch-specific resources
     batchResource, err := resources.AcquireWithTimeout("batch", 30*time.Second)
@@ -557,7 +557,7 @@ func (a *Application) processBatch(files []string) error {
 ### Database Integration
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Database integration patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Database integration patterns
 import (
     "database/sql"
     _ "github.com/lib/pq"
@@ -610,7 +610,7 @@ func (a *Application) storeBackupMetadata(db *sql.DB) error {
 ### HTTP Client Integration
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 HTTP client integration patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] HTTP client integration patterns
 func (a *Application) WithRemoteSync() error {
     client := &http.Client{
         Timeout: time.Duration(a.config.HTTPTimeout) * time.Second,
@@ -655,7 +655,7 @@ func (a *Application) syncToRemote(client *http.Client) error {
 ### Unit Testing with Packages
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Testing patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Testing patterns
 func TestApplicationIntegration(t *testing.T) {
     // Create test configuration
     cfg := &config.Config{
@@ -678,7 +678,7 @@ func TestApplicationIntegration(t *testing.T) {
     assert.Equal(t, len(testFiles), app.processedFiles)
 }
 
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Integration testing patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Integration testing patterns
 func TestGitIntegration(t *testing.T) {
     // Create temporary git repository
     tempDir := t.TempDir()
@@ -701,7 +701,7 @@ func TestGitIntegration(t *testing.T) {
 ### Configuration Management
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Production configuration patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Production configuration patterns
 func (a *Application) LoadProductionConfig() error {
     // Load configuration with environment overrides
     cfg, err := config.LoadWithDefaults(map[string]interface{}{
@@ -728,7 +728,7 @@ func (a *Application) LoadProductionConfig() error {
 ### Graceful Shutdown
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Graceful shutdown patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Graceful shutdown patterns
 func (a *Application) RunWithGracefulShutdown(ctx context.Context) error {
     // Create cancellable context
     ctx, cancel := context.WithCancel(ctx)
@@ -775,7 +775,7 @@ func (a *Application) Run(ctx context.Context) error {
 ### Metrics Collection
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Performance monitoring patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Performance monitoring patterns
 type Metrics struct {
     ProcessedFiles   int64
     ProcessingTime   time.Duration
@@ -807,12 +807,12 @@ func (a *Application) ReportMetrics() error {
 }
 ```
 
-## 🔄 Migration and Compatibility
+## [ACTION:migration] Migration and Compatibility
 
 ### Legacy System Integration
 
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Migration compatibility patterns
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Migration compatibility patterns
 func (a *Application) MigrateLegacyConfig(legacyPath string) error {
     // Read legacy configuration
     legacyData, err := os.ReadFile(legacyPath)
@@ -869,4 +869,4 @@ The packages are designed to be composable, allowing you to use only what you ne
 
 ---
 
-**🔺 EXTRACT-008: Integration documentation system - 📝 Complete integration guide with comprehensive examples** 
+**[HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Complete integration guide with comprehensive examples** 

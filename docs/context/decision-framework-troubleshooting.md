@@ -1,6 +1,6 @@
-# 🔧 Decision Framework Troubleshooting Guide
+# [ACTION:core-functionality] Decision Framework Troubleshooting Guide
 
-> **🔶 DOC-014: Comprehensive troubleshooting scenarios and solutions for AI assistant decision-making**
+> **[MEDIUM] DOC-014: Comprehensive troubleshooting scenarios and solutions for AI assistant decision-making**
 
 ## 📑 Table of Contents
 
@@ -18,7 +18,7 @@
 ### **🔥 Multiple Critical Tasks Available**
 
 **Symptoms**:
-- Several ⭐ CRITICAL priority tasks in feature-tracking.md
+- Several [CRITICAL] CRITICAL priority tasks in feature-tracking.md
 - Uncertain which to prioritize
 - Risk of context switching overhead
 
@@ -78,12 +78,12 @@ Decision: EXTRACT-002 (foundation work, high dependency impact)
    → Future reusability requirements
    → Backward compatibility constraints
 
-3. 🔧 Choose Approach That Enables Goals
+3. [ACTION:core-functionality] Choose Approach That Enables Goals
    → Prefer loose coupling over tight coupling
    → Choose patterns that support extraction
    → Document new patterns if needed
 
-4. 📝 Update Architecture Documentation
+4. [ACTION:format-processing] Update Architecture Documentation
    → Document architectural decisions
    → Update patterns in architecture.md
    → Ensure future consistency
@@ -97,7 +97,7 @@ Analysis: Interface-based enables extraction, inheritance creates coupling
 Decision: Interface-based design, update architecture.md
 ```
 
-### **🔄 Circular Dependency Deadlocks**
+### **[ACTION:migration] Circular Dependency Deadlocks**
 
 **Symptoms**:
 - Task A depends on Task B, which depends on Task A
@@ -111,12 +111,12 @@ Decision: Interface-based design, update architecture.md
 
 **Solution Process**:
 ```
-1. 🔍 Decompose Dependencies
+1. [ACTION:discovery] Decompose Dependencies
    → Break circular features into smaller components
    → Identify minimal viable implementations
    → Create intermediate milestone tasks
 
-2. 🛡️ Create Foundation-First Approach
+2. [ACTION:validation] Create Foundation-First Approach
    → Identify foundational components with no dependencies
    → Implement basic infrastructure first
    → Build dependent features incrementally
@@ -138,7 +138,7 @@ Analysis: Both need configuration reflection
 Solution: Create CFG-006-base (basic reflection), then CFG-005, then CFG-006-full
 ```
 
-## 🛡️ Validation Failures
+## [ACTION:validation] Validation Failures
 
 ### **❌ Test Failures Blocking Progress**
 
@@ -164,7 +164,7 @@ go test -race ./...
 
 **Common Causes & Solutions**:
 
-#### **🔧 Configuration Test Isolation Issues**
+#### **[ACTION:core-functionality] Configuration Test Isolation Issues**
 ```
 Problem: Tests fail when personal config files exist
 Solution: Update TEST-FIX-001 patterns
@@ -184,7 +184,7 @@ Actions:
 - Add build tags for integration vs unit tests
 ```
 
-#### **🔄 Race Conditions**
+#### **[ACTION:migration] Race Conditions**
 ```
 Problem: Tests fail intermittently with race conditions
 Solution: Fix concurrent access patterns
@@ -207,7 +207,7 @@ Actions:
 ./scripts/validate-icon-enforcement.sh --verbose
 
 # 2. Check specific token issues
-grep -r "// [^⭐🔺🔶🔻].*:" --include="*.go" .
+grep -r "// [^[CRITICAL][HIGH][MEDIUM][LOW]].*:" --include="*.go" .
 
 # 3. Validate token standardization rate
 ./scripts/validate-decision-framework.sh --format detailed
@@ -219,20 +219,20 @@ grep -r "// [^⭐🔺🔶🔻].*:" --include="*.go" .
 ```
 Problem: New code lacks implementation tokens
 Solution: Add tokens following DOC-007 format
-Example: // ⭐ FEATURE-ID: Description [DECISION: context1, context2]
+Example: // [CRITICAL] FEATURE-ID: Description [DECISION: context1, context2]
 ```
 
 #### **🎨 Incorrect Icon Usage**
 ```
 Problem: Wrong priority icons or duplicated meanings
 Solution: Use standardized icon system
-- ⭐ CRITICAL (blocking all other work)
-- 🔺 HIGH (significant impact)
-- 🔶 MEDIUM (moderate impact)  
-- 🔻 LOW (nice to have)
+- [CRITICAL] CRITICAL (blocking all other work)
+- [HIGH] HIGH (significant impact)
+- [MEDIUM] MEDIUM (moderate impact)  
+- [LOW] LOW (nice to have)
 ```
 
-#### **🔧 Legacy Token Format**
+#### **[ACTION:core-functionality] Legacy Token Format**
 ```
 Problem: Old token format not updated
 Solution: Run token migration scripts
@@ -242,7 +242,7 @@ Commands:
 - make validate-enhanced-tokens
 ```
 
-## ⭐ Priority Conflicts
+## [CRITICAL] Priority Conflicts
 
 ### **🎯 Unclear Priority Assignment**
 
@@ -276,10 +276,10 @@ Low Risk: Repetition of established approaches
 
 **Priority Resolution Matrix**:
 ```
-Phase Critical + High Impact + Low Risk = ⭐ CRITICAL
-Phase Critical + Medium Impact + Low Risk = 🔺 HIGH
-Phase Neutral + High Impact + Low Risk = 🔺 HIGH
-Phase Critical + Low Impact + High Risk = 🔶 MEDIUM
+Phase Critical + High Impact + Low Risk = [CRITICAL] CRITICAL
+Phase Critical + Medium Impact + Low Risk = [HIGH] HIGH
+Phase Neutral + High Impact + Low Risk = [HIGH] HIGH
+Phase Critical + Low Impact + High Risk = [MEDIUM] MEDIUM
 ```
 
 ### **⚡ Urgent vs Important Conflicts**
@@ -298,7 +298,7 @@ Action: Drop current work, fix immediately with BUG FIX Protocol
 Recovery: Resume planned work after resolution
 ```
 
-#### **🔺 Urgent + Not Important = Delegate or Defer**
+#### **[HIGH] Urgent + Not Important = Delegate or Defer**
 ```
 Examples: Non-critical configuration changes, minor UI updates
 Action: Assess if truly urgent or can be scheduled
@@ -312,7 +312,7 @@ Action: Continue with planned schedule and protocols
 Monitoring: Ensure doesn't become urgent due to delays
 ```
 
-#### **🔻 Not Urgent + Not Important = Avoid**
+#### **[LOW] Not Urgent + Not Important = Avoid**
 ```
 Examples: Speculative optimizations, nice-to-have features
 Action: Decline or defer indefinitely
@@ -321,7 +321,7 @@ Documentation: Note decision rationale for future reference
 
 ## 📋 Scope Boundary Issues
 
-### **🔍 Feature Scope Unclear**
+### **[ACTION:discovery] Feature Scope Unclear**
 
 **Symptoms**:
 - Uncertain if change fits within existing feature
@@ -471,7 +471,7 @@ func loadConfigFile(path string) (*Config, error) {
 
 ## 🎯 Goal Alignment Challenges
 
-### **🔄 Project Phase Confusion**
+### **[ACTION:migration] Project Phase Confusion**
 
 **Symptoms**:
 - Working on tasks not aligned with current phase
@@ -700,7 +700,7 @@ Option 3: Time-boxed approach (fixed time budget for quality steps)
 Option 4: Post-implementation cleanup (fix debt after delivery)
 ```
 
-### **🔧 Framework Itself Not Working**
+### **[ACTION:core-functionality] Framework Itself Not Working**
 
 **Symptoms**:
 - Decision framework giving poor guidance
@@ -742,6 +742,6 @@ Transition: Gradual re-adoption with lessons learned
 ---
 
 **📋 Document Status**: ✅ Complete  
-**🔄 Last Updated**: 2025-01-04  
-**📝 Next Review**: After framework usage feedback  
+**[ACTION:migration] Last Updated**: 2025-01-04  
+**[ACTION:format-processing] Next Review**: After framework usage feedback  
 **🔗 Related**: decision-framework-usage-guide.md, ai-decision-framework.md 

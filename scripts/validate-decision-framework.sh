@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Decision Framework Validation Script
-# 🔶 DOC-014: Decision validation tools - Automated compliance checking
+# [MEDIUM] DOC-014: Decision validation tools [ACTION:validation]
 # Validates compliance with DOC-014 AI Assistant Decision Framework
 
 set -euo pipefail
@@ -1051,7 +1051,7 @@ main() {
     done
     # Only show log messages if not in JSON mode
     if [[ "$OUTPUT_FORMAT" != "json" ]]; then
-        log_info "🔶 DOC-014: Decision Framework Validation"
+        log_info "[MEDIUM] DOC-014: Decision Framework Validation"
         log_info "Mode: $VALIDATION_MODE | Format: $OUTPUT_FORMAT"
         echo ""
     fi

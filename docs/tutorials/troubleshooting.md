@@ -1,6 +1,6 @@
-# 🔧 Troubleshooting: Common Issues and Solutions
+# [ACTION:core-functionality] Troubleshooting: Common Issues and Solutions
 
-> **🔺 EXTRACT-008: Tutorial series creation - 📚 Troubleshooting guide**
+> **[HIGH] EXTRACT-008: Tutorial series creation - 📚 Troubleshooting guide**
 
 ## 🎯 Overview
 
@@ -21,7 +21,7 @@ Failed to load config: configuration file not found
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Config troubleshooting
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Config troubleshooting
 func loadConfigWithFallback() (*config.Config, error) {
     // Try current directory first
     cfg, err := config.LoadConfig(".")
@@ -82,7 +82,7 @@ Error: file operation failed
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Error context preservation
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Error context preservation
 func processFileWithContext(filename string) error {
     file, err := os.Open(filename)
     if err != nil {
@@ -155,7 +155,7 @@ File handles left open, temporary files not deleted
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Resource cleanup patterns
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Resource cleanup patterns
 func properResourceManagement() error {
     rm := resources.NewManager()
     defer rm.Cleanup() // Always defer cleanup
@@ -214,7 +214,7 @@ template: parse error at line 3: unexpected "}"
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Template debugging
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Template debugging
 func debugTemplate() {
     // Test template syntax separately
     templateStr := `
@@ -289,7 +289,7 @@ Failed to get Git info: git command not found
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Git troubleshooting
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Git troubleshooting
 func checkGitAvailability() error {
     // Check if git is available
     if !git.DetectRepository(".") {
@@ -341,7 +341,7 @@ Unknown command: mycommand
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 CLI command debugging
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 CLI command debugging
 func debugCommandRegistration() {
     app := cli.NewApplication("myapp", "1.0.0")
     
@@ -399,7 +399,7 @@ Processing hangs indefinitely
 
 **Solution:**
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Processing deadlock prevention
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Processing deadlock prevention
 func preventProcessingDeadlock() error {
     // Always use context with timeout
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
@@ -447,12 +447,12 @@ func preventProcessingDeadlock() error {
 }
 ```
 
-## 🔍 Debugging Techniques
+## [ACTION:discovery] Debugging Techniques
 
 ### 1. Enable Debug Logging
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Debug logging patterns
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Debug logging patterns
 func enableDebugLogging(cfg *config.Config) {
     if cfg.GetBool("debug", false) {
         log.SetLevel(log.DebugLevel)
@@ -497,7 +497,7 @@ func monitorResources() {
 }
 ```
 
-## 🛠️ Development Tools
+## [ACTION:maintenance] Development Tools
 
 ### Configuration Validation
 
@@ -537,7 +537,7 @@ echo "more" >> test.txt
 ### Memory Leaks
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Memory leak detection
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Memory leak detection
 func detectMemoryLeaks() {
     // Force GC and get baseline
     runtime.GC()
@@ -636,4 +636,4 @@ func recoverFromPanic() {
 
 ---
 
-**🔺 EXTRACT-008: Tutorial series creation - 📚 Comprehensive troubleshooting guide** 
+**[HIGH] EXTRACT-008: Tutorial series creation - 📚 Comprehensive troubleshooting guide** 

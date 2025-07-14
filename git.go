@@ -5,69 +5,77 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// GIT-INTEGRATION-001: Git integration specification - Git integration and metadata [ACTION:core-functionality]
+// Source: git.go - GIT-INTEGRATION-001
+// Impact: Core functionality requirement for Git integration
+
+// SERVICE-GIT-001: Git service architecture decision - Git service implementation [ACTION:core-functionality]
+// Source: git.go - SERVICE-GIT-001
+// Impact: Git service implementation decision
 package main
 
 import (
 	"bkpdir/pkg/git"
 )
 
-// ⭐ EXTRACT-004: Git integration adapter using extracted pkg/git package - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // This file now serves as an adapter layer to maintain backward compatibility
 // while using the extracted Git integration system.
 
-// 🔶 REFACTOR-001: Git provider interface contracts defined - 🔧
-// 🔶 REFACTOR-001: Dependency analysis - clean boundary confirmed - 🔧
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
 
-// 🔺 GIT-001: Git error handling structure - 🔧
+// GIT-001: See specification.md - Git Information Extraction [DECISION:maintenance]
 // GitError is now provided by the pkg/git package
 type GitError = git.GitError
 
-// ⭐ EXTRACT-004: Backward compatibility functions using pkg/git - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // These functions maintain the original API while delegating to the extracted package
 
-// 🔺 GIT-001: Git repository detection implementation - 🔍
+// GIT-001: See specification.md - Git Information Extraction [DECISION:maintenance]
 // IsGitRepository checks if the given directory is a Git repository.
 // It uses git rev-parse to check if the directory is inside a git work tree.
 func IsGitRepository(dir string) bool {
 	return git.IsGitRepository(dir)
 }
 
-// 🔺 GIT-002: Git branch extraction implementation - 🔍
+// GIT-002: See specification.md - Git Branch and Commit Extraction [DECISION:maintenance]
 // GetGitBranch returns the current Git branch name.
 // It returns an empty string if not in a Git repository or on error.
 func GetGitBranch(dir string) string {
 	return git.GetGitBranch(dir)
 }
 
-// 🔺 GIT-002: Git commit hash extraction implementation - 🔍
+// GIT-002: See specification.md - Git Branch and Commit Extraction [DECISION:maintenance]
 // GetGitShortHash returns the short commit hash of the current HEAD.
 // It returns an empty string if not in a Git repository or on error.
 func GetGitShortHash(dir string) string {
 	return git.GetGitShortHash(dir)
 }
 
-// 🔺 GIT-001: Combined Git information extraction - 🔍
+// GIT-001: See specification.md - Git Information Extraction [DECISION:maintenance]
 // GetGitInfo returns both the branch name and commit hash.
 // It returns empty strings if not in a Git repository or on error.
 func GetGitInfo(dir string) (branch, hash string) {
 	return git.GetGitInfo(dir)
 }
 
-// 🔺 GIT-003: Git working directory state detection - 🔍
+// GIT-003: See specification.md - Git Status Detection [DECISION:maintenance]
 // IsGitWorkingDirectoryClean checks if the Git working directory is clean (no uncommitted changes).
 // It returns true if the working directory is clean, false if there are changes or not in a Git repository.
 func IsGitWorkingDirectoryClean(dir string) bool {
 	return git.IsGitWorkingDirectoryClean(dir)
 }
 
-// 🔺 GIT-003: Combined Git information extraction with status - 🔍
+// GIT-003: See specification.md - Git Status Detection [DECISION:maintenance]
 // GetGitInfoWithStatus returns branch name, commit hash, and working directory status.
 // It returns empty strings and false for status if not in a Git repository or on error.
 func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
 	return git.GetGitInfoWithStatus(dir)
 }
 
-// 🔶 GIT-004: Git submodule support functions - 🔧
+// GIT-004: See architecture.md - Git Submodule Support [DECISION:maintenance]
 // These functions provide Git submodule detection and management capabilities.
 
 // IsGitSubmodule checks if the given directory is a Git submodule.

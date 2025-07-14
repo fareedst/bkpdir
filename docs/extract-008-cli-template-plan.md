@@ -5,13 +5,13 @@
 **Task ID**: EXTRACT-008  
 **Task Title**: Create CLI Application Template  
 **Priority**: HIGH - Demonstrates value and accelerates adoption  
-**Status**: 📝 Not Started  
+**Status**: [ACTION:format-processing] Not Started  
 **Phase**: 5C - Component Reuse and Integration  
 
 ### 📋 Task Description
 Create a complete working CLI application template that showcases all extracted packages and provides a foundation for new CLI projects. This template will demonstrate the value of the extracted components and accelerate adoption by providing a complete, working example.
 
-## 🔍 PHASE 1: CRITICAL VALIDATION (COMPLETED)
+## [ACTION:discovery] PHASE 1: CRITICAL VALIDATION (COMPLETED)
 
 ### ✅ Task Verification
 - [x] **Feature ID Verification**: EXTRACT-008 exists in `feature-tracking.md` ✅
@@ -38,17 +38,17 @@ Create a complete working CLI application template that showcases all extracted 
 5. **Clear Dependencies**: Package interdependency mapping shows proper usage
 6. **Adoption Ready**: Template serves as foundation for new CLI applications
 
-### 🔧 Design Decisions
+### [ACTION:core-functionality] Design Decisions
 - **Template Structure**: Complete CLI application with examples of each package
 - **Scaffolding Approach**: Interactive generator with component selection
 - **Documentation Strategy**: Multiple formats - tutorial, reference, and examples
 - **Migration Path**: Clear transition from monolithic to package-based structure
 
-## 📝 Detailed Subtasks
+## [ACTION:format-processing] Detailed Subtasks
 
 ### 1. 🏗️ Create `cmd/cli-template` Example
 **Status**: [x] COMPLETED  
-**Priority**: ⭐ CRITICAL  
+**Priority**: [CRITICAL] CRITICAL  
 **Estimated Time**: 8-12 hours (Actual: 6 hours)  
 
 #### Implementation Plan:
@@ -102,9 +102,9 @@ Create a complete working CLI application template that showcases all extracted 
 - [x] Git integration framework ready ✅
 - [x] Concurrent processing simulation working ✅
 
-### 2. 🛠️ Develop Project Scaffolding
+### 2. [ACTION:maintenance] Develop Project Scaffolding
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 6-8 hours  
 
 #### Implementation Plan:
@@ -149,7 +149,7 @@ Create a complete working CLI application template that showcases all extracted 
 
 ### 3. 📚 Create Integration Documentation
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 4-6 hours  
 
 #### Documentation Structure:
@@ -191,7 +191,7 @@ Create a complete working CLI application template that showcases all extracted 
 
 ### 4. 📖 Add Migration Guide
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 3-4 hours  
 
 #### Migration Guide Structure:
@@ -230,7 +230,7 @@ Create a complete working CLI application template that showcases all extracted 
 
 ### 5. 🗺️ Create Package Interdependency Mapping
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 2-3 hours  
 
 #### Dependency Analysis:
@@ -346,7 +346,7 @@ Create a complete working CLI application template that showcases all extracted 
 - [ ] **Documentation Quality**: Documentation enables independent usage
 - [ ] **Migration Viability**: Migration guide enables successful transitions
 
-## 🔄 Risk Mitigation
+## [ACTION:migration] Risk Mitigation
 
 ### Technical Risks
 - **Package Integration Issues**: Extensive testing of package combinations

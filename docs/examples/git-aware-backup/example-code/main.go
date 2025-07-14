@@ -1,4 +1,4 @@
-// EXTRACT-010: Git-Aware Backup Tool Example - Integration of config + cli + git + fileops packages - 🔺
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package main
 
 import (
@@ -186,7 +186,7 @@ func runCreateBackup(tool *GitBackupTool, ctx context.Context) error {
 		output, _ := tool.formatter.FormatYAML(metadata)
 		fmt.Println(output)
 	default:
-		fmt.Printf("\n✅ Backup created successfully!\n")
+		fmt.Printf("\n[SUCCESS] Backup created successfully!\n")
 		fmt.Printf("Name: %s\n", backupName)
 		fmt.Printf("Files: %d\n", len(files))
 		if gitInfo != nil {

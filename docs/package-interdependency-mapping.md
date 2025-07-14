@@ -1,6 +1,6 @@
 # Package Interdependency Mapping
 
-> **🔺 EXTRACT-008: Package interdependency mapping - 📊 Clear usage patterns for extracted packages**
+> **[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Clear usage patterns for extracted packages**
 
 ## 📑 Executive Summary
 
@@ -23,7 +23,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 
 ## 📊 Package Overview
 
-### 🔧 pkg/config - Configuration Management System
+### [ACTION:core-functionality] pkg/config - Configuration Management System
 **Lines**: 1,322 | **Files**: 4 | **Maturity**: Production Ready
 
 **Purpose**: Schema-agnostic configuration loading, merging, and validation
@@ -42,9 +42,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `gopkg.in/yaml.v3`
 **Performance**: 24.3μs per configuration load operation
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Configuration package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Configuration package analysis
 
-### 🛡️ pkg/errors - Error Handling & Classification
+### [ACTION:validation] pkg/errors - Error Handling & Classification
 **Lines**: 918 | **Files**: 3 | **Maturity**: Production Ready
 
 **Purpose**: Structured error handling with context and classification
@@ -62,7 +62,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Error handling package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Error handling package analysis
 
 ### 🗂️ pkg/resources - Resource Management & Cleanup
 **Lines**: 486 | **Files**: 2 | **Maturity**: Production Ready
@@ -81,7 +81,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Resource management package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Resource management package analysis
 
 ### 🎨 pkg/formatter - Output Formatting System
 **Lines**: 1,056 | **Files**: 5 | **Maturity**: Production Ready
@@ -103,7 +103,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Output formatting package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Output formatting package analysis
 
 ### 🔀 pkg/git - Git Integration Utilities
 **Lines**: 255 | **Files**: 1 | **Maturity**: Production Ready
@@ -121,7 +121,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None (uses command-line git)
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Git integration package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Git integration package analysis
 
 ### ⚡ pkg/cli - CLI Command Framework
 **Lines**: 722 | **Files**: 6 | **Maturity**: Production Ready
@@ -144,7 +144,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `github.com/spf13/cobra`
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 CLI framework package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] CLI framework package analysis
 
 ### 📁 pkg/fileops - File Operations & Utilities
 **Lines**: 1,173 | **Files**: 6 | **Maturity**: Production Ready
@@ -167,7 +167,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `github.com/bmatcuk/doublestar/v4`
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 File operations package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] File operations package analysis
 
 ### ⚙️ pkg/processing - Data Processing Patterns
 **Lines**: 1,705 | **Files**: 6 | **Maturity**: Production Ready
@@ -190,7 +190,7 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Data processing package analysis 
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Data processing package analysis 
 
 ## 🗺️ Dependency Matrix
 
@@ -221,15 +221,15 @@ processing        -       -        -          -       -    -      -         -
 | **fileops** | `github.com/bmatcuk/doublestar/v4` | Advanced glob pattern matching |
 | **All Others** | None | Self-contained implementations |
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 📊 Dependency matrix creation
+// [HIGH] EXTRACT-008: Package interdependency mapping - 📊 Dependency matrix creation
 
 ## 🎯 Usage Pattern Catalog
 
-### 🔧 Single Package Usage Patterns
+### [ACTION:core-functionality] Single Package Usage Patterns
 
 #### Configuration Management (pkg/config)
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Configuration usage pattern
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Configuration usage pattern
 import "bkpdir/pkg/config"
 
 // Basic configuration loading
@@ -245,7 +245,7 @@ for _, value := range values {
 
 #### Error Handling (pkg/errors)
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Error handling usage pattern
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Error handling usage pattern
 import "bkpdir/pkg/errors"
 
 // Create application-specific error
@@ -259,7 +259,7 @@ if errors.IsDiskFullError(err) {
 
 #### Resource Management (pkg/resources)
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Resource management usage pattern
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Resource management usage pattern
 import "bkpdir/pkg/resources"
 
 // Create resource manager
@@ -271,11 +271,11 @@ tempFile, err := rm.CreateTempFile("prefix", ".tmp")
 // Automatic cleanup on defer
 ```
 
-### 🔄 Multi-Package Integration Patterns
+### [ACTION:migration] Multi-Package Integration Patterns
 
 #### Configuration + Formatter Pattern
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Config+Formatter integration pattern
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Config+Formatter integration pattern
 import (
     "bkpdir/pkg/config"
     "bkpdir/pkg/formatter"
@@ -292,7 +292,7 @@ output := formatter.FormatTemplate("Status: %{status}", data)
 
 #### Errors + Resources Coordination
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Error+Resource coordination pattern
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Error+Resource coordination pattern
 import (
     "bkpdir/pkg/errors"
     "bkpdir/pkg/resources"
@@ -315,7 +315,7 @@ func ProcessWithCleanup() error {
 
 #### Complete CLI Application Assembly
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Complete CLI assembly pattern
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Complete CLI assembly pattern
 import (
     "bkpdir/pkg/cli"
     "bkpdir/pkg/config"
@@ -342,13 +342,13 @@ func BuildCLIApp() *cobra.Command {
 }
 ```
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Usage pattern documentation
+// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Usage pattern documentation
 
 ## 💡 Integration Examples
 
 ### 🚀 Basic CLI Application
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 💡 Basic CLI integration example
+// [HIGH] EXTRACT-008: Package interdependency mapping - 💡 Basic CLI integration example
 package main
 
 import (
@@ -411,9 +411,9 @@ func main() {
 }
 ```
 
-### 🔄 File Processing Pipeline
+### [ACTION:migration] File Processing Pipeline
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - 💡 File processing pipeline example
+// [HIGH] EXTRACT-008: Package interdependency mapping - 💡 File processing pipeline example
 import (
     "bkpdir/pkg/fileops"
     "bkpdir/pkg/processing"
@@ -463,7 +463,7 @@ func ProcessFiles(inputDir, outputDir string) error {
 }
 ```
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 💡 Integration examples creation
+// [HIGH] EXTRACT-008: Package interdependency mapping - 💡 Integration examples creation
 
 ## ⚡ Performance Considerations
 
@@ -480,11 +480,11 @@ func ProcessFiles(inputDir, outputDir string) error {
 | **fileops** | Medium (buffers) | Medium | High (file ops) | Yes |
 | **processing** | High (workers) | High | Variable | Yes |
 
-### 🔧 Optimization Guidelines
+### [ACTION:core-functionality] Optimization Guidelines
 
 #### Memory Optimization
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - ⚡ Memory optimization patterns
+// [HIGH] EXTRACT-008: Package interdependency mapping - ⚡ Memory optimization patterns
 // Reuse formatters and config loaders
 var (
     globalFormatter = formatter.NewTemplateFormatter(config)
@@ -501,7 +501,7 @@ resourcePool := sync.Pool{
 
 #### Concurrent Processing
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - ⚡ Concurrent processing optimization
+// [HIGH] EXTRACT-008: Package interdependency mapping - ⚡ Concurrent processing optimization
 // Use processing package for CPU-intensive work
 processor := processing.NewConcurrentProcessor(runtime.NumCPU())
 
@@ -514,7 +514,7 @@ results := processor.ProcessBatchWithContext(ctx, items, workerFunc)
 
 #### Resource Management
 ```go
-// 🔺 EXTRACT-008: Package interdependency mapping - ⚡ Resource management optimization
+// [HIGH] EXTRACT-008: Package interdependency mapping - ⚡ Resource management optimization
 // Use single resource manager per operation
 func OptimizedOperation() error {
     rm := resources.NewResourceManager()
@@ -535,7 +535,7 @@ func OptimizedOperation() error {
 }
 ```
 
-// 🔺 EXTRACT-008: Package interdependency mapping - ⚡ Performance analysis and optimization
+// [HIGH] EXTRACT-008: Package interdependency mapping - ⚡ Performance analysis and optimization
 
 ## 📋 Best Practices
 
@@ -555,7 +555,7 @@ func OptimizedOperation() error {
 4. **Blocking Operations**: Use context for cancellation in long-running operations
 5. **Hardcoded Paths**: Use pkg/config for all configuration values
 
-### 🔧 Integration Checklist
+### [ACTION:core-functionality] Integration Checklist
 
 - [ ] Configuration loaded before component initialization
 - [ ] ResourceManager created for temporary resources
@@ -565,7 +565,7 @@ func OptimizedOperation() error {
 - [ ] Interfaces used for component dependencies
 - [ ] Tests written for integration scenarios
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 📋 Best practices documentation
+// [HIGH] EXTRACT-008: Package interdependency mapping - 📋 Best practices documentation
 
 ## 🚨 Troubleshooting Guide
 
@@ -605,7 +605,7 @@ if err != nil {
 }
 ```
 
-### 🔍 Debugging Tips
+### [ACTION:discovery] Debugging Tips
 
 1. **Enable Verbose Logging**: Use formatter for structured output
 2. **Check Resource Usage**: Monitor ResourceManager for leaks
@@ -613,7 +613,7 @@ if err != nil {
 4. **Profile Performance**: Use processing package benchmarks
 5. **Test Integration**: Write integration tests for package combinations
 
-// 🔺 EXTRACT-008: Package interdependency mapping - 📋 Troubleshooting guide
+// [HIGH] EXTRACT-008: Package interdependency mapping - 📋 Troubleshooting guide
 
 ## 🎯 Conclusion
 
@@ -634,4 +634,4 @@ The 8 extracted packages provide a comprehensive foundation for building robust 
 - Explore individual package documentation for detailed APIs
 - Consider contributing improvements back to the extracted packages
 
-**🔺 EXTRACT-008: Package interdependency mapping - 📊 Complete package interdependency mapping with comprehensive usage patterns and integration guidance** 
+**[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Complete package interdependency mapping with comprehensive usage patterns and integration guidance** 

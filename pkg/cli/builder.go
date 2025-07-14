@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ⭐ EXTRACT-005: Command structure templates and builder patterns - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // DefaultCommandBuilder provides standard command building functionality
 type DefaultCommandBuilder struct {

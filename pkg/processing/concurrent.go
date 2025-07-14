@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Concurrent processing - Worker pool patterns extracted from file collection functions - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
 import (

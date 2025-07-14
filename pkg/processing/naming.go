@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Naming conventions - Timestamp-based naming patterns extracted from archive.go and backup.go - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
 import (

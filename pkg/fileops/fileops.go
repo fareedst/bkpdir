@@ -65,7 +65,7 @@
 // original implementation while providing clean, reusable interfaces.
 package fileops
 
-// ⭐ EXTRACT-006: File operations package interface - 📝
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 
 // Version information
 const (
@@ -76,4 +76,4 @@ const (
 	PackageName = "fileops"
 )
 
-// ⭐ EXTRACT-006: Package version and identification - 📝
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]

@@ -1,7 +1,7 @@
 # Code Structure Optimization Analysis (REFACTOR-005)
 
 **Task**: Code Structure Optimization for Extraction - **MEDIUM PRIORITY**  
-**Status**: 🔄 In Progress  
+**Status**: [ACTION:migration] In Progress  
 **Implementation Tokens**: `// REFACTOR-005: Structure optimization`, `// REFACTOR-005: Extraction preparation`
 
 ## Executive Summary

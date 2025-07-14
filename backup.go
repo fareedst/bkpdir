@@ -2,6 +2,14 @@
 //
 // Package main provides file backup functionality for BkpDir.
 // It handles individual file backup creation, comparison, and management.
+
+// BACKUP-FEATURES-001: File Backup Operations Specification - File backup creation and management [ACTION:core-functionality]
+// Source: docs/context/specification.md - File Backup Operations section
+// Impact: Core functionality requirement for file backup operations
+
+// SERVICE-BACKUP-001: Backup Service Architecture Decision - Backup service implementation [ACTION:core-functionality]
+// Source: docs/context/architecture.md - File Backup Service section
+// Impact: Backup service architecture decision
 package main
 
 import (
@@ -15,12 +23,11 @@ import (
 	"time"
 )
 
-// 🔶 REFACTOR-001: Backup management interface contracts defined - 🔧
-// 🔶 REFACTOR-001: Multiple dependency interfaces required for extraction - 🔧
-// 🔶 REFACTOR-004: Error handling now standardized in errors.go - 🔧
-// 🔶 REFACTOR-005: Structure optimization - Interface-based backup operations - 🔍
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
+// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 
-// 🔶 REFACTOR-005: Structure optimization - Interface-based configuration abstraction - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // BackupConfigInterface abstracts configuration dependencies for backup operations
 type BackupConfigInterface interface {
 	GetBackupDirPath() string
@@ -32,7 +39,7 @@ type BackupConfigInterface interface {
 	GetStatusFileIsIdenticalToExistingBackup() int
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Interface-based formatter abstraction - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // BackupFormatterInterface abstracts formatter dependencies for backup operations
 type BackupFormatterInterface interface {
 	PrintDryRunBackup(path string)
@@ -41,7 +48,7 @@ type BackupFormatterInterface interface {
 	PrintNoBackupsFound(filename, backupDir string)
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Interface wrapper for Config backward compatibility - 📝
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
 type ConfigToBackupConfigAdapter struct {
 	cfg *Config
@@ -75,7 +82,7 @@ func (a *ConfigToBackupConfigAdapter) GetStatusFileIsIdenticalToExistingBackup()
 	return a.cfg.StatusFileIsIdenticalToExistingBackup
 }
 
-// 🔶 REFACTOR-005: Structure optimization - Interface wrapper for OutputFormatter backward compatibility - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // OutputFormatterToBackupFormatterAdapter adapts OutputFormatter to BackupFormatterInterface
 type OutputFormatterToBackupFormatterAdapter struct {
 	formatter *OutputFormatter
@@ -124,11 +131,8 @@ type BackupOptions struct {
 	DryRun    bool
 }
 
-// ⭐ FILE-002: File backup creation implementation - 🔧
-// IMMUTABLE-REF: Commands - Create File Backup, File Backup Operations
-// TEST-REF: TestCreateFileBackup
-// DECISION-REF: DEC-002
-// 🔶 REFACTOR-004: Error handling now uses standardized patterns from errors.go - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
 // CreateFileBackup creates a backup of a single file
 func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
 	opts := BackupOptions{
@@ -142,10 +146,7 @@ func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) er
 	return createFileBackupInternal(opts)
 }
 
-// ⭐ FILE-002: Core backup logic implementation - 📝
-// IMMUTABLE-REF: File Backup Operations, Atomic Operations
-// TEST-REF: TestCreateFileBackup
-// DECISION-REF: DEC-002
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // createFileBackupInternal handles the core backup logic
 func createFileBackupInternal(opts BackupOptions) error {
 	// Validate file
@@ -166,10 +167,7 @@ func createFileBackupInternal(opts BackupOptions) error {
 	return performBackupOperation(opts, backupPath)
 }
 
-// ⭐ FILE-001: Backup path generation implementation - 🔧
-// IMMUTABLE-REF: File Backup Naming Convention
-// TEST-REF: TestGenerateBackupName
-// DECISION-REF: DEC-002
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // generateBackupPath creates the full backup path including note
 func generateBackupPath(cfg *Config, filePath, note string) (string, error) {
 	backupPath, err := determineBackupPath(cfg, filePath)
@@ -184,16 +182,13 @@ func generateBackupPath(cfg *Config, filePath, note string) (string, error) {
 	return backupPath, nil
 }
 
-// 🔺 CFG-003: Dry run output formatting - 📝
-// IMMUTABLE-REF: Output Formatting Requirements
-// TEST-REF: TestCreateFileBackup
-// DECISION-REF: DEC-003
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // handleDryRunBackup handles dry run mode output
 func handleDryRunBackup(formatter formatter.OutputFormatterInterface, backupPath string) error {
 	if formatter != nil {
 		formatter.PrintDryRunBackup(backupPath)
 	} else {
-		// Fallback for legacy code paths
+		// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 		cfg := DefaultConfig()
 		fallbackFormatter := NewOutputFormatter(cfg)
 		fallbackFormatter.PrintBackupWouldCreate(backupPath)
@@ -201,7 +196,7 @@ func handleDryRunBackup(formatter formatter.OutputFormatterInterface, backupPath
 	return nil
 }
 
-// ⭐ FILE-002: Backup operation coordination - 📝
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // IMMUTABLE-REF: File Backup Operations, Atomic Operations
 // TEST-REF: TestCreateFileBackup
 // DECISION-REF: DEC-002
@@ -223,7 +218,7 @@ func performBackupOperation(opts BackupOptions, backupPath string) error {
 	return executeBackupWithCleanup(opts, backupPath)
 }
 
-// ⭐ FILE-003: Identical file backup detection - 🔍
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // IMMUTABLE-REF: File Backup Operations, Identical File Detection
 // TEST-REF: TestCheckForIdenticalFileBackup
 // DECISION-REF: DEC-002
@@ -234,7 +229,7 @@ func checkAndHandleIdenticalBackup(opts BackupOptions, backupDir, baseFilename s
 		if opts.Formatter != nil {
 			opts.Formatter.PrintIdenticalBackup(existingBackup)
 		} else {
-			// Fallback for legacy code paths
+			// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 			cfg := DefaultConfig()
 			fallbackFormatter := NewOutputFormatter(cfg)
 			fallbackFormatter.PrintBackupIdentical(existingBackup)
@@ -244,7 +239,7 @@ func checkAndHandleIdenticalBackup(opts BackupOptions, backupDir, baseFilename s
 	return nil
 }
 
-// ⭐ FILE-002: Atomic backup execution with cleanup - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // IMMUTABLE-REF: File Backup Operations, Atomic Operations, Resource Cleanup
 // TEST-REF: TestCreateFileBackupWithCleanup
 // DECISION-REF: DEC-002
@@ -272,6 +267,7 @@ func executeBackupWithCleanup(opts BackupOptions, backupPath string) error {
 	rm.RemoveResource(&TempFile{Path: tempFile})
 
 	// Create formatter for output (fallback since this function doesn't have direct access to opts.Formatter)
+	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(opts.Config)
 	formatter.PrintBackupCreated(backupPath)
 	return nil
@@ -634,6 +630,7 @@ func executeContextAwareBackup(opts BackupOptions, backupPath string) error {
 	rm.RemoveResource(&TempFile{Path: tempFile})
 
 	// Create formatter for output (fallback since this function doesn't have direct access to opts.Formatter)
+	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(opts.Config)
 	formatter.PrintBackupCreated(backupPath)
 	return nil

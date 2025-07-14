@@ -1,6 +1,6 @@
 # Testing Utilities Package (testutil)
 
-⭐ **EXTRACT-009: Testing Patterns and Utilities** - 🔧
+[HIGH] **DOC-014: Testing Patterns and Utilities** [ACTION:maintenance]
 
 This package provides comprehensive testing utilities extracted from the bkpdir codebase, offering reusable testing patterns and infrastructure for Go applications.
 

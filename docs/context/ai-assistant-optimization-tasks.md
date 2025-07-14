@@ -8,12 +8,12 @@ This document tracks the AI assistant optimization tasks that emerged from the D
 
 | Task ID | Priority | Status | Impact on AI Assistants | Timeline |
 |---------|----------|--------|-------------------------|----------|
-| DOC-009 | 🔺 CRITICAL | Not Started | Address 562 validation warnings affecting all code changes | 2-4 weeks |
-| DOC-011 | 🔺 HIGH | Not Started | Zero-friction validation integration | 2-3 weeks after DOC-009 |
-| DOC-010 | 🔶 MEDIUM | Not Started | 95%+ accuracy in token format suggestions | 4-6 weeks, parallel with DOC-011 |
-| DOC-012 | 🔶 MEDIUM | Not Started | Sub-second validation feedback during development | 6-8 weeks, advanced enhancement |
+| DOC-009 | [HIGH] CRITICAL | Not Started | Address 562 validation warnings affecting all code changes | 2-4 weeks |
+| DOC-011 | [HIGH] HIGH | Not Started | Zero-friction validation integration | 2-3 weeks after DOC-009 |
+| DOC-010 | [MEDIUM] MEDIUM | Not Started | 95%+ accuracy in token format suggestions | 4-6 weeks, parallel with DOC-011 |
+| DOC-012 | [MEDIUM] MEDIUM | Not Started | Sub-second validation feedback during development | 6-8 weeks, advanced enhancement |
 
-## 🔺 DOC-009: Mass Implementation Token Standardization
+## [HIGH] DOC-009: Mass Implementation Token Standardization
 
 ### **📊 Current Baseline (from docs/validation-reports/icon-validation-report.md)**
 - **Total implementation tokens**: 592 across 47 files
@@ -29,33 +29,33 @@ This document tracks the AI assistant optimization tasks that emerged from the D
    - `scripts/migrate-tokens.sh` - Main migration orchestrator
    - `scripts/analyze-token-patterns.py` - Pattern analysis and inference
    - `scripts/validate-migration.sh` - Post-migration validation
-   - **Implementation Token**: `// 🔺 DOC-009: Token migration scripts - 🔧 Automation framework`
+   - **Implementation Token**: `// [HIGH] DOC-009: Token migration scripts - [ACTION:core-functionality] Automation framework`
 
 2. **Implement batch token updates**
    - Safe mass updates with atomic operations
    - Rollback mechanisms for failed migrations
    - Progress tracking and checkpoint creation
-   - **Implementation Token**: `// 🔺 DOC-009: Batch token updates - 🛡️ Safe mass operations`
+   - **Implementation Token**: `// [HIGH] DOC-009: Batch token updates - [ACTION:validation] Safe mass operations`
 
 #### **Phase 2: Priority Icon Inference (Week 2)**
 3. **Add priority icon inference**
    - Parse feature-tracking.md for priority mappings
-   - Automatically assign priority icons (⭐🔺🔶🔻) based on feature priority
+   - Automatically assign priority icons ([CRITICAL][HIGH][MEDIUM][LOW]) based on feature priority
    - Handle edge cases and unknown feature IDs
-   - **Implementation Token**: `// 🔺 DOC-009: Priority icon inference - 🔍 Feature tracking analysis`
+   - **Implementation Token**: `// [HIGH] DOC-009: Priority icon inference - [ACTION:discovery] Feature tracking analysis`
 
 4. **Create action icon suggestion engine**
    - Analyze function signatures and behavior patterns
-   - Map common patterns to action icons (🔍📝🔧🛡️)
+   - Map common patterns to action icons ([ACTION:discovery][ACTION:format-processing][ACTION:core-functionality][ACTION:validation])
    - Provide intelligent suggestions with confidence scores
-   - **Implementation Token**: `// 🔺 DOC-009: Action icon suggestions - 🔍 Function behavior analysis`
+   - **Implementation Token**: `// [HIGH] DOC-009: Action icon suggestions - [ACTION:discovery] Function behavior analysis`
 
 #### **Phase 3: Migration Execution (Weeks 3-4)**
 5. **Establish migration checkpoints**
    - File-by-file migration with validation
    - Progress tracking and reporting
    - Quality gates at 25%, 50%, 75%, 100% completion
-   - **Implementation Token**: `// 🔺 DOC-009: Migration checkpoints - 📊 Progress validation`
+   - **Implementation Token**: `// [HIGH] DOC-009: Migration checkpoints - 📊 Progress validation`
 
 ### **🚀 Success Criteria**
 - [ ] Reduce validation warnings from 562 to ≤25
@@ -64,7 +64,7 @@ This document tracks the AI assistant optimization tasks that emerged from the D
 - [ ] Pass `make validate-icon-enforcement` with zero errors
 - [ ] Generate clean validation report suitable for AI assistant reference
 
-## 🔺 DOC-011: Token Validation Integration for AI Assistants
+## [HIGH] DOC-011: Token Validation Integration for AI Assistants
 
 ### **🎯 Implementation Plan**
 
@@ -73,26 +73,26 @@ This document tracks the AI assistant optimization tasks that emerged from the D
    - Pre-submission validation APIs
    - Integration with AI assistant decision-making processes
    - Minimal workflow disruption design
-   - **Implementation Token**: `// 🔺 DOC-011: AI workflow hooks - 🔧 Seamless integration`
+   - **Implementation Token**: `// [HIGH] DOC-011: AI workflow hooks - [ACTION:core-functionality] Seamless integration`
 
 2. **Implement pre-submission checks**
    - Automatic validation before code submission
    - Integration with existing `make validate-icon-enforcement`
    - Configurable validation levels (strict/standard/legacy)
-   - **Implementation Token**: `// 🔺 DOC-011: Pre-submission checks - 🛡️ Quality gates`
+   - **Implementation Token**: `// [HIGH] DOC-011: Pre-submission checks - [ACTION:validation] Quality gates`
 
 #### **Phase 2: Intelligent Error Reporting (Week 3)**
 3. **Add intelligent error reporting**
    - Context-aware validation feedback optimized for AI comprehension
    - Structured error responses with actionable suggestions
    - Error categorization and priority guidance
-   - **Implementation Token**: `// 🔺 DOC-011: Intelligent error reporting - 📝 AI-optimized feedback`
+   - **Implementation Token**: `// [HIGH] DOC-011: Intelligent error reporting - [ACTION:format-processing] AI-optimized feedback`
 
 4. **Create validation bypass mechanisms**
    - Safe overrides for exceptional cases
    - Documentation requirements for bypasses
    - Audit trail for compliance monitoring
-   - **Implementation Token**: `// 🔺 DOC-011: Validation bypasses - 🔧 Exception handling`
+   - **Implementation Token**: `// [HIGH] DOC-011: Validation bypasses - [ACTION:core-functionality] Exception handling`
 
 5. **Establish compliance monitoring**
    - Track AI assistant adherence to validation requirements

@@ -2,7 +2,7 @@
 
 ## 🔥 ENHANCED ACTIONABLE CHANGE PROCESS
 
-### 📝 Adding New Features (STEP-BY-STEP)
+### [ACTION:format-processing] Adding New Features (STEP-BY-STEP)
 
 **⚡ IMMEDIATE ACTIONS REQUIRED:**
 1. **Assign Feature ID**: Use prefix (ARCH, FILE, CFG, GIT, etc.) + sequential number
@@ -12,7 +12,7 @@
 5. Open testing.md → Add to test coverage section
 6. Add implementation tokens to code
 
-### 🔄 Modifying Existing Features
+### [ACTION:migration] Modifying Existing Features
 
 **⚡ IMMEDIATE ACTIONS REQUIRED:**
 1. **Update Feature ID**: Add modification suffix (e.g., ARCH-001-MOD-001)
@@ -32,7 +32,7 @@
 5. Open testing.md → Add regression tests
 6. Add bug fix tokens to code
 
-### 🛠️ Configuration Changes
+### [ACTION:maintenance] Configuration Changes
 
 **⚡ IMMEDIATE ACTIONS REQUIRED:**
 1. **Update CFG- Feature ID**: Add modification suffix
@@ -42,7 +42,7 @@
 5. Open testing.md → Update config tests
 6. Add config modification tokens
 
-### 🔄 API/Interface Changes
+### [ACTION:migration] API/Interface Changes
 
 **⚡ IMMEDIATE ACTIONS REQUIRED:**
 1. **Update ARCH- Feature ID**: Add interface suffix
@@ -62,7 +62,7 @@
 5. Open testing.md → Add test descriptions
 6. Add test implementation tokens
 
-### 🔧 Error Handling Changes
+### [ACTION:core-functionality] Error Handling Changes
 
 **⚡ IMMEDIATE ACTIONS REQUIRED:**
 1. **Update ARCH- Feature ID**: Add error suffix

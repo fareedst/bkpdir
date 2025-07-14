@@ -1,4 +1,4 @@
-// 🔶 DOC-012: Real-time validation CLI - ⚡ Live validation service command-line interface
+// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
 import (
@@ -28,29 +28,29 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "realtime-validator",
-	Short: "🔶 DOC-012: Real-time icon validation service",
+	Short: "DOC-012: Real-time icon validation service [DECISION:validation]",
 	Long: `Real-time Icon Validation Service
 
 This service provides live validation feedback with sub-second response times
 for icon compliance and intelligent correction suggestions. Part of the DOC-012
 Real-time Icon Validation Feedback system.
 
-🔶 DOC-012: Real-time validation - Enhanced developer experience with immediate feedback`,
+DOC-012: Real-time validation - Enhanced developer experience with immediate feedback [DECISION:validation]`,
 }
 
 // serverCmd starts the real-time validation server
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "🔧 Start real-time validation HTTP server",
+	Short: "Start real-time validation HTTP server",
 	Long: `Start the real-time validation HTTP server.
 
 This command starts an HTTP server that provides real-time validation APIs
 for editors and development tools to integrate with.
 
-🔶 DOC-012: Live validation service - HTTP API server for real-time validation`,
+DOC-012: Live validation service - HTTP API server for real-time validation [DECISION:validation]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔶 DOC-012: Server startup - 🔧 HTTP service initialization
-		fmt.Printf("🔶 DOC-012: Starting real-time validation server on port %d\n", serverPort)
+		// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+		fmt.Printf("DOC-012: Starting real-time validation server on port %d [DECISION:validation]\n", serverPort)
 
 		validator := validation.NewRealTimeValidator()
 
@@ -64,34 +64,34 @@ for editors and development tools to integrate with.
 			}
 		}()
 
-		fmt.Printf("✅ Real-time validation server running at http://localhost:%d\n", serverPort)
-		fmt.Println("📊 Available endpoints:")
+		fmt.Printf("[SUCCESS] Real-time validation server running at http://localhost:%d\n", serverPort)
+		fmt.Println("[INFO] Available endpoints:")
 		fmt.Printf("  POST /validate - Real-time file validation\n")
 		fmt.Printf("  GET  /subscribe - WebSocket subscription\n")
 		fmt.Printf("  GET  /status - Validation status indicators\n")
 		fmt.Printf("  GET  /suggestions - Intelligent suggestions\n")
 		fmt.Printf("  GET  /metrics - Performance metrics\n")
-		fmt.Println("\n🔶 DOC-012: Server ready for real-time validation requests")
+		fmt.Println("\nDOC-012: Server ready for real-time validation requests [DECISION:validation]")
 
 		// Wait for shutdown signal
 		<-sigChan
-		fmt.Println("\n🔶 DOC-012: Shutting down real-time validation server...")
+		fmt.Println("\nDOC-012: Shutting down real-time validation server... [DECISION:validation]")
 	},
 }
 
 // validateCmd validates files in real-time
 var validateCmd = &cobra.Command{
 	Use:   "validate [files...]",
-	Short: "🔍 Validate files with real-time feedback",
+	Short: "Validate files with real-time feedback",
 	Long: `Validate files with real-time feedback and intelligent suggestions.
 
 This command provides immediate validation feedback for the specified files
 with intelligent correction suggestions and visual status indicators.
 
-🔶 DOC-012: Real-time validation - Immediate feedback for development workflow`,
+DOC-012: Real-time validation - Immediate feedback for development workflow [DECISION:validation]`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔶 DOC-012: File validation - 🔍 Real-time validation processing
+		// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		validator := validation.NewRealTimeValidator()
 
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -118,16 +118,16 @@ with intelligent correction suggestions and visual status indicators.
 // statusCmd shows validation status indicators
 var statusCmd = &cobra.Command{
 	Use:   "status [files...]",
-	Short: "📊 Show validation status indicators",
+	Short: "Show validation status indicators",
 	Long: `Show visual validation status indicators for files.
 
 This command displays compliance levels, error counts, and visual feedback
 elements for the specified files.
 
-🔶 DOC-012: Status indicators - Visual compliance feedback`,
+DOC-012: Status indicators - Visual compliance feedback [DECISION:validation]`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔶 DOC-012: Status display - 📊 Visual status indicators
+		// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		validator := validation.NewRealTimeValidator()
 
 		indicator := validator.GetValidationStatusIndicator(args)
@@ -138,18 +138,18 @@ elements for the specified files.
 // watchCmd watches files for changes and provides real-time validation
 var watchCmd = &cobra.Command{
 	Use:   "watch [files...]",
-	Short: "👁️ Watch files for real-time validation",
+	Short: "Watch files for real-time validation",
 	Long: `Watch files for changes and provide real-time validation feedback.
 
 This command monitors the specified files for changes and automatically
 validates them, providing immediate feedback during development.
 
-🔶 DOC-012: Editor integration - File watching for live feedback`,
+DOC-012: Editor integration - File watching for live feedback [DECISION:validation]`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔶 DOC-012: File watching - 👁️ Live monitoring and validation
-		fmt.Printf("🔶 DOC-012: Starting file watch mode for %d files\n", len(args))
-		fmt.Println("📝 Watching for changes... (Press Ctrl+C to stop)")
+		// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+		fmt.Printf("DOC-012: Starting file watch mode for %d files [DECISION:validation]\n", len(args))
+		fmt.Println("[NOTE] Watching for changes... (Press Ctrl+C to stop)")
 
 		validator := validation.NewRealTimeValidator()
 
@@ -162,18 +162,18 @@ validates them, providing immediate feedback during development.
 
 		go func() {
 			for update := range updates {
-				fmt.Printf("\n🔄 File changed: %s\n", update.File)
+				fmt.Printf("\n[PROCESS] File changed: %s\n", update.File)
 				outputValidationUpdate(update.File, update)
 			}
 		}()
 
 		// Simulate file watching (in real implementation, use file system watcher)
 		fmt.Println("⚠️  Note: File system watching not implemented in this demo")
-		fmt.Println("🔶 DOC-012: Watch mode ready - subscription active")
+		fmt.Println("DOC-012: Watch mode ready - subscription active [DECISION:validation]")
 
 		// Wait for shutdown
 		<-sigChan
-		fmt.Println("\n🔶 DOC-012: Stopping watch mode...")
+		fmt.Println("\nDOC-012: Stopping watch mode... [DECISION:validation]")
 		validator.UnsubscribeFromValidation("watch-cli")
 	},
 }
@@ -181,22 +181,22 @@ validates them, providing immediate feedback during development.
 // metricsCmd shows performance metrics
 var metricsCmd = &cobra.Command{
 	Use:   "metrics",
-	Short: "📈 Show real-time validation performance metrics",
+	Short: "Show real-time validation performance metrics",
 	Long: `Show performance metrics for the real-time validation system.
 
 This command displays validation performance statistics including response
 times, cache hit rates, and throughput metrics.
 
-🔶 DOC-012: Performance optimization - Metrics monitoring`,
+DOC-012: Performance optimization - Metrics monitoring [DECISION:validation]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔶 DOC-012: Metrics display - 📈 Performance monitoring
-		fmt.Println("🔶 DOC-012: Real-time Validation Performance Metrics")
+		// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+		fmt.Println("DOC-012: Real-time Validation Performance Metrics [DECISION:validation]")
 		fmt.Println(strings.Repeat("=", 55))
 
 		validator := validation.NewRealTimeValidator()
 
 		// Note: In real implementation, connect to running server for metrics
-		fmt.Println("📊 Current Session Metrics:")
+		fmt.Println("[INFO] Current Session Metrics:")
 		fmt.Println("  Total Validations: 0")
 		fmt.Println("  Average Response Time: N/A")
 		fmt.Println("  Cache Hit Rate: N/A")
@@ -208,7 +208,7 @@ times, cache hit rates, and throughput metrics.
 		fmt.Println("  Cache Hit Rate: > 80%")
 		fmt.Println("  Availability: 99.9%")
 		fmt.Println()
-		fmt.Printf("🔶 DOC-012: Metrics available at server endpoint /metrics\n")
+		fmt.Printf("DOC-012: Metrics available at server endpoint /metrics [DECISION:validation]\n")
 
 		_ = validator // Prevent unused variable warning
 	},
@@ -216,13 +216,13 @@ times, cache hit rates, and throughput metrics.
 
 // Helper functions for output formatting
 func outputValidationUpdate(filePath string, update *validation.RealTimeValidationUpdate) {
-	// 🔶 DOC-012: Output formatting - 📝 Structured validation results
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	fmt.Printf("\n📄 File: %s\n", filePath)
 	fmt.Printf("⏱️  Processing Time: %v\n", update.ProcessingTime)
 
 	// Status with visual indicators
 	if update.StatusIndicator != nil {
-		fmt.Printf("📊 Status: %s %s (%s compliance)\n",
+		fmt.Printf("[INFO] Status: %s %s (%s compliance)\n",
 			update.StatusIndicator.VisualElements.StatusIcon,
 			strings.ToUpper(update.StatusIndicator.OverallStatus),
 			update.StatusIndicator.ComplianceLevel)
@@ -248,8 +248,8 @@ func outputValidationUpdate(filePath string, update *validation.RealTimeValidati
 }
 
 func outputSummaryFormat(update *validation.RealTimeValidationUpdate) {
-	// 🔶 DOC-012: Output formatting - 📋 Summary format display
-	fmt.Printf("🔍 Validation Summary:\n")
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+	fmt.Printf("[CHECK] Validation Summary:\n")
 	fmt.Printf("  Status: %s\n", update.Status)
 	fmt.Printf("  Errors: %d, Warnings: %d\n", len(update.Errors), len(update.Warnings))
 	fmt.Printf("  Suggestions: %d\n", len(update.Suggestions))
@@ -263,7 +263,7 @@ func outputSummaryFormat(update *validation.RealTimeValidationUpdate) {
 }
 
 func outputDetailedFormat(update *validation.RealTimeValidationUpdate) {
-	// 🔶 DOC-012: Output formatting - 📋 Detailed format display
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	// Errors
 	if len(update.Errors) > 0 {
 		fmt.Println("\n❌ Validation Errors:")
@@ -297,15 +297,15 @@ func outputDetailedFormat(update *validation.RealTimeValidationUpdate) {
 }
 
 func outputStatusIndicator(indicator *validation.ValidationStatusIndicator) {
-	// 🔶 DOC-012: Status display - 📊 Visual status presentation
-	fmt.Println("🔶 DOC-012: Validation Status Indicators")
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+	fmt.Println("DOC-012: Validation Status Indicators [DECISION:validation]")
 	fmt.Println(strings.Repeat("=", 45))
 
 	if indicator.VisualElements != nil {
 		fmt.Printf("🎨 Visual Status: %s %s\n",
 			indicator.VisualElements.StatusIcon,
 			strings.ToUpper(indicator.OverallStatus))
-		fmt.Printf("📊 Compliance Level: %s (%d%%)\n",
+		fmt.Printf("[INFO] Compliance Level: %s (%d%%)\n",
 			indicator.ComplianceLevel,
 			indicator.VisualElements.ProgressBar)
 		fmt.Printf("🏷️  Badge: %s\n", indicator.VisualElements.BadgeText)
@@ -333,7 +333,7 @@ func min(a, b int) int {
 }
 
 func init() {
-	// 🔶 DOC-012: CLI initialization - 🔧 Command setup
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	rootCmd.AddCommand(serverCmd)
 	rootCmd.AddCommand(validateCmd)
 	rootCmd.AddCommand(statusCmd)
@@ -357,7 +357,7 @@ func init() {
 }
 
 func main() {
-	// 🔶 DOC-012: CLI main - ⚡ Real-time validator entry point
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "❌ Error: %v\n", err)
 		os.Exit(1)

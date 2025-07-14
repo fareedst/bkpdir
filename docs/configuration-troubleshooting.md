@@ -1,10 +1,10 @@
 # Configuration Troubleshooting Guide
 
-<!-- 🔻 CFG-006: Documentation - 📝 Troubleshooting guide -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Troubleshooting guide -->
 
 This guide helps you diagnose and resolve common configuration issues with the enhanced configuration inspection system (CFG-006). Use the powerful configuration visibility features to debug problems quickly.
 
-## 🔍 Quick Diagnosis Commands
+## [ACTION:discovery] Quick Diagnosis Commands
 
 Before diving into specific issues, use these commands for quick diagnosis:
 
@@ -19,7 +19,7 @@ bkpdir config --overrides-only --sources
 time bkpdir config >/dev/null
 ```
 
-## 🛠️ Configuration Value Issues
+## [ACTION:maintenance] Configuration Value Issues
 
 ### Issue 1: Configuration Value Not Being Applied
 
@@ -482,7 +482,7 @@ grep -r "cobra" main.go | grep config
 bkpdir config --help | grep -A 20 "Flags:"
 ```
 
-## 🔧 Common Error Messages
+## [ACTION:core-functionality] Common Error Messages
 
 ### Error: "reflection: call of reflect.Value.Field on zero Value"
 
@@ -624,7 +624,7 @@ echo "Testing with sources..."
 time bkpdir config --sources >/dev/null
 ```
 
-## 📝 Prevention Best Practices
+## [ACTION:format-processing] Prevention Best Practices
 
 ### 1. Regular Configuration Audits
 

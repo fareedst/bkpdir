@@ -1,13 +1,13 @@
 # CFG-006 Implementation Plan: Complete Configuration Reflection and Visibility
 
-> **🔺 HIGH PRIORITY**: Implementation plan for enabling comprehensive visibility of all configuration parameters through automatic field discovery and hierarchical source attribution.
+> **[HIGH] HIGH PRIORITY**: Implementation plan for enabling comprehensive visibility of all configuration parameters through automatic field discovery and hierarchical source attribution.
 
 ## 📑 Implementation Overview
 
 **Feature ID**: CFG-006  
-**Status**: 🔄 IN PROGRESS  
-**Priority**: 🔺 HIGH  
-**Implementation Tokens**: `// 🔺 CFG-006: Complete config visibility`  
+**Status**: [ACTION:migration] IN PROGRESS  
+**Priority**: [HIGH] HIGH  
+**Implementation Tokens**: `// [HIGH] CFG-006: Complete config visibility`  
 **Test Function**: TestConfigReflection  
 
 **Strategic Goal**: Transform the config command from a manually-maintained list to a comprehensive, automatically-updating view of the entire configuration system with full inheritance chain visibility.
@@ -54,7 +54,7 @@
   - `TestConfigReflectionPerformance()` - Performance validation
   - `TestConfigReflectionIntegration()` - Integration testing
 
-## 🔄 PHASE 2: Advanced Features (NEXT)
+## [ACTION:migration] PHASE 2: Advanced Features (NEXT)
 
 ### **Subtask 5: Full Inheritance Chain Tracking**
 - **Status**: 📋 PENDING
@@ -100,7 +100,7 @@
 - **Configuration validation tests**
 - **Documentation generation tests**
 
-## 🔧 IMPLEMENTATION DETAILS
+## [ACTION:core-functionality] IMPLEMENTATION DETAILS
 
 ### **Core Reflection System**
 - **Language**: Go reflection (`reflect` package)
@@ -133,7 +133,7 @@
 - **Command system integration**: For enhanced config command output
 - **Documentation generation system**: For automated field documentation
 
-## 📝 RECOVERY INFORMATION
+## [ACTION:format-processing] RECOVERY INFORMATION
 
 ### **Key Implementation Files**
 1. **`config.go`**: Core reflection implementation
@@ -147,7 +147,7 @@
    - Function `TestConfigReflectionIntegration()`: Integration tests
 
 ### **Implementation Tokens**
-All code is marked with: `// 🔺 CFG-006: Complete config visibility`
+All code is marked with: `// [HIGH] CFG-006: Complete config visibility`
 
 ### **Testing Commands**
 ```bash

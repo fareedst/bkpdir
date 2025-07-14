@@ -18,7 +18,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// ⭐ CFG-005: Inheritance chain builder implementation - 🔧 Core inheritance functionality
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // DefaultInheritanceChainBuilder implements InheritanceChainBuilder interface.
 type DefaultInheritanceChainBuilder struct {
@@ -32,7 +32,7 @@ func NewInheritanceChainBuilder(fileOps ConfigFileOperations) *DefaultInheritanc
 	}
 }
 
-// ⭐ CFG-005: Inheritance chain building logic - 🔍 Dependency chain construction
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (b *DefaultInheritanceChainBuilder) BuildChain(configPath string, pathResolver PathResolver) (*InheritanceChain, error) {
 	startTime := time.Now()
 
@@ -59,7 +59,7 @@ func (b *DefaultInheritanceChainBuilder) BuildChain(configPath string, pathResol
 	return chain, nil
 }
 
-// ⭐ CFG-005: Recursive chain building - 🔍 Depth-first dependency resolution
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (b *DefaultInheritanceChainBuilder) buildChainRecursive(configPath, basePath string, pathResolver PathResolver, chain *InheritanceChain) error {
 	// Resolve the full path
 	resolvedPath, err := pathResolver.ResolvePath(configPath, basePath)
@@ -104,7 +104,7 @@ func (b *DefaultInheritanceChainBuilder) buildChainRecursive(configPath, basePat
 	return nil
 }
 
-// ⭐ CFG-005: Inheritance metadata loading - 📝 YAML inheritance parsing
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (b *DefaultInheritanceChainBuilder) loadInheritanceMetadata(configPath string) (*ConfigInheritance, error) {
 	// Read the configuration file
 	data, err := b.fileOps.ReadFile(configPath)
@@ -191,7 +191,7 @@ func (b *DefaultInheritanceChainBuilder) GetChainMetadata(chain *InheritanceChai
 	}
 }
 
-// ⭐ CFG-005: Path resolver implementation - 🔍 Path resolution and validation
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // DefaultPathResolver implements PathResolver interface.
 type DefaultPathResolver struct {
@@ -205,7 +205,7 @@ func NewPathResolver(fileOps ConfigFileOperations) *DefaultPathResolver {
 	}
 }
 
-// ⭐ CFG-005: Path resolution logic - 🔧 Path expansion and normalization
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (r *DefaultPathResolver) ResolvePath(path string, basePath string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")
@@ -238,7 +238,7 @@ func (r *DefaultPathResolver) ResolvePath(path string, basePath string) (string,
 	return filepath.Clean(resolvedPath), nil
 }
 
-// ⭐ CFG-005: Path expansion logic - 🔧 Variable expansion support
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (r *DefaultPathResolver) ExpandPath(path string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")
@@ -295,7 +295,7 @@ func (r *DefaultPathResolver) ValidatePath(path string) error {
 	return nil
 }
 
-// ⭐ CFG-005: Circular dependency detector implementation - 🛡️ Cycle detection
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // DefaultCircularDependencyDetector implements CircularDependencyDetector interface.
 type DefaultCircularDependencyDetector struct {
@@ -313,7 +313,7 @@ func NewCircularDependencyDetector() *DefaultCircularDependencyDetector {
 	}
 }
 
-// ⭐ CFG-005: Cycle detection algorithm - 🔍 Depth-first search implementation
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (d *DefaultCircularDependencyDetector) DetectCycle(startFile string, resolver PathResolver) error {
 	// Reset detector state
 	d.Reset()

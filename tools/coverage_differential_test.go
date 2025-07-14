@@ -1,4 +1,4 @@
-// 🔺 COV-002: Test suite for differential coverage reporting tool - 🔧
+// COV-002: See specification.md - Coverage Differential Reporting [DECISION:core-functionality]
 package main
 
 import (

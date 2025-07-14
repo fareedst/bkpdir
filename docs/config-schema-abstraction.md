@@ -1,6 +1,6 @@
 # Configuration Schema Abstraction Design
 
-## 🔻 REFACTOR-003: Configuration Schema Abstraction Implementation
+## [LOW] REFACTOR-003: Configuration Schema Abstraction Implementation
 
 This document describes the configuration schema abstraction design implemented to prepare the configuration system for extraction while maintaining backward compatibility with the existing backup application.
 
@@ -39,7 +39,7 @@ The abstraction introduces several layers to separate concerns:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 🔧 Interface Definitions
+### [ACTION:core-functionality] Interface Definitions
 
 #### ConfigLoader Interface
 **Purpose**: Schema-agnostic configuration management operations
@@ -108,7 +108,7 @@ type ApplicationConfig interface {
 }
 ```
 
-### 🔧 Concrete Implementations
+### [ACTION:core-functionality] Concrete Implementations
 
 #### DefaultConfigLoader
 **Purpose**: Default implementation maintaining backward compatibility
@@ -141,7 +141,7 @@ type ApplicationConfig interface {
 - Abstracts file operations to enable testing and different storage backends
 - Provides clean interface for configuration file management
 
-### 📝 Schema Separation Structures
+### [ACTION:format-processing] Schema Separation Structures
 
 #### ArchiveSettings
 **Purpose**: Archive-specific configuration separation
@@ -176,7 +176,7 @@ type FormatSettings struct {
 }
 ```
 
-### 🔄 Backward Compatibility
+### [ACTION:migration] Backward Compatibility
 
 The abstraction maintains complete backward compatibility:
 
@@ -208,8 +208,8 @@ The abstraction prepares for extraction to `pkg/config` by:
 
 All code changes include implementation tokens for traceability:
 
-- `// 🔻 REFACTOR-003: Config abstraction - [Description] - 🔧`
-- `// 🔻 REFACTOR-003: Schema separation - [Description] - 📝`
+- `// [LOW] REFACTOR-003: Config abstraction - [Description] - [ACTION:core-functionality]`
+- `// [LOW] REFACTOR-003: Schema separation - [Description] - [ACTION:format-processing]`
 
 These tokens enable tracking during the extraction process.
 

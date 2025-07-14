@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -20,7 +20,7 @@ func NewFileSystemTestHelper() FileSystemTestHelper {
 // CreateTempDir creates a temporary directory and returns its path.
 // This enhances the standard t.TempDir() with custom prefix support.
 //
-// ⭐ EXTRACT-009: Temporary directory creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultFileSystemTestHelper) CreateTempDir(t *testing.T, prefix string) string {
 	t.Helper()
 
@@ -39,7 +39,7 @@ func (h *DefaultFileSystemTestHelper) CreateTempDir(t *testing.T, prefix string)
 
 // CreateTempFile creates a temporary file with content and returns its path.
 //
-// ⭐ EXTRACT-009: Temporary file creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultFileSystemTestHelper) CreateTempFile(t *testing.T, dir, name string, content []byte) string {
 	t.Helper()
 
@@ -61,7 +61,7 @@ func (h *DefaultFileSystemTestHelper) CreateTempFile(t *testing.T, dir, name str
 // CreateDirectory creates a directory structure from a map of paths to content.
 // Extracted from comparison_test.go createTestDirectory function.
 //
-// ⭐ EXTRACT-009: Directory structure creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultFileSystemTestHelper) CreateDirectory(t *testing.T, root string, files map[string]string) error {
 	t.Helper()
 
@@ -80,7 +80,7 @@ func (h *DefaultFileSystemTestHelper) CreateDirectory(t *testing.T, root string,
 // CreateZipArchive creates a ZIP archive from a map of paths to content.
 // Extracted from comparison_test.go createTestZipArchive function.
 //
-// ⭐ EXTRACT-009: ZIP archive creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultFileSystemTestHelper) CreateZipArchive(t *testing.T, archivePath string, files map[string]string) error {
 	t.Helper()
 
@@ -115,7 +115,7 @@ func (h *DefaultFileSystemTestHelper) CreateZipArchive(t *testing.T, archivePath
 // CreateTestFiles creates multiple test files in a directory from a map.
 // This is a convenience function that combines directory and file creation.
 //
-// ⭐ EXTRACT-009: Multiple test file creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultFileSystemTestHelper) CreateTestFiles(t *testing.T, baseDir string, files map[string]string) {
 	t.Helper()
 
@@ -140,35 +140,35 @@ var defaultFileSystemHelper = NewFileSystemTestHelper()
 
 // CreateTempDir is a package-level convenience function for creating temporary directories.
 //
-// ⭐ EXTRACT-009: Package-level temp directory - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTempDir(t *testing.T, prefix string) string {
 	return defaultFileSystemHelper.CreateTempDir(t, prefix)
 }
 
 // CreateTempFile is a package-level convenience function for creating temporary files.
 //
-// ⭐ EXTRACT-009: Package-level temp file - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTempFile(t *testing.T, dir, name string, content []byte) string {
 	return defaultFileSystemHelper.CreateTempFile(t, dir, name, content)
 }
 
 // CreateDirectory is a package-level convenience function for creating directory structures.
 //
-// ⭐ EXTRACT-009: Package-level directory creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateDirectory(t *testing.T, root string, files map[string]string) error {
 	return defaultFileSystemHelper.CreateDirectory(t, root, files)
 }
 
 // CreateZipArchive is a package-level convenience function for creating ZIP archives.
 //
-// ⭐ EXTRACT-009: Package-level ZIP creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateZipArchive(t *testing.T, archivePath string, files map[string]string) error {
 	return defaultFileSystemHelper.CreateZipArchive(t, archivePath, files)
 }
 
 // CreateTestFiles is a package-level convenience function for creating multiple test files.
 //
-// ⭐ EXTRACT-009: Package-level test files - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTestFiles(t *testing.T, baseDir string, files map[string]string) {
 	defaultFileSystemHelper.CreateTestFiles(t, baseDir, files)
 }
@@ -176,7 +176,7 @@ func CreateTestFiles(t *testing.T, baseDir string, files map[string]string) {
 // WithTempDir executes a function with a temporary directory and cleans up automatically.
 // This is a convenience function for tests that need a temporary directory.
 //
-// ⭐ EXTRACT-009: Temporary directory with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTempDir(t *testing.T, prefix string, fn func(dir string)) {
 	t.Helper()
 
@@ -188,7 +188,7 @@ func WithTempDir(t *testing.T, prefix string, fn func(dir string)) {
 // WithTestFiles executes a function with test files created in a temporary directory.
 // This combines temporary directory creation with file setup.
 //
-// ⭐ EXTRACT-009: Test files with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTestFiles(t *testing.T, files map[string]string, fn func(dir string)) {
 	t.Helper()
 
@@ -200,7 +200,7 @@ func WithTestFiles(t *testing.T, files map[string]string, fn func(dir string)) {
 
 // WithTestArchive executes a function with a test ZIP archive and cleans up automatically.
 //
-// ⭐ EXTRACT-009: Test archive with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTestArchive(t *testing.T, files map[string]string, fn func(archivePath string)) {
 	t.Helper()
 

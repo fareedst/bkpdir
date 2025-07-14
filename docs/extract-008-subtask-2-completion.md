@@ -97,7 +97,7 @@ generated-project/
     └── main_test.go      # Basic tests
 ```
 
-## 🔧 Technical Implementation
+## [ACTION:core-functionality] Technical Implementation
 
 ### Architecture
 - **Modular Design**: Clean separation between UI, generation, and templates
@@ -150,20 +150,20 @@ generated-project/
 3. **Maintenance Reduction**: Standardized project structure reduces support burden
 4. **Innovation Acceleration**: Developers can focus on business logic, not boilerplate
 
-## 🔍 Implementation Tokens
+## [ACTION:discovery] Implementation Tokens
 
 Following DOC-007 standardized format:
 
 ```go
-// 🔺 EXTRACT-008: Project scaffolding system - 🔧 Interactive generator core
-// 🔺 EXTRACT-008: Component selection interface - 🔍 Package discovery and configuration
-// 🔺 EXTRACT-008: Project template generation - 📝 Template processing and file creation
-// 🔺 EXTRACT-008: Template management system - 📝 File generation coordination
-// 🔺 EXTRACT-008: Interactive CLI configuration - 🔍 User input collection and validation
-// 🔺 EXTRACT-008: Project directory creation - 🔧 Directory structure setup
-// 🔺 EXTRACT-008: Core file generation - 📝 Template-based file creation
-// 🔺 EXTRACT-008: Package-specific generation - 🔧 Component integration
-// 🔺 EXTRACT-008: Optional feature generation - 📝 Additional features
+// [HIGH] EXTRACT-008: Project scaffolding system - [ACTION:core-functionality] Interactive generator core
+// [HIGH] EXTRACT-008: Component selection interface - [ACTION:discovery] Package discovery and configuration
+// [HIGH] EXTRACT-008: Project template generation - [ACTION:format-processing] Template processing and file creation
+// [HIGH] EXTRACT-008: Template management system - [ACTION:format-processing] File generation coordination
+// [HIGH] EXTRACT-008: Interactive CLI configuration - [ACTION:discovery] User input collection and validation
+// [HIGH] EXTRACT-008: Project directory creation - [ACTION:core-functionality] Directory structure setup
+// [HIGH] EXTRACT-008: Core file generation - [ACTION:format-processing] Template-based file creation
+// [HIGH] EXTRACT-008: Package-specific generation - [ACTION:core-functionality] Component integration
+// [HIGH] EXTRACT-008: Optional feature generation - [ACTION:format-processing] Additional features
 ```
 
 ## 📁 Files Created
@@ -202,13 +202,13 @@ Following DOC-007 standardized format:
 - ✅ Generated Makefiles work properly
 - ✅ Documentation generation accurate
 
-## 🔄 Integration with EXTRACT-008
+## [ACTION:migration] Integration with EXTRACT-008
 
 ### Relationship to Other Subtasks
 - **Subtask 1** (CLI Template): ✅ Provides foundation and examples
-- **Subtask 3** (Integration Documentation): 🔄 Will document scaffolding usage
-- **Subtask 4** (Migration Guide): 🔄 Will reference scaffolding for new projects
-- **Subtask 5** (Dependency Mapping): 🔄 Will use scaffolding examples
+- **Subtask 3** (Integration Documentation): [ACTION:migration] Will document scaffolding usage
+- **Subtask 4** (Migration Guide): [ACTION:migration] Will reference scaffolding for new projects
+- **Subtask 5** (Dependency Mapping): [ACTION:migration] Will use scaffolding examples
 
 ### Package Utilization
 - **All 8 Packages**: Scaffolding system demonstrates integration of all extracted packages

@@ -3,18 +3,18 @@
 ## 🎯 Overview
 BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories and backups of individual files. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives and file backups, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
 
-> **🛡️ Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
+> **[ACTION:validation] Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
 
 ## 🤖 AI Assistant Navigation Guide
 
 ### 🚨 CRITICAL PRIORITY [AI Must Read First]
-- **🛡️ [Immutable Specifications](immutable.md)** - Core behaviors that cannot change
+- **[ACTION:validation] [Immutable Specifications](immutable.md)** - Core behaviors that cannot change
 - **📋 [Feature Tracking](feature-tracking.md)** - Master feature registry with tokens
-- **🔍 [AI Assistant Compliance](ai-assistant-compliance.md)** - Mandatory token requirements
+- **[ACTION:discovery] [AI Assistant Compliance](ai-assistant-compliance.md)** - Mandatory token requirements
 
 ### 🎯 HIGH PRIORITY [AI Core References]
 - **🏗️ [Architecture](architecture.md)** - System design and technical implementation
-- **📝 [Requirements](requirements.md)** - Implementation details and constraints
+- **[ACTION:format-processing] [Requirements](requirements.md)** - Implementation details and constraints
 - **🧪 [Testing](testing.md)** - Test coverage requirements and validation
 
 ### 📊 MEDIUM PRIORITY [AI Conditional References]
@@ -22,9 +22,9 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - **🔌 API Integration** - See Git Integration and Output Management sections
 - **🚀 Performance Specifications** - See Quality Assurance section
 
-### 📝 LOW PRIORITY [AI Reference Only]
+### [ACTION:format-processing] LOW PRIORITY [AI Reference Only]
 - **📚 Documentation Standards** - Reference for formatting only
-- **🔧 Implementation Examples** - Code examples for understanding
+- **[ACTION:core-functionality] Implementation Examples** - Code examples for understanding
 
 ## 📋 Documentation Navigation
 
@@ -42,7 +42,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Follow [Testing](testing.md) requirements for all changes
 - Ensure all code passes linting requirements before submission
 
-### 🔧 Document Maintenance
+### [ACTION:core-functionality] Document Maintenance
 - Keep [Specification](specification.md) and [Immutable Specifications](immutable.md) in sync
 - Update [Requirements](requirements.md) with new features
 - Maintain test coverage as per [Testing](testing.md)
@@ -50,7 +50,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## ✅ Quality Assurance and Code Standards
 
-### 🔧 Linting Requirements
+### [ACTION:core-functionality] Linting Requirements
 - All Go code must pass `revive` linter checks before commit
 - Linting configuration is maintained in `.revive.toml`
 - Run linting with `make lint` command
@@ -64,7 +64,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Context support for operation cancellation and timeouts
 - Comprehensive error logging without exposing sensitive information
 
-### 🛡️ Resource Management
+### [ACTION:validation] Resource Management
 - Automatic cleanup of temporary files and directories
 - Thread-safe resource tracking for concurrent operations
 - Atomic file operations to prevent data corruption
@@ -72,6 +72,13 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Comprehensive cleanup testing and verification
 
 ## Configuration Discovery
+
+### CONFIG-DISCOVERY-001: Configuration Discovery Specification [ACTION:discovery]
+**Source**: docs/context/specification.md - Configuration Discovery section
+**Impact**: Core functionality requirement for configuration discovery
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 - Configuration files are discovered using a configurable search path
 - The search path is controlled by the `BKPDIR_CONFIG` environment variable
 - If `BKPDIR_CONFIG` is not set, the default search path is hard-coded as: `./.bkpdir.yml:~/.bkpdir.yml`
@@ -86,6 +93,13 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Home directory (`~`) expansion is supported
 
 ## Configuration File
+
+### CONFIG-FILE-001: Configuration File Specification [ACTION:core-functionality]
+**Source**: docs/context/specification.md - Configuration File section
+**Impact**: Core functionality requirement for configuration file handling
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 - Configuration is stored in YAML files with names specified by the configuration discovery system
 - If no configuration files are found, default values are used (see [Immutable Specifications](immutable.md#configuration-defaults))
 - Configuration files use the `.yml` extension by convention
@@ -278,7 +292,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      pattern_timestamp: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
      ```
 
-9. **⭐ Layered Configuration Inheritance** (CFG-005)
+9. **[CRITICAL] Layered Configuration Inheritance** (CFG-005)
    - Configuration files can inherit from other configuration files using explicit declarations
    - Supports flexible merge strategies for different data types (arrays, objects, primitives)
    - Prevents circular inheritance through automatic dependency tracking
@@ -491,6 +505,13 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Shows both directory archiving and file backup configuration options
 
 ## Global Options
+
+### CLI-GLOBAL-001: Global Options Specification [ACTION:core-functionality]
+**Source**: docs/context/specification.md - Global Options section
+**Impact**: Core functionality requirement for global CLI options
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 - **Dry-Run Mode**: When enabled with `--dry-run` flag:
   - For directory operations: Shows the archive filename that would be created using `format_dry_run_archive` or `template_dry_run_archive` configuration
     - Default format: "Would create archive: [PATH]"
@@ -505,6 +526,12 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
   - All output uses configurable printf-style format strings or template-based formatting
 
 ## Archive Features
+
+### ARCHIVE-FEATURES-001: Archive Features Specification [ACTION:core-functionality]
+**Source**: docs/context/specification.md - Archive Features section
+**Impact**: Core functionality requirement for archive features
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Git Integration
 - Automatically detects Git repositories using `git rev-parse --is-inside-work-tree`
@@ -537,6 +564,18 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Supports same Git integration and exclusion patterns
 
 ## Error Handling and Recovery
+
+### ERROR-HANDLING-001: Error Handling and Recovery Specification [ACTION:validation]
+**Source**: docs/context/specification.md - Error Handling and Recovery section
+**Impact**: Core functionality requirement for error handling
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
+### RESOURCE-MGMT-001: Resource Management Specification [ACTION:core-functionality]
+**Source**: docs/context/specification.md - Error Handling and Recovery section
+**Impact**: Core functionality requirement for resource management
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
 
 ### Structured Error Reporting
 - All operations return structured errors with specific status codes
@@ -744,11 +783,11 @@ For detailed implementation requirements and constraints, see:
 - Scalable for large directories and many archives
 - Streaming ZIP creation for memory efficiency
 
-## 🔻 CI/CD Pipeline Optimization for AI Development
+## [LOW] CI/CD Pipeline Optimization for AI Development
 
 ### CICD-001: AI-First Development Optimization
-**Priority**: 🔻 LOW  
-**Status**: 📝 Not Started
+**Priority**: [LOW] LOW  
+**Status**: [ACTION:format-processing] Not Started
 
 The CI/CD pipeline shall be optimized for AI-first development workflows where:
 
@@ -771,11 +810,11 @@ The CI/CD pipeline shall be optimized for AI-first development workflows where:
 - Automated compliance checking against AI assistant protocols
 - Self-healing pipeline configurations that adapt to AI workflow patterns
 
-## 🔻 AI-First Documentation and Code Maintenance
+## [LOW] AI-First Documentation and Code Maintenance
 
 ### DOC-011: Token Validation Integration for AI Assistants
-**Priority**: 🔺 HIGH  
-**Status**: 🔄 In Progress
+**Priority**: [HIGH] HIGH  
+**Status**: [ACTION:migration] In Progress
 
 The token validation integration system shall provide seamless validation workflow integration for AI assistants where:
 
@@ -809,8 +848,8 @@ The token validation integration system shall provide seamless validation workfl
 - Dependencies on DOC-008 (Validation system) and DOC-009 (Clean baseline)
 
 ### DOC-013: AI-First Documentation and Code Maintenance Strategy
-**Priority**: 🔻 LOW  
-**Status**: 📝 Not Started
+**Priority**: [LOW] LOW  
+**Status**: [ACTION:format-processing] Not Started
 
 The documentation and code maintenance approach shall be optimized for AI-first development where:
 

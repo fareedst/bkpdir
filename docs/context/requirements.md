@@ -176,6 +176,13 @@ if backupErr, ok := err.(*BackupError); ok {
 ```
 
 ### Context Support Requirements
+
+### CONTEXT-001: Context Support Requirements [ACTION:core-functionality]
+**Source**: docs/context/requirements.md - Context Support Requirements section
+**Impact**: Core functionality requirement for context support
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 **Implementation**: `archive.go`, `backup.go` - Context-aware operations
 **Specification Requirements**:
 - **Context-Aware Operations**: All long-running operations must support context cancellation
@@ -1200,10 +1207,10 @@ if !containsAllTypes(detected, expectedTypes) {
 - **Temporary Files**: Cross-platform temporary directory usage with proper cleanup
 - **File Permissions**: Respects platform-specific file permission models
 
-## 🔻 CI/CD Requirements for AI Development
+## [LOW] CI/CD Requirements for AI Development
 
 ### CICD-001: AI-First Development Optimization Requirements
-**Priority**: 🔻 LOW  
+**Priority**: [LOW] LOW  
 **Implementation Tokens**: `// CICD-001: AI-first CI/CD optimization`
 
 #### Core Requirements
@@ -1234,10 +1241,10 @@ if !containsAllTypes(detected, expectedTypes) {
 - **R-CICD-001-19**: Scalable configuration management for AI team workflows
 - **R-CICD-001-20**: Automated pipeline optimization based on AI usage patterns
 
-## 🔻 AI-First Documentation and Code Maintenance Requirements
+## [LOW] AI-First Documentation and Code Maintenance Requirements
 
 ### DOC-011: Token Validation Integration for AI Assistants Requirements
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Implementation Tokens**: `// DOC-011: AI validation integration`
 
 #### Core AI Workflow Integration Requirements
@@ -1283,7 +1290,7 @@ if !containsAllTypes(detected, expectedTypes) {
 - **R-DOC-011-30**: Integration MUST maintain backward compatibility with existing validation workflows
 
 ### DOC-013: AI-First Documentation and Code Maintenance Requirements
-**Priority**: 🔻 LOW  
+**Priority**: [LOW] LOW  
 **Implementation Tokens**: `// DOC-013: AI-first maintenance`
 
 #### Core AI-Centric Requirements
@@ -1314,11 +1321,11 @@ if !containsAllTypes(detected, expectedTypes) {
 - **R-DOC-013-19**: Content organization MUST follow predictable patterns for AI assistant processing
 - **R-DOC-013-20**: Maintenance procedures MUST be documented in AI-executable formats
 
-## ⭐ Configuration System Enhancement Requirements
+## [CRITICAL] Configuration System Enhancement Requirements
 
 ### CFG-005: Layered Configuration Inheritance Requirements
-**Priority**: ⭐ CRITICAL  
-**Implementation Tokens**: `// ⭐ CFG-005: Layered configuration inheritance`
+**Priority**: [CRITICAL] CRITICAL  
+**Implementation Tokens**: `// [CRITICAL] CFG-005: Layered configuration inheritance`
 
 #### Core Inheritance Requirements
 - **R-CFG-005-1**: Configuration files MUST support explicit inheritance declarations using `inherit` field
@@ -1376,7 +1383,7 @@ if !containsAllTypes(detected, expectedTypes) {
 
 ### CFG-006: Complete Configuration Reflection and Visibility Requirements
 
-**Implementation Tokens**: `// 🔺 CFG-006: Complete config visibility`
+**Implementation Tokens**: `// [HIGH] CFG-006: Complete config visibility`
 
 #### Core Configuration Inspection Requirements
 - **R-CFG-006-1**: Configuration command MUST display ALL configuration parameters automatically without manual maintenance

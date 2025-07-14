@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -18,7 +18,7 @@ func NewAssertionHelper() AssertionHelper {
 
 // AssertEqual asserts that two values are equal using reflection.
 //
-// ⭐ EXTRACT-009: Generic equality assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertEqual(t *testing.T, name string, got, want interface{}) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
@@ -29,7 +29,7 @@ func (h *DefaultAssertionHelper) AssertEqual(t *testing.T, name string, got, wan
 // AssertStringEqual asserts that two strings are equal.
 // Extracted from config_test.go assertStringEqual function.
 //
-// ⭐ EXTRACT-009: String assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertStringEqual(t *testing.T, name, got, want string) {
 	t.Helper()
 	if got != want {
@@ -40,7 +40,7 @@ func (h *DefaultAssertionHelper) AssertStringEqual(t *testing.T, name, got, want
 // AssertBoolEqual asserts that two booleans are equal.
 // Extracted from config_test.go assertBoolEqual function.
 //
-// ⭐ EXTRACT-009: Boolean assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertBoolEqual(t *testing.T, name string, got, want bool) {
 	t.Helper()
 	if got != want {
@@ -51,7 +51,7 @@ func (h *DefaultAssertionHelper) AssertBoolEqual(t *testing.T, name string, got,
 // AssertIntEqual asserts that two integers are equal.
 // Extracted from config_test.go assertIntEqual function.
 //
-// ⭐ EXTRACT-009: Integer assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertIntEqual(t *testing.T, name string, got, want int) {
 	t.Helper()
 	if got != want {
@@ -62,7 +62,7 @@ func (h *DefaultAssertionHelper) AssertIntEqual(t *testing.T, name string, got, 
 // AssertSliceEqual asserts that two string slices are equal.
 // Extracted from config_test.go assertStringSliceEqual function.
 //
-// ⭐ EXTRACT-009: Slice assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertSliceEqual(t *testing.T, name string, got, want []string) {
 	t.Helper()
 	if len(got) != len(want) {
@@ -79,7 +79,7 @@ func (h *DefaultAssertionHelper) AssertSliceEqual(t *testing.T, name string, got
 
 // AssertError asserts whether an error should or should not have occurred.
 //
-// ⭐ EXTRACT-009: Error assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertError(t *testing.T, err error, expectError bool) {
 	t.Helper()
 	if expectError && err == nil {
@@ -91,7 +91,7 @@ func (h *DefaultAssertionHelper) AssertError(t *testing.T, err error, expectErro
 
 // AssertContains asserts that a string contains a substring.
 //
-// ⭐ EXTRACT-009: String contains assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultAssertionHelper) AssertContains(t *testing.T, str, substr, name string) {
 	t.Helper()
 	if !strings.Contains(str, substr) {
@@ -102,7 +102,7 @@ func (h *DefaultAssertionHelper) AssertContains(t *testing.T, str, substr, name 
 // AssertNotContains asserts that a string does not contain a substring.
 // Additional utility not in the interface but useful for testing.
 //
-// ⭐ EXTRACT-009: String not contains assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertNotContains(t *testing.T, str, substr, name string) {
 	t.Helper()
 	if strings.Contains(str, substr) {
@@ -112,7 +112,7 @@ func AssertNotContains(t *testing.T, str, substr, name string) {
 
 // AssertFileExists asserts that a file exists at the given path.
 //
-// ⭐ EXTRACT-009: File existence assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertFileExists(t *testing.T, path, name string) {
 	t.Helper()
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -124,7 +124,7 @@ func AssertFileExists(t *testing.T, path, name string) {
 
 // AssertFileNotExists asserts that a file does not exist at the given path.
 //
-// ⭐ EXTRACT-009: File non-existence assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertFileNotExists(t *testing.T, path, name string) {
 	t.Helper()
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
@@ -138,7 +138,7 @@ func AssertFileNotExists(t *testing.T, path, name string) {
 
 // AssertFileContent asserts that a file contains the expected content.
 //
-// ⭐ EXTRACT-009: File content assertion helper - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertFileContent(t *testing.T, path, expectedContent, name string) {
 	t.Helper()
 	content, err := os.ReadFile(path)
@@ -158,42 +158,42 @@ var defaultHelper = NewAssertionHelper()
 
 // AssertStringEqual is a package-level convenience function for string assertions.
 //
-// ⭐ EXTRACT-009: Package-level string assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertStringEqual(t *testing.T, name, got, want string) {
 	defaultHelper.AssertStringEqual(t, name, got, want)
 }
 
 // AssertBoolEqual is a package-level convenience function for boolean assertions.
 //
-// ⭐ EXTRACT-009: Package-level boolean assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertBoolEqual(t *testing.T, name string, got, want bool) {
 	defaultHelper.AssertBoolEqual(t, name, got, want)
 }
 
 // AssertIntEqual is a package-level convenience function for integer assertions.
 //
-// ⭐ EXTRACT-009: Package-level integer assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertIntEqual(t *testing.T, name string, got, want int) {
 	defaultHelper.AssertIntEqual(t, name, got, want)
 }
 
 // AssertSliceEqual is a package-level convenience function for slice assertions.
 //
-// ⭐ EXTRACT-009: Package-level slice assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertSliceEqual(t *testing.T, name string, got, want []string) {
 	defaultHelper.AssertSliceEqual(t, name, got, want)
 }
 
 // AssertError is a package-level convenience function for error assertions.
 //
-// ⭐ EXTRACT-009: Package-level error assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertError(t *testing.T, err error, expectError bool) {
 	defaultHelper.AssertError(t, err, expectError)
 }
 
 // AssertContains is a package-level convenience function for string contains assertions.
 //
-// ⭐ EXTRACT-009: Package-level contains assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertContains(t *testing.T, str, substr, name string) {
 	defaultHelper.AssertContains(t, str, substr, name)
 }

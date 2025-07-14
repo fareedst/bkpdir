@@ -1,4 +1,20 @@
-// ⭐ EXTRACT-004: Git Integration System - Comprehensive test suite for extracted Git package - 🧪
+// This file is part of bkpdir
+//
+// Package git provides tests for the Git integration components.
+// It tests repository detection, info extraction, and Git operations.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
+
+// TEST-GIT-PKG-001: Git package test validation - Git integration and metadata testing [ACTION:validation]
+// Source: pkg/git/git.go - Git integration implementation
+// Impact: Core functionality validation for Git package
+
+// TEST-SERVICE-GIT-PKG-001: Git package service test validation - Git service implementation testing [ACTION:validation]
+// Source: pkg/git/git.go - Git service implementation
+// Impact: Git service validation for Git package service implementation
+
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package git
 
 import (
@@ -11,9 +27,11 @@ import (
 	"testing"
 )
 
-// TestGitIntegration tests the Git integration functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Integration System
 func TestGitIntegration(t *testing.T) {
-	// ⭐ EXTRACT-004: Git integration validation - 🧪
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_test_")
@@ -125,9 +143,11 @@ func TestGitIntegration(t *testing.T) {
 	})
 }
 
-// TestGitConfiguration tests the Git configuration functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Configuration System
 func TestGitConfiguration(t *testing.T) {
-	// ⭐ EXTRACT-004: Git configuration support testing - 🧪
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	t.Run("DefaultConfig", func(t *testing.T) {
 		config := DefaultConfig()
@@ -171,9 +191,11 @@ func TestGitConfiguration(t *testing.T) {
 	})
 }
 
-// TestGitBranchExtraction tests branch extraction functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Branch System
 func TestGitBranchExtraction(t *testing.T) {
-	// ⭐ EXTRACT-004: Git branch and hash utilities testing - 🧪
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Skip if git is not available
 	if !isGitAvailable() {
@@ -261,9 +283,11 @@ func TestGitBranchExtraction(t *testing.T) {
 	})
 }
 
-// TestGitStatus tests Git status detection functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Status System
 func TestGitStatus(t *testing.T) {
-	// ⭐ EXTRACT-004: Git status detection testing - 🧪
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Skip if git is not available
 	if !isGitAvailable() {
@@ -361,9 +385,11 @@ func TestGitStatus(t *testing.T) {
 	})
 }
 
-// TestBackwardCompatibilityFunctions tests the package-level convenience functions
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Compatibility System
 func TestBackwardCompatibilityFunctions(t *testing.T) {
-	// ⭐ EXTRACT-004: Backward compatibility testing - 🧪
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	tmpDir, err := ioutil.TempDir("", "git_compat_test_")
 	if err != nil {
@@ -444,9 +470,11 @@ func TestBackwardCompatibilityFunctions(t *testing.T) {
 	}
 }
 
-// TestGitError tests Git error handling
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Error System
 func TestGitError(t *testing.T) {
-	// ⭐ EXTRACT-004: Git error handling testing - 🧪
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	t.Run("GitErrorFormatting", func(t *testing.T) {
 		gitErr := &GitError{
@@ -512,8 +540,9 @@ func runGitCommand(t *testing.T, dir string, args ...string) {
 	}
 }
 
-// 🔶 GIT-004: Git submodule functionality tests - 🧪
-// TestGitSubmodules tests the Git submodule functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-004
+// IMMUTABLE-REF: Git Submodule System
 func TestGitSubmodules(t *testing.T) {
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_submodule_test_")

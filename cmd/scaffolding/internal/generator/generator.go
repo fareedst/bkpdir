@@ -1,4 +1,4 @@
-// 🔺 EXTRACT-008: Project template generation - 📝 Template processing and file creation
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 package generator
 
 import (
@@ -25,27 +25,27 @@ func New() *Generator {
 
 // GenerateProject creates a new CLI project based on the configuration
 func (g *Generator) GenerateProject(config *ui.ProjectConfig) error {
-	// 🔺 EXTRACT-008: Project directory creation - 🔧 Directory structure setup
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := g.createProjectDirectory(config); err != nil {
 		return fmt.Errorf("creating project directory: %w", err)
 	}
 
-	// 🔺 EXTRACT-008: Core file generation - 📝 Template-based file creation
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := g.generateCoreFiles(config); err != nil {
 		return fmt.Errorf("generating core files: %w", err)
 	}
 
-	// 🔺 EXTRACT-008: Package-specific generation - 🔧 Component integration
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := g.generatePackageFiles(config); err != nil {
 		return fmt.Errorf("generating package files: %w", err)
 	}
 
-	// 🔺 EXTRACT-008: Optional feature generation - 📝 Additional features
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := g.generateOptionalFiles(config); err != nil {
 		return fmt.Errorf("generating optional files: %w", err)
 	}
 
-	fmt.Printf("📁 Project structure created:\n")
+	fmt.Printf("[DIR] Project structure created:\n")
 	g.printProjectStructure(config)
 
 	return nil
@@ -234,5 +234,5 @@ func (g *Generator) printProjectStructure(config *ui.ProjectConfig) {
 		fmt.Printf("    └── main_test.go\n")
 	}
 
-	fmt.Printf("\n🔗 Included packages: %s\n", strings.Join(config.SelectedPackages, ", "))
+	fmt.Printf("\n[LINK] Included packages: %s\n", strings.Join(config.SelectedPackages, ", "))
 }

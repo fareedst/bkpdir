@@ -70,12 +70,12 @@ Successfully implemented comprehensive testing for CFG-006 (Complete Configurati
 - High-frequency access patterns (1000 operations stress test)
 - Concurrent access safety (10 goroutines × 100 operations)
 
-## 🔧 Technical Implementation Details
+## [ACTION:core-functionality] Technical Implementation Details
 
 ### Test Infrastructure
 - **Total Test Functions**: 13 comprehensive test functions
 - **Total Subtests**: 33 individual test scenarios
-- **Implementation Tokens**: `// 🔺 CFG-006: Comprehensive testing`
+- **Implementation Tokens**: `// [HIGH] CFG-006: Comprehensive testing`
 - **Test Coverage**: >95% for all CFG-006 functionality
 - **Performance Validation**: All operations <100ms, caching provides 60%+ improvement
 
@@ -123,7 +123,7 @@ BenchmarkConfigReflectionOperations/FilteredConfigAccess-10                10000
 - **Concurrent Access**: 10 goroutines × 100 operations safely handled
 - **Stress Testing**: 1000 operations completed in 78ms (avg: 78µs per operation)
 
-## 🔍 Implementation Approach
+## [ACTION:discovery] Implementation Approach
 
 The comprehensive testing implementation followed the 5-phase strategy outlined in the working plan:
 
@@ -144,7 +144,7 @@ The comprehensive testing implementation followed the 5-phase strategy outlined 
 
 ### Test Implementation
 - `config_test.go`: Added 13 comprehensive test functions (~800 lines)
-- Implementation tokens: `// 🔺 CFG-006: Comprehensive testing`
+- Implementation tokens: `// [HIGH] CFG-006: Comprehensive testing`
 
 ### Documentation
 - `CFG-006-subtask-7-comprehensive-testing-plan.md`: Working plan (300+ lines)
@@ -160,7 +160,7 @@ With CFG-006 subtask 7 completed successfully:
 3. **Feature Integration**: CFG-006 ready for production use
 4. **Next Features**: Can proceed with other high-priority features
 
-## 🔧 Recovery Information
+## [ACTION:core-functionality] Recovery Information
 
 ### Test Execution Commands
 ```bash

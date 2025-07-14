@@ -14,13 +14,13 @@ import (
 	"text/template"
 )
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Template formatting implementation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // DefaultTemplateFormatter provides template-based formatting functionality
 type DefaultTemplateFormatter struct {
 	configProvider ConfigProvider
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Constructor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewDefaultTemplateFormatter creates a new DefaultTemplateFormatter
 func NewDefaultTemplateFormatter(configProvider ConfigProvider) *DefaultTemplateFormatter {
 	return &DefaultTemplateFormatter{
@@ -28,7 +28,7 @@ func NewDefaultTemplateFormatter(configProvider ConfigProvider) *DefaultTemplate
 	}
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Pattern and template processing
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatWithTemplate formats input using a pattern and template string
 func (tf *DefaultTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
 	// Extract data using regex pattern
@@ -54,7 +54,7 @@ func (tf *DefaultTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr s
 	return tf.FormatWithPlaceholders(tmplStr, data), nil
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Placeholder-based formatting
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatWithPlaceholders formats a string using placeholder-based template formatting
 func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
@@ -81,7 +81,7 @@ func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data m
 	return buf.String()
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Archive template operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateCreatedArchive formats a created archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("created_archive")
@@ -91,7 +91,7 @@ func (tf *DefaultTemplateFormatter) TemplateCreatedArchive(data map[string]strin
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Identical archive template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateIdenticalArchive formats an identical archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateIdenticalArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("identical_archive")
@@ -101,7 +101,7 @@ func (tf *DefaultTemplateFormatter) TemplateIdenticalArchive(data map[string]str
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 List archive template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateListArchive formats a list archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateListArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("list_archive")
@@ -111,7 +111,7 @@ func (tf *DefaultTemplateFormatter) TemplateListArchive(data map[string]string) 
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Configuration value template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateConfigValue formats a configuration value message using a template
 func (tf *DefaultTemplateFormatter) TemplateConfigValue(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("config_value")
@@ -121,7 +121,7 @@ func (tf *DefaultTemplateFormatter) TemplateConfigValue(data map[string]string) 
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Dry run archive template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateDryRunArchive formats a dry-run archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateDryRunArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("dry_run_archive")
@@ -131,7 +131,7 @@ func (tf *DefaultTemplateFormatter) TemplateDryRunArchive(data map[string]string
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Error template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateError formats an error message using a template
 func (tf *DefaultTemplateFormatter) TemplateError(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("error")
@@ -141,7 +141,7 @@ func (tf *DefaultTemplateFormatter) TemplateError(data map[string]string) string
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Backup template operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateCreatedBackup formats a created backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateCreatedBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("created_backup")
@@ -151,7 +151,7 @@ func (tf *DefaultTemplateFormatter) TemplateCreatedBackup(data map[string]string
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Identical backup template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateIdenticalBackup formats an identical backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateIdenticalBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("identical_backup")
@@ -161,7 +161,7 @@ func (tf *DefaultTemplateFormatter) TemplateIdenticalBackup(data map[string]stri
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 List backup template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateListBackup formats a list backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateListBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("list_backup")
@@ -171,7 +171,7 @@ func (tf *DefaultTemplateFormatter) TemplateListBackup(data map[string]string) s
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Dry run backup template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateDryRunBackup formats a dry-run backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateDryRunBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("dry_run_backup")
@@ -181,17 +181,17 @@ func (tf *DefaultTemplateFormatter) TemplateDryRunBackup(data map[string]string)
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple template formatter without config
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // SimpleTemplateFormatter provides template formatting without configuration dependency
 type SimpleTemplateFormatter struct{}
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple constructor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewSimpleTemplateFormatter creates a SimpleTemplateFormatter
 func NewSimpleTemplateFormatter() *SimpleTemplateFormatter {
 	return &SimpleTemplateFormatter{}
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple pattern and template processing
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatWithTemplate formats input using a pattern and template string
 func (stf *SimpleTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
 	// Extract data using regex pattern
@@ -217,7 +217,7 @@ func (stf *SimpleTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr s
 	return stf.FormatWithPlaceholders(tmplStr, data), nil
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple placeholder formatting
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatWithPlaceholders formats a string using placeholder-based template formatting
 func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
@@ -244,43 +244,43 @@ func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data m
 	return buf.String()
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple template operations with defaults
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateCreatedArchive formats a created archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Created archive: %{path}", data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple identical archive template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateIdenticalArchive formats an identical archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateIdenticalArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Identical archive: %{path}", data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple list archive template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateListArchive formats a list archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateListArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("%{path} (created: %{creation_time})", data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple config value template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateConfigValue formats a configuration value message using default template
 func (stf *SimpleTemplateFormatter) TemplateConfigValue(data map[string]string) string {
 	return stf.FormatWithPlaceholders("%{name}=%{value} (source: %{source})", data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple dry run template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateDryRunArchive formats a dry-run archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateDryRunArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Would create archive: %{path}", data)
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter component - 🔧 Simple error template
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateError formats an error message using default template
 func (stf *SimpleTemplateFormatter) TemplateError(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Error: %{message}", data)
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Enhanced template methods
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // Enhanced template operations using file statistics for detailed output
 
 // TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics (DefaultTemplateFormatter)
@@ -345,7 +345,7 @@ func (stf *SimpleTemplateFormatter) TemplateIncrementalCreatedWithStats(path str
 	return formatTemplate("Created incremental archive: {path} ({size_human}, {mtime})", data)
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Helper functions for template formatting
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 
 // buildStatsTemplateData builds template data from file statistics
 func buildStatsTemplateData(stats *FileStatInfo) map[string]string {

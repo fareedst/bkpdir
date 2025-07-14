@@ -1,6 +1,6 @@
 #!/bin/bash
 # Enhanced Implementation Token Migration Script
-# 🔺 DOC-014: Enhanced implementation token system - token enhancement migration
+# [HIGH] DOC-014: Enhanced implementation token system [ACTION:maintenance]
 # Extends existing token migration with decision context inference
 
 set -euo pipefail
@@ -404,7 +404,7 @@ done
 
 # Main execution
 main() {
-    log_info "🔺 DOC-014: Enhanced Implementation Token Migration"
+    log_info "[HIGH] DOC-014: Enhanced Implementation Token Migration"
     
     if [[ "$DRY_RUN" == "true" ]]; then
         log_warning "DRY RUN MODE: No files will be modified"

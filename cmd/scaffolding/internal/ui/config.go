@@ -1,4 +1,4 @@
-// 🔺 EXTRACT-008: Component selection interface - 🔍 Package discovery and configuration
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 package ui
 
 import (
@@ -63,17 +63,17 @@ type Template struct {
 func CollectProjectConfig() (*ProjectConfig, error) {
 	config := &ProjectConfig{}
 
-	// 🔺 EXTRACT-008: Project name and basic configuration - 🔍 User input validation
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := collectBasicInfo(config); err != nil {
 		return nil, fmt.Errorf("collecting basic info: %w", err)
 	}
 
-	// 🔺 EXTRACT-008: Template selection interface - 🔍 Template and package selection
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := collectTemplateAndPackages(config); err != nil {
 		return nil, fmt.Errorf("collecting template and packages: %w", err)
 	}
 
-	// 🔺 EXTRACT-008: Optional features configuration - 🔍 Additional options
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	if err := collectOptionalFeatures(config); err != nil {
 		return nil, fmt.Errorf("collecting optional features: %w", err)
 	}
@@ -174,13 +174,13 @@ func collectTemplateAndPackages(config *ProjectConfig) error {
 		return collectCustomPackages(config)
 	} else {
 		config.SelectedPackages = selectedTemplate.Packages
-		fmt.Printf("📦 Selected packages: %s\n", strings.Join(selectedTemplate.Packages, ", "))
+		fmt.Printf("[PACKAGES] Selected packages: %s\n", strings.Join(selectedTemplate.Packages, ", "))
 		return nil
 	}
 }
 
 func collectCustomPackages(config *ProjectConfig) error {
-	fmt.Println("\n📦 Select packages to include in your project:")
+	fmt.Println("\n[PACKAGES] Select packages to include in your project:")
 
 	var selectedPackages []string
 

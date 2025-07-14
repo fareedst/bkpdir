@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -22,7 +22,7 @@ func NewCliTestHelper() CliTestHelper {
 // CreateTestCommand creates a test cobra command.
 // Extracted from main_test.go createTestRootCmd pattern.
 //
-// ⭐ EXTRACT-009: Test command creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultCliTestHelper) CreateTestCommand(name string, runFunc func(cmd *cobra.Command, args []string)) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   name,
@@ -40,7 +40,7 @@ func (h *DefaultCliTestHelper) CreateTestCommand(name string, runFunc func(cmd *
 // ExecuteCommand executes a command with arguments and returns output and error.
 // This captures both stdout and stderr for testing.
 //
-// ⭐ EXTRACT-009: Command execution with output capture - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultCliTestHelper) ExecuteCommand(t *testing.T, cmd *cobra.Command, args []string) (string, error) {
 	t.Helper()
 
@@ -69,7 +69,7 @@ func (h *DefaultCliTestHelper) ExecuteCommand(t *testing.T, cmd *cobra.Command, 
 
 // CaptureOutput captures stdout/stderr during function execution.
 //
-// ⭐ EXTRACT-009: Output capture utility - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (h *DefaultCliTestHelper) CaptureOutput(t *testing.T, fn func()) (stdout, stderr string) {
 	t.Helper()
 
@@ -130,7 +130,7 @@ func (h *DefaultCliTestHelper) CaptureOutput(t *testing.T, fn func()) (stdout, s
 // CreateTestRootCommand creates a test root command with common setup.
 // Extracted from main_test.go createTestRootCmd function.
 //
-// ⭐ EXTRACT-009: Test root command creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTestRootCommand(appName string) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   appName,
@@ -147,7 +147,7 @@ func CreateTestRootCommand(appName string) *cobra.Command {
 
 // ExecuteCommandWithInput executes a command with simulated stdin input.
 //
-// ⭐ EXTRACT-009: Command execution with input - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func ExecuteCommandWithInput(t *testing.T, cmd *cobra.Command, args []string, input string) (string, error) {
 	t.Helper()
 
@@ -182,7 +182,7 @@ func ExecuteCommandWithInput(t *testing.T, cmd *cobra.Command, args []string, in
 
 // AssertCommandSuccess asserts that a command executed successfully.
 //
-// ⭐ EXTRACT-009: Command success assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertCommandSuccess(t *testing.T, cmd *cobra.Command, args []string) string {
 	t.Helper()
 
@@ -198,7 +198,7 @@ func AssertCommandSuccess(t *testing.T, cmd *cobra.Command, args []string) strin
 
 // AssertCommandError asserts that a command failed with an error.
 //
-// ⭐ EXTRACT-009: Command error assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertCommandError(t *testing.T, cmd *cobra.Command, args []string) (string, error) {
 	t.Helper()
 
@@ -214,7 +214,7 @@ func AssertCommandError(t *testing.T, cmd *cobra.Command, args []string) (string
 
 // AssertCommandOutput asserts that a command produces expected output.
 //
-// ⭐ EXTRACT-009: Command output assertion - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AssertCommandOutput(t *testing.T, cmd *cobra.Command, args []string, expectedOutput string) {
 	t.Helper()
 
@@ -227,7 +227,7 @@ func AssertCommandOutput(t *testing.T, cmd *cobra.Command, args []string, expect
 
 // WithTestCommand executes a function with a test command and cleans up automatically.
 //
-// ⭐ EXTRACT-009: Test command with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTestCommand(t *testing.T, name string, runFunc func(cmd *cobra.Command, args []string), fn func(cmd *cobra.Command)) {
 	t.Helper()
 
@@ -238,7 +238,7 @@ func WithTestCommand(t *testing.T, name string, runFunc func(cmd *cobra.Command,
 
 // CreateSubcommand creates a subcommand and adds it to a parent command.
 //
-// ⭐ EXTRACT-009: Subcommand creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateSubcommand(parent *cobra.Command, name, short string, runFunc func(cmd *cobra.Command, args []string)) *cobra.Command {
 	subCmd := &cobra.Command{
 		Use:   name,
@@ -255,21 +255,21 @@ func CreateSubcommand(parent *cobra.Command, name, short string, runFunc func(cm
 
 // AddStringFlag adds a string flag to a command.
 //
-// ⭐ EXTRACT-009: String flag addition - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AddStringFlag(cmd *cobra.Command, name, shorthand, defaultValue, usage string) {
 	cmd.Flags().StringP(name, shorthand, defaultValue, usage)
 }
 
 // AddBoolFlag adds a boolean flag to a command.
 //
-// ⭐ EXTRACT-009: Boolean flag addition - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AddBoolFlag(cmd *cobra.Command, name, shorthand string, defaultValue bool, usage string) {
 	cmd.Flags().BoolP(name, shorthand, defaultValue, usage)
 }
 
 // AddIntFlag adds an integer flag to a command.
 //
-// ⭐ EXTRACT-009: Integer flag addition - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func AddIntFlag(cmd *cobra.Command, name, shorthand string, defaultValue int, usage string) {
 	cmd.Flags().IntP(name, shorthand, defaultValue, usage)
 }
@@ -280,21 +280,21 @@ var defaultCliHelper = NewCliTestHelper()
 
 // CreateTestCommand is a package-level convenience function for creating test commands.
 //
-// ⭐ EXTRACT-009: Package-level test command - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTestCommand(name string, runFunc func(cmd *cobra.Command, args []string)) *cobra.Command {
 	return defaultCliHelper.CreateTestCommand(name, runFunc)
 }
 
 // ExecuteCommand is a package-level convenience function for executing commands.
 //
-// ⭐ EXTRACT-009: Package-level command execution - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func ExecuteCommand(t *testing.T, cmd *cobra.Command, args []string) (string, error) {
 	return defaultCliHelper.ExecuteCommand(t, cmd, args)
 }
 
 // CaptureOutput is a package-level convenience function for capturing output.
 //
-// ⭐ EXTRACT-009: Package-level output capture - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CaptureOutput(t *testing.T, fn func()) (stdout, stderr string) {
 	return defaultCliHelper.CaptureOutput(t, fn)
 }

@@ -36,7 +36,7 @@ Successfully implemented semantic cross-referencing system that enhances documen
 - **Counts references** across all documentation files
 - **Reports consistency levels**:
   - ✅ **Consistently referenced**: 3+ references across documents
-  - ⚠️  **Minimally referenced**: 1-2 references 
+  - [WARNING] **Minimally referenced**: 1-2 references 
   - ❌ **Not found**: No references in other documents
 - **Identifies files** containing each feature reference
 
@@ -103,7 +103,7 @@ Use the format from `cross-reference-template.md`:
 
 ### Validation Output Interpretation
 - ✅ **Success**: All links valid, complete feature references found
-- ⚠️  **Warning**: Minimal references, incomplete feature blocks
+- [WARNING] **Warning**: Minimal references, incomplete feature blocks
 - ❌ **Error**: Broken links, missing feature references, orphaned features
 
 ## Future Enhancements

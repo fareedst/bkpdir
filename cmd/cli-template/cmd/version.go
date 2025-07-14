@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-008: CLI Application Template - Version command demonstrating pkg/git integration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package cmd
 
 import (

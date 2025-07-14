@@ -6,7 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// 🔺 TEST-INFRA-001-D: Context cancellation testing helpers tests - 🔧
+// TEST-INFRA-001-D: Context cancellation testing helpers tests
 // DECISION-REF: DEC-007 (Context-aware operations)
 // IMPLEMENTATION-NOTES: Comprehensive testing of context cancellation utilities with deterministic scenarios
 
@@ -22,6 +22,9 @@ import (
 	"time"
 )
 
+// TEST-INFRA-001: Context controller [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Context System
 func TestNewContextController(t *testing.T) {
 	timeout := 100 * time.Millisecond
 	controller := NewContextController(timeout)
@@ -50,6 +53,9 @@ func TestNewContextController(t *testing.T) {
 	controller.Stop()
 }
 
+// TEST-INFRA-001: Cancellation delay [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Delay System
 func TestContextController_SetCancellationDelay(t *testing.T) {
 	controller := NewContextController(0)
 	defer controller.Stop()
@@ -62,6 +68,9 @@ func TestContextController_SetCancellationDelay(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-001: Controlled cancellation [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Cancellation System
 func TestContextController_StartControlledCancellation(t *testing.T) {
 	t.Run("without delay", func(t *testing.T) {
 		controller := NewContextController(100 * time.Millisecond)
@@ -121,6 +130,9 @@ func TestContextController_StartControlledCancellation(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Controller events [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Event System
 func TestContextController_Events(t *testing.T) {
 	controller := NewContextController(0)
 	defer controller.Stop()
@@ -156,6 +168,9 @@ func TestContextController_Events(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-001: Cancellation manager [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Manager System
 func TestNewCancellationManager(t *testing.T) {
 	manager := NewCancellationManager()
 
@@ -173,6 +188,9 @@ func TestNewCancellationManager(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-001: Cancellation point registration [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Registration System
 func TestCancellationManager_RegisterCancellationPoint(t *testing.T) {
 	manager := NewCancellationManager()
 
@@ -205,6 +223,9 @@ func TestCancellationManager_RegisterCancellationPoint(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-001: Cancellation injection [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Injection System
 func TestCancellationManager_InjectCancellation(t *testing.T) {
 	t.Run("successful injection", func(t *testing.T) {
 		manager := NewCancellationManager()
@@ -299,6 +320,9 @@ func TestCancellationManager_InjectCancellation(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Manager enable/disable [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Enable System
 func TestCancellationManager_EnableDisable(t *testing.T) {
 	manager := NewCancellationManager()
 
@@ -336,6 +360,9 @@ func TestCancellationManager_EnableDisable(t *testing.T) {
 	manager.EnablePoint("nonexistent", false) // Should not panic
 }
 
+// TEST-INFRA-001: Concurrent testing [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Concurrent System
 func TestCancellationManager_RunConcurrentTest(t *testing.T) {
 	t.Run("successful operations", func(t *testing.T) {
 		manager := NewCancellationManager()
@@ -414,6 +441,9 @@ func TestCancellationManager_RunConcurrentTest(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Propagation testing [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Propagation System
 func TestCancellationManager_TestPropagation(t *testing.T) {
 	t.Run("successful propagation", func(t *testing.T) {
 		manager := NewCancellationManager()
@@ -483,6 +513,9 @@ func TestCancellationManager_TestPropagation(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Helper functions [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Helper System
 func TestContextHelperFunctions(t *testing.T) {
 	t.Run("CreateTimeoutContext", func(t *testing.T) {
 		timeout := 50 * time.Millisecond
@@ -536,6 +569,9 @@ func TestContextHelperFunctions(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Slow operation simulation [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Simulation System
 func TestSimulateSlowOperation(t *testing.T) {
 	t.Run("operation completes", func(t *testing.T) {
 		ctx := context.Background()
@@ -580,6 +616,9 @@ func TestSimulateSlowOperation(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Propagation verification [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Verification System
 func TestVerifyContextPropagation(t *testing.T) {
 	t.Run("proper propagation", func(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
@@ -635,6 +674,9 @@ func TestVerifyContextPropagation(t *testing.T) {
 	})
 }
 
+// TEST-INFRA-001: Point helpers [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Point System
 func TestCancellationPointHelpers(t *testing.T) {
 	t.Run("CreateArchiveCancellationPoint", func(t *testing.T) {
 		stage := "file_scanning"
@@ -685,6 +727,9 @@ func TestCancellationPointHelpers(t *testing.T) {
 
 // Integration tests combining multiple features
 
+// TEST-INFRA-001: Concurrent integration [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Integration System
 func TestIntegration_ConcurrentCancellation(t *testing.T) {
 	manager := NewCancellationManager()
 
@@ -736,6 +781,9 @@ func TestIntegration_ConcurrentCancellation(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-001: Propagation integration [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Integration System
 func TestIntegration_PropagationWithCancellation(t *testing.T) {
 	manager := NewCancellationManager()
 
@@ -838,6 +886,9 @@ func BenchmarkSimulateSlowOperation(b *testing.B) {
 
 // Error handling tests
 
+// TEST-INFRA-001: Error handling [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Error System
 func TestErrorHandling_CancellationFunction(t *testing.T) {
 	manager := NewCancellationManager()
 
@@ -868,6 +919,9 @@ func TestErrorHandling_CancellationFunction(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-001: Stress testing [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-INFRA-001
+// IMMUTABLE-REF: TestUtil Stress System
 func TestStress_ConcurrentAccess(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping stress test in short mode")

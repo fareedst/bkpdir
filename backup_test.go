@@ -1,5 +1,12 @@
 // This file is part of bkpdir
 
+// TEST-BACKUP-FEATURES-001: Backup features test validation - File backup creation and management testing [ACTION:validation]
+// Source: backup.go - BACKUP-FEATURES-001
+// Impact: Validates backup features functionality
+
+// TEST-SERVICE-BACKUP-001: Backup service test validation - Backup service implementation testing [ACTION:validation]
+// Source: backup.go - SERVICE-BACKUP-001
+// Impact: Validates backup service implementation
 package main
 
 import (
@@ -11,10 +18,10 @@ import (
 	"time"
 )
 
+// FILE-001: See specification.md - Backup Naming Convention [DECISION:validation]
+// TEST-REF: Feature tracking matrix FILE-001
+// IMMUTABLE-REF: File Backup Naming Convention
 func TestGenerateBackupName(t *testing.T) {
-	// ⭐ FILE-001: Backup naming convention validation - 🔧
-	// TEST-REF: Feature tracking matrix FILE-001
-	// IMMUTABLE-REF: File Backup Naming Convention
 	t.Run("basic backup naming without notes", func(t *testing.T) {
 		testBasicBackupNaming(t)
 	})
@@ -164,6 +171,9 @@ func testMultipleExtensions(t *testing.T) {
 	}
 }
 
+// FILE-001: See specification.md - Backup Naming Convention [DECISION:validation]
+// TEST-REF: Feature tracking matrix FILE-001
+// IMMUTABLE-REF: File Backup Listing Requirements
 func TestListFileBackups(t *testing.T) {
 	t.Run("empty backup directory", func(t *testing.T) {
 		testEmptyBackupDirectory(t)
@@ -419,8 +429,11 @@ func testBackupPermissionDenied(t *testing.T) {
 	}
 }
 
+// FILE-002: See specification.md - File Backup Creation [DECISION:configuration]
+// TEST-REF: Feature tracking matrix FILE-002
+// IMMUTABLE-REF: File Backup Creation Requirements
 func TestCreateFileBackup(t *testing.T) {
-	// ⭐ FILE-002: File backup creation validation - 🔧
+	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 	// TEST-REF: Feature tracking matrix FILE-002
 	// IMMUTABLE-REF: File Backup Operations
 	t.Run("successful backup creation", func(t *testing.T) {
@@ -580,6 +593,9 @@ func testBackupDirectoryCreation(t *testing.T) {
 	}
 }
 
+// FILE-002: See specification.md - File Backup Creation [DECISION:configuration]
+// TEST-REF: Feature tracking matrix FILE-002
+// IMMUTABLE-REF: File Backup Creation Requirements
 func TestCreateFileBackupWithContext(t *testing.T) {
 	t.Run("successful backup with context", func(t *testing.T) {
 		tmpDir := t.TempDir()
@@ -693,6 +709,9 @@ func TestCreateFileBackupWithContext(t *testing.T) {
 	})
 }
 
+// FILE-003: See specification.md - File Comparison [DECISION:validation]
+// TEST-REF: Feature tracking matrix FILE-003
+// IMMUTABLE-REF: File Comparison Requirements
 func TestCheckForIdenticalFileBackup(t *testing.T) {
 	t.Run("file identical to most recent backup", func(t *testing.T) {
 		testIdenticalToRecentBackup(t)

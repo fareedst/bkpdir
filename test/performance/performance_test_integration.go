@@ -82,7 +82,7 @@ func TestPerformanceByTier(t *testing.T) {
 
 	t.Logf("🎯 Running Performance Tests - Tier: %s", tier)
 	t.Logf("⏱️ Max Duration: %v", config.MaxDuration)
-	t.Logf("🔄 Iterations: %d", config.TestIterations)
+	t.Logf("[PROCESS] Iterations: %d", config.TestIterations)
 	t.Logf("📋 Test Subset: %v", config.TestSubset)
 
 	switch tier {
@@ -114,7 +114,7 @@ func runSmokeTests(t *testing.T, config TestConfig) {
 			if _, err := os.Stat(script); os.IsNotExist(err) {
 				t.Errorf("❌ Script missing: %s", script)
 			} else {
-				t.Logf("✅ Script exists: %s", script)
+				t.Logf("[SUCCESS] Script exists: %s", script)
 			}
 		}
 	})
@@ -122,7 +122,7 @@ func runSmokeTests(t *testing.T, config TestConfig) {
 	// Test 2: Basic syntax validation
 	t.Run("SyntaxValidation", func(t *testing.T) {
 		// This would run bash -n on scripts
-		t.Logf("✅ Syntax validation passed")
+		t.Logf("[SUCCESS] Syntax validation passed")
 	})
 
 	// Test 3: Configuration validation
@@ -134,7 +134,7 @@ func runSmokeTests(t *testing.T, config TestConfig) {
 			if _, err := os.Stat(config); os.IsNotExist(err) {
 				t.Errorf("❌ Config missing: %s", config)
 			} else {
-				t.Logf("✅ Config exists: %s", config)
+				t.Logf("[SUCCESS] Config exists: %s", config)
 			}
 		}
 	})
@@ -143,7 +143,7 @@ func runSmokeTests(t *testing.T, config TestConfig) {
 	if elapsed > config.MaxDuration {
 		t.Errorf("❌ Smoke tests exceeded time limit: %v > %v", elapsed, config.MaxDuration)
 	} else {
-		t.Logf("✅ Smoke tests completed in %v", elapsed)
+		t.Logf("[SUCCESS] Smoke tests completed in %v", elapsed)
 	}
 }
 
@@ -157,20 +157,20 @@ func runIntegrationTests(t *testing.T, config TestConfig) {
 	// Test 4: Memory usage patterns
 	t.Run("MemoryUsage", func(t *testing.T) {
 		// Run subset of memory tests with reduced iterations
-		t.Logf("✅ Memory usage test passed")
+		t.Logf("[SUCCESS] Memory usage test passed")
 	})
 
 	// Test 5: Concurrency validation
 	t.Run("ConcurrencyValidation", func(t *testing.T) {
 		// Test concurrent access patterns
-		t.Logf("✅ Concurrency validation passed")
+		t.Logf("[SUCCESS] Concurrency validation passed")
 	})
 
 	elapsed := time.Since(startTime)
 	if elapsed > config.MaxDuration {
 		t.Errorf("❌ Integration tests exceeded time limit: %v > %v", elapsed, config.MaxDuration)
 	} else {
-		t.Logf("✅ Integration tests completed in %v", elapsed)
+		t.Logf("[SUCCESS] Integration tests completed in %v", elapsed)
 	}
 }
 
@@ -184,13 +184,13 @@ func runFullTests(t *testing.T, config TestConfig) {
 	// Test 6: Full performance benchmark
 	t.Run("FullPerformanceBenchmark", func(t *testing.T) {
 		// Run original comprehensive tests but with optimizations
-		t.Logf("✅ Full performance benchmark completed")
+		t.Logf("[SUCCESS] Full performance benchmark completed")
 	})
 
 	elapsed := time.Since(startTime)
 	if elapsed > config.MaxDuration {
 		t.Errorf("❌ Full tests exceeded time limit: %v > %v", elapsed, config.MaxDuration)
 	} else {
-		t.Logf("✅ Full tests completed in %v", elapsed)
+		t.Logf("[SUCCESS] Full tests completed in %v", elapsed)
 	}
 }

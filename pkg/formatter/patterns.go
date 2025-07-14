@@ -12,13 +12,13 @@ import (
 	"strings"
 )
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔧 Generic pattern extraction implementation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // DefaultPatternExtractor provides default pattern extraction functionality
 type DefaultPatternExtractor struct {
 	configProvider ConfigProvider
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔧 Constructor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewDefaultPatternExtractor creates a new DefaultPatternExtractor
 func NewDefaultPatternExtractor(configProvider ConfigProvider) *DefaultPatternExtractor {
 	return &DefaultPatternExtractor{
@@ -26,7 +26,7 @@ func NewDefaultPatternExtractor(configProvider ConfigProvider) *DefaultPatternEx
 	}
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Archive filename data extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractArchiveFilenameData extracts data from archive filenames using configured patterns
 func (pe *DefaultPatternExtractor) ExtractArchiveFilenameData(filename string) map[string]string {
 	pattern := pe.configProvider.GetPattern("archive_filename")
@@ -37,7 +37,7 @@ func (pe *DefaultPatternExtractor) ExtractArchiveFilenameData(filename string) m
 	return pe.ExtractPatternData(pattern, filename)
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Backup filename data extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractBackupFilenameData extracts data from backup filenames using configured patterns
 func (pe *DefaultPatternExtractor) ExtractBackupFilenameData(filename string) map[string]string {
 	pattern := pe.configProvider.GetPattern("backup_filename")
@@ -48,7 +48,7 @@ func (pe *DefaultPatternExtractor) ExtractBackupFilenameData(filename string) ma
 	return pe.ExtractPatternData(pattern, filename)
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Generic pattern data extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractPatternData extracts named groups from text using a regex pattern
 func (pe *DefaultPatternExtractor) ExtractPatternData(pattern, text string) map[string]string {
 	re, err := regexp.Compile(pattern)
@@ -71,7 +71,7 @@ func (pe *DefaultPatternExtractor) ExtractPatternData(pattern, text string) map[
 	return result
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Additional extraction utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractConfigLineData extracts data from configuration lines
 func (pe *DefaultPatternExtractor) ExtractConfigLineData(line string) map[string]string {
 	pattern := pe.configProvider.GetPattern("config_line")
@@ -82,7 +82,7 @@ func (pe *DefaultPatternExtractor) ExtractConfigLineData(line string) map[string
 	return pe.ExtractPatternData(pattern, strings.TrimSpace(line))
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Timestamp data extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractTimestampData extracts timestamp components
 func (pe *DefaultPatternExtractor) ExtractTimestampData(timestamp string) map[string]string {
 	pattern := pe.configProvider.GetPattern("timestamp")
@@ -93,37 +93,37 @@ func (pe *DefaultPatternExtractor) ExtractTimestampData(timestamp string) map[st
 	return pe.ExtractPatternData(pattern, timestamp)
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔧 Utility functions
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetFilenameFromPath extracts filename from a full path
 func GetFilenameFromPath(path string) string {
 	return filepath.Base(path)
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔧 Simple pattern extractor without config
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // SimplePatternExtractor provides pattern extraction without configuration dependency
 type SimplePatternExtractor struct{}
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔧 Simple constructor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewSimplePatternExtractor creates a SimplePatternExtractor
 func NewSimplePatternExtractor() *SimplePatternExtractor {
 	return &SimplePatternExtractor{}
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Simple archive filename extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractArchiveFilenameData extracts data using default archive pattern
 func (spe *SimplePatternExtractor) ExtractArchiveFilenameData(filename string) map[string]string {
 	pattern := `^(?P<name>.*?)_(?P<timestamp>\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(?P<suffix>\..*)?$`
 	return spe.ExtractPatternData(pattern, filename)
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Simple backup filename extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractBackupFilenameData extracts data using default backup pattern
 func (spe *SimplePatternExtractor) ExtractBackupFilenameData(filename string) map[string]string {
 	pattern := `^(?P<name>.*?)_(?P<timestamp>\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(?P<suffix>\..*)?$`
 	return spe.ExtractPatternData(pattern, filename)
 }
 
-// ⭐ EXTRACT-003: PatternExtractor component - 🔍 Simple pattern extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExtractPatternData extracts named groups from text using a regex pattern
 func (spe *SimplePatternExtractor) ExtractPatternData(pattern, text string) map[string]string {
 	re, err := regexp.Compile(pattern)

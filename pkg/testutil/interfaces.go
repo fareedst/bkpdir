@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (

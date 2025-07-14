@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// ⭐ OUT-002: File stat information gathering - 🧪
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // TestGatherFileStatInfo tests the file statistics gathering functionality
 func TestGatherFileStatInfo(t *testing.T) {
 	// Create a temporary file for testing
@@ -60,7 +60,7 @@ func TestGatherFileStatInfo(t *testing.T) {
 	}
 }
 
-// ⭐ OUT-002: File stat information gathering - 🧪
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // TestGatherFileStatInfoDirectory tests file stats for directories
 func TestGatherFileStatInfoDirectory(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -79,7 +79,7 @@ func TestGatherFileStatInfoDirectory(t *testing.T) {
 	}
 }
 
-// ⭐ OUT-002: File stat information gathering - 🧪
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // TestGatherFileStatInfoNonexistent tests error handling for nonexistent files
 func TestGatherFileStatInfoNonexistent(t *testing.T) {
 	nonexistentFile := "/path/that/does/not/exist"
@@ -90,7 +90,7 @@ func TestGatherFileStatInfoNonexistent(t *testing.T) {
 	}
 }
 
-// ⭐ OUT-002: File stat information gathering - 🧪
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // TestFormatHumanSize tests the human-readable size formatting
 func TestFormatHumanSize(t *testing.T) {
 	tests := []struct {
@@ -118,7 +118,7 @@ func TestFormatHumanSize(t *testing.T) {
 	}
 }
 
-// ⭐ OUT-002: File stat information gathering - 🧪
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // TestGetFileType tests file type detection
 func TestGetFileType(t *testing.T) {
 	// Create a temporary file

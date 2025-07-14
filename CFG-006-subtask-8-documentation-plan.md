@@ -1,9 +1,9 @@
 # CFG-006 Subtask 8 Documentation Plan: Update documentation and examples
 
-**Task**: CFG-006 Subtask 8 - Update documentation and examples (🔻 LOW)
+**Task**: CFG-006 Subtask 8 - Update documentation and examples ([LOW] LOW)
 **Priority**: LOW - Documentation support
 **Status**: Not Started → In Progress
-**Implementation Tokens**: `// 🔻 CFG-006: Documentation`
+**Implementation Tokens**: `// [LOW] CFG-006: Documentation`
 
 ## 📑 Purpose
 
@@ -49,7 +49,7 @@ Based on feature-tracking.md and code analysis, CFG-006 provides:
 
 Based on AI Assistant Protocol for documentation changes:
 - **File Impact**: Documentation files, help text, examples
-- **Priority**: LOW (🔻) - Documentation support
+- **Priority**: LOW ([LOW]) - Documentation support
 - **Protocol**: Documentation update protocol
 - **Validation**: All tests must pass, lint compliance
 
@@ -140,11 +140,11 @@ Based on AI Assistant Protocol for documentation changes:
    - EXTRACT-001 pkg/config integration
    - CLI framework integration
 
-## 🔄 Phase 3: Implementation Tasks
+## [ACTION:migration] Phase 3: Implementation Tasks
 
 ### 3.1 Task Breakdown
 
-**Task 3.1.1: Create Configuration Inspection Guide** (🔻 LOW)
+**Task 3.1.1: Create Configuration Inspection Guide** ([LOW] LOW)
 - Create `docs/configuration-inspection-guide.md`
 - Document automatic field discovery capabilities
 - Explain source tracking and inheritance visualization
@@ -152,20 +152,20 @@ Based on AI Assistant Protocol for documentation changes:
 - Include performance optimization details
 - Add integration information with CFG-005
 
-**Task 3.1.2: Add Comprehensive Usage Examples** (🔻 LOW)
+**Task 3.1.2: Add Comprehensive Usage Examples** ([LOW] LOW)
 - Create `docs/configuration-examples.md`
 - Provide basic inspection examples
 - Document advanced filtering scenarios
 - Show troubleshooting examples
 - Include real-world use cases
 
-**Task 3.1.3: Update Command Help Text** (🔻 LOW)
+**Task 3.1.3: Update Command Help Text** ([LOW] LOW)
 - Enhance help text in main.go configCmd function
 - Add inheritance debugging guidance
 - Include performance characteristics
 - Add troubleshooting references
 
-**Task 3.1.4: Create Troubleshooting Guide** (🔻 LOW)
+**Task 3.1.4: Create Troubleshooting Guide** ([LOW] LOW)
 - Create `docs/configuration-troubleshooting.md`
 - Document common configuration issues
 - Provide debugging strategies
@@ -193,15 +193,15 @@ Based on AI Assistant Protocol for documentation changes:
 
 All documentation changes will be marked with:
 ```markdown
-<!-- 🔻 CFG-006: Documentation - 📝 Configuration inspection guide -->
-<!-- 🔻 CFG-006: Documentation - 📝 Usage examples -->
-<!-- 🔻 CFG-006: Documentation - 📝 Help text updates -->
-<!-- 🔻 CFG-006: Documentation - 📝 Troubleshooting guide -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Configuration inspection guide -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Usage examples -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Help text updates -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Troubleshooting guide -->
 ```
 
 Code changes (help text) will be marked with:
 ```go
-// 🔻 CFG-006: Documentation - 📝 Enhanced help text
+// [LOW] CFG-006: Documentation - [ACTION:format-processing] Enhanced help text
 ```
 
 ### 4.3 Completion Criteria
@@ -220,7 +220,7 @@ Code changes (help text) will be marked with:
 
 ### 4.4 Final Subtask: Update Feature Tracking
 
-**Task 4.1: Update Feature Tracking Status** (🔻 LOW)
+**Task 4.1: Update Feature Tracking Status** ([LOW] LOW)
 - Update CFG-006 subtask 8 status in `docs/context/feature-tracking.md`
 - Mark all sub-tasks as completed with [x] checkmarks
 - Document implementation notes and achievements
@@ -278,4 +278,4 @@ Code changes (help text) will be marked with:
 ---
 
 **Status**: Working plan created - Ready for implementation
-**Implementation Tokens**: `// 🔻 CFG-006: Documentation planning` 
+**Implementation Tokens**: `// [LOW] CFG-006: Documentation planning` 

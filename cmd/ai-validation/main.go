@@ -1,4 +1,4 @@
-// 🔺 DOC-011: AI validation CLI - Command-line interface for AI assistant validation
+// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 // Integrated with DOC-014: AI Assistant Decision Framework
 package main
 
@@ -27,30 +27,29 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "ai-validation",
-	Short: "🔺 DOC-011: AI assistant validation tool",
+	Short: "DOC-011: AI assistant validation tool [DECISION:validation]",
 	Long: `AI Validation Tool for AI Assistants
 
 This tool provides comprehensive validation services for AI assistants working with
 code changes, including pre-submission validation, compliance monitoring, and
 bypass mechanisms with comprehensive audit trails.
 
-🔺 DOC-011: Token validation integration for AI assistants - Zero-friction validation
-workflow integration designed specifically for AI-first development environments.`,
+DOC-011: Token validation integration for AI assistants - Zero-friction validation workflow integration designed specifically for AI-first development environments. [DECISION:validation]`,
 }
 
 // validateCmd represents the validate command
 var validateCmd = &cobra.Command{
 	Use:   "validate [files...]",
-	Short: "🔍 Validate source files for AI assistant compliance",
+	Short: "Validate source files for AI assistant compliance",
 	Long: `Validate source files for AI assistant compliance.
 
 This command validates the specified files using the DOC-008 validation framework
 with AI-optimized error reporting and remediation guidance.
 
-🔺 DOC-011: Pre-submission validation - Zero-friction validation integration`,
+DOC-011: Pre-submission validation - Zero-friction validation integration [DECISION:validation]`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔺 DOC-011: Validation command execution - 🔍 Core validation processing
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		gateway := validation.NewAIValidationGateway()
 
 		ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -90,16 +89,16 @@ with AI-optimized error reporting and remediation guidance.
 // preSubmitCmd represents the pre-submit validation command
 var preSubmitCmd = &cobra.Command{
 	Use:   "pre-submit [files...]",
-	Short: "🔧 Pre-submission validation for AI assistants",
+	Short: "Pre-submission validation for AI assistants",
 	Long: `Pre-submission validation for AI assistants.
 
 This command provides pre-submission validation designed for AI assistant workflows,
 ensuring all changes meet validation requirements before submission.
 
-🔺 DOC-011: Pre-submission validation APIs - Zero-friction integration`,
+DOC-011: Pre-submission validation APIs - Zero-friction integration [DECISION:validation]`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔺 DOC-011: Pre-submission command - 🔧 AI workflow integration
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		gateway := validation.NewAIValidationGateway()
 
 		ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -117,22 +116,22 @@ ensuring all changes meet validation requirements before submission.
 			os.Exit(2)
 		}
 
-		fmt.Printf("\n✅ DOC-011: Pre-submission validation passed. Changes ready for submission.\n")
+		fmt.Printf("\n[SUCCESS] DOC-011: Pre-submission validation passed. Changes ready for submission.\n")
 	},
 }
 
 // bypassCmd represents the bypass command
 var bypassCmd = &cobra.Command{
 	Use:   "bypass",
-	Short: "🛡️ Request validation bypass with audit trail",
+	Short: "Request validation bypass with audit trail",
 	Long: `Request validation bypass with comprehensive audit trail.
 
 This command allows AI assistants to request bypasses for validation failures
 in exceptional cases, with mandatory documentation and audit trail recording.
 
-🔺 DOC-011: Bypass mechanisms - Safe overrides with documentation`,
+DOC-011: Bypass mechanisms - Safe overrides with documentation [DECISION:validation]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔺 DOC-011: Bypass command - 🛡️ Safe override with documentation
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		reason, _ := cmd.Flags().GetString("reason")
 		justification, _ := cmd.Flags().GetString("justification")
 		files, _ := cmd.Flags().GetStringSlice("files")
@@ -161,25 +160,25 @@ in exceptional cases, with mandatory documentation and audit trail recording.
 			log.Fatalf("❌ Bypass request failed: %v", err)
 		}
 
-		fmt.Printf("✅ DOC-011: Validation bypass granted for assistant %s\n", assistantID)
-		fmt.Printf("📝 Reason: %s\n", reason)
+		fmt.Printf("[SUCCESS] DOC-011: Validation bypass granted for assistant %s\n", assistantID)
+		fmt.Printf("[NOTE] Reason: %s\n", reason)
 		fmt.Printf("📋 Justification: %s\n", justification)
-		fmt.Printf("🛡️ Audit trail updated with bypass event\n")
+		fmt.Printf("DOC-011: Audit trail updated with bypass event [DECISION:validation]\n")
 	},
 }
 
 // complianceCmd represents the compliance monitoring command
 var complianceCmd = &cobra.Command{
 	Use:   "compliance",
-	Short: "📊 Generate compliance report for AI assistant",
+	Short: "Generate compliance report for AI assistant",
 	Long: `Generate compliance report for AI assistant.
 
 This command generates comprehensive compliance reports showing validation
 behavior, success rates, and adherence to validation requirements.
 
-🔺 DOC-011: Compliance monitoring - AI assistant behavior tracking`,
+DOC-011: Compliance monitoring - AI assistant behavior tracking [DECISION:validation]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔺 DOC-011: Compliance command - 📊 Monitoring and reporting
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		timeRange, _ := cmd.Flags().GetString("time-range")
 
 		gateway := validation.NewAIValidationGateway()
@@ -196,15 +195,15 @@ behavior, success rates, and adherence to validation requirements.
 // auditCmd represents the audit trail command
 var auditCmd = &cobra.Command{
 	Use:   "audit",
-	Short: "📝 Display bypass audit trail",
+	Short: "Display bypass audit trail",
 	Long: `Display comprehensive bypass audit trail.
 
 This command shows the complete audit trail of validation bypasses,
 providing transparency and accountability for exceptional cases.
 
-🔺 DOC-011: Bypass audit trails - Comprehensive tracking`,
+DOC-011: Bypass audit trails - Comprehensive tracking [DECISION:validation]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔺 DOC-011: Audit command - 📝 Audit trail display
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		gateway := validation.NewAIValidationGateway()
 
 		auditTrail := gateway.GetBypassAuditTrail()
@@ -214,7 +213,7 @@ providing transparency and accountability for exceptional cases.
 			return
 		}
 
-		fmt.Printf("📝 DOC-011: Bypass Audit Trail (%d events)\n", len(auditTrail))
+		fmt.Printf("[NOTE] DOC-011: Bypass Audit Trail (%d events)\n", len(auditTrail))
 		fmt.Println("=" + strings.Repeat("=", 50))
 
 		for i, event := range auditTrail {
@@ -228,16 +227,16 @@ providing transparency and accountability for exceptional cases.
 // strictCmd represents the strict validation command
 var strictCmd = &cobra.Command{
 	Use:   "strict [files...]",
-	Short: "🔍 Strict validation mode for critical changes",
+	Short: "Strict validation mode for critical changes",
 	Long: `Strict validation mode for critical changes.
 
 This command performs enhanced validation with stricter requirements,
 designed for critical code changes that require higher validation standards.
 
-🔺 DOC-011: Strict validation mode - Enhanced validation for critical changes`,
+DOC-011: Strict validation mode - Enhanced validation for critical changes [DECISION:validation]`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// 🔺 DOC-011: Strict validation command - 🔍 Enhanced validation
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		gateway := validation.NewAIValidationGateway()
 
 		ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -248,7 +247,7 @@ designed for critical code changes that require higher validation standards.
 			log.Fatalf("❌ Strict validation failed: %v", err)
 		}
 
-		fmt.Printf("🔍 DOC-011: Strict validation mode results:\n")
+		fmt.Printf("[CHECK] DOC-011: Strict validation mode results:\n")
 		outputValidationResult(response)
 
 		// Exit with appropriate code based on validation status
@@ -269,21 +268,21 @@ designed for critical code changes that require higher validation standards.
 func outputValidationResult(response *validation.ValidationResponse) {
 	switch outputFormat {
 	case "json":
-		// 🔺 DOC-011: JSON output format - 📝 Machine-readable results
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		data, err := json.MarshalIndent(response, "", "  ")
 		if err != nil {
 			log.Fatalf("❌ Failed to marshal JSON: %v", err)
 		}
 		fmt.Println(string(data))
 	case "summary":
-		// 🔺 DOC-011: Summary output format - 📊 Human-readable summary
-		fmt.Printf("📊 Validation Status: %s\n", response.Status)
-		fmt.Printf("📊 Compliance Score: %.2f\n", response.ComplianceScore)
-		fmt.Printf("📊 Processing Time: %v\n", response.ProcessingTime)
-		fmt.Printf("📊 Errors: %d, Warnings: %d\n", len(response.Errors), len(response.Warnings))
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+		fmt.Printf("[INFO] Validation Status: %s\n", response.Status)
+		fmt.Printf("[INFO] Compliance Score: %.2f\n", response.ComplianceScore)
+		fmt.Printf("[INFO] Processing Time: %v\n", response.ProcessingTime)
+		fmt.Printf("[INFO] Errors: %d, Warnings: %d\n", len(response.Errors), len(response.Warnings))
 
 		if len(response.RemediationSteps) > 0 {
-			fmt.Printf("\n🔧 Remediation Steps:\n")
+			fmt.Printf("\n[ACTION] Remediation Steps:\n")
 			for i, step := range response.RemediationSteps {
 				fmt.Printf("  %d. %s: %s\n", i+1, step.Action, step.Description)
 				if step.Command != "" {
@@ -292,8 +291,8 @@ func outputValidationResult(response *validation.ValidationResponse) {
 			}
 		}
 	default:
-		// 🔺 DOC-011: Detailed output format - 📋 Complete results
-		fmt.Printf("🔺 DOC-011: AI Validation Results\n")
+		// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+		fmt.Printf("DOC-011: AI Validation Results [DECISION:validation]\n")
 		fmt.Println("=" + strings.Repeat("=", 40))
 		fmt.Printf("Status: %s\n", response.Status)
 		fmt.Printf("Compliance Score: %.2f\n", response.ComplianceScore)
@@ -320,7 +319,7 @@ func outputValidationResult(response *validation.ValidationResponse) {
 		}
 
 		if len(response.RemediationSteps) > 0 {
-			fmt.Printf("\n🔧 Remediation Steps (%d):\n", len(response.RemediationSteps))
+			fmt.Printf("\n[ACTION] Remediation Steps (%d):\n", len(response.RemediationSteps))
 			for i, step := range response.RemediationSteps {
 				fmt.Printf("  %d. %s (Priority %d)\n", i+1, step.Description, step.Priority)
 				if step.Command != "" {
@@ -333,7 +332,7 @@ func outputValidationResult(response *validation.ValidationResponse) {
 
 // outputComplianceReport outputs the compliance report
 func outputComplianceReport(report *validation.ComplianceReport) {
-	fmt.Printf("📊 DOC-011: Compliance Report for %s\n", report.AssistantID)
+	fmt.Printf("[INFO] DOC-011: Compliance Report for %s\n", report.AssistantID)
 	fmt.Println("=" + strings.Repeat("=", 50))
 	fmt.Printf("Time Range: %s\n", report.TimeRange)
 	fmt.Printf("Generated: %s\n", report.GeneratedAt.Format("2006-01-02 15:04:05"))
@@ -351,7 +350,7 @@ func outputComplianceReport(report *validation.ComplianceReport) {
 }
 
 func init() {
-	// 🔺 DOC-011: CLI initialization - 🔧 Command setup and configuration
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	rootCmd.AddCommand(validateCmd)
 	rootCmd.AddCommand(preSubmitCmd)
 	rootCmd.AddCommand(bypassCmd)
@@ -378,7 +377,7 @@ func init() {
 }
 
 func main() {
-	// 🔺 DOC-011: Main execution - 🚀 AI validation CLI entry point
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if sessionID == "" {
 		sessionID = fmt.Sprintf("cli-%d", time.Now().Unix())
 	}

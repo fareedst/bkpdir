@@ -1,6 +1,6 @@
 # Configuration Inspection Guide
 
-<!-- 🔻 CFG-006: Documentation - 📝 Configuration inspection guide -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Configuration inspection guide -->
 
 ## 📑 Overview
 
@@ -8,7 +8,7 @@ The BkpDir configuration system provides comprehensive configuration inspection 
 
 This guide covers the powerful configuration visibility features introduced in CFG-006, including automatic field discovery, inheritance chain visualization, multiple output formats, and advanced filtering options.
 
-## 🔍 Key Features
+## [ACTION:discovery] Key Features
 
 ### Automatic Field Discovery
 - **Zero Maintenance**: New configuration fields appear automatically
@@ -135,7 +135,7 @@ bkpdir config --format json
 }
 ```
 
-## 🔍 Advanced Filtering
+## [ACTION:discovery] Advanced Filtering
 
 ### Filter by Pattern
 
@@ -223,7 +223,7 @@ bkpdir config archive_dir_path
 
 Sub-100ms response time for single field access through incremental resolution.
 
-## 🔧 Integration Features
+## [ACTION:core-functionality] Integration Features
 
 ### CFG-005 Inheritance Integration
 
@@ -354,15 +354,15 @@ diff dev-config.json prod-config.json
 bkpdir config --format json | jq -r '.configuration[] | "- **\(.name)**: \(.value) (\(.source))"'
 ```
 
-## 📝 Summary
+## [ACTION:format-processing] Summary
 
 The CFG-006 configuration inspection system provides:
 
-- **🔍 Zero-maintenance discovery**: 100+ fields automatically discovered
+- **[ACTION:discovery] Zero-maintenance discovery**: 100+ fields automatically discovered
 - **📊 Complete visibility**: Full inheritance chain and source attribution
 - **⚡ High performance**: Sub-second response with reflection caching
 - **🎨 Flexible display**: Table, tree, and JSON output formats
-- **🔧 Powerful filtering**: Pattern-based and category-based filtering
+- **[ACTION:core-functionality] Powerful filtering**: Pattern-based and category-based filtering
 - **🔗 Seamless integration**: Works with CFG-005 inheritance and EXTRACT-001 packages
 
 This powerful configuration inspection capability makes it easy to understand, debug, and maintain complex configuration setups in your BkpDir workflow.

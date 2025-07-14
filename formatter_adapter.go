@@ -4,6 +4,14 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// FORMATTER-COMPATIBILITY-001: Formatter compatibility specification - Backward compatibility formatter adapter [ACTION:format-processing]
+// Source: formatter_adapter.go - FORMATTER-COMPATIBILITY-001
+// Impact: Core functionality requirement for formatter compatibility
+
+// SERVICE-FORMATTER-001: Formatter service architecture decision - Formatter service implementation [ACTION:core-functionality]
+// Source: formatter_adapter.go - SERVICE-FORMATTER-001
+// Impact: Formatter service implementation decision
 package main
 
 import (
@@ -12,7 +20,7 @@ import (
 	"os"
 )
 
-// ⭐ EXTRACT-003: Backward compatibility adapter - 🔧 Configuration provider implementation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatterConfigProvider adapts the Config struct to the formatter.ConfigProvider interface
 type FormatterConfigProvider struct {
 	config *Config
@@ -125,7 +133,7 @@ func (fcp *FormatterConfigProvider) GetErrorFormat(errorType string) string {
 	}
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Enhanced configuration support
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // GetDetailedFormatString returns detailed format strings with file statistics
 func (fcp *FormatterConfigProvider) GetDetailedFormatString(formatType string) string {
 	switch formatType {
@@ -150,7 +158,7 @@ func (fcp *FormatterConfigProvider) GetDetailedTemplateString(templateType strin
 	}
 }
 
-// ⭐ EXTRACT-003: Backward compatibility adapter - 🔧 OutputFormatter adapter
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatterAdapter wraps the extracted formatter to maintain backward compatibility
 type FormatterAdapter struct {
 	formatter formatter.OutputFormatterInterface
@@ -175,7 +183,7 @@ func NewFormatterAdapterWithCollector(config *Config, collector *formatter.Outpu
 	}
 }
 
-// ⭐ EXTRACT-003: Backward compatibility adapter - 📝 Delegate all methods to extracted formatter
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // IsDelayedMode delegates to the extracted formatter
 func (fa *FormatterAdapter) IsDelayedMode() bool {
@@ -362,7 +370,7 @@ func (fa *FormatterAdapter) TemplateFileNotFound(err error) string {
 	return fa.formatter.TemplateFileNotFound(err)
 }
 
-// ⭐ EXTRACT-003: Extended formatting methods - 📝 Additional methods from original OutputFormatter
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // Extended formatting methods
 func (fa *FormatterAdapter) FormatNoArchivesFound(archiveDir string) string {
@@ -549,18 +557,7 @@ func (fa *FormatterAdapter) PrintBackupCreated(path string) {
 	}
 }
 
-// ⭐ EXTRACT-003: Backward compatibility adapter - 🔧 Constructor replacement
-// NewOutputFormatter creates a FormatterAdapter instead of the original OutputFormatter
-func NewOutputFormatter(cfg *Config) *FormatterAdapter {
-	return NewFormatterAdapter(cfg)
-}
-
-// NewOutputFormatterWithCollector creates a FormatterAdapter with collector
-func NewOutputFormatterWithCollector(cfg *Config, collector *formatter.OutputCollector) *FormatterAdapter {
-	return NewFormatterAdapterWithCollector(cfg, collector)
-}
-
-// ⭐ EXTRACT-003: FormatterAdapter - 📝 Additional print methods for compatibility
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // PrintVerificationErrorDetail prints verification error details
 func (fa *FormatterAdapter) PrintVerificationErrorDetail(errMsg string) {
 	message := fmt.Sprintf("  - %s\n", errMsg)
@@ -581,7 +578,7 @@ func (fa *FormatterAdapter) PrintArchiveListWithStatus(output, status string) {
 	}
 }
 
-// ⭐ EXTRACT-003: FormatterAdapter - 📝 Extended formatting methods with extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatListArchiveWithExtraction formats archive listing with data extraction
 func (fa *FormatterAdapter) FormatListArchiveWithExtraction(archivePath, creationTime string) string {
 	// Extract data from archive filename and format with template
@@ -620,7 +617,7 @@ func (fa *FormatterAdapter) FormatListBackupWithExtraction(backupPath, creationT
 	return fa.formatter.FormatListBackup(backupPath, creationTime)
 }
 
-// ⭐ EXTRACT-003: FormatterAdapter - 📝 Error print methods for compatibility
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // PrintDiskFullError prints disk full error message
 func (fa *FormatterAdapter) PrintDiskFullError(err error) {
 	message := fa.FormatDiskFullError(err)
@@ -741,7 +738,7 @@ func (fa *FormatterAdapter) PrintFailedAccessFile(err error) {
 	}
 }
 
-// ⭐ OUT-002: Enhanced output with file statistics - Enhanced formatting methods
+// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 // Enhanced methods using file statistics for detailed output
 
 // FormatCreatedArchiveWithStats delegates to the enhanced formatter method

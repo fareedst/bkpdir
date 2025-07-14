@@ -35,7 +35,7 @@
 
 ### Priority Actions Needed
 1. **Update Legacy Tokens**: 300 legacy implementation tokens need standardization
-2. **Add Action Icons**: Include appropriate action icons (🔍📝🔧🛡️) in implementation tokens
+2. **Add Action Icons**: Include appropriate action icons ([ACTION:discovery][ACTION:format-processing][ACTION:core-functionality][ACTION:validation]) in implementation tokens
 3. **Review Documentation**: Ensure all icons conform to master legend in README.md
 
 ### Critical Issues Requiring Immediate Attention

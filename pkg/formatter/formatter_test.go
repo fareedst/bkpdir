@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// ⭐ EXTRACT-003: Test configuration provider - 🧪 Mock for testing
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // MockConfigProvider provides test configuration values
 type MockConfigProvider struct {
 	formatStrings   map[string]string
@@ -47,7 +47,15 @@ func (mcp *MockConfigProvider) GetErrorFormat(errorType string) string {
 	return mcp.errorFormats[errorType]
 }
 
-// ⭐ EXTRACT-003: OutputCollector tests - 🧪 Delayed output functionality
+func (mcp *MockConfigProvider) GetDetailedFormatString(formatType string) string {
+	return mcp.formatStrings[formatType+"_detailed"]
+}
+
+func (mcp *MockConfigProvider) GetDetailedTemplateString(templateType string) string {
+	return mcp.templateStrings[templateType+"_detailed"]
+}
+
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestOutputCollector(t *testing.T) {
 	collector := NewOutputCollector()
 
@@ -80,7 +88,7 @@ func TestOutputCollector(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: PatternExtractor tests - 🧪 Regex pattern extraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestPatternExtractor(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	extractor := NewDefaultPatternExtractor(configProvider)
@@ -112,7 +120,7 @@ func TestPatternExtractor(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: TemplateFormatter tests - 🧪 Template-based formatting
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestTemplateFormatter(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultTemplateFormatter(configProvider)
@@ -153,7 +161,7 @@ func TestTemplateFormatter(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: DefaultOutputFormatter tests - 🧪 Main formatter functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestDefaultOutputFormatter(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -185,7 +193,7 @@ func TestDefaultOutputFormatter(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: Delayed output mode tests - 🧪 OutputCollector integration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestDelayedOutputMode(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	collector := NewOutputCollector()
@@ -225,7 +233,7 @@ func TestDelayedOutputMode(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: Template delegation tests - 🧪 Component integration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestTemplateDelegation(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -247,7 +255,7 @@ func TestTemplateDelegation(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: Error template formatting tests - 🧪 Template error handling
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestErrorTemplateFormatting(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -271,7 +279,7 @@ func TestErrorTemplateFormatting(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: Pattern extraction edge cases - 🧪 Robust pattern handling
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestPatternExtractionEdgeCases(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	extractor := NewDefaultPatternExtractor(configProvider)
@@ -298,7 +306,7 @@ func TestPatternExtractionEdgeCases(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-003: Interface compliance tests - 🧪 Interface implementation validation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func TestInterfaceCompliance(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 
@@ -330,7 +338,7 @@ func TestInterfaceCompliance(t *testing.T) {
 	formatter.SetCollector(NewOutputCollector())
 }
 
-// ⭐ EXTRACT-003: Performance benchmark tests - 🧪 Performance validation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func BenchmarkFormatterOperations(b *testing.B) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)

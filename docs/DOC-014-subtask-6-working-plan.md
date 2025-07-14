@@ -1,9 +1,9 @@
-# 🔶 DOC-014 Subtask 6: Integration Testing and Validation - Working Plan
+# [MEDIUM] DOC-014 Subtask 6: Integration Testing and Validation - Working Plan
 
 ## 📑 Task Overview
 **Feature ID**: DOC-014  
 **Subtask**: 6. Integration testing and validation  
-**Priority**: 🔶 MEDIUM - Quality assurance  
+**Priority**: [MEDIUM] MEDIUM - Quality assurance  
 **Status**: ✅ **COMPLETED**  
 **Dependencies**: Subtasks 1-5 (all framework components) ✅ COMPLETED  
 
@@ -35,7 +35,7 @@
 
 ### 📋 Subtask Breakdown
 
-#### 1. **[ ] Test framework with existing systems** (⭐ CRITICAL) - Validate integration with feature tracking and protocols
+#### 1. **[ ] Test framework with existing systems** ([CRITICAL] CRITICAL) - Validate integration with feature tracking and protocols
 **Rationale**: Ensure decision framework seamlessly integrates with existing documentation and validation systems
 
 **Implementation Plan**:
@@ -52,7 +52,7 @@
 - AI validation gateway integration tests
 - Makefile workflow dependency tests
 
-#### 2. **[ ] Create decision scenario testing** (🔺 HIGH) - Test decision trees with realistic scenarios
+#### 2. **[ ] Create decision scenario testing** ([HIGH] HIGH) - Test decision trees with realistic scenarios
 **Rationale**: Validate that decision framework correctly guides AI assistants through realistic development scenarios
 
 **Implementation Plan**:
@@ -69,7 +69,7 @@
 - Configuration change scenarios (following CONFIG CHANGE protocol)
 - Refactoring scenarios (following REFACTORING protocol)
 
-#### 3. **[ ] Validate metric collection** (🔺 HIGH) - Ensure decision quality metrics work correctly
+#### 3. **[ ] Validate metric collection** ([HIGH] HIGH) - Ensure decision quality metrics work correctly
 **Rationale**: Verify that decision quality tracking accurately measures framework effectiveness
 
 **Implementation Plan**:
@@ -86,7 +86,7 @@
 - Validation system integration measurement
 - Success criteria achievement tracking
 
-#### 4. **[ ] Performance impact assessment** (🔶 MEDIUM) - Verify framework doesn't slow development
+#### 4. **[ ] Performance impact assessment** ([MEDIUM] MEDIUM) - Verify framework doesn't slow development
 **Rationale**: Ensure decision framework and validation tools maintain acceptable performance
 
 **Implementation Plan**:
@@ -188,7 +188,7 @@ Comprehensive performance and load testing
 - **Validation Overhead**: Ensure validation adds value without excessive overhead
 - **Documentation Sync**: Keep all documentation updated as integration evolves
 
-## 🛠️ Implementation Tools
+## [ACTION:maintenance] Implementation Tools
 
 ### Test Framework
 - Go testing framework for comprehensive test coverage
@@ -330,7 +330,7 @@ Comprehensive performance and load testing
 - Generate final validation report
 - Prepare for subtask 7 (Documentation and training materials)
 
-## 🔧 Implementation Notes
+## [ACTION:core-functionality] Implementation Notes
 
 This working plan provides comprehensive testing and validation of the DOC-014 Decision Framework to ensure:
 1. **Reliable Integration**: All components work seamlessly with existing systems

@@ -1,6 +1,6 @@
 # 🚀 Getting Started: Building Your First CLI Application
 
-> **🔺 EXTRACT-008: Tutorial series creation - 📚 Step-by-step learning materials**
+> **[HIGH] EXTRACT-008: Tutorial series creation - 📚 Step-by-step learning materials**
 
 ## 🎯 Overview
 
@@ -55,14 +55,14 @@ my-cli-app/
 └── go.mod
 ```
 
-## 🔧 Building the Application
+## [ACTION:core-functionality] Building the Application
 
 ### Step 1: Create the Main Entry Point
 
 Create `main.go`:
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Getting started main function
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Getting started main function
 package main
 
 import (
@@ -106,7 +106,7 @@ func main() {
 }
 
 func handleError(err error) {
-    // 🔺 EXTRACT-008: Tutorial series creation - 📚 Error handling demonstration
+    // [HIGH] EXTRACT-008: Tutorial series creation - 📚 Error handling demonstration
     if userErr := errors.AsUserError(err); userErr != nil {
         fmt.Fprintf(os.Stderr, "Error: %s\n", userErr.UserMessage())
         if userErr.Code() != "" {
@@ -140,7 +140,7 @@ func handleError(err error) {
 Create `config.yaml`:
 
 ```yaml
-# 🔺 EXTRACT-008: Tutorial series creation - 📚 Configuration example
+# [HIGH] EXTRACT-008: Tutorial series creation - 📚 Configuration example
 app:
   name: "my-cli-app"
   version: "1.0.0"
@@ -161,7 +161,7 @@ resources:
 Create `cmd/create.go`:
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Create command implementation
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Create command implementation
 package main
 
 import (
@@ -243,7 +243,7 @@ func createResource(name string, cfg *config.Config) error {
 Create `cmd/list.go`:
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 List command implementation
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 List command implementation
 package main
 
 import (
@@ -318,7 +318,7 @@ func listCommand(ctx context.Context, args []string) error {
 Create `cmd/delete.go`:
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Delete command implementation
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Delete command implementation
 package main
 
 import (
@@ -473,7 +473,7 @@ go build -o my-cli-app
 - Template-based formatting for complex output
 - Configuration-driven output behavior
 
-## 🔄 Next Steps
+## [ACTION:migration] Next Steps
 
 Now that you have a basic CLI application working, you can:
 
@@ -497,4 +497,4 @@ Now that you have a basic CLI application working, you can:
 
 ---
 
-**🔺 EXTRACT-008: Tutorial series creation - 📚 Complete getting started guide with working examples** 
+**[HIGH] EXTRACT-008: Tutorial series creation - 📚 Complete getting started guide with working examples** 

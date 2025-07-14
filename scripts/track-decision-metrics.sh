@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Decision Quality Metrics Tracker
-# 🔶 DOC-014: Decision validation tools - Decision quality metrics tracking
+# [MEDIUM] DOC-014: Decision validation tools [ACTION:validation]
 # Tracks and analyzes decision quality metrics for AI Assistant Decision Framework
 
 set -euo pipefail
@@ -149,7 +149,7 @@ create_metrics_config() {
     
     cat > "$CONFIG_FILE" << 'EOF'
 # Decision Quality Metrics Configuration
-# 🔶 DOC-014: Decision validation tools - Metrics tracking configuration
+# [MEDIUM] DOC-014: Decision validation tools [ACTION:validation]
 
 [thresholds]
 # Quality thresholds for decision metrics (percentages)
@@ -1479,7 +1479,7 @@ main() {
     
     # Only show log messages if not in JSON mode
     if [[ "$OUTPUT_FORMAT" != "json" ]]; then
-        log_info "🔶 DOC-014: Decision Quality Metrics Tracker"
+        log_info "[MEDIUM] DOC-014: Decision Quality Metrics Tracker"
         log_info "Mode: $COLLECTION_MODE | Format: $OUTPUT_FORMAT | Range: $TIME_RANGE"
         echo ""
     fi

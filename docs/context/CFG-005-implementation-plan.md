@@ -13,19 +13,19 @@
 ### 1.2 Feature Tracking Registry ✅  
 - **Status**: VERIFIED - CFG-005 exists in feature-tracking.md
 - **Feature ID**: CFG-005 
-- **Priority**: ⭐ CRITICAL
-- **Implementation Tokens**: `// ⭐ CFG-005: Layered configuration inheritance`
+- **Priority**: [CRITICAL] CRITICAL
+- **Implementation Tokens**: `// [CRITICAL] CFG-005: Layered configuration inheritance`
 
 ### 1.3 AI Assistant Compliance ✅
 - **Status**: VERIFIED - Token requirements understood
-- **Required Format**: `// ⭐ CFG-005: Description - 🔧 Action context`
-- **Icons Required**: ⭐ (Critical priority), 🔧 (Configure/modify), 🔍 (Search/discover), 📝 (Document/update)
+- **Required Format**: `// [CRITICAL] CFG-005: Description - [ACTION:core-functionality] Action context`
+- **Icons Required**: [CRITICAL] (Critical priority), [ACTION:core-functionality] (Configure/modify), [ACTION:discovery] (Search/discover), [ACTION:format-processing] (Document/update)
 
 ### 1.4 AI Assistant Protocol ✅
 - **Protocol**: NEW FEATURE Protocol (followed)
 - **Documentation Updated**: specification.md, requirements.md, architecture.md, testing.md
 
-## 🔧 PHASE 2: IMPLEMENTATION ANALYSIS AND PLANNING
+## [ACTION:core-functionality] PHASE 2: IMPLEMENTATION ANALYSIS AND PLANNING
 
 ### 2.1 Existing Configuration System Analysis
 
@@ -63,7 +63,7 @@
 
 ## 📋 DETAILED SUBTASK BREAKDOWN
 
-### Subtask 1: Design inheritance configuration structure (⭐ CRITICAL)
+### Subtask 1: Design inheritance configuration structure ([CRITICAL] CRITICAL)
 **Status**: ✅ COMPLETED
 **Files**: pkg/config/interfaces.go, pkg/config/loader.go
 **Implementation**:
@@ -91,7 +91,7 @@ type InheritanceChain struct {
 **Estimated Time**: 2-3 hours
 **Test Requirements**: Basic structure validation
 
-### Subtask 2: Implement prefix-based merge strategies (⭐ CRITICAL)  
+### Subtask 2: Implement prefix-based merge strategies ([CRITICAL] CRITICAL)  
 **Status**: ✅ COMPLETED
 **Files**: pkg/config/merge_strategies.go (new), pkg/config/loader.go
 **Implementation**:
@@ -120,8 +120,8 @@ type PrefixedKeyProcessor struct {
 **Estimated Time**: 4-5 hours  
 **Test Requirements**: All merge strategies with nested data
 
-### Subtask 3: Extend configuration loading engine (🔺 HIGH)
-**Status**: 📝 NOT STARTED  
+### Subtask 3: Extend configuration loading engine ([HIGH] HIGH)
+**Status**: [ACTION:format-processing] NOT STARTED  
 **Files**: pkg/config/loader.go, pkg/config/inheritance.go (new)
 **Implementation**:
 ```go
@@ -145,7 +145,7 @@ func (l *InheritanceConfigLoader) LoadConfigWithInheritance(root string, config 
 **Estimated Time**: 6-8 hours
 **Test Requirements**: Multi-level inheritance chains
 
-### Subtask 4: Implement inheritance resolution logic (🔺 HIGH)
+### Subtask 4: Implement inheritance resolution logic ([HIGH] HIGH)
 **Status**: ✅ COMPLETED
 **Files**: pkg/config/inheritance.go, pkg/config/resolver.go (new)  
 **Implementation**:
@@ -172,8 +172,8 @@ func (d *CircularDependencyDetector) DetectCycle(startFile string, resolver Path
 **Estimated Time**: 4-6 hours
 **Test Requirements**: Circular dependency detection, missing files
 
-### Subtask 5: Create merge strategy processor (🔺 HIGH)
-**Status**: 📝 NOT STARTED
+### Subtask 5: Create merge strategy processor ([HIGH] HIGH)
+**Status**: [ACTION:format-processing] NOT STARTED
 **Files**: pkg/config/merge_strategies.go, pkg/config/processor.go (new)
 **Implementation**:
 ```go
@@ -192,8 +192,8 @@ func (p *MergeStrategyProcessor) ProcessMergeOperations(config map[string]interf
 **Estimated Time**: 3-4 hours
 **Test Requirements**: Complex nested structure merging
 
-### Subtask 6: Add configuration debugging and tracing (🔶 MEDIUM)
-**Status**: 📝 NOT STARTED
+### Subtask 6: Add configuration debugging and tracing ([MEDIUM] MEDIUM)
+**Status**: [ACTION:format-processing] NOT STARTED
 **Files**: pkg/config/tracing.go (new), pkg/config/debug.go (new)
 **Implementation**:
 ```go
@@ -217,8 +217,8 @@ type ValueOrigin struct {
 **Estimated Time**: 3-4 hours  
 **Test Requirements**: Source tracking accuracy
 
-### Subtask 7: Implement comprehensive testing (🔶 MEDIUM)
-**Status**: 📝 NOT STARTED
+### Subtask 7: Implement comprehensive testing ([MEDIUM] MEDIUM)
+**Status**: [ACTION:format-processing] NOT STARTED
 **Files**: pkg/config/inheritance_test.go (new), config_test.go updates
 **Implementation**:
 ```go
@@ -237,8 +237,8 @@ func TestInheritancePerformance(t *testing.T) {}
 **Estimated Time**: 8-10 hours
 **Test Requirements**: All scenarios from testing.md
 
-### Subtask 8: Create backward compatibility layer (🔶 MEDIUM)  
-**Status**: 📝 NOT STARTED
+### Subtask 8: Create backward compatibility layer ([MEDIUM] MEDIUM)  
+**Status**: [ACTION:format-processing] NOT STARTED
 **Files**: config_adapter.go, config.go updates
 **Implementation**:
 ```go
@@ -263,8 +263,8 @@ func (a *ConfigAdapterWithInheritance) LoadConfig(root string) (*Config, error) 
 **Estimated Time**: 2-3 hours
 **Test Requirements**: Legacy config compatibility
 
-### Subtask 9: Update documentation and examples (🔻 LOW)
-**Status**: 📝 NOT STARTED  
+### Subtask 9: Update documentation and examples ([LOW] LOW)
+**Status**: [ACTION:format-processing] NOT STARTED  
 **Files**: README.md updates, example configurations
 **Implementation**:
 - Update main README with inheritance examples
@@ -276,8 +276,8 @@ func (a *ConfigAdapterWithInheritance) LoadConfig(root string) (*Config, error) 
 **Estimated Time**: 2-3 hours
 **Test Requirements**: Documentation accuracy
 
-### Subtask 10: Update task status in feature tracking (🔻 LOW)
-**Status**: 📝 NOT STARTED
+### Subtask 10: Update task status in feature tracking ([LOW] LOW)
+**Status**: [ACTION:format-processing] NOT STARTED
 **Files**: docs/context/feature-tracking.md
 **Implementation**:
 - Mark completed subtasks with checkmarks [x]
@@ -321,7 +321,7 @@ func (a *ConfigAdapterWithInheritance) LoadConfig(root string) (*Config, error) 
 
 **Critical Path**: Subtasks 1 → 2 → 3 → 4 → 5 → 7 → 8
 
-## 🔧 VALIDATION COMMANDS
+## [ACTION:core-functionality] VALIDATION COMMANDS
 
 ```bash
 # Run comprehensive tests

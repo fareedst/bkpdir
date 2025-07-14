@@ -2110,10 +2110,10 @@ assert.True(t, result.GetPerformanceMetrics().WithinExpectedBounds())
 
 // ... existing code ... 
 
-## 🔻 CI/CD Pipeline Testing Requirements
+## [LOW] CI/CD Pipeline Testing Requirements
 
 ### CICD-001: AI-First Development Optimization Testing
-**Priority**: 🔻 LOW  
+**Priority**: [LOW] LOW  
 **Implementation Tokens**: `// CICD-001: AI-first CI/CD optimization`  
 **Test Function**: `TestAIWorkflow`
 
@@ -2125,13 +2125,13 @@ assert.True(t, result.GetPerformanceMetrics().WithinExpectedBounds())
 - **Background Processing**: Non-blocking execution verification
 - **Resource Management**: CPU/memory usage within limits
 
-**🛡️ AI Protocol Integration Testing**
+**[ACTION:validation] AI Protocol Integration Testing**
 - **DOC-008 Integration**: Icon validation system integration tests
 - **Token Compliance**: Implementation token validation testing
 - **Documentation Sync**: Cross-reference consistency testing
 - **Protocol Adherence**: ai-assistant-protocol.md compliance verification
 
-**🔧 Quality Gate Testing**
+**[ACTION:core-functionality] Quality Gate Testing**
 - **Automated Gates**: Zero-human intervention validation
 - **Failure Recovery**: Self-healing pipeline configuration tests
 - **Threshold Configuration**: AI-optimized quality metrics testing
@@ -2141,7 +2141,7 @@ assert.True(t, result.GetPerformanceMetrics().WithinExpectedBounds())
 
 **📋 Test Categories**
 ```go
-// 🔻 CICD-001: AI workflow pipeline testing - 🧪 Test infrastructure
+// [LOW] CICD-001: AI workflow pipeline testing - 🧪 Test infrastructure
 func TestAIWorkflow(t *testing.T) {
     // Test suite for AI-optimized CI/CD pipeline
 }
@@ -2167,7 +2167,7 @@ func TestAIOptimizedReporting(t *testing.T) {
 }
 ```
 
-**🔍 Integration Test Scenarios**
+**[ACTION:discovery] Integration Test Scenarios**
 - **Full Pipeline Execution**: End-to-end AI workflow testing
 - **Failure Scenarios**: Error handling and recovery testing
 - **Performance Testing**: Background resource usage validation
@@ -2195,7 +2195,7 @@ func TestAIOptimizedReporting(t *testing.T) {
 
 #### Compliance Testing
 
-**🛡️ AI Assistant Protocol Compliance**
+**[ACTION:validation] AI Assistant Protocol Compliance**
 - Validation against ai-assistant-compliance.md requirements
 - Token referencing requirement testing
 - Documentation update requirement validation
@@ -2206,16 +2206,16 @@ func TestAIOptimizedReporting(t *testing.T) {
 - Token-based change attribution validation
 - Documentation synchronization testing
 
-## 🔻 AI-First Documentation and Code Maintenance Testing
+## [LOW] AI-First Documentation and Code Maintenance Testing
 
 ### DOC-013: AI-First Documentation Strategy Testing
-**Priority**: 🔻 LOW  
+**Priority**: [LOW] LOW  
 **Implementation Tokens**: `// DOC-013: AI-first maintenance`  
 **Test Function**: `TestAIDocumentation`
 
 #### Core Testing Requirements
 
-**🔍 AI Comprehension Testing**
+**[ACTION:discovery] AI Comprehension Testing**
 - **Test Coverage**: All AI-centric documentation components and workflows
 - **Icon Integration**: DOC-007/DOC-008 icon standardization validation
 - **Token Format**: Implementation token format compliance testing
@@ -2227,7 +2227,7 @@ func TestAIOptimizedReporting(t *testing.T) {
 - **Hierarchy Testing**: Information architecture validation for AI navigation
 - **Organization Testing**: Content structure optimization verification
 
-**🔧 Workflow Integration Testing**
+**[ACTION:core-functionality] Workflow Integration Testing**
 - **Automation Testing**: AI assistant maintenance procedure validation
 - **Update Testing**: Automated documentation update verification
 - **Validation Testing**: Cross-reference consistency checking
@@ -2237,7 +2237,7 @@ func TestAIOptimizedReporting(t *testing.T) {
 
 **📋 Test Categories**
 ```go
-// 🔻 DOC-013: AI documentation strategy testing - 🧪 Test infrastructure
+// [LOW] DOC-013: AI documentation strategy testing - 🧪 Test infrastructure
 func TestAIDocumentation(t *testing.T) {
     // Test suite for AI-first documentation system
 }
@@ -2267,7 +2267,7 @@ func TestTerminologyConsistency(t *testing.T) {
 }
 ```
 
-**🔍 AI Integration Test Scenarios**
+**[ACTION:discovery] AI Integration Test Scenarios**
 - **Documentation Creation**: AI assistant content generation testing
 - **Cross-Reference Maintenance**: Automated link validation and repair testing
 - **Pattern Recognition**: AI comprehension and pattern generation testing
@@ -2295,7 +2295,7 @@ func TestTerminologyConsistency(t *testing.T) {
 
 #### AI Assistant Compliance Testing
 
-**🛡️ AI-First Documentation Compliance**
+**[ACTION:validation] AI-First Documentation Compliance**
 - Validation against ai-assistant-compliance.md requirements for documentation
 - AI-friendly formatting requirement testing
 - Cross-reference traversal requirement validation
@@ -2321,22 +2321,22 @@ func TestTerminologyConsistency(t *testing.T) {
 - Cross-reference integrity monitoring
 - AI assistant task completion efficiency measurement
 
-## 🔻 AI-First Documentation and Code Maintenance Testing
+## [LOW] AI-First Documentation and Code Maintenance Testing
 
 ### DOC-011: Token Validation Integration for AI Assistants Testing
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Implementation Tokens**: `// DOC-011: AI validation integration`  
 **Test Function**: `TestAIValidation`
 
 #### Core Testing Requirements
 
-**🔧 AI Workflow Integration Testing**
+**[ACTION:core-functionality] AI Workflow Integration Testing**
 - **Test Coverage**: All AI workflow validation hooks and integration points
 - **DOC-008 Integration**: Seamless integration with existing validation framework
 - **Pre-submission Validation**: API endpoint functionality and workflow integration
 - **Zero-friction Integration**: Validation workflow non-disruption verification
 
-**🛡️ AI Error Processing Testing**
+**[ACTION:validation] AI Error Processing Testing**
 - **Error Message Formatting**: AI-readable error structure and content validation
 - **Remediation Guidance**: Context-aware guidance generation and accuracy testing
 - **Error Categorization**: Priority-based error classification validation
@@ -2348,7 +2348,7 @@ func TestTerminologyConsistency(t *testing.T) {
 - **Approval Workflow Testing**: Automated approval process validation
 - **Rollback Testing**: Reversible bypass action verification and recovery testing
 
-**🔍 Compliance Monitoring Testing**
+**[ACTION:discovery] Compliance Monitoring Testing**
 - **Behavior Tracking**: AI assistant validation behavior pattern analysis
 - **Adherence Monitoring**: Real-time compliance measurement and reporting
 - **Dashboard Testing**: Compliance dashboard generation and accuracy validation
@@ -2358,7 +2358,7 @@ func TestTerminologyConsistency(t *testing.T) {
 
 **📋 Test Categories**
 ```go
-// 🔺 DOC-011: AI validation integration testing - 🧪 Test infrastructure
+// [HIGH] DOC-011: AI validation integration testing - 🧪 Test infrastructure
 func TestAIValidation(t *testing.T) {
     // Test suite for AI validation integration framework
 }
@@ -2392,7 +2392,7 @@ func TestValidationWorkflowIntegration(t *testing.T) {
 }
 ```
 
-**🔍 AI Validation Integration Test Scenarios**
+**[ACTION:discovery] AI Validation Integration Test Scenarios**
 - **Pre-submission Validation**: End-to-end validation workflow testing
 - **Error Processing Scenarios**: AI error reporting and remediation testing
 - **Bypass Workflow Testing**: Safe override mechanism and audit trail testing
@@ -2431,22 +2431,22 @@ func TestValidationRequestProcessing(t *testing.T) {
 }
 ```
 
-## ⭐ Configuration System Enhancement Testing
+## [CRITICAL] Configuration System Enhancement Testing
 
 ### CFG-005: Layered Configuration Inheritance Testing
-**Priority**: ⭐ CRITICAL  
-**Implementation Tokens**: `// ⭐ CFG-005: Layered configuration inheritance`  
+**Priority**: [CRITICAL] CRITICAL  
+**Implementation Tokens**: `// [CRITICAL] CFG-005: Layered configuration inheritance`  
 **Test Function**: `TestConfigInheritance`
 
 #### Core Testing Requirements
 
-**🔧 Inheritance Mechanism Testing**
+**[ACTION:core-functionality] Inheritance Mechanism Testing**
 - **Test Coverage**: All inheritance declaration parsing and chain building functionality
 - **Circular Dependency Detection**: Comprehensive cycle detection with various inheritance patterns
 - **Path Resolution Testing**: Absolute, relative, and home directory expansion validation
 - **Backward Compatibility**: Non-inheritance configuration loading preserved
 
-**🛡️ Merge Strategy Testing**
+**[ACTION:validation] Merge Strategy Testing**
 - **Standard Override Testing**: Child values completely replace parent values
 - **Array Merge Testing**: Child arrays append to parent arrays (`+` prefix)
 - **Array Prepend Testing**: Child arrays prepend to parent arrays (`^` prefix)
@@ -2459,7 +2459,7 @@ func TestValidationRequestProcessing(t *testing.T) {
 - **Source Tracking Testing**: Value origin visibility throughout inheritance chain
 - **Error Handling Testing**: Missing files, malformed syntax, invalid declarations
 
-**🔍 Performance and Reliability Testing**
+**[ACTION:discovery] Performance and Reliability Testing**
 - **Performance Testing**: O(n) complexity validation for inheritance processing
 - **Thread Safety Testing**: Concurrent configuration loading verification
 - **Memory Usage Testing**: Linear scaling with inheritance chain depth
@@ -2469,7 +2469,7 @@ func TestValidationRequestProcessing(t *testing.T) {
 
 **📋 Test Categories**
 ```go
-// ⭐ CFG-005: Configuration inheritance testing - 🧪 Test infrastructure
+// [CRITICAL] CFG-005: Configuration inheritance testing - 🧪 Test infrastructure
 func TestConfigInheritance(t *testing.T) {
     // Test suite for layered configuration inheritance system
 }
@@ -2503,7 +2503,7 @@ func TestInheritancePerformance(t *testing.T) {
 }
 ```
 
-**🔍 Inheritance Test Scenarios**
+**[ACTION:discovery] Inheritance Test Scenarios**
 - **Simple Inheritance**: Parent-child configuration relationships
 - **Multi-level Inheritance**: Deep inheritance chains (3+ levels)
 - **Multiple Parents**: Configuration inheriting from multiple sources
@@ -2708,13 +2708,13 @@ func TestInheritanceBackwardCompatibility(t *testing.T) {
 This comprehensive testing framework ensures the layered configuration inheritance system works reliably across all scenarios while maintaining backward compatibility and performance characteristics.
 
 ### CFG-006: Complete Configuration Reflection and Visibility Testing
-**Priority**: 🔺 HIGH  
-**Implementation Tokens**: `// 🔺 CFG-006: Complete config visibility`  
+**Priority**: [HIGH] HIGH  
+**Implementation Tokens**: `// [HIGH] CFG-006: Complete config visibility`  
 **Test Function**: `TestConfigReflection`
 
 #### Core Testing Requirements
 
-**🔍 Automatic Field Discovery Testing**
+**[ACTION:discovery] Automatic Field Discovery Testing**
 - **Reflection Accuracy**: Comprehensive validation of Go struct field enumeration for all data types
 - **Nested Structure Handling**: Deep nested structs, embedded fields, slices, maps, and complex types
 - **Type Safety Testing**: Correct Go type information extraction and preservation
@@ -2745,7 +2745,7 @@ This comprehensive testing framework ensures the layered configuration inheritan
 
 **📋 Test Categories**
 ```go
-// 🔺 CFG-006: Complete config visibility testing - 🧪 Test infrastructure  
+// [HIGH] CFG-006: Complete config visibility testing - 🧪 Test infrastructure  
 func TestConfigReflection(t *testing.T) {
     // Test suite for complete configuration reflection and visibility system
 }
@@ -3110,7 +3110,7 @@ func TestIncrementalResolution(t *testing.T) {
 }
 ```
 
-**🔧 Error Handling and Recovery Tests**
+**[ACTION:core-functionality] Error Handling and Recovery Tests**
 ```go
 func TestConfigInspectionErrorRecovery(t *testing.T) {
     inspector := NewConfigurationInspector()
@@ -3231,3 +3231,171 @@ func TestCLIFrameworkIntegration(t *testing.T) {
 ```
 
 This comprehensive testing framework ensures the complete configuration reflection and visibility system provides accurate, performant, and reliable configuration inspection capabilities while maintaining full integration with existing systems.
+
+## [LOW] AI-First Documentation and Code Maintenance Testing
+
+### DOC-014: AI Assistant Decision Framework Testing
+**Priority**: [MEDIUM] MEDIUM  
+**Implementation Tokens**: `// DOC-014: AI decision framework`  
+**Test Function**: `TestDOC014MainIntegrationSuite`
+
+#### Core Testing Requirements
+
+**[ACTION:validation] Decision Framework Core Testing**
+- **Test Coverage**: All decision framework document structure and required sections
+- **Feature Tracking Integration**: DOC-014 entry validation and subtask completion status
+- **Protocol Integration**: AI assistant protocols include decision framework validation
+- **Validation System Compatibility**: DOC-008/DOC-011 integration working seamlessly
+
+**[ACTION:core-functionality] Decision Scenario Testing**
+- **New Feature Scenarios**: Decision trees guide appropriate outcomes for feature requests
+- **Modification Scenarios**: Existing feature modification decision validation
+- **Bug Fix Scenarios**: Bug fix decision scenarios with proper priority assessment
+- **Conflict Resolution**: Decision hierarchy guides conflict resolution appropriately
+
+**📊 Metrics Validation Testing**
+- **Compliance Rate Accuracy**: Decision compliance metrics calculation validation
+- **Goal Alignment Measurement**: Goal alignment rate measurement accuracy testing
+- **Framework Maturity Scoring**: Framework maturity score calculation validation
+- **Token Enhancement Tracking**: Token enhancement rate tracking accuracy
+
+#### Test Implementation Strategy
+
+**📋 Test Categories**
+```go
+// [MEDIUM] DOC-014: AI decision framework testing - 🧪 Test infrastructure
+func TestDOC014MainIntegrationSuite(t *testing.T) {
+    // Test suite for AI assistant decision framework integration
+}
+
+func TestDecisionFrameworkCore(t *testing.T) {
+    // Verify decision framework document structure and required sections
+}
+
+func TestFeatureTrackingIntegration(t *testing.T) {
+    // Test DOC-014 entry validation and subtask completion status
+}
+
+func TestProtocolIntegration(t *testing.T) {
+    // Validate AI assistant protocols include decision framework validation
+}
+
+func TestValidationSystemIntegration(t *testing.T) {
+    // Test DOC-008/DOC-011 integration compatibility
+}
+
+func TestMetricsValidation(t *testing.T) {
+    // Validate decision quality metrics calculation accuracy
+}
+```
+
+**[ACTION:discovery] Decision Framework Test Scenarios**
+- **Document Structure**: Decision framework document completeness validation
+- **Feature Integration**: Feature tracking system integration verification
+- **Protocol Compliance**: AI assistant protocol decision framework integration
+- **Metrics Accuracy**: Decision quality metrics calculation validation
+
+**📊 Decision Framework Validation Requirements**
+- **4-Tier Hierarchy**: Safety Gates, Scope Boundaries, Quality Thresholds, Goal Alignment
+- **Decision Trees**: Common scenario decision tree validation
+- **Protocol Integration**: All AI assistant protocols include decision validation
+- **Metrics Collection**: Decision quality metrics accuracy and reliability
+
+#### Decision Framework Test Data
+
+**🚀 Test Framework Components**
+```yaml
+# Decision Framework Document Structure
+required_sections:
+  - "🚨 DECISION HIERARCHY"
+  - "[ACTION:validation] Safety Gates"
+  - "📑 Scope Boundaries"
+  - "📊 Quality Thresholds"
+  - "🎯 Goal Alignment"
+  - "🧠 DECISION TREE"
+  - "🔒 ENHANCED ENFORCEMENT"
+  - "🎯 DECISION VALIDATION CHECKLIST"
+
+# Decision Trees for Common Scenarios
+decision_trees:
+  - "Should I implement this feature request?"
+  - "Should I refactor this code?"
+  - "Should I fix this test failure?"
+  - "Should I update documentation?"
+
+# Protocol Integration Requirements
+protocols_with_validation:
+  - "🆕 NEW FEATURE Protocol"
+  - "[ACTION] MODIFICATION Protocol"
+  - "🐛 BUG FIX Protocol"
+  - "⚙️ CONFIG CHANGE Protocol"
+  - "🔌 API CHANGE Protocol"
+  - "[PROCESS] REFACTORING Protocol"
+```
+
+**Expected Integration Results Testing**
+```go
+func TestDecisionFrameworkIntegration(t *testing.T) {
+    suite := NewIntegrationTestSuite(projectRoot)
+    
+    // Test decision framework document structure
+    frameworkContent := suite.loadDecisionFramework()
+    assert.Contains(t, frameworkContent, "🚨 DECISION HIERARCHY")
+    assert.Contains(t, frameworkContent, "📊 Quality Thresholds")
+    
+    // Test feature tracking integration
+    trackingContent := suite.loadFeatureTracking()
+    assert.Contains(t, trackingContent, "DOC-014")
+    assert.Contains(t, trackingContent, "AI Assistant Decision Framework")
+    
+    // Test protocol integration
+    protocolContent := suite.loadProtocols()
+    protocolsWithValidation := suite.countProtocolsWithValidation(protocolContent)
+    assert.GreaterOrEqual(t, protocolsWithValidation, 5) // At least 5/6 protocols
+}
+```
+
+#### Error Handling Test Cases
+
+**🚨 Decision Framework Error Scenarios**
+```go
+func TestDecisionFrameworkErrorScenarios(t *testing.T) {
+    testCases := []struct {
+        name          string
+        testFunction  func() error
+        expectedError string
+    }{
+        {
+            name: "Missing Required Section",
+            testFunction: func() error {
+                return validateRequiredSections([]string{"🚨 DECISION HIERARCHY"})
+            },
+            expectedError: "Decision framework missing required section",
+        },
+        {
+            name: "Missing DOC-014 Entry",
+            testFunction: func() error {
+                return validateDOC014Entry("testing.md")
+            },
+            expectedError: "DOC-014 entry not found in testing.md",
+        },
+        {
+            name: "Insufficient Protocol Integration",
+            testFunction: func() error {
+                return validateProtocolIntegration(protocolContent)
+            },
+            expectedError: "Insufficient protocol integration",
+        },
+    }
+    
+    for _, tc := range testCases {
+        t.Run(tc.name, func(t *testing.T) {
+            err := tc.testFunction()
+            assert.Error(t, err)
+            assert.Contains(t, err.Error(), tc.expectedError)
+        })
+    }
+}
+```
+
+### DOC-011: Token Validation Integration for AI Assistants Testing

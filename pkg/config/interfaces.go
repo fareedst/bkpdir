@@ -17,7 +17,7 @@ import (
 	"os"
 )
 
-// ⭐ EXTRACT-001: Core interface extraction - Schema-agnostic configuration loading interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigLoader provides schema-agnostic configuration management operations.
 // This interface abstracts configuration loading from specific application schemas.
 type ConfigLoader interface {
@@ -37,7 +37,7 @@ type ConfigLoader interface {
 	ValidateConfig(cfg interface{}) error
 }
 
-// ⭐ EXTRACT-001: Core interface extraction - Configuration merging and composition interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigMerger provides schema-agnostic configuration merging and composition operations.
 // This interface enables reusable configuration merging logic across different schemas.
 type ConfigMerger interface {
@@ -54,7 +54,7 @@ type ConfigMerger interface {
 	ExpandPath(path string) string
 }
 
-// ⭐ EXTRACT-001: Core interface extraction - Configuration source abstraction interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigSource abstracts different configuration sources (file, environment, defaults).
 // This interface enables pluggable configuration sources for different environments.
 type ConfigSource interface {
@@ -74,7 +74,7 @@ type ConfigSource interface {
 	IsAvailable() bool
 }
 
-// ⭐ EXTRACT-001: Core interface extraction - Pluggable configuration validation interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigValidator enables different applications to define their own configuration schemas.
 // This interface allows for schema-specific validation while maintaining common validation logic.
 type ConfigValidator interface {
@@ -91,7 +91,7 @@ type ConfigValidator interface {
 	GetValidationRules() map[string]ValidationRule
 }
 
-// ⭐ EXTRACT-001: Core interface extraction - Application-specific configuration interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ApplicationConfig provides access to application-specific configuration settings.
 // This interface abstracts application-specific schema from generic configuration operations.
 type ApplicationConfig interface {
@@ -108,7 +108,7 @@ type ApplicationConfig interface {
 	GetConfigSchema() interface{}
 }
 
-// 🔺 EXTRACT-001: Configuration structure extraction - Configuration validation rule structure - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ValidationRule defines validation criteria for configuration fields.
 // This structure enables flexible validation rules for different application schemas.
 type ValidationRule struct {
@@ -121,7 +121,7 @@ type ValidationRule struct {
 	Dependencies []string
 }
 
-// 🔺 EXTRACT-001: Configuration structure extraction - Configuration source determination interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // SourceDeterminer provides methods to determine configuration value sources.
 // This interface enables source tracking across different configuration providers.
 type SourceDeterminer interface {
@@ -135,7 +135,7 @@ type SourceDeterminer interface {
 	GetSourcePriority() []string
 }
 
-// 🔺 EXTRACT-001: Configuration structure extraction - Generic configuration value extractor interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ValueExtractor provides methods to extract configuration values from different structures.
 // This interface enables schema-agnostic value extraction for different application types.
 type ValueExtractor interface {
@@ -149,7 +149,7 @@ type ValueExtractor interface {
 	GetSupportedCategories() []string
 }
 
-// 🔺 EXTRACT-001: Configuration structure extraction - File operation interface for configuration - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigFileOperations provides file system operations for configuration management.
 // This interface abstracts file operations to enable testing and different storage backends.
 type ConfigFileOperations interface {
@@ -166,7 +166,7 @@ type ConfigFileOperations interface {
 	GetFileInfo(path string) (os.FileInfo, error)
 }
 
-// 🔺 EXTRACT-001: Configuration structure extraction - Environment variable provider interface - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // EnvironmentProvider abstracts environment variable operations for configuration.
 // This interface enables configurable environment variable mapping and testing.
 type EnvironmentProvider interface {
@@ -183,7 +183,7 @@ type EnvironmentProvider interface {
 	SetEnvMapping(mapping map[string]string)
 }
 
-// 🔶 EXTRACT-001: Value tracking abstraction - Configuration value representation - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigValue represents a configuration value with its source information.
 // This structure enables source tracking for any configuration type.
 type ConfigValue struct {
@@ -193,7 +193,7 @@ type ConfigValue struct {
 	Type   string      // Type of the configuration value
 }
 
-// ⭐ CFG-005: Configuration inheritance interfaces - 🔧 Core inheritance functionality
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // InheritanceLoader extends ConfigLoader with inheritance support.
 // This interface enables configuration files to inherit from other configuration files.
@@ -293,7 +293,7 @@ type InheritanceSourceTracker interface {
 	GetChainSources() []string
 }
 
-// ⭐ CFG-005: Configuration inheritance data structures - 📝 Core data models
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // InheritanceChain represents a configuration inheritance dependency chain.
 type InheritanceChain struct {

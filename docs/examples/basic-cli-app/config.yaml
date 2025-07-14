@@ -1,4 +1,4 @@
-# EXTRACT-010: Basic CLI Application Example Configuration - Sample configuration demonstrating pkg/config integration - 🔺
+# EXTRACT-010: Basic CLI Application Example Configuration - Sample configuration demonstrating pkg/config integration - [HIGH]
 
 # Output configuration
 output_format: table  # Options: table, json, yaml, template

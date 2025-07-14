@@ -2,6 +2,14 @@
 
 // Package main provides tests for archive verification functionality.
 // It verifies integrity checking and checksum validation.
+
+// TEST-VERIFICATION-FEATURES-001: Verification features test validation - Archive verification and integrity checking testing [ACTION:validation]
+// Source: verify.go - VERIFICATION-FEATURES-001
+// Impact: Validates verification features functionality
+
+// TEST-SERVICE-VERIFY-001: Verification service test validation - Verification service implementation testing [ACTION:validation]
+// Source: verify.go - SERVICE-VERIFY-001
+// Impact: Validates verification service implementation
 package main
 
 import (
@@ -79,7 +87,7 @@ func setupTestArchive(t *testing.T) (*TestArchiveData, func()) {
 	return data, cleanup
 }
 
-// ⭐ ARCH-002: Archive verification functionality validation - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 // TEST-REF: TestVerifyArchive
 func TestVerifyArchive(t *testing.T) {
 	data, cleanup := setupTestArchive(t)

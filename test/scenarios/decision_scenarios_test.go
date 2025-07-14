@@ -1,4 +1,4 @@
-// 🔶 DOC-014: Decision scenario testing - Validate decision trees with realistic scenarios
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package scenarios
 
 import (
@@ -128,11 +128,11 @@ func (tester *DecisionScenarioTester) createNewFeatureScenarios() []DecisionScen
 			Description: "Implementing a new feature with all prerequisites met",
 			Context: ScenarioContext{
 				FeatureExists:      true,
-				FeatureStatus:      "📝 Not Started",
+				FeatureStatus:      "[NOTE] Not Started",
 				DependenciesMet:    true,
 				TestsCoverage:      95.0,
 				ArchitectureAlign:  true,
-				PriorityLevel:      "⭐ CRITICAL",
+				PriorityLevel:      "[CRITICAL] CRITICAL",
 				ProjectPhase:       "Phase 4: Component Extraction",
 				ConflictingChanges: false,
 				BreakingChanges:    false,
@@ -142,7 +142,7 @@ func (tester *DecisionScenarioTester) createNewFeatureScenarios() []DecisionScen
 				RequiredProtocol:   "NEW FEATURE",
 				SkippedHierarchy:   []string{},
 				ValidationRequired: []string{"safety_gates", "scope_boundaries", "quality_thresholds", "goal_alignment"},
-				ExpectedFiles:      []string{"feature-tracking.md", "architecture.md", "requirements.md", "specification.md"},
+				ExpectedFiles:      []string{"testing.md", "architecture.md", "requirements.md", "specification.md"},
 				PerformanceImpact:  "acceptable",
 			},
 			DecisionPath: []DecisionStep{
@@ -158,11 +158,11 @@ func (tester *DecisionScenarioTester) createNewFeatureScenarios() []DecisionScen
 			Description: "Attempting to implement feature with unmet dependencies",
 			Context: ScenarioContext{
 				FeatureExists:      true,
-				FeatureStatus:      "📝 Not Started",
+				FeatureStatus:      "[NOTE] Not Started",
 				DependenciesMet:    false,
 				TestsCoverage:      90.0,
 				ArchitectureAlign:  true,
-				PriorityLevel:      "🔺 HIGH",
+				PriorityLevel:      "[HIGH] HIGH",
 				ProjectPhase:       "Phase 4: Component Extraction",
 				ConflictingChanges: false,
 				BreakingChanges:    false,
@@ -192,11 +192,11 @@ func (tester *DecisionScenarioTester) createBugFixScenarios() []DecisionScenario
 			Description: "Fixing a critical bug blocking extraction work",
 			Context: ScenarioContext{
 				FeatureExists:      true,
-				FeatureStatus:      "✅ Implemented",
+				FeatureStatus:      "[SUCCESS] Implemented",
 				DependenciesMet:    true,
 				TestsCoverage:      85.0,
 				ArchitectureAlign:  true,
-				PriorityLevel:      "⭐ CRITICAL",
+				PriorityLevel:      "[CRITICAL] CRITICAL",
 				ProjectPhase:       "Phase 4: Component Extraction",
 				ConflictingChanges: false,
 				BreakingChanges:    false,
@@ -228,11 +228,11 @@ func (tester *DecisionScenarioTester) createConflictScenarios() []DecisionScenar
 			Description: "Test failures preventing any development work",
 			Context: ScenarioContext{
 				FeatureExists:      true,
-				FeatureStatus:      "📝 Not Started",
+				FeatureStatus:      "[NOTE] Not Started",
 				DependenciesMet:    true,
 				TestsCoverage:      0.0,
 				ArchitectureAlign:  true,
-				PriorityLevel:      "⭐ CRITICAL",
+				PriorityLevel:      "[CRITICAL] CRITICAL",
 				ProjectPhase:       "Phase 4: Component Extraction",
 				ConflictingChanges: false,
 				BreakingChanges:    false,
@@ -303,9 +303,9 @@ func (tester *DecisionScenarioTester) applyDecisionHierarchy(t *testing.T, scena
 		actualDecision.ShouldProceed = true
 
 		// Determine protocol based on context
-		if scenario.Context.FeatureStatus == "📝 Not Started" {
+		if scenario.Context.FeatureStatus == "[NOTE] Not Started" {
 			actualDecision.RequiredProtocol = "NEW FEATURE"
-			actualDecision.ExpectedFiles = []string{"feature-tracking.md", "architecture.md", "requirements.md", "specification.md"}
+			actualDecision.ExpectedFiles = []string{"testing.md", "architecture.md", "requirements.md", "specification.md"}
 		} else if strings.Contains(scenario.Description, "bug") {
 			actualDecision.RequiredProtocol = "BUG FIX"
 			actualDecision.ExpectedFiles = []string{"testing.md"}

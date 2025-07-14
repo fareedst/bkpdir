@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-004: Git Integration System - Extracted Git integration package - 🔧
+// GIT-004: See specification.md - Git Integration System [DECISION:discovery]
 // This file is part of bkpdir
 //
 // Package git provides Git integration for repository detection, metadata extraction,
@@ -16,8 +16,8 @@ import (
 	"strings"
 )
 
-// ⭐ EXTRACT-004: Git operation context and configuration - 🔧
-// 🔶 GIT-005: Enhanced Git integration configuration - 📝
+// GIT-004: See specification.md - Git Operation Context and Configuration [DECISION:discovery]
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // Config represents Git integration configuration options
 type Config struct {
 	// Basic Git integration settings
@@ -49,7 +49,7 @@ type Config struct {
 }
 
 // DefaultConfig returns a Config with sensible defaults
-// 🔶 GIT-005: Enhanced default configuration - 📝
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 func DefaultConfig() *Config {
 	return &Config{
 		Enabled:           true,
@@ -71,7 +71,7 @@ func DefaultConfig() *Config {
 	}
 }
 
-// ⭐ EXTRACT-004: Git error handling structure - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GitError represents an error that occurred during Git operations.
 // It includes the operation that failed and the underlying error.
 type GitError struct {
@@ -83,7 +83,7 @@ func (e *GitError) Error() string {
 	return fmt.Sprintf("git %s failed: %v", e.Operation, e.Err)
 }
 
-// ⭐ EXTRACT-004: Git information structure - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Info represents Git repository information
 type Info struct {
 	Branch      string
@@ -94,7 +94,7 @@ type Info struct {
 	Submodules  []SubmoduleInfo
 }
 
-// 🔶 GIT-004: Git submodule information structure - 🔧
+// GIT-004: See specification.md - Git Submodule Information Structure [DECISION:maintenance]
 // SubmoduleInfo represents information about a Git submodule
 type SubmoduleInfo struct {
 	Name   string // Submodule name
@@ -104,7 +104,7 @@ type SubmoduleInfo struct {
 	Status string // Submodule status (e.g., "clean", "dirty", "uninitialized")
 }
 
-// ⭐ EXTRACT-004: Git repository interface definition - 🔧
+// GIT-004: See specification.md - Git Repository Interface Definition [DECISION:discovery]
 // Repository defines the interface for Git operations
 type Repository interface {
 	// IsRepository checks if the directory is a Git repository
@@ -119,7 +119,7 @@ type Repository interface {
 	GetInfo() (*Info, error)
 	// GetInfoWithStatus returns Git information including status
 	GetInfoWithStatus() (*Info, error)
-	// 🔶 GIT-004: Git submodule interface methods - 🔧
+	// GIT-004: See specification.md - Git Submodule Interface Methods [DECISION:maintenance]
 	// IsSubmodule checks if the directory is a Git submodule
 	IsSubmodule() (bool, error)
 	// GetSubmodules returns information about all submodules
@@ -128,7 +128,7 @@ type Repository interface {
 	GetSubmoduleStatus(path string) (string, error)
 }
 
-// ⭐ EXTRACT-004: Git repository implementation - 🔧
+// GIT-004: See specification.md - Git Repository Implementation [DECISION:discovery]
 // Repo implements the Repository interface using command-line Git
 type Repo struct {
 	config *Config
@@ -144,11 +144,11 @@ func NewRepositoryWithConfig(config *Config) Repository {
 	return &Repo{config: config}
 }
 
-// ⭐ EXTRACT-004: Generalized Git command execution framework - 🔧
-// 🔶 GIT-005: Enhanced Git command execution with new configuration - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // executeGitCommand runs a Git command with the configured parameters
 func (r *Repo) executeGitCommand(args ...string) (string, error) {
-	// 🔶 GIT-005: Use new Command field with legacy GitCommand fallback
+	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	gitCmd := r.config.Command
 	if gitCmd == "" {
 		gitCmd = r.config.GitCommand // Legacy fallback
@@ -169,14 +169,14 @@ func (r *Repo) executeGitCommand(args ...string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-// ⭐ EXTRACT-004: Git repository detection implementation - 🔍
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsRepository checks if the configured directory is a Git repository
 func (r *Repo) IsRepository() bool {
 	out, err := r.executeGitCommand("rev-parse", "--is-inside-work-tree")
 	return err == nil && out == "true"
 }
 
-// ⭐ EXTRACT-004: Git branch extraction implementation - 🔍
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetBranch returns the current Git branch name
 func (r *Repo) GetBranch() (string, error) {
 	if !r.IsRepository() {
@@ -185,7 +185,7 @@ func (r *Repo) GetBranch() (string, error) {
 	return r.executeGitCommand("rev-parse", "--abbrev-ref", "HEAD")
 }
 
-// ⭐ EXTRACT-004: Git commit hash extraction implementation - 🔍
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetShortHash returns the short commit hash of the current HEAD
 func (r *Repo) GetShortHash() (string, error) {
 	if !r.IsRepository() {
@@ -194,7 +194,7 @@ func (r *Repo) GetShortHash() (string, error) {
 	return r.executeGitCommand("rev-parse", "--short", "HEAD")
 }
 
-// ⭐ EXTRACT-004: Git working directory state detection - 🔍
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsWorkingDirectoryClean checks if the Git working directory is clean
 func (r *Repo) IsWorkingDirectoryClean() (bool, error) {
 	if !r.IsRepository() {
@@ -209,7 +209,7 @@ func (r *Repo) IsWorkingDirectoryClean() (bool, error) {
 	return len(out) == 0, nil
 }
 
-// ⭐ EXTRACT-004: Combined Git information extraction - 🔍
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetInfo returns complete Git repository information
 func (r *Repo) GetInfo() (*Info, error) {
 	info := &Info{IsRepo: r.IsRepository()}
@@ -231,7 +231,7 @@ func (r *Repo) GetInfo() (*Info, error) {
 	return info, nil
 }
 
-// ⭐ EXTRACT-004: Combined Git information extraction with status - 🔍
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetInfoWithStatus returns complete Git information including working directory status
 func (r *Repo) GetInfoWithStatus() (*Info, error) {
 	info, err := r.GetInfo()
@@ -239,7 +239,7 @@ func (r *Repo) GetInfoWithStatus() (*Info, error) {
 		return info, err
 	}
 
-	// 🔶 GIT-005: Use new ShowDirtyStatus field with legacy IncludeDirtyStatus fallback
+	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	includeDirtyStatus := r.config.ShowDirtyStatus || r.config.IncludeDirtyStatus
 	if includeDirtyStatus {
 		info.IsClean, err = r.IsWorkingDirectoryClean()
@@ -248,8 +248,8 @@ func (r *Repo) GetInfoWithStatus() (*Info, error) {
 		}
 	}
 
-	// 🔶 GIT-004: Add submodule information to Git info - 🔧
-	// 🔶 GIT-005: Use IncludeSubmodules configuration option
+	// GIT-004: See specification.md - Add Submodule Information to Git Info [DECISION:maintenance]
+	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	if r.config.IncludeSubmodules {
 		info.IsSubmodule, err = r.IsSubmodule()
 		if err != nil {
@@ -265,7 +265,7 @@ func (r *Repo) GetInfoWithStatus() (*Info, error) {
 	return info, nil
 }
 
-// 🔶 GIT-004: Git submodule detection implementation - 🔍
+// GIT-004: See specification.md - Git Submodule Detection Implementation [DECISION:maintenance]
 // IsSubmodule checks if the current directory is a Git submodule
 func (r *Repo) IsSubmodule() (bool, error) {
 	if !r.IsRepository() {
@@ -284,7 +284,7 @@ func (r *Repo) IsSubmodule() (bool, error) {
 	return strings.TrimSpace(out) != "", nil
 }
 
-// 🔶 GIT-004: Git submodule listing implementation - 🔍
+// GIT-004: See specification.md - Git Submodule Listing Implementation [DECISION:maintenance]
 // GetSubmodules returns information about all submodules in the repository
 func (r *Repo) GetSubmodules() ([]SubmoduleInfo, error) {
 	if !r.IsRepository() {
@@ -317,7 +317,7 @@ func (r *Repo) GetSubmodules() ([]SubmoduleInfo, error) {
 	return submodules, nil
 }
 
-// 🔶 GIT-004: Git submodule status implementation - 🔍
+// GIT-004: See specification.md - Git Submodule Status Implementation [DECISION:maintenance]
 // GetSubmoduleStatus returns the status of a specific submodule
 func (r *Repo) GetSubmoduleStatus(path string) (string, error) {
 	if !r.IsRepository() {
@@ -348,7 +348,7 @@ func (r *Repo) GetSubmoduleStatus(path string) (string, error) {
 	}
 }
 
-// 🔶 GIT-004: Git submodule status line parser - 🔧
+// GIT-004: See specification.md - Git Submodule Status Line Parser [DECISION:maintenance]
 // parseSubmoduleStatusLine parses a line from git submodule status output
 func (r *Repo) parseSubmoduleStatusLine(line string) (SubmoduleInfo, error) {
 	// Git submodule status format: [status][hash] [path] [(description)]
@@ -401,7 +401,7 @@ func (r *Repo) parseSubmoduleStatusLine(line string) (SubmoduleInfo, error) {
 	}, nil
 }
 
-// 🔶 GIT-004: Git submodule URL extraction - 🔧
+// GIT-004: See specification.md - Git Submodule URL Extraction [DECISION:maintenance]
 // getSubmoduleURL gets the remote URL for a submodule
 func (r *Repo) getSubmoduleURL(path string) (string, error) {
 	out, err := r.executeGitCommand("config", "--file", ".gitmodules", "--get", "submodule."+path+".url")
@@ -411,7 +411,7 @@ func (r *Repo) getSubmoduleURL(path string) (string, error) {
 	return strings.TrimSpace(out), nil
 }
 
-// ⭐ EXTRACT-004: Convenience functions for backward compatibility - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Package-level convenience functions that maintain the original API
 
 // IsGitRepository checks if the given directory is a Git repository
@@ -480,7 +480,7 @@ func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
 	return info.Branch, info.Hash, info.IsClean
 }
 
-// 🔶 GIT-004: Convenience functions for Git submodule operations - 🔧
+// GIT-004: See specification.md - Convenience Functions for Git Submodule Operations [DECISION:maintenance]
 
 // IsGitSubmodule checks if the given directory is a Git submodule
 func IsGitSubmodule(dir string) bool {

@@ -18,11 +18,11 @@ Add a command to make an empty configuration YAML file in the current directory 
 
 ### ✅ Pre-Work Validation Completed:
 1. **📋 Task Verification**: Task recorded in feature-tracking.md with valid Feature ID: CFG-TEMPLATE-001
-2. **🔍 Compliance Check**: Following ai-assistant-compliance.md requirements for implementation tokens
+2. **[ACTION:discovery] Compliance Check**: Following ai-assistant-compliance.md requirements for implementation tokens
 3. **📁 File Impact Analysis**: Determined documentation files requiring updates
-4. **🛡️ Immutable Check**: No conflicts with immutable.md requirements
+4. **[ACTION:validation] Immutable Check**: No conflicts with immutable.md requirements
 
-## 🔧 Change Classification: NEW FEATURE
+## [ACTION:core-functionality] Change Classification: NEW FEATURE
 
 **Protocol**: NEW FEATURE Protocol [PRIORITY: CRITICAL]  
 **Justification**: Adding new command functionality with CLI interface and configuration generation
@@ -65,7 +65,7 @@ Add a command to make an empty configuration YAML file in the current directory 
 - [ ] Error handling and validation
 - [ ] Test with various configuration scenarios
 
-## 📝 Subtask Breakdown
+## [ACTION:format-processing] Subtask Breakdown
 
 ### Subtask 1: CLI Command Implementation
 **Status**: Not Started  
@@ -118,7 +118,7 @@ Add a command to make an empty configuration YAML file in the current directory 
 - Update architecture documentation
 - Add testing requirements
 
-## 🔧 Technical Implementation Details
+## [ACTION:core-functionality] Technical Implementation Details
 
 ### Command Structure:
 ```go
@@ -193,7 +193,7 @@ templateCmd := &cobra.Command{
 4. **Phase 4** (45 min): Integration testing and refinement
 5. **Phase 5** (30 min): Documentation updates per NEW FEATURE protocol
 
-## 🔍 Validation Checklist
+## [ACTION:discovery] Validation Checklist
 
 ### Pre-Implementation:
 - [x] Feature ID created in feature-tracking.md

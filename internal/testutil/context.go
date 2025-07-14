@@ -7,7 +7,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// 🔺 TEST-INFRA-001-D: Context cancellation testing helpers - 🔧
+// TEST-INFRA-001-D: Context cancellation testing helpers
 // DECISION-REF: DEC-007 (Context-aware operations)
 // IMPLEMENTATION-NOTES: Use ticker-based timing control and goroutine coordination for deterministic cancellation testing
 

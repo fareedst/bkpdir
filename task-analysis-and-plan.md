@@ -8,7 +8,7 @@
 - Provide `stat`-like info for the file as named replacements for the format string
 - Currently: "inc" command displays the file name, "full" command displays nothing
 
-## 🔍 Current State Analysis
+## [ACTION:discovery] Current State Analysis
 
 ### Command Output Analysis
 
@@ -127,7 +127,7 @@ func GatherFileStatInfo(path string) (*FileStatInfo, error)
 - Document available named replacements
 - Add examples of customizing output format
 
-## 🔧 Technical Implementation Details
+## [ACTION:core-functionality] Technical Implementation Details
 
 ### File Stat Information Gathering
 
@@ -185,7 +185,7 @@ format_created_archive: "Created archive: {path} (size: {size_human}, modified: 
 5. **Consistent behavior**: Both inc and full commands behave similarly
 6. **Configuration**: Users can customize output format via configuration
 
-## 🔄 Risk Assessment
+## [ACTION:migration] Risk Assessment
 
 **Low Risk**:
 - Adding new functionality alongside existing code
@@ -197,7 +197,7 @@ format_created_archive: "Created archive: {path} (size: {size_human}, modified: 
 - Add comprehensive unit tests
 - Follow existing architectural patterns
 
-## 📝 Implementation Tokens
+## [ACTION:format-processing] Implementation Tokens
 
 All code changes will use the format:
 ```go

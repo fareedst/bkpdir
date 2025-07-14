@@ -1,4 +1,4 @@
-// 🔶 DOC-010: Token suggestion engine tests - 🧪 Comprehensive testing suite
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
 import (
@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-// 🔶 DOC-010: Test analyzer creation - 🧪 Analyzer initialization testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestNewTokenAnalyzer(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
@@ -30,7 +30,7 @@ func TestNewTokenAnalyzer(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test validator creation - 🧪 Validator initialization testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestNewTokenValidator(t *testing.T) {
 	validator := NewTokenValidator()
 
@@ -43,7 +43,7 @@ func TestNewTokenValidator(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test batch processor creation - 🧪 Batch processor initialization testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestNewBatchProcessor(t *testing.T) {
 	processor := NewBatchProcessor()
 
@@ -60,7 +60,7 @@ func TestNewBatchProcessor(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test priority determination - 🧪 Priority assignment testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestDeterminePriority(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
@@ -75,35 +75,35 @@ func TestDeterminePriority(t *testing.T) {
 			name:           "Critical function - main",
 			functionName:   "MainFunction",
 			context:        map[string]string{},
-			expectedIcon:   "⭐",
+			expectedIcon:   "[CRITICAL]",
 			expectedReason: "Critical operation: main",
 		},
 		{
 			name:           "High priority - config",
 			functionName:   "LoadConfig",
 			context:        map[string]string{},
-			expectedIcon:   "🔺",
+			expectedIcon:   "[HIGH]",
 			expectedReason: "High priority: config",
 		},
 		{
 			name:           "Medium priority - format",
 			functionName:   "FormatOutput",
 			context:        map[string]string{},
-			expectedIcon:   "🔶",
+			expectedIcon:   "[MEDIUM]",
 			expectedReason: "Medium priority: format",
 		},
 		{
 			name:           "Context-based high priority - error handling",
 			functionName:   "ProcessData",
 			context:        map[string]string{"error_handling": "true"},
-			expectedIcon:   "🔺",
+			expectedIcon:   "[HIGH]",
 			expectedReason: "High priority: error handling function",
 		},
 		{
 			name:           "Default low priority",
 			functionName:   "UtilityFunction",
 			context:        map[string]string{},
-			expectedIcon:   "🔻",
+			expectedIcon:   "[LOW]",
 			expectedReason: "Low priority: utility function",
 		},
 	}
@@ -124,7 +124,7 @@ func TestDeterminePriority(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test action determination - 🧪 Action assignment testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestDetermineAction(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
@@ -139,42 +139,42 @@ func TestDetermineAction(t *testing.T) {
 			name:           "Analysis function - get",
 			functionName:   "GetConfig",
 			context:        map[string]string{},
-			expectedIcon:   "🔍",
+			expectedIcon:   "[DECISION:discovery]",
 			expectedReason: "Analysis operation: get",
 		},
 		{
 			name:           "Documentation function - format",
 			functionName:   "FormatOutput",
 			context:        map[string]string{},
-			expectedIcon:   "📝",
+			expectedIcon:   "[DECISION:format-processing]",
 			expectedReason: "Documentation operation: format",
 		},
 		{
 			name:           "Configuration function - create",
 			functionName:   "CreateArchive",
 			context:        map[string]string{},
-			expectedIcon:   "🔧",
+			expectedIcon:   "[DECISION:core-functionality]",
 			expectedReason: "Configuration operation: create",
 		},
 		{
 			name:           "Protection function - validate",
 			functionName:   "ValidateInput",
 			context:        map[string]string{},
-			expectedIcon:   "🛡️",
+			expectedIcon:   "[DECISION:validation]",
 			expectedReason: "Protection operation: validate",
 		},
 		{
 			name:           "Context-based protection - error handling",
 			functionName:   "ProcessRequest",
 			context:        map[string]string{"error_handling": "true"},
-			expectedIcon:   "🛡️",
+			expectedIcon:   "[DECISION:validation]",
 			expectedReason: "Protection: error handling",
 		},
 		{
 			name:           "Default configuration",
 			functionName:   "UtilityFunction",
 			context:        map[string]string{},
-			expectedIcon:   "🔧",
+			expectedIcon:   "[DECISION:core-functionality]",
 			expectedReason: "Configuration: general operation",
 		},
 	}
@@ -195,7 +195,7 @@ func TestDetermineAction(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test feature ID determination - 🧪 Feature mapping testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestDetermineFeatureID(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
@@ -255,7 +255,7 @@ func TestDetermineFeatureID(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test confidence calculation - 🧪 Confidence scoring testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestCalculateConfidence(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
@@ -306,18 +306,18 @@ func TestCalculateConfidence(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test complexity analysis - 🧪 Complexity assessment testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestAnalyzeComplexity(t *testing.T) {
 	// This would require creating AST nodes, which is complex for testing
 	// In a real implementation, we would mock the AST or use test fixtures
 	t.Skip("Complexity analysis requires AST fixtures - implementation would include proper AST testing")
 }
 
-// 🔶 DOC-010: Test context analysis - 🧪 Context analysis testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestAnalyzeContext(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
-	// 🔶 DOC-010: Test source code - 📝 Sample code for analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	testCode := `package main
 
 import "fmt"
@@ -344,7 +344,7 @@ func ProcessData(data string) error {
 		t.Fatalf("Context analysis failed: %v", err)
 	}
 
-	// 🔶 DOC-010: Context validation - 🛡️ Expected patterns
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	expectedPatterns := map[string]string{
 		"error_handling":        "true",
 		"resource_management":   "true",
@@ -363,22 +363,22 @@ func ProcessData(data string) error {
 	}
 }
 
-// 🔶 DOC-010: Test token validation - 🧪 Validation testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestValidateFile(t *testing.T) {
 	validator := NewTokenValidator()
 
-	// 🔶 DOC-010: Create temporary test file - 📁 Test file setup
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	tmpDir := t.TempDir()
 	testFile := filepath.Join(tmpDir, "test.go")
 
 	testContent := `package main
 
 // Valid token format
-// ⭐ ARCH-001: Archive creation - 🔧 Core functionality
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 func CreateArchive() {}
 
 // Invalid token format - missing icons
-// ARCH-002: Archive validation
+// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 func ValidateArchive() {}
 
 // Invalid token format - wrong structure
@@ -386,7 +386,7 @@ func ValidateArchive() {}
 func ProcessArchive() {}
 
 // Valid but different format
-// 🔺 CFG-001: Configuration loading - 🔍 Discovery operation
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 func LoadConfig() {}`
 
 	err := os.WriteFile(testFile, []byte(testContent), 0644)
@@ -394,13 +394,13 @@ func LoadConfig() {}`
 		t.Fatalf("Failed to create test file: %v", err)
 	}
 
-	// 🔶 DOC-010: Validate test file - 🛡️ Validation execution
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	violations, err := validator.validateFile(testFile)
 	if err != nil {
 		t.Fatalf("Validation failed: %v", err)
 	}
 
-	// 🔶 DOC-010: Violation analysis - 📊 Expected violations
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(violations) == 0 {
 		t.Error("Expected violations to be found")
 	}
@@ -426,11 +426,11 @@ func LoadConfig() {}`
 	}
 }
 
-// 🔶 DOC-010: Test file analysis integration - 🧪 Integration testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestAnalyzeTargetFile(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
-	// 🔶 DOC-010: Create test Go file - 📁 Test file creation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	tmpDir := t.TempDir()
 	testFile := filepath.Join(tmpDir, "test.go")
 
@@ -463,13 +463,13 @@ func validateInput(data string) bool {
 		t.Fatalf("Failed to create test file: %v", err)
 	}
 
-	// 🔶 DOC-010: Analyze test file - 🔍 File analysis execution
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	results, err := analyzer.AnalyzeTarget(testFile)
 	if err != nil {
 		t.Fatalf("Analysis failed: %v", err)
 	}
 
-	// 🔶 DOC-010: Results validation - 📊 Analysis verification
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if results.Target != testFile {
 		t.Errorf("Expected target %s, got %s", testFile, results.Target)
 	}
@@ -486,7 +486,7 @@ func validateInput(data string) bool {
 		t.Error("Expected processing time to be recorded")
 	}
 
-	// 🔶 DOC-010: Suggestion content validation - 💡 Suggestion quality check
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, suggestion := range results.Suggestions {
 		if suggestion.FilePath != testFile {
 			t.Errorf("Expected file path %s, got %s", testFile, suggestion.FilePath)
@@ -514,11 +514,11 @@ func validateInput(data string) bool {
 	}
 }
 
-// 🔶 DOC-010: Test batch processing - 🧪 Batch processing testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestBatchProcessing(t *testing.T) {
 	processor := NewBatchProcessor()
 
-	// 🔶 DOC-010: Create test directory structure - 📁 Test setup
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	tmpDir := t.TempDir()
 
 	// Create multiple test files
@@ -543,13 +543,13 @@ func TestSomething() {}`, // This should be skipped
 		}
 	}
 
-	// 🔶 DOC-010: Execute batch processing - 🚀 Batch execution
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	results, err := processor.ProcessDirectory(tmpDir)
 	if err != nil {
 		t.Fatalf("Batch processing failed: %v", err)
 	}
 
-	// 🔶 DOC-010: Batch results validation - 📊 Results verification
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if results.Directory != tmpDir {
 		t.Errorf("Expected directory %s, got %s", tmpDir, results.Directory)
 	}
@@ -570,7 +570,7 @@ func TestSomething() {}`, // This should be skipped
 		t.Error("Expected processing time to be recorded")
 	}
 
-	// 🔶 DOC-010: Priority and action breakdown validation - 📊 Category verification
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	totalPriority := results.PriorityBreakdown.Critical + results.PriorityBreakdown.High +
 		results.PriorityBreakdown.Medium + results.PriorityBreakdown.Low
 	if totalPriority != results.TotalSuggestions {
@@ -583,7 +583,7 @@ func TestSomething() {}`, // This should be skipped
 		t.Errorf("Action breakdown doesn't match total suggestions: %d vs %d", totalAction, results.TotalSuggestions)
 	}
 
-	// 🔶 DOC-010: Top suggestions validation - 💡 Quality ranking verification
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(results.TopSuggestions) > 10 {
 		t.Error("Expected top suggestions to be limited to 10")
 	}
@@ -596,17 +596,17 @@ func TestSomething() {}`, // This should be skipped
 	}
 }
 
-// 🔶 DOC-010: Test error handling - 🧪 Error condition testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestErrorHandling(t *testing.T) {
 	analyzer := NewTokenAnalyzer()
 
-	// 🔶 DOC-010: Test non-existent file - 🛡️ Error case testing
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	_, err := analyzer.AnalyzeTarget("non-existent-file.go")
 	if err == nil {
 		t.Error("Expected error for non-existent file")
 	}
 
-	// 🔶 DOC-010: Test invalid Go file - 🛡️ Parser error testing
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	tmpDir := t.TempDir()
 	invalidFile := filepath.Join(tmpDir, "invalid.go")
 
@@ -621,7 +621,7 @@ func TestErrorHandling(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test configuration defaults - 🧪 Configuration testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestDefaultAnalysisConfig(t *testing.T) {
 	config := DefaultAnalysisConfig()
 
@@ -629,7 +629,7 @@ func TestDefaultAnalysisConfig(t *testing.T) {
 		t.Fatal("Expected config to be created")
 	}
 
-	// 🔶 DOC-010: Validate priority rules - ⭐ Priority configuration validation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(config.PriorityRules.CriticalPatterns) == 0 {
 		t.Error("Expected critical patterns to be defined")
 	}
@@ -638,7 +638,7 @@ func TestDefaultAnalysisConfig(t *testing.T) {
 		t.Error("Expected high patterns to be defined")
 	}
 
-	// 🔶 DOC-010: Validate action rules - 🔧 Action configuration validation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(config.ActionRules.AnalysisPatterns) == 0 {
 		t.Error("Expected analysis patterns to be defined")
 	}
@@ -647,7 +647,7 @@ func TestDefaultAnalysisConfig(t *testing.T) {
 		t.Error("Expected configuration patterns to be defined")
 	}
 
-	// 🔶 DOC-010: Validate confidence weights - 📊 Weight configuration validation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	totalWeight := config.ConfidenceWeights.SignatureMatch +
 		config.ConfidenceWeights.PatternMatch +
 		config.ConfidenceWeights.ContextMatch +
@@ -658,7 +658,7 @@ func TestDefaultAnalysisConfig(t *testing.T) {
 		t.Errorf("Expected confidence weights to sum to 1.0, got %f", totalWeight)
 	}
 
-	// 🔶 DOC-010: Validate validation rules - 🛡️ Validation configuration
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(config.ValidationRules.ValidPriorityIcons) != 4 {
 		t.Errorf("Expected 4 priority icons, got %d", len(config.ValidationRules.ValidPriorityIcons))
 	}
@@ -672,9 +672,9 @@ func TestDefaultAnalysisConfig(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Test utility functions - 🧪 Utility function testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func TestUtilityFunctions(t *testing.T) {
-	// 🔶 DOC-010: Test integer min/max - 🔧 Integer utilities
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if min(5, 3) != 3 {
 		t.Error("min function failed for integers")
 	}
@@ -683,7 +683,7 @@ func TestUtilityFunctions(t *testing.T) {
 		t.Error("max function failed for integers")
 	}
 
-	// 🔶 DOC-010: Test float64 min/max - 🔧 Float utilities
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if minFloat64(5.5, 3.3) != 3.3 {
 		t.Error("minFloat64 function failed")
 	}
@@ -693,11 +693,11 @@ func TestUtilityFunctions(t *testing.T) {
 	}
 }
 
-// 🔶 DOC-010: Benchmark analysis performance - ⚡ Performance testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func BenchmarkAnalyzeTarget(b *testing.B) {
 	analyzer := NewTokenAnalyzer()
 
-	// 🔶 DOC-010: Create benchmark test file - 📁 Performance test setup
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	tmpDir := b.TempDir()
 	testFile := filepath.Join(tmpDir, "benchmark.go")
 
@@ -714,7 +714,7 @@ func FormatOutput(data interface{}) string { return "" }`
 		b.Fatalf("Failed to create benchmark file: %v", err)
 	}
 
-	// 🔶 DOC-010: Execute benchmark - ⚡ Performance measurement
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, err := analyzer.AnalyzeTarget(testFile)
@@ -724,11 +724,11 @@ func FormatOutput(data interface{}) string { return "" }`
 	}
 }
 
-// 🔶 DOC-010: Benchmark batch processing performance - ⚡ Batch performance testing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func BenchmarkBatchProcessing(b *testing.B) {
 	processor := NewBatchProcessor()
 
-	// 🔶 DOC-010: Create benchmark directory - 📁 Batch performance setup
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	tmpDir := b.TempDir()
 
 	// Create multiple files for batch processing
@@ -744,7 +744,7 @@ func Function%dB() bool { return true }`, i, i)
 		}
 	}
 
-	// 🔶 DOC-010: Execute batch benchmark - ⚡ Batch performance measurement
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, err := processor.ProcessDirectory(tmpDir)

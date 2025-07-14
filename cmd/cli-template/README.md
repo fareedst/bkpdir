@@ -173,7 +173,7 @@ cli-template/
 ./cli-template --verbose config
 ```
 
-## 🔧 Development
+## [ACTION:core-functionality] Development
 
 ### Building from Source
 

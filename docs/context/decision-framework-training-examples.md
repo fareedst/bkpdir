@@ -1,6 +1,6 @@
 # 🎓 Decision Framework Training Examples
 
-> **🔶 DOC-014: Real-world decision-making examples for AI assistant training and framework adoption**
+> **[MEDIUM] DOC-014: Real-world decision-making examples for AI assistant training and framework adoption**
 
 ## 📑 Table of Contents
 
@@ -21,7 +21,7 @@
 
 **Decision Framework Application**:
 
-#### **1. 🛡️ Safety Gates Check**
+#### **1. [ACTION:validation] Safety Gates Check**
 ```
 ❌ make test → Tests failing (this is what we're fixing)
 ✅ Backward compatibility → This is a bug fix, not a behavior change
@@ -46,7 +46,7 @@
 ✅ Test coverage → Fix will improve coverage by making tests pass
 ✅ Error patterns → Will use existing Git error handling patterns
 ✅ Performance → No performance impact expected
-✅ Traceability → Will update // 🔺 GIT-003: Git status token
+✅ Traceability → Will update // [HIGH] GIT-003: Git status token
 ```
 
 **Result**: All quality thresholds satisfied
@@ -84,7 +84,7 @@
 
 **Decision Framework Application**:
 
-#### **1. 🛡️ Safety Gates Check**
+#### **1. [ACTION:validation] Safety Gates Check**
 ```
 ✅ make test → All tests passing
 ✅ Backward compatibility → New functionality, won't break existing
@@ -107,7 +107,7 @@
 grep -A 5 "GIT-004" docs/context/feature-tracking.md
 ```
 
-Found: GIT-004 exists as "Git submodule support" with status "📝 Not Started"
+Found: GIT-004 exists as "Git submodule support" with status "[ACTION:format-processing] Not Started"
 
 **Result**: All scope boundaries satisfied
 
@@ -116,7 +116,7 @@ Found: GIT-004 exists as "Git submodule support" with status "📝 Not Started"
 ✅ Test coverage → Will add comprehensive submodule tests
 ✅ Error patterns → Will follow existing Git error handling
 ✅ Performance → Minimal impact, submodules are optional
-✅ Traceability → Will add // 🔶 GIT-004: Git submodules tokens
+✅ Traceability → Will add // [MEDIUM] GIT-004: Git submodules tokens
 ```
 
 **Result**: All quality thresholds satisfied
@@ -124,7 +124,7 @@ Found: GIT-004 exists as "Git submodule support" with status "📝 Not Started"
 #### **4. 🎯 Goal Alignment Check**
 ```
 ✅ Phase progress → Advances Git integration completion
-✅ Priority order → 🔶 MEDIUM priority, no higher priority tasks available
+✅ Priority order → [MEDIUM] MEDIUM priority, no higher priority tasks available
 ✅ Future impact → Completes Git feature set
 ✅ Reusability → Enhances pkg/git component value
 ```
@@ -155,7 +155,7 @@ Found: GIT-004 exists as "Git submodule support" with status "📝 Not Started"
 
 **Decision Framework Application**:
 
-#### **1. 🛡️ Safety Gates Check**
+#### **1. [ACTION:validation] Safety Gates Check**
 ```
 ✅ make test → All tests passing
 ✅ Backward compatibility → Refactoring must preserve all functionality
@@ -188,7 +188,7 @@ Found: GIT-004 exists as "Git submodule support" with status "📝 Not Started"
 #### **4. 🎯 Goal Alignment Check**
 ```
 ✅ Phase progress → Critical for pre-extraction refactoring phase
-✅ Priority order → 🔺 HIGH priority (extraction enabler)
+✅ Priority order → [HIGH] HIGH priority (extraction enabler)
 ✅ Future impact → Essential for EXTRACT-003 success
 ✅ Reusability → Improves component extraction readiness
 ```
@@ -211,7 +211,7 @@ Found: GIT-004 exists as "Git submodule support" with status "📝 Not Started"
 - Backward compatibility is critical for refactoring
 - Framework connects refactoring to larger project goals
 
-## 🔧 Intermediate Decision Cases
+## [ACTION:core-functionality] Intermediate Decision Cases
 
 ### **Scenario 4: Conflicting Priorities**
 
@@ -275,7 +275,7 @@ Foundation Work: EXTRACT-002 ✅
 
 #### **Scope Analysis Process**:
 ```
-1. 🔍 Feature Impact Assessment
+1. [ACTION:discovery] Feature Impact Assessment
    CFG-001: Affects configuration loading (minor extension)
    CFG-002: Affects error status codes (moderate changes)
    CFG-003: Affects error message formatting (minor extension)
@@ -287,7 +287,7 @@ Foundation Work: EXTRACT-002 ✅
    CFG-003 impact: Add validation error templates (MODIFICATION)
    New validation: Custom rule engine (NEW FEATURE)
 
-3. 🔧 Implementation Strategy Options
+3. [ACTION:core-functionality] Implementation Strategy Options
    Option A: Extend each existing feature incrementally
    Option B: Create CFG-007 for validation system
    Option C: Mix approach - new feature + modifications
@@ -333,7 +333,7 @@ Foundation Work: EXTRACT-002 ✅
 
 #### **Trade-off Analysis**:
 ```
-1. 🛡️ Safety Gates (Non-negotiable)
+1. [ACTION:validation] Safety Gates (Non-negotiable)
    ✅ Tests must still pass
    ✅ Backward compatibility required
    ✅ Token compliance maintained
@@ -425,7 +425,7 @@ Week 3-4 (Post-demo):
    - Inheritance-based: Poor, creates circular dependencies
    - Functional: Good, but inconsistent with existing codebase
 
-3. 🔧 Existing Codebase Patterns
+3. [ACTION:core-functionality] Existing Codebase Patterns
    Current: Mix of interface-based and some inheritance
    Trend: Moving toward interface-based (REFACTOR-001-006)
    Goal: Component extraction readiness
@@ -493,7 +493,7 @@ Success Criteria: Clean extraction, high reusability, maintained backward compat
    Timeline: Immediate fix required
    Risk: System reputation and data safety
 
-2. 🛡️ Safety Gate Override Analysis
+2. [ACTION:validation] Safety Gate Override Analysis
    Normal: All tests must pass before starting work
    Emergency: Bug fix work allowed with failing tests (if fixing them)
    Override Justification: Critical system integrity issue
@@ -502,7 +502,7 @@ Success Criteria: Clean extraction, high reusability, maintained backward compat
 
 **Framework Emergency Process**:
 ```
-1. 🔄 Work State Management
+1. [ACTION:migration] Work State Management
    Current: REFACTOR-002 50% complete, tests passing
    Action: Stash current refactoring work
    Verification: Confirm system stable after stash
@@ -517,7 +517,7 @@ Success Criteria: Clean extraction, high reusability, maintained backward compat
    Testing: Comprehensive tests for the specific bug
    Documentation: Minimal updates, focus on resolution
    
-3. 🔄 Resume Strategy
+3. [ACTION:migration] Resume Strategy
    After Fix: Resume REFACTOR-002 from stashed state
    Integration: Consider if bug fix affects refactoring approach
    Validation: Ensure emergency fix and refactoring work together
@@ -597,7 +597,7 @@ Phase 3: Work Resumption (4+ hours)
    B) Proceed with patterns (preserves timeline, risks rework)
    C) Collaborative approach (balances both concerns)
 
-3. 🔧 Collaborative Solution Design
+3. [ACTION:core-functionality] Collaborative Solution Design
    Proposal: Lead pattern design with architecture team input
    Process: Create pattern proposal, get rapid feedback
    Validation: Implement with explicit approval checkpoints
@@ -653,7 +653,7 @@ Documentation: Clear pattern rationale for future decisions
 
 #### **Framework Hierarchy Validation**:
 ```
-1. 🛡️ Safety Gates Analysis
+1. [ACTION:validation] Safety Gates Analysis
    Test Failure: "Non-critical test failure"
    Impact Assessment: 
    - Does it block CI/CD? 
@@ -673,7 +673,7 @@ Documentation: Clear pattern rationale for future decisions
 
 **Framework Interpretation Process**:
 ```
-1. 🔍 Safety Gate Definition Clarification
+1. [ACTION:discovery] Safety Gate Definition Clarification
    Original: "All tests must pass (make test)"
    Intent: Tests that block development work
    
@@ -686,7 +686,7 @@ Documentation: Clear pattern rationale for future decisions
    If make test fails: Fix immediately (Safety Gate override)
    If make test passes: Apply normal priority system (Goal Alignment)
    
-3. 🔧 Framework Clarification
+3. [ACTION:core-functionality] Framework Clarification
    Safety Gates apply to: System-level blocking issues
    Individual test failures: Evaluated through full 4-tier hierarchy
 ```
@@ -730,7 +730,7 @@ Meta-Learning: Framework itself needs iteration and clarification
 
 #### **Dependency Chain Mapping**:
 ```
-1. 🔄 Circular Loop Identification
+1. [ACTION:migration] Circular Loop Identification
    DOC-014 Subtask 6: Requires validation to pass
    DOC-014 Validation: Requires Subtask 7 documentation
    DOC-014 Subtask 7: Requires working validation framework
@@ -738,7 +738,7 @@ Meta-Learning: Framework itself needs iteration and clarification
    
    Loop: Subtask 6 → Validation → Subtask 7 → Framework → Subtask 6
 
-2. 🔍 Minimum Viable Breaking Point
+2. [ACTION:discovery] Minimum Viable Breaking Point
    Options:
    A) Implement basic documentation first (bootstrap approach)
    B) Make validation tolerant of missing documentation
@@ -757,7 +757,7 @@ Meta-Learning: Framework itself needs iteration and clarification
    - Documents requirements clearly
    - Allows testing at each stage
 
-2. 🔧 Implementation Phases
+2. [ACTION:core-functionality] Implementation Phases
    Phase 1: Create minimal documentation stubs
    Phase 2: Implement basic validation with stubs
    Phase 3: Enhance documentation iteratively
@@ -844,7 +844,7 @@ Enhancement Schedule:
 ### **Anti-Pattern 3: Priority Inversion**
 
 **❌ Wrong Approach**:
-"I know EXTRACT-002 is marked as ⭐ CRITICAL, but I'm more familiar with the testing code, so I'll work on TEST-INFRA-002 instead."
+"I know EXTRACT-002 is marked as [CRITICAL] CRITICAL, but I'm more familiar with the testing code, so I'll work on TEST-INFRA-002 instead."
 
 **Why This Is Wrong**:
 - Ignores documented priority system
@@ -1059,6 +1059,6 @@ Enhancement Schedule:
 ---
 
 **📋 Document Status**: ✅ Complete  
-**🔄 Last Updated**: 2025-01-04  
-**📝 Next Review**: After practical framework usage feedback  
+**[ACTION:migration] Last Updated**: 2025-01-04  
+**[ACTION:format-processing] Next Review**: After practical framework usage feedback  
 **🔗 Related**: decision-framework-usage-guide.md, decision-framework-troubleshooting.md 

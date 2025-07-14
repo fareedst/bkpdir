@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-008: CLI Application Template - Main entry point demonstrating extracted packages
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package main
 
 import (

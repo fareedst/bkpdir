@@ -15,11 +15,11 @@ import (
 
 	yaml "gopkg.in/yaml.v3"
 
-	// 🔶 GIT-005: Import Git package for configuration integration
+	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	"bkpdir/pkg/git"
 )
 
-// 🔻 REFACTOR-003: Config abstraction - Default configuration loader implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // DefaultConfigLoader provides the default implementation of ConfigLoader interface.
 // This implementation maintains backward compatibility while enabling schema abstraction.
 type DefaultConfigLoader struct {
@@ -38,7 +38,7 @@ func NewDefaultConfigLoader() *DefaultConfigLoader {
 }
 
 // LoadConfig loads configuration from the specified root directory.
-// 🔻 REFACTOR-003: Config abstraction - Schema-agnostic configuration loading - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigLoader) LoadConfig(root string) (*Config, error) {
 	cfg := DefaultConfig()
 
@@ -64,7 +64,7 @@ func (d *DefaultConfigLoader) LoadConfig(root string) (*Config, error) {
 }
 
 // LoadConfigValues loads configuration values with source tracking.
-// 🔻 REFACTOR-003: Config abstraction - Source tracking for configuration values - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigLoader) LoadConfigValues(root string) (map[string]ConfigValue, error) {
 	cfg, err := d.LoadConfig(root)
 	if err != nil {
@@ -80,36 +80,36 @@ func (d *DefaultConfigLoader) LoadConfigValues(root string) (map[string]ConfigVa
 }
 
 // GetConfigValues extracts configuration values from a Config struct.
-// 🔻 REFACTOR-003: Config abstraction - Generic configuration value extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigLoader) GetConfigValues(cfg *Config) []ConfigValue {
 	return GetConfigValues(cfg)
 }
 
 // GetConfigValuesWithSources extracts configuration values with source information.
-// 🔻 REFACTOR-003: Config abstraction - Source-aware configuration value extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigLoader) GetConfigValuesWithSources(cfg *Config, root string) []ConfigValue {
 	return GetConfigValuesWithSources(cfg, root)
 }
 
 // ValidateConfig validates a configuration structure.
-// 🔻 REFACTOR-003: Config abstraction - Pluggable configuration validation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigLoader) ValidateConfig(cfg *Config) error {
 	return d.validator.ValidateSchema(cfg)
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Default configuration merger implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // DefaultConfigMerger provides the default implementation of ConfigMerger interface.
 // This implementation maintains backward compatibility while enabling schema abstraction.
 type DefaultConfigMerger struct{}
 
 // MergeConfigs merges source configuration into destination configuration.
-// 🔻 REFACTOR-003: Config abstraction - Schema-agnostic configuration merging - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigMerger) MergeConfigs(dst, src *Config) {
 	mergeConfigs(dst, src)
 }
 
 // MergeConfigValues merges configuration value maps.
-// 🔻 REFACTOR-003: Config abstraction - Configuration value map merging - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigMerger) MergeConfigValues(dst, src map[string]ConfigValue) {
 	for key, value := range src {
 		dst[key] = value
@@ -117,18 +117,18 @@ func (d *DefaultConfigMerger) MergeConfigValues(dst, src map[string]ConfigValue)
 }
 
 // GetConfigSearchPaths returns the search paths for configuration files.
-// 🔻 REFACTOR-003: Config abstraction - Configurable search path logic - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigMerger) GetConfigSearchPaths() []string {
 	return getConfigSearchPaths()
 }
 
 // ExpandPath expands path variables and returns absolute path.
-// 🔻 REFACTOR-003: Config abstraction - Path expansion abstraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigMerger) ExpandPath(path string) string {
 	return expandPath(path)
 }
 
-// 🔻 REFACTOR-003: Config abstraction - File configuration source implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // FileConfigSource provides file-based configuration loading.
 // This implementation abstracts file-based configuration from other sources.
 type FileConfigSource struct {
@@ -145,7 +145,7 @@ func NewFileConfigSource(path string) *FileConfigSource {
 }
 
 // LoadFromFile loads configuration from a file source.
-// 🔻 REFACTOR-003: Config abstraction - File-based configuration loading - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileConfigSource) LoadFromFile(path string) (*Config, error) {
 	if !f.fileOps.FileExists(path) {
 		return DefaultConfig(), nil
@@ -165,7 +165,7 @@ func (f *FileConfigSource) LoadFromFile(path string) (*Config, error) {
 }
 
 // LoadFromEnvironment loads configuration from environment variables.
-// 🔻 REFACTOR-003: Config abstraction - Environment-based configuration loading - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileConfigSource) LoadFromEnvironment() (*Config, error) {
 	cfg := DefaultConfig()
 
@@ -180,7 +180,7 @@ func (f *FileConfigSource) LoadFromEnvironment() (*Config, error) {
 		cfg.IncludeGitInfo = strings.ToLower(includeGit) == "true"
 	}
 
-	// 🔶 GIT-005: Git configuration environment variable support - 📝
+	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// Git configuration overrides from environment variables
 	if cfg.Git == nil {
 		cfg.Git = DefaultGitConfig()
@@ -209,13 +209,13 @@ func (f *FileConfigSource) LoadFromEnvironment() (*Config, error) {
 }
 
 // LoadDefaults returns the default configuration.
-// 🔻 REFACTOR-003: Config abstraction - Default configuration provider - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileConfigSource) LoadDefaults() *Config {
 	return DefaultConfig()
 }
 
 // GetSourceName returns the name of this configuration source.
-// 🔻 REFACTOR-003: Config abstraction - Configuration source identification - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileConfigSource) GetSourceName() string {
 	if f.path != "" {
 		return fmt.Sprintf("file:%s", f.path)
@@ -224,18 +224,18 @@ func (f *FileConfigSource) GetSourceName() string {
 }
 
 // IsAvailable checks if this configuration source is available.
-// 🔻 REFACTOR-003: Config abstraction - Configuration source availability - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileConfigSource) IsAvailable() bool {
 	return f.path == "" || f.fileOps.FileExists(f.path)
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Backup application validator implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // BackupAppValidator provides validation specific to the backup application schema.
 // This implementation demonstrates schema-specific validation while using the common interface.
 type BackupAppValidator struct{}
 
 // ValidateSchema validates the configuration against the expected schema.
-// 🔻 REFACTOR-003: Config abstraction - Backup application schema validation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupAppValidator) ValidateSchema(cfg *Config) error {
 	if cfg == nil {
 		return fmt.Errorf("configuration cannot be nil")
@@ -270,7 +270,7 @@ func (b *BackupAppValidator) ValidateSchema(cfg *Config) error {
 }
 
 // ValidateValues validates individual configuration values.
-// 🔻 REFACTOR-003: Config abstraction - Individual value validation - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupAppValidator) ValidateValues(values map[string]ConfigValue) error {
 	for name, value := range values {
 		if err := b.validateValue(name, value.Value); err != nil {
@@ -281,7 +281,7 @@ func (b *BackupAppValidator) ValidateValues(values map[string]ConfigValue) error
 }
 
 // GetRequiredFields returns the list of required configuration fields.
-// 🔻 REFACTOR-003: Config abstraction - Required field specification - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupAppValidator) GetRequiredFields() []string {
 	return []string{
 		"archive_dir_path",
@@ -290,7 +290,7 @@ func (b *BackupAppValidator) GetRequiredFields() []string {
 }
 
 // GetValidationRules returns validation rules for configuration fields.
-// 🔻 REFACTOR-003: Config abstraction - Validation rule specification - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupAppValidator) GetValidationRules() map[string]ValidationRule {
 	return map[string]ValidationRule{
 		"archive_dir_path": {
@@ -314,7 +314,7 @@ func (b *BackupAppValidator) GetValidationRules() map[string]ValidationRule {
 }
 
 // validateValue validates an individual configuration value.
-// 🔻 REFACTOR-003: Config abstraction - Single value validation logic - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupAppValidator) validateValue(name, value string) error {
 	rules := b.GetValidationRules()
 	rule, exists := rules[name]
@@ -360,7 +360,7 @@ func (b *BackupAppValidator) validateValue(name, value string) error {
 	return nil
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Application-specific configuration implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // BackupApplicationConfig provides access to backup-specific configuration settings.
 // This implementation demonstrates schema separation from generic configuration operations.
 type BackupApplicationConfig struct {
@@ -373,7 +373,7 @@ func NewBackupApplicationConfig(cfg *Config) *BackupApplicationConfig {
 }
 
 // GetArchiveSettings returns archive-related configuration.
-// 🔻 REFACTOR-003: Schema separation - Archive settings extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupApplicationConfig) GetArchiveSettings() ArchiveSettings {
 	return ArchiveSettings{
 		DirectoryPath:      b.cfg.ArchiveDirPath,
@@ -386,7 +386,7 @@ func (b *BackupApplicationConfig) GetArchiveSettings() ArchiveSettings {
 }
 
 // GetBackupSettings returns backup-related configuration.
-// 🔻 REFACTOR-003: Schema separation - Backup settings extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupApplicationConfig) GetBackupSettings() BackupSettings {
 	return BackupSettings{
 		DirectoryPath:             b.cfg.BackupDirPath,
@@ -395,13 +395,13 @@ func (b *BackupApplicationConfig) GetBackupSettings() BackupSettings {
 }
 
 // GetStatusCodes returns application status codes.
-// 🔻 REFACTOR-003: Schema separation - Status code extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupApplicationConfig) GetStatusCodes() map[string]int {
 	return b.cfg.GetStatusCodes()
 }
 
 // GetFormatSettings returns output formatting configuration.
-// 🔻 REFACTOR-003: Schema separation - Format settings extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (b *BackupApplicationConfig) GetFormatSettings() FormatSettings {
 	return FormatSettings{
 		FormatStrings: map[string]string{
@@ -438,37 +438,37 @@ func (b *BackupApplicationConfig) GetFormatSettings() FormatSettings {
 	}
 }
 
-// 🔻 REFACTOR-003: Config abstraction - File system operations implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // FileSystemOperations provides concrete file system operations for configuration.
 // This implementation enables testing and different storage backends.
 type FileSystemOperations struct{}
 
 // FileExists checks if a configuration file exists.
-// 🔻 REFACTOR-003: Config abstraction - File existence checking - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileSystemOperations) FileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
 }
 
 // ReadFile reads configuration file contents.
-// 🔻 REFACTOR-003: Config abstraction - File content reading - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileSystemOperations) ReadFile(path string) ([]byte, error) {
 	return os.ReadFile(path)
 }
 
 // WriteFile writes configuration file contents.
-// 🔻 REFACTOR-003: Config abstraction - File content writing - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileSystemOperations) WriteFile(path string, data []byte, perm os.FileMode) error {
 	return os.WriteFile(path, data, perm)
 }
 
 // GetFileInfo returns file information for configuration files.
-// 🔻 REFACTOR-003: Config abstraction - File information retrieval - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (f *FileSystemOperations) GetFileInfo(path string) (os.FileInfo, error) {
 	return os.Stat(path)
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Configuration source determiner implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // DefaultSourceDeterminer provides default source determination logic.
 // This implementation enables source tracking across different configuration providers.
 type DefaultSourceDeterminer struct {
@@ -481,7 +481,7 @@ func NewDefaultSourceDeterminer(configSource string) *DefaultSourceDeterminer {
 }
 
 // DetermineSource determines the source of a configuration value.
-// 🔻 REFACTOR-003: Config abstraction - Configuration value source tracking - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultSourceDeterminer) DetermineSource(current, defaultValue interface{}) string {
 	if current == defaultValue {
 		return "default"
@@ -493,49 +493,49 @@ func (d *DefaultSourceDeterminer) DetermineSource(current, defaultValue interfac
 }
 
 // GetConfigSource returns the primary configuration source.
-// 🔻 REFACTOR-003: Config abstraction - Primary source identification - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultSourceDeterminer) GetConfigSource() string {
 	return d.configSource
 }
 
 // GetSourcePriority returns the priority order of configuration sources.
-// 🔻 REFACTOR-003: Config abstraction - Source priority definition - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultSourceDeterminer) GetSourcePriority() []string {
 	return []string{"file", "environment", "default"}
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Configuration value extractor implementation - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // DefaultValueExtractor provides default configuration value extraction logic.
 // This implementation enables schema-agnostic value extraction for different application types.
 type DefaultValueExtractor struct{}
 
 // ExtractBasicValues extracts basic configuration values.
-// 🔻 REFACTOR-003: Config abstraction - Basic value extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultValueExtractor) ExtractBasicValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
 	return getBasicConfigValues(cfg, defaultCfg, getSource)
 }
 
 // ExtractStatusCodeValues extracts status code configuration values.
-// 🔻 REFACTOR-003: Config abstraction - Status code value extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultValueExtractor) ExtractStatusCodeValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
 	return getStatusCodeValues(cfg, defaultCfg, getSource)
 }
 
 // ExtractVerificationValues extracts verification configuration values.
-// 🔻 REFACTOR-003: Config abstraction - Verification value extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultValueExtractor) ExtractVerificationValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
 	return getVerificationValues(cfg, defaultCfg, getSource)
 }
 
 // ExtractFormatValues extracts format string configuration values.
-// 🔻 REFACTOR-003: Config abstraction - Format value extraction - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultValueExtractor) ExtractFormatValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
 	// This would extract format strings - implementation depends on schema
 	// For now, return empty slice as format extraction is complex
 	return []ConfigValue{}
 }
 
-// 🔶 GIT-005: Git configuration conversion - 📝
+// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 // ToGitConfig converts the main application's GitConfig to pkg/git Config
 func (gc *GitConfig) ToGitConfig() *git.Config {
 	if gc == nil {
@@ -574,7 +574,7 @@ func (gc *GitConfig) ToGitConfig() *git.Config {
 	return gitConfig
 }
 
-// 🔶 GIT-005: Git configuration integration helper - 📝
+// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 // GetGitConfig returns a properly configured pkg/git Config from the application config
 func GetGitConfig(cfg *Config) *git.Config {
 	if cfg.Git != nil {

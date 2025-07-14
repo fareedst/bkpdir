@@ -1,6 +1,6 @@
 # Enhanced Implementation Token Migration Strategy
 
-> **🔺 DOC-014: Enhanced token migration strategy [DECISION: developer-experience, enables-flexibility, backward-compatible]**
+> **[HIGH] DOC-014: Enhanced token migration strategy [DECISION: developer-experience, enables-flexibility, backward-compatible]**
 
 ## 📑 Purpose
 
@@ -12,10 +12,10 @@ This document defines the comprehensive strategy for migrating existing implemen
 - **Total Standardized Tokens**: 592 tokens across 47 files
 - **Current Standardization Rate**: 100% (achieved by DOC-009)
 - **Priority Distribution**:
-  - ⭐ CRITICAL: ~15% (89 tokens)
-  - 🔺 HIGH: ~35% (207 tokens)
-  - 🔶 MEDIUM: ~30% (178 tokens)
-  - 🔻 LOW: ~20% (118 tokens)
+  - [CRITICAL] CRITICAL: ~15% (89 tokens)
+  - [HIGH] HIGH: ~35% (207 tokens)
+  - [MEDIUM] MEDIUM: ~30% (178 tokens)
+  - [LOW] LOW: ~20% (118 tokens)
 
 ### **Current Token Format**
 ```go
@@ -32,19 +32,19 @@ This document defines the comprehensive strategy for migrating existing implemen
 
 ### **Phase-Based Migration Approach**
 
-#### **Phase 1: Critical Tokens (⭐ Priority)** - **IMMEDIATE**
+#### **Phase 1: Critical Tokens ([CRITICAL] Priority)** - **IMMEDIATE**
 - **Target**: 89 critical priority tokens
 - **Timeline**: Week 1
 - **Approach**: Manual migration with automated validation
 - **Rationale**: Critical tokens provide maximum AI assistant guidance value
 
-#### **Phase 2: High Priority Tokens (🔺 Priority)** - **STAGED**
+#### **Phase 2: High Priority Tokens ([HIGH] Priority)** - **STAGED**
 - **Target**: 207 high priority tokens
 - **Timeline**: Weeks 2-3
 - **Approach**: Semi-automated migration with manual validation
 - **Rationale**: High priority tokens cover major functionality
 
-#### **Phase 3: Medium/Low Priority Tokens (🔶🔻)** - **OPTIONAL**
+#### **Phase 3: Medium/Low Priority Tokens ([MEDIUM][LOW])** - **OPTIONAL**
 - **Target**: 296 medium/low priority tokens
 - **Timeline**: Weeks 4-6 (as time permits)
 - **Approach**: Automated migration with spot validation
@@ -53,24 +53,24 @@ This document defines the comprehensive strategy for migrating existing implemen
 ### **Migration Criteria**
 
 #### **Mandatory Decision Context**
-- ⭐ CRITICAL priority implementations
+- [CRITICAL] CRITICAL priority implementations
 - Components involved in extraction planning (EXTRACT-001-010)
 - User-facing functionality changes
 - Breaking changes or major architectural decisions
 
 #### **Recommended Decision Context**
-- 🔺 HIGH priority implementations
+- [HIGH] HIGH priority implementations
 - Features that enable future development
 - Performance-critical implementations
 - Infrastructure and tooling improvements
 
 #### **Optional Decision Context**
-- 🔶 MEDIUM priority implementations
-- 🔻 LOW priority implementations
+- [MEDIUM] MEDIUM priority implementations
+- [LOW] LOW priority implementations
 - Straightforward bug fixes
 - Routine maintenance tasks
 
-## 🛠️ Automated Migration Tools
+## [ACTION:maintenance] Automated Migration Tools
 
 ### **Enhanced Token Migration Script Extension**
 
@@ -160,51 +160,51 @@ enhance-tokens-validate: ## Validate enhanced tokens
 
 ### **Migration Examples by Priority**
 
-#### **⭐ CRITICAL Priority Migration**
+#### **[CRITICAL] CRITICAL Priority Migration**
 ```go
 // Before
-// ⭐ ARCH-001: Archive naming convention implementation
+// [CRITICAL] ARCH-001: Archive naming convention implementation
 
 // After  
-// ⭐ ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
+// [CRITICAL] ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
 
 // Rationale: Core functionality that blocks extraction work and affects user experience
 ```
 
-#### **🔺 HIGH Priority Migration**
+#### **[HIGH] HIGH Priority Migration**
 ```go
 // Before
-// 🔺 CFG-005: Configuration inheritance system
+// [HIGH] CFG-005: Configuration inheritance system
 
 // After
-// 🔺 CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
+// [HIGH] CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
 
 // Rationale: Enhancement that enables future flexibility while maintaining compatibility
 ```
 
-#### **🔶 MEDIUM Priority Migration**
+#### **[MEDIUM] MEDIUM Priority Migration**
 ```go
 // Before
-// 🔶 DOC-010: Token format suggestions
+// [MEDIUM] DOC-010: Token format suggestions
 
 // After
-// 🔶 DOC-010: Token format suggestions [DECISION: developer-experience, independent]
+// [MEDIUM] DOC-010: Token format suggestions [DECISION: developer-experience, independent]
 
 // Rationale: Development tool that can be implemented independently
 ```
 
-#### **🔻 LOW Priority Migration**
+#### **[LOW] LOW Priority Migration**
 ```go
 // Before  
-// 🔻 TEST-FIX-001: Personal config isolation in tests
+// [LOW] TEST-FIX-001: Personal config isolation in tests
 
 // After
-// 🔻 TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
+// [LOW] TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
 
 // Rationale: Infrastructure improvement required for reliable testing
 ```
 
-## 🔧 Validation and Quality Assurance
+## [ACTION:core-functionality] Validation and Quality Assurance
 
 ### **Enhanced Validation Script**
 
@@ -277,32 +277,32 @@ validate_decision_context() {
 ```bash
 # Generate progress report
 echo "📊 Enhanced Token Migration Progress"
-echo "Phase 1 (Critical): $(count_enhanced_tokens ⭐)/$(count_total_tokens ⭐) ($(calc_percentage)%)"
-echo "Phase 2 (High): $(count_enhanced_tokens 🔺)/$(count_total_tokens 🔺) ($(calc_percentage)%)"
-echo "Phase 3 (Med/Low): $(count_enhanced_tokens 🔶🔻)/$(count_total_tokens 🔶🔻) ($(calc_percentage)%)"
+echo "Phase 1 (Critical): $(count_enhanced_tokens [CRITICAL])/$(count_total_tokens [CRITICAL]) ($(calc_percentage)%)"
+echo "Phase 2 (High): $(count_enhanced_tokens [HIGH])/$(count_total_tokens [HIGH]) ($(calc_percentage)%)"
+echo "Phase 3 (Med/Low): $(count_enhanced_tokens [MEDIUM][LOW])/$(count_total_tokens [MEDIUM][LOW]) ($(calc_percentage)%)"
 ```
 
 ## 🎯 Implementation Timeline
 
 ### **Week 1: Phase 1 Critical Tokens**
 - [ ] Create enhanced migration tools
-- [ ] Manual migration of ⭐ critical tokens (89 tokens)
+- [ ] Manual migration of [CRITICAL] critical tokens (89 tokens)
 - [ ] Validation and testing of enhanced format
 - [ ] Integration with DOC-008 validation system
 
 ### **Week 2-3: Phase 2 High Priority Tokens**  
-- [ ] Semi-automated migration of 🔺 high priority tokens (207 tokens)
+- [ ] Semi-automated migration of [HIGH] high priority tokens (207 tokens)
 - [ ] Manual validation of automated suggestions
 - [ ] Refinement of migration algorithms
 - [ ] Progress tracking and reporting
 
 ### **Week 4-6: Phase 3 Optional Enhancement**
-- [ ] Automated migration of 🔶🔻 medium/low tokens (296 tokens)
+- [ ] Automated migration of [MEDIUM][LOW] medium/low tokens (296 tokens)
 - [ ] Spot validation of automated enhancements
 - [ ] Final validation and quality assurance
 - [ ] Migration completion documentation
 
-## 🔄 Rollback Strategy
+## [ACTION:migration] Rollback Strategy
 
 ### **Backup and Recovery**
 ```bash
@@ -323,7 +323,7 @@ git reset --hard pre-enhanced-tokens-YYYYMMDD
 ## 🎯 Success Criteria
 
 ### **Technical Success**
-- **95%+ Critical Token Enhancement**: All ⭐ tokens have decision context
+- **95%+ Critical Token Enhancement**: All [CRITICAL] tokens have decision context
 - **Validation Success**: >95% enhanced tokens pass validation
 - **Backward Compatibility**: Zero existing functionality broken
 - **Integration Success**: Works with DOC-008/009/011 systems

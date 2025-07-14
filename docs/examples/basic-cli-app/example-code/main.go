@@ -1,4 +1,4 @@
-// EXTRACT-010: Basic CLI Application Example - Integration of config + cli + formatter packages - 🔺
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package main
 
 import (
@@ -417,7 +417,7 @@ func (app *BasicCliApp) runConfigValidateCommand(ctx context.Context) error {
 		return err
 	}
 
-	fmt.Printf("✅ Configuration is valid\n")
+	fmt.Printf("[SUCCESS] Configuration is valid\n")
 	return nil
 }
 

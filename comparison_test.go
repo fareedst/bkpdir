@@ -1,5 +1,9 @@
 // This file is part of bkpdir
-// 🔺 LINT-001: Lint compliance - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
+
+// TEST-VERIFY-001: Archive Verification Test Validation - Archive verification and validation testing [ACTION:validation]
+// Source: comparison_test.go - TEST-VERIFY-001
+// Impact: Test validation for archive verification functionality
 
 package main
 
@@ -51,7 +55,9 @@ func createTestDirectory(rootPath string, files map[string]string) error {
 	return nil
 }
 
-// TestCreateArchiveSnapshot tests the CreateArchiveSnapshot function - 0% coverage
+// COMPARISON-001: See specification.md - Archive Snapshot Creation [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-001
+// IMMUTABLE-REF: Archive Snapshot System
 func TestCreateArchiveSnapshot(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -144,7 +150,9 @@ func TestCreateArchiveSnapshot(t *testing.T) {
 	}
 }
 
-// TestCreateArchiveSnapshot_ErrorCases tests error scenarios
+// COMPARISON-001: See specification.md - Archive Snapshot Error Handling [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-001
+// IMMUTABLE-REF: Archive Snapshot System
 func TestCreateArchiveSnapshot_ErrorCases(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -180,7 +188,9 @@ func TestCreateArchiveSnapshot_ErrorCases(t *testing.T) {
 	}
 }
 
-// TestCalculateArchiveFileHash tests the archive file hash calculation through CreateArchiveSnapshot - 0% coverage
+// COMPARISON-002: See specification.md - Archive File Hash Calculation [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-002
+// IMMUTABLE-REF: Archive Hash System
 func TestCalculateArchiveFileHash(t *testing.T) {
 	tempDir := t.TempDir()
 	archivePath := filepath.Join(tempDir, "test.zip")
@@ -234,7 +244,9 @@ func TestCalculateArchiveFileHash(t *testing.T) {
 	}
 }
 
-// TestIsDirectoryIdenticalToArchive tests the IsDirectoryIdenticalToArchive function - 0% coverage
+// COMPARISON-003: See specification.md - Directory vs Archive Comparison [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-003
+// IMMUTABLE-REF: Directory Comparison System
 func TestIsDirectoryIdenticalToArchive(t *testing.T) {
 	tests := []struct {
 		name            string
@@ -339,7 +351,9 @@ func TestIsDirectoryIdenticalToArchive(t *testing.T) {
 	}
 }
 
-// TestIsDirectoryIdenticalToArchive_ErrorCases tests error scenarios
+// COMPARISON-003: See specification.md - Directory vs Archive Error Handling [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-003
+// IMMUTABLE-REF: Directory Comparison System
 func TestIsDirectoryIdenticalToArchive_ErrorCases(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -388,7 +402,9 @@ func TestIsDirectoryIdenticalToArchive_ErrorCases(t *testing.T) {
 	}
 }
 
-// TestFindMostRecentArchive tests the FindMostRecentArchive function - 0% coverage
+// COMPARISON-004: See specification.md - Find Most Recent Archive [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-004
+// IMMUTABLE-REF: Archive Selection System
 func TestFindMostRecentArchive(t *testing.T) {
 	tempDir := t.TempDir()
 	archiveDir := filepath.Join(tempDir, "archives")
@@ -485,7 +501,9 @@ func TestFindMostRecentArchive(t *testing.T) {
 	})
 }
 
-// TestFindMostRecentArchive_ErrorCases tests error scenarios
+// COMPARISON-004: See specification.md - Find Most Recent Archive Error Handling [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-004
+// IMMUTABLE-REF: Archive Selection System
 func TestFindMostRecentArchive_ErrorCases(t *testing.T) {
 	tests := []struct {
 		name       string
@@ -516,7 +534,9 @@ func TestFindMostRecentArchive_ErrorCases(t *testing.T) {
 	}
 }
 
-// TestCheckForIdenticalArchive tests the CheckForIdenticalArchive function - 0% coverage
+// COMPARISON-005: See specification.md - Identical Archive Check [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-005
+// IMMUTABLE-REF: Archive Comparison System
 func TestCheckForIdenticalArchive(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -640,7 +660,9 @@ func TestCheckForIdenticalArchive(t *testing.T) {
 	})
 }
 
-// TestGetDirectoryTreeSummary tests the GetDirectoryTreeSummary function - 0% coverage
+// COMPARISON-006: See specification.md - Directory Tree Summary [DECISION:analysis]
+// TEST-REF: Feature tracking matrix COMPARISON-006
+// IMMUTABLE-REF: Directory Summary System
 func TestGetDirectoryTreeSummary(t *testing.T) {
 	tempDir := t.TempDir()
 	testDir := filepath.Join(tempDir, "testdir")
@@ -731,7 +753,9 @@ func TestGetDirectoryTreeSummary(t *testing.T) {
 	})
 }
 
-// TestGetDirectoryTreeSummary_ErrorCases tests error scenarios
+// COMPARISON-006: See specification.md - Directory Tree Summary Error Handling [DECISION:analysis]
+// TEST-REF: Feature tracking matrix COMPARISON-006
+// IMMUTABLE-REF: Directory Summary System
 func TestGetDirectoryTreeSummary_ErrorCases(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -762,7 +786,9 @@ func TestGetDirectoryTreeSummary_ErrorCases(t *testing.T) {
 	}
 }
 
-// TestGetArchiveTreeSummary tests the GetArchiveTreeSummary function - 0% coverage
+// COMPARISON-007: See specification.md - Archive Tree Summary [DECISION:analysis]
+// TEST-REF: Feature tracking matrix COMPARISON-007
+// IMMUTABLE-REF: Archive Summary System
 func TestGetArchiveTreeSummary(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -841,7 +867,9 @@ func TestGetArchiveTreeSummary(t *testing.T) {
 	})
 }
 
-// TestGetArchiveTreeSummary_ErrorCases tests error scenarios
+// COMPARISON-007: See specification.md - Archive Tree Summary Error Handling [DECISION:analysis]
+// TEST-REF: Feature tracking matrix COMPARISON-007
+// IMMUTABLE-REF: Archive Summary System
 func TestGetArchiveTreeSummary_ErrorCases(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -933,9 +961,11 @@ func BenchmarkGetDirectoryTreeSummary(b *testing.B) {
 	}
 }
 
-// TestCompareFiles tests the file comparison functionality for FILE-003 feature
+// COMPARISON-009: See specification.md - File Comparison [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-009
+// IMMUTABLE-REF: File Comparison System
 func TestCompareFiles(t *testing.T) {
-	// ⭐ FILE-003: File comparison validation - 🔍
+	// FILE-003: See specification.md - File Comparison Validation [DECISION:discovery]
 	// TEST-REF: Feature tracking matrix FILE-003
 	// IMMUTABLE-REF: Identical File Detection
 
@@ -1033,7 +1063,9 @@ func TestCompareFiles(t *testing.T) {
 	})
 }
 
-// TestCreateDirectorySnapshot tests directory snapshot creation
+// COMPARISON-010: See specification.md - Directory Snapshot Creation [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-010
+// IMMUTABLE-REF: Directory Snapshot System
 func TestCreateDirectorySnapshot(t *testing.T) {
 	tmpDir := t.TempDir()
 
@@ -1073,7 +1105,9 @@ func TestCreateDirectorySnapshot(t *testing.T) {
 	}
 }
 
-// TestCompareSnapshots tests snapshot comparison functionality
+// COMPARISON-011: See specification.md - Snapshot Comparison [DECISION:validation]
+// TEST-REF: Feature tracking matrix COMPARISON-011
+// IMMUTABLE-REF: Snapshot Comparison System
 func TestCompareSnapshots(t *testing.T) {
 	// Create test snapshots
 	snapshot1 := &DirectorySnapshot{

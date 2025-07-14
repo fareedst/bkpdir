@@ -11,6 +11,9 @@ import (
 	"time"
 )
 
+// TEST-INFRA-060-A: Permission simulator creation and initialization
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests permission simulator creation and directory setup
 func TestNewPermissionSimulator(t *testing.T) {
 	config := PermissionConfig{
 		TempDirPrefix: "test_permissions_",
@@ -50,6 +53,9 @@ func TestNewPermissionSimulator(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-061-A: File creation and permission validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests file creation, content, and permission validation
 func TestPermissionSimulator_CreateFile(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "test_create_file_",
@@ -95,6 +101,9 @@ func TestPermissionSimulator_CreateFile(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-062-A: Directory creation and permission validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests directory creation and permission validation
 func TestPermissionSimulator_CreateDir(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "test_create_dir_",
@@ -130,6 +139,9 @@ func TestPermissionSimulator_CreateDir(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-063-A: Permission change and validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests permission change and validation on files
 func TestPermissionSimulator_SetPermission(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Permission testing not fully supported on Windows")
@@ -168,6 +180,9 @@ func TestPermissionSimulator_SetPermission(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-064-A: Permission restoration validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests permission restoration after changes
 func TestPermissionSimulator_RestorePermissions(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Permission testing not fully supported on Windows")
@@ -214,6 +229,9 @@ func TestPermissionSimulator_RestorePermissions(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-065-A: Simulate permission denied error
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests simulation of permission denied errors
 func TestPermissionSimulator_SimulatePermissionDenied(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Permission testing not fully supported on Windows")
@@ -252,6 +270,9 @@ func TestPermissionSimulator_SimulatePermissionDenied(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-066-A: Permission error retrieval validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests retrieval of permission errors
 func TestPermissionSimulator_GetPermissionError(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "test_permission_error_",
@@ -285,6 +306,9 @@ func TestPermissionSimulator_GetPermissionError(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-067-A: Permission error detection validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests detection of permission errors
 func TestPermissionSimulator_IsPermissionError(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "test_is_permission_error_",
@@ -347,6 +371,9 @@ func TestPermissionSimulator_IsPermissionError(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-068-A: Permission scenario generation validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests generation of permission test scenarios
 func TestPermissionSimulator_GeneratePermissionScenarios(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "test_generate_scenarios_",
@@ -391,6 +418,9 @@ func TestPermissionSimulator_GeneratePermissionScenarios(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-069-A: Permission scenario execution validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests execution of permission test scenarios
 func TestPermissionSimulator_RunScenario(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Permission testing not fully supported on Windows")
@@ -418,6 +448,9 @@ func TestPermissionSimulator_RunScenario(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-070-A: Permission change detection validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests detection of permission changes
 func TestPermissionSimulator_DetectPermissionChange(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Permission testing not fully supported on Windows")
@@ -473,6 +506,9 @@ func TestPermissionSimulator_DetectPermissionChange(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-071-A: Permission simulator statistics validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests statistics tracking for permission simulator
 func TestPermissionSimulator_GetStats(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "test_get_stats_",
@@ -507,6 +543,9 @@ func TestPermissionSimulator_GetStats(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-072-A: Permission test helper validation
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests permission test helper functions
 func TestPermissionTestHelper(t *testing.T) {
 	helper, err := NewPermissionTestHelper()
 	if err != nil {
@@ -533,6 +572,9 @@ func TestPermissionTestHelper(t *testing.T) {
 	}
 }
 
+// TEST-INFRA-073-A: Cross-platform permission detection validation - [NOTE]
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Tests cross-platform permission detection
 func TestCrossPlatformDetection(t *testing.T) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix:       "test_cross_platform_",
@@ -567,6 +609,9 @@ func (e *customError) Error() string {
 }
 
 // Benchmarks
+// TEST-INFRA-074-A: Permission simulator file creation performance benchmarking
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Performance benchmarks for file creation
 func BenchmarkPermissionSimulator_CreateFile(b *testing.B) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "bench_create_file_",
@@ -590,6 +635,9 @@ func BenchmarkPermissionSimulator_CreateFile(b *testing.B) {
 	}
 }
 
+// TEST-INFRA-075-A: Permission error detection performance benchmarking
+// DECISION-REF: DEC-005 (Permissions simulation)
+// IMPLEMENTATION-NOTES: Performance benchmarks for permission error detection
 func BenchmarkPermissionSimulator_IsPermissionError(b *testing.B) {
 	ps, err := NewPermissionSimulator(PermissionConfig{
 		TempDirPrefix: "bench_is_permission_error_",

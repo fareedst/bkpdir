@@ -1,6 +1,13 @@
 // This file is part of bkpdir
-// 🔺 LINT-001: Lint compliance - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
+// TEST-GIT-INTEGRATION-001: Git integration test validation - Git integration and metadata testing [ACTION:validation]
+// Source: git.go - GIT-INTEGRATION-001
+// Impact: Validates Git integration functionality
+
+// TEST-SERVICE-GIT-001: Git service test validation - Git service implementation testing [ACTION:validation]
+// Source: git.go - SERVICE-GIT-001
+// Impact: Validates Git service implementation
 package main
 
 import (
@@ -14,7 +21,7 @@ import (
 
 // TestGitIntegration tests the Git integration functionality for GIT-001 feature
 func TestGitIntegration(t *testing.T) {
-	// 🔺 GIT-001: Git integration validation - 🔧
+	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// TEST-REF: Feature tracking matrix GIT-001
 	// IMMUTABLE-REF: Git Integration Requirements
 
@@ -105,7 +112,7 @@ func TestGitIntegration(t *testing.T) {
 
 // TestGitNaming tests the Git naming functionality for GIT-002 feature
 func TestGitNaming(t *testing.T) {
-	// 🔺 GIT-002: Git naming validation - 🔧
+	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// TEST-REF: Feature tracking matrix GIT-002
 	// IMMUTABLE-REF: Git Integration Requirements
 
@@ -224,7 +231,7 @@ func TestGitNaming(t *testing.T) {
 
 // TestGitStatus tests the Git status detection functionality for GIT-003 feature
 func TestGitStatus(t *testing.T) {
-	// 🔺 GIT-003: Git status validation - 🔍
+	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// TEST-REF: Feature tracking matrix GIT-003
 	// IMMUTABLE-REF: Git Integration Requirements
 
@@ -375,10 +382,10 @@ func runGitCommand(t *testing.T, dir string, args ...string) {
 	}
 }
 
-// 🔶 GIT-004: Git submodule functionality tests - 🧪
+// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 // TestGitSubmoduleIntegration tests the Git submodule integration functionality
 func TestGitSubmoduleIntegration(t *testing.T) {
-	// 🔶 GIT-004: Git submodule validation - 🔧
+	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// TEST-REF: Feature tracking matrix GIT-004
 	// IMMUTABLE-REF: Git Integration Requirements
 

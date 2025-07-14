@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/fileops.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/fileops)
 
-⭐ **EXTRACT-006: File Operations and Utilities** - 🔺 HIGH
+[CRITICAL] **ARCH-001: File Operations and Utilities** [ACTION:core-functionality]
 
 This package provides comprehensive file operations and utilities for CLI applications, including atomic operations, path validation, directory traversal, and file comparison utilities extracted from the BkpDir application.
 

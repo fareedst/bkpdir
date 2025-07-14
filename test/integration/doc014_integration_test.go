@@ -1,4 +1,20 @@
-// 🔶 DOC-014: Integration testing - Main test suite for decision framework integration
+// This file is part of bkpdir
+//
+// Package integration provides integration tests for the semantic token system.
+// It tests cross-layer traceability and decision framework integration.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
+
+// TEST-INTEGRATION-001: Integration test validation - Cross-layer traceability and decision framework testing [ACTION:validation]
+// Source: docs/context/ai-decision-framework.md - Decision framework implementation
+// Impact: Core functionality validation for integration testing
+
+// TEST-SERVICE-INTEGRATION-001: Integration service test validation - Integration service implementation testing [ACTION:validation]
+// Source: test/integration/doc014_integration_test.go - Integration service implementation
+// Impact: Integration service validation for integration service implementation
+
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package integration
 
 import (
@@ -12,7 +28,7 @@ import (
 	"time"
 )
 
-// 🔶 DOC-014: Integration test suite configuration
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 type IntegrationTestSuite struct {
 	ProjectRoot     string
 	ContextDir      string
@@ -48,7 +64,7 @@ func (suite *IntegrationTestSuite) setupTestEnvironment(t *testing.T) {
 	// Verify required files exist
 	requiredFiles := []string{
 		filepath.Join(suite.ContextDir, "ai-decision-framework.md"),
-		filepath.Join(suite.ContextDir, "feature-tracking.md"),
+		filepath.Join(suite.ContextDir, "testing.md"),
 		filepath.Join(suite.ContextDir, "ai-assistant-compliance.md"),
 		filepath.Join(suite.ContextDir, "ai-assistant-protocol.md"),
 		filepath.Join(suite.ScriptsDir, "validate-decision-framework.sh"),
@@ -95,7 +111,7 @@ func (suite *IntegrationTestSuite) testDecisionFrameworkCore(t *testing.T) {
 	// Test 2: Required sections exist
 	requiredSections := []string{
 		"🚨 DECISION HIERARCHY",
-		"🛡️ Safety Gates",
+		"[ACTION:validation] Safety Gates",
 		"📑 Scope Boundaries",
 		"📊 Quality Thresholds",
 		"🎯 Goal Alignment",
@@ -134,9 +150,9 @@ func (suite *IntegrationTestSuite) testDecisionFrameworkCore(t *testing.T) {
 	}
 }
 
-// testFeatureTrackingIntegration validates integration with feature-tracking.md
+// testFeatureTrackingIntegration validates integration with testing.md
 func (suite *IntegrationTestSuite) testFeatureTrackingIntegration(t *testing.T) {
-	featureTrackingFile := filepath.Join(suite.ContextDir, "feature-tracking.md")
+	featureTrackingFile := filepath.Join(suite.ContextDir, "testing.md")
 
 	// Test 1: DOC-014 entry exists in feature tracking
 	content, err := os.ReadFile(featureTrackingFile)
@@ -149,7 +165,7 @@ func (suite *IntegrationTestSuite) testFeatureTrackingIntegration(t *testing.T) 
 
 	// Test 2: DOC-014 feature entry exists
 	if !strings.Contains(trackingContent, "DOC-014") {
-		t.Error("DOC-014 entry not found in feature-tracking.md")
+		t.Error("DOC-014 entry not found in testing.md")
 		return
 	}
 
@@ -203,11 +219,11 @@ func (suite *IntegrationTestSuite) testProtocolIntegration(t *testing.T) {
 	// Test 2: Key protocols include decision validation
 	protocols := []string{
 		"🆕 NEW FEATURE Protocol",
-		"🔧 MODIFICATION Protocol",
+		"[ACTION:core-functionality] MODIFICATION Protocol",
 		"🐛 BUG FIX Protocol",
 		"⚙️ CONFIG CHANGE Protocol",
 		"🔌 API CHANGE Protocol",
-		"🔄 REFACTORING Protocol",
+		"[ACTION:migration] REFACTORING Protocol",
 	}
 
 	// Count how many protocols include decision framework validation
@@ -370,13 +386,13 @@ func (suite *IntegrationTestSuite) testTokenConsistency(t *testing.T) {
 			continue
 		}
 
-		// 🔍 Check for proper token format: // [ICON] DOC-014-EXAMPLE: Description [CONTEXT: tags]
+		// [CHECK] Check for proper token format: // [ICON] DOC-014-EXAMPLE: Description [CONTEXT: tags]
 		if strings.Contains(line, "// ") && strings.Contains(line, "DOC-"+"014:") {
 			validTokenCount++
 
 			// Basic format validation
-			if !strings.Contains(line, "🔶") && !strings.Contains(line, "⭐") &&
-				!strings.Contains(line, "🔺") && !strings.Contains(line, "🔻") {
+			if !strings.Contains(line, "[MEDIUM]") && !strings.Contains(line, "[CRITICAL]") &&
+				!strings.Contains(line, "[HIGH]") && !strings.Contains(line, "[LOW]") {
 				t.Errorf("DOC-014 token missing priority icon: %s", line)
 			}
 		}

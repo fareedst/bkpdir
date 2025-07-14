@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// ⭐ EXTRACT-005: Generic dry-run operation support extracted from main.go - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // DefaultDryRunManager provides standard dry-run functionality
 type DefaultDryRunManager struct{}

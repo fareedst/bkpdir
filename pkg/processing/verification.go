@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Verification systems - Data integrity checking patterns extracted from verify.go - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
 import (

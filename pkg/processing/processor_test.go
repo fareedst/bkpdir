@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Processing package structure - Comprehensive test suite for all components - 🧪
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
 import (
@@ -9,7 +9,9 @@ import (
 	"time"
 )
 
-// Test naming provider functionality
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Naming System
 func TestNamingProvider(t *testing.T) {
 	np := NewNamingProvider()
 
@@ -57,7 +59,9 @@ func TestNamingProvider(t *testing.T) {
 	}
 }
 
-// Test verification provider functionality
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Verification System
 func TestVerificationProvider(t *testing.T) {
 	verifier := NewSHA256Verifier()
 
@@ -89,7 +93,9 @@ func TestVerificationProvider(t *testing.T) {
 	}
 }
 
-// Test verification manager functionality
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Verification System
 func TestVerificationManager(t *testing.T) {
 	vm := NewVerificationManager()
 
@@ -120,7 +126,9 @@ func TestVerificationManager(t *testing.T) {
 	}
 }
 
-// Test pipeline functionality
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Pipeline System
 func TestPipeline(t *testing.T) {
 	pipeline := NewPipeline("test-pipeline")
 
@@ -162,7 +170,9 @@ func TestPipeline(t *testing.T) {
 	}
 }
 
-// Test concurrent processing functionality
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Concurrent System
 func TestConcurrentProcessor(t *testing.T) {
 	// Create test processor function
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {
@@ -210,7 +220,9 @@ func TestConcurrentProcessor(t *testing.T) {
 	}
 }
 
-// Test context cancellation
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Context System
 func TestContextCancellation(t *testing.T) {
 	// Create a slow processor function that always checks for cancellation
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {
@@ -280,7 +292,9 @@ func TestContextCancellation(t *testing.T) {
 		err, result.FailedItems, result.SuccessfulItems, result.TotalItems, len(items))
 }
 
-// Test utility functions
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Processing Utility System
 func TestUtilityFunctions(t *testing.T) {
 	// Test ProcessItems convenience function
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {

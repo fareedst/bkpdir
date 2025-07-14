@@ -1,3 +1,18 @@
+// This file is part of bkpdir
+//
+// Package main provides file statistics functionality for BkpDir.
+// It handles gathering and formatting file statistics for output display.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
+
+// STATS-FEATURES-001: Statistics features specification - File statistics and information gathering [ACTION:format-processing]
+// Source: file_stats.go - STATS-FEATURES-001
+// Impact: Core functionality requirement for statistics features
+
+// SERVICE-STATS-001: Statistics service architecture decision - Statistics service implementation [ACTION:core-functionality]
+// Source: file_stats.go - SERVICE-STATS-001
+// Impact: Statistics service implementation decision
 package main
 
 import (
@@ -7,7 +22,7 @@ import (
 	"time"
 )
 
-// ⭐ OUT-002: File stat information gathering - 📝
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // FileStatInfo contains statistical information about a file for output formatting
 type FileStatInfo struct {
 	Path      string      // Full file path
@@ -20,7 +35,7 @@ type FileStatInfo struct {
 	Type      string      // File type (regular, directory, symlink)
 }
 
-// ⭐ OUT-002: File stat information gathering - 🔧
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // GatherFileStatInfo gathers statistical information about a file for output formatting.
 // It returns a FileStatInfo struct containing path, size, modification time, permissions, and type.
 func GatherFileStatInfo(path string) (*FileStatInfo, error) {
@@ -41,7 +56,7 @@ func GatherFileStatInfo(path string) (*FileStatInfo, error) {
 	}, nil
 }
 
-// ⭐ OUT-002: File stat information gathering - 🔧
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // formatHumanSize converts a size in bytes to a human-readable format.
 // Examples: 1024 -> "1.0KB", 1536 -> "1.5KB", 1048576 -> "1.0MB"
 func formatHumanSize(size int64) string {
@@ -66,7 +81,7 @@ func formatHumanSize(size int64) string {
 	}
 }
 
-// ⭐ OUT-002: File stat information gathering - 🔧
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // getFileType determines the type of a file based on its FileInfo.
 // Returns "regular", "directory", "symlink", "device", "pipe", "socket", or "other".
 func getFileType(info os.FileInfo) string {

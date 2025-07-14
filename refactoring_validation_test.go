@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-// 🔺 REFACTOR-006: Find project root directory
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func findProjectRoot() (string, error) {
 	// Start from current directory and walk up to find project root
 	currentDir, err := os.Getwd()
@@ -33,7 +33,7 @@ func findProjectRoot() (string, error) {
 	// If go.mod not found, try looking for key project files
 	dir = currentDir
 	for {
-		if _, err := os.Stat(filepath.Join(dir, "docs", "context", "feature-tracking.md")); err == nil {
+		if _, err := os.Stat(filepath.Join(dir, "docs", "context", "testing.md")); err == nil {
 			return dir, nil
 		}
 		parent := filepath.Dir(dir)
@@ -47,7 +47,7 @@ func findProjectRoot() (string, error) {
 	return currentDir, nil
 }
 
-// 🔺 REFACTOR-006: Get absolute path from project root
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func getProjectPath(relativePath string) (string, error) {
 	projectRoot, err := findProjectRoot()
 	if err != nil {
@@ -56,7 +56,7 @@ func getProjectPath(relativePath string) (string, error) {
 	return filepath.Join(projectRoot, relativePath), nil
 }
 
-// 🔺 REFACTOR-006: Refactoring validation - Comprehensive test suite validation - 🧪
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func TestRefactoringValidation(t *testing.T) {
 	// Skip if not in project root context
 	projectRoot, err := findProjectRoot()
@@ -81,7 +81,7 @@ func TestRefactoringValidation(t *testing.T) {
 	t.Run("ExtractionReadiness", testRefactorExtractionReadiness)
 }
 
-// 🔺 REFACTOR-006: Test validation - Full test suite execution validation - 🧪
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func testComprehensiveTestSuite(t *testing.T) {
 	// Execute full test suite and validate results
 	cmd := exec.Command("go", "test", "./...")
@@ -109,13 +109,13 @@ func testComprehensiveTestSuite(t *testing.T) {
 	}
 
 	if passCount >= len(expectedPasses)/2 {
-		t.Logf("✅ Most test packages passed successfully (%d/%d)", passCount, len(expectedPasses))
+		t.Logf("[SUCCESS] Most test packages passed successfully (%d/%d)", passCount, len(expectedPasses))
 	} else {
 		t.Logf("⚠️ Some test packages may have issues, but continuing validation")
 	}
 }
 
-// 🔺 REFACTOR-006: Performance validation - Benchmark baseline verification - 📊
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func testPerformanceBaseline(t *testing.T) {
 	// Execute performance benchmarks to establish baseline
 	cmd := exec.Command("go", "test", "-bench=.", "-benchmem", "./...")
@@ -143,18 +143,18 @@ func testPerformanceBaseline(t *testing.T) {
 	for _, benchmark := range expectedBenchmarks {
 		if strings.Contains(outputStr, benchmark) {
 			foundBenchmarks++
-			t.Logf("✅ Benchmark found: %s", benchmark)
+			t.Logf("[SUCCESS] Benchmark found: %s", benchmark)
 		}
 	}
 
 	if foundBenchmarks >= len(expectedBenchmarks)/2 {
-		t.Logf("✅ Performance baseline benchmarks executed successfully (%d/%d)", foundBenchmarks, len(expectedBenchmarks))
+		t.Logf("[SUCCESS] Performance baseline benchmarks executed successfully (%d/%d)", foundBenchmarks, len(expectedBenchmarks))
 	} else {
 		t.Logf("⚠️ Some benchmarks may not have run, but baseline can still be established")
 	}
 }
 
-// 🔺 REFACTOR-006: Token consistency validation - Implementation token compliance - 🔍
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func testImplementationTokens(t *testing.T) {
 	// Check if validation script exists
 	scriptPath := "./scripts/validate-icon-enforcement.sh"
@@ -178,9 +178,9 @@ func testImplementationTokens(t *testing.T) {
 	// Validate standardization rate
 	if strings.Contains(outputStr, "Standardization rate: 100%") ||
 		strings.Contains(outputStr, "Excellent standardization rate") {
-		t.Logf("✅ Excellent token standardization rate found")
+		t.Logf("[SUCCESS] Excellent token standardization rate found")
 	} else if strings.Contains(outputStr, "Standardization rate:") {
-		t.Logf("✅ Token standardization rate found in output")
+		t.Logf("[SUCCESS] Token standardization rate found in output")
 	}
 
 	// Validate REFACTOR tokens exist
@@ -197,11 +197,11 @@ func testImplementationTokens(t *testing.T) {
 	}
 
 	if foundTokens >= len(refactorTokens)/2 {
-		t.Logf("✅ Implementation token consistency validated (%d/%d tokens found)", foundTokens, len(refactorTokens))
+		t.Logf("[SUCCESS] Implementation token consistency validated (%d/%d tokens found)", foundTokens, len(refactorTokens))
 	}
 }
 
-// 🔺 REFACTOR-006: Documentation synchronization - Context file validation - 📝
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func testDocumentationSynchronization(t *testing.T) {
 	// Validate that key documentation files exist and contain expected content
 	requiredDocs := map[string][]string{
@@ -246,18 +246,18 @@ func testDocumentationSynchronization(t *testing.T) {
 
 		if contentFound >= len(expectedContent)/2 {
 			validatedDocs++
-			t.Logf("✅ Documentation file validated: %s", docFile)
+			t.Logf("[SUCCESS] Documentation file validated: %s", docFile)
 		} else {
 			t.Logf("⚠️ Documentation file may need updates: %s", docFile)
 		}
 	}
 
 	if validatedDocs >= len(requiredDocs)/2 {
-		t.Logf("✅ Documentation synchronization verified (%d/%d files)", validatedDocs, len(requiredDocs))
+		t.Logf("[SUCCESS] Documentation synchronization verified (%d/%d files)", validatedDocs, len(requiredDocs))
 	}
 }
 
-// 🔺 REFACTOR-006: Extraction readiness - Pre-extraction criteria validation - 🛡️
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func testRefactorExtractionReadiness(t *testing.T) {
 	// Validate extraction readiness criteria
 	readinessCriteria := map[string]func() bool{
@@ -287,17 +287,17 @@ func testRefactorExtractionReadiness(t *testing.T) {
 	for criterion, check := range readinessCriteria {
 		if check() {
 			criteriaMet++
-			t.Logf("✅ Extraction readiness criterion satisfied: %s", criterion)
+			t.Logf("[SUCCESS] Extraction readiness criterion satisfied: %s", criterion)
 		} else {
 			t.Logf("⚠️ Extraction readiness criterion needs attention: %s", criterion)
 		}
 	}
 
 	if criteriaMet >= totalCriteria*3/4 {
-		t.Logf("🎯 EXTRACTION READINESS: MOSTLY READY ✅ (%d/%d criteria met)", criteriaMet, totalCriteria)
+		t.Logf("🎯 EXTRACTION READINESS: MOSTLY READY [SUCCESS] (%d/%d criteria met)", criteriaMet, totalCriteria)
 		t.Logf("Authorization granted for component extraction with minor preparations")
 	} else if criteriaMet >= totalCriteria/2 {
-		t.Logf("⚠️ EXTRACTION READINESS: PARTIAL 🔶 (%d/%d criteria met)", criteriaMet, totalCriteria)
+		t.Logf("⚠️ EXTRACTION READINESS: PARTIAL [MEDIUM] (%d/%d criteria met)", criteriaMet, totalCriteria)
 		t.Logf("Some preparation work needed before extraction")
 	} else {
 		t.Logf("🚨 EXTRACTION READINESS: BLOCKED ❌ (%d/%d criteria met)", criteriaMet, totalCriteria)
@@ -305,20 +305,20 @@ func testRefactorExtractionReadiness(t *testing.T) {
 	}
 }
 
-// 🔺 REFACTOR-006: Quality assurance - Overall validation summary - ✅
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func TestValidationSummary(t *testing.T) {
-	t.Log("📊 REFACTOR-006 Validation Summary:")
-	t.Log("✅ Test Suite: All packages passing")
-	t.Log("✅ Performance: Baseline established, no degradation")
-	t.Log("✅ Tokens: 99% standardization rate")
-	t.Log("✅ Documentation: Complete synchronization")
-	t.Log("✅ Extraction: All criteria satisfied")
+	t.Log("[INFO] REFACTOR-006 Validation Summary:")
+	t.Log("[SUCCESS] Test Suite: All packages passing")
+	t.Log("[SUCCESS] Performance: Baseline established, no degradation")
+	t.Log("[SUCCESS] Tokens: 99% standardization rate")
+	t.Log("[SUCCESS] Documentation: Complete synchronization")
+	t.Log("[SUCCESS] Extraction: All criteria satisfied")
 	t.Log("")
 	t.Log("🎯 FINAL RESULT: REFACTOR-006 COMPLETED SUCCESSFULLY")
 	t.Log("🚀 NEXT PHASE: Component extraction authorized (EXTRACT-001, EXTRACT-002)")
 }
 
-// 🔺 REFACTOR-006: Validation framework - Test infrastructure verification - 🔧
+// REFACTOR-006: See architecture.md - Refactoring Validation [DECISION:maintenance]
 func TestValidationInfrastructure(t *testing.T) {
 	// Skip if not in project root context
 	projectRoot, err := findProjectRoot()
@@ -349,7 +349,7 @@ func TestValidationInfrastructure(t *testing.T) {
 		if _, err := os.Stat(tool); os.IsNotExist(err) {
 			t.Logf("⚠️ Validation tool missing: %s", tool)
 		} else {
-			t.Logf("✅ Validation tool available: %s", tool)
+			t.Logf("[SUCCESS] Validation tool available: %s", tool)
 			toolsFound++
 		}
 	}
@@ -371,7 +371,7 @@ func TestValidationInfrastructure(t *testing.T) {
 	targetsFound := 0
 	for _, target := range expectedTargets {
 		if strings.Contains(makefileStr, target+":") {
-			t.Logf("✅ Makefile target found: %s", target)
+			t.Logf("[SUCCESS] Makefile target found: %s", target)
 			targetsFound++
 		} else {
 			t.Logf("⚠️ Makefile target missing: %s", target)
@@ -379,6 +379,6 @@ func TestValidationInfrastructure(t *testing.T) {
 	}
 
 	if targetsFound >= len(expectedTargets)/2 {
-		t.Logf("✅ Validation infrastructure mostly ready (%d/%d tools, %d/%d targets)", toolsFound, len(validationTools), targetsFound, len(expectedTargets))
+		t.Logf("[SUCCESS] Validation infrastructure mostly ready (%d/%d tools, %d/%d targets)", toolsFound, len(validationTools), targetsFound, len(expectedTargets))
 	}
 }

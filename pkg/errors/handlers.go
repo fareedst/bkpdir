@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Centralized error handling
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // HandleError provides centralized error handling with interface abstractions
 // This function processes different types of errors and returns appropriate status codes
 func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
@@ -64,14 +64,14 @@ func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
 	}
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔍 Application error handling
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // HandleApplicationError handles ApplicationError instances with proper formatting
 func HandleApplicationError(err *ApplicationError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	formatter.PrintError(err.Error())
 	return err.GetStatusCode()
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Context-aware error handling
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // HandleErrorWithContext handles errors with context information for enhanced debugging
 func HandleErrorWithContext(err error, errorCtx *ErrorContext, cfg ErrorConfig, formatter ErrorFormatter) int {
 	if err == nil {
@@ -104,7 +104,7 @@ func HandleErrorWithContext(err error, errorCtx *ErrorContext, cfg ErrorConfig, 
 	return HandleApplicationError(contextualError, cfg, formatter)
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Error recovery framework
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorRecoveryStrategy defines a strategy for attempting to recover from an error
 type ErrorRecoveryStrategy interface {
 	CanRecover(err error, context *ErrorContext) bool
@@ -112,7 +112,7 @@ type ErrorRecoveryStrategy interface {
 	GetRecoveryDescription() string
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Disk space recovery strategy
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // DiskSpaceRecoveryStrategy attempts to recover from disk space errors
 type DiskSpaceRecoveryStrategy struct {
 	MinFreeSpace int64 // Minimum free space required in bytes
@@ -125,13 +125,13 @@ func NewDiskSpaceRecoveryStrategy(minFreeSpace int64) *DiskSpaceRecoveryStrategy
 	}
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔍 Disk space recovery capability
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // CanRecover checks if a disk space error can potentially be recovered from
 func (rs *DiskSpaceRecoveryStrategy) CanRecover(err error, context *ErrorContext) bool {
 	return IsDiskFullError(err)
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Disk space recovery attempt
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Recover attempts to recover from disk space errors by checking available space
 func (rs *DiskSpaceRecoveryStrategy) Recover(err error, context *ErrorContext) error {
 	if !rs.CanRecover(err, context) {
@@ -146,13 +146,13 @@ func (rs *DiskSpaceRecoveryStrategy) Recover(err error, context *ErrorContext) e
 	return err
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔍 Recovery description
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetRecoveryDescription returns a description of what this strategy attempts
 func (rs *DiskSpaceRecoveryStrategy) GetRecoveryDescription() string {
 	return "Attempts to recover from disk space errors by checking available space and suggesting cleanup actions"
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Error recovery manager
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorRecoveryManager manages multiple recovery strategies
 type ErrorRecoveryManager struct {
 	strategies []ErrorRecoveryStrategy
@@ -170,13 +170,13 @@ func NewErrorRecoveryManager(classifier ErrorClassifier) *ErrorRecoveryManager {
 	}
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Recovery strategy registration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // AddStrategy adds a recovery strategy to the manager
 func (rm *ErrorRecoveryManager) AddStrategy(strategy ErrorRecoveryStrategy) {
 	rm.strategies = append(rm.strategies, strategy)
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Error recovery attempt
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TryRecover attempts to recover from an error using available strategies
 func (rm *ErrorRecoveryManager) TryRecover(err error, context *ErrorContext) error {
 	if err == nil {
@@ -201,7 +201,7 @@ func (rm *ErrorRecoveryManager) TryRecover(err error, context *ErrorContext) err
 	return err
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Enhanced error handling with recovery
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // HandleErrorWithRecovery handles errors with automatic recovery attempts
 func HandleErrorWithRecovery(
 	err error,
@@ -226,7 +226,7 @@ func HandleErrorWithRecovery(
 	return HandleErrorWithContext(err, errorCtx, cfg, formatter)
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔍 Path validation utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ValidateDirectoryPath validates that a path points to an accessible directory
 // Extracted from original errors.go with enhanced error handling
 func ValidateDirectoryPath(path string, cfg ErrorConfig) error {
@@ -267,7 +267,7 @@ func ValidateDirectoryPath(path string, cfg ErrorConfig) error {
 	return nil
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔍 File validation utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ValidateFilePath validates that a path points to an accessible file
 // Extracted from original errors.go with enhanced error handling
 func ValidateFilePath(path string, cfg ErrorConfig) error {
@@ -308,14 +308,14 @@ func ValidateFilePath(path string, cfg ErrorConfig) error {
 	return nil
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Safe filesystem operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // SafeMkdirAll creates directories with enhanced error handling and context support
 // Extracted from original errors.go with interface abstractions
 func SafeMkdirAll(path string, perm os.FileMode, cfg ErrorConfig) error {
 	return SafeMkdirAllWithContext(context.Background(), path, perm, cfg)
 }
 
-// ⭐ EXTRACT-002: Error handler functions - 🔧 Context-aware safe directory creation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // SafeMkdirAllWithContext creates directories with context support and enhanced error handling
 func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode, cfg ErrorConfig) error {
 	// Check for cancellation

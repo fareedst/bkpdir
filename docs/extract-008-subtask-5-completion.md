@@ -1,6 +1,6 @@
 # EXTRACT-008 Subtask 5 Completion Summary
 
-> **🔺 EXTRACT-008: Package interdependency mapping - 📊 Subtask completion summary**
+> **[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Subtask completion summary**
 
 ## 📑 Task Overview
 
@@ -108,7 +108,7 @@
 - [x] Cross-references to related documentation
 - [x] Visual elements enhance understanding (matrices, tables)
 
-## 🔄 EXTRACT-008 Overall Status
+## [ACTION:migration] EXTRACT-008 Overall Status
 
 ### Subtask Completion Summary
 - **Subtask 1**: ✅ CLI Template Application (2025-01-02)
@@ -180,4 +180,4 @@
 - **Troubleshooting Support**: Common issues and resolution guidance
 - **Adoption Strategy**: Clear path for progressive package adoption
 
-**🔺 EXTRACT-008: Package interdependency mapping - 📊 Complete subtask 5 with comprehensive package analysis and integration guidance** 
+**[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Complete subtask 5 with comprehensive package analysis and integration guidance** 

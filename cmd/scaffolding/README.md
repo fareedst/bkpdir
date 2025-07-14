@@ -134,7 +134,7 @@ my-project/
     └── main_test.go      # Basic application tests
 ```
 
-## 🛠️ Development
+## [ACTION:maintenance] Development
 
 ### Build and Test
 
@@ -238,7 +238,7 @@ Structured error handling throughout:
 # Result: CLI with Git branch/commit detection
 ```
 
-## 🔄 EXTRACT-008 Integration
+## [ACTION:migration] [HIGH] EXTRACT-008: Project scaffolding system [ACTION:maintenance]
 
 This scaffolding system demonstrates:
 
@@ -256,14 +256,14 @@ The scaffolding generator is part of EXTRACT-008 (CLI Application Template). Con
 3. Update documentation and examples
 4. Test generated projects build successfully
 
-## 📝 Implementation Tokens
+## [ACTION:format-processing] Implementation Tokens
 
 Key implementation areas:
 
-- `🔺 EXTRACT-008: Project scaffolding system` - Core generator functionality
-- `🔺 EXTRACT-008: Component selection interface` - Package selection UI
-- `🔺 EXTRACT-008: Project template generation` - File generation system
-- `🔺 EXTRACT-008: Template management system` - Template coordination
+- ` [HIGH] EXTRACT-008: Project scaffolding system [ACTION:maintenance]` - Core generator functionality
+- ` [HIGH] EXTRACT-008: Component selection interface [ACTION:maintenance]` - Package selection UI
+- ` [HIGH] EXTRACT-008: Project template generation [ACTION:maintenance]` - File generation system
+- ` [HIGH] EXTRACT-008: Template management system [ACTION:maintenance]` - Template coordination
 
 ---
 

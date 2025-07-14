@@ -1,4 +1,4 @@
-// 🔶 DOC-014: Decision validation tools test suite
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package validation
 
 import (
@@ -448,11 +448,11 @@ func createTestProject(t *testing.T, projectRoot string) {
 
 	// Create basic files
 	files := map[string]string{
-		"docs/context/feature-tracking.md": `# Feature Tracking Matrix
+		"docs/context/testing.md": `# Testing Requirements and Architecture
 ## Feature Registry
 | Feature ID | Status |
 |------------|--------|
-| TEST-001   | ✅ Completed |
+| TEST-001   | [SUCCESS] Completed |
 `,
 		"docs/context/ai-decision-framework.md": `# AI Decision Framework
 ## Decision Hierarchy
@@ -468,7 +468,7 @@ exit 0
 		"go.mod": `module bkpdir
 go 1.21
 `,
-		"main.go": `// ⭐ TEST-001: Test main file
+		"main.go": `// TEST-001: See specification.md - Test Main File [DECISION:maintenance]
 package main
 func main() {}
 `,

@@ -1,772 +1,470 @@
-# Package formatter
+# Formatter Package
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/formatter.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/formatter)
+The formatter package provides comprehensive output formatting functionality for BkpDir operations. It supports both printf-style and template-based formatting with optional delayed output collection.
 
-## Overview
+## Architecture Overview
 
-Package `formatter` provides a comprehensive output formatting system extracted from the BkpDir application. It supports multiple formatting approaches including printf-style formatting, Go template-based formatting, regex pattern extraction, and output collection, designed to handle complex CLI output requirements while remaining flexible and testable.
+### AI-First Design Principles
 
-### Key Features
+The formatter package follows AI-first design principles to ensure optimal AI assistant comprehension and maintenance:
 
-- **Dual Formatting Support**: Both printf-style and Go template-based formatting
-- **Pattern Extraction**: Regex-based data extraction from filenames and text
-- **Output Collection**: Delayed output management for batch operations
-- **Error Formatting**: Specialized formatting for different error types
-- **Template Engine**: Full Go text/template support with custom functions
-- **Configuration-Driven**: All format strings and templates from configuration
-- **Interface-Based**: Clean abstractions for testing and dependency injection
+1. **Clear Component Separation**: Each component has a single, well-defined responsibility
+2. **Interface Standardization**: Consistent interface patterns across all components
+3. **Structured Data Types**: JSON-serializable data structures for easy AI comprehension
+4. **Context-Aware Operations**: AI-friendly context structures for complex operations
+5. **Comprehensive Error Handling**: Consistent error patterns with detailed context
 
-### Design Philosophy
+### Component Architecture
 
-The `formatter` package was extracted to provide a reusable formatting system that can handle both simple printf-style formatting and complex template-based output generation. It emphasizes flexibility, allowing applications to choose the most appropriate formatting approach for their needs while maintaining consistent output patterns.
-
-## Installation
-
-```bash
-go get github.com/bkpdir/pkg/formatter
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    AIFirstFormatter                        │
+│  (Primary Interface - Composes All Capabilities)          │
+├─────────────────────────────────────────────────────────────┤
+│  CoreFormatter  │  AIPatternExtractor  │  AIOutputManager │
+│  (Pure Logic)   │  (Data Extraction)   │  (I/O Handling) │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+                    ┌─────────────────┐
+                    │ FormatterConfig │
+                    │ (Configuration) │
+                    └─────────────────┘
 ```
 
-## Quick Start
+## Core Interfaces
 
-### Basic Printf-Style Formatting
+### AIFirstFormatter
+
+The primary interface that combines all formatting capabilities:
 
 ```go
-package main
-
-import (
-    "fmt"
+type AIFirstFormatter interface {
+    // Core formatting capabilities
+    CoreFormatter
+    AIPatternExtractor
+    AIOutputManager
     
-    "github.com/bkpdir/pkg/formatter"
-)
-
-func main() {
-    // Create a simple config provider
-    config := &SimpleConfigProvider{
-        formats: map[string]string{
-            "created_archive": "✅ Archive created: %s",
-            "list_archive":    "%s (created: %s)",
-        },
-    }
+    // Configuration management
+    SetConfig(config FormatterConfig) error
+    GetConfig() FormatterConfig
     
-    // Create formatter
-    f := formatter.NewFormatter(config)
-    
-    // Format messages
-    created := f.FormatCreatedArchive("/path/to/archive.zip")
-    fmt.Println(created) // ✅ Archive created: /path/to/archive.zip
-    
-    list := f.FormatListArchive("/path/to/archive.zip", "2024-01-01 12:00:00")
-    fmt.Println(list) // /path/to/archive.zip (created: 2024-01-01 12:00:00)
-}
-
-type SimpleConfigProvider struct {
-    formats map[string]string
-}
-
-func (c *SimpleConfigProvider) GetFormatString(formatType string) string {
-    return c.formats[formatType]
-}
-
-func (c *SimpleConfigProvider) GetTemplateString(templateType string) string {
-    return ""
-}
-
-func (c *SimpleConfigProvider) GetPattern(patternType string) string {
-    return ""
-}
-
-func (c *SimpleConfigProvider) GetErrorFormat(errorType string) string {
-    return ""
+    // AI-friendly operations
+    FormatWithContext(ctx FormatContext) (string, error)
+    ExtractWithContext(ctx ExtractContext) (interface{}, error)
+    PrintWithContext(ctx PrintContext) error
 }
 ```
 
-### Template-Based Formatting
+**Key Features:**
+- **Composition Pattern**: Combines three specialized interfaces
+- **Configuration Management**: Dynamic configuration updates
+- **Context-Aware Operations**: AI-friendly operation contexts
+- **Error Handling**: Comprehensive error context and validation
+
+### CoreFormatter
+
+Provides pure formatting operations without side effects:
 
 ```go
-package main
-
-import (
-    "fmt"
+type CoreFormatter interface {
+    // Pure formatting operations (no side effects)
+    FormatArchive(path string, formatType FormatType) (string, error)
+    FormatBackup(path string, formatType FormatType) (string, error)
+    FormatConfig(name, value, source string) (string, error)
+    FormatError(err error, errorType ErrorType) (string, error)
     
-    "github.com/bkpdir/pkg/formatter"
-)
-
-func main() {
-    // Create config with templates
-    config := &TemplateConfigProvider{
-        templates: map[string]string{
-            "created_archive": "🎉 Created {{.filename}} ({{.size}} bytes) at {{.timestamp}}",
-            "archive_info":    "Archive: {{.name}}\nBranch: {{.branch}}\nCommit: {{.commit}}",
-        },
-        patterns: map[string]string{
-            "archive_filename": `^(?P<prefix>\w+)-(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{6})-(?P<branch>\w+)-(?P<commit>\w+)-?(?P<note>.*)?\.zip$`,
-        },
-    }
+    // Template-based formatting
+    FormatWithTemplate(template string, data map[string]interface{}) (string, error)
+    FormatWithPlaceholders(format string, data map[string]string) (string, error)
     
-    // Create template formatter
-    tf := formatter.NewTemplateFormatter(config)
-    
-    // Extract data from filename using pattern
-    filename := "bkp-2024-01-01T120000-main-abc123-initial.zip"
-    data := tf.ExtractArchiveFilenameData(filename)
-    
-    // Add additional data
-    data["filename"] = filename
-    data["size"] = "1024"
-    data["timestamp"] = "2024-01-01 12:00:00"
-    
-    // Format with template
-    result := tf.TemplateCreatedArchive(data)
-    fmt.Println(result) // 🎉 Created bkp-2024-01-01T120000-main-abc123-initial.zip (1024 bytes) at 2024-01-01 12:00:00
-}
-
-type TemplateConfigProvider struct {
-    templates map[string]string
-    patterns  map[string]string
-}
-
-func (c *TemplateConfigProvider) GetFormatString(formatType string) string {
-    return ""
-}
-
-func (c *TemplateConfigProvider) GetTemplateString(templateType string) string {
-    return c.templates[templateType]
-}
-
-func (c *TemplateConfigProvider) GetPattern(patternType string) string {
-    return c.patterns[patternType]
-}
-
-func (c *TemplateConfigProvider) GetErrorFormat(errorType string) string {
-    return ""
+    // AI-friendly operations
+    FormatWithContext(ctx FormatContext) (string, error)
 }
 ```
 
-## API Reference
+**Key Features:**
+- **Pure Functions**: No side effects, deterministic output
+- **Type Safety**: Strongly typed format and error types
+- **Template Support**: Both Go templates and placeholder substitution
+- **Context Awareness**: AI-friendly context structures
 
-### Core Interfaces
+### AIPatternExtractor
 
-#### OutputFormatterInterface
-
-The main interface combining all formatting capabilities:
+Provides structured data extraction from text patterns:
 
 ```go
-type OutputFormatterInterface interface {
-    Formatter
-    TemplateFormatter
-    ErrorFormatter
-    PrintFormatter
-    PatternExtractor
+type AIPatternExtractor interface {
+    // Core extraction operations
+    ExtractArchiveData(filename string) (AIArchiveData, error)
+    ExtractBackupData(filename string) (AIBackupData, error)
+    ExtractConfigData(line string) (AIConfigData, error)
+    ExtractTimestampData(timestamp string) (AITimestampData, error)
     
-    // Delayed output support
+    // Generic pattern extraction
+    ExtractPattern(pattern, text string) (map[string]string, error)
+    
+    // AI-friendly operations
+    ExtractWithContext(ctx ExtractContext) (interface{}, error)
+}
+```
+
+**Key Features:**
+- **Structured Data**: JSON-serializable data structures
+- **Type Safety**: Strongly typed return values
+- **Pattern Flexibility**: Configurable regex patterns
+- **Error Context**: Detailed error information
+
+### AIOutputManager
+
+Provides output handling with delayed output support:
+
+```go
+type AIOutputManager interface {
+    // Direct output operations
+    Print(message string) error
+    PrintError(message string) error
+    
+    // Delayed output operations
+    Collect(message AIOutputMessage) error
+    Flush() error
+    FlushStdout() error
+    FlushStderr() error
+    Clear() error
+    
+    // Output state management
     IsDelayedMode() bool
-    GetCollector() *OutputCollector
-    SetCollector(collector *OutputCollector)
-}
-```
-
-#### Formatter
-
-Printf-style formatting operations:
-
-```go
-type Formatter interface {
-    FormatCreatedArchive(path string) string
-    FormatIdenticalArchive(path string) string
-    FormatListArchive(path, creationTime string) string
-    FormatConfigValue(name, value, source string) string
-    FormatError(message string) string
-    FormatDryRunArchive(path string) string
-    FormatCreatedBackup(path string) string
-    FormatIdenticalBackup(path string) string
-    FormatListBackup(path, creationTime string) string
-    FormatDryRunBackup(path string) string
-}
-```
-
-#### TemplateFormatter
-
-Template-based formatting operations:
-
-```go
-type TemplateFormatter interface {
-    FormatWithTemplate(input, pattern, tmplStr string) (string, error)
-    FormatWithPlaceholders(format string, data map[string]string) string
-    TemplateCreatedArchive(data map[string]string) string
-    TemplateIdenticalArchive(data map[string]string) string
-    TemplateListArchive(data map[string]string) string
-    TemplateConfigValue(data map[string]string) string
-    TemplateDryRunArchive(data map[string]string) string
-    TemplateError(data map[string]string) string
-}
-```
-
-#### PatternExtractor
-
-Regex-based data extraction:
-
-```go
-type PatternExtractor interface {
-    ExtractArchiveFilenameData(filename string) map[string]string
-    ExtractBackupFilenameData(filename string) map[string]string
-    ExtractPatternData(pattern, text string) map[string]string
-}
-```
-
-### Configuration Interfaces
-
-#### ConfigProvider
-
-Provides configuration access for formatter components:
-
-```go
-type ConfigProvider interface {
-    GetFormatString(formatType string) string
-    GetTemplateString(templateType string) string
-    GetPattern(patternType string) string
-    GetErrorFormat(errorType string) string
-}
-```
-
-#### OutputDestination
-
-Abstracts output handling:
-
-```go
-type OutputDestination interface {
-    Print(message string)
-    PrintError(message string)
-    IsDelayedMode() bool
-    SetCollector(collector *OutputCollector)
-}
-```
-
-## Examples
-
-### Complete Formatting System
-
-```go
-package main
-
-import (
-    "fmt"
-    "os"
+    SetDelayedMode(enabled bool) error
+    GetCollectedMessages() []AIOutputMessage
     
-    "github.com/bkpdir/pkg/formatter"
+    // AI-friendly operations
+    PrintWithContext(ctx PrintContext) error
+}
+```
+
+**Key Features:**
+- **Delayed Output**: Collect and display messages later
+- **Destination Control**: Separate stdout/stderr handling
+- **State Management**: Dynamic mode switching
+- **Message Metadata**: Rich message context
+
+## Data Types
+
+### Format Types
+
+```go
+type FormatType string
+
+const (
+    FormatTypeCreated    FormatType = "created"
+    FormatTypeIdentical  FormatType = "identical"
+    FormatTypeList       FormatType = "list"
+    FormatTypeDryRun     FormatType = "dry_run"
+    FormatTypeError      FormatType = "error"
+    FormatTypeConfig     FormatType = "config"
 )
+```
 
-type AppConfig struct {
-    Formats   map[string]string
-    Templates map[string]string
-    Patterns  map[string]string
-    Errors    map[string]string
+### Error Types
+
+```go
+type ErrorType string
+
+const (
+    ErrorTypeDiskFull        ErrorType = "disk_full"
+    ErrorTypePermission      ErrorType = "permission"
+    ErrorTypeDirectoryNotFound ErrorType = "directory_not_found"
+    ErrorTypeFileNotFound    ErrorType = "file_not_found"
+    ErrorTypeInvalidDirectory ErrorType = "invalid_directory"
+    ErrorTypeInvalidFile     ErrorType = "invalid_file"
+    ErrorTypeGeneric         ErrorType = "generic"
+)
+```
+
+### Structured Data Types
+
+```go
+type AIArchiveData struct {
+    Prefix    string `json:"prefix"`
+    Year      string `json:"year"`
+    Month     string `json:"month"`
+    Day       string `json:"day"`
+    Hour      string `json:"hour"`
+    Minute    string `json:"minute"`
+    Branch    string `json:"branch"`
+    Hash      string `json:"hash"`
+    Note      string `json:"note"`
 }
 
-func (c *AppConfig) GetFormatString(formatType string) string {
-    return c.Formats[formatType]
-}
-
-func (c *AppConfig) GetTemplateString(templateType string) string {
-    return c.Templates[templateType]
-}
-
-func (c *AppConfig) GetPattern(patternType string) string {
-    return c.Patterns[patternType]
-}
-
-func (c *AppConfig) GetErrorFormat(errorType string) string {
-    return c.Errors[errorType]
-}
-
-func main() {
-    // Configure formatting system
-    config := &AppConfig{
-        Formats: map[string]string{
-            "created_archive":   "✅ Created archive: %s",
-            "identical_archive": "ℹ️  Identical archive exists: %s",
-            "list_archive":      "%s (created: %s)",
-            "config_value":      "%s: %s (from %s)",
-        },
-        Templates: map[string]string{
-            "created_archive":   "🎉 Archive {{.filename}} created\n  📁 Size: {{.size}} bytes\n  🕒 Time: {{.timestamp}}",
-            "identical_archive": "⚠️  Archive {{.filename}} already exists\n  📁 Path: {{.path}}\n  🔄 Status: Identical",
-            "archive_info":      "📦 {{.name}}\n  🌿 Branch: {{.branch}}\n  📝 Commit: {{.commit}}\n  📅 Created: {{.timestamp}}",
-        },
-        Patterns: map[string]string{
-            "archive_filename": `^(?P<prefix>\w+)-(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{6})-(?P<branch>\w+)-(?P<commit>\w+)-?(?P<note>.*)?\.zip$`,
-            "backup_filename":  `^(?P<name>.*)-(?P<timestamp>\d{4}-\d{2}-\d{2}-\d{2}-\d{2})(?:=(?P<note>.*))?$`,
-        },
-    }
-    
-    // Create comprehensive formatter
-    outputFormatter := formatter.NewOutputFormatter(config, os.Stdout)
-    
-    // Example 1: Printf-style formatting
-    fmt.Println("=== Printf-Style Formatting ===")
-    created := outputFormatter.FormatCreatedArchive("/backups/myapp-2024-01-01T120000-main-abc123.zip")
-    fmt.Println(created)
-    
-    list := outputFormatter.FormatListArchive("/backups/archive.zip", "2024-01-01 12:00:00")
-    fmt.Println(list)
-    
-    // Example 2: Template-based formatting
-    fmt.Println("\n=== Template-Based Formatting ===")
-    
-    // Extract data from filename
-    archiveFile := "myapp-2024-01-01T120000-main-abc123-release.zip"
-    data := outputFormatter.ExtractArchiveFilenameData(archiveFile)
-    
-    // Add additional context
-    data["filename"] = archiveFile
-    data["size"] = "2048576"
-    data["timestamp"] = "2024-01-01 12:00:00"
-    data["path"] = "/backups/" + archiveFile
-    
-    // Format with template
-    templateResult := outputFormatter.TemplateCreatedArchive(data)
-    fmt.Println(templateResult)
-    
-    // Example 3: Pattern extraction
-    fmt.Println("\n=== Pattern Extraction ===")
-    backupFile := "config.yaml-2024-01-01-12-00=before-update"
-    backupData := outputFormatter.ExtractBackupFilenameData(backupFile)
-    
-    fmt.Printf("Extracted data from %s:\n", backupFile)
-    for key, value := range backupData {
-        fmt.Printf("  %s: %s\n", key, value)
-    }
+type AIBackupData struct {
+    Filename  string `json:"filename"`
+    Year      string `json:"year"`
+    Month     string `json:"month"`
+    Day       string `json:"day"`
+    Hour      string `json:"hour"`
+    Minute    string `json:"minute"`
+    Note      string `json:"note"`
 }
 ```
 
-### Delayed Output Collection
+## Context Structures
+
+### FormatContext
+
+AI-friendly context for formatting operations:
 
 ```go
-package main
-
-import (
-    "fmt"
-    "os"
-    
-    "github.com/bkpdir/pkg/formatter"
-)
-
-func main() {
-    config := &SimpleConfig{} // Your config implementation
-    
-    // Create output collector for delayed output
-    collector := formatter.NewOutputCollector()
-    
-    // Create formatter with delayed output
-    outputFormatter := formatter.NewOutputFormatter(config, os.Stdout)
-    outputFormatter.SetCollector(collector)
-    
-    // Collect output instead of printing immediately
-    outputFormatter.PrintCreatedArchive("archive1.zip")
-    outputFormatter.PrintCreatedArchive("archive2.zip")
-    outputFormatter.PrintCreatedArchive("archive3.zip")
-    
-    // Print all collected output at once
-    fmt.Println("=== Batch Operation Results ===")
-    collector.FlushAll()
-    
-    // Check if we're in delayed mode
-    if outputFormatter.IsDelayedMode() {
-        fmt.Println("Operating in delayed output mode")
-    }
+type FormatContext struct {
+    FormatType    FormatType                `json:"format_type"`
+    Data          map[string]interface{}    `json:"data"`
+    Options       FormatOptions             `json:"options"`
+    Metadata      map[string]string         `json:"metadata"`
 }
 ```
 
-### Custom Error Formatting
+### ExtractContext
+
+AI-friendly context for data extraction:
 
 ```go
-package main
-
-import (
-    "errors"
-    "fmt"
-    "os"
-    
-    "github.com/bkpdir/pkg/formatter"
-)
-
-func main() {
-    config := &ErrorConfig{
-        errorFormats: map[string]string{
-            "disk_full":         "💾 Error: Disk space exhausted - %s",
-            "permission_denied": "🔒 Error: Permission denied - %s",
-            "file_not_found":    "📄 Error: File not found - %s",
-        },
-        errorTemplates: map[string]string{
-            "disk_full":         "💾 Disk Full Error\n  📁 Path: {{.path}}\n  💿 Available: {{.available}}\n  📊 Required: {{.required}}",
-            "permission_denied": "🔒 Permission Error\n  📁 Path: {{.path}}\n  👤 User: {{.user}}\n  🛡️  Required: {{.permission}}",
-        },
-    }
-    
-    errorFormatter := formatter.NewErrorFormatter(config)
-    
-    // Format different types of errors
-    diskErr := errors.New("no space left on device: /tmp")
-    permErr := errors.New("permission denied: /etc/config.yml")
-    fileErr := errors.New("file not found: /missing/file.txt")
-    
-    fmt.Println("=== Error Formatting ===")
-    fmt.Println(errorFormatter.FormatDiskFullError(diskErr))
-    fmt.Println(errorFormatter.FormatPermissionError(permErr))
-    fmt.Println(errorFormatter.FormatFileNotFound(fileErr))
-    
-    // Template-based error formatting
-    fmt.Println("\n=== Template Error Formatting ===")
-    fmt.Println(errorFormatter.TemplateDiskFullError(diskErr))
-}
-
-type ErrorConfig struct {
-    errorFormats   map[string]string
-    errorTemplates map[string]string
-}
-
-func (c *ErrorConfig) GetFormatString(formatType string) string {
-    return ""
-}
-
-func (c *ErrorConfig) GetTemplateString(templateType string) string {
-    return c.errorTemplates[templateType]
-}
-
-func (c *ErrorConfig) GetPattern(patternType string) string {
-    return ""
-}
-
-func (c *ErrorConfig) GetErrorFormat(errorType string) string {
-    return c.errorFormats[errorType]
+type ExtractContext struct {
+    PatternType   PatternType               `json:"pattern_type"`
+    Input         string                    `json:"input"`
+    Options       ExtractOptions            `json:"options"`
+    Metadata      map[string]string         `json:"metadata"`
 }
 ```
 
-### Advanced Template Usage
+### PrintContext
+
+AI-friendly context for output operations:
 
 ```go
-package main
-
-import (
-    "fmt"
-    "strings"
-    
-    "github.com/bkpdir/pkg/formatter"
-)
-
-func main() {
-    config := &AdvancedTemplateConfig{
-        templates: map[string]string{
-            // Template with custom functions
-            "archive_summary": `
-📦 Archive Summary
-  📁 Name: {{.name | upper}}
-  📏 Size: {{.size | humanize}}
-  🕒 Created: {{.timestamp | formatTime}}
-  🌿 Branch: {{.branch | default "main"}}
-  📝 Note: {{.note | default "No description"}}
-{{- if .verified}}
-  ✅ Verified: Yes
-{{- else}}
-  ❌ Verified: No
-{{- end}}`,
-            
-            // Complex conditional template
-            "operation_result": `
-{{- if eq .status "success"}}
-✅ Operation completed successfully
-{{- else if eq .status "warning"}}
-⚠️  Operation completed with warnings
-{{- else}}
-❌ Operation failed
-{{- end}}
-  📁 Target: {{.target}}
-  ⏱️  Duration: {{.duration}}ms
-{{- if .errors}}
-  🚨 Errors: {{len .errors}}
-{{- range .errors}}
-    - {{.}}
-{{- end}}
-{{- end}}`,
-        },
-    }
-    
-    templateFormatter := formatter.NewTemplateFormatter(config)
-    
-    // Example 1: Archive summary with custom functions
-    archiveData := map[string]string{
-        "name":      "myproject-backup",
-        "size":      "2048576",
-        "timestamp": "2024-01-01T12:00:00Z",
-        "branch":    "feature/new-ui",
-        "note":      "Release candidate",
-        "verified":  "true",
-    }
-    
-    summary := templateFormatter.TemplateCreatedArchive(archiveData)
-    fmt.Println(summary)
-    
-    // Example 2: Operation result with conditionals
-    operationData := map[string]string{
-        "status":   "warning",
-        "target":   "/home/user/project",
-        "duration": "1500",
-        "errors":   "File permissions changed,Temporary file cleanup failed",
-    }
-    
-    result := templateFormatter.FormatWithPlaceholders(
-        config.templates["operation_result"], 
-        operationData,
-    )
-    fmt.Println(result)
-}
-
-type AdvancedTemplateConfig struct {
-    templates map[string]string
-}
-
-func (c *AdvancedTemplateConfig) GetFormatString(formatType string) string {
-    return ""
-}
-
-func (c *AdvancedTemplateConfig) GetTemplateString(templateType string) string {
-    return c.templates[templateType]
-}
-
-func (c *AdvancedTemplateConfig) GetPattern(patternType string) string {
-    return ""
-}
-
-func (c *AdvancedTemplateConfig) GetErrorFormat(errorType string) string {
-    return ""
+type PrintContext struct {
+    Message       string                    `json:"message"`
+    Destination   AIOutputDestination       `json:"destination"`
+    Type          AIMessageType             `json:"type"`
+    Options       PrintOptions              `json:"options"`
+    Metadata      map[string]string         `json:"metadata"`
 }
 ```
 
-## Integration
+## Usage Examples
 
-### Integration with Other Packages
-
-#### With pkg/config
+### Basic Usage
 
 ```go
-import (
-    "github.com/bkpdir/pkg/formatter"
-    "github.com/bkpdir/pkg/config"
-)
+// Create formatter with configuration
+config := NewMockFormatterConfig()
+formatter := NewAIFirstFormatter(config)
 
-type ConfigBackedFormatter struct {
-    configLoader config.ConfigLoader
-    formatter    formatter.OutputFormatterInterface
+// Format with context
+ctx := FormatContext{
+    FormatType: FormatTypeCreated,
+    Data: map[string]interface{}{
+        "path": "/test/archive.tar.gz",
+    },
+    Options:  FormatOptions{},
+    Metadata: make(map[string]string),
 }
 
-func NewConfigBackedFormatter(loader config.ConfigLoader) *ConfigBackedFormatter {
-    // Load formatter configuration
-    cfg, err := loader.LoadConfig(".", &FormatterConfig{})
+result, err := formatter.FormatWithContext(ctx)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Pattern Extraction
+
+```go
+// Extract archive data
+ctx := ExtractContext{
+    PatternType: PatternTypeArchiveFilename,
+    Input:       "test-2024-01-15-14-30-main-abc123-note.tar.gz",
+    Options:     ExtractOptions{},
+    Metadata:    make(map[string]string),
+}
+
+result, err := formatter.ExtractWithContext(ctx)
+if err != nil {
+    log.Fatal(err)
+}
+
+if archiveData, ok := result.(AIArchiveData); ok {
+    fmt.Printf("Archive: %s, Year: %s\n", archiveData.Prefix, archiveData.Year)
+}
+```
+
+### Delayed Output
+
+```go
+// Create formatter with collector
+collector := NewOutputCollector()
+formatter := NewAIFirstFormatterWithCollector(config, collector)
+
+// Print with context
+printCtx := PrintContext{
+    Message:     "Processing archive...",
+    Destination: AIOutputDestinationStdout,
+    Type:        AIMessageTypeInfo,
+    Options: PrintOptions{
+        Delayed: true,
+        Flush:   false,
+    },
+    Metadata: make(map[string]string),
+}
+
+err := formatter.PrintWithContext(printCtx)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Flush all collected messages
+err = formatter.Flush()
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+## Configuration
+
+### FormatterConfig Interface
+
+```go
+type FormatterConfig interface {
+    // Format string access
+    GetFormatString(formatType FormatType) (string, error)
+    GetTemplateString(templateType FormatType) (string, error)
+    GetErrorFormat(errorType ErrorType) (string, error)
+    
+    // Pattern access
+    GetPattern(patternType PatternType) (string, error)
+    
+    // Configuration validation
+    Validate() error
+    GetValidationErrors() []ConfigError
+}
+```
+
+### Configuration Error Handling
+
+```go
+type ConfigError struct {
+    Field   string `json:"field"`
+    Message string `json:"message"`
+    Code    string `json:"code"`
+}
+```
+
+## Testing
+
+### Mock Configuration
+
+```go
+type MockFormatterConfig struct {
+    formatStrings   map[FormatType]string
+    templateStrings map[FormatType]string
+    errorFormats    map[ErrorType]string
+    patterns        map[PatternType]string
+}
+```
+
+### Test Examples
+
+```go
+func TestAIFirstFormatter(t *testing.T) {
+    config := NewMockFormatterConfig()
+    formatter := NewAIFirstFormatter(config)
+    
+    // Test format with context
+    ctx := FormatContext{
+        FormatType: FormatTypeCreated,
+        Data: map[string]interface{}{
+            "path": "/test/archive.tar.gz",
+        },
+        Options:  FormatOptions{},
+        Metadata: make(map[string]string),
+    }
+    
+    result, err := formatter.FormatWithContext(ctx)
     if err != nil {
-        // Handle error
-        return nil
+        t.Errorf("FormatWithContext failed: %v", err)
     }
     
-    formatterConfig := cfg.(*FormatterConfig)
-    formatter := formatter.NewOutputFormatter(formatterConfig, os.Stdout)
-    
-    return &ConfigBackedFormatter{
-        configLoader: loader,
-        formatter:    formatter,
-    }
-}
-
-func (cbf *ConfigBackedFormatter) FormatConfigDisplay() {
-    values, err := cbf.configLoader.LoadConfigValues(".", &FormatterConfig{})
-    if err != nil {
-        return
-    }
-    
-    for name, value := range values {
-        formatted := cbf.formatter.FormatConfigValue(name, fmt.Sprintf("%v", value.Value), value.Source)
-        fmt.Println(formatted)
+    if result == "" {
+        t.Error("FormatWithContext returned empty result")
     }
 }
 ```
 
-#### With pkg/cli
+## Migration Guide
 
-```go
-import (
-    "github.com/bkpdir/pkg/formatter"
-    "github.com/bkpdir/pkg/cli"
-)
+### From Legacy Formatter
 
-func createFormattedCLI() *cobra.Command {
-    var (
-        format     string
-        useTemplates bool
-    )
-    
-    cmd := cli.NewCommandBuilder().NewCommand(
-        "list", 
-        "List items", 
-        "List items with configurable output formatting",
-    )
-    
-    cmd.Flags().StringVarP(&format, "format", "f", "default", "Output format")
-    cmd.Flags().BoolVar(&useTemplates, "templates", false, "Use template formatting")
-    
-    cli.NewCommandBuilder().WithHandler(cmd, func(cmd *cobra.Command, args []string) error {
-        config := &DynamicFormatterConfig{
-            format:       format,
-            useTemplates: useTemplates,
-        }
-        
-        formatter := formatter.NewOutputFormatter(config, os.Stdout)
-        
-        // Sample data
-        items := []string{"item1.txt", "item2.txt", "item3.txt"}
-        
-        for _, item := range items {
-            if useTemplates {
-                data := map[string]string{
-                    "name": item,
-                    "timestamp": time.Now().Format("2006-01-02 15:04:05"),
-                }
-                result := formatter.TemplateListArchive(data)
-                fmt.Println(result)
-            } else {
-                result := formatter.FormatListArchive(item, time.Now().Format("2006-01-02 15:04:05"))
-                fmt.Println(result)
-            }
-        }
-        
-        return nil
-    })
-    
-    return cmd
-}
-```
+1. **Replace Direct Usage**:
+   ```go
+   // Old
+   formatter := NewOutputFormatter(config)
+   result := formatter.FormatCreatedArchive(path)
+   
+   // New
+   formatter := NewAIFirstFormatter(config)
+   ctx := FormatContext{
+       FormatType: FormatTypeCreated,
+       Data: map[string]interface{}{"path": path},
+       Options: FormatOptions{},
+       Metadata: make(map[string]string),
+   }
+   result, err := formatter.FormatWithContext(ctx)
+   ```
 
-#### With pkg/errors
+2. **Update Error Handling**:
+   ```go
+   // Old
+   result := formatter.FormatError(err)
+   
+   // New
+   result, err := formatter.FormatError(err, ErrorTypeGeneric)
+   ```
 
-```go
-import (
-    "github.com/bkpdir/pkg/formatter"
-    "github.com/bkpdir/pkg/errors"
-)
-
-func handleFormattedErrors(err error, formatter formatter.ErrorFormatter) {
-    switch e := err.(type) {
-    case *errors.DiskFullError:
-        formatted := formatter.FormatDiskFullError(e)
-        fmt.Fprintf(os.Stderr, "%s\n", formatted)
-    case *errors.PermissionError:
-        formatted := formatter.FormatPermissionError(e)
-        fmt.Fprintf(os.Stderr, "%s\n", formatted)
-    case *errors.FileNotFoundError:
-        formatted := formatter.FormatFileNotFound(e)
-        fmt.Fprintf(os.Stderr, "%s\n", formatted)
-    default:
-        formatted := formatter.FormatError(err.Error())
-        fmt.Fprintf(os.Stderr, "%s\n", formatted)
-    }
-}
-```
-
-## Performance Characteristics
-
-- **Printf Formatting**: ~5μs per format operation
-- **Template Formatting**: ~50μs per template (includes parsing and execution)
-- **Pattern Extraction**: ~20μs per regex match operation
-- **Output Collection**: ~1μs per collected message
-- **Memory Usage**: Minimal overhead with template caching
-- **Template Parsing**: Templates are parsed once and cached for reuse
+3. **Migrate Pattern Extraction**:
+   ```go
+   // Old
+   data := formatter.ExtractArchiveFilenameData(filename)
+   
+   // New
+   data, err := formatter.ExtractArchiveData(filename)
+   ```
 
 ## Best Practices
 
-### 1. Use Configuration-Driven Formatting
+### For AI Assistants
 
-Define all format strings and templates in configuration:
+1. **Use Context Structures**: Always use context structures for complex operations
+2. **Handle Errors**: Check all error returns and provide meaningful context
+3. **Validate Inputs**: Use the validation methods provided by interfaces
+4. **Use Structured Data**: Prefer structured data types over raw strings
+5. **Document Operations**: Use clear, descriptive operation names
 
-```go
-config := &FormatterConfig{
-    Formats: map[string]string{
-        "success": "✅ %s completed successfully",
-        "error":   "❌ %s failed: %s",
-    },
-    Templates: map[string]string{
-        "detailed": "{{.icon}} {{.operation}} {{.status}}\n  📁 {{.path}}\n  ⏱️  {{.duration}}",
-    },
-}
-```
+### For Developers
 
-### 2. Implement Graceful Fallbacks
+1. **Interface Composition**: Compose interfaces rather than creating monolithic types
+2. **Error Context**: Provide detailed error information with context
+3. **Type Safety**: Use strongly typed enums and structures
+4. **Testing**: Write comprehensive tests for all interface implementations
+5. **Documentation**: Keep documentation updated with interface changes
 
-Always provide fallback formatting when templates fail:
+## Performance Considerations
 
-```go
-func (tf *TemplateFormatter) FormatWithFallback(template, fallback string, data map[string]string) string {
-    result, err := tf.FormatWithTemplate(data["input"], data["pattern"], template)
-    if err != nil {
-        return tf.FormatWithPlaceholders(fallback, data)
-    }
-    return result
-}
-```
+1. **Lazy Initialization**: Components are created on-demand
+2. **Memory Efficiency**: Structured data types are optimized for JSON serialization
+3. **Error Handling**: Errors are handled efficiently without excessive allocations
+4. **Context Reuse**: Context structures can be reused for multiple operations
 
-### 3. Use Pattern Extraction for Rich Data
+## Future Enhancements
 
-Extract structured data from strings using named regex groups:
-
-```go
-pattern := `^(?P<name>.*)-(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{6})-(?P<branch>\w+)-(?P<commit>\w+)\.zip$`
-data := formatter.ExtractPatternData(pattern, filename)
-// data now contains: name, timestamp, branch, commit
-```
-
-### 4. Leverage Delayed Output for Batch Operations
-
-Use output collection for operations that process multiple items:
-
-```go
-collector := formatter.NewOutputCollector()
-formatter.SetCollector(collector)
-
-// Process multiple items
-for _, item := range items {
-    formatter.PrintCreatedArchive(item)
-}
-
-// Output all results at once
-collector.FlushAll()
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Template parsing errors**: Check template syntax and ensure all variables are provided
-2. **Pattern extraction failing**: Verify regex patterns use named groups (`(?P<name>...)`)
-3. **Missing format strings**: Ensure all required format types are defined in configuration
-4. **Output not appearing**: Check if delayed mode is enabled and collector needs flushing
-
-### Debug Mode
-
-Enable debug logging to trace formatting operations:
-
-```go
-formatter.SetDebugMode(true)  // Enable detailed formatting logs
-```
-
-## Contributing
-
-This package is part of the BkpDir extraction project. For contributions:
-
-1. Follow the interface-based design patterns
-2. Add comprehensive tests for new formatting features
-3. Ensure template compatibility with existing patterns
-4. Maintain backward compatibility with printf-style formatting
-
-## License
-
-Licensed under the MIT License. See LICENSE file for details.
-
----
-
-**// EXTRACT-010: Package formatter comprehensive documentation - Complete formatting system guide with printf, templates, and pattern extraction - 🔺** 
+1. **Async Operations**: Support for asynchronous formatting operations
+2. **Streaming Output**: Real-time output streaming capabilities
+3. **Custom Patterns**: User-defined pattern extraction rules
+4. **Performance Metrics**: Built-in performance monitoring
+5. **Plugin System**: Extensible formatter plugin architecture 

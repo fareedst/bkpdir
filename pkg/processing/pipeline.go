@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Processing pipelines - Pipeline patterns extracted from context-aware functions - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
 import (

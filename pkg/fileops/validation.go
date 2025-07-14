@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-// ⭐ EXTRACT-006: Path validation system extracted - 🛡️
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 
 // PathValidator provides path validation and security checking functionality
 type PathValidator struct{}
@@ -26,13 +26,13 @@ type Validator interface {
 
 // NewPathValidator creates a new PathValidator instance
 func NewPathValidator() Validator {
-	// ⭐ EXTRACT-006: Path validator initialization - 🛡️
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return &PathValidator{}
 }
 
 // ValidatePath performs comprehensive path validation including security checks
 func (pv *PathValidator) ValidatePath(path string) error {
-	// ⭐ EXTRACT-006: Comprehensive path validation - 🛡️
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if path == "" {
 		return fmt.Errorf("path cannot be empty")
 	}
@@ -53,7 +53,7 @@ func (pv *PathValidator) ValidatePath(path string) error {
 
 // ValidateExistence checks if a path exists
 func (pv *PathValidator) ValidateExistence(path string) error {
-	// ⭐ EXTRACT-006: Path existence validation - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if err := pv.ValidatePath(path); err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func (pv *PathValidator) ValidateExistence(path string) error {
 
 // ValidateReadable checks if a path is readable
 func (pv *PathValidator) ValidateReadable(path string) error {
-	// ⭐ EXTRACT-006: Path readability validation - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if err := pv.ValidateExistence(path); err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func (pv *PathValidator) ValidateReadable(path string) error {
 
 // ValidateWritable checks if a path is writable
 func (pv *PathValidator) ValidateWritable(path string) error {
-	// ⭐ EXTRACT-006: Path writability validation - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if err := pv.ValidatePath(path); err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func (pv *PathValidator) ValidateWritable(path string) error {
 
 // IsSecurePath checks if a path is secure (no path traversal, etc.)
 func (pv *PathValidator) IsSecurePath(path string) bool {
-	// ⭐ EXTRACT-006: Path security validation - 🛡️
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Check for path traversal attempts
 	if strings.Contains(path, "..") {
@@ -162,35 +162,35 @@ func (pv *PathValidator) IsSecurePath(path string) bool {
 
 // ValidatePath validates a path using the default validator
 func ValidatePath(path string) error {
-	// ⭐ EXTRACT-006: Convenience path validation function - 🛡️
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	validator := NewPathValidator()
 	return validator.ValidatePath(path)
 }
 
 // ValidateExistence validates path existence using the default validator
 func ValidateExistence(path string) error {
-	// ⭐ EXTRACT-006: Convenience existence validation function - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	validator := NewPathValidator()
 	return validator.ValidateExistence(path)
 }
 
 // ValidateReadable validates path readability using the default validator
 func ValidateReadable(path string) error {
-	// ⭐ EXTRACT-006: Convenience readability validation function - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	validator := NewPathValidator()
 	return validator.ValidateReadable(path)
 }
 
 // ValidateWritable validates path writability using the default validator
 func ValidateWritable(path string) error {
-	// ⭐ EXTRACT-006: Convenience writability validation function - 🔍
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	validator := NewPathValidator()
 	return validator.ValidateWritable(path)
 }
 
 // IsSecurePath checks path security using the default validator
 func IsSecurePath(path string) bool {
-	// ⭐ EXTRACT-006: Convenience security validation function - 🛡️
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	validator := NewPathValidator()
 	return validator.IsSecurePath(path)
 }

@@ -94,7 +94,7 @@ type PipelineInterface interface {
 }
 ```
 
-## 📝 Implementation Subtasks
+## [ACTION:format-processing] Implementation Subtasks
 
 ### ✅ 1. Create `pkg/processing` package structure
 - [ ] Create directory structure with all files
@@ -158,7 +158,7 @@ type PipelineInterface interface {
 - Update `docs/context/requirements.md` - Add processing requirements
 - Update `docs/context/testing.md` - Add processing test requirements
 
-## 🔄 Validation and Quality Gates
+## [ACTION:migration] Validation and Quality Gates
 
 ### Pre-Implementation Validation
 - [ ] All existing tests pass (`make test`)

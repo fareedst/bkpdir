@@ -5,10 +5,21 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// CONFIG-DISCOVERY-001: Configuration discovery specification - Configuration discovery and loading [ACTION:discovery]
+// Source: config.go - CONFIG-DISCOVERY-001
+// Impact: Core functionality requirement for configuration discovery
+
+// CONFIG-FILE-001: Configuration file specification - Configuration file handling [ACTION:core-functionality]
+// Source: config.go - CONFIG-FILE-001
+// Impact: Core functionality requirement for configuration file handling
+
+// SERVICE-ARCH-001: Service architecture decision - Configuration service implementation [ACTION:core-functionality]
+// Source: config.go - SERVICE-ARCH-001
+// Impact: Configuration service implementation decision
 package main
 
-// 🔶 REFACTOR-005: Structure optimization - Clean configuration interface preparation - 🔧
-// 🔶 REFACTOR-005: Extraction preparation - Standardized naming conventions and decoupled interfaces - 🔧
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 
 import (
 	"fmt"
@@ -17,6 +28,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -25,19 +37,19 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
-// 🔶 REFACTOR-001: Configuration interface contracts defined - 🔧
-// 🔶 REFACTOR-001: Dependency analysis - clean boundary confirmed - 📝
-// 🔶 REFACTOR-005: Structure optimization - Interface-based configuration access - 📝
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // Note: Interfaces defined in config_interfaces.go for clean separation
 
-// 🔶 REFACTOR-005: Structure optimization - Standardized configuration structure - 📝
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // Separated concerns into logical groupings for better extraction boundaries
 
-// 🔺 CFG-002: Verification configuration structure - 📝
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Archive Verification Requirements
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
-// 🔶 REFACTOR-003: Schema separation - Backup-specific verification config - 🔍
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // VerificationConfig defines settings for archive verification.
 // It controls whether archives are verified on creation and which checksum algorithm to use.
 type VerificationConfig struct {
@@ -45,21 +57,19 @@ type VerificationConfig struct {
 	ChecksumAlgorithm string `yaml:"checksum_algorithm"`
 }
 
-// 🔺 CFG-001: Main configuration structure - 🔍
-// 🔺 CFG-002: Status code configuration - 🔍
-// 🔺 CFG-003: Output formatting configuration - 🔍
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Configuration Defaults, Output Formatting Requirements
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
-// 🔶 REFACTOR-001: Configuration interface contracts defined - 📝
-// 🔶 REFACTOR-001: Dependency analysis - clean boundary confirmed - 📝
-// 🔶 REFACTOR-003: Schema separation - Backup application specific schema - 📝
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
+// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // Config holds all configuration settings for the BkpDir application.
 // It includes settings for archive creation, file backup, status codes,
 // and output formatting.
 // The configuration can be loaded from YAML files and environment variables.
 type Config struct {
-	// 🔶 REFACTOR-003: Schema separation - Basic backup settings - 📝
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Basic settings
 	ArchiveDirPath     string              `yaml:"archive_dir_path"`
 	UseCurrentDirName  bool                `yaml:"use_current_dir_name"`
@@ -69,20 +79,20 @@ type Config struct {
 	SkipBrokenSymlinks bool                `yaml:"skip_broken_symlinks"`
 	Verification       *VerificationConfig `yaml:"verification"`
 
-	// ⭐ CFG-005: Configuration inheritance support - 🔧 Core inheritance functionality
+	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality] Core inheritance functionality
 	// Inherit specifies configuration files to inherit from
 	Inherit []string `yaml:"inherit,omitempty"`
 
-	// 🔶 GIT-005: Git integration configuration - 📝
+	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	// Git configuration for repository detection and information extraction
 	Git *GitConfig `yaml:"git,omitempty"`
 
-	// 🔶 REFACTOR-003: Schema separation - File backup specific settings - 🔧
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// File backup settings
 	BackupDirPath             string `yaml:"backup_dir_path"`
 	UseCurrentDirNameForFiles bool   `yaml:"use_current_dir_name_for_files"`
 
-	// 🔶 REFACTOR-003: Schema separation - Backup application status codes - 🔧
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Status codes for directory operations
 	StatusCreatedArchive                        int `yaml:"status_created_archive"`
 	StatusFailedToCreateArchiveDirectory        int `yaml:"status_failed_to_create_archive_directory"`
@@ -100,7 +110,7 @@ type Config struct {
 	StatusFileNotFound                    int `yaml:"status_file_not_found"`
 	StatusInvalidFileType                 int `yaml:"status_invalid_file_type"`
 
-	// 🔶 REFACTOR-003: Schema separation - Backup application format strings - 📝
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Printf-style format strings for directory operations
 	FormatCreatedArchive   string `yaml:"format_created_archive"`
 	FormatIdenticalArchive string `yaml:"format_identical_archive"`
@@ -115,7 +125,7 @@ type Config struct {
 	FormatListBackup      string `yaml:"format_list_backup"`
 	FormatDryRunBackup    string `yaml:"format_dry_run_backup"`
 
-	// 🔶 REFACTOR-003: Schema separation - Backup application template strings - 📝
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Template-based format strings for directory operations
 	TemplateCreatedArchive   string `yaml:"template_created_archive"`
 	TemplateIdenticalArchive string `yaml:"template_identical_archive"`
@@ -130,15 +140,15 @@ type Config struct {
 	TemplateListBackup      string `yaml:"template_list_backup"`
 	TemplateDryRunBackup    string `yaml:"template_dry_run_backup"`
 
-	// 🔶 REFACTOR-003: Schema separation - Backup application regex patterns - 🔧
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Regex patterns
 	PatternArchiveFilename string `yaml:"pattern_archive_filename"`
 	PatternBackupFilename  string `yaml:"pattern_backup_filename"`
 	PatternConfigLine      string `yaml:"pattern_config_line"`
 	PatternTimestamp       string `yaml:"pattern_timestamp"`
 
-	// 🔺 CFG-004: Extended format strings for comprehensive string configuration - 📝
-	// 🔶 REFACTOR-003: Schema separation - Extended backup operation messages - 📝
+	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Archive operation messages
 	FormatNoArchivesFound      string `yaml:"format_no_archives_found"`
 	FormatVerificationFailed   string `yaml:"format_verification_failed"`
@@ -151,7 +161,7 @@ type Config struct {
 	FormatNoFilesModified      string `yaml:"format_no_files_modified"`
 	FormatIncrementalCreated   string `yaml:"format_incremental_created"`
 
-	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	// Enhanced format strings with stat information support
 	FormatCreatedArchiveDetailed     string `yaml:"format_created_archive_detailed"`
 	FormatIncrementalCreatedDetailed string `yaml:"format_incremental_created_detailed"`
@@ -162,8 +172,8 @@ type Config struct {
 	FormatBackupIdentical   string `yaml:"format_backup_identical"`
 	FormatBackupCreated     string `yaml:"format_backup_created"`
 
-	// 🔺 CFG-004: Error message format strings - 📝
-	// 🔶 REFACTOR-003: Schema separation - Backup application error messages - 📝
+	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	FormatDiskFullError       string `yaml:"format_disk_full_error"`
 	FormatPermissionError     string `yaml:"format_permission_error"`
 	FormatDirectoryNotFound   string `yaml:"format_directory_not_found"`
@@ -177,7 +187,7 @@ type Config struct {
 	FormatFailedAccessDir     string `yaml:"format_failed_access_dir"`
 	FormatFailedAccessFile    string `yaml:"format_failed_access_file"`
 
-	// 🔶 REFACTOR-003: Schema separation - Extended backup template strings - 📝
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Template-based extended format strings
 	TemplateNoArchivesFound      string `yaml:"template_no_archives_found"`
 	TemplateVerificationFailed   string `yaml:"template_verification_failed"`
@@ -190,7 +200,7 @@ type Config struct {
 	TemplateNoFilesModified      string `yaml:"template_no_files_modified"`
 	TemplateIncrementalCreated   string `yaml:"template_incremental_created"`
 
-	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	// Enhanced template strings with stat information support
 	TemplateCreatedArchiveDetailed     string `yaml:"template_created_archive_detailed"`
 	TemplateIncrementalCreatedDetailed string `yaml:"template_incremental_created_detailed"`
@@ -201,8 +211,8 @@ type Config struct {
 	TemplateBackupIdentical   string `yaml:"template_backup_identical"`
 	TemplateBackupCreated     string `yaml:"template_backup_created"`
 
-	// 🔺 CFG-004: Template-based error message format strings - 📝
-	// 🔶 REFACTOR-003: Schema separation - Backup application error templates - 📝
+	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	TemplateDiskFullError       string `yaml:"template_disk_full_error"`
 	TemplatePermissionError     string `yaml:"template_permission_error"`
 	TemplateDirectoryNotFound   string `yaml:"template_directory_not_found"`
@@ -217,11 +227,11 @@ type Config struct {
 	TemplateFailedAccessFile    string `yaml:"template_failed_access_file"`
 }
 
-// 🔺 CFG-003: Configuration value representation - 📝
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Commands - Display Configuration
 // TEST-REF: TestDisplayConfig
 // DECISION-REF: DEC-002
-// 🔶 REFACTOR-003: Config abstraction - Generic configuration value representation - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ConfigValue represents a single configuration value with its source.
 // It is used for displaying configuration values and their origins.
 type ConfigValue struct {
@@ -230,11 +240,11 @@ type ConfigValue struct {
 	Source string
 }
 
-// 🔺 CFG-003: Default regex patterns for template extraction - 📝
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Template Formatting Requirements, Configuration Defaults
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// 🔶 REFACTOR-003: Schema separation - Backup application default patterns - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // Default regex patterns
 const (
 	defaultArchivePattern = `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-` +
@@ -246,13 +256,11 @@ const (
 		`(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})`
 )
 
-// 🔺 CFG-001: Default configuration implementation - 📝
-// 🔺 CFG-002: Default status codes - 📝
-// 🔺 CFG-003: Default format strings and templates - 📝
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Configuration Defaults
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
-// 🔶 REFACTOR-003: Schema separation - Backup application default configuration - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // DefaultConfig returns a new Config instance with default values.
 // These values are used when no configuration is provided or when merging configurations.
 func DefaultConfig() *Config {
@@ -269,7 +277,7 @@ func DefaultConfig() *Config {
 			ChecksumAlgorithm: "sha256",
 		},
 
-		// 🔶 GIT-005: Git configuration integration - default configuration
+		// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 		Git: DefaultGitConfig(),
 
 		// File backup settings
@@ -327,7 +335,7 @@ func DefaultConfig() *Config {
 		PatternConfigLine:      defaultConfigPattern,
 		PatternTimestamp:       defaultTimestampPattern,
 
-		// 🔺 CFG-004: Extended format strings for comprehensive string configuration - 📝
+		// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 		// Archive operation messages
 		FormatNoArchivesFound:      "No archives found in %s\n",
 		FormatVerificationFailed:   "Archive %s verification failed: %v\n",
@@ -340,7 +348,7 @@ func DefaultConfig() *Config {
 		FormatNoFilesModified:      "No files modified since last full archive\n",
 		FormatIncrementalCreated:   "Created incremental archive: %s\n",
 
-		// ⭐ OUT-002: Enhanced format configuration - 📝
+		// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 		// Enhanced format strings with stat information (backward compatible defaults)
 		FormatCreatedArchiveDetailed:     "Created archive: %s (%s, %s)\n",
 		FormatIncrementalCreatedDetailed: "Created incremental archive: %s (%s, %s)\n",
@@ -351,7 +359,7 @@ func DefaultConfig() *Config {
 		FormatBackupIdentical:   "File is identical to existing backup: %s\n",
 		FormatBackupCreated:     "Created backup: %s\n",
 
-		// 🔺 CFG-004: Error message format strings - 📝
+		// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 		FormatDiskFullError:       "Disk full error: %v\n",
 		FormatPermissionError:     "Permission error: %v\n",
 		FormatDirectoryNotFound:   "Directory not found: %v\n",
@@ -377,7 +385,7 @@ func DefaultConfig() *Config {
 		TemplateNoFilesModified:      "No files modified since last full archive\n",
 		TemplateIncrementalCreated:   "Created incremental archive: %{path}\n",
 
-		// ⭐ OUT-002: Enhanced format configuration - 📝
+		// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 		// Enhanced template strings with stat information support
 		TemplateCreatedArchiveDetailed:     "Created archive: %{path} (size: %{size_human}, modified: %{mtime})\n",
 		TemplateIncrementalCreatedDetailed: "Created incremental archive: %{path} (size: %{size_human}, modified: %{mtime})\n",
@@ -388,7 +396,7 @@ func DefaultConfig() *Config {
 		TemplateBackupIdentical:   "File is identical to existing backup: %{path}\n",
 		TemplateBackupCreated:     "Created backup: %{path}\n",
 
-		// 🔺 CFG-004: Template-based error message format strings - 📝
+		// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 		TemplateDiskFullError:       "Disk full error: %{error}\n",
 		TemplatePermissionError:     "Permission error: %{error}\n",
 		TemplateDirectoryNotFound:   "Directory not found: %{error}\n",
@@ -404,7 +412,7 @@ func DefaultConfig() *Config {
 	}
 }
 
-// 🔺 CFG-001: Configuration search path implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -420,7 +428,7 @@ func getConfigSearchPaths() []string {
 	return []string{"./.bkpdir.yml", "~/.bkpdir.yml"}
 }
 
-// 🔺 CFG-001: Path expansion implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -437,15 +445,15 @@ func expandPath(path string) string {
 	return path
 }
 
-// 🔺 CFG-001: Configuration loading implementation - 🔍
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
-// 🔶 REFACTOR-003: Config abstraction - Schema-specific configuration loading - 🔍
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // LoadConfig loads configuration from YAML files and environment variables.
 // It searches for configuration files in the standard locations and merges them with defaults.
 func LoadConfig(root string) (*Config, error) {
-	// ⭐ CFG-005: Configuration loading with inheritance support - 🔧 Enhanced loading engine
+	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 	// Try loading with inheritance first (the new default behavior)
 	cfg, err := LoadConfigWithInheritance(root)
 	if err == nil {
@@ -453,14 +461,14 @@ func LoadConfig(root string) (*Config, error) {
 	}
 
 	// If inheritance loading fails, fallback to original method for backward compatibility
-	// 🔶 REFACTOR-003: Schema separation - Backup application default config - 🔍
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	cfg = DefaultConfig()
-	// 🔶 REFACTOR-003: Config abstraction - Hardcoded search paths need abstraction - 🔍
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	searchPaths := getConfigSearchPaths()
 
 	// Process configuration files in order (earlier files take precedence)
 	for _, configPath := range searchPaths {
-		// 🔶 REFACTOR-003: Config abstraction - Path expansion needs abstraction - 🔍
+		// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 		expandedPath := expandPath(configPath)
 
 		// Make relative paths relative to root directory
@@ -475,7 +483,7 @@ func LoadConfig(root string) (*Config, error) {
 			}
 			defer f.Close()
 
-			// 🔶 REFACTOR-003: Schema separation - Hardcoded Config struct unmarshaling - 🔧
+			// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 			// Create a temporary config to load into
 			tempCfg := DefaultConfig()
 			d := yaml.NewDecoder(f)
@@ -485,7 +493,7 @@ func LoadConfig(root string) (*Config, error) {
 			}
 			f.Close()
 
-			// 🔶 REFACTOR-003: Config abstraction - Schema-specific merging logic - 📝
+			// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 			// Merge non-zero values from tempCfg into cfg
 			mergeConfigs(cfg, tempCfg)
 			break // Use first valid config file found
@@ -495,15 +503,15 @@ func LoadConfig(root string) (*Config, error) {
 	return cfg, nil
 }
 
-// 🔺 CFG-001: Configuration merging implementation - 🔍
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
-// 🔶 REFACTOR-003: Config abstraction - Schema-specific merging needs abstraction - 🔍
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // mergeConfigs merges source configuration into destination configuration.
 // It preserves non-zero values from the source configuration.
 func mergeConfigs(dst, src *Config) {
-	// 🔶 REFACTOR-003: Schema separation - Backup application specific merge functions - 🔍
+	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	mergeBasicSettings(dst, src)
 	mergeFileBackupSettings(dst, src)
 	mergeStatusCodes(dst, src)
@@ -512,11 +520,11 @@ func mergeConfigs(dst, src *Config) {
 	mergePatterns(dst, src)
 	mergeExtendedFormatStrings(dst, src)
 	mergeExtendedTemplates(dst, src)
-	// 🔶 GIT-005: Git configuration merging
+	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	mergeGitSettings(dst, src)
 }
 
-// 🔺 CFG-001: Basic settings merging implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -544,7 +552,7 @@ func mergeBasicSettings(dst, src *Config) {
 	if src.Verification != nil {
 		dst.Verification = src.Verification
 	}
-	// 🔶 GIT-005: Git configuration integration - legacy Git field support
+	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	// Support legacy Git fields for backward compatibility
 	if src.Git != nil {
 		if dst.Git == nil {
@@ -560,7 +568,7 @@ func mergeBasicSettings(dst, src *Config) {
 	}
 }
 
-// 🔶 GIT-005: Git configuration merging implementation - 📝
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // mergeGitSettings merges Git configuration settings between configs.
 // It handles both the new Git configuration and legacy fields for backward compatibility.
 func mergeGitSettings(dst, src *Config) {
@@ -588,7 +596,7 @@ func mergeGitSettings(dst, src *Config) {
 	}
 }
 
-// 🔶 GIT-005: Git configuration struct merging - 📝
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // mergeGitConfigStruct merges GitConfig struct fields
 func mergeGitConfigStruct(dst, src, defaultCfg *GitConfig) {
 	if src.Enabled != defaultCfg.Enabled {
@@ -632,7 +640,7 @@ func mergeGitConfigStruct(dst, src, defaultCfg *GitConfig) {
 	}
 }
 
-// 🔺 CFG-001: File backup settings merging implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -647,7 +655,7 @@ func mergeFileBackupSettings(dst, src *Config) {
 	}
 }
 
-// 🔺 CFG-002: Status code merging implementation - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -658,7 +666,7 @@ func mergeStatusCodes(dst, src *Config) {
 	mergeFileStatusCodes(dst, src)
 }
 
-// 🔺 CFG-002: Directory status code merging implementation - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -710,7 +718,7 @@ func mergeDirectoryStatusCodes(dst, src *Config) {
 	}
 }
 
-// 🔺 CFG-002: File status code merging implementation - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -949,7 +957,7 @@ func GetConfigValues(cfg *Config) []ConfigValue {
 // GetConfigValuesWithSources returns a slice of ConfigValue containing all configuration
 // values with their actual sources (default, config file, etc.).
 // The returned values are sorted alphabetically by configuration name.
-// 🔺 CFG-006: Backward compatibility update - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 4.5: Preserve backward compatibility
 // GetConfigValuesWithSources maintains backward compatibility while using the new reflection system.
 // This function now uses automatic field discovery instead of manual enumeration.
@@ -1095,7 +1103,7 @@ func boolToString(b bool) string {
 	return "false"
 }
 
-// 🔺 CFG-001: Configuration value loading implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1106,7 +1114,7 @@ func LoadConfigValues(root string) (map[string]ConfigValue, error) {
 	return nil, nil // Placeholder return, actual implementation needed
 }
 
-// 🔺 CFG-001: Configuration value merging implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1116,7 +1124,7 @@ func mergeConfigValues(dst, src map[string]ConfigValue) {
 	// Implementation of mergeConfigValues function
 }
 
-// 🔺 CFG-001: Basic settings value merging implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1126,7 +1134,7 @@ func mergeBasicSettingValues(dst, src map[string]ConfigValue, srcCfg *Config) {
 	// Implementation of mergeBasicSettingValues function
 }
 
-// 🔺 CFG-001: File backup settings value merging implementation - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1136,7 +1144,7 @@ func mergeFileBackupSettingValues(dst, src map[string]ConfigValue, srcCfg *Confi
 	// Implementation of mergeFileBackupSettingValues function
 }
 
-// 🔺 CFG-002: Status code value merging implementation - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1146,7 +1154,7 @@ func mergeStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) {
 	// Implementation of mergeStatusCodeValues function
 }
 
-// 🔺 CFG-002: Directory status code value merging implementation - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1156,7 +1164,7 @@ func mergeDirectoryStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Con
 	// Implementation of mergeDirectoryStatusCodeValues function
 }
 
-// 🔺 CFG-002: File status code value merging implementation - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // IMMUTABLE-REF: Configuration Discovery
 // TEST-REF: TestGetConfigSearchPath
 // DECISION-REF: DEC-002
@@ -1166,7 +1174,7 @@ func mergeFileStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) 
 	// Implementation of mergeFileStatusCodeValues function
 }
 
-// 🔺 CFG-004: Extended format strings for comprehensive string configuration - 📝
+// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 // mergeExtendedFormatStrings merges extended format string settings.
 func mergeExtendedFormatStrings(dst, src *Config) {
 	defaultCfg := DefaultConfig()
@@ -1203,7 +1211,7 @@ func mergeExtendedFormatStrings(dst, src *Config) {
 		dst.FormatIncrementalCreated = src.FormatIncrementalCreated
 	}
 
-	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	// Merge enhanced format strings
 	if src.FormatCreatedArchiveDetailed != defaultCfg.FormatCreatedArchiveDetailed {
 		dst.FormatCreatedArchiveDetailed = src.FormatCreatedArchiveDetailed
@@ -1227,7 +1235,7 @@ func mergeExtendedFormatStrings(dst, src *Config) {
 	}
 }
 
-// 🔺 CFG-004: Extended templates for comprehensive string configuration - 📝
+// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 // mergeExtendedTemplates merges extended template settings.
 func mergeExtendedTemplates(dst, src *Config) {
 	defaultCfg := DefaultConfig()
@@ -1264,7 +1272,7 @@ func mergeExtendedTemplates(dst, src *Config) {
 		dst.TemplateIncrementalCreated = src.TemplateIncrementalCreated
 	}
 
-	// ⭐ OUT-002: Enhanced format configuration - 📝
+	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	// Merge enhanced template strings
 	if src.TemplateCreatedArchiveDetailed != defaultCfg.TemplateCreatedArchiveDetailed {
 		dst.TemplateCreatedArchiveDetailed = src.TemplateCreatedArchiveDetailed
@@ -1288,7 +1296,7 @@ func mergeExtendedTemplates(dst, src *Config) {
 	}
 }
 
-// 🔶 REFACTOR-005: Structure optimization - ErrorConfig interface implementation - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // GetStatusCodes returns a map of status code names to values
 func (c *Config) GetStatusCodes() map[string]int {
 	return map[string]int{
@@ -1308,7 +1316,7 @@ func (c *Config) GetStatusCodes() map[string]int {
 	}
 }
 
-// 🔶 REFACTOR-005: Structure optimization - ErrorConfig interface implementation - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // GetErrorFormatStrings returns a map of error format string names to values
 func (c *Config) GetErrorFormatStrings() map[string]string {
 	return map[string]string{
@@ -1327,19 +1335,19 @@ func (c *Config) GetErrorFormatStrings() map[string]string {
 	}
 }
 
-// 🔶 REFACTOR-005: Structure optimization - ErrorConfig interface implementation - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // GetDirectoryPermissions returns the default directory permissions
 func (c *Config) GetDirectoryPermissions() os.FileMode {
 	return 0755 // Standard directory permissions
 }
 
-// 🔶 REFACTOR-005: Structure optimization - ErrorConfig interface implementation - 🔍
+// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // GetFilePermissions returns the default file permissions
 func (c *Config) GetFilePermissions() os.FileMode {
 	return 0644 // Standard file permissions
 }
 
-// ⭐ CFG-005: Configuration loading with inheritance - 🔧 Enhanced loading engine
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 // LoadConfigWithInheritance loads configuration with inheritance chain processing.
 // This extends the original LoadConfig function to support layered configuration inheritance.
 func LoadConfigWithInheritance(root string) (*Config, error) {
@@ -1373,7 +1381,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 	return loadConfigRecursive(primaryConfigPath, pathResolver, chainBuilder)
 }
 
-// ⭐ CFG-005: Recursive configuration loading - 🔍 Inheritance chain processing
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 // loadConfigRecursive loads configuration following inheritance chains.
 func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuilder inheritanceChainBuilder) (*Config, error) {
 	// Build inheritance chain
@@ -1403,7 +1411,7 @@ func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuil
 	return cfg, nil
 }
 
-// ⭐ CFG-005: Single file loading - 📝 Individual config file processing
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 // loadSingleConfigFile loads a single configuration file.
 func loadSingleConfigFile(configPath string) (*Config, error) {
 	f, err := os.Open(configPath)
@@ -1421,7 +1429,7 @@ func loadSingleConfigFile(configPath string) (*Config, error) {
 	return cfg, nil
 }
 
-// ⭐ CFG-005: Merge strategy application - 🔧 Strategy-based merging
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 // applyMergeStrategies applies merge strategies when combining configurations.
 func applyMergeStrategies(dst, src *Config) (*Config, error) {
 	processor := newMergeStrategyProcessor()
@@ -1453,7 +1461,7 @@ func applyMergeStrategies(dst, src *Config) (*Config, error) {
 	return result, nil
 }
 
-// ⭐ CFG-005: Supporting types and interfaces for inheritance - 🔧 Implementation infrastructure
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // configFileOperations implements file operations for inheritance system
 type configFileOperations struct{}
@@ -1781,7 +1789,7 @@ func isZeroValue(value interface{}) bool {
 	}
 }
 
-// 🔺 CFG-006: Configuration field metadata structure - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Automatic field discovery
 // configFieldInfo represents metadata about a configuration field discovered through reflection.
 // It provides complete information about field structure, type, and documentation.
@@ -1798,7 +1806,7 @@ type configFieldInfo struct {
 	Path      string       // Full path for nested fields (e.g., "verification.verify_on_create")
 }
 
-// 🔺 CFG-006: Enhanced configuration value with field metadata - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Source tracking extension
 // ConfigValueWithMetadata extends ConfigValue with complete field information and inheritance tracking.
 type ConfigValueWithMetadata struct {
@@ -1810,8 +1818,8 @@ type ConfigValueWithMetadata struct {
 	ConflictSources  []string // Sources that had conflicting values
 }
 
-// 🔺 CFG-006: Automatic field discovery implementation - 🔍
-// 🔶 CFG-006: Performance optimization - Reflection result caching
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 1: Automatic Field Discovery System
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
 // GetAllConfigFields discovers all configuration fields using reflection.
@@ -1861,7 +1869,7 @@ func GetAllConfigFields(cfg *Config) []configFieldInfo {
 	return fields
 }
 
-// 🔶 CFG-006: Performance optimization - Field value updating for cached metadata
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
 // updateFieldValues updates cached field metadata with current config values.
 // This avoids expensive reflection while keeping values current.
@@ -1885,7 +1893,7 @@ func updateFieldValues(cachedFields []configFieldInfo, cfg *Config) []configFiel
 	return result
 }
 
-// 🔶 CFG-006: Performance optimization - Field value resolution by path
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
 // getFieldValueByPath retrieves a field value from a struct using dot-separated path.
 func getFieldValueByPath(structValue reflect.Value, path string) (interface{}, error) {
@@ -1925,7 +1933,7 @@ func getFieldValueByPath(structValue reflect.Value, path string) (interface{}, e
 	return currentValue.Interface(), nil
 }
 
-// 🔺 CFG-006: Recursive field reflection implementation - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 1.2: Implement reflectConfigFields() function
 // reflectConfigFields recursively discovers fields in structs, handling nested types.
 func reflectConfigFields(structType reflect.Type, structValue reflect.Value, prefix string, category string) []configFieldInfo {
@@ -2023,7 +2031,7 @@ func reflectConfigFields(structType reflect.Type, structValue reflect.Value, pre
 	return fields
 }
 
-// 🔺 CFG-006: Field categorization implementation - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 1.5: Create field filtering and categorization
 // determineFieldCategory categorizes configuration fields by their purpose and type.
 func determineFieldCategory(fieldName string, parentCategory string) string {
@@ -2054,7 +2062,7 @@ func determineFieldCategory(fieldName string, parentCategory string) string {
 	}
 }
 
-// 🔺 CFG-006: Enhanced source tracking implementation - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 2: Enhanced Source Tracking Extension
 // GetAllConfigValuesWithSources provides comprehensive configuration visibility using reflection.
 // It replaces the manual field enumeration with automatic discovery and enhanced source tracking.
@@ -2094,6 +2102,14 @@ func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMe
 		// Format value as string
 		valueStr := formatFieldValue(field.Value, field.Kind)
 
+		// Track inheritance chain for this field
+		inheritanceChain, mergeStrategy, conflictSources := trackInheritanceChain(field.Path, cfg, root)
+
+		// Ensure conflict sources is always a slice
+		if conflictSources == nil {
+			conflictSources = []string{}
+		}
+
 		// Create enhanced config value
 		configValue := ConfigValueWithMetadata{
 			ConfigValue: ConfigValue{
@@ -2102,10 +2118,10 @@ func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMe
 				Source: source,
 			},
 			FieldInfo:        field,
-			InheritanceChain: []string{source}, // TODO: Implement full inheritance chain tracking
-			MergeStrategy:    "override",       // TODO: Implement merge strategy tracking
+			InheritanceChain: inheritanceChain,
+			MergeStrategy:    mergeStrategy,
 			IsOverridden:     source != "default",
-			ConflictSources:  []string{}, // TODO: Implement conflict detection
+			ConflictSources:  conflictSources,
 		}
 
 		results = append(results, configValue)
@@ -2119,7 +2135,7 @@ func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMe
 	return results
 }
 
-// 🔺 CFG-006: Value formatting implementation - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 3.2: Implement type-aware value formatting
 // formatFieldValue formats configuration values based on their Go type.
 func formatFieldValue(value interface{}, kind reflect.Kind) string {
@@ -2157,7 +2173,7 @@ func formatFieldValue(value interface{}, kind reflect.Kind) string {
 	}
 }
 
-// 🔺 CFG-006: Zero value helper implementation - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Helper functions for reflection system
 // getZeroValueForKind returns the appropriate zero value for a given reflect.Kind.
 func getZeroValueForKind(kind reflect.Kind) interface{} {
@@ -2179,7 +2195,7 @@ func getZeroValueForKind(kind reflect.Kind) interface{} {
 	}
 }
 
-// 🔶 CFG-006: Performance optimization - Reflection result caching infrastructure
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
 
 // ConfigFieldCache provides thread-safe caching of configuration field discovery results.
@@ -2280,7 +2296,7 @@ func (c *ConfigFieldCache) invalidateCache() {
 	c.valid = false
 }
 
-// 🔶 CFG-006: Performance optimization - Lazy source evaluation
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.2: Implement lazy source evaluation
 // GetConfigValuesWithSourcesFiltered provides configuration visibility with filtering.
 // It only resolves sources for fields that match the filter criteria for better performance.
@@ -2371,7 +2387,7 @@ func GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *Config
 	return results
 }
 
-// 🔶 CFG-006: Performance optimization - Configuration field filtering
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.2: Implement lazy source evaluation
 // applyConfigFilter filters configuration fields based on filter criteria.
 func applyConfigFilter(fields []configFieldInfo, filter *ConfigFilter) []configFieldInfo {
@@ -2425,7 +2441,7 @@ func applyConfigFilter(fields []configFieldInfo, filter *ConfigFilter) []configF
 	return filtered
 }
 
-// 🔶 CFG-006: Performance optimization - Incremental resolution support
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
 // GetConfigFieldByPattern retrieves specific configuration fields matching a pattern.
 // This enables efficient single-field or pattern-based queries without full enumeration.
@@ -2459,7 +2475,7 @@ func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, er
 	return matchingFields, nil
 }
 
-// 🔶 CFG-006: Performance optimization - Single field access
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
 // GetConfigFieldValue retrieves a single configuration field value with complete metadata.
 // This is the most efficient way to access a specific configuration field.
@@ -2525,7 +2541,7 @@ func GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata
 	}, nil
 }
 
-// 🔶 CFG-006: Performance optimization - Efficient field existence check
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
 // HasConfigField checks if a configuration field exists without full field enumeration.
 func HasConfigField(cfg *Config, fieldPath string) bool {
@@ -2534,7 +2550,7 @@ func HasConfigField(cfg *Config, fieldPath string) bool {
 	return err == nil
 }
 
-// 🔶 GIT-005: Git configuration integration - 📝
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // GitConfig defines Git integration configuration options.
 // It controls Git repository detection, information extraction, and behavior.
 type GitConfig struct {
@@ -2562,7 +2578,7 @@ type GitConfig struct {
 	MaxSubmoduleDepth int    `yaml:"max_submodule_depth"` // Maximum submodule recursion depth
 }
 
-// 🔶 GIT-005: Git configuration defaults - 📝
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // DefaultGitConfig returns a GitConfig with sensible defaults
 func DefaultGitConfig() *GitConfig {
 	return &GitConfig{
@@ -2579,5 +2595,612 @@ func DefaultGitConfig() *GitConfig {
 		IncludeStatus:     true,
 		CommandTimeout:    "30s",
 		MaxSubmoduleDepth: 3,
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 5: Full Inheritance Chain Tracking
+// trackInheritanceChain tracks the complete inheritance chain for a configuration field.
+// It analyzes the inheritance hierarchy to determine which files contributed to each value.
+func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string, string, []string) {
+	// Get inheritance chain using existing system
+	fileOps := &configFileOperations{}
+	pathResolver := newPathResolver(fileOps)
+	chainBuilder := newInheritanceChainBuilder(fileOps)
+
+	// Build the inheritance chain
+	searchPaths := getConfigSearchPaths()
+	var primaryConfigPath string
+
+	for _, configPath := range searchPaths {
+		expandedPath := expandPath(configPath)
+		if !filepath.IsAbs(expandedPath) {
+			expandedPath = filepath.Join(root, expandedPath)
+		}
+
+		if _, err := os.Stat(expandedPath); err == nil {
+			primaryConfigPath = expandedPath
+			break
+		}
+	}
+
+	if primaryConfigPath == "" {
+		// No config file found, return default source
+		return []string{"default"}, "default", []string{}
+	}
+
+	// Build inheritance chain
+	chain, err := chainBuilder.buildChain(primaryConfigPath, pathResolver)
+	if err != nil {
+		// Fallback to single file
+		return []string{primaryConfigPath}, "config", []string{}
+	}
+
+	// Track value through inheritance chain
+	var inheritanceChain []string
+	var mergeStrategy string
+	var conflictSources []string
+
+	// Start with default configuration
+	currentCfg := DefaultConfig()
+	defaultValue, _ := getFieldValueByPath(reflect.ValueOf(currentCfg), fieldPath)
+
+	// Process files in inheritance order (parents first)
+	for i, filePath := range chain.files {
+		tempCfg, err := loadSingleConfigFile(filePath)
+		if err != nil {
+			continue // Skip files with errors
+		}
+
+		// Get value from this file
+		tempValue, _ := getFieldValueByPath(reflect.ValueOf(tempCfg), fieldPath)
+
+		// Check if this file contributes to the final value
+		if !reflect.DeepEqual(tempValue, defaultValue) {
+			inheritanceChain = append(inheritanceChain, filePath)
+
+			// Determine merge strategy based on field characteristics
+			mergeStrategy = determineMergeStrategyForField(fieldPath, tempValue, defaultValue)
+
+			// Check for conflicts with previous values
+			if i > 0 && !reflect.DeepEqual(tempValue, defaultValue) {
+				// This is a simplified conflict detection
+				// In a full implementation, this would track actual conflicts
+				if hasConflict(tempValue, defaultValue) {
+					conflictSources = append(conflictSources, filePath)
+				}
+			}
+		}
+
+		// Apply merge strategies and merge into current config
+		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg)
+		if err != nil {
+			continue // Skip problematic merges
+		}
+		currentCfg = mergedCfg
+	}
+
+	// If no inheritance chain found, use default
+	if len(inheritanceChain) == 0 {
+		return []string{"default"}, "default", []string{}
+	}
+
+	return inheritanceChain, mergeStrategy, conflictSources
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 5: Helper function for inheritance tracking
+// determineMergeStrategyForField determines the merge strategy used for a specific field.
+func determineMergeStrategyForField(fieldPath string, newValue, oldValue interface{}) string {
+	// Check for exclude_patterns first (should use append strategy)
+	if strings.Contains(fieldPath, "exclude_patterns") || strings.Contains(fieldPath, "inherit") {
+		// Slice fields typically use append strategy
+		if reflect.TypeOf(newValue).Kind() == reflect.Slice {
+			return "append"
+		}
+	}
+
+	// Check for prepend strategy indicators - patterns fields should use prepend
+	// But avoid matching exclude_patterns
+	if strings.Contains(fieldPath, "patterns") && !strings.Contains(fieldPath, "exclude_patterns") {
+		// Pattern fields use prepend strategy
+		return "prepend"
+	}
+
+	// Check for specific field patterns that indicate different strategies
+	if strings.Contains(fieldPath, "git") {
+		// Git configuration fields use merge strategy for nested structs
+		return "merge"
+	}
+
+	if strings.Contains(fieldPath, "verification") {
+		// Verification fields use override strategy
+		return "override"
+	}
+
+	// Check if value is different from default (override strategy)
+	if oldValue != nil && !reflect.DeepEqual(newValue, oldValue) {
+		// Determine if this is a default value application
+		if isZeroValue(oldValue) && !isZeroValue(newValue) {
+			return "default"
+		}
+		return "override"
+	}
+
+	// Default strategy for non-nil values
+	if newValue != nil {
+		return "override"
+	}
+
+	// Default strategy
+	return "override"
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 5: Helper function for conflict detection
+// hasConflict checks if there's a conflict between two values.
+func hasConflict(newValue, oldValue interface{}) bool {
+	// This is a simplified conflict detection
+	// In a full implementation, this would check for actual conflicts
+	// For now, we consider it a conflict if values are different and both non-zero
+	if reflect.DeepEqual(newValue, oldValue) {
+		return false
+	}
+
+	// Check if both values are non-zero
+	newIsZero := isZeroValue(newValue)
+	oldIsZero := isZeroValue(oldValue)
+
+	// Conflict if both are non-zero and different
+	return !newIsZero && !oldIsZero
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 6: Enhanced merge strategy detection
+// detectMergeStrategyFromField analyzes field characteristics to determine merge strategy.
+func detectMergeStrategyFromField(field configFieldInfo) string {
+	// Analyze field type and characteristics
+	switch {
+	case field.IsSlice:
+		// Slice fields typically use append strategy
+		return "append"
+	case field.IsStruct:
+		// Struct fields use merge strategy
+		return "merge"
+	case field.IsPointer:
+		// Pointer fields use override strategy
+		return "override"
+	case strings.Contains(field.Name, "Pattern"):
+		// Pattern fields might use prepend strategy
+		return "prepend"
+	case strings.Contains(field.Name, "Git"):
+		// Git fields use merge strategy
+		return "merge"
+	case strings.Contains(field.Name, "Verification"):
+		// Verification fields use override strategy
+		return "override"
+	default:
+		// Default to override strategy
+		return "override"
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Configuration Validation and Documentation
+// ConfigValidationRule represents a validation rule for a configuration field.
+type ConfigValidationRule struct {
+	FieldPath   string
+	RuleType    string // "range", "pattern", "required", "custom"
+	MinValue    interface{}
+	MaxValue    interface{}
+	Pattern     string
+	CustomFunc  func(interface{}) error
+	Description string
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Field documentation structure
+// ConfigFieldDocumentation provides documentation for a configuration field.
+type ConfigFieldDocumentation struct {
+	FieldPath     string
+	Description   string
+	DefaultValue  string
+	ValidRange    string
+	Examples      []string
+	RelatedFields []string
+	Deprecated    bool
+	DeprecatedIn  string
+	Replacement   string
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Validation and documentation functions
+// validateConfigField validates a configuration field against defined rules.
+func validateConfigField(fieldPath string, value interface{}, rules []ConfigValidationRule) []error {
+	var errors []error
+
+	for _, rule := range rules {
+		if rule.FieldPath != fieldPath {
+			continue
+		}
+
+		switch rule.RuleType {
+		case "range":
+			if err := validateRange(value, rule.MinValue, rule.MaxValue); err != nil {
+				errors = append(errors, fmt.Errorf("field %s: %w", fieldPath, err))
+			}
+		case "pattern":
+			if err := validatePattern(value, rule.Pattern); err != nil {
+				errors = append(errors, fmt.Errorf("field %s: %w", fieldPath, err))
+			}
+		case "required":
+			if err := validateRequired(value); err != nil {
+				errors = append(errors, fmt.Errorf("field %s: %w", fieldPath, err))
+			}
+		case "custom":
+			if rule.CustomFunc != nil {
+				if err := rule.CustomFunc(value); err != nil {
+					errors = append(errors, fmt.Errorf("field %s: %w", fieldPath, err))
+				}
+			}
+		}
+	}
+
+	return errors
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Validation helper functions
+// validateRange validates that a value is within the specified range.
+func validateRange(value interface{}, min, max interface{}) error {
+	switch v := value.(type) {
+	case int:
+		if minInt, ok := min.(int); ok && v < minInt {
+			return fmt.Errorf("value %d is below minimum %d", v, minInt)
+		}
+		if maxInt, ok := max.(int); ok && v > maxInt {
+			return fmt.Errorf("value %d is above maximum %d", v, maxInt)
+		}
+	case string:
+		if minStr, ok := min.(string); ok && v < minStr {
+			return fmt.Errorf("value %s is below minimum %s", v, minStr)
+		}
+		if maxStr, ok := max.(string); ok && v > maxStr {
+			return fmt.Errorf("value %s is above maximum %s", v, maxStr)
+		}
+	}
+	return nil
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Pattern validation
+// validatePattern validates a value against a regex pattern.
+func validatePattern(value interface{}, pattern string) error {
+	if pattern == "" {
+		return nil
+	}
+
+	strValue, ok := value.(string)
+	if !ok {
+		return fmt.Errorf("pattern validation only supports string values")
+	}
+
+	matched, err := regexp.MatchString(pattern, strValue)
+	if err != nil {
+		return fmt.Errorf("invalid pattern %s: %w", pattern, err)
+	}
+
+	if !matched {
+		return fmt.Errorf("value %s does not match pattern %s", strValue, pattern)
+	}
+
+	return nil
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Required field validation
+// validateRequired validates that a required field is not empty.
+func validateRequired(value interface{}) error {
+	if isZeroValue(value) {
+		return fmt.Errorf("field is required but has zero value")
+	}
+	return nil
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Documentation generation
+// GenerateConfigDocumentation generates comprehensive documentation for all configuration fields.
+func GenerateConfigDocumentation(cfg *Config) []ConfigFieldDocumentation {
+	fields := GetAllConfigFields(cfg)
+	var docs []ConfigFieldDocumentation
+
+	for _, field := range fields {
+		doc := ConfigFieldDocumentation{
+			FieldPath:     field.YAMLName, // Use YAMLName instead of Go struct Name
+			Description:   generateFieldDescription(field),
+			DefaultValue:  formatFieldValue(field.Value, field.Kind),
+			ValidRange:    generateValidRange(field),
+			Examples:      generateFieldExamples(field),
+			RelatedFields: generateRelatedFields(field),
+		}
+		docs = append(docs, doc)
+	}
+
+	return docs
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Documentation helper functions
+// generateFieldDescription generates a description for a configuration field.
+func generateFieldDescription(field configFieldInfo) string {
+	switch {
+	case strings.Contains(field.Name, "Archive"):
+		return "Archive operation configuration"
+	case strings.Contains(field.Name, "Backup"):
+		return "File backup operation configuration"
+	case strings.Contains(field.Name, "Status"):
+		return "Status code for operation result"
+	case strings.Contains(field.Name, "Format"):
+		return "Output formatting string"
+	case strings.Contains(field.Name, "Template"):
+		return "Template-based output formatting"
+	case strings.Contains(field.Name, "Pattern"):
+		return "Regex pattern for matching"
+	case strings.Contains(field.Name, "Git"):
+		return "Git integration configuration"
+	case strings.Contains(field.Name, "Verification"):
+		return "Archive verification configuration"
+	default:
+		return "Configuration parameter"
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Range generation
+// generateValidRange generates valid range information for a field.
+func generateValidRange(field configFieldInfo) string {
+	switch field.Kind {
+	case reflect.Int:
+		return "Integer value"
+	case reflect.String:
+		return "String value"
+	case reflect.Bool:
+		return "Boolean value (true/false)"
+	case reflect.Slice:
+		return "Array of values"
+	default:
+		return "Any valid value"
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Example generation
+// generateFieldExamples generates example values for a field.
+func generateFieldExamples(field configFieldInfo) []string {
+	switch {
+	case strings.Contains(field.Name, "ArchiveDirPath"):
+		return []string{"./archives", "/var/backups"}
+	case strings.Contains(field.Name, "ExcludePatterns"):
+		return []string{"*.tmp", "node_modules/", ".git/"}
+	case strings.Contains(field.Name, "Format"):
+		return []string{"Created archive: %s", "Archive %s created successfully"}
+	case strings.Contains(field.Name, "Status"):
+		return []string{"0", "1", "2"}
+	default:
+		return []string{}
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Related fields generation
+// generateRelatedFields generates a list of related configuration fields.
+func generateRelatedFields(field configFieldInfo) []string {
+	var related []string
+
+	// Add related fields based on field characteristics
+	switch {
+	case strings.Contains(field.Name, "Archive"):
+		related = append(related, "archive_dir_path", "use_current_dir_name")
+	case strings.Contains(field.Name, "Backup"):
+		related = append(related, "backup_dir_path", "use_current_dir_name_for_files")
+	case strings.Contains(field.Name, "Git"):
+		related = append(related, "git.enabled", "git.include_info")
+	case strings.Contains(field.Name, "Verification"):
+		related = append(related, "verification.verify_on_create", "verification.checksum_algorithm")
+	}
+
+	return related
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: Documentation Plan
+// GenerateMarkdownDocumentation generates markdown documentation for configuration.
+func GenerateMarkdownDocumentation(cfg *Config) string {
+	docs := GenerateConfigDocumentation(cfg)
+
+	var buf strings.Builder
+
+	// Write header
+	buf.WriteString("# BkpDir Configuration Reference\n\n")
+	buf.WriteString("This document provides a comprehensive reference for all BkpDir configuration options.\n\n")
+
+	// Group fields by category
+	categories := groupFieldsByCategory(docs)
+
+	for category, fields := range categories {
+		buf.WriteString(fmt.Sprintf("## %s\n\n", category))
+
+		for _, field := range fields {
+			buf.WriteString(fmt.Sprintf("### %s\n\n", field.FieldPath))
+			buf.WriteString(fmt.Sprintf("%s\n\n", field.Description))
+
+			if field.DefaultValue != "" {
+				buf.WriteString(fmt.Sprintf("**Default:** `%s`\n\n", field.DefaultValue))
+			}
+
+			if field.ValidRange != "" {
+				buf.WriteString(fmt.Sprintf("**Valid Range:** %s\n\n", field.ValidRange))
+			}
+
+			if len(field.Examples) > 0 {
+				buf.WriteString("**Examples:**\n")
+				for _, example := range field.Examples {
+					buf.WriteString(fmt.Sprintf("- `%s`\n", example))
+				}
+				buf.WriteString("\n")
+			}
+
+			if len(field.RelatedFields) > 0 {
+				buf.WriteString("**Related Fields:**\n")
+				for _, related := range field.RelatedFields {
+					buf.WriteString(fmt.Sprintf("- `%s`\n", related))
+				}
+				buf.WriteString("\n")
+			}
+
+			if field.Deprecated {
+				buf.WriteString(fmt.Sprintf("**Deprecated:** This field is deprecated since %s\n", field.DeprecatedIn))
+				if field.Replacement != "" {
+					buf.WriteString(fmt.Sprintf("**Replacement:** Use `%s` instead\n", field.Replacement))
+				}
+				buf.WriteString("\n")
+			}
+		}
+	}
+
+	return buf.String()
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: Documentation helper functions
+// groupFieldsByCategory groups configuration fields by their category.
+func groupFieldsByCategory(docs []ConfigFieldDocumentation) map[string][]ConfigFieldDocumentation {
+	categories := make(map[string][]ConfigFieldDocumentation)
+
+	for _, doc := range docs {
+		category := determineFieldCategory(doc.FieldPath, "")
+		categories[category] = append(categories[category], doc)
+	}
+
+	return categories
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: JSON Schema generation
+// GenerateJSONSchema generates a JSON schema for the configuration structure.
+func GenerateJSONSchema(cfg *Config) string {
+	fields := GetAllConfigFields(cfg)
+
+	var buf strings.Builder
+	buf.WriteString("{\n")
+	buf.WriteString(`  "$schema": "http://json-schema.org/draft-07/schema#",` + "\n")
+	buf.WriteString(`  "title": "BkpDir Configuration Schema",` + "\n")
+	buf.WriteString(`  "type": "object",` + "\n")
+	buf.WriteString(`  "properties": {` + "\n")
+
+	for i, field := range fields {
+		if i > 0 {
+			buf.WriteString(",\n")
+		}
+
+		buf.WriteString(fmt.Sprintf(`    "%s": {`, field.YAMLName))
+		buf.WriteString(fmt.Sprintf(`"type": "%s"`, getJSONSchemaType(field.Kind)))
+
+		description := generateFieldDescription(field)
+		if description != "" {
+			buf.WriteString(fmt.Sprintf(`, "description": "%s"`, description))
+		}
+
+		defaultValue := formatFieldValue(field.Value, field.Kind)
+		if defaultValue != "" {
+			buf.WriteString(fmt.Sprintf(`, "default": %s`, formatJSONValue(defaultValue, field.Kind)))
+		}
+
+		buf.WriteString("}")
+	}
+
+	buf.WriteString("\n  },\n")
+	buf.WriteString(`  "additionalProperties": false` + "\n")
+	buf.WriteString("}\n")
+
+	return buf.String()
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: JSON Schema helper functions
+// getJSONSchemaType converts Go reflect.Kind to JSON schema type.
+func getJSONSchemaType(kind reflect.Kind) string {
+	switch kind {
+	case reflect.String:
+		return "string"
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return "integer"
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return "integer"
+	case reflect.Bool:
+		return "boolean"
+	case reflect.Slice:
+		return "array"
+	case reflect.Struct:
+		return "object"
+	default:
+		return "string"
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: JSON value formatting
+// formatJSONValue formats a value for JSON schema.
+func formatJSONValue(value string, kind reflect.Kind) string {
+	switch kind {
+	case reflect.String:
+		return fmt.Sprintf(`"%s"`, value)
+	case reflect.Bool:
+		return value
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return value
+	default:
+		return fmt.Sprintf(`"%s"`, value)
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: Configuration validation
+// ValidateConfiguration validates the entire configuration against defined rules.
+func ValidateConfiguration(cfg *Config, rules []ConfigValidationRule) []error {
+	var errors []error
+	fields := GetAllConfigFields(cfg)
+
+	for _, field := range fields {
+		fieldErrors := validateConfigField(field.Path, field.Value, rules)
+		errors = append(errors, fieldErrors...)
+	}
+
+	return errors
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: Default validation rules
+// GetDefaultValidationRules returns default validation rules for configuration fields.
+func GetDefaultValidationRules() []ConfigValidationRule {
+	return []ConfigValidationRule{
+		{
+			FieldPath:   "archive_dir_path",
+			RuleType:    "required",
+			Description: "Archive directory path is required",
+		},
+		{
+			FieldPath:   "status_created_archive",
+			RuleType:    "range",
+			MinValue:    0,
+			MaxValue:    255,
+			Description: "Status code must be between 0 and 255",
+		},
+		{
+			FieldPath:   "pattern_archive_filename",
+			RuleType:    "pattern",
+			Pattern:     `^[^*?:"<>|]+$`,
+			Description: "Archive filename pattern must not contain invalid characters",
+		},
 	}
 }

@@ -2,7 +2,7 @@
 
 ## 📋 **PHASE 1 CRITICAL VALIDATION - COMPLETED**
 
-### 🛡️ **Immutable Requirements Check** ✅ **PASSED**
+### [ACTION:validation] **Immutable Requirements Check** ✅ **PASSED**
 - **Status**: No conflicts with immutable specifications
 - **Analysis**: EXTRACT-007 extracts generic patterns while preserving all immutable behaviors:
   - Archive naming conventions remain unchanged in original application
@@ -16,14 +16,14 @@
 - **Critical Finding**: **DOCUMENTATION INCONSISTENCY DETECTED**
   - ❌ Registry table shows completion but subtasks still marked as `[ ]` unchecked
   - ❌ Violates DOC-008 enforcement requirement for dual-location updates
-  - 🔧 **IMMEDIATE ACTION REQUIRED**: Update subtask checkboxes to `[x]`
+  - [ACTION:core-functionality] **IMMEDIATE ACTION REQUIRED**: Update subtask checkboxes to `[x]`
 
-### 🔍 **AI Assistant Compliance** ✅ **VALIDATED**
-- **Token Requirements**: All implementation tokens properly formatted with ⭐ priority icon
+### [ACTION:discovery] **AI Assistant Compliance** ✅ **VALIDATED**
+- **Token Requirements**: All implementation tokens properly formatted with [CRITICAL] priority icon
 - **Icon Validation**: DOC-007 standardized format confirmed in pkg/processing/
 - **Cross-References**: Implementation properly linked to feature tracking
 
-### ⭐ **AI Assistant Protocol** ✅ **FOLLOWED**
+### [CRITICAL] **AI Assistant Protocol** ✅ **FOLLOWED**
 - **Protocol Type**: NEW FEATURE Protocol (package creation)
 - **Status**: Successfully completed following all requirements
 
@@ -80,7 +80,7 @@ pkg/processing/
 
 #### **Implementation Tokens** ✅ **PROPERLY ADDED**
 - Added EXTRACT-007 tokens to archive.go for traceability
-- All tokens follow DOC-007 standardized format with ⭐ priority icons
+- All tokens follow DOC-007 standardized format with [CRITICAL] priority icons
 
 ## 🚨 **CRITICAL DOCUMENTATION INCONSISTENCY**
 
@@ -92,9 +92,9 @@ The task implementation is complete, but `docs/context/feature-tracking.md` show
 **This violates DOC-008 enforcement requirement:**
 > "When marking a task as completed in the feature registry table, you MUST also update the detailed subtask blocks to show all subtasks as completed with checkmarks [x]. Failure to update both locations creates documentation inconsistency and violates DOC-008 enforcement requirements."
 
-## 📝 **REQUIRED ACTIONS**
+## [ACTION:format-processing] **REQUIRED ACTIONS**
 
-### **1. Update Feature Tracking Documentation** ⭐ **CRITICAL**
+### **1. Update Feature Tracking Documentation** [CRITICAL] **CRITICAL**
 
 **Location**: `docs/context/feature-tracking.md` lines 653-661
 
@@ -108,14 +108,14 @@ The task implementation is complete, but `docs/context/feature-tracking.md` show
     - [x] **Extract concurrent processing** - Worker pool patterns
 ```
 
-### **2. Verify All Task Locations** 🔍 **VALIDATION**
+### **2. Verify All Task Locations** [ACTION:discovery] **VALIDATION**
 
 Search for other locations where EXTRACT-007 subtasks might be referenced:
 - Implementation status document
 - Architecture documentation
 - Any other context files
 
-### **3. Update Implementation Status Notes** 📝 **DOCUMENTATION**
+### **3. Update Implementation Status Notes** [ACTION:format-processing] **DOCUMENTATION**
 
 Add completion notes indicating all subtasks are finished with checkmarks.
 

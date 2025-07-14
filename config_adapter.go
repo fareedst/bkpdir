@@ -5,9 +5,17 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// ADAPTER-COMPATIBILITY-001: Adapter compatibility specification - Backward compatibility adapter [ACTION:core-functionality]
+// Source: config_adapter.go - ADAPTER-COMPATIBILITY-001
+// Impact: Core functionality requirement for adapter compatibility
+
+// SERVICE-ADAPTER-001: Adapter service architecture decision - Adapter service implementation [ACTION:core-functionality]
+// Source: config_adapter.go - SERVICE-ADAPTER-001
+// Impact: Adapter service implementation decision
 package main
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration adapter for extracted package - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 import (
 	"fmt"
@@ -16,7 +24,7 @@ import (
 	"bkpdir/pkg/config"
 )
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Application-specific configuration adapter - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigAdapter provides backward compatibility between the original Config struct
 // and the extracted pkg/config package. This allows the original application to
 // continue working unchanged while using the extracted configuration system.
@@ -29,7 +37,7 @@ type ConfigAdapter struct {
 	envProvider config.EnvironmentProvider
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Adapter constructor - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewConfigAdapter creates a new configuration adapter using the extracted package.
 func NewConfigAdapter() *ConfigAdapter {
 	pathDiscovery := config.NewDefaultPathDiscovery()
@@ -47,7 +55,7 @@ func NewConfigAdapter() *ConfigAdapter {
 	}
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration loading adapter - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // LoadConfig loads configuration using the extracted package but returns the original Config struct.
 // This maintains backward compatibility with existing code.
 func (a *ConfigAdapter) LoadConfig(root string) (*Config, error) {
@@ -67,7 +75,7 @@ func (a *ConfigAdapter) LoadConfig(root string) (*Config, error) {
 	return DefaultConfig(), nil
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration values adapter - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // LoadConfigValues loads configuration values using the extracted package.
 func (a *ConfigAdapter) LoadConfigValues(root string) (map[string]ConfigValue, error) {
 	// Use the extracted package to load configuration values with default config
@@ -90,7 +98,7 @@ func (a *ConfigAdapter) LoadConfigValues(root string) (map[string]ConfigValue, e
 	return result, nil
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration values with sources adapter - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetConfigValuesWithSources extracts configuration values with sources using the extracted package.
 func (a *ConfigAdapter) GetConfigValuesWithSources(cfg *Config, root string) []ConfigValue {
 	// Use the extracted package to get configuration values with sources
@@ -109,7 +117,7 @@ func (a *ConfigAdapter) GetConfigValuesWithSources(cfg *Config, root string) []C
 	return result
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration values extraction adapter - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetConfigValues extracts configuration values using the extracted package.
 func (a *ConfigAdapter) GetConfigValues(cfg *Config) []ConfigValue {
 	// Use the extracted package to get configuration values
@@ -128,25 +136,25 @@ func (a *ConfigAdapter) GetConfigValues(cfg *Config) []ConfigValue {
 	return result
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration validation adapter - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ValidateConfig validates configuration using the extracted package.
 func (a *ConfigAdapter) ValidateConfig(cfg *Config) error {
 	return a.validator.ValidateSchema(cfg)
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Configuration search paths adapter - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetConfigSearchPaths returns configuration search paths using the extracted package.
 func (a *ConfigAdapter) GetConfigSearchPaths() []string {
 	return a.merger.GetConfigSearchPaths()
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Path expansion adapter - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ExpandPath expands path variables using the extracted package.
 func (a *ConfigAdapter) ExpandPath(path string) string {
 	return a.merger.ExpandPath(path)
 }
 
-// 🔺 EXTRACT-001: Backward compatibility layer - Value conversion utility - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // convertToString converts interface{} values to strings for backward compatibility.
 func convertToString(value interface{}) string {
 	if value == nil {
@@ -174,11 +182,11 @@ func convertToString(value interface{}) string {
 	}
 }
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Global adapter instance - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Global adapter instance for backward compatibility
 var globalConfigAdapter = NewConfigAdapter()
 
-// ⭐ EXTRACT-001: Backward compatibility layer - Backward compatible function wrappers - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // These functions maintain the original API while using the extracted package internally.
 
 // LoadConfig loads configuration using the extracted package (backward compatible).

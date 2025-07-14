@@ -13,13 +13,13 @@ import (
 	"strings"
 )
 
-// ⭐ CFG-005: Merge strategy implementations - 🔧 Core merge functionality
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // StandardOverrideStrategy implements the default override behavior (no prefix).
 // Child values completely replace parent values.
 type StandardOverrideStrategy struct{}
 
-// ⭐ CFG-005: Standard override merge strategy - 🔧 Default behavior
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (s *StandardOverrideStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	// Standard override: child value completely replaces parent value
 	return src, nil
@@ -41,7 +41,7 @@ func (s *StandardOverrideStrategy) SupportsType(valueType string) bool {
 // Child array elements are appended to parent array elements.
 type ArrayMergeStrategy struct{}
 
-// ⭐ CFG-005: Array merge strategy implementation - 🔧 Array append behavior
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (a *ArrayMergeStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	destVal := reflect.ValueOf(dest)
 	srcVal := reflect.ValueOf(src)
@@ -94,7 +94,7 @@ func (a *ArrayMergeStrategy) SupportsType(valueType string) bool {
 // Child array elements are prepended to parent array elements (higher priority).
 type ArrayPrependStrategy struct{}
 
-// ⭐ CFG-005: Array prepend strategy implementation - 🔧 Array prepend behavior
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (a *ArrayPrependStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	destVal := reflect.ValueOf(dest)
 	srcVal := reflect.ValueOf(src)
@@ -147,7 +147,7 @@ func (a *ArrayPrependStrategy) SupportsType(valueType string) bool {
 // Child array completely replaces parent array.
 type ArrayReplaceStrategy struct{}
 
-// ⭐ CFG-005: Array replace strategy implementation - 🔧 Array replacement behavior
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (a *ArrayReplaceStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	// Array replace: child array completely replaces parent array
 	return src, nil
@@ -169,7 +169,7 @@ func (a *ArrayReplaceStrategy) SupportsType(valueType string) bool {
 // Child value is used only if parent value is not set or is zero value.
 type DefaultValueStrategy struct{}
 
-// ⭐ CFG-005: Default value strategy implementation - 🔧 Default fallback behavior
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (d *DefaultValueStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	destVal := reflect.ValueOf(dest)
 
@@ -199,7 +199,7 @@ type PrefixedKeyProcessor struct {
 	strategies map[string]MergeStrategy
 }
 
-// ⭐ CFG-005: Prefixed key processor implementation - 🔍 Key prefix analysis
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func NewPrefixedKeyProcessor() *PrefixedKeyProcessor {
 	processor := &PrefixedKeyProcessor{
 		strategies: make(map[string]MergeStrategy),
@@ -234,7 +234,7 @@ func (p *PrefixedKeyProcessor) GetAvailableStrategies() map[string]MergeStrategy
 	return strategies
 }
 
-// ⭐ CFG-005: Key processing implementation - 🔧 Prefix extraction and strategy selection
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func (p *PrefixedKeyProcessor) ProcessKeys(config map[string]interface{}) (*ProcessedConfig, error) {
 	processed := &ProcessedConfig{
 		Config:     make(map[string]interface{}),
@@ -284,7 +284,7 @@ type DefaultMergeStrategyProcessor struct {
 	*PrefixedKeyProcessor
 }
 
-// ⭐ CFG-005: Default merge strategy processor - 🔧 Pre-configured processor
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 func NewDefaultMergeStrategyProcessor() *DefaultMergeStrategyProcessor {
 	return &DefaultMergeStrategyProcessor{
 		PrefixedKeyProcessor: NewPrefixedKeyProcessor(),

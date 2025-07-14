@@ -5,6 +5,14 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// TEST-CONFIG-PKG-001: Config package test validation - Configuration discovery and loading testing [ACTION:validation]
+// Source: pkg/config/discovery.go - Config discovery implementation
+// Impact: Core functionality validation for config package
+
+// TEST-SERVICE-CONFIG-PKG-001: Config package service test validation - Configuration service implementation testing [ACTION:validation]
+// Source: pkg/config/loader.go - Config service implementation
+// Impact: Config service validation for config package service implementation
 package config
 
 import (
@@ -23,7 +31,9 @@ type TestConfig struct {
 	Environment string   `yaml:"environment"`
 }
 
-// ⭐ EXTRACT-001: Package validation - Generic configuration loader test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config Loader System
 func TestGenericConfigLoader(t *testing.T) {
 	// Create a temporary directory for test
 	tempDir, err := os.MkdirTemp("", "config_test")
@@ -101,7 +111,9 @@ environment: testing
 	}
 }
 
-// ⭐ EXTRACT-001: Package validation - Configuration value extraction test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config Value System
 func TestConfigValueExtraction(t *testing.T) {
 	config := &TestConfig{
 		Name:        "example-app",
@@ -137,7 +149,9 @@ func TestConfigValueExtraction(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-001: Package validation - Configuration merging test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config Merge System
 func TestConfigMerging(t *testing.T) {
 	merger := NewGenericConfigMerger()
 
@@ -181,7 +195,9 @@ func TestConfigMerging(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-001: Package validation - Path discovery test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config Path System
 func TestPathDiscovery(t *testing.T) {
 	discovery := NewGenericPathDiscovery("myapp", ".myapp.yml")
 
@@ -203,7 +219,9 @@ func TestPathDiscovery(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-001: Package validation - Environment provider test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config Environment System
 func TestEnvironmentProvider(t *testing.T) {
 	provider := NewDefaultEnvironmentProvider()
 
@@ -235,7 +253,9 @@ func TestEnvironmentProvider(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-001: Package validation - File operations test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config FileOps System
 func TestFileOperations(t *testing.T) {
 	fileOps := NewDefaultFileOperations()
 
@@ -278,7 +298,9 @@ func TestFileOperations(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-001: Package validation - Value extractor test - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-001
+// IMMUTABLE-REF: Config ValueExtractor System
 func TestValueExtractor(t *testing.T) {
 	extractor := NewGenericValueExtractor()
 
@@ -321,7 +343,7 @@ func TestValueExtractor(t *testing.T) {
 }
 
 // BenchmarkConfigLoading benchmarks the configuration loading performance.
-// ⭐ EXTRACT-001: Package validation - Performance benchmark - 🧪
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func BenchmarkConfigLoading(b *testing.B) {
 	// Create test setup
 	tempDir, err := os.MkdirTemp("", "benchmark_config")

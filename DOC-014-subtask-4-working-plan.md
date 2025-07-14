@@ -3,18 +3,18 @@
 ## 🎯 TASK OVERVIEW
 
 **Feature ID**: DOC-014 Subtask 4
-**Priority**: 🔺 HIGH - Improves token system effectiveness
+**Priority**: [HIGH] HIGH - Improves token system effectiveness
 **Status**: ⚡ In Progress
-**Implementation Tokens**: `// 🔺 DOC-014: Enhanced tokens`
+**Implementation Tokens**: `// [HIGH] DOC-014: Enhanced tokens`
 
 **Task Description**: Enhance the implementation token system by adding decision context syntax, categories, updating guidelines, and creating migration strategy.
 
 ## 🚨 PHASE 1: CRITICAL VALIDATION COMPLETED ✅
 
 ### ✅ Pre-Work Validation Results:
-1. **🛡️ Immutable Check**: ✅ PASSED - No conflicts with immutable specifications
+1. **[ACTION:validation] Immutable Check**: ✅ PASSED - No conflicts with immutable specifications
 2. **📋 Feature ID Verification**: ✅ CONFIRMED - DOC-014 exists with proper classification  
-3. **🔍 Dependency Verification**: ✅ COMPLETED - Subtask 1 (core framework) defines decision categories
+3. **[ACTION:discovery] Dependency Verification**: ✅ COMPLETED - Subtask 1 (core framework) defines decision categories
 4. **📚 Existing Guidelines Review**: ✅ COMPLETED - Current DOC-007 structure analyzed
 
 ### ✅ Critical Dependencies Satisfied:
@@ -25,13 +25,13 @@
 
 ## 📋 DETAILED SUBTASK BREAKDOWN
 
-### **4.1 Define Decision Context Syntax** (⭐ CRITICAL)
+### **4.1 Define Decision Context Syntax** ([CRITICAL] CRITICAL)
 **Goal**: Standardize decision rationale format in implementation tokens
 
 **Current State Analysis**:
 - ✅ Current format: `// [PRIORITY_ICON] FEATURE-ID: Brief description [- DETAIL_ICON Context]`
 - ✅ ai-decision-framework.md defines categories: Impact Level, Dependencies, Constraints
-- ✅ Example suggested: `// ⭐ ARCH-001: Archive naming [DECISION: core-functionality, blocks-extraction, user-facing]`
+- ✅ Example suggested: `// [CRITICAL] ARCH-001: Archive naming [DECISION: core-functionality, blocks-extraction, user-facing]`
 
 **Implementation Plan**:
 1. **Syntax Design**: 
@@ -55,7 +55,7 @@
 - ✅ Integration with existing priority and action icon systems
 - ✅ Validation-ready format for automated compliance checking
 
-### **4.2 Create Decision Categories** (⭐ CRITICAL)
+### **4.2 Create Decision Categories** ([CRITICAL] CRITICAL)
 **Goal**: Impact level, dependencies, constraints classification
 
 **Implementation Plan**:
@@ -79,7 +79,7 @@
 
 4. **Category Mapping**:
    - Link categories to ai-decision-framework.md decision hierarchy
-   - Map to current feature priority system (⭐🔺🔶🔻)
+   - Map to current feature priority system ([CRITICAL][HIGH][MEDIUM][LOW])
    - Integration with feature-tracking.md classification
 
 **Expected Outcomes**:
@@ -87,7 +87,7 @@
 - ✅ Alignment with existing decision framework
 - ✅ Clear guidelines for category selection
 
-### **4.3 Update Token Guidelines** (🔺 HIGH)
+### **4.3 Update Token Guidelines** ([HIGH] HIGH)
 **Goal**: Extend DOC-007 with decision context requirements
 
 **Implementation Plan**:
@@ -99,10 +99,10 @@
 
 2. **Decision Context Examples**:
    ```go
-   // ⭐ ARCH-001: Archive naming [DECISION: core-functionality, blocks-extraction, user-facing]
-   // 🔺 CFG-005: Inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
-   // 🔶 DOC-010: Token suggestions [DECISION: developer-experience, independent]
-   // 🔻 TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
+   // [CRITICAL] ARCH-001: Archive naming [DECISION: core-functionality, blocks-extraction, user-facing]
+   // [HIGH] CFG-005: Inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
+   // [MEDIUM] DOC-010: Token suggestions [DECISION: developer-experience, independent]
+   // [LOW] TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
    ```
 
 3. **Update Validation Integration**:
@@ -120,7 +120,7 @@
 - ✅ Clear examples and usage patterns
 - ✅ Integration with existing validation systems
 
-### **4.4 Create Migration Strategy** (🔺 HIGH)
+### **4.4 Create Migration Strategy** ([HIGH] HIGH)
 **Goal**: Plan for upgrading existing tokens with decision context
 
 **Implementation Plan**:
@@ -130,9 +130,9 @@
    - Identify tokens that would benefit most from decision context
 
 2. **Phased Migration Approach**:
-   - **Phase 1**: Critical tokens (⭐ priority) - immediate migration
-   - **Phase 2**: High priority tokens (🔺 priority) - staged migration
-   - **Phase 3**: Medium/Low priority tokens (🔶🔻) - optional migration
+   - **Phase 1**: Critical tokens ([CRITICAL] priority) - immediate migration
+   - **Phase 2**: High priority tokens ([HIGH] priority) - staged migration
+   - **Phase 3**: Medium/Low priority tokens ([MEDIUM][LOW]) - optional migration
 
 3. **Automated Migration Tools**:
    - Extend existing token-migration.sh script
@@ -156,7 +156,7 @@
 - ✅ Automated tools for efficient migration
 - ✅ Quality assurance for migration accuracy
 
-### **4.5 Update Task Status in Feature Tracking** (🔻 LOW)
+### **4.5 Update Task Status in Feature Tracking** ([LOW] LOW)
 **Goal**: Update task and subtask status in feature-tracking.md with completion notes
 
 **Implementation Plan**:

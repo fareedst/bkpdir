@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -10,7 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// TestDefaultTestUtilProvider tests the main provider functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Provider System
 func TestDefaultTestUtilProvider(t *testing.T) {
 	provider := NewTestUtilProvider()
 
@@ -54,7 +56,9 @@ func TestDefaultTestUtilProvider(t *testing.T) {
 	}
 }
 
-// TestAssertionHelper tests the assertion functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Assertion System
 func TestAssertionHelper(t *testing.T) {
 	helper := NewAssertionHelper()
 
@@ -92,7 +96,9 @@ func TestAssertionHelper(t *testing.T) {
 	})
 }
 
-// TestFileSystemTestHelper tests the file system utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil FileSystem System
 func TestFileSystemTestHelper(t *testing.T) {
 	helper := NewFileSystemTestHelper()
 
@@ -182,7 +188,9 @@ func TestFileSystemTestHelper(t *testing.T) {
 	})
 }
 
-// TestCliTestHelper tests the CLI utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil CLI System
 func TestCliTestHelper(t *testing.T) {
 	helper := NewCliTestHelper()
 
@@ -231,7 +239,9 @@ func TestCliTestHelper(t *testing.T) {
 	})
 }
 
-// TestConfigProvider tests the configuration utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Config System
 func TestConfigProvider(t *testing.T) {
 	configData := map[string]interface{}{
 		"test_key":    "test_value",
@@ -282,7 +292,9 @@ func TestConfigProvider(t *testing.T) {
 	})
 }
 
-// TestEnvironmentManager tests the environment management utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Environment System
 func TestEnvironmentManager(t *testing.T) {
 	manager := NewEnvironmentManager()
 
@@ -315,7 +327,9 @@ func TestEnvironmentManager(t *testing.T) {
 	})
 }
 
-// TestTestFixtureManager tests the fixture management utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Fixture System
 func TestTestFixtureManager(t *testing.T) {
 	tempDir := t.TempDir()
 	manager := NewTestFixtureManager(tempDir)
@@ -371,7 +385,9 @@ func TestTestFixtureManager(t *testing.T) {
 	})
 }
 
-// TestTestScenario tests the scenario functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Scenario System
 func TestTestScenario(t *testing.T) {
 	t.Run("BasicScenario", func(t *testing.T) {
 		var setupCalled, executeCalled, verifyCalled, cleanupCalled bool
@@ -454,7 +470,9 @@ func TestTestScenario(t *testing.T) {
 	})
 }
 
-// TestConvenienceFunctions tests package-level convenience functions
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-009
+// IMMUTABLE-REF: TestUtil Convenience System
 func TestConvenienceFunctions(t *testing.T) {
 	t.Run("GetDefaultProvider", func(t *testing.T) {
 		provider := GetDefaultProvider()

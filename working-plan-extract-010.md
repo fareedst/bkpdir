@@ -4,7 +4,7 @@
 **Task ID**: 31 (EXTRACT-010)  
 **Title**: Create Package Documentation and Examples  
 **Priority**: HIGH - Essential for adoption and maintenance  
-**Status**: 🔄 In Progress  
+**Status**: [ACTION:migration] In Progress  
 **Started**: 2025-01-02
 
 ## 🚀 PHASE 1: CRITICAL VALIDATION REQUIREMENTS
@@ -32,7 +32,7 @@
 ### ✅ 3. AI Assistant Compliance Check
 - **Implementation Tokens Required**: YES - All documentation files must include `// EXTRACT-010:` tokens
 - **Token Format**: `// EXTRACT-010: Description` following DOC-007 standardized format
-- **Icon Requirements**: HIGH priority tasks require 🔺 HIGH priority icon
+- **Icon Requirements**: HIGH priority tasks require [HIGH] HIGH priority icon
 - **Compliance Standard**: Must follow DOC-008 validation requirements
 
 ### ✅ 4. AI Assistant Protocol Verification
@@ -47,7 +47,7 @@
 
 ## 📊 Current State Analysis
 
-### 🔍 Extracted Packages Inventory
+### [ACTION:discovery] Extracted Packages Inventory
 Based on analysis of `pkg/` directory:
 
 1. **pkg/config** - Configuration management system
@@ -77,8 +77,8 @@ Based on analysis of `pkg/` directory:
 
 ## 🎯 Detailed Subtask Plan
 
-### 📝 Subtask 1: Document Each Extracted Package
-**Priority**: 🔺 HIGH  
+### [ACTION:format-processing] Subtask 1: Document Each Extracted Package
+**Priority**: [HIGH] HIGH  
 **Estimated Effort**: 3-4 hours  
 **Dependencies**: None
 
@@ -123,7 +123,7 @@ How it works with other packages
 ```
 
 ### 🔗 Subtask 2: Create Integration Examples ✅ **COMPLETED**
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Effort**: 2-3 hours  
 **Dependencies**: Subtask 1 (package documentation)
 
@@ -143,7 +143,7 @@ How it works with other packages
 **Note**: Core integration examples completed. Additional examples can be added in future iterations based on user feedback and adoption needs.
 
 ### 📈 Subtask 3: Add Performance Benchmarks  
-**Priority**: 🔶 MEDIUM  
+**Priority**: [MEDIUM] MEDIUM  
 **Estimated Effort**: 2-3 hours  
 **Dependencies**: Subtask 1 (package documentation)
 
@@ -160,8 +160,8 @@ How it works with other packages
 4. **File Operations Performance** - Atomic operations efficiency
 5. **Error Handling Overhead** - Structured error performance impact
 
-### 🔧 Subtask 4: Create Troubleshooting Guides
-**Priority**: 🔶 MEDIUM  
+### [ACTION:core-functionality] Subtask 4: Create Troubleshooting Guides
+**Priority**: [MEDIUM] MEDIUM  
 **Estimated Effort**: 2 hours  
 **Dependencies**: Subtask 2 (integration examples)
 
@@ -179,7 +179,7 @@ How it works with other packages
 5. **Testing Issues** - Common testing setup and isolation problems
 
 ### 📚 Subtask 5: Document Design Decisions
-**Priority**: 🔶 MEDIUM  
+**Priority**: [MEDIUM] MEDIUM  
 **Estimated Effort**: 2-3 hours  
 **Dependencies**: All previous subtasks for comprehensive understanding
 
@@ -198,7 +198,7 @@ How it works with other packages
 6. **Performance Trade-offs** - Extraction overhead vs maintainability
 
 ### 🏁 Subtask 6: Update Feature Tracking Status
-**Priority**: 🔺 HIGH (MANDATORY)  
+**Priority**: [HIGH] HIGH (MANDATORY)  
 **Estimated Effort**: 30 minutes  
 **Dependencies**: All previous subtasks completed
 
@@ -233,9 +233,9 @@ How it works with other packages
 **Target**: Subtasks 5 & 6 - Design decisions and status updates  
 **Output**: Design decision documentation and task completion
 
-## 🛠️ Technical Approach
+## [ACTION:maintenance] Technical Approach
 
-### 📝 Documentation Standards
+### [ACTION:format-processing] Documentation Standards
 - **Godoc Compatibility**: All documentation must be godoc-compatible
 - **Markdown Format**: Use consistent markdown formatting
 - **Code Examples**: Include runnable code examples
@@ -255,7 +255,7 @@ How it works with other packages
 - **Adoption**: Documentation enables easy package adoption
 - **Maintenance**: Design decisions preserve institutional knowledge
 
-## 🔄 Risk Mitigation
+## [ACTION:migration] Risk Mitigation
 
 ### ⚠️ Identified Risks
 1. **Documentation Drift** - Documentation becoming outdated
@@ -263,7 +263,7 @@ How it works with other packages
 3. **Performance Regression** - Extraction introduces unexpected performance costs
 4. **Integration Complexity** - Package integration more complex than expected
 
-### 🛡️ Mitigation Strategies
+### [ACTION:validation] Mitigation Strategies
 1. **Automated Validation** - Build system validates documentation examples
 2. **Layered Examples** - Provide both simple and complex examples
 3. **Benchmark Monitoring** - Track performance over time
@@ -344,4 +344,4 @@ Each package in `pkg/*/` will have:
 
 **📋 This working plan serves as the comprehensive roadmap for EXTRACT-010 completion, ensuring thorough documentation of all extracted packages while following the established context documentation system requirements.**
 
-**🔄 Next Action**: Begin Subtask 1 - Document each extracted package, starting with pkg/config as the foundation package. 
+**[ACTION:migration] Next Action**: Begin Subtask 1 - Document each extracted package, starting with pkg/config as the foundation package. 

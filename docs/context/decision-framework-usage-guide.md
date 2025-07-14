@@ -1,8 +1,8 @@
-# 🎯 AI Assistant Decision Framework - Usage Guide
+# [OBJECTIVE] AI Assistant Decision Framework - Usage Guide
 
-> **🔶 DOC-014: Comprehensive guide for AI assistants to effectively use the decision framework**
+> **[MEDIUM_PRIORITY] DOC-014: Comprehensive guide for AI assistants to effectively use the decision framework**
 
-## 📑 Table of Contents
+## [PURPOSE] Table of Contents
 
 1. [Quick Start Guide](#-quick-start-guide)
 2. [4-Tier Decision Hierarchy](#-4-tier-decision-hierarchy)
@@ -13,18 +13,18 @@
 7. [Troubleshooting Scenarios](#-troubleshooting-scenarios)
 8. [Training Examples](#-training-examples)
 
-## 🚀 Quick Start Guide
+## [EXECUTION] Quick Start Guide
 
-### **⚡ 30-Second Decision Process**
+### **[IMMEDIATE] 30-Second Decision Process**
 ```
-1. 🛡️ SAFETY CHECK: Are tests passing? (`make test`)
-2. 📋 SCOPE CHECK: Is this in feature-tracking.md?
-3. 📊 QUALITY CHECK: Will this maintain >90% coverage?
-4. 🎯 GOAL CHECK: Does this advance current extraction phase?
+1. [VALIDATION] SAFETY CHECK: Are tests passing? (`make test`)
+2. [CHECKLIST] SCOPE CHECK: Is this in feature-tracking.md?
+3. [METRICS] QUALITY CHECK: Will this maintain >90% coverage?
+4. [OBJECTIVE] GOAL CHECK: Does this advance current extraction phase?
 ➡️ If ALL YES → PROCEED with appropriate protocol
 ```
 
-### **🔧 First-Time Setup**
+### **[CONFIGURE_MODIFY] First-Time Setup**
 ```bash
 # 1. Validate your environment
 make test                    # All tests must pass
@@ -37,43 +37,43 @@ make validate-icons          # Icon validation must pass
 grep -A 10 "Current Priority" docs/context/feature-tracking.md
 ```
 
-## 🏗️ 4-Tier Decision Hierarchy
+## [BUILD_CONSTRUCT] 4-Tier Decision Hierarchy
 
-### **Tier 1: 🛡️ Safety Gates (NEVER Override)**
+### **Tier 1: [VALIDATION] Safety Gates (NEVER Override)**
 
-#### **🧪 Test Validation**
+#### **[TECHNICAL] Test Validation**
 - **Check**: `make test` returns exit code 0
 - **Rationale**: Broken tests block all downstream work
 - **Action**: Fix failing tests before ANY other work
 - **Exception**: None - safety gates are absolute
 
-#### **🔧 Backward Compatibility**
+#### **[CONFIGURE_MODIFY] Backward Compatibility**
 - **Check**: Existing functionality preserved
 - **Rationale**: Breaking changes require extensive documentation updates
 - **Action**: Ensure all existing APIs and behaviors unchanged
 - **Exception**: None - breaking changes must be explicitly planned
 
-#### **🏷️ Token Compliance**
+#### **[CLASSIFICATION] Token Compliance**
 - **Check**: Implementation tokens properly formatted (DOC-007/008/009)
 - **Rationale**: Traceability system depends on consistent tokens
 - **Action**: Add/update tokens per standardized format
 - **Exception**: None - 100% compliance required
 
-#### **📋 Validation Scripts**
+#### **[CHECKLIST] Validation Scripts**
 - **Check**: `make validate-icons` passes cleanly
 - **Rationale**: Automated validation prevents regression
 - **Action**: Fix validation errors before proceeding
 - **Exception**: None - validation must pass
 
-### **Tier 2: 📑 Scope Boundaries (Strict Limits)**
+### **Tier 2: [PURPOSE] Scope Boundaries (Strict Limits)**
 
-#### **📋 Feature Scope**
+#### **[CHECKLIST] Feature Scope**
 - **Check**: Change documented in feature-tracking.md
 - **Rationale**: Undocumented work creates scope creep
 - **Action**: Find existing feature or create new feature ID
 - **Guidance**: Break large changes into multiple features
 
-#### **🔗 Dependency Check**
+#### **[INTEGRATION] Dependency Check**
 - **Check**: All blocking dependencies marked "✅ Completed"
 - **Rationale**: Work on blocked features wastes effort
 - **Action**: Complete dependencies first or find unblocked work
@@ -85,13 +85,13 @@ grep -A 10 "Current Priority" docs/context/feature-tracking.md
 - **Action**: Align with documented patterns or update architecture
 - **Guidance**: When in doubt, ask for architectural guidance
 
-#### **📝 Context Updates**
+#### **[ACTION:format-processing] Context Updates**
 - **Check**: Required context files identified per protocol
 - **Rationale**: Documentation drift breaks system integrity
 - **Action**: Update ALL required context files
 - **Guidance**: Better to update too many than too few
 
-### **Tier 3: 📊 Quality Thresholds (Must Meet)**
+### **Tier 3: [METRICS] Quality Thresholds (Must Meet)**
 
 #### **📈 Test Coverage**
 - **Check**: Maintains >90% coverage for new code (COV-001)
@@ -99,7 +99,7 @@ grep -A 10 "Current Priority" docs/context/feature-tracking.md
 - **Action**: Add comprehensive tests for new functionality
 - **Tool**: `make test-coverage-validate`
 
-#### **🛡️ Error Patterns**
+#### **[ACTION:validation] Error Patterns**
 - **Check**: Consistent with existing error handling
 - **Rationale**: Inconsistent error handling confuses users
 - **Action**: Follow established error patterns
@@ -115,9 +115,9 @@ grep -A 10 "Current Priority" docs/context/feature-tracking.md
 - **Check**: Implementation tokens added for bidirectional traceability
 - **Rationale**: Future maintenance requires clear code-to-documentation links
 - **Action**: Add tokens linking code to features
-- **Format**: `// ⭐ FEATURE-ID: Description [DECISION: context]`
+- **Format**: `// [CRITICAL] FEATURE-ID: Description [DECISION: context]`
 
-### **Tier 4: 🎯 Goal Alignment (Strategic Check)**
+### **Tier 4: [OBJECTIVE] Goal Alignment (Strategic Check)**
 
 #### **⚡ Phase Progress**
 - **Check**: Advances current extraction/refactoring phase
@@ -125,10 +125,10 @@ grep -A 10 "Current Priority" docs/context/feature-tracking.md
 - **Action**: Prioritize work that unblocks future phases
 - **Reference**: feature-tracking.md current phase section
 
-#### **⭐ Priority Order**
+#### **[CRITICAL] Priority Order**
 - **Check**: Highest priority task available
 - **Rationale**: Priority system ensures optimal resource allocation
-- **Action**: Work on ⭐ CRITICAL before 🔺 HIGH, etc.
+- **Action**: Work on [CRITICAL] CRITICAL before [HIGH] HIGH, etc.
 - **Tool**: Sort feature-tracking.md by priority icons
 
 #### **🔮 Future Impact**
@@ -137,7 +137,7 @@ grep -A 10 "Current Priority" docs/context/feature-tracking.md
 - **Action**: Consider impact on extraction and reusability goals
 - **Guidance**: Prefer solutions that improve architecture
 
-#### **🔧 Reusability**
+#### **[ACTION:core-functionality] Reusability**
 - **Check**: Preserves component extraction and reusability goals
 - **Rationale**: Tight coupling prevents successful component extraction
 - **Action**: Design for loose coupling and clear interfaces
@@ -151,7 +151,7 @@ grep -A 10 "Current Priority" docs/context/feature-tracking.md
 graph TD
     A[Feature Request] --> B{Exists in feature-tracking.md?}
     B -->|No| C[Create new feature ID]
-    B -->|Yes| D{Status is "📝 Not Started"?}
+    B -->|Yes| D{Status is "[ACTION:format-processing] Not Started"?}
     D -->|No| E[Check current status and requirements]
     D -->|Yes| F{All dependencies "✅ Completed"?}
     F -->|No| G[Complete dependencies first]
@@ -170,7 +170,7 @@ graph TD
     Q --> L
 ```
 
-### **🔧 "Should I refactor this code?"**
+### **[ACTION:core-functionality] "Should I refactor this code?"**
 
 ```mermaid
 graph TD
@@ -195,7 +195,7 @@ graph TD
 graph TD
     A[Test Failure] --> B{Blocks other work?}
     B -->|Yes| C[🚨 IMMEDIATE fix required]
-    B -->|No| D{Critical component (⭐/🔺)?}
+    B -->|No| D{Critical component ([CRITICAL]/[HIGH])?}
     D -->|Yes| E[High priority fix]
     D -->|No| F{Can fix without changing functionality?}
     F -->|Yes| G{Follows error patterns?}
@@ -208,7 +208,7 @@ graph TD
     J --> I
 ```
 
-### **📝 "Should I update documentation?"**
+### **[ACTION:format-processing] "Should I update documentation?"**
 
 ```mermaid
 graph TD
@@ -229,7 +229,7 @@ graph TD
 
 ## ✅ Validation Checklists
 
-### **🛡️ Pre-Implementation Checklist**
+### **[ACTION:validation] Pre-Implementation Checklist**
 
 ```bash
 # Safety Gates
@@ -293,7 +293,7 @@ graph TD
 - **Review**: Manual verification in change approval process
 - **Tools**: ai-assistant-compliance.md checklist
 
-### **🛡️ Regression Prevention Metrics**
+### **[ACTION:validation] Regression Prevention Metrics**
 - **Target**: Zero test failures introduced by changes
 - **Measurement**: Test suite stability over time
 - **Review**: Continuous monitoring of test results
@@ -305,7 +305,7 @@ graph TD
 - **Review**: Monthly analysis of rework requirements
 - **Tools**: Validation failure tracking and analysis
 
-### **🔄 Rework Minimization Metrics**
+### **[ACTION:migration] Rework Minimization Metrics**
 - **Target**: <5% of changes require significant rework
 - **Measurement**: Track scope changes and requirement modifications
 - **Review**: Root cause analysis of rework incidents
@@ -319,13 +319,13 @@ graph TD
 - **Integration**: Decision framework validates against feature registry
 - **Protocol**: Always check feature existence and dependencies
 
-### **🔧 Protocol Integration** 
+### **[ACTION:core-functionality] Protocol Integration** 
 - **File**: `docs/context/ai-assistant-protocol.md`
 - **Usage**: Defines required steps for each change type
 - **Integration**: Decision trees route to appropriate protocols
 - **Protocol**: Follow documentation cascade requirements
 
-### **🛡️ Validation Integration**
+### **[ACTION:validation] Validation Integration**
 - **Files**: DOC-008, DOC-011 validation systems
 - **Usage**: Automated compliance checking
 - **Integration**: Decision framework validation integrated with existing systems
@@ -343,9 +343,9 @@ graph TD
 - **Integration**: Decision framework validates architectural alignment
 - **Protocol**: Follow established patterns or update architecture
 
-## 🔧 Troubleshooting Scenarios
+## [ACTION:core-functionality] Troubleshooting Scenarios
 
-### **🚨 Scenario: Multiple ⭐ CRITICAL Tasks Available**
+### **🚨 Scenario: Multiple [CRITICAL] CRITICAL Tasks Available**
 
 **Problem**: Several critical priority tasks, unclear which to prioritize
 
@@ -379,7 +379,7 @@ Analysis: Affects CFG-001, CFG-002, CFG-004
 Decision: Create CFG-007 for new validation, modify existing features
 ```
 
-### **🔧 Scenario: Technical Debt vs Feature Work**
+### **[ACTION:core-functionality] Scenario: Technical Debt vs Feature Work**
 
 **Problem**: Technical debt is blocking feature implementation
 
@@ -396,7 +396,7 @@ Analysis: Refactoring needed to enable extraction
 Decision: Create REFACTOR-007, prioritize before EXTRACT-002
 ```
 
-### **📝 Scenario: Documentation Scope Uncertainty**
+### **[ACTION:format-processing] Scenario: Documentation Scope Uncertainty**
 
 **Problem**: Unclear which context files need updates
 
@@ -422,7 +422,7 @@ Optional Updates: architecture.md (if affects patterns)
 
 **Decision Process**:
 ```
-1. 🛡️ Safety Gates:
+1. [ACTION:validation] Safety Gates:
    ✅ make test (all pass)
    ✅ make validate-icons (pass)
    ✅ git status (clean)
@@ -437,11 +437,11 @@ Optional Updates: architecture.md (if affects patterns)
    ✅ Test strategy: Add comprehensive Git submodule tests
    ✅ Error patterns: Use existing Git error handling
    ✅ Performance: Minimal impact expected
-   ✅ Tokens: Add // 🔶 GIT-004: Git submodules
+   ✅ Tokens: Add // [MEDIUM] GIT-004: Git submodules
 
 4. 🎯 Goal Alignment:
    ✅ Phase: Git integration completion phase
-   ✅ Priority: 🔶 MEDIUM (no higher priority available)
+   ✅ Priority: [MEDIUM] MEDIUM (no higher priority available)
    ✅ Future: Enables complete Git feature set
    ✅ Reusability: Extends pkg/git reusable component
 ```
@@ -454,7 +454,7 @@ Optional Updates: architecture.md (if affects patterns)
 
 **Decision Process**:
 ```
-1. 🛡️ Safety Gates:
+1. [ACTION:validation] Safety Gates:
    ✅ make test (all pass)
    ✅ Backward compatibility required
    ✅ Token compliance maintained
@@ -473,7 +473,7 @@ Optional Updates: architecture.md (if affects patterns)
 
 4. 🎯 Goal Alignment:
    ✅ Phase: Pre-extraction refactoring phase
-   ✅ Priority: 🔺 HIGH (extraction blocker)
+   ✅ Priority: [HIGH] HIGH (extraction blocker)
    ✅ Future: Enables clean EXTRACT-003 implementation
    ✅ Reusability: Critical for component extraction
 ```
@@ -486,7 +486,7 @@ Optional Updates: architecture.md (if affects patterns)
 
 **Decision Process**:
 ```
-1. 🛡️ Safety Gates:
+1. [ACTION:validation] Safety Gates:
    ❌ make test (failing - this is what we're fixing)
    ✅ Fix won't break backward compatibility
    ✅ Implementation tokens will be updated
@@ -501,7 +501,7 @@ Optional Updates: architecture.md (if affects patterns)
    ✅ Coverage: Fix will improve coverage
    ✅ Patterns: Follow established Git error handling  
    ✅ Performance: No performance impact
-   ✅ Tokens: Update // 🔺 GIT-003: Git status
+   ✅ Tokens: Update // [HIGH] GIT-003: Git status
 
 4. 🎯 Goal Alignment:
    🚨 CRITICAL: Blocking all other work
@@ -518,7 +518,7 @@ Optional Updates: architecture.md (if affects patterns)
 
 **Decision Process**:
 ```
-1. 🛡️ Safety Gates:
+1. [ACTION:validation] Safety Gates:
    ✅ make test (all pass)
    ✅ No functional changes
    ✅ Documentation tokens updated
@@ -567,6 +567,6 @@ Optional Updates: architecture.md (if affects patterns)
 ---
 
 **📋 Document Status**: ✅ Complete  
-**🔄 Last Updated**: 2025-01-04  
-**📝 Next Review**: After DOC-014 completion  
+**[ACTION:migration] Last Updated**: 2025-01-04  
+**[ACTION:format-processing] Next Review**: After DOC-014 completion  
 **🔗 Related**: ai-decision-framework.md, ai-assistant-protocol.md, feature-tracking.md 

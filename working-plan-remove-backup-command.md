@@ -3,7 +3,7 @@
 **Task ID**: CLI-015 (to be assigned in feature-tracking.md)
 **Date**: 2025-01-09
 **AI Assistant**: Claude
-**Priority**: ⭐ CRITICAL (CLI interface change)
+**Priority**: [CRITICAL] CRITICAL (CLI interface change)
 
 ## 📑 Task Summary
 
@@ -34,7 +34,7 @@
 
 ## ⚡ PHASE 2: CORE IMPLEMENTATION PLANNING
 
-### 🔍 STEP 1: Analysis and Discovery
+### [ACTION:discovery] STEP 1: Analysis and Discovery
 
 #### Current State Analysis:
 - **Current CLI Structure**: 
@@ -54,7 +54,7 @@
 3. **Conditional Logic**: Route to appropriate backup/archive function
 4. **Preserve Existing Commands**: Keep backup, create, full commands for backward compatibility
 
-### 🔧 STEP 2: Detailed Implementation Plan
+### [ACTION:core-functionality] STEP 2: Detailed Implementation Plan
 
 #### Files to Modify:
 1. **main.go**:
@@ -73,7 +73,7 @@
 4. **Update Help Text**: Modify examples and usage text to reflect new behavior
 5. **Preserve Backward Compatibility**: Ensure existing commands continue working
 
-### 📝 STEP 3: Documentation Updates Required
+### [ACTION:format-processing] STEP 3: Documentation Updates Required
 
 #### CRITICAL Updates (✅ HIGH PRIORITY):
 - ✅ `feature-tracking.md` - Add CLI-015 feature entry with subtasks
@@ -86,51 +86,51 @@
 - ⚠️ `immutable.md` - **CRITICAL CONFLICT**: May need to update command structure or preserve old alongside new
 - ⚠️ `implementation-decisions.md` - Document CLI design decisions
 
-## 🔄 PHASE 3: DETAILED SUBTASKS
+## [ACTION:migration] PHASE 3: DETAILED SUBTASKS
 
-### **Subtask 1: Path Type Detection** (⭐ CRITICAL)
+### **Subtask 1: Path Type Detection** ([CRITICAL] CRITICAL)
 - **Description**: Implement function to detect if path is file or directory
 - **Files**: main.go
 - **Implementation**: Add `isFile()` and `isDirectory()` helper functions
 - **Testing**: Unit tests for path type detection
 
-### **Subtask 2: Root Command Modification** (⭐ CRITICAL)  
+### **Subtask 2: Root Command Modification** ([CRITICAL] CRITICAL)  
 - **Description**: Update root command to handle first positional argument
 - **Files**: main.go
 - **Implementation**: Modify root command Run function
 - **Testing**: Integration tests for root command behavior
 
-### **Subtask 3: Routing Logic** (⭐ CRITICAL)
+### **Subtask 3: Routing Logic** ([CRITICAL] CRITICAL)
 - **Description**: Route to appropriate function based on path type
 - **Files**: main.go
 - **Implementation**: Add conditional logic for file vs directory
 - **Testing**: Test both file and directory argument scenarios
 
-### **Subtask 4: Update Help and Examples** (🔺 HIGH)
+### **Subtask 4: Update Help and Examples** ([HIGH] HIGH)
 - **Description**: Update usage text and examples
 - **Files**: main.go
 - **Implementation**: Modify command descriptions and examples
 - **Testing**: Manual testing of help output
 
-### **Subtask 5: Backward Compatibility** (🔺 HIGH)
+### **Subtask 5: Backward Compatibility** ([HIGH] HIGH)
 - **Description**: Ensure existing commands continue working
 - **Files**: main.go
 - **Implementation**: Preserve existing command structure
 - **Testing**: Test all existing command variations
 
-### **Subtask 6: Error Handling** (🔺 HIGH)
+### **Subtask 6: Error Handling** ([HIGH] HIGH)
 - **Description**: Handle edge cases and errors
 - **Files**: main.go
 - **Implementation**: Add error handling for invalid paths, ambiguous cases
 - **Testing**: Test error scenarios
 
-### **Subtask 7: Documentation Updates** (🔺 HIGH)
+### **Subtask 7: Documentation Updates** ([HIGH] HIGH)
 - **Description**: Update all required documentation files
 - **Files**: Multiple .md files
 - **Implementation**: Follow MODIFICATION Protocol documentation requirements
 - **Testing**: Documentation consistency checks
 
-### **Subtask 8: Integration Testing** (🔶 MEDIUM)
+### **Subtask 8: Integration Testing** ([MEDIUM] MEDIUM)
 - **Description**: Comprehensive testing of new CLI behavior
 - **Files**: Test files
 - **Implementation**: Add comprehensive test coverage

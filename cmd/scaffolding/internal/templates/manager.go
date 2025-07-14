@@ -1,4 +1,4 @@
-// 🔺 EXTRACT-008: Template management system - 📝 File generation coordination
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 package templates
 
 import (
@@ -206,7 +206,7 @@ var configCmd = &cobra.Command{
 		
 		for _, path := range configPaths {
 			if _, err := os.Stat(path); err == nil {
-				fmt.Printf("📁 Config file: %s\n", path)
+				fmt.Printf("[DIR] Config file: %s\n", path)
 				
 				data, err := os.ReadFile(path)
 				if err != nil {
@@ -220,9 +220,9 @@ var configCmd = &cobra.Command{
 					continue
 				}
 				
-				fmt.Printf("   ✅ Loaded successfully\n")
+				fmt.Printf("   [SUCCESS] Loaded successfully\n")
 				if verbose {
-					fmt.Printf("   📊 Content:\n")
+					fmt.Printf("   [INFO] Content:\n")
 					for key, value := range config {
 						fmt.Printf("      %s: %v\n", key, value)
 					}
@@ -231,7 +231,7 @@ var configCmd = &cobra.Command{
 			}
 		}
 		
-		fmt.Printf("🔧 Flags:\n")
+		fmt.Printf("[ACTION] Flags:\n")
 		fmt.Printf("   verbose: %v\n", verbose)
 		fmt.Printf("   dry-run: %v\n", dryRun)
 		
@@ -273,15 +273,15 @@ var createCmd = &cobra.Command{
 			if !dryRun {
 				return fmt.Errorf("file already exists: %s", filename)
 			}
-			fmt.Printf("🔍 [DRY RUN] File exists: %s\n", filename)
+			fmt.Printf("[CHECK] [DRY RUN] File exists: %s\n", filename)
 		}
 		
 		content := fmt.Sprintf("# Example file created by %s\n\nCreated at: %s\nContent: This is an example file demonstrating file operations.\n", 
 			cmd.Parent().Name(), time.Now().Format(time.RFC3339))
 		
 		if dryRun {
-			fmt.Printf("🔍 [DRY RUN] Would create file: %s\n", filename)
-			fmt.Printf("📝 [DRY RUN] Content:\n%s\n", content)
+			fmt.Printf("[CHECK] [DRY RUN] Would create file: %s\n", filename)
+			fmt.Printf("[NOTE] [DRY RUN] Content:\n%s\n", content)
 			return nil
 		}
 		
@@ -297,10 +297,10 @@ var createCmd = &cobra.Command{
 			return fmt.Errorf("writing file: %w", err)
 		}
 		
-		fmt.Printf("✅ Created file: %s\n", filename)
+		fmt.Printf("[SUCCESS] Created file: %s\n", filename)
 		if verbose {
-			fmt.Printf("📁 Full path: %s\n", filepath.Join(".", filename))
-			fmt.Printf("📊 Size: %d bytes\n", len(content))
+			fmt.Printf("[DIR] Full path: %s\n", filepath.Join(".", filename))
+			fmt.Printf("[INFO] Size: %d bytes\n", len(content))
 		}
 		
 		return nil
@@ -337,10 +337,10 @@ var processCmd = &cobra.Command{
 			fmt.Sscanf(args[0], "%d", &count)
 		}
 		
-		fmt.Printf("🔄 Starting processing simulation with %d workers\n", count)
+		fmt.Printf("[PROCESS] Starting processing simulation with %d workers\n", count)
 		
 		if dryRun {
-			fmt.Printf("🔍 [DRY RUN] Would process %d items\n", count)
+			fmt.Printf("[CHECK] [DRY RUN] Would process %d items\n", count)
 			return nil
 		}
 		
@@ -384,7 +384,7 @@ func runProcessingSimulation(ctx context.Context, workerCount int) error {
 		fmt.Println(result)
 	}
 	
-	fmt.Printf("✅ Processing simulation completed\n")
+	fmt.Printf("[SUCCESS] Processing simulation completed\n")
 	return nil
 }
 
@@ -402,7 +402,7 @@ func worker(ctx context.Context, id int, work <-chan int, results chan<- string,
 			duration := time.Duration(rand.Intn(1000)+500) * time.Millisecond
 			time.Sleep(duration)
 			
-			results <- fmt.Sprintf("🔧 Worker %d processed item %d (took %v)", id, item, duration)
+			results <- fmt.Sprintf("[ACTION] Worker %d processed item %d (took %v)", id, item, duration)
 			
 		case <-ctx.Done():
 			return
@@ -429,7 +429,7 @@ help: ## Show this help message
 build: ## Build the application
 	@echo "🔨 Building %s..."
 	@go build -o bin/%s .
-	@echo "✅ Build completed: bin/%s"
+	@echo "[SUCCESS] Build completed: bin/%s"
 
 test: ## Run tests
 	@echo "🧪 Running tests..."
@@ -451,12 +451,12 @@ demo: build ## Build and run demonstration
 	@./bin/%s process 3
 
 install: build ## Install the application
-	@echo "📦 Installing %s..."
+	@echo "[PACKAGES] Installing %s..."
 	@go install .
-	@echo "✅ Installation completed"
+	@echo "[SUCCESS] Installation completed"
 
 lint: ## Run linting
-	@echo "🔍 Running linter..."
+	@echo "[CHECK] Running linter..."
 	@which golangci-lint > /dev/null || (echo "Installing golangci-lint..." && go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest)
 	@golangci-lint run
 
@@ -472,7 +472,7 @@ LDFLAGS = -X main.version=$(VERSION)
 build-release: ## Build release version
 	@echo "🔨 Building release version $(VERSION)..."
 	@go build -ldflags "$(LDFLAGS)" -o bin/%s .
-	@echo "✅ Release build completed: bin/%s"`,
+	@echo "[SUCCESS] Release build completed: bin/%s"`,
 		config.ProjectName, config.ProjectName, config.ProjectName, config.ProjectName,
 		config.ProjectName, config.ProjectName, config.ProjectName, config.ProjectName,
 		config.ProjectName, config.ProjectName, config.ProjectName)

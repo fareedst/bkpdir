@@ -2,7 +2,7 @@
 
 ## 🎯 Task Overview
 **Task ID**: INSTALL-001
-**Priority**: ⭐ CRITICAL  
+**Priority**: [CRITICAL] CRITICAL  
 **Status**: ✅ Completed
 
 Add instructions for end users to install pre-compiled binaries from the repository as the primary installation method, recommending processes with curl, wget, or best options for both Ubuntu and macOS.
@@ -33,7 +33,7 @@ Add instructions for end users to install pre-compiled binaries from the reposit
   - Include verification steps (checksums, execution permissions)
   - Maintain backward compatibility with existing methods
 
-## 🔧 Phase 3: IMPLEMENTATION SUBTASKS
+## [ACTION:core-functionality] Phase 3: IMPLEMENTATION SUBTASKS
 
 ### 3.1 Update README.md Installation Section
 - [x] Restructure installation section with binary installation as primary method
@@ -91,7 +91,7 @@ Add instructions for end users to install pre-compiled binaries from the reposit
 - Include troubleshooting section for common installation issues
 - Maintain existing installation methods for users who prefer them
 
-## 🔄 Recovery Information
+## [ACTION:migration] Recovery Information
 - **Task Started**: 2025-01-03
 - **AI Assistant**: Claude Sonnet 4
 - **Context Documentation Version**: Current as of 2025-01-03

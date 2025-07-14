@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -22,7 +22,7 @@ type DefaultTestFixtureManager struct {
 // NewTestFixtureManager creates a new test fixture manager.
 // If fixtureDir is empty, it uses a default "testdata" directory.
 //
-// ⭐ EXTRACT-009: Test fixture manager creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewTestFixtureManager(fixtureDir string) TestFixtureManager {
 	if fixtureDir == "" {
 		fixtureDir = "testdata"
@@ -38,7 +38,7 @@ func NewTestFixtureManager(fixtureDir string) TestFixtureManager {
 // Supports both JSON and YAML formats based on file extension.
 // Extracted from patterns in config_test.go and main_test.go.
 //
-// ⭐ EXTRACT-009: Test fixture loading - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (m *DefaultTestFixtureManager) LoadFixture(t *testing.T, name string) (map[string]interface{}, error) {
 	t.Helper()
 
@@ -87,7 +87,7 @@ func (m *DefaultTestFixtureManager) LoadFixture(t *testing.T, name string) (map[
 // SaveFixture saves test data to a fixture file.
 // Uses JSON format by default, but can save as YAML if name ends with .yaml or .yml.
 //
-// ⭐ EXTRACT-009: Test fixture saving - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (m *DefaultTestFixtureManager) SaveFixture(t *testing.T, name string, data map[string]interface{}) error {
 	t.Helper()
 
@@ -135,10 +135,10 @@ func (m *DefaultTestFixtureManager) SaveFixture(t *testing.T, name string, data 
 	return nil
 }
 
-// GetTestData returns predefined test data sets.
-// This provides access to commonly used test data without file I/O.
+// GetTestData retrieves test data by name.
+// Returns nil if no data is found for the given name.
 //
-// ⭐ EXTRACT-009: Test data retrieval - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (m *DefaultTestFixtureManager) GetTestData(name string) map[string]interface{} {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
@@ -155,10 +155,10 @@ func (m *DefaultTestFixtureManager) GetTestData(name string) map[string]interfac
 	return nil
 }
 
-// RegisterTestData registers a test data set for later retrieval.
-// This allows tests to register commonly used data sets.
+// RegisterTestData registers test data with the manager.
+// This allows for dynamic test data creation during tests.
 //
-// ⭐ EXTRACT-009: Test data registration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (m *DefaultTestFixtureManager) RegisterTestData(name string, data map[string]interface{}) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -174,27 +174,28 @@ func (m *DefaultTestFixtureManager) RegisterTestData(name string, data map[strin
 
 // Package-level convenience functions
 
-// LoadTestFixture loads a test fixture using the default fixture manager.
-// Extracted from patterns in config_test.go and main_test.go.
+// LoadTestFixture is a convenience function that loads test data from a fixture file.
+// It creates a default manager and loads the fixture.
 //
-// ⭐ EXTRACT-009: Convenience fixture loading - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func LoadTestFixture(t *testing.T, name string) (map[string]interface{}, error) {
 	manager := NewTestFixtureManager("")
 	return manager.LoadFixture(t, name)
 }
 
-// SaveTestFixture saves test data using the default fixture manager.
+// SaveTestFixture is a convenience function that saves test data to a fixture file.
+// It creates a default manager and saves the fixture.
 //
-// ⭐ EXTRACT-009: Convenience fixture saving - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func SaveTestFixture(t *testing.T, name string, data map[string]interface{}) error {
 	manager := NewTestFixtureManager("")
 	return manager.SaveFixture(t, name, data)
 }
 
-// WithTestFixture loads a fixture and executes a function with the data.
-// Provides automatic error handling and cleanup.
+// WithTestFixture is a convenience function that loads a fixture and executes a test function.
+// The fixture data is passed to the test function.
 //
-// ⭐ EXTRACT-009: Fixture-based test execution - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTestFixture(t *testing.T, fixtureName string, fn func(data map[string]interface{})) {
 	t.Helper()
 
@@ -206,10 +207,10 @@ func WithTestFixture(t *testing.T, fixtureName string, fn func(data map[string]i
 	fn(data)
 }
 
-// CreateTestDataSet creates a predefined test data set with common test values.
-// Extracted from patterns across multiple test files.
+// CreateTestDataSet creates a comprehensive test data set for testing.
+// This includes various file types, sizes, and configurations.
 //
-// ⭐ EXTRACT-009: Common test data creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTestDataSet() map[string]map[string]interface{} {
 	return map[string]map[string]interface{}{
 		"basic_config": {
@@ -272,10 +273,10 @@ func generateLongString(length int) string {
 	return string(result)
 }
 
-// RegisterCommonTestData registers commonly used test data sets.
-// This should be called during test setup to make common data available.
+// RegisterCommonTestData registers common test data with the provided manager.
+// This includes various file types, sizes, and configurations.
 //
-// ⭐ EXTRACT-009: Common test data registration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func RegisterCommonTestData(manager TestFixtureManager) {
 	testData := CreateTestDataSet()
 	for name, data := range testData {

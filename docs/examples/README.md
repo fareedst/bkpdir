@@ -1,6 +1,6 @@
 # Integration Examples
 
-// EXTRACT-010: Integration examples overview - Package integration examples and patterns - 🔺
+// EXTRACT-010: Integration examples overview - Package integration examples and patterns - [HIGH]
 
 This directory contains comprehensive integration examples demonstrating how to use the extracted BkpDir packages together to build real-world applications.
 

@@ -71,8 +71,8 @@ func TestDOC014ComplianceRateAccuracy(t *testing.T) {
 	}
 
 	t.Logf("🎯 Starting DOC-014 Compliance Rate Accuracy Test Suite")
-	t.Logf("📊 Workspace: %s", suite.WorkspaceRoot)
-	t.Logf("🔍 Validation Script: %s", suite.ValidationScriptPath)
+	t.Logf("[INFO] Workspace: %s", suite.WorkspaceRoot)
+	t.Logf("[CHECK] Validation Script: %s", suite.ValidationScriptPath)
 
 	// Create test scenarios
 	scenarios := suite.CreateComplianceScenarios()
@@ -97,7 +97,7 @@ func TestDOC014ComplianceRateAccuracy(t *testing.T) {
 	t.Run("HierarchyLevelCompliance", suite.TestHierarchyLevelCompliance)
 	t.Run("ComplianceRateConsistency", suite.TestComplianceRateConsistency)
 
-	t.Logf("✅ DOC-014 Compliance Rate Accuracy Test Suite Completed")
+	t.Logf("[SUCCESS] DOC-014 Compliance Rate Accuracy Test Suite Completed")
 }
 
 // Initialize sets up the compliance rate test environment
@@ -222,7 +222,7 @@ func (suite *ComplianceRateTestSuite) CreateComplianceScenarios() []ComplianceSc
 
 // TestFullyCompliantScenario tests compliance rate calculation for fully compliant scenarios
 func (suite *ComplianceRateTestSuite) TestFullyCompliantScenario(t *testing.T, scenario ComplianceScenario) {
-	t.Logf("✅ Testing fully compliant scenario: %s", scenario.Name)
+	t.Logf("[SUCCESS] Testing fully compliant scenario: %s", scenario.Name)
 
 	// Create scenario test file
 	scenarioFile := filepath.Join(suite.TestScenariosPath, fmt.Sprintf("%s.json", scenario.Name))
@@ -256,13 +256,13 @@ func (suite *ComplianceRateTestSuite) TestFullyCompliantScenario(t *testing.T, s
 		t.Errorf("Hierarchy level compliance below expected for fully compliant scenario")
 	}
 
-	t.Logf("✅ Fully compliant scenario validation passed: %.1f%% compliance (accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Fully compliant scenario validation passed: %.1f%% compliance (accuracy: %.1f%%)",
 		actualCompliance, result.ComplianceAccuracy)
 }
 
 // TestPartiallyCompliantScenario tests compliance rate calculation for partially compliant scenarios
 func (suite *ComplianceRateTestSuite) TestPartiallyCompliantScenario(t *testing.T, scenario ComplianceScenario) {
-	t.Logf("🔶 Testing partially compliant scenario: %s", scenario.Name)
+	t.Logf("[MEDIUM] Testing partially compliant scenario: %s", scenario.Name)
 
 	// Create scenario test file
 	scenarioFile := filepath.Join(suite.TestScenariosPath, fmt.Sprintf("%s.json", scenario.Name))
@@ -295,7 +295,7 @@ func (suite *ComplianceRateTestSuite) TestPartiallyCompliantScenario(t *testing.
 		t.Errorf("Partially compliant scenario compliance %.1f%% outside expected range (50-95%%)", result.OverallComplianceRate)
 	}
 
-	t.Logf("✅ Partially compliant scenario validation passed: %.1f%% compliance (accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Partially compliant scenario validation passed: %.1f%% compliance (accuracy: %.1f%%)",
 		actualCompliance, result.ComplianceAccuracy)
 }
 
@@ -334,7 +334,7 @@ func (suite *ComplianceRateTestSuite) TestNonCompliantScenario(t *testing.T, sce
 		t.Errorf("Non-compliant scenario compliance %.1f%% above expected threshold (<50%%)", result.OverallComplianceRate)
 	}
 
-	t.Logf("✅ Non-compliant scenario validation passed: %.1f%% compliance (accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Non-compliant scenario validation passed: %.1f%% compliance (accuracy: %.1f%%)",
 		actualCompliance, result.ComplianceAccuracy)
 }
 
@@ -387,13 +387,13 @@ func (suite *ComplianceRateTestSuite) TestMixedComplianceScenario(t *testing.T, 
 		t.Errorf("Mixed compliance scenario shows insufficient variation (variance: %.1f)", variance)
 	}
 
-	t.Logf("✅ Mixed compliance scenario validation passed: %.1f%% compliance (accuracy: %.1f%%, variance: %.1f)",
+	t.Logf("[SUCCESS] Mixed compliance scenario validation passed: %.1f%% compliance (accuracy: %.1f%%, variance: %.1f)",
 		actualCompliance, result.ComplianceAccuracy, variance)
 }
 
 // TestEdgeCaseScenarios tests compliance rate calculation for edge cases
 func (suite *ComplianceRateTestSuite) TestEdgeCaseScenarios(t *testing.T, scenarios []ComplianceScenario) {
-	t.Logf("🔍 Testing edge case scenarios")
+	t.Logf("[CHECK] Testing edge case scenarios")
 
 	for _, scenario := range scenarios {
 		t.Run(scenario.Name, func(t *testing.T) {
@@ -423,7 +423,7 @@ func (suite *ComplianceRateTestSuite) TestEdgeCaseScenarios(t *testing.T, scenar
 				t.Errorf("Edge case compliance rate mismatch: expected %.1f%%, got %.1f%%", expectedCompliance, actualCompliance)
 			}
 
-			t.Logf("✅ Edge case scenario %s validation passed: %.1f%% compliance (accuracy: %.1f%%)",
+			t.Logf("[SUCCESS] Edge case scenario %s validation passed: %.1f%% compliance (accuracy: %.1f%%)",
 				scenario.Name, actualCompliance, result.ComplianceAccuracy)
 		})
 	}
@@ -470,7 +470,7 @@ func (suite *ComplianceRateTestSuite) TestComplianceCalculationAccuracy(t *testi
 		t.Errorf("Overall compliance calculation error: expected %.1f%%, got %.1f%%", expectedOverall, result.OverallComplianceRate)
 	}
 
-	t.Logf("✅ Compliance calculation accuracy validated: %.1f%% (target: ≥95%%)", result.ComplianceAccuracy)
+	t.Logf("[SUCCESS] Compliance calculation accuracy validated: %.1f%% (target: ≥95%%)", result.ComplianceAccuracy)
 }
 
 // TestHierarchyLevelCompliance tests compliance calculation for each hierarchy level
@@ -521,14 +521,14 @@ func (suite *ComplianceRateTestSuite) TestHierarchyLevelCompliance(t *testing.T)
 				t.Errorf("Hierarchy level %s compliance accuracy %.1f%% below target of 90%%", level, result.ComplianceAccuracy)
 			}
 
-			t.Logf("✅ Hierarchy level %s compliance: %.1f%% (accuracy: %.1f%%)", level, levelCompliance, result.ComplianceAccuracy)
+			t.Logf("[SUCCESS] Hierarchy level %s compliance: %.1f%% (accuracy: %.1f%%)", level, levelCompliance, result.ComplianceAccuracy)
 		})
 	}
 }
 
 // TestComplianceRateConsistency tests compliance rate consistency across multiple runs
 func (suite *ComplianceRateTestSuite) TestComplianceRateConsistency(t *testing.T) {
-	t.Logf("🔄 Testing compliance rate consistency across multiple runs")
+	t.Logf("[PROCESS] Testing compliance rate consistency across multiple runs")
 
 	const numRuns = 3
 	var complianceRates []float64
@@ -566,7 +566,7 @@ func (suite *ComplianceRateTestSuite) TestComplianceRateConsistency(t *testing.T
 		}
 	}
 
-	t.Logf("✅ Compliance rate consistency validated across %d runs", numRuns)
+	t.Logf("[SUCCESS] Compliance rate consistency validated across %d runs", numRuns)
 }
 
 // CreateScenarioFile creates a test scenario file

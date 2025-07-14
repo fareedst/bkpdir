@@ -12,13 +12,13 @@
 - **Content**: User interface specifications, command behaviors, configuration schemas
 - **Triggers**: New CLI commands, configuration changes, output modifications, user-visible behavior changes
 
-## 📋 Requirements Document (requirements.md)
+## [CHECKLIST] Requirements Document (requirements.md)
 
 - **UPDATE WHEN**: Implementation requirements change, new functional requirements, non-functional requirement modifications
 - **Content**: Implementation requirements, traceability matrices, acceptance criteria
 - **Triggers**: New features, requirement modifications, acceptance criteria changes
 
-## 🏗️ Architecture Document (architecture.md)
+## [BUILD_CONSTRUCT] Architecture Document (architecture.md)
 
 - **UPDATE WHEN**: Technical implementation changes, new components, interface modifications, design decisions
 - **Content**: System architecture, component interactions, design patterns, technical decisions

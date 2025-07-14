@@ -1,4 +1,4 @@
-// 🔺 DOC-011: AI validation integration - Core validation framework for AI assistants
+// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 // Integrated with DOC-014: AI Assistant Decision Framework
 package validation
 
@@ -138,18 +138,18 @@ func NewAIValidationGateway() *AIValidationGateway {
 func (gw *AIValidationGateway) ProcessValidationRequest(ctx context.Context, request ValidationRequest) (*ValidationResponse, error) {
 	startTime := time.Now()
 
-	// 🔺 DOC-011: Pre-submission validation processing - 🔧 Request validation
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if err := gw.validateRequest(request); err != nil {
 		return nil, fmt.Errorf("invalid validation request: %w", err)
 	}
 
-	// 🔺 DOC-011: DOC-008 framework integration - 🔍 Core validation execution
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validationResult, err := gw.validator.ValidateFiles(ctx, request.SourceFiles, request.ValidationMode)
 	if err != nil {
 		return nil, fmt.Errorf("validation execution failed: %w", err)
 	}
 
-	// 🔺 DOC-011: AI-optimized error processing - 📝 Error formatting for AI consumption
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	response := &ValidationResponse{
 		Status:           gw.determineStatus(validationResult),
 		Errors:           gw.errorFormatter.FormatErrors(validationResult.Errors),
@@ -159,7 +159,7 @@ func (gw *AIValidationGateway) ProcessValidationRequest(ctx context.Context, req
 		ProcessingTime:   time.Since(startTime),
 	}
 
-	// 🔺 DOC-011: Compliance monitoring - 📊 Track AI assistant behavior
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	gw.complianceTracker.RecordValidationEvent(ValidationEvent{
 		AssistantID:     request.RequestContext.AssistantID,
 		SessionID:       request.RequestContext.SessionID,
@@ -190,7 +190,7 @@ func (gw *AIValidationGateway) ValidatePreSubmission(ctx context.Context, source
 
 // RequestValidationBypass requests a bypass for validation failures
 func (gw *AIValidationGateway) RequestValidationBypass(ctx context.Context, request BypassRequest) error {
-	// 🔺 DOC-011: Bypass mechanism - 🛡️ Safe override with documentation
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if request.Reason == "" {
 		return fmt.Errorf("bypass reason is required")
 	}
@@ -208,7 +208,7 @@ func (gw *AIValidationGateway) RequestValidationBypass(ctx context.Context, requ
 
 	gw.bypassManager.auditTrail = append(gw.bypassManager.auditTrail, bypassEvent)
 
-	// 📊 Track bypass usage in compliance monitoring
+	// [INFO] Track bypass usage in compliance monitoring
 	gw.complianceTracker.RecordValidationEvent(ValidationEvent{
 		AssistantID:     request.AssistantID,
 		SessionID:       fmt.Sprintf("bypass-%d", time.Now().Unix()),
@@ -224,7 +224,7 @@ func (gw *AIValidationGateway) RequestValidationBypass(ctx context.Context, requ
 
 // GetComplianceReport generates a compliance report for an AI assistant
 func (gw *AIValidationGateway) GetComplianceReport(assistantID string, timeRange string) (*ComplianceReport, error) {
-	// 🔺 DOC-011: Compliance monitoring - 📊 Generate compliance reports
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	dashboard := gw.complianceTracker.GenerateDashboard()
 
 	if metrics, exists := dashboard.Metrics[assistantID]; exists {
@@ -254,13 +254,13 @@ func (gw *AIValidationGateway) GetComplianceReport(assistantID string, timeRange
 
 // GetBypassAuditTrail returns the bypass audit trail
 func (gw *AIValidationGateway) GetBypassAuditTrail() []BypassEvent {
-	// 🔺 DOC-011: Bypass audit trail - 📝 Comprehensive audit tracking
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return gw.bypassManager.auditTrail
 }
 
 // ValidateWithStrictMode performs validation in strict mode
 func (gw *AIValidationGateway) ValidateWithStrictMode(ctx context.Context, sourceFiles []string, assistantID string) (*ValidationResponse, error) {
-	// 🔺 DOC-011: Strict validation mode - 🔍 Enhanced validation for critical changes
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	request := ValidationRequest{
 		SourceFiles:    sourceFiles,
 		ValidationMode: "strict",
@@ -348,7 +348,7 @@ func (gw *AIValidationGateway) calculateComplianceScore(result *ValidationResult
 func (gw *AIValidationGateway) generateRemediationSteps(result *ValidationResult) []RemediationAction {
 	var actions []RemediationAction
 
-	// 🔺 DOC-011: Intelligent remediation generation - 🔧 AI-friendly action steps
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, err := range result.Errors {
 		switch err.Category {
 		case "token_format":
@@ -361,7 +361,7 @@ func (gw *AIValidationGateway) generateRemediationSteps(result *ValidationResult
 		case "missing_icon":
 			actions = append(actions, RemediationAction{
 				Action:      "add_priority_icon",
-				Description: "Add priority icon (⭐🔺🔶🔻) to implementation token",
+				Description: "Add priority icon ([CRITICAL][HIGH][MEDIUM][LOW]) to implementation token",
 				Command:     "scripts/add-priority-icons.sh",
 				Priority:    2,
 			})
@@ -393,7 +393,7 @@ func (gw *AIValidationGateway) getBypassEventsForAssistant(assistantID string) [
 func (gw *AIValidationGateway) ExecuteMakefileValidation(mode string) (*ValidationResponse, error) {
 	var cmd *exec.Cmd
 
-	// 🔺 DOC-011: Makefile integration - 🔧 Seamless workflow integration
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	switch mode {
 	case "standard":
 		cmd = exec.Command("make", "validate-icon-enforcement")

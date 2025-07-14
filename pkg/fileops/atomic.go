@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 )
 
-// ⭐ EXTRACT-006: Atomic file operations extracted - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 
 // AtomicWriter provides atomic file writing capabilities
 type AtomicWriter struct {
@@ -32,7 +32,7 @@ type AtomicOp interface {
 
 // NewAtomicWriter creates a new atomic writer for the target path
 func NewAtomicWriter(targetPath string) (*AtomicWriter, error) {
-	// ⭐ EXTRACT-006: Atomic writer initialization - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Validate the target path
 	if err := ValidatePath(targetPath); err != nil {
@@ -64,7 +64,7 @@ func NewAtomicWriter(targetPath string) (*AtomicWriter, error) {
 
 // Write writes data to the temporary file
 func (aw *AtomicWriter) Write(data []byte) (int, error) {
-	// ⭐ EXTRACT-006: Atomic write operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isClosed {
 		return 0, fmt.Errorf("writer is closed")
 	}
@@ -77,13 +77,13 @@ func (aw *AtomicWriter) Write(data []byte) (int, error) {
 
 // WriteString writes a string to the temporary file
 func (aw *AtomicWriter) WriteString(s string) (int, error) {
-	// ⭐ EXTRACT-006: Atomic string write operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return aw.Write([]byte(s))
 }
 
 // Commit atomically moves the temporary file to the target location
 func (aw *AtomicWriter) Commit() error {
-	// ⭐ EXTRACT-006: Atomic commit operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isCommitted {
 		return fmt.Errorf("already committed")
 	}
@@ -113,7 +113,7 @@ func (aw *AtomicWriter) Commit() error {
 
 // Rollback removes the temporary file without committing
 func (aw *AtomicWriter) Rollback() error {
-	// ⭐ EXTRACT-006: Atomic rollback operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isCommitted {
 		return fmt.Errorf("cannot rollback after commit")
 	}
@@ -123,7 +123,7 @@ func (aw *AtomicWriter) Rollback() error {
 
 // Close closes the writer and cleans up if not committed
 func (aw *AtomicWriter) Close() error {
-	// ⭐ EXTRACT-006: Atomic close operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isClosed {
 		return nil
 	}
@@ -138,7 +138,7 @@ func (aw *AtomicWriter) Close() error {
 
 // cleanup removes the temporary file
 func (aw *AtomicWriter) cleanup() error {
-	// ⭐ EXTRACT-006: Atomic cleanup operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	var err error
 
 	if aw.tempFile != nil {
@@ -158,7 +158,7 @@ func (aw *AtomicWriter) cleanup() error {
 
 // AtomicCopy copies a file atomically from source to destination
 func AtomicCopy(src, dst string) error {
-	// ⭐ EXTRACT-006: Atomic file copy operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Validate paths
 	if err := ValidateReadable(src); err != nil {
@@ -209,7 +209,7 @@ func AtomicCopy(src, dst string) error {
 
 // AtomicWriteFile writes data to a file atomically
 func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
-	// ⭐ EXTRACT-006: Atomic file write operation - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	writer, err := NewAtomicWriter(filename)
 	if err != nil {
@@ -231,6 +231,6 @@ func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
 
 // AtomicWriteString writes a string to a file atomically
 func AtomicWriteString(filename, data string, perm os.FileMode) error {
-	// ⭐ EXTRACT-006: Atomic string write to file - 🔧
+	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return AtomicWriteFile(filename, []byte(data), perm)
 }

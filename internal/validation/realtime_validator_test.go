@@ -1,4 +1,4 @@
-// 🔶 DOC-012: Real-time validation tests - 🧪 Comprehensive test coverage for live validation
+// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 
 import (
@@ -10,7 +10,7 @@ import (
 
 // TestRealTimeValidation tests the main real-time validation functionality for DOC-012
 func TestRealTimeValidation(t *testing.T) {
-	// 🔶 DOC-012: Real-time validation test - 🧪 Core functionality validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 	if validator == nil {
 		t.Fatal("Failed to create real-time validator")
@@ -86,7 +86,7 @@ func TestRealTimeValidation(t *testing.T) {
 
 // TestValidationCache tests the caching mechanism for performance optimization
 func TestValidationCache(t *testing.T) {
-	// 🔶 DOC-012: Performance optimization test - ⚡ Cache functionality validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	cache := NewValidationCache(time.Minute)
 	if cache == nil {
 		t.Fatal("Failed to create validation cache")
@@ -118,7 +118,7 @@ func TestValidationCache(t *testing.T) {
 
 // TestSubscriptionManagement tests the real-time subscription system
 func TestSubscriptionManagement(t *testing.T) {
-	// 🔶 DOC-012: Editor integration test - 🔧 Subscription system validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	subscriberID := "test-subscriber"
@@ -157,7 +157,7 @@ func TestSubscriptionManagement(t *testing.T) {
 
 // TestValidationStatusIndicator tests the visual status indicator system
 func TestValidationStatusIndicator(t *testing.T) {
-	// 🔶 DOC-012: Status indicators test - 📊 Visual feedback validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	files := []string{"test1.go", "test2.go"}
@@ -182,7 +182,7 @@ func TestValidationStatusIndicator(t *testing.T) {
 
 // TestIntelligentSuggestions tests the intelligent suggestion generation
 func TestIntelligentSuggestions(t *testing.T) {
-	// 🔶 DOC-012: Intelligent corrections test - 📝 Suggestion system validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	// Create mock response with errors
@@ -227,7 +227,7 @@ func TestIntelligentSuggestions(t *testing.T) {
 
 // TestPerformanceMetrics tests the metrics tracking system
 func TestPerformanceMetrics(t *testing.T) {
-	// 🔶 DOC-012: Performance optimization test - 📊 Metrics tracking validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	metrics := &PerformanceMetrics{
 		lastMetricsUpdate: time.Now(),
 	}
@@ -264,7 +264,7 @@ func TestPerformanceMetrics(t *testing.T) {
 
 // TestVisualElements tests the visual feedback element creation
 func TestVisualElements(t *testing.T) {
-	// 🔶 DOC-012: Status indicators test - 🎨 Visual element validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	testCases := []struct {
@@ -274,7 +274,7 @@ func TestVisualElements(t *testing.T) {
 		expectedIcon  string
 		expectedBadge string
 	}{
-		{"pass", "excellent", "#28a745", "✅", "Perfect"},
+		{"pass", "excellent", "#28a745", "[SUCCESS]", "Perfect"},
 		{"warning", "good", "#ffc107", "⚠️", "Good"},
 		{"error", "poor", "#dc3545", "❌", "Poor"},
 		{"unknown", "needs_work", "#6c757d", "❓", "Issues"},
@@ -299,7 +299,7 @@ func TestVisualElements(t *testing.T) {
 
 // TestComplianceCalculation tests the compliance level calculation logic
 func TestComplianceCalculation(t *testing.T) {
-	// 🔶 DOC-012: Status indicators test - 🔍 Compliance calculation validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	testCases := []struct {
@@ -325,13 +325,13 @@ func TestComplianceCalculation(t *testing.T) {
 
 // TestProactiveSuggestions tests the proactive suggestion generation
 func TestProactiveSuggestions(t *testing.T) {
-	// 🔶 DOC-012: Intelligent corrections test - 🔍 Proactive suggestion validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	// Test content with tokens that could be enhanced
 	testContent := `
-// DOC-012: Some implementation
-// FEATURE-001: Another implementation
+// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+// FEATURE-001: See specification.md - Feature Implementation [DECISION:maintenance]
 package main
 `
 
@@ -355,7 +355,7 @@ package main
 
 // TestCacheExpiration tests the cache TTL functionality
 func TestCacheExpiration(t *testing.T) {
-	// 🔶 DOC-012: Performance optimization test - ⏰ Cache expiration validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	cache := NewValidationCache(100 * time.Millisecond) // Short TTL for testing
 
 	testFile := "expire_test.go"
@@ -383,7 +383,7 @@ func TestCacheExpiration(t *testing.T) {
 
 // TestSuggestionConfidence tests the confidence scoring for suggestions
 func TestSuggestionConfidence(t *testing.T) {
-	// 🔶 DOC-012: Intelligent corrections test - 🎯 Confidence scoring validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 
 	// Test different error types and their confidence levels
@@ -419,12 +419,12 @@ func TestSuggestionConfidence(t *testing.T) {
 
 // BenchmarkRealTimeValidation benchmarks the real-time validation performance
 func BenchmarkRealTimeValidation(b *testing.B) {
-	// 🔶 DOC-012: Performance optimization benchmark - ⚡ Speed validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validator := NewRealTimeValidator()
 	ctx := context.Background()
 	testFile := "benchmark.go"
 	testContent := `
-// 🔶 DOC-012: Benchmark test - 🔧 Performance testing
+// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
 func main() {
@@ -443,7 +443,7 @@ func main() {
 
 // BenchmarkCachePerformance benchmarks the cache performance
 func BenchmarkCachePerformance(b *testing.B) {
-	// 🔶 DOC-012: Performance optimization benchmark - 🔍 Cache speed validation
+	// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	cache := NewValidationCache(time.Hour)
 	response := &ValidationResponse{Status: "pass"}
 

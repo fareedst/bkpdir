@@ -79,7 +79,7 @@ func TestDOC014ValidationPerformanceFull(t *testing.T) {
 	}
 
 	t.Logf("🚀 Starting DOC-014 Validation Performance Test Suite")
-	t.Logf("📊 Workspace: %s", suite.WorkspaceRoot)
+	t.Logf("[INFO] Workspace: %s", suite.WorkspaceRoot)
 	t.Logf("⏱️ Target Max Validation Time: %v", suite.PerformanceTargets.MaxValidationTime)
 	t.Logf("💾 Target Max Memory Usage: %dMB", suite.PerformanceTargets.MaxMemoryUsageMB)
 
@@ -95,7 +95,7 @@ func TestDOC014ValidationPerformanceFull(t *testing.T) {
 	t.Run("ThroughputBenchmark", suite.TestThroughputBenchmark)
 	t.Run("LatencyBenchmark", suite.TestLatencyBenchmark)
 
-	t.Logf("✅ DOC-014 Validation Performance Test Suite Completed")
+	t.Logf("[SUCCESS] DOC-014 Validation Performance Test Suite Completed")
 }
 
 // Initialize sets up the validation performance test environment
@@ -205,7 +205,7 @@ func (suite *ValidationPerformanceTestSuite) TestDecisionFrameworkValidationPerf
 					result.ExecutionTime, suite.PerformanceTargets.MaxValidationTime)
 			}
 
-			t.Logf("✅ %s scenario: %v execution, %.1fMB memory, %.1f%% CPU",
+			t.Logf("[SUCCESS] %s scenario: %v execution, %.1fMB memory, %.1f%% CPU",
 				scenario.ScenarioName, result.ExecutionTime, result.MemoryUsageMB, result.CPUUsagePercent)
 		})
 	}
@@ -213,7 +213,7 @@ func (suite *ValidationPerformanceTestSuite) TestDecisionFrameworkValidationPerf
 
 // TestDecisionContextValidationPerformance benchmarks decision context validation performance
 func (suite *ValidationPerformanceTestSuite) TestDecisionContextValidationPerformance(t *testing.T) {
-	t.Logf("🔍 Testing decision context validation performance")
+	t.Logf("[CHECK] Testing decision context validation performance")
 
 	script := suite.ValidationScripts[1] // validate-decision-context.sh
 
@@ -236,7 +236,7 @@ func (suite *ValidationPerformanceTestSuite) TestDecisionContextValidationPerfor
 					result.MemoryUsageMB, script.MaxMemoryMB, scenario.ScenarioName)
 			}
 
-			t.Logf("✅ %s scenario: %v execution, %.1fMB memory, %.1f%% CPU",
+			t.Logf("[SUCCESS] %s scenario: %v execution, %.1fMB memory, %.1f%% CPU",
 				scenario.ScenarioName, result.ExecutionTime, result.MemoryUsageMB, result.CPUUsagePercent)
 		})
 	}
@@ -244,7 +244,7 @@ func (suite *ValidationPerformanceTestSuite) TestDecisionContextValidationPerfor
 
 // TestDecisionMetricsTrackingPerformance benchmarks decision metrics tracking performance
 func (suite *ValidationPerformanceTestSuite) TestDecisionMetricsTrackingPerformance(t *testing.T) {
-	t.Logf("📊 Testing decision metrics tracking performance")
+	t.Logf("[INFO] Testing decision metrics tracking performance")
 
 	script := suite.ValidationScripts[2] // track-decision-metrics.sh
 
@@ -267,7 +267,7 @@ func (suite *ValidationPerformanceTestSuite) TestDecisionMetricsTrackingPerforma
 					result.MemoryUsageMB, script.MaxMemoryMB, scenario.ScenarioName)
 			}
 
-			t.Logf("✅ %s scenario: %v execution, %.1fMB memory, %.1f%% CPU",
+			t.Logf("[SUCCESS] %s scenario: %v execution, %.1fMB memory, %.1f%% CPU",
 				scenario.ScenarioName, result.ExecutionTime, result.MemoryUsageMB, result.CPUUsagePercent)
 		})
 	}
@@ -275,7 +275,7 @@ func (suite *ValidationPerformanceTestSuite) TestDecisionMetricsTrackingPerforma
 
 // TestConcurrentValidationPerformance tests concurrent validation execution performance
 func (suite *ValidationPerformanceTestSuite) TestConcurrentValidationPerformance(t *testing.T) {
-	t.Logf("🔄 Testing concurrent validation performance")
+	t.Logf("[PROCESS] Testing concurrent validation performance")
 
 	// Test concurrent execution of multiple validation scripts (reduced to avoid hanging)
 	concurrencyLevels := []int{2, 3}
@@ -357,7 +357,7 @@ func (suite *ValidationPerformanceTestSuite) TestConcurrentValidationPerformance
 						totalMemory, concurrency)
 				}
 
-				t.Logf("✅ Concurrency level %d: %v total time, %v max individual time, %.1fMB total memory",
+				t.Logf("[SUCCESS] Concurrency level %d: %v total time, %v max individual time, %.1fMB total memory",
 					concurrency, totalTime, maxExecutionTime, totalMemory)
 			}
 		})
@@ -407,7 +407,7 @@ func (suite *ValidationPerformanceTestSuite) TestLargeCodebaseValidationPerforma
 				t.Errorf("Suspiciously small output for large codebase validation: %d bytes", len(output))
 			}
 
-			t.Logf("✅ %s large codebase: %v execution time", script.ScriptName, executionTime)
+			t.Logf("[SUCCESS] %s large codebase: %v execution time", script.ScriptName, executionTime)
 		})
 	}
 }
@@ -444,7 +444,7 @@ func (suite *ValidationPerformanceTestSuite) TestValidationCachingEffectiveness(
 			// Note: Second run may be slower due to caching overhead or system load
 			// This is not necessarily a failure condition
 
-			t.Logf("✅ %s caching: %.1f%% time improvement, %.1f%% memory improvement",
+			t.Logf("[SUCCESS] %s caching: %.1f%% time improvement, %.1f%% memory improvement",
 				script.ScriptName, timeImprovement, memoryImprovement)
 		})
 	}
@@ -475,7 +475,7 @@ func (suite *ValidationPerformanceTestSuite) TestMemoryUsageValidation(t *testin
 						result.MemoryUsageMB, scenario.ScenarioName)
 				}
 
-				t.Logf("✅ %s %s: %.1fMB memory usage", script.ScriptName, scenario.ScenarioName, result.MemoryUsageMB)
+				t.Logf("[SUCCESS] %s %s: %.1fMB memory usage", script.ScriptName, scenario.ScenarioName, result.MemoryUsageMB)
 			}
 		})
 	}
@@ -506,7 +506,7 @@ func (suite *ValidationPerformanceTestSuite) TestCPUUsageValidation(t *testing.T
 			// Calculate CPU efficiency (operations per CPU percentage)
 			cpuEfficiency := 100.0 / result.CPUUsagePercent
 
-			t.Logf("✅ %s: %.1f%% CPU usage, %.1f efficiency", script.ScriptName, result.CPUUsagePercent, cpuEfficiency)
+			t.Logf("[SUCCESS] %s: %.1f%% CPU usage, %.1f efficiency", script.ScriptName, result.CPUUsagePercent, cpuEfficiency)
 		})
 	}
 }
@@ -549,7 +549,7 @@ func (suite *ValidationPerformanceTestSuite) TestThroughputBenchmark(t *testing.
 					throughput, minThroughput, script.ScriptName)
 			}
 
-			t.Logf("✅ %s throughput: %.1f ops/sec (%d operations in %v)",
+			t.Logf("[SUCCESS] %s throughput: %.1f ops/sec (%d operations in %v)",
 				script.ScriptName, throughput, operations, duration)
 		})
 	}
@@ -600,7 +600,7 @@ func (suite *ValidationPerformanceTestSuite) TestLatencyBenchmark(t *testing.T) 
 					avgLatencyMs, suite.PerformanceTargets.MaxLatencyMs, script.ScriptName)
 			}
 
-			t.Logf("✅ %s latency: %dms avg, %v min, %v max",
+			t.Logf("[SUCCESS] %s latency: %dms avg, %v min, %v max",
 				script.ScriptName, avgLatencyMs, minLatency, maxLatency)
 		})
 	}

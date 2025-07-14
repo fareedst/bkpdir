@@ -1,4 +1,4 @@
-// 🔺 DOC-011: DOC-008 validation framework integration - 🔧 Bridge to existing validation system
+// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 
 import (
@@ -52,7 +52,7 @@ func NewDOC008Validator() *DOC008Validator {
 
 // ValidateFiles validates the specified files using DOC-008 validation framework
 func (v *DOC008Validator) ValidateFiles(ctx context.Context, files []string, mode string) (*ValidationResult, error) {
-	// 🔺 DOC-011: DOC-008 framework bridge - 🔍 Execute existing validation
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	cmd := v.buildValidationCommand(mode)
 
 	// Execute validation with context support
@@ -61,7 +61,7 @@ func (v *DOC008Validator) ValidateFiles(ctx context.Context, files []string, mod
 		return nil, fmt.Errorf("validation command failed: %w", err)
 	}
 
-	// 🔺 DOC-011: Validation result parsing - 📝 Parse DOC-008 output for AI consumption
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	result, err := v.parseValidationOutput(output)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse validation output: %w", err)
@@ -78,7 +78,7 @@ func (v *DOC008Validator) buildValidationCommand(mode string) *exec.Cmd {
 	case "legacy":
 		return exec.Command("make", "validate-icons")
 	case "realtime":
-		// 🔶 DOC-012: Real-time validation mode - ⚡ Fast validation for live feedback
+		// DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		return exec.Command("make", "validate-icon-enforcement")
 	default: // "standard"
 		return exec.Command("make", "validate-icon-enforcement")
@@ -87,7 +87,7 @@ func (v *DOC008Validator) buildValidationCommand(mode string) *exec.Cmd {
 
 // executeValidationCommand executes the validation command with context support
 func (v *DOC008Validator) executeValidationCommand(ctx context.Context, cmd *exec.Cmd) ([]byte, error) {
-	// 🔺 DOC-011: Context-aware validation execution - 🛡️ Cancellation support
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	cmd = exec.CommandContext(ctx, cmd.Path, cmd.Args[1:]...)
 
 	output, err := cmd.CombinedOutput()
@@ -104,7 +104,7 @@ func (v *DOC008Validator) parseValidationOutput(output []byte) (*ValidationResul
 
 	lines := strings.Split(string(output), "\n")
 
-	// 🔺 DOC-011: Validation output parsing - 📝 Convert DOC-008 output to AI format
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
 		if line == "" {
@@ -141,7 +141,7 @@ func (v *DOC008Validator) parseValidationOutput(output []byte) (*ValidationResul
 
 // parseErrorLine parses an error line from validation output
 func (v *DOC008Validator) parseErrorLine(line string, lineNum int) *ValidationError {
-	// 🔺 DOC-011: Error parsing - 🔍 Extract structured error information
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	parts := strings.Split(line, ":")
 	if len(parts) < 3 {
 		return &ValidationError{

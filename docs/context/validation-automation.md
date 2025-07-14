@@ -5,7 +5,7 @@ This document contains comprehensive validation and automation tools for maintai
 
 > **🔗 Related Documents**: See [`feature-tracking.md`](feature-tracking.md) for the core feature matrix and [`ai-assistant-compliance.md`](ai-assistant-compliance.md) for AI assistant requirements.
 
-## 🔧 VALIDATION AND AUTOMATION TOOLS
+## [ACTION:core-functionality] VALIDATION AND AUTOMATION TOOLS
 
 ### 📋 PRE-COMMIT VALIDATION CHECKLIST
 
@@ -13,7 +13,7 @@ Before ANY commit that includes code changes, run this complete validation check
 
 ```bash
 # 1. MANDATORY: Check for feature tracking updates
-echo "🔍 Checking feature tracking compliance..."
+echo "[ACTION:discovery] Checking feature tracking compliance..."
 git diff --cached --name-only | grep -E '\.(go|yaml|yml)$' && echo "✅ Code changes detected - context files MUST be updated" || echo "ℹ️  No code changes"
 
 # 2. MANDATORY: Verify context file updates
@@ -62,7 +62,7 @@ function check_context_updates() {
 ```bash
 # Validate all feature IDs are properly registered
 function validate_feature_ids() {
-    echo "🔍 Validating feature ID consistency..."
+    echo "[ACTION:discovery] Validating feature ID consistency..."
     
     # Extract feature IDs from code
     local code_features=$(grep -r "// [A-Z]+-[0-9]" --include="*.go" . | sed 's/.*\/\/ \([A-Z]*-[0-9]*\).*/\1/' | sort -u)
@@ -204,7 +204,7 @@ echo "✅ All context documentation requirements satisfied"
 # Add to Makefile
 .PHONY: validate-context
 validate-context:
-	@echo "🔍 Validating context documentation..."
+	@echo "[ACTION:discovery] Validating context documentation..."
 	@bash scripts/context-validation.sh
 	@echo "✅ Context validation complete"
 
@@ -267,7 +267,7 @@ function generate_coverage_report() {
 }
 ```
 
-### 🔄 CONTINUOUS IMPROVEMENT
+### [ACTION:migration] CONTINUOUS IMPROVEMENT
 
 #### **Weekly Validation Audit**
 ```bash
@@ -301,7 +301,7 @@ function weekly_audit() {
 
 This comprehensive validation framework ensures that the context documentation remains synchronized with code changes and maintains the high quality standards established in the feature tracking system.
 
-### 📝 IMPLEMENTATION TOKEN REQUIREMENTS (DETAILED)
+### [ACTION:format-processing] IMPLEMENTATION TOKEN REQUIREMENTS (DETAILED)
 
 #### **Token Format Standards**
 - **Standard Format**: `// FEATURE-ID: Brief description`
@@ -346,7 +346,7 @@ This comprehensive validation framework ensures that the context documentation r
 
 When making code changes, AI assistants MUST:
 
-1. **🔍 AUTO-DETECT AFFECTED TOKENS**:
+1. **[ACTION:discovery] AUTO-DETECT AFFECTED TOKENS**:
    ```bash
    # Search patterns AI should use:
    grep -r "// ARCH-" docs/context/ src/
@@ -370,7 +370,7 @@ When making code changes, AI assistants MUST:
    - architecture.md components: Archive Service, Config Layer"
    ```
 
-3. **🔄 AUTO-UPDATE TOKEN REGISTRY**:
+3. **[ACTION:migration] AUTO-UPDATE TOKEN REGISTRY**:
    ```
    For new features, AI should:
    - Propose new feature ID (check existing ones first)
@@ -412,7 +412,7 @@ AI assistants should APPROVE responses that:
 ```
 ## Token Impact Analysis
 
-### 🔍 Affected Tokens:
+### [ACTION:discovery] Affected Tokens:
 - **Primary**: [TOKEN-ID] - [Specific impact description]
 - **Secondary**: [TOKEN-ID], [TOKEN-ID] - [Brief impact descriptions]
 
@@ -423,7 +423,7 @@ AI assistants should APPROVE responses that:
 - **architecture.md**: "[specific component names]"
 - **testing.md**: "[specific test coverage areas]"
 
-### 🔄 Context File Updates Required:
+### [ACTION:migration] Context File Updates Required:
 - [ ] feature-tracking.md: [specific changes needed]
 - [ ] specification.md: [specific changes needed]
 - [ ] requirements.md: [specific changes needed]
@@ -444,7 +444,7 @@ AI assistants should APPROVE responses that:
 
 This document establishes ZERO TOLERANCE for code changes without proper token documentation. AI assistants are required to:
 
-#### **🔍 STEP 1: MANDATORY TOKEN SEARCH**
+#### **[ACTION:discovery] STEP 1: MANDATORY TOKEN SEARCH**
 ```bash
 # REQUIRED: Search for ALL existing tokens before making changes
 grep -r "// ARCH-" docs/context/
@@ -464,7 +464,7 @@ Every AI response with code changes MUST include:
 ```
 ## Token Impact Analysis
 
-### 🔍 Affected Tokens:
+### [ACTION:discovery] Affected Tokens:
 - **Primary**: [TOKEN-ID] - [Specific impact description]
 - **Secondary**: [TOKEN-ID], [TOKEN-ID] - [Brief impact descriptions]
 
@@ -475,7 +475,7 @@ Every AI response with code changes MUST include:
 - **architecture.md**: "[specific component names]"
 - **testing.md**: "[specific test coverage areas]"
 
-### 🔄 Context File Updates Required:
+### [ACTION:migration] Context File Updates Required:
 - [ ] feature-tracking.md: [specific changes needed]
 - [ ] specification.md: [specific changes needed]
 - [ ] requirements.md: [specific changes needed]
@@ -510,7 +510,7 @@ AI assistants should ONLY proceed if their response:
 - Follows established token naming conventions (ARCH-, FILE-, CFG-, etc.)
 - **🚨 NEW**: Demonstrates consistency between feature registry table and detailed subtask completion status
 
-### 🔄 ENFORCEMENT SUMMARY
+### [ACTION:migration] ENFORCEMENT SUMMARY
 
 **REMEMBER: THIS IS NOT OPTIONAL**
 

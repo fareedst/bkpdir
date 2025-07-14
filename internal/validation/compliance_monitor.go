@@ -1,4 +1,4 @@
-// 🔺 DOC-011: Compliance monitoring system - 📊 AI assistant behavior tracking
+// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 
 import (
@@ -177,7 +177,7 @@ func (cm *ComplianceMonitor) RecordValidationEvent(event ValidationEvent) {
 	cm.mu.Lock()
 	defer cm.mu.Unlock()
 
-	// 🔺 DOC-011: Event recording - 📊 Track AI assistant validation behavior
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	cm.behaviorTracker.RecordEvent(event)
 	cm.adherenceCalculator.UpdateMetrics(event)
 
@@ -205,7 +205,7 @@ func (bt *AIBehaviorTracker) RecordEvent(event ValidationEvent) {
 	bt.mu.Lock()
 	defer bt.mu.Unlock()
 
-	// 🔺 DOC-011: Behavior tracking - 🔍 Store validation events for analysis
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	bt.eventHistory = append(bt.eventHistory, event)
 
 	// Analyze patterns
@@ -224,7 +224,7 @@ func (pa *PatternAnalyzer) AnalyzeEvent(event ValidationEvent) {
 	pa.mu.Lock()
 	defer pa.mu.Unlock()
 
-	// 🔺 DOC-011: Pattern analysis - 📝 Detect AI assistant behavior patterns
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	patternKey := fmt.Sprintf("%s_%s", event.AssistantID, event.Status)
 
 	if pattern, exists := pa.patterns[patternKey]; exists {
@@ -251,7 +251,7 @@ func (am *AdherenceMetrics) UpdateMetrics(event ValidationEvent) {
 	am.mu.Lock()
 	defer am.mu.Unlock()
 
-	// 🔺 DOC-011: Metrics update - 📊 Calculate AI assistant adherence metrics
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if metrics, exists := am.assistantMetrics[event.AssistantID]; exists {
 		// Update existing metrics
 		metrics.TotalValidations++
@@ -292,7 +292,7 @@ func (cm *ComplianceMonitor) GenerateDashboard() *ComplianceDashboard {
 	cm.mu.RLock()
 	defer cm.mu.RUnlock()
 
-	// 🔺 DOC-011: Dashboard generation - 📝 Create compliance visualization
+	// DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	dashboard := &ComplianceDashboard{
 		Metrics:     cm.adherenceCalculator.GetAllMetrics(),
 		Patterns:    cm.behaviorTracker.behaviorPatterns.GetAllPatterns(),

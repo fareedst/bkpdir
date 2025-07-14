@@ -6,7 +6,7 @@
 // Licensed under the MIT License
 package formatter
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Configuration provider abstraction
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // ConfigProvider abstracts configuration access for formatter components
 type ConfigProvider interface {
 	GetFormatString(formatType string) string
@@ -18,7 +18,7 @@ type ConfigProvider interface {
 	GetDetailedTemplateString(templateType string) string
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Output destination abstraction
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // OutputDestination abstracts output handling for formatter components
 type OutputDestination interface {
 	Print(message string)
@@ -27,7 +27,7 @@ type OutputDestination interface {
 	SetCollector(collector *OutputCollector)
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Pattern extraction interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // PatternExtractor defines contract for regex-based data extraction
 type PatternExtractor interface {
 	ExtractArchiveFilenameData(filename string) map[string]string
@@ -35,7 +35,7 @@ type PatternExtractor interface {
 	ExtractPatternData(pattern, text string) map[string]string
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Printf formatter interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Formatter provides printf-style formatting operations
 type Formatter interface {
 	FormatCreatedArchive(path string) string
@@ -54,7 +54,7 @@ type Formatter interface {
 	FormatIncrementalCreatedWithStats(path string) string
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Template formatter interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateFormatter provides template-based formatting operations
 type TemplateFormatter interface {
 	FormatWithTemplate(input, pattern, tmplStr string) (string, error)
@@ -71,7 +71,7 @@ type TemplateFormatter interface {
 	TemplateIncrementalCreatedWithStats(path string) string
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Error formatter interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorFormatter provides specialized error formatting
 type ErrorFormatter interface {
 	FormatDiskFullError(err error) string
@@ -87,7 +87,7 @@ type ErrorFormatter interface {
 	TemplateFileNotFound(err error) string
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Print operations interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // PrintFormatter provides print operations with output destination support
 type PrintFormatter interface {
 	PrintCreatedArchive(path string)
@@ -106,7 +106,7 @@ type PrintFormatter interface {
 	PrintIncrementalCreatedWithStats(path string)
 }
 
-// ⭐ EXTRACT-003: Core interfaces - 🔧 Comprehensive formatter interface
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // OutputFormatterInterface combines all formatting capabilities
 type OutputFormatterInterface interface {
 	Formatter

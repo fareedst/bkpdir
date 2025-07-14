@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -21,7 +21,7 @@ type DefaultTestScenario struct {
 // NewTestScenario creates a new test scenario.
 // Extracted from patterns in internal/testutil/scenarios.go.
 //
-// ⭐ EXTRACT-009: Test scenario creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewTestScenario(name, description string) TestScenario {
 	return &DefaultTestScenario{
 		name:        name,
@@ -31,7 +31,7 @@ func NewTestScenario(name, description string) TestScenario {
 
 // Setup prepares the test scenario.
 //
-// ⭐ EXTRACT-009: Test scenario setup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) Setup(t *testing.T) error {
 	t.Helper()
 
@@ -48,7 +48,7 @@ func (s *DefaultTestScenario) Setup(t *testing.T) error {
 
 // Execute runs the test scenario.
 //
-// ⭐ EXTRACT-009: Test scenario execution - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) Execute(t *testing.T) error {
 	t.Helper()
 
@@ -65,7 +65,7 @@ func (s *DefaultTestScenario) Execute(t *testing.T) error {
 
 // Verify validates the test scenario results.
 //
-// ⭐ EXTRACT-009: Test scenario verification - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) Verify(t *testing.T) error {
 	t.Helper()
 
@@ -82,7 +82,7 @@ func (s *DefaultTestScenario) Verify(t *testing.T) error {
 
 // Cleanup cleans up the test scenario.
 //
-// ⭐ EXTRACT-009: Test scenario cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) Cleanup(t *testing.T) error {
 	t.Helper()
 
@@ -99,7 +99,7 @@ func (s *DefaultTestScenario) Cleanup(t *testing.T) error {
 
 // GetName returns the scenario name.
 //
-// ⭐ EXTRACT-009: Test scenario name retrieval - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) GetName() string {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
@@ -108,7 +108,7 @@ func (s *DefaultTestScenario) GetName() string {
 
 // GetDescription returns the scenario description.
 //
-// ⭐ EXTRACT-009: Test scenario description retrieval - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) GetDescription() string {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
@@ -117,7 +117,7 @@ func (s *DefaultTestScenario) GetDescription() string {
 
 // SetSetupFunc sets the setup function for the scenario.
 //
-// ⭐ EXTRACT-009: Test scenario setup configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) SetSetupFunc(fn func(t *testing.T) error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -126,7 +126,7 @@ func (s *DefaultTestScenario) SetSetupFunc(fn func(t *testing.T) error) {
 
 // SetExecuteFunc sets the execute function for the scenario.
 //
-// ⭐ EXTRACT-009: Test scenario execution configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) SetExecuteFunc(fn func(t *testing.T) error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -135,7 +135,7 @@ func (s *DefaultTestScenario) SetExecuteFunc(fn func(t *testing.T) error) {
 
 // SetVerifyFunc sets the verify function for the scenario.
 //
-// ⭐ EXTRACT-009: Test scenario verification configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) SetVerifyFunc(fn func(t *testing.T) error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -144,7 +144,7 @@ func (s *DefaultTestScenario) SetVerifyFunc(fn func(t *testing.T) error) {
 
 // SetCleanupFunc sets the cleanup function for the scenario.
 //
-// ⭐ EXTRACT-009: Test scenario cleanup configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (s *DefaultTestScenario) SetCleanupFunc(fn func(t *testing.T) error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -159,7 +159,7 @@ type ScenarioBuilder struct {
 
 // NewScenarioBuilder creates a new scenario builder.
 //
-// ⭐ EXTRACT-009: Test scenario builder creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewScenarioBuilder(name, description string) *ScenarioBuilder {
 	return &ScenarioBuilder{
 		scenario: &DefaultTestScenario{
@@ -171,7 +171,7 @@ func NewScenarioBuilder(name, description string) *ScenarioBuilder {
 
 // WithSetup adds a setup function to the scenario.
 //
-// ⭐ EXTRACT-009: Scenario builder setup configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (b *ScenarioBuilder) WithSetup(fn func(t *testing.T) error) *ScenarioBuilder {
 	b.scenario.SetSetupFunc(fn)
 	return b
@@ -179,7 +179,7 @@ func (b *ScenarioBuilder) WithSetup(fn func(t *testing.T) error) *ScenarioBuilde
 
 // WithExecute adds an execute function to the scenario.
 //
-// ⭐ EXTRACT-009: Scenario builder execution configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (b *ScenarioBuilder) WithExecute(fn func(t *testing.T) error) *ScenarioBuilder {
 	b.scenario.SetExecuteFunc(fn)
 	return b
@@ -187,7 +187,7 @@ func (b *ScenarioBuilder) WithExecute(fn func(t *testing.T) error) *ScenarioBuil
 
 // WithVerify adds a verify function to the scenario.
 //
-// ⭐ EXTRACT-009: Scenario builder verification configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (b *ScenarioBuilder) WithVerify(fn func(t *testing.T) error) *ScenarioBuilder {
 	b.scenario.SetVerifyFunc(fn)
 	return b
@@ -195,7 +195,7 @@ func (b *ScenarioBuilder) WithVerify(fn func(t *testing.T) error) *ScenarioBuild
 
 // WithCleanup adds a cleanup function to the scenario.
 //
-// ⭐ EXTRACT-009: Scenario builder cleanup configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (b *ScenarioBuilder) WithCleanup(fn func(t *testing.T) error) *ScenarioBuilder {
 	b.scenario.SetCleanupFunc(fn)
 	return b
@@ -203,7 +203,7 @@ func (b *ScenarioBuilder) WithCleanup(fn func(t *testing.T) error) *ScenarioBuil
 
 // Build returns the constructed scenario.
 //
-// ⭐ EXTRACT-009: Scenario builder finalization - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (b *ScenarioBuilder) Build() TestScenario {
 	return b.scenario
 }
@@ -213,7 +213,7 @@ func (b *ScenarioBuilder) Build() TestScenario {
 // RunScenario executes a complete test scenario with proper error handling.
 // Extracted from patterns in internal/testutil/scenarios_test.go.
 //
-// ⭐ EXTRACT-009: Complete scenario execution - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func RunScenario(t *testing.T, scenario TestScenario) {
 	t.Helper()
 
@@ -245,7 +245,7 @@ func RunScenario(t *testing.T, scenario TestScenario) {
 // CreateBasicScenario creates a basic test scenario with common patterns.
 // Extracted from patterns across multiple test files.
 //
-// ⭐ EXTRACT-009: Basic scenario creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateBasicScenario(name, description string, testFunc func(t *testing.T)) TestScenario {
 	return NewScenarioBuilder(name, description).
 		WithExecute(func(t *testing.T) error {
@@ -258,7 +258,7 @@ func CreateBasicScenario(name, description string, testFunc func(t *testing.T)) 
 // CreateFileOperationScenario creates a scenario for file operations.
 // Extracted from patterns in comparison_test.go and verify_test.go.
 //
-// ⭐ EXTRACT-009: File operation scenario creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateFileOperationScenario(name string, files map[string]string, operation func(t *testing.T, tempDir string)) TestScenario {
 	var tempDir string
 
@@ -282,7 +282,7 @@ func CreateFileOperationScenario(name string, files map[string]string, operation
 // CreateConfigScenario creates a scenario for configuration testing.
 // Extracted from patterns in config_test.go and main_test.go.
 //
-// ⭐ EXTRACT-009: Configuration scenario creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateConfigScenario(name string, configData map[string]interface{}, testFunc func(t *testing.T, configPath string)) TestScenario {
 	var configPath string
 	var cleanup func()

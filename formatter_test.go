@@ -1,5 +1,4 @@
 // This file is part of bkpdir
-// 🔺 LINT-001: Lint compliance - 🔧
 
 package main
 
@@ -11,11 +10,8 @@ import (
 	"testing"
 )
 
-// TestTemplateFormatter tests the template formatting functionality for CFG-003 feature
+// TestTemplateFormatter tests the template formatting functionality
 func TestTemplateFormatter(t *testing.T) {
-	// 🔺 CFG-003: Template formatting validation - 📝
-	// TEST-REF: Feature tracking matrix CFG-003
-	// IMMUTABLE-REF: Output Formatting Requirements
 	cfg := DefaultConfig()
 	fa := NewFormatterAdapter(cfg)
 
@@ -164,7 +160,7 @@ func TestTemplateFormatter(t *testing.T) {
 	})
 }
 
-// TestOutputCollector tests the OutputCollector functionality for OUT-001 feature
+// TestOutputCollector tests the OutputCollector functionality
 func TestOutputCollector(t *testing.T) {
 	t.Run("NewOutputCollector", func(t *testing.T) {
 		collector := formatter.NewOutputCollector()
@@ -274,31 +270,35 @@ func TestDelayedOutputMode(t *testing.T) {
 	})
 
 	t.Run("IsDelayedMode", func(t *testing.T) {
-		normalFormatter := NewOutputFormatter(cfg)
+		// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
+		normalFormatter := NewFormatterAdapter(cfg)
 		if normalFormatter.IsDelayedMode() {
 			t.Error("Expected normal formatter not to be in delayed mode")
 		}
 
-		delayedFormatter := NewOutputFormatterWithCollector(cfg, collector)
+		// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
+		delayedFormatter := NewFormatterAdapterWithCollector(cfg, collector)
 		if !delayedFormatter.IsDelayedMode() {
 			t.Error("Expected delayed formatter to be in delayed mode")
 		}
 	})
 
 	t.Run("GetCollector", func(t *testing.T) {
-		normalFormatter := NewOutputFormatter(cfg)
+		// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
+		normalFormatter := NewFormatterAdapter(cfg)
 		if normalFormatter.GetCollector() != nil {
 			t.Error("Expected normal formatter to have nil collector")
 		}
 
-		delayedFormatter := NewOutputFormatterWithCollector(cfg, collector)
+		// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
+		delayedFormatter := NewFormatterAdapterWithCollector(cfg, collector)
 		if delayedFormatter.GetCollector() == nil {
 			t.Error("Expected delayed formatter to have non-nil collector")
 		}
 	})
 
 	t.Run("SetCollector", func(t *testing.T) {
-		formatter := NewOutputFormatter(cfg)
+		formatter := NewFormatterAdapter(cfg)
 
 		// Set collector
 		formatter.SetCollector(collector)
@@ -315,7 +315,7 @@ func TestDelayedOutputMode(t *testing.T) {
 
 	t.Run("PrintMethodsWithCollector", func(t *testing.T) {
 		collector.Clear()
-		formatter := NewOutputFormatterWithCollector(cfg, collector)
+		formatter := NewFormatterAdapterWithCollector(cfg, collector)
 
 		// Test various print methods
 		formatter.PrintCreatedArchive("/test/archive.zip")
@@ -664,7 +664,6 @@ func TestPrintMethods(t *testing.T) {
 	})
 }
 
-// 🔺 TEST-001: Comprehensive formatter testing - OutputCollector flush methods - 📝
 func TestOutputCollectorFlushMethods(t *testing.T) {
 	// Capture stdout and stderr for testing flush methods
 	originalStdout := os.Stdout
@@ -836,11 +835,10 @@ func TestOutputCollectorFlushMethods(t *testing.T) {
 	})
 }
 
-// 🔺 TEST-001: Test Print methods in delayed output mode to achieve 100% coverage - 📝
 func TestPrintMethodsDelayedMode(t *testing.T) {
 	cfg := DefaultConfig()
 	collector := formatter.NewOutputCollector()
-	formatter := NewOutputFormatterWithCollector(cfg, collector)
+	formatter := NewFormatterAdapterWithCollector(cfg, collector)
 
 	t.Run("PrintMethodsWithCollectorRouting", func(t *testing.T) {
 		collector.Clear()

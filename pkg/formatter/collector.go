@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-// ⭐ EXTRACT-003: OutputCollector component - 🔧 Output message structure
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // OutputMessage represents a message that can be displayed later
 type OutputMessage struct {
 	Content     string
@@ -19,13 +19,13 @@ type OutputMessage struct {
 	Type        string // "info", "error", "warning", etc.
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 🔧 Delayed output management
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // OutputCollector collects output messages for delayed display
 type OutputCollector struct {
 	messages []OutputMessage
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 🔧 Constructor
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewOutputCollector creates a new OutputCollector
 func NewOutputCollector() *OutputCollector {
 	return &OutputCollector{
@@ -33,7 +33,7 @@ func NewOutputCollector() *OutputCollector {
 	}
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 📝 Add stdout message
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // AddStdout adds a stdout message to the collector
 func (oc *OutputCollector) AddStdout(content, messageType string) {
 	oc.messages = append(oc.messages, OutputMessage{
@@ -43,7 +43,7 @@ func (oc *OutputCollector) AddStdout(content, messageType string) {
 	})
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 📝 Add stderr message
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // AddStderr adds a stderr message to the collector
 func (oc *OutputCollector) AddStderr(content, messageType string) {
 	oc.messages = append(oc.messages, OutputMessage{
@@ -53,13 +53,13 @@ func (oc *OutputCollector) AddStderr(content, messageType string) {
 	})
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 🔍 Get all messages
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetMessages returns all collected messages
 func (oc *OutputCollector) GetMessages() []OutputMessage {
 	return oc.messages
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 📝 Flush all messages
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FlushAll displays all collected messages and clears the collector
 func (oc *OutputCollector) FlushAll() {
 	for _, msg := range oc.messages {
@@ -72,7 +72,7 @@ func (oc *OutputCollector) FlushAll() {
 	oc.messages = make([]OutputMessage, 0)
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 📝 Flush stdout only
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FlushStdout displays only stdout messages and removes them from the collector
 func (oc *OutputCollector) FlushStdout() {
 	remaining := make([]OutputMessage, 0)
@@ -86,7 +86,7 @@ func (oc *OutputCollector) FlushStdout() {
 	oc.messages = remaining
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 📝 Flush stderr only
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FlushStderr displays only stderr messages and removes them from the collector
 func (oc *OutputCollector) FlushStderr() {
 	remaining := make([]OutputMessage, 0)
@@ -100,7 +100,7 @@ func (oc *OutputCollector) FlushStderr() {
 	oc.messages = remaining
 }
 
-// ⭐ EXTRACT-003: OutputCollector component - 📝 Clear all messages
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Clear removes all collected messages without displaying them
 func (oc *OutputCollector) Clear() {
 	oc.messages = make([]OutputMessage, 0)

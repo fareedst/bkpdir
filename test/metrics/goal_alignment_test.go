@@ -98,7 +98,7 @@ func TestDOC014GoalAlignmentMeasurement(t *testing.T) {
 	}
 
 	t.Logf("🎯 Starting DOC-014 Goal Alignment Measurement Test Suite")
-	t.Logf("📊 Workspace: %s", suite.WorkspaceRoot)
+	t.Logf("[INFO] Workspace: %s", suite.WorkspaceRoot)
 	t.Logf("📈 Metrics Script: %s", suite.MetricsScriptPath)
 	t.Logf("🎯 Target Goal Alignment: %.1f%%", suite.AlignmentTargets.OverallTarget)
 
@@ -125,7 +125,7 @@ func TestDOC014GoalAlignmentMeasurement(t *testing.T) {
 	t.Run("AlignmentTargetValidation", suite.TestAlignmentTargetValidation)
 	t.Run("AlignmentConsistency", suite.TestAlignmentConsistency)
 
-	t.Logf("✅ DOC-014 Goal Alignment Measurement Test Suite Completed")
+	t.Logf("[SUCCESS] DOC-014 Goal Alignment Measurement Test Suite Completed")
 }
 
 // Initialize sets up the goal alignment test environment
@@ -325,13 +325,13 @@ func (suite *GoalAlignmentTestSuite) TestHighAlignmentScenario(t *testing.T, sce
 		t.Errorf("High alignment scenario measurement reliability %.1f%% below target (≥90%%)", result.MeasurementReliability)
 	}
 
-	t.Logf("✅ High alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, reliability: %.1f%%)",
+	t.Logf("[SUCCESS] High alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, reliability: %.1f%%)",
 		actualAlignment, expectedAlignment, result.MeasurementReliability)
 }
 
 // TestModerateAlignmentScenario tests goal alignment measurement for moderate alignment scenarios
 func (suite *GoalAlignmentTestSuite) TestModerateAlignmentScenario(t *testing.T, scenario GoalAlignmentScenario) {
-	t.Logf("🔶 Testing moderate alignment scenario: %s", scenario.Name)
+	t.Logf("[MEDIUM] Testing moderate alignment scenario: %s", scenario.Name)
 
 	// Create scenario test file
 	scenarioFile := filepath.Join(suite.TestScenariosPath, fmt.Sprintf("%s.json", scenario.Name))
@@ -364,13 +364,13 @@ func (suite *GoalAlignmentTestSuite) TestModerateAlignmentScenario(t *testing.T,
 		t.Errorf("Moderate alignment scenario measurement reliability %.1f%% below target (≥85%%)", result.MeasurementReliability)
 	}
 
-	t.Logf("✅ Moderate alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, reliability: %.1f%%)",
+	t.Logf("[SUCCESS] Moderate alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, reliability: %.1f%%)",
 		actualAlignment, expectedAlignment, result.MeasurementReliability)
 }
 
 // TestLowAlignmentScenario tests goal alignment measurement for low alignment scenarios
 func (suite *GoalAlignmentTestSuite) TestLowAlignmentScenario(t *testing.T, scenario GoalAlignmentScenario) {
-	t.Logf("🔻 Testing low alignment scenario: %s", scenario.Name)
+	t.Logf("[LOW] Testing low alignment scenario: %s", scenario.Name)
 
 	// Create scenario test file
 	scenarioFile := filepath.Join(suite.TestScenariosPath, fmt.Sprintf("%s.json", scenario.Name))
@@ -403,7 +403,7 @@ func (suite *GoalAlignmentTestSuite) TestLowAlignmentScenario(t *testing.T, scen
 		t.Errorf("Low alignment scenario measurement reliability %.1f%% below target (≥80%%)", result.MeasurementReliability)
 	}
 
-	t.Logf("✅ Low alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, reliability: %.1f%%)",
+	t.Logf("[SUCCESS] Low alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, reliability: %.1f%%)",
 		actualAlignment, expectedAlignment, result.MeasurementReliability)
 }
 
@@ -451,7 +451,7 @@ func (suite *GoalAlignmentTestSuite) TestMixedAlignmentScenario(t *testing.T, sc
 		t.Errorf("Mixed alignment scenario shows insufficient variation (variance: %.1f)", variance)
 	}
 
-	t.Logf("✅ Mixed alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, variance: %.1f)",
+	t.Logf("[SUCCESS] Mixed alignment scenario validation passed: %.1f%% alignment (expected: %.1f%%, variance: %.1f)",
 		actualAlignment, expectedAlignment, variance)
 }
 
@@ -488,13 +488,13 @@ func (suite *GoalAlignmentTestSuite) TestObjectiveBasedAlignment(t *testing.T) {
 		t.Errorf("Objective-based alignment accuracy %.1f%% below target of 90%%", result.AlignmentAccuracy)
 	}
 
-	t.Logf("✅ Objective-based alignment: %.1f%% (target: %.1f%%, accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Objective-based alignment: %.1f%% (target: %.1f%%, accuracy: %.1f%%)",
 		result.ObjectiveAlignmentRate, suite.AlignmentTargets.OverallTarget, result.AlignmentAccuracy)
 }
 
 // TestOutcomeBasedAlignment tests outcome-based alignment measurement
 func (suite *GoalAlignmentTestSuite) TestOutcomeBasedAlignment(t *testing.T) {
-	t.Logf("📊 Testing outcome-based alignment measurement")
+	t.Logf("[INFO] Testing outcome-based alignment measurement")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -524,7 +524,7 @@ func (suite *GoalAlignmentTestSuite) TestOutcomeBasedAlignment(t *testing.T) {
 		t.Errorf("Outcome-based alignment reliability %.1f%% below target of 85%%", result.MeasurementReliability)
 	}
 
-	t.Logf("✅ Outcome-based alignment: %.1f%% (reliability: %.1f%%)",
+	t.Logf("[SUCCESS] Outcome-based alignment: %.1f%% (reliability: %.1f%%)",
 		result.OutcomeAlignmentRate, result.MeasurementReliability)
 }
 
@@ -560,7 +560,7 @@ func (suite *GoalAlignmentTestSuite) TestImpactBasedAlignment(t *testing.T) {
 		t.Errorf("Impact-based alignment accuracy %.1f%% below target of 85%%", result.AlignmentAccuracy)
 	}
 
-	t.Logf("✅ Impact-based alignment: %.1f%% (accuracy: %.1f%%)",
+	t.Logf("[SUCCESS] Impact-based alignment: %.1f%% (accuracy: %.1f%%)",
 		result.CriteriaAlignmentRate, result.AlignmentAccuracy)
 }
 
@@ -602,7 +602,7 @@ func (suite *GoalAlignmentTestSuite) TestAlignmentMeasurementAccuracy(t *testing
 			result.OverallAlignmentRate, suite.AlignmentTargets.OverallTarget)
 	}
 
-	t.Logf("✅ Alignment measurement accuracy validated: %.1f%% (target: ≥95%%, reliability: %.1f%%)",
+	t.Logf("[SUCCESS] Alignment measurement accuracy validated: %.1f%% (target: ≥95%%, reliability: %.1f%%)",
 		result.AlignmentAccuracy, result.MeasurementReliability)
 }
 
@@ -647,13 +647,13 @@ func (suite *GoalAlignmentTestSuite) TestAlignmentTargetValidation(t *testing.T)
 		}
 	}
 
-	t.Logf("✅ Alignment targets validated: overall %.1f%% (target: %.1f%%)",
+	t.Logf("[SUCCESS] Alignment targets validated: overall %.1f%% (target: %.1f%%)",
 		result.OverallAlignmentRate, suite.AlignmentTargets.OverallTarget)
 }
 
 // TestAlignmentConsistency tests alignment measurement consistency across multiple runs
 func (suite *GoalAlignmentTestSuite) TestAlignmentConsistency(t *testing.T) {
-	t.Logf("🔄 Testing alignment measurement consistency")
+	t.Logf("[PROCESS] Testing alignment measurement consistency")
 
 	const numRuns = 3
 	var alignmentRates []float64
@@ -691,7 +691,7 @@ func (suite *GoalAlignmentTestSuite) TestAlignmentConsistency(t *testing.T) {
 		}
 	}
 
-	t.Logf("✅ Alignment measurement consistency validated across %d runs", numRuns)
+	t.Logf("[SUCCESS] Alignment measurement consistency validated across %d runs", numRuns)
 }
 
 // CreateAlignmentScenarioFile creates a test scenario file for goal alignment

@@ -5,13 +5,21 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// INTERFACE-ABSTRACTION-001: Interface abstraction specification - Configuration interface abstractions [ACTION:core-functionality]
+// Source: config_interfaces.go - INTERFACE-ABSTRACTION-001
+// Impact: Core functionality requirement for interface abstraction
+
+// SERVICE-INTERFACE-001: Interface service architecture decision - Interface service implementation [ACTION:core-functionality]
+// Source: config_interfaces.go - SERVICE-INTERFACE-001
+// Impact: Interface service implementation decision
 package main
 
 import (
 	"os"
 )
 
-// 🔻 REFACTOR-003: Config abstraction - Schema-agnostic configuration loading interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ConfigLoader provides schema-agnostic configuration management operations.
 // This interface abstracts configuration loading from specific application schemas.
 type ConfigLoader interface {
@@ -31,7 +39,7 @@ type ConfigLoader interface {
 	ValidateConfig(cfg *Config) error
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Configuration merging and composition interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ConfigMerger provides schema-agnostic configuration merging and composition operations.
 // This interface enables reusable configuration merging logic across different schemas.
 type ConfigMerger interface {
@@ -48,7 +56,7 @@ type ConfigMerger interface {
 	ExpandPath(path string) string
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Configuration source abstraction interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ConfigSource abstracts different configuration sources (file, environment, defaults).
 // This interface enables pluggable configuration sources for different environments.
 type ConfigSource interface {
@@ -68,7 +76,7 @@ type ConfigSource interface {
 	IsAvailable() bool
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Pluggable configuration validation interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ConfigValidator enables different applications to define their own configuration schemas.
 // This interface allows for schema-specific validation while maintaining common validation logic.
 type ConfigValidator interface {
@@ -85,7 +93,7 @@ type ConfigValidator interface {
 	GetValidationRules() map[string]ValidationRule
 }
 
-// 🔻 REFACTOR-003: Schema separation - Application-specific configuration interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ApplicationConfig provides access to application-specific configuration settings.
 // This interface abstracts the backup-specific schema from generic configuration operations.
 type ApplicationConfig interface {
@@ -102,7 +110,7 @@ type ApplicationConfig interface {
 	GetFormatSettings() FormatSettings
 }
 
-// 🔻 REFACTOR-003: Schema separation - Backup-specific archive settings structure - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ArchiveSettings contains archive-specific configuration settings.
 // This structure separates archive concerns from generic configuration.
 type ArchiveSettings struct {
@@ -114,7 +122,7 @@ type ArchiveSettings struct {
 	Verification       *VerificationConfig
 }
 
-// 🔻 REFACTOR-003: Schema separation - Backup-specific file backup settings structure - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // BackupSettings contains file backup-specific configuration settings.
 // This structure separates backup concerns from generic configuration.
 type BackupSettings struct {
@@ -122,7 +130,7 @@ type BackupSettings struct {
 	UseCurrentDirNameForFiles bool
 }
 
-// 🔻 REFACTOR-003: Schema separation - Application-specific format settings structure - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // FormatSettings contains output formatting configuration settings.
 // This structure separates formatting concerns from generic configuration.
 type FormatSettings struct {
@@ -132,7 +140,7 @@ type FormatSettings struct {
 	ErrorFormatStrings map[string]string
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Configuration validation rule structure - 📝
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ValidationRule defines validation criteria for configuration fields.
 // This structure enables flexible validation rules for different application schemas.
 type ValidationRule struct {
@@ -145,7 +153,7 @@ type ValidationRule struct {
 	Dependencies []string
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Configuration source determination interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // SourceDeterminer provides methods to determine configuration value sources.
 // This interface enables source tracking across different configuration providers.
 type SourceDeterminer interface {
@@ -159,7 +167,7 @@ type SourceDeterminer interface {
 	GetSourcePriority() []string
 }
 
-// 🔻 REFACTOR-003: Config abstraction - Generic configuration value extractor interface - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ValueExtractor provides methods to extract configuration values from different structures.
 // This interface enables schema-agnostic value extraction for different application types.
 type ValueExtractor interface {
@@ -176,7 +184,7 @@ type ValueExtractor interface {
 	ExtractFormatValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
 }
 
-// 🔻 REFACTOR-003: Config abstraction - File operation interface for configuration - 🔧
+// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // ConfigFileOperations provides file system operations for configuration management.
 // This interface abstracts file operations to enable testing and different storage backends.
 type ConfigFileOperations interface {

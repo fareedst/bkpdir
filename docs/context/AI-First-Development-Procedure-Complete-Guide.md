@@ -28,7 +28,7 @@ The AI-First Development Procedure is a comprehensive methodology designed for s
 - **🤖 AI-Centric Design**: All processes optimized for AI comprehension and execution
 - **🔗 Enhanced Cross-Referencing**: Bidirectional traceability between code and documentation
 - **📋 Comprehensive Task Tracking**: Feature matrix with multi-layered documentation cascade
-- **🛡️ Automated Validation**: Zero-friction compliance checking and enforcement
+- **[ACTION:validation] Automated Validation**: Zero-friction compliance checking and enforcement
 - **🎯 Decision Framework**: Explicit decision-making principles for AI alignment
 - **📊 Real-Time Monitoring**: Continuous validation and feedback systems
 
@@ -73,41 +73,41 @@ Implementation Tokens in Code ← Bidirectional Traceability →
 - **Unique Feature IDs**: Format: `CATEGORY-NNN` (e.g., `ARCH-001`, `CFG-005`)
 - **Multi-Document Cascade**: Changes propagate across specification, requirements, architecture, and testing documents
 - **Status Tracking**: Real-time implementation status with completion verification
-- **Priority Hierarchy**: Visual priority system using standardized icons
+- **Priority Hierarchy**: Semantic token priority system using standardized tokens
 
-### 🔧 Implementation Token System
+### [ACTION:core-functionality] Implementation Token System
 
-**Bidirectional traceability** between code and documentation using standardized tokens:
+**Bidirectional traceability** between code and documentation using semantic tokens:
 
 ```go
-// ⭐ ARCH-001: Archive naming convention - 🔧 Core functionality
-// 🔺 CFG-005: Configuration inheritance - 📝 Template processing
-// 🔶 GIT-004: Submodule support - 🔍 Discovery and validation
-// 🔻 DOC-013: Documentation strategy - 📝 AI-first maintenance
+// [CRITICAL] ARCH-001: Archive naming convention [ACTION:core-functionality]
+// [HIGH] CFG-005: Configuration inheritance [ACTION:template-processing]
+// [MEDIUM] GIT-004: Submodule support [ACTION:search-discover]
+// [LOW] DOC-013: Documentation strategy [ACTION:document-update]
 ```
 
 **Token Components:**
-- **Priority Icon**: `⭐` (Critical), `🔺` (High), `🔶` (Medium), `🔻` (Low)
+- **Priority Token**: `[CRITICAL]`, `[HIGH]`, `[MEDIUM]`, `[LOW]` (semantic tokens for priority)
 - **Feature ID**: Unique identifier linking to feature tracking matrix
 - **Description**: Brief implementation context
-- **Action Icon**: `🔍` (Search), `📝` (Document), `🔧` (Configure), `🛡️` (Validate)
+- **Action Token**: `[ACTION:search-discover]`, `[ACTION:document-update]`, `[ACTION:configure-modify]`, `[ACTION:protect-validate]` (semantic tokens for actions)
 
 ### 🤖 AI Assistant Protocol
 
 **Structured workflow protocols** for different types of changes:
 
 1. **🆕 NEW FEATURE Protocol**: Full documentation cascade with safety validation
-2. **🔧 MODIFICATION Protocol**: Impact analysis with targeted updates
+2. **[ACTION:core-functionality] MODIFICATION Protocol**: Impact analysis with targeted updates
 3. **🐛 BUG FIX Protocol**: Minimal scope with focused validation
 4. **⚙️ CONFIG CHANGE Protocol**: Configuration-focused documentation
 5. **🔌 API CHANGE Protocol**: Interface documentation critical updates
 6. **🧪 TEST ADDITION Protocol**: Testing documentation focus
 7. **🚀 PERFORMANCE Protocol**: Architecture documentation updates
-8. **🔄 REFACTORING Protocol**: Structural documentation only
+8. **[ACTION:migration] REFACTORING Protocol**: Structural documentation only
 
 ## AI Decision Framework
 
-### 🛡️ 4-Tier Decision Hierarchy
+### [ACTION:validation] 4-Tier Decision Hierarchy
 
 **1. Safety Gates (NEVER Override)**
 - Test validation: All tests must pass
@@ -137,7 +137,7 @@ Implementation Tokens in Code ← Bidirectional Traceability →
 
 **"Should I implement this feature request?"**
 ```
-✅ Feature exists in feature-tracking.md with status "📝 Not Started"
+✅ Feature exists in feature-tracking.md with status "[ACTION:format-processing] Not Started"
 ✅ All blocking dependencies marked "✅ Completed"
 ✅ Implementation aligns with documented architecture
 ✅ Required context files identified per protocol
@@ -147,7 +147,7 @@ Implementation Tokens in Code ← Bidirectional Traceability →
 **"Should I fix this test failure?"**
 ```
 🚨 Is this blocking other work or extraction tasks?
-🚨 Is this in a critical component (⭐ or 🔺 priority)?
+🚨 Is this in a critical component ([CRITICAL] or [HIGH] priority)?
 ✅ Can I fix without changing documented functionality?
 ✅ Does fix follow established error handling patterns?
 ➡️ IMMEDIATE fix with BUG FIX Protocol (minimal scope)
@@ -184,37 +184,37 @@ ARCH-001 (Archive Naming)
 
 ## Implementation Token System
 
-### 🏷️ Token Format Specification
+### 🏷️ Token Format Specification (Semantic Tokens)
 
 ```go
-// [PRIORITY_ICON] FEATURE-ID: Brief description [- ACTION_ICON Context]
+// [PRIORITY] FEATURE-ID: Brief description [ACTION:action-category]
 ```
 
 **Examples:**
 ```go
-// ⭐ ARCH-001: Archive naming convention - 🔧 Core functionality
-// 🔺 CFG-003: Template formatting logic - 📝 Format string processing
-// 🔶 GIT-004: Git submodule support - 🔍 Discovery and validation
-// 🔻 DOC-013: AI documentation strategy - 📝 AI-first maintenance
+// [CRITICAL] ARCH-001: Archive naming convention [ACTION:core-functionality]
+// [HIGH] CFG-003: Template formatting logic [ACTION:format-processing]
+// [MEDIUM] GIT-004: Git submodule support [ACTION:search-discover]
+// [LOW] DOC-013: AI documentation strategy [ACTION:document-update]
 ```
 
-### 🎯 Priority Icon System
+### 🎯 Priority Token System (Semantic Tokens)
 
-| Icon | Priority | AI Usage Context |
-|------|----------|------------------|
-| ⭐ | **CRITICAL** | Blocking operations, core system integrity, essential processing |
-| 🔺 | **HIGH** | Important business logic, significant configuration, primary features |
-| 🔶 | **MEDIUM** | Secondary features, conditional processing, enhancement functionality |
-| 🔻 | **LOW** | Maintenance tasks, optimization, documentation, cleanup operations |
+| Semantic Token | Priority | AI Usage Context |
+|----------------|----------|------------------|
+| [CRITICAL] | **CRITICAL** | Blocking operations, core system integrity, essential processing |
+| [HIGH] | **HIGH** | Important business logic, significant configuration, primary features |
+| [MEDIUM] | **MEDIUM** | Secondary features, conditional processing, enhancement functionality |
+| [LOW] | **LOW** | Maintenance tasks, optimization, documentation, cleanup operations |
 
-### 🔧 Action Icon System
+### [ACTION:core-functionality] Action Token System (Semantic Tokens)
 
-| Icon | Category | AI Implementation Context |
-|------|----------|---------------------------|
-| 🔍 | **SEARCH/DISCOVER** | File system operations, configuration search, pattern matching |
-| 📝 | **DOCUMENT/UPDATE** | Status updates, output formatting, configuration writing |
-| 🔧 | **CONFIGURE/MODIFY** | System configuration, parameter adjustment, environment setup |
-| 🛡️ | **PROTECT/VALIDATE** | Input validation, security checks, data integrity, error detection |
+| Semantic Token | Category | AI Implementation Context |
+|----------------|----------|---------------------------|
+| [ACTION:search-discover] | **SEARCH/DISCOVER** | File system operations, configuration search, pattern matching |
+| [ACTION:document-update] | **DOCUMENT/UPDATE** | Status updates, output formatting, configuration writing |
+| [ACTION:configure-modify] | **CONFIGURE/MODIFY** | System configuration, parameter adjustment, environment setup |
+| [ACTION:protect-validate] | **PROTECT/VALIDATE** | Input validation, security checks, data integrity, error detection |
 
 ## AI Assistant Protocol
 
@@ -222,36 +222,36 @@ ARCH-001 (Archive Naming)
 
 **Before making ANY code changes:**
 1. **📋 Task Verification**: Task exists in feature-tracking.md with valid Feature ID
-2. **🔍 Compliance Check**: Review ai-assistant-compliance.md for token requirements
+2. **[ACTION:discovery] Compliance Check**: Review ai-assistant-compliance.md for token requirements
 3. **📁 File Impact Analysis**: Determine documentation files requiring updates
-4. **🛡️ Immutable Check**: Verify no changes violate immutable requirements
+4. **[ACTION:validation] Immutable Check**: Verify no changes violate immutable requirements
 
 ### ✅ Mandatory Post-Work Completion
 
 **After ALL code changes:**
-1. **⭐ Decision Framework Validation**: Comply with 4-tier decision hierarchy
+1. **[CRITICAL] Decision Framework Validation**: Comply with 4-tier decision hierarchy
 2. **🧪 Full Test Suite**: All tests must pass
-3. **🔧 Lint Compliance**: All lint checks must pass
-4. **📝 Documentation Updates**: All required documentation files updated
+3. **[ACTION:core-functionality] Lint Compliance**: All lint checks must pass
+4. **[ACTION:format-processing] Documentation Updates**: All required documentation files updated
 5. **🏁 Task Completion**: Update task status to "Completed" with subtask consistency
 
-### 🔧 Change Type Classification
+### [ACTION:core-functionality] Change Type Classification
 
 AI assistants use decision trees to classify changes and execute appropriate protocols:
 
 **Change Types:**
 - **🆕 NEW FEATURE**: Full documentation cascade with architecture updates
-- **🔧 MODIFY EXISTING**: Impact analysis with targeted documentation updates
+- **[ACTION:core-functionality] MODIFY EXISTING**: Impact analysis with targeted documentation updates
 - **🐛 BUG FIX**: Minimal scope with focused validation
 - **⚙️ CONFIG CHANGE**: Configuration-focused updates
 - **🔌 API/INTERFACE**: Interface documentation critical
 - **🧪 TEST ADDITION**: Testing documentation focus
 - **🚀 PERFORMANCE**: Architecture documentation updates
-- **🔄 REFACTORING**: Structural documentation only
+- **[ACTION:migration] REFACTORING**: Structural documentation only
 
 ## Validation and Enforcement
 
-### 🛡️ Automated Validation System
+### [ACTION:validation] Automated Validation System
 
 **Pre-Commit Validation:**
 ```bash
@@ -268,7 +268,7 @@ AI assistants use decision trees to classify changes and execute appropriate pro
 - Feature ID registration verification
 - Documentation consistency monitoring
 
-### 🔧 Validation Tools
+### [ACTION:core-functionality] Validation Tools
 
 **Quick Context Check:**
 - Detect code changes requiring context file updates
@@ -330,7 +330,7 @@ configurable_behaviors:
   - "Note format extension"
 ```
 
-### 🛡️ Change Safety Framework
+### [ACTION:validation] Change Safety Framework
 
 **Pre-Change Safety Checks:**
 - Immutable requirement validation
@@ -366,7 +366,7 @@ configurable_behaviors:
 - **validation-automation.md**: Integration with rejection criteria
 - **context-file-checklist.md**: Final validation checklist inclusion
 
-### 🛡️ Integration with Validation System
+### [ACTION:validation] Integration with Validation System
 
 - **Rejection Criteria**: Explicit rejection for inconsistent task completion
 - **Approval Requirements**: Consistent completion as approval prerequisite
@@ -443,7 +443,7 @@ configurable_behaviors:
 - AI decision framework with explicit criteria
 - Basic validation automation scripts
 
-### 🔧 Phase 2: Documentation System
+### [ACTION:core-functionality] Phase 2: Documentation System
 
 **Week 3-4: Documentation Architecture**
 1. **Standardize Documentation Structure**: Implement AI-centric formatting
@@ -457,7 +457,7 @@ configurable_behaviors:
 - AI assistant protocol specifications
 - Enhanced traceability framework
 
-### 🛡️ Phase 3: Validation and Enforcement
+### [ACTION:validation] Phase 3: Validation and Enforcement
 
 **Week 5-6: Quality Assurance**
 1. **Implement Validation Automation**: Create comprehensive validation tools
@@ -486,7 +486,7 @@ configurable_behaviors:
 - Comprehensive metrics dashboard
 - Continuous improvement framework
 
-### 🔧 Technical Implementation Requirements
+### [ACTION:core-functionality] Technical Implementation Requirements
 
 **Infrastructure Requirements:**
 - Git repository with hook support
@@ -516,7 +516,7 @@ configurable_behaviors:
 - **100% Documentation Completeness**: Required context files updated per protocol
 - **<2 Minutes Decision Time**: Rapid change classification and protocol selection
 
-### 🛡️ Quality Assurance
+### [ACTION:validation] Quality Assurance
 
 **Quality Improvements:**
 - **Zero Test Failures**: No regressions introduced by AI changes

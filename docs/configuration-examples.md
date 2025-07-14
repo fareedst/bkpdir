@@ -1,10 +1,10 @@
 # Configuration Examples
 
-<!-- 🔻 CFG-006: Documentation - 📝 Usage examples -->
+<!-- [LOW] CFG-006: Documentation - [ACTION:format-processing] Usage examples -->
 
 This document provides practical examples for using the enhanced configuration inspection capabilities introduced in CFG-006. All examples are tested and verified to work with the current implementation.
 
-## 🔍 Basic Inspection Examples
+## [ACTION:discovery] Basic Inspection Examples
 
 ### Example 1: Display All Configuration Values
 
@@ -145,7 +145,7 @@ $ bkpdir config --format json --filter "archive"
 }
 ```
 
-## 🔍 Advanced Filtering Examples
+## [ACTION:discovery] Advanced Filtering Examples
 
 ### Example 6: Filter by Configuration Category
 
@@ -245,7 +245,7 @@ $ bkpdir config --sources --format json | jq '.configuration[] | select(.merge_s
 ]
 ```
 
-## 🛠️ Troubleshooting Examples
+## [ACTION:maintenance] Troubleshooting Examples
 
 ### Example 11: Debugging Configuration Values
 
@@ -412,7 +412,7 @@ chmod +x monitor-config.sh
 # Run periodically via cron or systemd timer
 ```
 
-## 🔧 Integration Examples
+## [ACTION:core-functionality] Integration Examples
 
 ### Example 21: Build System Integration
 
@@ -442,15 +442,15 @@ build:
     time bkpdir config >/dev/null
 ```
 
-## 📝 Summary
+## [ACTION:format-processing] Summary
 
 These examples demonstrate the power and flexibility of the CFG-006 configuration inspection system:
 
-- **🔍 Basic inspection** for quick configuration overview
+- **[ACTION:discovery] Basic inspection** for quick configuration overview
 - **🎨 Multiple formats** for different use cases and automation
-- **🔧 Advanced filtering** for focused analysis
+- **[ACTION:core-functionality] Advanced filtering** for focused analysis
 - **🔗 Inheritance debugging** for complex configuration setups
-- **🛠️ Troubleshooting** for configuration issue resolution
+- **[ACTION:maintenance] Troubleshooting** for configuration issue resolution
 - **📊 Automation integration** for scripts and CI/CD pipelines
 - **🎯 Real-world scenarios** for practical application
 

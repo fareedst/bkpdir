@@ -1,6 +1,6 @@
 # 🤖 AI Documentation Templates
 
-> **🔻 DOC-013**: AI-First Documentation Templates  
+> **[LOW] DOC-013**: AI-First Documentation Templates  
 > **Implementation Tokens**: `// DOC-013: AI documentation templates`  
 > **Purpose**: Standardized templates for AI assistants to create consistent, machine-readable documentation and code comments.
 
@@ -22,7 +22,7 @@ All templates follow:
 - **DOC-009**: Mass Implementation Token Standardization format
 - **AI-Assistant-Compliance**: Token referencing and cross-reference requirements
 
-## 📝 Feature Documentation Templates
+## [ACTION:format-processing] Feature Documentation Templates
 
 ### 🚀 Complete Feature Documentation Template
 ```markdown
@@ -32,8 +32,8 @@ All templates follow:
 > 
 > **Implementation Tokens**: `// FEATURE-ID: [Implementation description]`
 > 
-> **Priority**: [⭐🔺🔶🔻] [CRITICAL|HIGH|MEDIUM|LOW]  
-> **Status**: [📝 Not Started|🔄 In Progress|✅ Completed]  
+> **Priority**: [[CRITICAL][HIGH][MEDIUM][LOW]] [CRITICAL|HIGH|MEDIUM|LOW]  
+> **Status**: [[ACTION:format-processing] Not Started|[ACTION:migration] In Progress|✅ Completed]  
 > **Dependencies**: [List major dependencies or "None"]
 
 ## 📑 Feature Overview
@@ -46,7 +46,7 @@ All templates follow:
 - **DEPENDENCY-002**: [Description] - See [link](path/to/dependency.md)
 - **None**: [If no dependencies exist]
 
-### 🔧 Integration Points
+### [ACTION:core-functionality] Integration Points
 - **[System/Component 1]**: [How this feature integrates]
 - **[System/Component 2]**: [How this feature integrates]
 - **Standalone**: [If no integration points exist]
@@ -58,7 +58,7 @@ All templates follow:
 - **R-[FEATURE-ID]-002**: [Specific, testable requirement with clear acceptance criteria]
 - **R-[FEATURE-ID]-003**: [Additional requirements as needed]
 
-### 🔧 Architecture
+### [ACTION:core-functionality] Architecture
 [Brief description of technical architecture and design decisions]
 
 #### **Core Components**
@@ -74,7 +74,7 @@ All templates follow:
 ```go
 // [PRIORITY_ICON] FEATURE-ID: [Implementation description] - [ACTION_ICON] [Context]
 func [FeatureFunctionName]([parameters]) ([returnType], error) {
-    // 🔍 Input validation with clear error context
+    // [ACTION:discovery] Input validation with clear error context
     if [validation condition] {
         return [zero value], &StructuredError{
             Code:    "[ERROR_CODE]",
@@ -86,7 +86,7 @@ func [FeatureFunctionName]([parameters]) ([returnType], error) {
         }
     }
     
-    // 🔧 Main feature operation
+    // [ACTION:core-functionality] Main feature operation
     [implementation logic]
     
     // ✅ Success return
@@ -102,9 +102,9 @@ func [FeatureFunctionName]([parameters]) ([returnType], error) {
 - **Performance Tests**: [Any performance requirements]
 - **Error Path Tests**: [List error conditions to test]
 
-### 🔧 Test Implementation
+### [ACTION:core-functionality] Test Implementation
 ```go
-// 🔻 FEATURE-ID: Feature testing implementation - 🧪 Test coverage
+// [LOW] FEATURE-ID: Feature testing implementation - 🧪 Test coverage
 func Test[FeatureName](t *testing.T) {
     tests := []struct {
         name     string
@@ -144,7 +144,7 @@ func Test[FeatureName](t *testing.T) {
 - [ ] Requirements clearly defined and testable
 - [ ] Architecture design approved
 
-### 🔧 Implementation Phase
+### [ACTION:core-functionality] Implementation Phase
 - [ ] Implementation tokens added to all code
 - [ ] Error handling follows structured error patterns
 - [ ] Code comments follow AI-first documentation standards
@@ -156,7 +156,7 @@ func Test[FeatureName](t *testing.T) {
 - [ ] Error path tests implemented and passing
 - [ ] Performance tests implemented (if applicable)
 
-### 📝 Documentation Phase
+### [ACTION:format-processing] Documentation Phase
 - [ ] Feature documentation completed
 - [ ] Cross-references updated in related documents
 - [ ] `feature-tracking.md` status updated
@@ -176,23 +176,23 @@ func Test[FeatureName](t *testing.T) {
 - **Testing**: [Comprehensive test coverage with all tests passing]
 ```
 
-### 🔧 Configuration Feature Template
+### [ACTION:core-functionality] Configuration Feature Template
 ```markdown
 # [Configuration Feature Name]
 
-> **🔺 CFG-[XXX]**: [Configuration feature description]
+> **[HIGH] CFG-[XXX]**: [Configuration feature description]
 > 
 > **Implementation Tokens**: `// CFG-[XXX]: [Configuration implementation]`
 > 
-> **Priority**: 🔺 HIGH  
-> **Status**: [📝🔄✅]
+> **Priority**: [HIGH] HIGH  
+> **Status**: [[ACTION:format-processing][ACTION:migration]✅]
 
 ## 📑 Configuration Overview
 
 ### 🎯 Configuration Purpose
 [Description of what this configuration controls and why it's needed]
 
-### 🔧 Configuration Parameters
+### [ACTION:core-functionality] Configuration Parameters
 - **Parameter 1**: [Type] - [Description] - Default: [value]
 - **Parameter 2**: [Type] - [Description] - Default: [value]
 
@@ -206,23 +206,23 @@ func Test[FeatureName](t *testing.T) {
 
 ## 🏗️ Implementation Details
 
-### 🔧 Configuration Loading
+### [ACTION:core-functionality] Configuration Loading
 ```go
-// 🔺 CFG-[XXX]: Configuration loading implementation - 🔧 Config management
+// [HIGH] CFG-[XXX]: Configuration loading implementation - [ACTION:core-functionality] Config management
 type [ConfigStruct] struct {
     [Parameter1] [Type] `yaml:"[parameter1]" json:"[parameter1]"`
     [Parameter2] [Type] `yaml:"[parameter2]" json:"[parameter2]"`
 }
 
 func (c *[ConfigStruct]) Validate() error {
-    // 🛡️ Configuration validation logic
+    // [ACTION:validation] Configuration validation logic
     [validation implementation]
 }
 ```
 
 ### 📊 Usage Examples
 ```go
-// 🔺 CFG-[XXX]: Configuration usage example - 📝 Implementation guide
+// [HIGH] CFG-[XXX]: Configuration usage example - [ACTION:format-processing] Implementation guide
 config := &[ConfigStruct]{
     [Parameter1]: [defaultValue1],
     [Parameter2]: [defaultValue2],
@@ -244,7 +244,7 @@ if err := config.Validate(); err != nil {
 
 ### 🚀 Standard Function Comment Template
 ```go
-// 🔻 DOC-013: Standard function comment template - 📝 Code documentation
+// [LOW] DOC-013: Standard function comment template - [ACTION:format-processing] Code documentation
 
 // [PRIORITY_ICON] FEATURE-ID: [Function purpose in one clear sentence] - [ACTION_ICON] [Operation category]
 //
@@ -261,7 +261,7 @@ if err := config.Validate(); err != nil {
 //       // Handle error appropriately
 //   }
 func FunctionName(param1 ParamType1, param2 ParamType2) (ReturnType, error) {
-    // 🔍 Input validation with structured error responses
+    // [ACTION:discovery] Input validation with structured error responses
     if param1 == nil {
         return ReturnType{}, &StructuredError{
             Code:    "INVALID_INPUT",
@@ -273,7 +273,7 @@ func FunctionName(param1 ParamType1, param2 ParamType2) (ReturnType, error) {
         }
     }
     
-    // 🔧 Main operation with clear operation tracking
+    // [ACTION:core-functionality] Main operation with clear operation tracking
     [implementation logic with step-by-step comments]
     
     // ✅ Success path with result validation
@@ -281,61 +281,61 @@ func FunctionName(param1 ParamType1, param2 ParamType2) (ReturnType, error) {
 }
 ```
 
-### 🛡️ Error Handling Function Template  
+### [ACTION:validation] Error Handling Function Template  
 ```go
-// 🔻 DOC-013: Error handling function template - 🛡️ Error management
+// [LOW] DOC-013: Error handling function template - [ACTION:validation] Error management
 
-// [PRIORITY_ICON] ERROR-[XXX]: [Error handling purpose] - 🛡️ Error processing
+// [PRIORITY_ICON] ERROR-[XXX]: [Error handling purpose] - [ACTION:validation] Error processing
 //
 // Purpose: [What error conditions this function handles]
 // Error Types: [List of specific error types this function processes]
 // Recovery Actions: [What recovery or cleanup actions are performed]
 // Escalation: [When errors are escalated vs handled locally]
 func HandleSpecificError(err error, context ErrorContext) error {
-    // 🔍 Error type classification
+    // [ACTION:discovery] Error type classification
     switch errorType := classifyError(err); errorType {
     case DiskSpaceError:
-        // 🔧 Disk space error handling
+        // [ACTION:core-functionality] Disk space error handling
         return handleDiskSpaceError(err, context)
         
     case PermissionError:
-        // 🛡️ Permission error handling  
+        // [ACTION:validation] Permission error handling  
         return handlePermissionError(err, context)
         
     case NetworkError:
-        // 🔄 Network error with retry logic
+        // [ACTION:migration] Network error with retry logic
         return handleNetworkErrorWithRetry(err, context)
         
     default:
-        // 📝 Unknown error logging and escalation
+        // [ACTION:format-processing] Unknown error logging and escalation
         logUnknownError(err, context)
         return fmt.Errorf("unhandled error type: %w", err)
     }
 }
 ```
 
-### 🔧 Configuration Function Template
+### [ACTION:core-functionality] Configuration Function Template
 ```go
-// 🔻 DOC-013: Configuration function template - 🔧 Configuration management
+// [LOW] DOC-013: Configuration function template - [ACTION:core-functionality] Configuration management
 
-// 🔺 CFG-[XXX]: [Configuration operation description] - 🔧 Config processing
+// [HIGH] CFG-[XXX]: [Configuration operation description] - [ACTION:core-functionality] Config processing
 //
 // Purpose: [What configuration aspect this function manages]
 // Configuration Sources: [List of configuration sources: file, env, defaults]  
 // Validation: [What validation is performed on configuration values]
 // Side Effects: [Any side effects like file creation, environment changes]
 func LoadConfigurationValue(key string, defaultValue interface{}) (interface{}, error) {
-    // 🔍 Configuration source discovery
+    // [ACTION:discovery] Configuration source discovery
     sources := []ConfigSource{
         NewFileConfigSource(configPath),
         NewEnvConfigSource(),
         NewDefaultConfigSource(),
     }
     
-    // 🔧 Configuration value resolution with precedence
+    // [ACTION:core-functionality] Configuration value resolution with precedence
     for _, source := range sources {
         if value, exists := source.GetValue(key); exists {
-            // 🛡️ Configuration value validation
+            // [ACTION:validation] Configuration value validation
             if err := validateConfigValue(key, value); err != nil {
                 continue // Try next source
             }
@@ -343,7 +343,7 @@ func LoadConfigurationValue(key string, defaultValue interface{}) (interface{}, 
         }
     }
     
-    // 📝 Default value usage with validation
+    // [ACTION:format-processing] Default value usage with validation
     if err := validateConfigValue(key, defaultValue); err != nil {
         return nil, fmt.Errorf("invalid default value for %s: %w", key, err)
     }
@@ -354,16 +354,16 @@ func LoadConfigurationValue(key string, defaultValue interface{}) (interface{}, 
 
 ### 🧪 Test Function Template
 ```go
-// 🔻 DOC-013: Test function template - 🧪 Test implementation
+// [LOW] DOC-013: Test function template - 🧪 Test implementation
 
-// 🔻 TEST-[XXX]: [Test purpose description] - 🧪 Test coverage
+// [LOW] TEST-[XXX]: [Test purpose description] - 🧪 Test coverage
 //
 // Test Coverage: [What functionality this test validates]
 // Test Scenarios: [List of specific scenarios being tested]
 // Test Data: [Description of test data used]
 // Dependencies: [Any test dependencies or setup requirements]
 func TestFunctionName(t *testing.T) {
-    // 🔧 Test setup with cleanup
+    // [ACTION:core-functionality] Test setup with cleanup
     testDir := t.TempDir()
     defer func() {
         // 🧹 Test cleanup
@@ -385,7 +385,7 @@ func TestFunctionName(t *testing.T) {
             name:  "Successful operation with valid input",
             input: ValidInputData,
             setupFunc: func(t *testing.T) error {
-                // 🔧 Test-specific setup
+                // [ACTION:core-functionality] Test-specific setup
                 return createTestData(testDir)
             },
             expected: ExpectedSuccessResult,
@@ -401,7 +401,7 @@ func TestFunctionName(t *testing.T) {
             expected: ZeroValue,
             wantErr:  true,
             errorCheck: func(t *testing.T, err error) {
-                // 🛡️ Specific error validation
+                // [ACTION:validation] Specific error validation
                 assert.Contains(t, err.Error(), "expected error text")
             },
         },
@@ -410,7 +410,7 @@ func TestFunctionName(t *testing.T) {
     // 🧪 Test execution with proper error handling
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
-            // 🔧 Test setup
+            // [ACTION:core-functionality] Test setup
             if tt.setupFunc != nil {
                 if err := tt.setupFunc(t); err != nil {
                     t.Fatalf("test setup failed: %v", err)
@@ -420,7 +420,7 @@ func TestFunctionName(t *testing.T) {
             // 🏃 Execute function under test
             result, err := FunctionUnderTest(tt.input)
             
-            // 🛡️ Validate results
+            // [ACTION:validation] Validate results
             if tt.wantErr {
                 assert.Error(t, err, "expected error but got none")
                 if tt.errorCheck != nil {
@@ -447,14 +447,14 @@ func TestFunctionName(t *testing.T) {
 > 
 > **Implementation Tokens**: `// ARCH-[XXX]: [Architecture implementation]`
 > 
-> **Priority**: [⭐🔺🔶🔻] [Priority Level]
+> **Priority**: [[CRITICAL][HIGH][MEDIUM][LOW]] [Priority Level]
 
 ## 📑 Architecture Overview
 
 ### 🎯 Component Purpose
 [Clear description of what this architectural component provides]
 
-### 🔧 Design Principles
+### [ACTION:core-functionality] Design Principles
 - **Principle 1**: [Description and rationale]
 - **Principle 2**: [Description and rationale]
 - **Principle 3**: [Description and rationale]
@@ -489,7 +489,7 @@ func TestFunctionName(t *testing.T) {
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 🔧 Data Flow
+### [ACTION:core-functionality] Data Flow
 ```
 [Data Source] → [Processing Step 1] → [Processing Step 2] → [Data Destination]
 ```
@@ -533,7 +533,7 @@ func (c *[ConcreteComponent]) [Method1](param [Type]) ([ReturnType], error) {
 > 
 > **Implementation Tokens**: `// REQ-[XXX]: [Requirements implementation]`
 > 
-> **Priority**: [⭐🔺🔶🔻] [Priority Level]
+> **Priority**: [[CRITICAL][HIGH][MEDIUM][LOW]] [Priority Level]
 
 ## 📑 Requirements Overview
 
@@ -546,7 +546,7 @@ func (c *[ConcreteComponent]) [Method1](param [Type]) ([ReturnType], error) {
 
 ## 📋 Functional Requirements
 
-### 🔧 Core Requirements
+### [ACTION:core-functionality] Core Requirements
 - **R-[REQ-ID]-001**: [Requirement statement with clear acceptance criteria]
   - **Input**: [What inputs are required]
   - **Processing**: [What processing must occur]
@@ -559,12 +559,12 @@ func (c *[ConcreteComponent]) [Method1](param [Type]) ([ReturnType], error) {
   - **Output**: [Required outputs]
   - **Acceptance**: [Verification criteria]
 
-### 🛡️ Validation Requirements
+### [ACTION:validation] Validation Requirements
 - **R-[REQ-ID]-V01**: [Input validation requirements]
 - **R-[REQ-ID]-V02**: [Output validation requirements]
 - **R-[REQ-ID]-V03**: [Process validation requirements]
 
-### 🔍 Error Handling Requirements
+### [ACTION:discovery] Error Handling Requirements
 - **R-[REQ-ID]-E01**: [Error detection requirements]
 - **R-[REQ-ID]-E02**: [Error recovery requirements]
 - **R-[REQ-ID]-E03**: [Error reporting requirements]
@@ -593,17 +593,17 @@ func (c *[ConcreteComponent]) [Method1](param [Type]) ([ReturnType], error) {
 - **Security Testing**: [Security test requirements]
 ```
 
-## 🔧 AI Assistant Usage Guidelines
+## [ACTION:core-functionality] AI Assistant Usage Guidelines
 
 ### 📋 Template Selection Guide
 
-#### **🔍 When to Use Feature Documentation Template**
+#### **[ACTION:discovery] When to Use Feature Documentation Template**
 - Creating documentation for new features (FEATURE-ID pattern)
 - Comprehensive feature specification needed
 - Integration with multiple systems required
 - Full implementation lifecycle documentation needed
 
-#### **🔧 When to Use Configuration Template**
+#### **[ACTION:core-functionality] When to Use Configuration Template**
 - Adding new configuration parameters (CFG-XXX pattern)
 - Configuration validation requirements
 - Environment variable override support needed
@@ -621,15 +621,15 @@ func (c *[ConcreteComponent]) [Method1](param [Type]) ([ReturnType], error) {
 - Verification method specification needed
 - Cross-feature requirement dependencies
 
-### 🛡️ Template Customization Guidelines
+### [ACTION:validation] Template Customization Guidelines
 
-#### **🔧 Icon Usage Standards**
+#### **[ACTION:core-functionality] Icon Usage Standards**
 - **Priority Icons**: Must match feature-tracking.md priority levels
 - **Action Icons**: Must match actual function behavior
 - **Section Icons**: Use consistently across all templates
 - **Cross-Reference Icons**: Include in all related feature links
 
-#### **📝 Content Standards**
+#### **[ACTION:format-processing] Content Standards**
 - **Clear Language**: Use simple, direct sentences for AI comprehension
 - **Consistent Terminology**: Use standardized vocabulary across all templates
 - **Complete Cross-References**: Include all related feature IDs and links
@@ -649,13 +649,13 @@ func (c *[ConcreteComponent]) [Method1](param [Type]) ([ReturnType], error) {
 - [ ] Required sections present for documentation scope
 - [ ] Icon usage follows DOC-007/DOC-008 standards
 
-#### **🔧 Content Validation**  
+#### **[ACTION:core-functionality] Content Validation**  
 - [ ] All FEATURE-ID references use correct format
 - [ ] Implementation tokens match feature-tracking.md entries
 - [ ] Cross-references include valid links
 - [ ] Priority icons match actual feature priority
 
-#### **🛡️ Post-Creation Validation**
+#### **[ACTION:validation] Post-Creation Validation**
 - [ ] DOC-008 icon validation passes
 - [ ] Cross-reference integrity validated
 - [ ] Implementation tokens properly formatted

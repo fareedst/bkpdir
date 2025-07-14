@@ -300,4 +300,4 @@ Licensed under the MIT License. See LICENSE file for details.
 
 ---
 
-**// EXTRACT-010: Package cli comprehensive documentation - Complete CLI framework guide with examples and patterns - 🔺** 
+**// EXTRACT-010: Package cli comprehensive documentation - Complete CLI framework guide with examples and patterns - [HIGH]** 

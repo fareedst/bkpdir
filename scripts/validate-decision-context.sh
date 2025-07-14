@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Decision Context Validation Script
-# 🔶 DOC-014: Decision validation tools - Enhanced token decision context validation
+# [MEDIUM] DOC-014: Decision validation tools [ACTION:validation]
 # Validates decision context format in enhanced implementation tokens
 
 set -euo pipefail
@@ -723,7 +723,7 @@ done
 
 # Main execution
 main() {
-    log_info "🔶 DOC-014: Decision Context Validation"
+    log_info "[MEDIUM] DOC-014: Decision Context Validation"
     log_info "Mode: $VALIDATION_MODE | Format: $OUTPUT_FORMAT"
     echo ""
     

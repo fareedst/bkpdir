@@ -16,14 +16,14 @@ import (
 	"sync"
 )
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔍 Core resource contract
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Resource represents any resource that can be cleaned up
 type Resource interface {
 	Cleanup() error
 	String() string
 }
 
-// ⭐ EXTRACT-002: ResourceManager interface - 🔧 Resource management contract
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ResourceManagerInterface defines clean resource management contract
 type ResourceManagerInterface interface {
 	AddResource(resource Resource)
@@ -34,43 +34,43 @@ type ResourceManagerInterface interface {
 	CleanupWithPanicRecovery() error
 }
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔧 Temporary file resource
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TempFile represents a temporary file that can be cleaned up
 type TempFile struct {
 	Path string
 }
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔧 Temporary file cleanup
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Cleanup removes the temporary file from the filesystem
 func (tf *TempFile) Cleanup() error {
 	return os.Remove(tf.Path)
 }
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔍 Temporary file description
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // String returns a string representation of the temporary file
 func (tf *TempFile) String() string {
 	return fmt.Sprintf("TempFile{Path: %s}", tf.Path)
 }
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔧 Temporary directory resource
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TempDir represents a temporary directory that can be cleaned up
 type TempDir struct {
 	Path string
 }
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔧 Temporary directory cleanup
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Cleanup removes the temporary directory and all its contents from the filesystem
 func (td *TempDir) Cleanup() error {
 	return os.RemoveAll(td.Path)
 }
 
-// ⭐ EXTRACT-002: Resource interface and implementations - 🔍 Temporary directory description
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // String returns a string representation of the temporary directory
 func (td *TempDir) String() string {
 	return fmt.Sprintf("TempDir{Path: %s}", td.Path)
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Thread-safe resource tracking
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ResourceManager manages a collection of resources for automatic cleanup
 // Extracted from original errors.go with enhanced thread safety
 type ResourceManager struct {
@@ -78,7 +78,7 @@ type ResourceManager struct {
 	mutex     sync.RWMutex
 }
 
-// ⭐ EXTRACT-002: Resource factory functions - 🔧 ResourceManager creation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // NewResourceManager creates a new ResourceManager instance
 func NewResourceManager() *ResourceManager {
 	return &ResourceManager{
@@ -86,7 +86,7 @@ func NewResourceManager() *ResourceManager {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Resource registration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // AddResource adds a resource to be tracked for cleanup
 func (rm *ResourceManager) AddResource(resource Resource) {
 	rm.mutex.Lock()
@@ -94,19 +94,19 @@ func (rm *ResourceManager) AddResource(resource Resource) {
 	rm.resources = append(rm.resources, resource)
 }
 
-// ⭐ EXTRACT-002: Resource factory functions - 🔧 Temporary file registration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // AddTempFile adds a temporary file to be tracked for cleanup
 func (rm *ResourceManager) AddTempFile(path string) {
 	rm.AddResource(&TempFile{Path: path})
 }
 
-// ⭐ EXTRACT-002: Resource factory functions - 🔧 Temporary directory registration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // AddTempDir adds a temporary directory to be tracked for cleanup
 func (rm *ResourceManager) AddTempDir(path string) {
 	rm.AddResource(&TempDir{Path: path})
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Resource deregistration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // RemoveResource removes a resource from tracking (typically after successful completion)
 func (rm *ResourceManager) RemoveResource(resource Resource) {
 	rm.mutex.Lock()
@@ -122,7 +122,7 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Cleanup execution
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Cleanup cleans up all tracked resources in the ResourceManager
 func (rm *ResourceManager) Cleanup() error {
 	rm.mutex.Lock()
@@ -136,11 +136,11 @@ func (rm *ResourceManager) Cleanup() error {
 		}
 	}
 
-	rm.resources = rm.resources[:0] // Clear the slice
+	rm.resources = make([]Resource, 0) // Clear the slice
 	return lastError
 }
 
-// ⭐ EXTRACT-002: Panic recovery mechanisms - 🛡️ Panic-safe cleanup
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // CleanupWithPanicRecovery cleans up all resources and recovers from panics during cleanup
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	defer func() {
@@ -152,7 +152,7 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	return rm.Cleanup()
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔍 Resource inspection
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetResourceCount returns the number of currently tracked resources
 func (rm *ResourceManager) GetResourceCount() int {
 	rm.mutex.RLock()
@@ -160,7 +160,7 @@ func (rm *ResourceManager) GetResourceCount() int {
 	return len(rm.resources)
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔍 Resource listing
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetResources returns a copy of the currently tracked resources
 func (rm *ResourceManager) GetResources() []Resource {
 	rm.mutex.RLock()
@@ -172,7 +172,7 @@ func (rm *ResourceManager) GetResources() []Resource {
 	return resources
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Conditional cleanup
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // CleanupIf cleans up resources that match a given predicate
 func (rm *ResourceManager) CleanupIf(predicate func(Resource) bool) error {
 	rm.mutex.Lock()
@@ -196,7 +196,7 @@ func (rm *ResourceManager) CleanupIf(predicate func(Resource) bool) error {
 	return lastError
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Resource type filtering
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetResourcesByType returns resources of a specific type
 func (rm *ResourceManager) GetResourcesByType(resourceType string) []Resource {
 	rm.mutex.RLock()
@@ -224,7 +224,7 @@ func (rm *ResourceManager) GetResourcesByType(resourceType string) []Resource {
 	return matchingResources
 }
 
-// ⭐ EXTRACT-002: ResourceManager core - 🔧 Context integration
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // CleanupWithContext cleans up resources with context cancellation support
 func (rm *ResourceManager) CleanupWithContext(ctx context.Context) error {
 	// Check for cancellation before starting
@@ -250,6 +250,6 @@ func (rm *ResourceManager) CleanupWithContext(ctx context.Context) error {
 		}
 	}
 
-	rm.resources = rm.resources[:0] // Clear the slice
+	rm.resources = make([]Resource, 0) // Clear the slice
 	return lastError
 }

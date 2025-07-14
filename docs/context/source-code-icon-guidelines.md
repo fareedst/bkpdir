@@ -3,7 +3,7 @@
 ## 📑 Purpose
 This document establishes the official guidelines for using standardized icons in source code implementation tokens. It ensures consistent icon usage between documentation and code, improving traceability and AI assistant understanding.
 
-## 🛡️ Standardized Implementation Token Format
+## [ACTION:validation] Standardized Implementation Token Format
 
 ### ✨ **Core Format Structure**
 ```go
@@ -18,18 +18,18 @@ This document establishes the official guidelines for using standardized icons i
 
 **Standard Examples:**
 ```go
-// ⭐ ARCH-001: Archive naming convention implementation - 🔧 Core functionality
-// 🔺 CFG-003: Template formatting logic - 📝 Format string processing  
-// 🔶 GIT-004: Git submodule support - 🔍 Discovery and validation
-// 🔻 REFACTOR-001: Interface standardization - 🏗️ Architecture preparation
+// [CRITICAL] ARCH-001: Archive naming convention implementation - [ACTION:core-functionality] Core functionality
+// [HIGH] CFG-003: Template formatting logic - [ACTION:format-processing] Format string processing  
+// [MEDIUM] GIT-004: Git submodule support - [ACTION:discovery] Discovery and validation
+// [LOW] REFACTOR-001: Interface standardization - 🏗️ Architecture preparation
 ```
 
 **Enhanced Examples with Decision Context:**
 ```go
-// ⭐ ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
-// 🔺 CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
-// 🔶 DOC-010: Token format suggestions [DECISION: developer-experience, independent]
-// 🔻 TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
+// [CRITICAL] ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
+// [HIGH] CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
+// [MEDIUM] DOC-010: Token format suggestions [DECISION: developer-experience, independent]
+// [LOW] TEST-FIX-001: Config isolation [DECISION: infrastructure, prerequisite-for-testing]
 ```
 
 #### 🏷️ **Decision Context Categories** (DOC-014 Integration)
@@ -55,24 +55,24 @@ This document establishes the official guidelines for using standardized icons i
 #### 📋 **Decision Context Usage Guidelines**
 
 **Mandatory Decision Context:**
-- ⭐ CRITICAL priority implementations
+- [CRITICAL] CRITICAL priority implementations
 - Components involved in extraction planning (EXTRACT-001-010)
 - User-facing functionality changes
 - Breaking changes or major architectural decisions
 
 **Recommended Decision Context:**
-- 🔺 HIGH priority implementations
+- [HIGH] HIGH priority implementations
 - Features that enable future development
 - Performance-critical implementations
 - Infrastructure and tooling improvements
 
 **Optional Decision Context:**
-- 🔶 MEDIUM priority implementations
-- 🔻 LOW priority implementations
+- [MEDIUM] MEDIUM priority implementations
+- [LOW] LOW priority implementations
 - Straightforward bug fixes
 - Routine maintenance tasks
 
-#### 🔧 **Migration to Enhanced Format**
+#### [ACTION:core-functionality] **Migration to Enhanced Format**
 
 **Context Selection Process:**
 1. **Identify Impact Level**: Core/enhancement/developer-experience/infrastructure
@@ -82,15 +82,15 @@ This document establishes the official guidelines for using standardized icons i
 **Enhanced Migration Examples:**
 ```go
 // Before: Standard format
-// ⭐ ARCH-002: Archive creation with context handling
+// [CRITICAL] ARCH-002: Archive creation with context handling
 
 // After: Enhanced format with decision context
-// ⭐ ARCH-002: Archive creation with context handling [DECISION: core-functionality, performance-critical, backward-compatible]
+// [CRITICAL] ARCH-002: Archive creation with context handling [DECISION: core-functionality, performance-critical, backward-compatible]
 ```
 
 ### 🔥 Priority Icon Integration
 
-#### ⭐ **CRITICAL PRIORITY Tokens**
+#### [CRITICAL] **CRITICAL PRIORITY Tokens**
 **When to Use:**
 - ✅ Core system functionality that blocks other operations
 - ✅ Critical error handling and recovery paths
@@ -99,18 +99,18 @@ This document establishes the official guidelines for using standardized icons i
 
 **Format:**
 ```go
-// ⭐ ARCH-001: Archive creation with atomic operations
+// [CRITICAL] ARCH-001: Archive creation with atomic operations
 func CreateArchiveWithCleanup(ctx context.Context, cfg *Config) error {
-    // ⭐ ARCH-001: Critical resource management for atomic operations
+    // [CRITICAL] ARCH-001: Critical resource management for atomic operations
     rm := NewResourceManager()
     defer rm.Cleanup()
     
-    // ⭐ ARCH-001: Essential compression and file operations
+    // [CRITICAL] ARCH-001: Essential compression and file operations
     return processArchiveCreation(ctx, cfg, rm)
 }
 ```
 
-#### 🔺 **HIGH PRIORITY Tokens**
+#### [HIGH] **HIGH PRIORITY Tokens**
 **When to Use:**
 - ✅ Important feature implementations
 - ✅ Significant configuration processing
@@ -119,15 +119,15 @@ func CreateArchiveWithCleanup(ctx context.Context, cfg *Config) error {
 
 **Format:**
 ```go
-// 🔺 CFG-003: Template formatting engine implementation
+// [HIGH] CFG-003: Template formatting engine implementation
 func ProcessTemplateFormat(template string, data interface{}) (string, error) {
-    // 🔺 CFG-003: High-priority template parsing and validation
+    // [HIGH] CFG-003: High-priority template parsing and validation
     tmpl, err := template.New("format").Parse(template)
     if err != nil {
         return "", fmt.Errorf("template parsing failed: %w", err)
     }
     
-    // 🔺 CFG-003: Template execution with error handling
+    // [HIGH] CFG-003: Template execution with error handling
     var buf bytes.Buffer
     if err := tmpl.Execute(&buf, data); err != nil {
         return "", fmt.Errorf("template execution failed: %w", err)
@@ -137,7 +137,7 @@ func ProcessTemplateFormat(template string, data interface{}) (string, error) {
 }
 ```
 
-#### 🔶 **MEDIUM PRIORITY Tokens**
+#### [MEDIUM] **MEDIUM PRIORITY Tokens**
 **When to Use:**
 - ✅ Conditional feature implementations
 - ✅ Optional enhancement functions
@@ -146,20 +146,20 @@ func ProcessTemplateFormat(template string, data interface{}) (string, error) {
 
 **Format:**
 ```go
-// 🔶 GIT-004: Git submodule detection - conditional feature
+// [MEDIUM] GIT-004: Git submodule detection - conditional feature
 func DetectGitSubmodules(repoPath string) ([]string, error) {
-    // 🔶 GIT-004: Medium-priority submodule discovery
+    // [MEDIUM] GIT-004: Medium-priority submodule discovery
     gitmodulesPath := filepath.Join(repoPath, ".gitmodules")
     if !fileExists(gitmodulesPath) {
         return nil, nil // No submodules
     }
     
-    // 🔶 GIT-004: Parse .gitmodules file for submodule paths
+    // [MEDIUM] GIT-004: Parse .gitmodules file for submodule paths
     return parseGitmodulesFile(gitmodulesPath)
 }
 ```
 
-#### 🔻 **LOW PRIORITY Tokens**
+#### [LOW] **LOW PRIORITY Tokens**
 **When to Use:**
 - ✅ Cleanup and maintenance functions
 - ✅ Optional optimization code
@@ -168,16 +168,16 @@ func DetectGitSubmodules(repoPath string) ([]string, error) {
 
 **Format:**
 ```go
-// 🔻 REFACTOR-001: Legacy compatibility helper - low priority cleanup
+// [LOW] REFACTOR-001: Legacy compatibility helper - low priority cleanup
 func LegacyArchiveNameWrapper(prefix string, timestamp time.Time) string {
-    // 🔻 REFACTOR-001: Backward compatibility for old naming convention
+    // [LOW] REFACTOR-001: Backward compatibility for old naming convention
     return fmt.Sprintf("%s-%s.zip", prefix, timestamp.Format("2006-01-02-15-04"))
 }
 ```
 
-## 🔧 Action Category Icons in Implementation Tokens
+## [ACTION:core-functionality] Action Category Icons in Implementation Tokens
 
-### 🔍 **SEARCH/DISCOVER Action Tokens**
+### [ACTION:discovery] **SEARCH/DISCOVER Action Tokens**
 **When to Use:**
 - ✅ File system discovery and scanning
 - ✅ Configuration file search and detection
@@ -186,19 +186,19 @@ func LegacyArchiveNameWrapper(prefix string, timestamp time.Time) string {
 
 **Format:**
 ```go
-// 🔺 CFG-001: Configuration discovery - 🔍 Search and detection
+// [HIGH] CFG-001: Configuration discovery - [ACTION:discovery] Search and detection
 func GetConfigSearchPath() []string {
-    // 🔺 CFG-001: Environment variable search - 🔍 Discovery
+    // [HIGH] CFG-001: Environment variable search - [ACTION:discovery] Discovery
     if envPath := os.Getenv("BKPDIR_CONFIG"); envPath != "" {
         return strings.Split(envPath, ":")
     }
     
-    // 🔺 CFG-001: Default path search - 🔍 Fallback discovery
+    // [HIGH] CFG-001: Default path search - [ACTION:discovery] Fallback discovery
     return []string{"./.bkpdir.yml", "~/.bkpdir.yml"}
 }
 ```
 
-### 📝 **DOCUMENT/UPDATE Action Tokens**
+### [ACTION:format-processing] **DOCUMENT/UPDATE Action Tokens**
 **When to Use:**
 - ✅ Configuration file writing and updates
 - ✅ Log file creation and maintenance
@@ -207,20 +207,20 @@ func GetConfigSearchPath() []string {
 
 **Format:**
 ```go
-// 🔺 CFG-002: Configuration persistence - 📝 File updates
+// [HIGH] CFG-002: Configuration persistence - [ACTION:format-processing] File updates
 func SaveConfigData(configPath string, data *ConfigData) error {
-    // 🔺 CFG-002: YAML serialization - 📝 Format and write
+    // [HIGH] CFG-002: YAML serialization - [ACTION:format-processing] Format and write
     yamlData, err := yaml.Marshal(data)
     if err != nil {
         return fmt.Errorf("YAML marshaling failed: %w", err)
     }
     
-    // 🔺 CFG-002: Atomic file writing - 📝 Safe persistence
+    // [HIGH] CFG-002: Atomic file writing - [ACTION:format-processing] Safe persistence
     return writeFileAtomic(configPath, yamlData, 0644)
 }
 ```
 
-### 🔧 **CONFIGURE/MODIFY Action Tokens**
+### [ACTION:core-functionality] **CONFIGURE/MODIFY Action Tokens**
 **When to Use:**
 - ✅ System configuration and setup
 - ✅ Parameter adjustment and tuning
@@ -229,15 +229,15 @@ func SaveConfigData(configPath string, data *ConfigData) error {
 
 **Format:**
 ```go
-// 🔺 CFG-003: Output formatter configuration - 🔧 System setup
+// [HIGH] CFG-003: Output formatter configuration - [ACTION:core-functionality] System setup
 func ConfigureFormatter(cfg *Config) (*OutputFormatter, error) {
-    // 🔺 CFG-003: Printf formatter setup - 🔧 Configuration
+    // [HIGH] CFG-003: Printf formatter setup - [ACTION:core-functionality] Configuration
     printf := &PrintfFormatter{
         StatusCodeConfig: cfg.StatusCodes,
         FormatStrings:   cfg.FormatStrings,
     }
     
-    // 🔺 CFG-003: Template formatter setup - 🔧 Configuration  
+    // [HIGH] CFG-003: Template formatter setup - [ACTION:core-functionality] Configuration  
     template := &TemplateFormatter{
         Templates:     cfg.Templates,
         RegexPatterns: cfg.RegexPatterns,
@@ -250,7 +250,7 @@ func ConfigureFormatter(cfg *Config) (*OutputFormatter, error) {
 }
 ```
 
-### 🛡️ **PROTECT/VALIDATE Action Tokens**
+### [ACTION:validation] **PROTECT/VALIDATE Action Tokens**
 **When to Use:**
 - ✅ Input validation and sanitization
 - ✅ Security checks and enforcement
@@ -259,16 +259,16 @@ func ConfigureFormatter(cfg *Config) (*OutputFormatter, error) {
 
 **Format:**
 ```go
-// ⭐ ARCH-002: Archive verification - 🛡️ Integrity protection
+// [CRITICAL] ARCH-002: Archive verification - [ACTION:validation] Integrity protection
 func VerifyArchiveIntegrity(archivePath string) error {
-    // ⭐ ARCH-002: ZIP structure validation - 🛡️ Corruption detection
+    // [CRITICAL] ARCH-002: ZIP structure validation - [ACTION:validation] Corruption detection
     zipReader, err := zip.OpenReader(archivePath)
     if err != nil {
         return fmt.Errorf("archive validation failed: %w", err)
     }
     defer zipReader.Close()
     
-    // ⭐ ARCH-002: Archive integrity verification - 🛡️ Data protection
+    // [CRITICAL] ARCH-002: Archive integrity verification - [ACTION:validation] Data protection
     return validateArchiveStructure(zipReader)
 }
 ```
@@ -302,42 +302,42 @@ Decision context enhances implementation tokens by providing explicit rationale 
 - **`breaking-change`**: May break existing functionality (requires major version)
 - **`performance-critical`**: Impacts system performance significantly
 
-### 📝 **Decision Context Usage Guidelines**
+### [ACTION:format-processing] **Decision Context Usage Guidelines**
 
 #### **Mandatory Decision Context**
 ```go
-// ⭐ ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
+// [CRITICAL] ARCH-001: Archive naming convention [DECISION: core-functionality, blocks-extraction, user-facing]
 func GenerateArchiveName(cfg *Config, timestamp time.Time) string {
-    // ⭐ ARCH-001: Core naming logic with user-facing implications
+    // [CRITICAL] ARCH-001: Core naming logic with user-facing implications
     return fmt.Sprintf("%s-%s.zip", cfg.Prefix, timestamp.Format("2006-01-02T150405"))
 }
 ```
 
 #### **Recommended Decision Context**
 ```go
-// 🔺 CFG-005: Configuration inheritance system [DECISION: enhancement, enables-flexibility]
+// [HIGH] CFG-005: Configuration inheritance system [DECISION: enhancement, enables-flexibility]
 func LoadConfigWithInheritance(configPath string) (*Config, error) {
-    // 🔺 CFG-005: Enhanced config loading enabling future extensibility
+    // [HIGH] CFG-005: Enhanced config loading enabling future extensibility
     return loadConfigRecursive(configPath, make(map[string]bool))
 }
 ```
 
 #### **Optional Decision Context**
 ```go
-// 🔶 DOC-010: Token format suggestions [DECISION: developer-experience]
+// [MEDIUM] DOC-010: Token format suggestions [DECISION: developer-experience]
 func SuggestTokenFormat(functionName string) (*TokenSuggestion, error) {
-    // 🔶 DOC-010: AI assistant guidance utility
+    // [MEDIUM] DOC-010: AI assistant guidance utility
     return analyzeFunction(functionName)
 }
 ```
 
-### 🔧 **Integration with Existing Token Systems**
+### [ACTION:core-functionality] **Integration with Existing Token Systems**
 
 #### **Compatibility with Action Icons**
 ```go
-// 🔺 CFG-003: Template formatting - 📝 Output generation [DECISION: enhancement, user-facing, backward-compatible]
+// [HIGH] CFG-003: Template formatting - [ACTION:format-processing] Output generation [DECISION: enhancement, user-facing, backward-compatible]
 func ProcessTemplateFormat(template string, data interface{}) (string, error) {
-    // 🔺 CFG-003: Template parsing with backward compatibility - 📝 Format processing
+    // [HIGH] CFG-003: Template parsing with backward compatibility - [ACTION:format-processing] Format processing
     tmpl, err := template.New("format").Parse(template)
     return executeTemplate(tmpl, data)
 }
@@ -346,12 +346,12 @@ func ProcessTemplateFormat(template string, data interface{}) (string, error) {
 #### **Migration from Standard Format**
 **Before (Standard Format):**
 ```go
-// 🔺 GIT-001: Git info extraction - 🔍 Repository analysis
+// [HIGH] GIT-001: Git info extraction - [ACTION:discovery] Repository analysis
 ```
 
 **After (Enhanced Format):**
 ```go
-// 🔺 GIT-001: Git info extraction [DECISION: enhancement, independent, user-facing]
+// [HIGH] GIT-001: Git info extraction [DECISION: enhancement, independent, user-facing]
 ```
 
 ### 🚨 **Validation Requirements**
@@ -363,7 +363,7 @@ func ProcessTemplateFormat(template string, data interface{}) (string, error) {
 - All context tags must be from approved categories
 
 #### **Quality Assurance**
-- Priority icon must match implementation complexity (⭐ for core, 🔻 for infrastructure)
+- Priority icon must match implementation complexity ([CRITICAL] for core, [LOW] for infrastructure)
 - Feature ID must exist in feature-tracking.md
 - Decision context must add meaningful information for AI assistance
 - Context tags must accurately reflect implementation purpose
@@ -372,39 +372,39 @@ func ProcessTemplateFormat(template string, data interface{}) (string, error) {
 
 #### **Core Functionality with Extraction Blocking**
 ```go
-// ⭐ REFACTOR-001: Interface standardization [DECISION: core-functionality, blocks-extraction]
+// [CRITICAL] REFACTOR-001: Interface standardization [DECISION: core-functionality, blocks-extraction]
 func CreateStandardizedInterface() InterfaceContract {
-    // ⭐ REFACTOR-001: Critical interface prep blocking component extraction
+    // [CRITICAL] REFACTOR-001: Critical interface prep blocking component extraction
     return defineComponentBoundaries()
 }
 ```
 
 #### **Enhancement Enabling Future Development** 
 ```go
-// 🔺 CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
+// [HIGH] CFG-005: Configuration inheritance [DECISION: enhancement, enables-flexibility, backward-compatible]
 func ProcessConfigInheritance(configs []string) (*Config, error) {
-    // 🔺 CFG-005: Flexible config system enabling future extensibility
+    // [HIGH] CFG-005: Flexible config system enabling future extensibility
     return mergeConfigurationChain(configs)
 }
 ```
 
 #### **Developer Experience with Independence**
 ```go
-// 🔶 DOC-012: Real-time validation feedback [DECISION: developer-experience, independent]
+// [MEDIUM] DOC-012: Real-time validation feedback [DECISION: developer-experience, independent]
 func ProvideRealTimeValidation(code string) (*ValidationResult, error) {
-    // 🔶 DOC-012: Standalone development experience enhancement
+    // [MEDIUM] DOC-012: Standalone development experience enhancement
     return validateInRealTime(code)
 }
 ```
 
 #### **Infrastructure with Testing Prerequisites**
 ```go
-// 🔻 TEST-FIX-001: Personal config isolation [DECISION: infrastructure, prerequisite-for-testing]
+// [LOW] TEST-FIX-001: Personal config isolation [DECISION: infrastructure, prerequisite-for-testing]
 func IsolateTestConfiguration() error {
-    // 🔻 TEST-FIX-001: Test infrastructure foundation for reliable testing
+    // [LOW] TEST-FIX-001: Test infrastructure foundation for reliable testing
     return setupConfigurationIsolation()
 }
-    // ⭐ ARCH-002: Checksum verification - 🛡️ Data integrity
+    // [CRITICAL] ARCH-002: Checksum verification - [ACTION:validation] Data integrity
     return validateArchiveChecksums(zipReader)
 }
 ```
@@ -420,7 +420,7 @@ func IsolateTestConfiguration() error {
 
 **Format:**
 ```go
-// 🔺 ARCH-001: Archive service architecture - 🏗️ Core component
+// [HIGH] ARCH-001: Archive service architecture - 🏗️ Core component
 type ArchiveService struct {
     config      *Config
     formatter   OutputFormatter
@@ -428,7 +428,7 @@ type ArchiveService struct {
     resourceMgr *ResourceManager
 }
 
-// 🔺 ARCH-001: Archive service constructor - 🏗️ Component initialization
+// [HIGH] ARCH-001: Archive service constructor - 🏗️ Component initialization
 func NewArchiveService(cfg *Config) *ArchiveService {
     return &ArchiveService{
         config:      cfg,
@@ -448,13 +448,13 @@ func NewArchiveService(cfg *Config) *ArchiveService {
 
 **Format:**
 ```go
-// 🔺 TEST-001: Archive testing infrastructure - 🧪 Test utilities
+// [HIGH] TEST-001: Archive testing infrastructure - 🧪 Test utilities
 func CreateTestArchive(t *testing.T, files map[string]string) string {
-    // 🔺 TEST-001: Temporary archive creation - 🧪 Test fixture
+    // [HIGH] TEST-001: Temporary archive creation - 🧪 Test fixture
     tempDir := t.TempDir()
     archivePath := filepath.Join(tempDir, "test.zip")
     
-    // 🔺 TEST-001: Test archive population - 🧪 Data generation
+    // [HIGH] TEST-001: Test archive population - 🧪 Data generation
     return createArchiveWithFiles(archivePath, files)
 }
 ```
@@ -466,7 +466,7 @@ func CreateTestArchive(t *testing.T, files map[string]string) string {
 ```go
 // 🚀 Phase 1: Validation and setup
 func performValidationPhase(ctx context.Context) error {
-    // 🔺 CFG-001: Config validation - 🚀 Phase 1 setup
+    // [HIGH] CFG-001: Config validation - 🚀 Phase 1 setup
     if err := validateConfiguration(); err != nil {
         return err
     }
@@ -475,13 +475,13 @@ func performValidationPhase(ctx context.Context) error {
 
 // ⚡ Phase 2: Core processing
 func performProcessingPhase(ctx context.Context) error {
-    // ⭐ ARCH-002: Archive creation - ⚡ Phase 2 execution
+    // [CRITICAL] ARCH-002: Archive creation - ⚡ Phase 2 execution
     return createArchiveFiles(ctx)
 }
 
-// 🔄 Phase 3: Cleanup and finalization
+// [ACTION:migration] Phase 3: Cleanup and finalization
 func performCleanupPhase(ctx context.Context) error {
-    // 🔻 REFACTOR-001: Resource cleanup - 🔄 Phase 3 finalization
+    // [LOW] REFACTOR-001: Resource cleanup - [ACTION:migration] Phase 3 finalization
     return cleanupTemporaryResources()
 }
 ```
@@ -489,7 +489,7 @@ func performCleanupPhase(ctx context.Context) error {
 ### 1️⃣2️⃣3️⃣ **STEP Implementation Tokens**
 **Used for sequential step implementations:**
 ```go
-// 🔺 CFG-003: Template processing workflow
+// [HIGH] CFG-003: Template processing workflow
 func ProcessTemplate(template string, data interface{}) (string, error) {
     // 1️⃣ Step 1: Template parsing and validation
     tmpl, err := parseAndValidateTemplate(template)
@@ -514,7 +514,7 @@ func ProcessTemplate(template string, data interface{}) (string, error) {
 }
 ```
 
-## 🔄 Migration from Legacy Implementation Tokens
+## [ACTION:migration] Migration from Legacy Implementation Tokens
 
 ### ❌ **Legacy Patterns to Replace**
 ```go
@@ -531,53 +531,53 @@ func ProcessTemplate(template string, data interface{}) (string, error) {
 ### ✅ **New Standardized Patterns**
 ```go
 // NEW PATTERN - Clear priority and context
-// ⭐ ARCH-001: Archive naming convention implementation - 🔧 Core functionality
+// [CRITICAL] ARCH-001: Archive naming convention implementation - [ACTION:core-functionality] Core functionality
 
 // NEW PATTERN - Action category included
-// 🔺 CFG-003: Format string processing - 📝 Template formatting  
+// [HIGH] CFG-003: Format string processing - [ACTION:format-processing] Template formatting  
 
 // NEW PATTERN - Component architecture context
-// 🔺 GIT-002: Git branch and hash naming - 🏗️ Naming service
+// [HIGH] GIT-002: Git branch and hash naming - 🏗️ Naming service
 ```
 
-### 🔄 **Migration Command Pattern**
+### [ACTION:migration] **Migration Command Pattern**
 ```bash
 # Search and replace legacy patterns
-sed -i 's|// ARCH-\([0-9]\+\): \(.*\)|// ⭐ ARCH-\1: \2 - 🔧 Core functionality|g' *.go
-sed -i 's|// CFG-\([0-9]\+\): \(.*\)|// 🔺 CFG-\1: \2 - 🔧 Configuration|g' *.go
-sed -i 's|// FILE-\([0-9]\+\): \(.*\)|// ⭐ FILE-\1: \2 - 📁 File operations|g' *.go
-sed -i 's|// GIT-\([0-9]\+\): \(.*\)|// 🔺 GIT-\1: \2 - 🏗️ Git integration|g' *.go
+sed -i 's|// ARCH-\([0-9]\+\): \(.*\)|// [CRITICAL] ARCH-\1: \2 - [ACTION:core-functionality] Core functionality|g' *.go
+sed -i 's|// CFG-\([0-9]\+\): \(.*\)|// [HIGH] CFG-\1: \2 - [ACTION:core-functionality] Configuration|g' *.go
+sed -i 's|// FILE-\([0-9]\+\): \(.*\)|// [CRITICAL] FILE-\1: \2 - 📁 File operations|g' *.go
+sed -i 's|// GIT-\([0-9]\+\): \(.*\)|// [HIGH] GIT-\1: \2 - 🏗️ Git integration|g' *.go
 ```
 
 ## ✅ Icon Consistency Validation
 
-### 🛡️ **Validation Rules**
+### [ACTION:validation] **Validation Rules**
 1. **Priority Icon Consistency**: Priority icons in code must match feature priority in feature-tracking.md
 2. **Action Category Appropriateness**: Action icons must reflect actual function behavior
 3. **Component Classification**: Architecture icons must align with component boundaries
 4. **No Conflicting Meanings**: Same icon must have same meaning everywhere
 
-### 🔧 **Validation Script Pattern**
+### [ACTION:core-functionality] **Validation Script Pattern**
 ```bash
 #!/bin/bash
 # Validate implementation token icon consistency
 
-echo "🔍 Validating implementation token icon consistency..."
+echo "[ACTION:discovery] Validating implementation token icon consistency..."
 
 # Check for consistent priority icons
-grep -r "// ⭐" *.go | while read line; do
+grep -r "// [CRITICAL]" *.go | while read line; do
     feature_id=$(echo "$line" | grep -o '[A-Z]\+-[0-9]\+')
     # Verify this feature has CRITICAL priority in feature-tracking.md
-    if ! grep -q "$feature_id.*⭐.*CRITICAL" docs/context/feature-tracking.md; then
-        echo "❌ Priority mismatch: $feature_id uses ⭐ in code but not CRITICAL in docs"
+    if ! grep -q "$feature_id.*[CRITICAL].*CRITICAL" docs/context/feature-tracking.md; then
+        echo "❌ Priority mismatch: $feature_id uses [CRITICAL] in code but not CRITICAL in docs"
     fi
 done
 
 # Check for appropriate action icons
-grep -r "// .*🔍" *.go | while read line; do
+grep -r "// .*[ACTION:discovery]" *.go | while read line; do
     # Verify function actually performs search/discovery operations
     if ! echo "$line" | grep -qE "(find|search|discover|detect|scan|lookup)"; then
-        echo "⚠️ Action icon mismatch: 🔍 used but function may not be search-related"
+        echo "⚠️ Action icon mismatch: [ACTION:discovery] used but function may not be search-related"
     fi
 done
 
@@ -587,18 +587,18 @@ echo "✅ Icon consistency validation complete"
 ## 📋 Implementation Token Checklist
 
 ### ✅ **Before Committing Code**
-- [ ] **Priority Icons**: All implementation tokens use correct priority icons (⭐🔺🔶🔻)
-- [ ] **Action Context**: Functions include appropriate action icons (🔍📝🔧🛡️)
+- [ ] **Priority Icons**: All implementation tokens use correct priority icons ([CRITICAL][HIGH][MEDIUM][LOW])
+- [ ] **Action Context**: Functions include appropriate action icons ([ACTION:discovery][ACTION:format-processing][ACTION:core-functionality][ACTION:validation])
 - [ ] **Component Categories**: Architecture components marked with 🏗️ when appropriate
-- [ ] **Phase/Step Indicators**: Process implementations use 🚀⚡🔄🏁 or 1️⃣2️⃣3️⃣✅
+- [ ] **Phase/Step Indicators**: Process implementations use 🚀⚡[ACTION:migration]🏁 or 1️⃣2️⃣3️⃣✅
 - [ ] **Consistency Check**: Icons match meanings in documentation system
 - [ ] **No Legacy Patterns**: All old implementation tokens updated to new format
 
-### 🔧 **Automated Validation Integration**
+### [ACTION:core-functionality] **Automated Validation Integration**
 ```makefile
 # Add to Makefile
 validate-icons:
-    @echo "🔍 Validating implementation token icons..."
+    @echo "[ACTION:discovery] Validating implementation token icons..."
     @./scripts/validate-icon-consistency.sh
     @echo "✅ Icon validation complete"
 
@@ -629,7 +629,7 @@ ci-lint: validate-icons
 ---
 
 **📋 Guidelines Status**: Official implementation standard for DOC-007
-**🛡️ Enforcement**: Integrated with linting and validation processes  
-**⭐ Critical**: Mandatory for all new code and recommended for legacy updates
+**[ACTION:validation] Enforcement**: Integrated with linting and validation processes  
+**[CRITICAL] Critical**: Mandatory for all new code and recommended for legacy updates
 
 // DOC-007: Source code icon integration - Implementation guidelines complete 

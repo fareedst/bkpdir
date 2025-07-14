@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // Package testutil provides common testing utilities and patterns for CLI applications.
 //
 // This package extracts reusable testing patterns from the bkpdir application into

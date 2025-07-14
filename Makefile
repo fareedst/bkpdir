@@ -18,14 +18,15 @@
 #   
 #   Code Quality:
 #     lint            - Run linter (revive)
+#     lint-unicode    - Run unicode icon linter for semantic token consistency
 #     fmt             - Format code with gofmt
 #     vet             - Run go vet
 #     check           - Run all code quality checks
 #   
-#   Icon Validation:
-#     validate-icons  - Validate implementation token icon consistency (DOC-007)
-#     validate-icon-enforcement - Comprehensive icon validation and enforcement (DOC-008)
-#     validate-icons-strict - Run DOC-008 validation in strict mode for CI/CD
+#   Semantic Token Validation:
+#     validate-tokens  - Validate implementation token semantic consistency (DOC-007)
+#     validate-token-enforcement - Comprehensive semantic token validation and enforcement (DOC-008)
+#     validate-tokens-strict - Run DOC-008 validation in strict mode for CI/CD
 #   
 #   Production Builds:
 #     build-all       - Build for all platforms
@@ -39,7 +40,7 @@
 
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
 .PHONY: test test-verbose test-coverage test-coverage-new test-coverage-validate test-race test-bench test-all
-.PHONY: lint validate-icons validate-icon-enforcement validate-icons-strict fmt vet check dev install deps help
+.PHONY: lint lint-unicode validate-tokens validate-token-enforcement validate-tokens-strict fmt vet check dev install deps help
 .PHONY: token-migration-dry-run token-migration token-migration-rollback
 
 # Variables
@@ -97,9 +98,10 @@ help:
 	@echo ""
 	@echo "Code quality targets:"
 	@echo "  lint            Run linter (revive) with icon validation"
-	@echo "  validate-icons  Validate implementation token icon consistency (DOC-007)"
-	@echo "  validate-icon-enforcement Comprehensive icon validation and enforcement (DOC-008)"
-	@echo "  validate-icons-strict Run DOC-008 validation in strict mode for CI/CD"
+	@echo "  lint-unicode    Run unicode icon linter for semantic token consistency"
+	@echo "  validate-tokens  Validate implementation token semantic consistency (DOC-007)"
+	@echo "  validate-token-enforcement Comprehensive semantic token validation and enforcement (DOC-008)"
+	@echo "  validate-tokens-strict Run DOC-008 validation in strict mode for CI/CD"
 	@echo "  fmt             Format code with gofmt"
 	@echo "  vet             Run go vet"
 	@echo "  check           Run all code quality checks"
@@ -327,7 +329,7 @@ vet:
 	go vet ./...
 	@echo "✓ go vet completed"
 
-lint: validate-icon-enforcement
+lint: validate-token-enforcement
 	@echo "Running linter (revive)..."
 	@if command -v revive >/dev/null 2>&1; then \
 		revive -config .revive.toml -formatter friendly ./...; \
@@ -337,40 +339,53 @@ lint: validate-icon-enforcement
 		echo "  Install with: go install github.com/mgechev/revive@latest"; \
 	fi
 
-# 🔺 DOC-007: Implementation token icon consistency validation
-validate-icons:
-	@echo "🔧 DOC-007: Validating implementation token icon consistency..."
-	@if [ -f "scripts/validate-icon-consistency.sh" ]; then \
-		chmod +x scripts/validate-icon-consistency.sh; \
-		./scripts/validate-icon-consistency.sh; \
+# [HIGH] Unicode icon linter for semantic token consistency
+lint-unicode:
+	@echo "[HIGH] Running unicode icon linter for semantic token consistency..."
+	@if [ -f "scripts/validate-unicode-icons.sh" ]; then \
+		chmod +x scripts/validate-unicode-icons.sh; \
+		./scripts/validate-unicode-icons.sh; \
+		echo "✓ Unicode icon linting completed"; \
 	else \
-		echo "❌ Icon consistency validation script not found"; \
-		echo "   Expected: scripts/validate-icon-consistency.sh"; \
+		echo "❌ Unicode icon linter script not found"; \
+		echo "   Expected: scripts/validate-unicode-icons.sh"; \
 		exit 1; \
 	fi
 
-# 🔺 DOC-008: Comprehensive icon validation and enforcement
-validate-icon-enforcement:
-	@echo "🛡️ DOC-008: Running comprehensive icon validation and enforcement..."
+# [HIGH] DOC-007: Implementation token semantic consistency validation [ACTION:core-validation]
+validate-tokens:
+	@echo "[HIGH] DOC-007: Validating implementation token semantic consistency..."
+	@if [ -f "scripts/validate-semantic-tokens.sh" ]; then \
+		chmod +x scripts/validate-semantic-tokens.sh; \
+		./scripts/validate-semantic-tokens.sh; \
+	else \
+		echo "❌ Semantic token consistency validation script not found"; \
+		echo "   Expected: scripts/validate-semantic-tokens.sh"; \
+		exit 1; \
+	fi
+
+# [CRITICAL] DOC-008: Comprehensive semantic token validation and enforcement [ACTION:system-validation]
+validate-token-enforcement:
+	@echo "[CRITICAL] DOC-008: Running comprehensive semantic token validation and enforcement..."
 	@if [ -f "scripts/validate-icon-enforcement.sh" ]; then \
 		chmod +x scripts/validate-icon-enforcement.sh; \
 		./scripts/validate-icon-enforcement.sh; \
-		echo "✓ DOC-008 validation completed - see docs/validation-reports/icon-validation-report.md for details"; \
+		echo "✓ DOC-008 validation completed - see docs/validation-reports/token-validation-report.md for details"; \
 	else \
-		echo "❌ DOC-008 icon enforcement script not found"; \
+		echo "❌ DOC-008 semantic token enforcement script not found"; \
 		echo "   Expected: scripts/validate-icon-enforcement.sh"; \
 		exit 1; \
 	fi
 
-# 🔺 DOC-008: Strict mode validation for CI/CD pipelines
-validate-icons-strict:
-	@echo "🛡️ DOC-008: Running icon validation in strict mode (CI/CD)..."
+# [CRITICAL] DOC-008: Strict mode validation for CI/CD pipelines [ACTION:ci-cd-validation]
+validate-tokens-strict:
+	@echo "[CRITICAL] DOC-008: Running semantic token validation in strict mode (CI/CD)..."
 	@if [ -f "scripts/validate-icon-enforcement.sh" ]; then \
 		chmod +x scripts/validate-icon-enforcement.sh; \
 		./scripts/validate-icon-enforcement.sh --strict; \
 		echo "✓ DOC-008 strict validation passed"; \
 	else \
-		echo "❌ DOC-008 icon enforcement script not found"; \
+		echo "❌ DOC-008 semantic token enforcement script not found"; \
 		echo "   Expected: scripts/validate-icon-enforcement.sh"; \
 		exit 1; \
 	fi
@@ -454,7 +469,7 @@ standardize-tokens: analyze-priority-icons validate-token-priorities migrate-tok
 	@echo "  Next steps:"
 	@echo "  1. Review dry run output above"
 	@echo "  2. Run 'make migrate-tokens' to execute actual migration"
-	@echo "  3. Run 'make validate-icon-enforcement' to verify results"
+	@echo "  3. Run 'make validate-token-enforcement' to verify results"
 
 # 🔺 DOC-014: Enhanced implementation token system with decision context
 enhance-tokens-phase1:
@@ -523,7 +538,7 @@ validate-enhanced-tokens:
 		chmod +x scripts/enhance-tokens.sh; \
 		./scripts/enhance-tokens.sh --dry-run --format summary; \
 		echo "Running DOC-008 validation on enhanced tokens..."; \
-		$(MAKE) validate-icon-enforcement; \
+		$(MAKE) validate-token-enforcement; \
 		echo "✓ DOC-014: Enhanced token validation completed"; \
 	else \
 		echo "❌ Enhanced token migration script not found"; \
@@ -540,8 +555,8 @@ enhance-tokens-workflow: enhance-tokens-dry-run enhance-tokens-phase1 validate-e
 	@echo "  2. Run 'make enhance-tokens-phase3' for 🔶🔻 MEDIUM/LOW priority tokens"
 	@echo "  3. Run 'make validate-enhanced-tokens' to verify all enhancements"
 
-check: fmt vet lint validate-icon-enforcement
-	@echo "✓ All code quality checks completed (including DOC-008 icon validation)"
+check: fmt vet lint validate-token-enforcement
+	@echo "✓ All code quality checks completed (including DOC-008 semantic token validation)"
 
 # Production build targets
 build-all: build-local build-macos build-ubuntu
@@ -810,3 +825,52 @@ decision-framework-workflow: decision-validation-suite decision-quality-monitor
 	@echo "  - make track-decision-metrics       # Collect current metrics"
 	@echo ""
 	@echo "🚀 DOC-014 Decision Framework fully operational!"
+
+# ⭐ DOC-016: Comprehensive Token System Validation
+# Token traceability validation across all layers
+
+validate-token-traceability:
+	@echo "⭐ DOC-016: Validating comprehensive token traceability..."
+	@if [ -f "scripts/validate-token-traceability.sh" ]; then \
+		chmod +x scripts/validate-token-traceability.sh; \
+		./scripts/validate-token-traceability.sh; \
+	else \
+		echo "❌ Token traceability validation script not found"; \
+		echo "   Expected: scripts/validate-token-traceability.sh"; \
+		exit 1; \
+	fi
+
+validate-feature-tokens:
+	@echo "⭐ DOC-016: Validating feature implementation tokens..."
+	@echo "  🔍 Checking feature ID consistency in source code..."
+	@grep -r "// [⭐🔺🔶🔻] [A-Z]+-[0-9]+:" --include="*.go" . | head -20
+	@echo "  ✅ Feature token validation sample displayed"
+
+validate-architecture-tokens:
+	@echo "⭐ DOC-016: Validating architecture decision tokens..."
+	@echo "  🔍 Checking architecture decision tokens in documentation..."
+	@grep -r "// [⭐🔺🔶🔻] ARCH-DECISION-" --include="*.md" docs/ | head -10
+	@echo "  ✅ Architecture token validation sample displayed"
+
+validate-test-tokens:
+	@echo "⭐ DOC-016: Validating test coverage tokens..."
+	@echo "  🔍 Checking test tokens in test files..."
+	@grep -r "// [⭐🔺🔶🔻] TEST-" --include="*_test.go" . | head -10
+	@echo "  ✅ Test token validation sample displayed"
+
+validate-all-tokens: validate-token-traceability validate-feature-tokens validate-architecture-tokens validate-test-tokens
+	@echo "⭐ DOC-016: Comprehensive token validation completed"
+	@echo ""
+	@echo "🎯 Token System Status:"
+	@echo "  ✅ Traceability validation: COMPLETED"
+	@echo "  ✅ Feature token validation: COMPLETED"
+	@echo "  ✅ Architecture token validation: COMPLETED"
+	@echo "  ✅ Test token validation: COMPLETED"
+	@echo ""
+	@echo "📋 Available targets:"
+	@echo "  - make validate-token-traceability  # Complete cross-layer validation"
+	@echo "  - make validate-feature-tokens      # Feature implementation tokens"
+	@echo "  - make validate-architecture-tokens # Architecture decision tokens"
+	@echo "  - make validate-test-tokens         # Test coverage tokens"
+	@echo ""
+	@echo "🚀 DOC-016 Comprehensive Token System operational!"

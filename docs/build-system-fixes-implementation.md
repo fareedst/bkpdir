@@ -1,10 +1,10 @@
-# 🔧 Build System Fixes Implementation
+# [ACTION:core-functionality] Build System Fixes Implementation
 
 ## 📋 Overview
 
 This document outlines the implementation of critical build system fixes to address syntax errors, linter configuration issues, and unrealistic performance test expectations that were blocking the build process.
 
-## 🔍 Problem Analysis
+## [ACTION:discovery] Problem Analysis
 
 ### High Priority Issues
 1. **Bash Script Syntax Errors** in `scripts/validate-icon-enforcement.sh`
@@ -22,7 +22,7 @@ This document outlines the implementation of critical build system fixes to addr
    - Throughput expectations not aligned with system capabilities
    - Status: `RESOLVED` ✅
 
-## 🛠️ Implementation Details
+## [ACTION:maintenance] Implementation Details
 
 ### 1. Bash Script Compatibility Fix
 
@@ -38,12 +38,12 @@ This document outlines the implementation of critical build system fixes to addr
 # Before (problematic)
 declare -A MASTER_ICONS
 MASTER_ICONS=([...])
-if grep -q "⭐" "$doc_file"; then ((priority_icons_found++)); fi
+if grep -q "[CRITICAL]" "$doc_file"; then ((priority_icons_found++)); fi
 
 # After (compatible)
-MASTER_ICONS_SYMBOLS=("⭐" "🔺" "🔶" "🔻" [...])
+MASTER_ICONS_SYMBOLS=("[CRITICAL]" "[HIGH]" "[MEDIUM]" "[LOW]" [...])
 MASTER_ICONS_MEANINGS=("CRITICAL" "HIGH" "MEDIUM" "LOW" [...])
-if grep -q "⭐" "$doc_file"; then 
+if grep -q "[CRITICAL]" "$doc_file"; then 
     priority_icons_found=$((priority_icons_found + 1))
 fi
 ```
@@ -92,7 +92,7 @@ revive -config .revive.toml -formatter friendly ./...
 - Linter running successfully
 - Performance tests aligned with realistic expectations
 
-## 🔄 Maintenance Guidelines
+## [ACTION:migration] Maintenance Guidelines
 
 ### For Script Updates
 1. Always test bash scripts with `bash --posix` for compatibility
@@ -116,7 +116,7 @@ revive -config .revive.toml -formatter friendly ./...
 - ✅ Performance tests pass with realistic expectations
 - ✅ Documentation maintained for future reference
 
-## 📝 Future Recommendations
+## [ACTION:format-processing] Future Recommendations
 
 1. **Automated Testing**: Add pre-commit hooks to catch bash syntax errors
 2. **Configuration Management**: Consider consolidating configuration files

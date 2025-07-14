@@ -1,4 +1,4 @@
-// 🔺 EXTRACT-008: Project scaffolding system - 🔧 Interactive generator core
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 package main
 
 import (
@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	// 🔺 EXTRACT-008: Interactive CLI configuration - 🔍 User input collection and validation
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 	fmt.Println("🚀 Go CLI Project Scaffolding Generator")
 	fmt.Println("=====================================")
 	fmt.Println()
@@ -29,8 +29,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("\n✅ Successfully generated project '%s'\n", config.ProjectName)
-	fmt.Printf("📁 Project location: %s\n", config.OutputPath)
+	fmt.Printf("\n[SUCCESS] Successfully generated project '%s'\n", config.ProjectName)
+	fmt.Printf("[DIR] Project location: %s\n", config.OutputPath)
 	fmt.Println("\n🎯 Next steps:")
 	fmt.Printf("   cd %s\n", config.ProjectName)
 	fmt.Println("   make build    # Build the application")

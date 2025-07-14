@@ -14,37 +14,37 @@ import (
 	"strconv"
 )
 
-// 🔺 EXTRACT-001: Configuration structure extraction - Default file operations implementation - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // DefaultFileOperations provides the default implementation of ConfigFileOperations.
 // This implementation uses the standard os package for file system operations.
 type DefaultFileOperations struct{}
 
 // FileExists checks if a configuration file exists.
-// 🔺 EXTRACT-001: Configuration structure extraction - File existence checking - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (d *DefaultFileOperations) FileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
 }
 
 // ReadFile reads configuration file contents.
-// 🔺 EXTRACT-001: Configuration structure extraction - File content reading - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (d *DefaultFileOperations) ReadFile(path string) ([]byte, error) {
 	return os.ReadFile(path)
 }
 
 // WriteFile writes configuration file contents.
-// 🔺 EXTRACT-001: Configuration structure extraction - File content writing - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (d *DefaultFileOperations) WriteFile(path string, data []byte, perm os.FileMode) error {
 	return os.WriteFile(path, data, perm)
 }
 
 // GetFileInfo returns file information for configuration files.
-// 🔺 EXTRACT-001: Configuration structure extraction - File information access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (d *DefaultFileOperations) GetFileInfo(path string) (os.FileInfo, error) {
 	return os.Stat(path)
 }
 
-// 🔺 EXTRACT-001: Loading engine extraction - Generic configuration validator - 🛡️
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GenericValidator provides basic validation for any configuration structure.
 // This validator performs type checking and basic validation rules.
 type GenericValidator struct {
@@ -52,7 +52,7 @@ type GenericValidator struct {
 }
 
 // NewGenericValidator creates a new GenericValidator.
-// 🔺 EXTRACT-001: Loading engine extraction - Validator constructor - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewGenericValidator() *GenericValidator {
 	return &GenericValidator{
 		rules: make(map[string]ValidationRule),
@@ -60,7 +60,7 @@ func NewGenericValidator() *GenericValidator {
 }
 
 // ValidateSchema validates the configuration against the expected schema.
-// 🔺 EXTRACT-001: Loading engine extraction - Schema validation implementation - 🛡️
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValidator) ValidateSchema(cfg interface{}) error {
 	// Basic type validation - ensure it's a struct or pointer to struct
 	v := reflect.ValueOf(cfg)
@@ -77,7 +77,7 @@ func (g *GenericValidator) ValidateSchema(cfg interface{}) error {
 }
 
 // ValidateValues validates individual configuration values.
-// 🔺 EXTRACT-001: Loading engine extraction - Value validation implementation - 🛡️
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValidator) ValidateValues(values map[string]ConfigValue) error {
 	for name, value := range values {
 		if rule, exists := g.rules[name]; exists {
@@ -90,7 +90,7 @@ func (g *GenericValidator) ValidateValues(values map[string]ConfigValue) error {
 }
 
 // GetRequiredFields returns the list of required configuration fields.
-// 🔶 EXTRACT-001: Value tracking abstraction - Required field identification - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValidator) GetRequiredFields() []string {
 	var required []string
 	for name, rule := range g.rules {
@@ -102,7 +102,7 @@ func (g *GenericValidator) GetRequiredFields() []string {
 }
 
 // GetValidationRules returns validation rules for configuration fields.
-// 🔶 EXTRACT-001: Value tracking abstraction - Validation rule access - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValidator) GetValidationRules() map[string]ValidationRule {
 	result := make(map[string]ValidationRule)
 	for k, v := range g.rules {
@@ -112,13 +112,13 @@ func (g *GenericValidator) GetValidationRules() map[string]ValidationRule {
 }
 
 // SetValidationRule sets a validation rule for a field.
-// 🔺 EXTRACT-001: Loading engine extraction - Validation rule configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValidator) SetValidationRule(fieldName string, rule ValidationRule) {
 	g.rules[fieldName] = rule
 }
 
 // validateValue validates a single configuration value against a rule.
-// 🔺 EXTRACT-001: Loading engine extraction - Individual value validation - 🛡️
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValidator) validateValue(value ConfigValue, rule ValidationRule) error {
 	// Required field validation
 	if rule.Required && (value.Value == nil || isZeroValue(value.Value)) {
@@ -154,7 +154,7 @@ func (g *GenericValidator) validateValue(value ConfigValue, rule ValidationRule)
 	return nil
 }
 
-// 🔶 EXTRACT-001: Value tracking abstraction - Generic source determination - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GenericSourceDeterminer provides generic configuration source determination.
 // This component tracks where configuration values originate from.
 type GenericSourceDeterminer struct {
@@ -163,7 +163,7 @@ type GenericSourceDeterminer struct {
 }
 
 // NewGenericSourceDeterminer creates a new GenericSourceDeterminer.
-// 🔶 EXTRACT-001: Value tracking abstraction - Source determiner constructor - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewGenericSourceDeterminer(root string, pathDiscovery *PathDiscovery) *GenericSourceDeterminer {
 	return &GenericSourceDeterminer{
 		root:          root,
@@ -172,7 +172,7 @@ func NewGenericSourceDeterminer(root string, pathDiscovery *PathDiscovery) *Gene
 }
 
 // DetermineSource determines the source of a configuration value.
-// 🔶 EXTRACT-001: Value tracking abstraction - Source determination logic - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericSourceDeterminer) DetermineSource(current, defaultValue interface{}) string {
 	// Check if value is different from default
 	if !reflect.DeepEqual(current, defaultValue) {
@@ -189,7 +189,7 @@ func (g *GenericSourceDeterminer) DetermineSource(current, defaultValue interfac
 }
 
 // GetConfigSource returns the primary configuration source.
-// 🔶 EXTRACT-001: Value tracking abstraction - Primary source identification - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericSourceDeterminer) GetConfigSource() string {
 	if g.pathDiscovery != nil {
 		searchPaths := g.pathDiscovery.GetConfigSearchPaths()
@@ -204,7 +204,7 @@ func (g *GenericSourceDeterminer) GetConfigSource() string {
 }
 
 // GetSourcePriority returns the priority order of configuration sources.
-// 🔶 EXTRACT-001: Value tracking abstraction - Source priority definition - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericSourceDeterminer) GetSourcePriority() []string {
 	return []string{"environment", "config file", "default"}
 }
@@ -212,13 +212,13 @@ func (g *GenericSourceDeterminer) GetSourcePriority() []string {
 // Utility functions
 
 // parseInt64 parses a string to int64.
-// 🔺 EXTRACT-001: Environment variable abstraction - String to integer conversion utility - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func parseInt64(s string) (int64, error) {
 	return strconv.ParseInt(s, 10, 64)
 }
 
 // isZeroValue checks if a value is the zero value for its type.
-// 🔺 EXTRACT-001: Loading engine extraction - Zero value detection utility - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func isZeroValue(value interface{}) bool {
 	if value == nil {
 		return true
@@ -230,7 +230,7 @@ func isZeroValue(value interface{}) bool {
 
 // GetEnvForField returns the environment variable value for a specific config field.
 // This method is added to support the GenericConfigLoader's environment integration.
-// 🔺 EXTRACT-001: Environment variable abstraction - Field-based environment access utility - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func GetEnvForField(envProvider EnvironmentProvider, fieldName string) string {
 	if provider, ok := envProvider.(*DefaultEnvironmentProvider); ok {
 		return provider.GetEnvForField(fieldName)
@@ -246,24 +246,24 @@ func GetEnvForField(envProvider EnvironmentProvider, fieldName string) string {
 }
 
 // NewDefaultFileOperations creates a new DefaultFileOperations instance.
-// 🔺 EXTRACT-001: Configuration structure extraction - Default file operations constructor - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewDefaultFileOperations() *DefaultFileOperations {
 	return &DefaultFileOperations{}
 }
 
-// 🔺 EXTRACT-001: Value tracking abstraction - Generic value extractor implementation - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GenericValueExtractor provides generic configuration value extraction.
 // This extractor works with any configuration structure using reflection.
 type GenericValueExtractor struct{}
 
 // NewGenericValueExtractor creates a new GenericValueExtractor.
-// 🔺 EXTRACT-001: Value tracking abstraction - Value extractor constructor - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewGenericValueExtractor() *GenericValueExtractor {
 	return &GenericValueExtractor{}
 }
 
 // ExtractValues extracts configuration values from any configuration structure.
-// 🔺 EXTRACT-001: Value tracking abstraction - Generic value extraction - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValueExtractor) ExtractValues(cfg, defaultCfg interface{}, getSource func(interface{}, interface{}) string) []ConfigValue {
 	var values []ConfigValue
 
@@ -324,7 +324,7 @@ func (g *GenericValueExtractor) ExtractValues(cfg, defaultCfg interface{}, getSo
 }
 
 // ExtractValuesByCategory extracts values from a specific category.
-// 🔺 EXTRACT-001: Value tracking abstraction - Category-based value extraction - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValueExtractor) ExtractValuesByCategory(cfg, defaultCfg interface{}, category string, getSource func(interface{}, interface{}) string) []ConfigValue {
 	// For now, return all values regardless of category
 	// Can be enhanced later for specific categorization
@@ -332,7 +332,7 @@ func (g *GenericValueExtractor) ExtractValuesByCategory(cfg, defaultCfg interfac
 }
 
 // GetSupportedCategories returns the list of supported value categories.
-// 🔶 EXTRACT-001: Value tracking abstraction - Category support definition - 📝
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (g *GenericValueExtractor) GetSupportedCategories() []string {
 	return []string{"all", "basic", "advanced", "format", "paths"}
 }

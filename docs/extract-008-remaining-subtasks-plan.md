@@ -11,10 +11,10 @@
 ## 🚀 PHASE 1: CRITICAL VALIDATION COMPLETED
 
 ### ✅ Validation Results
-- [x] **🛡️ Immutable Requirements Check**: No conflicts - remaining subtasks are additive ✅
+- [x] **[ACTION:validation] Immutable Requirements Check**: No conflicts - remaining subtasks are additive ✅
 - [x] **📋 Feature ID Verification**: EXTRACT-008 exists in feature-tracking.md ✅
-- [x] **🔍 AI Assistant Compliance**: Token requirements and DOC-007/008 reviewed ✅
-- [x] **⭐ AI Assistant Protocol**: Using MODIFICATION Protocol for extending existing feature ✅
+- [x] **[ACTION:discovery] AI Assistant Compliance**: Token requirements and DOC-007/008 reviewed ✅
+- [x] **[CRITICAL] AI Assistant Protocol**: Using MODIFICATION Protocol for extending existing feature ✅
 
 ### 📊 Current Progress Assessment
 - **Subtask 1**: ✅ COMPLETED (2025-01-02) - CLI template application with all 8 packages
@@ -25,11 +25,11 @@
 
 **Overall Progress**: 40% Complete (2/5 subtasks)
 
-## 📝 Detailed Remaining Subtasks
+## [ACTION:format-processing] Detailed Remaining Subtasks
 
-### 2. 🛠️ Develop Project Scaffolding System
+### 2. [ACTION:maintenance] Develop Project Scaffolding System
 **Status**: [x] COMPLETED (2025-01-02)  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Actual Time**: 4 hours  
 **Dependencies**: Subtask 1 (COMPLETED)  
 
@@ -102,16 +102,16 @@ generated-project/
 - Project structure visualization and progress reporting
 - Comprehensive documentation and usage examples
 
-#### 🔧 Implementation Tokens
+#### [ACTION:core-functionality] Implementation Tokens
 ```go
-// 🔺 EXTRACT-008: Project scaffolding system - 🔧 Interactive generator core
-// 🔺 EXTRACT-008: Component selection interface - 🔍 Package discovery and configuration
-// 🔺 EXTRACT-008: Project template generation - 📝 Template processing and file creation
+// [HIGH] EXTRACT-008: Project scaffolding system - [ACTION:core-functionality] Interactive generator core
+// [HIGH] EXTRACT-008: Component selection interface - [ACTION:discovery] Package discovery and configuration
+// [HIGH] EXTRACT-008: Project template generation - [ACTION:format-processing] Template processing and file creation
 ```
 
 ### 3. 📚 Create Integration Documentation
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 4-6 hours  
 **Dependencies**: Subtask 1 (COMPLETED), Subtask 2 (for scaffolding examples)  
 
@@ -174,16 +174,16 @@ Comprehensive documentation showing how to use extracted packages individually a
 - [ ] Code examples tested and working
 - [ ] Documentation follows established patterns
 
-#### 🔧 Implementation Tokens
+#### [ACTION:core-functionality] Implementation Tokens
 ```go
-// 🔺 EXTRACT-008: Integration documentation system - 📝 Comprehensive usage guides
-// 🔺 EXTRACT-008: Package reference documentation - 📖 API and configuration reference
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Step-by-step learning materials
+// [HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Comprehensive usage guides
+// [HIGH] EXTRACT-008: Package reference documentation - 📖 API and configuration reference
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Step-by-step learning materials
 ```
 
 ### 4. 📖 Add Migration Guide
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 3-4 hours  
 **Dependencies**: Subtask 3 (integration documentation)  
 
@@ -223,7 +223,7 @@ Step-by-step guide for migrating existing monolithic CLI applications to use ext
 3. **Framework** (pkg/cli): Command orchestration
 4. **Operations** (pkg/fileops, pkg/processing): Business logic
 
-#### 🔄 Migration Process Steps
+#### [ACTION:migration] Migration Process Steps
 
 ##### Step 1: Assessment
 - Inventory existing functionality
@@ -256,16 +256,16 @@ Step-by-step guide for migrating existing monolithic CLI applications to use ext
 - [ ] Validation approaches specified
 - [ ] Examples from bkpdir migration provided
 
-#### 🔧 Implementation Tokens
+#### [ACTION:core-functionality] Implementation Tokens
 ```go
-// 🔺 EXTRACT-008: Migration methodology framework - 📖 Assessment and planning tools
-// 🔺 EXTRACT-008: Migration strategy implementation - 🔧 Step-by-step migration process
-// 🔺 EXTRACT-008: Migration validation system - 🛡️ Quality assurance and rollback
+// [HIGH] EXTRACT-008: Migration methodology framework - 📖 Assessment and planning tools
+// [HIGH] EXTRACT-008: Migration strategy implementation - [ACTION:core-functionality] Step-by-step migration process
+// [HIGH] EXTRACT-008: Migration validation system - [ACTION:validation] Quality assurance and rollback
 ```
 
 ### 5. 🗺️ Create Package Interdependency Mapping
 **Status**: [ ] Not Started  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 2-3 hours  
 **Dependencies**: Subtasks 1-4 (for comprehensive examples)  
 
@@ -345,11 +345,11 @@ graph TB
 - [ ] Integration guidelines provided
 - [ ] Anti-patterns documented
 
-#### 🔧 Implementation Tokens
+#### [ACTION:core-functionality] Implementation Tokens
 ```go
-// 🔺 EXTRACT-008: Package dependency analysis - 🔍 Comprehensive dependency mapping
-// 🔺 EXTRACT-008: Usage pattern documentation - 📊 Integration pattern analysis  
-// 🔺 EXTRACT-008: Anti-pattern identification - 🛡️ Integration guidelines and warnings
+// [HIGH] EXTRACT-008: Package dependency analysis - [ACTION:discovery] Comprehensive dependency mapping
+// [HIGH] EXTRACT-008: Usage pattern documentation - 📊 Integration pattern analysis  
+// [HIGH] EXTRACT-008: Anti-pattern identification - [ACTION:validation] Integration guidelines and warnings
 ```
 
 ## 🏗️ Implementation Strategy
@@ -414,7 +414,7 @@ graph TB
 - [ ] **Migration Viability**: Existing projects can successfully migrate
 - [ ] **Integration Ease**: Clear patterns for package combination
 
-## 🔄 Risk Mitigation
+## [ACTION:migration] Risk Mitigation
 
 ### Technical Risks
 - **Complex Dependencies**: Extensive testing of package combinations
@@ -464,13 +464,13 @@ graph TB
 - [ ] Implementation tokens added to all code
 - [ ] Context documentation updated as required
 
-## 📝 Final Subtask: Documentation Updates
+## [ACTION:format-processing] Final Subtask: Documentation Updates
 
 As required by the context documentation system, the final subtask will:
 
 ### 6. 📋 Update Task and Subtask Status
 **Status**: [ ] Final Step  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Estimated Time**: 30 minutes  
 
 #### 📋 Required Updates

@@ -1,3 +1,18 @@
+// This file is part of bkpdir
+//
+// Package cli provides tests for the CLI framework components.
+// It tests command building, context management, and CLI operations.
+//
+// Copyright (c) 2024 BkpDir Contributors
+// Licensed under the MIT License
+
+// TEST-CLI-FRAMEWORK-001: CLI framework test validation - CLI framework and command building testing [ACTION:validation]
+// Source: pkg/cli/builder.go - CLI framework implementation
+// Impact: Core functionality validation for CLI framework
+
+// TEST-SERVICE-CLI-001: CLI service test validation - CLI service implementation testing [ACTION:validation]
+// Source: pkg/cli/context.go - CLI service implementation
+// Impact: CLI service validation for CLI service implementation
 package cli
 
 import (
@@ -10,8 +25,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ⭐ EXTRACT-005: CLI framework test coverage - 🧪
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Build System
 func TestBuildInfo(t *testing.T) {
 	info := BuildInfo{
 		Version:  "1.0.0",
@@ -25,6 +43,9 @@ func TestBuildInfo(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI App System
 func TestAppInfo(t *testing.T) {
 	build := BuildInfo{
 		Version:  "1.0.0",
@@ -45,6 +66,9 @@ func TestAppInfo(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Version System
 func TestVersionManager(t *testing.T) {
 	vm := NewVersionManager()
 
@@ -73,6 +97,9 @@ func TestVersionManager(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI DryRun System
 func TestDryRunManager(t *testing.T) {
 	drm := NewDryRunManager()
 
@@ -119,6 +146,9 @@ func TestDryRunManager(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Context System
 func TestContextManager(t *testing.T) {
 	cm := NewContextManager()
 
@@ -147,6 +177,9 @@ func TestContextManager(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Context System
 func TestContextManagerWithTimeout(t *testing.T) {
 	cm := NewContextManager()
 
@@ -169,6 +202,9 @@ func TestContextManagerWithTimeout(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Flag System
 func TestFlagManager(t *testing.T) {
 	fm := NewFlagManager()
 	cmd := &cobra.Command{Use: "test"}
@@ -196,6 +232,9 @@ func TestFlagManager(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Command System
 func TestCommandBuilder(t *testing.T) {
 	fm := NewFlagManager()
 	cb := NewCommandBuilder(fm)
@@ -231,6 +270,9 @@ func TestCommandBuilder(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Command System
 func TestRootCommandBuilder(t *testing.T) {
 	fm := NewFlagManager()
 	vm := NewVersionManager()
@@ -264,6 +306,9 @@ func TestRootCommandBuilder(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI App System
 func TestCLIApp(t *testing.T) {
 	buildInfo := BuildInfo{
 		Version:  "1.0.0",
@@ -314,6 +359,9 @@ func TestCLIApp(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Operation System
 func TestCancellableOperation(t *testing.T) {
 	executed := false
 	op := NewCancellableOperation(func(ctx context.Context) error {
@@ -348,6 +396,9 @@ func TestCancellableOperation(t *testing.T) {
 	}
 }
 
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-005
+// IMMUTABLE-REF: CLI Signal System
 func TestWithSignalHandling(t *testing.T) {
 	ctx, cancel := WithSignalHandling(context.Background())
 	defer cancel()

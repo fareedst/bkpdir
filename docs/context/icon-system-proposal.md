@@ -9,7 +9,7 @@
 4. **AI-Friendly** - Unambiguous interpretation for AI assistants
 5. **Human-Readable** - Intuitive for human readers
 
-### 🔧 Technical Requirements
+### [ACTION:core-functionality] Technical Requirements
 - **Zero Conflicts** - No icon used for multiple meanings
 - **Clear Hierarchy** - Priority levels have visually distinct icons
 - **Category Separation** - Navigation, priority, and action icons are distinct
@@ -20,29 +20,29 @@
 
 ### 🔥 PRIORITY HIERARCHY (Mutually Exclusive)
 
-#### ⭐ **CRITICAL PRIORITY** (Replaces 🚨)
+#### [CRITICAL] **CRITICAL PRIORITY** (Replaces 🚨)
 - **Meaning**: Highest priority, must execute first, blocking
 - **Usage**: Critical features, blocking issues, urgent actions
 - **Visual Logic**: Star shape indicates top priority
 - **Current 🚨 Replacements**: 35+ instances
 
-#### 🔺 **HIGH PRIORITY** (Replaces 🎯)  
+#### [HIGH] **HIGH PRIORITY** (Replaces 🎯)  
 - **Meaning**: High importance, should execute with documentation
 - **Usage**: Important features, high-value tasks
 - **Visual Logic**: Triangle points upward indicating elevation
 - **Current 🎯 Replacements**: 30+ instances
 
-#### 🔶 **MEDIUM PRIORITY** (Replaces 📊)
+#### [MEDIUM] **MEDIUM PRIORITY** (Replaces 📊)
 - **Meaning**: Medium importance, evaluate conditionally  
 - **Usage**: Conditional updates, secondary features
 - **Visual Logic**: Diamond shape indicates balanced consideration
 - **Current 📊 Replacements**: 7+ instances
 
-#### 🔻 **LOW PRIORITY** (Replaces 📝)
+#### [LOW] **LOW PRIORITY** (Replaces [ACTION:format-processing])
 - **Meaning**: Low importance, execute last, minimal impact
 - **Usage**: Minor updates, cleanup tasks, optional items
 - **Visual Logic**: Triangle points downward indicating lower position
-- **Current 📝 Replacements**: 15+ instances
+- **Current [ACTION:format-processing] Replacements**: 15+ instances
 
 ### 📋 PROCESS EXECUTION (Sequential)
 
@@ -56,7 +56,7 @@
 - **Usage**: Main implementation, primary tasks  
 - **Visual Logic**: Lightning indicates active execution
 
-#### 🔄 **PHASE 3** (Retains current meaning)
+#### [ACTION:migration] **PHASE 3** (Retains current meaning)
 - **Meaning**: Third execution phase, follow-up work
 - **Usage**: Conditional references, cleanup
 - **Visual Logic**: Cycle indicates iterative/final work
@@ -68,7 +68,7 @@
 
 ### 📑 PROCESS STEPS (Within Phases)
 
-#### 1️⃣ **STEP 1** (Replaces 🔍 in step contexts)
+#### 1️⃣ **STEP 1** (Replaces [ACTION:discovery] in step contexts)
 - **Meaning**: First step in a process sequence
 - **Usage**: Initial analysis, discovery, search
 - **Visual Logic**: Number clearly indicates sequence
@@ -110,24 +110,24 @@
 - **Usage**: Technical specifications, reference guides
 - **Visual Logic**: Book indicates reference material
 
-### 🔧 ACTION CATEGORIES
+### [ACTION:core-functionality] ACTION CATEGORIES
 
-#### 🔍 **SEARCH/DISCOVER** (Replaces 🔍 in action contexts)
+#### [ACTION:discovery] **SEARCH/DISCOVER** (Replaces [ACTION:discovery] in action contexts)
 - **Meaning**: Search, find, discover, analyze
 - **Usage**: Search actions, discovery tasks, analysis
 - **Visual Logic**: Magnifying glass indicates investigation
 
-#### 📝 **DOCUMENT/UPDATE** (Replaces 📝 in action contexts)
+#### [ACTION:format-processing] **DOCUMENT/UPDATE** (Replaces [ACTION:format-processing] in action contexts)
 - **Meaning**: Write, update, document, record
 - **Usage**: Documentation tasks, update actions
 - **Visual Logic**: Pencil indicates writing/editing
 
-#### 🔧 **CONFIGURE/MODIFY** (Retains current meaning)
+#### [ACTION:core-functionality] **CONFIGURE/MODIFY** (Retains current meaning)
 - **Meaning**: Configure, modify, adjust, tune
 - **Usage**: Configuration tasks, modifications
 - **Visual Logic**: Wrench indicates adjustment/configuration
 
-#### 🛡️ **PROTECT/VALIDATE** (Retains current meaning) 
+#### [ACTION:validation] **PROTECT/VALIDATE** (Retains current meaning) 
 - **Meaning**: Protect, secure, validate, guard
 - **Usage**: Security tasks, validation actions
 - **Visual Logic**: Shield indicates protection/validation
@@ -176,21 +176,21 @@
 - **Usage**: Success status, approvals, completions
 - **Visual Logic**: Checkmark indicates positive outcome
 
-## 🔄 Migration Mapping
+## [ACTION:migration] Migration Mapping
 
 ### 🚨 CRITICAL Icon Replacements (35+ instances)
 | Current Context | New Icon | New Meaning |
 |----------------|----------|-------------|
-| CRITICAL priority | ⭐ | CRITICAL PRIORITY |
+| CRITICAL priority | [CRITICAL] | CRITICAL PRIORITY |
 | PHASE 1 validation | 🚀 | PHASE 1 |
-| MANDATORY actions | ⭐ | CRITICAL PRIORITY |
+| MANDATORY actions | [CRITICAL] | CRITICAL PRIORITY |
 | ERROR handling | 🐛 | BUG/ERROR |
-| ENFORCEMENT rules | 🛡️ | PROTECT/VALIDATE |
+| ENFORCEMENT rules | [ACTION:validation] | PROTECT/VALIDATE |
 
 ### 🎯 TARGET Icon Replacements (30+ instances)  
 | Current Context | New Icon | New Meaning |
 |----------------|----------|-------------|
-| HIGH priority | 🔺 | HIGH PRIORITY |
+| HIGH priority | [HIGH] | HIGH PRIORITY |
 | PHASE 2 execution | ⚡ | PHASE 2 |
 | Purpose sections | 📑 | PURPOSE SECTION |
 | Step 2 indicators | 2️⃣ | STEP 2 |
@@ -199,19 +199,19 @@
 ### 📋 CHECKLIST Icon Replacements (25+ instances)
 | Current Context | New Icon | New Meaning |
 |----------------|----------|-------------|
-| MANDATORY priority | ⭐ | CRITICAL PRIORITY |
+| MANDATORY priority | [CRITICAL] | CRITICAL PRIORITY |
 | Task verification | 1️⃣ | STEP 1 |
 | Document type | 📋 | CHECKLIST DOCUMENT |
 | Registry references | 📋 | CHECKLIST DOCUMENT |
 | Step indicators | 2️⃣ | STEP 2 |
 
-### 🔍 SEARCH Icon Replacements (20+ instances)
+### [ACTION:discovery] SEARCH Icon Replacements (20+ instances)
 | Current Context | New Icon | New Meaning |  
 |----------------|----------|-------------|
-| VALIDATE priority | 🛡️ | PROTECT/VALIDATE |
+| VALIDATE priority | [ACTION:validation] | PROTECT/VALIDATE |
 | Step 1 indicators | 1️⃣ | STEP 1 |
-| Search actions | 🔍 | SEARCH/DISCOVER |
-| Compliance checks | 🛡️ | PROTECT/VALIDATE |
+| Search actions | [ACTION:discovery] | SEARCH/DISCOVER |
+| Compliance checks | [ACTION:validation] | PROTECT/VALIDATE |
 
 ## 📊 Implementation Impact Assessment
 
@@ -225,7 +225,7 @@
 
 #### **AI Assistant Benefits**
 - **Zero context switching** - Icons have consistent meaning everywhere
-- **Clear priority hierarchy** - ⭐ > 🔺 > 🔶 > 🔻 visual progression
+- **Clear priority hierarchy** - [CRITICAL] > [HIGH] > [MEDIUM] > [LOW] visual progression
 - **Unambiguous navigation** - Document categories clearly separated
 - **Deterministic processing** - No disambiguation logic required
 
@@ -235,15 +235,15 @@
 - **Consistent experience** - Same icon means same thing everywhere
 - **Reduced cognitive load** - No mental mapping required
 
-### 🔧 Implementation Complexity
+### [ACTION:core-functionality] Implementation Complexity
 
 #### **Phase 1: Core Priority Icons** (Week 1)
-- Replace ⭐🔺🔶🔻 priority system (70+ instances)
+- Replace [CRITICAL][HIGH][MEDIUM][LOW] priority system (70+ instances)
 - Update feature-tracking.md priority classifications
 - Standardize README.md priority matrix
 
 #### **Phase 2: Process Flow Icons** (Week 2)  
-- Implement 🚀⚡🔄🏁 phase system (15+ instances)
+- Implement 🚀⚡[ACTION:migration]🏁 phase system (15+ instances)
 - Add 1️⃣2️⃣3️⃣✅ step system (20+ instances)
 - Update ai-assistant-protocol.md workflows
 
@@ -277,7 +277,7 @@
 - [ ] **Efficient scanning** - quick visual recognition
 - [ ] **Reduced documentation friction** - easier to navigate
 
-### 🔄 Process Integration Validation
+### [ACTION:migration] Process Integration Validation
 - [ ] **Seamless AI assistant workflow** - no confusion in protocols
 - [ ] **Clear feature tracking** - priority and status immediately visible
 - [ ] **Efficient documentation updates** - appropriate icons obvious
@@ -285,7 +285,7 @@
 
 ## 📋 Next Steps for DOC-006 Implementation
 
-### ⭐ **PHASE 1: Analysis Complete** ✅
+### [CRITICAL] **PHASE 1: Analysis Complete** ✅
 - [x] Current usage analysis complete
 - [x] Conflict identification complete  
 - [x] Unique icon system designed
@@ -293,14 +293,14 @@
 
 ### 🚀 **PHASE 2: System Implementation** (Next)
 1. **Update Master Icon Legend** - Create definitive reference in README.md
-2. **Replace High-Priority Conflicts** - Start with ⭐🔺🔶🔻 priority system
+2. **Replace High-Priority Conflicts** - Start with [CRITICAL][HIGH][MEDIUM][LOW] priority system
 3. **Update Core Documents** - feature-tracking.md, ai-assistant-protocol.md priority matrices
 4. **Validate Phase 1 Implementation** - Ensure no conflicts remain
 
 ### ⚡ **PHASE 3: Full Migration** (Following)
-1. **Replace Process Icons** - Implement 🚀⚡🔄🏁 and 1️⃣2️⃣3️⃣ systems
+1. **Replace Process Icons** - Implement 🚀⚡[ACTION:migration]🏁 and 1️⃣2️⃣3️⃣ systems
 2. **Update Document Categories** - Deploy 📑📋📊📖 navigation system
-3. **Complete Action/Status Icons** - Finalize 🔍📝🔧🛡️ action categories
+3. **Complete Action/Status Icons** - Finalize [ACTION:discovery][ACTION:format-processing][ACTION:core-functionality][ACTION:validation] action categories
 4. **Comprehensive Validation** - Verify zero conflicts across all documents
 
 ### 🏁 **PHASE 4: Guidelines and Enforcement** (Final)
@@ -313,6 +313,6 @@
 
 **📋 Proposal Status**: Ready for implementation
 **🎯 Next Action**: Begin PHASE 2 implementation with priority icon updates
-**⭐ Critical Success**: Zero conflicts maintained throughout migration
+**[CRITICAL] Critical Success**: Zero conflicts maintained throughout migration
 
 // DOC-006: Icon standardization - Unique system proposal complete 

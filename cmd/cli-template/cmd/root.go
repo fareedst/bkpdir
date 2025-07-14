@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-008: CLI Application Template - Root command demonstrating extracted packages
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package cmd
 
 import (

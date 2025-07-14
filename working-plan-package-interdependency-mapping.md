@@ -2,7 +2,7 @@
 
 ## 🚀 PHASE 1: CRITICAL VALIDATION [COMPLETED ✅]
 
-### 1. 🛡️ Immutable Requirements Check ✅
+### 1. [ACTION:validation] Immutable Requirements Check ✅
 - **Status**: VALIDATED - Documentation task, no code conflicts
 - **Finding**: Package interdependency mapping is pure documentation
 - **Verification**: No immutable.md conflicts with documentation creation
@@ -13,20 +13,20 @@
 - **Current Status**: 4/5 subtasks completed (80% complete)
 - **Location**: feature-tracking.md line 672
 
-### 3. 🔍 AI Assistant Compliance ✅
+### 3. [ACTION:discovery] AI Assistant Compliance ✅
 - **Protocol**: NEW FEATURE Protocol (continuing EXTRACT-008)
 - **Priority**: HIGH - Demonstrates value and accelerates adoption
 - **Implementation Tokens**: Required with `EXTRACT-008` prefix
 - **Response Format**: Comprehensive documentation with examples
 
-### 4. ⭐ Change Protocol ✅
+### 4. [CRITICAL] Change Protocol ✅
 - **Type**: Documentation Enhancement (NEW FEATURE continuation)
 - **Impact Level**: MEDIUM - User-facing documentation
 - **Documentation Cascade**: Required for specification.md, architecture.md
 
 ## ⚡ PHASE 2: CORE ANALYSIS AND PLANNING
 
-### 🔍 Current Package Inventory Analysis
+### [ACTION:discovery] Current Package Inventory Analysis
 
 **Extracted Packages Identified** (8 total):
 1. **pkg/config** - Configuration management system
@@ -68,9 +68,9 @@
 7. **Best Practices**: Recommended usage patterns
 8. **Troubleshooting Guide**: Common integration issues and solutions
 
-## 🔄 PHASE 3: DETAILED SUBTASK BREAKDOWN
+## [ACTION:migration] PHASE 3: DETAILED SUBTASK BREAKDOWN
 
-### 📝 Subtask 1: Package Inventory and Analysis
+### [ACTION:format-processing] Subtask 1: Package Inventory and Analysis
 **Objective**: Create comprehensive overview of all extracted packages
 
 **Tasks**:
@@ -91,7 +91,7 @@
   - Test coverage analysis
   - Documentation completeness review
 
-**Implementation Token**: `// 🔺 EXTRACT-008: Package interdependency mapping - 🔍 Package inventory analysis`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Package inventory analysis`
 
 ### 🔗 Subtask 2: Dependency Matrix Creation
 **Objective**: Map all package-to-package relationships
@@ -110,7 +110,7 @@
   - Document dependency resolution order
   - Identify potential future circular dependency risks
 
-**Implementation Token**: `// 🔺 EXTRACT-008: Package interdependency mapping - 📊 Dependency matrix creation`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - 📊 Dependency matrix creation`
 
 ### 🎯 Subtask 3: Usage Pattern Documentation
 **Objective**: Document common integration patterns
@@ -130,7 +130,7 @@
   - Performance anti-patterns
   - Integration complexity red flags
 
-**Implementation Token**: `// 🔺 EXTRACT-008: Package interdependency mapping - 🎯 Usage pattern documentation`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - 🎯 Usage pattern documentation`
 
 ### 💡 Subtask 4: Integration Examples and Code Samples
 **Objective**: Provide working code examples for package combinations
@@ -149,7 +149,7 @@
   - Concurrent processing coordination
   - Memory-efficient data handling
 
-**Implementation Token**: `// 🔺 EXTRACT-008: Package interdependency mapping - 💡 Integration examples creation`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - 💡 Integration examples creation`
 
 ### ⚡ Subtask 5: Performance and Best Practices Analysis
 **Objective**: Document performance implications and optimization guidance
@@ -168,7 +168,7 @@
   - Large data set handling
   - Resource contention avoidance
 
-**Implementation Token**: `// 🔺 EXTRACT-008: Package interdependency mapping - ⚡ Performance analysis and optimization`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - ⚡ Performance analysis and optimization`
 
 ### 📋 Subtask 6: Documentation Creation and Validation
 **Objective**: Create comprehensive interdependency mapping document
@@ -187,7 +187,7 @@
   - User experience review for clarity
   - Integration with existing documentation system
 
-**Implementation Token**: `// 🔺 EXTRACT-008: Package interdependency mapping - 📋 Documentation creation and validation`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - 📋 Documentation creation and validation`
 
 ## 🏁 PHASE 4: COMPLETION AND VALIDATION
 
@@ -212,7 +212,7 @@
 - [ ] Cross-references to related documentation
 - [ ] Visual elements enhance understanding (diagrams, matrices)
 
-### 🔄 Final Integration Tasks
+### [ACTION:migration] Final Integration Tasks
 
 **Documentation Updates Required**:
 - [ ] **Update feature-tracking.md**
@@ -267,7 +267,7 @@
 - **Adoption Support**: Mapping demonstrates value and reduces integration friction
 - **Maintenance Support**: Clear patterns support ongoing package evolution
 
-## 🔧 Implementation Approach
+## [ACTION:core-functionality] Implementation Approach
 
 ### Analysis Strategy
 1. **Automated Analysis**: Use go tooling for dependency extraction

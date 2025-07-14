@@ -1,9 +1,9 @@
-# 🔶 DOC-014 Subtask 5: Create Decision Validation Tools - Working Plan
+# [MEDIUM] DOC-014 Subtask 5: Create Decision Validation Tools - Working Plan
 
 ## 📑 Task Overview
 **Feature ID**: DOC-014  
 **Subtask**: 5. Create decision validation tools  
-**Priority**: 🔶 MEDIUM - Automation enhancement  
+**Priority**: [MEDIUM] MEDIUM - Automation enhancement  
 **Status**: ✅ COMPLETED - All tests passing  
 **Dependencies**: Subtasks 1-4 (framework and enhanced tokens) ✅ COMPLETED  
 
@@ -26,7 +26,7 @@
 
 ### 📋 Subtask Breakdown
 
-#### 1. **[ ] Implement decision checklist validation** (⭐ CRITICAL) - Automated checking of decision criteria
+#### 1. **[ ] Implement decision checklist validation** ([CRITICAL] CRITICAL) - Automated checking of decision criteria
 **Rationale**: Core validation ensuring AI assistants follow the 4-tier decision hierarchy (Safety Gates, Scope Boundaries, Quality Thresholds, Goal Alignment)
 
 **Implementation Plan**:
@@ -40,7 +40,7 @@
 - Create `internal/validation/decision_checklist.go` for programmatic validation
 - Add decision checklist CLI commands to existing ai-validation tool
 
-#### 2. **[ ] Create decision quality metrics** (🔺 HIGH) - Track goal alignment and rework rates  
+#### 2. **[ ] Create decision quality metrics** ([HIGH] HIGH) - Track goal alignment and rework rates  
 **Rationale**: Measure effectiveness of decision framework through quantitative metrics
 
 **Implementation Plan**:
@@ -55,7 +55,7 @@
 - Create `docs/decision-metrics/` directory for reports
 - Add metrics commands to ai-validation CLI
 
-#### 3. **[ ] Add decision context validation** (🔺 HIGH) - Check enhanced token format compliance
+#### 3. **[ ] Add decision context validation** ([HIGH] HIGH) - Check enhanced token format compliance
 **Rationale**: Ensure enhanced tokens follow the decision context format defined in subtask 4
 
 **Implementation Plan**:
@@ -69,7 +69,7 @@
 - Create `internal/validation/decision_context.go` for programmatic validation
 - Update DOC-008 validation to include decision context checking
 
-#### 4. **[ ] Integrate with existing validation** (🔺 HIGH) - Extend DOC-008/DOC-011 systems
+#### 4. **[ ] Integrate with existing validation** ([HIGH] HIGH) - Extend DOC-008/DOC-011 systems
 **Rationale**: Seamless integration ensures decision validation becomes part of normal workflow
 
 **Implementation Plan**:
@@ -84,7 +84,7 @@
 - Update `scripts/validate-icon-enforcement.sh` to include decision validation
 - Update Makefile with comprehensive decision validation workflows
 
-## 🔧 Technical Implementation Details
+## [ACTION:core-functionality] Technical Implementation Details
 
 ### Decision Validation Architecture
 
@@ -185,7 +185,7 @@ After implementation completion, update both:
 - **Phase 3: Enhanced Token Validation** ✅ COMPLETED - Decision context validation for enhanced tokens
 - **Phase 4: System Integration** ✅ COMPLETED - Full integration with DOC-008/DOC-011 validation systems
 
-**🔧 Key Deliverables Implemented:**
+**[ACTION:core-functionality] Key Deliverables Implemented:**
 - `internal/validation/decision_checklist.go` - Complete decision validation system (638 lines)
 - `internal/validation/decision_checklist_test.go` - Comprehensive test suite (400+ lines)
 - Enhanced validation scripts: `validate-decision-framework.sh`, `validate-decision-context.sh`, `track-decision-metrics.sh`

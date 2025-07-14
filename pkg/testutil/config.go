@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 import (
@@ -16,7 +16,7 @@ type DefaultConfigProvider struct {
 
 // NewConfigProvider creates a new configuration provider with initial data.
 //
-// ⭐ EXTRACT-009: Configuration provider creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewConfigProvider(data map[string]interface{}) ConfigProvider {
 	if data == nil {
 		data = make(map[string]interface{})
@@ -28,21 +28,21 @@ func NewConfigProvider(data map[string]interface{}) ConfigProvider {
 
 // GetConfigData returns the configuration data as a map.
 //
-// ⭐ EXTRACT-009: Configuration data access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (cp *DefaultConfigProvider) GetConfigData() map[string]interface{} {
 	return cp.data
 }
 
 // SetConfigValue sets a configuration value.
 //
-// ⭐ EXTRACT-009: Configuration value setting - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (cp *DefaultConfigProvider) SetConfigValue(key string, value interface{}) {
 	cp.data[key] = value
 }
 
 // SaveToFile saves the configuration to a YAML file.
 //
-// ⭐ EXTRACT-009: Configuration file saving - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (cp *DefaultConfigProvider) SaveToFile(path string) error {
 	yamlData, err := yaml.Marshal(cp.data)
 	if err != nil {
@@ -59,7 +59,7 @@ type DefaultEnvironmentManager struct {
 
 // NewEnvironmentManager creates a new environment manager.
 //
-// ⭐ EXTRACT-009: Environment manager creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewEnvironmentManager() EnvironmentManager {
 	return &DefaultEnvironmentManager{
 		originalValues: make(map[string]string),
@@ -70,7 +70,7 @@ func NewEnvironmentManager() EnvironmentManager {
 // SetEnv sets an environment variable for the test.
 // Extracted from TEST-FIX-001 environment variable isolation patterns.
 //
-// ⭐ EXTRACT-009: Environment variable setting - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (em *DefaultEnvironmentManager) SetEnv(key, value string) {
 	// Store original value if not already stored
 	if _, exists := em.originalValues[key]; !exists {
@@ -86,7 +86,7 @@ func (em *DefaultEnvironmentManager) SetEnv(key, value string) {
 
 // UnsetEnv removes an environment variable.
 //
-// ⭐ EXTRACT-009: Environment variable unsetting - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (em *DefaultEnvironmentManager) UnsetEnv(key string) {
 	// Store original value if not already stored
 	if _, exists := em.originalValues[key]; !exists {
@@ -100,14 +100,14 @@ func (em *DefaultEnvironmentManager) UnsetEnv(key string) {
 
 // GetEnv gets an environment variable value.
 //
-// ⭐ EXTRACT-009: Environment variable getting - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (em *DefaultEnvironmentManager) GetEnv(key string) string {
 	return os.Getenv(key)
 }
 
 // RestoreEnv restores all environment variables to their original state.
 //
-// ⭐ EXTRACT-009: Environment variable restoration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (em *DefaultEnvironmentManager) RestoreEnv() {
 	// Restore original values
 	for key, value := range em.originalValues {
@@ -127,7 +127,7 @@ func (em *DefaultEnvironmentManager) RestoreEnv() {
 // CreateTestConfig creates a test configuration file with the given data.
 // Extracted from config_test.go createTestConfigFile and createTestConfigFileWithData functions.
 //
-// ⭐ EXTRACT-009: Test configuration creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTestConfig(t *testing.T, dir string, data map[string]interface{}) (string, func()) {
 	t.Helper()
 
@@ -157,7 +157,7 @@ func CreateTestConfig(t *testing.T, dir string, data map[string]interface{}) (st
 // CreateTestConfigWithDefaults creates a test configuration with common default values.
 // This provides a convenient way to create test configs with typical settings.
 //
-// ⭐ EXTRACT-009: Default test configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateTestConfigWithDefaults(t *testing.T, dir string, overrides map[string]interface{}) (string, func()) {
 	t.Helper()
 
@@ -181,7 +181,7 @@ func CreateTestConfigWithDefaults(t *testing.T, dir string, overrides map[string
 
 // WithTestConfig executes a function with a test configuration and cleans up automatically.
 //
-// ⭐ EXTRACT-009: Test configuration with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTestConfig(t *testing.T, data map[string]interface{}, fn func(configPath string)) {
 	t.Helper()
 
@@ -194,7 +194,7 @@ func WithTestConfig(t *testing.T, data map[string]interface{}, fn func(configPat
 
 // WithTestConfigDefaults executes a function with default test configuration.
 //
-// ⭐ EXTRACT-009: Default test configuration with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithTestConfigDefaults(t *testing.T, overrides map[string]interface{}, fn func(configPath string)) {
 	t.Helper()
 
@@ -208,7 +208,7 @@ func WithTestConfigDefaults(t *testing.T, overrides map[string]interface{}, fn f
 // IsolateEnvironment creates an environment manager and returns a cleanup function.
 // This is useful for tests that need to modify environment variables.
 //
-// ⭐ EXTRACT-009: Environment isolation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func IsolateEnvironment(t *testing.T) func() {
 	t.Helper()
 
@@ -227,7 +227,7 @@ func IsolateEnvironment(t *testing.T) func() {
 
 // WithEnvironment executes a function with modified environment variables and restores them.
 //
-// ⭐ EXTRACT-009: Environment modification with cleanup - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func WithEnvironment(t *testing.T, envVars map[string]string, fn func()) {
 	t.Helper()
 
@@ -247,7 +247,7 @@ func WithEnvironment(t *testing.T, envVars map[string]string, fn func()) {
 
 // CreateSimpleTestConfig creates a simple test configuration with minimal data.
 //
-// ⭐ EXTRACT-009: Simple test configuration - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func CreateSimpleTestConfig(t *testing.T, dir string) (string, func()) {
 	return CreateTestConfigWithDefaults(t, dir, nil)
 }

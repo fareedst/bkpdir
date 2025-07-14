@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Disk space error detection
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsDiskFullError checks if an error indicates disk space exhaustion
 // Extracted from original errors.go with comprehensive disk space error detection
 func IsDiskFullError(err error) bool {
@@ -43,7 +43,7 @@ func IsDiskFullError(err error) bool {
 	return false
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Permission error detection
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsPermissionError checks if an error indicates permission or access issues
 // Extracted from original errors.go with enhanced permission error detection
 func IsPermissionError(err error) bool {
@@ -75,7 +75,7 @@ func IsPermissionError(err error) bool {
 	return false
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Directory/file existence error detection
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsDirectoryNotFoundError checks if an error indicates a directory doesn't exist
 // Extracted from original errors.go with enhanced path existence detection
 func IsDirectoryNotFoundError(err error) bool {
@@ -106,7 +106,7 @@ func IsDirectoryNotFoundError(err error) bool {
 	return false
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 File existence error detection
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsFileNotFoundError checks if an error indicates a file doesn't exist
 func IsFileNotFoundError(err error) bool {
 	if err == nil {
@@ -135,7 +135,7 @@ func IsFileNotFoundError(err error) bool {
 	return false
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Network error detection
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsNetworkError checks if an error indicates network connectivity issues
 func IsNetworkError(err error) bool {
 	if err == nil {
@@ -165,7 +165,7 @@ func IsNetworkError(err error) bool {
 	return false
 }
 
-// ⭐ EXTRACT-002: Error classification framework - 🔧 Default classifier implementation
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // DefaultErrorClassifier provides a default implementation of ErrorClassifier
 type DefaultErrorClassifier struct{}
 
@@ -174,7 +174,7 @@ func NewDefaultErrorClassifier() *DefaultErrorClassifier {
 	return &DefaultErrorClassifier{}
 }
 
-// ⭐ EXTRACT-002: Error classification framework - 🔍 Error categorization
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ClassifyError categorizes an error into one of the predefined categories
 func (c *DefaultErrorClassifier) ClassifyError(err error) ErrorCategory {
 	if err == nil {
@@ -195,7 +195,7 @@ func (c *DefaultErrorClassifier) ClassifyError(err error) ErrorCategory {
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification framework - 🔍 Recoverability assessment
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsRecoverable determines if an error can potentially be recovered from
 func (c *DefaultErrorClassifier) IsRecoverable(err error) bool {
 	if err == nil {
@@ -228,7 +228,7 @@ func (c *DefaultErrorClassifier) IsRecoverable(err error) bool {
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification framework - 🔍 Severity assessment
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetSeverity determines the severity level of an error
 func (c *DefaultErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	if err == nil {
@@ -261,7 +261,7 @@ func (c *DefaultErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔧 Pattern matching framework
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ErrorPattern represents a configurable error detection pattern
 type ErrorPattern struct {
 	Name        string   // Name of the error pattern
@@ -271,7 +271,7 @@ type ErrorPattern struct {
 	Recoverable bool
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔧 Configurable classifier
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ConfigurableErrorClassifier allows customizing error classification patterns
 type ConfigurableErrorClassifier struct {
 	patterns []ErrorPattern
@@ -289,7 +289,7 @@ func NewConfigurableErrorClassifier(patterns []ErrorPattern, fallback ErrorClass
 	}
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Pattern-based classification
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // ClassifyError classifies errors using configured patterns, falling back to default
 func (c *ConfigurableErrorClassifier) ClassifyError(err error) ErrorCategory {
 	if err == nil {
@@ -311,7 +311,7 @@ func (c *ConfigurableErrorClassifier) ClassifyError(err error) ErrorCategory {
 	return c.fallback.ClassifyError(err)
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Pattern-based recoverability
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // IsRecoverable determines recoverability using configured patterns
 func (c *ConfigurableErrorClassifier) IsRecoverable(err error) bool {
 	if err == nil {
@@ -333,7 +333,7 @@ func (c *ConfigurableErrorClassifier) IsRecoverable(err error) bool {
 	return c.fallback.IsRecoverable(err)
 }
 
-// ⭐ EXTRACT-002: Error classification utilities - 🔍 Pattern-based severity
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // GetSeverity determines severity using configured patterns
 func (c *ConfigurableErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	if err == nil {

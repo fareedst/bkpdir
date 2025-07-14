@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-007: Processing package structure - Core interfaces and types - 🔧
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
 import (

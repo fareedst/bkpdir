@@ -23,6 +23,13 @@ This document contains specifications that MUST NOT be changed without a major v
 - This naming convention is fixed and must not be modified
 
 ## Directory Operations
+
+### DIR-001: Directory Operations Immutable [ACTION:core-functionality]
+**Source**: docs/context/immutable.md - Directory Operations section
+**Impact**: Core functionality requirement for directory operations
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 - **Platform Independence**: Use platform-independent path handling
 - **Permission Preservation**: Preserve file permissions and modification time
 - **Atomic Operations**: All operations must be atomic to prevent corruption
@@ -43,6 +50,13 @@ This document contains specifications that MUST NOT be changed without a major v
 - These file backup operation rules are fundamental and must not be altered
 
 ## File Exclusion Requirements
+
+### EXCLUDE-001: File Exclusion Requirements Immutable [ACTION:core-functionality]
+**Source**: docs/context/immutable.md - File Exclusion Requirements section
+**Impact**: Core functionality requirement for file exclusion
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 - **Pattern Matching**: Doublestar glob pattern matching
 - **Configuration**: Configurable exclusion patterns
 - **System Files**: Default exclusions for system files
@@ -61,6 +75,13 @@ This document contains specifications that MUST NOT be changed without a major v
 - These Git integration requirements are mandatory and must be preserved
 
 ## Archive Verification Requirements
+
+### VERIFY-001: Archive Verification Requirements Immutable [ACTION:validation]
+**Source**: docs/context/immutable.md - Archive Verification Requirements section
+**Impact**: Core functionality requirement for archive verification
+**Cross-Layer Requirements**: Documentation, Code, Tests
+**Implementation Priority**: CRITICAL
+
 - **Structure Check**: ZIP structure verification
 - **Checksum Support**: SHA-256 checksum verification
 - **Status Tracking**: Verification status tracking

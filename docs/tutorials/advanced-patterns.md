@@ -1,6 +1,6 @@
-# 🔧 Advanced Integration Patterns
+# [ACTION:core-functionality] Advanced Integration Patterns
 
-> **🔺 EXTRACT-008: Tutorial series creation - 📚 Advanced integration scenarios**
+> **[HIGH] EXTRACT-008: Tutorial series creation - 📚 Advanced integration scenarios**
 
 ## 🎯 Overview
 
@@ -17,7 +17,7 @@ This tutorial covers advanced patterns for integrating the extracted packages in
 ### Multi-Package Integration
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Advanced application structure
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Advanced application structure
 package main
 
 import (
@@ -90,12 +90,12 @@ func (a *Application) Close() error {
 }
 ```
 
-## 🔄 Concurrent Processing Patterns
+## [ACTION:migration] Concurrent Processing Patterns
 
 ### Pattern 1: Pipeline Processing
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Pipeline processing pattern
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Pipeline processing pattern
 func (a *Application) ProcessPipeline(ctx context.Context, files []string) error {
     // Stage 1: File validation
     validFiles := make(chan string, len(files))
@@ -174,7 +174,7 @@ func (a *Application) processFile(file string) (ProcessResult, error) {
 ### Pattern 2: Worker Pool with Error Aggregation
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Worker pool with error handling
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Worker pool with error handling
 func (a *Application) ProcessWithErrorAggregation(ctx context.Context, files []string) error {
     errorCollector := errors.NewCollector()
     results := make([]ProcessResult, 0, len(files))
@@ -239,12 +239,12 @@ func (a *Application) reportResults(results []ProcessResult) {
 }
 ```
 
-## 🛡️ Advanced Resource Management
+## [ACTION:validation] Advanced Resource Management
 
 ### Pattern 1: Resource Pools
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Resource pool management
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Resource pool management
 type ResourcePool struct {
     manager   *resources.Manager
     pools     map[string]chan resources.Resource
@@ -307,7 +307,7 @@ func (rp *ResourcePool) ReturnToPool(resource resources.Resource) {
 ### Pattern 2: Context-Aware Resource Management
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Context-aware resources
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Context-aware resources
 func (a *Application) ProcessWithContextResources(ctx context.Context, files []string) error {
     // Create context-specific resource manager
     ctxManager := resources.NewManagerWithContext(ctx)
@@ -340,7 +340,7 @@ func (a *Application) ProcessWithContextResources(ctx context.Context, files []s
 ### Pattern 1: Git-Driven File Selection
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Git-aware file processing
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Git-aware file processing
 func (a *Application) ProcessGitAwareFiles(ctx context.Context, patterns []string) error {
     if a.git == nil {
         return errors.New("not in a git repository")
@@ -424,7 +424,7 @@ func (a *Application) processFileWithGitContext(ctx context.Context, file string
 ### Pattern 2: Branch-Aware Operations
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Branch-aware processing
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Branch-aware processing
 func (a *Application) ProcessByBranch(ctx context.Context, files []string) error {
     if a.git == nil {
         return a.processRegular(ctx, files)
@@ -502,12 +502,12 @@ func (a *Application) processFeatureBranch(ctx context.Context, files []string, 
 }
 ```
 
-## 🔧 Configuration-Driven Behavior
+## [ACTION:core-functionality] Configuration-Driven Behavior
 
 ### Pattern 1: Dynamic Configuration
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Dynamic configuration
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Dynamic configuration
 type DynamicConfig struct {
     base     *config.Config
     overrides map[string]interface{}
@@ -562,7 +562,7 @@ func (a *Application) ProcessWithDynamicConfig(ctx context.Context, files []stri
 ### Pattern 2: Environment-Aware Processing
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Environment-aware processing
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Environment-aware processing
 func (a *Application) ProcessByEnvironment(ctx context.Context, files []string) error {
     env := os.Getenv("APP_ENV")
     if env == "" {
@@ -680,7 +680,7 @@ func (a *Application) processWithConfig(ctx context.Context, files []string, cfg
 ### Pattern 1: Graceful Shutdown
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Graceful shutdown pattern
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Graceful shutdown pattern
 func (a *Application) RunWithGracefulShutdown() error {
     ctx, cancel := context.WithCancel(context.Background())
     defer cancel()
@@ -755,7 +755,7 @@ func (a *Application) gracefulCleanup(ctx context.Context) error {
 ### Pattern 2: Health Monitoring
 
 ```go
-// 🔺 EXTRACT-008: Tutorial series creation - 📚 Health monitoring pattern
+// [HIGH] EXTRACT-008: Tutorial series creation - 📚 Health monitoring pattern
 type HealthMonitor struct {
     app       *Application
     metrics   *Metrics
@@ -873,4 +873,4 @@ These patterns provide a foundation for building robust, production-ready CLI ap
 
 ---
 
-**🔺 EXTRACT-008: Tutorial series creation - 📚 Advanced integration patterns and production-ready applications**
+**[HIGH] EXTRACT-008: Tutorial series creation - 📚 Advanced integration patterns and production-ready applications**

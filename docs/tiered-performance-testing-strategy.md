@@ -75,7 +75,7 @@ The original performance tests were taking 15+ minutes to complete due to:
 - ✅ Maximum iterations and stress testing
 - ✅ Detailed benchmarking and analysis
 
-## 🔧 **Implementation Details**
+## [ACTION:core-functionality] **Implementation Details**
 
 ### **Build System Integration**
 
@@ -167,7 +167,7 @@ make test-performance-full
 make test-performance-comprehensive
 ```
 
-## 🔄 **Maintenance Strategy**
+## [ACTION:migration] **Maintenance Strategy**
 
 ### **Performance Regression Detection**
 - **Baseline Storage**: Store performance baselines per tier
@@ -201,7 +201,7 @@ make test-performance-comprehensive
 - ✅ **Full performance baseline** validation
 - ✅ **Regression detection** before release
 
-## 📝 **Future Enhancements**
+## [ACTION:format-processing] **Future Enhancements**
 
 ### **Phase 1: Optimization** (Next 2 weeks)
 - Implement actual script execution with mocking

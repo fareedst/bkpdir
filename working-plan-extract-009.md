@@ -1,7 +1,7 @@
 # Working Plan: EXTRACT-009 - Extract Testing Patterns and Utilities
 
 > **📋 Feature ID**: EXTRACT-009  
-> **⭐ Priority**: HIGH - Critical for maintaining quality in extracted components  
+> **[CRITICAL] Priority**: HIGH - Critical for maintaining quality in extracted components  
 > **🎯 Status**: ✅ COMPLETED  
 > **📅 Created**: 2025-01-02  
 
@@ -10,7 +10,7 @@
 ### 🎯 Objective
 Extract common testing utilities and patterns from the existing codebase into a reusable `pkg/testutil` package that can be used by all extracted packages and future CLI applications.
 
-### 🔍 Current Situation Analysis
+### [ACTION:discovery] Current Situation Analysis
 The codebase contains rich testing patterns across 10+ test files with complex testing utilities:
 - **Configuration testing** with multiple files and environment variables
 - **Temporary file/directory management** patterns in multiple test files
@@ -29,15 +29,15 @@ The codebase contains rich testing patterns across 10+ test files with complex t
 
 ### 1️⃣ Pre-Implementation Validation
 - [x] **📋 Feature ID Verification**: EXTRACT-009 exists in feature-tracking.md ✅
-- [x] **🛡️ Immutable Check**: No conflicts with immutable.md requirements ✅
-- [x] **🔍 Compliance Review**: Check ai-assistant-compliance.md requirements ✅
+- [x] **[ACTION:validation] Immutable Check**: No conflicts with immutable.md requirements ✅
+- [x] **[ACTION:discovery] Compliance Review**: Check ai-assistant-compliance.md requirements ✅
 - [x] **📁 Dependencies Check**: Confirm EXTRACT-001 through EXTRACT-008 completion status ✅
 
 ### 2️⃣ Current State Analysis
-- [x] **🔍 Analyze existing testing patterns** across all `*_test.go` files
+- [x] **[ACTION:discovery] Analyze existing testing patterns** across all `*_test.go` files
 - [x] **📊 Inventory internal/testutil** to understand existing advanced utilities
 - [x] **🗂️ Identify extraction candidates** for common testing patterns
-- [x] **📝 Document extraction strategy** and backward compatibility approach
+- [x] **[ACTION:format-processing] Document extraction strategy** and backward compatibility approach
 
 ## ⚡ PHASE 2: CORE IMPLEMENTATION (Execute SECOND)
 
@@ -104,7 +104,7 @@ The codebase contains rich testing patterns across 10+ test files with complex t
 - [ ] **Benchmark Utilities** - Extract benchmarking patterns
 - [ ] **Performance Testing Helpers** - Extract performance validation patterns
 
-## 🔄 PHASE 3: DOCUMENTATION AND INTEGRATION (Execute THIRD)
+## [ACTION:migration] PHASE 3: DOCUMENTATION AND INTEGRATION (Execute THIRD)
 
 ### 6️⃣ Create Testing Patterns Documentation
 
@@ -173,14 +173,14 @@ The codebase contains rich testing patterns across 10+ test files with complex t
 **10.1 Implementation Token Updates**
 - [ ] **Add implementation tokens** to all new pkg/testutil code
   ```go
-  // ⭐ EXTRACT-009: Testing utility extraction - 🔧
+  // [CRITICAL] EXTRACT-009: Testing utility extraction - [ACTION:core-functionality]
   ```
 - [ ] **Update existing tokens** in modified test files
 
 **10.2 Task Completion**
 - [ ] **🧪 All tests pass** - Run full test suite with new testutil package
-- [ ] **🔧 All lint checks pass** - Ensure code quality standards
-- [ ] **📝 All documentation updated** - Complete required documentation updates
+- [ ] **[ACTION:core-functionality] All lint checks pass** - Ensure code quality standards
+- [ ] **[ACTION:format-processing] All documentation updated** - Complete required documentation updates
 - [ ] **🏁 Mark task complete** - Update feature-tracking.md with completion status and notes
 
 ## 📊 Success Metrics
@@ -203,7 +203,7 @@ The codebase contains rich testing patterns across 10+ test files with complex t
 - **Flexibility**: Utilities support various testing scenarios and patterns
 - **Maintainability**: Clear architecture and well-documented interfaces
 
-## 🔍 Risk Mitigation
+## [ACTION:discovery] Risk Mitigation
 
 ### Technical Risks
 - **Circular Dependencies**: Ensure pkg/testutil doesn't depend on packages that use it
@@ -231,7 +231,7 @@ The codebase contains rich testing patterns across 10+ test files with complex t
 - **EXTRACT-010**: Package Documentation and Examples (benefits from testutil patterns)
 - **Testing Infrastructure (TEST-INFRA-001)**: Advanced testing infrastructure already exists in `internal/testutil`
 
-## 📝 Implementation Notes
+## [ACTION:format-processing] Implementation Notes
 
 ### Design Decisions
 - **Separate from internal/testutil**: Create pkg/testutil for external use while preserving internal/testutil for specialized testing infrastructure
@@ -287,6 +287,6 @@ The codebase contains rich testing patterns across 10+ test files with complex t
 
 ---
 
-> **📝 Working Plan Status**: All phases completed successfully.  
+> **[ACTION:format-processing] Working Plan Status**: All phases completed successfully.  
 > **✅ Final Status**: EXTRACT-009 completed with comprehensive pkg/testutil package.  
 > **⏱️ Actual Timeline**: Completed within planned 2-3 week timeline. 

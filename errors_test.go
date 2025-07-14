@@ -5,6 +5,14 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+
+// TEST-ERROR-HANDLING-001: Error handling test validation - Error handling and resource management testing [ACTION:validation]
+// Source: errors.go - ERROR-HANDLING-001
+// Impact: Validates error handling functionality
+
+// TEST-SERVICE-ERROR-001: Error service test validation - Error service implementation testing [ACTION:validation]
+// Source: errors.go - SERVICE-ERROR-001
+// Impact: Validates error service implementation
 package main
 
 import (
@@ -642,6 +650,7 @@ func TestContextualOperation_Cleanup(t *testing.T) {
 // Test HandleArchiveError function - 0% coverage
 func TestHandleArchiveError(t *testing.T) {
 	cfg := DefaultConfig()
+	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(cfg)
 
 	tests := []struct {
@@ -930,17 +939,16 @@ func (tpr *TestPanicResource) String() string {
 
 // Test AtomicWriteFile with rename failure scenario
 func TestAtomicWriteFile_RenameFailure(t *testing.T) {
-	tempDir := t.TempDir()
 	rm := NewResourceManager()
 	defer rm.CleanupWithPanicRecovery()
 
 	// Create a scenario where rename might fail
-	// On some systems, we can create a read-only directory to test failure
+	// Use a path that requires root permissions to ensure failure
 	testData := []byte("test data")
 
 	// Test with a path that would cause rename to fail
-	// Use a directory that doesn't exist for the parent
-	invalidPath := filepath.Join(tempDir, "nonexistent_dir", "target.txt")
+	// Use a path that requires root permissions
+	invalidPath := "/root/protected_file.txt"
 
 	err := AtomicWriteFile(invalidPath, testData, rm)
 	if err == nil {

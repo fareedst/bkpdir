@@ -16,6 +16,14 @@
 
 // Package main provides comprehensive tests for archive creation, verification, and management.
 // It tests both full and incremental archive operations with various configurations.
+
+// TEST-ARCHIVE-FEATURES-001: Archive features test validation - Archive creation and management testing [ACTION:validation]
+// Source: archive.go - ARCHIVE-FEATURES-001
+// Impact: Core functionality validation for archive features
+
+// TEST-SERVICE-ARCHIVE-001: Archive service test validation - Archive service implementation testing [ACTION:validation]
+// Source: archive.go - SERVICE-ARCHIVE-001
+// Impact: Archive service validation for archive service implementation
 package main
 
 import (
@@ -27,7 +35,9 @@ import (
 	"testing"
 )
 
-// Test archive name generation
+// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-001
+// IMMUTABLE-REF: Archive Naming Convention
 func TestGenerateArchiveName(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -151,11 +161,10 @@ func TestGenerateArchiveName(t *testing.T) {
 	}
 }
 
-// TestCreateFullArchive tests the full archive creation functionality for ARCH-002 feature
+// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix ARCH-002
+// IMMUTABLE-REF: Commands - Create Archive
 func TestCreateFullArchive(t *testing.T) {
-	// ⭐ ARCH-002: Full archive creation validation - 🔧
-	// TEST-REF: Feature tracking matrix ARCH-002
-	// IMMUTABLE-REF: Commands - Create Archive
 	tempDir := t.TempDir()
 
 	sourceDir := filepath.Join(tempDir, "source")
@@ -245,11 +254,10 @@ func TestCreateFullArchive(t *testing.T) {
 	})
 }
 
-// TestCreateIncremental tests the incremental archive creation functionality for ARCH-003 feature
+// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:configuration]
+// TEST-REF: Feature tracking matrix ARCH-003
+// IMMUTABLE-REF: Commands - Create Incremental Archive
 func TestCreateIncremental(t *testing.T) {
-	// ⭐ ARCH-003: Incremental archive creation validation - 🔧
-	// TEST-REF: Feature tracking matrix ARCH-003
-	// IMMUTABLE-REF: Commands - Create Incremental Archive
 	tempDir := t.TempDir()
 
 	sourceDir := filepath.Join(tempDir, "source")
@@ -354,6 +362,9 @@ func TestCreateIncremental(t *testing.T) {
 	})
 }
 
+// ARCH-004: Symlink handling validation [DECISION:validation]
+// TEST-REF: Feature tracking matrix ARCH-004
+// IMMUTABLE-REF: Symlink Handling Requirements
 func TestSkipBrokenSymlinks(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir, err := os.MkdirTemp("", "bkpdir_symlink_test")

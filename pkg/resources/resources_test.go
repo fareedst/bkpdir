@@ -17,7 +17,9 @@ import (
 	"time"
 )
 
-// ⭐ EXTRACT-002: Resource interface testing - 🧪 TempFile functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources TempFile System
 func TestTempFile(t *testing.T) {
 	// Create a temporary file for testing
 	tempDir := t.TempDir()
@@ -60,7 +62,9 @@ func TestTempFile(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Resource interface testing - 🧪 TempDir functionality
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources TempDir System
 func TestTempDir(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir := t.TempDir()
@@ -109,7 +113,9 @@ func TestTempDir(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager testing - 🧪 Basic resource management
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Manager System
 func TestResourceManager(t *testing.T) {
 	rm := NewResourceManager()
 
@@ -187,7 +193,9 @@ func TestResourceManager(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager testing - 🧪 Resource removal
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Removal System
 func TestResourceManager_RemoveResource(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -218,7 +226,9 @@ func TestResourceManager_RemoveResource(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager testing - 🧪 Conditional cleanup
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Cleanup System
 func TestResourceManager_CleanupIf(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -260,7 +270,9 @@ func TestResourceManager_CleanupIf(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager testing - 🧪 Panic recovery
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Recovery System
 func TestResourceManager_CleanupWithPanicRecovery(t *testing.T) {
 	rm := NewResourceManager()
 
@@ -279,7 +291,9 @@ func TestResourceManager_CleanupWithPanicRecovery(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager testing - 🧪 Context-aware cleanup
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Context System
 func TestResourceManager_CleanupWithContext(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -320,7 +334,9 @@ func TestResourceManager_CleanupWithContext(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ResourceManager testing - 🧪 Concurrent access
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Concurrent System
 func TestResourceManager_ConcurrentAccess(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -373,7 +389,9 @@ func TestResourceManager_ConcurrentAccess(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: ContextualOperation testing - 🧪 Context operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Contextual System
 func TestContextualOperation(t *testing.T) {
 	ctx := context.Background()
 	co := NewContextualOperation(ctx)
@@ -436,7 +454,9 @@ func TestContextualOperation(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Context operations testing - 🧪 Atomic file operations
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Atomic System
 func TestAtomicWriteFile(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -491,7 +511,9 @@ func TestAtomicWriteFile(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Context operations testing - 🧪 Context utilities
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Context System
 func TestContextUtilities(t *testing.T) {
 	// Test WithResourceManager
 	ctx := context.Background()
@@ -583,7 +605,9 @@ func TestContextUtilities(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Error combination testing - 🧪 CombineErrors utility
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Error System
 func TestCombineErrors(t *testing.T) {
 	// Test with no errors
 	combinedErr := CombineErrors()
@@ -637,20 +661,9 @@ func TestCombineErrors(t *testing.T) {
 	}
 }
 
-// ⭐ EXTRACT-002: Mock resources for testing - 🧪 Test utilities
-
-// MockPanicResource is a resource that panics during cleanup for testing panic recovery
-type MockPanicResource struct{}
-
-func (mpr *MockPanicResource) Cleanup() error {
-	panic("test panic during cleanup")
-}
-
-func (mpr *MockPanicResource) String() string {
-	return "MockPanicResource{panic test}"
-}
-
-// ⭐ EXTRACT-002: Resource interface testing - 🧪 Integration test
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix EXTRACT-002
+// IMMUTABLE-REF: Resources Integration System
 func TestResourceManagement_Integration(t *testing.T) {
 	// Create a contextual operation
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -705,4 +718,17 @@ func TestResourceManagement_Integration(t *testing.T) {
 			t.Errorf("Temp directory %d should be removed", i)
 		}
 	}
+}
+
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
+// MockPanicResource is a resource that panics during cleanup for testing panic recovery
+type MockPanicResource struct{}
+
+func (mpr *MockPanicResource) Cleanup() error {
+	panic("test panic during cleanup")
+}
+
+func (mpr *MockPanicResource) String() string {
+	return "MockPanicResource{panic test}"
 }

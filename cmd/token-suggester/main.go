@@ -1,4 +1,4 @@
-// 🔶 DOC-010: Token analysis engine - 🔧 CLI application for automated token format suggestions
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
 import (
@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// 🔶 DOC-010: CLI application structure - 🔧 Main application framework
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 var (
 	verbose    bool
 	outputJSON bool
@@ -19,7 +19,7 @@ var (
 	dryRun     bool
 )
 
-// 🔶 DOC-010: Main command definition - 🔧 Primary CLI interface
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 var rootCmd = &cobra.Command{
 	Use:   "token-suggester",
 	Short: "Automated token format suggestion engine for AI assistants",
@@ -27,14 +27,14 @@ var rootCmd = &cobra.Command{
 implementation token formats following DOC-007/DOC-008 standardization.
 
 This tool helps AI assistants create consistently formatted implementation 
-tokens with correct priority icons (⭐🔺🔶🔻) and action icons (🔍📝🔧🛡️).`,
+tokens with correct priority levels ([CRITICAL][HIGH][MEDIUM][LOW]) and action types ([DECISION:discovery][DECISION:format-processing][DECISION:core-functionality][DECISION:validation]).`,
 	Example: `  token-suggester analyze ./pkg/config/
   token-suggester suggest-function main.go:45
   token-suggester validate-tokens . --dry-run
   token-suggester batch-suggest . --output-json`,
 }
 
-// 🔶 DOC-010: Analysis command - 🔍 Code analysis and pattern recognition
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 var analyzeCmd = &cobra.Command{
 	Use:   "analyze [directory|file]",
 	Short: "Analyze code for token suggestion opportunities",
@@ -45,9 +45,9 @@ function signatures, behavior patterns, and feature tracking mappings.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		analyzer := NewTokenAnalyzer()
 
-		// 🔶 DOC-010: Pattern recognition analysis - 🔍 Code structure analysis
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if verbose {
-			fmt.Printf("🔍 Analyzing %s for token suggestions...\n", args[0])
+			fmt.Printf("[CHECK] Analyzing %s for token suggestions...\n", args[0])
 		}
 
 		results, err := analyzer.AnalyzeTarget(args[0])
@@ -55,7 +55,7 @@ function signatures, behavior patterns, and feature tracking mappings.`,
 			return fmt.Errorf("analysis failed: %w", err)
 		}
 
-		// 🔶 DOC-010: Results presentation - 📝 Output formatting
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if outputJSON {
 			return outputResultsJSON(results)
 		}
@@ -63,7 +63,7 @@ function signatures, behavior patterns, and feature tracking mappings.`,
 	},
 }
 
-// 🔶 DOC-010: Function suggestion command - 🔧 Individual function analysis
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 var suggestFunctionCmd = &cobra.Command{
 	Use:   "suggest-function [file:line]",
 	Short: "Suggest token format for specific function",
@@ -78,13 +78,13 @@ provide detailed token format suggestions including priority and action icons.`,
 
 		analyzer := NewTokenAnalyzer()
 
-		// 🔶 DOC-010: Function-specific analysis - 🔍 Detailed function examination
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		suggestion, err := analyzer.SuggestForFunction(parts[0], parts[1])
 		if err != nil {
 			return fmt.Errorf("suggestion failed: %w", err)
 		}
 
-		// 🔶 DOC-010: Function suggestion output - 📝 Detailed suggestion formatting
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if outputJSON {
 			return outputSuggestionJSON(suggestion)
 		}
@@ -92,7 +92,7 @@ provide detailed token format suggestions including priority and action icons.`,
 	},
 }
 
-// 🔶 DOC-010: Token validation command - 🛡️ Token format validation
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 var validateCmd = &cobra.Command{
 	Use:   "validate-tokens [directory]",
 	Short: "Validate existing token formats and suggest improvements",
@@ -102,9 +102,9 @@ them against DOC-007/DOC-008 standards. Provide suggestions for improvements.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		validator := NewTokenValidator()
 
-		// 🔶 DOC-010: Token validation process - 🛡️ Standards compliance checking
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if verbose {
-			fmt.Printf("🛡️ Validating tokens in %s...\n", args[0])
+			fmt.Printf("[ACTION:validation] Validating tokens in %s...\n", args[0])
 		}
 
 		violations, err := validator.ValidateTokens(args[0])
@@ -112,7 +112,7 @@ them against DOC-007/DOC-008 standards. Provide suggestions for improvements.`,
 			return fmt.Errorf("validation failed: %w", err)
 		}
 
-		// 🔶 DOC-010: Validation results output - 📝 Violation reporting
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if outputJSON {
 			return outputViolationsJSON(violations)
 		}
@@ -120,7 +120,7 @@ them against DOC-007/DOC-008 standards. Provide suggestions for improvements.`,
 	},
 }
 
-// 🔶 DOC-010: Batch suggestion command - 🚀 Mass suggestion processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 var batchSuggestCmd = &cobra.Command{
 	Use:   "batch-suggest [directory]",
 	Short: "Generate token suggestions for entire codebase",
@@ -131,7 +131,7 @@ standardization efforts.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		processor := NewBatchProcessor()
 
-		// 🔶 DOC-010: Batch processing execution - 🚀 Comprehensive analysis
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if verbose {
 			fmt.Printf("🚀 Processing batch suggestions for %s...\n", args[0])
 		}
@@ -141,7 +141,7 @@ standardization efforts.`,
 			return fmt.Errorf("batch processing failed: %w", err)
 		}
 
-		// 🔶 DOC-010: Batch results output - 📊 Comprehensive reporting
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if outputJSON {
 			return outputBatchResultsJSON(batchResults)
 		}
@@ -149,7 +149,7 @@ standardization efforts.`,
 	},
 }
 
-// 🔶 DOC-010: Output formatting functions - 📝 Results presentation
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func outputResultsJSON(results *AnalysisResults) error {
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "  ")
@@ -157,16 +157,16 @@ func outputResultsJSON(results *AnalysisResults) error {
 }
 
 func outputResultsText(results *AnalysisResults) error {
-	fmt.Printf("📊 Token Analysis Results\n")
+	fmt.Printf("[INFO] Token Analysis Results\n")
 	fmt.Printf("========================\n\n")
 
-	fmt.Printf("📁 Analyzed: %s\n", results.Target)
-	fmt.Printf("🔍 Functions analyzed: %d\n", results.FunctionsAnalyzed)
+	fmt.Printf("[DIR] Analyzed: %s\n", results.Target)
+	fmt.Printf("[CHECK] Functions analyzed: %d\n", results.FunctionsAnalyzed)
 	fmt.Printf("🆕 Missing tokens: %d\n", results.MissingTokens)
 	fmt.Printf("⚠️  Format violations: %d\n", results.FormatViolations)
 	fmt.Printf("💡 Suggestions generated: %d\n\n", len(results.Suggestions))
 
-	// 🔶 DOC-010: Suggestion display - 📝 Human-readable output
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, suggestion := range results.Suggestions {
 		fmt.Printf("📍 %s:%d\n", suggestion.FilePath, suggestion.LineNumber)
 		fmt.Printf("   Function: %s\n", suggestion.FunctionName)
@@ -189,19 +189,19 @@ func outputSuggestionText(suggestion *TokenSuggestion) error {
 	fmt.Printf("🎯 Token Suggestion for %s\n", suggestion.FunctionName)
 	fmt.Printf("================================\n\n")
 
-	fmt.Printf("📁 File: %s:%d\n", suggestion.FilePath, suggestion.LineNumber)
-	fmt.Printf("🔧 Function: %s\n", suggestion.FunctionName)
+	fmt.Printf("[DIR] File: %s:%d\n", suggestion.FilePath, suggestion.LineNumber)
+	fmt.Printf("[ACTION] Function: %s\n", suggestion.FunctionName)
 	fmt.Printf("🎯 Feature ID: %s\n\n", suggestion.FeatureID)
 
 	fmt.Printf("💡 Suggested Token:\n")
 	fmt.Printf("   %s\n\n", suggestion.SuggestedToken)
 
-	fmt.Printf("📊 Analysis Details:\n")
+	fmt.Printf("[INFO] Analysis Details:\n")
 	fmt.Printf("   Priority: %s (%s)\n", suggestion.PriorityIcon, suggestion.PriorityReason)
 	fmt.Printf("   Action: %s (%s)\n", suggestion.ActionIcon, suggestion.ActionReason)
 	fmt.Printf("   Confidence: %.1f%%\n\n", suggestion.Confidence*100)
 
-	fmt.Printf("🔍 Function Analysis:\n")
+	fmt.Printf("[CHECK] Function Analysis:\n")
 	fmt.Printf("   Return Type: %s\n", suggestion.FunctionSignature.ReturnType)
 	fmt.Printf("   Parameters: %d\n", len(suggestion.FunctionSignature.Parameters))
 	fmt.Printf("   Complexity: %s\n", suggestion.ComplexityLevel)
@@ -216,17 +216,17 @@ func outputViolationsJSON(violations []TokenViolation) error {
 }
 
 func outputViolationsText(violations []TokenViolation, dryRun bool) error {
-	fmt.Printf("🛡️ Token Validation Results\n")
+	fmt.Printf("[ACTION:validation] Token Validation Results\n")
 	fmt.Printf("============================\n\n")
 
 	if len(violations) == 0 {
-		fmt.Printf("✅ No violations found - all tokens comply with standards!\n")
+		fmt.Printf("[SUCCESS] No violations found - all tokens comply with standards!\n")
 		return nil
 	}
 
 	fmt.Printf("⚠️  Found %d token violations:\n\n", len(violations))
 
-	// 🔶 DOC-010: Violation categorization - 🛡️ Issue classification
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, violation := range violations {
 		fmt.Printf("📍 %s:%d\n", violation.FilePath, violation.LineNumber)
 		fmt.Printf("   Issue: %s\n", violation.ViolationType)
@@ -235,7 +235,7 @@ func outputViolationsText(violations []TokenViolation, dryRun bool) error {
 		fmt.Printf("   Severity: %s\n", violation.Severity)
 
 		if dryRun {
-			fmt.Printf("   📝 DRY RUN - would apply fix\n")
+			fmt.Printf("   [NOTE] DRY RUN - would apply fix\n")
 		}
 		fmt.Printf("\n")
 	}
@@ -253,26 +253,26 @@ func outputBatchResultsText(results *BatchResults) error {
 	fmt.Printf("🚀 Batch Processing Results\n")
 	fmt.Printf("===========================\n\n")
 
-	fmt.Printf("📁 Directory: %s\n", results.Directory)
-	fmt.Printf("📊 Files processed: %d\n", results.FilesProcessed)
-	fmt.Printf("🔍 Functions analyzed: %d\n", results.TotalFunctions)
+	fmt.Printf("[DIR] Directory: %s\n", results.Directory)
+	fmt.Printf("[INFO] Files processed: %d\n", results.FilesProcessed)
+	fmt.Printf("[CHECK] Functions analyzed: %d\n", results.TotalFunctions)
 	fmt.Printf("💡 Suggestions generated: %d\n", results.TotalSuggestions)
 	fmt.Printf("⚠️  Violations found: %d\n\n", results.TotalViolations)
 
-	// 🔶 DOC-010: Priority breakdown - 📊 Suggestion categorization
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	fmt.Printf("🎯 Priority Breakdown:\n")
-	fmt.Printf("   ⭐ Critical: %d suggestions\n", results.PriorityBreakdown.Critical)
-	fmt.Printf("   🔺 High: %d suggestions\n", results.PriorityBreakdown.High)
-	fmt.Printf("   🔶 Medium: %d suggestions\n", results.PriorityBreakdown.Medium)
-	fmt.Printf("   🔻 Low: %d suggestions\n\n", results.PriorityBreakdown.Low)
+	fmt.Printf("   [CRITICAL]: %d suggestions\n", results.PriorityBreakdown.Critical)
+	fmt.Printf("   [HIGH]: %d suggestions\n", results.PriorityBreakdown.High)
+	fmt.Printf("   [MEDIUM]: %d suggestions\n", results.PriorityBreakdown.Medium)
+	fmt.Printf("   [LOW]: %d suggestions\n\n", results.PriorityBreakdown.Low)
 
-	fmt.Printf("🔧 Action Breakdown:\n")
-	fmt.Printf("   🔍 Analysis: %d suggestions\n", results.ActionBreakdown.Analysis)
-	fmt.Printf("   📝 Documentation: %d suggestions\n", results.ActionBreakdown.Documentation)
-	fmt.Printf("   🔧 Configuration: %d suggestions\n", results.ActionBreakdown.Configuration)
-	fmt.Printf("   🛡️ Protection: %d suggestions\n\n", results.ActionBreakdown.Protection)
+	fmt.Printf("[ACTION] Action Breakdown:\n")
+	fmt.Printf("   [CHECK] Analysis: %d suggestions\n", results.ActionBreakdown.Analysis)
+	fmt.Printf("   [NOTE] Documentation: %d suggestions\n", results.ActionBreakdown.Documentation)
+	fmt.Printf("   [ACTION] Configuration: %d suggestions\n", results.ActionBreakdown.Configuration)
+	fmt.Printf("   [ACTION:validation] Protection: %d suggestions\n\n", results.ActionBreakdown.Protection)
 
-	// 🔶 DOC-010: Top suggestions display - 💡 Most important suggestions
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(results.TopSuggestions) > 0 {
 		fmt.Printf("💡 Top Suggestions (by confidence):\n")
 		for i, suggestion := range results.TopSuggestions {
@@ -288,26 +288,26 @@ func outputBatchResultsText(results *BatchResults) error {
 	return nil
 }
 
-// 🔶 DOC-010: Application initialization - 🚀 Setup and configuration
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func init() {
-	// 🔶 DOC-010: Global flags - ⚙️ CLI configuration
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose output")
 	rootCmd.PersistentFlags().BoolVarP(&outputJSON, "json", "j", false, "Output results in JSON format")
 	rootCmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "Configuration file path")
 
-	// 🔶 DOC-010: Command-specific flags - ⚙️ Command configuration
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	validateCmd.Flags().BoolVar(&dryRun, "dry-run", false, "Show what would be changed without making changes")
 
-	// 🔶 DOC-010: Command registration - 🔧 CLI command structure
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	rootCmd.AddCommand(analyzeCmd)
 	rootCmd.AddCommand(suggestFunctionCmd)
 	rootCmd.AddCommand(validateCmd)
 	rootCmd.AddCommand(batchSuggestCmd)
 }
 
-// 🔶 DOC-010: Main application entry point - 🚀 CLI execution
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func main() {
-	// 🔶 DOC-010: Error handling and execution - 🛡️ Application reliability
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "❌ Error: %v\n", err)
 		os.Exit(1)

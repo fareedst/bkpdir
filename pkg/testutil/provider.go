@@ -1,4 +1,4 @@
-// ⭐ EXTRACT-009: Testing utility extraction - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 
 // DefaultTestUtilProvider provides access to all testing utilities.
@@ -14,7 +14,7 @@ type DefaultTestUtilProvider struct {
 
 // NewTestUtilProvider creates a new test utility provider with default implementations.
 //
-// ⭐ EXTRACT-009: Test utility provider creation - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewTestUtilProvider() TestUtilProvider {
 	return &DefaultTestUtilProvider{
 		configProvider:  NewConfigProvider(nil),
@@ -28,7 +28,7 @@ func NewTestUtilProvider() TestUtilProvider {
 
 // NewTestUtilProviderWithFixtureDir creates a test utility provider with a custom fixture directory.
 //
-// ⭐ EXTRACT-009: Test utility provider with custom fixture directory - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func NewTestUtilProviderWithFixtureDir(fixtureDir string) TestUtilProvider {
 	return &DefaultTestUtilProvider{
 		configProvider:  NewConfigProvider(nil),
@@ -42,49 +42,49 @@ func NewTestUtilProviderWithFixtureDir(fixtureDir string) TestUtilProvider {
 
 // GetConfigProvider returns a configuration provider for testing.
 //
-// ⭐ EXTRACT-009: Configuration provider access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) GetConfigProvider() ConfigProvider {
 	return p.configProvider
 }
 
 // GetEnvironmentManager returns an environment manager for testing.
 //
-// ⭐ EXTRACT-009: Environment manager access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) GetEnvironmentManager() EnvironmentManager {
 	return p.envManager
 }
 
 // GetFileSystemHelper returns a file system helper for testing.
 //
-// ⭐ EXTRACT-009: File system helper access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) GetFileSystemHelper() FileSystemTestHelper {
 	return p.fsHelper
 }
 
 // GetCliHelper returns a CLI helper for testing.
 //
-// ⭐ EXTRACT-009: CLI helper access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) GetCliHelper() CliTestHelper {
 	return p.cliHelper
 }
 
 // GetAssertionHelper returns an assertion helper for testing.
 //
-// ⭐ EXTRACT-009: Assertion helper access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) GetAssertionHelper() AssertionHelper {
 	return p.assertionHelper
 }
 
 // GetFixtureManager returns a fixture manager for testing.
 //
-// ⭐ EXTRACT-009: Fixture manager access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) GetFixtureManager() TestFixtureManager {
 	return p.fixtureManager
 }
 
 // CreateScenario creates a new test scenario.
 //
-// ⭐ EXTRACT-009: Test scenario creation via provider - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func (p *DefaultTestUtilProvider) CreateScenario(name, description string) TestScenario {
 	return NewTestScenario(name, description)
 }
@@ -94,14 +94,14 @@ func (p *DefaultTestUtilProvider) CreateScenario(name, description string) TestS
 // GetDefaultProvider returns a default test utility provider.
 // This is the most common way to access testutil functionality.
 //
-// ⭐ EXTRACT-009: Default provider access - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func GetDefaultProvider() TestUtilProvider {
 	return NewTestUtilProvider()
 }
 
 // GetProviderWithFixtures returns a test utility provider with a custom fixture directory.
 //
-// ⭐ EXTRACT-009: Provider with custom fixtures - 🔧
+// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func GetProviderWithFixtures(fixtureDir string) TestUtilProvider {
 	return NewTestUtilProviderWithFixtureDir(fixtureDir)
 }

@@ -3,7 +3,7 @@
 ## 📑 Purpose
 This document establishes the official guidelines for using icons in the context documentation system. It ensures the standardized icon system remains conflict-free and provides clear rules for future documentation updates.
 
-## 🛡️ Core Principles
+## [ACTION:validation] Core Principles
 
 ### ✨ **Fundamental Rules**
 1. **One Icon, One Meaning** - Each icon represents exactly one semantic concept across ALL documentation
@@ -13,14 +13,14 @@ This document establishes the official guidelines for using icons in the context
 5. **AI-Friendly Design** - Unambiguous interpretation for AI assistants
 
 ### 🚫 **Prohibited Practices** 
-- ❌ **Reusing Priority Icons** - Never use ⭐🔺🔶🔻 for non-priority meanings
-- ❌ **Phase/Step Confusion** - Don't mix 🚀⚡🔄🏁 with 1️⃣2️⃣3️⃣✅
+- ❌ **Reusing Priority Icons** - Never use [CRITICAL][HIGH][MEDIUM][LOW] for non-priority meanings
+- ❌ **Phase/Step Confusion** - Don't mix 🚀⚡[ACTION:migration]🏁 with 1️⃣2️⃣3️⃣✅
 - ❌ **Navigation Conflicts** - Keep 📑📋📊📖 separate from actions
 - ❌ **Context-Dependent Meanings** - Same icon must mean same thing everywhere
 
 ## 🔥 Priority Hierarchy Guidelines
 
-### ⭐ **CRITICAL PRIORITY** 
+### [CRITICAL] **CRITICAL PRIORITY** 
 **When to Use:**
 - ✅ Blocking issues that prevent progress
 - ✅ Mandatory actions required for ALL changes
@@ -34,12 +34,12 @@ This document establishes the official guidelines for using icons in the context
 
 **Examples:**
 ```markdown
-⭐ CRITICAL: All code changes require feature tracking
-⭐ MANDATORY: Follow protocol validation steps
-⭐ BLOCKING: Resolve dependency conflicts before extraction
+[CRITICAL] CRITICAL: All code changes require feature tracking
+[CRITICAL] MANDATORY: Follow protocol validation steps
+[CRITICAL] BLOCKING: Resolve dependency conflicts before extraction
 ```
 
-### 🔺 **HIGH PRIORITY**
+### [HIGH] **HIGH PRIORITY**
 **When to Use:**
 - ✅ Important features requiring documentation updates
 - ✅ High-value tasks that should be completed soon  
@@ -47,18 +47,18 @@ This document establishes the official guidelines for using icons in the context
 - ✅ Tasks that affect multiple components
 
 **When NOT to Use:**
-- ❌ Critical/blocking items (use ⭐ instead)
+- ❌ Critical/blocking items (use [CRITICAL] instead)
 - ❌ Medium-importance conditional items
 - ❌ Document purpose headers
 
 **Examples:**
 ```markdown
-🔺 HIGH: Configuration system requires comprehensive testing
-🔺 IMPORTANT: Git integration affects multiple workflows
-🔺 SIGNIFICANT: Format system impacts all user output
+[HIGH] HIGH: Configuration system requires comprehensive testing
+[HIGH] IMPORTANT: Git integration affects multiple workflows
+[HIGH] SIGNIFICANT: Format system impacts all user output
 ```
 
-### 🔶 **MEDIUM PRIORITY**
+### [MEDIUM] **MEDIUM PRIORITY**
 **When to Use:**
 - ✅ Conditional updates that depend on other factors
 - ✅ Secondary features with moderate importance
@@ -66,18 +66,18 @@ This document establishes the official guidelines for using icons in the context
 - ✅ Features requiring evaluation before implementation
 
 **When NOT to Use:**
-- ❌ High-importance features (use 🔺 instead)
+- ❌ High-importance features (use [HIGH] instead)
 - ❌ Analysis document headers (keep as document type)
 - ❌ Low-priority cleanup tasks
 
 **Examples:**
 ```markdown
-🔶 CONDITIONAL: Update architecture.md IF structural changes
-🔶 EVALUATE: Consider implementing advanced Git features
-🔶 SECONDARY: Performance optimizations for edge cases
+[MEDIUM] CONDITIONAL: Update architecture.md IF structural changes
+[MEDIUM] EVALUATE: Consider implementing advanced Git features
+[MEDIUM] SECONDARY: Performance optimizations for edge cases
 ```
 
-### 🔻 **LOW PRIORITY**
+### [LOW] **LOW PRIORITY**
 **When to Use:**
 - ✅ Cleanup tasks with minimal impact
 - ✅ Optional improvements and enhancements
@@ -85,15 +85,15 @@ This document establishes the official guidelines for using icons in the context
 - ✅ Minor updates and refinements
 
 **When NOT to Use:**
-- ❌ Medium-importance items (use 🔶 instead)  
+- ❌ Medium-importance items (use [MEDIUM] instead)  
 - ❌ Documentation action headers
 - ❌ Reference materials
 
 **Examples:**
 ```markdown
-🔻 MINOR: Update code comments for clarity
-🔻 OPTIONAL: Add advanced configuration examples
-🔻 CLEANUP: Remove outdated implementation notes
+[LOW] MINOR: Update code comments for clarity
+[LOW] OPTIONAL: Add advanced configuration examples
+[LOW] CLEANUP: Remove outdated implementation notes
 ```
 
 ## 📋 Process Execution Guidelines
@@ -124,7 +124,7 @@ Before making ANY changes...
 For main development work...
 ```
 
-### 🔄 **PHASE 3** (Follow-up)
+### [ACTION:migration] **PHASE 3** (Follow-up)
 **When to Use:**
 - ✅ Conditional references and evaluations
 - ✅ Follow-up work after core completion
@@ -133,7 +133,7 @@ For main development work...
 
 **Usage Pattern:**
 ```markdown
-### 🔄 PHASE 3: CONDITIONAL REFERENCES [Execute THIRD - MEDIUM PRIORITY]
+### [ACTION:migration] PHASE 3: CONDITIONAL REFERENCES [Execute THIRD - MEDIUM PRIORITY]
 Reference only if changes affect...
 ```
 
@@ -223,9 +223,9 @@ The system architecture includes...
 ## 📖 API Reference Guide
 ```
 
-## 🔧 Action Category Guidelines
+## [ACTION:core-functionality] Action Category Guidelines
 
-### 🔍 **SEARCH/DISCOVER**
+### [ACTION:discovery] **SEARCH/DISCOVER**
 **When to Use:**
 - ✅ Search actions and discovery tasks
 - ✅ Analysis and investigation activities
@@ -234,11 +234,11 @@ The system architecture includes...
 
 **Usage Pattern:**
 ```markdown
-1. **🔍 SEARCH FOR EXISTING TOKENS** [PRIORITY: CRITICAL]
-## 🔍 Token Search Quick Commands
+1. **[ACTION:discovery] SEARCH FOR EXISTING TOKENS** [PRIORITY: CRITICAL]
+## [ACTION:discovery] Token Search Quick Commands
 ```
 
-### 📝 **DOCUMENT/UPDATE**
+### [ACTION:format-processing] **DOCUMENT/UPDATE**
 **When to Use:**
 - ✅ Writing and documentation tasks
 - ✅ Update and modification actions
@@ -247,11 +247,11 @@ The system architecture includes...
 
 **Usage Pattern:**
 ```markdown
-**Phase 2: Documentation Updates 📝**
-- [ ] 📝 Updated all required documentation files
+**Phase 2: Documentation Updates [ACTION:format-processing]**
+- [ ] [ACTION:format-processing] Updated all required documentation files
 ```
 
-### 🔧 **CONFIGURE/MODIFY**
+### [ACTION:core-functionality] **CONFIGURE/MODIFY**
 **When to Use:**
 - ✅ Configuration and setup tasks
 - ✅ System modification and adjustment
@@ -260,11 +260,11 @@ The system architecture includes...
 
 **Usage Pattern:**
 ```markdown
-**🔧 MODIFY EXISTING → Execute: MODIFICATION Protocol**
-## 🔧 Configuration Management
+**[ACTION:core-functionality] MODIFY EXISTING → Execute: MODIFICATION Protocol**
+## [ACTION:core-functionality] Configuration Management
 ```
 
-### 🛡️ **PROTECT/VALIDATE**
+### [ACTION:validation] **PROTECT/VALIDATE**
 **When to Use:**
 - ✅ Security and protection tasks
 - ✅ Validation and verification activities
@@ -273,8 +273,8 @@ The system architecture includes...
 
 **Usage Pattern:**
 ```markdown
-**🛡️ MANDATORY PRE-WORK VALIDATION**
-1. **🛡️ Immutable Check**: Verify no conflicts
+**[ACTION:validation] MANDATORY PRE-WORK VALIDATION**
+1. **[ACTION:validation] Immutable Check**: Verify no conflicts
 ```
 
 ## 🚫 Common Mistakes and How to Avoid Them
@@ -286,8 +286,8 @@ The system architecture includes...
 📋 MANDATORY     # Wrong - mixes mandatory with checklist
 
 # CORRECT - Using standardized priority icons  
-🔺 HIGH PRIORITY  # Clear priority indication
-⭐ MANDATORY     # Clear critical priority
+[HIGH] HIGH PRIORITY  # Clear priority indication
+[CRITICAL] MANDATORY     # Clear critical priority
 ```
 
 ### ❌ **Mistake 2: Phase/Step Mixing**
@@ -309,7 +309,7 @@ The system architecture includes...
 
 # CORRECT - Unique meanings
 📑 Purpose       # Always means purpose
-🔺 HIGH PRIORITY # Always means high priority
+[HIGH] HIGH PRIORITY # Always means high priority
 ```
 
 ### ❌ **Mistake 4: Semantic Overloading**
@@ -321,7 +321,7 @@ The system architecture includes...
 
 # CORRECT - Distinct icons for distinct concepts
 📋 Checklist document    # Document type only
-⭐ Mandatory requirement # Priority level only
+[CRITICAL] Mandatory requirement # Priority level only
 1️⃣ Task verification     # Process step only
 ```
 
@@ -332,11 +332,11 @@ When choosing an icon, follow this decision process:
 ### 🔥 **Priority Classification**
 ```
 Is this about priority/importance?
-├─ YES: Use priority hierarchy (⭐🔺🔶🔻)
-│   ├─ Blocking/Critical? → ⭐
-│   ├─ Important/High? → 🔺  
-│   ├─ Conditional/Medium? → 🔶
-│   └─ Minor/Low? → 🔻
+├─ YES: Use priority hierarchy ([CRITICAL][HIGH][MEDIUM][LOW])
+│   ├─ Blocking/Critical? → [CRITICAL]
+│   ├─ Important/High? → [HIGH]  
+│   ├─ Conditional/Medium? → [MEDIUM]
+│   └─ Minor/Low? → [LOW]
 └─ NO: Continue to next category
 ```
 
@@ -344,7 +344,7 @@ Is this about priority/importance?
 ```
 Is this about process execution?
 ├─ YES: Determine type
-│   ├─ Sequential phases? → 🚀⚡🔄🏁
+│   ├─ Sequential phases? → 🚀⚡[ACTION:migration]🏁
 │   ├─ Numbered steps? → 1️⃣2️⃣3️⃣
 │   └─ Completion status? → ✅
 └─ NO: Continue to next category
@@ -361,18 +361,18 @@ Is this about document navigation?
 └─ NO: Continue to next category
 ```
 
-### 🔧 **Action Classification**
+### [ACTION:core-functionality] **Action Classification**
 ```
 Is this about actions/tasks?
 ├─ YES: Use action categories
-│   ├─ Search/Discovery? → 🔍
-│   ├─ Documentation? → 📝
-│   ├─ Configuration? → 🔧
-│   └─ Validation? → 🛡️
+│   ├─ Search/Discovery? → [ACTION:discovery]
+│   ├─ Documentation? → [ACTION:format-processing]
+│   ├─ Configuration? → [ACTION:core-functionality]
+│   └─ Validation? → [ACTION:validation]
 └─ NO: Use specialized icons (🧪🆕🔌🐛🚫⚠️)
 ```
 
-## 🔄 Validation and Enforcement
+## [ACTION:migration] Validation and Enforcement
 
 ### ✅ **Self-Validation Checklist**
 Before using any icon, verify:
@@ -383,7 +383,7 @@ Before using any icon, verify:
 - [ ] **Clear Semantics**: Icon meaning is obvious to AI assistants and humans
 - [ ] **Future-Proof**: Usage doesn't create potential conflicts
 
-### 🛡️ **Review Process Integration**
+### [ACTION:validation] **Review Process Integration**
 All documentation changes must verify:
 
 1. **Icon Compliance**: All icons follow these guidelines
@@ -391,14 +391,14 @@ All documentation changes must verify:
 3. **Meaning Consistency**: Same icons mean same things everywhere
 4. **Category Adherence**: Icons used in correct categories
 
-### 🔧 **Enforcement Tools**
+### [ACTION:core-functionality] **Enforcement Tools**
 ```bash
 # Validate icon consistency across documents
 grep -r "🚨\|🎯\|📋" docs/context/ # Should find zero legacy conflicts
-grep -r "⭐\|🔺\|🔶\|🔻" docs/context/ # Should find only priority usage
+grep -r "[CRITICAL]\|[HIGH]\|[MEDIUM]\|[LOW]" docs/context/ # Should find only priority usage
 
 # Check for proper phase/step usage  
-grep -r "🚀\|⚡\|🔄\|🏁" docs/context/ # Should find only phase usage
+grep -r "🚀\|⚡\|[ACTION:migration]\|🏁" docs/context/ # Should find only phase usage
 grep -r "1️⃣\|2️⃣\|3️⃣" docs/context/ # Should find only step usage
 ```
 
@@ -407,15 +407,15 @@ grep -r "1️⃣\|2️⃣\|3️⃣" docs/context/ # Should find only step usage
 ### 🔥 **Priority Icons**
 | Icon | Meaning | Usage |
 |------|---------|-------|
-| ⭐ | CRITICAL | Blocking, mandatory, urgent |
-| 🔺 | HIGH | Important, significant impact |
-| 🔶 | MEDIUM | Conditional, balanced consideration |
-| 🔻 | LOW | Minor, cleanup, optional |
+| [CRITICAL] | CRITICAL | Blocking, mandatory, urgent |
+| [HIGH] | HIGH | Important, significant impact |
+| [MEDIUM] | MEDIUM | Conditional, balanced consideration |
+| [LOW] | LOW | Minor, cleanup, optional |
 
 ### 📋 **Process Icons** 
 | Icon | Meaning | Usage |
 |------|---------|-------|
-| 🚀⚡🔄🏁 | PHASES 1-4 | Sequential phases |
+| 🚀⚡[ACTION:migration]🏁 | PHASES 1-4 | Sequential phases |
 | 1️⃣2️⃣3️⃣ | STEPS 1-3 | Numbered steps |
 | ✅ | COMPLETE | Success/completion |
 
@@ -423,12 +423,12 @@ grep -r "1️⃣\|2️⃣\|3️⃣" docs/context/ # Should find only step usage
 | Icon | Meaning | Usage |
 |------|---------|-------|
 | 📑📋📊📖 | DOCUMENT TYPES | Navigation categories |
-| 🔍📝🔧🛡️ | ACTION TYPES | Task categories |
+| [ACTION:discovery][ACTION:format-processing][ACTION:core-functionality][ACTION:validation] | ACTION TYPES | Task categories |
 
 ---
 
 **📋 Guidelines Status**: Official - Mandatory for all documentation
-**🛡️ Enforcement**: Integrated with documentation review process
-**⭐ Critical**: Zero tolerance for icon conflicts
+**[ACTION:validation] Enforcement**: Integrated with documentation review process
+**[CRITICAL] Critical**: Zero tolerance for icon conflicts
 
 // DOC-006: Icon standardization - Usage guidelines complete 

@@ -1,5 +1,16 @@
 // This file is part of bkpdir
 
+// TEST-CONFIG-DISCOVERY-001: Configuration discovery test validation - Configuration discovery and loading testing [ACTION:validation]
+// Source: config.go - CONFIG-DISCOVERY-001
+// Impact: Validates configuration discovery functionality
+
+// TEST-CONFIG-FILE-001: Configuration file test validation - Configuration file handling testing [ACTION:validation]
+// Source: config.go - CONFIG-FILE-001
+// Impact: Validates configuration file handling functionality
+
+// TEST-SERVICE-ARCH-001: Service architecture test validation - Configuration service implementation testing [ACTION:validation]
+// Source: config.go - SERVICE-ARCH-001
+// Impact: Validates configuration service implementation
 package main
 
 import (
@@ -27,10 +38,10 @@ var (
 	testExcludePatterns    = []string{"node_modules/", "*.log"}
 )
 
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
+// TEST-REF: Feature tracking matrix CFG-002
+// IMMUTABLE-REF: Configuration System
 func TestDefaultConfig(t *testing.T) {
-	// 🔺 CFG-002: Configuration defaults validation - 📝
-	// TEST-REF: Feature tracking matrix CFG-002
-	// IMMUTABLE-REF: Configuration System
 	cfg := DefaultConfig()
 
 	t.Run("default values", func(t *testing.T) {
@@ -49,8 +60,10 @@ func TestDefaultConfig(t *testing.T) {
 	})
 }
 
+// TEST-FIX-001: Configuration isolation validation [DECISION:validation]
+// TEST-REF: Feature tracking matrix TEST-FIX-001
+// IMMUTABLE-REF: Configuration Isolation Requirements
 func TestLoadConfig(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
@@ -118,6 +131,9 @@ func TestLoadConfig(t *testing.T) {
 	})
 }
 
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// TEST-REF: Feature tracking matrix CFG-003
+// IMMUTABLE-REF: Configuration Value System
 func TestGetConfigValues(t *testing.T) {
 	t.Run("returns expected config values", func(t *testing.T) {
 		cfg := DefaultConfig()
@@ -151,11 +167,10 @@ func TestGetConfigValues(t *testing.T) {
 	})
 }
 
-// TestGetConfigSearchPath tests the configuration search path functionality for CFG-001 feature
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
+// TEST-REF: Feature tracking matrix CFG-001
+// IMMUTABLE-REF: Configuration Discovery
 func TestGetConfigSearchPath(t *testing.T) {
-	// 🔺 CFG-001: Configuration discovery validation - 🔍
-	// TEST-REF: Feature tracking matrix CFG-001
-	// IMMUTABLE-REF: Configuration Discovery
 	// Test basic path retrieval
 
 	// Save original environment
@@ -238,9 +253,9 @@ func TestGetConfigSearchPath(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-001: Test GetConfigValuesWithSources for comprehensive configuration value extraction - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 func TestGetConfigValuesWithSources(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
@@ -388,9 +403,9 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-001: Test determineConfigSource for config file source detection - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 func TestDetermineConfigSource(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
@@ -455,7 +470,7 @@ func TestDetermineConfigSource(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-001: Test createSourceDeterminer for config value source determination - 🔧
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 func TestCreateSourceDeterminer(t *testing.T) {
 	t.Run("string value comparison", func(t *testing.T) {
 		determiner := createSourceDeterminer("/test/config.yml")
@@ -530,7 +545,7 @@ func TestCreateSourceDeterminer(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-001: Test helper functions for config value extraction - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 func TestGetBasicConfigValues(t *testing.T) {
 	cfg := DefaultConfig()
 	defaultCfg := DefaultConfig()
@@ -576,7 +591,7 @@ func TestGetBasicConfigValues(t *testing.T) {
 	}
 }
 
-// 🔺 CFG-002: Test status code value extraction - 🔍
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 func TestGetStatusCodeValues(t *testing.T) {
 	cfg := DefaultConfig()
 	defaultCfg := DefaultConfig()
@@ -622,7 +637,7 @@ func TestGetStatusCodeValues(t *testing.T) {
 	}
 }
 
-// 🔺 CFG-001: Test verification value extraction - 🔍
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 func TestGetVerificationValues(t *testing.T) {
 	cfg := DefaultConfig()
 	defaultCfg := DefaultConfig()
@@ -668,7 +683,7 @@ func TestGetVerificationValues(t *testing.T) {
 	}
 }
 
-// 🔺 CFG-004: Test mergeExtendedFormatStrings for extended string configuration - 📝
+// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 func TestMergeExtendedFormatStrings(t *testing.T) {
 	t.Run("merge non-default format strings", func(t *testing.T) {
 		dst := DefaultConfig()
@@ -782,7 +797,7 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-004: Test mergeExtendedTemplates for extended template configuration - 📝
+// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 func TestMergeExtendedTemplates(t *testing.T) {
 	t.Run("merge non-default template strings", func(t *testing.T) {
 		dst := DefaultConfig()
@@ -896,7 +911,7 @@ func TestMergeExtendedTemplates(t *testing.T) {
 	})
 }
 
-// 🔺 TEST-CONFIG-001: Test placeholder functions with basic implementation - 🔧
+// TEST-CONFIG-001: Test placeholder functions with basic implementation
 func TestPlaceholderConfigFunctions(t *testing.T) {
 	t.Run("LoadConfigValues placeholder", func(t *testing.T) {
 		dir := t.TempDir()
@@ -1039,7 +1054,7 @@ func createTestConfigFileWithData(t *testing.T, configPath string, data map[stri
 	}
 }
 
-// ⭐ CFG-005: Configuration inheritance testing - 🧪 Comprehensive inheritance test coverage
+// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 
 // TestConfigInheritance tests basic configuration inheritance functionality
 func TestConfigInheritance(t *testing.T) {
@@ -1361,7 +1376,7 @@ include_git_info: false
 	}
 }
 
-// 🔺 CFG-006: Complete Configuration Reflection and Visibility Tests - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 4: Create comprehensive test suite
 // TestConfigReflection validates the automatic field discovery and enhanced source tracking system.
 
@@ -1649,7 +1664,7 @@ func TestConfigReflection(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Field discovery performance test - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 5.3: Performance validation
 func TestConfigReflectionPerformance(t *testing.T) {
 	cfg := DefaultConfig()
@@ -1670,7 +1685,7 @@ func TestConfigReflectionPerformance(t *testing.T) {
 	}
 }
 
-// 🔺 CFG-006: Source tracking integration test - 🔍
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 4.1: Integration with existing config system
 func TestConfigReflectionIntegration(t *testing.T) {
 	// Create temporary directory for test
@@ -1747,7 +1762,7 @@ status_created_archive: 100
 	}
 }
 
-// 🔺 CFG-006: Comprehensive testing - Advanced field discovery edge cases - 🧪
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 7: Comprehensive testing implementation
 // TestAdvancedFieldDiscovery validates edge cases in automatic field discovery that extend beyond basic reflection.
 
@@ -1975,7 +1990,7 @@ func TestAdvancedFieldDiscovery(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Field discovery error handling - 🧪
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 7: Comprehensive testing implementation
 // TestFieldDiscoveryErrorHandling validates graceful handling of problematic struct scenarios.
 
@@ -2188,9 +2203,9 @@ func TestFieldDiscoveryErrorHandling(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 2: Source Attribution Accuracy Testing
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestSourceAttributionAccuracy(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -2368,9 +2383,9 @@ func TestSourceAttributionAccuracy(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 2: Source Conflict Detection
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestSourceConflictDetection(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -2458,9 +2473,9 @@ func TestSourceConflictDetection(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 3: Display Formatting Validation
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestDisplayFormatting(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -2742,9 +2757,9 @@ func TestDisplayFormatting(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 3: Formatting Edge Cases
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestFormattingEdgeCases(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -2868,7 +2883,7 @@ func TestFormattingEdgeCases(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Debug test for categories and paths
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestCategoryDebug(t *testing.T) {
 	dir := t.TempDir()
 
@@ -2907,9 +2922,9 @@ func TestCategoryDebug(t *testing.T) {
 	}
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 4: Filtering Functionality Testing
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestFilteringFunctionality(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -3197,9 +3212,9 @@ func TestFilteringFunctionality(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 4: Advanced Filtering Edge Cases
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestAdvancedFilteringEdgeCases(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -3327,9 +3342,9 @@ func TestAdvancedFilteringEdgeCases(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Phase 5: Performance Optimization Validation
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestPerformanceOptimization(t *testing.T) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -3498,9 +3513,9 @@ func TestPerformanceOptimization(t *testing.T) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Performance benchmark validation
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func BenchmarkConfigReflectionOperations(b *testing.B) {
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -3548,13 +3563,13 @@ func BenchmarkConfigReflectionOperations(b *testing.B) {
 	})
 }
 
-// 🔺 CFG-006: Comprehensive testing - Stress test for complex scenarios
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 func TestConfigReflectionStressTest(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping stress test in short mode")
 	}
 
-	// 🔶 TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference - 🔧
+	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
 	defer func() {
 		if origEnv == "" {
@@ -3661,7 +3676,7 @@ func TestConfigReflectionStressTest(t *testing.T) {
 	})
 }
 
-// 🔶 GIT-005: Git configuration integration test - 📝
+// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 func TestGitConfigIntegration(t *testing.T) {
 	t.Run("GitConfig to pkg/git Config conversion", func(t *testing.T) {
 		// Create a GitConfig with all fields set
@@ -3836,4 +3851,220 @@ func TestGitConfigIntegration(t *testing.T) {
 			t.Errorf("Expected default Command=%s, got %s", defaultConfig.Command, pkgGitConfig.Command)
 		}
 	})
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 5: Inheritance chain tracking tests
+// TestInheritanceChainTracking tests the inheritance chain tracking functionality.
+func TestInheritanceChainTracking(t *testing.T) {
+	cfg := DefaultConfig()
+
+	// Test inheritance chain tracking for a field
+	inheritanceChain, mergeStrategy, conflictSources := trackInheritanceChain("archive_dir_path", cfg, ".")
+
+	// Should have at least default in inheritance chain
+	if len(inheritanceChain) == 0 {
+		t.Error("Expected inheritance chain to contain at least default")
+	}
+
+	// Should have a valid merge strategy
+	if mergeStrategy == "" {
+		t.Error("Expected non-empty merge strategy")
+	}
+
+	// Conflict sources should be a slice (even if empty)
+	if conflictSources == nil {
+		t.Error("Expected conflict sources to be a slice")
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 6: Merge strategy tracking tests
+// TestMergeStrategyTracking tests the merge strategy detection functionality.
+func TestMergeStrategyTracking(t *testing.T) {
+	// Test different field types and their expected merge strategies
+	testCases := []struct {
+		fieldPath string
+		value     interface{}
+		expected  string
+	}{
+		{"exclude_patterns", []string{"*.tmp"}, "append"},
+		{"archive_dir_path", "./archives", "override"},
+		{"git.enabled", true, "merge"},
+		{"verification.verify_on_create", true, "override"},
+		{"patterns.archive_filename", "*.zip", "prepend"},
+	}
+
+	for _, tc := range testCases {
+		strategy := determineMergeStrategyForField(tc.fieldPath, tc.value, nil)
+		if strategy != tc.expected {
+			t.Errorf("Expected merge strategy %s for %s, got %s", tc.expected, tc.fieldPath, strategy)
+		}
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Configuration validation tests
+// TestConfigurationValidation tests the configuration validation functionality.
+func TestConfigurationValidation(t *testing.T) {
+	cfg := DefaultConfig()
+	rules := GetDefaultValidationRules()
+
+	// Test validation with default config (should pass)
+	errors := ValidateConfiguration(cfg, rules)
+	if len(errors) > 0 {
+		t.Errorf("Expected no validation errors for default config, got %d", len(errors))
+	}
+
+	// Test individual field validation
+	testCases := []struct {
+		fieldPath string
+		value     interface{}
+		ruleType  string
+		shouldErr bool
+	}{
+		{"archive_dir_path", "", "required", true},
+		{"archive_dir_path", "./archives", "required", false},
+		{"status_created_archive", 300, "range", true},
+		{"status_created_archive", 0, "range", false},
+		{"pattern_archive_filename", "invalid<>chars", "pattern", true},
+		{"pattern_archive_filename", "valid_name", "pattern", false},
+	}
+
+	for _, tc := range testCases {
+		rule := ConfigValidationRule{
+			FieldPath: tc.fieldPath,
+			RuleType:  tc.ruleType,
+		}
+
+		switch tc.ruleType {
+		case "range":
+			rule.MinValue = 0
+			rule.MaxValue = 255
+		case "pattern":
+			rule.Pattern = `^[^*?:"<>|]+$`
+		}
+
+		errors := validateConfigField(tc.fieldPath, tc.value, []ConfigValidationRule{rule})
+
+		if tc.shouldErr && len(errors) == 0 {
+			t.Errorf("Expected validation error for %s with value %v", tc.fieldPath, tc.value)
+		}
+		if !tc.shouldErr && len(errors) > 0 {
+			t.Errorf("Unexpected validation error for %s with value %v: %v", tc.fieldPath, tc.value, errors)
+		}
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 7: Documentation generation tests
+// TestDocumentationGeneration tests the documentation generation functionality.
+func TestDocumentationGeneration(t *testing.T) {
+	cfg := DefaultConfig()
+
+	// Test documentation generation
+	docs := GenerateConfigDocumentation(cfg)
+	if len(docs) == 0 {
+		t.Error("Expected documentation for at least one field")
+	}
+
+	// Check that we have documentation for key fields
+	fieldPaths := make(map[string]bool)
+	for _, doc := range docs {
+		fieldPaths[doc.FieldPath] = true
+		t.Logf("Found documentation for field: %s", doc.FieldPath)
+	}
+
+	expectedFields := []string{"archive_dir_path", "exclude_patterns", "status_created_archive"}
+	for _, field := range expectedFields {
+		if !fieldPaths[field] {
+			t.Errorf("Expected documentation for field %s", field)
+		}
+	}
+
+	// Test markdown generation
+	markdown := GenerateMarkdownDocumentation(cfg)
+	if !strings.Contains(markdown, "# BkpDir Configuration Reference") {
+		t.Error("Expected markdown to contain header")
+	}
+
+	// Test JSON schema generation
+	schema := GenerateJSONSchema(cfg)
+	if !strings.Contains(schema, `"$schema"`) {
+		t.Error("Expected JSON schema to contain schema reference")
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 8: Enhanced metadata tests
+// TestEnhancedMetadata tests the enhanced metadata functionality.
+func TestEnhancedMetadata(t *testing.T) {
+	cfg := DefaultConfig()
+
+	// Test enhanced config values with metadata
+	values := GetAllConfigValuesWithSources(cfg, ".")
+	if len(values) == 0 {
+		t.Error("Expected at least one config value with metadata")
+	}
+
+	// Check that each value has enhanced metadata
+	for _, value := range values {
+		if len(value.InheritanceChain) == 0 {
+			t.Errorf("Expected inheritance chain for field %s", value.FieldInfo.Path)
+		}
+
+		if value.MergeStrategy == "" {
+			t.Errorf("Expected merge strategy for field %s", value.FieldInfo.Path)
+		}
+
+		// Conflict sources should be a slice (even if empty)
+		if value.ConflictSources == nil {
+			t.Errorf("Expected conflict sources to be a slice for field %s", value.FieldInfo.Path)
+		}
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Integration tests
+// TestCFG006Integration tests the complete CFG-006 functionality integration.
+func TestCFG006Integration(t *testing.T) {
+	cfg := DefaultConfig()
+
+	// Test complete workflow
+	// 1. Get all fields with reflection
+	fields := GetAllConfigFields(cfg)
+	if len(fields) == 0 {
+		t.Error("Expected at least one field from reflection")
+	}
+
+	// 2. Get enhanced values with inheritance tracking
+	values := GetAllConfigValuesWithSources(cfg, ".")
+	if len(values) != len(fields) {
+		t.Errorf("Expected same number of values as fields, got %d vs %d", len(values), len(fields))
+	}
+
+	// 3. Validate configuration
+	rules := GetDefaultValidationRules()
+	errors := ValidateConfiguration(cfg, rules)
+	if len(errors) > 0 {
+		t.Errorf("Expected no validation errors for default config, got %d", len(errors))
+	}
+
+	// 4. Generate documentation
+	docs := GenerateConfigDocumentation(cfg)
+	if len(docs) == 0 {
+		t.Error("Expected documentation for at least one field")
+	}
+
+	// 5. Generate markdown
+	markdown := GenerateMarkdownDocumentation(cfg)
+	if len(markdown) == 0 {
+		t.Error("Expected non-empty markdown documentation")
+	}
+
+	// 6. Generate JSON schema
+	schema := GenerateJSONSchema(cfg)
+	if len(schema) == 0 {
+		t.Error("Expected non-empty JSON schema")
+	}
 }

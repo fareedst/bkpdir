@@ -1,4 +1,4 @@
-// 🔶 DOC-010: Token analysis engine - 🔍 Core analysis and suggestion logic
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
 import (
@@ -16,25 +16,25 @@ import (
 	"time"
 )
 
-// 🔶 DOC-010: Core token analyzer - 🔍 Main analysis engine
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type TokenAnalyzer struct {
 	config     *AnalysisConfig
 	fileSet    *token.FileSet
 	featureMap map[string]FeatureMapping
 }
 
-// 🔶 DOC-010: Token validator - 🛡️ Standards compliance validator
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type TokenValidator struct {
 	config *AnalysisConfig
 }
 
-// 🔶 DOC-010: Batch processor - 🚀 Mass processing engine
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 type BatchProcessor struct {
 	analyzer  *TokenAnalyzer
 	validator *TokenValidator
 }
 
-// 🔶 DOC-010: Analyzer constructor - 🔧 Initialize analysis engine
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func NewTokenAnalyzer() *TokenAnalyzer {
 	config := DefaultAnalysisConfig()
 	analyzer := &TokenAnalyzer{
@@ -42,23 +42,23 @@ func NewTokenAnalyzer() *TokenAnalyzer {
 		fileSet: token.NewFileSet(),
 	}
 
-	// 🔶 DOC-010: Feature tracking integration - 🎯 Load feature mappings
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if err := analyzer.loadFeatureMappings(); err != nil {
-		// 🔶 DOC-010: Fallback to empty mapping - 🛡️ Graceful degradation
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		analyzer.featureMap = make(map[string]FeatureMapping)
 	}
 
 	return analyzer
 }
 
-// 🔶 DOC-010: Validator constructor - 🛡️ Initialize validation engine
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func NewTokenValidator() *TokenValidator {
 	return &TokenValidator{
 		config: DefaultAnalysisConfig(),
 	}
 }
 
-// 🔶 DOC-010: Batch processor constructor - 🚀 Initialize batch processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func NewBatchProcessor() *BatchProcessor {
 	return &BatchProcessor{
 		analyzer:  NewTokenAnalyzer(),
@@ -66,11 +66,11 @@ func NewBatchProcessor() *BatchProcessor {
 	}
 }
 
-// 🔶 DOC-010: Feature mapping loader - 🎯 Feature tracking integration
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) loadFeatureMappings() error {
 	ta.featureMap = make(map[string]FeatureMapping)
 
-	// 🔶 DOC-010: Feature tracking file processing - 📝 Parse feature tracking
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	file, err := os.Open(ta.config.FeatureTrackingFile)
 	if err != nil {
 		return fmt.Errorf("failed to open feature tracking file: %w", err)
@@ -78,9 +78,9 @@ func (ta *TokenAnalyzer) loadFeatureMappings() error {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	featureRegex := regexp.MustCompile(`\|\s*([A-Z]+-[0-9]+)\s*\|.*\|\s*(⭐|🔺|🔶|🔻)\s*(CRITICAL|HIGH|MEDIUM|LOW)`)
+	featureRegex := regexp.MustCompile(`\|\s*([A-Z]+-[0-9]+)\s*\|.*\|\s*\[(CRITICAL|HIGH|MEDIUM|LOW)\]\s*(CRITICAL|HIGH|MEDIUM|LOW)`)
 
-	// 🔶 DOC-010: Feature extraction from table - 🔍 Parse feature entries
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for scanner.Scan() {
 		line := scanner.Text()
 		matches := featureRegex.FindStringSubmatch(line)
@@ -97,7 +97,7 @@ func (ta *TokenAnalyzer) loadFeatureMappings() error {
 				Category:    strings.Split(featureID, "-")[0],
 			}
 
-			// 🔶 DOC-010: Priority icon validation - 🛡️ Consistency checking
+			// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 			if priorityIcon != "" {
 				// Store the icon for consistency checking
 				if ta.featureMap[featureID].Priority == "" {
@@ -112,11 +112,11 @@ func (ta *TokenAnalyzer) loadFeatureMappings() error {
 	return scanner.Err()
 }
 
-// 🔶 DOC-010: Target analysis - 🔍 Analyze directory or file
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) AnalyzeTarget(target string) (*AnalysisResults, error) {
 	startTime := time.Now()
 
-	// 🔶 DOC-010: Target validation - 🛡️ Input validation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	info, err := os.Stat(target)
 	if err != nil {
 		return nil, fmt.Errorf("target not found: %w", err)
@@ -131,7 +131,7 @@ func (ta *TokenAnalyzer) AnalyzeTarget(target string) (*AnalysisResults, error) 
 		AnalysisTimestamp: time.Now(),
 	}
 
-	// 🔶 DOC-010: Directory vs file processing - 🔧 Path handling
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if info.IsDir() {
 		err = ta.analyzeDirectory(target, results)
 	} else {
@@ -142,21 +142,21 @@ func (ta *TokenAnalyzer) AnalyzeTarget(target string) (*AnalysisResults, error) 
 		return nil, fmt.Errorf("analysis failed: %w", err)
 	}
 
-	// 🔶 DOC-010: Results post-processing - 📊 Statistics calculation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	ta.calculateStatistics(results)
 	results.ProcessingTime = time.Since(startTime)
 
 	return results, nil
 }
 
-// 🔶 DOC-010: Directory analysis - 🔍 Recursive directory processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) analyzeDirectory(dir string, results *AnalysisResults) error {
 	return filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// 🔶 DOC-010: Go file filtering - 📁 File type validation
+		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if !info.IsDir() && strings.HasSuffix(path, ".go") {
 			// Skip test files unless explicitly requested
 			if strings.HasSuffix(path, "_test.go") {
@@ -170,9 +170,9 @@ func (ta *TokenAnalyzer) analyzeDirectory(dir string, results *AnalysisResults) 
 	})
 }
 
-// 🔶 DOC-010: File analysis - 🔍 Individual file processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) analyzeFile(filePath string, results *AnalysisResults) error {
-	// 🔶 DOC-010: AST parsing - 🔍 Code structure analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	src, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file %s: %w", filePath, err)
@@ -183,14 +183,14 @@ func (ta *TokenAnalyzer) analyzeFile(filePath string, results *AnalysisResults) 
 		return fmt.Errorf("failed to parse file %s: %w", filePath, err)
 	}
 
-	// 🔶 DOC-010: Function discovery - 🔍 Function extraction
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	ast.Inspect(file, func(n ast.Node) bool {
 		switch node := n.(type) {
 		case *ast.FuncDecl:
 			if node.Name != nil && node.Name.IsExported() {
 				results.FunctionsAnalyzed++
 
-				// 🔶 DOC-010: Function analysis - 🔍 Individual function processing
+				// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 				suggestion, err := ta.analyzeFunctionDecl(filePath, node, src)
 				if err == nil && suggestion != nil {
 					results.Suggestions = append(results.Suggestions, *suggestion)
@@ -203,21 +203,21 @@ func (ta *TokenAnalyzer) analyzeFile(filePath string, results *AnalysisResults) 
 	return nil
 }
 
-// 🔶 DOC-010: Function declaration analysis - 🔍 Function-specific analysis
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) analyzeFunctionDecl(filePath string, funcDecl *ast.FuncDecl, src []byte) (*TokenSuggestion, error) {
-	// 🔶 DOC-010: Function signature extraction - 📝 Signature analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	signature := ta.extractFunctionSignature(funcDecl)
 
-	// 🔶 DOC-010: Line number calculation - 📍 Position tracking
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	position := ta.fileSet.Position(funcDecl.Pos())
 
-	// 🔶 DOC-010: Context analysis - 🔍 Surrounding code analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	context, err := ta.analyzeContext(filePath, position.Line, src)
 	if err != nil {
 		return nil, fmt.Errorf("context analysis failed: %w", err)
 	}
 
-	// 🔶 DOC-010: Token suggestion generation - 💡 Suggestion creation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion := &TokenSuggestion{
 		FilePath:          filePath,
 		LineNumber:        position.Line,
@@ -227,22 +227,22 @@ func (ta *TokenAnalyzer) analyzeFunctionDecl(filePath string, funcDecl *ast.Func
 		Timestamp:         time.Now(),
 	}
 
-	// 🔶 DOC-010: Priority assignment - ⭐ Priority determination
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion.PriorityIcon, suggestion.PriorityReason = ta.determinePriority(signature, context)
 
-	// 🔶 DOC-010: Action assignment - 🔧 Action determination
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion.ActionIcon, suggestion.ActionReason = ta.determineAction(signature, context)
 
-	// 🔶 DOC-010: Feature mapping - 🎯 Feature ID assignment
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion.FeatureID = ta.determineFeatureID(signature, context)
 
-	// 🔶 DOC-010: Confidence calculation - 📊 Quality scoring
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion.Confidence = ta.calculateConfidence(signature, context, suggestion)
 
-	// 🔶 DOC-010: Complexity analysis - 📊 Complexity determination
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion.ComplexityLevel = ta.analyzeComplexity(funcDecl)
 
-	// 🔶 DOC-010: Token format generation - 📝 Final token creation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	suggestion.SuggestedToken = fmt.Sprintf("// %s %s: %s - %s %s",
 		suggestion.PriorityIcon,
 		suggestion.FeatureID,
@@ -253,7 +253,7 @@ func (ta *TokenAnalyzer) analyzeFunctionDecl(filePath string, funcDecl *ast.Func
 	return suggestion, nil
 }
 
-// 🔶 DOC-010: Function signature extraction - 📝 Signature parsing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) extractFunctionSignature(funcDecl *ast.FuncDecl) FunctionSignature {
 	signature := FunctionSignature{
 		Name:       funcDecl.Name.Name,
@@ -261,7 +261,7 @@ func (ta *TokenAnalyzer) extractFunctionSignature(funcDecl *ast.FuncDecl) Functi
 		Parameters: make([]Parameter, 0),
 	}
 
-	// 🔶 DOC-010: Receiver analysis - 🔍 Method receiver extraction
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if funcDecl.Recv != nil {
 		for _, field := range funcDecl.Recv.List {
 			if len(field.Names) > 0 {
@@ -270,7 +270,7 @@ func (ta *TokenAnalyzer) extractFunctionSignature(funcDecl *ast.FuncDecl) Functi
 		}
 	}
 
-	// 🔶 DOC-010: Parameter extraction - 📝 Parameter analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if funcDecl.Type.Params != nil {
 		for _, field := range funcDecl.Type.Params.List {
 			paramType := "unknown"
@@ -294,7 +294,7 @@ func (ta *TokenAnalyzer) extractFunctionSignature(funcDecl *ast.FuncDecl) Functi
 		}
 	}
 
-	// 🔶 DOC-010: Return type extraction - 📝 Return type analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if funcDecl.Type.Results != nil {
 		returnTypes := make([]string, 0)
 		for _, field := range funcDecl.Type.Results.List {
@@ -310,42 +310,42 @@ func (ta *TokenAnalyzer) extractFunctionSignature(funcDecl *ast.FuncDecl) Functi
 	return signature
 }
 
-// 🔶 DOC-010: Context analysis - 🔍 Surrounding code analysis
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) analyzeContext(filePath string, lineNumber int, src []byte) (map[string]string, error) {
 	context := make(map[string]string)
 
-	// 🔶 DOC-010: Source code line extraction - 📝 Line-based analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	lines := strings.Split(string(src), "\n")
 	if lineNumber > len(lines) {
 		return context, fmt.Errorf("line number %d exceeds file length", lineNumber)
 	}
 
-	// 🔶 DOC-010: Context window extraction - 🔍 Surrounding code collection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	start := max(0, lineNumber-5)
 	end := min(len(lines), lineNumber+5)
 
 	contextLines := lines[start:end]
 	context["surrounding_code"] = strings.Join(contextLines, "\n")
 
-	// 🔶 DOC-010: Pattern matching - 🔍 Code pattern recognition
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	fullCode := strings.Join(lines, "\n")
 
-	// 🔶 DOC-010: Error handling detection - 🛡️ Error pattern analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(fullCode, "error") || strings.Contains(fullCode, "err") {
 		context["error_handling"] = "true"
 	}
 
-	// 🔶 DOC-010: Resource management detection - 🛡️ Resource pattern analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(fullCode, "defer") || strings.Contains(fullCode, "Close") {
 		context["resource_management"] = "true"
 	}
 
-	// 🔶 DOC-010: Configuration detection - 🔧 Config pattern analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(fullCode, "config") || strings.Contains(fullCode, "Config") {
 		context["configuration_related"] = "true"
 	}
 
-	// 🔶 DOC-010: File operation detection - 🔍 File pattern analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(fullCode, "file") || strings.Contains(fullCode, "File") {
 		context["file_operations"] = "true"
 	}
@@ -353,94 +353,94 @@ func (ta *TokenAnalyzer) analyzeContext(filePath string, lineNumber int, src []b
 	return context, nil
 }
 
-// 🔶 DOC-010: Priority determination - ⭐ Priority assignment logic
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) determinePriority(signature FunctionSignature, context map[string]string) (string, string) {
 	funcName := strings.ToLower(signature.Name)
 
-	// 🔶 DOC-010: Critical priority patterns - ⭐ Critical function detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.PriorityRules.CriticalPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "⭐", fmt.Sprintf("Critical operation: %s", pattern)
+			return "[CRITICAL]", fmt.Sprintf("Critical operation: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: High priority patterns - 🔺 High priority detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.PriorityRules.HighPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "🔺", fmt.Sprintf("High priority: %s", pattern)
+			return "[HIGH]", fmt.Sprintf("High priority: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: Medium priority patterns - 🔶 Medium priority detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.PriorityRules.MediumPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "🔶", fmt.Sprintf("Medium priority: %s", pattern)
+			return "[MEDIUM]", fmt.Sprintf("Medium priority: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: Context-based priority adjustment - 🔍 Context priority analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if context["error_handling"] == "true" {
-		return "🔺", "High priority: error handling function"
+		return "[HIGH]", "High priority: error handling function"
 	}
 
 	if context["resource_management"] == "true" {
-		return "🔺", "High priority: resource management function"
+		return "[HIGH]", "High priority: resource management function"
 	}
 
-	// 🔶 DOC-010: Default low priority - 🔻 Default assignment
-	return "🔻", "Low priority: utility function"
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+	return "[LOW]", "Low priority: utility function"
 }
 
-// 🔶 DOC-010: Action determination - 🔧 Action assignment logic
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) determineAction(signature FunctionSignature, context map[string]string) (string, string) {
 	funcName := strings.ToLower(signature.Name)
 
-	// 🔶 DOC-010: Analysis action patterns - 🔍 Analysis function detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.ActionRules.AnalysisPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "🔍", fmt.Sprintf("Analysis operation: %s", pattern)
+			return "[DECISION:discovery]", fmt.Sprintf("Analysis operation: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: Documentation action patterns - 📝 Documentation function detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.ActionRules.DocumentationPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "📝", fmt.Sprintf("Documentation operation: %s", pattern)
+			return "[DECISION:format-processing]", fmt.Sprintf("Documentation operation: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: Configuration action patterns - 🔧 Configuration function detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.ActionRules.ConfigurationPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "🔧", fmt.Sprintf("Configuration operation: %s", pattern)
+			return "[DECISION:core-functionality]", fmt.Sprintf("Configuration operation: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: Protection action patterns - 🛡️ Protection function detection
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for _, pattern := range ta.config.ActionRules.ProtectionPatterns {
 		if strings.Contains(funcName, strings.ToLower(pattern)) {
-			return "🛡️", fmt.Sprintf("Protection operation: %s", pattern)
+			return "[DECISION:validation]", fmt.Sprintf("Protection operation: %s", pattern)
 		}
 	}
 
-	// 🔶 DOC-010: Context-based action assignment - 🔍 Context action analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if context["error_handling"] == "true" {
-		return "🛡️", "Protection: error handling"
+		return "[DECISION:validation]", "Protection: error handling"
 	}
 
 	if context["configuration_related"] == "true" {
-		return "🔧", "Configuration: config management"
+		return "[DECISION:core-functionality]", "Configuration: config management"
 	}
 
-	// 🔶 DOC-010: Default configuration action - 🔧 Default assignment
-	return "🔧", "Configuration: general operation"
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+	return "[DECISION:core-functionality]", "Configuration: general operation"
 }
 
-// 🔶 DOC-010: Feature ID determination - 🎯 Feature mapping logic
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) determineFeatureID(signature FunctionSignature, context map[string]string) string {
 	funcName := strings.ToLower(signature.Name)
 
-	// 🔶 DOC-010: Direct feature mapping - 🎯 Feature tracking lookup
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for featureID, mapping := range ta.featureMap {
 		category := strings.ToLower(mapping.Category)
 		if strings.Contains(funcName, category) {
@@ -448,7 +448,7 @@ func (ta *TokenAnalyzer) determineFeatureID(signature FunctionSignature, context
 		}
 	}
 
-	// 🔶 DOC-010: Category-based assignment - 🎯 Category inference
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if strings.Contains(funcName, "config") {
 		return "CFG-NEW"
 	}
@@ -465,45 +465,45 @@ func (ta *TokenAnalyzer) determineFeatureID(signature FunctionSignature, context
 		return "TEST-NEW"
 	}
 
-	// 🔶 DOC-010: Default generic assignment - 🎯 Fallback assignment
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return "UTIL-NEW"
 }
 
-// 🔶 DOC-010: Confidence calculation - 📊 Quality scoring algorithm
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) calculateConfidence(signature FunctionSignature, context map[string]string, suggestion *TokenSuggestion) float64 {
 	confidence := 0.0
 	weights := ta.config.ConfidenceWeights
 
-	// 🔶 DOC-010: Signature matching confidence - 📝 Signature quality assessment
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if signature.IsExported && len(signature.Parameters) > 0 {
 		confidence += weights.SignatureMatch
 	}
 
-	// 🔶 DOC-010: Pattern matching confidence - 🔍 Pattern recognition quality
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if suggestion.PriorityReason != "Low priority: utility function" {
 		confidence += weights.PatternMatch
 	}
 
-	// 🔶 DOC-010: Context matching confidence - 🔍 Context analysis quality
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(context) > 2 {
 		confidence += weights.ContextMatch
 	}
 
-	// 🔶 DOC-010: Feature mapping confidence - 🎯 Feature tracking quality
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if !strings.HasSuffix(suggestion.FeatureID, "-NEW") {
 		confidence += weights.FeatureMapping
 	}
 
-	// 🔶 DOC-010: Complexity factor - 📊 Complexity-based adjustment
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(signature.Parameters) > 3 || signature.ReturnType != "void" {
 		confidence += weights.ComplexityFactor
 	}
 
-	// 🔶 DOC-010: Confidence normalization - 📊 Score normalization
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return minFloat64(1.0, confidence)
 }
 
-// 🔶 DOC-010: Complexity analysis - 📊 Function complexity assessment
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) analyzeComplexity(funcDecl *ast.FuncDecl) string {
 	paramCount := 0
 	if funcDecl.Type.Params != nil {
@@ -515,7 +515,7 @@ func (ta *TokenAnalyzer) analyzeComplexity(funcDecl *ast.FuncDecl) string {
 		returnCount = len(funcDecl.Type.Results.List)
 	}
 
-	// 🔶 DOC-010: Complexity scoring - 📊 Simple complexity heuristics
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	complexityScore := paramCount + returnCount
 
 	if complexityScore >= 8 {
@@ -529,11 +529,11 @@ func (ta *TokenAnalyzer) analyzeComplexity(funcDecl *ast.FuncDecl) string {
 	return "LOW"
 }
 
-// 🔶 DOC-010: Description generation - 📝 Human-readable description
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) generateDescription(signature FunctionSignature, context map[string]string) string {
 	funcName := signature.Name
 
-	// 🔶 DOC-010: Context-based description - 📝 Contextual description generation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if context["error_handling"] == "true" {
 		return fmt.Sprintf("%s with error handling", funcName)
 	}
@@ -546,17 +546,17 @@ func (ta *TokenAnalyzer) generateDescription(signature FunctionSignature, contex
 		return fmt.Sprintf("%s configuration operation", funcName)
 	}
 
-	// 🔶 DOC-010: Default description - 📝 Generic description
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return fmt.Sprintf("%s implementation", funcName)
 }
 
-// 🔶 DOC-010: Statistics calculation - 📊 Results post-processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) calculateStatistics(results *AnalysisResults) {
 	if len(results.Suggestions) == 0 {
 		return
 	}
 
-	// 🔶 DOC-010: Confidence statistics - 📈 Confidence analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	var totalConfidence float64
 	minConf := 1.0
 	maxConf := 0.0
@@ -587,20 +587,20 @@ func (ta *TokenAnalyzer) calculateStatistics(results *AnalysisResults) {
 		LowConfidence:     lowCount,
 	}
 
-	// 🔶 DOC-010: Suggestion sorting - 📊 Quality-based ordering
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	sort.Slice(results.Suggestions, func(i, j int) bool {
 		return results.Suggestions[i].Confidence > results.Suggestions[j].Confidence
 	})
 }
 
-// 🔶 DOC-010: Function-specific suggestion - 🔍 Individual function analysis
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (ta *TokenAnalyzer) SuggestForFunction(filePath, lineStr string) (*TokenSuggestion, error) {
 	lineNumber, err := strconv.Atoi(lineStr)
 	if err != nil {
 		return nil, fmt.Errorf("invalid line number: %w", err)
 	}
 
-	// 🔶 DOC-010: File parsing for specific function - 🔍 Targeted analysis
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	src, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read file: %w", err)
@@ -611,7 +611,7 @@ func (ta *TokenAnalyzer) SuggestForFunction(filePath, lineStr string) (*TokenSug
 		return nil, fmt.Errorf("failed to parse file: %w", err)
 	}
 
-	// 🔶 DOC-010: Function location matching - 📍 Position-based lookup
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	var targetFunc *ast.FuncDecl
 	ast.Inspect(file, func(n ast.Node) bool {
 		if funcDecl, ok := n.(*ast.FuncDecl); ok {
@@ -628,15 +628,15 @@ func (ta *TokenAnalyzer) SuggestForFunction(filePath, lineStr string) (*TokenSug
 		return nil, fmt.Errorf("no function found at line %d", lineNumber)
 	}
 
-	// 🔶 DOC-010: Targeted function analysis - 🔍 Single function processing
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	return ta.analyzeFunctionDecl(filePath, targetFunc, src)
 }
 
-// 🔶 DOC-010: Token validation - 🛡️ Standards compliance checking
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (tv *TokenValidator) ValidateTokens(directory string) ([]TokenViolation, error) {
 	violations := make([]TokenViolation, 0)
 
-	// 🔶 DOC-010: Directory traversal for validation - 🛡️ Comprehensive validation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -656,20 +656,20 @@ func (tv *TokenValidator) ValidateTokens(directory string) ([]TokenViolation, er
 	return violations, err
 }
 
-// 🔶 DOC-010: File validation - 🛡️ Individual file compliance checking
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (tv *TokenValidator) validateFile(filePath string) ([]TokenViolation, error) {
 	violations := make([]TokenViolation, 0)
 
-	// 🔶 DOC-010: File content analysis - 📝 Token extraction and validation
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read file: %w", err)
 	}
 
 	lines := strings.Split(string(content), "\n")
-	tokenRegex := regexp.MustCompile(`//\s*([⭐🔺🔶🔻])?\s*([A-Z]+-[0-9]+):?\s*(.*)`)
+	tokenRegex := regexp.MustCompile(`//\s*(\[(CRITICAL|HIGH|MEDIUM|LOW)\])?\s*([A-Z]+-[0-9]+):?\s*(.*)`)
 
-	// 🔶 DOC-010: Line-by-line token validation - 🛡️ Format compliance checking
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	for i, line := range lines {
 		if strings.Contains(line, "//") && (strings.Contains(line, "-") || strings.Contains(line, ":")) {
 			matches := tokenRegex.FindStringSubmatch(line)
@@ -679,7 +679,7 @@ func (tv *TokenValidator) validateFile(filePath string) ([]TokenViolation, error
 					LineNumber:    i + 1,
 					ViolationType: "INVALID_FORMAT",
 					CurrentToken:  strings.TrimSpace(line),
-					SuggestedFix:  "// 🔶 FEATURE-ID: Description - 🔧 Action description",
+					SuggestedFix:  "// FEATURE-ID: Description [DECISION:core-functionality] Action description",
 					Severity:      "WARNING",
 					RuleID:        "FORMAT-001",
 					Description:   "Token does not match required format",
@@ -691,7 +691,7 @@ func (tv *TokenValidator) validateFile(filePath string) ([]TokenViolation, error
 	return violations, nil
 }
 
-// 🔶 DOC-010: Batch processing - 🚀 Directory-wide analysis
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (bp *BatchProcessor) ProcessDirectory(directory string) (*BatchResults, error) {
 	startTime := time.Now()
 
@@ -705,7 +705,7 @@ func (bp *BatchProcessor) ProcessDirectory(directory string) (*BatchResults, err
 		TopSuggestions:    make([]TokenSuggestion, 0),
 	}
 
-	// 🔶 DOC-010: Directory traversal for batch processing - 🚀 Comprehensive processing
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -723,7 +723,7 @@ func (bp *BatchProcessor) ProcessDirectory(directory string) (*BatchResults, err
 			results.TotalViolations += fileResult.ViolationsCount
 			results.FileResults[path] = *fileResult
 
-			// 🔶 DOC-010: Priority and action breakdown - 📊 Category statistics
+			// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 			for _, suggestion := range fileResult.Suggestions {
 				bp.updateBreakdowns(suggestion, results)
 				results.TopSuggestions = append(results.TopSuggestions, suggestion)
@@ -737,18 +737,18 @@ func (bp *BatchProcessor) ProcessDirectory(directory string) (*BatchResults, err
 		return nil, err
 	}
 
-	// 🔶 DOC-010: Results finalization - 📊 Final processing
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	bp.finalizeResults(results)
 	results.ProcessingTime = time.Since(startTime)
 
 	return results, nil
 }
 
-// 🔶 DOC-010: Individual file processing for batch - 🔍 File-specific batch processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (bp *BatchProcessor) processFile(filePath string) (*FileResult, error) {
 	startTime := time.Now()
 
-	// 🔶 DOC-010: Combined analysis and validation - 🔍 Comprehensive file processing
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	analysisResults, err := bp.analyzer.AnalyzeTarget(filePath)
 	if err != nil {
 		return nil, err
@@ -770,47 +770,47 @@ func (bp *BatchProcessor) processFile(filePath string) (*FileResult, error) {
 	}, nil
 }
 
-// 🔶 DOC-010: Breakdown updates - 📊 Category statistics maintenance
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (bp *BatchProcessor) updateBreakdowns(suggestion TokenSuggestion, results *BatchResults) {
-	// 🔶 DOC-010: Priority breakdown updates - ⭐ Priority statistics
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	switch suggestion.PriorityIcon {
-	case "⭐":
+	case "[CRITICAL]":
 		results.PriorityBreakdown.Critical++
-	case "🔺":
+	case "[HIGH]":
 		results.PriorityBreakdown.High++
-	case "🔶":
+	case "[MEDIUM]":
 		results.PriorityBreakdown.Medium++
-	case "🔻":
+	case "[LOW]":
 		results.PriorityBreakdown.Low++
 	}
 
-	// 🔶 DOC-010: Action breakdown updates - 🔧 Action statistics
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	switch suggestion.ActionIcon {
-	case "🔍":
+	case "[DECISION:discovery]":
 		results.ActionBreakdown.Analysis++
-	case "📝":
+	case "[DECISION:format-processing]":
 		results.ActionBreakdown.Documentation++
-	case "🔧":
+	case "[DECISION:core-functionality]":
 		results.ActionBreakdown.Configuration++
-	case "🛡️":
+	case "[DECISION:validation]":
 		results.ActionBreakdown.Protection++
 	}
 }
 
-// 🔶 DOC-010: Results finalization - 📊 Final results processing
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func (bp *BatchProcessor) finalizeResults(results *BatchResults) {
-	// 🔶 DOC-010: Top suggestions sorting - 📊 Quality-based ranking
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	sort.Slice(results.TopSuggestions, func(i, j int) bool {
 		return results.TopSuggestions[i].Confidence > results.TopSuggestions[j].Confidence
 	})
 
-	// 🔶 DOC-010: Top suggestions limiting - 📊 Results optimization
+	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(results.TopSuggestions) > 10 {
 		results.TopSuggestions = results.TopSuggestions[:10]
 	}
 }
 
-// 🔶 DOC-010: Utility functions - 🔧 Helper functions
+// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func min(a, b int) int {
 	if a < b {
 		return a

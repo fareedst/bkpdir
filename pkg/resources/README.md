@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/resources.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/resources)
 
-⭐ **EXTRACT-002: Resource Management and Cleanup Patterns** - 🔺 HIGH
+[CRITICAL] **ARCH-001: Resource Management and Cleanup Patterns** [ACTION:core-functionality]
 
 This package provides comprehensive resource management utilities for CLI applications, including automatic cleanup, lifecycle management, and panic recovery patterns extracted from the BkpDir application.
 

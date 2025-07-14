@@ -1,18 +1,18 @@
 # CFG-006 Subtask 7: Comprehensive Testing Implementation Plan
 
-> **🔺 HIGH PRIORITY**: Implementation plan for creating comprehensive testing for the configuration reflection and visibility system.
+> **[HIGH] HIGH PRIORITY**: Implementation plan for creating comprehensive testing for the configuration reflection and visibility system.
 
 ## 📑 Task Overview
 
 **Task ID**: CFG-006 Subtask 7  
 **Feature ID**: CFG-006  
-**Priority**: 🔺 HIGH  
+**Priority**: [HIGH] HIGH  
 **Protocol**: TEST ADDITION Protocol [PRIORITY: LOW]  
-**Implementation Tokens**: `// 🔺 CFG-006: Comprehensive testing`
+**Implementation Tokens**: `// [HIGH] CFG-006: Comprehensive testing`
 **Status**: 📋 NOT STARTED
 **Dependencies**: All implementation subtasks (1-6) ✅ SATISFIED
 
-## 🔍 Current State Analysis
+## [ACTION:discovery] Current State Analysis
 
 ### ✅ Existing Test Coverage (Already Implemented)
 From analysis of `config_test.go`, these tests are already implemented:
@@ -38,8 +38,8 @@ From analysis of `config_test.go`, these tests are already implemented:
 
 Based on the comprehensive testing requirements in subtask 7, these areas need new test implementations:
 
-#### 🔍 **Test automatic field discovery** - PARTIALLY COVERED
-**Status**: 🔶 PARTIALLY COMPLETE - Basic discovery tested, missing advanced scenarios
+#### [ACTION:discovery] **Test automatic field discovery** - PARTIALLY COVERED
+**Status**: [MEDIUM] PARTIALLY COMPLETE - Basic discovery tested, missing advanced scenarios
 **Missing Tests**:
 - Anonymous fields handling
 - Unexported fields exclusion
@@ -68,7 +68,7 @@ Based on the comprehensive testing requirements in subtask 7, these areas need n
 - Edge cases in formatting (empty values, special characters)
 - Type-specific formatting validation
 
-#### 🔍 **Test filtering functionality** - MISSING
+#### [ACTION:discovery] **Test filtering functionality** - MISSING
 **Status**: ❌ NOT IMPLEMENTED  
 **Missing Tests**:
 - --all flag functionality
@@ -80,7 +80,7 @@ Based on the comprehensive testing requirements in subtask 7, these areas need n
 - Filter performance with large configs
 
 #### ⚡ **Test performance characteristics** - PARTIALLY COVERED
-**Status**: 🔶 PARTIALLY COMPLETE - Basic performance tested, missing optimization validation
+**Status**: [MEDIUM] PARTIALLY COMPLETE - Basic performance tested, missing optimization validation
 **Missing Tests**:
 - Reflection result caching validation
 - Cache invalidation testing
@@ -92,7 +92,7 @@ Based on the comprehensive testing requirements in subtask 7, these areas need n
 ## 🚀 Implementation Strategy
 
 ### Phase 1: Advanced Field Discovery Testing (Week 1)
-**Priority**: 🔺 HIGH - Foundation testing
+**Priority**: [HIGH] HIGH - Foundation testing
 **Files to Modify**: `config_test.go`
 
 #### Test 1.1: Advanced Field Discovery Edge Cases
@@ -130,7 +130,7 @@ func TestFieldDiscoveryErrorHandling(t *testing.T) {
 ```
 
 ### Phase 2: Source Attribution Accuracy Testing (Week 1-2)
-**Priority**: ⭐ CRITICAL - Core CFG-006 functionality
+**Priority**: [CRITICAL] CRITICAL - Core CFG-006 functionality
 **Files to Modify**: `config_test.go`
 
 #### Test 2.1: Inheritance Chain Tracking
@@ -164,7 +164,7 @@ func TestSourceConflictDetection(t *testing.T) {
 ```
 
 ### Phase 3: Display Formatting Validation (Week 2)
-**Priority**: 🔺 HIGH - User interface testing
+**Priority**: [HIGH] HIGH - User interface testing
 **Files to Modify**: `config_test.go`, `main_test.go`
 
 #### Test 3.1: Output Format Testing
@@ -202,7 +202,7 @@ func TestFormattingEdgeCases(t *testing.T) {
 ```
 
 ### Phase 4: Filtering Functionality Testing (Week 2-3)
-**Priority**: 🔺 HIGH - CLI interface testing
+**Priority**: [HIGH] HIGH - CLI interface testing
 **Files to Modify**: `config_test.go`, `main_test.go`
 
 #### Test 4.1: Command Line Flag Testing
@@ -240,7 +240,7 @@ func TestComplexFiltering(t *testing.T) {
 ```
 
 ### Phase 5: Performance Characteristics Validation (Week 3)
-**Priority**: 🔶 MEDIUM - Performance optimization validation
+**Priority**: [MEDIUM] MEDIUM - Performance optimization validation
 **Files to Modify**: `config_bench_test.go`, `config_test.go`
 
 #### Test 5.1: Caching Performance Validation
@@ -301,7 +301,7 @@ func TestPerformanceCharacteristics(t *testing.T) {
 - **Integration**: Zero regressions in existing functionality
 - **Error Handling**: Graceful recovery from all error scenarios
 
-## 🔧 Implementation Files
+## [ACTION:core-functionality] Implementation Files
 
 ### Primary Test Files
 1. **`config_test.go`** - Main test implementations
@@ -315,7 +315,7 @@ func TestPerformanceCharacteristics(t *testing.T) {
 ## 📋 Recovery Information
 
 ### Implementation Tokens
-All test functions will be marked with: `// 🔺 CFG-006: Comprehensive testing`
+All test functions will be marked with: `// [HIGH] CFG-006: Comprehensive testing`
 
 ### Key Dependencies
 - **CFG-005**: Layered inheritance system (for source attribution testing)
@@ -362,7 +362,7 @@ go test -bench=. -benchmem
 4. **Week 3**: Complete performance characteristics validation
 5. **Final**: Update feature tracking with completion status
 
-## 📝 Notes
+## [ACTION:format-processing] Notes
 
 - This plan builds on existing test foundation in `TestConfigReflection()`
 - Focus on areas not currently covered by existing tests

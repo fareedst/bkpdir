@@ -56,7 +56,7 @@ myapp/
 
 ### Step 1: Assess Current Structure
 
-**🔍 Analyze your monolithic application:**
+**[ACTION:discovery] Analyze your monolithic application:**
 
 ```bash
 # 1. Count lines of code in major files
@@ -97,17 +97,17 @@ grep -r "config\|Config" . --include="*.go"
 
 ### Step 2: Choose Migration Strategy
 
-**🔶 Progressive Migration (Recommended)**
+**[MEDIUM] Progressive Migration (Recommended)**
 - Migrate one component at a time
 - Maintain backward compatibility
 - Validate each step before proceeding
 
-**🔶 Complete Rewrite**
+**[MEDIUM] Complete Rewrite**
 - Start fresh with package-based structure
 - Faster but higher risk
 - Suitable for smaller applications
 
-**🔶 Hybrid Approach**
+**[MEDIUM] Hybrid Approach**
 - Migrate core components progressively
 - Rewrite complex monolithic sections
 - Best for medium-sized applications
@@ -116,7 +116,7 @@ grep -r "config\|Config" . --include="*.go"
 
 ### Step 1: Setup New Project Structure
 
-**🔧 Initialize new project:**
+**[ACTION:core-functionality] Initialize new project:**
 
 ```bash
 # 1. Create new project directory
@@ -134,7 +134,7 @@ go mod edit -require=gopkg.in/yaml.v2@v2.4.0
 mkdir -p cmd config pkg docs
 ```
 
-**📝 Create basic structure:**
+**[ACTION:format-processing] Create basic structure:**
 
 ```bash
 # Copy and adapt from CLI template
@@ -144,7 +144,7 @@ cp -r /path/to/cmd/cli-template/* .
 
 ### Step 2: Migrate Configuration
 
-**🔧 Before (Monolithic):**
+**[ACTION:core-functionality] Before (Monolithic):**
 ```go
 // config.go - 800 lines mixed with business logic
 type Config struct {
@@ -161,7 +161,7 @@ func LoadConfig() (*Config, error) {
 }
 ```
 
-**🔧 After (Package-Based):**
+**[ACTION:core-functionality] After (Package-Based):**
 ```go
 // cmd/root.go - Clean configuration usage
 import "myapp/pkg/config"
@@ -183,7 +183,7 @@ func initConfig() {
 }
 ```
 
-**🔍 Migration Steps:**
+**[ACTION:discovery] Migration Steps:**
 
 1. **Extract Schema-Specific Settings:**
    ```go
@@ -221,7 +221,7 @@ func initConfig() {
 
 ### Step 3: Migrate Error Handling
 
-**🔧 Before (Monolithic):**
+**[ACTION:core-functionality] Before (Monolithic):**
 ```go
 // Scattered error handling throughout codebase
 func ProcessFile(path string) error {
@@ -233,7 +233,7 @@ func ProcessFile(path string) error {
 }
 ```
 
-**🔧 After (Package-Based):**
+**[ACTION:core-functionality] After (Package-Based):**
 ```go
 import "myapp/pkg/errors"
 
@@ -247,7 +247,7 @@ func ProcessFile(path string) error {
 }
 ```
 
-**🔍 Migration Steps:**
+**[ACTION:discovery] Migration Steps:**
 
 1. **Identify Error Categories:**
    - File operation errors
@@ -278,7 +278,7 @@ func ProcessFile(path string) error {
 
 ### Step 4: Migrate Output Formatting
 
-**🔧 Before (Monolithic):**
+**[ACTION:core-functionality] Before (Monolithic):**
 ```go
 // formatter.go - 1677 lines of mixed formatting logic
 func PrintResult(message string, args ...interface{}) {
@@ -290,7 +290,7 @@ func PrintError(err error) {
 }
 ```
 
-**🔧 After (Package-Based):**
+**[ACTION:core-functionality] After (Package-Based):**
 ```go
 import "myapp/pkg/formatter"
 
@@ -313,7 +313,7 @@ func PrintResult(fmt formatter.FormatterInterface, operation, result string) {
 
 ### Step 5: Migrate File Operations
 
-**🔧 Before (Monolithic):**
+**[ACTION:core-functionality] Before (Monolithic):**
 ```go
 // Scattered file operations with inconsistent error handling
 func CopyFile(src, dst string) error {
@@ -323,7 +323,7 @@ func CopyFile(src, dst string) error {
 }
 ```
 
-**🔧 After (Package-Based):**
+**[ACTION:core-functionality] After (Package-Based):**
 ```go
 import "myapp/pkg/fileops"
 
@@ -335,7 +335,7 @@ func CopyFile(src, dst string) error {
 
 ### Step 6: Migrate CLI Commands
 
-**🔧 Before (Monolithic):**
+**[ACTION:core-functionality] Before (Monolithic):**
 ```go
 // main.go - Everything mixed together
 func main() {
@@ -347,7 +347,7 @@ func main() {
 }
 ```
 
-**🔧 After (Package-Based):**
+**[ACTION:core-functionality] After (Package-Based):**
 ```go
 // cmd/process.go
 import "myapp/pkg/cli"
@@ -369,7 +369,7 @@ func handleProcess(cmd *cobra.Command, args []string) error {
 }
 ```
 
-## 🔄 Phase 3: Integration and Testing
+## [ACTION:migration] Phase 3: Integration and Testing
 
 ### Step 1: Validate Component Integration
 
@@ -395,7 +395,7 @@ func TestMigrationComponents(t *testing.T) {
 }
 ```
 
-**🔍 Verify functionality:**
+**[ACTION:discovery] Verify functionality:**
 
 ```bash
 # 1. Run integration tests
@@ -435,7 +435,7 @@ go test -bench=. ./...
 
 ### Step 1: Gradual Rollout Strategy
 
-**🔄 Blue-Green Deployment:**
+**[ACTION:migration] Blue-Green Deployment:**
 
 ```bash
 # 1. Deploy new version alongside old
@@ -452,7 +452,7 @@ cp new-app app-v2
 mv app-v2 app
 ```
 
-**🔄 Feature Flag Migration:**
+**[ACTION:migration] Feature Flag Migration:**
 
 ```go
 // Use feature flags for gradual migration
@@ -486,7 +486,7 @@ tail -f /var/log/myapp.log
 - Critical functionality broken
 - User complaints or support tickets
 
-## 🛠️ Common Migration Patterns
+## [ACTION:maintenance] Common Migration Patterns
 
 ### Pattern 1: Configuration Migration
 
@@ -668,7 +668,7 @@ func (a *App) Initialize() error {
 - **Deploy Success Rate**: Target 100% successful deployments
 - **Rollback Time**: <5 minutes for emergency rollback
 
-**🛡️ Reliability:**
+**[ACTION:validation] Reliability:**
 - **Error Rate**: No increase in error rates
 - **Uptime**: Maintain current SLA levels
 - **Resource Usage**: Monitor memory and CPU patterns
@@ -727,4 +727,4 @@ func (a *App) Initialize() error {
 
 ---
 
-**🔧 EXTRACT-008: Migration guide for package-based development patterns** - This comprehensive guide enables successful migration from monolithic to modular architecture using the extracted packages. 
+**[ACTION:core-functionality] EXTRACT-008: Migration guide for package-based development patterns** - This comprehensive guide enables successful migration from monolithic to modular architecture using the extracted packages. 

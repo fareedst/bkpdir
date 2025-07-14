@@ -1,4 +1,4 @@
-// 🔶 DOC-014: Decision validation tools - Core decision checklist validation
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package validation
 
 import (
@@ -99,7 +99,7 @@ func (v *DecisionChecklistValidator) ValidateDecisionChecklist(ctx context.Conte
 	return result, nil
 }
 
-// 🔶 DOC-014: Safety Gates validation - 🛡️ NEVER Override checks
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 func (v *DecisionChecklistValidator) validateSafetyGates(ctx context.Context, section *ChecklistSection) error {
 	section.Details = []ChecklistItem{}
 	section.Context = make(map[string]interface{})
@@ -161,7 +161,7 @@ func (v *DecisionChecklistValidator) validateSafetyGates(ctx context.Context, se
 	return nil
 }
 
-// 🔶 DOC-014: Scope Boundaries validation - 📑 Strict Limits checks
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 func (v *DecisionChecklistValidator) validateScopeBoundaries(ctx context.Context, section *ChecklistSection) error {
 	section.Details = []ChecklistItem{}
 	section.Context = make(map[string]interface{})
@@ -211,7 +211,7 @@ func (v *DecisionChecklistValidator) validateScopeBoundaries(ctx context.Context
 	return nil
 }
 
-// 🔶 DOC-014: Quality Thresholds validation - 📊 Must Meet checks
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 func (v *DecisionChecklistValidator) validateQualityThresholds(ctx context.Context, section *ChecklistSection) error {
 	section.Details = []ChecklistItem{}
 	section.Context = make(map[string]interface{})
@@ -261,7 +261,7 @@ func (v *DecisionChecklistValidator) validateQualityThresholds(ctx context.Conte
 	return nil
 }
 
-// 🔶 DOC-014: Goal Alignment validation - 🎯 Strategic Check
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 func (v *DecisionChecklistValidator) validateGoalAlignment(ctx context.Context, section *ChecklistSection) error {
 	section.Details = []ChecklistItem{}
 	section.Context = make(map[string]interface{})
@@ -396,7 +396,7 @@ func (v *DecisionChecklistValidator) validateTokenCompliance(ctx context.Context
 		}
 	}
 
-	if strings.Contains(string(output), "✅") && !strings.Contains(string(output), "❌") {
+	if strings.Contains(string(output), "[SUCCESS]") && !strings.Contains(string(output), "❌") {
 		return ChecklistItem{
 			Check:    "Token Compliance",
 			Status:   "pass",
@@ -439,16 +439,16 @@ func (v *DecisionChecklistValidator) validateValidationScripts(ctx context.Conte
 
 // Individual validation methods for Scope Boundaries
 func (v *DecisionChecklistValidator) validateFeatureScope(ctx context.Context) ChecklistItem {
-	// Check if current changes align with documented features in feature-tracking.md
-	featureTrackingPath := filepath.Join(v.projectRoot, "docs", "context", "feature-tracking.md")
+	// Check if current changes align with documented features in requirements.md
+	requirementsPath := filepath.Join(v.projectRoot, "docs", "context", "requirements.md")
 
-	// Check if feature tracking file exists and is accessible
-	if _, err := os.Stat(featureTrackingPath); err != nil {
+	// Check if requirements file exists and is accessible
+	if _, err := os.Stat(requirementsPath); err != nil {
 		return ChecklistItem{
 			Check:       "Feature Scope",
 			Status:      "warning",
-			Message:     "feature-tracking.md not found - cannot validate scope alignment",
-			Remediation: "Ensure feature-tracking.md exists and contains relevant features",
+			Message:     "requirements.md not found - cannot validate scope alignment",
+			Remediation: "Ensure requirements.md exists and contains relevant features",
 			Priority:    "high",
 		}
 	}
@@ -463,7 +463,7 @@ func (v *DecisionChecklistValidator) validateFeatureScope(ctx context.Context) C
 }
 
 func (v *DecisionChecklistValidator) validateDependencies(ctx context.Context) ChecklistItem {
-	// Check feature-tracking.md for blocking dependencies
+	// Check requirements.md for blocking dependencies
 	// This would parse the feature tracking document and verify dependencies are completed
 	return ChecklistItem{
 		Check:    "Dependency Check",
@@ -562,7 +562,7 @@ func (v *DecisionChecklistValidator) validateTraceability(ctx context.Context) C
 
 // Individual validation methods for Goal Alignment
 func (v *DecisionChecklistValidator) validatePhaseProgress(ctx context.Context) ChecklistItem {
-	// Check current project phase from feature-tracking.md
+	// Check current project phase from requirements.md
 	return ChecklistItem{
 		Check:    "Phase Progress",
 		Status:   "pass",
@@ -572,7 +572,7 @@ func (v *DecisionChecklistValidator) validatePhaseProgress(ctx context.Context) 
 }
 
 func (v *DecisionChecklistValidator) validatePriorityOrder(ctx context.Context) ChecklistItem {
-	// Check priority ordering from feature-tracking.md
+	// Check priority ordering from requirements.md
 	return ChecklistItem{
 		Check:    "Priority Order",
 		Status:   "pass",
@@ -626,7 +626,7 @@ func (v *DecisionChecklistValidator) generateRecommendations(result *DecisionChe
 
 	// Analyze each section for recommendations
 	if result.SafetyGates.Score < 100 {
-		recommendations = append(recommendations, "🛡️ CRITICAL: Address safety gate failures immediately")
+		recommendations = append(recommendations, "[ACTION:validation] CRITICAL: Address safety gate failures immediately")
 	}
 
 	if result.ScopeBoundaries.Score < 80 {
@@ -634,7 +634,7 @@ func (v *DecisionChecklistValidator) generateRecommendations(result *DecisionChe
 	}
 
 	if result.QualityThreshold.Score < 90 {
-		recommendations = append(recommendations, "📊 Improve quality metrics - focus on test coverage and patterns")
+		recommendations = append(recommendations, "[INFO] Improve quality metrics - focus on test coverage and patterns")
 	}
 
 	if result.GoalAlignment.Score < 85 {
@@ -642,7 +642,7 @@ func (v *DecisionChecklistValidator) generateRecommendations(result *DecisionChe
 	}
 
 	if len(recommendations) == 0 {
-		recommendations = append(recommendations, "✅ All decision criteria validated - proceed with implementation")
+		recommendations = append(recommendations, "[SUCCESS] All decision criteria validated - proceed with implementation")
 	}
 
 	return recommendations

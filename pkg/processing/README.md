@@ -1,6 +1,6 @@
 # Package processing
 
-// EXTRACT-010: Package processing documentation - Comprehensive API documentation and usage examples - 🔺
+// EXTRACT-010: Package processing documentation - Comprehensive API documentation and usage examples - [HIGH]
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # Basic CLI Application Example
 
-// EXTRACT-010: Basic CLI application integration example - Demonstrates config + cli + formatter package integration - 🔺
+// EXTRACT-010: Basic CLI application integration example - Demonstrates config + cli + formatter package integration - [HIGH]
 
 This example demonstrates how to build a CLI application using the extracted BkpDir packages:
 

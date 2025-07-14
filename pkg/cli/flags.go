@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ⭐ EXTRACT-005: Cobra command patterns and flag handling extracted from main.go - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // DefaultFlagManager provides standard flag management functionality
 type DefaultFlagManager struct{}

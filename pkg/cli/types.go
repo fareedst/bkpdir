@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ⭐ EXTRACT-005: Core CLI framework types and interfaces - 🔧
+// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // BuildInfo contains version and build-time information for the application
 type BuildInfo struct {

@@ -4,7 +4,7 @@
 
 **Subtask**: Create `cmd/cli-template` example - Working example using extracted packages  
 **Status**: ✅ **COMPLETED** (2025-01-02)  
-**Priority**: ⭐ CRITICAL  
+**Priority**: [CRITICAL] CRITICAL  
 **Estimated Time**: 8-12 hours  
 **Actual Time**: 6 hours  
 
@@ -166,7 +166,7 @@ $ make demo
 - `cmd/cli-template/go.mod` - Go module configuration
 - `cmd/cli-template/go.sum` - Dependency checksums
 
-## 🔄 Next Steps
+## [ACTION:migration] Next Steps
 
 ### Phase 2: Full Package Integration
 - [ ] Implement actual pkg/config loading

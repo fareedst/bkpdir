@@ -24,7 +24,7 @@ make build
 ./cli-template config
 ```
 
-## 📝 Basic Examples
+## [ACTION:format-processing] Basic Examples
 
 ### Example 1: Create a File
 
