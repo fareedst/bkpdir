@@ -453,6 +453,9 @@ func expandPath(path string) string {
 // LoadConfig loads configuration from YAML files and environment variables.
 // It searches for configuration files in the standard locations and merges them with defaults.
 func LoadConfig(root string) (*Config, error) {
+	if debug {
+		fmt.Printf("DEBUG: Entered LoadConfig with root: %s\n", root)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 	// Try loading with inheritance first (the new default behavior)
 	cfg, err := LoadConfigWithInheritance(root)
@@ -465,20 +468,38 @@ func LoadConfig(root string) (*Config, error) {
 	cfg = DefaultConfig()
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	searchPaths := getConfigSearchPaths()
+	if debug {
+		fmt.Printf("DEBUG: searchPaths = %v\n", searchPaths)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 	// Process configuration files in order (earlier files take precedence)
 	for _, configPath := range searchPaths {
 		// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 		expandedPath := expandPath(configPath)
+		if debug {
+			fmt.Printf("DEBUG: configPath = %s, expandedPath = %s\n", configPath, expandedPath)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 		// Make relative paths relative to root directory
 		if !filepath.IsAbs(expandedPath) {
 			expandedPath = filepath.Join(root, expandedPath)
+			if debug {
+				fmt.Printf("DEBUG: expandedPath made absolute: %s\n", expandedPath)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 		}
 
+		if debug {
+			fmt.Printf("DEBUG: Checking existence of: %s\n", expandedPath)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 		if _, err := os.Stat(expandedPath); err == nil {
+			if debug {
+				fmt.Printf("DEBUG: File exists: %s\n", expandedPath)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			f, err := os.Open(expandedPath)
 			if err != nil {
+				if debug {
+					fmt.Printf("DEBUG: Failed to open %s: %v\n", expandedPath, err)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 				continue // Skip files we can't open
 			}
 			defer f.Close()
@@ -488,15 +509,21 @@ func LoadConfig(root string) (*Config, error) {
 			tempCfg := DefaultConfig()
 			d := yaml.NewDecoder(f)
 			if err := d.Decode(tempCfg); err != nil {
+				if debug {
+					fmt.Printf("DEBUG: Failed to decode YAML in %s: %v\n", expandedPath, err)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 				f.Close()
 				continue // Skip files with invalid YAML
 			}
 			f.Close()
 
-			// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+			// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 			// Merge non-zero values from tempCfg into cfg
+			// Earlier files take precedence over later files as per specification
+			if debug {
+				fmt.Printf("DEBUG: Merging config from %s\n", expandedPath)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			mergeConfigs(cfg, tempCfg)
-			break // Use first valid config file found
 		}
 	}
 
@@ -1351,34 +1378,44 @@ func (c *Config) GetFilePermissions() os.FileMode {
 // LoadConfigWithInheritance loads configuration with inheritance chain processing.
 // This extends the original LoadConfig function to support layered configuration inheritance.
 func LoadConfigWithInheritance(root string) (*Config, error) {
-	// Use the pkg/config system for inheritance support
 	fileOps := &configFileOperations{}
 	pathResolver := newPathResolver(fileOps)
 	chainBuilder := newInheritanceChainBuilder(fileOps)
 
-	// Get the primary configuration file
 	searchPaths := getConfigSearchPaths()
-	var primaryConfigPath string
+	finalCfg := DefaultConfig()
+	var foundAny bool
 
 	for _, configPath := range searchPaths {
 		expandedPath := expandPath(configPath)
 		if !filepath.IsAbs(expandedPath) {
 			expandedPath = filepath.Join(root, expandedPath)
 		}
-
 		if _, err := os.Stat(expandedPath); err == nil {
-			primaryConfigPath = expandedPath
-			break
+			// Build and process inheritance chain for this file
+			chain, err := chainBuilder.buildChain(expandedPath, pathResolver)
+			if err != nil {
+				continue // Skip files with errors
+			}
+			for _, filePath := range chain.files {
+				tempCfg, err := loadSingleConfigFile(filePath)
+				if err != nil {
+					continue // Skip files with errors
+				}
+				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg)
+				if err != nil {
+					continue // Skip problematic merges
+				}
+				finalCfg = mergedCfg
+			}
+			foundAny = true
 		}
 	}
 
-	// If no config file found, return default config
-	if primaryConfigPath == "" {
+	if !foundAny {
 		return DefaultConfig(), nil
 	}
-
-	// Load configuration with inheritance
-	return loadConfigRecursive(primaryConfigPath, pathResolver, chainBuilder)
+	return finalCfg, nil
 }
 
 // CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
@@ -1667,6 +1704,7 @@ func configToMap(cfg *Config) map[string]interface{} {
 		"exclude_patterns":     cfg.ExcludePatterns,
 		"include_git_info":     cfg.IncludeGitInfo,
 		"skip_broken_symlinks": cfg.SkipBrokenSymlinks,
+		"backup_dir_path":      cfg.BackupDirPath,
 		// Status codes
 		"status_created_archive": cfg.StatusCreatedArchive,
 		"status_disk_full":       cfg.StatusDiskFull,
@@ -1749,6 +1787,10 @@ func setConfigField(cfg *Config, key string, value interface{}) error {
 	case "include_git_info":
 		if b, ok := value.(bool); ok {
 			cfg.IncludeGitInfo = b
+		}
+	case "backup_dir_path":
+		if s, ok := value.(string); ok {
+			cfg.BackupDirPath = s
 		}
 	case "skip_broken_symlinks":
 		if b, ok := value.(bool); ok {

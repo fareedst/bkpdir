@@ -3,6 +3,9 @@
 // Package main provides tests for archive verification functionality.
 // It verifies integrity checking and checksum validation.
 
+// [REQ:ARCHIVE_VERIFICATION] Archive verification and integrity checking testing
+// [ARCH:VERIFICATION] Archive verification system validation
+// [IMPL:VERIFICATION] Multi-algorithm checksum verification validation
 // TEST-VERIFICATION-FEATURES-001: Verification features test validation - Archive verification and integrity checking testing [ACTION:validation]
 // Source: verify.go - VERIFICATION-FEATURES-001
 // Impact: Validates verification features functionality

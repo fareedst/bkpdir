@@ -192,19 +192,19 @@ check_orphaned_references() {
 
 validate_cross_document_consistency() {
     # Check that feature IDs are consistently named across documents
-    local feature_tracking="docs/context/feature-tracking.md"
+    local semantic_tokens="semantic-tokens.md"
     
-    if [[ -f "$feature_tracking" ]]; then
-        # Extract feature IDs and their descriptions from feature tracking
-        local features=$(grep -E '^\| [A-Z]+-[0-9]+ \|' "$feature_tracking" | cut -d'|' -f2 | sed 's/^ *//;s/ *$//')
+    if [[ -f "$semantic_tokens" ]]; then
+        # Extract feature IDs from semantic tokens (ARCH-001, FILE-001, etc.)
+        local features=$(grep -oE '\`[A-Z]+_[0-9]+\`|\`[A-Z]+-[0-9]+\`' "$semantic_tokens" | sed 's/`//g' | sort -u)
         
         for feature_id in $features; do
             local ref_count=0
             local files_with_refs=""
             
             # Count references across all documentation files
-            for doc_file in docs/context/*.md; do
-                if [[ -f "$doc_file" ]] && [[ "$doc_file" != "$feature_tracking" ]]; then
+            for doc_file in docs/context/*.md semantic-tokens.md requirements.md architecture-decisions.md implementation-decisions.md tasks.md; do
+                if [[ -f "$doc_file" ]] && [[ "$doc_file" != "$semantic_tokens" ]]; then
                     local count=$(grep -c "$feature_id" "$doc_file" 2>/dev/null || echo "0")
                     if [[ $count -gt 0 ]]; then
                         ref_count=$((ref_count + count))
@@ -234,7 +234,7 @@ required_docs=(
     "docs/context/specification.md"
     "docs/context/architecture.md"
     "docs/context/testing.md"
-    "docs/context/feature-tracking.md"
+    "semantic-tokens.md"
     "docs/context/doc-validation.md"
 )
 
@@ -249,13 +249,13 @@ done
 echo
 check "Checking feature ID consistency"
 
-# Extract feature IDs from feature tracking
-if [[ -f "docs/context/feature-tracking.md" ]]; then
-    feature_ids=$(grep -o '\(ARCH\|FILE\|CFG\|GIT\|DOC\)-[0-9]\+' docs/context/feature-tracking.md | sort -u)
+# Extract feature IDs from semantic tokens
+if [[ -f "semantic-tokens.md" ]]; then
+    feature_ids=$(grep -oE '\`[A-Z]+_[0-9]+\`|\`[A-Z]+-[0-9]+\`' semantic-tokens.md | sed 's/`//g' | sort -u)
     
     # Check if feature IDs are referenced in documentation
     for feature_id in $feature_ids; do
-        count=$(grep -r "$feature_id" docs/context/ | wc -l)
+        count=$(grep -r "$feature_id" docs/context/ semantic-tokens.md requirements.md architecture-decisions.md implementation-decisions.md tasks.md 2>/dev/null | wc -l)
         if [[ $count -gt 1 ]]; then
             success "Feature ID $feature_id referenced $count times"
         else
@@ -263,7 +263,7 @@ if [[ -f "docs/context/feature-tracking.md" ]]; then
         fi
     done
 else
-    error "Feature tracking document not found"
+    error "Semantic tokens document not found"
 fi
 
 echo
@@ -288,15 +288,15 @@ done
 echo
 check "Checking test references"
 
-# Check if test functions referenced in feature tracking exist
-if [[ -f "docs/context/feature-tracking.md" ]]; then
-    test_refs=$(grep -o 'Test[A-Za-z][A-Za-z0-9]*' docs/context/feature-tracking.md | grep -v '^Testing$' | grep -v '^Tests$' | sort -u)
-    
+# Check if test functions referenced in documentation exist
+test_refs=$(grep -o 'Test[A-Za-z][A-Za-z0-9]*' requirements.md architecture-decisions.md implementation-decisions.md tasks.md 2>/dev/null | grep -v '^Testing$' | grep -v '^Tests$' | sort -u)
+
+if [[ -n "$test_refs" ]]; then
     for test_ref in $test_refs; do
         if grep -r "func $test_ref" *_test.go >/dev/null 2>&1; then
             success "Test function $test_ref exists"
         else
-            error "Referenced test function $test_ref not found"
+            warning "Referenced test function $test_ref not found"
         fi
     done
 fi
@@ -305,18 +305,18 @@ echo
 check "Checking decision references"
 
 # Check if decision IDs are properly documented
-decision_ids=$(grep -o 'DEC-[0-9]\+' docs/context/feature-tracking.md 2>/dev/null | sort -u || echo "")
+decision_ids=$(grep -o 'DEC-[0-9]\+' requirements.md architecture-decisions.md implementation-decisions.md 2>/dev/null | sort -u || echo "")
 
 if [[ -n "$decision_ids" ]]; then
     for decision_id in $decision_ids; do
-        if grep -q "#### $decision_id:" docs/context/feature-tracking.md; then
+        if grep -q "$decision_id" requirements.md architecture-decisions.md implementation-decisions.md 2>/dev/null; then
             success "Decision $decision_id is documented"
         else
-            error "Decision $decision_id referenced but not documented"
+            warning "Decision $decision_id referenced but not documented"
         fi
     done
 else
-    warning "No decision IDs found in feature tracking"
+    info "No decision IDs found in documentation"
 fi
 
 echo

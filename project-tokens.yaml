@@ -246,9 +246,9 @@ features:
   TOKEN-001:
     description: "Semantic token migration system"
     action: migration
-    status: active
+    status: completed
     implementation_priority: "CRITICAL"
-    source: "scripts/migrate-to-semantic-tokens.sh"
+    source: "semantic-tokens.md"
     cross_layer_requirements: "Documentation, Code, Tests, Validation"
     subtasks:
       - unicode-to-semantic-mapping

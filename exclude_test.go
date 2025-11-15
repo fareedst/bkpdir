@@ -3,6 +3,9 @@
 // Package main provides tests for file exclusion logic in BkpDir.
 // It verifies pattern matching and exclusion behavior.
 
+// [REQ:CONFIGURATION] File exclusion and pattern matching testing
+// [ARCH:EXCLUSION_PATTERNS] Pattern-based exclusion validation
+// [IMPL:EXCLUSION_PATTERNS] Doublestar glob pattern matching validation
 // TEST-EXCLUDE-001: File Exclusion Test Validation - File exclusion and pattern matching testing [ACTION:validation]
 // Source: exclude_test.go - TEST-EXCLUDE-001
 // Impact: Test validation for file exclusion functionality
@@ -10,9 +13,9 @@ package main
 
 import "testing"
 
-// FILE-003: See specification.md - File Exclusion Patterns [DECISION:maintenance]
-// TEST-REF: TestShouldExcludeFile
-func TestShouldExcludeFile(t *testing.T) {
+// [REQ:CONFIGURATION] [ARCH:EXCLUSION_PATTERNS] [IMPL:EXCLUSION_PATTERNS]
+// TestShouldExcludeFile validates pattern-based file exclusion
+func TestShouldExcludeFile_REQ_CONFIGURATION(t *testing.T) {
 	patterns := []string{".git/", "vendor/", "*.tmp", "foo/bar/*", "*.log", "build/*", "**/node_modules/", "*.DS_Store"}
 	tests := []struct {
 		file     string

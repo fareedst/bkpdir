@@ -1,5 +1,5 @@
 # bkpdir config file
-.bkpdir.yml
+/.bkpdir.yml*
 
 # bkpdir archives
 **/.bkpdir/
@@ -55,3 +55,6 @@ docs/cli-app-spec.zip
 
 # temporary
 *.bak
+
+/test-dir/
+/bkpdir-test

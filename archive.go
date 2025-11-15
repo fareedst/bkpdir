@@ -6,6 +6,11 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
+// [REQ:ARCHIVE_VERIFICATION] Archive creation and management
+// [ARCH:ARCHIVE_FORMAT] ZIP format for all archive operations
+// [ARCH:PROCESSING_PATTERNS] Uses processing patterns for archive creation
+// [IMPL:ZIP_FORMAT] Uses Go's archive/zip package
+// [IMPL:PROCESSING_PATTERNS] Pipeline-based processing with naming conventions
 // ARCHIVE-FEATURES-001: Archive Operations Specification - Archive creation and management [ACTION:core-functionality]
 // Source: docs/context/specification.md - Archive Features section
 // Impact: Core functionality requirement for archive operations
@@ -773,7 +778,17 @@ func prepareIncrementalArchiveWithInterface(
 		BaseName:           latestFullArchive.Name,
 	}
 	archiveName := GenerateArchiveNameWithInterface(nameCfg)
-	archivePath := filepath.Join(cfg.GetArchiveDirPath(), archiveName)
+
+	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+	// IMMUTABLE-REF: Archive Directory Structure - Source Directory Name Preservation
+	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+	// Ensure incremental archives follow the same directory structure as full archives
+	archiveDir := cfg.GetArchiveDirPath()
+	if cfg.GetUseCurrentDirName() {
+		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
+	}
+
+	archivePath := filepath.Join(archiveDir, archiveName)
 	return archivePath, nil
 }
 

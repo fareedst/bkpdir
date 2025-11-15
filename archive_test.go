@@ -17,6 +17,9 @@
 // Package main provides comprehensive tests for archive creation, verification, and management.
 // It tests both full and incremental archive operations with various configurations.
 
+// [REQ:ARCHIVE_VERIFICATION] Archive creation and management testing
+// [ARCH:ARCHIVE_FORMAT] [ARCH:PROCESSING_PATTERNS] Archive format and processing patterns validation
+// [IMPL:ZIP_FORMAT] [IMPL:PROCESSING_PATTERNS] ZIP format and processing implementation validation
 // TEST-ARCHIVE-FEATURES-001: Archive features test validation - Archive creation and management testing [ACTION:validation]
 // Source: archive.go - ARCHIVE-FEATURES-001
 // Impact: Core functionality validation for archive features
@@ -32,6 +35,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -358,6 +362,167 @@ func TestCreateIncremental(t *testing.T) {
 		// The function should handle this case gracefully
 		if err != nil {
 			t.Logf("CreateIncrementalArchive with no changes: %v", err)
+		}
+	})
+}
+
+// ARCH-005: Incremental Archive Directory Structure Validation [DECISION:core-functionality]
+// TEST-REF: Feature tracking matrix ARCH-005
+// IMMUTABLE-REF: Archive Directory Structure - Source Directory Name Preservation
+// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
+	tempDir := t.TempDir()
+
+	// Create source directory with a specific name
+	sourceDirName := "test-project"
+	sourceDir := filepath.Join(tempDir, sourceDirName)
+	archiveDir := filepath.Join(tempDir, "archives")
+
+	// Create directories
+	if err := os.MkdirAll(sourceDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(archiveDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	// Create initial files
+	initialFiles := map[string]string{
+		"file1.txt": "content1",
+		"file2.txt": "content2",
+	}
+
+	for filePath, content := range initialFiles {
+		fullPath := filepath.Join(sourceDir, filePath)
+		if err := ioutil.WriteFile(fullPath, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Save current directory and change to source directory
+	origDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(origDir)
+
+	if err := os.Chdir(sourceDir); err != nil {
+		t.Fatal(err)
+	}
+
+	// Test with UseCurrentDirName = true
+	t.Run("WithUseCurrentDirName", func(t *testing.T) {
+		// Create config with UseCurrentDirName = true
+		cfg := DefaultConfig()
+		cfg.ArchiveDirPath = archiveDir
+		cfg.UseCurrentDirName = true
+
+		// Create initial full archive
+		err = CreateFullArchive(cfg, "base-archive", false, false)
+		if err != nil {
+			t.Fatalf("CreateFullArchive failed: %v", err)
+		}
+
+		// Verify full archive is in the correct directory structure
+		expectedFullArchiveDir := filepath.Join(archiveDir, sourceDirName)
+		fullArchives, err := ListArchives(expectedFullArchiveDir)
+		if err != nil {
+			t.Fatalf("Failed to list archives in %s: %v", expectedFullArchiveDir, err)
+		}
+		if len(fullArchives) == 0 {
+			t.Fatalf("No full archives found in expected directory: %s", expectedFullArchiveDir)
+		}
+
+		// Add new file for incremental
+		newFile := filepath.Join(sourceDir, "file3.txt")
+		if err := ioutil.WriteFile(newFile, []byte("content3"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		// Create incremental archive
+		err = CreateIncrementalArchive(cfg, "incremental-test", false, false)
+		if err != nil {
+			t.Fatalf("CreateIncrementalArchive failed: %v", err)
+		}
+
+		// Verify incremental archive is in the same directory structure as full archive
+		incrementalArchives, err := ListArchives(expectedFullArchiveDir)
+		if err != nil {
+			t.Fatalf("Failed to list archives in %s: %v", expectedFullArchiveDir, err)
+		}
+		if len(incrementalArchives) <= len(fullArchives) {
+			t.Fatalf("Expected more archives after incremental creation. Full: %d, Total: %d",
+				len(fullArchives), len(incrementalArchives))
+		}
+
+		// Verify that incremental archives are in the correct directory
+		for _, archive := range incrementalArchives {
+			if !strings.Contains(archive.Path, sourceDirName) {
+				t.Errorf("Incremental archive not in correct directory structure. Path: %s, Expected to contain: %s",
+					archive.Path, sourceDirName)
+			}
+		}
+	})
+
+	// Test with UseCurrentDirName = false
+	t.Run("WithoutUseCurrentDirName", func(t *testing.T) {
+		// Clean up previous test files
+		os.RemoveAll(archiveDir)
+		if err := os.MkdirAll(archiveDir, 0755); err != nil {
+			t.Fatal(err)
+		}
+
+		// Create config with UseCurrentDirName = false
+		cfg := DefaultConfig()
+		cfg.ArchiveDirPath = archiveDir
+		cfg.UseCurrentDirName = false
+
+		// Create initial full archive
+		err = CreateFullArchive(cfg, "base-archive", false, false)
+		if err != nil {
+			t.Fatalf("CreateFullArchive failed: %v", err)
+		}
+
+		// Verify full archive is in the base archive directory
+		fullArchives, err := ListArchives(archiveDir)
+		if err != nil {
+			t.Fatalf("Failed to list archives in %s: %v", archiveDir, err)
+		}
+		if len(fullArchives) == 0 {
+			t.Fatalf("No full archives found in expected directory: %s", archiveDir)
+		}
+
+		// Add new file for incremental
+		newFile := filepath.Join(sourceDir, "file4.txt")
+		if err := ioutil.WriteFile(newFile, []byte("content4"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		// Create incremental archive
+		err = CreateIncrementalArchive(cfg, "incremental-test", false, false)
+		if err != nil {
+			t.Fatalf("CreateIncrementalArchive failed: %v", err)
+		}
+
+		// Verify incremental archive is in the same directory as full archive
+		incrementalArchives, err := ListArchives(archiveDir)
+		if err != nil {
+			t.Fatalf("Failed to list archives in %s: %v", archiveDir, err)
+		}
+		if len(incrementalArchives) <= len(fullArchives) {
+			t.Fatalf("Expected more archives after incremental creation. Full: %d, Total: %d",
+				len(fullArchives), len(incrementalArchives))
+		}
+
+		// Verify that incremental archives are in the same directory as full archives
+		// (not in a subdirectory when UseCurrentDirName=false)
+		expectedArchiveDir := archiveDir
+		for _, archive := range incrementalArchives {
+			actualArchiveDir := filepath.Dir(archive.Path)
+			if actualArchiveDir != expectedArchiveDir {
+				t.Errorf("Incremental archive should be in same directory as full archives when UseCurrentDirName=false. Archive dir: %s, Expected: %s",
+					actualArchiveDir, expectedArchiveDir)
+			}
 		}
 	})
 }

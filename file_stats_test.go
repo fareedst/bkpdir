@@ -1,3 +1,6 @@
+// [REQ:OUTPUT_FORMATTING] File statistics gathering testing
+// [ARCH:FILE_STATISTICS] File statistics architecture validation
+// [IMPL:FILE_STATISTICS] FileStatInfo structure and formatting validation
 package main
 
 import (
@@ -7,9 +10,9 @@ import (
 	"time"
 )
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 // TestGatherFileStatInfo tests the file statistics gathering functionality
-func TestGatherFileStatInfo(t *testing.T) {
+func TestGatherFileStatInfo_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	// Create a temporary file for testing
 	tmpDir := t.TempDir()
 	testFile := filepath.Join(tmpDir, "testfile.txt")
@@ -60,9 +63,9 @@ func TestGatherFileStatInfo(t *testing.T) {
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 // TestGatherFileStatInfoDirectory tests file stats for directories
-func TestGatherFileStatInfoDirectory(t *testing.T) {
+func TestGatherFileStatInfoDirectory_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	stats, err := GatherFileStatInfo(tmpDir)
@@ -79,9 +82,9 @@ func TestGatherFileStatInfoDirectory(t *testing.T) {
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 // TestGatherFileStatInfoNonexistent tests error handling for nonexistent files
-func TestGatherFileStatInfoNonexistent(t *testing.T) {
+func TestGatherFileStatInfoNonexistent_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	nonexistentFile := "/path/that/does/not/exist"
 
 	_, err := GatherFileStatInfo(nonexistentFile)
@@ -90,9 +93,9 @@ func TestGatherFileStatInfoNonexistent(t *testing.T) {
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 // TestFormatHumanSize tests the human-readable size formatting
-func TestFormatHumanSize(t *testing.T) {
+func TestFormatHumanSize_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	tests := []struct {
 		size     int64
 		expected string
@@ -118,9 +121,9 @@ func TestFormatHumanSize(t *testing.T) {
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 // TestGetFileType tests file type detection
-func TestGetFileType(t *testing.T) {
+func TestGetFileType_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	// Create a temporary file
 	tmpDir := t.TempDir()
 	testFile := filepath.Join(tmpDir, "testfile.txt")

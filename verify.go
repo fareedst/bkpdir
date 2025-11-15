@@ -6,6 +6,9 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
+// [REQ:ARCHIVE_VERIFICATION] Archive verification and integrity checking
+// [ARCH:VERIFICATION] Archive verification system with checksum support
+// [IMPL:VERIFICATION] Multi-algorithm checksum verification with status tracking
 // VERIFICATION-FEATURES-001: Verification features specification - Archive verification and integrity checking [ACTION:core-functionality]
 // Source: verify.go - VERIFICATION-FEATURES-001
 // Impact: Core functionality requirement for verification features
@@ -27,6 +30,7 @@ import (
 	"time"
 )
 
+// [IMPL:VERIFICATION] [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
 // VerificationStatus represents the result of an archive verification
 type VerificationStatus struct {
 	VerifiedAt   time.Time `json:"verified_at"`
@@ -35,6 +39,7 @@ type VerificationStatus struct {
 	Errors       []string  `json:"errors,omitempty"`
 }
 
+// [IMPL:VERIFICATION] [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
 // VerifyArchive verifies the integrity of an archive
 func VerifyArchive(archivePath string) (*VerificationStatus, error) {
 	// Archive verification implementation

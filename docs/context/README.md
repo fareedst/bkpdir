@@ -1,184 +1,143 @@
-# [AI_ASSISTANT] AI Assistant Context Documentation Index
+# AI Assistant Context Documentation Index
 
-> **[CRITICAL_PRIORITY] CRITICAL**: This is the MASTER INDEX for all AI assistants working on the BkpDir project. All AI assistants MUST start here and follow the priority order below.
+> **⚠️ UPDATED**: This project follows **Semantic Token-Driven Development (STDD)** methodology. This index provides navigation to STDD documents and historical context files.
 
-## [PURPOSE] Master Icon Legend
+## Current Development Process
 
-> **[VALIDATION] STANDARDIZED SYSTEM**: This legend defines the OFFICIAL icon meanings for all context documentation. Each icon has exactly ONE meaning to eliminate AI assistant confusion.
+This project follows **Semantic Token-Driven Development (STDD)**. Please refer to:
 
-### [CRITICAL] PRIORITY HIERARCHY (Execution Order)
-| Icon | Priority Level | Meaning | Usage |
-|------|---------------|---------|-------|
-| [CRITICAL] | **CRITICAL** | Must execute first, blocking, highest impact | Critical features, urgent actions, blocking issues |
-| [HIGH] | **HIGH** | Important, execute with documentation | High-value tasks, important features |
-| [MEDIUM] | **MEDIUM** | Evaluate conditionally, balanced consideration | Secondary features, conditional updates |
-| [LOW] | **LOW** | Execute last, minimal impact | Cleanup tasks, minor updates, optional items |
+1. **`.cursorrules`** - Complete STDD methodology and rules (auto-loaded by Cursor IDE)
+2. **`ai-principles.md`** - Complete AI-First Principles and process guide
+3. **STDD Documents** - See below for primary STDD documentation
 
-### [CHECKLIST] PROCESS EXECUTION (Sequential Phases)
-| Icon | Phase | Meaning | Usage |
-|------|--------|---------|-------|
-| [EXECUTION] | **PHASE 1** | Foundation requirements, initial validation | Pre-work, setup, validation |
-| [IMMEDIATE] | **PHASE 2** | Core work, main implementation | Primary tasks, core implementation |
-| [PROCESS] | **PHASE 3** | Follow-up work, iterative processes | Conditional references, cleanup |
-| [ACHIEVEMENT] | **PHASE 4** | Process completion, final wrap-up | Final references, completion tasks |
+## STDD Documents (Primary References)
 
-### [PURPOSE] PROCESS STEPS (Within Phases)
-| Icon | Step | Meaning | Usage |
-|------|------|---------|-------|
-| 1️⃣ | **STEP 1** | First step, initial analysis | Discovery, search, analysis |
-| 2️⃣ | **STEP 2** | Second step, planning/documentation | Preparation, documentation, planning |
-| 3️⃣ | **STEP 3** | Third step, execution/implementation | Action, implementation, execution |
-| [COMPLETED] | **COMPLETE** | Step or process successfully finished | Completion status, success indicators |
+### Core STDD Documents
 
-### [CLASSIFICATION] DOCUMENT CATEGORIES (Navigation)
-| Icon | Category | Meaning | Usage |
-|------|----------|---------|-------|
-| [PURPOSE] | **PURPOSE** | Document purpose, overview, introduction | Section headers, document introductions |
-| [CHECKLIST] | **CHECKLIST** | Process checklist, step-by-step guide | Checklist documents, process guides |
-| [METRICS] | **ANALYSIS** | Data analysis, metrics, assessment | Analysis sections, data presentations |
-| [TECHNICAL] | **REFERENCE** | Reference material, specifications | Technical specs, reference guides |
+1. **`stdd/ai-principles.md`** - Complete STDD methodology and process guide
+2. **`stdd/requirements.md`** - All functional and non-functional requirements with `[REQ:*]` tokens
+3. **`stdd/architecture-decisions.md`** - Architecture decisions with `[ARCH:*]` tokens
+4. **`stdd/implementation-decisions.md`** - Implementation decisions with `[IMPL:*]` tokens
+5. **`stdd/tasks.md`** - Active tasks and feature tracking
+6. **`stdd/semantic-tokens.md`** - Central registry of all semantic tokens
 
-### [IMPLEMENTATION] ACTION CATEGORIES
-| Icon | Action | Meaning | Usage |
-|------|--------|---------|-------|
-| [SEARCH_DISCOVER] | **SEARCH** | Search, find, discover, analyze | Search actions, discovery tasks |
-| [DOCUMENT_UPDATE] | **DOCUMENT** | Write, update, document, record | Documentation tasks, update actions |
-| [CONFIGURE_MODIFY] | **CONFIGURE** | Configure, modify, adjust, tune | Configuration tasks, modifications |
-| [PROTECT_VALIDATE] | **PROTECT** | Protect, secure, validate, guard | Security tasks, validation actions |
+### User-Facing Documentation
 
-## [PURPOSE] AI Assistant Quick Start Guide
+- **`../user/specification.md`** - User-facing features and behaviors (moved to `docs/user/`)
+- **`testing.md`** - Test coverage requirements and validation standards (migrated to implementation-decisions.md)
 
-### 🚀 PHASE 1: CRITICAL VALIDATION [Execute FIRST - MANDATORY]
+### Historical Context Files
 
-Before making ANY code changes, AI assistants MUST:
+All historical context files have been merged into STDD (`ai-principles.md`) and removed. The STDD methodology now includes:
 
-1. **[ACTION:validation] [Immutable Requirements Check](immutable.md)** - Verify no conflicts with unchangeable specifications
-2. **📋 [Feature Tracking Registry](feature-tracking.md)** - Find or create Feature ID for your task
-3. **[ACTION:discovery] [AI Assistant Compliance](ai-assistant-compliance.md)** - Review token requirements and response format
-4. **[CRITICAL] [AI Assistant Protocol](ai-assistant-protocol.md)** - Follow the appropriate change protocol
+- Complete cross-referencing guidance with feature documentation format
+- Change impact tracking with pre/post validation checklists
+- Behavioral contracts and dependency mapping
+- Code standards and documentation templates
+- All validation and traceability guidance
 
-### ⚡ PHASE 2: CORE DOCUMENTATION [Execute SECOND - HIGH PRIORITY]
+## STDD Development Process
 
-For understanding and implementing changes:
+### Phase 1: Requirements → Pseudo-Code (NO CODE YET)
 
-5. **🏗️ [Architecture](architecture.md)** - System design and technical components
-6. **[ACTION:format-processing] [Requirements](requirements.md)** - Implementation requirements and constraints  
-7. **🧪 [Testing](testing.md)** - Test coverage requirements and validation standards
-8. **📖 [Specification](specification.md)** - User-facing features and behaviors
+**MANDATORY**: Before any code changes:
 
-### [ACTION:migration] PHASE 3: CONDITIONAL REFERENCES [Execute THIRD - MEDIUM PRIORITY]
+1. Read `stdd/ai-principles.md` - Understand the complete STDD process
+2. Check `stdd/semantic-tokens.md` - Review existing tokens
+3. Review `stdd/requirements.md` - Check existing requirements
+4. Review `stdd/architecture-decisions.md` - Check existing architecture decisions
+5. Review `stdd/implementation-decisions.md` - Check existing implementation decisions
+6. Expand requirements into pseudo-code and decisions
+7. Document architecture decisions IMMEDIATELY in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens
+8. Document implementation decisions IMMEDIATELY in `stdd/implementation-decisions.md` with `[IMPL:*]` tokens
+9. Update `stdd/semantic-tokens.md` with new tokens
+10. Create tasks in `stdd/tasks.md` with priorities BEFORE implementation
 
-Reference only if your changes affect these areas:
+### Phase 2: Tasks → Implementation
 
-9. **⚙️ [Implementation Decisions](implementation-decisions.md)** - IF making architectural decisions
-10. **[ACTION:core-functionality] [Validation Automation](validation-automation.md)** - IF adding validation processes
-11. **[ACTION:migration] [Sync Framework](sync-framework.md)** - IF affecting data synchronization
-12. **📈 [Implementation Status](implementation-status.md)** - For progress tracking
+1. Work on highest priority tasks first (P0 > P1 > P2 > P3)
+2. Update documentation AS YOU WORK
+3. Mark tasks complete when all criteria met
 
-### 🏁 PHASE 4: PROCESS REFERENCES [Execute LAST - LOW PRIORITY]
+## Documentation Update Requirements
 
-Reference only for process understanding (NEVER modify):
+For ANY code changes, you MUST:
 
-13. **📋 [Context File Checklist](context-file-checklist.md)** - File update guidelines
-14. **🔒 [Enforcement Mechanisms](enforcement-mechanisms.md)** - Validation rules
-15. **🚫 [Change Rejection Criteria](change-rejection-criteria.md)** - Common rejection scenarios
-16. **📚 [Feature Documentation Standards](feature-documentation-standards.md)** - Documentation guidelines
+1. **Reference Requirements**: Link code changes to `[REQ:*]` tokens in `stdd/requirements.md`
+2. **Reference Architecture**: Link code changes to `[ARCH:*]` tokens in `stdd/architecture-decisions.md`
+3. **Reference Implementation**: Link code changes to `[IMPL:*]` tokens in `stdd/implementation-decisions.md`
+4. **Update Task Tracking**: Update `stdd/tasks.md` with task status
+5. **Update Semantic Tokens**: Update `stdd/semantic-tokens.md` if creating new tokens
 
-## [CRITICAL] AI Assistant Priority Matrix
+### Code Comment Format
 
-### 🔥 CRITICAL ACTIONS [NEVER SKIP]
-```
-┌─ [ACTION:validation] Check immutable.md for conflicts
-├─ 📋 Verify Feature ID exists in feature-tracking.md  
-├─ [ACTION:discovery] Review ai-assistant-compliance.md requirements
-└─ [CRITICAL] Follow ai-assistant-protocol.md for change type
+```go
+// [REQ:FILE_BACKUP] Create backup of single file with comparison
+// [IMPL:ATOMIC_OPS] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
+func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
+    // ...
+}
 ```
 
-### [HIGH] HIGH PRIORITY [ALWAYS EXECUTE]
-```
-┌─ 🏗️ Update architecture.md if technical changes
-├─ [ACTION:format-processing] Update requirements.md if new requirements
-├─ 🧪 Update testing.md if test changes
-└─ 📖 Update specification.md if user-facing changes
-```
+### Test Name Format
 
-### [MEDIUM] MEDIUM PRIORITY [EVALUATE CONDITIONALLY]
-```
-┌─ ⚙️ Update implementation-decisions.md if architectural
-├─ [ACTION:core-functionality] Update validation-automation.md if validation changes
-├─ [ACTION:migration] Update sync-framework.md if sync changes
-└─ 📈 Update implementation-status.md for progress
+```go
+func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
+    // ...
+}
 ```
 
-### ❌ NEVER MODIFY [REFERENCE ONLY]
-```
-┌─ [ACTION:validation] immutable.md - Only check for conflicts
-├─ 🔒 enforcement-mechanisms.md - Process reference only
-├─ 📋 context-file-checklist.md - Guidelines only
-└─ 🚫 change-rejection-criteria.md - Reference only
-```
-
-## 📑 Change Type Quick Reference
-
-When you know your change type, jump directly to the protocol:
-
-| Change Type | Icon | Protocol Section | Priority | Documentation Impact |
-|-------------|------|------------------|----------|---------------------|
-| **New Feature** | 🆕 | [NEW FEATURE Protocol](ai-assistant-protocol.md#-new-feature-protocol-priority-critical) | [CRITICAL] CRITICAL | Full documentation cascade |
-| **Modify Existing** | [ACTION:core-functionality] | [MODIFICATION Protocol](ai-assistant-protocol.md#-modification-protocol-priority-critical) | [CRITICAL] CRITICAL | Impact analysis required |
-| **Bug Fix** | 🐛 | [BUG FIX Protocol](ai-assistant-protocol.md#-bug-fix-protocol-priority-medium) | [MEDIUM] MEDIUM | Minimal documentation |
-| **Config Change** | ⚙️ | [CONFIG CHANGE Protocol](ai-assistant-protocol.md#-config-change-protocol-priority-medium) | [MEDIUM] MEDIUM | Configuration focus |
-| **API/Interface** | 🔌 | [API CHANGE Protocol](ai-assistant-protocol.md#-api-change-protocol-priority-critical) | [CRITICAL] CRITICAL | Interface documentation |
-| **Test Only** | 🧪 | [TEST ADDITION Protocol](ai-assistant-protocol.md#-test-addition-protocol-priority-low) | [LOW] LOW | Testing documentation |
-| **Performance** | 🚀 | [PERFORMANCE Protocol](ai-assistant-protocol.md#-performance-protocol-priority-medium) | [MEDIUM] MEDIUM | Architecture documentation |
-| **Refactoring** | [ACTION:migration] | [REFACTORING Protocol](ai-assistant-protocol.md#-refactoring-protocol-priority-low) | [LOW] LOW | Structural documentation |
-
-## [ACTION:discovery] Token Search Quick Commands
+## Token Search Quick Commands
 
 ```bash
-# Search for existing feature tokens
-grep -r "// [A-Z]+-[0-9]+" docs/context/
+# Search for semantic tokens
+grep -r "\[REQ:" . --include="*.go"   # Requirements tokens
+grep -r "\[ARCH:" . --include="*.go"   # Architecture tokens
+grep -r "\[IMPL:" . --include="*.go"  # Implementation tokens
 
-# Find specific token patterns
-grep -r "ARCH-[0-9]+" docs/context/   # Archive operations
-grep -r "FILE-[0-9]+" docs/context/   # File operations  
-grep -r "CFG-[0-9]+" docs/context/    # Configuration
-grep -r "GIT-[0-9]+" docs/context/    # Git integration
-grep -r "TEST-[0-9]+" docs/context/   # Testing infrastructure
+# Find tokens in documentation
+grep -r "\[REQ:" *.md                  # Requirements in docs
+grep -r "\[ARCH:" *.md                 # Architecture in docs
+grep -r "\[IMPL:" *.md                 # Implementation in docs
 
 # Validate all changes
 make test && make lint
 ```
 
-## ✅ AI Assistant Validation Checklist
+## AI Assistant Validation Checklist
 
 Before submitting any code changes, verify:
 
-- [ ] [ACTION:discovery] Searched for existing tokens related to your changes
-- [ ] 📋 Referenced specific Feature ID from feature-tracking.md
-- [ ] [CRITICAL] Followed appropriate protocol from ai-assistant-protocol.md
-- [ ] 🏷️ Added implementation tokens to all modified code
-- [ ] [ACTION:format-processing] Updated all required documentation files
-- [ ] 🧪 All tests pass (`make test`)
-- [ ] [ACTION:core-functionality] All lint checks pass (`make lint`)
-- [ ] 🏁 Marked task complete in feature-tracking.md
+- [ ] Read `stdd/ai-principles.md` and understand STDD process
+- [ ] Check `stdd/semantic-tokens.md` for existing tokens
+- [ ] Review `stdd/requirements.md` for related requirements
+- [ ] Review `stdd/architecture-decisions.md` for related architecture
+- [ ] Review `stdd/implementation-decisions.md` for related implementation
+- [ ] Added semantic token references (`[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`) to code
+- [ ] Updated `stdd/tasks.md` with task status
+- [ ] Updated `stdd/semantic-tokens.md` if creating new tokens
+- [ ] All tests pass (`make test`)
+- [ ] All lint checks pass (`make lint`)
 
-## [CRITICAL] Critical Reminders for AI Assistants
+## Critical Reminders
 
-1. **[ACTION:validation] IMMUTABLE REQUIREMENTS**: Never modify anything that conflicts with `immutable.md`
-2. **📋 FEATURE TRACKING**: Every code change MUST have a corresponding Feature ID
-3. **🏷️ IMPLEMENTATION TOKENS**: Every modified function/method needs `// FEATURE-ID: Description`
-4. **[ACTION:format-processing] DOCUMENTATION SYNC**: Update ALL affected context files, not just code
-5. **✅ VALIDATION**: Run tests and linting before marking tasks complete
+1. **STDD Process**: Follow the 3-phase STDD development process (Requirements → Tasks → Implementation)
+2. **Documentation First**: Document requirements, architecture, and implementation decisions BEFORE coding
+3. **Semantic Tokens**: Use `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]` tokens for all cross-references
+4. **Task Planning**: Create tasks in `tasks.md` with priorities BEFORE implementation
+5. **Validation**: Run tests and linting before marking tasks complete
 
-## 📞 Emergency Quick Reference
+## Quick Reference
 
 If you're unsure about anything:
 
-1. **[ACTION:discovery] Search First**: Use `grep -r "relevant-term" docs/context/`
-2. **📋 Check Feature Registry**: Look in feature-tracking.md for existing features
-3. **[CRITICAL] Follow Protocol**: Use ai-assistant-protocol.md for your change type
-4. **[ACTION:validation] Check Immutable**: Verify no conflicts with immutable.md
-5. **🧪 Validate Changes**: Run `make test && make lint`
+1. **Read `stdd/ai-principles.md`** - Complete STDD methodology guide
+2. **Check `stdd/semantic-tokens.md`** - Token registry
+3. **Review `stdd/tasks.md`** - Active tasks
+4. **Review STDD documents** - Requirements, architecture, implementation decisions
+5. **Validate Changes**: Run `make test && make lint`
 
-**🤖 This index serves as your primary navigation hub. Bookmark this document and always start here!** 
+---
+
+**Last Updated**: 2025-01-13  
+**Status**: Updated to reflect STDD methodology migration 

@@ -12,6 +12,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -1497,5 +1498,56 @@ func TestMain_Integration_CLI015_EdgeCases(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Test for debug flag
+func TestDebugFlagControlsOutput(t *testing.T) {
+	// Save and restore original debug value
+	origDebug := debug
+	defer func() { debug = origDebug }()
+
+	debug = false
+	var buf bytes.Buffer
+	origStdout := os.Stdout
+	origStderr := os.Stderr
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+	os.Stderr = w
+	defer func() {
+		os.Stdout = origStdout
+		os.Stderr = origStderr
+		w.Close()
+	}()
+
+	done := make(chan struct{})
+	go func() {
+		_, _ = buf.ReadFrom(r)
+		done <- struct{}{}
+	}()
+
+	handleConfigCommand()
+	w.Close()
+	<-done
+	if strings.Contains(buf.String(), "DEBUG:") {
+		t.Errorf("DEBUG output should not be shown when debug is false")
+	}
+
+	buf.Reset()
+	r, w, _ = os.Pipe()
+	os.Stdout = w
+	os.Stderr = w
+	done = make(chan struct{})
+	go func() {
+		_, _ = buf.ReadFrom(r)
+		done <- struct{}{}
+	}()
+
+	debug = true
+	handleConfigCommand()
+	w.Close()
+	<-done
+	if !strings.Contains(buf.String(), "DEBUG:") {
+		t.Errorf("DEBUG output should be shown when debug is true")
 	}
 }

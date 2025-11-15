@@ -43,7 +43,6 @@ This project uses a **semantic token system** for AI-optimized development:
 // [CRITICAL] ARCH-001: Archive naming convention [ACTION:core-functionality]
 // [HIGH] CFG-003: Template formatting logic [ACTION:format-processing]
 // [MEDIUM] GIT-004: Git submodule support [ACTION:discovery]
-// [LOW] DOC-014: Interface cleanup [ACTION:maintenance]
 ```
 
 **Key Benefits:**
@@ -204,7 +203,6 @@ The project uses a central registry for semantic tokens:
 - `ARCH-001` - Archive naming convention implementation
 - `CFG-003` - Template formatting logic
 - `GIT-004` - Git submodule support
-- `DOC-014` - AI-first documentation system
 
 ## Migration from Legacy Icons
 

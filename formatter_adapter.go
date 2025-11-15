@@ -36,7 +36,9 @@ func (fcp *FormatterConfigProvider) GetFormatString(formatType string) string {
 	switch formatType {
 	case "created_archive":
 		result := fcp.config.FormatCreatedArchive
-		fmt.Fprintf(os.Stderr, "DEBUG: GetFormatString(created_archive) = %q\n", result)
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: GetFormatString(created_archive) = %q\n", result)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 		return result
 	case "identical_archive":
 		return fcp.config.FormatIdenticalArchive

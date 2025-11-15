@@ -29,8 +29,6 @@ import (
 	"bkpdir/pkg/formatter"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // Version, date, and commit are set at build time via ldflags
 var version = "dev"
@@ -57,14 +55,12 @@ Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
-	// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 	appVersion     = "1.5.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
 // Runtime compilation information (set by build flags)
 var (
-	// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 	compileDate = "unknown"
 	platform    = "unknown"
 	Version     = appVersion // Public version for external access
@@ -74,11 +70,11 @@ var (
 	dryRun     bool
 	note       string
 	showConfig bool
+	debug      bool // SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Global debug flag
 )
 
-// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options implementation [ACTION:core-functionality]
-// Source: docs/context/specification.md - Global Options section
-// Impact: Core functionality requirement for CLI global options
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
+// isFile detects if a path is a regular file
 func isFile(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -87,9 +83,8 @@ func isFile(path string) bool {
 	return info.Mode().IsRegular()
 }
 
-// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options implementation [ACTION:core-functionality]
-// Source: docs/context/specification.md - Global Options section
-// Impact: Core functionality requirement for CLI global options
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
+// isDirectory detects if a path is a directory
 func isDirectory(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -98,9 +93,8 @@ func isDirectory(path string) bool {
 	return info.IsDir()
 }
 
-// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options validation [ACTION:validation]
-// Source: docs/context/specification.md - Global Options section
-// Impact: Validation requirement for CLI global options
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
+// validatePath validates that a path exists and is accessible
 func validatePath(path string) error {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -115,9 +109,8 @@ func validatePath(path string) error {
 	return nil
 }
 
-// CLI-GLOBAL-001: CLI Global Options Specification - CLI global options implementation [ACTION:core-functionality]
-// Source: docs/context/specification.md - Global Options section
-// Impact: Core functionality requirement for CLI global options
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
+// handleAutoDetectedCommand routes commands based on path type detection
 func handleAutoDetectedCommand(args []string) {
 	if len(args) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: no path provided\n")
@@ -147,7 +140,7 @@ func handleAutoDetectedCommand(args []string) {
 	}
 }
 
-// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
 // handleAutoDetectedFileBackup handles file backup when auto-detected
 func handleAutoDetectedFileBackup(args []string) {
 	ctx := context.Background()
@@ -187,7 +180,7 @@ func handleAutoDetectedFileBackup(args []string) {
 	}
 }
 
-// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
 // handleAutoDetectedDirectoryArchive handles directory archive when auto-detected
 func handleAutoDetectedDirectoryArchive(args []string) {
 	ctx := context.Background()
@@ -240,7 +233,7 @@ BkpDir is a command-line tool for archiving directories and backing up individua
 It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
 Git-aware archive naming, and archive verification.`
 
-// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
+// [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
 // executeWithAutoDetection handles Cobra command resolution issues by implementing
 // custom argument parsing that allows auto-detection to work alongside existing commands
 func executeWithAutoDetection(rootCmd *cobra.Command) error {
@@ -397,6 +390,7 @@ func main() {
 		"Display configuration values and exit (backward compatibility)")
 	rootCmd.PersistentFlags().StringVar(&listFile, "list", "",
 		"List backups for a specific file")
+	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug output (AI-first semantic token: DEBUG-OUTPUT)")
 
 	// Add commands - new specification-compliant commands first
 	rootCmd.AddCommand(createCmd())
@@ -423,12 +417,18 @@ func main() {
 func handleConfigCommand() {
 	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+	if debug {
+		fmt.Printf("DEBUG: handleConfigCommand called\n")
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	cwd, err := os.Getwd()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
 		os.Exit(1)
 	}
 
+	if debug {
+		fmt.Printf("DEBUG: Current working directory: %s\n", cwd)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	cfg, err := LoadConfig(cwd)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
@@ -1465,7 +1465,6 @@ func saveConfigData(configPath string, configData map[string]interface{}) {
 	}
 }
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // CommandConfig holds configuration for CLI command execution
 type CommandConfig struct {
 	Config    *Config
@@ -1473,7 +1472,6 @@ type CommandConfig struct {
 	Context   context.Context
 }
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // CommandHandlerInterface abstracts command execution for better testability
 type CommandHandlerInterface interface {
 	HandleFullArchive(args []string, note string, dryRun bool, verify bool) error
@@ -1485,19 +1483,16 @@ type CommandHandlerInterface interface {
 	HandleDisplayConfig(args []string) error
 }
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // CommandHandler provides the concrete implementation of CommandHandlerInterface
 type CommandHandler struct {
 	config CommandConfig
 }
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // NewCommandHandler creates a new CommandHandler with the given configuration
 func NewCommandHandler(cfg CommandConfig) CommandHandlerInterface {
 	return &CommandHandler{config: cfg}
 }
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // HandleFullArchive handles full archive creation command
 func (h *CommandHandler) HandleFullArchive(args []string, note string, dryRun bool, verify bool) error {
 	return CreateFullArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)

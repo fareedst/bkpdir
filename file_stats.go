@@ -6,6 +6,9 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
+// [REQ:OUTPUT_FORMATTING] File statistics and information gathering
+// [ARCH:FILE_STATISTICS] File statistics gathering for enhanced output formatting
+// [IMPL:FILE_STATISTICS] FileStatInfo structure with human-readable formatting
 // STATS-FEATURES-001: Statistics features specification - File statistics and information gathering [ACTION:format-processing]
 // Source: file_stats.go - STATS-FEATURES-001
 // Impact: Core functionality requirement for statistics features
@@ -22,7 +25,7 @@ import (
 	"time"
 )
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// [IMPL:FILE_STATISTICS] [ARCH:FILE_STATISTICS] [REQ:OUTPUT_FORMATTING]
 // FileStatInfo contains statistical information about a file for output formatting
 type FileStatInfo struct {
 	Path      string      // Full file path
@@ -35,7 +38,7 @@ type FileStatInfo struct {
 	Type      string      // File type (regular, directory, symlink)
 }
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// [IMPL:FILE_STATISTICS] [ARCH:FILE_STATISTICS] [REQ:OUTPUT_FORMATTING]
 // GatherFileStatInfo gathers statistical information about a file for output formatting.
 // It returns a FileStatInfo struct containing path, size, modification time, permissions, and type.
 func GatherFileStatInfo(path string) (*FileStatInfo, error) {
@@ -56,7 +59,7 @@ func GatherFileStatInfo(path string) (*FileStatInfo, error) {
 	}, nil
 }
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// [IMPL:FILE_STATISTICS] [ARCH:FILE_STATISTICS] [REQ:OUTPUT_FORMATTING]
 // formatHumanSize converts a size in bytes to a human-readable format.
 // Examples: 1024 -> "1.0KB", 1536 -> "1.5KB", 1048576 -> "1.0MB"
 func formatHumanSize(size int64) string {
@@ -81,7 +84,7 @@ func formatHumanSize(size int64) string {
 	}
 }
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// [IMPL:FILE_STATISTICS] [ARCH:FILE_STATISTICS] [REQ:OUTPUT_FORMATTING]
 // getFileType determines the type of a file based on its FileInfo.
 // Returns "regular", "directory", "symlink", "device", "pipe", "socket", or "other".
 func getFileType(info os.FileInfo) string {

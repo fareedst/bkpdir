@@ -3,6 +3,9 @@
 // Package main provides file backup functionality for BkpDir.
 // It handles individual file backup creation, comparison, and management.
 
+// [REQ:FILE_BACKUP] File backup creation and management
+// [ARCH:RESOURCE_MANAGEMENT] Atomic operations for file backups
+// [IMPL:ATOMIC_OPS] Temporary files with atomic rename
 // BACKUP-FEATURES-001: File Backup Operations Specification - File backup creation and management [ACTION:core-functionality]
 // Source: docs/context/specification.md - File Backup Operations section
 // Impact: Core functionality requirement for file backup operations

@@ -1,5 +1,8 @@
 // This file is part of bkpdir
 
+// [REQ:FILE_BACKUP] File backup creation and management testing
+// [ARCH:RESOURCE_MANAGEMENT] Atomic operations validation
+// [IMPL:ATOMIC_OPS] Atomic file operations implementation validation
 // TEST-BACKUP-FEATURES-001: Backup features test validation - File backup creation and management testing [ACTION:validation]
 // Source: backup.go - BACKUP-FEATURES-001
 // Impact: Validates backup features functionality

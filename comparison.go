@@ -3,6 +3,10 @@
 // Package main provides directory comparison functionality for the BkpDir application.
 // It handles comparing directories to detect changes and identical states.
 
+// [REQ:ARCHIVE_VERIFICATION] Directory comparison for archive verification
+// [ARCH:DIRECTORY_COMPARISON] Snapshot-based directory comparison system
+// [ARCH:PACKAGE_EXTRACTION] Uses extracted fileops package for comparison
+// [IMPL:DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms
 // VERIFY-001: Archive Verification Requirements Immutable - Archive verification and validation [ACTION:validation]
 // Source: docs/context/immutable.md - Archive Verification Requirements section
 // Impact: Core functionality requirement for archive verification
@@ -25,8 +29,6 @@ import (
 )
 
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
 // Legacy type aliases for backward compatibility
 type (
@@ -36,24 +38,28 @@ type (
 
 // Legacy function wrappers for backward compatibility
 
+// [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
 // CreateDirectorySnapshot creates a snapshot of the given directory using the extracted package
 func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
 	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 	return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
 }
 
+// [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
 // CreateArchiveSnapshot creates a snapshot from a ZIP archive using the extracted package
 func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
 	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 	return fileops.CreateArchiveSnapshot(archivePath)
 }
 
+// [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
 // CompareSnapshots compares two directory snapshots using the extracted package
 func CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
 	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return fileops.CompareSnapshots(snapshot1, snapshot2)
 }
 
+// [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
 // IsDirectoryIdenticalToArchive checks if a directory is identical to an archive using the extracted package
 func IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns []string) (bool, error) {
 	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]

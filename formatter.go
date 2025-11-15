@@ -215,9 +215,15 @@ func (f *OutputFormatter) SetCollector(collector *OutputCollector) {
 func (f *OutputFormatter) FormatCreatedArchive(path string) string {
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	result := fmt.Sprintf(f.cfg.FormatCreatedArchive, path)
-	fmt.Fprintf(os.Stderr, "DEBUG: FormatCreatedArchive called with path: %s\n", path)
-	fmt.Fprintf(os.Stderr, "DEBUG: Format string: %q\n", f.cfg.FormatCreatedArchive)
-	fmt.Fprintf(os.Stderr, "DEBUG: Result: %q\n", result)
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: FormatCreatedArchive called with path: %s\n", path)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: Format string: %q\n", f.cfg.FormatCreatedArchive)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: Result: %q\n", result)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	return result
 }
 
@@ -1030,9 +1036,15 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 	result := f.formatTemplate(f.cfg.TemplateCreatedArchiveDetailed, data)
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	if strings.Contains(result, "%{") {
-		fmt.Fprintf(os.Stderr, "DEBUG: Template not processed correctly: %q\n", result)
-		fmt.Fprintf(os.Stderr, "DEBUG: Template input was: %q\n", f.cfg.TemplateCreatedArchiveDetailed)
-		fmt.Fprintf(os.Stderr, "DEBUG: Data was: %+v\n", data)
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: Template not processed correctly: %q\n", result)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: Template input was: %q\n", f.cfg.TemplateCreatedArchiveDetailed)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: Data was: %+v\n", data)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	}
 	return result
 }

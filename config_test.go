@@ -40,7 +40,7 @@ var (
 
 // CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // TEST-REF: Feature tracking matrix CFG-002
-// IMMUTABLE-REF: Configuration System
+// IMMUTABLE-REF: Configuration Merging Requirements
 func TestDefaultConfig(t *testing.T) {
 	cfg := DefaultConfig()
 
@@ -128,6 +128,136 @@ func TestLoadConfig(t *testing.T) {
 
 		// Should fall back to defaults
 		assertStringEqual(t, "fallback ArchiveDirPath", cfg.ArchiveDirPath, defaultArchiveDir)
+	})
+}
+
+// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
+// TEST-REF: Feature tracking matrix CFG-002
+// IMMUTABLE-REF: Configuration Merging Requirements
+func TestLoadConfigMultipleFiles(t *testing.T) {
+	// Save original environment and set to non-existent path to avoid personal config
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("multiple config files processed in sequence", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// Create first config file (should be overridden by second)
+		config1Path := filepath.Join(dir, ".bkpdir.yml")
+		config1Data := map[string]interface{}{
+			"archive_dir_path": "/first/archive",
+			"exclude_patterns": []string{"first1", "first2"},
+			"include_git_info": false,
+		}
+		createTestConfigFileWithData(t, config1Path, config1Data)
+
+		// Create second config file (should override first)
+		config2Path := filepath.Join(dir, "second.yml")
+		config2Data := map[string]interface{}{
+			"archive_dir_path": "/second/archive",
+			"exclude_patterns": []string{"second1", "second2"},
+			"include_git_info": true,
+		}
+		createTestConfigFileWithData(t, config2Path, config2Data)
+
+		// Set BKPDIR_CONFIG to use both files in order
+		os.Setenv("BKPDIR_CONFIG", config1Path+":"+config2Path)
+
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Second file should override first file values
+		assertStringEqual(t, "ArchiveDirPath from second file", cfg.ArchiveDirPath, "/second/archive")
+		assertStringSliceEqual(t, "ExcludePatterns from second file", cfg.ExcludePatterns, []string{"second1", "second2"})
+		assertBoolEqual(t, "IncludeGitInfo from second file", cfg.IncludeGitInfo, true)
+	})
+
+	t.Run("default search path processes multiple files", func(t *testing.T) {
+		// Save original BKPDIR_CONFIG
+		originalBKPDIRConfig := os.Getenv("BKPDIR_CONFIG")
+		defer func() {
+			if originalBKPDIRConfig != "" {
+				os.Setenv("BKPDIR_CONFIG", originalBKPDIRConfig)
+			} else {
+				os.Unsetenv("BKPDIR_CONFIG")
+			}
+		}()
+
+		dir := t.TempDir()
+
+		// Create local config file
+		localConfigPath := filepath.Join(dir, ".bkpdir.yml")
+		localConfigData := map[string]interface{}{
+			"archive_dir_path": "/local/archive",
+			"exclude_patterns": []string{"local1", "local2"},
+		}
+		createTestConfigFileWithData(t, localConfigPath, localConfigData)
+
+		// Create home config file (simulated)
+		homeDir := t.TempDir()
+		homeConfigPath := filepath.Join(homeDir, ".bkpdir.yml")
+		homeConfigData := map[string]interface{}{
+			"archive_dir_path": "/home/archive",
+			"exclude_patterns": []string{"home1", "home2"},
+			"include_git_info": true,
+		}
+		createTestConfigFileWithData(t, homeConfigPath, homeConfigData)
+
+		// Set BKPDIR_CONFIG to use both files
+		// Note: In current implementation, later files override earlier files
+		// So homeConfigPath (second) will override localConfigPath (first)
+		os.Setenv("BKPDIR_CONFIG", localConfigPath+":"+homeConfigPath)
+
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Second file (home) overrides first file (local) values in current implementation
+		assertStringEqual(t, "ArchiveDirPath from home file", cfg.ArchiveDirPath, "/home/archive")
+		assertStringSliceEqual(t, "ExcludePatterns from home file", cfg.ExcludePatterns, []string{"home1", "home2"})
+		// Home file values should be preserved
+		assertBoolEqual(t, "IncludeGitInfo from home file", cfg.IncludeGitInfo, true)
+	})
+
+	t.Run("invalid files are skipped and processing continues", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// Create invalid config file
+		invalidConfigPath := filepath.Join(dir, "invalid.yml")
+		invalidYAML := "invalid: yaml: content: ["
+		err := os.WriteFile(invalidConfigPath, []byte(invalidYAML), 0644)
+		if err != nil {
+			t.Fatalf("Failed to write invalid config: %v", err)
+		}
+
+		// Create valid config file
+		validConfigPath := filepath.Join(dir, "valid.yml")
+		validConfigData := map[string]interface{}{
+			"archive_dir_path": "/valid/archive",
+			"exclude_patterns": []string{"valid1", "valid2"},
+		}
+		createTestConfigFileWithData(t, validConfigPath, validConfigData)
+
+		// Set BKPDIR_CONFIG to use both files
+		os.Setenv("BKPDIR_CONFIG", invalidConfigPath+":"+validConfigPath)
+
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Valid file should be processed even after invalid file
+		assertStringEqual(t, "ArchiveDirPath from valid file", cfg.ArchiveDirPath, "/valid/archive")
+		assertStringSliceEqual(t, "ExcludePatterns from valid file", cfg.ExcludePatterns, []string{"valid1", "valid2"})
 	})
 }
 
@@ -1688,6 +1818,16 @@ func TestConfigReflectionPerformance(t *testing.T) {
 // CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Step 4.1: Integration with existing config system
 func TestConfigReflectionIntegration(t *testing.T) {
+	// Save original BKPDIR_CONFIG
+	originalBKPDIRConfig := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if originalBKPDIRConfig != "" {
+			os.Setenv("BKPDIR_CONFIG", originalBKPDIRConfig)
+		} else {
+			os.Unsetenv("BKPDIR_CONFIG")
+		}
+	}()
+
 	// Create temporary directory for test
 	tempDir := t.TempDir()
 
@@ -1709,6 +1849,9 @@ status_created_archive: 100
 	if err != nil {
 		t.Fatalf("Failed to create test config file: %v", err)
 	}
+
+	// Set BKPDIR_CONFIG to use only the test config file to avoid loading from user's home directory
+	os.Setenv("BKPDIR_CONFIG", configPath)
 
 	// Load configuration
 	cfg, err := LoadConfig(tempDir)
@@ -4067,4 +4210,50 @@ func TestCFG006Integration(t *testing.T) {
 	if len(schema) == 0 {
 		t.Error("Expected non-empty JSON schema")
 	}
+}
+
+// CFG-007: Multi-File Inheritance Chain Processing [TEST]
+func TestLoadConfigWithInheritance_MultiFile(t *testing.T) {
+	dir := t.TempDir()
+
+	// Create base config file (inherited by both)
+	basePath := filepath.Join(dir, "base.yml")
+	baseData := map[string]interface{}{
+		"archive_dir_path": "/base/archive",
+		"exclude_patterns": []string{"base1"},
+	}
+	createTestConfigFileWithData(t, basePath, baseData)
+
+	// Create first config file that inherits from base
+	config1Path := filepath.Join(dir, "config1.yml")
+	config1Data := map[string]interface{}{
+		"inherit":          []string{"base.yml"},
+		"archive_dir_path": "/config1/archive",
+		"exclude_patterns": []string{"config1-1"},
+	}
+	createTestConfigFileWithData(t, config1Path, config1Data)
+
+	// Create second config file that also inherits from base
+	config2Path := filepath.Join(dir, "config2.yml")
+	config2Data := map[string]interface{}{
+		"inherit":          []string{"base.yml"},
+		"archive_dir_path": "/config2/archive",
+		"exclude_patterns": []string{"config2-1"},
+		"include_git_info": true,
+	}
+	createTestConfigFileWithData(t, config2Path, config2Data)
+
+	// Set BKPDIR_CONFIG to use both files in order
+	os.Setenv("BKPDIR_CONFIG", config1Path+":"+config2Path)
+
+	cfg, err := LoadConfigWithInheritance(dir)
+	if err != nil {
+		t.Fatalf("LoadConfigWithInheritance error: %v", err)
+	}
+
+	// config2 should take precedence for archive_dir_path and exclude_patterns
+	assertStringEqual(t, "archive_dir_path from config2", cfg.ArchiveDirPath, "/config2/archive")
+	assertStringSliceEqual(t, "exclude_patterns from config2", cfg.ExcludePatterns, []string{"config2-1"})
+	// include_git_info should come from config2
+	assertBoolEqual(t, "include_git_info from config2", cfg.IncludeGitInfo, true)
 }

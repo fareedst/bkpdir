@@ -27,11 +27,6 @@ import (
 	"syscall"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 // REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 
 // ErrorConfig abstracts configuration dependencies for error handling

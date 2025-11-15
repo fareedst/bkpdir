@@ -1,6 +1,8 @@
 // This file is part of bkpdir
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
+// [REQ:ARCHIVE_VERIFICATION] Directory comparison testing for archive verification
+// [ARCH:DIRECTORY_COMPARISON] Snapshot-based comparison validation
+// [IMPL:DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms validation
 // TEST-VERIFY-001: Archive Verification Test Validation - Archive verification and validation testing [ACTION:validation]
 // Source: comparison_test.go - TEST-VERIFY-001
 // Impact: Test validation for archive verification functionality
