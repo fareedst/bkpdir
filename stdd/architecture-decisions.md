@@ -159,11 +159,18 @@ bkpdir/
 - Maintains backward compatibility
 
 **Merge Strategies:**
-- Standard override (no prefix): Replace parent values
-- Array merge (`+` prefix): Append to parent arrays
+- Standard override (no prefix): Replace parent values (for non-array fields)
+- Array merge (no prefix for array fields): Default merge strategy for array fields per CFG-005
+- Array merge (`+` prefix): Explicit append to parent arrays
 - Array prepend (`^` prefix): Prepend to parent arrays
 - Array replace (`!` prefix): Replace parent arrays completely
 - Default value (`=` prefix): Use only if parent not set
+
+**Array Field Default Behavior:**
+- Array fields (like `exclude_patterns`) default to merge (accumulate) strategy when no prefix is specified
+- This applies to both inheritance chains and sequential file processing
+- Explicit prefixes (`!`, `+`, `^`, `=`) override the default merge behavior
+- Default patterns are preserved when child configs add values
 
 **Implementation:**
 - Inheritance chain processing with circular dependency detection
@@ -1023,3 +1030,57 @@ bkpdir
 - Realistic performance targets
 
 **Cross-References**: [REQ:PERFORMANCE], [REQ:CODE_QUALITY]
+
+## 22. Configuration Testing Architecture [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006]
+
+### Decision: Test-driven validation of exclude patterns merging and source tracking
+**Rationale:**
+- Validates that configuration merging works correctly for array fields
+- Ensures source tracking accurately reflects merged values
+- Provides regression protection for merge behavior changes
+- Enables debugging of configuration issues through test scenarios
+
+**Test Architecture:**
+- **Test Scenario Setup**: Create temporary directory structure with multiple config files
+- **Merge Validation**: Verify patterns from all sources are accumulated, not replaced
+- **Source Tracking Validation**: Verify config command shows correct source attribution
+- **Edge Case Coverage**: Empty arrays, duplicates, order preservation
+
+**Test Structure:**
+- Unit test for merge logic validation
+- Integration test for config command output validation
+- Test fixtures with realistic config file scenarios
+
+**Integration Points:**
+- Uses existing config loading infrastructure
+- Leverages CFG-006 source tracking system
+- Validates CFG-005 merge strategy behavior
+
+**Cross-References**: [REQ:TEST_EXCLUDE_MERGE], [REQ:CONFIGURATION], [REQ:CFG_006], [ARCH:CFG_006]
+
+## 23. Array Field Default Merge Strategy Implementation [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005] [REQ:CONFIGURATION]
+
+### Decision: Array fields default to "merge" strategy to satisfy CFG-005 requirement
+**Rationale:**
+- Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts
+- Ensures default patterns (`.git/`, `vendor/`) are preserved when users add local patterns
+- Fixes implementation bug where array fields were using "override" instead of "merge" by default
+- Provides graceful handling of unknown config fields to prevent merge failures
+- Handles YAML type conversions robustly
+
+**Architecture Changes:**
+- **Merge Strategy Detection**: `extractStrategy` function detects array field keys (like `exclude_patterns`) and defaults to "merge" strategy instead of "override" in all contexts (inheritance chains and sequential file processing)
+- **State Management**: `applyMergeStrategies` uses current state (`resultMap`) instead of original state (`dstMap`) for merge operations to ensure proper accumulation
+- **Pattern Preservation**: Default patterns explicitly copied into result before merge operations
+- **Deduplication**: Merge operations deduplicate values to prevent duplicates
+- **Unknown Field Handling**: Unknown config fields (like `inherit`, `verification`) are gracefully skipped instead of aborting merge operations
+- **YAML Type Conversion**: Robust handling of `[]interface{}` types from YAML unmarshaling, converting to `[]string` as needed
+- **Metadata Field Filtering**: Metadata fields used for inheritance processing (like `inherit`) are filtered out before merge operations
+
+**Integration Points:**
+- Implements CFG-005 merge strategy system requirement
+- Integrates with CFG-006 source tracking
+- Preserves CFG-002 merge behavior specification
+- Ensures backward compatibility with existing config files
+
+**Cross-References**: [REQ:CFG_005], [REQ:CONFIGURATION], [ARCH:CFG_005], [ARCH:CFG_006]

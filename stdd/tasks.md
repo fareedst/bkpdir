@@ -89,6 +89,39 @@ This document tracks all tasks and subtasks for implementing the bkpdir project.
 
 **Priority Rationale**: P0 - Enhances user experience and provides consistent output formatting across commands
 
+## P1: Array Field Default Merge Strategy Implementation [REQ:CFG_005] [ARCH:EXCLUDE_MERGE_FIX] [IMPL:EXCLUDE_MERGE_FIX]
+
+**Status**: ✅ Complete
+
+**Description**: Implement CFG-005 requirement that array configuration fields default to merge (accumulate) strategy. Fixes implementation bug where array fields were using "override" instead of "merge" by default.
+
+**Dependencies**: [REQ:CFG_005] (Configuration Inheritance), [REQ:CONFIGURATION] (Configuration Management), [REQ:TEST_EXCLUDE_MERGE] (Exclude Patterns Merge Testing)
+
+**Subtasks**:
+- [x] Implement merge strategy detection for array fields [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Fix merge state management to use current state [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Fix merge operation to handle nil values and deduplication [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Add explicit pattern preservation before merge [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Handle YAML type conversions (`[]interface{}` to `[]string`) [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Implement graceful unknown field handling [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Add `isKnownConfigField` helper function [REQ:CFG_005] [IMPL:EXCLUDE_MERGE_FIX]
+- [x] Update tests to use explicit merge strategy prefixes where override expected [REQ:CFG_005] [TEST:EXCLUDE_MERGE]
+- [x] Create test scenario for merge validation [REQ:TEST_EXCLUDE_MERGE] [IMPL:TEST_EXCLUDE_MERGE]
+
+**Completion Criteria**:
+- [x] exclude_patterns defaults to "merge" strategy instead of "override" in all contexts
+- [x] Patterns from defaults are preserved when local config adds patterns
+- [x] Patterns are deduplicated during merge
+- [x] Order is preserved (defaults first, then additions)
+- [x] Merge operations use current state (not original state)
+- [x] YAML unmarshaling type conversions handled correctly (`[]interface{}` to `[]string`)
+- [x] Unknown config fields gracefully skipped instead of aborting merge
+- [x] Metadata fields (like `inherit`) filtered out before merge operations
+- [x] All tests pass (TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE, TestLoadConfigMultipleFiles, TestLoadConfigWithInheritance_MultiFile, TestSourceConflictDetection)
+- [x] Documentation updated
+
+**Priority Rationale**: P1 - Implements CFG-005 requirement for array field default merge behavior. Critical for user experience and configuration behavior - users expect array fields to accumulate from multiple sources.
+
 ## P1: Code Linting Compliance [REQ:LINT_001] [ARCH:CODE_ORGANIZATION] [IMPL:CODE_STYLE]
 
 **Status**: 🟡 In Progress

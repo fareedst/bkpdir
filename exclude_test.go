@@ -43,3 +43,27 @@ func TestShouldExcludeFile_REQ_CONFIGURATION(t *testing.T) {
 		}
 	}
 }
+
+// [REQ:CONFIGURATION] [ARCH:EXCLUSION_PATTERNS] [IMPL:EXCLUSION_PATTERNS]
+// TestDirectoryExclusionPattern validates directory exclusion patterns ending with /
+func TestDirectoryExclusionPattern_REQ_CONFIGURATION(t *testing.T) {
+	patterns := []string{"demo/batches/", "*.log"}
+	tests := []struct {
+		file     string
+		excluded bool
+		name     string
+	}{
+		{"demo/batches/file1.txt", true, "file in demo/batches/ directory"},
+		{"demo/batches/subdir/file2.txt", true, "file in subdirectory of demo/batches/"},
+		{"demo/batches", false, "demo/batches as file (not directory)"},
+		{"demo/other/file.txt", false, "file in demo/other (not excluded)"},
+		{"other/batches/file.txt", false, "batches in different parent"},
+		{"error.log", true, "log file excluded"},
+		{"demo/batches.log", true, "log file matching *.log"},
+	}
+	for _, tt := range tests {
+		if got := ShouldExcludeFile(tt.file, patterns); got != tt.excluded {
+			t.Errorf("%s: ShouldExcludeFile(%q) = %v, want %v", tt.name, tt.file, got, tt.excluded)
+		}
+	}
+}

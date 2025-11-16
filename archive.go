@@ -417,7 +417,21 @@ func collectFilesToArchive(ctx context.Context, cwd string, excludePatterns []st
 			return err
 		}
 
-		if rel == "." || info.IsDir() || ShouldExcludeFile(rel, excludePatterns) {
+		// Skip root directory
+		if rel == "." {
+			return nil
+		}
+
+		// Check exclusion patterns first - if excluded, skip directory or file
+		if ShouldExcludeFile(rel, excludePatterns) {
+			if info.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+
+		// Skip directories (non-excluded directories are not added to files list)
+		if info.IsDir() {
 			return nil
 		}
 
@@ -463,7 +477,11 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 		return err
 	}
 
-	files, err := collectFilesToArchiveWithInterface(ctx, cwd, archiveConfig.GetExcludePatterns())
+	excludePatterns := archiveConfig.GetExcludePatterns()
+	if debug {
+		fmt.Printf("DEBUG: Using exclude patterns for archive: %v\n", excludePatterns)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+	files, err := collectFilesToArchiveWithInterface(ctx, cwd, excludePatterns)
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to scan directory", 1, err)
 	}
@@ -532,7 +550,21 @@ func collectFilesToArchiveWithInterface(ctx context.Context, cwd string, exclude
 			return err
 		}
 
-		if rel == "." || info.IsDir() || ShouldExcludeFile(rel, excludePatterns) {
+		// Skip root directory
+		if rel == "." {
+			return nil
+		}
+
+		// Check exclusion patterns first - if excluded, skip directory or file
+		if ShouldExcludeFile(rel, excludePatterns) {
+			if info.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+
+		// Skip directories (non-excluded directories are not added to files list)
+		if info.IsDir() {
 			return nil
 		}
 

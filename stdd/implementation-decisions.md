@@ -992,7 +992,135 @@ func FilterPaths(paths []string, exclusions []string) []string {
 
 **Code Markers**: `pkg/fileops/exclusion.go`, `PatternMatcher` struct, doublestar imports
 
-## 19. Verification Implementation [IMPL:VERIFICATION] [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
+## 19. Exclude Patterns Merge Testing [IMPL:TEST_EXCLUDE_MERGE] [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006]
+
+### Decision: Comprehensive test scenario for exclude patterns merging and source tracking
+**Rationale:**
+- Validates merge behavior fix for exclude patterns
+- Ensures source tracking shows correct attribution
+- Provides regression protection
+- Enables debugging through test scenarios
+
+### Test Implementation Structure
+```go
+// Test scenario setup
+func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
+    // 1. Create temp directory with config files
+    // 2. Load config and verify merge
+    // 3. Verify config command output
+    // 4. Validate source attribution
+}
+```
+
+### Test Scenarios
+1. **Basic Merge Test**: Default + local config merge
+2. **Source Attribution Test**: Config command shows correct source
+3. **Deduplication Test**: Duplicate patterns handled correctly
+4. **Order Preservation Test**: Defaults first, then additions
+
+### Test Validation Points
+- Merged patterns contain all patterns from all sources
+- Config command output shows config file path (not "default")
+- Inheritance chain shows all contributing files
+- Patterns are deduplicated
+- Order is preserved
+
+**Code Markers**: `config_test.go`, `TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE`
+
+**Cross-References**: [REQ:TEST_EXCLUDE_MERGE], [ARCH:TEST_EXCLUDE_MERGE], [REQ:CONFIGURATION], [REQ:CFG_006]
+
+## 20. Array Field Default Merge Strategy Implementation [IMPL:EXCLUDE_MERGE_FIX] [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005] [REQ:CONFIGURATION]
+
+### Decision: Implement array field default merge strategy to satisfy CFG-005 requirement
+**Rationale:**
+- Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts (inheritance chains and sequential file processing)
+- Fixes implementation bug where array fields were using "override" instead of "merge" by default
+- Ensures default patterns are preserved when local config adds patterns
+- Provides proper deduplication during merge
+- Uses current state for merge operations to ensure proper accumulation
+- Handles YAML unmarshaling type conversions gracefully
+- Gracefully skips unknown config fields instead of aborting merge operations
+
+### Implementation Changes
+
+#### 1. Merge Strategy Detection Fix (`extractStrategy`)
+**Location**: `config.go:1760-1783`
+**Change**: Array fields (like `exclude_patterns`) now default to "merge" strategy instead of "override" in all contexts. This applies to both inheritance chains and sequential file processing, ensuring consistent behavior per CFG-005.
+
+#### 2. Merge State Management Fix (`applyMergeStrategies`)
+**Location**: `config.go:1700-1875`
+**Changes**:
+- Initialize `result` as a deep copy of `dst` instead of `DefaultConfig()` to preserve accumulated values
+- Save `dst.ExcludePatterns` before calling `mergeConfigs` and restore after to prevent `mergeConfigs` from interfering with merge strategy processing
+- Create temporary copy of `src` with `ExcludePatterns` set to `nil` before calling `mergeConfigs` to prevent double-processing
+- Use `resultMap` (current state) instead of `dstMap` (original state) for merge operations
+- Update `resultMap` after each merge operation to reflect changes
+- Skip unknown config fields (like `inherit`, `verification`) gracefully instead of aborting merge
+
+#### 3. Unknown Field Handling (`isKnownConfigField` and `applyMergeStrategies`)
+**Location**: `config.go:1840-1844, 1861-1867, 2345-2358`
+**New Function**: `isKnownConfigField` helper function checks if a field name is a valid config field before processing.
+```go
+func isKnownConfigField(key string) bool {
+    knownFields := map[string]bool{
+        "archive_dir_path":     true,
+        "use_current_dir_name": true,
+        "exclude_patterns":     true,
+        "include_git_info":     true,
+        "backup_dir_path":      true,
+        "skip_broken_symlinks": true,
+        "status_created_archive": true,
+        "status_disk_full":      true,
+    }
+    return knownFields[key]
+}
+```
+**Changes**:
+- Skip `inherit` metadata field (used for inheritance processing, not config)
+- Skip unknown config fields using `isKnownConfigField` check before processing
+- Fallback error handler skips unknown fields if they slip through (defensive programming)
+- Prevents merge operations from aborting when encountering metadata or unknown fields
+
+#### 4. YAML Type Conversion Fix (`applyMerge`)
+**Location**: `config.go:2115-2256`
+**Changes**:
+- Handle `[]interface{}` from YAML unmarshaling by converting to `[]string` before processing
+- Convert both source (`value`) and destination (`dstValue`) from `[]interface{}` to `[]string` if needed
+- Ensures merge logic correctly processes string slices regardless of YAML unmarshaling type
+- Preserves existing merge logic with deduplication and order preservation
+
+#### 5. Field Setting Type Conversion Fix (`setConfigField`)
+**Location**: `config.go:2285-2343`
+**Changes**:
+- Added `else if` block to handle `[]interface{}` values for `exclude_patterns`
+- Converts `[]interface{}` to `[]string` before assignment
+- Ensures `applyReplace` and other merge operations work correctly with YAML-unmarshaled values
+
+#### 6. Array Field Default Merge in All Contexts
+**Location**: `config.go:1770-1783`
+**Change**: Removed `inheritContext` condition that was preventing array fields from defaulting to merge in sequential file processing. Array fields now default to merge in all contexts (inheritance chains and sequential files), per CFG-005 requirement. Explicit prefixes (`!`, `+`, `^`, `=`) are still respected.
+
+### Fix Summary
+1. **Strategy Detection**: Array fields default to "merge" instead of "override" in all contexts
+2. **State Management**: Uses current state (`resultMap`) instead of original state (`dstMap`)
+3. **Pattern Preservation**: Explicitly copies default patterns before merge
+4. **Deduplication**: Proper deduplication during merge operations
+5. **Nil Handling**: Handles nil `dstValue` by getting current value from result
+6. **YAML Type Conversion**: Handles `[]interface{}` from YAML unmarshaling in both `applyMerge` and `setConfigField`
+7. **Unknown Field Handling**: Gracefully skips unknown config fields instead of aborting merge
+8. **Metadata Field Handling**: Skips `inherit` and other metadata fields that aren't part of Config struct
+
+### Test Updates
+**Location**: `config_test.go`
+**Changes**:
+- Updated `TestLoadConfigMultipleFiles/default_search_path_processes_multiple_files` to use `!exclude_patterns` prefix where override behavior is expected
+- Tests now explicitly use merge strategy prefixes to align with CFG-005 requirement that array fields default to merge
+
+**Code Markers**: `config.go`, `extractStrategy`, `applyMergeStrategies`, `applyMerge`, `setConfigField`, `isKnownConfigField`
+
+**Cross-References**: [REQ:CFG_005], [ARCH:EXCLUDE_MERGE_FIX], [REQ:CONFIGURATION], [REQ:TEST_EXCLUDE_MERGE]
+
+## 20. Verification Implementation [IMPL:VERIFICATION] [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
 
 ### Decision: Multi-algorithm checksum verification with status tracking
 **Rationale:**

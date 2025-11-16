@@ -45,9 +45,10 @@ This acknowledgment confirms that the AI agent has:
 2. [AI-First Principles](#ai-first-principles)
 3. [Documentation Structure](#documentation-structure)
 4. [Semantic Token System](#semantic-token-system)
-5. [Development Process](#development-process)
-6. [Task Tracking System](#task-tracking-system)
-7. [How to Present This to AI Agents](#how-to-present-this-to-ai-agents)
+5. [Bugs vs Requirements: Proper STDD Handling](#-bugs-vs-requirements-proper-stdd-handling)
+6. [Development Process](#development-process)
+7. [Task Tracking System](#task-tracking-system)
+8. [How to Present This to AI Agents](#how-to-present-this-to-ai-agents)
 
 ---
 
@@ -227,7 +228,127 @@ Each document should contain:
 
 This ensures traceability in both directions and helps AI assistants understand relationships.
 
-#### Change Impact Tracking
+## 🐛 Bugs vs Requirements: Proper STDD Handling
+
+### Critical Distinction
+
+**Requirements describe desired behavior. Bugs describe implementation failures.**
+
+This distinction is fundamental to STDD:
+
+- **Requirements (`[REQ:*]`)**: Describe WHAT the system should do and WHY
+- **Bugs**: Describe WHERE the implementation fails to meet a requirement
+
+### Rules for Requirements
+
+1. **Requirements MUST NOT describe bugs**
+   - ❌ Bad: "Fix configuration merge strategy for exclude_patterns"
+   - ✅ Good: "Array configuration fields default to merge (accumulate) strategy"
+
+2. **Requirements describe desired behavior**
+   - Focus on WHAT the system should do
+   - Focus on WHY the behavior is needed
+   - Avoid implementation details
+   - Avoid references to "fix", "bug", "issue", "problem"
+
+3. **Requirements are user-facing**
+   - Describe behavior users expect
+   - Describe capabilities the system provides
+   - Use positive language (what should happen, not what shouldn't)
+
+### Rules for Bug Tracking
+
+1. **Bugs are tracked in Architecture/Implementation Decisions**
+   - Document bugs in `architecture-decisions.md` or `implementation-decisions.md`
+   - Use `[ARCH:*]` or `[IMPL:*]` tokens
+   - Cross-reference to the requirement that should be satisfied: `[REQ:*]`
+
+2. **Bug documentation format**
+   ```markdown
+   ## N. Bug Description [ARCH:BUG_IDENTIFIER] [REQ:RELATED_REQUIREMENT]
+   
+   ### Issue: Brief description of the bug
+   **Rationale:**
+   - Describes the implementation failure
+   - References the requirement that should be satisfied
+   - Explains why the current implementation is incorrect
+   
+   ### Fix Approach
+   - How the bug will be fixed
+   - What changes are needed
+   - Cross-reference to requirement being satisfied
+   ```
+
+3. **When a bug reveals a missing requirement**
+   - If fixing a bug reveals that behavior wasn't properly specified, ADD a requirement
+   - The requirement describes the desired behavior
+   - The bug fix implements that requirement
+   - Example: Bug "exclude_patterns not merging" → Requirement "Array fields default to merge strategy"
+
+### Decision Tree: Bug or Requirement?
+
+```
+Is this describing WHAT the system should do?
+├─ YES → It's a REQUIREMENT
+│   └─ Document in requirements.md with [REQ:*] token
+│   └─ Describe desired behavior, not the problem
+│
+└─ NO → Is this describing WHERE implementation fails?
+    ├─ YES → It's a BUG
+    │   └─ Document in architecture-decisions.md or implementation-decisions.md
+    │   └─ Use [ARCH:*] or [IMPL:*] token
+    │   └─ Cross-reference to [REQ:*] that should be satisfied
+    │   └─ Describe the fix approach
+    │
+    └─ NO → Is this describing HOW to implement something?
+        └─ YES → It's an ARCHITECTURE or IMPLEMENTATION decision
+            └─ Document in appropriate decisions file
+            └─ Use [ARCH:*] or [IMPL:*] token
+            └─ Cross-reference to [REQ:*]
+```
+
+### Examples
+
+#### ❌ Bad: Bug as Requirement
+```markdown
+### [REQ:EXCLUDE_MERGE_FIX] Exclude Patterns Merge Strategy Fix Requirements
+
+- **Description**: Fix configuration merge strategy for `exclude_patterns` to ensure patterns are accumulated...
+```
+**Problem**: Describes a fix, not desired behavior
+
+#### ✅ Good: Requirement Describing Behavior
+```markdown
+### [REQ:CFG_005] Layered Configuration Inheritance Requirements
+
+- **Description**: Array configuration fields default to merge (accumulate) strategy to preserve values...
+```
+**Correct**: Describes desired behavior
+
+#### ✅ Good: Bug Documented in Architecture Decision
+```markdown
+## 23. Array Field Default Merge Strategy Implementation [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005]
+
+### Decision: Array fields default to "merge" strategy to satisfy CFG-005 requirement
+**Rationale:**
+- Implements CFG-005 requirement that array fields default to merge (accumulate) strategy
+- Fixes implementation bug where array fields were using "override" instead of "merge" by default
+```
+**Correct**: Bug fix documented in architecture decision, references requirement
+
+### Tasks and Bugs
+
+1. **Tasks can reference bugs**
+   - Task descriptions can mention bug fixes
+   - Tasks should reference the requirement being satisfied: `[REQ:*]`
+   - Example: "Implement CFG-005 requirement. Fixes bug where..."
+
+2. **Task priority rationale**
+   - Can mention bug impact on user experience
+   - Should emphasize requirement implementation
+   - Example: "P1 - Implements CFG-005 requirement. Critical for user experience..."
+
+### Change Impact Tracking
 
 When making changes, use this matrix to identify what needs updating:
 
@@ -237,7 +358,7 @@ When making changes, use this matrix to identify what needs updating:
 | Requirement Change | requirements.md, architecture-decisions.md, implementation-decisions.md, tests | Implementation validation |
 | Architecture Change | architecture-decisions.md, implementation-decisions.md, tests | Test validation |
 | Implementation Detail | implementation-decisions.md, tests | Test validation |
-| Bug Fix | requirements.md (if requirement was wrong), tests | Regression validation |
+| Bug Fix | architecture-decisions.md or implementation-decisions.md, tests, requirements.md (if requirement was missing/wrong) | Regression validation |
 
 #### Pre-Change Validation Checklist
 

@@ -46,6 +46,7 @@ Each requirement includes:
 |-------|------------|----------|--------|--------------|----------------|
 | `[REQ:CFG_005]` | Layered Configuration Inheritance | P0 | ✅ | See `architecture-decisions.md` § Layered Configuration Inheritance | See `implementation-decisions.md` § Configuration Structure |
 | `[REQ:CFG_006]` | Complete Configuration Reflection and Visibility | P1 | ✅ | See `architecture-decisions.md` § Configuration System | See `implementation-decisions.md` § Configuration Structure |
+| `[REQ:TEST_EXCLUDE_MERGE]` | Exclude Patterns Merge Testing | P1 | ✅ | See `architecture-decisions.md` § Configuration Testing Architecture [ARCH:TEST_EXCLUDE_MERGE] | See `implementation-decisions.md` § Exclude Patterns Merge Testing [IMPL:TEST_EXCLUDE_MERGE] |
 
 ### Non-Functional Requirements
 
@@ -276,13 +277,17 @@ Each requirement includes:
 
 **Priority: P0 (Critical)**
 
-- **Description**: Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported.
-- **Rationale**: Enables hierarchical configuration management for complex project structures
+- **Description**: Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported. Array configuration fields (such as `exclude_patterns`) default to merge (accumulate) strategy to preserve values from defaults and parent configs when child configs add values.
+- **Rationale**: Enables hierarchical configuration management for complex project structures. Array fields accumulating by default ensures that default values (like `.git/`, `vendor/`) are preserved when users add local values.
 - **Satisfaction Criteria**:
   - Configuration files can inherit from other files
   - Circular dependencies detected and prevented
   - Inheritance chains processed in correct order
   - Merge strategies (override, append, prepend, replace, default) work correctly
+  - Array fields default to merge (accumulate) strategy when no prefix is specified
+  - Array field values from defaults and parent configs are preserved when child configs add values
+  - Duplicate values in arrays are deduplicated during merge
+  - Order is preserved: defaults/parent values first, then child additions
 - **Validation Criteria**: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
 - **Architecture**: See `architecture-decisions.md` § Layered Configuration Inheritance [ARCH:CFG_005]
 - **Implementation**: See `implementation-decisions.md` § Configuration Structure [IMPL:CONFIG_STRUCT]
@@ -316,6 +321,32 @@ Each requirement includes:
 - **Implementation**: See `implementation-decisions.md` § Configuration Reflection Implementation [IMPL:CFG_006]
 
 **Status**: ✅ Implemented
+
+### [REQ:TEST_EXCLUDE_MERGE] Exclude Patterns Merge Testing Requirements
+
+**Priority: P1 (Important)**
+
+- **Description**: Test scenario that verifies `exclude_patterns` are correctly merged from multiple configuration files and that the `config` command accurately displays the source of merged exclude patterns. Test must validate that patterns from multiple config files (e.g., default config and local `.bkpdir.yml`) are properly accumulated and that source tracking shows all contributing sources.
+- **Rationale**: Ensures configuration merging works correctly for exclude patterns and that users can debug configuration issues by seeing where each pattern comes from. Critical for validating the fix to exclude pattern merging behavior.
+- **Satisfaction Criteria**:
+  - Test creates scenario with default config and local config file
+  - Test verifies exclude patterns from both sources are merged (accumulated, not replaced)
+  - Test verifies merged patterns contain all patterns from all sources
+  - Test verifies `config` command shows correct source attribution (not just "default")
+  - Test validates that patterns are deduplicated during merge
+  - Test validates that order is preserved (defaults first, then local additions)
+- **Validation Criteria**: 
+  - Test passes with merged exclude patterns containing patterns from all sources
+  - Test validates config command output shows source as config file path (not "default") when local patterns are present
+  - Test validates inheritance chain tracking shows all contributing files
+  - Test covers edge cases: empty arrays, duplicate patterns, pattern order
+- **Architecture**: See `architecture-decisions.md` § Configuration Testing Architecture [ARCH:TEST_EXCLUDE_MERGE]
+- **Implementation**: See `implementation-decisions.md` § Exclude Patterns Merge Testing [IMPL:TEST_EXCLUDE_MERGE]
+
+**Status**: ✅ Implemented
+
+**Cross-References**: [REQ:CONFIGURATION] (Configuration Management), [REQ:CFG_006] (Configuration Reflection and Visibility), [REQ:IMMUTABLE_FILE_EXCLUSION] (File Exclusion Requirements)
+
 
 ## Non-Functional Requirements
 

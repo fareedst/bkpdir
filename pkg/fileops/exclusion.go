@@ -57,22 +57,50 @@ func (pm *PatternMatcher) matchesPattern(path, pattern string) bool {
 }
 
 // matchesDirectoryPattern handles patterns ending with /
+// Patterns ending with / should only match directories, not files
 func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-	patternsToTry := []string{
-		pattern,                // e.g., node_modules/
-		pattern + "**",         // e.g., node_modules/**
-		"**/" + pattern,        // e.g., **/node_modules/
-		"**/" + pattern + "**", // e.g., **/node_modules/**
-	}
-
-	for _, p := range patternsToTry {
-		matched, err := doublestar.Match(p, path)
-		if err == nil && matched {
-			return true
+	// Remove trailing / from pattern for matching
+	patternBase := strings.TrimSuffix(pattern, "/")
+	
+	// Patterns ending with / should only match directories:
+	// - Path must have a / after the pattern base (e.g., "demo/batches/file.txt")
+	// - Path must end with / (e.g., "demo/batches/")
+	// - Path must NOT be exactly the pattern base without / (e.g., "demo/batches" as a file)
+	
+	// Check if pattern starts with **/ (matches anywhere)
+	if strings.HasPrefix(pattern, "**/") {
+		// For **/ patterns, extract the directory name (after **/)
+		// Pattern is like "**/node_modules/", patternBase is "**/node_modules"
+		// We need to find "node_modules/" in the path
+		dirName := strings.TrimPrefix(patternBase, "**/")
+		dirPattern := dirName + "/"
+		
+		// Check if path contains dirPattern anywhere
+		if strings.Contains(path, dirPattern) {
+			// Verify it's not just the directory name as a file
+			// Path must have content after dirPattern or end with "/"
+			idx := strings.Index(path, dirPattern)
+			if idx >= 0 {
+				remaining := path[idx+len(dirPattern):]
+				// If there's content after dirPattern, it's a directory match
+				if len(remaining) > 0 || strings.HasSuffix(path, "/") {
+					return true
+				}
+			}
 		}
+		return false
 	}
-	return false
+	
+	// For non-** patterns, strict check: path must have / after patternBase or end with /
+	// This ensures "demo/batches/" matches but "demo/batches" (file) does not
+	if !strings.HasPrefix(path, patternBase+"/") && path != patternBase+"/" {
+		return false
+	}
+	
+	// If we get here, path starts with patternBase+"/" or equals patternBase+"/"
+	// Both cases indicate a directory match
+	return true
 }
 
 // matchesGlobPattern handles patterns containing *

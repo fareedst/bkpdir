@@ -152,7 +152,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		config1Path := filepath.Join(dir, ".bkpdir.yml")
 		config1Data := map[string]interface{}{
 			"archive_dir_path": "/first/archive",
-			"exclude_patterns": []string{"first1", "first2"},
+			"!exclude_patterns": []string{"first1", "first2"},
 			"include_git_info": false,
 		}
 		createTestConfigFileWithData(t, config1Path, config1Data)
@@ -161,7 +161,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		config2Path := filepath.Join(dir, "second.yml")
 		config2Data := map[string]interface{}{
 			"archive_dir_path": "/second/archive",
-			"exclude_patterns": []string{"second1", "second2"},
+			"!exclude_patterns": []string{"second1", "second2"},
 			"include_git_info": true,
 		}
 		createTestConfigFileWithData(t, config2Path, config2Data)
@@ -206,14 +206,14 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		homeConfigPath := filepath.Join(homeDir, ".bkpdir.yml")
 		homeConfigData := map[string]interface{}{
 			"archive_dir_path": "/home/archive",
-			"exclude_patterns": []string{"home1", "home2"},
+			"!exclude_patterns": []string{"home1", "home2"}, // Use ! prefix to explicitly override (per CFG-005)
 			"include_git_info": true,
 		}
 		createTestConfigFileWithData(t, homeConfigPath, homeConfigData)
 
 		// Set BKPDIR_CONFIG to use both files
-		// Note: In current implementation, later files override earlier files
-		// So homeConfigPath (second) will override localConfigPath (first)
+		// Note: Per CFG-005, array fields default to merge, but ! prefix explicitly requests override
+		// So homeConfigPath (second) will override localConfigPath (first) for exclude_patterns
 		os.Setenv("BKPDIR_CONFIG", localConfigPath+":"+homeConfigPath)
 
 		cfg, err := LoadConfig(dir)
@@ -221,7 +221,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Second file (home) overrides first file (local) values in current implementation
+		// Second file (home) overrides first file (local) values due to ! prefix
 		assertStringEqual(t, "ArchiveDirPath from home file", cfg.ArchiveDirPath, "/home/archive")
 		assertStringSliceEqual(t, "ExcludePatterns from home file", cfg.ExcludePatterns, []string{"home1", "home2"})
 		// Home file values should be preserved
@@ -241,10 +241,10 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 
 		// Create valid config file
 		validConfigPath := filepath.Join(dir, "valid.yml")
-		validConfigData := map[string]interface{}{
-			"archive_dir_path": "/valid/archive",
-			"exclude_patterns": []string{"valid1", "valid2"},
-		}
+	validConfigData := map[string]interface{}{
+		"archive_dir_path": "/valid/archive",
+		"!exclude_patterns": []string{"valid1", "valid2"},
+	}
 		createTestConfigFileWithData(t, validConfigPath, validConfigData)
 
 		// Set BKPDIR_CONFIG to use both files
@@ -1160,7 +1160,7 @@ func createTestConfigFile(t *testing.T, dir string) {
 
 	configYAML := "archive_dir_path: " + testArchiveDir + "\n" +
 		"use_current_dir_name: false\n" +
-		"exclude_patterns:\n" +
+		"\"!exclude_patterns\":\n" +
 		"  - node_modules/\n" +
 		"  - '*.log'\n"
 
@@ -4238,7 +4238,7 @@ func TestLoadConfigWithInheritance_MultiFile(t *testing.T) {
 	config2Data := map[string]interface{}{
 		"inherit":          []string{"base.yml"},
 		"archive_dir_path": "/config2/archive",
-		"exclude_patterns": []string{"config2-1"},
+		"!exclude_patterns": []string{"config2-1"},
 		"include_git_info": true,
 	}
 	createTestConfigFileWithData(t, config2Path, config2Data)
@@ -4256,4 +4256,250 @@ func TestLoadConfigWithInheritance_MultiFile(t *testing.T) {
 	assertStringSliceEqual(t, "exclude_patterns from config2", cfg.ExcludePatterns, []string{"config2-1"})
 	// include_git_info should come from config2
 	assertBoolEqual(t, "include_git_info from config2", cfg.IncludeGitInfo, true)
+}
+
+// [REQ:TEST_EXCLUDE_MERGE] [ARCH:TEST_EXCLUDE_MERGE] [IMPL:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006]
+// TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE verifies that exclude_patterns are correctly merged
+// from multiple configuration files and that the config command shows correct source attribution
+func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
+	// Save original environment
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("exclude patterns merged from defaults and local config", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// Create local config file with additional exclude patterns
+		localConfigPath := filepath.Join(dir, ".bkpdir.yml")
+		localConfigData := map[string]interface{}{
+			"exclude_patterns": []string{"demo/batches/", "*.log"},
+		}
+		createTestConfigFileWithData(t, localConfigPath, localConfigData)
+
+		// DIAGNOSTIC: Verify file was created correctly
+		fileContent, err := os.ReadFile(localConfigPath)
+		if err != nil {
+			t.Fatalf("Failed to read config file: %v", err)
+		}
+		t.Logf("DIAGNOSTIC: Config file content:\n%s", string(fileContent))
+
+		// Set BKPDIR_CONFIG to use only local config (defaults will be loaded first)
+		os.Setenv("BKPDIR_CONFIG", localConfigPath)
+
+		// DIAGNOSTIC: Test loadSingleConfigFile directly
+		t.Logf("DIAGNOSTIC: Testing loadSingleConfigFile directly")
+		loadResult, err := loadSingleConfigFile(localConfigPath)
+		if err != nil {
+			t.Fatalf("loadSingleConfigFile error: %v", err)
+		}
+		t.Logf("DIAGNOSTIC: loadResult.config.ExcludePatterns: %v", loadResult.config.ExcludePatterns)
+		rawMapKeys := make([]string, 0, len(loadResult.rawMap))
+		for k := range loadResult.rawMap {
+			rawMapKeys = append(rawMapKeys, k)
+		}
+		t.Logf("DIAGNOSTIC: loadResult.rawMap keys: %v", rawMapKeys)
+		if val, ok := loadResult.rawMap["exclude_patterns"]; ok {
+			t.Logf("DIAGNOSTIC: loadResult.rawMap[\"exclude_patterns\"]: %v (type: %T)", val, val)
+		} else {
+			t.Logf("DIAGNOSTIC: loadResult.rawMap[\"exclude_patterns\"]: NOT FOUND")
+		}
+
+		// DIAGNOSTIC: Test applyMergeStrategies directly
+		t.Logf("DIAGNOSTIC: Testing applyMergeStrategies directly")
+		defaultCfg := DefaultConfig()
+		t.Logf("DIAGNOSTIC: Default config exclude_patterns: %v", defaultCfg.ExcludePatterns)
+		t.Logf("DIAGNOSTIC: Source config exclude_patterns: %v", loadResult.config.ExcludePatterns)
+		
+		// Enable debug temporarily for this test (debug is in main.go)
+		// We'll use t.Logf for diagnostics instead since debug is not accessible here
+		
+		mergedCfg, err := applyMergeStrategies(defaultCfg, loadResult.config, true, loadResult.rawMap)
+		if err != nil {
+			t.Fatalf("applyMergeStrategies error: %v", err)
+		}
+		t.Logf("DIAGNOSTIC: Merged config exclude_patterns: %v", mergedCfg.ExcludePatterns)
+		
+		// Verify the direct merge worked
+		expectedDirectMerge := []string{".git/", "vendor/", "demo/batches/", "*.log"}
+		if !equalStringSlices(mergedCfg.ExcludePatterns, expectedDirectMerge) {
+			t.Errorf("DIAGNOSTIC: Direct applyMergeStrategies failed. Expected %v, got %v", expectedDirectMerge, mergedCfg.ExcludePatterns)
+		}
+
+		// DIAGNOSTIC: Check search paths before LoadConfig
+		searchPaths := getConfigSearchPaths()
+		t.Logf("DIAGNOSTIC: Search paths before LoadConfig: %v", searchPaths)
+		for i, configPath := range searchPaths {
+			expandedPath := expandPath(configPath)
+			if !filepath.IsAbs(expandedPath) {
+				expandedPath = filepath.Join(dir, expandedPath)
+			}
+			if info, err := os.Stat(expandedPath); err == nil {
+				t.Logf("DIAGNOSTIC: Search path[%d] %s -> %s (exists, size=%d)", i, configPath, expandedPath, info.Size())
+			} else {
+				t.Logf("DIAGNOSTIC: Search path[%d] %s -> %s (NOT FOUND: %v)", i, configPath, expandedPath, err)
+			}
+		}
+
+		// Load config - should merge defaults with local config
+		t.Logf("DIAGNOSTIC: Calling LoadConfig with root: %s", dir)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Debug: Show what we got
+		t.Logf("DIAGNOSTIC: LoadConfig completed successfully")
+		t.Logf("DIAGNOSTIC: Loaded config exclude_patterns: %v (len=%d)", cfg.ExcludePatterns, len(cfg.ExcludePatterns))
+		t.Logf("DIAGNOSTIC: Default exclude_patterns: %v (len=%d)", DefaultConfig().ExcludePatterns, len(DefaultConfig().ExcludePatterns))
+
+		// Verify merged exclude patterns contain both defaults and local patterns
+		expectedPatterns := []string{".git/", "vendor/", "demo/batches/", "*.log"}
+		if !equalStringSlices(cfg.ExcludePatterns, expectedPatterns) {
+			t.Errorf("Exclude patterns not merged correctly. Expected %v (len=%d), got %v (len=%d)", 
+				expectedPatterns, len(expectedPatterns), cfg.ExcludePatterns, len(cfg.ExcludePatterns))
+			
+			// Detailed comparison
+			expectedMap := make(map[string]bool)
+			for _, p := range expectedPatterns {
+				expectedMap[p] = true
+			}
+			gotMap := make(map[string]bool)
+			for _, p := range cfg.ExcludePatterns {
+				gotMap[p] = true
+			}
+			
+			t.Logf("DIAGNOSTIC: Missing patterns:")
+			for p := range expectedMap {
+				if !gotMap[p] {
+					t.Logf("DIAGNOSTIC:   - %q", p)
+				}
+			}
+			t.Logf("DIAGNOSTIC: Unexpected patterns:")
+			for p := range gotMap {
+				if !expectedMap[p] {
+					t.Logf("DIAGNOSTIC:   + %q", p)
+				}
+			}
+		}
+
+		// Verify config command shows correct source attribution
+		values := GetAllConfigValuesWithSources(cfg, dir)
+		var excludePatternValue *ConfigValueWithMetadata
+		for i := range values {
+			if values[i].ConfigValue.Name == "exclude_patterns" {
+				excludePatternValue = &values[i]
+				break
+			}
+		}
+
+		if excludePatternValue == nil {
+			t.Fatal("exclude_patterns not found in config values")
+		}
+
+		// Source should be the config file path, not "default"
+		if excludePatternValue.ConfigValue.Source == "default" {
+			t.Errorf("exclude_patterns source should be config file path, not 'default'. Got: %s", excludePatternValue.ConfigValue.Source)
+		}
+
+		// Source should contain the config file path
+		if !strings.Contains(excludePatternValue.ConfigValue.Source, ".bkpdir.yml") {
+			t.Errorf("exclude_patterns source should contain config file path. Got: %s", excludePatternValue.ConfigValue.Source)
+		}
+
+		// Verify inheritance chain shows the config file
+		if len(excludePatternValue.InheritanceChain) == 0 {
+			t.Error("exclude_patterns inheritance chain should not be empty")
+		}
+
+		// Verify patterns are deduplicated (test with duplicate)
+		t.Run("duplicate patterns are deduplicated", func(t *testing.T) {
+			duplicateConfigPath := filepath.Join(dir, "duplicate.yml")
+			duplicateConfigData := map[string]interface{}{
+				"exclude_patterns": []string{".git/", "demo/batches/", "new_pattern"},
+			}
+			createTestConfigFileWithData(t, duplicateConfigPath, duplicateConfigData)
+			os.Setenv("BKPDIR_CONFIG", localConfigPath+":"+duplicateConfigPath)
+
+			cfg2, err := LoadConfig(dir)
+			if err != nil {
+				t.Fatalf("LoadConfig error: %v", err)
+			}
+
+			// Should contain all unique patterns
+			expectedUnique := []string{".git/", "vendor/", "demo/batches/", "*.log", "new_pattern"}
+			// Count occurrences
+			patternCounts := make(map[string]int)
+			for _, p := range cfg2.ExcludePatterns {
+				patternCounts[p]++
+			}
+
+			// Verify no duplicates
+			for pattern, count := range patternCounts {
+				if count > 1 {
+					t.Errorf("Pattern %q appears %d times, should appear only once", pattern, count)
+				}
+			}
+
+			// Verify all expected patterns are present
+			for _, expected := range expectedUnique {
+				found := false
+				for _, actual := range cfg2.ExcludePatterns {
+					if actual == expected {
+						found = true
+						break
+					}
+				}
+				if !found {
+					t.Errorf("Expected pattern %q not found in merged patterns: %v", expected, cfg2.ExcludePatterns)
+				}
+			}
+		})
+	})
+
+	t.Run("order preserved: defaults first, then local additions", func(t *testing.T) {
+		dir := t.TempDir()
+
+		localConfigPath := filepath.Join(dir, ".bkpdir.yml")
+		localConfigData := map[string]interface{}{
+			"exclude_patterns": []string{"local1", "local2"},
+		}
+		createTestConfigFileWithData(t, localConfigPath, localConfigData)
+		os.Setenv("BKPDIR_CONFIG", localConfigPath)
+
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Verify defaults come first
+		if len(cfg.ExcludePatterns) < 2 {
+			t.Fatalf("Expected at least 2 patterns, got %d", len(cfg.ExcludePatterns))
+		}
+
+		// First two should be defaults
+		if cfg.ExcludePatterns[0] != ".git/" || cfg.ExcludePatterns[1] != "vendor/" {
+			t.Errorf("Expected defaults first, got: %v", cfg.ExcludePatterns)
+		}
+
+		// Local patterns should come after
+		foundLocal1 := false
+		foundLocal2 := false
+		for i := 2; i < len(cfg.ExcludePatterns); i++ {
+			if cfg.ExcludePatterns[i] == "local1" {
+				foundLocal1 = true
+			}
+			if cfg.ExcludePatterns[i] == "local2" {
+				foundLocal2 = true
+			}
+		}
+		if !foundLocal1 || !foundLocal2 {
+			t.Errorf("Local patterns not found after defaults. Got: %v", cfg.ExcludePatterns)
+		}
+	})
 }

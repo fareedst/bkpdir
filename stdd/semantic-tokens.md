@@ -68,6 +68,9 @@ When referencing other tokens:
 - `[REQ:CFG_006]` → See `requirements.md` § Complete Configuration Reflection and Visibility Requirements
   - Architecture: `[ARCH:CFG_006]`
   - Implementation: `[IMPL:CFG_006]`
+- `[REQ:TEST_EXCLUDE_MERGE]` → See `requirements.md` § Exclude Patterns Merge Testing Requirements
+  - Architecture: `[ARCH:TEST_EXCLUDE_MERGE]`
+  - Implementation: `[IMPL:TEST_EXCLUDE_MERGE]`
 
 ### Non-Functional Requirements
 - `[REQ:PERFORMANCE]` → See `requirements.md` § Performance Requirements
@@ -108,6 +111,8 @@ When referencing other tokens:
 - `[ARCH:CONFIG_SYSTEM]` → See `architecture-decisions.md` § Configuration System
 - `[ARCH:CFG_005]` → See `architecture-decisions.md` § Layered Configuration Inheritance
 - `[ARCH:CFG_006]` → See `architecture-decisions.md` § Configuration Reflection Architecture [REQ:CFG_006]
+- `[ARCH:TEST_EXCLUDE_MERGE]` → See `architecture-decisions.md` § Configuration Testing Architecture [REQ:TEST_EXCLUDE_MERGE]
+- `[ARCH:EXCLUDE_MERGE_FIX]` → See `architecture-decisions.md` § Array Field Default Merge Strategy Implementation [REQ:CFG_005]
 - `[ARCH:ERROR_HANDLING]` → See `architecture-decisions.md` § Error Handling Strategy
 - `[ARCH:RESOURCE_MANAGEMENT]` → See `architecture-decisions.md` § Resource Management
 - `[ARCH:CONTEXT_SUPPORT]` → See `architecture-decisions.md` § Context-Aware Operations
@@ -143,6 +148,8 @@ When referencing other tokens:
 ### Core Implementation Decisions
 - `[IMPL:CONFIG_STRUCT]` → See `implementation-decisions.md` § Configuration Structure [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 - `[IMPL:CFG_006]` → See `implementation-decisions.md` § Configuration Reflection Implementation [ARCH:CFG_006] [REQ:CFG_006]
+- `[IMPL:TEST_EXCLUDE_MERGE]` → See `implementation-decisions.md` § Exclude Patterns Merge Testing [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE]
+- `[IMPL:EXCLUDE_MERGE_FIX]` → See `implementation-decisions.md` § Array Field Default Merge Strategy Implementation [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005]
 - `[IMPL:ZIP_FORMAT]` → See `implementation-decisions.md` § ZIP Archive Format Implementation [ARCH:ARCHIVE_FORMAT] [REQ:ARCHIVE_VERIFICATION]
 - `[IMPL:DUAL_FORMATTING]` → See `implementation-decisions.md` § Dual Printf/Template Formatting [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
 - `[IMPL:STRUCTURED_ERRORS]` → See `implementation-decisions.md` § Structured Error Handling [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]

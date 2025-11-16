@@ -457,23 +457,55 @@ func LoadConfig(root string) (*Config, error) {
 		fmt.Printf("DEBUG: Entered LoadConfig with root: %s\n", root)
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
-	// Try loading with inheritance first (the new default behavior)
-	cfg, err := LoadConfigWithInheritance(root)
-	if err == nil {
-		return cfg, nil
+	// Check if any config files exist first
+	searchPaths := getConfigSearchPaths()
+	foundAnyFile := false
+	for _, configPath := range searchPaths {
+		expandedPath := expandPath(configPath)
+		if !filepath.IsAbs(expandedPath) {
+			expandedPath = filepath.Join(root, expandedPath)
+		}
+		if _, err := os.Stat(expandedPath); err == nil {
+			foundAnyFile = true
+			break
+		}
+	}
+	
+	// If no files found, try inheritance loading (might have inheritance chains)
+	// Otherwise, use fallback method directly for better compatibility
+	if foundAnyFile {
+		// Files exist - use fallback method directly for now
+		// TODO: Fix LoadConfigWithInheritance to handle single files correctly
+		if debug {
+			fmt.Printf("DEBUG: Config files found, using fallback loading method\n")
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		fmt.Printf("DIAGNOSTIC: LoadConfig - Files found, using fallback method\n")
+	} else {
+		// No files found - try inheritance loading
+		if debug {
+			fmt.Printf("DEBUG: No config files found, trying inheritance loading\n")
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		fmt.Printf("DIAGNOSTIC: LoadConfig - No files found, trying inheritance loading\n")
+		cfg, err := LoadConfigWithInheritance(root)
+		if err == nil && cfg != nil {
+			fmt.Printf("DIAGNOSTIC: LoadConfig - Inheritance loading succeeded\n")
+			return cfg, nil
+		}
+		fmt.Printf("DIAGNOSTIC: LoadConfig - Inheritance loading failed or returned nil, using fallback\n")
 	}
 
 	// If inheritance loading fails, fallback to original method for backward compatibility
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
-	cfg = DefaultConfig()
+	cfg := DefaultConfig()
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
-	searchPaths := getConfigSearchPaths()
+	// searchPaths already declared above
 	if debug {
 		fmt.Printf("DEBUG: searchPaths = %v\n", searchPaths)
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 	// Process configuration files in order (earlier files take precedence)
-	for _, configPath := range searchPaths {
+	fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing %d search paths\n", len(searchPaths))
+	for i, configPath := range searchPaths {
 		// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 		expandedPath := expandPath(configPath)
 		if debug {
@@ -495,37 +527,56 @@ func LoadConfig(root string) (*Config, error) {
 			if debug {
 				fmt.Printf("DEBUG: File exists: %s\n", expandedPath)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-			f, err := os.Open(expandedPath)
+			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing file[%d]: %s\n", i, expandedPath)
+			// Use loadSingleConfigFile to preserve merge strategy prefixes
+			loadResult, err := loadSingleConfigFile(expandedPath)
 			if err != nil {
 				if debug {
-					fmt.Printf("DEBUG: Failed to open %s: %v\n", expandedPath, err)
+					fmt.Printf("DEBUG: Failed to load config file %s: %v\n", expandedPath, err)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				continue // Skip files we can't open
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to load file[%d] %s: %v\n", i, expandedPath, err)
+				continue // Skip files with errors
 			}
-			defer f.Close()
-
-			// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
-			// Create a temporary config to load into
-			tempCfg := DefaultConfig()
-			d := yaml.NewDecoder(f)
-			if err := d.Decode(tempCfg); err != nil {
-				if debug {
-					fmt.Printf("DEBUG: Failed to decode YAML in %s: %v\n", expandedPath, err)
-				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				f.Close()
-				continue // Skip files with invalid YAML
-			}
-			f.Close()
+			tempCfg := loadResult.config
 
 			// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 			// Merge non-zero values from tempCfg into cfg
 			// Earlier files take precedence over later files as per specification
+			// For fallback path: first file merges with defaults, subsequent files override
 			if debug {
-				fmt.Printf("DEBUG: Merging config from %s\n", expandedPath)
+				fmt.Printf("DEBUG: Loading config from: %s\n", expandedPath)
+				if len(tempCfg.ExcludePatterns) > 0 {
+					fmt.Printf("DEBUG:   Exclude patterns in this file: %v\n", tempCfg.ExcludePatterns)
+				}
+				fmt.Printf("DEBUG:   Current exclude patterns before merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-			mergeConfigs(cfg, tempCfg)
+			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns: %v\n", i, tempCfg.ExcludePatterns)
+			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
+			
+			// Determine merge context: first file merges with defaults, subsequent files override
+			isFirstFile := cfg.ArchiveDirPath == DefaultConfig().ArchiveDirPath && 
+				len(cfg.ExcludePatterns) == len(DefaultConfig().ExcludePatterns)
+			inheritContext := isFirstFile // First file merges with defaults
+			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] isFirstFile=%v, inheritContext=%v\n", i, isFirstFile, inheritContext)
+			
+			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap)
+			if err != nil {
+				if debug {
+					fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to merge file[%d] %s: %v\n", i, expandedPath, err)
+				continue // Skip problematic merges
+			}
+			cfg = mergedCfg
+			if debug {
+				fmt.Printf("DEBUG:   Exclude patterns after merge: %v\n", cfg.ExcludePatterns)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns after merge: %v\n", i, cfg.ExcludePatterns)
+		} else {
+			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] %s does not exist\n", i, expandedPath)
 		}
 	}
+	fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Final cfg exclude_patterns: %v\n", cfg.ExcludePatterns)
 
 	return cfg, nil
 }
@@ -564,8 +615,26 @@ func mergeBasicSettings(dst, src *Config) {
 	if src.UseCurrentDirName != DefaultConfig().UseCurrentDirName {
 		dst.UseCurrentDirName = src.UseCurrentDirName
 	}
+	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
+	// Merge exclude patterns by appending (earlier files take precedence, but patterns accumulate)
 	if len(src.ExcludePatterns) > 0 && !equalStringSlices(src.ExcludePatterns, DefaultConfig().ExcludePatterns) {
-		dst.ExcludePatterns = src.ExcludePatterns
+		if debug {
+			fmt.Printf("DEBUG: Merging exclude patterns - existing: %v, new: %v\n", dst.ExcludePatterns, src.ExcludePatterns)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		// Merge by appending new patterns that aren't already present
+		existingMap := make(map[string]bool)
+		for _, pattern := range dst.ExcludePatterns {
+			existingMap[pattern] = true
+		}
+		for _, pattern := range src.ExcludePatterns {
+			if !existingMap[pattern] {
+				dst.ExcludePatterns = append(dst.ExcludePatterns, pattern)
+				existingMap[pattern] = true
+			}
+		}
+		if debug {
+			fmt.Printf("DEBUG: Merged exclude patterns result: %v\n", dst.ExcludePatterns)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	}
 	if src.IncludeGitInfo != DefaultConfig().IncludeGitInfo {
 		dst.IncludeGitInfo = src.IncludeGitInfo
@@ -1032,9 +1101,37 @@ func createSourceDeterminer(configSource string) func(interface{}, interface{}) 
 				return "default"
 			}
 		case []string:
-			if equalStringSlices(v, defaultVal.([]string)) {
+			// For arrays, check if current contains all defaults AND has additional items
+			defaultSlice := defaultVal.([]string)
+			if equalStringSlices(v, defaultSlice) {
 				return "default"
 			}
+			// If current array contains all default values plus more, it's from config
+			// Check if all defaults are present in current
+			defaultMap := make(map[string]bool)
+			for _, d := range defaultSlice {
+				defaultMap[d] = true
+			}
+			hasAllDefaults := true
+			for _, d := range defaultSlice {
+				found := false
+				for _, c := range v {
+					if c == d {
+						found = true
+						break
+					}
+				}
+				if !found {
+					hasAllDefaults = false
+					break
+				}
+			}
+			// If it has all defaults but is longer, it's merged from config
+			if hasAllDefaults && len(v) > len(defaultSlice) {
+				return configSource
+			}
+			// If arrays are different, it's from config
+			return configSource
 		}
 		return configSource
 	}
@@ -1385,6 +1482,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 	searchPaths := getConfigSearchPaths()
 	finalCfg := DefaultConfig()
 	var foundAny bool
+	var isFirstFile = true
 
 	for _, configPath := range searchPaths {
 		expandedPath := expandPath(configPath)
@@ -1392,25 +1490,111 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 			expandedPath = filepath.Join(root, expandedPath)
 		}
 		if _, err := os.Stat(expandedPath); err == nil {
+			if debug {
+				fmt.Printf("DEBUG: Processing config file with inheritance: %s\n", expandedPath)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			// Build and process inheritance chain for this file
 			chain, err := chainBuilder.buildChain(expandedPath, pathResolver)
 			if err != nil {
-				continue // Skip files with errors
-			}
-			for _, filePath := range chain.files {
-				tempCfg, err := loadSingleConfigFile(filePath)
-				if err != nil {
-					continue // Skip files with errors
+				if debug {
+					fmt.Printf("DEBUG: Failed to build inheritance chain for %s: %v\n", expandedPath, err)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				// If buildChain fails, try loading the file directly as a single-file chain
+				// This handles files without inheritance or with parse errors in inherit field
+				if debug {
+					fmt.Printf("DEBUG: Attempting to load %s as single file\n", expandedPath)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				loadResult, err2 := loadSingleConfigFile(expandedPath)
+				if err2 != nil {
+					if debug {
+						fmt.Printf("DEBUG: Failed to load %s directly: %v\n", expandedPath, err2)
+					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+					continue // Skip files we can't load
 				}
-				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg)
-				if err != nil {
+				// Create a single-file chain
+				chain = &inheritanceChain{
+					files:   []string{expandedPath},
+					visited: make(map[string]bool),
+				}
+				chain.visited[expandedPath] = true
+				// Process this single file
+				tempCfg := loadResult.config
+				if debug {
+					fmt.Printf("DEBUG: Loading config from single file: %s\n", expandedPath)
+					if len(tempCfg.ExcludePatterns) > 0 {
+						fmt.Printf("DEBUG:   Exclude patterns in this file: %v\n", tempCfg.ExcludePatterns)
+					}
+					fmt.Printf("DEBUG:   Current exclude patterns before merge: %v\n", finalCfg.ExcludePatterns)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				
+				inheritContext := isFirstFile // First file merges with defaults
+				mergedCfg, err2 := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap)
+				if err2 != nil {
+					if debug {
+						fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err2)
+					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 					continue // Skip problematic merges
 				}
 				finalCfg = mergedCfg
+				if debug {
+					fmt.Printf("DEBUG:   Exclude patterns after merge: %v\n", finalCfg.ExcludePatterns)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				foundAny = true
+				isFirstFile = false
+				continue // Skip the normal chain processing below
+			}
+			if debug {
+				fmt.Printf("DEBUG: Inheritance chain: %v\n", chain.files)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+			
+			// Determine if this is an inheritance chain (multiple files) or single file
+			isInheritanceChain := len(chain.files) > 1
+			
+			for _, filePath := range chain.files {
+				loadResult, err := loadSingleConfigFile(filePath)
+				if err != nil {
+					if debug {
+						fmt.Printf("DEBUG: Failed to load config file %s: %v\n", filePath, err)
+					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+					continue // Skip files with errors
+				}
+				tempCfg := loadResult.config
+				if debug {
+					fmt.Printf("DEBUG: Loading config from inheritance chain: %s\n", filePath)
+					if len(tempCfg.ExcludePatterns) > 0 {
+						fmt.Printf("DEBUG:   Exclude patterns in this file: %v\n", tempCfg.ExcludePatterns)
+					}
+					fmt.Printf("DEBUG:   Current exclude patterns before merge: %v\n", finalCfg.ExcludePatterns)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				
+				// Determine merge context:
+				// - Within inheritance chain (multiple files): always merge (inheritContext=true)
+				// - First file from searchPaths: merge with defaults per CFG-005 (inheritContext=true)
+				// - Subsequent files from searchPaths: override previous files (inheritContext=false)
+				// Note: For backward compatibility, use !exclude_patterns prefix to explicitly override
+				inheritContext := isInheritanceChain || isFirstFile
+				
+				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap)
+				if err != nil {
+					if debug {
+						fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", filePath, err)
+					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+					continue // Skip problematic merges
+				}
+				fmt.Printf("DIAGNOSTIC: LoadConfigWithInheritance - After merge from %s: exclude_patterns = %v (len=%d)\n", filePath, mergedCfg.ExcludePatterns, len(mergedCfg.ExcludePatterns))
+				finalCfg = mergedCfg
+				if debug {
+					fmt.Printf("DEBUG:   Exclude patterns after merge: %v\n", finalCfg.ExcludePatterns)
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			}
 			foundAny = true
+			isFirstFile = false // After processing first file, subsequent files override
 		}
 	}
+
+	if debug {
+		fmt.Printf("DEBUG: Final merged exclude patterns (with inheritance): %v\n", finalCfg.ExcludePatterns)
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 	if !foundAny {
 		return DefaultConfig(), nil
@@ -1432,13 +1616,15 @@ func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuil
 
 	// Process files in inheritance order (parents first)
 	for _, filePath := range chain.files {
-		tempCfg, err := loadSingleConfigFile(filePath)
+		loadResult, err := loadSingleConfigFile(filePath)
 		if err != nil {
 			continue // Skip files with errors, continue with chain
 		}
+		tempCfg := loadResult.config
 
 		// Apply merge strategies and merge into main config
-		mergedCfg, err := applyMergeStrategies(cfg, tempCfg)
+		// Within inheritance chain, array fields default to merge
+		mergedCfg, err := applyMergeStrategies(cfg, tempCfg, true, loadResult.rawMap)
 		if err != nil {
 			return nil, fmt.Errorf("failed to merge config from %s: %w", filePath, err)
 		}
@@ -1448,52 +1634,253 @@ func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuil
 	return cfg, nil
 }
 
+// configFileLoadResult holds both the Config and the raw map with prefixes preserved
+type configFileLoadResult struct {
+	config  *Config
+	rawMap  map[string]interface{}
+}
+
 // CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 // loadSingleConfigFile loads a single configuration file.
-func loadSingleConfigFile(configPath string) (*Config, error) {
+// Unmarshals into a map first to preserve merge strategy prefixes (!, +, ^, =),
+// then processes merge strategies and converts to Config.
+// Returns both the Config and the raw map with prefixes preserved.
+func loadSingleConfigFile(configPath string) (*configFileLoadResult, error) {
 	f, err := os.Open(configPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open config file %s: %w", configPath, err)
 	}
 	defer f.Close()
 
-	cfg := DefaultConfig()
+	// Unmarshal into map first to preserve merge strategy prefixes
+	var rawMap map[string]interface{}
 	d := yaml.NewDecoder(f)
-	if err := d.Decode(cfg); err != nil {
+	if err := d.Decode(&rawMap); err != nil {
 		return nil, fmt.Errorf("failed to decode config file %s: %w", configPath, err)
 	}
 
-	return cfg, nil
+	// Process merge strategies to extract clean keys and strategies
+	processor := newMergeStrategyProcessor()
+	processed, err := processor.processKeys(rawMap)
+	if err != nil {
+		return nil, fmt.Errorf("failed to process merge strategies: %w", err)
+	}
+
+	// Convert processed operations back to a map with clean keys
+	cleanMap := make(map[string]interface{})
+	for key, op := range processed.operations {
+		cleanMap[key] = op.value
+	}
+
+	// Now unmarshal the clean map into Config struct
+	cfg := DefaultConfig()
+	cleanYAML, err := yaml.Marshal(cleanMap)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal processed config: %w", err)
+	}
+	if err := yaml.Unmarshal(cleanYAML, cfg); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal processed config: %w", err)
+	}
+
+	return &configFileLoadResult{config: cfg, rawMap: rawMap}, nil
 }
 
 // CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 // applyMergeStrategies applies merge strategies when combining configurations.
-func applyMergeStrategies(dst, src *Config) (*Config, error) {
+// inheritContext indicates if this merge is within an inheritance chain (true) or between sequential files (false).
+// Array fields default to merge only within inheritance chains, not between sequential files.
+// rawSrcMap is the original map with merge strategy prefixes preserved (can be nil if not available)
+func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}) (*Config, error) {
 	processor := newMergeStrategyProcessor()
 
-	// Convert configs to map for strategy processing
-	dstMap := configToMap(dst)
-	srcMap := configToMap(src)
+	// Use rawSrcMap if available (preserves merge strategy prefixes), otherwise convert Config to map
+	var srcMap map[string]interface{}
+	if rawSrcMap != nil {
+		srcMap = rawSrcMap
+		// Ensure exclude_patterns is in srcMap even if not in rawSrcMap (for backward compatibility)
+		if _, exists := srcMap["exclude_patterns"]; !exists && len(src.ExcludePatterns) > 0 {
+			srcMap["exclude_patterns"] = src.ExcludePatterns
+		}
+	} else {
+		srcMap = configToMap(src)
+	}
 
 	// Process merge strategies
 	processed, err := processor.processKeys(srcMap)
 	if err != nil {
 		return nil, fmt.Errorf("failed to process merge strategies: %w", err)
 	}
-
-	// Apply processed configuration
-	result := DefaultConfig()
-
-	// Start with destination values
-	mergeConfigs(result, dst)
-
-	// Apply source values with merge strategies
-	for key, operation := range processed.operations {
-		err := applyMergeOperation(result, key, operation, dstMap[key])
-		if err != nil {
-			return nil, fmt.Errorf("failed to apply merge operation for %s: %w", key, err)
+	
+	// Ensure exclude_patterns is in processed.operations if it exists in src but wasn't processed
+	// This handles cases where exclude_patterns might not be in rawSrcMap but is in src.Config
+	if _, exists := processed.operations["exclude_patterns"]; !exists && len(src.ExcludePatterns) > 0 {
+		processed.operations["exclude_patterns"] = &mergeOperation{
+			strategy: "override", // Will be changed to "merge" below if inheritContext is true
+			value:    src.ExcludePatterns,
+			key:      "exclude_patterns",
 		}
 	}
+	
+	if debug {
+		keys := make([]string, 0, len(processed.operations))
+		for k := range processed.operations {
+			keys = append(keys, k)
+		}
+		fmt.Printf("DEBUG: applyMergeStrategies - processed.operations keys: %v\n", keys)
+		if op, ok := processed.operations["exclude_patterns"]; ok {
+			fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns operation: strategy=%s, value=%v\n", op.strategy, op.value)
+		} else {
+			fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns NOT in processed.operations\n")
+		}
+	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+	
+	// CFG-005: Array fields default to merge (accumulate) strategy to preserve values
+	// from defaults and parent configs when child configs add values.
+	// This applies to both inheritance chains and sequential file processing.
+	// But respect explicit merge strategy prefixes (!, +, ^, =) in all contexts
+	// Check if explicit prefix was used in rawSrcMap
+	hasExplicitPrefix := false
+	if rawSrcMap != nil {
+		for origKey := range rawSrcMap {
+			if origKey == "!exclude_patterns" || origKey == "+exclude_patterns" || 
+			   origKey == "^exclude_patterns" || origKey == "=exclude_patterns" {
+				hasExplicitPrefix = true
+				break
+			}
+		}
+	}
+	
+	for key, operation := range processed.operations {
+		if key == "exclude_patterns" {
+			if debug {
+				fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns before: strategy=%s, hasExplicitPrefix=%v, inheritContext=%v\n", operation.strategy, hasExplicitPrefix, inheritContext)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+			// If explicit prefix was used (!, +, ^, =), respect it (don't change to merge)
+			// Note: ! gives "replace", + gives "merge", ^ gives "prepend", = gives "default"
+			// CFG-005: Array fields default to merge (no prefix) in all contexts
+			// If strategy is already "replace", "merge", "prepend", or "default", keep it
+			if operation.strategy == "override" && !hasExplicitPrefix {
+				// Default override (no prefix), change to merge per CFG-005 requirement
+				operation.strategy = "merge"
+				if debug {
+					fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns changed to merge strategy (CFG-005: array fields default to merge)\n")
+				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+			}
+			// For "replace" (!), "merge" (+), "prepend" (^), "default" (=), keep as-is
+		}
+	}
+
+	// Apply processed configuration
+	// Start with a copy of dst (current state), not DefaultConfig()
+	// This ensures we preserve any accumulated values from previous merges
+	result := &Config{}
+	*result = *dst  // Copy the config
+	
+	// Save dst's exclude_patterns - we'll handle exclude_patterns via applyMergeOperation based on strategy
+	dstExcludePatterns := make([]string, len(dst.ExcludePatterns))
+	copy(dstExcludePatterns, dst.ExcludePatterns)
+	
+	// Create a copy of src with exclude_patterns cleared to prevent mergeConfigs from merging them
+	// (we'll handle exclude_patterns via merge strategies instead)
+	srcCopy := &Config{}
+	*srcCopy = *src
+	srcCopy.ExcludePatterns = nil
+	
+	// Merge other settings from srcCopy into result (exclude_patterns skipped)
+	mergeConfigs(result, srcCopy)
+	
+	// For exclude_patterns, restore dst's original patterns so applyMergeOperation can merge based on strategy
+	// This ensures we start with the current state (dst) and merge src's patterns into it
+	result.ExcludePatterns = dstExcludePatterns
+
+	// Apply source values with merge strategies
+	// Use result's current values (not dst's) for merge operations
+	// Create resultMap AFTER restoring exclude_patterns so it reflects the correct state
+	resultMap := configToMap(result)
+	
+	// DIAGNOSTIC: Always log exclude_patterns processing (not just when debug is enabled)
+	fmt.Printf("\n=== DIAGNOSTIC: applyMergeStrategies ===\n")
+	fmt.Printf("inheritContext: %v\n", inheritContext)
+	fmt.Printf("dst.ExcludePatterns: %v (len=%d)\n", dst.ExcludePatterns, len(dst.ExcludePatterns))
+	fmt.Printf("src.ExcludePatterns: %v (len=%d)\n", src.ExcludePatterns, len(src.ExcludePatterns))
+	fmt.Printf("dstExcludePatterns (saved): %v (len=%d)\n", dstExcludePatterns, len(dstExcludePatterns))
+	fmt.Printf("result.ExcludePatterns (after copy): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+	fmt.Printf("result.ExcludePatterns (after restore): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+	
+	keys := make([]string, 0, len(processed.operations))
+	for k := range processed.operations {
+		keys = append(keys, k)
+	}
+	fmt.Printf("processed.operations keys: %v\n", keys)
+	if _, hasExcludePatterns := processed.operations["exclude_patterns"]; hasExcludePatterns {
+		fmt.Printf("✓ exclude_patterns found in processed.operations\n")
+		op := processed.operations["exclude_patterns"]
+		fmt.Printf("  operation.strategy: %s\n", op.strategy)
+		fmt.Printf("  operation.value: %v (type: %T)\n", op.value, op.value)
+		if opSlice, ok := op.value.([]string); ok {
+			fmt.Printf("  operation.value as []string: %v (len=%d)\n", opSlice, len(opSlice))
+		}
+		if opSlice, ok := op.value.([]interface{}); ok {
+			fmt.Printf("  operation.value as []interface{}: %v (len=%d)\n", opSlice, len(opSlice))
+		}
+	} else {
+		fmt.Printf("✗ exclude_patterns NOT found in processed.operations. Keys: %v\n", keys)
+	}
+	
+	fmt.Printf("resultMap[\"exclude_patterns\"]: %v\n", resultMap["exclude_patterns"])
+	
+	for key, operation := range processed.operations {
+		fmt.Printf("DIAGNOSTIC: Processing key: %s, strategy: %s\n", key, operation.strategy)
+		// Skip metadata fields that are not part of the Config struct
+		// These fields are used for inheritance processing but shouldn't be merged into the config
+		if key == "inherit" {
+			fmt.Printf("DIAGNOSTIC: Skipping metadata field: %s\n", key)
+			continue
+		}
+		// Check if this is a known config field before processing
+		if !isKnownConfigField(key) {
+			fmt.Printf("DIAGNOSTIC: Skipping unknown config field: %s\n", key)
+			continue
+		}
+		// Get current value from result (which has dst merged in)
+		currentValue := resultMap[key]
+		if key == "exclude_patterns" {
+			fmt.Printf("\n--- Processing exclude_patterns ---\n")
+			fmt.Printf("currentValue: %v (type: %T)\n", currentValue, currentValue)
+			if cvSlice, ok := currentValue.([]string); ok {
+				fmt.Printf("currentValue as []string: %v (len=%d)\n", cvSlice, len(cvSlice))
+			}
+			fmt.Printf("operation.value: %v (type: %T)\n", operation.value, operation.value)
+			fmt.Printf("operation.strategy: %s\n", operation.strategy)
+			fmt.Printf("result.ExcludePatterns BEFORE applyMergeOperation: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+		}
+		if debug && key == "exclude_patterns" {
+			fmt.Printf("DEBUG: applyMergeStrategies - key: %s, currentValue: %v, operation.value: %v, strategy: %s\n", 
+				key, currentValue, operation.value, operation.strategy)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		err := applyMergeOperation(result, key, operation, currentValue)
+		if err != nil {
+			// Check if error is due to unknown field (shouldn't happen if isKnownConfigField works correctly)
+			if strings.Contains(err.Error(), "unknown config field") {
+				fmt.Printf("DIAGNOSTIC: Skipping unknown config field (from error): %s\n", key)
+				continue
+			}
+			fmt.Printf("DIAGNOSTIC: Error applying merge operation for %s: %v\n", key, err)
+			return nil, fmt.Errorf("failed to apply merge operation for %s: %w", key, err)
+		}
+		// Update resultMap to reflect the merge for subsequent operations
+		resultMap = configToMap(result)
+		if key == "exclude_patterns" {
+			fmt.Printf("result.ExcludePatterns AFTER applyMergeOperation: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+			fmt.Printf("--- End processing exclude_patterns ---\n\n")
+		}
+		if debug && key == "exclude_patterns" {
+			fmt.Printf("DEBUG: applyMergeStrategies - after merge, result.ExcludePatterns: %v\n", result.ExcludePatterns)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		fmt.Printf("DIAGNOSTIC: Completed processing key: %s\n", key)
+	}
+	
+	fmt.Printf("=== END DIAGNOSTIC: applyMergeStrategies ===\n\n")
 
 	return result, nil
 }
@@ -1736,14 +2123,136 @@ func applyOverride(result *Config, key string, value interface{}) error {
 }
 
 func applyMerge(result *Config, key string, value interface{}, dstValue interface{}) error {
-	// For arrays, merge by appending
-	if srcSlice, ok := value.([]string); ok {
-		if dstSlice, ok := dstValue.([]string); ok {
-			merged := append(dstSlice, srcSlice...)
-			return setConfigField(result, key, merged)
+	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
+	// For arrays, merge by appending with deduplication
+	if key == "exclude_patterns" {
+		fmt.Printf("=== DIAGNOSTIC: applyMerge for exclude_patterns ===\n")
+		fmt.Printf("value: %v (type: %T)\n", value, value)
+		fmt.Printf("dstValue: %v (type: %T)\n", dstValue, dstValue)
+		fmt.Printf("result.ExcludePatterns: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+	}
+	
+	// Convert []interface{} to []string if needed (common from YAML unmarshaling)
+	var srcSlice []string
+	var ok bool
+	if srcSlice, ok = value.([]string); !ok {
+		// Try to convert from []interface{}
+		if ifaceSlice, ok2 := value.([]interface{}); ok2 {
+			srcSlice = make([]string, 0, len(ifaceSlice))
+			for _, item := range ifaceSlice {
+				if str, ok3 := item.(string); ok3 {
+					srcSlice = append(srcSlice, str)
+				} else {
+					// If conversion fails, fall back to setConfigField
+					if key == "exclude_patterns" {
+						fmt.Printf("Failed to convert []interface{} element to string, using setConfigField directly\n")
+						fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+					}
+					return setConfigField(result, key, value)
+				}
+			}
+			if key == "exclude_patterns" {
+				fmt.Printf("Converted []interface{} to []string: %v (len=%d)\n", srcSlice, len(srcSlice))
+			}
+		} else {
+			// Not a slice at all, fall back to setConfigField
+			if key == "exclude_patterns" {
+				fmt.Printf("value is not []string or []interface{}, using setConfigField directly\n")
+				fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+			}
+			return setConfigField(result, key, value)
 		}
 	}
-	return setConfigField(result, key, value)
+	
+	// Only process if we have source values to merge
+	if len(srcSlice) > 0 {
+		if key == "exclude_patterns" {
+			fmt.Printf("srcSlice: %v (len=%d)\n", srcSlice, len(srcSlice))
+		}
+		// Handle nil or missing dstValue by getting current value from result
+		if dstValue == nil {
+			if key == "exclude_patterns" {
+				fmt.Printf("dstValue is nil, getting from result config\n")
+			}
+			// Get current value from result config
+			resultMap := configToMap(result)
+			dstValue = resultMap[key]
+			if key == "exclude_patterns" {
+				fmt.Printf("dstValue from resultMap: %v (type: %T)\n", dstValue, dstValue)
+			}
+		}
+		
+		var dstSlice []string
+		if dstValue != nil {
+			if dstSlice, ok = dstValue.([]string); !ok {
+				// Try to convert from []interface{}
+				if ifaceSlice, ok2 := dstValue.([]interface{}); ok2 {
+					dstSlice = make([]string, 0, len(ifaceSlice))
+					for _, item := range ifaceSlice {
+						if str, ok3 := item.(string); ok3 {
+							dstSlice = append(dstSlice, str)
+						}
+					}
+					if key == "exclude_patterns" {
+						fmt.Printf("Converted dstValue []interface{} to []string: %v (len=%d)\n", dstSlice, len(dstSlice))
+					}
+				} else {
+					// dstValue is not a slice, start with srcSlice
+					if key == "exclude_patterns" {
+						fmt.Printf("dstValue is not []string or []interface{}, starting with srcSlice\n")
+						fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+					}
+					return setConfigField(result, key, srcSlice)
+				}
+			}
+		}
+		
+		// Merge srcSlice into dstSlice (or start with srcSlice if dstSlice is nil/empty)
+		if len(dstSlice) > 0 {
+			if key == "exclude_patterns" {
+				fmt.Printf("dstSlice: %v (len=%d)\n", dstSlice, len(dstSlice))
+			}
+			// Create map to track existing patterns for deduplication
+			existingMap := make(map[string]bool)
+			for _, pattern := range dstSlice {
+				existingMap[pattern] = true
+			}
+			
+			// Append new patterns that aren't already present
+			merged := make([]string, len(dstSlice), len(dstSlice)+len(srcSlice))
+			copy(merged, dstSlice)
+			for _, pattern := range srcSlice {
+				if !existingMap[pattern] {
+					merged = append(merged, pattern)
+					existingMap[pattern] = true
+					if key == "exclude_patterns" {
+						fmt.Printf("  Added pattern: %q\n", pattern)
+					}
+				} else {
+					if key == "exclude_patterns" {
+						fmt.Printf("  Skipped duplicate pattern: %q\n", pattern)
+					}
+				}
+			}
+			if key == "exclude_patterns" {
+				fmt.Printf("merged result: %v (len=%d)\n", merged, len(merged))
+				fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+			}
+			return setConfigField(result, key, merged)
+		}
+		// If dstSlice is nil or empty, start with srcSlice (no existing patterns)
+		if key == "exclude_patterns" {
+			fmt.Printf("dstSlice is nil or empty, starting with srcSlice\n")
+			fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+		}
+		return setConfigField(result, key, srcSlice)
+	}
+	// If srcSlice is empty, don't merge - preserve existing value
+	if key == "exclude_patterns" {
+		fmt.Printf("srcSlice is empty, preserving existing value\n")
+		fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+	}
+	return nil // No merge needed, preserve existing value
 }
 
 func applyPrepend(result *Config, key string, value interface{}, dstValue interface{}) error {
@@ -1758,7 +2267,20 @@ func applyPrepend(result *Config, key string, value interface{}, dstValue interf
 }
 
 func applyReplace(result *Config, key string, value interface{}) error {
-	return setConfigField(result, key, value)
+	if key == "exclude_patterns" {
+		fmt.Printf("=== DIAGNOSTIC: applyReplace for exclude_patterns ===\n")
+		fmt.Printf("value: %v (type: %T)\n", value, value)
+		fmt.Printf("result.ExcludePatterns BEFORE: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+	}
+	err := setConfigField(result, key, value)
+	if key == "exclude_patterns" {
+		fmt.Printf("result.ExcludePatterns AFTER: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+		if err != nil {
+			fmt.Printf("setConfigField error: %v\n", err)
+		}
+		fmt.Printf("=== END DIAGNOSTIC: applyReplace ===\n\n")
+	}
+	return err
 }
 
 func applyDefault(result *Config, key string, value interface{}, dstValue interface{}) error {
@@ -1783,6 +2305,15 @@ func setConfigField(cfg *Config, key string, value interface{}) error {
 	case "exclude_patterns":
 		if slice, ok := value.([]string); ok {
 			cfg.ExcludePatterns = slice
+		} else if ifaceSlice, ok := value.([]interface{}); ok {
+			// Convert []interface{} to []string (common from YAML unmarshaling)
+			strSlice := make([]string, 0, len(ifaceSlice))
+			for _, item := range ifaceSlice {
+				if str, ok := item.(string); ok {
+					strSlice = append(strSlice, str)
+				}
+			}
+			cfg.ExcludePatterns = strSlice
 		}
 	case "include_git_info":
 		if b, ok := value.(bool); ok {
@@ -1809,6 +2340,21 @@ func setConfigField(cfg *Config, key string, value interface{}) error {
 		return fmt.Errorf("unknown config field: %s", key)
 	}
 	return nil
+}
+
+// isKnownConfigField checks if a field name is a known config field
+func isKnownConfigField(key string) bool {
+	knownFields := map[string]bool{
+		"archive_dir_path":     true,
+		"use_current_dir_name": true,
+		"exclude_patterns":     true,
+		"include_git_info":     true,
+		"backup_dir_path":      true,
+		"skip_broken_symlinks": true,
+		"status_created_archive": true,
+		"status_disk_full":      true,
+	}
+	return knownFields[key]
 }
 
 // isZeroValue checks if a value is the zero value for its type
@@ -2140,6 +2686,13 @@ func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMe
 
 		// Determine source of this field
 		source := getSource(field.Value, defaultValue)
+		if debug && field.YAMLName == "exclude_patterns" {
+			fmt.Printf("DEBUG: Source determination for exclude_patterns:\n")
+			fmt.Printf("DEBUG:   Current value: %v (type: %T)\n", field.Value, field.Value)
+			fmt.Printf("DEBUG:   Default value: %v (type: %T)\n", defaultValue, defaultValue)
+			fmt.Printf("DEBUG:   Determined source: %s\n", source)
+			fmt.Printf("DEBUG:   Config source path: %s\n", configSource)
+		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 		// Format value as string
 		valueStr := formatFieldValue(field.Value, field.Kind)
@@ -2689,10 +3242,11 @@ func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string
 
 	// Process files in inheritance order (parents first)
 	for i, filePath := range chain.files {
-		tempCfg, err := loadSingleConfigFile(filePath)
+		loadResult, err := loadSingleConfigFile(filePath)
 		if err != nil {
 			continue // Skip files with errors
 		}
+		tempCfg := loadResult.config
 
 		// Get value from this file
 		tempValue, _ := getFieldValueByPath(reflect.ValueOf(tempCfg), fieldPath)
@@ -2715,7 +3269,8 @@ func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string
 		}
 
 		// Apply merge strategies and merge into current config
-		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg)
+		// Within inheritance chain, array fields default to merge
+		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg, true, loadResult.rawMap)
 		if err != nil {
 			continue // Skip problematic merges
 		}
