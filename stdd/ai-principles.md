@@ -80,6 +80,15 @@ This acknowledgment confirms that the AI agent has:
    - When all subtasks for a task are complete, remove subtasks and mark the parent task complete.
    - Maintain a clean task list showing only active work.
 
+7. **Extensive Debug Output During Development**
+   - Use extensive diagnostic output (`fmt.Printf`, `t.Logf`, debug flags) liberally during initial implementation and debugging
+   - Debug output helps AI agents understand execution flow, data transformations, and state changes
+   - Include diagnostic output in test functions to trace behavior when tests fail
+   - Use descriptive prefixes (e.g., `DIAGNOSTIC:`, `DEBUG:`) to clearly identify debug output
+   - Debug output should remain in code unless explicitly requested to be removed - it is not intrusive and is optional during production use
+   - Debug output controlled by `debug` flags or build tags can be conditionally enabled/disabled without removal
+   - **Rationale**: AI agents benefit from visibility into execution flow, especially when debugging complex logic like configuration merging, state management, or data transformations. Keeping debug output in code provides ongoing value for future debugging and understanding code behavior.
+
 ---
 
 ## 📚 Documentation Structure
@@ -496,12 +505,22 @@ Create and maintain `semantic-tokens.md` with:
 1. **Work on Highest Priority Tasks First**
    - P0 tasks before P1, P1 before P2, etc.
 
-2. **Complete Subtasks**
+2. **Use Extensive Debug Output During Implementation**
+   - Add diagnostic output (`fmt.Printf`, `t.Logf`) liberally when implementing complex logic
+   - Include debug output in test functions to trace execution flow and state changes
+   - Use descriptive prefixes: `DIAGNOSTIC:`, `DEBUG:`, `TRACE:`
+   - Show key variables, function parameters, return values, and state transitions
+   - Debug output helps AI agents understand what's happening when code doesn't work as expected
+   - **Example**: When implementing configuration merging, output `exclude_patterns` state before/after each merge operation
+   - **Retention**: Debug output should remain in code unless explicitly requested to be removed - it is not intrusive and provides ongoing value for debugging and understanding code behavior
+   - Debug output controlled by `debug` flags or build tags can be conditionally enabled/disabled without removal
+
+3. **Complete Subtasks**
    - Mark subtasks complete as they're done
    - Remove completed subtasks
    - When all subtasks complete, mark parent task complete
 
-3. **Update Documentation** (MANDATORY - Update AS YOU WORK)
+4. **Update Documentation** (MANDATORY - Update AS YOU WORK)
    - **BEFORE making changes**: Consult the Change Impact Tracking matrix (see Cross-Reference Format section) to identify all documents that need updating
    - **DURING implementation**: Update `architecture-decisions.md` if decisions are refined
    - **DURING implementation**: Update `implementation-decisions.md` if decisions are refined
@@ -687,6 +706,9 @@ This project follows AI-First Principles. Before making changes:
 - [ ] **MANDATORY**: Break work into trackable tasks in `tasks.md` BEFORE starting implementation
 - [ ] **MANDATORY**: Assign appropriate priorities to all tasks
 - [ ] **MANDATORY**: Update `tasks.md` as subtasks are completed
+- [ ] Add extensive debug output during implementation to trace execution flow and state changes
+- [ ] Use descriptive debug prefixes (`DIAGNOSTIC:`, `DEBUG:`, `TRACE:`) to identify debug output
+- [ ] Keep debug output in code unless explicitly requested to be removed - it is not intrusive and provides ongoing value
 - [ ] **MANDATORY**: Update `semantic-tokens.md` when creating new tokens
 - [ ] **MANDATORY**: Update documentation AS YOU WORK - do not defer until the end
 
