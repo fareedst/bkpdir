@@ -1,9 +1,9 @@
 # Requirements Directory
 
-**STDD Methodology Version**: 1.0.0
+**STDD Methodology Version**: 1.0.1
 
 ## Overview
-This document serves as the **central listing/registry** for all requirements in the bkpdir project. Each requirement has a unique semantic token `[REQ:IDENTIFIER]` for traceability.
+This document serves as the **central listing/registry** for all requirements in this project. Each requirement has a unique semantic token `[REQ:IDENTIFIER]` for traceability.
 
 **For detailed information about how requirements are fulfilled, see:**
 - **Architecture decisions**: See `architecture-decisions.md` for high-level design choices that fulfill requirements

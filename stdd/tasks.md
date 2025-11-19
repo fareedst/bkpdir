@@ -1,9 +1,9 @@
 # Tasks and Incomplete Subtasks
 
-**STDD Methodology Version**: 1.0.0
+**STDD Methodology Version**: 1.0.1
 
 ## Overview
-This document tracks all tasks and subtasks for implementing the bkpdir project. Tasks are organized by priority and implementation phase.
+This document tracks all tasks and subtasks for implementing this project. Tasks are organized by priority and implementation phase.
 
 ## Priority Levels
 
@@ -36,6 +36,31 @@ This document tracks all tasks and subtasks for implementing the bkpdir project.
 
 **Priority Rationale**: Why this is P0/P1/P2/P3
 ```
+
+## Task Management Rules
+
+1. **Subtasks are Temporary**
+   - Subtasks exist only while the parent task is in progress
+   - Remove subtasks when parent task completes
+
+2. **Priority Must Be Justified**
+   - Each task must have a priority rationale
+   - Priorities follow: Tests/Code/Functions > DX > Infrastructure > Security
+
+3. **Semantic Token References Required**
+   - Every task MUST reference at least one semantic token
+   - Cross-reference to related tokens
+
+4. **Completion Criteria Must Be Met**
+   - All criteria must be checked before marking complete
+   - Documentation must be updated
+
+## Task Status Icons
+
+- 🟡 **In Progress**: Actively being worked on
+- ✅ **Complete**: All criteria met, subtasks removed
+- ⏸️ **Blocked**: Waiting on dependency
+- ⏳ **Pending**: Not yet started
 
 ## P0: Enhanced Command Output with File Statistics [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 

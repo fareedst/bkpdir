@@ -1,9 +1,43 @@
 # Architecture Decisions
 
-**STDD Methodology Version**: 1.0.0
+**STDD Methodology Version**: 1.0.1
 
 ## Overview
-This document captures the high-level architectural decisions for the bkpdir project. All decisions are cross-referenced with requirements using semantic tokens `[REQ:*]` and assigned architecture tokens `[ARCH:*]` for traceability.
+This document captures the high-level architectural decisions for this project. All decisions are cross-referenced with requirements using semantic tokens `[REQ:*]` and assigned architecture tokens `[ARCH:*]` for traceability.
+
+## Template Structure
+
+When documenting architecture decisions, use this format:
+
+```markdown
+## N. Decision Title [ARCH:IDENTIFIER] [REQ:RELATED_REQUIREMENT]
+
+### Decision: Brief description of the architectural decision
+**Rationale:**
+- Why this decision was made
+- What problems it solves
+- What benefits it provides
+
+**Alternatives Considered:**
+- Alternative 1: Why it was rejected
+- Alternative 2: Why it was rejected
+
+**Cross-References**: [REQ:RELATED_REQUIREMENT], [ARCH:OTHER_DECISION]
+
+## Notes
+
+- All architecture decisions MUST be recorded here IMMEDIATELY when made
+- Each decision MUST include `[ARCH:*]` token and cross-reference `[REQ:*]` tokens
+- Architecture decisions are dependent on requirements
+- DO NOT defer architecture documentation - record decisions as they are made
+
+---
+
+**Rationale:**
+- Clear separation of concerns
+- Standard project layout
+- Testable components
+
 
 ## 1. Language and Runtime [ARCH:LANGUAGE_SELECTION]
 

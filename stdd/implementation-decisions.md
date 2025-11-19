@@ -1,10 +1,41 @@
 # Implementation Decisions
 
-**STDD Methodology Version**: 1.0.0
+**STDD Methodology Version**: 1.0.1
 
 ## Overview
-This document captures detailed implementation decisions for the bkpdir project, including specific APIs, data structures, and algorithms. All decisions are cross-referenced with architecture decisions using `[ARCH:*]` tokens and requirements using `[REQ:*]` tokens for traceability.
+This document captures detailed implementation decisions for this project, including specific APIs, data structures, and algorithms. All decisions are cross-referenced with architecture decisions using `[ARCH:*]` tokens and requirements using `[REQ:*]` tokens for traceability.
 
+## Template Structure
+
+When documenting implementation decisions, use this format:
+
+```markdown
+## N. Implementation Title [IMPL:IDENTIFIER] [ARCH:RELATED_ARCHITECTURE] [REQ:RELATED_REQUIREMENT]
+
+### Decision: Brief description of the implementation decision
+**Rationale:**
+- Why this implementation approach was chosen
+- What problems it solves
+- How it fulfills the architecture decision
+
+### Implementation Approach:
+- Specific technical details
+- Code structure or patterns
+- API design decisions
+
+**Code Markers**: Specific code locations, function names, or patterns to look for
+
+**Cross-References**: [ARCH:RELATED_ARCHITECTURE], [REQ:RELATED_REQUIREMENT]
+```
+
+## Notes
+
+- All implementation decisions MUST be recorded here IMMEDIATELY when made
+- Each decision MUST include `[IMPL:*]` token and cross-reference both `[ARCH:*]` and `[REQ:*]` tokens
+- Implementation decisions are dependent on both architecture decisions and requirements
+- DO NOT defer implementation documentation - record decisions as they are made
+
+---
 ## 1. Configuration Structure [IMPL:CONFIG_STRUCT] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 
 ### Config Type
