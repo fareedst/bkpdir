@@ -57,6 +57,7 @@ Each requirement includes:
 | `[REQ:RELIABILITY]` | Reliability | P0 | ✅ | See `architecture-decisions.md` § Resource Management, Error Handling Strategy | See `implementation-decisions.md` § Resource Management with Cleanup, Structured Error Handling |
 | `[REQ:MAINTAINABILITY]` | Maintainability | P1 | ✅ | See `architecture-decisions.md` § Code Organization Principles | See `implementation-decisions.md` § Code Style and Conventions |
 | `[REQ:USABILITY]` | Usability | P1 | ✅ | See `architecture-decisions.md` § Output Formatting | See `implementation-decisions.md` § Dual Printf/Template Formatting |
+| `[REQ:DEBUG_OUTPUT_CONTROL]` | Debug and Diagnostic Output Control | P1 | ✅ | See `architecture-decisions.md` § Configuration System, Testing Strategy | See `implementation-decisions.md` § Configuration Structure |
 
 ### Immutable Requirements (Major Version Change Required)
 
@@ -418,6 +419,32 @@ Each requirement includes:
 - **Implementation**: See `implementation-decisions.md` § Dual Printf/Template Formatting [IMPL:DUAL_FORMATTING]
 
 **Status**: ✅ Implemented
+
+### [REQ:DEBUG_OUTPUT_CONTROL] Debug and Diagnostic Output Control Requirements
+
+**Priority: P1 (Important)**
+
+- **Description**: Debug and diagnostic output must be controlled by a global debug flag and disabled by default in normal execution. Diagnostic output provides detailed information about configuration loading, merging, and inheritance processing. Debug output must be automatically enabled during test execution to aid in debugging test failures.
+- **Rationale**: Keeps normal execution output clean while preserving valuable debugging information for development and testing. Enables developers to troubleshoot configuration issues without cluttering user-facing output.
+- **Satisfaction Criteria**:
+  - All diagnostic output controlled by `debug` flag
+  - Normal execution produces clean output (0 diagnostic messages)
+  - Debug mode (`--debug` CLI flag) shows all diagnostic output
+  - Test execution automatically enables debug output via `TestMain`
+  - Diagnostic output helps developers understand configuration loading and merging
+  - All diagnostic statements marked with DIAGNOSTIC-OUTPUT semantic token
+- **Validation Criteria**: 
+  - Normal execution verification (no diagnostic output)
+  - Debug mode verification (all diagnostic output appears)
+  - Test execution verification (diagnostic output enabled automatically)
+  - All tests pass with diagnostic output enabled
+  - See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+- **Architecture**: See `architecture-decisions.md` § Configuration System [ARCH:CONFIG_SYSTEM], § Testing Strategy [ARCH:TESTING_STRATEGY]
+- **Implementation**: See `implementation-decisions.md` § Configuration Structure [IMPL:CONFIG_STRUCT]
+
+**Status**: ✅ Implemented
+
+**Related Requirements**: [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_006], [REQ:MAINTAINABILITY], [REQ:CODE_QUALITY]
 
 ## Incomplete Requirements
 

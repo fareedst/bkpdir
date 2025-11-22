@@ -657,6 +657,14 @@ EXTRACT-008 → EXTRACT-009, EXTRACT-010
 - ✅ COV-001: Existing code coverage exclusion - Completed
 - ✅ COV-002: Coverage baseline establishment - Completed
 - ✅ DOC-001 through DOC-017: Documentation enhancement system - Various completion statuses
+- ✅ DIAGNOSTIC-OUTPUT: Diagnostic Output Control (2025-11-21)
+  - Wrapped all 24 diagnostic output statements in `config.go` with `if debug { ... }` blocks
+  - Added SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT markers for STDD compliance
+  - Implemented `TestMain` in `config_test.go` to enable debug output for tests
+  - Normal execution produces clean output (0 diagnostic messages)
+  - Debug mode (`--debug` flag) shows all diagnostic output
+  - All tests pass with diagnostic output enabled by default
+  - Related tokens: DEBUG-OUTPUT, [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_006]
 
 ## Recommended Implementation Order
 

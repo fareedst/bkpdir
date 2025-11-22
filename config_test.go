@@ -38,6 +38,19 @@ var (
 	testExcludePatterns    = []string{"node_modules/", "*.log"}
 )
 
+// TestMain sets up the test environment and enables debug output by default
+// SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Enable debug output for all tests
+func TestMain(m *testing.M) {
+	// Enable debug output by default for tests to show diagnostic information
+	debug = true
+
+	// Run all tests
+	exitCode := m.Run()
+
+	// Exit with the test result code
+	os.Exit(exitCode)
+}
+
 // CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 // TEST-REF: Feature tracking matrix CFG-002
 // IMMUTABLE-REF: Configuration Merging Requirements

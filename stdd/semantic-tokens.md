@@ -10,6 +10,50 @@ This document serves as the **central directory/registry** for all semantic toke
 - **Architecture tokens**: See `architecture-decisions.md` for architectural decisions, rationale, and alternatives considered
 - **Implementation tokens**: See `implementation-decisions.md` for implementation details, code structures, and algorithms
 
+## AI Assistant Integration Guidelines [REQ:DOC_016]
+
+### Token Usage for AI Assistants
+
+AI assistants should use semantic tokens for:
+
+1. **Code Navigation**: Search for `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]` tokens to find related code
+2. **Feature Understanding**: Trace features from requirements through architecture to implementation
+3. **Change Impact Analysis**: Use token cross-references to identify affected components
+4. **Test Discovery**: Find tests for features using `[REQ:*]` tokens in test names
+
+### Token-Based Code Navigation
+
+```bash
+# Find all implementations of a requirement
+grep -r "\[REQ:FEATURE_NAME\]" --include="*.go" .
+
+# Find all tests for a requirement
+grep -r "REQ_FEATURE_NAME" --include="*_test.go" .
+
+# Find architecture decisions for a feature
+grep -r "\[ARCH:FEATURE_NAME\]" --include="*.md" .
+
+# Find implementation details
+grep -r "\[IMPL:FEATURE_NAME\]" --include="*.go" .
+```
+
+### Token Creation Requirements
+
+When implementing features:
+1. **ALWAYS** create `[REQ:*]` token in `requirements.md` first
+2. **ALWAYS** create `[ARCH:*]` token in `architecture-decisions.md` for design decisions
+3. **ALWAYS** add `[IMPL:*]` tokens to code comments
+4. **ALWAYS** reference `[REQ:*]` tokens in test names/comments
+5. **ALWAYS** update `semantic-tokens.md` registry when creating new tokens
+
+### Token Validation Requirements
+
+Before marking features complete:
+1. **ALWAYS** run token validation scripts
+2. **ALWAYS** ensure token consistency across all layers
+3. **ALWAYS** verify token traceability in documentation
+4. **ALWAYS** check that all cross-references are valid
+
 ## Token Format
 
 ```
@@ -36,6 +80,84 @@ When referencing other tokens:
 ```markdown
 [IMPL:EXAMPLE] Description [ARCH:DESIGN] [REQ:REQUIREMENT]
 ```
+
+## Usage Examples
+
+### In Code Comments
+```go
+// [REQ:FILE_BACKUP] Create backup of single file with comparison
+// [IMPL:ATOMIC_OPS] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
+func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
+    // ...
+}
+```
+
+### In Tests
+```go
+// Test validates [REQ:FILE_BACKUP] is met
+func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
+    // ...
+}
+```
+
+### In Documentation
+```markdown
+The file backup feature uses [ARCH:RESOURCE_MANAGEMENT] to fulfill [REQ:FILE_BACKUP].
+Implementation details are documented in [IMPL:ATOMIC_OPS].
+```
+
+## Token Validation Guidelines [REQ:DOC_016]
+
+### Cross-Layer Token Consistency
+
+Every feature must have proper token coverage across all layers:
+
+1. **Requirements Layer**: Feature must have `[REQ:*]` token in `requirements.md`
+2. **Architecture Layer**: Architecture decisions must have `[ARCH:*]` tokens in `architecture-decisions.md`
+3. **Implementation Layer**: Implementation must have `[IMPL:*]` tokens in code comments
+4. **Test Layer**: Tests must reference `[REQ:*]` tokens in test names/comments
+5. **Documentation Layer**: All documentation must cross-reference tokens consistently
+
+### Token Format Validation
+
+1. **Token Format**: Must follow `[TYPE:IDENTIFIER]` pattern exactly
+2. **Token Types**: Must use valid types (`REQ`, `ARCH`, `IMPL`, `TEST`)
+3. **Identifier Format**: Must use UPPER_SNAKE_CASE
+4. **Cross-References**: Implementation tokens must reference architecture and requirement tokens
+
+### Token Traceability Validation
+
+1. Every requirement in `requirements.md` must have corresponding implementation tokens
+2. Every architecture decision must have corresponding implementation tokens
+3. Every test must link to specific requirements via `[REQ:*]` tokens
+4. All tokens must be discoverable through automated validation
+
+### Automated Validation
+
+Validation scripts check:
+- Token format compliance across all files
+- Cross-layer token consistency
+- Token traceability completeness
+- Missing token detection
+
+See `scripts/validate-token-traceability.sh` for validation implementation.
+
+## Token Relationships
+
+### Hierarchical Relationships
+- `[REQ:CONFIGURATION]` contains `[REQ:CFG_005]`, `[REQ:CFG_006]`
+- `[ARCH:CONFIG_SYSTEM]` includes `[ARCH:CFG_005]`, `[ARCH:CFG_006]`
+- `[IMPL:CONFIG_STRUCT]` implements `[ARCH:CONFIG_SYSTEM]`
+- `[IMPL:CFG_006]` implements `[ARCH:CFG_006]` and fulfills `[REQ:CFG_006]`
+
+### Flow Relationships
+- `[REQ:FEATURE]` → `[ARCH:DESIGN]` → `[IMPL:IMPLEMENTATION]` → Code + Tests
+
+### Dependency Relationships
+- `[IMPL:FEATURE]` depends on `[ARCH:DESIGN]` and `[REQ:FEATURE]`
+- `[ARCH:DESIGN]` depends on `[REQ:FEATURE]`
+- `[ARCH:CFG_006]` depends on `[REQ:CFG_006]` and integrates with `[ARCH:CFG_005]`
+- `[IMPL:CFG_006]` depends on `[ARCH:CFG_006]`, `[REQ:CFG_006]`, and `[IMPL:CONFIG_STRUCT]`
 
 ## Requirements Tokens Registry
 
@@ -197,127 +319,6 @@ When referencing other tokens:
 - `[IMPL:TOKEN_SYSTEM]` → See `implementation-decisions.md` § Token System Implementation [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
 - `[IMPL:CONFIG_OUTPUT_GROUPING]` → See `implementation-decisions.md` § Configuration Output Grouping Implementation [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
 
-## Token Relationships
-
-### Hierarchical Relationships
-- `[REQ:CONFIGURATION]` contains `[REQ:CFG_005]`, `[REQ:CFG_006]`
-- `[ARCH:CONFIG_SYSTEM]` includes `[ARCH:CFG_005]`, `[ARCH:CFG_006]`
-- `[IMPL:CONFIG_STRUCT]` implements `[ARCH:CONFIG_SYSTEM]`
-- `[IMPL:CFG_006]` implements `[ARCH:CFG_006]` and fulfills `[REQ:CFG_006]`
-
-### Flow Relationships
-- `[REQ:FEATURE]` → `[ARCH:DESIGN]` → `[IMPL:IMPLEMENTATION]` → Code + Tests
-
-### Dependency Relationships
-- `[IMPL:FEATURE]` depends on `[ARCH:DESIGN]` and `[REQ:FEATURE]`
-- `[ARCH:DESIGN]` depends on `[REQ:FEATURE]`
-- `[ARCH:CFG_006]` depends on `[REQ:CFG_006]` and integrates with `[ARCH:CFG_005]`
-- `[IMPL:CFG_006]` depends on `[ARCH:CFG_006]`, `[REQ:CFG_006]`, and `[IMPL:CONFIG_STRUCT]`
-
-## Usage Examples
-
-### In Code Comments
-```go
-// [REQ:FILE_BACKUP] Create backup of single file with comparison
-// [IMPL:ATOMIC_OPS] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
-func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
-    // ...
-}
-```
-
-### In Tests
-```go
-// Test validates [REQ:FILE_BACKUP] is met
-func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
-    // ...
-}
-```
-
-### In Documentation
-```markdown
-The file backup feature uses [ARCH:RESOURCE_MANAGEMENT] to fulfill [REQ:FILE_BACKUP].
-Implementation details are documented in [IMPL:ATOMIC_OPS].
-```
-
-## Token Validation Guidelines [REQ:DOC_016]
-
-### Cross-Layer Token Consistency
-
-Every feature must have proper token coverage across all layers:
-
-1. **Requirements Layer**: Feature must have `[REQ:*]` token in `requirements.md`
-2. **Architecture Layer**: Architecture decisions must have `[ARCH:*]` tokens in `architecture-decisions.md`
-3. **Implementation Layer**: Implementation must have `[IMPL:*]` tokens in code comments
-4. **Test Layer**: Tests must reference `[REQ:*]` tokens in test names/comments
-5. **Documentation Layer**: All documentation must cross-reference tokens consistently
-
-### Token Format Validation
-
-1. **Token Format**: Must follow `[TYPE:IDENTIFIER]` pattern exactly
-2. **Token Types**: Must use valid types (`REQ`, `ARCH`, `IMPL`, `TEST`)
-3. **Identifier Format**: Must use UPPER_SNAKE_CASE
-4. **Cross-References**: Implementation tokens must reference architecture and requirement tokens
-
-### Token Traceability Validation
-
-1. Every requirement in `requirements.md` must have corresponding implementation tokens
-2. Every architecture decision must have corresponding implementation tokens
-3. Every test must link to specific requirements via `[REQ:*]` tokens
-4. All tokens must be discoverable through automated validation
-
-### Automated Validation
-
-Validation scripts check:
-- Token format compliance across all files
-- Cross-layer token consistency
-- Token traceability completeness
-- Missing token detection
-
-See `scripts/validate-token-traceability.sh` for validation implementation.
-
-## AI Assistant Integration Guidelines [REQ:DOC_016]
-
-### Token Usage for AI Assistants
-
-AI assistants should use semantic tokens for:
-
-1. **Code Navigation**: Search for `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]` tokens to find related code
-2. **Feature Understanding**: Trace features from requirements through architecture to implementation
-3. **Change Impact Analysis**: Use token cross-references to identify affected components
-4. **Test Discovery**: Find tests for features using `[REQ:*]` tokens in test names
-
-### Token-Based Code Navigation
-
-```bash
-# Find all implementations of a requirement
-grep -r "\[REQ:FEATURE_NAME\]" --include="*.go" .
-
-# Find all tests for a requirement
-grep -r "REQ_FEATURE_NAME" --include="*_test.go" .
-
-# Find architecture decisions for a feature
-grep -r "\[ARCH:FEATURE_NAME\]" --include="*.md" .
-
-# Find implementation details
-grep -r "\[IMPL:FEATURE_NAME\]" --include="*.go" .
-```
-
-### Token Creation Requirements
-
-When implementing features:
-1. **ALWAYS** create `[REQ:*]` token in `requirements.md` first
-2. **ALWAYS** create `[ARCH:*]` token in `architecture-decisions.md` for design decisions
-3. **ALWAYS** add `[IMPL:*]` tokens to code comments
-4. **ALWAYS** reference `[REQ:*]` tokens in test names/comments
-5. **ALWAYS** update `semantic-tokens.md` registry when creating new tokens
-
-### Token Validation Requirements
-
-Before marking features complete:
-1. **ALWAYS** run token validation scripts
-2. **ALWAYS** ensure token consistency across all layers
-3. **ALWAYS** verify token traceability in documentation
-4. **ALWAYS** check that all cross-references are valid
 
 ## Quick Reference Index
 
@@ -351,3 +352,4 @@ Before marking features complete:
 - **Performance**: `PERF_001`
 - **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`, `VERIFICATION`
 - **Configuration Schema**: `CONFIG_SCHEMA_FLEX`
+- **Output Control**: `DEBUG-OUTPUT`, `DIAGNOSTIC-OUTPUT`

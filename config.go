@@ -479,19 +479,27 @@ func LoadConfig(root string) (*Config, error) {
 		if debug {
 			fmt.Printf("DEBUG: Config files found, using fallback loading method\n")
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		fmt.Printf("DIAGNOSTIC: LoadConfig - Files found, using fallback method\n")
+		if debug {
+			fmt.Printf("DIAGNOSTIC: LoadConfig - Files found, using fallback method\n")
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	} else {
 		// No files found - try inheritance loading
 		if debug {
 			fmt.Printf("DEBUG: No config files found, trying inheritance loading\n")
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		fmt.Printf("DIAGNOSTIC: LoadConfig - No files found, trying inheritance loading\n")
+		if debug {
+			fmt.Printf("DIAGNOSTIC: LoadConfig - No files found, trying inheritance loading\n")
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		cfg, err := LoadConfigWithInheritance(root)
 		if err == nil && cfg != nil {
-			fmt.Printf("DIAGNOSTIC: LoadConfig - Inheritance loading succeeded\n")
+			if debug {
+				fmt.Printf("DIAGNOSTIC: LoadConfig - Inheritance loading succeeded\n")
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 			return cfg, nil
 		}
-		fmt.Printf("DIAGNOSTIC: LoadConfig - Inheritance loading failed or returned nil, using fallback\n")
+		if debug {
+			fmt.Printf("DIAGNOSTIC: LoadConfig - Inheritance loading failed or returned nil, using fallback\n")
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	}
 
 	// If inheritance loading fails, fallback to original method for backward compatibility
@@ -504,7 +512,9 @@ func LoadConfig(root string) (*Config, error) {
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 	// Process configuration files in order (earlier files take precedence)
-	fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing %d search paths\n", len(searchPaths))
+	if debug {
+		fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing %d search paths\n", len(searchPaths))
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	for i, configPath := range searchPaths {
 		// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 		expandedPath := expandPath(configPath)
@@ -527,14 +537,18 @@ func LoadConfig(root string) (*Config, error) {
 			if debug {
 				fmt.Printf("DEBUG: File exists: %s\n", expandedPath)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing file[%d]: %s\n", i, expandedPath)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing file[%d]: %s\n", i, expandedPath)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 			// Use loadSingleConfigFile to preserve merge strategy prefixes
 			loadResult, err := loadSingleConfigFile(expandedPath)
 			if err != nil {
 				if debug {
 					fmt.Printf("DEBUG: Failed to load config file %s: %v\n", expandedPath, err)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to load file[%d] %s: %v\n", i, expandedPath, err)
+				if debug {
+					fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to load file[%d] %s: %v\n", i, expandedPath, err)
+				} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 				continue // Skip files with errors
 			}
 			tempCfg := loadResult.config
@@ -550,33 +564,45 @@ func LoadConfig(root string) (*Config, error) {
 				}
 				fmt.Printf("DEBUG:   Current exclude patterns before merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns: %v\n", i, tempCfg.ExcludePatterns)
-			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns: %v\n", i, tempCfg.ExcludePatterns)
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 			// Determine merge context: first file merges with defaults, subsequent files override
 			isFirstFile := cfg.ArchiveDirPath == DefaultConfig().ArchiveDirPath &&
 				len(cfg.ExcludePatterns) == len(DefaultConfig().ExcludePatterns)
 			inheritContext := isFirstFile // First file merges with defaults
-			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] isFirstFile=%v, inheritContext=%v\n", i, isFirstFile, inheritContext)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] isFirstFile=%v, inheritContext=%v\n", i, isFirstFile, inheritContext)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap)
 			if err != nil {
 				if debug {
 					fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to merge file[%d] %s: %v\n", i, expandedPath, err)
+				if debug {
+					fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to merge file[%d] %s: %v\n", i, expandedPath, err)
+				} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 				continue // Skip problematic merges
 			}
 			cfg = mergedCfg
 			if debug {
 				fmt.Printf("DEBUG:   Exclude patterns after merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns after merge: %v\n", i, cfg.ExcludePatterns)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns after merge: %v\n", i, cfg.ExcludePatterns)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		} else {
-			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] %s does not exist\n", i, expandedPath)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] %s does not exist\n", i, expandedPath)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		}
 	}
-	fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Final cfg exclude_patterns: %v\n", cfg.ExcludePatterns)
+	if debug {
+		fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Final cfg exclude_patterns: %v\n", cfg.ExcludePatterns)
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 	return cfg, nil
 }
@@ -1581,7 +1607,9 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 					continue // Skip problematic merges
 				}
-				fmt.Printf("DIAGNOSTIC: LoadConfigWithInheritance - After merge from %s: exclude_patterns = %v (len=%d)\n", filePath, mergedCfg.ExcludePatterns, len(mergedCfg.ExcludePatterns))
+				if debug {
+					fmt.Printf("DIAGNOSTIC: LoadConfigWithInheritance - After merge from %s: exclude_patterns = %v (len=%d)\n", filePath, mergedCfg.ExcludePatterns, len(mergedCfg.ExcludePatterns))
+				} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 				finalCfg = mergedCfg
 				if debug {
 					fmt.Printf("DEBUG:   Exclude patterns after merge: %v\n", finalCfg.ExcludePatterns)
@@ -1798,53 +1826,61 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	// Create resultMap AFTER restoring exclude_patterns so it reflects the correct state
 	resultMap := configToMap(result)
 
-	// DIAGNOSTIC: Always log exclude_patterns processing (not just when debug is enabled)
-	fmt.Printf("\n=== DIAGNOSTIC: applyMergeStrategies ===\n")
-	fmt.Printf("inheritContext: %v\n", inheritContext)
-	fmt.Printf("dst.ExcludePatterns: %v (len=%d)\n", dst.ExcludePatterns, len(dst.ExcludePatterns))
-	fmt.Printf("src.ExcludePatterns: %v (len=%d)\n", src.ExcludePatterns, len(src.ExcludePatterns))
-	fmt.Printf("dstExcludePatterns (saved): %v (len=%d)\n", dstExcludePatterns, len(dstExcludePatterns))
-	fmt.Printf("result.ExcludePatterns (after copy): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
-	fmt.Printf("result.ExcludePatterns (after restore): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+	if debug {
+		// DIAGNOSTIC: Always log exclude_patterns processing (not just when debug is enabled)
+		fmt.Printf("\n=== DIAGNOSTIC: applyMergeStrategies ===\n")
+		fmt.Printf("inheritContext: %v\n", inheritContext)
+		fmt.Printf("dst.ExcludePatterns: %v (len=%d)\n", dst.ExcludePatterns, len(dst.ExcludePatterns))
+		fmt.Printf("src.ExcludePatterns: %v (len=%d)\n", src.ExcludePatterns, len(src.ExcludePatterns))
+		fmt.Printf("dstExcludePatterns (saved): %v (len=%d)\n", dstExcludePatterns, len(dstExcludePatterns))
+		fmt.Printf("result.ExcludePatterns (after copy): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+		fmt.Printf("result.ExcludePatterns (after restore): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 
-	keys := make([]string, 0, len(processed.operations))
-	for k := range processed.operations {
-		keys = append(keys, k)
-	}
-	fmt.Printf("processed.operations keys: %v\n", keys)
-	if _, hasExcludePatterns := processed.operations["exclude_patterns"]; hasExcludePatterns {
-		fmt.Printf("✓ exclude_patterns found in processed.operations\n")
-		op := processed.operations["exclude_patterns"]
-		fmt.Printf("  operation.strategy: %s\n", op.strategy)
-		fmt.Printf("  operation.value: %v (type: %T)\n", op.value, op.value)
-		if opSlice, ok := op.value.([]string); ok {
-			fmt.Printf("  operation.value as []string: %v (len=%d)\n", opSlice, len(opSlice))
+		keys := make([]string, 0, len(processed.operations))
+		for k := range processed.operations {
+			keys = append(keys, k)
 		}
-		if opSlice, ok := op.value.([]interface{}); ok {
-			fmt.Printf("  operation.value as []interface{}: %v (len=%d)\n", opSlice, len(opSlice))
+		fmt.Printf("processed.operations keys: %v\n", keys)
+		if _, hasExcludePatterns := processed.operations["exclude_patterns"]; hasExcludePatterns {
+			fmt.Printf("✓ exclude_patterns found in processed.operations\n")
+			op := processed.operations["exclude_patterns"]
+			fmt.Printf("  operation.strategy: %s\n", op.strategy)
+			fmt.Printf("  operation.value: %v (type: %T)\n", op.value, op.value)
+			if opSlice, ok := op.value.([]string); ok {
+				fmt.Printf("  operation.value as []string: %v (len=%d)\n", opSlice, len(opSlice))
+			}
+			if opSlice, ok := op.value.([]interface{}); ok {
+				fmt.Printf("  operation.value as []interface{}: %v (len=%d)\n", opSlice, len(opSlice))
+			}
+		} else {
+			fmt.Printf("✗ exclude_patterns NOT found in processed.operations. Keys: %v\n", keys)
 		}
-	} else {
-		fmt.Printf("✗ exclude_patterns NOT found in processed.operations. Keys: %v\n", keys)
-	}
 
-	fmt.Printf("resultMap[\"exclude_patterns\"]: %v\n", resultMap["exclude_patterns"])
+		fmt.Printf("resultMap[\"exclude_patterns\"]: %v\n", resultMap["exclude_patterns"])
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 	for key, operation := range processed.operations {
-		fmt.Printf("DIAGNOSTIC: Processing key: %s, strategy: %s\n", key, operation.strategy)
+		if debug {
+			fmt.Printf("DIAGNOSTIC: Processing key: %s, strategy: %s\n", key, operation.strategy)
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		// Skip metadata fields that are not part of the Config struct
 		// These fields are used for inheritance processing but shouldn't be merged into the config
 		if key == "inherit" {
-			fmt.Printf("DIAGNOSTIC: Skipping metadata field: %s\n", key)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: Skipping metadata field: %s\n", key)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 			continue
 		}
 		// Check if this is a known config field before processing
 		if !isKnownConfigField(key) {
-			fmt.Printf("DIAGNOSTIC: Skipping unknown config field: %s\n", key)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: Skipping unknown config field: %s\n", key)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 			continue
 		}
 		// Get current value from result (which has dst merged in)
 		currentValue := resultMap[key]
-		if key == "exclude_patterns" {
+		if debug && key == "exclude_patterns" {
 			fmt.Printf("\n--- Processing exclude_patterns ---\n")
 			fmt.Printf("currentValue: %v (type: %T)\n", currentValue, currentValue)
 			if cvSlice, ok := currentValue.([]string); ok {
@@ -1853,7 +1889,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 			fmt.Printf("operation.value: %v (type: %T)\n", operation.value, operation.value)
 			fmt.Printf("operation.strategy: %s\n", operation.strategy)
 			fmt.Printf("result.ExcludePatterns BEFORE applyMergeOperation: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
-		}
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		if debug && key == "exclude_patterns" {
 			fmt.Printf("DEBUG: applyMergeStrategies - key: %s, currentValue: %v, operation.value: %v, strategy: %s\n",
 				key, currentValue, operation.value, operation.strategy)
@@ -1862,25 +1898,33 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 		if err != nil {
 			// Check if error is due to unknown field (shouldn't happen if isKnownConfigField works correctly)
 			if strings.Contains(err.Error(), "unknown config field") {
-				fmt.Printf("DIAGNOSTIC: Skipping unknown config field (from error): %s\n", key)
+				if debug {
+					fmt.Printf("DIAGNOSTIC: Skipping unknown config field (from error): %s\n", key)
+				} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 				continue
 			}
-			fmt.Printf("DIAGNOSTIC: Error applying merge operation for %s: %v\n", key, err)
+			if debug {
+				fmt.Printf("DIAGNOSTIC: Error applying merge operation for %s: %v\n", key, err)
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 			return nil, fmt.Errorf("failed to apply merge operation for %s: %w", key, err)
 		}
 		// Update resultMap to reflect the merge for subsequent operations
 		resultMap = configToMap(result)
-		if key == "exclude_patterns" {
+		if debug && key == "exclude_patterns" {
 			fmt.Printf("result.ExcludePatterns AFTER applyMergeOperation: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 			fmt.Printf("--- End processing exclude_patterns ---\n\n")
-		}
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		if debug && key == "exclude_patterns" {
 			fmt.Printf("DEBUG: applyMergeStrategies - after merge, result.ExcludePatterns: %v\n", result.ExcludePatterns)
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		fmt.Printf("DIAGNOSTIC: Completed processing key: %s\n", key)
+		if debug {
+			fmt.Printf("DIAGNOSTIC: Completed processing key: %s\n", key)
+		} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	}
 
-	fmt.Printf("=== END DIAGNOSTIC: applyMergeStrategies ===\n\n")
+	if debug {
+		fmt.Printf("=== END DIAGNOSTIC: applyMergeStrategies ===\n\n")
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 	return result, nil
 }
@@ -2125,12 +2169,12 @@ func applyOverride(result *Config, key string, value interface{}) error {
 func applyMerge(result *Config, key string, value interface{}, dstValue interface{}) error {
 	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	// For arrays, merge by appending with deduplication
-	if key == "exclude_patterns" {
+	if debug && key == "exclude_patterns" {
 		fmt.Printf("=== DIAGNOSTIC: applyMerge for exclude_patterns ===\n")
 		fmt.Printf("value: %v (type: %T)\n", value, value)
 		fmt.Printf("dstValue: %v (type: %T)\n", dstValue, dstValue)
 		fmt.Printf("result.ExcludePatterns: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
-	}
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 	// Convert []interface{} to []string if needed (common from YAML unmarshaling)
 	var srcSlice []string
@@ -2144,40 +2188,40 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 					srcSlice = append(srcSlice, str)
 				} else {
 					// If conversion fails, fall back to setConfigField
-					if key == "exclude_patterns" {
+					if debug && key == "exclude_patterns" {
 						fmt.Printf("Failed to convert []interface{} element to string, using setConfigField directly\n")
 						fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
-					}
+					} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 					return setConfigField(result, key, value)
 				}
 			}
-			if key == "exclude_patterns" {
+			if debug && key == "exclude_patterns" {
 				fmt.Printf("Converted []interface{} to []string: %v (len=%d)\n", srcSlice, len(srcSlice))
-			}
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 		} else {
-			// Not a slice at all, fall back to setConfigField
-			if key == "exclude_patterns" {
+			// If conversion fails, fall back to setConfigField
+			if debug && key == "exclude_patterns" {
 				fmt.Printf("value is not []string or []interface{}, using setConfigField directly\n")
 				fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
-			}
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 			return setConfigField(result, key, value)
 		}
 	}
 
 	// Only process if we have source values to merge
 	if len(srcSlice) > 0 {
-		if key == "exclude_patterns" {
+		if debug && key == "exclude_patterns" {
 			fmt.Printf("srcSlice: %v (len=%d)\n", srcSlice, len(srcSlice))
 		}
 		// Handle nil or missing dstValue by getting current value from result
 		if dstValue == nil {
-			if key == "exclude_patterns" {
+			if debug && key == "exclude_patterns" {
 				fmt.Printf("dstValue is nil, getting from result config\n")
 			}
 			// Get current value from result config
 			resultMap := configToMap(result)
 			dstValue = resultMap[key]
-			if key == "exclude_patterns" {
+			if debug && key == "exclude_patterns" {
 				fmt.Printf("dstValue from resultMap: %v (type: %T)\n", dstValue, dstValue)
 			}
 		}
@@ -2193,12 +2237,12 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 							dstSlice = append(dstSlice, str)
 						}
 					}
-					if key == "exclude_patterns" {
+					if debug && key == "exclude_patterns" {
 						fmt.Printf("Converted dstValue []interface{} to []string: %v (len=%d)\n", dstSlice, len(dstSlice))
 					}
 				} else {
 					// dstValue is not a slice, start with srcSlice
-					if key == "exclude_patterns" {
+					if debug && key == "exclude_patterns" {
 						fmt.Printf("dstValue is not []string or []interface{}, starting with srcSlice\n")
 						fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
 					}
@@ -2209,7 +2253,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 
 		// Merge srcSlice into dstSlice (or start with srcSlice if dstSlice is nil/empty)
 		if len(dstSlice) > 0 {
-			if key == "exclude_patterns" {
+			if debug && key == "exclude_patterns" {
 				fmt.Printf("dstSlice: %v (len=%d)\n", dstSlice, len(dstSlice))
 			}
 			// Create map to track existing patterns for deduplication
@@ -2225,33 +2269,35 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 				if !existingMap[pattern] {
 					merged = append(merged, pattern)
 					existingMap[pattern] = true
-					if key == "exclude_patterns" {
+					if debug && key == "exclude_patterns" {
 						fmt.Printf("  Added pattern: %q\n", pattern)
 					}
 				} else {
-					if key == "exclude_patterns" {
+					if debug && key == "exclude_patterns" {
 						fmt.Printf("  Skipped duplicate pattern: %q\n", pattern)
 					}
 				}
 			}
-			if key == "exclude_patterns" {
+			if debug && key == "exclude_patterns" {
 				fmt.Printf("merged result: %v (len=%d)\n", merged, len(merged))
 				fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
 			}
 			return setConfigField(result, key, merged)
 		}
-		// If dstSlice is nil or empty, start with srcSlice (no existing patterns)
-		if key == "exclude_patterns" {
-			fmt.Printf("dstSlice is nil or empty, starting with srcSlice\n")
-			fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+		// If dstSlice is nil or empty, just use srcSlice
+		if len(dstSlice) == 0 {
+			if debug && key == "exclude_patterns" {
+				fmt.Printf("dstSlice is nil or empty, starting with srcSlice\n")
+				fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
+			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+			return setConfigField(result, key, srcSlice)
 		}
-		return setConfigField(result, key, srcSlice)
 	}
 	// If srcSlice is empty, don't merge - preserve existing value
-	if key == "exclude_patterns" {
+	if debug && key == "exclude_patterns" {
 		fmt.Printf("srcSlice is empty, preserving existing value\n")
 		fmt.Printf("=== END DIAGNOSTIC: applyMerge ===\n\n")
-	}
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	return nil // No merge needed, preserve existing value
 }
 
@@ -2267,19 +2313,19 @@ func applyPrepend(result *Config, key string, value interface{}, dstValue interf
 }
 
 func applyReplace(result *Config, key string, value interface{}) error {
-	if key == "exclude_patterns" {
+	if debug && key == "exclude_patterns" {
 		fmt.Printf("=== DIAGNOSTIC: applyReplace for exclude_patterns ===\n")
 		fmt.Printf("value: %v (type: %T)\n", value, value)
 		fmt.Printf("result.ExcludePatterns BEFORE: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
-	}
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	err := setConfigField(result, key, value)
-	if key == "exclude_patterns" {
+	if debug && key == "exclude_patterns" {
 		fmt.Printf("result.ExcludePatterns AFTER: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 		if err != nil {
 			fmt.Printf("setConfigField error: %v\n", err)
 		}
 		fmt.Printf("=== END DIAGNOSTIC: applyReplace ===\n\n")
-	}
+	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	return err
 }
 
