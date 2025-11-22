@@ -1067,6 +1067,26 @@ bkpdir
 
 ## 22. Configuration Testing Architecture [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006]
 
+### Configuration Output Grouping [ARCH:CONFIG_OUTPUT_GROUPING]
+
+**Context**:
+The current configuration output is a flat, sorted list. As the number of configuration options grows (100+), this becomes difficult to navigate. Users need a way to see related options together and see the most important options first.
+
+**Decision**:
+We will implement a grouped and ranked presentation for configuration output.
+1.  **Primary Grouping**: Configuration options will be grouped by logical category (e.g., Core, Backup, Archive, Git, Output).
+2.  **Secondary Ranking**: Within each category, options will be ranked by importance (Critical, High, Medium, Low) or frequency of use.
+3.  **Backward Compatibility**: The original flat list view will be preserved as a secondary presentation mode, accessible via a flag (e.g., `--flat`).
+4.  **Metadata-Driven**: The grouping and ranking will be driven by metadata associated with the configuration fields, leveraging the existing reflection-based system.
+
+**Consequences**:
+-   **Pros**: Improved usability, better discoverability of options, logical organization.
+-   **Cons**: Slightly more complex display logic.
+-   **Compliance**: [REQ:CONFIG_OUTPUT_GROUPING]
+
+**Related Decisions**:
+-   [ARCH:CFG_006] Configuration Reflection Architecture
+
 ### Decision: Test-driven validation of exclude patterns merging and source tracking
 **Rationale:**
 - Validates that configuration merging works correctly for array fields
@@ -1118,3 +1138,23 @@ bkpdir
 - Ensures backward compatibility with existing config files
 
 **Cross-References**: [REQ:CFG_005], [REQ:CONFIGURATION], [ARCH:CFG_005], [ARCH:CFG_006]
+
+## 24. Configuration Output Grouping [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
+
+### Decision: Group configuration output by category and rank by importance
+**Rationale:**
+- Improves usability by organizing numerous configuration options
+- Highlights critical settings for better visibility
+- Maintains backward compatibility via flags
+- Aligns with standard CLI best practices
+
+**Grouping Strategy:**
+- **Categories**: Defined logical groups (Basic, Archive, Backup, Git, Output, Advanced)
+- **Importance**: Critical, High, Medium, Low
+- **Sorting**: Category Priority -> Importance -> Name
+
+**Display Modes:**
+- **Grouped (Default)**: Categories with headers, sorted by importance
+- **Flat (Legacy)**: Single alphabetical list, accessible via `--flat`
+
+**Cross-References**: [REQ:CONFIG_OUTPUT_GROUPING], [REQ:USABILITY]

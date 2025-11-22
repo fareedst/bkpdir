@@ -47,6 +47,7 @@ Each requirement includes:
 | `[REQ:CFG_005]` | Layered Configuration Inheritance | P0 | ✅ | See `architecture-decisions.md` § Layered Configuration Inheritance | See `implementation-decisions.md` § Configuration Structure |
 | `[REQ:CFG_006]` | Complete Configuration Reflection and Visibility | P1 | ✅ | See `architecture-decisions.md` § Configuration System | See `implementation-decisions.md` § Configuration Structure |
 | `[REQ:TEST_EXCLUDE_MERGE]` | Exclude Patterns Merge Testing | P1 | ✅ | See `architecture-decisions.md` § Configuration Testing Architecture [ARCH:TEST_EXCLUDE_MERGE] | See `implementation-decisions.md` § Exclude Patterns Merge Testing [IMPL:TEST_EXCLUDE_MERGE] |
+| `[REQ:CONFIG_OUTPUT_GROUPING]` | Configuration Output Grouping | P1 | ✅ | See `architecture-decisions.md` § Configuration Output Grouping [ARCH:CONFIG_OUTPUT_GROUPING] | See `implementation-decisions.md` § Configuration Output Grouping Implementation [IMPL:CONFIG_OUTPUT_GROUPING] |
 
 ### Non-Functional Requirements
 

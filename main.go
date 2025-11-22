@@ -483,13 +483,16 @@ func handleEnhancedConfigCommand(showAll, showOverrides, showSources bool, outpu
 	filteredValues := applyConfigFiltering(configValues, showOverrides, filterPattern)
 
 	// Display based on format
+	// Display based on format
 	switch outputFormat {
 	case "tree":
 		displayConfigTree(filteredValues, showSources)
 	case "json":
 		displayConfigJSON(filteredValues, showSources)
-	default: // "table"
-		displayConfigTable(filteredValues, showSources)
+	case "flat":
+		displayConfigFlat(filteredValues, showSources)
+	default: // "table" (now grouped by default)
+		displayConfigGrouped(filteredValues, showSources)
 	}
 }
 
@@ -600,8 +603,8 @@ func displayConfigJSON(values []ConfigValueWithMetadata, showSources bool) {
 
 // CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
 // IMPLEMENTATION-REF: CFG-006 Subtask 4: Enhanced display with source attribution
-// displayConfigTable shows configuration in traditional table format with enhanced metadata.
-func displayConfigTable(values []ConfigValueWithMetadata, showSources bool) {
+// displayConfigFlat shows configuration in traditional flat table format with enhanced metadata.
+func displayConfigFlat(values []ConfigValueWithMetadata, showSources bool) {
 	// Display configuration file paths first
 	cwd, _ := os.Getwd()
 	configPaths := getConfigSearchPaths()
@@ -631,6 +634,86 @@ func displayConfigTable(values []ConfigValueWithMetadata, showSources bool) {
 			if len(value.InheritanceChain) > 1 {
 				fmt.Printf(" [chain: %s]", strings.Join(value.InheritanceChain, " → "))
 			}
+		}
+		fmt.Println()
+	}
+}
+
+// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
+// IMPLEMENTATION-REF: CFG-006 Subtask 4: Grouped display
+// displayConfigGrouped shows configuration grouped by category and ranked by importance.
+func displayConfigGrouped(values []ConfigValueWithMetadata, showSources bool) {
+	// Group by category
+	categories := make(map[string][]ConfigValueWithMetadata)
+	for _, value := range values {
+		category := value.FieldInfo.Category
+		categories[category] = append(categories[category], value)
+	}
+
+	// Get sorted categories based on priority
+	var sortedCategories []string
+	for cat := range categories {
+		sortedCategories = append(sortedCategories, cat)
+	}
+	sort.Slice(sortedCategories, func(i, j int) bool {
+		p1, ok1 := CategoryPriority[sortedCategories[i]]
+		p2, ok2 := CategoryPriority[sortedCategories[j]]
+		if !ok1 {
+			p1 = 999
+		}
+		if !ok2 {
+			p2 = 999
+		}
+		if p1 != p2 {
+			return p1 < p2
+		}
+		return sortedCategories[i] < sortedCategories[j]
+	})
+
+	// Display configuration file paths first
+	cwd, _ := os.Getwd()
+	configPaths := getConfigSearchPaths()
+	expandedPaths := make([]string, len(configPaths))
+	for i, path := range configPaths {
+		expandedPath := expandPath(path)
+		if !filepath.IsAbs(expandedPath) {
+			expandedPath = filepath.Join(cwd, expandedPath)
+		}
+		expandedPaths[i] = expandedPath
+	}
+	configPathsStr := strings.Join(expandedPaths, ":")
+	fmt.Printf("Configuration Sources: %s\n\n", configPathsStr)
+
+	// Display each category
+	for _, category := range sortedCategories {
+		categoryValues := categories[category]
+
+		// Sort values by importance then name
+		sort.Slice(categoryValues, func(i, j int) bool {
+			if categoryValues[i].FieldInfo.Importance != categoryValues[j].FieldInfo.Importance {
+				return categoryValues[i].FieldInfo.Importance < categoryValues[j].FieldInfo.Importance
+			}
+			return categoryValues[i].ConfigValue.Name < categoryValues[j].ConfigValue.Name
+		})
+
+		// Print category header
+		title := strings.Title(strings.ReplaceAll(category, "_", " "))
+		fmt.Printf("## %s\n", title)
+
+		for _, value := range categoryValues {
+			// Indent items
+			fmt.Printf("  %s: %s", value.ConfigValue.Name, value.ConfigValue.Value)
+
+			if showSources {
+				fmt.Printf(" (source: %s)", value.ConfigValue.Source)
+				if value.IsOverridden {
+					fmt.Printf(" [overridden]")
+				}
+				if len(value.InheritanceChain) > 1 {
+					fmt.Printf(" [chain: %s]", strings.Join(value.InheritanceChain, " → "))
+				}
+			}
+			fmt.Println()
 		}
 		fmt.Println()
 	}
@@ -750,6 +833,7 @@ func configCmd() *cobra.Command {
 		showSources   bool
 		outputFormat  string
 		filterPattern string
+		flatOutput    bool
 	)
 
 	cmd := &cobra.Command{
@@ -811,6 +895,10 @@ For detailed documentation, see docs/configuration-inspection-guide.md`,
 		Args: cobra.MaximumNArgs(2),
 		Run: func(_ *cobra.Command, args []string) {
 			if len(args) == 0 {
+				// Handle --flat flag
+				if flatOutput {
+					outputFormat = "flat"
+				}
 				// Enhanced configuration display with filtering options
 				handleEnhancedConfigCommand(showAll, showOverrides, showSources, outputFormat, filterPattern)
 			} else if len(args) == 2 {
@@ -830,6 +918,7 @@ For detailed documentation, see docs/configuration-inspection-guide.md`,
 	cmd.Flags().BoolVar(&showSources, "sources", false, "Show detailed source attribution")
 	cmd.Flags().StringVar(&outputFormat, "format", "table", "Output format: table, tree, json")
 	cmd.Flags().StringVar(&filterPattern, "filter", "", "Filter fields by name pattern")
+	cmd.Flags().BoolVar(&flatOutput, "flat", false, "Show flat list instead of grouped output")
 
 	return cmd
 }

@@ -36,6 +36,8 @@ When documenting implementation decisions, use this format:
 - DO NOT defer implementation documentation - record decisions as they are made
 
 ---
+
+
 ## 1. Configuration Structure [IMPL:CONFIG_STRUCT] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 
 ### Config Type
@@ -1837,3 +1839,29 @@ func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
 **Solution**: Create package-specific tests while ensuring original integration tests still pass  
 **Approach**: Extract test utilities first, then create focused tests for each package  
 **Design Note**: Comprehensive testing ensures extracted components are production-ready
+
+## 21. Configuration Output Grouping Implementation [IMPL:CONFIG_OUTPUT_GROUPING] [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
+
+### Decision: Implement grouping via metadata extension and display refactoring
+**Rationale:**
+- Extends existing metadata system without breaking changes
+- Reuses existing display logic where possible
+- Provides flexible ranking system
+
+### Implementation Approach:
+1.  **Metadata Extension**:
+    -   Added `Importance` field to `configFieldInfo` struct
+    -   Added `CategoryPriority` map for category sorting
+    -   Added `getFieldImportance` helper for assigning importance
+
+2.  **Display Logic**:
+    -   `displayConfigGrouped`: New function for grouped output
+    -   `displayConfigFlat`: Renamed from `displayConfigTable`
+    -   `handleEnhancedConfigCommand`: Updated to switch between formats
+
+3.  **Flags**:
+    -   Added `--flat` flag to `configCmd`
+
+**Code Markers**: `displayConfigGrouped`, `Importance`, `CategoryPriority`
+
+**Cross-References**: [ARCH:CONFIG_OUTPUT_GROUPING], [REQ:CONFIG_OUTPUT_GROUPING]

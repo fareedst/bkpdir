@@ -62,12 +62,12 @@ func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	// Remove trailing / from pattern for matching
 	patternBase := strings.TrimSuffix(pattern, "/")
-	
+
 	// Patterns ending with / should only match directories:
 	// - Path must have a / after the pattern base (e.g., "demo/batches/file.txt")
 	// - Path must end with / (e.g., "demo/batches/")
 	// - Path must NOT be exactly the pattern base without / (e.g., "demo/batches" as a file)
-	
+
 	// Check if pattern starts with **/ (matches anywhere)
 	if strings.HasPrefix(pattern, "**/") {
 		// For **/ patterns, extract the directory name (after **/)
@@ -75,7 +75,7 @@ func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 		// We need to find "node_modules/" in the path
 		dirName := strings.TrimPrefix(patternBase, "**/")
 		dirPattern := dirName + "/"
-		
+
 		// Check if path contains dirPattern anywhere
 		if strings.Contains(path, dirPattern) {
 			// Verify it's not just the directory name as a file
@@ -91,13 +91,13 @@ func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 		}
 		return false
 	}
-	
+
 	// For non-** patterns, strict check: path must have / after patternBase or end with /
 	// This ensures "demo/batches/" matches but "demo/batches" (file) does not
 	if !strings.HasPrefix(path, patternBase+"/") && path != patternBase+"/" {
 		return false
 	}
-	
+
 	// If we get here, path starts with patternBase+"/" or equals patternBase+"/"
 	// Both cases indicate a directory match
 	return true

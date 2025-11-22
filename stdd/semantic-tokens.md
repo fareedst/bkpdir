@@ -68,6 +68,9 @@ When referencing other tokens:
 - `[REQ:CFG_006]` → See `requirements.md` § Complete Configuration Reflection and Visibility Requirements
   - Architecture: `[ARCH:CFG_006]`
   - Implementation: `[IMPL:CFG_006]`
+- `[REQ:CONFIG_OUTPUT_GROUPING]` → See `requirements.md` § Configuration Output Grouping Requirements
+  - Architecture: `[ARCH:CONFIG_OUTPUT_GROUPING]`
+  - Implementation: `[IMPL:CONFIG_OUTPUT_GROUPING]`
 - `[REQ:TEST_EXCLUDE_MERGE]` → See `requirements.md` § Exclude Patterns Merge Testing Requirements
   - Architecture: `[ARCH:TEST_EXCLUDE_MERGE]`
   - Implementation: `[IMPL:TEST_EXCLUDE_MERGE]`
@@ -140,6 +143,7 @@ When referencing other tokens:
 - `[ARCH:AI_DOCUMENTATION]` → See `architecture-decisions.md` § AI-First Documentation Architecture
 - `[ARCH:PERF_VALIDATION]` → See `architecture-decisions.md` § Validation Performance Optimization Architecture
 - `[ARCH:TOKEN_SYSTEM]` → See `architecture-decisions.md` § Token System Architecture [REQ:DOC_016]
+- `[ARCH:CONFIG_OUTPUT_GROUPING]` → See `architecture-decisions.md` § Configuration Output Grouping [REQ:CONFIG_OUTPUT_GROUPING]
 
 ## Implementation Tokens Registry
 
@@ -191,6 +195,7 @@ When referencing other tokens:
 - `[IMPL:DEPENDENCY_MGMT]` → See `implementation-decisions.md` § Dependency Management [ARCH:CODE_ORGANIZATION] [REQ:MAINTAINABILITY]
 - `[IMPL:TESTING_COMPLEXITY]` → See `implementation-decisions.md` § Testing Complexity [ARCH:TESTING_STRATEGY] [REQ:*]
 - `[IMPL:TOKEN_SYSTEM]` → See `implementation-decisions.md` § Token System Implementation [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
+- `[IMPL:CONFIG_OUTPUT_GROUPING]` → See `implementation-decisions.md` § Configuration Output Grouping Implementation [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
 
 ## Token Relationships
 

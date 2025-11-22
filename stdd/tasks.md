@@ -62,6 +62,23 @@ This document tracks all tasks and subtasks for implementing this project. Tasks
 - ⏸️ **Blocked**: Waiting on dependency
 - ⏳ **Pending**: Not yet started
 
+## P1: Configuration Output Grouping [REQ:CONFIG_OUTPUT_GROUPING] [ARCH:CONFIG_OUTPUT_GROUPING] [IMPL:CONFIG_OUTPUT_GROUPING]
+
+**Status**: ✅ Complete
+
+**Description**: Change the primary presentation of the `--config` output to be grouped by category and ranked by importance/frequency. The existing single sorted list becomes the secondary presentation.
+
+**Dependencies**: [REQ:CFG_006] (Configuration Reflection)
+
+**Completion Criteria**:
+- [x] Default `bkpdir config` output is grouped by category
+- [x] Categories are ranked by importance
+- [x] Items within categories are ranked by importance
+- [x] Secondary presentation (flat list) is accessible via flag
+- [x] Tests pass
+
+**Priority Rationale**: P1 - User requested change to improve usability of configuration display.
+
 ## P0: Enhanced Command Output with File Statistics [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
 
 **Status**: 🟡 In Progress
@@ -643,7 +660,8 @@ EXTRACT-008 → EXTRACT-009, EXTRACT-010
 
 ## Recommended Implementation Order
 
-1. P0: Enhanced Command Output with File Statistics (OUT-002)
-2. P1: Code Linting Compliance (LINT-001)
-3. P2: Selective Coverage Reporting (COV-003)
-4. Migration tasks (can proceed in parallel)
+1. P1: Configuration Output Grouping (REQ:CONFIG_OUTPUT_GROUPING)
+2. P0: Enhanced Command Output with File Statistics (OUT-002)
+3. P1: Code Linting Compliance (LINT-001)
+4. P2: Selective Coverage Reporting (COV-003)
+5. Migration tasks (can proceed in parallel)

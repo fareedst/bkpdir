@@ -151,18 +151,18 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		// Create first config file (should be overridden by second)
 		config1Path := filepath.Join(dir, ".bkpdir.yml")
 		config1Data := map[string]interface{}{
-			"archive_dir_path": "/first/archive",
+			"archive_dir_path":  "/first/archive",
 			"!exclude_patterns": []string{"first1", "first2"},
-			"include_git_info": false,
+			"include_git_info":  false,
 		}
 		createTestConfigFileWithData(t, config1Path, config1Data)
 
 		// Create second config file (should override first)
 		config2Path := filepath.Join(dir, "second.yml")
 		config2Data := map[string]interface{}{
-			"archive_dir_path": "/second/archive",
+			"archive_dir_path":  "/second/archive",
 			"!exclude_patterns": []string{"second1", "second2"},
-			"include_git_info": true,
+			"include_git_info":  true,
 		}
 		createTestConfigFileWithData(t, config2Path, config2Data)
 
@@ -205,9 +205,9 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		homeDir := t.TempDir()
 		homeConfigPath := filepath.Join(homeDir, ".bkpdir.yml")
 		homeConfigData := map[string]interface{}{
-			"archive_dir_path": "/home/archive",
+			"archive_dir_path":  "/home/archive",
 			"!exclude_patterns": []string{"home1", "home2"}, // Use ! prefix to explicitly override (per CFG-005)
-			"include_git_info": true,
+			"include_git_info":  true,
 		}
 		createTestConfigFileWithData(t, homeConfigPath, homeConfigData)
 
@@ -241,10 +241,10 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 
 		// Create valid config file
 		validConfigPath := filepath.Join(dir, "valid.yml")
-	validConfigData := map[string]interface{}{
-		"archive_dir_path": "/valid/archive",
-		"!exclude_patterns": []string{"valid1", "valid2"},
-	}
+		validConfigData := map[string]interface{}{
+			"archive_dir_path":  "/valid/archive",
+			"!exclude_patterns": []string{"valid1", "valid2"},
+		}
 		createTestConfigFileWithData(t, validConfigPath, validConfigData)
 
 		// Set BKPDIR_CONFIG to use both files
@@ -4236,10 +4236,10 @@ func TestLoadConfigWithInheritance_MultiFile(t *testing.T) {
 	// Create second config file that also inherits from base
 	config2Path := filepath.Join(dir, "config2.yml")
 	config2Data := map[string]interface{}{
-		"inherit":          []string{"base.yml"},
-		"archive_dir_path": "/config2/archive",
+		"inherit":           []string{"base.yml"},
+		"archive_dir_path":  "/config2/archive",
 		"!exclude_patterns": []string{"config2-1"},
-		"include_git_info": true,
+		"include_git_info":  true,
 	}
 	createTestConfigFileWithData(t, config2Path, config2Data)
 
@@ -4315,16 +4315,16 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		defaultCfg := DefaultConfig()
 		t.Logf("DIAGNOSTIC: Default config exclude_patterns: %v", defaultCfg.ExcludePatterns)
 		t.Logf("DIAGNOSTIC: Source config exclude_patterns: %v", loadResult.config.ExcludePatterns)
-		
+
 		// Enable debug temporarily for this test (debug is in main.go)
 		// We'll use t.Logf for diagnostics instead since debug is not accessible here
-		
+
 		mergedCfg, err := applyMergeStrategies(defaultCfg, loadResult.config, true, loadResult.rawMap)
 		if err != nil {
 			t.Fatalf("applyMergeStrategies error: %v", err)
 		}
 		t.Logf("DIAGNOSTIC: Merged config exclude_patterns: %v", mergedCfg.ExcludePatterns)
-		
+
 		// Verify the direct merge worked
 		expectedDirectMerge := []string{".git/", "vendor/", "demo/batches/", "*.log"}
 		if !equalStringSlices(mergedCfg.ExcludePatterns, expectedDirectMerge) {
@@ -4361,9 +4361,9 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		// Verify merged exclude patterns contain both defaults and local patterns
 		expectedPatterns := []string{".git/", "vendor/", "demo/batches/", "*.log"}
 		if !equalStringSlices(cfg.ExcludePatterns, expectedPatterns) {
-			t.Errorf("Exclude patterns not merged correctly. Expected %v (len=%d), got %v (len=%d)", 
+			t.Errorf("Exclude patterns not merged correctly. Expected %v (len=%d), got %v (len=%d)",
 				expectedPatterns, len(expectedPatterns), cfg.ExcludePatterns, len(cfg.ExcludePatterns))
-			
+
 			// Detailed comparison
 			expectedMap := make(map[string]bool)
 			for _, p := range expectedPatterns {
@@ -4373,7 +4373,7 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 			for _, p := range cfg.ExcludePatterns {
 				gotMap[p] = true
 			}
-			
+
 			t.Logf("DIAGNOSTIC: Missing patterns:")
 			for p := range expectedMap {
 				if !gotMap[p] {

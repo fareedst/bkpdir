@@ -71,7 +71,7 @@ type MetricsValidationResult struct {
 // The decision framework metrics are no longer applicable after STDD migration
 func TestDOC014MetricsValidationSuite(t *testing.T) {
 	t.Skip("DOC-014 metrics tests deprecated - project migrated to STDD methodology")
-	
+
 	suite := &DecisionMetricsTestSuite{}
 
 	// Initialize test suite

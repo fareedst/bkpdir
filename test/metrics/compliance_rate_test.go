@@ -66,7 +66,7 @@ type ComplianceAnalysisResult struct {
 // The DOC-014 decision framework is no longer applicable after STDD migration
 func TestDOC014ComplianceRateAccuracy(t *testing.T) {
 	t.Skip("DOC-014 compliance rate tests deprecated - project migrated to STDD methodology")
-	
+
 	suite := &ComplianceRateTestSuite{}
 
 	// Initialize test suite

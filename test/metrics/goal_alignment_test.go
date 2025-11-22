@@ -93,7 +93,7 @@ type GoalAlignmentResult struct {
 // The decision framework goal alignment metrics are no longer applicable after STDD migration
 func TestDOC014GoalAlignmentMeasurement(t *testing.T) {
 	t.Skip("DOC-014 goal alignment tests deprecated - project migrated to STDD methodology")
-	
+
 	suite := &GoalAlignmentTestSuite{}
 
 	// Initialize test suite

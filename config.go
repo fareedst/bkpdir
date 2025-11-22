@@ -470,7 +470,7 @@ func LoadConfig(root string) (*Config, error) {
 			break
 		}
 	}
-	
+
 	// If no files found, try inheritance loading (might have inheritance chains)
 	// Otherwise, use fallback method directly for better compatibility
 	if foundAnyFile {
@@ -552,13 +552,13 @@ func LoadConfig(root string) (*Config, error) {
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] exclude_patterns: %v\n", i, tempCfg.ExcludePatterns)
 			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
-			
+
 			// Determine merge context: first file merges with defaults, subsequent files override
-			isFirstFile := cfg.ArchiveDirPath == DefaultConfig().ArchiveDirPath && 
+			isFirstFile := cfg.ArchiveDirPath == DefaultConfig().ArchiveDirPath &&
 				len(cfg.ExcludePatterns) == len(DefaultConfig().ExcludePatterns)
 			inheritContext := isFirstFile // First file merges with defaults
 			fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] isFirstFile=%v, inheritContext=%v\n", i, isFirstFile, inheritContext)
-			
+
 			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap)
 			if err != nil {
 				if debug {
@@ -1526,7 +1526,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 					}
 					fmt.Printf("DEBUG:   Current exclude patterns before merge: %v\n", finalCfg.ExcludePatterns)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				
+
 				inheritContext := isFirstFile // First file merges with defaults
 				mergedCfg, err2 := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap)
 				if err2 != nil {
@@ -1546,10 +1546,10 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 			if debug {
 				fmt.Printf("DEBUG: Inheritance chain: %v\n", chain.files)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-			
+
 			// Determine if this is an inheritance chain (multiple files) or single file
 			isInheritanceChain := len(chain.files) > 1
-			
+
 			for _, filePath := range chain.files {
 				loadResult, err := loadSingleConfigFile(filePath)
 				if err != nil {
@@ -1566,14 +1566,14 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 					}
 					fmt.Printf("DEBUG:   Current exclude patterns before merge: %v\n", finalCfg.ExcludePatterns)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				
+
 				// Determine merge context:
 				// - Within inheritance chain (multiple files): always merge (inheritContext=true)
 				// - First file from searchPaths: merge with defaults per CFG-005 (inheritContext=true)
 				// - Subsequent files from searchPaths: override previous files (inheritContext=false)
 				// Note: For backward compatibility, use !exclude_patterns prefix to explicitly override
 				inheritContext := isInheritanceChain || isFirstFile
-				
+
 				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap)
 				if err != nil {
 					if debug {
@@ -1636,8 +1636,8 @@ func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuil
 
 // configFileLoadResult holds both the Config and the raw map with prefixes preserved
 type configFileLoadResult struct {
-	config  *Config
-	rawMap  map[string]interface{}
+	config *Config
+	rawMap map[string]interface{}
 }
 
 // CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
@@ -1710,7 +1710,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	if err != nil {
 		return nil, fmt.Errorf("failed to process merge strategies: %w", err)
 	}
-	
+
 	// Ensure exclude_patterns is in processed.operations if it exists in src but wasn't processed
 	// This handles cases where exclude_patterns might not be in rawSrcMap but is in src.Config
 	if _, exists := processed.operations["exclude_patterns"]; !exists && len(src.ExcludePatterns) > 0 {
@@ -1720,7 +1720,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 			key:      "exclude_patterns",
 		}
 	}
-	
+
 	if debug {
 		keys := make([]string, 0, len(processed.operations))
 		for k := range processed.operations {
@@ -1733,7 +1733,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 			fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns NOT in processed.operations\n")
 		}
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-	
+
 	// CFG-005: Array fields default to merge (accumulate) strategy to preserve values
 	// from defaults and parent configs when child configs add values.
 	// This applies to both inheritance chains and sequential file processing.
@@ -1742,14 +1742,14 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	hasExplicitPrefix := false
 	if rawSrcMap != nil {
 		for origKey := range rawSrcMap {
-			if origKey == "!exclude_patterns" || origKey == "+exclude_patterns" || 
-			   origKey == "^exclude_patterns" || origKey == "=exclude_patterns" {
+			if origKey == "!exclude_patterns" || origKey == "+exclude_patterns" ||
+				origKey == "^exclude_patterns" || origKey == "=exclude_patterns" {
 				hasExplicitPrefix = true
 				break
 			}
 		}
 	}
-	
+
 	for key, operation := range processed.operations {
 		if key == "exclude_patterns" {
 			if debug {
@@ -1774,21 +1774,21 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	// Start with a copy of dst (current state), not DefaultConfig()
 	// This ensures we preserve any accumulated values from previous merges
 	result := &Config{}
-	*result = *dst  // Copy the config
-	
+	*result = *dst // Copy the config
+
 	// Save dst's exclude_patterns - we'll handle exclude_patterns via applyMergeOperation based on strategy
 	dstExcludePatterns := make([]string, len(dst.ExcludePatterns))
 	copy(dstExcludePatterns, dst.ExcludePatterns)
-	
+
 	// Create a copy of src with exclude_patterns cleared to prevent mergeConfigs from merging them
 	// (we'll handle exclude_patterns via merge strategies instead)
 	srcCopy := &Config{}
 	*srcCopy = *src
 	srcCopy.ExcludePatterns = nil
-	
+
 	// Merge other settings from srcCopy into result (exclude_patterns skipped)
 	mergeConfigs(result, srcCopy)
-	
+
 	// For exclude_patterns, restore dst's original patterns so applyMergeOperation can merge based on strategy
 	// This ensures we start with the current state (dst) and merge src's patterns into it
 	result.ExcludePatterns = dstExcludePatterns
@@ -1797,7 +1797,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	// Use result's current values (not dst's) for merge operations
 	// Create resultMap AFTER restoring exclude_patterns so it reflects the correct state
 	resultMap := configToMap(result)
-	
+
 	// DIAGNOSTIC: Always log exclude_patterns processing (not just when debug is enabled)
 	fmt.Printf("\n=== DIAGNOSTIC: applyMergeStrategies ===\n")
 	fmt.Printf("inheritContext: %v\n", inheritContext)
@@ -1806,7 +1806,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	fmt.Printf("dstExcludePatterns (saved): %v (len=%d)\n", dstExcludePatterns, len(dstExcludePatterns))
 	fmt.Printf("result.ExcludePatterns (after copy): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 	fmt.Printf("result.ExcludePatterns (after restore): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
-	
+
 	keys := make([]string, 0, len(processed.operations))
 	for k := range processed.operations {
 		keys = append(keys, k)
@@ -1826,9 +1826,9 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	} else {
 		fmt.Printf("✗ exclude_patterns NOT found in processed.operations. Keys: %v\n", keys)
 	}
-	
+
 	fmt.Printf("resultMap[\"exclude_patterns\"]: %v\n", resultMap["exclude_patterns"])
-	
+
 	for key, operation := range processed.operations {
 		fmt.Printf("DIAGNOSTIC: Processing key: %s, strategy: %s\n", key, operation.strategy)
 		// Skip metadata fields that are not part of the Config struct
@@ -1855,7 +1855,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 			fmt.Printf("result.ExcludePatterns BEFORE applyMergeOperation: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 		}
 		if debug && key == "exclude_patterns" {
-			fmt.Printf("DEBUG: applyMergeStrategies - key: %s, currentValue: %v, operation.value: %v, strategy: %s\n", 
+			fmt.Printf("DEBUG: applyMergeStrategies - key: %s, currentValue: %v, operation.value: %v, strategy: %s\n",
 				key, currentValue, operation.value, operation.strategy)
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 		err := applyMergeOperation(result, key, operation, currentValue)
@@ -1879,7 +1879,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 		fmt.Printf("DIAGNOSTIC: Completed processing key: %s\n", key)
 	}
-	
+
 	fmt.Printf("=== END DIAGNOSTIC: applyMergeStrategies ===\n\n")
 
 	return result, nil
@@ -2131,7 +2131,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 		fmt.Printf("dstValue: %v (type: %T)\n", dstValue, dstValue)
 		fmt.Printf("result.ExcludePatterns: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 	}
-	
+
 	// Convert []interface{} to []string if needed (common from YAML unmarshaling)
 	var srcSlice []string
 	var ok bool
@@ -2163,7 +2163,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 			return setConfigField(result, key, value)
 		}
 	}
-	
+
 	// Only process if we have source values to merge
 	if len(srcSlice) > 0 {
 		if key == "exclude_patterns" {
@@ -2181,7 +2181,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 				fmt.Printf("dstValue from resultMap: %v (type: %T)\n", dstValue, dstValue)
 			}
 		}
-		
+
 		var dstSlice []string
 		if dstValue != nil {
 			if dstSlice, ok = dstValue.([]string); !ok {
@@ -2206,7 +2206,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 				}
 			}
 		}
-		
+
 		// Merge srcSlice into dstSlice (or start with srcSlice if dstSlice is nil/empty)
 		if len(dstSlice) > 0 {
 			if key == "exclude_patterns" {
@@ -2217,7 +2217,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 			for _, pattern := range dstSlice {
 				existingMap[pattern] = true
 			}
-			
+
 			// Append new patterns that aren't already present
 			merged := make([]string, len(dstSlice), len(dstSlice)+len(srcSlice))
 			copy(merged, dstSlice)
@@ -2345,14 +2345,14 @@ func setConfigField(cfg *Config, key string, value interface{}) error {
 // isKnownConfigField checks if a field name is a known config field
 func isKnownConfigField(key string) bool {
 	knownFields := map[string]bool{
-		"archive_dir_path":     true,
-		"use_current_dir_name": true,
-		"exclude_patterns":     true,
-		"include_git_info":     true,
-		"backup_dir_path":      true,
-		"skip_broken_symlinks": true,
+		"archive_dir_path":       true,
+		"use_current_dir_name":   true,
+		"exclude_patterns":       true,
+		"include_git_info":       true,
+		"backup_dir_path":        true,
+		"skip_broken_symlinks":   true,
 		"status_created_archive": true,
-		"status_disk_full":      true,
+		"status_disk_full":       true,
 	}
 	return knownFields[key]
 }
@@ -2382,16 +2382,70 @@ func isZeroValue(value interface{}) bool {
 // configFieldInfo represents metadata about a configuration field discovered through reflection.
 // It provides complete information about field structure, type, and documentation.
 type configFieldInfo struct {
-	Name      string       // Field name in Go struct
-	YAMLName  string       // YAML tag name for configuration file
-	Type      string       // Go type as string
-	Kind      reflect.Kind // Reflect kind for type handling
-	Value     interface{}  // Current field value
-	IsPointer bool         // Whether field is a pointer type
-	IsSlice   bool         // Whether field is a slice type
-	IsStruct  bool         // Whether field is a struct type
-	Category  string       // Field category (basic, status, format, template, etc.)
-	Path      string       // Full path for nested fields (e.g., "verification.verify_on_create")
+	Name       string       // Field name in Go struct
+	YAMLName   string       // YAML tag name for configuration file
+	Type       string       // Go type as string
+	Kind       reflect.Kind // Reflect kind for type handling
+	Value      interface{}  // Current field value
+	IsPointer  bool         // Whether field is a pointer type
+	IsSlice    bool         // Whether field is a slice type
+	IsStruct   bool         // Whether field is a struct type
+	Category   string       // Field category (basic, status, format, template, etc.)
+	Path       string       // Full path for nested fields (e.g., "verification.verify_on_create")
+	Importance int          // Importance level (0=Critical, 1=High, 2=Medium, 3=Low)
+}
+
+// Importance levels for configuration fields
+const (
+	ImportanceCritical = 0
+	ImportanceHigh     = 1
+	ImportanceMedium   = 2
+	ImportanceLow      = 3
+)
+
+// CategoryPriority defines the display order for categories
+var CategoryPriority = map[string]int{
+	"basic_settings":   0,
+	"archive_settings": 1,
+	"backup_settings":  2,
+	"git_settings":     3,
+	"verification":     4,
+	"output_format":    5,
+	"status_codes":     6,
+	"advanced":         7,
+}
+
+// getFieldImportance determines the importance level of a configuration field
+func getFieldImportance(name, category string) int {
+	// Critical settings
+	criticalFields := map[string]bool{
+		"archive_dir_path": true,
+		"backup_dir_path":  true,
+	}
+	if criticalFields[name] {
+		return ImportanceCritical
+	}
+
+	// High importance settings
+	highFields := map[string]bool{
+		"use_current_dir_name":           true,
+		"use_current_dir_name_for_files": true,
+		"git.enabled":                    true,
+		"verification.verify_on_create":  true,
+	}
+	if highFields[name] {
+		return ImportanceHigh
+	}
+
+	// Medium importance settings
+	if strings.Contains(name, "format") || strings.Contains(name, "template") {
+		return ImportanceLow
+	}
+	if strings.Contains(name, "status") {
+		return ImportanceLow
+	}
+
+	return ImportanceMedium
 }
 
 // CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
@@ -2440,16 +2494,17 @@ func GetAllConfigFields(cfg *Config) []configFieldInfo {
 	for i, field := range fields {
 		// Store field metadata without specific values for caching
 		fieldMetadata[i] = configFieldInfo{
-			Name:      field.Name,
-			YAMLName:  field.YAMLName,
-			Type:      field.Type,
-			Kind:      field.Kind,
-			Value:     nil, // Values will be updated per call
-			IsPointer: field.IsPointer,
-			IsSlice:   field.IsSlice,
-			IsStruct:  field.IsStruct,
-			Category:  field.Category,
-			Path:      field.Path,
+			Name:       field.Name,
+			YAMLName:   field.YAMLName,
+			Type:       field.Type,
+			Kind:       field.Kind,
+			Value:      nil, // Values will be updated per call
+			IsPointer:  field.IsPointer,
+			IsSlice:    field.IsSlice,
+			IsStruct:   field.IsStruct,
+			Category:   field.Category,
+			Path:       field.Path,
+			Importance: getFieldImportance(field.YAMLName, field.Category),
 		}
 	}
 	globalFieldCache.setCachedFields(fieldMetadata)
