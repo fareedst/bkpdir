@@ -154,8 +154,25 @@ func (f *AICoreFormatter) FormatWithPlaceholders(format string, data map[string]
 // [CRITICAL] FMT-001: AI-friendly context formatting - [ACTION:core-functionality]
 func (f *AICoreFormatter) FormatWithContext(ctx FormatContext) (string, error) {
 	switch ctx.FormatType {
-	case FormatTypeCreated, FormatTypeIdentical, FormatTypeList, FormatTypeDryRun:
+	case FormatTypeCreated, FormatTypeIdentical, FormatTypeDryRun:
 		if path, ok := ctx.Data["path"].(string); ok {
+			return f.FormatArchive(path, ctx.FormatType)
+		}
+		return "", fmt.Errorf("missing path in format context")
+	case FormatTypeList:
+		// [IMPL:DUAL_FORMATTING] [REQ:OUTPUT_FORMATTING] Handle list format with creation time
+		if path, ok := ctx.Data["path"].(string); ok {
+			if creationTime, ok := ctx.Data["creationTime"].(string); ok {
+				formatStr, err := f.config.GetFormatString(FormatTypeList)
+				if err != nil {
+					return "", fmt.Errorf("failed to get format string for type %s: %w", FormatTypeList, err)
+				}
+				if formatStr == "" {
+					formatStr = "%s (created: %s)\n"
+				}
+				return fmt.Sprintf(formatStr, path, creationTime), nil
+			}
+			// If creationTime is missing, fall back to just path (though this shouldn't happen with correct usage)
 			return f.FormatArchive(path, ctx.FormatType)
 		}
 		return "", fmt.Errorf("missing path in format context")

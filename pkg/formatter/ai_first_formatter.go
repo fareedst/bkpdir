@@ -67,12 +67,8 @@ func (f *AIFirstFormatterImpl) FormatWithContext(ctx FormatContext) (string, err
 		}
 		return "", fmt.Errorf("missing path in format context")
 	case FormatTypeList:
-		if path, ok := ctx.Data["path"].(string); ok {
-			if _, ok := ctx.Data["creationTime"].(string); ok {
-				return f.FormatArchive(path, FormatTypeList)
-			}
-		}
-		return "", fmt.Errorf("missing path or creationTime in format context")
+		// [IMPL:DUAL_FORMATTING] [REQ:OUTPUT_FORMATTING] Delegate to core formatter for correct list formatting
+		return f.coreFormatter.FormatWithContext(ctx)
 	case FormatTypeError:
 		if err, ok := ctx.Data["error"].(error); ok {
 			if errorType, ok := ctx.Data["errorType"].(ErrorType); ok {

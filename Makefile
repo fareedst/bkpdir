@@ -40,7 +40,7 @@
 
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
 .PHONY: test test-verbose test-coverage test-coverage-new test-coverage-validate test-race test-bench test-all
-.PHONY: lint lint-unicode validate-tokens validate-token-enforcement validate-tokens-strict fmt vet check dev install deps help
+.PHONY: lint lint-unicode validate-tokens validate-token-enforcement validate-tokens-strict fmt vet check dev install install-link deps help
 .PHONY: token-migration-dry-run token-migration token-migration-rollback
 
 # Variables
@@ -529,9 +529,12 @@ coverage-check: test-coverage-validate
 dev-full: check test-coverage-validate build-local token-suggester
 	@echo "🚀 Full development workflow completed with token suggestion integration"
 
-# Example usage comment for symbolic link
-# To create a symbolic link in your local bin:
-# ln -s "$(pwd)/bin/$(BINARY_NAME)-macos-arm64" ~/.local/bin/$(BINARY_NAME)
+# Install via symbolic link (macos-arm64 specific)
+install-link: build-macos-arm64
+	@echo "Linking $(BINARY_NAME) to ~/.local/bin..."
+	@mkdir -p ~/.local/bin
+	ln -sf "$$(pwd)/bin/$(BINARY_NAME)-macos-arm64" ~/.local/bin/$(BINARY_NAME)
+	@echo "✓ Linked $(BINARY_NAME) to ~/.local/bin/$(BINARY_NAME)"
 
 # 🔶 DOC-012: Real-time icon validation feedback targets
 build-realtime-validator:

@@ -154,6 +154,28 @@ func TestAIFirstFormatterFormatWithContext(t *testing.T) {
 	if err == nil {
 		t.Error("FormatWithContext should fail with missing path")
 	}
+
+	// Test list archive formatting (Regression test for date formatting)
+	// [TEST:FORMAT_LIST] [REQ:OUTPUT_FORMATTING]
+	ctx = FormatContext{
+		FormatType: FormatTypeList,
+		Data: map[string]interface{}{
+			"path":         "/test/archive.zip",
+			"creationTime": "2023-10-27 10:00:00",
+		},
+		Options:  FormatOptions{},
+		Metadata: make(map[string]string),
+	}
+
+	result, err = formatter.FormatWithContext(ctx)
+	if err != nil {
+		t.Errorf("FormatWithContext failed for list archive: %v", err)
+	}
+
+	expected := "/test/archive.zip (created: 2023-10-27 10:00:00)\n"
+	if result != expected {
+		t.Errorf("expected '%s', got '%s'", expected, result)
+	}
 }
 
 // [CRITICAL] FMT-001: Test extract with context - [ACTION:discovery]

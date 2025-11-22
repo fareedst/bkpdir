@@ -29,7 +29,6 @@ import (
 	"bkpdir/pkg/formatter"
 )
 
-
 // Version, date, and commit are set at build time via ldflags
 var version = "dev"
 var date = "unknown"
@@ -55,7 +54,7 @@ Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
-	appVersion     = "1.5.0"
+	appVersion     = "1.5.1"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
