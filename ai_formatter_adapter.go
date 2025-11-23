@@ -11,6 +11,7 @@ package main
 import (
 	"bkpdir/pkg/formatter"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -352,15 +353,32 @@ func (fa *AIFormatterAdapter) FormatWithTemplate(input, pattern, tmplStr string)
 }
 
 func (fa *AIFormatterAdapter) FormatWithPlaceholders(format string, data map[string]string) string {
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatWithPlaceholders called with format=%q, data=%+v\n", format, data)
+	}
 	result, err := fa.aiFormatter.FormatWithPlaceholders(format, data)
 	if err != nil {
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatWithPlaceholders error, using fallback: %v\n", err)
+		}
 		// Fallback to simple string replacement
 		result := format
 		for key, value := range data {
-			placeholder := "%{" + key + "}"
-			result = strings.ReplaceAll(result, placeholder, value)
+			placeholder := "#{" + key + "}"
+			if strings.Contains(result, placeholder) {
+				if debug {
+					fmt.Fprintf(os.Stderr, "DEBUG: Replacing %q with %q\n", placeholder, value)
+				}
+				result = strings.ReplaceAll(result, placeholder, value)
+			}
+		}
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatWithPlaceholders fallback result=%q\n", result)
 		}
 		return result
+	}
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatWithPlaceholders result=%q\n", result)
 	}
 	return result
 }
@@ -850,8 +868,10 @@ func (fa *AIFormatterAdapter) PrintVerificationErrorDetail(errMsg string) {
 }
 
 func (fa *AIFormatterAdapter) PrintArchiveListWithStatus(output, status string) {
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use string concatenation, NOT fmt.Sprintf
+	// to avoid fmt misinterpreting #{...} patterns as format verbs
 	ctx := formatter.PrintContext{
-		Message:     fmt.Sprintf("%s%s\n", output, status),
+		Message:     output + status + "\n",
 		Destination: formatter.AIOutputDestinationStdout,
 		Type:        formatter.AIMessageTypeInfo,
 	}
@@ -860,6 +880,9 @@ func (fa *AIFormatterAdapter) PrintArchiveListWithStatus(output, status string) 
 
 // [CRITICAL] FMT-001: Enhanced format operations - [ACTION:core-functionality]
 func (fa *AIFormatterAdapter) FormatListArchiveWithExtraction(archivePath, creationTime string) string {
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction called with path=%q, creationTime=%q\n", archivePath, creationTime)
+	}
 	// Extract data from archive filename and format with template
 	data := fa.ExtractArchiveFilenameData(archivePath)
 	if data == nil {
@@ -868,13 +891,67 @@ func (fa *AIFormatterAdapter) FormatListArchiveWithExtraction(archivePath, creat
 	data["path"] = archivePath
 	data["creation_time"] = creationTime
 
-	// Try template formatting first, fall back to printf formatting
-	if templateStr := fa.config.TemplateListArchive; templateStr != "" {
-		return fa.FormatWithPlaceholders(templateStr, data)
+	// Gather file statistics for placeholders like #{size_human}
+	statInfo, err := formatter.GatherFileStatInfo(archivePath)
+	if err == nil && statInfo != nil {
+		data["size"] = fmt.Sprintf("%d", statInfo.Size)
+		data["size_human"] = statInfo.SizeHuman
+		data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+		data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+		data["mode"] = statInfo.Mode.String()
+		data["type"] = statInfo.Type
+		if statInfo.Name != "" {
+			data["name"] = statInfo.Name
+		}
+	} else {
+		// Provide defaults for missing stats
+		data["size"] = "0"
+		data["size_human"] = "unknown"
+		data["mtime"] = creationTime
+		data["mtime_unix"] = "0"
+		data["mode"] = "unknown"
+		data["type"] = "unknown"
+		// Extract filename from path
+		parts := strings.Split(archivePath, "/")
+		if len(parts) > 0 {
+			data["name"] = parts[len(parts)-1]
+		} else {
+			data["name"] = archivePath
+		}
 	}
 
-	// Fall back to standard formatting
-	return fa.FormatListArchive(archivePath, creationTime)
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction data map: %+v\n", data)
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction FormatListArchive=%q\n", fa.config.FormatListArchive)
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction TemplateListArchive=%q\n", fa.config.TemplateListArchive)
+	}
+
+	// Priority: FormatListArchive (if contains #{) > TemplateListArchive > default
+	var formatStr string
+	if fa.config.FormatListArchive != "" && strings.Contains(fa.config.FormatListArchive, "#{") {
+		formatStr = fa.config.FormatListArchive
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction using FormatListArchive=%q\n", formatStr)
+		}
+	} else if fa.config.TemplateListArchive != "" {
+		formatStr = fa.config.TemplateListArchive
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction using TemplateListArchive=%q\n", formatStr)
+		}
+	} else {
+		// Default template format when both are empty
+		formatStr = "#{path} (size: #{size_human})\n"
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction using default format=%q\n", formatStr)
+		}
+	}
+
+	// Use FormatWithPlaceholders to replace all placeholders
+	result := fa.FormatWithPlaceholders(formatStr, data)
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: AIFormatterAdapter.FormatListArchiveWithExtraction final result=%q\n", result)
+	}
+	return result
 }
 
 func (fa *AIFormatterAdapter) FormatListBackupWithExtraction(backupPath, creationTime string) string {

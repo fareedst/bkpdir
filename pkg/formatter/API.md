@@ -134,7 +134,7 @@ type CoreFormatter interface {
 #### `FormatWithPlaceholders(format string, data map[string]string) (string, error)`
 - **Purpose**: Formats using placeholder substitution
 - **Parameters**: 
-  - `format` - Format string with placeholders like `%{key}`
+  - `format` - Format string with placeholders like `#{key}`
   - `data` - Data to substitute
 - **Returns**: Formatted string and error
 

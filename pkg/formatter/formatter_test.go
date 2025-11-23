@@ -126,7 +126,7 @@ func TestTemplateFormatter(t *testing.T) {
 	formatter := NewDefaultTemplateFormatter(configProvider)
 
 	// Test placeholder formatting
-	template := "Created archive: %{path} at %{timestamp}"
+	template := "Created archive: #{path} at #{timestamp}"
 	data := map[string]string{
 		"path":      "/test/archive.zip",
 		"timestamp": "2024-01-15_14-30-45",
@@ -141,7 +141,7 @@ func TestTemplateFormatter(t *testing.T) {
 	// Test template with pattern
 	input := "myproject_2024-01-15_14-30-45.zip"
 	pattern := `^(?P<name>.*?)_(?P<timestamp>\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(?P<suffix>\..*)?$`
-	tmplStr := "Archive %{name} created at %{timestamp}"
+	tmplStr := "Archive #{name} created at #{timestamp}"
 
 	templateResult, err := formatter.FormatWithTemplate(input, pattern, tmplStr)
 	if err != nil {
@@ -272,7 +272,7 @@ func TestErrorTemplateFormatting(t *testing.T) {
 	}
 
 	// Test with custom template
-	configProvider.templateStrings["error_permission"] = "Access denied: %{error}"
+	configProvider.templateStrings["error_permission"] = "Access denied: #{error}"
 	customResult := formatter.TemplatePermissionError(testErr)
 	if !strings.Contains(customResult, "Access denied") {
 		t.Errorf("Custom template should be used")

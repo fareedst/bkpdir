@@ -1192,10 +1192,18 @@ func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterf
 		// Use enhanced formatting with extraction if possible
 		creationTime := a.CreationTime.Format("2006-01-02 15:04:05")
 		if formatterAdapter, ok := formatter.(*FormatterAdapter); ok {
-			output := formatterAdapter.FormatListArchiveWithExtraction(a.Name, creationTime)
+			// Use Path (full path) for file stats, Name (filename) for display
+			output := formatterAdapter.FormatListArchiveWithExtraction(a.Path, creationTime)
 			// Remove trailing newline from output to add status on same line
 			output = strings.TrimSuffix(output, "\n")
 			formatterAdapter.PrintArchiveListWithStatus(output, status)
+		} else if aiFormatterAdapter, ok := formatter.(*AIFormatterAdapter); ok {
+			// Use Path (full path) for file stats, Name (filename) for display
+			output := aiFormatterAdapter.FormatListArchiveWithExtraction(a.Path, creationTime)
+			// Remove trailing newline from output to add status on same line
+			output = strings.TrimSuffix(output, "\n")
+			// Use os.Stdout.WriteString to avoid fmt misinterpreting #{...} patterns
+			os.Stdout.WriteString(output + status + "\n")
 		} else {
 			output := formatter.FormatListArchive(a.Name, creationTime)
 			fmt.Printf("%s%s\n", strings.TrimSuffix(output, "\n"), status)
@@ -1616,7 +1624,8 @@ func (h *CommandHandler) HandleListArchives(args []string) error {
 	for _, archive := range archives {
 		creationTime := archive.CreationTime.Format("2006-01-02 15:04:05")
 		if formatterAdapter, ok := h.config.Formatter.(*FormatterAdapter); ok {
-			output := formatterAdapter.FormatListArchiveWithExtraction(archive.Name, creationTime)
+			// Use Path (full path) for file stats, Name (filename) for display
+			output := formatterAdapter.FormatListArchiveWithExtraction(archive.Path, creationTime)
 			fmt.Print(output)
 		} else {
 			output := h.config.Formatter.FormatListArchive(archive.Name, creationTime)

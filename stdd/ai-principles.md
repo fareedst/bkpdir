@@ -85,9 +85,22 @@ This acknowledgment confirms that the AI agent has:
    - Debug output helps AI agents understand execution flow, data transformations, and state changes
    - Include diagnostic output in test functions to trace behavior when tests fail
    - Use descriptive prefixes (e.g., `DIAGNOSTIC:`, `DEBUG:`) to clearly identify debug output
+   - **CRITICAL**: Debug statements that identify architecture or implementation decisions MUST be kept in code
+   - Debug statements that document key decision points, format string selection, placeholder replacement steps, or other architectural/implementation logic provide ongoing value for understanding code behavior
    - Debug output should remain in code unless explicitly requested to be removed - it is not intrusive and is optional during production use
    - Debug output controlled by `debug` flags or build tags can be conditionally enabled/disabled without removal
-   - **Rationale**: AI agents benefit from visibility into execution flow, especially when debugging complex logic like configuration merging, state management, or data transformations. Keeping debug output in code provides ongoing value for future debugging and understanding code behavior.
+   - **Rationale**: AI agents benefit from visibility into execution flow, especially when debugging complex logic like configuration merging, state management, or data transformations. Debug statements that document architecture or implementation decisions serve as inline documentation of key decision points and execution paths. Keeping debug output in code provides ongoing value for future debugging and understanding code behavior.
+
+8. **Separation of Concerns**
+   - **Principle**: Each component, function, or module should have a single, well-defined responsibility
+   - **When logic is difficult to implement or test within a large application context:**
+     - Extract it into a pure function or isolated module
+     - Give it a single, clear responsibility
+     - Remove dependencies on application-specific context
+     - Make it testable in isolation
+   - **Benefits**: Improved testability, reusability, maintainability, and clarity
+   - **Application**: Apply consistently when designing new features, refactoring existing code, or when complexity makes testing or reasoning difficult
+   - **Rationale**: Separating simple, reusable logic from complex application logic enables independent testing, reduces coupling, and makes code easier to understand and maintain. Pure functions with single responsibilities are easier to reason about, test, and reuse across different contexts.
 
 ---
 
@@ -512,8 +525,24 @@ Create and maintain `semantic-tokens.md` with:
    - Show key variables, function parameters, return values, and state transitions
    - Debug output helps AI agents understand what's happening when code doesn't work as expected
    - **Example**: When implementing configuration merging, output `exclude_patterns` state before/after each merge operation
-   - **Retention**: Debug output should remain in code unless explicitly requested to be removed - it is not intrusive and provides ongoing value for debugging and understanding code behavior
-   - Debug output controlled by `debug` flags or build tags can be conditionally enabled/disabled without removal
+   - **CRITICAL - Debug Code Retention**: 
+     - Debug statements that identify architecture or implementation decisions MUST be kept in code
+     - Debug statements documenting format string selection, placeholder replacement steps, data transformations, or other key decision points serve as inline documentation
+     - These debug statements provide ongoing value for understanding code behavior and debugging issues
+     - Debug output should remain in code unless explicitly requested to be removed - it is not intrusive and is optional during production use
+     - Debug output controlled by `debug` flags or build tags can be conditionally enabled/disabled without removal
+   - **Examples of debug statements to keep**:
+     - Format string selection logic (e.g., "using FormatListArchive", "using TemplateListArchive", "using default format")
+     - Placeholder replacement steps (e.g., "Replacing #{path} with value", "after ReplacePlaceholders: result")
+     - Data map contents showing available placeholders
+     - Architecture decision points (e.g., "falling back to emergency replacement", "gathering file statistics")
+
+3. **Apply Separation of Concerns**
+   - When logic is difficult to implement or test within a large application context, extract it into a pure function or isolated module
+   - Give extracted components a single, clear responsibility
+   - Remove dependencies on application-specific context to enable independent testing
+   - **Example**: Extract placeholder replacement logic into a pure function that takes format string and data map, returns formatted string - no side effects, no application dependencies
+   - **Benefits**: Improved testability, reusability, maintainability, and clarity
 
 3. **Complete Subtasks**
    - Mark subtasks complete as they're done
@@ -708,6 +737,7 @@ This project follows AI-First Principles. Before making changes:
 - [ ] **MANDATORY**: Update `tasks.md` as subtasks are completed
 - [ ] Add extensive debug output during implementation to trace execution flow and state changes
 - [ ] Use descriptive debug prefixes (`DIAGNOSTIC:`, `DEBUG:`, `TRACE:`) to identify debug output
+- [ ] **CRITICAL**: Keep debug statements that identify architecture or implementation decisions - they document key decision points
 - [ ] Keep debug output in code unless explicitly requested to be removed - it is not intrusive and provides ongoing value
 - [ ] **MANDATORY**: Update `semantic-tokens.md` when creating new tokens
 - [ ] **MANDATORY**: Update documentation AS YOU WORK - do not defer until the end

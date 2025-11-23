@@ -287,7 +287,7 @@ cfg, err := loader.LoadConfig(".", &AppConfig{})
 
 // Create formatter with config
 formatter := formatter.NewTemplateFormatter(cfg)
-output := formatter.FormatTemplate("Status: %{status}", data)
+output := formatter.FormatTemplate("Status: #{status}", data)
 ```
 
 #### Errors + Resources Coordination
@@ -395,7 +395,7 @@ func main() {
         Use:   "myapp",
         Short: "Example CLI application",
         Run: func(cmd *cobra.Command, args []string) {
-            output := formatter.FormatTemplate("App running in %{format} mode", map[string]interface{}{
+            output := formatter.FormatTemplate("App running in #{format} mode", map[string]interface{}{
                 "format": appCfg.OutputFormat,
             })
             fmt.Println(output)

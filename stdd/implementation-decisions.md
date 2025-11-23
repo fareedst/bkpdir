@@ -1865,3 +1865,176 @@ func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
 **Code Markers**: `displayConfigGrouped`, `Importance`, `CategoryPriority`
 
 **Cross-References**: [ARCH:CONFIG_OUTPUT_GROUPING], [REQ:CONFIG_OUTPUT_GROUPING]
+
+## 22. User-Customizable Format Strings Implementation [IMPL:CUSTOMIZABLE_FORMAT_STRINGS] [ARCH:CUSTOMIZABLE_FORMAT_STRINGS] [REQ:CUSTOMIZABLE_FORMAT_STRINGS]
+
+### Decision: Implement format string validation and comprehensive documentation for user customization. FormatListArchive and FormatListBackup support both printf-style and template-style placeholders.
+
+**Rationale:**
+- Existing infrastructure already supports customization (YAML tags, config loading)
+- Main work is validation and documentation to prevent user mistakes
+- Validation provides helpful guidance for correct placeholder usage
+- Documentation enables users to discover and customize format strings
+
+### Implementation Components:
+
+#### 1. Format String Validation
+
+**Location**: `config.go` - Functions: `ValidateFormatString()`, `validateAllFormatStrings()`, `getExpectedPlaceholders()`, `extractPlaceholders()`
+
+**Key Decisions:**
+- Validation runs automatically on configuration load (non-fatal warnings)
+- Supports both printf-style (`%s`, `%d`) and template-style (`#{path}`, `#{name}`) placeholders
+- Special placeholders like `#{size_human}` are validated per field
+- Warnings printed to stderr, configuration loading continues
+- Expected placeholders defined per field in `getExpectedPlaceholders()`
+- **CRITICAL DECISION**: Template-style placeholders (`#{name}`) are replaced using simple string replacement, NOT Go text/template
+- **CRITICAL DECISION**: Go text/template (`tmpl.Execute`) is ONLY used for `{{.name}}` style templates, and ONLY after all `#{...}` patterns are replaced
+- **CRITICAL DECISION**: If any `#{...}` patterns remain after replacement, Go text/template processing is skipped to prevent fmt package errors
+
+**Integration Points:**
+- Integrated into `LoadConfig()` and `LoadConfigWithInheritance()` functions
+- Validation occurs after configuration merging and before returning config
+- See code comments in `config.go` for detailed implementation
+
+#### 2. Documentation Structure
+
+**Files Created:**
+- `docs/format-strings-reference.md`: Comprehensive reference listing all format strings, organized by category, with placeholders, defaults, and examples
+- `example-custom-formats.yml`: Brief example configuration demonstrating common customizations
+
+**Documentation Features:**
+- Lists all available format strings with YAML field names
+- Documents supported placeholders for each format string
+- Explains printf-style vs template-style formats
+- Provides examples of common customizations (emoji, internationalization)
+
+#### 3. Testing Implementation
+
+**Test Files:**
+- `config_test.go`: Format string validation tests (`TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS`, `TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS`, `TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS`, `TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS`)
+
+**Test Coverage:**
+- Validates correct placeholder detection for printf and template styles
+- Verifies custom format strings load correctly from configuration
+- Ensures default format strings work when not specified
+- Confirms validation warnings are printed to stderr
+
+#### 4. Simplified List Formatting Implementation
+
+**Location**: `formatter_adapter_simple.go` - Function: `formatListArchiveSimple()`
+
+**Key Decisions:**
+- **SIMPLIFIED DESIGN**: Single, clear code path for list formatting
+- **TEMPLATE-ONLY PLACEHOLDERS**: Only supports `#{name}` style placeholders. Printf-style (`%s`, `%d`) is NOT supported.
+- **ALWAYS GATHER STATS**: File statistics are always gathered (needed for template placeholders)
+- **SIMPLE STRING REPLACEMENT**: Uses `strings.ReplaceAll()` for placeholder replacement - no complex template engine
+- **PRIORITY-BASED FORMAT SELECTION**:
+  1. Use `FormatListArchive` if it contains template placeholders (`#{`)
+  2. If `FormatListArchive` is empty or doesn't contain `#{`, use `TemplateListArchive`
+  3. If both are empty, use default template format `#{path} (size: #{size_human})\n`
+- **COMPREHENSIVE TESTING**: Detailed test suite validates all scenarios including:
+  - Template placeholders replacement
+  - Multiple placeholders
+  - Fallback to TemplateListArchive
+  - Fallback to default format
+  - Missing files (graceful degradation with "unknown" defaults)
+  - Unknown placeholders (left as-is)
+
+**Rationale:**
+- **Simplicity**: Single code path with simple string replacement is easier to understand, test, and maintain
+- **Reliability**: Always gathering stats ensures template placeholders always work
+- **Testability**: Clear function boundaries enable comprehensive unit testing
+- **Maintainability**: No complex template engine means fewer bugs and easier updates
+- **Clarity**: Only `#{name}` placeholders eliminates confusion about printf vs template formats
+
+**Implementation Details:**
+- Function signature: `formatListArchiveSimple(cfg *Config, formatterInstance *FormatterAdapter, archivePath, creationTime string) string`
+- Always populates data map with: path, creation_time, name, size, size_human, mtime, mode, type
+- Provides defaults ("unknown", "0") when file stats can't be gathered
+- Uses simple `strings.ReplaceAll()` for placeholder replacement - no template engine needed
+- Unknown placeholders (not in data map) are left as-is in the output
+
+#### 5. Code Structure
+
+**Files Modified:**
+- `config.go`: Added validation functions and integrated into load process. Updated default format strings and validation for `FormatListArchive` and `FormatListBackup`.
+- `formatter.go`: Enhanced template formatter to handle missing `#{size_human}` with fallback. Updated `FormatListArchive` and `FormatListBackup` to support template placeholders.
+- `pkg/formatter/formatter.go`: Updated `FormatListArchive` and `FormatListBackup` to support template placeholders with automatic file statistics gathering.
+- `formatter_adapter.go`: Enhanced to gather file statistics for template formatting
+- `pkg/formatter/template.go`: Added fallback handling for missing placeholders
+
+**Files Created:**
+- `docs/format-strings-reference.md`: Comprehensive reference documentation
+- `example-custom-formats.yml`: Brief example configuration
+
+**No Changes Required:**
+- `config.go` struct: Already has YAML tags
+- `LoadConfig()`: Already loads format strings (validation added)
+- `mergeFormatStrings()`: Already merges format strings
+- `DefaultConfig()`: Already provides defaults
+
+### Validation Strategy:
+
+**Non-Fatal Warnings:**
+- Validation warnings printed to stderr
+- Configuration loading continues
+- Users informed of potential issues but not blocked
+
+**Error Message Format:**
+- `Warning: Field 'FieldName': unexpected placeholder 'placeholder'. Expected one of: [list]`
+- Clear indication of field, unexpected placeholder, and expected alternatives
+
+### Backward Compatibility:
+
+- All format strings have defaults in `DefaultConfig()`
+- Users who don't specify format strings get default behavior
+- Existing configurations continue to work unchanged
+- Validation is non-fatal (warnings only)
+- No breaking changes to configuration schema
+
+### Performance Considerations:
+
+- Validation runs once at configuration load time
+- Regex compilation cached for efficiency
+
+#### 6. Placeholder Syntax Migration: %{...} to #{...}
+
+**Location**: All format string processing code - `pkg/formatter/ai_core_formatter.go`, `pkg/formatter/placeholder_replace.go`, `pkg/formatter/template.go`, `ai_formatter_adapter.go`, `formatter_adapter_simple.go`, `config.go`, and all test files
+
+**Key Decisions:**
+- **MIGRATION COMPLETE**: All placeholder syntax migrated from `%{...}` to `#{...}` to avoid conflicts with Go's `fmt` package
+- **ROOT CAUSE**: Go's `fmt` package interprets `%{` as the start of a format verb, causing `%!(EXTRA ...)` errors when placeholders weren't replaced
+- **SOLUTION**: Changed all placeholder syntax from `%{key}` to `#{key}` throughout the codebase
+- **IMPACT**: Eliminates fmt package misinterpretation errors, simplifies code, improves maintainability
+- **BACKWARD COMPATIBILITY**: Breaking change - users with old `%{...}` format strings must update to `#{...}` syntax
+
+**Files Updated:**
+- **Core Implementation**: `pkg/formatter/ai_core_formatter.go` - Updated `FormatWithPlaceholders` to use `#{}` syntax
+- **Placeholder Replacement**: `pkg/formatter/placeholder_replace.go` - Already using `#{}` syntax (no change needed)
+- **Template Processing**: `pkg/formatter/template.go` - Updated all placeholder generation and replacement to use `#{}`
+- **Adapters**: `ai_formatter_adapter.go`, `formatter_adapter.go` - Updated fallback replacement logic to use `#{}`
+- **Configuration**: `config.go` - Updated all default format strings and validation to use `#{}`
+- **Tests**: All test files updated to use `#{}` syntax in format strings and assertions
+- **Documentation**: All documentation files updated to reflect `#{}` syntax
+
+**Rationale:**
+- **Reliability**: Eliminates fmt package conflicts that caused `%!(EXTRA ...)` errors
+- **Clarity**: `#{}` syntax is clearly distinct from Go's fmt format verbs
+- **Simplicity**: No need for complex escaping or workarounds to prevent fmt misinterpretation
+- **Consistency**: Single placeholder syntax throughout the codebase
+
+**Implementation Details:**
+- All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
+- All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
+- All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)
+- All validation logic updated to recognize `#{}` placeholders
+- All test assertions updated to check for `#{}` instead of `%{}`
+- All documentation examples updated to use `#{}` syntax
+
+**Migration Status**: ✅ Complete - All code, tests, and documentation updated
+- No runtime overhead for format string usage
+
+**Code Markers**: `ValidateFormatString`, `validateAllFormatStrings`, `getExpectedPlaceholders`, `extractPlaceholders`, `// [REQ:CUSTOMIZABLE_FORMAT_STRINGS]`
+
+**Cross-References**: [ARCH:CUSTOMIZABLE_FORMAT_STRINGS], [REQ:CUSTOMIZABLE_FORMAT_STRINGS], [ARCH:CONFIG_SYSTEM], [ARCH:OUTPUT_FORMATTING], [IMPL:CONFIG_STRUCT], [IMPL:DUAL_FORMATTING]

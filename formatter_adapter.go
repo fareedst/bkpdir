@@ -18,6 +18,7 @@ import (
 	"bkpdir/pkg/formatter"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
@@ -571,33 +572,30 @@ func (fa *FormatterAdapter) PrintVerificationErrorDetail(errMsg string) {
 }
 
 // PrintArchiveListWithStatus prints archive list with status
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: output may contain #{...} patterns if placeholder replacement failed
+// Use os.Stdout.WriteString instead of fmt.Print to avoid fmt misinterpreting #{...} as format verbs
 func (fa *FormatterAdapter) PrintArchiveListWithStatus(output, status string) {
-	message := fmt.Sprintf("%s%s\n", output, status)
+	// CRITICAL: Use os.Stdout.WriteString, NOT fmt.Print, to avoid fmt misinterpreting #{...} patterns
+	// fmt.Print internally uses fmt.Sprintf("%v", ...) which can misinterpret #{...} as format verbs
+	message := output + status + "\n"
 	if fa.formatter.IsDelayedMode() {
 		fa.formatter.GetCollector().AddStdout(message, "info")
 	} else {
-		fmt.Print(message)
+		os.Stdout.WriteString(message)
 	}
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatListArchiveWithExtraction formats archive listing with data extraction
+// FormatListArchiveWithExtraction formats archive listing with a simplified, testable implementation.
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] This implementation:
+// 1. Always gathers file statistics (needed for template placeholders)
+// 2. Uses FormatListArchive if it contains template placeholders, otherwise TemplateListArchive
+// 3. Processes all placeholders in a single, clear code path
+// 4. Returns formatted string ready for output
 func (fa *FormatterAdapter) FormatListArchiveWithExtraction(archivePath, creationTime string) string {
-	// Extract data from archive filename and format with template
-	data := fa.formatter.ExtractArchiveFilenameData(archivePath)
-	if data == nil {
-		data = make(map[string]string)
-	}
-	data["path"] = archivePath
-	data["creation_time"] = creationTime
-
-	// Try template formatting first, fall back to printf formatting
-	if templateStr := fa.config.TemplateListArchive; templateStr != "" {
-		return fa.formatter.FormatWithPlaceholders(templateStr, data)
-	}
-
-	// Fall back to standard formatting
-	return fa.formatter.FormatListArchive(archivePath, creationTime)
+	// Use the simplified implementation
+	return formatListArchiveSimple(fa.config, fa, archivePath, creationTime)
 }
 
 // FormatListBackupWithExtraction formats backup listing with data extraction
@@ -610,13 +608,58 @@ func (fa *FormatterAdapter) FormatListBackupWithExtraction(backupPath, creationT
 	data["path"] = backupPath
 	data["creation_time"] = creationTime
 
-	// Try template formatting first, fall back to printf formatting
-	if templateStr := fa.config.TemplateListBackup; templateStr != "" {
-		return fa.formatter.FormatWithPlaceholders(templateStr, data)
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Gather file statistics to populate size_human and other stat fields
+	// Per requirements: list output MUST support template-style placeholders for file attributes
+	statInfo, err := formatter.GatherFileStatInfo(backupPath)
+	if err == nil {
+		// Add file statistics to data map
+		data["size"] = fmt.Sprintf("%d", statInfo.Size)
+		data["size_human"] = statInfo.SizeHuman
+		data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+		data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+		data["mode"] = statInfo.Mode.String()
+		data["type"] = statInfo.Type
+		data["name"] = statInfo.Name
+	} else {
+		// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Provide default values for file attributes when stats can't be gathered
+		// This ensures placeholders like #{size_human} are always available in the data map
+		if _, exists := data["size"]; !exists {
+			data["size"] = "0"
+		}
+		if _, exists := data["size_human"]; !exists {
+			data["size_human"] = "unknown"
+		}
+		if _, exists := data["mtime"]; !exists {
+			data["mtime"] = creationTime // Use creation_time as fallback
+		}
+		if _, exists := data["mtime_unix"]; !exists {
+			data["mtime_unix"] = "0"
+		}
+		if _, exists := data["mode"]; !exists {
+			data["mode"] = "unknown"
+		}
+		if _, exists := data["type"]; !exists {
+			data["type"] = "unknown"
+		}
+		if _, exists := data["name"]; !exists {
+			// Extract filename from path
+			parts := strings.Split(backupPath, "/")
+			if len(parts) > 0 {
+				data["name"] = parts[len(parts)-1]
+			} else {
+				data["name"] = backupPath
+			}
+		}
 	}
 
-	// Fall back to standard formatting
-	return fa.formatter.FormatListBackup(backupPath, creationTime)
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Per requirements: list output MUST use template-style format strings
+	// Always prefer TemplateListBackup for list output to support file attributes
+	templateStr := fa.config.TemplateListBackup
+	if templateStr == "" {
+		// Use default template format that includes size_human as per requirements
+		templateStr = "#{path} (size: #{size_human})\n"
+	}
+	return fa.formatter.FormatWithPlaceholders(templateStr, data)
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]

@@ -82,21 +82,21 @@ $ bkpdir config --format tree
 Configuration Tree:
 ├── Archive Settings
 │   ├── archive_dir_path: ~/Archives (Config File: ~/.bkpdir.yml)
-│   ├── archive_name_format: %{timestamp}_%{branch}_%{note} (Default)
+│   ├── archive_name_format: #{timestamp}_#{branch}_#{note} (Default)
 │   ├── include_git_info: false (Environment: BKPDIR_INCLUDE_GIT_INFO)
 │   └── create_archive_index: true (Default)
 ├── Backup Settings  
 │   ├── backup_dir_path: ~/Backups (Default)
 │   ├── file_comparison_method: hash (Default)
-│   └── backup_name_format: %{filename}_%{timestamp} (Default)
+│   └── backup_name_format: #{filename}_#{timestamp} (Default)
 ├── Git Integration
 │   ├── git_branch_in_name: true (Default)
 │   ├── git_hash_length: 8 (Default)
 │   └── git_dirty_indicator: dirty (Default)
 ├── Format Settings
 │   ├── timestamp_format: 2006-01-02_15-04-05 (Default)
-│   ├── printf_format: [%{level}] %{message} (Config File)
-│   └── template_format: Archive: %{path} (%{size}) (Default)
+│   ├── printf_format: [#{level}] #{message} (Config File)
+│   └── template_format: Archive: #{path} (#{size}) (Default)
 └── Exclusion Patterns
     ├── exclude_patterns: [*.tmp, *.log, build/] (Inherited + Local)
     ├── include_hidden_files: false (Default)
@@ -126,7 +126,7 @@ $ bkpdir config --format json --filter "archive"
     },
     {
       "name": "archive_name_format", 
-      "value": "%{timestamp}_%{branch}_%{note}",
+      "value": "#{timestamp}_#{branch}_#{note}",
       "source": "Default",
       "category": "Archive Settings",
       "type": "string", 
@@ -197,7 +197,7 @@ $ bkpdir config --overrides-only --filter "format" --sources --format tree
 ```
 Configuration Tree (Overrides Only, Filtered: "format"):
 └── Format Settings
-    ├── printf_format: [%{level}] %{message} (Config File: ~/.bkpdir.yml)
+    ├── printf_format: [#{level}] #{message} (Config File: ~/.bkpdir.yml)
     └── timestamp_format: 2006-01-02_15-04-05 (Environment: BKPDIR_TIMESTAMP_FORMAT)
 ```
 

@@ -52,6 +52,9 @@ verification:
 status_created_archive: 0
 status_failed_to_create_archive_directory: 31
 
-# Format strings for output
-format_created_archive: "Created archive: %s (branch: %s, hash: %s)\n"
-format_identical_archive: "Directory is identical to existing archive: %s\n" 
+# Format strings for output (optional customization)
+# See docs/format-strings-reference.md for complete list
+format_created_archive: "✅ Archive created: %s\n"
+format_identical_archive: "⚠️  No changes detected: %s\n"
+format_list_archive: "📦 %s (size: #{size_human})\n"
+ 

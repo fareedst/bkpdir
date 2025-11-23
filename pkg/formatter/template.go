@@ -1,6 +1,6 @@
 // Template-based formatting functionality for the formatter package.
 // Provides pattern-based and placeholder-based template formatting with
-// support for both %{name} style and Go text/template {{.name}} placeholders.
+// support for both #{name} style and Go text/template {{.name}} placeholders.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
@@ -59,26 +59,77 @@ func (tf *DefaultTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr s
 func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
 
-	// Handle %{name} style placeholders
+	// Handle #{name} style placeholders - replace ALL placeholders from data map first
 	for key, value := range data {
-		placeholder := fmt.Sprintf("%%{%s}", key)
+		placeholder := fmt.Sprintf("#{%s}", key)
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// Handle Go text/template style {{.name}} placeholders
-	tmpl, err := template.New("format").Parse(result)
-	if err != nil {
-		// Fall back to simple replacement if template parsing fails
-		return result
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
+	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
+	// Only replace known placeholders, leave unknown ones as-is
+	knownPlaceholders := map[string]string{
+		"#{size_human}": "unknown",
+		"#{size}":       "0",
+	}
+	// Add mtime default if creation_time is available
+	if creationTime, ok := data["creation_time"]; ok {
+		knownPlaceholders["#{mtime}"] = creationTime
+	} else {
+		knownPlaceholders["#{mtime}"] = "unknown"
 	}
 
-	var buf strings.Builder
-	if err := tmpl.Execute(&buf, data); err != nil {
-		// Fall back to simple replacement if template execution fails
-		return result
+	// Replace only known placeholders that are still present (weren't replaced by data map)
+	for placeholder, defaultValue := range knownPlaceholders {
+		if strings.Contains(result, placeholder) {
+			result = strings.ReplaceAll(result, placeholder, defaultValue)
+		}
 	}
 
-	return buf.String()
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// This allows mixed format strings like "%s (size: #{size_human})\n"
+	// We need to replace printf placeholders with values from the data map
+	// Common mappings: %s -> path or name, %d -> size, etc.
+	if strings.Contains(result, "%s") {
+		// Replace %s with path if available, otherwise name
+		if path, ok := data["path"]; ok {
+			result = strings.Replace(result, "%s", path, 1) // Replace first occurrence
+		} else if name, ok := data["name"]; ok {
+			result = strings.Replace(result, "%s", name, 1)
+		}
+		// If there are multiple %s, replace them with available values
+		// Second %s could be creation_time
+		if strings.Contains(result, "%s") {
+			if creationTime, ok := data["creation_time"]; ok {
+				result = strings.Replace(result, "%s", creationTime, 1)
+			}
+		}
+	}
+
+	// CRITICAL: Do NOT call tmpl.Execute if result still contains #{...} patterns
+	// Go's text/template uses fmt internally which will misinterpret #{...} as format verbs
+	// Only parse as Go template if there are {{.}} patterns AND no #{...} patterns remain
+	hasGoTemplatePatterns := strings.Contains(result, "{{") && strings.Contains(result, "}}")
+	hasPlaceholderPatterns := strings.Contains(result, "#{")
+
+	if hasGoTemplatePatterns && !hasPlaceholderPatterns {
+		tmpl, err := template.New("format").Parse(result)
+		if err != nil {
+			// Fall back to simple replacement if template parsing fails
+			return result
+		}
+
+		var buf strings.Builder
+		if err := tmpl.Execute(&buf, data); err != nil {
+			// Fall back to simple replacement if template execution fails
+			return result
+		}
+
+		return buf.String()
+	}
+
+	return result
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
@@ -86,7 +137,7 @@ func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data m
 func (tf *DefaultTemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("created_archive")
 	if templateStr == "" {
-		templateStr = "Created archive: %{path}"
+		templateStr = "Created archive: #{path}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -96,7 +147,7 @@ func (tf *DefaultTemplateFormatter) TemplateCreatedArchive(data map[string]strin
 func (tf *DefaultTemplateFormatter) TemplateIdenticalArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("identical_archive")
 	if templateStr == "" {
-		templateStr = "Identical archive: %{path}"
+		templateStr = "Identical archive: #{path}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -106,7 +157,7 @@ func (tf *DefaultTemplateFormatter) TemplateIdenticalArchive(data map[string]str
 func (tf *DefaultTemplateFormatter) TemplateListArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("list_archive")
 	if templateStr == "" {
-		templateStr = "%{path} (created: %{creation_time})"
+		templateStr = "#{path} (created: #{creation_time})"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -116,7 +167,7 @@ func (tf *DefaultTemplateFormatter) TemplateListArchive(data map[string]string) 
 func (tf *DefaultTemplateFormatter) TemplateConfigValue(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("config_value")
 	if templateStr == "" {
-		templateStr = "%{name}=%{value} (source: %{source})"
+		templateStr = "#{name}=#{value} (source: #{source})"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -126,7 +177,7 @@ func (tf *DefaultTemplateFormatter) TemplateConfigValue(data map[string]string) 
 func (tf *DefaultTemplateFormatter) TemplateDryRunArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("dry_run_archive")
 	if templateStr == "" {
-		templateStr = "Would create archive: %{path}"
+		templateStr = "Would create archive: #{path}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -136,7 +187,7 @@ func (tf *DefaultTemplateFormatter) TemplateDryRunArchive(data map[string]string
 func (tf *DefaultTemplateFormatter) TemplateError(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("error")
 	if templateStr == "" {
-		templateStr = "Error: %{message}"
+		templateStr = "Error: #{message}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -146,7 +197,7 @@ func (tf *DefaultTemplateFormatter) TemplateError(data map[string]string) string
 func (tf *DefaultTemplateFormatter) TemplateCreatedBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("created_backup")
 	if templateStr == "" {
-		templateStr = "Created backup: %{path}"
+		templateStr = "Created backup: #{path}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -156,7 +207,7 @@ func (tf *DefaultTemplateFormatter) TemplateCreatedBackup(data map[string]string
 func (tf *DefaultTemplateFormatter) TemplateIdenticalBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("identical_backup")
 	if templateStr == "" {
-		templateStr = "Identical backup: %{path}"
+		templateStr = "Identical backup: #{path}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -166,7 +217,7 @@ func (tf *DefaultTemplateFormatter) TemplateIdenticalBackup(data map[string]stri
 func (tf *DefaultTemplateFormatter) TemplateListBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("list_backup")
 	if templateStr == "" {
-		templateStr = "%{path} (created: %{creation_time})"
+		templateStr = "#{path} (created: #{creation_time})"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -176,7 +227,7 @@ func (tf *DefaultTemplateFormatter) TemplateListBackup(data map[string]string) s
 func (tf *DefaultTemplateFormatter) TemplateDryRunBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("dry_run_backup")
 	if templateStr == "" {
-		templateStr = "Would create backup: %{path}"
+		templateStr = "Would create backup: #{path}"
 	}
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
@@ -222,62 +273,113 @@ func (stf *SimpleTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr s
 func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
 
-	// Handle %{name} style placeholders
+	// Handle #{name} style placeholders - replace ALL placeholders from data map first
 	for key, value := range data {
-		placeholder := fmt.Sprintf("%%{%s}", key)
+		placeholder := fmt.Sprintf("#{%s}", key)
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// Handle Go text/template style {{.name}} placeholders
-	tmpl, err := template.New("format").Parse(result)
-	if err != nil {
-		// Fall back to simple replacement if template parsing fails
-		return result
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
+	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
+	// Only replace known placeholders, leave unknown ones as-is
+	knownPlaceholders := map[string]string{
+		"#{size_human}": "unknown",
+		"#{size}":       "0",
+	}
+	// Add mtime default if creation_time is available
+	if creationTime, ok := data["creation_time"]; ok {
+		knownPlaceholders["#{mtime}"] = creationTime
+	} else {
+		knownPlaceholders["#{mtime}"] = "unknown"
 	}
 
-	var buf strings.Builder
-	if err := tmpl.Execute(&buf, data); err != nil {
-		// Fall back to simple replacement if template execution fails
-		return result
+	// Replace only known placeholders that are still present (weren't replaced by data map)
+	for placeholder, defaultValue := range knownPlaceholders {
+		if strings.Contains(result, placeholder) {
+			result = strings.ReplaceAll(result, placeholder, defaultValue)
+		}
 	}
 
-	return buf.String()
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// This allows mixed format strings like "%s (size: #{size_human})\n"
+	// We need to replace printf placeholders with values from the data map
+	// Common mappings: %s -> path or name, %d -> size, etc.
+	if strings.Contains(result, "%s") {
+		// Replace %s with path if available, otherwise name
+		if path, ok := data["path"]; ok {
+			result = strings.Replace(result, "%s", path, 1) // Replace first occurrence
+		} else if name, ok := data["name"]; ok {
+			result = strings.Replace(result, "%s", name, 1)
+		}
+		// If there are multiple %s, replace them with available values
+		// Second %s could be creation_time
+		if strings.Contains(result, "%s") {
+			if creationTime, ok := data["creation_time"]; ok {
+				result = strings.Replace(result, "%s", creationTime, 1)
+			}
+		}
+	}
+
+	// CRITICAL: Do NOT call tmpl.Execute if result still contains #{...} patterns
+	// Go's text/template uses fmt internally which will misinterpret #{...} as format verbs
+	// Only parse as Go template if there are {{.}} patterns AND no #{...} patterns remain
+	hasGoTemplatePatterns := strings.Contains(result, "{{") && strings.Contains(result, "}}")
+	hasPlaceholderPatterns := strings.Contains(result, "#{")
+
+	if hasGoTemplatePatterns && !hasPlaceholderPatterns {
+		tmpl, err := template.New("format").Parse(result)
+		if err != nil {
+			// Fall back to simple replacement if template parsing fails
+			return result
+		}
+
+		var buf strings.Builder
+		if err := tmpl.Execute(&buf, data); err != nil {
+			// Fall back to simple replacement if template execution fails
+			return result
+		}
+
+		return buf.String()
+	}
+
+	return result
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateCreatedArchive formats a created archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
-	return stf.FormatWithPlaceholders("Created archive: %{path}", data)
+	return stf.FormatWithPlaceholders("Created archive: #{path}", data)
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateIdenticalArchive formats an identical archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateIdenticalArchive(data map[string]string) string {
-	return stf.FormatWithPlaceholders("Identical archive: %{path}", data)
+	return stf.FormatWithPlaceholders("Identical archive: #{path}", data)
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateListArchive formats a list archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateListArchive(data map[string]string) string {
-	return stf.FormatWithPlaceholders("%{path} (created: %{creation_time})", data)
+	return stf.FormatWithPlaceholders("#{path} (created: #{creation_time})", data)
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateConfigValue formats a configuration value message using default template
 func (stf *SimpleTemplateFormatter) TemplateConfigValue(data map[string]string) string {
-	return stf.FormatWithPlaceholders("%{name}=%{value} (source: %{source})", data)
+	return stf.FormatWithPlaceholders("#{name}=#{value} (source: #{source})", data)
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateDryRunArchive formats a dry-run archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateDryRunArchive(data map[string]string) string {
-	return stf.FormatWithPlaceholders("Would create archive: %{path}", data)
+	return stf.FormatWithPlaceholders("Would create archive: #{path}", data)
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TemplateError formats an error message using default template
 func (stf *SimpleTemplateFormatter) TemplateError(data map[string]string) string {
-	return stf.FormatWithPlaceholders("Error: %{message}", data)
+	return stf.FormatWithPlaceholders("Error: #{message}", data)
 }
 
 // OUT-002: See specification.md - Output Formatting [DECISION:format-processing]

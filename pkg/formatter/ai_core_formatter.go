@@ -144,7 +144,7 @@ func (f *AICoreFormatter) FormatWithPlaceholders(format string, data map[string]
 	result := format
 
 	for key, value := range data {
-		placeholder := "%{" + key + "}"
+		placeholder := "#{" + key + "}"
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 

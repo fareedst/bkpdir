@@ -3556,8 +3556,8 @@ func TestPerformanceOptimization(t *testing.T) {
 			"backup_dir_path":        "/perf/backups",
 			"status_created_archive": 99,
 			"status_created_backup":  88,
-			"format_created_archive": "Performance Test Archive: %{path}",
-			"format_created_backup":  "Performance Test Backup: %{path}",
+			"format_created_archive": "Performance Test Archive: #{path}",
+			"format_created_backup":  "Performance Test Backup: #{path}",
 			"exclude_patterns":       []string{"*.perf", "*.test"},
 		}
 		createTestConfigFileWithData(t, configPath, configData)
@@ -4515,4 +4515,332 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 			t.Errorf("Local patterns not found after defaults. Got: %v", cfg.ExcludePatterns)
 		}
 	})
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test format string validation
+func TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
+	tests := []struct {
+		name           string
+		fieldName      string
+		formatString   string
+		expectWarnings bool
+		expectedCount  int
+	}{
+		{
+			name:           "valid_printf_format",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "Created: %s\n",
+			expectWarnings: false,
+		},
+		{
+			name:           "invalid_placeholder_printf",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "Created: #{path}\n", // Wrong style for printf
+			expectWarnings: true,
+			expectedCount:  1,
+		},
+		{
+			name:           "valid_template_format",
+			fieldName:      "TemplateCreatedArchive",
+			formatString:   "Created: #{path}\n",
+			expectWarnings: false,
+		},
+		{
+			name:           "invalid_placeholder_template",
+			fieldName:      "TemplateCreatedArchive",
+			formatString:   "Created: %s\n", // Wrong style for template
+			expectWarnings: true,
+			expectedCount:  1,
+		},
+		{
+			name:           "valid_special_placeholder",
+			fieldName:      "TemplateListArchive",
+			formatString:   "#{path} (size: #{size_human})\n",
+			expectWarnings: false,
+		},
+		{
+			name:           "invalid_mixed_placeholders_in_format_list_archive",
+			fieldName:      "FormatListArchive",
+			formatString:   "%s (size: #{size_human})\n",
+			expectWarnings: true, // Mixed placeholders are invalid - only template placeholders are supported
+			expectedCount:  1,    // Should warn about %s
+		},
+		{
+			name:           "valid_template_placeholders_in_format_list_archive",
+			fieldName:      "FormatListArchive",
+			formatString:   "#{path} (size: #{size_human})\n",
+			expectWarnings: false, // Template placeholders are valid for FormatListArchive
+			expectedCount:  0,
+		},
+		{
+			name:           "multiple_valid_placeholders",
+			fieldName:      "TemplateConfigValue",
+			formatString:   "#{name}: #{value} (source: #{source})\n",
+			expectWarnings: false,
+		},
+		{
+			name:           "unexpected_placeholder",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "Created: %s with #{unexpected}\n",
+			expectWarnings: true,
+			expectedCount:  1,
+		},
+		{
+			name:           "empty_format_string",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "",
+			expectWarnings: false,
+		},
+		{
+			name:           "valid_verification_format",
+			fieldName:      "FormatVerificationFailed",
+			formatString:   "Archive %s verification failed: %v\n",
+			expectWarnings: false,
+		},
+		{
+			name:           "invalid_verification_format",
+			fieldName:      "FormatVerificationFailed",
+			formatString:   "Archive %s verification failed: #{error}\n",
+			expectWarnings: true,
+			expectedCount:  1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			warnings := ValidateFormatString(tt.fieldName, tt.formatString)
+			hasWarnings := len(warnings) > 0
+
+			if tt.expectWarnings != hasWarnings {
+				t.Errorf("Expected warnings: %v, got warnings: %v. Warnings: %v", tt.expectWarnings, hasWarnings, warnings)
+			}
+
+			if tt.expectWarnings && tt.expectedCount > 0 && len(warnings) != tt.expectedCount {
+				t.Errorf("Expected %d warnings, got %d: %v", tt.expectedCount, len(warnings), warnings)
+			}
+
+			// Verify warning message format
+			if hasWarnings {
+				for _, warning := range warnings {
+					if !strings.Contains(warning, tt.fieldName) {
+						t.Errorf("Warning should contain field name '%s': %s", tt.fieldName, warning)
+					}
+					if !strings.Contains(warning, "unexpected placeholder") {
+						t.Errorf("Warning should mention 'unexpected placeholder': %s", warning)
+					}
+				}
+			}
+		})
+	}
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test custom format strings load correctly
+func TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
+	// Save original environment
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".bkpdir.yml")
+	configContent := `
+format_created_archive: "✅ Custom: %s\n"
+format_identical_archive: "⚠️ Custom identical: %s\n"
+format_error: "❌ Custom error: %s\n"
+template_created_archive: "✅ Created: #{path}\n"
+`
+	err := os.WriteFile(configPath, []byte(configContent), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write config file: %v", err)
+	}
+
+	os.Setenv("BKPDIR_CONFIG", configPath)
+
+	cfg, err := LoadConfig(dir)
+	if err != nil {
+		t.Fatalf("LoadConfig error: %v", err)
+	}
+
+	if cfg.FormatCreatedArchive != "✅ Custom: %s\n" {
+		t.Errorf("Expected custom format_created_archive, got: %q", cfg.FormatCreatedArchive)
+	}
+	if cfg.FormatIdenticalArchive != "⚠️ Custom identical: %s\n" {
+		t.Errorf("Expected custom format_identical_archive, got: %q", cfg.FormatIdenticalArchive)
+	}
+	if cfg.FormatError != "❌ Custom error: %s\n" {
+		t.Errorf("Expected custom format_error, got: %q", cfg.FormatError)
+	}
+	if cfg.TemplateCreatedArchive != "✅ Created: #{path}\n" {
+		t.Errorf("Expected custom template_created_archive, got: %q", cfg.TemplateCreatedArchive)
+	}
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test defaults work when not specified
+func TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
+	// Save original environment
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	// Set to non-existent path to ensure only defaults are used
+	os.Setenv("BKPDIR_CONFIG", "/nonexistent/path/config.yml")
+
+	dir := t.TempDir()
+	cfg, err := LoadConfig(dir)
+	if err != nil {
+		t.Fatalf("LoadConfig error: %v", err)
+	}
+
+	// Verify defaults are used
+	defaultCfg := DefaultConfig()
+	if cfg.FormatCreatedArchive != defaultCfg.FormatCreatedArchive {
+		t.Errorf("Expected default FormatCreatedArchive, got: %q", cfg.FormatCreatedArchive)
+	}
+	if cfg.FormatIdenticalArchive != defaultCfg.FormatIdenticalArchive {
+		t.Errorf("Expected default FormatIdenticalArchive, got: %q", cfg.FormatIdenticalArchive)
+	}
+	if cfg.TemplateCreatedArchive != defaultCfg.TemplateCreatedArchive {
+		t.Errorf("Expected default TemplateCreatedArchive, got: %q", cfg.TemplateCreatedArchive)
+	}
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test validation warnings are printed
+func TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
+	// Save original environment
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".bkpdir.yml")
+	// Use invalid placeholder for FormatCreatedArchive (should use %s, not #{path})
+	configContent := `
+format_created_archive: "Created: #{path}\n"
+`
+	err := os.WriteFile(configPath, []byte(configContent), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write config file: %v", err)
+	}
+
+	os.Setenv("BKPDIR_CONFIG", configPath)
+
+	// Capture stderr to verify warnings are printed
+	oldStderr := os.Stderr
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("Failed to create pipe: %v", err)
+	}
+	os.Stderr = w
+
+	cfg, err := LoadConfig(dir)
+	if err != nil {
+		os.Stderr = oldStderr
+		t.Fatalf("LoadConfig error: %v", err)
+	}
+
+	// Close write end and read stderr
+	w.Close()
+	os.Stderr = oldStderr
+
+	stderrOutput := make([]byte, 1024)
+	n, _ := r.Read(stderrOutput)
+	r.Close()
+
+	// Verify config still loads (validation is non-fatal)
+	if cfg == nil {
+		t.Fatal("Config should not be nil even with validation warnings")
+	}
+
+	// Verify warning was printed
+	stderrStr := string(stderrOutput[:n])
+	if !strings.Contains(stderrStr, "Warning:") {
+		t.Errorf("Expected warning in stderr, got: %s", stderrStr)
+	}
+	if !strings.Contains(stderrStr, "FormatCreatedArchive") {
+		t.Errorf("Expected field name in warning, got: %s", stderrStr)
+	}
+	if !strings.Contains(stderrStr, "unexpected placeholder") {
+		t.Errorf("Expected 'unexpected placeholder' in warning, got: %s", stderrStr)
+	}
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test placeholder extraction through validation
+// Note: extractPlaceholders is not exported, so we test it indirectly through ValidateFormatString
+func TestPlaceholderExtraction_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
+	tests := []struct {
+		name           string
+		fieldName      string
+		formatString   string
+		expectWarnings bool
+		description    string
+	}{
+		{
+			name:           "printf_placeholders_valid",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "Created: %s\n",
+			expectWarnings: false,
+			description:    "Single printf placeholder should be valid for FormatCreatedArchive",
+		},
+		{
+			name:           "template_placeholders_invalid_for_printf",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "Created: #{path} with #{size_human}\n",
+			expectWarnings: true,
+			description:    "Template placeholders should be invalid for printf-style format",
+		},
+		{
+			name:           "mixed_placeholders_invalid",
+			fieldName:      "FormatListArchive",
+			formatString:   "%s (size: #{size_human})\n",
+			expectWarnings: true,
+			description:    "Mixed placeholders (printf and template) should be invalid for FormatListArchive - only template placeholders are supported",
+		},
+		{
+			name:           "template_placeholders_valid",
+			fieldName:      "FormatListArchive",
+			formatString:   "#{path} (size: #{size_human})\n",
+			expectWarnings: false,
+			description:    "Template placeholders should be valid for FormatListArchive",
+		},
+		{
+			name:           "no_placeholders_valid",
+			fieldName:      "FormatCreatedArchive",
+			formatString:   "Simple message\n",
+			expectWarnings: false,
+			description:    "Format strings without placeholders should be valid",
+		},
+		{
+			name:           "multiple_template_placeholders_valid",
+			fieldName:      "TemplateConfigValue",
+			formatString:   "#{name}: #{value} (source: #{source})\n",
+			expectWarnings: false,
+			description:    "Multiple template placeholders should be valid for TemplateConfigValue",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			warnings := ValidateFormatString(tt.fieldName, tt.formatString)
+			hasWarnings := len(warnings) > 0
+
+			if tt.expectWarnings != hasWarnings {
+				t.Errorf("%s: Expected warnings: %v, got warnings: %v. Warnings: %v", tt.description, tt.expectWarnings, hasWarnings, warnings)
+			}
+		})
+	}
 }

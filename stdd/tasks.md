@@ -666,6 +666,30 @@ EXTRACT-008 → EXTRACT-009, EXTRACT-010
   - All tests pass with diagnostic output enabled by default
   - Related tokens: DEBUG-OUTPUT, [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_006]
 
+## P1: User-Customizable Format Strings [REQ:CUSTOMIZABLE_FORMAT_STRINGS] [ARCH:CUSTOMIZABLE_FORMAT_STRINGS] [IMPL:CUSTOMIZABLE_FORMAT_STRINGS]
+
+**Status**: ✅ Complete
+
+**Description**: Enable user customization of all output format strings through configuration files with validation. Users can override any format string in their `.bkpdir.yml` to customize the application's output interface.
+
+**Dependencies**: [REQ:CONFIGURATION], [REQ:OUTPUT_FORMATTING]
+
+**Completion Criteria**:
+- [x] All format strings can be overridden in `.bkpdir.yml`
+- [x] Format string validation warns users of invalid or unexpected placeholders
+- [x] Validation provides helpful error messages indicating expected placeholders
+- [x] Comprehensive reference documentation lists all available format strings with their placeholders
+- [x] Brief example configuration file demonstrates common customizations
+- [x] Placeholder documentation explains available variables for each format string
+- [x] Backward compatibility maintained (defaults work when not specified)
+- [x] Template-style (`#{path}`) format supported (migrated from `%{...}` to `#{...}` to avoid fmt conflicts)
+- [x] Special placeholders like `#{size_human}` documented and validated
+- [x] Validation integrated into LoadConfig and LoadConfigWithInheritance
+- [x] Comprehensive tests for validation functionality
+- [x] Integration tests for custom format strings loading and usage
+
+**Priority Rationale**: P1 - Important for user experience and internationalization support
+
 ## Recommended Implementation Order
 
 1. P1: Configuration Output Grouping (REQ:CONFIG_OUTPUT_GROUPING)

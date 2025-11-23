@@ -1158,3 +1158,84 @@ We will implement a grouped and ranked presentation for configuration output.
 - **Flat (Legacy)**: Single alphabetical list, accessible via `--flat`
 
 **Cross-References**: [REQ:CONFIG_OUTPUT_GROUPING], [REQ:USABILITY]
+
+## 25. User-Customizable Format Strings [ARCH:CUSTOMIZABLE_FORMAT_STRINGS] [REQ:CUSTOMIZABLE_FORMAT_STRINGS]
+
+### Decision: Enable user customization of all output format strings through configuration files with validation
+
+**Rationale:**
+- Users have different preferences for output formatting (emoji, colors, verbosity, language)
+- Internationalization may require different message formats
+- Integration with other tools may require specific output formats
+- Existing infrastructure (YAML tags, config loading) already supports customization
+- Validation prevents common mistakes and improves user experience
+- Enhances usability without requiring source code modifications
+
+**Architecture Components:**
+
+1. **Configuration Integration**:
+   - Leverage existing `LoadConfig()` and `mergeFormatStrings()` infrastructure
+   - All format strings already have YAML field tags (e.g., `yaml:"format_created_archive"`)
+   - Configuration merging already handles format string overrides
+   - No code changes required to core configuration system
+
+2. **Format String Validation**:
+   - Validate format strings on configuration load
+   - Check for expected placeholders (e.g., `%s`, `#{path}`, `#{size_human}`)
+   - Warn users of invalid or unexpected placeholders
+   - Provide helpful error messages indicating expected placeholders
+   - **CRITICAL**: Only template-style placeholders (`#{name}`) are supported. Printf-style placeholders (`%s`, `%d`) are NOT supported.
+   - **REQUIRED**: `FormatListArchive` and `FormatListBackup` MUST support template-style placeholders (`#{name}`) to enable file attribute display (e.g., `#{size_human}`)
+   - **REQUIRED**: The list command implementation MUST use a single, simplified code path (`formatListArchiveSimple`)
+   - **REQUIRED**: File statistics MUST always be gathered (needed for template placeholders)
+   - **REQUIRED**: Format selection priority: `FormatListArchive` (if contains `#{`) > `TemplateListArchive` > default template
+   - **REQUIRED**: Template formatting MUST ONLY handle template (`#{name}`) placeholders - no printf support
+   - **REQUIRED**: Comprehensive tests MUST validate all scenarios: template placeholders, missing files, unknown placeholders
+   - **CRITICAL**: Template-style format strings (`TemplateListArchive`, etc.) can contain template-style placeholders (`#{name}`)
+   - **REQUIRED**: The list command output MUST use template-style format strings (`TemplateListArchive` or `FormatListArchive` with template placeholders) to support named file attributes
+   - **REQUIRED**: Template-style placeholders for list output MUST include: `#{path}`, `#{size_human}`, `#{size}`, `#{creation_time}`, `#{mtime}`, `#{mode}`, `#{type}`, `#{name}`, and other file attributes
+   - **REQUIRED**: Users MUST be able to customize list output with formats like `#{path} (size: #{size_human})` to display file attributes
+   - **CRITICAL**: Template-style placeholders (`#{name}`) must be replaced BEFORE any Go text/template processing
+   - **CRITICAL**: Go text/template engine (`tmpl.Execute`) must NEVER be called on strings containing `#{...}` patterns, as Go's fmt package will misinterpret them as format verbs
+   - **MIGRATION COMPLETE**: All placeholder syntax migrated from `%{...}` to `#{...}` to eliminate fmt package conflicts
+   - **ROOT CAUSE RESOLVED**: The `%{...}` syntax conflicted with Go's fmt package, causing `%!(EXTRA ...)` errors. Migration to `#{...}` syntax completely resolves this issue.
+
+3. **Documentation Architecture**:
+   - Comprehensive reference document (`docs/format-strings-reference.md`)
+   - Lists all available format strings with YAML field names
+   - Documents supported placeholders for each format string
+   - Explains printf-style vs template-style formats
+   - Provides examples of common customizations
+
+4. **Example Configuration**:
+   - Brief example file showing common customizations
+   - Demonstrates both printf-style and template-style formats
+   - Shows special placeholders like `#{size_human}`
+   - Includes emoji and internationalization examples
+
+**Format String Categories:**
+- **Directory Operations** (6 strings): `format_created_archive`, `format_identical_archive`, `format_list_archive`, `format_config_value`, `format_dry_run_archive`, `format_error`
+- **File Operations** (4 strings): `format_created_backup`, `format_identical_backup`, `format_list_backup`, `format_dry_run_backup`
+- **Extended Messages** (~20 strings): Verification, incremental, error messages
+- **Template-Based** (~30 strings): Template versions of all format strings
+
+**Validation Strategy:**
+- Define expected placeholders for each format string field
+- Validate on configuration load (non-fatal warnings)
+- Provide clear error messages with expected placeholder list
+- Support both strict validation (error) and lenient validation (warning)
+- Allow users to disable validation if needed
+
+**Backward Compatibility:**
+- All format strings have defaults in `DefaultConfig()`
+- Users who don't specify format strings get default behavior
+- Existing configurations continue to work unchanged
+- No breaking changes to configuration schema
+
+**Alternatives Considered:**
+- **Hardcoded strings only**: Rejected - limits user customization and internationalization
+- **Separate format string files**: Rejected - adds complexity, YAML config sufficient
+- **Plugin system for formatters**: Rejected - over-engineering for this use case
+- **No validation**: Rejected - users can easily make mistakes without guidance
+
+**Cross-References**: [REQ:CUSTOMIZABLE_FORMAT_STRINGS], [REQ:CONFIGURATION], [REQ:OUTPUT_FORMATTING], [REQ:USABILITY], [ARCH:CONFIG_SYSTEM], [ARCH:OUTPUT_FORMATTING]

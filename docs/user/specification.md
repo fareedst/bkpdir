@@ -194,7 +194,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
    - Configures printf-style format strings for all standard output
    - Configures template-based formatting with named placeholders and regex patterns
    - Format strings support text highlighting and structure formatting
-   - Templates support both Go text/template syntax ({{.name}}) and placeholder syntax (%{name})
+   - Templates support both Go text/template syntax ({{.name}}) and placeholder syntax (#{name})
    - All user-facing text is extracted from code into configuration data
    - Format strings have specific defaults if not specified (see [Immutable Specifications](immutable.md#configuration-defaults))
    - YAML keys for printf-style format strings for directory operations:
@@ -210,17 +210,17 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      - `format_list_backup`: Format for file backup listing entries (default: "%s (created: %s)\n")
      - `format_dry_run_backup`: Format for dry-run file backup messages (default: "Would create backup: %s\n")
    - YAML keys for template-based format strings for directory operations:
-     - `template_created_archive`: Template for successful archive creation messages (default: "Created archive: %{path}\n")
-     - `template_identical_archive`: Template for identical directory messages (default: "Directory is identical to existing archive: %{path}\n")
-     - `template_list_archive`: Template for archive listing entries (default: "%{path} (created: %{creation_time})\n")
-     - `template_config_value`: Template for configuration value display (default: "%{name}: %{value} (source: %{source})\n")
-     - `template_dry_run_archive`: Template for dry-run archive messages (default: "Would create archive: %{path}\n")
-     - `template_error`: Template for error messages (default: "Error: %{message}\n")
+     - `template_created_archive`: Template for successful archive creation messages (default: "Created archive: #{path}\n")
+     - `template_identical_archive`: Template for identical directory messages (default: "Directory is identical to existing archive: #{path}\n")
+     - `template_list_archive`: Template for archive listing entries (default: "#{path} (created: #{creation_time})\n")
+     - `template_config_value`: Template for configuration value display (default: "#{name}: #{value} (source: #{source})\n")
+     - `template_dry_run_archive`: Template for dry-run archive messages (default: "Would create archive: #{path}\n")
+     - `template_error`: Template for error messages (default: "Error: #{message}\n")
    - YAML keys for template-based format strings for file operations:
-     - `template_created_backup`: Template for successful file backup creation messages (default: "Created backup: %{path}\n")
-     - `template_identical_backup`: Template for identical file messages (default: "File is identical to existing backup: %{path}\n")
-     - `template_list_backup`: Template for file backup listing entries (default: "%{path} (created: %{creation_time})\n")
-     - `template_dry_run_backup`: Template for dry-run file backup messages (default: "Would create backup: %{path}\n")
+     - `template_created_backup`: Template for successful file backup creation messages (default: "Created backup: #{path}\n")
+     - `template_identical_backup`: Template for identical file messages (default: "File is identical to existing backup: #{path}\n")
+     - `template_list_backup`: Template for file backup listing entries (default: "#{path} (created: #{creation_time})\n")
+     - `template_dry_run_backup`: Template for dry-run file backup messages (default: "Would create backup: #{path}\n")
    - YAML keys for regex patterns:
      - `pattern_archive_filename`: Named regex for parsing archive filenames (default: `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-(?P<hour>\d{2})-(?P<minute>\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\.zip`)
      - `pattern_backup_filename`: Named regex for parsing file backup filenames (default: `(?P<filename>[^/]+)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-(?P<hour>\d{2})-(?P<minute>\d{2})(?:=(?P<note>.+))?`)
@@ -248,18 +248,18 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      format_dry_run_backup: "\033[35m⚠ Would create backup:\033[0m %s\n"
      
      # Template-based formatting with named placeholders and data extraction
-     template_created_archive: "\033[32m✓ Created archive:\033[0m %{path}\n"
-     template_identical_archive: "\033[33m≡ Directory %{prefix} is identical to archive from %{year}-%{month}-%{day}:\033[0m %{path}\n"
-     template_list_archive: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
-     template_config_value: "\033[1m%{name}:\033[0m %{value} \033[90m(from %{source})\033[0m\n"
-     template_dry_run_archive: "\033[35m⚠ Would create archive for %{prefix} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
-     template_error: "\033[31m✗ Error in %{operation}:\033[0m %{message}\n"
+     template_created_archive: "\033[32m✓ Created archive:\033[0m #{path}\n"
+     template_identical_archive: "\033[33m≡ Directory #{prefix} is identical to archive from #{year}-#{month}-#{day}:\033[0m #{path}\n"
+     template_list_archive: "\033[36m#{path}\033[0m (created: \033[90m#{creation_time}\033[0m) #{note}\n"
+     template_config_value: "\033[1m#{name}:\033[0m #{value} \033[90m(from #{source})\033[0m\n"
+     template_dry_run_archive: "\033[35m⚠ Would create archive for #{prefix} on #{year}-#{month}-#{day}:\033[0m #{path}\n"
+     template_error: "\033[31m✗ Error in #{operation}:\033[0m #{message}\n"
      
      # Template-based formatting for file operations
-     template_created_backup: "\033[32m✓ Created backup:\033[0m %{path}\n"
-     template_identical_backup: "\033[33m≡ File %{filename} is identical to backup from %{year}-%{month}-%{day}:\033[0m %{path}\n"
-     template_list_backup: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
-     template_dry_run_backup: "\033[35m⚠ Would create backup for %{filename} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_created_backup: "\033[32m✓ Created backup:\033[0m #{path}\n"
+     template_identical_backup: "\033[33m≡ File #{filename} is identical to backup from #{year}-#{month}-#{day}:\033[0m #{path}\n"
+     template_list_backup: "\033[36m#{path}\033[0m (created: \033[90m#{creation_time}\033[0m) #{note}\n"
+     template_dry_run_backup: "\033[35m⚠ Would create backup for #{filename} on #{year}-#{month}-#{day}:\033[0m #{path}\n"
      
            # Named regex patterns for data extraction
       pattern_archive_filename: "(?P<prefix>[^-]*)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\\.zip"
@@ -273,18 +273,18 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      format_dry_run_backup: "\033[35m⚠ Would create backup:\033[0m %s\n"
      
      # Template-based formatting for directory operations
-     template_created_archive: "\033[32m✓ Created archive:\033[0m %{path}\n"
-     template_identical_archive: "\033[33m≡ Directory %{prefix} is identical to archive from %{year}-%{month}-%{day} (%{branch}@%{hash}):\033[0m %{path}\n"
-     template_list_archive: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
-     template_config_value: "\033[1m%{name}:\033[0m %{value} \033[90m(from %{source})\033[0m\n"
-     template_dry_run_archive: "\033[35m⚠ Would create archive for %{prefix} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
-     template_error: "\033[31m✗ Error in %{operation}:\033[0m %{message}\n"
+     template_created_archive: "\033[32m✓ Created archive:\033[0m #{path}\n"
+     template_identical_archive: "\033[33m≡ Directory #{prefix} is identical to archive from #{year}-#{month}-#{day} (#{branch}@#{hash}):\033[0m #{path}\n"
+     template_list_archive: "\033[36m#{path}\033[0m (created: \033[90m#{creation_time}\033[0m) #{note}\n"
+     template_config_value: "\033[1m#{name}:\033[0m #{value} \033[90m(from #{source})\033[0m\n"
+     template_dry_run_archive: "\033[35m⚠ Would create archive for #{prefix} on #{year}-#{month}-#{day}:\033[0m #{path}\n"
+     template_error: "\033[31m✗ Error in #{operation}:\033[0m #{message}\n"
      
      # Template-based formatting for file operations
-     template_created_backup: "\033[32m✓ Created backup:\033[0m %{path}\n"
-     template_identical_backup: "\033[33m≡ File %{filename} is identical to backup from %{year}-%{month}-%{day}:\033[0m %{path}\n"
-     template_list_backup: "\033[36m%{path}\033[0m (created: \033[90m%{creation_time}\033[0m) %{note}\n"
-     template_dry_run_backup: "\033[35m⚠ Would create backup for %{filename} on %{year}-%{month}-%{day}:\033[0m %{path}\n"
+     template_created_backup: "\033[32m✓ Created backup:\033[0m #{path}\n"
+     template_identical_backup: "\033[33m≡ File #{filename} is identical to backup from #{year}-#{month}-#{day}:\033[0m #{path}\n"
+     template_list_backup: "\033[36m#{path}\033[0m (created: \033[90m#{creation_time}\033[0m) #{note}\n"
+     template_dry_run_backup: "\033[35m⚠ Would create backup for #{filename} on #{year}-#{month}-#{day}:\033[0m #{path}\n"
      
      # Named regex patterns for data extraction
      pattern_archive_filename: "(?P<prefix>[^-]*)-(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})-(?P<hour>\\d{2})-(?P<minute>\\d{2})(?:=(?P<branch>[^=]+))?(?:=(?P<hash>[^=]+))?(?:=(?P<note>.+))?\\.zip"

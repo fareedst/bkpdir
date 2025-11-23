@@ -193,6 +193,9 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:CONFIG_OUTPUT_GROUPING]` → See `requirements.md` § Configuration Output Grouping Requirements
   - Architecture: `[ARCH:CONFIG_OUTPUT_GROUPING]`
   - Implementation: `[IMPL:CONFIG_OUTPUT_GROUPING]`
+- `[REQ:CUSTOMIZABLE_FORMAT_STRINGS]` → See `requirements.md` § User-Customizable Format Strings Requirements
+  - Architecture: `[ARCH:CUSTOMIZABLE_FORMAT_STRINGS]`
+  - Implementation: `[IMPL:CUSTOMIZABLE_FORMAT_STRINGS]`
 - `[REQ:TEST_EXCLUDE_MERGE]` → See `requirements.md` § Exclude Patterns Merge Testing Requirements
   - Architecture: `[ARCH:TEST_EXCLUDE_MERGE]`
   - Implementation: `[IMPL:TEST_EXCLUDE_MERGE]`

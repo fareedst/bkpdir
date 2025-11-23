@@ -1,0 +1,84 @@
+# Example: Custom Format Strings Configuration
+# This file demonstrates how to customize output format strings in bkpdir
+
+# Basic settings
+archive_dir_path: "~/Archives"
+backup_dir_path: "~/Backups"
+use_current_dir_name: true
+
+# ============================================================================
+# Directory Operation Format Strings
+# ============================================================================
+# Customize how bkpdir displays messages for directory archive operations
+
+# Archive creation success message
+format_created_archive: "✅ Archive created: %s\n"
+
+# Archive identical to existing (no changes detected)
+format_identical_archive: "⚠️  No changes detected. Identical to: %s\n"
+
+# Archive listing format (supports #{size_human} for human-readable sizes)
+format_list_archive: "📦 %s (size: #{size_human})\n"
+
+# Configuration value display
+format_config_value: "⚙️  %s: %s (from: %s)\n"
+
+# Dry run message (when using --dry-run flag)
+format_dry_run_archive: "🔍 [DRY RUN] Would create: %s\n"
+
+# Generic error message
+format_error: "❌ Error: %s\n"
+
+# ============================================================================
+# File Backup Format Strings
+# ============================================================================
+# Customize how bkpdir displays messages for file backup operations
+
+format_created_backup: "✅ Backup created: %s\n"
+format_identical_backup: "⚠️  File unchanged. Identical to: %s\n"
+format_list_backup: "📄 %s (size: #{size_human})\n"
+format_dry_run_backup: "🔍 [DRY RUN] Would backup: %s\n"
+
+# ============================================================================
+# Template-Based Format Strings (Optional)
+# ============================================================================
+# Template-style formats use named placeholders like #{path}, #{name}
+# These are more readable and self-documenting
+
+template_created_archive: "✅ Created: #{path}\n"
+template_identical_archive: "⚠️  Identical: #{path}\n"
+template_list_archive: "📦 #{path} (#{size_human})\n"
+template_config_value: "⚙️  #{name}: #{value} (source: #{source})\n"
+template_dry_run_archive: "🔍 Would create: #{path}\n"
+template_error: "❌ #{message}\n"
+
+# ============================================================================
+# Extended Format Strings (Optional)
+# ============================================================================
+# Additional format strings for specific operations
+
+# Archive operations
+format_no_archives_found: "ℹ️  No archives found in %s\n"
+format_verification_failed: "❌ Verification failed for %s: %v\n"
+format_verification_success: "✅ Verified: %s\n"
+format_incremental_created: "✅ Incremental archive created: %s\n"
+
+# Detailed output with statistics
+format_created_archive_detailed: "✅ Created: %s (size: %s, modified: %s)\n"
+format_incremental_created_detailed: "✅ Incremental: %s (size: %s, modified: %s)\n"
+
+# Error messages
+format_disk_full_error: "❌ Disk full: %v\n"
+format_permission_error: "❌ Permission denied: %v\n"
+format_directory_not_found: "❌ Directory not found: %v\n"
+format_file_not_found: "❌ File not found: %v\n"
+
+# ============================================================================
+# Notes
+# ============================================================================
+# - See docs/format-strings-reference.md for complete documentation
+# - Use %s, %d, %v for printf-style placeholders
+# - Use #{name} for template-style placeholders
+# - Special placeholder: #{size_human} for human-readable file sizes
+# - Most format strings should end with \n for proper line breaks
+# - Emoji are optional - remove them if you prefer plain text output

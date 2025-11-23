@@ -139,7 +139,7 @@ type TemplateFormatter struct {
 **Functionality**: 
 - Pattern-based data extraction using regex
 - Template rendering with `text/template`
-- Placeholder replacement (`%{name}` and `{{.name}}`)
+- Placeholder replacement (`#{name}` and `{{.name}}`)
 
 **Dependencies**: `regexp`, `text/template`, `strings` packages
 

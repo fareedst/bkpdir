@@ -243,8 +243,56 @@ func (f *OutputFormatter) FormatIdenticalArchive(path string) string {
 // DECISION-REF: DEC-003
 // FormatListArchive formats a message for listing an archive.
 // It uses the configured format string to create the output message with path and creation time.
+// FormatListArchive formats a list archive message.
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// If template placeholders are detected, gathers file statistics and uses template formatting.
+// Otherwise, uses printf formatting for backward compatibility.
 func (f *OutputFormatter) FormatListArchive(path, creationTime string) string {
-	return fmt.Sprintf(f.cfg.FormatListArchive, path, creationTime)
+	formatStr := f.cfg.FormatListArchive
+
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
+
+	if hasTemplatePlaceholders {
+		// Use template formatting with file statistics
+		data := make(map[string]string)
+		data["path"] = path
+		data["creation_time"] = creationTime
+
+		// Gather file statistics to populate size_human and other stat fields
+		statInfo, err := GatherFileStatInfo(path)
+		if err == nil {
+			// Add file statistics to data map
+			data["size"] = fmt.Sprintf("%d", statInfo.Size)
+			data["size_human"] = statInfo.SizeHuman
+			data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+			data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+			data["mode"] = statInfo.Mode.String()
+			data["type"] = statInfo.Type
+			data["name"] = statInfo.Name
+		} else {
+			// Provide default values for file attributes when stats can't be gathered
+			data["size"] = "0"
+			data["size_human"] = "unknown"
+			data["mtime"] = creationTime
+			data["mtime_unix"] = "0"
+			data["mode"] = "unknown"
+			data["type"] = "unknown"
+			// Extract filename from path
+			parts := strings.Split(path, "/")
+			if len(parts) > 0 {
+				data["name"] = parts[len(parts)-1]
+			} else {
+				data["name"] = path
+			}
+		}
+
+		// Use template formatter to process placeholders
+		return f.formatTemplate(formatStr, data)
+	}
+
+	// Use printf formatting for backward compatibility
+	return fmt.Sprintf(formatStr, path, creationTime)
 }
 
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
@@ -526,6 +574,31 @@ func (f *OutputFormatter) FormatListArchiveWithExtraction(archivePath, creationT
 	data["path"] = archivePath
 	data["creation_time"] = creationTime
 
+	// Gather file statistics to populate size_human and other stat fields
+	statInfo, err := GatherFileStatInfo(archivePath)
+	if err == nil {
+		// Add file statistics to data map
+		data["size"] = fmt.Sprintf("%d", statInfo.Size)
+		data["size_human"] = statInfo.SizeHuman
+		data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+		data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+		data["mode"] = statInfo.Mode.String()
+		data["type"] = statInfo.Type
+		data["name"] = statInfo.Name
+	} else {
+		// If stats can't be gathered, provide default values for common placeholders
+		// to prevent template placeholders from appearing literally in output
+		if _, exists := data["size_human"]; !exists {
+			data["size_human"] = "unknown"
+		}
+		if _, exists := data["size"]; !exists {
+			data["size"] = "0"
+		}
+		if _, exists := data["mtime"]; !exists {
+			data["mtime"] = creationTime // Use creation_time as fallback
+		}
+	}
+
 	// Use template formatting if we have extracted data
 	if len(data) > 2 { // More than just "path" and "creation_time"
 		return f.FormatListArchiveTemplate(data)
@@ -566,8 +639,56 @@ func (f *OutputFormatter) FormatIdenticalBackup(path string) string {
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
 // FormatListBackup formats a message for listing a backup.
+// FormatListBackup formats a list backup message.
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// If template placeholders are detected, gathers file statistics and uses template formatting.
+// Otherwise, uses printf formatting for backward compatibility.
 func (f *OutputFormatter) FormatListBackup(path, creationTime string) string {
-	return fmt.Sprintf(f.cfg.FormatListBackup, path, creationTime)
+	formatStr := f.cfg.FormatListBackup
+
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
+
+	if hasTemplatePlaceholders {
+		// Use template formatting with file statistics
+		data := make(map[string]string)
+		data["path"] = path
+		data["creation_time"] = creationTime
+
+		// Gather file statistics to populate size_human and other stat fields
+		statInfo, err := GatherFileStatInfo(path)
+		if err == nil {
+			// Add file statistics to data map
+			data["size"] = fmt.Sprintf("%d", statInfo.Size)
+			data["size_human"] = statInfo.SizeHuman
+			data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+			data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+			data["mode"] = statInfo.Mode.String()
+			data["type"] = statInfo.Type
+			data["name"] = statInfo.Name
+		} else {
+			// Provide default values for file attributes when stats can't be gathered
+			data["size"] = "0"
+			data["size_human"] = "unknown"
+			data["mtime"] = creationTime
+			data["mtime_unix"] = "0"
+			data["mode"] = "unknown"
+			data["type"] = "unknown"
+			// Extract filename from path
+			parts := strings.Split(path, "/")
+			if len(parts) > 0 {
+				data["name"] = parts[len(parts)-1]
+			} else {
+				data["name"] = path
+			}
+		}
+
+		// Use template formatter to process placeholders
+		return f.formatTemplate(formatStr, data)
+	}
+
+	// Use printf formatting for backward compatibility
+	return fmt.Sprintf(formatStr, path, creationTime)
 }
 
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
@@ -637,27 +758,121 @@ func (f *OutputFormatter) FormatDryRunBackupTemplate(data map[string]string) str
 
 // Template formatting helper
 func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]string) string {
-	// First handle %{name} style placeholders
+	// First handle #{name} style placeholders - replace ALL placeholders from data map first
 	result := templateStr
 	for key, value := range data {
-		placeholder := fmt.Sprintf("%%{%s}", key)
+		placeholder := fmt.Sprintf("#{%s}", key)
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// Then handle Go text/template style {{.name}} placeholders
-	tmpl, err := template.New("format").Parse(result)
-	if err != nil {
-		// Fall back to simple replacement if template parsing fails
-		return result
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
+	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
+	// Only replace known placeholders, leave unknown ones as-is
+	knownPlaceholders := map[string]string{
+		"#{size_human}": "unknown",
+		"#{size}":       "0",
+	}
+	// Add mtime default if creation_time is available
+	if creationTime, ok := data["creation_time"]; ok {
+		knownPlaceholders["#{mtime}"] = creationTime
+	} else {
+		knownPlaceholders["#{mtime}"] = "unknown"
 	}
 
-	var buf strings.Builder
-	if err := tmpl.Execute(&buf, data); err != nil {
-		// Fall back to simple replacement if template execution fails
-		return result
+	// Replace only known placeholders that are still present (weren't replaced by data map)
+	for placeholder, defaultValue := range knownPlaceholders {
+		if strings.Contains(result, placeholder) {
+			result = strings.ReplaceAll(result, placeholder, defaultValue)
+		}
 	}
 
-	return buf.String()
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// This allows mixed format strings like "%s (size: #{size_human})\n"
+	// We need to replace printf placeholders with values from the data map
+	// Common mappings: %s -> path or name, %d -> size, etc.
+	if strings.Contains(result, "%s") {
+		// Replace %s with path if available, otherwise name
+		if path, ok := data["path"]; ok {
+			result = strings.Replace(result, "%s", path, 1) // Replace first occurrence
+		} else if name, ok := data["name"]; ok {
+			result = strings.Replace(result, "%s", name, 1)
+		}
+		// If there are multiple %s, replace them with available values
+		// Second %s could be creation_time
+		if strings.Contains(result, "%s") {
+			if creationTime, ok := data["creation_time"]; ok {
+				result = strings.Replace(result, "%s", creationTime, 1)
+			}
+		}
+	}
+
+	// CRITICAL: Final safety check - replace any remaining #{...} patterns
+	// This prevents fmt.Sprintf from misinterpreting them as format verbs
+	// We MUST ensure no #{...} patterns remain before returning
+	if strings.Contains(result, "#{") {
+		// Replace any remaining known placeholders with safe defaults
+		finalReplacements := map[string]string{
+			"#{path}": func() string {
+				if p, ok := data["path"]; ok {
+					return p
+				}
+				return "unknown"
+			}(),
+			"#{name}": func() string {
+				if n, ok := data["name"]; ok {
+					return n
+				}
+				return "unknown"
+			}(),
+			"#{creation_time}": func() string {
+				if ct, ok := data["creation_time"]; ok {
+					return ct
+				}
+				return "unknown"
+			}(),
+			"#{size_human}": "unknown",
+			"#{size}":       "0",
+			"#{mtime}": func() string {
+				if ct, ok := data["creation_time"]; ok {
+					return ct
+				}
+				return "unknown"
+			}(),
+			"#{mtime_unix}": "0",
+			"#{mode}":       "unknown",
+			"#{type}":       "unknown",
+		}
+		for placeholder, value := range finalReplacements {
+			if strings.Contains(result, placeholder) {
+				result = strings.ReplaceAll(result, placeholder, value)
+			}
+		}
+	}
+
+	// CRITICAL: Do NOT call tmpl.Execute if result still contains #{...} patterns
+	// Go's text/template uses fmt internally which will misinterpret #{...} as format verbs
+	// Only parse as Go template if there are {{.}} patterns AND no #{...} patterns remain
+	hasGoTemplatePatterns := strings.Contains(result, "{{") && strings.Contains(result, "}}")
+	hasPlaceholderPatterns := strings.Contains(result, "#{")
+
+	if hasGoTemplatePatterns && !hasPlaceholderPatterns {
+		tmpl, err := template.New("format").Parse(result)
+		if err != nil {
+			// Fall back to simple replacement if template parsing fails
+			return result
+		}
+
+		var buf strings.Builder
+		if err := tmpl.Execute(&buf, data); err != nil {
+			// Fall back to simple replacement if template execution fails
+			return result
+		}
+
+		return buf.String()
+	}
+
+	return result
 }
 
 // REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
@@ -734,26 +949,100 @@ func (tf *TemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) 
 func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
 
-	// Handle %{name} style placeholders
+	// Handle #{name} style placeholders - replace ALL placeholders from data map first
 	for key, value := range data {
-		placeholder := fmt.Sprintf("%%{%s}", key)
+		placeholder := fmt.Sprintf("#{%s}", key)
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// Handle Go text/template style {{.name}} placeholders
-	tmpl, err := template.New("format").Parse(result)
-	if err != nil {
-		// Fall back to simple replacement if template parsing fails
-		return result
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
+	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
+	// Only replace known placeholders, leave unknown ones as-is
+	knownPlaceholders := map[string]string{
+		"#{size_human}": "unknown",
+		"#{size}":       "0",
+	}
+	// Add mtime default if creation_time is available
+	if creationTime, ok := data["creation_time"]; ok {
+		knownPlaceholders["#{mtime}"] = creationTime
+	} else {
+		knownPlaceholders["#{mtime}"] = "unknown"
 	}
 
-	var buf strings.Builder
-	if err := tmpl.Execute(&buf, data); err != nil {
-		// Fall back to simple replacement if template execution fails
-		return result
+	// Replace only known placeholders that are still present (weren't replaced by data map)
+	for placeholder, defaultValue := range knownPlaceholders {
+		if strings.Contains(result, placeholder) {
+			result = strings.ReplaceAll(result, placeholder, defaultValue)
+		}
 	}
 
-	return buf.String()
+	// CRITICAL: Final safety check - replace any remaining #{...} patterns
+	// This prevents fmt.Sprintf from misinterpreting them as format verbs
+	// We MUST ensure no #{...} patterns remain before returning
+	if strings.Contains(result, "#{") {
+		// Replace any remaining known placeholders with safe defaults
+		finalReplacements := map[string]string{
+			"#{path}": func() string {
+				if p, ok := data["path"]; ok {
+					return p
+				}
+				return "unknown"
+			}(),
+			"#{name}": func() string {
+				if n, ok := data["name"]; ok {
+					return n
+				}
+				return "unknown"
+			}(),
+			"#{creation_time}": func() string {
+				if ct, ok := data["creation_time"]; ok {
+					return ct
+				}
+				return "unknown"
+			}(),
+			"#{size_human}": "unknown",
+			"#{size}":       "0",
+			"#{mtime}": func() string {
+				if ct, ok := data["creation_time"]; ok {
+					return ct
+				}
+				return "unknown"
+			}(),
+			"#{mtime_unix}": "0",
+			"#{mode}":       "unknown",
+			"#{type}":       "unknown",
+		}
+		for placeholder, value := range finalReplacements {
+			if strings.Contains(result, placeholder) {
+				result = strings.ReplaceAll(result, placeholder, value)
+			}
+		}
+	}
+
+	// CRITICAL: Do NOT call tmpl.Execute if result still contains #{...} patterns
+	// Go's text/template uses fmt internally which will misinterpret #{...} as format verbs
+	// Only parse as Go template if there are {{.}} patterns AND no #{...} patterns remain
+	hasGoTemplatePatterns := strings.Contains(result, "{{") && strings.Contains(result, "}}")
+	hasPlaceholderPatterns := strings.Contains(result, "#{")
+
+	if hasGoTemplatePatterns && !hasPlaceholderPatterns {
+		tmpl, err := template.New("format").Parse(result)
+		if err != nil {
+			// Fall back to simple replacement if template parsing fails
+			return result
+		}
+
+		var buf strings.Builder
+		if err := tmpl.Execute(&buf, data); err != nil {
+			// Fall back to simple replacement if template execution fails
+			return result
+		}
+
+		return buf.String()
+	}
+
+	return result
 }
 
 // REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
@@ -1035,7 +1324,7 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 	// Use detailed template string with named replacements
 	result := f.formatTemplate(f.cfg.TemplateCreatedArchiveDetailed, data)
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
-	if strings.Contains(result, "%{") {
+	if strings.Contains(result, "#{") {
 		if debug {
 			fmt.Fprintf(os.Stderr, "DEBUG: Template not processed correctly: %q\n", result)
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
@@ -1715,11 +2004,14 @@ func (f *OutputFormatter) PrintVerificationErrorDetail(errMsg string) {
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 // OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
 func (f *OutputFormatter) PrintArchiveListWithStatus(output, status string) {
-	message := fmt.Sprintf("%s%s\n", output, status)
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use os.Stdout.WriteString, NOT fmt.Print
+	// to avoid fmt misinterpreting #{...} patterns as format verbs
+	// fmt.Print internally uses fmt.Sprintf("%v", ...) which can misinterpret #{...} as format verbs
+	message := output + status + "\n"
 	if f.collector != nil {
 		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
 		f.collector.AddStdout(message, "info")
 	} else {
-		fmt.Print(message)
+		os.Stdout.WriteString(message)
 	}
 }

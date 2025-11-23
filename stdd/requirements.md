@@ -96,6 +96,7 @@ Each requirement includes:
 | `[REQ:CICD_001]` | AI-First Development Optimization | P2 | ⏳ | See `architecture-decisions.md` § CI/CD Pipeline Architecture | See `implementation-decisions.md` § Testing Implementation |
 | `[REQ:DOC_011]` | Token Validation Integration for AI Assistants | P1 | ⏳ | See `architecture-decisions.md` § AI-First Documentation Architecture | See `implementation-decisions.md` § Testing Implementation |
 | `[REQ:DOC_013]` | AI-First Documentation and Code Maintenance | P2 | ⏳ | See `architecture-decisions.md` § AI-First Documentation Architecture | See `implementation-decisions.md` § Code Style and Conventions |
+| `[REQ:CUSTOMIZABLE_FORMAT_STRINGS]` | User-Customizable Format Strings | P1 | ✅ | See `architecture-decisions.md` § User-Customizable Format Strings [ARCH:CUSTOMIZABLE_FORMAT_STRINGS] | See `implementation-decisions.md` § User-Customizable Format Strings Implementation [IMPL:CUSTOMIZABLE_FORMAT_STRINGS] |
 
 ---
 
@@ -424,8 +425,8 @@ Each requirement includes:
 
 **Priority: P1 (Important)**
 
-- **Description**: Debug and diagnostic output must be controlled by a global debug flag and disabled by default in normal execution. Diagnostic output provides detailed information about configuration loading, merging, and inheritance processing. Debug output must be automatically enabled during test execution to aid in debugging test failures.
-- **Rationale**: Keeps normal execution output clean while preserving valuable debugging information for development and testing. Enables developers to troubleshoot configuration issues without cluttering user-facing output.
+- **Description**: Debug and diagnostic output must be controlled by a global debug flag and disabled by default in normal execution. Diagnostic output provides detailed information about configuration loading, merging, and inheritance processing. Debug output must be automatically enabled during test execution to aid in debugging test failures. Debug statements that identify architecture or implementation decisions must be preserved in code as they serve as inline documentation of key decision points.
+- **Rationale**: Keeps normal execution output clean while preserving valuable debugging information for development and testing. Enables developers to troubleshoot configuration issues without cluttering user-facing output. Debug statements documenting architecture or implementation decisions (e.g., format string selection, placeholder replacement steps, data transformations) provide ongoing value for understanding code behavior and serve as inline documentation.
 - **Satisfaction Criteria**:
   - All diagnostic output controlled by `debug` flag
   - Normal execution produces clean output (0 diagnostic messages)
@@ -433,6 +434,8 @@ Each requirement includes:
   - Test execution automatically enables debug output via `TestMain`
   - Diagnostic output helps developers understand configuration loading and merging
   - All diagnostic statements marked with DIAGNOSTIC-OUTPUT semantic token
+  - Debug statements that identify architecture or implementation decisions are preserved in code
+  - Debug statements documenting format string selection, placeholder replacement, data transformations, and other key decision points remain in code
 - **Validation Criteria**: 
   - Normal execution verification (no diagnostic output)
   - Debug mode verification (all diagnostic output appears)
@@ -550,6 +553,49 @@ Each requirement includes:
 - **Implementation**: See `implementation-decisions.md` § Testing Implementation [IMPL:TESTING]
 
 **Status**: ⏳ Not Started
+
+### [REQ:CUSTOMIZABLE_FORMAT_STRINGS] User-Customizable Format Strings Requirements
+
+**Priority: P1 (Important)**
+
+- **Description**: All output format strings must be customizable by users through configuration files. Users should be able to override any format string in their `.bkpdir.yml` to customize the application's output interface. Format string validation must warn users of invalid placeholders. Comprehensive documentation and examples must be provided.
+- **Rationale**: Enables users to customize output format to match their preferences, workflows, and internationalization needs without modifying source code. Validation prevents common mistakes and improves user experience.
+- **Satisfaction Criteria**:
+  - All format strings can be overridden in `.bkpdir.yml`
+  - Format string validation warns users of invalid or unexpected placeholders
+  - Validation provides helpful error messages indicating expected placeholders
+  - Comprehensive reference documentation lists all available format strings with their placeholders
+  - Brief example configuration file demonstrates common customizations
+  - Placeholder documentation explains available variables for each format string
+  - Backward compatibility maintained (defaults work when not specified)
+  - **CRITICAL**: Only template-style placeholders (`#{name}`) are supported. Printf-style placeholders (`%s`, `%d`) are NOT supported.
+  - All placeholders MUST use the named format: `#{path}`, `#{size_human}`, `#{creation_time}`, etc.
+  - Special placeholders like `#{size_human}` documented and validated
+  - **REQUIRED**: The `list` command output MUST support template-style placeholders to display file attributes
+  - **REQUIRED**: Users MUST be able to use placeholders like `#{size_human}`, `#{path}`, `#{creation_time}`, and other named attributes in the list output format
+  - **REQUIRED**: The substring `(size: #{size_human})` MUST be supported and display as `(size: 1 byte)` or similar human-readable size format (e.g., `(size: 1.2MB)`, `(size: 455KB)`)
+  - **REQUIRED**: All named file attributes (size, size_human, mtime, mode, type, name, etc.) MUST be equally accessible as template-style placeholders in list output
+  - **REQUIRED**: The default list output format MUST include file size information using `#{size_human}` placeholder (e.g., `#{path} (size: #{size_human})`)
+- **Validation Criteria**: 
+  - Integration tests verify format string customization works end-to-end
+  - Tests verify format string validation catches invalid placeholders
+  - Tests verify validation provides helpful error messages
+  - Tests verify defaults work when not specified
+  - Tests verify custom format strings are loaded and used correctly
+  - Tests verify both printf-style and template-style formats work
+  - Documentation is complete, accurate, and tested
+  - Example configuration files work as documented
+- **Architecture**: See `architecture-decisions.md` § User-Customizable Format Strings [ARCH:CUSTOMIZABLE_FORMAT_STRINGS]
+- **Implementation**: See `implementation-decisions.md` § User-Customizable Format Strings Implementation [IMPL:CUSTOMIZABLE_FORMAT_STRINGS]
+
+**Status**: ✅ Implemented
+
+**Implementation Notes:**
+- **Placeholder Syntax Migration**: All placeholders migrated from `%{...}` to `#{...}` syntax to avoid conflicts with Go's `fmt` package
+- **Migration Complete**: All code, tests, and documentation updated to use `#{...}` syntax exclusively
+- **Breaking Change**: Users with old `%{...}` format strings must update to `#{...}` syntax
+
+**Related Requirements**: [REQ:CONFIGURATION], [REQ:OUTPUT_FORMATTING], [REQ:IMMUTABLE_CONFIGURATION_DEFAULTS], [REQ:USABILITY]
 
 ## Immutable Requirements (Major Version Change Required)
 
@@ -819,7 +865,7 @@ These requirements define core behaviors that MUST NOT be changed without a majo
   - **Configuration-Driven**: Format strings and templates must be retrieved from configuration
   - **Text Highlighting**: Must provide means to highlight/format text for structure and meaning
   - **Data Separation**: All user-facing text must be extracted from code into data files
-  - **Named Placeholders**: Must support both Go text/template syntax ({{.name}}) and placeholder syntax (%{name})
+  - **Named Placeholders**: Must support both Go text/template syntax ({{.name}}) and placeholder syntax (#{name})
   - **Regex Integration**: Must support named regex groups for data extraction
   - **Backward Compatibility**: Default format strings must preserve existing output appearance
   - **Immutable Defaults**: Default format specifications cannot be changed without major version bump
@@ -845,7 +891,7 @@ These requirements define core behaviors that MUST NOT be changed without a majo
 **Priority: P0 (Critical - Immutable)**
 
 - **Description**: Template formatting requirements are mandatory and must be preserved:
-  - **Dual Syntax Support**: Must support both Go text/template syntax ({{.name}}) and placeholder syntax (%{name})
+  - **Dual Syntax Support**: Must support both Go text/template syntax ({{.name}}) and placeholder syntax (#{name})
   - **Regex Data Extraction**: Must extract named groups from filenames using configurable regex patterns
   - **Graceful Degradation**: Must fall back to placeholder formatting when template processing fails
   - **Operation Context**: Error messages must include operation context for enhanced debugging

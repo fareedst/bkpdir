@@ -304,7 +304,7 @@ func DefaultConfig() *Config {
 		// Printf-style format strings for directory operations
 		FormatCreatedArchive:   "Created archive: %s\n",
 		FormatIdenticalArchive: "Directory is identical to existing archive: %s\n",
-		FormatListArchive:      "%s (created: %s)\n",
+		FormatListArchive:      "#{path} (size: #{size_human})\n", // Template-style placeholders only
 		FormatConfigValue:      "%s: %s (source: %s)\n",
 		FormatDryRunArchive:    "Would create archive: %s\n",
 		FormatError:            "Error: %s\n",
@@ -312,22 +312,22 @@ func DefaultConfig() *Config {
 		// Printf-style format strings for file operations
 		FormatCreatedBackup:   "Created backup: %s\n",
 		FormatIdenticalBackup: "File is identical to existing backup: %s\n",
-		FormatListBackup:      "%s (created: %s)\n",
+		FormatListBackup:      "#{path} (size: #{size_human})\n", // Template-style placeholders only
 		FormatDryRunBackup:    "Would create backup: %s\n",
 
 		// Template-based format strings for directory operations
-		TemplateCreatedArchive:   "Created archive: %{path}\n",
-		TemplateIdenticalArchive: "Directory is identical to existing archive: %{path}\n",
-		TemplateListArchive:      "%{path} (created: %{creation_time})\n",
-		TemplateConfigValue:      "%{name}: %{value} (source: %{source})\n",
-		TemplateDryRunArchive:    "Would create archive: %{path}\n",
-		TemplateError:            "Error: %{message}\n",
+		TemplateCreatedArchive:   "Created archive: #{path}\n",
+		TemplateIdenticalArchive: "Directory is identical to existing archive: #{path}\n",
+		TemplateListArchive:      "#{path} (size: #{size_human})\n",
+		TemplateConfigValue:      "#{name}: #{value} (source: #{source})\n",
+		TemplateDryRunArchive:    "Would create archive: #{path}\n",
+		TemplateError:            "Error: #{message}\n",
 
 		// Template-based format strings for file operations
-		TemplateCreatedBackup:   "Created backup: %{path}\n",
-		TemplateIdenticalBackup: "File is identical to existing backup: %{path}\n",
-		TemplateListBackup:      "%{path} (created: %{creation_time})\n",
-		TemplateDryRunBackup:    "Would create backup: %{path}\n",
+		TemplateCreatedBackup:   "Created backup: #{path}\n",
+		TemplateIdenticalBackup: "File is identical to existing backup: #{path}\n",
+		TemplateListBackup:      "#{path} (size: #{size_human})\n",
+		TemplateDryRunBackup:    "Would create backup: #{path}\n",
 
 		// Regex patterns
 		PatternArchiveFilename: defaultArchivePattern,
@@ -374,41 +374,41 @@ func DefaultConfig() *Config {
 		FormatFailedAccessFile:    "Failed to access file: %v\n",
 
 		// Template-based extended format strings
-		TemplateNoArchivesFound:      "No archives found in %{archive_dir}\n",
-		TemplateVerificationFailed:   "Archive %{name} verification failed: %{error}\n",
-		TemplateVerificationSuccess:  "Archive %{name} verified successfully\n",
-		TemplateVerificationWarning:  "Warning: Could not store verification status for %{name}: %{error}\n",
-		TemplateConfigurationUpdated: "Configuration updated: %{key} = %{value}\n",
-		TemplateConfigFilePath:       "Config file: %{path}\n",
+		TemplateNoArchivesFound:      "No archives found in #{archive_dir}\n",
+		TemplateVerificationFailed:   "Archive #{name} verification failed: #{error}\n",
+		TemplateVerificationSuccess:  "Archive #{name} verified successfully\n",
+		TemplateVerificationWarning:  "Warning: Could not store verification status for #{name}: #{error}\n",
+		TemplateConfigurationUpdated: "Configuration updated: #{key} = #{value}\n",
+		TemplateConfigFilePath:       "Config file: #{path}\n",
 		TemplateDryRunFilesHeader:    "[Dry Run] Files to include:\n",
-		TemplateDryRunFileEntry:      "  %{file}\n",
+		TemplateDryRunFileEntry:      "  #{file}\n",
 		TemplateNoFilesModified:      "No files modified since last full archive\n",
-		TemplateIncrementalCreated:   "Created incremental archive: %{path}\n",
+		TemplateIncrementalCreated:   "Created incremental archive: #{path}\n",
 
 		// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 		// Enhanced template strings with stat information support
-		TemplateCreatedArchiveDetailed:     "Created archive: %{path} (size: %{size_human}, modified: %{mtime})\n",
-		TemplateIncrementalCreatedDetailed: "Created incremental archive: %{path} (size: %{size_human}, modified: %{mtime})\n",
+		TemplateCreatedArchiveDetailed:     "Created archive: #{path} (size: #{size_human}, modified: #{mtime})\n",
+		TemplateIncrementalCreatedDetailed: "Created incremental archive: #{path} (size: #{size_human}, modified: #{mtime})\n",
 
 		// Template-based backup operation messages
-		TemplateNoBackupsFound:    "No backups found for %{filename} in %{backup_dir}\n",
-		TemplateBackupWouldCreate: "Would create backup: %{path}\n",
-		TemplateBackupIdentical:   "File is identical to existing backup: %{path}\n",
-		TemplateBackupCreated:     "Created backup: %{path}\n",
+		TemplateNoBackupsFound:    "No backups found for #{filename} in #{backup_dir}\n",
+		TemplateBackupWouldCreate: "Would create backup: #{path}\n",
+		TemplateBackupIdentical:   "File is identical to existing backup: #{path}\n",
+		TemplateBackupCreated:     "Created backup: #{path}\n",
 
 		// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-		TemplateDiskFullError:       "Disk full error: %{error}\n",
-		TemplatePermissionError:     "Permission error: %{error}\n",
-		TemplateDirectoryNotFound:   "Directory not found: %{error}\n",
-		TemplateFileNotFound:        "File not found: %{error}\n",
-		TemplateInvalidDirectory:    "Invalid directory: %{error}\n",
-		TemplateInvalidFile:         "Invalid file: %{error}\n",
-		TemplateFailedWriteTemp:     "Failed to write temporary file: %{error}\n",
-		TemplateFailedFinalizeFile:  "Failed to finalize file: %{error}\n",
-		TemplateFailedCreateDirDisk: "Failed to create directory on disk: %{error}\n",
-		TemplateFailedCreateDir:     "Failed to create directory: %{error}\n",
-		TemplateFailedAccessDir:     "Failed to access directory: %{error}\n",
-		TemplateFailedAccessFile:    "Failed to access file: %{error}\n",
+		TemplateDiskFullError:       "Disk full error: #{error}\n",
+		TemplatePermissionError:     "Permission error: #{error}\n",
+		TemplateDirectoryNotFound:   "Directory not found: #{error}\n",
+		TemplateFileNotFound:        "File not found: #{error}\n",
+		TemplateInvalidDirectory:    "Invalid directory: #{error}\n",
+		TemplateInvalidFile:         "Invalid file: #{error}\n",
+		TemplateFailedWriteTemp:     "Failed to write temporary file: #{error}\n",
+		TemplateFailedFinalizeFile:  "Failed to finalize file: #{error}\n",
+		TemplateFailedCreateDirDisk: "Failed to create directory on disk: #{error}\n",
+		TemplateFailedCreateDir:     "Failed to create directory: #{error}\n",
+		TemplateFailedAccessDir:     "Failed to access directory: #{error}\n",
+		TemplateFailedAccessFile:    "Failed to access file: #{error}\n",
 	}
 }
 
@@ -603,6 +603,13 @@ func LoadConfig(root string) (*Config, error) {
 	if debug {
 		fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Final cfg exclude_patterns: %v\n", cfg.ExcludePatterns)
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
+	if warnings := validateAllFormatStrings(cfg); len(warnings) > 0 {
+		for _, w := range warnings {
+			fmt.Fprintf(os.Stderr, "Warning: %s\n", w)
+		}
+	}
 
 	return cfg, nil
 }
@@ -1625,8 +1632,23 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 	if !foundAny {
-		return DefaultConfig(), nil
+		cfg := DefaultConfig()
+		// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
+		if warnings := validateAllFormatStrings(cfg); len(warnings) > 0 {
+			for _, w := range warnings {
+				fmt.Fprintf(os.Stderr, "Warning: %s\n", w)
+			}
+		}
+		return cfg, nil
 	}
+
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
+	if warnings := validateAllFormatStrings(finalCfg); len(warnings) > 0 {
+		for _, w := range warnings {
+			fmt.Fprintf(os.Stderr, "Warning: %s\n", w)
+		}
+	}
+
 	return finalCfg, nil
 }
 
@@ -3901,4 +3923,277 @@ func GetDefaultValidationRules() []ConfigValidationRule {
 			Description: "Archive filename pattern must not contain invalid characters",
 		},
 	}
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Format string validation utilities
+//
+// ValidateFormatString validates a format string against expected placeholders.
+//
+// This function checks if all placeholders in the format string match the expected
+// placeholders for the given field. It supports both printf-style placeholders
+// (%s, %d, %v) and template-style placeholders (#{path}, #{name}).
+//
+// Returns a slice of warning messages for unexpected placeholders. Empty slice
+// indicates all placeholders are valid. Warnings are non-fatal and printed to
+// stderr during configuration load.
+//
+// Example:
+//
+//	warnings := ValidateFormatString("FormatCreatedArchive", "Created: %s\n")
+//	// Returns [] if valid, or []string{"Field 'FormatCreatedArchive': unexpected placeholder '%d'. Expected one of: [%s]"} if invalid
+//
+// See getExpectedPlaceholders() for the list of expected placeholders per field.
+// See extractPlaceholders() for placeholder extraction logic.
+func ValidateFormatString(fieldName, formatString string) []string {
+	expected := getExpectedPlaceholders(fieldName)
+	if len(expected) == 0 {
+		return nil // No validation rules for this field
+	}
+	found := extractPlaceholders(formatString)
+	warnings := []string{}
+	for _, ph := range found {
+		if !containsString(expected, ph) {
+			warnings = append(warnings, fmt.Sprintf("Field '%s': unexpected placeholder '%s'. Expected one of: %v", fieldName, ph, expected))
+		}
+	}
+	return warnings
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] getExpectedPlaceholders returns the list of expected placeholders for a given field.
+//
+// This function defines the validation rules for each format string field. It returns
+// a slice of expected placeholder strings (e.g., ["%s"], ["#{path}", "#{size_human}"]).
+//
+// Placeholder types:
+//   - Printf-style: %s (string), %d (integer), %v (value), %f (float) - for non-list format strings
+//   - Template-style: #{path}, #{name}, #{size_human}, etc. - for list format strings
+//
+// CRITICAL: FormatListArchive and FormatListBackup ONLY support template-style placeholders (#{name}).
+// Printf-style placeholders (%s, %d) are NOT supported for list format strings.
+//
+// Available template placeholders for list format strings:
+//   - #{path}: File or archive path
+//   - #{name}: File or archive name
+//   - #{size_human}: Human-readable file size (e.g., "1.2MB", "455KB")
+//   - #{size}: File size in bytes (as string)
+//   - #{creation_time}: Creation timestamp
+//   - #{mtime}: Modification time
+//   - #{mode}: File mode/permissions
+//   - #{type}: File type
+//
+// Returns empty slice if field has no validation rules (all placeholders allowed).
+//
+// See ValidateFormatString() for usage.
+func getExpectedPlaceholders(fieldName string) []string {
+	placeholderMap := map[string][]string{
+		// Printf-style directory operation format strings
+		"FormatCreatedArchive":   {"%s"},
+		"FormatIdenticalArchive": {"%s"},
+		"FormatListArchive":      {"#{path}", "#{size_human}", "#{size}", "#{creation_time}", "#{mtime}", "#{mode}", "#{type}", "#{name}"}, // Template-style placeholders only
+		"FormatConfigValue":      {"%s"},                                                                                                   // 3 occurrences of %s
+		"FormatDryRunArchive":    {"%s"},
+		"FormatError":            {"%s"},
+		// Printf-style file backup format strings
+		"FormatCreatedBackup":   {"%s"},
+		"FormatIdenticalBackup": {"%s"},
+		"FormatListBackup":      {"#{path}", "#{size_human}", "#{size}", "#{creation_time}", "#{mtime}", "#{mode}", "#{type}", "#{name}"}, // Template-style placeholders only
+		"FormatDryRunBackup":    {"%s"},
+		// Template-style directory operation format strings
+		"TemplateCreatedArchive":   {"#{path}"},
+		"TemplateIdenticalArchive": {"#{path}"},
+		"TemplateListArchive":      {"#{path}", "#{size_human}", "#{size}", "#{creation_time}", "#{mtime}", "#{mode}", "#{type}", "#{name}"},
+		"TemplateConfigValue":      {"#{name}", "#{value}", "#{source}"},
+		"TemplateDryRunArchive":    {"#{path}"},
+		"TemplateError":            {"#{message}"},
+		// Template-style file backup format strings
+		"TemplateCreatedBackup":   {"#{path}"},
+		"TemplateIdenticalBackup": {"#{path}"},
+		"TemplateListBackup":      {"#{path}", "#{size_human}", "#{size}", "#{creation_time}", "#{mtime}", "#{mode}", "#{type}", "#{name}"},
+		"TemplateDryRunBackup":    {"#{path}"},
+		// Extended format strings (examples)
+		"FormatNoArchivesFound":            {"%s"},
+		"FormatVerificationFailed":         {"%s", "%v"},
+		"FormatVerificationSuccess":        {"%s"},
+		"FormatVerificationWarning":        {"%s", "%v"},
+		"FormatConfigurationUpdated":       {"%s", "%v"},
+		"FormatConfigFilePath":             {"%s"},
+		"FormatDryRunFilesHeader":          {},
+		"FormatDryRunFileEntry":            {"%s"},
+		"FormatNoFilesModified":            {},
+		"FormatIncrementalCreated":         {"%s"},
+		"FormatCreatedArchiveDetailed":     {"%s"}, // 3 occurrences
+		"FormatIncrementalCreatedDetailed": {"%s"}, // 3 occurrences
+		// Backup operation messages
+		"FormatNoBackupsFound":    {"%s"},
+		"FormatBackupWouldCreate": {"%s"},
+		"FormatBackupIdentical":   {"%s"},
+		"FormatBackupCreated":     {"%s"},
+		// Error format strings
+		"FormatDiskFullError":     {"%v"},
+		"FormatPermissionError":   {"%v"},
+		"FormatDirectoryNotFound": {"%v"},
+		"FormatFileNotFound":      {"%v"},
+		// Template-based extended format strings (examples)
+		"TemplateNoArchivesFound":            {"#{archive_dir}"},
+		"TemplateVerificationFailed":         {"#{name}", "#{error}"},
+		"TemplateVerificationSuccess":        {"#{name}"},
+		"TemplateVerificationWarning":        {"#{name}", "#{error}"},
+		"TemplateConfigurationUpdated":       {"#{key}", "#{value}"},
+		"TemplateConfigFilePath":             {"#{path}"},
+		"TemplateDryRunFilesHeader":          {},
+		"TemplateDryRunFileEntry":            {"#{file}"},
+		"TemplateNoFilesModified":            {},
+		"TemplateIncrementalCreated":         {"#{path}"},
+		"TemplateCreatedArchiveDetailed":     {"#{path}", "#{size_human}", "#{mtime}"},
+		"TemplateIncrementalCreatedDetailed": {"#{path}", "#{size_human}", "#{mtime}"},
+		// Template-based backup operation messages
+		"TemplateNoBackupsFound":    {"#{filename}", "#{backup_dir}"},
+		"TemplateBackupWouldCreate": {"#{path}"},
+		"TemplateBackupIdentical":   {"#{path}"},
+		"TemplateBackupCreated":     {"#{path}"},
+		// Template-based error format strings
+		"TemplateDiskFullError":     {"#{error}"},
+		"TemplatePermissionError":   {"#{error}"},
+		"TemplateDirectoryNotFound": {"#{error}"},
+		"TemplateFileNotFound":      {"#{error}"},
+	}
+	return placeholderMap[fieldName]
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] extractPlaceholders finds all placeholders in a format string using regex.
+//
+// This function extracts both printf-style and template-style placeholders from
+// a format string. It uses regex patterns to find:
+//   - Printf-style: %s, %d, %v, %f, %b, %t, %x, %X
+//   - Template-style: #{name}, #{path}, #{size_human}, etc.
+//
+// Returns a slice of all found placeholders (may contain duplicates).
+//
+// Example:
+//
+//	placeholders := extractPlaceholders("%s (size: #{size_human})\n")
+//	// Returns: []string{"%s", "#{size_human}"}
+//
+// See ValidateFormatString() for usage.
+func extractPlaceholders(formatString string) []string {
+	placeholders := []string{}
+	// Printf-style placeholders: %s, %d, %v, %f, etc.
+	printfRegex := regexp.MustCompile(`%[sdvfbtxX]`)
+	placeholders = append(placeholders, printfRegex.FindAllString(formatString, -1)...)
+	// Template-style placeholders: #{name}
+	templateRegex := regexp.MustCompile(`#\{[^}]+\}`)
+	placeholders = append(placeholders, templateRegex.FindAllString(formatString, -1)...)
+	return placeholders
+}
+
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] validateAllFormatStrings validates all format string fields in the Config.
+//
+// This function iterates over all format string fields in the Config struct and
+// validates each one using ValidateFormatString(). It collects all warnings and
+// returns them as a single slice.
+//
+// Format string fields validated:
+//   - Printf-style: FormatCreatedArchive, FormatIdenticalArchive, FormatListArchive, etc.
+//   - Template-style: TemplateCreatedArchive, TemplateIdenticalArchive, TemplateListArchive, etc.
+//   - Extended: FormatNoArchivesFound, FormatVerificationFailed, etc.
+//
+// Returns empty slice if all format strings are valid. Warnings are printed to
+// stderr during configuration load (non-fatal).
+//
+// Called automatically by LoadConfig() and LoadConfigWithInheritance().
+//
+// See ValidateFormatString() for individual field validation logic.
+func validateAllFormatStrings(cfg *Config) []string {
+	if cfg == nil {
+		return nil
+	}
+	warnings := []string{}
+	formatFields := map[string]string{
+		// Printf-style directory operations
+		"FormatCreatedArchive":   cfg.FormatCreatedArchive,
+		"FormatIdenticalArchive": cfg.FormatIdenticalArchive,
+		"FormatListArchive":      cfg.FormatListArchive,
+		"FormatConfigValue":      cfg.FormatConfigValue,
+		"FormatDryRunArchive":    cfg.FormatDryRunArchive,
+		"FormatError":            cfg.FormatError,
+		// Printf-style file backups
+		"FormatCreatedBackup":   cfg.FormatCreatedBackup,
+		"FormatIdenticalBackup": cfg.FormatIdenticalBackup,
+		"FormatListBackup":      cfg.FormatListBackup,
+		"FormatDryRunBackup":    cfg.FormatDryRunBackup,
+		// Template-style directory operations
+		"TemplateCreatedArchive":   cfg.TemplateCreatedArchive,
+		"TemplateIdenticalArchive": cfg.TemplateIdenticalArchive,
+		"TemplateListArchive":      cfg.TemplateListArchive,
+		"TemplateConfigValue":      cfg.TemplateConfigValue,
+		"TemplateDryRunArchive":    cfg.TemplateDryRunArchive,
+		"TemplateError":            cfg.TemplateError,
+		// Template-style file backups
+		"TemplateCreatedBackup":   cfg.TemplateCreatedBackup,
+		"TemplateIdenticalBackup": cfg.TemplateIdenticalBackup,
+		"TemplateListBackup":      cfg.TemplateListBackup,
+		"TemplateDryRunBackup":    cfg.TemplateDryRunBackup,
+		// Extended format strings (selected examples)
+		"FormatNoArchivesFound":            cfg.FormatNoArchivesFound,
+		"FormatVerificationFailed":         cfg.FormatVerificationFailed,
+		"FormatVerificationSuccess":        cfg.FormatVerificationSuccess,
+		"FormatVerificationWarning":        cfg.FormatVerificationWarning,
+		"FormatConfigurationUpdated":       cfg.FormatConfigurationUpdated,
+		"FormatConfigFilePath":             cfg.FormatConfigFilePath,
+		"FormatDryRunFilesHeader":          cfg.FormatDryRunFilesHeader,
+		"FormatDryRunFileEntry":            cfg.FormatDryRunFileEntry,
+		"FormatNoFilesModified":            cfg.FormatNoFilesModified,
+		"FormatIncrementalCreated":         cfg.FormatIncrementalCreated,
+		"FormatCreatedArchiveDetailed":     cfg.FormatCreatedArchiveDetailed,
+		"FormatIncrementalCreatedDetailed": cfg.FormatIncrementalCreatedDetailed,
+		// Backup operation messages
+		"FormatNoBackupsFound":    cfg.FormatNoBackupsFound,
+		"FormatBackupWouldCreate": cfg.FormatBackupWouldCreate,
+		"FormatBackupIdentical":   cfg.FormatBackupIdentical,
+		"FormatBackupCreated":     cfg.FormatBackupCreated,
+		// Error format strings
+		"FormatDiskFullError":     cfg.FormatDiskFullError,
+		"FormatPermissionError":   cfg.FormatPermissionError,
+		"FormatDirectoryNotFound": cfg.FormatDirectoryNotFound,
+		"FormatFileNotFound":      cfg.FormatFileNotFound,
+		// Template-based extended format strings (selected examples)
+		"TemplateNoArchivesFound":            cfg.TemplateNoArchivesFound,
+		"TemplateVerificationFailed":         cfg.TemplateVerificationFailed,
+		"TemplateVerificationSuccess":        cfg.TemplateVerificationSuccess,
+		"TemplateVerificationWarning":        cfg.TemplateVerificationWarning,
+		"TemplateConfigurationUpdated":       cfg.TemplateConfigurationUpdated,
+		"TemplateConfigFilePath":             cfg.TemplateConfigFilePath,
+		"TemplateDryRunFilesHeader":          cfg.TemplateDryRunFilesHeader,
+		"TemplateDryRunFileEntry":            cfg.TemplateDryRunFileEntry,
+		"TemplateNoFilesModified":            cfg.TemplateNoFilesModified,
+		"TemplateIncrementalCreated":         cfg.TemplateIncrementalCreated,
+		"TemplateCreatedArchiveDetailed":     cfg.TemplateCreatedArchiveDetailed,
+		"TemplateIncrementalCreatedDetailed": cfg.TemplateIncrementalCreatedDetailed,
+		// Template-based backup operation messages
+		"TemplateNoBackupsFound":    cfg.TemplateNoBackupsFound,
+		"TemplateBackupWouldCreate": cfg.TemplateBackupWouldCreate,
+		"TemplateBackupIdentical":   cfg.TemplateBackupIdentical,
+		"TemplateBackupCreated":     cfg.TemplateBackupCreated,
+		// Template-based error format strings
+		"TemplateDiskFullError":     cfg.TemplateDiskFullError,
+		"TemplatePermissionError":   cfg.TemplatePermissionError,
+		"TemplateDirectoryNotFound": cfg.TemplateDirectoryNotFound,
+		"TemplateFileNotFound":      cfg.TemplateFileNotFound,
+	}
+	for name, val := range formatFields {
+		if w := ValidateFormatString(name, val); len(w) > 0 {
+			warnings = append(warnings, w...)
+		}
+	}
+	return warnings
+}
+
+// containsString checks if a slice contains a string.
+func containsString(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
 }

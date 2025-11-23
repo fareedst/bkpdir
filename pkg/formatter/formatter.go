@@ -82,12 +82,58 @@ func (f *DefaultOutputFormatter) FormatIdenticalArchive(path string) string {
 	return fmt.Sprintf(formatStr, path)
 }
 
-// FormatListArchive formats a list archive message using printf-style formatting
+// FormatListArchive formats a list archive message.
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// If template placeholders are detected, gathers file statistics and uses template formatting.
+// Otherwise, uses printf formatting for backward compatibility.
 func (f *DefaultOutputFormatter) FormatListArchive(path, creationTime string) string {
 	formatStr := f.configProvider.GetFormatString("list_archive")
 	if formatStr == "" {
 		formatStr = "%s (created: %s)\n"
 	}
+
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
+
+	if hasTemplatePlaceholders {
+		// Use template formatting with file statistics
+		data := make(map[string]string)
+		data["path"] = path
+		data["creation_time"] = creationTime
+
+		// Gather file statistics to populate size_human and other stat fields
+		statInfo, err := GatherFileStatInfo(path)
+		if err == nil {
+			// Add file statistics to data map
+			data["size"] = fmt.Sprintf("%d", statInfo.Size)
+			data["size_human"] = statInfo.SizeHuman
+			data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+			data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+			data["mode"] = statInfo.Mode.String()
+			data["type"] = statInfo.Type
+			data["name"] = statInfo.Name
+		} else {
+			// Provide default values for file attributes when stats can't be gathered
+			data["size"] = "0"
+			data["size_human"] = "unknown"
+			data["mtime"] = creationTime
+			data["mtime_unix"] = "0"
+			data["mode"] = "unknown"
+			data["type"] = "unknown"
+			// Extract filename from path
+			parts := strings.Split(path, "/")
+			if len(parts) > 0 {
+				data["name"] = parts[len(parts)-1]
+			} else {
+				data["name"] = path
+			}
+		}
+
+		// Use template formatter to process placeholders
+		return f.templateFormatter.FormatWithPlaceholders(formatStr, data)
+	}
+
+	// Use printf formatting for backward compatibility
 	return fmt.Sprintf(formatStr, path, creationTime)
 }
 
@@ -137,11 +183,58 @@ func (f *DefaultOutputFormatter) FormatIdenticalBackup(path string) string {
 }
 
 // FormatListBackup formats a list backup message using printf-style formatting
+// FormatListBackup formats a list backup message.
+// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// If template placeholders are detected, gathers file statistics and uses template formatting.
+// Otherwise, uses printf formatting for backward compatibility.
 func (f *DefaultOutputFormatter) FormatListBackup(path, creationTime string) string {
 	formatStr := f.configProvider.GetFormatString("list_backup")
 	if formatStr == "" {
 		formatStr = "%s (created: %s)\n"
 	}
+
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
+
+	if hasTemplatePlaceholders {
+		// Use template formatting with file statistics
+		data := make(map[string]string)
+		data["path"] = path
+		data["creation_time"] = creationTime
+
+		// Gather file statistics to populate size_human and other stat fields
+		statInfo, err := GatherFileStatInfo(path)
+		if err == nil {
+			// Add file statistics to data map
+			data["size"] = fmt.Sprintf("%d", statInfo.Size)
+			data["size_human"] = statInfo.SizeHuman
+			data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+			data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+			data["mode"] = statInfo.Mode.String()
+			data["type"] = statInfo.Type
+			data["name"] = statInfo.Name
+		} else {
+			// Provide default values for file attributes when stats can't be gathered
+			data["size"] = "0"
+			data["size_human"] = "unknown"
+			data["mtime"] = creationTime
+			data["mtime_unix"] = "0"
+			data["mode"] = "unknown"
+			data["type"] = "unknown"
+			// Extract filename from path
+			parts := strings.Split(path, "/")
+			if len(parts) > 0 {
+				data["name"] = parts[len(parts)-1]
+			} else {
+				data["name"] = path
+			}
+		}
+
+		// Use template formatter to process placeholders
+		return f.templateFormatter.FormatWithPlaceholders(formatStr, data)
+	}
+
+	// Use printf formatting for backward compatibility
 	return fmt.Sprintf(formatStr, path, creationTime)
 }
 
@@ -378,7 +471,7 @@ func (f *DefaultOutputFormatter) TemplateDiskFullError(err error) string {
 	data := map[string]string{"error": err.Error(), "type": "disk_full"}
 	templateStr := f.configProvider.GetTemplateString("error_disk_full")
 	if templateStr == "" {
-		templateStr = "Error: Disk full - %{error}"
+		templateStr = "Error: Disk full - #{error}"
 	}
 	return f.FormatWithPlaceholders(templateStr, data)
 }
@@ -388,7 +481,7 @@ func (f *DefaultOutputFormatter) TemplatePermissionError(err error) string {
 	data := map[string]string{"error": err.Error(), "type": "permission"}
 	templateStr := f.configProvider.GetTemplateString("error_permission")
 	if templateStr == "" {
-		templateStr = "Error: Permission denied - %{error}"
+		templateStr = "Error: Permission denied - #{error}"
 	}
 	return f.FormatWithPlaceholders(templateStr, data)
 }
@@ -398,7 +491,7 @@ func (f *DefaultOutputFormatter) TemplateDirectoryNotFound(err error) string {
 	data := map[string]string{"error": err.Error(), "type": "directory_not_found"}
 	templateStr := f.configProvider.GetTemplateString("error_directory_not_found")
 	if templateStr == "" {
-		templateStr = "Error: Directory not found - %{error}"
+		templateStr = "Error: Directory not found - #{error}"
 	}
 	return f.FormatWithPlaceholders(templateStr, data)
 }
@@ -408,7 +501,7 @@ func (f *DefaultOutputFormatter) TemplateFileNotFound(err error) string {
 	data := map[string]string{"error": err.Error(), "type": "file_not_found"}
 	templateStr := f.configProvider.GetTemplateString("error_file_not_found")
 	if templateStr == "" {
-		templateStr = "Error: File not found - %{error}"
+		templateStr = "Error: File not found - #{error}"
 	}
 	return f.FormatWithPlaceholders(templateStr, data)
 }

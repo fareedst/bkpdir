@@ -91,14 +91,14 @@ bkpdir config --format tree
 Configuration Tree:
 ├── Archive Settings
 │   ├── archive_dir_path: ~/Archives (Config File)
-│   ├── archive_name_format: %{timestamp}_%{branch} (Default)
+│   ├── archive_name_format: #{timestamp}_#{branch} (Default)
 │   └── include_git_info: true (Environment: BKPDIR_INCLUDE_GIT_INFO)
 ├── Backup Settings
 │   ├── backup_dir_path: ~/Backups (Config File)
 │   └── file_comparison_method: hash (Default)
 └── Format Settings
     ├── timestamp_format: 2006-01-02_15-04-05 (Default)
-    └── printf_format: [%{level}] %{message} (Config File)
+    └── printf_format: [#{level}] #{message} (Config File)
 ```
 
 ### JSON Format
