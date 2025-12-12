@@ -1,6 +1,6 @@
 # Implementation Decisions
 
-**STDD Methodology Version**: 1.0.1
+**STDD Methodology Version**: 1.0.2
 
 ## Overview
 This document captures detailed implementation decisions for this project, including specific APIs, data structures, and algorithms. All decisions are cross-referenced with architecture decisions using `[ARCH:*]` tokens and requirements using `[REQ:*]` tokens for traceability.
@@ -2038,3 +2038,290 @@ func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
 **Code Markers**: `ValidateFormatString`, `validateAllFormatStrings`, `getExpectedPlaceholders`, `extractPlaceholders`, `// [REQ:CUSTOMIZABLE_FORMAT_STRINGS]`
 
 **Cross-References**: [ARCH:CUSTOMIZABLE_FORMAT_STRINGS], [REQ:CUSTOMIZABLE_FORMAT_STRINGS], [ARCH:CONFIG_SYSTEM], [ARCH:OUTPUT_FORMATTING], [IMPL:CONFIG_STRUCT], [IMPL:DUAL_FORMATTING]
+
+## 23. Configuration File Precedence Fix [IMPL:CFG_PRECEDENCE_FIX] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
+
+### Decision: Fix configuration merge logic to respect earlier file precedence for sequential file processing
+**Rationale:**
+- Bug fix: Configuration files were not respecting the requirement that "earlier files take precedence over later files" when processing sequential config files
+- The `mergeConfigs` and `mergeBasicSettings` functions were unconditionally overriding values without checking if they were already set by earlier files
+- This caused local config files (e.g., `./.bkpdir.yml`) to be overridden by home directory config files (e.g., `~/.bkpdir.yml`), violating the precedence specification
+- Special case: When an earlier file explicitly sets a value to the default (e.g., `include_git_info: false`), we need to detect that it was explicitly set, not just compare against defaults
+- The fix ensures that when processing sequential files (not inheritance chains), values set by earlier files are preserved, even if they equal the default
+
+### Implementation Approach:
+- Modified `LoadConfig` fallback path to use `fileProcessed` flag instead of checking if cfg equals defaults (which fails when first file sets values to defaults)
+- Modified `applyMergeStrategies` to accept `initialDefaultCfg` parameter to track initial defaults before any files were processed
+- Modified `mergeConfigs` to accept `inheritContext`, `defaultCfg`, `rawSrcMap`, `initialDefaultCfg`, and `dstBeforeMerge` parameters
+- Added `dstBeforeMerge` tracking: Save state of `dst` before merge to detect if earlier files modified values
+- Updated `mergeBasicSettings`, `mergeFileBackupSettings`, and `mergeGitSettings` to check if `dstBeforeMerge` equals `initialDefaultCfg` to detect if earlier files modified values
+- Use `rawSrcMap` to check if fields were explicitly set in source files (not just present in unmarshaled Config)
+- Updated `applyReplace` to respect earlier file precedence even with explicit `!` (replace) prefix
+
+**Key Changes:**
+1. `LoadConfig` fallback: Uses `fileProcessed` flag and `initialDefaultCfg` to track initial state
+2. `applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}, initialDefaultCfg *Config)` - Added `initialDefaultCfg` parameter
+3. `mergeConfigs(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config)` - Added context and state tracking parameters
+4. `mergeBasicSettings` - Added precedence check: `dstWasNotModified := dstBeforeMerge != nil && initialDefaultCfg != nil && dstBeforeMerge.IncludeGitInfo == initialDefaultCfg.IncludeGitInfo`
+5. `applyReplace` - Added precedence check for sequential file processing
+6. All merge functions updated to accept and use new parameters
+
+**Behavior:**
+- **Inheritance chains** (`inheritContext=true`): Child configs override parent configs (normal inheritance behavior)
+- **Sequential files** (`inheritContext=false`): Earlier files take precedence - if `dstBeforeMerge` equals `initialDefaultCfg`, no earlier file modified the field, so allow setting; otherwise preserve earlier file's value
+- **Explicit field setting**: Use `rawSrcMap` to check if a field was explicitly set in the source file (not just present due to defaults)
+- **Default value handling**: When first file sets `include_git_info: false` (default), `dstBeforeMerge` for second file will have `false` (from first file), which equals `initialDefaultCfg.IncludeGitInfo` (also `false`), so we correctly detect that no earlier file modified it from initial default
+
+**Code Markers**: `mergeConfigs`, `mergeBasicSettings`, `applyOverride`, `applyReplace`, `inheritContext`, `fileProcessed`, `initialDefaultCfg`, `dstBeforeMerge`, `rawSrcMap`, `// CFG-001: Earlier files take precedence`
+
+**Test Case:**
+- Local config: `/tmp/myapp/.bkpdir.yml` with `archive_dir_path: "./archives"` and `include_git_info: false`
+- Home config: `/Users/fareed/.bkpdir.yml` with `archive_dir_path: "/Users/fareed/.bkpdir"` and `include_git_info: true`
+- Expected: Local config values (`"./archives"` and `false`) are preserved
+- Before fix: Home config values (`"/Users/fareed/.bkpdir"` and `true`) were incorrectly used
+- After fix: Local config values (`"./archives"` and `false`) are correctly preserved
+
+**Cross-References**: [ARCH:CONFIG_SYSTEM], [REQ:CONFIGURATION], [IMPL:CONFIG_STRUCT]
+
+## 24. Field-Level Merge Behavior Registry [IMPL:CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH:CFG_005] [ARCH:CFG_001] [REQ:CFG_005] [REQ:CONFIGURATION]
+
+### Decision: Implement field-level merge behavior registry to resolve conflict between CFG-001 and CFG-005
+**Rationale:**
+- Conflict resolution: CFG-005 requires array fields to merge/accumulate by default, while CFG-001 requires earlier files to take precedence
+- Solution: Field-level registry specifies merge behavior per field, allowing different fields to have different precedence rules
+- Enables fine-grained control: Some fields (like `exclude_patterns`) should always merge, while others (like `archive_dir_path`) should respect earlier file precedence
+- Maintains backward compatibility: Default behavior preserved, explicit prefixes still work
+
+### Implementation Approach:
+- Created `FieldMergeBehavior` type with two behaviors: `MergeBehaviorAccumulate` and `MergeBehaviorPrecedence`
+- Created `fieldMergeBehaviors` registry map specifying behavior per field
+- Updated `getFieldMergeBehavior()` helper function to retrieve field-specific behavior
+- Updated `applyMergeStrategies()` to use registry for default strategy selection
+- Updated `applyReplace()` to check registry and respect field-specific behavior
+- Updated explicit prefix detection to work for all fields (not just `exclude_patterns`)
+
+**Key Changes:**
+1. `FieldMergeBehavior` type and constants (`MergeBehaviorAccumulate`, `MergeBehaviorPrecedence`)
+2. `fieldMergeBehaviors` registry map with field-specific behaviors
+3. `getFieldMergeBehavior(fieldName string) FieldMergeBehavior` helper function
+4. `applyMergeStrategies()`: Uses registry to determine default strategy for accumulate fields
+5. `applyReplace()`: Checks registry to determine if precedence check should apply
+6. Explicit prefix detection: Now works for all fields via `hasExplicitPrefix` map
+
+**Field Behavior Matrix:**
+| Field | Behavior | Default Strategy | Sequential Files | Inheritance Chains |
+|-------|----------|------------------|------------------|-------------------|
+| `exclude_patterns` | Accumulate | Merge | Merge | Merge |
+| `archive_dir_path` | Precedence | Override | Earlier wins | Child overrides |
+| `include_git_info` | Precedence | Override | Earlier wins | Child overrides |
+| `!exclude_patterns` | Accumulate* | Replace | Earlier wins** | Replace |
+
+*Note: Even with `!` prefix, `exclude_patterns` is still marked as accumulate, but explicit prefix overrides default merge strategy.  
+**Note: For sequential files, earlier file precedence applies even with `!` prefix if field was set by earlier file (CFG-001).
+
+**Behavior:**
+- **MergeBehaviorAccumulate fields** (e.g., `exclude_patterns`):
+  - Default (no prefix): Always merge/accumulate (CFG-005)
+  - Explicit `!` prefix: Replace, but still respect earlier file precedence if field was set by earlier file (CFG-001)
+  - Explicit `+` prefix: Explicit merge (same as default for this field)
+  - Explicit `^` prefix: Prepend to existing values
+  - Explicit `=` prefix: Use only if not set by earlier file
+
+- **MergeBehaviorPrecedence fields** (e.g., `archive_dir_path`, `include_git_info`):
+  - Default (no prefix): Earlier files take precedence (CFG-001)
+  - Explicit prefixes: Work as normal, but precedence still applies for sequential files
+
+**Code Markers**: `FieldMergeBehavior`, `fieldMergeBehaviors`, `getFieldMergeBehavior`, `applyMergeStrategies`, `applyReplace`, `// CFG-001 + CFG-005: Field merge behavior configuration`
+
+**Test Cases:**
+- `exclude_patterns` without prefix: Merges from all files (CFG-005)
+- `exclude_patterns` with `!` prefix in later file: Respects earlier file if it was set (CFG-001)
+- `archive_dir_path` in later file: Earlier file value preserved (CFG-001)
+- `include_git_info` in later file: Earlier file value preserved (CFG-001)
+
+**Cross-References**: [ARCH:CFG_005], [ARCH:CFG_001], [REQ:CFG_005], [REQ:CONFIGURATION], [IMPL:CFG_PRECEDENCE_FIX]
+
+## 25. Mixed-Mode Merge Strategy Fix [IMPL:CFG_MIXED_MODE_MERGE_FIX] [ARCH:CFG_005] [ARCH:CFG_001] [REQ:CFG_005] [REQ:CONFIGURATION]
+
+### Decision: Fix mixed-mode merge to ensure CFG-005 merge behavior for accumulate fields in all contexts
+**Rationale:**
+- Bug fix: `exclude_patterns` and other `MergeBehaviorAccumulate` fields were not consistently merging with defaults per CFG-005 requirement
+- The logic was incorrectly keeping "override" strategy for first file in sequential processing, causing defaults to be replaced instead of merged
+- Test expectations were misaligned with CFG-005 requirement - updated to reflect correct merge behavior
+- Ensures consistent behavior: accumulate fields always merge (unless explicit `!` prefix), regardless of context
+
+### Implementation Approach:
+- Simplified merge strategy logic in `applyMergeStrategies` to always change "override" to "merge" for `MergeBehaviorAccumulate` fields (unless explicit prefix)
+- Updated `applyOverride` to check if earlier files were processed and preserve their state (including defaults)
+- Updated `applyMergeOperation` to pass `originalDstValue` (before `mergeConfigs` modifications) for accurate precedence checking
+- Updated `applyOverride` to reset values back to original when override is prevented
+- Updated test expectations in `TestLoadConfigMultipleFiles` to match CFG-005 behavior (merge with defaults)
+
+### Key Changes:
+
+#### 1. Simplified Merge Strategy Logic (`applyMergeStrategies`)
+**Change**: For `MergeBehaviorAccumulate` fields with no explicit prefix, always change "override" to "merge" strategy. Removed complex conditional logic that was preventing merge in certain contexts.
+
+**Before**: Complex logic checking `isFirstFileInSequential`, `isTrueInheritanceChain`, etc., sometimes keeping "override" strategy
+**After**: Simple logic - always merge for accumulate fields unless explicit `!` prefix is used
+
+**Code Location**: `config.go`, `applyMergeStrategies` function, lines ~1963-1985
+
+#### 2. Earlier File Precedence Enhancement (`applyOverride`)
+**Change**: Enhanced precedence checking to preserve earlier file state even when values equal defaults. Added check for `earlierFilesProcessed` to ensure later files cannot override earlier file's state.
+
+**Before**: Only checked if field was explicitly set by earlier file or if value differed from default
+**After**: Also checks if any earlier files were processed, preserving their entire state (including defaults)
+
+**Code Location**: `config.go`, `applyOverride` function, lines ~2460-2485
+
+#### 3. Original Value Tracking (`applyMergeOperation`)
+**Change**: Added `originalDstValue` parameter to track values before `mergeConfigs` modifications. This ensures precedence checks use correct original values, not values modified by `mergeConfigs`.
+
+**Before**: Used `dstValue` which could be modified by `mergeConfigs` before precedence check
+**After**: Uses `originalDstValue` from before `mergeConfigs` modifications
+
+**Code Location**: `config.go`, `applyMergeOperation` function, lines ~2422-2453
+
+#### 4. Value Reset on Override Prevention (`applyOverride`)
+**Change**: When override is prevented due to earlier file precedence, reset the value back to original `dstValue` to undo any modifications made by `mergeConfigs`.
+
+**Before**: Just returned `nil` without resetting value, leaving `mergeConfigs` modifications in place
+**After**: Calls `setConfigField(result, key, dstValue)` to reset to original value
+
+**Code Location**: `config.go`, `applyOverride` function, line ~2483
+
+#### 5. Test Expectation Update (`TestLoadConfigMultipleFiles`)
+**Change**: Updated test expectation to match CFG-005 behavior - `exclude_patterns` should merge with defaults, not replace them.
+
+**Before**: Expected `[local1, local2]` (replacement behavior)
+**After**: Expected `[.git/ vendor/ local1, local2]` (merge behavior per CFG-005)
+
+**Code Location**: `config_test.go`, `TestLoadConfigMultipleFiles` function, line ~240
+
+### Behavior:
+
+- **Single file scenario**: `exclude_patterns` merges with defaults → `[.git/ vendor/ user_patterns]` (CFG-005)
+- **Multiple files, first file**: Merges with defaults → `[.git/ vendor/ first_file_patterns]` (CFG-005)
+- **Multiple files, subsequent files**: Merges with accumulated result → `[.git/ vendor/ first_file_patterns second_file_patterns]` (CFG-005)
+- **Explicit `!` prefix**: Replaces, but still respects earlier file precedence if field was set by earlier file (CFG-001)
+- **Earlier file precedence**: For `MergeBehaviorPrecedence` fields, earlier files take precedence even if values equal defaults
+
+### Test Cases:
+- `TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE`: Validates merge with defaults for single file
+- `TestLoadConfigMultipleFiles`: Validates merge with defaults and earlier file precedence
+- `TestLoadConfigMultipleFiles/default_search_path_processes_multiple_files`: Validates earlier file precedence for non-accumulate fields
+
+### Validation:
+- ✅ `exclude_patterns` merges with defaults in all contexts (CFG-005)
+- ✅ Earlier file precedence preserved for `MergeBehaviorPrecedence` fields (CFG-001)
+- ✅ Explicit `!` prefix still respects earlier file precedence (CFG-001)
+- ✅ All tests pass with updated expectations
+
+**Code Markers**: `applyMergeStrategies`, `applyOverride`, `applyMergeOperation`, `applyReplace`, `originalDstValue`, `earlierFilesProcessed`, `// CFG-005: Array fields default to merge`, `// CFG-001: Earlier files take precedence`
+
+**Cross-References**: [ARCH:CFG_005], [ARCH:CFG_001], [REQ:CFG_005], [REQ:CONFIGURATION], [IMPL:CFG_PRECEDENCE_FIX], [IMPL:EXCLUDE_MERGE_FIX]
+
+---
+
+## 26. Quoted YAML Key Prefix Support [IMPL:CFG_QUOTED_KEY_PREFIX] [ARCH:CFG_005] [REQ:CFG_005] [REQ:CONFIGURATION]
+
+**Date**: 2025-12-11  
+**Status**: Implemented  
+**Priority**: P1 (Important)
+
+### Problem:
+When YAML keys with merge strategy prefixes (`+`, `^`, `!`, `=`) are quoted (e.g., `"+exclude_patterns"`), the YAML parser preserves the quotes as part of the key string. This caused the prefix detection logic to fail because it was checking the first character of the key, which was `"` instead of `+`.
+
+**Symptoms**:
+- Merge strategy prefixes in quoted YAML keys were not recognized
+- Tests using quoted keys (e.g., `"+exclude_patterns":`) failed because the strategy was extracted as "override" instead of "merge"
+- Inheritance chain merge strategies with quoted keys did not work correctly
+
+### Solution:
+Updated three key functions to handle quoted YAML keys:
+
+1. **`extractStrategy` function**: Strip quotes before checking for merge strategy prefixes
+2. **`hasExplicitPrefix` detection**: Strip quotes before checking for prefix characters
+3. **`processKeys` function**: Prioritize keys with explicit prefixes when duplicate keys exist
+
+### Implementation Details:
+
+#### 1. Quote Handling in `extractStrategy`
+**Change**: Added logic to detect and strip quotes (both double `"` and single `'`) from YAML keys before checking for merge strategy prefixes.
+
+**Before**: 
+```go
+switch key[0] {
+case '+':
+    return "merge", key[1:]
+```
+
+**After**:
+```go
+// Handle quoted YAML keys
+cleanKey := key
+if len(key) >= 2 && ((key[0] == '"' && key[len(key)-1] == '"') || (key[0] == '\'' && key[len(key)-1] == '\'')) {
+    cleanKey = key[1 : len(key)-1]
+}
+switch cleanKey[0] {
+case '+':
+    return "merge", cleanKey[1:]
+```
+
+**Code Location**: `config.go`, `extractStrategy` function, lines ~2394-2411
+
+#### 2. Quote Handling in `hasExplicitPrefix` Detection
+**Change**: Updated the prefix detection logic to strip quotes before checking for prefix characters.
+
+**Before**:
+```go
+if len(origKey) > 0 && (origKey[0] == '!' || origKey[0] == '+' || origKey[0] == '^' || origKey[0] == '=') {
+```
+
+**After**:
+```go
+// Handle quoted YAML keys
+cleanKey := origKey
+if len(origKey) >= 2 && ((origKey[0] == '"' && origKey[len(origKey)-1] == '"') || (origKey[0] == '\'' && origKey[len(origKey)-1] == '\'')) {
+    cleanKey = origKey[1 : len(origKey)-1]
+}
+if len(cleanKey) > 0 && (cleanKey[0] == '!' || cleanKey[0] == '+' || cleanKey[0] == '^' || cleanKey[0] == '=') {
+```
+
+**Code Location**: `config.go`, `applyMergeStrategies` function, lines ~1936-1946
+
+#### 3. Duplicate Key Prioritization in `processKeys`
+**Change**: Added logic to identify keys with explicit prefixes and prioritize them when duplicate keys exist (one with prefix, one without).
+
+**Implementation**:
+- First pass: Identify all keys with explicit prefixes and map them to their base keys
+- Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
+- This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+
+**Code Location**: `config.go`, `processKeys` function, lines ~2383-2465
+
+### Behavior:
+
+- **Quoted keys with prefixes**: `"+exclude_patterns"` is correctly recognized as merge strategy
+- **Unquoted keys with prefixes**: `+exclude_patterns` continues to work as before
+- **Duplicate keys**: Keys with explicit prefixes take precedence over plain keys
+- **Both quote types**: Supports both double quotes (`"`) and single quotes (`'`)
+
+### Test Cases:
+
+- `TestMergeStrategiesInInheritanceChains/merge_strategy_(+)_in_inheritance_chain`: Validates merge strategy with quoted `"+exclude_patterns"` key
+- `TestMergeStrategiesInSequentialFiles/merge_strategy_(+)_appends_in_sequential_files`: Validates merge strategy with quoted keys in sequential files
+- `TestMergeStrategiesInSequentialFiles/prepend_strategy_(^)_prepends_in_sequential_files`: Validates prepend strategy with quoted keys
+
+### Validation:
+
+- ✅ Quoted YAML keys with merge strategy prefixes are correctly recognized
+- ✅ Merge strategies work correctly with quoted keys in inheritance chains
+- ✅ Merge strategies work correctly with quoted keys in sequential files
+- ✅ Duplicate keys are handled correctly (explicit prefix keys take precedence)
+- ✅ All tests pass with quoted key syntax
+
+**Code Markers**: `extractStrategy`, `hasExplicitPrefix`, `processKeys`, `quoted YAML keys`, `cleanKey`, `explicitPrefixKeys`
+
+**Cross-References**: [ARCH:CFG_005], [REQ:CFG_005], [REQ:CONFIGURATION], [IMPL:CFG_MIXED_MODE_MERGE_FIX]

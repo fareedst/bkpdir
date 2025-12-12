@@ -161,7 +161,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 	t.Run("multiple config files processed in sequence", func(t *testing.T) {
 		dir := t.TempDir()
 
-		// Create first config file (should be overridden by second)
+		// Create first config file (earlier files take precedence per CFG-001)
 		config1Path := filepath.Join(dir, ".bkpdir.yml")
 		config1Data := map[string]interface{}{
 			"archive_dir_path":  "/first/archive",
@@ -170,7 +170,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		}
 		createTestConfigFileWithData(t, config1Path, config1Data)
 
-		// Create second config file (should override first)
+		// Create second config file (later file, should not override earlier file's non-default values)
 		config2Path := filepath.Join(dir, "second.yml")
 		config2Data := map[string]interface{}{
 			"archive_dir_path":  "/second/archive",
@@ -187,10 +187,10 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Second file should override first file values
-		assertStringEqual(t, "ArchiveDirPath from second file", cfg.ArchiveDirPath, "/second/archive")
-		assertStringSliceEqual(t, "ExcludePatterns from second file", cfg.ExcludePatterns, []string{"second1", "second2"})
-		assertBoolEqual(t, "IncludeGitInfo from second file", cfg.IncludeGitInfo, true)
+		// First file takes precedence - its values should be preserved
+		assertStringEqual(t, "ArchiveDirPath from first file", cfg.ArchiveDirPath, "/first/archive")
+		assertStringSliceEqual(t, "ExcludePatterns from first file", cfg.ExcludePatterns, []string{"first1", "first2"})
+		assertBoolEqual(t, "IncludeGitInfo from first file", cfg.IncludeGitInfo, false)
 	})
 
 	t.Run("default search path processes multiple files", func(t *testing.T) {
@@ -206,7 +206,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 
 		dir := t.TempDir()
 
-		// Create local config file
+		// Create local config file (earlier file, takes precedence per CFG-001)
 		localConfigPath := filepath.Join(dir, ".bkpdir.yml")
 		localConfigData := map[string]interface{}{
 			"archive_dir_path": "/local/archive",
@@ -214,19 +214,18 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		}
 		createTestConfigFileWithData(t, localConfigPath, localConfigData)
 
-		// Create home config file (simulated)
+		// Create home config file (later file, should not override earlier file's non-default values)
 		homeDir := t.TempDir()
 		homeConfigPath := filepath.Join(homeDir, ".bkpdir.yml")
 		homeConfigData := map[string]interface{}{
 			"archive_dir_path":  "/home/archive",
-			"!exclude_patterns": []string{"home1", "home2"}, // Use ! prefix to explicitly override (per CFG-005)
+			"!exclude_patterns": []string{"home1", "home2"}, // Use ! prefix, but earlier file precedence still applies
 			"include_git_info":  true,
 		}
 		createTestConfigFileWithData(t, homeConfigPath, homeConfigData)
 
 		// Set BKPDIR_CONFIG to use both files
-		// Note: Per CFG-005, array fields default to merge, but ! prefix explicitly requests override
-		// So homeConfigPath (second) will override localConfigPath (first) for exclude_patterns
+		// Per CFG-001: Earlier files take precedence over later files for sequential file processing
 		os.Setenv("BKPDIR_CONFIG", localConfigPath+":"+homeConfigPath)
 
 		cfg, err := LoadConfig(dir)
@@ -234,11 +233,15 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Second file (home) overrides first file (local) values due to ! prefix
-		assertStringEqual(t, "ArchiveDirPath from home file", cfg.ArchiveDirPath, "/home/archive")
-		assertStringSliceEqual(t, "ExcludePatterns from home file", cfg.ExcludePatterns, []string{"home1", "home2"})
-		// Home file values should be preserved
-		assertBoolEqual(t, "IncludeGitInfo from home file", cfg.IncludeGitInfo, true)
+		// First file (local) takes precedence - its values should be preserved
+		assertStringEqual(t, "ArchiveDirPath from local file", cfg.ArchiveDirPath, "/local/archive")
+		// exclude_patterns from local file should be merged with defaults (CFG-005: array fields default to merge)
+		// Note: Even with ! prefix in home file, earlier file precedence applies for sequential files
+		// CFG-005 requires that exclude_patterns merges with defaults, so we expect [.git/ vendor/ local1 local2]
+		expectedExcludePatterns := []string{".git/", "vendor/", "local1", "local2"}
+		assertStringSliceEqual(t, "ExcludePatterns from local file (merged with defaults per CFG-005)", cfg.ExcludePatterns, expectedExcludePatterns)
+		// include_git_info from local file (default false) should remain, home file cannot override
+		assertBoolEqual(t, "IncludeGitInfo from local file", cfg.IncludeGitInfo, false)
 	})
 
 	t.Run("invalid files are skipped and processing continues", func(t *testing.T) {
@@ -842,7 +845,8 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 		// Keep some as default to test selective merging
 		// src.FormatVerificationFailed remains default
 
-		mergeExtendedFormatStrings(dst, src)
+		defaultCfg := DefaultConfig()
+		mergeExtendedFormatStrings(dst, src, true, defaultCfg)
 
 		// Verify custom values were merged
 		if dst.FormatNoArchivesFound != "Custom: No archives found in %s" {
@@ -866,7 +870,6 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 		}
 
 		// Verify default values were not overridden
-		defaultCfg := DefaultConfig()
 		if dst.FormatVerificationFailed != defaultCfg.FormatVerificationFailed {
 			t.Error("Default FormatVerificationFailed should not be overridden")
 		}
@@ -892,7 +895,8 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 		src.FormatBackupIdentical = "Custom13"
 		src.FormatBackupCreated = "Custom14"
 
-		mergeExtendedFormatStrings(dst, src)
+		defaultCfg := DefaultConfig()
+		mergeExtendedFormatStrings(dst, src, true, defaultCfg)
 
 		// Verify all custom values were merged
 		if dst.FormatNoArchivesFound != "Custom1" {
@@ -956,7 +960,8 @@ func TestMergeExtendedTemplates(t *testing.T) {
 		// Keep some as default to test selective merging
 		// src.TemplateVerificationFailed remains default
 
-		mergeExtendedTemplates(dst, src)
+		defaultCfg := DefaultConfig()
+		mergeExtendedTemplates(dst, src, true, defaultCfg, nil)
 
 		// Verify custom values were merged
 		if dst.TemplateNoArchivesFound != "{{.custom}} template for no archives" {
@@ -980,7 +985,6 @@ func TestMergeExtendedTemplates(t *testing.T) {
 		}
 
 		// Verify default values were not overridden
-		defaultCfg := DefaultConfig()
 		if dst.TemplateVerificationFailed != defaultCfg.TemplateVerificationFailed {
 			t.Error("Default TemplateVerificationFailed should not be overridden")
 		}
@@ -1006,7 +1010,8 @@ func TestMergeExtendedTemplates(t *testing.T) {
 		src.TemplateBackupIdentical = "Template13"
 		src.TemplateBackupCreated = "Template14"
 
-		mergeExtendedTemplates(dst, src)
+		defaultCfg := DefaultConfig()
+		mergeExtendedTemplates(dst, src, true, defaultCfg, nil)
 
 		// Verify all custom values were merged
 		if dst.TemplateNoArchivesFound != "Template1" {
@@ -1348,7 +1353,8 @@ func TestArrayMergeStrategies(t *testing.T) {
 			}
 
 			dstValue := testResult.ExcludePatterns
-			err := applyMergeOperation(testResult, "exclude_patterns", operation, dstValue)
+			defaultCfg := DefaultConfig()
+			err := applyMergeOperation(testResult, "exclude_patterns", operation, dstValue, dstValue, true, defaultCfg, nil)
 			if err != nil {
 				t.Fatalf("Failed to apply merge operation: %v", err)
 			}
@@ -1420,7 +1426,8 @@ func TestDefaultValueStrategy(t *testing.T) {
 		key:      "archive_dir_path",
 	}
 
-	err := applyMergeOperation(result, "archive_dir_path", operation, "")
+	defaultCfg := DefaultConfig()
+	err := applyMergeOperation(result, "archive_dir_path", operation, "", "", true, defaultCfg, nil)
 	if err != nil {
 		t.Fatalf("Failed to apply default operation: %v", err)
 	}
@@ -1433,7 +1440,7 @@ func TestDefaultValueStrategy(t *testing.T) {
 	result.ArchiveDirPath = "/existing/path"
 	operation.value = "/should/not/apply"
 
-	err = applyMergeOperation(result, "archive_dir_path", operation, "/existing/path")
+	err = applyMergeOperation(result, "archive_dir_path", operation, "/existing/path", "/existing/path", true, defaultCfg, nil)
 	if err != nil {
 		t.Fatalf("Failed to apply default operation: %v", err)
 	}
@@ -4332,7 +4339,8 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		// Enable debug temporarily for this test (debug is in main.go)
 		// We'll use t.Logf for diagnostics instead since debug is not accessible here
 
-		mergedCfg, err := applyMergeStrategies(defaultCfg, loadResult.config, true, loadResult.rawMap)
+		initialDefaultCfg := DefaultConfig()
+		mergedCfg, err := applyMergeStrategies(defaultCfg, loadResult.config, true, loadResult.rawMap, initialDefaultCfg, nil)
 		if err != nil {
 			t.Fatalf("applyMergeStrategies error: %v", err)
 		}
@@ -4514,6 +4522,444 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		if !foundLocal1 || !foundLocal2 {
 			t.Errorf("Local patterns not found after defaults. Got: %v", cfg.ExcludePatterns)
 		}
+	})
+}
+
+// [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// TestMergeStrategiesInSequentialFiles verifies all merge strategies work correctly in sequential file processing
+func TestMergeStrategiesInSequentialFiles(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("merge strategy (+) appends in sequential files", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"exclude_patterns": []string{"file1-1", "file1-2"},
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file with merge strategy - write YAML directly to preserve + prefix
+		// Quote the key to ensure + prefix is preserved
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2YAML := `"+exclude_patterns":
+  - "file2-1"
+  - "file2-2"
+`
+		err := os.WriteFile(file2Path, []byte(file2YAML), 0644)
+		if err != nil {
+			t.Fatalf("Failed to write file2: %v", err)
+		}
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should merge: defaults + file1 + file2 (CFG-005)
+		expected := []string{".git/", "vendor/", "file1-1", "file1-2", "file2-1", "file2-2"}
+		assertStringSliceEqual(t, "Merged exclude_patterns with + strategy", cfg.ExcludePatterns, expected)
+	})
+
+	t.Run("prepend strategy (^) prepends in sequential files", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"exclude_patterns": []string{"file1-1", "file1-2"},
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file with prepend strategy - write YAML directly to preserve ^ prefix
+		// Quote the key to ensure ^ prefix is preserved
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2YAML := `"^exclude_patterns":
+  - "file2-1"
+  - "file2-2"
+`
+		err := os.WriteFile(file2Path, []byte(file2YAML), 0644)
+		if err != nil {
+			t.Fatalf("Failed to write file2: %v", err)
+		}
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should prepend: file2 (prepended to existing) + defaults + file1
+		// Prepend strategy puts new values BEFORE existing values
+		expected := []string{"file2-1", "file2-2", ".git/", "vendor/", "file1-1", "file1-2"}
+		assertStringSliceEqual(t, "Prepend exclude_patterns with ^ strategy", cfg.ExcludePatterns, expected)
+	})
+
+	t.Run("replace strategy (!) respects earlier file precedence in sequential files", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"exclude_patterns": []string{"file1-1", "file1-2"},
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file with replace strategy - should NOT override due to earlier file precedence (CFG-001)
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"!exclude_patterns": []string{"file2-1", "file2-2"},
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should preserve first file's patterns (earlier file precedence, CFG-001)
+		expected := []string{".git/", "vendor/", "file1-1", "file1-2"}
+		assertStringSliceEqual(t, "Replace strategy respects earlier file precedence", cfg.ExcludePatterns, expected)
+	})
+
+	t.Run("default strategy (=) only applies if field not set by earlier file", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file sets the field
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"archive_dir_path": "/file1/path",
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file with default strategy - should NOT apply since file1 set it
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"=archive_dir_path": "/file2/path",
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should preserve first file's value (default strategy doesn't override)
+		assertStringEqual(t, "Default strategy doesn't override set field", cfg.ArchiveDirPath, "/file1/path")
+	})
+}
+
+// [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// TestEmptyArrayHandling verifies empty arrays are handled correctly in merging
+func TestEmptyArrayHandling(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("empty array in first file allows second file to merge", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file with empty array
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"exclude_patterns": []string{}, // Empty array
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file with patterns
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"exclude_patterns": []string{"file2-1", "file2-2"},
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should merge: defaults + file2 (empty array doesn't prevent merge)
+		expected := []string{".git/", "vendor/", "file2-1", "file2-2"}
+		assertStringSliceEqual(t, "Empty array allows merge", cfg.ExcludePatterns, expected)
+	})
+
+	t.Run("empty array in second file preserves first file's patterns", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file with patterns
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"exclude_patterns": []string{"file1-1", "file1-2"},
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file with empty array
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"exclude_patterns": []string{}, // Empty array
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should preserve first file's patterns (empty doesn't clear)
+		expected := []string{".git/", "vendor/", "file1-1", "file1-2"}
+		assertStringSliceEqual(t, "Empty array doesn't clear existing patterns", cfg.ExcludePatterns, expected)
+	})
+}
+
+// [REQ:CFG_001] [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// TestMixedFieldBehaviors verifies accumulate and precedence fields work together correctly
+func TestMixedFieldBehaviors(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("accumulate field merges, precedence field preserved", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file sets both accumulate and precedence fields
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"exclude_patterns": []string{"file1-pattern"},
+			"archive_dir_path": "/file1/archive",
+			"include_git_info": false,
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file tries to override both
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"exclude_patterns": []string{"file2-pattern"},
+			"archive_dir_path": "/file2/archive",
+			"include_git_info": true,
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// exclude_patterns should merge (CFG-005 accumulate behavior)
+		expectedPatterns := []string{".git/", "vendor/", "file1-pattern", "file2-pattern"}
+		assertStringSliceEqual(t, "Accumulate field merges", cfg.ExcludePatterns, expectedPatterns)
+
+		// archive_dir_path should preserve first file (CFG-001 precedence)
+		assertStringEqual(t, "Precedence field preserved", cfg.ArchiveDirPath, "/file1/archive")
+
+		// include_git_info should preserve first file (CFG-001 precedence)
+		assertBoolEqual(t, "Precedence field preserved", cfg.IncludeGitInfo, false)
+	})
+}
+
+// [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// TestMergeStrategiesInInheritanceChains verifies all merge strategies work correctly in inheritance chains
+func TestMergeStrategiesInInheritanceChains(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("merge strategy (+) in inheritance chain", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// Parent file
+		parentPath := filepath.Join(dir, "parent.yml")
+		parentData := map[string]interface{}{
+			"exclude_patterns": []string{"parent-1", "parent-2"},
+		}
+		createTestConfigFileWithData(t, parentPath, parentData)
+
+		// Child file with merge strategy - write YAML directly to preserve + prefix
+		// Quote the key to ensure + prefix is preserved
+		childPath := filepath.Join(dir, "child.yml")
+		childYAML := `inherit:
+  - "parent.yml"
+"+exclude_patterns":
+  - "child-1"
+  - "child-2"
+`
+		err := os.WriteFile(childPath, []byte(childYAML), 0644)
+		if err != nil {
+			t.Fatalf("Failed to write child file: %v", err)
+		}
+
+		os.Setenv("BKPDIR_CONFIG", childPath)
+		cfg, err := LoadConfigWithInheritance(dir)
+		if err != nil {
+			t.Fatalf("LoadConfigWithInheritance error: %v", err)
+		}
+
+		// Should merge: defaults + parent + child
+		expected := []string{".git/", "vendor/", "parent-1", "parent-2", "child-1", "child-2"}
+		assertStringSliceEqual(t, "Merge strategy in inheritance chain", cfg.ExcludePatterns, expected)
+	})
+
+	t.Run("replace strategy (!) in inheritance chain replaces parent", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// Parent file
+		parentPath := filepath.Join(dir, "parent.yml")
+		parentData := map[string]interface{}{
+			"exclude_patterns": []string{"parent-1", "parent-2"},
+		}
+		createTestConfigFileWithData(t, parentPath, parentData)
+
+		// Child file with replace strategy (inheritance allows override)
+		childPath := filepath.Join(dir, "child.yml")
+		childData := map[string]interface{}{
+			"inherit":           []string{"parent.yml"},
+			"!exclude_patterns": []string{"child-1", "child-2"},
+		}
+		createTestConfigFileWithData(t, childPath, childData)
+
+		os.Setenv("BKPDIR_CONFIG", childPath)
+		cfg, err := LoadConfigWithInheritance(dir)
+		if err != nil {
+			t.Fatalf("LoadConfigWithInheritance error: %v", err)
+		}
+
+		// Should replace: child replaces parent completely (including defaults)
+		// ! prefix means complete replacement, not merge
+		expected := []string{"child-1", "child-2"}
+		assertStringSliceEqual(t, "Replace strategy in inheritance chain", cfg.ExcludePatterns, expected)
+	})
+}
+
+// [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// TestUnsetFieldsUseDefaults verifies fields not set in any file use defaults
+func TestUnsetFieldsUseDefaults(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("field not set uses default value", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// Config file that doesn't set include_git_info
+		configPath := filepath.Join(dir, ".bkpdir.yml")
+		configData := map[string]interface{}{
+			"archive_dir_path": "/custom/archive",
+			// include_git_info not set
+		}
+		createTestConfigFileWithData(t, configPath, configData)
+
+		os.Setenv("BKPDIR_CONFIG", configPath)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should use default value
+		defaultCfg := DefaultConfig()
+		assertBoolEqual(t, "Unset field uses default", cfg.IncludeGitInfo, defaultCfg.IncludeGitInfo)
+	})
+
+	t.Run("multiple files, none set field, uses default", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"archive_dir_path": "/file1/archive",
+			// include_git_info not set
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"exclude_patterns": []string{"pattern1"},
+			// include_git_info not set
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should use default value
+		defaultCfg := DefaultConfig()
+		assertBoolEqual(t, "Unset field in multiple files uses default", cfg.IncludeGitInfo, defaultCfg.IncludeGitInfo)
+	})
+}
+
+// [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// TestExplicitDefaultValue verifies explicitly setting a field to its default value is preserved
+func TestExplicitDefaultValue(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
+	t.Run("explicit default value preserved over later file", func(t *testing.T) {
+		dir := t.TempDir()
+
+		// First file explicitly sets to default
+		file1Path := filepath.Join(dir, "file1.yml")
+		file1Data := map[string]interface{}{
+			"include_git_info": false, // Explicit default
+		}
+		createTestConfigFileWithData(t, file1Path, file1Data)
+
+		// Second file tries to override
+		file2Path := filepath.Join(dir, "file2.yml")
+		file2Data := map[string]interface{}{
+			"include_git_info": true,
+		}
+		createTestConfigFileWithData(t, file2Path, file2Data)
+
+		os.Setenv("BKPDIR_CONFIG", file1Path+":"+file2Path)
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// Should preserve first file's explicit default (earlier file precedence, CFG-001)
+		assertBoolEqual(t, "Explicit default value preserved", cfg.IncludeGitInfo, false)
 	})
 }
 

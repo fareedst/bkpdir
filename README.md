@@ -4,6 +4,188 @@
 
 A powerful command-line tool for creating, managing, and verifying directory archives with AI-optimized development workflow.
 
+## Complex Usage Scenario
+
+This example demonstrates a complete workflow using multiple bkpdir commands to create, update, and report on archives over time.
+
+### Scenario: Managing Project Archives Over Time
+
+Imagine you're working on a software project and want to maintain a complete archive history with incremental backups:
+
+```bash
+# Navigate to your project directory
+cd ~/projects/myapp
+
+# Day 1: Create initial full archive of current directory
+bkpdir .
+
+# Day 2: After making changes, create an incremental archive
+bkpdir inc
+
+# Day 3: Create another incremental archive
+bkpdir inc
+
+# Verify the integrity of the latest archive
+bkpdir verify
+
+# List all archives
+bkpdir list
+
+# Check configuration
+bkpdir config
+```
+
+### Using Configuration Files
+
+For more control and automation, use configuration files:
+
+**Step 1: Create a basic configuration file** (`.bkpdir.yml`):
+
+```yaml
+# .bkpdir.yml
+archive_dir_path: "./archives"
+use_current_dir_name: true
+
+# Exclude patterns for files/directories to skip
+exclude_patterns:
+  - ".git/"
+  - "node_modules/"
+  - "*.tmp"
+  - "*.log"
+
+# Git integration settings
+# Enable Git info in archive names (branch and commit hash)
+git:
+  include_info: true
+  show_dirty_status: true  # Add "-dirty" suffix when repo has uncommitted changes
+
+# Archive verification settings
+verification:
+  verify_on_create: false
+  checksum_algorithm: "sha256"
+```
+
+**Step 2: Create archives using the configuration:**
+
+```bash
+# Navigate to your project directory
+cd ~/projects/myapp
+
+# Create archive using configuration file
+bkpdir .
+
+# Create incremental archive (uses config settings)
+bkpdir inc
+
+# Verify archives
+bkpdir verify
+
+# List archives
+bkpdir list
+
+# View configuration
+bkpdir config
+```
+
+**Step 3: Use advanced configuration with inheritance:**
+
+Create a base configuration (`base-config.yml`):
+
+```yaml
+# base-config.yml
+archive_dir_path: "~/Archives"
+use_current_dir_name: true
+
+# Common exclusion patterns
+exclude_patterns:
+  - ".git/"
+  - "vendor/"
+  - "node_modules/"
+  - "*.log"
+
+# Git settings
+include_git_info: false
+show_git_dirty_status: true
+
+# Verification settings
+verification:
+  verify_on_create: false
+  checksum_algorithm: "sha256"
+```
+
+Create a project-specific configuration (`.bkpdir.yml`):
+
+```yaml
+# .bkpdir.yml
+inherit:
+  - "../base-config.yml"
+
+# Override archive directory for this project
+archive_dir_path: "./archives"
+
+# Add project-specific exclusions (merged with base)
++exclude_patterns:
+  - "dist/"
+  - "build/"
+  - "*.cache"
+
+# Enable Git integration for this project
+git:
+  include_info: true
+  show_dirty_status: true
+```
+
+**Step 4: Run operations with configuration:**
+
+```bash
+# All commands now use the configuration file automatically
+cd ~/projects/myapp
+
+# Create archive (uses .bkpdir.yml)
+bkpdir .
+
+# Create incremental (inherits from base-config.yml)
+bkpdir inc
+
+# Verify with configuration settings
+bkpdir verify
+
+# List archives with verification status
+bkpdir list
+
+# View effective configuration
+bkpdir config
+
+# Generate configuration template
+bkpdir template
+```
+
+### Visual Demonstration Suggestions
+
+To better illustrate this workflow, consider adding:
+
+1. **Animated GIF/Video**: A screen recording showing the terminal commands executing sequentially, with:
+   - Terminal output showing archive creation progress
+   - File tree visualization of archive directory growing
+   - Comparison output highlighting differences between archives
+   - Timeline visualization showing archive creation dates
+
+2. **Diagram/Infographic**: A visual timeline showing:
+   - Day 1: Initial full archive (large size)
+   - Day 2-3: Incremental archives (smaller sizes)
+   - Archive relationships and dependencies
+   - Disk space usage over time
+
+3. **Before/After Screenshots**: 
+   - Before: Directory structure before archiving
+   - After: Archive directory with multiple versions
+   - Archive listing output showing all versions
+
+**Suggested image locations:**
+- `images/complex-scenario-workflow.gif` - Animated workflow demonstration
+- `images/archive-timeline.png` - Visual timeline of archive creation
+- `images/archive-comparison.png` - Side-by-side comparison output
+
 ## Quick Start
 
 ### Installation

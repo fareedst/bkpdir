@@ -66,7 +66,7 @@ This acknowledgment confirms that the AI agent has:
 
 3. **Test-Driven Documentation**
    - Tests MUST reference the requirements they validate using semantic tokens.
-   - Test names should include semantic tokens (e.g., `TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION`).
+   - Test names should include semantic tokens (e.g., `test('duplicate prevention REQ_DUPLICATE_PREVENTION')`).
 
 4. **Incremental Task Tracking**
    - Every requirement implementation MUST be broken down into trackable tasks and subtasks.
@@ -81,7 +81,7 @@ This acknowledgment confirms that the AI agent has:
    - Maintain a clean task list showing only active work.
 
 7. **Extensive Debug Output During Development**
-   - Use extensive diagnostic output (`fmt.Printf`, `t.Logf`, debug flags) liberally during initial implementation and debugging
+   - Use extensive diagnostic output (logging functions, debug flags) liberally during initial implementation and debugging
    - Debug output helps AI agents understand execution flow, data transformations, and state changes
    - Include diagnostic output in test functions to trace behavior when tests fail
    - Use descriptive prefixes (e.g., `DIAGNOSTIC:`, `DEBUG:`) to clearly identify debug output
@@ -102,6 +102,19 @@ This acknowledgment confirms that the AI agent has:
    - **Application**: Apply consistently when designing new features, refactoring existing code, or when complexity makes testing or reasoning difficult
    - **Rationale**: Separating simple, reusable logic from complex application logic enables independent testing, reduces coupling, and makes code easier to understand and maintain. Pure functions with single responsibilities are easier to reason about, test, and reuse across different contexts.
 
+9. **Independent Module Validation Before Integration** (MANDATORY - Required for [REQ:MODULE_VALIDATION])
+   - **MANDATORY**: Logical modules MUST be validated independently before integration into code satisfying specific requirements
+   - **MANDATORY**: Each module must have clear boundaries, interfaces, and validation criteria defined before development
+   - **MANDATORY**: Module validation must include:
+     - Unit tests with mocked dependencies
+     - Integration tests with test doubles (mocks, stubs, fakes)
+     - Contract validation (input/output validation)
+     - Edge case testing
+     - Error handling validation
+   - **MANDATORY**: Modules must pass all validation criteria before integration
+   - **MANDATORY**: Integration tasks must be separate from module development and validation tasks
+   - **Rationale**: Independent module validation eliminates bugs related to code complexity by ensuring each module works correctly in isolation before combining with other modules. This reduces integration complexity and catches bugs early in the development cycle.
+
 ---
 
 ## 📚 Documentation Structure
@@ -121,6 +134,7 @@ All project documentation MUST include these sections with semantic token cross-
 - Example: `[REQ:FEATURE] Description of the feature requirement`
 - Implementation status: ✅ (Implemented) or ⏳ (Planned)
 - **Note**: Validation criteria defined in requirements inform the testing strategy in `architecture-decisions.md` and specific test implementations in `implementation-decisions.md`
+- **Language Discussions**: Requirements MUST be language-agnostic. Language selection, runtime choices, and language-specific implementation details belong in architecture decisions (`architecture-decisions.md`) or implementation decisions (`implementation-decisions.md`), NOT in requirements. The ONLY exception is when language selection is itself a specific requirement (e.g., `[REQ:USE_PYTHON]` for a Python-specific project requirement).
 
 #### 2. Architecture Decisions Section
 - Documents high-level design choices
@@ -129,9 +143,10 @@ All project documentation MUST include these sections with semantic token cross-
 - **DO NOT** defer architecture documentation - record decisions as they are made
 - Links to requirements via semantic tokens
 - Each decision MUST include semantic token `[ARCH:IDENTIFIER]` and cross-reference to `[REQ:*]` tokens
-- Example: `[ARCH:CONCURRENCY_MODEL] Uses goroutines with WaitGroup for async execution [REQ:ASYNC_EXECUTION]`
+- Example: `[ARCH:CONCURRENCY_MODEL] Uses Promises/async-await for async execution [REQ:ASYNC_EXECUTION]`
 - **Dependency**: Architecture decisions depend on requirements and should reference `[REQ:*]` tokens
 - **Update Timing**: Record in `architecture-decisions.md` during Phase 1 (Requirements → Pseudo-Code) and update as decisions evolve
+- **Language Discussions**: Language selection, runtime choices, and language-specific architectural patterns belong in architecture decisions. Document language choice with `[ARCH:LANGUAGE_SELECTION]` token when it's an architectural decision (not a requirement). Language-specific patterns (e.g., async/await, goroutines, callbacks) should be documented here.
 
 #### 3. Implementation Decisions Section
 - Documents low-level implementation choices
@@ -143,6 +158,7 @@ All project documentation MUST include these sections with semantic token cross-
 - Example: `[IMPL:DUPLICATE_PREVENTION] Track lastText string [ARCH:STATE_TRACKING] [REQ:DUPLICATE_PREVENTION]`
 - **Dependency**: Implementation decisions depend on both architecture decisions and requirements
 - **Update Timing**: Record in `implementation-decisions.md` during Phase 1 (Requirements → Pseudo-Code) and update during Phase 3 (Implementation) as decisions are refined
+- **Language Discussions**: Language-specific implementation details (APIs, libraries, syntax patterns, idioms) belong in implementation decisions. Code examples in documentation should use `[your-language]` placeholders or be language-agnostic pseudo-code unless demonstrating a specific language requirement.
 
 #### 4. Semantic Token Registry
 - Central registry of all semantic tokens used in the project
@@ -158,7 +174,7 @@ All project documentation MUST include these sections with semantic token cross-
 
 #### 6. Test References
 - Test names and comments MUST include semantic tokens
-- Example: `func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)`
+- Example: `testDuplicatePrevention_REQ_DUPLICATE_PREVENTION()` (language-agnostic pattern)
 - Reference the requirement being validated: `// [REQ:DUPLICATE_PREVENTION] Validates duplicate prevention logic`
 
 #### 7. Feature Documentation
@@ -235,8 +251,8 @@ For comprehensive feature documentation, use this structured format that links a
 **Requirement**: [REQ:IDENTIFIER] → See `requirements.md` § Section Name
 **Architecture**: [ARCH:IDENTIFIER] → See `architecture-decisions.md` § Decision Name  
 **Implementation**: [IMPL:IDENTIFIER] → See `implementation-decisions.md` § Implementation Name
-**Tests**: `TestFeatureName_REQ_IDENTIFIER` → See `*_test.go` files
-**Code**: `// [REQ:IDENTIFIER] Implementation comment` → See `*.go` files
+**Tests**: `TestFeatureName_REQ_IDENTIFIER` → See `*_test.*` files
+**Code**: `// [REQ:IDENTIFIER] Implementation comment` → See source code files
 
 **Description**: Brief description of what this feature accomplishes.
 ```
@@ -471,18 +487,32 @@ Create and maintain `semantic-tokens.md` with:
    - Implementation decisions are dependent on both architecture decisions and requirements
    - **DO NOT** defer - record decisions as they are made, not at the end
 
-4. **Pseudo-Code**
+4. **Module Identification** (MANDATORY - Required for [REQ:MODULE_VALIDATION])
+   - **IMMEDIATELY** identify logical modules that will be developed
+   - **IMMEDIATELY** document module boundaries and responsibilities
+   - **IMMEDIATELY** define module interfaces and contracts
+   - **IMMEDIATELY** specify module validation criteria (what "validated" means for each module)
+   - Each module MUST have clear, testable boundaries
+   - Modules should be independently testable and validatable
+   - Document module dependencies and integration points
+   - **Rationale**: Independent module validation reduces complexity-related bugs by ensuring each module works correctly before integration
+
+5. **Pseudo-Code**
    - Write pseudo-code with semantic token comments
+   - Include module boundaries in pseudo-code
    - Example:
      ```text
      // [REQ:DUPLICATE_PREVENTION]
+     // Module: DuplicateDetection
+     // Interface: isDuplicate(text, lastText) -> bool
      if text == lastText:
        skip()
      ```
 
-5. **Update Documentation** (MANDATORY - Do IMMEDIATELY)
+6. **Update Documentation** (MANDATORY - Do IMMEDIATELY)
    - **IMMEDIATELY** add architecture decisions to `architecture-decisions.md` with `[ARCH:*]` tokens and `[REQ:*]` cross-references
    - **IMMEDIATELY** add implementation decisions to `implementation-decisions.md` with `[IMPL:*]` tokens and `[ARCH:*]` and `[REQ:*]` cross-references
+   - **IMMEDIATELY** document module boundaries and validation criteria
    - **IMMEDIATELY** update `semantic-tokens.md` with any new tokens created
    - **IMMEDIATELY** create tasks in `tasks.md` with priorities and semantic token references
    - Cross-reference all tokens consistently
@@ -493,17 +523,21 @@ Create and maintain `semantic-tokens.md` with:
 1. **Generate Tasks** (MANDATORY - Record in `tasks.md`)
    - **IMMEDIATELY** break down into discrete tasks in `tasks.md`
    - Each task MUST reference semantic tokens
+   - **IMMEDIATELY** create separate tasks for module development and module validation
    - Example: `Task: Implement duplicate prevention [REQ:DUPLICATE_PREVENTION]`
+   - Example: `Task: Validate DuplicateDetection module [REQ:MODULE_VALIDATION] [REQ:DUPLICATE_PREVENTION]`
    - **DO NOT** start implementation until tasks are documented
 
 2. **Generate Subtasks** (MANDATORY - Record in `tasks.md`)
    - **IMMEDIATELY** break tasks into implementable subtasks in `tasks.md`
    - Each subtask is a single, complete unit of work
+   - **IMMEDIATELY** include module validation subtasks for each module
    - Example:
      - Subtask: Add field to data structure
      - Subtask: Implement `isDuplicate()` function
-     - Subtask: Call `isDuplicate()` in polling loop
-     - Subtask: Write test `TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION`
+     - Subtask: **Validate DuplicateDetection module independently** (unit tests, integration tests with mocks)
+     - Subtask: Call `isDuplicate()` in polling loop (integration)
+     - Subtask: Write test `test('duplicate prevention REQ_DUPLICATE_PREVENTION', () => {})`
    - **DO NOT** start implementation until subtasks are documented
 
 3. **Assign Priorities** (MANDATORY - Required for all tasks)
@@ -512,14 +546,28 @@ Create and maintain `semantic-tokens.md` with:
    - P2: Nice-to-have (improves UX/developer experience)
    - P3: Future (deferred)
    - **ALL tasks MUST have priorities assigned**
+   - **Module validation tasks are typically P0 or P1** - they must be completed before integration
 
 ### Phase 3: Tasks → Implementation
 
 1. **Work on Highest Priority Tasks First**
    - P0 tasks before P1, P1 before P2, etc.
 
-2. **Use Extensive Debug Output During Implementation**
-   - Add diagnostic output (`fmt.Printf`, `t.Logf`) liberally when implementing complex logic
+2. **Module Development and Validation** (MANDATORY - Required for [REQ:MODULE_VALIDATION])
+   - **BEFORE integration**: Develop each logical module independently
+   - **BEFORE integration**: Validate each module independently using:
+     - Unit tests with mocked dependencies
+     - Integration tests with test doubles (mocks, stubs, fakes)
+     - Contract validation (input/output validation)
+     - Edge case testing
+     - Error handling validation
+   - **BEFORE integration**: Ensure module meets its defined validation criteria
+   - **BEFORE integration**: Document module validation results
+   - **ONLY AFTER validation**: Integrate validated modules into the larger system
+   - **Rationale**: Independent validation catches bugs early, reduces integration complexity, and ensures each module works correctly in isolation before combining with other modules
+
+3. **Use Extensive Debug Output During Implementation**
+   - Add diagnostic output (logging functions) liberally when implementing complex logic
    - Include debug output in test functions to trace execution flow and state changes
    - Use descriptive prefixes: `DIAGNOSTIC:`, `DEBUG:`, `TRACE:`
    - Show key variables, function parameters, return values, and state transitions
@@ -537,22 +585,24 @@ Create and maintain `semantic-tokens.md` with:
      - Data map contents showing available placeholders
      - Architecture decision points (e.g., "falling back to emergency replacement", "gathering file statistics")
 
-3. **Apply Separation of Concerns**
+4. **Apply Separation of Concerns**
    - When logic is difficult to implement or test within a large application context, extract it into a pure function or isolated module
    - Give extracted components a single, clear responsibility
    - Remove dependencies on application-specific context to enable independent testing
    - **Example**: Extract placeholder replacement logic into a pure function that takes format string and data map, returns formatted string - no side effects, no application dependencies
    - **Benefits**: Improved testability, reusability, maintainability, and clarity
 
-3. **Complete Subtasks**
+5. **Complete Subtasks**
    - Mark subtasks complete as they're done
+   - **MANDATORY**: Mark module validation subtasks complete only after validation passes
    - Remove completed subtasks
    - When all subtasks complete, mark parent task complete
 
-4. **Update Documentation** (MANDATORY - Update AS YOU WORK)
+6. **Update Documentation** (MANDATORY - Update AS YOU WORK)
    - **BEFORE making changes**: Consult the Change Impact Tracking matrix (see Cross-Reference Format section) to identify all documents that need updating
    - **DURING implementation**: Update `architecture-decisions.md` if decisions are refined
    - **DURING implementation**: Update `implementation-decisions.md` if decisions are refined
+   - **DURING implementation**: Document module validation results
    - **DURING implementation**: Update `tasks.md` as subtasks are completed
    - **DURING implementation**: Maintain bi-directional links when updating documentation
    - **AFTER completion**: Mark requirements as ✅ Implemented
@@ -730,6 +780,11 @@ This project follows AI-First Principles. Before making changes:
 - [ ] Use semantic tokens in all code comments
 - [ ] Use semantic tokens in test names/comments
 - [ ] Cross-reference requirements → architecture → implementation
+- [ ] **MANDATORY**: Identify logical modules and document module boundaries before development [REQ:MODULE_VALIDATION]
+- [ ] **MANDATORY**: Develop each logical module independently [REQ:MODULE_VALIDATION]
+- [ ] **MANDATORY**: Validate each module independently (unit tests with mocks, contract tests, edge cases, error handling) BEFORE integration [REQ:MODULE_VALIDATION]
+- [ ] **MANDATORY**: Only integrate modules after validation passes [REQ:MODULE_VALIDATION]
+- [ ] **MANDATORY**: Document module validation results [REQ:MODULE_VALIDATION]
 - [ ] **MANDATORY**: Record architecture decisions in `architecture-decisions.md` IMMEDIATELY when made (with `[ARCH:*]` tokens and `[REQ:*]` cross-references)
 - [ ] **MANDATORY**: Record implementation decisions in `implementation-decisions.md` IMMEDIATELY when made (with `[IMPL:*]` tokens and `[ARCH:*]` and `[REQ:*]` cross-references)
 - [ ] **MANDATORY**: Break work into trackable tasks in `tasks.md` BEFORE starting implementation
@@ -799,7 +854,7 @@ This document should be:
 - **Implementation Phase**: Update documentation as decisions are refined
 - **Completion Phase**: Verify all documentation is current and complete
 
-**Last Updated**: 2025-11-08
-**Version**: 1.0.1
-**STDD Methodology Version**: 1.0.1
+**Last Updated**: 2025-11-22
+**Version**: 1.0.2
+**STDD Methodology Version**: 1.0.2
 

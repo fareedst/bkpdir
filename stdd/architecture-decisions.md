@@ -1,6 +1,6 @@
 # Architecture Decisions
 
-**STDD Methodology Version**: 1.0.1
+**STDD Methodology Version**: 1.0.2
 
 ## Overview
 This document captures the high-level architectural decisions for this project. All decisions are cross-referenced with requirements using semantic tokens `[REQ:*]` and assigned architecture tokens `[ARCH:*]` for traceability.
@@ -23,6 +23,7 @@ When documenting architecture decisions, use this format:
 - Alternative 2: Why it was rejected
 
 **Cross-References**: [REQ:RELATED_REQUIREMENT], [ARCH:OTHER_DECISION]
+```
 
 ## Notes
 
@@ -30,6 +31,7 @@ When documenting architecture decisions, use this format:
 - Each decision MUST include `[ARCH:*]` token and cross-reference `[REQ:*]` tokens
 - Architecture decisions are dependent on requirements
 - DO NOT defer architecture documentation - record decisions as they are made
+- **Language Selection**: Language selection, runtime choices, and language-specific architectural patterns belong in architecture decisions. Document language choice with `[ARCH:LANGUAGE_SELECTION]` token when it's an architectural decision (not a requirement). Language-specific patterns (e.g., async/await, goroutines, callbacks) should be documented here. Requirements should remain language-agnostic unless language selection is itself a specific requirement.
 
 ---
 
@@ -174,6 +176,7 @@ bkpdir/
    - `./.bkpdir.yml` (current directory)
    - `~/.bkpdir.yml` (home directory)
    - Custom paths from `BKPDIR_CONFIG`
+   - **Precedence Rule**: Earlier files in the search path take precedence over later files. When processing sequential config files (not inheritance chains), values set by earlier files are preserved and cannot be overridden by later files, even if those values equal the defaults. The implementation tracks the initial default state and compares the destination state before merge to detect if earlier files modified values.
 4. Default values (lowest priority)
 
 **Alternatives Considered:**
@@ -205,6 +208,13 @@ bkpdir/
 - This applies to both inheritance chains and sequential file processing
 - Explicit prefixes (`!`, `+`, `^`, `=`) override the default merge behavior
 - Default patterns are preserved when child configs add values
+
+**Field-Level Merge Behavior (CFG-001 + CFG-005 Conflict Resolution):**
+- **Field Merge Behavior Registry**: Each field has a configured merge behavior to resolve conflicts between CFG-001 (earlier files take precedence) and CFG-005 (array fields merge)
+- **MergeBehaviorAccumulate**: Fields that always merge/accumulate (e.g., `exclude_patterns`) - CFG-005 behavior
+- **MergeBehaviorPrecedence**: Fields that respect earlier file precedence (e.g., `archive_dir_path`, `include_git_info`) - CFG-001 behavior
+- **Explicit Prefixes Override**: Explicit prefixes (`!`, `+`, `^`, `=`) override the default behavior, but precedence rules still apply for sequential files
+- **Implementation**: See `fieldMergeBehaviors` registry in `config.go` and `getFieldMergeBehavior()` function
 
 **Implementation:**
 - Inheritance chain processing with circular dependency detection

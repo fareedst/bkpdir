@@ -279,6 +279,8 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:CFG_006]` → See `implementation-decisions.md` § Configuration Reflection Implementation [ARCH:CFG_006] [REQ:CFG_006]
 - `[IMPL:TEST_EXCLUDE_MERGE]` → See `implementation-decisions.md` § Exclude Patterns Merge Testing [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE]
 - `[IMPL:EXCLUDE_MERGE_FIX]` → See `implementation-decisions.md` § Array Field Default Merge Strategy Implementation [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005]
+- `[IMPL:CFG_MIXED_MODE_MERGE_FIX]` → See `implementation-decisions.md` § Mixed-Mode Merge Strategy Fix [ARCH:CFG_005] [ARCH:CFG_001] [REQ:CFG_005]
+- `[IMPL:CFG_QUOTED_KEY_PREFIX]` → See `implementation-decisions.md` § Quoted YAML Key Prefix Support [ARCH:CFG_005] [REQ:CFG_005]
 - `[IMPL:ZIP_FORMAT]` → See `implementation-decisions.md` § ZIP Archive Format Implementation [ARCH:ARCHIVE_FORMAT] [REQ:ARCHIVE_VERIFICATION]
 - `[IMPL:DUAL_FORMATTING]` → See `implementation-decisions.md` § Dual Printf/Template Formatting [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
 - `[IMPL:STRUCTURED_ERRORS]` → See `implementation-decisions.md` § Structured Error Handling [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]
@@ -321,6 +323,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:TESTING_COMPLEXITY]` → See `implementation-decisions.md` § Testing Complexity [ARCH:TESTING_STRATEGY] [REQ:*]
 - `[IMPL:TOKEN_SYSTEM]` → See `implementation-decisions.md` § Token System Implementation [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
 - `[IMPL:CONFIG_OUTPUT_GROUPING]` → See `implementation-decisions.md` § Configuration Output Grouping Implementation [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
+- `[IMPL:CFG_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Configuration File Precedence Fix [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 
 
 ## Quick Reference Index
@@ -344,7 +347,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 ### Implementation Tokens
 - **Core**: `CONFIG_STRUCT`, `CFG_006`, `ZIP_FORMAT`, `DUAL_FORMATTING`, `STRUCTURED_ERRORS`, `GIT_CLI`, `RESOURCE_MANAGER`, `CONTEXT_OPS`, `ATOMIC_OPS`, `TESTING`, `CODE_STYLE`, `DATA_MODELS`
 - **File Operations**: `FILE_001`, `FILE_002`, `FILE_003`
-- **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`
+- **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`, `CFG_PRECEDENCE_FIX`
 - **Git Integration**: `GIT_001`, `GIT_002`, `GIT_003`, `GIT_004`, `GIT_005`, `GIT_006`, `GIT_DIRTY_CONFIG`
 - **Output Management**: `OUT_001`, `OUT_002`, `DELAYED_OUTPUT`
 - **Testing Infrastructure**: `TEST_001`, `TEST_002`, `TEST_FIX_001`, `TEST_INFRA_001_B`, `TEST_INFRA_001_E`, `TEST_COVERAGE`, `TESTING_COMPLEXITY`

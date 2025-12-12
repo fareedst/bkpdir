@@ -505,6 +505,9 @@ func LoadConfig(root string) (*Config, error) {
 	// If inheritance loading fails, fallback to original method for backward compatibility
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	cfg := DefaultConfig()
+	initialDefaultCfg := DefaultConfig() // Save initial defaults to detect if any file has been processed
+	// CFG-001: Track which fields were explicitly set by earlier files (even if they equal defaults)
+	explicitlySetFields := make(map[string]bool) // Track fields explicitly set by earlier files
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// searchPaths already declared above
 	if debug {
@@ -515,6 +518,7 @@ func LoadConfig(root string) (*Config, error) {
 	if debug {
 		fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Processing %d search paths\n", len(searchPaths))
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+	fileProcessed := false // Track if we've processed any file yet
 	for i, configPath := range searchPaths {
 		// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 		expandedPath := expandPath(configPath)
@@ -569,15 +573,14 @@ func LoadConfig(root string) (*Config, error) {
 				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
-			// Determine merge context: first file merges with defaults, subsequent files override
-			isFirstFile := cfg.ArchiveDirPath == DefaultConfig().ArchiveDirPath &&
-				len(cfg.ExcludePatterns) == len(DefaultConfig().ExcludePatterns)
-			inheritContext := isFirstFile // First file merges with defaults
+			// Determine merge context: first file merges with defaults, subsequent files respect earlier file precedence
+			// CFG-001: Earlier files take precedence - use inheritContext=false for sequential files after the first
+			inheritContext := !fileProcessed // First file merges with defaults (true), subsequent files respect precedence (false)
 			if debug {
-				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] isFirstFile=%v, inheritContext=%v\n", i, isFirstFile, inheritContext)
+				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] fileProcessed=%v, inheritContext=%v\n", i, fileProcessed, inheritContext)
 			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
-			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap)
+			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields)
 			if err != nil {
 				if debug {
 					fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err)
@@ -588,6 +591,18 @@ func LoadConfig(root string) (*Config, error) {
 				continue // Skip problematic merges
 			}
 			cfg = mergedCfg
+			fileProcessed = true // Mark that we've processed at least one file
+			// CFG-001: Track fields explicitly set in this file for later precedence checks
+			if loadResult.rawMap != nil {
+				for key := range loadResult.rawMap {
+					// Remove merge strategy prefixes (!, +, ^, =) to get base field name
+					baseKey := key
+					if len(key) > 0 && (key[0] == '!' || key[0] == '+' || key[0] == '^' || key[0] == '=') {
+						baseKey = key[1:]
+					}
+					explicitlySetFields[baseKey] = true
+				}
+			}
 			if debug {
 				fmt.Printf("DEBUG:   Exclude patterns after merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
@@ -621,18 +636,23 @@ func LoadConfig(root string) (*Config, error) {
 // REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 // mergeConfigs merges source configuration into destination configuration.
 // It preserves non-zero values from the source configuration.
-func mergeConfigs(dst, src *Config) {
+// When inheritContext is false (sequential file processing), earlier files take precedence.
+// rawSrcMap is used to check if fields were explicitly set in the source file.
+// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
+// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
+// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+func mergeConfigs(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
-	mergeBasicSettings(dst, src)
-	mergeFileBackupSettings(dst, src)
-	mergeStatusCodes(dst, src)
-	mergeFormatStrings(dst, src)
-	mergeTemplates(dst, src)
-	mergePatterns(dst, src)
-	mergeExtendedFormatStrings(dst, src)
-	mergeExtendedTemplates(dst, src)
+	mergeBasicSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
+	mergeFileBackupSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
+	mergeStatusCodes(dst, src, inheritContext, defaultCfg, rawSrcMap)
+	mergeFormatStrings(dst, src, inheritContext, defaultCfg, rawSrcMap)
+	mergeTemplates(dst, src, inheritContext, defaultCfg, rawSrcMap)
+	mergePatterns(dst, src, inheritContext, defaultCfg, rawSrcMap)
+	mergeExtendedFormatStrings(dst, src, inheritContext, defaultCfg)
+	mergeExtendedTemplates(dst, src, inheritContext, defaultCfg, rawSrcMap)
 	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
-	mergeGitSettings(dst, src)
+	mergeGitSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
 }
 
 // CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
@@ -641,66 +661,130 @@ func mergeConfigs(dst, src *Config) {
 // DECISION-REF: DEC-002
 // mergeBasicSettings merges basic configuration settings.
 // It handles archive directory path, Git integration, and verification settings.
-func mergeBasicSettings(dst, src *Config) {
-	if src.ArchiveDirPath != DefaultConfig().ArchiveDirPath {
-		dst.ArchiveDirPath = src.ArchiveDirPath
-	}
-	if src.UseCurrentDirName != DefaultConfig().UseCurrentDirName {
-		dst.UseCurrentDirName = src.UseCurrentDirName
-	}
-	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
-	// Merge exclude patterns by appending (earlier files take precedence, but patterns accumulate)
-	if len(src.ExcludePatterns) > 0 && !equalStringSlices(src.ExcludePatterns, DefaultConfig().ExcludePatterns) {
-		if debug {
-			fmt.Printf("DEBUG: Merging exclude patterns - existing: %v, new: %v\n", dst.ExcludePatterns, src.ExcludePatterns)
-		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		// Merge by appending new patterns that aren't already present
-		existingMap := make(map[string]bool)
-		for _, pattern := range dst.ExcludePatterns {
-			existingMap[pattern] = true
+// When inheritContext is false (sequential file processing), earlier files take precedence.
+// rawSrcMap is used to check if fields were explicitly set in the source file.
+// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
+// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
+// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+func mergeBasicSettings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
+	// CFG-001: Earlier files take precedence over later files when processing sequential config files
+	// When processing sequential files (inheritContext=false), only set if:
+	// 1. Field was explicitly set in source file (checked via rawSrcMap)
+	// 2. Field was NOT explicitly set by earlier files (checked via explicitlySetFields)
+	// 3. Source differs from default
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		if src.ArchiveDirPath != defaultCfg.ArchiveDirPath {
+			dst.ArchiveDirPath = src.ArchiveDirPath
 		}
-		for _, pattern := range src.ExcludePatterns {
-			if !existingMap[pattern] {
-				dst.ExcludePatterns = append(dst.ExcludePatterns, pattern)
-				existingMap[pattern] = true
-			}
+	} else {
+		// Sequential files: check if field was explicitly set by earlier files
+		_, explicitlySetInSrc := rawSrcMap["archive_dir_path"]
+		_, explicitlySetByEarlier := explicitlySetFields["archive_dir_path"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.ArchiveDirPath != defaultCfg.ArchiveDirPath {
+			dst.ArchiveDirPath = src.ArchiveDirPath
 		}
-		if debug {
-			fmt.Printf("DEBUG: Merged exclude patterns result: %v\n", dst.ExcludePatterns)
-		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 	}
-	if src.IncludeGitInfo != DefaultConfig().IncludeGitInfo {
-		dst.IncludeGitInfo = src.IncludeGitInfo
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		// If field was explicitly set in source, set it even if it equals default
+		_, explicitlySetInSrc := rawSrcMap["use_current_dir_name"]
+		if explicitlySetInSrc {
+			dst.UseCurrentDirName = src.UseCurrentDirName
+		} else if src.UseCurrentDirName != defaultCfg.UseCurrentDirName {
+			dst.UseCurrentDirName = src.UseCurrentDirName
+		}
+	} else {
+		// Sequential files: check if field was explicitly set by earlier files
+		_, explicitlySetInSrc := rawSrcMap["use_current_dir_name"]
+		_, explicitlySetByEarlier := explicitlySetFields["use_current_dir_name"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.UseCurrentDirName != defaultCfg.UseCurrentDirName {
+			dst.UseCurrentDirName = src.UseCurrentDirName
+		}
 	}
-	if src.ShowGitDirtyStatus != DefaultConfig().ShowGitDirtyStatus {
-		dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
+	// CFG-001 + CFG-005: exclude_patterns is handled by applyMergeStrategies, not here
+	// This ensures merge strategies (!, +, ^, =) and field-specific behavior are respected
+	// Do NOT merge ExcludePatterns here - let the merge strategy system handle it
+	// CFG-001: Respect earlier file precedence for sequential file processing
+	// When processing sequential files (inheritContext=false), only set if:
+	// 1. Field was explicitly set in source file (checked via rawSrcMap)
+	// 2. Field was NOT explicitly set by earlier files (checked via explicitlySetFields)
+	// 3. Source differs from default
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		// If field was explicitly set in source, set it even if it equals default
+		_, explicitlySetInSrc := rawSrcMap["include_git_info"]
+		if explicitlySetInSrc {
+			dst.IncludeGitInfo = src.IncludeGitInfo
+		} else if src.IncludeGitInfo != defaultCfg.IncludeGitInfo {
+			dst.IncludeGitInfo = src.IncludeGitInfo
+		}
+	} else {
+		// Sequential files: check if field was explicitly set by earlier files
+		// CFG-001: Earlier files take precedence - if earlier file processed this field (even implicitly via defaults),
+		// later files cannot override it. Only allow override if earlier file didn't process AND current dst equals default.
+		_, explicitlySetInSrc := rawSrcMap["include_git_info"]
+		_, explicitlySetByEarlier := explicitlySetFields["include_git_info"]
+		// Check if dst value differs from default (meaning it was set by earlier file processing)
+		dstDiffersFromDefault := dst.IncludeGitInfo != defaultCfg.IncludeGitInfo
+		// Only allow override if: earlier file didn't set it AND (dst equals default OR source doesn't want to change it)
+		// This ensures that if earlier file left it at default, later file can only set it if it would change from default
+		// But if earlier file explicitly set it (even to default), later file cannot override
+		if !explicitlySetByEarlier && explicitlySetInSrc && !dstDiffersFromDefault && src.IncludeGitInfo != defaultCfg.IncludeGitInfo {
+			dst.IncludeGitInfo = src.IncludeGitInfo
+		}
+		// If explicitlySetByEarlier is true, or dstDiffersFromDefault is true, don't override (earlier file precedence)
 	}
-	if src.SkipBrokenSymlinks != DefaultConfig().SkipBrokenSymlinks {
-		dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		// If field was explicitly set in source, set it even if it equals default
+		_, explicitlySetInSrc := rawSrcMap["show_git_dirty_status"]
+		if explicitlySetInSrc {
+			dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
+		} else if src.ShowGitDirtyStatus != defaultCfg.ShowGitDirtyStatus {
+			dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
+		}
+	} else {
+		_, explicitlySetInSrc := rawSrcMap["show_git_dirty_status"]
+		_, explicitlySetByEarlier := explicitlySetFields["show_git_dirty_status"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.ShowGitDirtyStatus != defaultCfg.ShowGitDirtyStatus {
+			dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
+		}
+	}
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		// If field was explicitly set in source, set it even if it equals default
+		_, explicitlySetInSrc := rawSrcMap["skip_broken_symlinks"]
+		if explicitlySetInSrc {
+			dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
+		} else if src.SkipBrokenSymlinks != defaultCfg.SkipBrokenSymlinks {
+			dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
+		}
+	} else {
+		_, explicitlySetInSrc := rawSrcMap["skip_broken_symlinks"]
+		_, explicitlySetByEarlier := explicitlySetFields["skip_broken_symlinks"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.SkipBrokenSymlinks != defaultCfg.SkipBrokenSymlinks {
+			dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
+		}
 	}
 	if src.Verification != nil {
 		dst.Verification = src.Verification
 	}
 	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	// Support legacy Git fields for backward compatibility
-	if src.Git != nil {
-		if dst.Git == nil {
-			dst.Git = DefaultGitConfig()
-		}
-		// Merge explicit Git configuration over defaults
-		if src.Git.IncludeInfo != dst.Git.IncludeInfo {
-			dst.Git.IncludeInfo = src.Git.IncludeInfo
-		}
-		if src.Git.ShowDirtyStatus != dst.Git.ShowDirtyStatus {
-			dst.Git.ShowDirtyStatus = src.Git.ShowDirtyStatus
-		}
-	}
+	// Note: Git struct merging is handled in mergeGitSettings to respect precedence rules
+	// This code is kept for backward compatibility but should not override precedence
 }
 
 // GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // mergeGitSettings merges Git configuration settings between configs.
 // It handles both the new Git configuration and legacy fields for backward compatibility.
-func mergeGitSettings(dst, src *Config) {
+// When inheritContext is false (sequential file processing), earlier files take precedence.
+// rawSrcMap is used to check if fields were explicitly set in the source file.
+// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
+// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
+// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+func mergeGitSettings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
 	defaultGit := DefaultGitConfig()
 
 	// Initialize destination Git config if needed
@@ -708,35 +792,66 @@ func mergeGitSettings(dst, src *Config) {
 		dst.Git = DefaultGitConfig()
 	}
 
-	// If source has Git configuration, merge it
-	if src.Git != nil {
-		mergeGitConfigStruct(dst.Git, src.Git, defaultGit)
+	// Handle legacy fields for backward compatibility FIRST
+	// Legacy fields take precedence over Git struct for compatibility
+	// CFG-001: When inheritContext=true, set value if explicitly set in source, even if equals default
+	if inheritContext {
+		_, explicitlySetInSrc := rawSrcMap["include_git_info"]
+		if explicitlySetInSrc {
+			dst.Git.IncludeInfo = src.IncludeGitInfo
+			dst.IncludeGitInfo = src.IncludeGitInfo // Keep legacy field in sync
+		} else if src.IncludeGitInfo != defaultGit.IncludeInfo {
+			dst.Git.IncludeInfo = src.IncludeGitInfo
+			dst.IncludeGitInfo = src.IncludeGitInfo // Keep legacy field in sync
+		}
+		_, explicitlySetInSrc = rawSrcMap["show_git_dirty_status"]
+		if explicitlySetInSrc {
+			dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
+			dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus // Keep legacy field in sync
+		} else if src.ShowGitDirtyStatus != defaultGit.ShowDirtyStatus {
+			dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
+			dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus // Keep legacy field in sync
+		}
+	} else {
+		// Sequential files: check if field was explicitly set by earlier files
+		_, explicitlySetInSrc := rawSrcMap["include_git_info"]
+		_, explicitlySetByEarlier := explicitlySetFields["include_git_info"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.IncludeGitInfo != defaultGit.IncludeInfo {
+			dst.Git.IncludeInfo = src.IncludeGitInfo
+			dst.IncludeGitInfo = src.IncludeGitInfo // Keep legacy field in sync
+		}
+		_, explicitlySetInSrc = rawSrcMap["show_git_dirty_status"]
+		_, explicitlySetByEarlier = explicitlySetFields["show_git_dirty_status"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.ShowGitDirtyStatus != defaultGit.ShowDirtyStatus {
+			dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
+			dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus // Keep legacy field in sync
+		}
 	}
 
-	// Handle legacy fields for backward compatibility
-	// Legacy fields take precedence over Git struct for compatibility
-	if src.IncludeGitInfo != defaultGit.IncludeInfo {
-		dst.Git.IncludeInfo = src.IncludeGitInfo
-		dst.IncludeGitInfo = src.IncludeGitInfo // Keep legacy field in sync
-	}
-	if src.ShowGitDirtyStatus != defaultGit.ShowDirtyStatus {
-		dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
-		dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus // Keep legacy field in sync
+	// If source has Git configuration, merge it
+	// CFG-001: IncludeInfo and ShowDirtyStatus are handled above via legacy fields to respect precedence
+	// mergeGitConfigStruct does NOT merge IncludeInfo/ShowDirtyStatus to avoid conflicts
+	if src.Git != nil {
+		// Always merge Git struct (IncludeInfo/ShowDirtyStatus are skipped in mergeGitConfigStruct)
+		mergeGitConfigStruct(dst.Git, src.Git, defaultGit)
 	}
 }
 
 // GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 // mergeGitConfigStruct merges GitConfig struct fields
+// Note: IncludeInfo and ShowDirtyStatus are NOT merged here - they are handled by legacy field
+// merging in mergeGitSettings to respect precedence rules (CFG-001)
 func mergeGitConfigStruct(dst, src, defaultCfg *GitConfig) {
 	if src.Enabled != defaultCfg.Enabled {
 		dst.Enabled = src.Enabled
 	}
-	if src.IncludeInfo != defaultCfg.IncludeInfo {
-		dst.IncludeInfo = src.IncludeInfo
-	}
-	if src.ShowDirtyStatus != defaultCfg.ShowDirtyStatus {
-		dst.ShowDirtyStatus = src.ShowDirtyStatus
-	}
+	// Skip IncludeInfo and ShowDirtyStatus - handled by legacy field merging to respect precedence
+	// if src.IncludeInfo != defaultCfg.IncludeInfo {
+	// 	dst.IncludeInfo = src.IncludeInfo
+	// }
+	// if src.ShowDirtyStatus != defaultCfg.ShowDirtyStatus {
+	// 	dst.ShowDirtyStatus = src.ShowDirtyStatus
+	// }
 	if src.Command != defaultCfg.Command {
 		dst.Command = src.Command
 	}
@@ -775,12 +890,44 @@ func mergeGitConfigStruct(dst, src, defaultCfg *GitConfig) {
 // DECISION-REF: DEC-002
 // mergeFileBackupSettings merges file backup configuration settings.
 // It handles backup directory path and naming settings.
-func mergeFileBackupSettings(dst, src *Config) {
-	if src.BackupDirPath != DefaultConfig().BackupDirPath {
-		dst.BackupDirPath = src.BackupDirPath
+// When inheritContext is false (sequential file processing), earlier files take precedence.
+// rawSrcMap is used to check if fields were explicitly set in the source file.
+// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
+// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
+// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+func mergeFileBackupSettings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
+	// CFG-001: Respect earlier file precedence for sequential file processing
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		// If field was explicitly set in source, set it even if it equals default
+		_, explicitlySetInSrc := rawSrcMap["backup_dir_path"]
+		if explicitlySetInSrc {
+			dst.BackupDirPath = src.BackupDirPath
+		} else if src.BackupDirPath != defaultCfg.BackupDirPath {
+			dst.BackupDirPath = src.BackupDirPath
+		}
+	} else {
+		_, explicitlySetInSrc := rawSrcMap["backup_dir_path"]
+		_, explicitlySetByEarlier := explicitlySetFields["backup_dir_path"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.BackupDirPath != defaultCfg.BackupDirPath {
+			dst.BackupDirPath = src.BackupDirPath
+		}
 	}
-	if src.UseCurrentDirNameForFiles != DefaultConfig().UseCurrentDirNameForFiles {
-		dst.UseCurrentDirNameForFiles = src.UseCurrentDirNameForFiles
+	if inheritContext {
+		// Inheritance context: allow overrides normally
+		// If field was explicitly set in source, set it even if it equals default
+		_, explicitlySetInSrc := rawSrcMap["use_current_dir_name_for_files"]
+		if explicitlySetInSrc {
+			dst.UseCurrentDirNameForFiles = src.UseCurrentDirNameForFiles
+		} else if src.UseCurrentDirNameForFiles != defaultCfg.UseCurrentDirNameForFiles {
+			dst.UseCurrentDirNameForFiles = src.UseCurrentDirNameForFiles
+		}
+	} else {
+		_, explicitlySetInSrc := rawSrcMap["use_current_dir_name_for_files"]
+		_, explicitlySetByEarlier := explicitlySetFields["use_current_dir_name_for_files"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.UseCurrentDirNameForFiles != defaultCfg.UseCurrentDirNameForFiles {
+			dst.UseCurrentDirNameForFiles = src.UseCurrentDirNameForFiles
+		}
 	}
 }
 
@@ -790,9 +937,9 @@ func mergeFileBackupSettings(dst, src *Config) {
 // DECISION-REF: DEC-002
 // mergeStatusCodes merges all status code settings.
 // It handles both directory and file operation status codes.
-func mergeStatusCodes(dst, src *Config) {
-	mergeDirectoryStatusCodes(dst, src)
-	mergeFileStatusCodes(dst, src)
+func mergeStatusCodes(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}) {
+	mergeDirectoryStatusCodes(dst, src, inheritContext, defaultCfg)
+	mergeFileStatusCodes(dst, src, inheritContext, defaultCfg)
 }
 
 // CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
@@ -801,7 +948,7 @@ func mergeStatusCodes(dst, src *Config) {
 // DECISION-REF: DEC-002
 // mergeDirectoryStatusCodes merges directory operation status codes.
 // It handles archive creation and verification status codes.
-func mergeDirectoryStatusCodes(dst, src *Config) {
+func mergeDirectoryStatusCodes(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	statusCodes := map[string]struct {
 		src *int
 		dst *int
@@ -853,7 +1000,7 @@ func mergeDirectoryStatusCodes(dst, src *Config) {
 // DECISION-REF: DEC-002
 // mergeFileStatusCodes merges file operation status codes.
 // It handles file backup and verification status codes.
-func mergeFileStatusCodes(dst, src *Config) {
+func mergeFileStatusCodes(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	statusCodes := map[string]struct {
 		src *int
 		dst *int
@@ -888,13 +1035,13 @@ func mergeFileStatusCodes(dst, src *Config) {
 }
 
 // mergeFormatStrings merges printf-style format string settings.
-func mergeFormatStrings(dst, src *Config) {
-	mergeDirectoryFormatStrings(dst, src)
-	mergeFileFormatStrings(dst, src)
+func mergeFormatStrings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}) {
+	mergeDirectoryFormatStrings(dst, src, inheritContext, defaultCfg)
+	mergeFileFormatStrings(dst, src, inheritContext, defaultCfg)
 }
 
 // mergeDirectoryFormatStrings merges directory operation format strings.
-func mergeDirectoryFormatStrings(dst, src *Config) {
+func mergeDirectoryFormatStrings(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	formats := map[string]struct {
 		src *string
 		dst *string
@@ -933,7 +1080,7 @@ func mergeDirectoryFormatStrings(dst, src *Config) {
 }
 
 // mergeFileFormatStrings merges file operation format strings.
-func mergeFileFormatStrings(dst, src *Config) {
+func mergeFileFormatStrings(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	formats := map[string]struct {
 		src *string
 		dst *string
@@ -964,13 +1111,13 @@ func mergeFileFormatStrings(dst, src *Config) {
 }
 
 // mergeTemplates merges template-based format string settings.
-func mergeTemplates(dst, src *Config) {
-	mergeDirectoryTemplates(dst, src)
-	mergeFileTemplates(dst, src)
+func mergeTemplates(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}) {
+	mergeDirectoryTemplates(dst, src, inheritContext, defaultCfg)
+	mergeFileTemplates(dst, src, inheritContext, defaultCfg)
 }
 
 // mergeDirectoryTemplates merges directory operation templates.
-func mergeDirectoryTemplates(dst, src *Config) {
+func mergeDirectoryTemplates(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	templates := map[string]struct {
 		src *string
 		dst *string
@@ -1009,7 +1156,7 @@ func mergeDirectoryTemplates(dst, src *Config) {
 }
 
 // mergeFileTemplates merges file operation templates.
-func mergeFileTemplates(dst, src *Config) {
+func mergeFileTemplates(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	templates := map[string]struct {
 		src *string
 		dst *string
@@ -1040,7 +1187,7 @@ func mergeFileTemplates(dst, src *Config) {
 }
 
 // mergePatterns merges regex pattern settings.
-func mergePatterns(dst, src *Config) {
+func mergePatterns(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}) {
 	if src.PatternArchiveFilename != DefaultConfig().PatternArchiveFilename {
 		dst.PatternArchiveFilename = src.PatternArchiveFilename
 	}
@@ -1333,9 +1480,7 @@ func mergeFileStatusCodeValues(dst, src map[string]ConfigValue, srcCfg *Config) 
 
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 // mergeExtendedFormatStrings merges extended format string settings.
-func mergeExtendedFormatStrings(dst, src *Config) {
-	defaultCfg := DefaultConfig()
-
+func mergeExtendedFormatStrings(dst, src *Config, inheritContext bool, defaultCfg *Config) {
 	// Archive operation messages
 	if src.FormatNoArchivesFound != defaultCfg.FormatNoArchivesFound {
 		dst.FormatNoArchivesFound = src.FormatNoArchivesFound
@@ -1394,9 +1539,7 @@ func mergeExtendedFormatStrings(dst, src *Config) {
 
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 // mergeExtendedTemplates merges extended template settings.
-func mergeExtendedTemplates(dst, src *Config) {
-	defaultCfg := DefaultConfig()
-
+func mergeExtendedTemplates(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}) {
 	// Archive operation templates
 	if src.TemplateNoArchivesFound != defaultCfg.TemplateNoArchivesFound {
 		dst.TemplateNoArchivesFound = src.TemplateNoArchivesFound
@@ -1514,6 +1657,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 
 	searchPaths := getConfigSearchPaths()
 	finalCfg := DefaultConfig()
+	initialDefaultCfg := DefaultConfig() // Save initial defaults for precedence checking
 	var foundAny bool
 	var isFirstFile = true
 
@@ -1561,7 +1705,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
 				inheritContext := isFirstFile // First file merges with defaults
-				mergedCfg, err2 := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap)
+				mergedCfg, err2 := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, nil)
 				if err2 != nil {
 					if debug {
 						fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err2)
@@ -1607,7 +1751,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 				// Note: For backward compatibility, use !exclude_patterns prefix to explicitly override
 				inheritContext := isInheritanceChain || isFirstFile
 
-				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap)
+				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, nil)
 				if err != nil {
 					if debug {
 						fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", filePath, err)
@@ -1674,7 +1818,8 @@ func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuil
 
 		// Apply merge strategies and merge into main config
 		// Within inheritance chain, array fields default to merge
-		mergedCfg, err := applyMergeStrategies(cfg, tempCfg, true, loadResult.rawMap)
+		// For inheritance chains, initialDefaultCfg is not needed (inheritContext=true), but pass nil for consistency
+		mergedCfg, err := applyMergeStrategies(cfg, tempCfg, true, loadResult.rawMap, nil, nil)
 		if err != nil {
 			return nil, fmt.Errorf("failed to merge config from %s: %w", filePath, err)
 		}
@@ -1740,7 +1885,9 @@ func loadSingleConfigFile(configPath string) (*configFileLoadResult, error) {
 // inheritContext indicates if this merge is within an inheritance chain (true) or between sequential files (false).
 // Array fields default to merge only within inheritance chains, not between sequential files.
 // rawSrcMap is the original map with merge strategy prefixes preserved (can be nil if not available)
-func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}) (*Config, error) {
+// initialDefaultCfg is the initial default config before any files were processed (used to detect if dst was modified)
+// explicitlySetFields tracks which fields were explicitly set by earlier files (used for precedence checking)
+func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, explicitlySetFields map[string]bool) (*Config, error) {
 	processor := newMergeStrategyProcessor()
 
 	// Use rawSrcMap if available (preserves merge strategy prefixes), otherwise convert Config to map
@@ -1784,39 +1931,70 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 		}
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
-	// CFG-005: Array fields default to merge (accumulate) strategy to preserve values
-	// from defaults and parent configs when child configs add values.
-	// This applies to both inheritance chains and sequential file processing.
-	// But respect explicit merge strategy prefixes (!, +, ^, =) in all contexts
-	// Check if explicit prefix was used in rawSrcMap
-	hasExplicitPrefix := false
+	// CFG-001 + CFG-005: Check for explicit merge strategy prefixes (!, +, ^, =) per field
+	// This allows us to respect explicit prefixes even for fields that default to accumulate
+	hasExplicitPrefix := make(map[string]bool)
 	if rawSrcMap != nil {
 		for origKey := range rawSrcMap {
-			if origKey == "!exclude_patterns" || origKey == "+exclude_patterns" ||
-				origKey == "^exclude_patterns" || origKey == "=exclude_patterns" {
-				hasExplicitPrefix = true
-				break
+			// Handle quoted YAML keys (e.g., "+exclude_patterns" or '^exclude_patterns')
+			// Strip quotes if present
+			cleanKey := origKey
+			if len(origKey) >= 2 && ((origKey[0] == '"' && origKey[len(origKey)-1] == '"') || (origKey[0] == '\'' && origKey[len(origKey)-1] == '\'')) {
+				cleanKey = origKey[1 : len(origKey)-1]
+			}
+			// Check if key has explicit prefix (!, +, ^, =)
+			if len(cleanKey) > 0 && (cleanKey[0] == '!' || cleanKey[0] == '+' || cleanKey[0] == '^' || cleanKey[0] == '=') {
+				// Extract base field name (remove prefix)
+				baseKey := cleanKey[1:]
+				hasExplicitPrefix[baseKey] = true
 			}
 		}
 	}
 
 	for key, operation := range processed.operations {
-		if key == "exclude_patterns" {
+		// CFG-001 + CFG-005: Apply field-specific merge behavior
+		// Check if this field should default to merge (accumulate) behavior
+		behavior := getFieldMergeBehavior(key)
+		hasExplicitPrefixForField := hasExplicitPrefix[key]
+		if behavior == MergeBehaviorAccumulate {
+			// Field defaults to accumulate (merge) behavior
 			if debug {
-				fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns before: strategy=%s, hasExplicitPrefix=%v, inheritContext=%v\n", operation.strategy, hasExplicitPrefix, inheritContext)
+				fmt.Printf("DEBUG: applyMergeStrategies - %s before: strategy=%s, hasExplicitPrefix=%v, inheritContext=%v, behavior=Accumulate\n", key, operation.strategy, hasExplicitPrefixForField, inheritContext)
 			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			// If explicit prefix was used (!, +, ^, =), respect it (don't change to merge)
 			// Note: ! gives "replace", + gives "merge", ^ gives "prepend", = gives "default"
-			// CFG-005: Array fields default to merge (no prefix) in all contexts
+			// CFG-005: Array fields default to merge (no prefix) in inheritance chains
+			// CFG-001: For sequential files (inheritContext=false), earlier files take precedence
 			// If strategy is already "replace", "merge", "prepend", or "default", keep it
-			if operation.strategy == "override" && !hasExplicitPrefix {
-				// Default override (no prefix), change to merge per CFG-005 requirement
+			if operation.strategy == "override" && !hasExplicitPrefixForField {
+				// Default override (no prefix) → change to merge per CFG-005 requirement
+				// CFG-005: Array fields default to merge in ALL contexts (inheritance chains AND sequential file processing)
+				// For MergeBehaviorAccumulate fields, always merge (accumulate) unless explicit ! prefix is used
+				// The only exception is when explicit ! prefix is used, which is handled by hasExplicitPrefixForField check above
 				operation.strategy = "merge"
 				if debug {
-					fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns changed to merge strategy (CFG-005: array fields default to merge)\n")
+					context := "default merge behavior (CFG-005)"
+					if inheritContext {
+						if initialDefaultCfg == nil {
+							context = "inheritance chain"
+						} else if explicitlySetFields == nil {
+							context = "single file (merge with defaults)"
+						} else {
+							context = "first file merging with defaults"
+						}
+					} else {
+						context = "subsequent file (accumulate behavior)"
+					}
+					fmt.Printf("DEBUG: applyMergeStrategies - %s changed to merge strategy (CFG-005: %s)\n", key, context)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 			}
 			// For "replace" (!), "merge" (+), "prepend" (^), "default" (=), keep as-is
+		} else {
+			// Field defaults to precedence behavior (CFG-001)
+			// Keep strategy as-is (override, replace, etc.)
+			if debug {
+				fmt.Printf("DEBUG: applyMergeStrategies - %s: strategy=%s, behavior=Precedence, hasExplicitPrefix=%v\n", key, operation.strategy, hasExplicitPrefixForField)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 		}
 	}
 
@@ -1825,6 +2003,17 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	// This ensures we preserve any accumulated values from previous merges
 	result := &Config{}
 	*result = *dst // Copy the config
+
+	// Cache default config once for use in applyOverride to avoid repeated calls
+	defaultCfg := DefaultConfig()
+
+	// CFG-001: For sequential file processing, save dst state before merge to detect if earlier files modified values
+	// Compare dst with initialDefaultCfg to determine if any earlier file has modified values
+	var dstBeforeMerge *Config
+	if !inheritContext && initialDefaultCfg != nil {
+		dstBeforeMerge = &Config{}
+		*dstBeforeMerge = *dst // Save state before merge to detect earlier file modifications
+	}
 
 	// Save dst's exclude_patterns - we'll handle exclude_patterns via applyMergeOperation based on strategy
 	dstExcludePatterns := make([]string, len(dst.ExcludePatterns))
@@ -1837,11 +2026,29 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	srcCopy.ExcludePatterns = nil
 
 	// Merge other settings from srcCopy into result (exclude_patterns skipped)
-	mergeConfigs(result, srcCopy)
+	// Also skip fields that will be processed by merge operations (to avoid double-processing)
+	// Pass inheritContext, rawSrcMap, initialDefaultCfg, dstBeforeMerge, and explicitlySetFields to respect earlier file precedence
+	// rawSrcMap allows us to check if fields were explicitly set in the source file
+	// initialDefaultCfg allows us to detect if dst was modified from initial defaults by earlier files
+	// dstBeforeMerge allows us to detect if dst was modified by earlier files in this merge operation
+	// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults)
+	// If initialDefaultCfg is nil (inheritance context), it will be ignored in merge functions
+	// Merge other settings from srcCopy into result (exclude_patterns skipped)
+	// Pass inheritContext, rawSrcMap, initialDefaultCfg, dstBeforeMerge, and explicitlySetFields to respect earlier file precedence
+	// rawSrcMap allows us to check if fields were explicitly set in the source file
+	// initialDefaultCfg allows us to detect if dst was modified from initial defaults by earlier files
+	// dstBeforeMerge allows us to detect if dst was modified by earlier files in this merge operation
+	// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults)
+	// If initialDefaultCfg is nil (inheritance context), it will be ignored in merge functions
+	mergeConfigs(result, srcCopy, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
 
 	// For exclude_patterns, restore dst's original patterns so applyMergeOperation can merge based on strategy
 	// This ensures we start with the current state (dst) and merge src's patterns into it
 	result.ExcludePatterns = dstExcludePatterns
+
+	// Save original dst values before mergeConfigs modifies result
+	// This is needed for applyOverride to check against original values, not modified ones
+	originalDstMap := configToMap(dst)
 
 	// Apply source values with merge strategies
 	// Use result's current values (not dst's) for merge operations
@@ -1902,6 +2109,28 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 		}
 		// Get current value from result (which has dst merged in)
 		currentValue := resultMap[key]
+		// Get original dst value before mergeConfigs modified it
+		// This is needed for precedence checking in applyOverride/applyReplace
+		originalDstValue := originalDstMap[key]
+		// CFG-005: For exclude_patterns, ensure we use result.ExcludePatterns directly if currentValue is empty/nil
+		// This ensures defaults are preserved when merging
+		if key == "exclude_patterns" {
+			if currentValue == nil {
+				if len(result.ExcludePatterns) > 0 {
+					currentValue = result.ExcludePatterns
+					if debug {
+						fmt.Printf("DIAGNOSTIC: Using result.ExcludePatterns directly (currentValue was nil): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+					} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+				}
+			} else if cvSlice, ok := currentValue.([]string); ok && len(cvSlice) == 0 {
+				if len(result.ExcludePatterns) > 0 {
+					currentValue = result.ExcludePatterns
+					if debug {
+						fmt.Printf("DIAGNOSTIC: Using result.ExcludePatterns directly (currentValue was empty): %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+					} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+				}
+			}
+		}
 		if debug && key == "exclude_patterns" {
 			fmt.Printf("\n--- Processing exclude_patterns ---\n")
 			fmt.Printf("currentValue: %v (type: %T)\n", currentValue, currentValue)
@@ -1916,7 +2145,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 			fmt.Printf("DEBUG: applyMergeStrategies - key: %s, currentValue: %v, operation.value: %v, strategy: %s\n",
 				key, currentValue, operation.value, operation.strategy)
 		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		err := applyMergeOperation(result, key, operation, currentValue)
+		err := applyMergeOperation(result, key, operation, currentValue, originalDstValue, inheritContext, defaultCfg, explicitlySetFields)
 		if err != nil {
 			// Check if error is due to unknown field (shouldn't happen if isKnownConfigField works correctly)
 			if strings.Contains(err.Error(), "unknown config field") {
@@ -2104,6 +2333,46 @@ type mergeOperation struct {
 	key      string
 }
 
+// CFG-001 + CFG-005: Field merge behavior configuration
+// FieldMergeBehavior specifies how a field should behave during sequential file processing
+// when there's a conflict between CFG-001 (earlier files take precedence) and CFG-005 (array fields merge)
+type FieldMergeBehavior int
+
+const (
+	// MergeBehaviorAccumulate: Field accumulates values from all files (CFG-005 style)
+	// Used for fields like exclude_patterns that should merge/accumulate by default
+	MergeBehaviorAccumulate FieldMergeBehavior = iota
+	// MergeBehaviorPrecedence: Field respects earlier file precedence (CFG-001 style)
+	// Used for scalar fields that should respect earlier file values
+	MergeBehaviorPrecedence
+)
+
+// CFG-001 + CFG-005: Field merge behavior registry
+// Specifies merge behavior per field to resolve conflict between CFG-001 and CFG-005
+// - Fields with MergeBehaviorAccumulate: Always merge, even in sequential file processing
+// - Fields with MergeBehaviorPrecedence: Respect earlier file precedence, even for array fields
+// - Explicit prefixes (!, +, ^, =) override the default behavior
+var fieldMergeBehaviors = map[string]FieldMergeBehavior{
+	"exclude_patterns":               MergeBehaviorAccumulate, // CFG-005: Merge by default
+	"archive_dir_path":               MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"include_git_info":               MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"show_git_dirty_status":          MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"skip_broken_symlinks":           MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"use_current_dir_name":           MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"backup_dir_path":                MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"use_current_dir_name_for_files": MergeBehaviorPrecedence, // CFG-001: Earlier files win
+}
+
+// getFieldMergeBehavior returns the merge behavior for a given field
+// Returns MergeBehaviorPrecedence as default if field is not in registry
+func getFieldMergeBehavior(fieldName string) FieldMergeBehavior {
+	if behavior, exists := fieldMergeBehaviors[fieldName]; exists {
+		return behavior
+	}
+	// Default to precedence behavior for unknown fields (CFG-001)
+	return MergeBehaviorPrecedence
+}
+
 // defaultMergeStrategyProcessor implements mergeStrategyProcessor
 type defaultMergeStrategyProcessor struct{}
 
@@ -2116,12 +2385,70 @@ func (p *defaultMergeStrategyProcessor) processKeys(config map[string]interface{
 		operations: make(map[string]*mergeOperation),
 	}
 
+	// First pass: identify keys with explicit prefixes
+	explicitPrefixKeys := make(map[string]string) // cleanKey -> originalKey
+	for key := range config {
+		cleanKey := key
+		// Handle quoted YAML keys
+		if len(key) >= 2 && ((key[0] == '"' && key[len(key)-1] == '"') || (key[0] == '\'' && key[len(key)-1] == '\'')) {
+			cleanKey = key[1 : len(key)-1]
+		}
+		// Check if key has explicit prefix
+		if len(cleanKey) > 0 && (cleanKey[0] == '!' || cleanKey[0] == '+' || cleanKey[0] == '^' || cleanKey[0] == '=') {
+			baseKey := cleanKey[1:]
+			// Store the original key with prefix for this base key
+			if existing, exists := explicitPrefixKeys[baseKey]; !exists {
+				explicitPrefixKeys[baseKey] = key
+			} else {
+				// If we already have an explicit prefix key, prefer the one with the prefix
+				// (the current key might be the one with prefix)
+				if len(key) > len(existing) || (strings.Contains(key, "+") || strings.Contains(key, "^") || strings.Contains(key, "!") || strings.Contains(key, "=")) {
+					explicitPrefixKeys[baseKey] = key
+				}
+			}
+		}
+	}
+
+	// Second pass: process keys, prioritizing explicit prefix keys
 	for key, value := range config {
+		if debug && (key == "exclude_patterns" || strings.Contains(key, "exclude_patterns")) {
+			fmt.Printf("DEBUG: processKeys - processing key: %q (len=%d)\n", key, len(key))
+		}
 		strategy, cleanKey := p.extractStrategy(key)
-		result.operations[cleanKey] = &mergeOperation{
-			strategy: strategy,
-			value:    value,
-			key:      cleanKey,
+		if debug && (key == "exclude_patterns" || strings.Contains(key, "exclude_patterns")) {
+			fmt.Printf("DEBUG: processKeys - extracted strategy: %q, cleanKey: %q\n", strategy, cleanKey)
+		}
+
+		// If there's an explicit prefix key for this cleanKey, only use it if this is that key
+		// Otherwise, skip if we've already processed the explicit prefix key
+		if explicitKey, hasExplicit := explicitPrefixKeys[cleanKey]; hasExplicit {
+			if key != explicitKey {
+				// This is a duplicate key without the explicit prefix, skip it
+				if debug && (key == "exclude_patterns" || strings.Contains(key, "exclude_patterns")) {
+					fmt.Printf("DEBUG: processKeys - skipping duplicate key %q (explicit prefix key %q exists)\n", key, explicitKey)
+				}
+				continue
+			}
+		}
+
+		// Only set the operation if we don't already have one, or if this is the explicit prefix key
+		if existing, exists := result.operations[cleanKey]; exists {
+			// If existing operation has explicit prefix, keep it
+			// Otherwise, replace with current (which might have explicit prefix)
+			if strategy != "override" || existing.strategy == "override" {
+				// Current has explicit prefix or both are override, use current
+				result.operations[cleanKey] = &mergeOperation{
+					strategy: strategy,
+					value:    value,
+					key:      cleanKey,
+				}
+			}
+		} else {
+			result.operations[cleanKey] = &mergeOperation{
+				strategy: strategy,
+				value:    value,
+				key:      cleanKey,
+			}
 		}
 	}
 
@@ -2133,15 +2460,27 @@ func (p *defaultMergeStrategyProcessor) extractStrategy(key string) (string, str
 		return "override", key
 	}
 
-	switch key[0] {
+	// Handle quoted YAML keys (e.g., "+exclude_patterns" or '^exclude_patterns')
+	// Strip quotes if present
+	cleanKey := key
+	if len(key) >= 2 && ((key[0] == '"' && key[len(key)-1] == '"') || (key[0] == '\'' && key[len(key)-1] == '\'')) {
+		cleanKey = key[1 : len(key)-1]
+	}
+
+	// Check the first character of the clean key for merge strategy prefixes
+	if len(cleanKey) == 0 {
+		return "override", key
+	}
+
+	switch cleanKey[0] {
 	case '+':
-		return "merge", key[1:]
+		return "merge", cleanKey[1:]
 	case '^':
-		return "prepend", key[1:]
+		return "prepend", cleanKey[1:]
 	case '!':
-		return "replace", key[1:]
+		return "replace", cleanKey[1:]
 	case '=':
-		return "default", key[1:]
+		return "default", cleanKey[1:]
 	default:
 		return "override", key
 	}
@@ -2166,16 +2505,17 @@ func configToMap(cfg *Config) map[string]interface{} {
 }
 
 // applyMergeOperation applies a merge operation to the result configuration
-func applyMergeOperation(result *Config, key string, operation *mergeOperation, dstValue interface{}) error {
+// originalDstValue is the value from dst before mergeConfigs modified result (needed for precedence checking)
+func applyMergeOperation(result *Config, key string, operation *mergeOperation, dstValue interface{}, originalDstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	switch operation.strategy {
 	case "override":
-		return applyOverride(result, key, operation.value)
+		return applyOverride(result, key, operation.value, originalDstValue, inheritContext, defaultCfg, explicitlySetFields)
 	case "merge":
 		return applyMerge(result, key, operation.value, dstValue)
 	case "prepend":
 		return applyPrepend(result, key, operation.value, dstValue)
 	case "replace":
-		return applyReplace(result, key, operation.value)
+		return applyReplace(result, key, operation.value, originalDstValue, inheritContext, defaultCfg, explicitlySetFields)
 	case "default":
 		return applyDefault(result, key, operation.value, dstValue)
 	default:
@@ -2184,18 +2524,48 @@ func applyMergeOperation(result *Config, key string, operation *mergeOperation, 
 }
 
 // Helper functions for applying different merge strategies
-func applyOverride(result *Config, key string, value interface{}) error {
+// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
+// Earlier files take precedence over later files when processing sequential config files.
+// When inheritContext is false (sequential file processing), don't override non-default values
+// that were already set by earlier files.
+func applyOverride(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
+	// When processing sequential files (inheritContext=false), respect earlier file precedence
+	// by not overriding values that were set by earlier files
+	if !inheritContext && dstValue != nil && defaultCfg != nil {
+		defaultValue := getDefaultValueForKey(key, defaultCfg)
+		// Check if field was explicitly set by earlier file (even if it equals default)
+		wasSetByEarlierFile := explicitlySetFields != nil && explicitlySetFields[key]
+		// Check if any earlier file was processed (explicitlySetFields map exists and has entries)
+		// If earlier files were processed, preserve their state (including defaults) - later files cannot override
+		earlierFilesProcessed := explicitlySetFields != nil && len(explicitlySetFields) > 0
+		// If destination already has a non-default value, don't override it
+		// OR if field was explicitly set by earlier file (even if equals default), don't override it
+		// OR if earlier files were processed (meaning dst represents earlier file's state), don't override
+		// This ensures earlier files take precedence over later files
+		if !reflect.DeepEqual(dstValue, defaultValue) || wasSetByEarlierFile || earlierFilesProcessed {
+			if debug {
+				fmt.Printf("DEBUG: applyOverride - Skipping override for %s: dstValue (%v) != defaultValue (%v) OR wasSetByEarlierFile=%v OR earlierFilesProcessed=%v (earlier file precedence)\n",
+					key, dstValue, defaultValue, wasSetByEarlierFile, earlierFilesProcessed)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+			// Reset value back to original dstValue (mergeConfigs may have modified result already)
+			// This ensures earlier file's value is preserved
+			return setConfigField(result, key, dstValue)
+		}
+	}
 	return setConfigField(result, key, value)
 }
 
 func applyMerge(result *Config, key string, value interface{}, dstValue interface{}) error {
 	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
+	// CFG-005: Array fields default to merge (accumulate) strategy
 	// For arrays, merge by appending with deduplication
+	// Field-specific behavior is controlled by fieldMergeBehaviors registry
 	if debug && key == "exclude_patterns" {
 		fmt.Printf("=== DIAGNOSTIC: applyMerge for exclude_patterns ===\n")
 		fmt.Printf("value: %v (type: %T)\n", value, value)
 		fmt.Printf("dstValue: %v (type: %T)\n", dstValue, dstValue)
 		fmt.Printf("result.ExcludePatterns: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+		fmt.Printf("fieldMergeBehavior: %v\n", getFieldMergeBehavior(key))
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
 	// Convert []interface{} to []string if needed (common from YAML unmarshaling)
@@ -2234,6 +2604,7 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 	if len(srcSlice) > 0 {
 		if debug && key == "exclude_patterns" {
 			fmt.Printf("srcSlice: %v (len=%d)\n", srcSlice, len(srcSlice))
+			fmt.Printf("dstValue: %v (type: %T)\n", dstValue, dstValue)
 		}
 		// Handle nil or missing dstValue by getting current value from result
 		if dstValue == nil {
@@ -2246,6 +2617,14 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 			if debug && key == "exclude_patterns" {
 				fmt.Printf("dstValue from resultMap: %v (type: %T)\n", dstValue, dstValue)
 			}
+		}
+		// If dstValue is still nil after checking result, it means the field doesn't exist
+		// For exclude_patterns, this shouldn't happen, but handle it gracefully
+		if dstValue == nil && key == "exclude_patterns" {
+			if debug {
+				fmt.Printf("dstValue still nil for exclude_patterns, using result.ExcludePatterns directly\n")
+			}
+			dstValue = result.ExcludePatterns
 		}
 
 		var dstSlice []string
@@ -2325,21 +2704,92 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 
 func applyPrepend(result *Config, key string, value interface{}, dstValue interface{}) error {
 	// For arrays, prepend source to destination
-	if srcSlice, ok := value.([]string); ok {
-		if dstSlice, ok := dstValue.([]string); ok {
+	// Convert []interface{} to []string if needed (common from YAML unmarshaling)
+	var srcSlice []string
+	if strSlice, ok := value.([]string); ok {
+		srcSlice = strSlice
+	} else if ifaceSlice, ok := value.([]interface{}); ok {
+		srcSlice = make([]string, 0, len(ifaceSlice))
+		for _, v := range ifaceSlice {
+			if str, ok := v.(string); ok {
+				srcSlice = append(srcSlice, str)
+			}
+		}
+	} else {
+		// Not a slice, just set the value
+		return setConfigField(result, key, value)
+	}
+
+	if debug && key == "exclude_patterns" {
+		fmt.Printf("=== DIAGNOSTIC: applyPrepend for exclude_patterns ===\n")
+		fmt.Printf("srcSlice: %v (len=%d, type=%T)\n", srcSlice, len(srcSlice), srcSlice)
+		fmt.Printf("dstValue: %v (type=%T)\n", dstValue, dstValue)
+		fmt.Printf("result.ExcludePatterns BEFORE: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+	}
+
+	if dstValue != nil {
+		var dstSlice []string
+		var ok bool
+		if dstSlice, ok = dstValue.([]string); ok {
 			merged := append(srcSlice, dstSlice...)
+			if debug && key == "exclude_patterns" {
+				fmt.Printf("Merged (prepend): %v (len=%d)\n", merged, len(merged))
+				fmt.Printf("=== END DIAGNOSTIC: applyPrepend ===\n\n")
+			}
+			return setConfigField(result, key, merged)
+		} else if ifaceSlice, ok2 := dstValue.([]interface{}); ok2 {
+			// Convert []interface{} to []string
+			dstSlice := make([]string, 0, len(ifaceSlice))
+			for _, v := range ifaceSlice {
+				if str, ok3 := v.(string); ok3 {
+					dstSlice = append(dstSlice, str)
+				}
+			}
+			merged := append(srcSlice, dstSlice...)
+			if debug && key == "exclude_patterns" {
+				fmt.Printf("Merged (prepend, converted): %v (len=%d)\n", merged, len(merged))
+				fmt.Printf("=== END DIAGNOSTIC: applyPrepend ===\n\n")
+			}
 			return setConfigField(result, key, merged)
 		}
 	}
-	return setConfigField(result, key, value)
+
+	// If dstValue is not a slice or is nil, just use srcSlice
+	if debug && key == "exclude_patterns" {
+		fmt.Printf("dstValue not a slice or nil, using srcSlice only\n")
+		fmt.Printf("=== END DIAGNOSTIC: applyPrepend ===\n\n")
+	}
+	return setConfigField(result, key, srcSlice)
 }
 
-func applyReplace(result *Config, key string, value interface{}) error {
+func applyReplace(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	if debug && key == "exclude_patterns" {
 		fmt.Printf("=== DIAGNOSTIC: applyReplace for exclude_patterns ===\n")
 		fmt.Printf("value: %v (type: %T)\n", value, value)
 		fmt.Printf("result.ExcludePatterns BEFORE: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
+		fmt.Printf("fieldMergeBehavior: %v\n", getFieldMergeBehavior(key))
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+	// CFG-001 + CFG-005: When processing sequential files (inheritContext=false), respect earlier file precedence
+	// For both MergeBehaviorPrecedence and MergeBehaviorAccumulate fields, earlier files take precedence
+	// Even with explicit "replace" strategy (! prefix), earlier file values are preserved (CFG-001)
+	// The difference is in default behavior (merge vs override), not in precedence rules
+	if !inheritContext && dstValue != nil && defaultCfg != nil {
+		defaultValue := getDefaultValueForKey(key, defaultCfg)
+		// Check if field was explicitly set by earlier file (even if it equals default)
+		wasSetByEarlierFile := explicitlySetFields != nil && explicitlySetFields[key]
+		// If destination already has a non-default value, don't replace it (CFG-001: earlier file precedence)
+		// OR if field was explicitly set by earlier file (even if equals default), don't replace it
+		// This applies to both accumulate and precedence fields when using explicit ! prefix
+		if !reflect.DeepEqual(dstValue, defaultValue) || wasSetByEarlierFile {
+			behavior := getFieldMergeBehavior(key)
+			if debug {
+				fmt.Printf("DEBUG: applyReplace - Skipping replace for %s: dstValue (%v) != defaultValue (%v) OR wasSetByEarlierFile=%v (earlier file precedence, behavior=%v)\n",
+					key, dstValue, defaultValue, wasSetByEarlierFile, behavior)
+			} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+			return nil // Skip replace to respect earlier file precedence
+		}
+	}
+	// If destination equals default (no earlier file set it), allow replace
 	err := setConfigField(result, key, value)
 	if debug && key == "exclude_patterns" {
 		fmt.Printf("result.ExcludePatterns AFTER: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
@@ -2423,6 +2873,30 @@ func isKnownConfigField(key string) bool {
 		"status_disk_full":       true,
 	}
 	return knownFields[key]
+}
+
+// getDefaultValueForKey returns the default value for a given configuration key
+func getDefaultValueForKey(key string, defaultCfg *Config) interface{} {
+	switch key {
+	case "archive_dir_path":
+		return defaultCfg.ArchiveDirPath
+	case "use_current_dir_name":
+		return defaultCfg.UseCurrentDirName
+	case "exclude_patterns":
+		return defaultCfg.ExcludePatterns
+	case "include_git_info":
+		return defaultCfg.IncludeGitInfo
+	case "backup_dir_path":
+		return defaultCfg.BackupDirPath
+	case "skip_broken_symlinks":
+		return defaultCfg.SkipBrokenSymlinks
+	case "status_created_archive":
+		return defaultCfg.StatusCreatedArchive
+	case "status_disk_full":
+		return defaultCfg.StatusDiskFull
+	default:
+		return nil
+	}
 }
 
 // isZeroValue checks if a value is the zero value for its type
@@ -3393,7 +3867,8 @@ func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string
 
 		// Apply merge strategies and merge into current config
 		// Within inheritance chain, array fields default to merge
-		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg, true, loadResult.rawMap)
+		// For inheritance chains, initialDefaultCfg is not needed (inheritContext=true), but pass nil for consistency
+		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg, true, loadResult.rawMap, nil, nil)
 		if err != nil {
 			continue // Skip problematic merges
 		}

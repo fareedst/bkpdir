@@ -105,7 +105,9 @@ type DefaultConfigMerger struct{}
 // MergeConfigs merges source configuration into destination configuration.
 // REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultConfigMerger) MergeConfigs(dst, src *Config) {
-	mergeConfigs(dst, src)
+	// Use inheritContext=true for backward compatibility (old behavior was to always override)
+	defaultCfg := DefaultConfig()
+	mergeConfigs(dst, src, true, defaultCfg, nil, nil, nil, nil)
 }
 
 // MergeConfigValues merges configuration value maps.
