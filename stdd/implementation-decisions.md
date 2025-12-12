@@ -2138,6 +2138,8 @@ func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
 - `exclude_patterns` with `!` prefix in later file: Respects earlier file if it was set (CFG-001)
 - `archive_dir_path` in later file: Earlier file value preserved (CFG-001)
 - `include_git_info` in later file: Earlier file value preserved (CFG-001)
+- `+archive_dir_path` in later file: Earlier file value preserved (CFG-001) - Fixed in [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]
+- `^archive_dir_path` in later file: Earlier file value preserved (CFG-001) - Fixed in [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]
 
 **Cross-References**: [ARCH:CFG_005], [ARCH:CFG_001], [REQ:CFG_005], [REQ:CONFIGURATION], [IMPL:CFG_PRECEDENCE_FIX]
 
@@ -2325,3 +2327,454 @@ if len(cleanKey) > 0 && (cleanKey[0] == '!' || cleanKey[0] == '+' || cleanKey[0]
 **Code Markers**: `extractStrategy`, `hasExplicitPrefix`, `processKeys`, `quoted YAML keys`, `cleanKey`, `explicitPrefixKeys`
 
 **Cross-References**: [ARCH:CFG_005], [REQ:CFG_005], [REQ:CONFIGURATION], [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+
+## 26. Merge and Prepend Strategy Precedence Fix [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH:CFG_001] [ARCH:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]
+
+### Decision: Fix `applyMerge()` and `applyPrepend()` to respect earlier file precedence for scalar/precedence fields
+**Rationale:**
+- Bug fix: `+` and `^` prefixes on scalar/precedence fields (e.g., `+archive_dir_path`, `^archive_dir_path`) were bypassing precedence checks
+- Per CFG-001 and implementation decision [IMPL:CFG_MERGE_BEHAVIOR_REGISTRY], explicit prefixes should "work as normal, but precedence still applies for sequential files"
+- `applyMerge()` and `applyPrepend()` were designed for arrays and fell back to `setConfigField()` for scalars without checking precedence
+- This violated CFG-001 requirement that earlier files take precedence over later files
+
+### Implementation Approach:
+- Updated `applyMerge()` and `applyPrepend()` function signatures to accept `inheritContext`, `defaultCfg`, and `explicitlySetFields` parameters
+- Added precedence checking logic for scalar/precedence fields before falling back to `setConfigField()`
+- Updated `applyMergeOperation()` to pass new parameters to `applyMerge()` and `applyPrepend()`
+- Updated tests to expect correct behavior (earlier file precedence)
+
+### Key Changes:
+
+#### 1. Updated `applyMerge()` Function Signature
+**Change**: Added parameters for precedence checking: `inheritContext bool`, `defaultCfg *Config`, `explicitlySetFields map[string]bool`
+
+**Before**: `func applyMerge(result *Config, key string, value interface{}, dstValue interface{}) error`
+**After**: `func applyMerge(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error`
+
+**Code Location**: `config.go`, `applyMerge` function, line ~2563
+
+#### 2. Added Precedence Check in `applyMerge()` for Scalar Fields
+**Change**: When value is not an array, check if field is `MergeBehaviorPrecedence` and respect earlier file precedence before setting value.
+
+**Before**: Fell back to `setConfigField(result, key, value)` without precedence check
+**After**: Checks precedence similar to `applyOverride()` - if earlier file set the field, preserve its value
+
+**Code Location**: `config.go`, `applyMerge` function, lines ~2598-2615
+
+#### 3. Updated `applyPrepend()` Function Signature
+**Change**: Added parameters for precedence checking: `inheritContext bool`, `defaultCfg *Config`, `explicitlySetFields map[string]bool`
+
+**Before**: `func applyPrepend(result *Config, key string, value interface{}, dstValue interface{}) error`
+**After**: `func applyPrepend(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error`
+
+**Code Location**: `config.go`, `applyPrepend` function, line ~2733
+
+#### 4. Added Precedence Check in `applyPrepend()` for Scalar Fields
+**Change**: When value is not an array, check if field is `MergeBehaviorPrecedence` and respect earlier file precedence before setting value.
+
+**Before**: Fell back to `setConfigField(result, key, value)` without precedence check
+**After**: Checks precedence similar to `applyOverride()` - if earlier file set the field, preserve its value
+
+**Code Location**: `config.go`, `applyPrepend` function, lines ~2746-2763
+
+#### 5. Updated `applyMergeOperation()` Calls
+**Change**: Updated calls to `applyMerge()` and `applyPrepend()` to pass new parameters.
+
+**Before**: 
+```go
+case "merge":
+    return applyMerge(result, key, operation.value, dstValue)
+case "prepend":
+    return applyPrepend(result, key, operation.value, dstValue)
+```
+
+**After**:
+```go
+case "merge":
+    return applyMerge(result, key, operation.value, dstValue, inheritContext, defaultCfg, explicitlySetFields)
+case "prepend":
+    return applyPrepend(result, key, operation.value, dstValue, inheritContext, defaultCfg, explicitlySetFields)
+```
+
+**Code Location**: `config.go`, `applyMergeOperation` function, lines ~2514-2516
+
+#### 6. Updated Test Expectations
+**Change**: Updated `TestAllStrategiesWithPrecedenceFields` tests to expect earlier file precedence for `+` and `^` prefixes.
+
+**Before**: Tests accepted either file1 or file2 value (masking the bug)
+**After**: Tests expect file1's value to be preserved (correct CFG-001 behavior)
+
+**Code Location**: `config_test.go`, `TestAllStrategiesWithPrecedenceFields` function, lines ~5617-5665
+
+### Behavior:
+
+**Before Fix:**
+- `+archive_dir_path` in file2: Overrode file1's value ❌
+- `^archive_dir_path` in file2: Overrode file1's value ❌
+- `!archive_dir_path` in file2: Correctly respected file1's value ✅
+- `archive_dir_path` (no prefix) in file2: Correctly respected file1's value ✅
+
+**After Fix:**
+- `+archive_dir_path` in file2: Respects file1's value ✅
+- `^archive_dir_path` in file2: Respects file1's value ✅
+- `!archive_dir_path` in file2: Respects file1's value ✅
+- `archive_dir_path` (no prefix) in file2: Respects file1's value ✅
+
+### Test Coverage:
+- `TestAllStrategiesWithPrecedenceFields/merge_strategy (+)` - Validates `+` prefix respects precedence
+- `TestAllStrategiesWithPrecedenceFields/prepend_strategy (^)` - Validates `^` prefix respects precedence
+- `TestAllStrategiesWithPrecedenceFields/replace_strategy (!)` - Validates `!` prefix respects precedence (already working)
+- `TestAllStrategiesWithPrecedenceFields/no prefix` - Validates no prefix respects precedence (already working)
+
+### Code Markers:
+- `applyMerge`, `applyPrepend`, `applyMergeOperation`
+- `// CFG-001 + CFG-005: For scalar/precedence fields with +/^ prefix, respect earlier file precedence`
+- `getFieldMergeBehavior`, `MergeBehaviorPrecedence`
+
+### Cross-References:
+- [ARCH:CFG_001] - Configuration Discovery Architecture
+- [ARCH:CFG_005] - Layered Configuration Inheritance Architecture
+- [REQ:CFG_001] - Configuration Discovery (earlier file precedence)
+- [REQ:CONFIGURATION] - Configuration Management
+- [IMPL:CFG_MERGE_BEHAVIOR_REGISTRY] - Field-Level Merge Behavior Registry
+- [IMPL:CFG_MIXED_MODE_MERGE_FIX] - Mixed-Mode Merge Strategy Fix
+
+## 27. Priority 1 Configuration Merge Tests Implementation [IMPL:TEST_CFG_005_P1] [ARCH:CFG_005] [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]
+
+**Date**: 2025-12-11
+**Status**: Implemented
+**Priority**: P1 (Important)
+
+### Decision: Implement comprehensive Priority 1 tests for configuration merge edge cases and inheritance scenarios
+**Rationale:**
+- Validates important edge cases for configuration inheritance and merging
+- Ensures relative path resolution, home directory expansion, and error handling work correctly
+- Tests cover multiple inheritance sources, deep chains, type mismatches, and null value handling
+- Provides comprehensive coverage beyond Priority 0 critical tests
+
+### Implementation Approach:
+- **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)
+  - Verifies precedence fields (child overrides parents in inheritance chains)
+  - Verifies accumulate fields merge from all sources including defaults
+- **TestRelativePathInheritance_REQ_CFG_005**: Tests relative path resolution (../base.yml, ./sibling.yml)
+  - Verifies paths resolve correctly relative to config file location
+  - Tests both parent directory (../) and sibling (./) path resolution
+- **TestHomeDirectoryExpansion_REQ_CFG_005**: Tests home directory expansion in inherit paths (~/.bkpdir-base.yml)
+  - Verifies ~ expansion works in inheritance chain resolution
+  - Tests loading base config from user's home directory
+- **TestMissingInheritanceFile_REQ_CFG_005**: Tests error handling when inheritance file is missing
+  - Verifies graceful error handling or skip behavior
+  - Ensures child config still loads when parent is missing
+- **TestInvalidYAMLHandling_REQ_CFG_005**: Tests invalid YAML in one file
+  - Verifies first file loads successfully, second file skipped with error logged
+  - Ensures no data loss when one file has errors
+- **TestDeepInheritanceChain_REQ_CFG_005**: Tests very long inheritance chain (12 files)
+  - Currently skipped due to known implementation bug where only last level is processed
+  - Documents expected behavior: all levels should have patterns merged
+- **TestTypeMismatchHandling_REQ_CFG_005**: Tests type mismatches (array vs string)
+  - Verifies graceful handling when field types don't match
+  - Tests first file array, second file string scenario
+- **TestNullValueHandling_REQ_CFG_005**: Tests nil/null value handling
+  - Verifies null values treated as not set
+  - Tests that first file's values preserved when second file has null
+- **TestWhitespaceStringHandling_REQ_CFG_005**: Tests whitespace-only string handling
+  - Verifies whitespace strings handled correctly (treated as empty or preserved)
+  - Tests precedence behavior with whitespace values
+
+### Test Expectations:
+- All tests account for default merging behavior (defaults included in accumulate fields)
+- Inheritance chains: child overrides parent for precedence fields
+- Sequential files: first file merges with defaults, subsequent files respect precedence
+- Tests use semantic token references `[REQ:CFG_005]` in test names and comments
+
+### Code Markers:
+- `config_test.go`: TestMultipleInheritanceSources_REQ_CFG_005, TestRelativePathInheritance_REQ_CFG_005, TestHomeDirectoryExpansion_REQ_CFG_005, TestMissingInheritanceFile_REQ_CFG_005, TestInvalidYAMLHandling_REQ_CFG_005, TestDeepInheritanceChain_REQ_CFG_005, TestTypeMismatchHandling_REQ_CFG_005, TestNullValueHandling_REQ_CFG_005, TestWhitespaceStringHandling_REQ_CFG_005
+
+**Cross-References**: [ARCH:CFG_005], [REQ:CFG_005], [REQ:CFG_001], [REQ:CONFIGURATION], [IMPL:CFG_INHERITANCE_PATH_RESOLUTION]
+
+## 28. Inheritance Path Resolution Fix [IMPL:CFG_INHERITANCE_PATH_RESOLUTION] [ARCH:CFG_005] [REQ:CFG_005] [REQ:CONFIGURATION]
+
+**Date**: 2025-12-11
+**Status**: Implemented
+**Priority**: P1 (Important)
+
+### Decision: Fix inheritance chain path resolution to correctly handle relative paths and home directory expansion
+**Rationale:**
+- Bug fix: `buildChainRecursive` was passing `resolvedPath` (file path) instead of `filepath.Dir(resolvedPath)` (directory) as basePath
+- Bug fix: `resolvePath` was not expanding `~` before resolving relative paths
+- Bug fix: `resolvePath` was not handling directory paths correctly (was calling `filepath.Dir()` on directories)
+- These bugs prevented inheritance chains from resolving parent files correctly, especially with relative paths and home directory expansion
+
+### Implementation Approach:
+- **Fixed buildChainRecursive basePath**: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls
+  - Ensures parent file paths are resolved relative to the directory containing the child file
+- **Added ExpandPath method**: Added `ExpandPath` method to `defaultPathResolver` to handle `~` expansion
+  - Expands `~/` to user's home directory before path resolution
+  - Handles environment variable expansion
+- **Fixed resolvePath directory handling**: Updated `resolvePath` to:
+  - Call `ExpandPath` first to expand `~` before checking if path is absolute
+  - Check if `basePath` is a directory or file using `os.Stat()`
+  - Use `basePath` directly if it's a directory, or `filepath.Dir(basePath)` if it's a file
+  - Handle case where `basePath` doesn't exist (assume it's a directory from `filepath.Dir()`)
+
+### Code Changes:
+- `config.go` line 2289: `buildChainRecursive(parentPath, filepath.Dir(resolvedPath), pathResolver, chain)`
+- `config.go` line 2212-2240: Updated `resolvePath` to expand `~` and handle directories correctly
+- `config.go` line 2241-2253: Added `ExpandPath` method to `defaultPathResolver`
+
+### Test Coverage:
+- TestConfigInheritance: Now passes with relative path `base.yml` resolving correctly
+- TestRelativePathInheritance_REQ_CFG_005: Tests `../base/base.yml` and `./sibling.yml` resolution
+- TestHomeDirectoryExpansion_REQ_CFG_005: Tests `~/.bkpdir-base.yml` expansion in inherit paths
+
+**Cross-References**: [ARCH:CFG_005], [REQ:CFG_005], [REQ:CONFIGURATION], [IMPL:TEST_CFG_005_P1]
+
+## 42. Mixed Sequential and Inheritance File Processing [IMPL:CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH:CFG_005] [REQ:CFG_005] [REQ:CFG_001]
+
+### Decision: Implement field tracking to preserve sequential file values when processing inheritance chains that come after sequential files
+**Rationale:**
+- Requirement: When a sequential file (no inheritance) is processed first, followed by an inheritance chain, the sequential file's precedence fields should be preserved [REQ:CFG_001]
+- Requirement: Within inheritance chains, child files should override parent files (normal inheritance behavior) [REQ:CFG_005]
+- Problem: Without field tracking, inheritance chain files would override sequential file values, violating CFG-001 precedence rules
+- Solution: Track fields from sequential files (single-file chains) in `explicitlySetFields`, but do NOT track fields from true inheritance chain files, allowing child files to override parent files while preserving sequential file values
+
+### Implementation Approach:
+- **Field Tracking Strategy**:
+  - Track fields in `explicitlySetFields` only from sequential files (single-file chains, `len(chain.files) == 1`)
+  - Do NOT track fields from true inheritance chain files (`len(chain.files) > 1`) to allow child files to override parent files
+  - When processing inheritance chain files, check `explicitlySetFields` to preserve sequential file values for precedence fields
+- **Merge Function Updates**:
+  - Updated `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings` to check `explicitlySetFields` even when `inheritContext=true` (inheritance chains)
+  - Updated `applyOverride` to check `explicitlySetFields` when `inheritContext=true` to preserve sequential file values
+  - Within inheritance chains, fields can still override each other (normal inheritance), but cannot override sequential file values
+- **Single-File Chain Detection**:
+  - Added `isSingleFileChain` flag to detect when `buildChain` returns a single-file chain (file without inheritance)
+  - Single-file chains are processed through the inheritance chain path but have their fields tracked
+  - This handles the case where `buildChain` succeeds for files without `inherit` field (returns single-file chain)
+
+### Code Changes:
+- `config.go` line 1789: Added `isSingleFileChain := len(chain.files) == 1` detection
+- `config.go` line 1833-1843: Track fields from single-file chains in `explicitlySetFields`
+- `config.go` line 675-692: Updated `mergeBasicSettings` to check `explicitlySetFields` when `inheritContext=true`
+- `config.go` line 728-747: Updated `mergeBasicSettings` for `include_git_info` to check `explicitlySetFields`
+- `config.go` line 806-837: Updated `mergeGitSettings` to check `explicitlySetFields` when `inheritContext=true`
+- `config.go` line 928-940: Updated `mergeFileBackupSettings` to check `explicitlySetFields` when `inheritContext=true`
+- `config.go` line 2649-2681: Updated `applyOverride` to check `explicitlySetFields` when `inheritContext=true`
+
+### Test Coverage:
+- `TestMixedSequentialAndInheritance`: Verifies that sequential file precedence fields are preserved when processing inheritance chains
+  - Sequential file sets `archive_dir_path`, `include_git_info`, `skip_broken_symlinks` (precedence fields)
+  - Inheritance chain (base.yml + inherited.yml) tries to override these fields
+  - Expected: Sequential file values are preserved, accumulate fields (`exclude_patterns`) merge correctly
+
+### Behavior:
+- **Sequential files processed first**: Fields are tracked in `explicitlySetFields`
+- **Inheritance chains processed after sequential files**: 
+  - Precedence fields from sequential files are preserved (checked via `explicitlySetFields`)
+  - Accumulate fields from sequential files and inheritance chain merge correctly
+- **Within inheritance chains**: Child files can override parent files (normal inheritance behavior)
+- **Single-file chains**: Fields are tracked to preserve values when inheritance chains are processed later
+
+**Code Markers**: `isSingleFileChain`, `explicitlySetFields`, `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings`, `applyOverride`, `// CFG-001: Track fields explicitly set in this file for later precedence checks`
+
+**Cross-References**: [ARCH:CFG_005], [REQ:CFG_005], [REQ:CFG_001], [REQ:CONFIGURATION]
+
+## 34. Unicode and Special Character Handling Tests [IMPL:TEST_UNICODE_HANDLING] [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+
+### Decision: Comprehensive test coverage for Unicode and special character handling in configuration
+**Rationale:**
+- Ensures configuration system correctly handles Unicode characters in paths and patterns
+- Validates that special characters in config file paths don't break loading
+- Critical for internationalization and real-world usage scenarios
+- Part of comprehensive configuration merge test plan
+
+### Implementation Approach:
+- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values
+  - Tests Unicode in `archive_dir_path` field
+  - Tests Unicode in `exclude_patterns` array field
+  - Verifies all characters are preserved correctly after loading
+  - Validates merge behavior with Unicode patterns (CFG-005: array fields default to merge)
+  
+- **TestSpecialCharactersInPaths**: Tests special characters in config file paths
+  - Tests config file paths with spaces: `/path/with spaces/.bkpdir.yml`
+  - Tests config file paths with Unicode: `/path/with-特殊/.bkpdir.yml`
+  - Tests config file paths with both spaces and Unicode
+  - Verifies LoadConfig correctly loads files regardless of path characters
+
+### Test Structure:
+```go
+// TestUnicodeHandling tests Unicode and special characters in configuration values
+// [REQ:CONFIGURATION] [REQ:CFG_005] Validates Unicode character preservation
+func TestUnicodeHandling(t *testing.T) {
+    // Creates config with Unicode in archive_dir_path and exclude_patterns
+    // Verifies all Unicode characters preserved correctly
+    // Validates merge behavior with defaults (CFG-005)
+}
+
+// TestSpecialCharactersInPaths tests special characters in config file paths
+// [REQ:CONFIGURATION] [REQ:CFG_001] Validates config file loading with special paths
+func TestSpecialCharactersInPaths(t *testing.T) {
+    // Tests spaces in path
+    // Tests Unicode in path
+    // Tests both spaces and Unicode in path
+    // Verifies LoadConfig works correctly
+}
+```
+
+### Test Coverage:
+- Unicode characters in `archive_dir_path`: `/path/with/émojis/🚀/and/特殊字符`
+- Unicode patterns in `exclude_patterns`: `["*.文件", "测试/*", "unicode-文件.log", "émoji-🚀.tmp"]`
+- Config file paths with spaces: `path with spaces/.bkpdir.yml`
+- Config file paths with Unicode: `path-with-特殊/.bkpdir.yml`
+- Config file paths with both: `path with 特殊 chars/.bkpdir.yml`
+- Merge behavior validation: Unicode patterns merge correctly with defaults per CFG-005
+
+### Behavior:
+- **Unicode in values**: All Unicode characters preserved exactly as specified
+- **Unicode in patterns**: Unicode patterns work correctly in exclude_patterns
+- **Special chars in paths**: Config files load correctly regardless of path characters
+- **Merge behavior**: Unicode patterns merge with defaults per CFG-005 (array fields default to merge)
+
+**Code Markers**: `config_test.go` line ~6470-6600, `TestUnicodeHandling`, `TestSpecialCharactersInPaths`, `createTestConfigFileWithData`
+
+**Cross-References**: [ARCH:TESTING_STRATEGY], [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_001]
+
+## 35. Empty String Handling Tests [IMPL:TEST_EMPTY_STRING_HANDLING] [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_001] [REQ:CFG_005]
+
+### Decision: Comprehensive test coverage for empty string handling in configuration merging
+**Rationale:**
+- Ensures configuration system correctly handles empty strings in merging scenarios
+- Validates whether empty strings are treated as zero values or explicit empty values
+- Critical for understanding precedence behavior when empty strings are explicitly set
+- Part of comprehensive configuration merge test plan
+
+### Implementation Approach:
+- **TestEmptyStringHandling**: Tests empty string handling in various merge scenarios
+  - First file empty string, second file value: Tests if empty string is treated as zero value (allows override) or explicit value (preserves empty)
+  - First file value, second file empty string: Tests CFG-001 precedence (first file value preserved)
+  - Both files empty string: Tests that empty string is preserved when both files have it
+
+### Test Structure:
+```go
+// TestEmptyStringHandling tests empty string handling in configuration merging
+// [REQ:CONFIGURATION] [REQ:CFG_001] [REQ:CFG_005] Validates empty string treatment
+func TestEmptyStringHandling(t *testing.T) {
+    // Test: first file empty, second file value
+    // Test: first file value, second file empty
+    // Test: both files empty
+}
+```
+
+### Test Coverage:
+- Empty string in first file, value in second file: Verifies behavior (zero value vs explicit empty)
+- Value in first file, empty string in second file: Verifies CFG-001 precedence (first file preserved)
+- Empty string in both files: Verifies empty string is preserved
+- Merge behavior validation: Empty strings handled correctly per CFG-001 and CFG-005
+
+### Behavior:
+- **Empty string as zero value**: If treated as zero value, later files can override
+- **Empty string as explicit value**: If treated as explicit, CFG-001 precedence applies (first file preserved)
+- **Precedence with empty strings**: First file's value (even if empty) takes precedence per CFG-001
+- **Both files empty**: Result is empty string
+
+**Code Markers**: `config_test.go` line ~6643-6750, `TestEmptyStringHandling`, `createTestConfigFileWithData`, `isZeroValue`
+
+**Cross-References**: [ARCH:TESTING_STRATEGY], [REQ:CONFIGURATION], [REQ:CFG_001], [REQ:CFG_005]
+
+## 36. Prepend Strategy Ordering Tests [IMPL:TEST_PREPEND_ORDERING] [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+
+### Decision: Comprehensive test coverage for prepend strategy ordering in configuration merging
+**Rationale:**
+- Ensures prepend strategy (`^` prefix) correctly maintains order (new values before existing values)
+- Validates prepend behavior in both inheritance chains and sequential file processing
+- Critical for understanding merge strategy ordering semantics
+- Part of comprehensive configuration merge test plan
+
+### Implementation Approach:
+- **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios
+  - Inheritance chain: Parent has patterns, child prepends - verifies child patterns come before parent patterns
+  - Sequential files: First file has patterns, second file prepends - verifies second file patterns come before first file patterns
+  - With defaults: Prepend with only defaults - verifies prepended values come before defaults
+  - Multiple prepends: Multiple prepend operations - verifies CFG-001 precedence (earlier files take precedence)
+
+### Test Structure:
+```go
+// TestPrependStrategyOrdering tests prepend strategy ordering in configuration merging
+// [REQ:CONFIGURATION] [REQ:CFG_005] Validates prepend strategy maintains correct order
+func TestPrependStrategyOrdering(t *testing.T) {
+    // Test: prepend in inheritance chain
+    // Test: prepend in sequential files
+    // Test: prepend with defaults
+    // Test: multiple prepend operations
+}
+```
+
+### Test Coverage:
+- Inheritance chain prepend: Parent `["parent1", "parent2"]`, child `^["child1", "child2"]` → `["child1", "child2", "parent1", "parent2"]`
+- Sequential files prepend: First file patterns, second file prepends → new values before existing
+- Prepend with defaults: Prepend patterns come before default patterns
+- Multiple prepend operations: CFG-001 precedence applies (earlier prepends preserved)
+
+### Behavior:
+- **Prepend ordering**: New values (source) are placed before existing values (destination)
+- **Inheritance chains**: Child prepended values come before parent values
+- **Sequential files**: Later file prepended values come before earlier file values (but CFG-001 precedence may apply)
+- **With defaults**: Prepended values come before default values
+- **Multiple prepends**: CFG-001 precedence ensures earlier file prepends are preserved
+
+**Code Markers**: `config_test.go` line ~6753-6850, `TestPrependStrategyOrdering`, `createTestConfigFileWithData`, `ArrayPrependStrategy`, `applyPrepend`
+
+**Cross-References**: [ARCH:TESTING_STRATEGY], [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_001]
+
+## 37. Default Strategy Edge Cases Tests [IMPL:TEST_DEFAULT_STRATEGY_EDGES] [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+
+### Decision: Comprehensive test coverage for default strategy (`=` prefix) edge cases
+**Rationale:**
+- Ensures default strategy only applies when destination is zero value
+- Validates that default strategy does NOT apply when destination is non-zero or equals default
+- Critical for understanding default strategy semantics
+- Part of comprehensive configuration merge test plan
+
+### Implementation Approach:
+- **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios
+  - String field zero value: Empty string → default strategy should apply
+  - String field non-zero: Non-empty string → default strategy should NOT apply
+  - String field equals default: Value equals default but not zero → default strategy should NOT apply
+  - Array field zero value: Empty slice → default strategy should apply
+  - Array field non-zero: Non-empty slice → default strategy should NOT apply
+  - Bool field zero value: false → default strategy should apply
+  - Bool field non-zero: true → default strategy should NOT apply
+
+### Test Structure:
+```go
+// TestDefaultStrategyEdgeCases tests default strategy edge cases
+// [REQ:CONFIGURATION] [REQ:CFG_005] Validates default strategy only applies when destination is zero value
+func TestDefaultStrategyEdgeCases(t *testing.T) {
+    // Test: default strategy when field is zero value
+    // Test: default strategy when field is non-zero
+    // Test: default strategy when field equals default
+    // Test: default strategy with array field (zero and non-zero)
+    // Test: default strategy with bool field (zero and non-zero)
+}
+```
+
+### Test Coverage:
+- String field zero value: `=archive_dir_path: "/custom/path"` when destination is `""` → applies
+- String field non-zero: `=archive_dir_path: "/custom/path"` when destination is `"/existing/path"` → does NOT apply
+- String field equals default: `=archive_dir_path: "/custom/path"` when destination is `"../.bkpdir"` → does NOT apply (not zero, even if equals default)
+- Array field zero value: `=exclude_patterns: ["custom1"]` when destination is `[]` → **Important**: Empty array in first file merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is `[".git/", "vendor/"]` (non-zero), and default strategy does NOT apply. Result: defaults preserved, not custom values.
+- Array field non-zero: `=exclude_patterns: ["custom1"]` when destination is `["existing1"]` → does NOT apply
+- Bool field zero value: `=include_git_info: true` when destination is `false` → applies
+- Bool field non-zero: `=include_git_info: false` when destination is `true` → does NOT apply
+
+### Behavior:
+- **Zero value check**: Default strategy uses `isZeroValue()` to check if destination is zero value
+- **Zero value types**: Empty string `""`, empty slice `[]`, `false` for bool, `0` for int, `nil`
+- **Non-zero values**: Any non-zero value prevents default strategy from applying
+- **Equals default but not zero**: Even if value equals default (e.g., `"../.bkpdir"`), if it's not zero value, default strategy does NOT apply
+- **Array field special case**: When first file has empty array `[]`, it merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is non-zero (contains defaults), and default strategy does NOT apply
+- **Core principle**: Default strategy only applies when destination is zero value at the time of evaluation, regardless of whether it equals the default
+
+**Code Markers**: `config_test.go` line ~6937-7155, `TestDefaultStrategyEdgeCases`, `createTestConfigFileWithData`, `applyDefault`, `isZeroValue`, `DefaultValueStrategy`
+
+**Cross-References**: [ARCH:TESTING_STRATEGY], [REQ:CONFIGURATION], [REQ:CFG_005]

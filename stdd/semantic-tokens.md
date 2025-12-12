@@ -280,6 +280,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:TEST_EXCLUDE_MERGE]` → See `implementation-decisions.md` § Exclude Patterns Merge Testing [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE]
 - `[IMPL:EXCLUDE_MERGE_FIX]` → See `implementation-decisions.md` § Array Field Default Merge Strategy Implementation [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005]
 - `[IMPL:CFG_MIXED_MODE_MERGE_FIX]` → See `implementation-decisions.md` § Mixed-Mode Merge Strategy Fix [ARCH:CFG_005] [ARCH:CFG_001] [REQ:CFG_005]
+- `[IMPL:CFG_MIXED_SEQUENTIAL_INHERITANCE]` → See `implementation-decisions.md` § Mixed Sequential and Inheritance File Processing [ARCH:CFG_005] [REQ:CFG_005] [REQ:CFG_001]
 - `[IMPL:CFG_QUOTED_KEY_PREFIX]` → See `implementation-decisions.md` § Quoted YAML Key Prefix Support [ARCH:CFG_005] [REQ:CFG_005]
 - `[IMPL:ZIP_FORMAT]` → See `implementation-decisions.md` § ZIP Archive Format Implementation [ARCH:ARCHIVE_FORMAT] [REQ:ARCHIVE_VERIFICATION]
 - `[IMPL:DUAL_FORMATTING]` → See `implementation-decisions.md` § Dual Printf/Template Formatting [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
@@ -324,6 +325,14 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:TOKEN_SYSTEM]` → See `implementation-decisions.md` § Token System Implementation [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
 - `[IMPL:CONFIG_OUTPUT_GROUPING]` → See `implementation-decisions.md` § Configuration Output Grouping Implementation [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
 - `[IMPL:CFG_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Configuration File Precedence Fix [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
+- `[IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Merge and Prepend Strategy Precedence Fix [ARCH:CFG_001] [ARCH:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]
+- `[IMPL:TEST_CFG_005_P1]` → See `implementation-decisions.md` § Priority 1 Configuration Merge Tests Implementation [ARCH:CFG_005] [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]
+- `[IMPL:TEST_UNICODE_HANDLING]` → See `implementation-decisions.md` § Unicode and Special Character Handling Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+- `[IMPL:TEST_EMPTY_STRING_HANDLING]` → See `implementation-decisions.md` § Empty String Handling Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_001] [REQ:CFG_005]
+- `[IMPL:TEST_PREPEND_ORDERING]` → See `implementation-decisions.md` § Prepend Strategy Ordering Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+- `[IMPL:TEST_DEFAULT_STRATEGY_EDGES]` → See `implementation-decisions.md` § Default Strategy Edge Cases Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+- `[IMPL:CFG_INHERITANCE_PATH_RESOLUTION]` → See `implementation-decisions.md` § Inheritance Path Resolution Fix [ARCH:CFG_005] [REQ:CFG_005] [REQ:CONFIGURATION]
+- `[IMPL:TEST_UNICODE_HANDLING]` → See `implementation-decisions.md` § Unicode and Special Character Handling Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
 
 
 ## Quick Reference Index
@@ -347,10 +356,10 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 ### Implementation Tokens
 - **Core**: `CONFIG_STRUCT`, `CFG_006`, `ZIP_FORMAT`, `DUAL_FORMATTING`, `STRUCTURED_ERRORS`, `GIT_CLI`, `RESOURCE_MANAGER`, `CONTEXT_OPS`, `ATOMIC_OPS`, `TESTING`, `CODE_STYLE`, `DATA_MODELS`
 - **File Operations**: `FILE_001`, `FILE_002`, `FILE_003`
-- **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`, `CFG_PRECEDENCE_FIX`
+- **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`, `CFG_PRECEDENCE_FIX`, `CFG_MERGE_PREPEND_PRECEDENCE_FIX`
 - **Git Integration**: `GIT_001`, `GIT_002`, `GIT_003`, `GIT_004`, `GIT_005`, `GIT_006`, `GIT_DIRTY_CONFIG`
 - **Output Management**: `OUT_001`, `OUT_002`, `DELAYED_OUTPUT`
-- **Testing Infrastructure**: `TEST_001`, `TEST_002`, `TEST_FIX_001`, `TEST_INFRA_001_B`, `TEST_INFRA_001_E`, `TEST_COVERAGE`, `TESTING_COMPLEXITY`
+- **Testing Infrastructure**: `TEST_001`, `TEST_002`, `TEST_FIX_001`, `TEST_INFRA_001_B`, `TEST_INFRA_001_E`, `TEST_COVERAGE`, `TESTING_COMPLEXITY`, `TEST_UNICODE_HANDLING`, `TEST_EMPTY_STRING_HANDLING`, `TEST_PREPEND_ORDERING`, `TEST_DEFAULT_STRATEGY_EDGES`
 - **Code Quality**: `LINT_001`, `COV_001`, `COV_002`, `COV_003`
 - **Documentation**: `DOC_001` through `DOC_017`, `INSTALL_001`, `DOC_ENHANCEMENT`, `SEMANTIC_CROSS_REF`, `TRACEABILITY`, `TOKEN_SYSTEM`
 - **Extraction & Modularization**: `PACKAGE_EXTRACTION`, `CLI_FRAMEWORK`, `FILE_OPERATIONS`, `PROCESSING_PATTERNS`, `EXTRACT_001` through `EXTRACT_010`, `EXTRACTION_PRINCIPLES`, `BACKWARD_COMPAT`, `INTERFACE_DRIVEN`, `ZERO_BREAKING`, `LAYERED_EXTRACTION`, `EXTRACTION_CHALLENGES`, `LARGE_FILE_CHALLENGE`, `DEPENDENCY_MGMT`
