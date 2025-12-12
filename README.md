@@ -2,6 +2,12 @@
 
 A powerful command-line tool for creating and managing directory archives with AI-optimized development workflow.
 
+## 📹 Visual Demonstration
+
+**Watch the demo below to see bkpdir in action!** This GIF demonstrates how to use and configure bkpdir, including creating archives, managing incremental backups, and working with configuration files.
+
+![bkpdir Demo - Usage and Configuration Example](images/bkpdir-demo-optimized.gif)
+
 ## Complex Usage Scenario
 
 This example demonstrates a complete workflow using multiple bkpdir commands to create, update, and report on archives over time.

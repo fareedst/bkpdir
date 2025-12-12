@@ -56,6 +56,8 @@ func (a *AIFormatterConfigAdapter) GetTemplateString(templateType formatter.Form
 		return a.config.TemplateDryRunArchive, nil
 	case formatter.FormatTypeError:
 		return a.config.TemplateError, nil
+	case formatter.FormatTypeConfig:
+		return a.config.TemplateConfigValue, nil
 	default:
 		return "", fmt.Errorf("unsupported template type: %s", templateType)
 	}

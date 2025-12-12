@@ -721,12 +721,16 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return nil
 	}
 
+	rm := NewResourceManager()
+	defer rm.CleanupWithPanicRecovery()
+
 	return createAndVerifyIncrementalArchive(ArchiveCreationOptions{
-		Context: config.Context,
-		CWD:     cwd,
-		Path:    archivePath,
-		Files:   modifiedFiles,
-		Config:  archiveConfig,
+		Context:     config.Context,
+		CWD:         cwd,
+		Path:        archivePath,
+		Files:       modifiedFiles,
+		Config:      archiveConfig,
+		ResourceMgr: rm,
 	})
 }
 
