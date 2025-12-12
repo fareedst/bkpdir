@@ -1,3 +1,5 @@
+/.gitexclude
+
 # bkpdir config file
 /.bkpdir.yml*
 

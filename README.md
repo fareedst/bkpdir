@@ -8,6 +8,60 @@ A powerful command-line tool for creating and managing directory archives with A
 
 ![bkpdir Demo - Usage and Configuration Example](images/bkpdir-demo-optimized.gif)
 
+## Most Common Commands
+
+### `bkpdir .` - Archive Current Directory
+
+**The most frequently used command** - creates a full archive of your current working directory.
+
+```bash
+# Navigate to your project directory
+cd ~/projects/myapp
+
+# Create a full archive of the current directory
+bkpdir .
+```
+
+**How it works:**
+1. **Auto-detection**: bkpdir automatically detects that `.` is a directory path
+2. **Configuration loading**: Searches for `.bkpdir.yml` in the current directory and parent directories
+3. **Archive creation**: Creates a complete ZIP archive of all files in the current directory
+4. **Smart naming**: Archive name includes:
+   - Current directory name (if `use_current_dir_name: true`)
+   - Timestamp
+   - Git branch and commit hash (if `include_git_info: true`)
+   - Dirty status suffix (if `show_git_dirty_status: true` and repo has uncommitted changes)
+
+**Example output:**
+```
+Created archive: myapp-2024-01-15-143022-main-abc123.zip
+```
+
+**With optional note:**
+```bash
+bkpdir . "Before major refactoring"
+```
+
+### `bkpdir inc` - Incremental Archive
+
+**The second most common command** - creates an incremental archive containing only files that changed since the last archive.
+
+```bash
+# Create an incremental archive (only changed files)
+bkpdir inc
+```
+
+**How it works:**
+1. **Comparison**: Compares current directory state with the most recent archive
+2. **Change detection**: Identifies new, modified, or deleted files
+3. **Archive creation**: Creates a ZIP archive containing only the changed files
+4. **Efficiency**: Much smaller archives, faster creation time
+
+**Use cases:**
+- Daily backups of active projects
+- Version control for incremental changes
+- Space-efficient archiving workflows
+
 ## Complex Usage Scenario
 
 This example demonstrates a complete workflow using multiple bkpdir commands to create, update, and report on archives over time.
@@ -163,14 +217,21 @@ go run main.go --help
 ### Basic Usage
 
 ```bash
-# Create full archive
-bkpdir create /path/to/directory
+# Create full archive of current directory (most common)
+bkpdir .
 
-# Create incremental archive
-bkpdir create /path/to/directory --incremental
+# Create incremental archive (second most common)
+bkpdir inc
+
+# Create full archive of specific directory
+bkpdir /path/to/directory
 
 # List all archives
 bkpdir list
+
+# Alternative: Explicit commands (less common)
+bkpdir create /path/to/directory
+bkpdir create /path/to/directory --incremental
 ```
 
 ## AI-First Development

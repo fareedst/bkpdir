@@ -52,7 +52,7 @@ Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
-	appVersion     = "1.5.1"
+	appVersion     = "1.6.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
@@ -322,32 +322,31 @@ func main() {
 		Version: fmt.Sprintf("%s (compiled %s) [%s]", Version, compileDate, platform),
 		// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
 		DisableSuggestions: true,
-		Example: `  # Auto-detect operation based on path type (NEW)
+		Example: `  # Most common commands (use these most often!)
+  bkpdir .                                  # Create full archive of current directory
+  bkpdir . "Optional note"                  # Create archive with descriptive note
+  bkpdir inc                                # Create incremental archive (only changed files)
+
+  # Auto-detect operation based on path type
   bkpdir myfile.txt "Before changes"        # Creates file backup automatically
   bkpdir mydirectory "Initial backup"       # Creates directory archive automatically
   bkpdir /path/to/file.txt                  # Auto-detects file backup
   bkpdir /path/to/directory                 # Auto-detects directory archive
 
-  # Create a full directory archive (explicit commands)
-  bkpdir create "Initial backup"
-  bkpdir full -n "Initial backup"  # backward compatibility
-
-  # Create an incremental directory archive
-  bkpdir create --incremental "Changes after feature X"
+  # Explicit commands (alternative syntax)
+  bkpdir create "Initial backup"            # Create full archive (explicit)
+  bkpdir create --incremental "Changes"    # Create incremental archive (explicit)
+  bkpdir full -n "Initial backup"          # backward compatibility
   bkpdir inc -n "Changes after feature X"  # backward compatibility
 
-  # Create a file backup (explicit command)
+  # File backup (explicit command)
   bkpdir backup myfile.txt "Before changes"
 
-  # List all directory archives
-  bkpdir list
-
-  # List backups for a specific file
-  bkpdir --list myfile.txt
-
-  # Show configuration
-  bkpdir config
-  bkpdir --config  # backward compatibility`,
+  # List and configuration
+  bkpdir list                              # List all directory archives
+  bkpdir --list myfile.txt                  # List backups for a specific file
+  bkpdir config                             # Show configuration
+  bkpdir --config                           # backward compatibility`,
 		Run: func(cmd *cobra.Command, args []string) {
 			// Handle --config flag when no subcommand is provided (backward compatibility)
 			if showConfig {
