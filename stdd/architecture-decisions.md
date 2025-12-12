@@ -179,6 +179,12 @@ bkpdir/
    - **Precedence Rule**: Earlier files in the search path take precedence over later files. When processing sequential config files (not inheritance chains), values set by earlier files are preserved and cannot be overridden by later files, even if those values equal the defaults. The implementation tracks the initial default state and compares the destination state before merge to detect if earlier files modified values.
 4. Default values (lowest priority)
 
+**Configuration Key Structure:**
+- All configuration keys are displayed as top-level keys in `bkpdir config` output
+- Internal struct may have nested fields (e.g., `Git *GitConfig`), but the reflection-based display system flattens them using YAML tag names
+- Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.
+- YAML files use top-level keys for all configuration options (see [IMPL:CONFIG_DISPLAY_FLATTENING])
+
 **Alternatives Considered:**
 - JSON: Rejected due to lack of comments
 - TOML: Rejected due to less common usage

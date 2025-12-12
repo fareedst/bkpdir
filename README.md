@@ -48,11 +48,11 @@ exclude_patterns:
   - "*.tmp"
   - "*.log"
 
-# Git integration settings
+# Git integration settings (top-level keys)
 # Enable Git info in archive names (branch and commit hash)
-git:
-  include_info: true
-  show_dirty_status: true  # Add "-dirty" suffix when repo has uncommitted changes
+include_git_info: true
+show_git_dirty_status: true  # Add "-dirty" suffix when repo has uncommitted changes
+include_branch: true
 
 ```
 
@@ -114,9 +114,9 @@ archive_dir_path: "./archives"
   - "*.cache"
 
 # Enable Git integration for this project
-git:
-  include_info: true
-  show_dirty_status: true
+include_git_info: true
+show_git_dirty_status: true
+include_branch: true
 ```
 
 **Step 4: Run operations with configuration:**
@@ -140,32 +140,6 @@ bkpdir config
 # Generate configuration template
 bkpdir template
 ```
-
-### Visual Demonstration Suggestions
-
-To better illustrate this workflow, consider adding:
-
-1. **Animated GIF/Video**: A screen recording showing the terminal commands executing sequentially, with:
-   - Terminal output showing archive creation progress
-   - File tree visualization of archive directory growing
-   - Comparison output highlighting differences between archives
-   - Timeline visualization showing archive creation dates
-
-2. **Diagram/Infographic**: A visual timeline showing:
-   - Day 1: Initial full archive (large size)
-   - Day 2-3: Incremental archives (smaller sizes)
-   - Archive relationships and dependencies
-   - Disk space usage over time
-
-3. **Before/After Screenshots**: 
-   - Before: Directory structure before archiving
-   - After: Archive directory with multiple versions
-   - Archive listing output showing all versions
-
-**Suggested image locations:**
-- `images/complex-scenario-workflow.gif` - Animated workflow demonstration
-- `images/archive-timeline.png` - Visual timeline of archive creation
-- `images/archive-comparison.png` - Side-by-side comparison output
 
 ## Quick Start
 
@@ -270,36 +244,45 @@ bkpdir/
 
 ```yaml
 # .bkpdir.yml
-archive:
-  base_directory: "/path/to/archives"
-  format: "tar.gz"
-  incremental: true
+archive_dir_path: "/path/to/archives"
+backup_dir_path: "/path/to/backups"
+use_current_dir_name: true
 
-backup:
-  directory: "/path/to/backups"
-  max_versions: 5
+# Exclusion patterns
+exclude_patterns:
+  - ".git/"
+  - "node_modules/"
+  - "*.tmp"
 
-git:
-  include_branch: true
-  include_status: true
+# Git integration settings (top-level keys)
+include_git_info: true
+show_git_dirty_status: true
+include_branch: true
 ```
 
 ### Advanced Configuration
 
 ```yaml
-# Inheritance support
-inherit_from: "../base-config.yml"
+# Inheritance support (array of config files to inherit from)
+inherit:
+  - "../base-config.yml"
+  - "~/.bkpdir/base.yml"
 
-# Template customization
-template:
-  archive_name: "{{.Name}}-{{.Date}}-{{.Branch}}"
-  output_format: "detailed"
+# Template customization (top-level template keys)
+template_created_archive: "{{.Name}}-{{.Date}}-{{.Branch}}"
+template_list_archive: "📦 {{.Name}} ({{.Size}})\n"
 
-# Exclusion patterns
-exclude:
+# Exclusion patterns (top-level array)
+exclude_patterns:
   - "*.tmp"
   - "node_modules/"
   - ".git/"
+
+# Git integration (top-level keys)
+include_git_info: true
+show_git_dirty_status: true
+include_branch: true
+include_hash: true
 ```
 
 ## Development

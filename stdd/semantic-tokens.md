@@ -273,6 +273,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 
 ### Core Implementation Decisions
 - `[IMPL:CONFIG_STRUCT]` → See `implementation-decisions.md` § Configuration Structure [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
+- `[IMPL:CONFIG_DISPLAY_FLATTENING]` → See `implementation-decisions.md` § Configuration Display Flattening [ARCH:CFG_006] [REQ:CFG_006]
 - `[IMPL:CFG_006]` → See `implementation-decisions.md` § Configuration Reflection Implementation [ARCH:CFG_006] [REQ:CFG_006]
 - `[IMPL:TEST_EXCLUDE_MERGE]` → See `implementation-decisions.md` § Exclude Patterns Merge Testing [ARCH:TEST_EXCLUDE_MERGE] [REQ:TEST_EXCLUDE_MERGE]
 - `[IMPL:EXCLUDE_MERGE_FIX]` → See `implementation-decisions.md` § Array Field Default Merge Strategy Implementation [ARCH:EXCLUDE_MERGE_FIX] [REQ:CFG_005]

@@ -47,7 +47,11 @@ type Config struct {
     ArchiveDirPath    string   `yaml:"archive_dir_path"`
     UseCurrentDirName bool     `yaml:"use_current_dir_name"`
     ExcludePatterns   []string `yaml:"exclude_patterns"`
-    IncludeGitInfo    bool     `yaml:"include_git_info"`
+    IncludeGitInfo    bool     `yaml:"include_git_info"`      // Legacy - use Git.IncludeInfo
+    ShowGitDirtyStatus bool    `yaml:"show_git_dirty_status"` // Legacy - use Git.ShowDirtyStatus
+    
+    // GIT-005: Git configuration for repository detection and information extraction
+    Git *GitConfig `yaml:"git,omitempty"`
     
     // File backup settings
     BackupDirPath             string `yaml:"backup_dir_path"`
@@ -97,11 +101,50 @@ type Config struct {
 }
 ```
 
+### Configuration Display Flattening [IMPL:CONFIG_DISPLAY_FLATTENING] [ARCH:CFG_006] [REQ:CFG_006]
+
+**Decision**: Configuration keys are displayed as top-level keys in `bkpdir config` output, even when they are nested in the internal struct.
+
+**Rationale:**
+- The reflection-based configuration discovery system (`GetAllConfigFields`) uses YAML tag names for display
+- Nested struct fields (like `Git.IncludeBranch`) are displayed using their YAML tag names (e.g., `include_branch`) as top-level keys
+- This provides a flat, consistent view of all configuration options regardless of internal struct organization
+- Users see configuration keys as they appear in YAML files, not as nested struct paths
+
+**Implementation Details:**
+- Internal struct has `Git *GitConfig` with nested fields
+- YAML files can use either:
+  - Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)
+  - Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)
+- The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
+- Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
+- Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
+
+**Configuration File Format:**
+```yaml
+# Top-level keys (actual format used in practice)
+include_git_info: true
+show_git_dirty_status: true
+include_branch: true
+include_hash: true
+
+# Nested format (also supported internally, but displayed as top-level)
+# git:
+#   include_info: true
+#   include_branch: true
+```
+
+**Code Markers**: `GetAllConfigFields`, `reflectConfigFields`, `field.YAMLName`, `config.go` line 3424
+
+**Cross-References**: [ARCH:CFG_006], [REQ:CFG_006], [IMPL:CFG_006]
+
 ### Default Values
 - ArchiveDirPath: "../.bkpdir"
 - UseCurrentDirName: true
 - ExcludePatterns: [".git/", "vendor/"]
 - IncludeGitInfo: false
+- ShowGitDirtyStatus: true
+- Git: DefaultGitConfig() (includes nested GitConfig with defaults)
 - BackupDirPath: "../.bkpdir"
 - UseCurrentDirNameForFiles: true
 - Status codes: Various defaults (0 for success, non-zero for errors)
