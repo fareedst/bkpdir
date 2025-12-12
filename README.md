@@ -1,8 +1,6 @@
 # BkpDir - AI-First Directory Archiving CLI
 
-> **[CRITICAL] ARCH-001: Archive naming convention implementation [ACTION:core-functionality]**
-
-A powerful command-line tool for creating, managing, and verifying directory archives with AI-optimized development workflow.
+A powerful command-line tool for creating and managing directory archives with AI-optimized development workflow.
 
 ## Complex Usage Scenario
 
@@ -24,9 +22,6 @@ bkpdir inc
 
 # Day 3: Create another incremental archive
 bkpdir inc
-
-# Verify the integrity of the latest archive
-bkpdir verify
 
 # List all archives
 bkpdir list
@@ -59,10 +54,6 @@ git:
   include_info: true
   show_dirty_status: true  # Add "-dirty" suffix when repo has uncommitted changes
 
-# Archive verification settings
-verification:
-  verify_on_create: false
-  checksum_algorithm: "sha256"
 ```
 
 **Step 2: Create archives using the configuration:**
@@ -76,9 +67,6 @@ bkpdir .
 
 # Create incremental archive (uses config settings)
 bkpdir inc
-
-# Verify archives
-bkpdir verify
 
 # List archives
 bkpdir list
@@ -107,10 +95,6 @@ exclude_patterns:
 include_git_info: false
 show_git_dirty_status: true
 
-# Verification settings
-verification:
-  verify_on_create: false
-  checksum_algorithm: "sha256"
 ```
 
 Create a project-specific configuration (`.bkpdir.yml`):
@@ -147,10 +131,7 @@ bkpdir .
 # Create incremental (inherits from base-config.yml)
 bkpdir inc
 
-# Verify with configuration settings
-bkpdir verify
-
-# List archives with verification status
+# List archives
 bkpdir list
 
 # View effective configuration
@@ -207,9 +188,6 @@ bkpdir create /path/to/directory
 
 # Create incremental archive
 bkpdir create /path/to/directory --incremental
-
-# Verify archive integrity
-bkpdir verify /path/to/archive.tar.gz
 
 # List all archives
 bkpdir list
@@ -274,7 +252,6 @@ bkpdir/
 
 - **Archive Creation**: Full and incremental directory archiving
 - **Backup Management**: File-level backup with deduplication
-- **Verification**: Integrity checking with checksums
 - **Git Integration**: Git-aware archiving with branch detection
 - **Configuration**: Flexible YAML-based configuration
 - **Template System**: Customizable output formatting

@@ -14,10 +14,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package main provides comprehensive tests for archive creation, verification, and management.
+// Package main provides comprehensive tests for archive creation and management.
 // It tests both full and incremental archive operations with various configurations.
 
-// [REQ:ARCHIVE_VERIFICATION] Archive creation and management testing
+// Archive creation and management testing
 // [ARCH:ARCHIVE_FORMAT] [ARCH:PROCESSING_PATTERNS] Archive format and processing patterns validation
 // [IMPL:ZIP_FORMAT] [IMPL:PROCESSING_PATTERNS] ZIP format and processing implementation validation
 // TEST-ARCHIVE-FEATURES-001: Archive features test validation - Archive creation and management testing [ACTION:validation]
@@ -217,7 +217,7 @@ func TestCreateFullArchive(t *testing.T) {
 	cfg.UseCurrentDirName = false // Don't create subdirectory
 
 	// Test archive creation with valid config
-	err = CreateFullArchive(cfg, "test-note", false, false)
+	err = CreateFullArchive(cfg, "test-note", false)
 	if err != nil {
 		t.Fatalf("CreateFullArchive failed: %v", err)
 	}
@@ -241,7 +241,7 @@ func TestCreateFullArchive(t *testing.T) {
 		cfgExclude.ExcludePatterns = []string{"subdir/*.txt"}
 
 		// Create archive with exclusion
-		err = CreateFullArchive(cfgExclude, "exclude-test", false, false)
+		err = CreateFullArchive(cfgExclude, "exclude-test", false)
 		if err != nil {
 			t.Fatalf("CreateFullArchive with exclusion failed: %v", err)
 		}
@@ -304,7 +304,7 @@ func TestCreateIncremental(t *testing.T) {
 	cfg.ArchiveDirPath = archiveDir
 	cfg.UseCurrentDirName = false
 
-	err = CreateFullArchive(cfg, "base-archive", false, false)
+	err = CreateFullArchive(cfg, "base-archive", false)
 	if err != nil {
 		t.Fatalf("CreateFullArchive failed: %v", err)
 	}
@@ -332,7 +332,7 @@ func TestCreateIncremental(t *testing.T) {
 	}
 
 	// Create incremental archive
-	err = CreateIncrementalArchive(cfg, "incremental-test", false, false)
+	err = CreateIncrementalArchive(cfg, "incremental-test", false)
 	if err != nil {
 		t.Fatalf("CreateIncrementalArchive failed: %v", err)
 	}
@@ -358,7 +358,7 @@ func TestCreateIncremental(t *testing.T) {
 		os.Remove(filepath.Join(sourceDir, "subdir"))
 
 		// This should detect that no incremental is needed
-		err = CreateIncrementalArchive(cfg, "no-change-test", false, false)
+		err = CreateIncrementalArchive(cfg, "no-change-test", false)
 		// The function should handle this case gracefully
 		if err != nil {
 			t.Logf("CreateIncrementalArchive with no changes: %v", err)
@@ -418,7 +418,7 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 		cfg.UseCurrentDirName = true
 
 		// Create initial full archive
-		err = CreateFullArchive(cfg, "base-archive", false, false)
+		err = CreateFullArchive(cfg, "base-archive", false)
 		if err != nil {
 			t.Fatalf("CreateFullArchive failed: %v", err)
 		}
@@ -440,7 +440,7 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 		}
 
 		// Create incremental archive
-		err = CreateIncrementalArchive(cfg, "incremental-test", false, false)
+		err = CreateIncrementalArchive(cfg, "incremental-test", false)
 		if err != nil {
 			t.Fatalf("CreateIncrementalArchive failed: %v", err)
 		}
@@ -478,7 +478,7 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 		cfg.UseCurrentDirName = false
 
 		// Create initial full archive
-		err = CreateFullArchive(cfg, "base-archive", false, false)
+		err = CreateFullArchive(cfg, "base-archive", false)
 		if err != nil {
 			t.Fatalf("CreateFullArchive failed: %v", err)
 		}
@@ -499,7 +499,7 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 		}
 
 		// Create incremental archive
-		err = CreateIncrementalArchive(cfg, "incremental-test", false, false)
+		err = CreateIncrementalArchive(cfg, "incremental-test", false)
 		if err != nil {
 			t.Fatalf("CreateIncrementalArchive failed: %v", err)
 		}

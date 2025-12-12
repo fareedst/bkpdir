@@ -561,18 +561,6 @@ func (fa *AIFormatterAdapter) FormatNoArchivesFound(archiveDir string) string {
 	return fmt.Sprintf("No archives found in: %s\n", archiveDir)
 }
 
-func (fa *AIFormatterAdapter) FormatVerificationFailed(archiveName string, err error) string {
-	return fmt.Sprintf("Verification failed for %s: %s\n", archiveName, err.Error())
-}
-
-func (fa *AIFormatterAdapter) FormatVerificationSuccess(archiveName string) string {
-	return fmt.Sprintf("Verification successful for: %s\n", archiveName)
-}
-
-func (fa *AIFormatterAdapter) FormatVerificationWarning(archiveName string, err error) string {
-	return fmt.Sprintf("Verification warning for %s: %s\n", archiveName, err.Error())
-}
-
 func (fa *AIFormatterAdapter) FormatConfigurationUpdated(key string, value interface{}) string {
 	return fmt.Sprintf("Configuration updated: %s = %v\n", key, value)
 }
@@ -619,33 +607,6 @@ func (fa *AIFormatterAdapter) PrintNoArchivesFound(archiveDir string) {
 		Message:     fa.FormatNoArchivesFound(archiveDir),
 		Destination: formatter.AIOutputDestinationStdout,
 		Type:        formatter.AIMessageTypeInfo,
-	}
-	fa.aiFormatter.PrintWithContext(ctx)
-}
-
-func (fa *AIFormatterAdapter) PrintVerificationFailed(archiveName string, err error) {
-	ctx := formatter.PrintContext{
-		Message:     fa.FormatVerificationFailed(archiveName, err),
-		Destination: formatter.AIOutputDestinationStderr,
-		Type:        formatter.AIMessageTypeError,
-	}
-	fa.aiFormatter.PrintWithContext(ctx)
-}
-
-func (fa *AIFormatterAdapter) PrintVerificationSuccess(archiveName string) {
-	ctx := formatter.PrintContext{
-		Message:     fa.FormatVerificationSuccess(archiveName),
-		Destination: formatter.AIOutputDestinationStdout,
-		Type:        formatter.AIMessageTypeInfo,
-	}
-	fa.aiFormatter.PrintWithContext(ctx)
-}
-
-func (fa *AIFormatterAdapter) PrintVerificationWarning(archiveName string, err error) {
-	ctx := formatter.PrintContext{
-		Message:     fa.FormatVerificationWarning(archiveName, err),
-		Destination: formatter.AIOutputDestinationStderr,
-		Type:        formatter.AIMessageTypeWarning,
 	}
 	fa.aiFormatter.PrintWithContext(ctx)
 }
@@ -853,15 +814,6 @@ func (fa *AIFormatterAdapter) PrintFailedAccessFile(err error) {
 	ctx := formatter.PrintContext{
 		Message:     fa.FormatError(err.Error()),
 		Destination: formatter.AIOutputDestinationStderr,
-		Type:        formatter.AIMessageTypeError,
-	}
-	fa.aiFormatter.PrintWithContext(ctx)
-}
-
-func (fa *AIFormatterAdapter) PrintVerificationErrorDetail(errMsg string) {
-	ctx := formatter.PrintContext{
-		Message:     fmt.Sprintf("  - %s\n", errMsg),
-		Destination: formatter.AIOutputDestinationStdout,
 		Type:        formatter.AIMessageTypeError,
 	}
 	fa.aiFormatter.PrintWithContext(ctx)

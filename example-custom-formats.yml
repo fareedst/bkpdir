@@ -59,8 +59,6 @@ template_error: "❌ #{message}\n"
 
 # Archive operations
 format_no_archives_found: "ℹ️  No archives found in %s\n"
-format_verification_failed: "❌ Verification failed for %s: %v\n"
-format_verification_success: "✅ Verified: %s\n"
 format_incremental_created: "✅ Incremental archive created: %s\n"
 
 # Detailed output with statistics

@@ -43,20 +43,6 @@ func (fm *DefaultFlagManager) AddConfigFlag(cmd *cobra.Command, target *bool) er
 	return nil
 }
 
-// AddVerifyFlag adds verification flag for operations
-func (fm *DefaultFlagManager) AddVerifyFlag(cmd *cobra.Command, target *bool) error {
-	cmd.Flags().BoolVarP(target, "verify", "v", false,
-		"Verify operation results")
-	return nil
-}
-
-// AddChecksumFlag adds checksum flag for verification
-func (fm *DefaultFlagManager) AddChecksumFlag(cmd *cobra.Command, target *bool) error {
-	cmd.Flags().BoolVarP(target, "checksum", "c", false,
-		"Perform checksum verification")
-	return nil
-}
-
 // AddIncrementalFlag adds incremental flag for operations
 func (fm *DefaultFlagManager) AddIncrementalFlag(cmd *cobra.Command, target *bool) error {
 	cmd.Flags().BoolVarP(target, "incremental", "i", false,
@@ -99,18 +85,6 @@ func (fm *DefaultFlagManager) AddFlags(cmd *cobra.Command, flagSet FlagSet) erro
 
 	if flagSet.Config != nil {
 		if err := fm.AddConfigFlag(cmd, flagSet.Config); err != nil {
-			return err
-		}
-	}
-
-	if flagSet.Verify != nil {
-		if err := fm.AddVerifyFlag(cmd, flagSet.Verify); err != nil {
-			return err
-		}
-	}
-
-	if flagSet.Checksum != nil {
-		if err := fm.AddChecksumFlag(cmd, flagSet.Checksum); err != nil {
 			return err
 		}
 	}

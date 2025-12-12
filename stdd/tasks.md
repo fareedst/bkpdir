@@ -105,7 +105,7 @@ This document tracks all tasks and subtasks for implementing this project. Tasks
   - [ ] Maintain backward compatibility - Preserve existing format methods unchanged
 - [ ] Archive Creation Function Updates [REQ:OUTPUT_FORMATTING] [IMPL:OUTPUT_FORMATTING]
   - [ ] Add success output to CreateFullArchiveWithContext - Output when archive created successfully
-  - [ ] Enhance createAndVerifyIncrementalArchive output - Use stat-based formatting
+  - [ ] Enhance createIncrementalArchive output - Use stat-based formatting
   - [ ] Ensure consistent behavior - Both inc and full commands output file info
   - [ ] Integrate with error handling - Proper error handling for stat gathering
 - [ ] Testing and Validation [REQ:OUTPUT_FORMATTING] [TEST:OUTPUT_FORMATTING]

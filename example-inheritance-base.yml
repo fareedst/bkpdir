@@ -19,10 +19,6 @@ show_git_dirty_status: true
 # File handling
 skip_broken_symlinks: false
 
-# Verification settings
-verification:
-  verify_on_create: false
-  checksum_algorithm: "sha256"
 
 # Basic status codes
 status_created_archive: 0

@@ -112,7 +112,7 @@ bkpdir/
 ┌─────────────────────────────────────────────────────────────┐
 │                      Core Services                          │
 ├─────────────────────────────────────────────────────────────┤
-│  Archive Service   │  Git Service      │  Verification      │
+│  Archive Service   │  Git Service      │                    │
 │  Resource Manager  │  Template Engine  │  Error Handler     │
 │  Context Manager   │  File Operations  │  Backup Service    │
 │  Comparison Svc    │  Formatter Svc    │  Config Service    │
@@ -122,7 +122,7 @@ bkpdir/
 │                     Storage Layer                           │
 ├─────────────────────────────────────────────────────────────┤
 │  File System        │  ZIP Archives    │  Checksums         │
-│  File Backups       │  Metadata        │  Verification      │
+│  File Backups       │  Metadata        │                    │
 │  Directory Trees    │  Atomic Ops      │  Resource Cleanup  │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -137,7 +137,7 @@ bkpdir/
 
 **Cross-References**: [REQ:MAINTAINABILITY], [REQ:USABILITY]
 
-## 3. Archive Format [ARCH:ARCHIVE_FORMAT] [REQ:ARCHIVE_VERIFICATION]
+## 3. Archive Format [ARCH:ARCHIVE_FORMAT]
 
 ### Decision: ZIP format for all archive operations
 **Rationale:**
@@ -157,7 +157,7 @@ bkpdir/
 - Supports compression levels
 - Atomic file operations prevent corruption
 
-**Cross-References**: [REQ:RELIABILITY], [REQ:ARCHIVE_VERIFICATION]
+**Cross-References**: [REQ:RELIABILITY]
 
 ## 4. Configuration System [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 
@@ -492,18 +492,15 @@ bkpdir/
 - Enables pipeline-based data processing
 - Supports concurrent processing for performance
 - Standardizes naming conventions
-- Integrates verification capabilities
 
 **Core Patterns:**
 - **Pipeline Pattern**: Stage-based processing with composition
 - **Concurrent Processing**: Worker pool pattern for parallel execution
 - **Naming Conventions**: Timestamp-based naming with Git integration
-- **Verification Integration**: Checksum verification with multiple algorithms
 
 **Pipeline Stages:**
 - Collection: Gather files/directories
 - Processing: Transform or process data
-- Verification: Validate integrity
 - Output: Generate results
 
 **Concurrent Processing:**
@@ -518,10 +515,6 @@ bkpdir/
 - Metadata and note support
 - Archive, backup, and incremental patterns
 
-**Verification Support:**
-- SHA-256, SHA-512, MD5 algorithms
-- Checksum calculation and verification
-- Serialization support
 - Manager pattern for algorithm selection
 
 **Alternatives Considered:**
@@ -606,7 +599,7 @@ bkpdir/
 
 **Cross-References**: [REQ:OUTPUT_FORMATTING], [REQ:USABILITY]
 
-## 20. Directory Comparison Architecture [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
+## 20. Directory Comparison Architecture [ARCH:DIRECTORY_COMPARISON]
 
 ### Decision: Snapshot-based directory comparison system
 **Rationale:**
@@ -641,7 +634,7 @@ bkpdir/
 - Timestamp-only comparison: Rejected due to accuracy concerns
 - Full content comparison: Rejected due to performance impact
 
-**Cross-References**: [REQ:ARCHIVE_VERIFICATION], [REQ:PERFORMANCE]
+**Cross-References**: [REQ:PERFORMANCE]
 
 ## 21. Exclusion Patterns Architecture [ARCH:EXCLUSION_PATTERNS] [REQ:CONFIGURATION]
 
@@ -682,49 +675,6 @@ bkpdir/
 
 **Cross-References**: [REQ:CONFIGURATION], [REQ:PERFORMANCE]
 
-## 22. Verification Architecture [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
-
-### Decision: Archive verification system with checksum support and integrity checking
-**Rationale:**
-- Ensures archive integrity and data reliability
-- Detects corruption early
-- Supports multiple checksum algorithms
-- Provides verification status tracking
-
-**Verification Components:**
-- **Archive Integrity Checking**: Validates ZIP structure and file readability
-- **Checksum Generation**: Calculates checksums for files (SHA-256, SHA-512, MD5)
-- **Checksum Verification**: Validates stored checksums against file content
-- **Verification Status**: Tracks verification results with timestamps and errors
-
-**Verification Process:**
-- Open archive and validate ZIP structure
-- Verify each file can be read without errors
-- Calculate checksums for files (if enabled)
-- Compare calculated checksums with stored checksums (if available)
-- Report verification status with detailed error information
-
-**Checksum Algorithms:**
-- SHA-256: Default, secure, widely supported
-- SHA-512: Higher security, larger checksums
-- MD5: Legacy support, faster but less secure
-
-**Verification Status:**
-- **VerificationStatus**: Tracks verification timestamp, success status, checksum presence, errors
-- JSON serialization for persistence
-- Error collection for detailed reporting
-
-**Integration:**
-- Optional verification after archive creation
-- Standalone verification command
-- Verification status in archive listings
-- Checksum storage in archive metadata
-
-**Alternatives Considered:**
-- No verification: Rejected due to reliability concerns
-- External verification tools: Rejected due to dependency and integration concerns
-
-**Cross-References**: [REQ:ARCHIVE_VERIFICATION], [REQ:RELIABILITY]
 
 ## 23. Configuration Reflection Architecture [ARCH:CFG_006] [REQ:CFG_006]
 
@@ -740,9 +690,9 @@ bkpdir/
 
 1. **Automatic Field Discovery System**
    - Go reflection-based enumeration of all Config struct fields
-   - Recursive traversal of nested structures (e.g., VerificationConfig)
+   - Recursive traversal of nested structures
    - Type-aware processing for strings, bools, ints, slices, pointers, structs
-   - Field categorization (archive, backup, formatting, verification, etc.)
+   - Field categorization (archive, backup, formatting, etc.)
    - Metadata extraction (field names, types, YAML tags, categories)
 
 2. **Source Tracking Architecture**
@@ -810,10 +760,8 @@ bkpdir/
 - **Temporary Files**: Secure temporary file creation with automatic cleanup
 
 **Archive Security:**
-- **Checksum Verification**: SHA-256 integrity checks with context support
 - **Compression Bombs**: ZIP bomb protection during creation
 - **Path Sanitization**: Safe archive extraction with validation
-- **Metadata Validation**: Archive metadata verification with structured errors
 
 **Cross-References**: [REQ:RELIABILITY], [REQ:RESOURCE_MANAGEMENT]
 
@@ -843,9 +791,7 @@ type BackupPlugin interface {
 
 **Hook System:**
 - **Pre-Archive**: Before archive creation with context
-- **Post-Archive**: After archive creation with verification
-- **Pre-Verification**: Before verification with context
-- **Post-Verification**: After verification with status
+- **Post-Archive**: After archive creation
 - **Pre-Backup**: Before file backup creation
 - **Post-Backup**: After file backup creation
 
@@ -937,7 +883,6 @@ bkpdir
 ├── backup FILE_PATH [NOTE]         # Create file backup
 ├── list                            # List directory archives
 ├── --list FILE_PATH                # List file backups for specific file
-├── verify [ARCHIVE_NAME]           # Verify archive integrity
 ├── config                          # Display configuration
 ├── full [NOTE]                     # Backward compatibility: create full archive
 ├── inc [NOTE]                      # Backward compatibility: create incremental archive
@@ -947,10 +892,10 @@ bkpdir
 **Command Implementation:**
 - **Directory Archive Commands**: `create`, `create --incremental`, `full`, `inc`
 - **File Backup Commands**: `backup FILE_PATH [NOTE]`, `--list FILE_PATH`
-- **Management Commands**: `list`, `verify [ARCHIVE_NAME]`, `config`
+- **Management Commands**: `list`, `config`
 
 **Command Flags:**
-- **Global Flags**: `--dry-run`, `--verify`, `--checksum`, `--note`, `--config`, `--list`
+- **Global Flags**: `--dry-run`, `--note`, `--config`, `--list`
 - **Context Support**: All long-running operations support context cancellation
 - **Output Formatting**: Configurable output with printf-style and template-based formatting
 
@@ -1137,7 +1082,7 @@ We will implement a grouped and ranked presentation for configuration output.
 - **State Management**: `applyMergeStrategies` uses current state (`resultMap`) instead of original state (`dstMap`) for merge operations to ensure proper accumulation
 - **Pattern Preservation**: Default patterns explicitly copied into result before merge operations
 - **Deduplication**: Merge operations deduplicate values to prevent duplicates
-- **Unknown Field Handling**: Unknown config fields (like `inherit`, `verification`) are gracefully skipped instead of aborting merge operations
+- **Unknown Field Handling**: Unknown config fields (like `inherit`) are gracefully skipped instead of aborting merge operations
 - **YAML Type Conversion**: Robust handling of `[]interface{}` types from YAML unmarshaling, converting to `[]string` as needed
 - **Metadata Field Filtering**: Metadata fields used for inheritance processing (like `inherit`) are filtered out before merge operations
 
@@ -1226,7 +1171,7 @@ We will implement a grouped and ranked presentation for configuration output.
 **Format String Categories:**
 - **Directory Operations** (6 strings): `format_created_archive`, `format_identical_archive`, `format_list_archive`, `format_config_value`, `format_dry_run_archive`, `format_error`
 - **File Operations** (4 strings): `format_created_backup`, `format_identical_backup`, `format_list_backup`, `format_dry_run_backup`
-- **Extended Messages** (~20 strings): Verification, incremental, error messages
+- **Extended Messages** (~20 strings): Incremental, error messages
 - **Template-Based** (~30 strings): Template versions of all format strings
 
 **Validation Strategy:**

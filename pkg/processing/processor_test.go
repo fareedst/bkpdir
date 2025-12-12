@@ -4,7 +4,6 @@ package processing
 import (
 	"context"
 	"fmt"
-	"strings"
 	"testing"
 	"time"
 )
@@ -56,73 +55,6 @@ func TestNamingProvider(t *testing.T) {
 	formats := np.GetSupportedFormats()
 	if len(formats) == 0 {
 		t.Error("Expected supported formats, got none")
-	}
-}
-
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Verification System
-func TestVerificationProvider(t *testing.T) {
-	verifier := NewSHA256Verifier()
-
-	// Test checksum calculation
-	data := strings.NewReader("test data")
-	checksum, err := verifier.Calculate(data)
-	if err != nil {
-		t.Fatalf("Failed to calculate checksum: %v", err)
-	}
-
-	if checksum == "" {
-		t.Error("Expected checksum, got empty string")
-	}
-
-	// Test verification
-	data2 := strings.NewReader("test data")
-	isValid, err := verifier.Verify(data2, checksum)
-	if err != nil {
-		t.Fatalf("Failed to verify checksum: %v", err)
-	}
-
-	if !isValid {
-		t.Error("Expected valid checksum verification")
-	}
-
-	// Test algorithm info
-	if verifier.GetAlgorithm() != "sha256" {
-		t.Errorf("Expected algorithm 'sha256', got '%s'", verifier.GetAlgorithm())
-	}
-}
-
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Verification System
-func TestVerificationManager(t *testing.T) {
-	vm := NewVerificationManager()
-
-	// Test supported algorithms
-	algorithms := vm.GetSupportedAlgorithms()
-	if len(algorithms) == 0 {
-		t.Error("Expected supported algorithms, got none")
-	}
-
-	// Test provider retrieval
-	provider, err := vm.GetProvider("sha256")
-	if err != nil {
-		t.Fatalf("Failed to get provider: %v", err)
-	}
-
-	if provider.GetAlgorithm() != "sha256" {
-		t.Errorf("Expected algorithm 'sha256', got '%s'", provider.GetAlgorithm())
-	}
-
-	// Test default provider
-	defaultProvider, err := vm.GetProvider("")
-	if err != nil {
-		t.Fatalf("Failed to get default provider: %v", err)
-	}
-
-	if defaultProvider.GetAlgorithm() != "sha256" {
-		t.Errorf("Expected default algorithm 'sha256', got '%s'", defaultProvider.GetAlgorithm())
 	}
 }
 
@@ -375,17 +307,6 @@ func BenchmarkNamingProvider(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = np.GenerateName(template)
-	}
-}
-
-func BenchmarkVerification(b *testing.B) {
-	verifier := NewSHA256Verifier()
-	data := strings.NewReader("benchmark data for testing")
-
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		data.Seek(0, 0)
-		_, _ = verifier.Calculate(data)
 	}
 }
 

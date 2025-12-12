@@ -41,14 +41,6 @@ features:
     cross_layer_requirements: "Documentation, Code, Tests"
     implementation_priority: "CRITICAL"
   
-  VERIFY-001:
-    description: "Archive Verification Requirements Immutable"
-    action: validation
-    status: active
-    source: "docs/context/immutable.md - Archive Verification Requirements section"
-    cross_layer_requirements: "Documentation, Code, Tests"
-    implementation_priority: "CRITICAL"
-  
   # Requirements (6 tokens)
   CONTEXT-001:
     description: "Context Support Requirements"
@@ -315,10 +307,6 @@ features:
     description: "ArchiveError data object requirements"
     action: validation
     status: active
-  DATA-VERIFICATIONCONFIG-001:
-    description: "VerificationConfig data object requirements"
-    action: validation
-    status: active
   DATA-ARCHIVE-001:
     description: "Archive data object requirements"
     action: core-functionality
@@ -326,10 +314,6 @@ features:
   DATA-BACKUPINFO-001:
     description: "BackupInfo data object requirements"
     action: core-functionality
-    status: active
-  DATA-VERIFICATIONSTATUS-001:
-    description: "VerificationStatus data object requirements"
-    action: validation
     status: active
   DATA-RESOURCEMANAGER-001:
     description: "ResourceManager data object requirements"
@@ -462,10 +446,6 @@ features:
   REQ-005:
     description: "Git integration requirements"
     action: discovery
-    status: active
-  REQ-006:
-    description: "Archive verification requirements"
-    action: validation
     status: active
   REQ-007:
     description: "Configuration system enhancement requirements"

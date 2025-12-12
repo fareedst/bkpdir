@@ -147,10 +147,6 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 6. **Verification Configuration**
    - Controls archive verification behavior
-   - YAML key: `verification`
-   - Sub-options:
-     - `verify_on_create`: Automatically verify archives after creation (default: false)
-     - `checksum_algorithm`: Algorithm used for checksums (default: "sha256")
 
 7. **Status Code Configuration**
    - Configures exit status codes returned for different application conditions
@@ -361,9 +357,6 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
    ^exclude_patterns:
      - "*.private"
    
-   # Use base setting if not already defined
-   =verification:
-     verify_on_create: true
    ```
    
    **Configuration Value Resolution:**
@@ -371,7 +364,6 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
    - `backup_dir_path`: "./project-backups" (overridden by child)
    - `exclude_patterns`: ["*.private", "*.tmp", "*.log", ".DS_Store", "node_modules/", "dist/", "*.secret"] (merged with prepend + append)
    - `include_git_info`: true (inherited from parent)
-   - `verification.verify_on_create`: true (set by child using default strategy)
    
    **Error Handling:**
    - Missing inheritance files result in descriptive error messages
@@ -427,19 +419,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Supports text highlighting and color formatting through ANSI escape codes in format strings and templates
 - Template-based formatting allows rich data extraction from archive filenames using named regex groups
 - Archives are sorted by creation time (most recent first)
-- Shows verification status if available: [VERIFIED], [FAILED], or [UNVERIFIED]
 - Handles errors gracefully with appropriate status codes using `format_error` or `template_error` configuration
-
-### 4. Verify Archive
-- Verifies archive integrity and optionally checksums
-- Usage: `bkpdir verify [ARCHIVE_NAME]`
-- Flags:
-  - `--checksum`: Include checksum verification of archive contents
-- Performs ZIP archive structure and integrity verification
-- With --checksum flag: verifies file contents against stored checksums
-- Stores verification results for display in list command
-- Reports verification status using configurable format strings
-- Uses appropriate status codes for verification results
 
 ### 5. Create File Backup
 - Creates a backup of a single file with robust error handling and resource cleanup
@@ -549,11 +529,6 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Configurable via `exclude_patterns` setting
 - Patterns are applied recursively to directory tree
 
-### Archive Verification
-- ZIP structure integrity checking
-- Optional SHA-256 checksum verification
-- Verification status stored and displayed in listings
-- Configurable automatic verification after creation
 - Supports manual verification of existing archives
 
 ### Incremental Archives
@@ -714,9 +689,8 @@ The application includes comprehensive testing infrastructure for systematic arc
   - <1ms cleanup overhead with automatic resource management
   - Cross-platform compatibility with proper file permission handling
 
-#### Integration with Verification Logic
-- **Testing Utilities**: Designed for use with existing verification systems
-  - Integrates with `verify.go` for testing archive verification logic
+#### Integration with Testing Utilities
+- **Testing Utilities**: Designed for use with existing testing systems
   - Compatible with `comparison.go` for testing archive comparison under corruption
   - Uses existing `ResourceManager` for cleanup and error handling
   - Supports existing `OutputFormatter` for test result display

@@ -43,10 +43,6 @@ exclude_patterns:
   - "*.tmp"
   - "*.log"
 
-# Archive verification settings
-verification:
-  verify_on_create: true
-  checksum_algorithm: "sha256"
 
 # Status codes remain unchanged
 status_created_archive: 0

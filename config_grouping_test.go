@@ -14,7 +14,6 @@ func TestGetFieldImportance(t *testing.T) {
 		{"backup_dir_path", "basic_settings", ImportanceCritical},
 		{"use_current_dir_name", "basic_settings", ImportanceHigh},
 		{"git.enabled", "git_settings", ImportanceHigh},
-		{"verification.verify_on_create", "verification", ImportanceHigh},
 		{"format_created_archive", "output_format", ImportanceLow},
 		{"status_disk_full", "status_codes", ImportanceLow},
 		{"unknown_field", "basic_settings", ImportanceMedium},

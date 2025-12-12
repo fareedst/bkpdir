@@ -53,8 +53,6 @@ type Config struct {
     BackupDirPath             string `yaml:"backup_dir_path"`
     UseCurrentDirNameForFiles bool   `yaml:"use_current_dir_name_for_files"`
     
-    // Verification settings
-    Verification *VerificationConfig `yaml:"verification"`
     
     // Status codes for directory operations
     StatusCreatedArchive                        int `yaml:"status_created_archive"`
@@ -110,7 +108,7 @@ type Config struct {
 - Format strings: Default printf-style formats
 - Template strings: Default template formats with placeholders
 
-## 2. ZIP Archive Format Implementation [IMPL:ZIP_FORMAT] [ARCH:ARCHIVE_FORMAT] [REQ:ARCHIVE_VERIFICATION]
+## 2. ZIP Archive Format Implementation [IMPL:ZIP_FORMAT] [ARCH:ARCHIVE_FORMAT]
 
 ### Decision: Use ZIP format for all archive operations
 **Rationale:**
@@ -597,7 +595,6 @@ func (pm *PatternMatcher) AddPattern(pattern string)
 - Enables reusable processing patterns
 - Supports high-performance concurrent operations
 - Standardizes naming conventions
-- Integrates verification capabilities
 
 ### Pipeline Pattern
 **Pipeline Interface:**
@@ -652,19 +649,6 @@ type NamingProviderInterface interface {
 - Archive pattern: `{prefix}-{timestamp}-{note}.zip`
 - Backup pattern: `{name}-{timestamp}-{note}.bak`
 
-### Verification Integration
-**VerificationManager:**
-```go
-type VerificationManager struct {
-    providers map[string]VerificationProvider
-    defaultAlg string
-}
-
-func NewVerificationManager() *VerificationManager
-func (vm *VerificationManager) AddProvider(name string, provider VerificationProvider)
-func (vm *VerificationManager) Calculate(path string, algorithm string) (string, error)
-func (vm *VerificationManager) Verify(path string, checksum string, algorithm string) (bool, error)
-```
 
 **Code Markers**: `pkg/processing/` package, pipeline stages, worker pools
 
@@ -843,7 +827,7 @@ func getFileType(info os.FileInfo) string {
 
 **Code Markers**: `file_stats.go`, `FileStatInfo` struct, `GatherFileStatInfo()` function
 
-## 17. Directory Comparison Implementation [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
+## 17. Directory Comparison Implementation [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON]
 
 ### Decision: Snapshot-based comparison with hash-based content verification
 **Rationale:**
@@ -1153,114 +1137,6 @@ func isKnownConfigField(key string) bool {
 
 **Cross-References**: [REQ:CFG_005], [ARCH:EXCLUDE_MERGE_FIX], [REQ:CONFIGURATION], [REQ:TEST_EXCLUDE_MERGE]
 
-## 20. Verification Implementation [IMPL:VERIFICATION] [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
-
-### Decision: Multi-algorithm checksum verification with status tracking
-**Rationale:**
-- Ensures archive integrity
-- Supports multiple checksum algorithms
-- Provides detailed verification status
-- Enables corruption detection
-
-### VerificationStatus Structure
-```go
-type VerificationStatus struct {
-    VerifiedAt   time.Time `json:"verified_at"`
-    IsVerified   bool      `json:"is_verified"`
-    HasChecksums bool      `json:"has_checksums"`
-    Errors       []string  `json:"errors,omitempty"`
-}
-```
-
-### Archive Verification
-```go
-func VerifyArchive(archivePath string) (*VerificationStatus, error) {
-    status := &VerificationStatus{
-        VerifiedAt: time.Now(),
-        IsVerified: true,
-    }
-    
-    reader, err := zip.OpenReader(archivePath)
-    if err != nil {
-        status.IsVerified = false
-        status.Errors = append(status.Errors, fmt.Sprintf("Failed to open archive: %v", err))
-        return status, nil
-    }
-    defer reader.Close()
-    
-    for _, file := range reader.File {
-        if err := verifyFile(file); err != nil {
-            status.IsVerified = false
-            status.Errors = append(status.Errors, err.Error())
-        }
-    }
-    
-    return status, nil
-}
-```
-
-### File Verification
-```go
-func verifyFile(file *zip.File) error {
-    rc, err := file.Open()
-    if err != nil {
-        return fmt.Errorf("failed to open file %s: %v", file.Name, err)
-    }
-    defer rc.Close()
-    
-    buf := make([]byte, 1024)
-    _, err = rc.Read(buf)
-    if err != nil && err != io.EOF {
-        return fmt.Errorf("failed to read file %s: %v", file.Name, err)
-    }
-    
-    return nil
-}
-```
-
-### Checksum Generation
-```go
-func GenerateChecksums(fileMap map[string]string, algorithm string) (map[string]string, error) {
-    checksums := make(map[string]string)
-    
-    for relPath, absPath := range fileMap {
-        checksum, err := calculateFileChecksum(absPath, algorithm)
-        if err != nil {
-            return nil, fmt.Errorf("failed to calculate checksum for %s: %w", relPath, err)
-        }
-        checksums[relPath] = checksum
-    }
-    
-    return checksums, nil
-}
-
-func calculateFileChecksum(filePath string, algorithm string) (string, error) {
-    data, err := os.ReadFile(filePath)
-    if err != nil {
-        return "", err
-    }
-    
-    var hash []byte
-    switch algorithm {
-    case "sha256":
-        h := sha256.Sum256(data)
-        hash = h[:]
-    case "sha512":
-        h := sha512.Sum512(data)
-        hash = h[:]
-    case "md5":
-        h := md5.Sum(data)
-        hash = h[:]
-    default:
-        return "", fmt.Errorf("unsupported algorithm: %s", algorithm)
-    }
-    
-    return hex.EncodeToString(hash), nil
-}
-```
-
-**Code Markers**: `verify.go`, `VerificationStatus` struct, checksum functions
-
 ## 20. Configuration Reflection Implementation [IMPL:CFG_006] [ARCH:CFG_006] [REQ:CFG_006]
 
 ### Decision: Reflection-based field discovery with caching and lazy evaluation
@@ -1294,7 +1170,7 @@ func GetAllConfigFields(cfg *Config) []configFieldInfo {
 **Field Metadata Structure:**
 ```go
 type configFieldInfo struct {
-    Path     string   // Full field path (e.g., "Verification.VerifyOnCreate")
+    Path     string   // Full field path (e.g., "Git.IncludeInfo")
     Name     string   // Field name
     Type     string   // Type string representation
     Category string   // Field category (archive, backup, formatting, etc.)
@@ -1303,7 +1179,7 @@ type configFieldInfo struct {
 ```
 
 **Recursive Field Traversal:**
-- Handles nested structs (e.g., VerificationConfig)
+- Handles nested structs (e.g., GitConfig)
 - Supports embedded fields and anonymous structs
 - Prevents circular references with visited type tracking
 - Maximum depth limiting for safety
@@ -1507,7 +1383,6 @@ type Archive struct {
     GitHash            string
     Note               string
     BaseArchive        string
-    VerificationStatus *VerificationStatus
 }
 ```
 

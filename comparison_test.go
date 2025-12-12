@@ -1,10 +1,9 @@
 // This file is part of bkpdir
 
-// [REQ:ARCHIVE_VERIFICATION] Directory comparison testing for archive verification
+// Directory comparison testing for incremental archive detection
 // [ARCH:DIRECTORY_COMPARISON] Snapshot-based comparison validation
 // [IMPL:DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms validation
-// TEST-VERIFY-001: Archive Verification Test Validation - Archive verification and validation testing [ACTION:validation]
-// Source: comparison_test.go - TEST-VERIFY-001
+// Directory comparison test validation
 // Impact: Test validation for archive verification functionality
 
 package main

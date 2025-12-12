@@ -4,7 +4,7 @@
 
 ## Overview
 
-Package `processing` provides generalized data processing patterns extracted from BkpDir, offering reusable patterns for timestamp-based naming conventions, data integrity verification, processing pipelines, and concurrent processing with resource management.
+Package `processing` provides generalized data processing patterns extracted from BkpDir, offering reusable patterns for timestamp-based naming conventions, processing pipelines, and concurrent processing with resource management.
 
 This package is designed to work independently or in combination with other extracted BkpDir packages like `pkg/config`, `pkg/errors`, and `pkg/formatter`.
 
@@ -79,7 +79,6 @@ func main() {
     // Add custom stages (implement PipelineStage interface)
     pipeline.AddStage(&CollectionStage{})
     pipeline.AddStage(&ProcessingStage{})
-    pipeline.AddStage(&VerificationStage{})
     
     // Execute pipeline
     input := &processing.ProcessingInput{
@@ -524,8 +523,6 @@ func main() {
     options := &processing.ProcessingOptions{
         Concurrency:           cfg.GetInt("processing.concurrency", 4),
         Timeout:               cfg.GetDuration("processing.timeout", time.Minute*5),
-        EnableVerification:    cfg.GetBool("processing.verify", true),
-        VerificationAlgorithm: cfg.GetString("processing.verify_algorithm", "sha256"),
         ContinueOnError:       cfg.GetBool("processing.continue_on_error", false),
     }
     

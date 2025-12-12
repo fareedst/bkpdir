@@ -119,7 +119,6 @@ type ArchiveSettings struct {
 	ExcludePatterns    []string
 	IncludeGitInfo     bool
 	ShowGitDirtyStatus bool
-	Verification       *VerificationConfig
 }
 
 // REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
@@ -176,9 +175,6 @@ type ValueExtractor interface {
 
 	// ExtractStatusCodeValues extracts status code configuration values
 	ExtractStatusCodeValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
-
-	// ExtractVerificationValues extracts verification configuration values
-	ExtractVerificationValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue
 
 	// ExtractFormatValues extracts format string configuration values
 	ExtractFormatValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue

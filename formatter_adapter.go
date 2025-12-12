@@ -381,18 +381,6 @@ func (fa *FormatterAdapter) FormatNoArchivesFound(archiveDir string) string {
 	return fmt.Sprintf(fa.config.FormatNoArchivesFound, archiveDir)
 }
 
-func (fa *FormatterAdapter) FormatVerificationFailed(archiveName string, err error) string {
-	return fmt.Sprintf(fa.config.FormatVerificationFailed, archiveName, err.Error())
-}
-
-func (fa *FormatterAdapter) FormatVerificationSuccess(archiveName string) string {
-	return fmt.Sprintf(fa.config.FormatVerificationSuccess, archiveName)
-}
-
-func (fa *FormatterAdapter) FormatVerificationWarning(archiveName string, err error) string {
-	return fmt.Sprintf(fa.config.FormatVerificationWarning, archiveName, err.Error())
-}
-
 func (fa *FormatterAdapter) FormatConfigurationUpdated(key string, value interface{}) string {
 	return fmt.Sprintf(fa.config.FormatConfigurationUpdated, key, value)
 }
@@ -440,33 +428,6 @@ func (fa *FormatterAdapter) PrintNoArchivesFound(archiveDir string) {
 		fa.formatter.GetCollector().AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
-	}
-}
-
-func (fa *FormatterAdapter) PrintVerificationFailed(archiveName string, err error) {
-	message := fa.FormatVerificationFailed(archiveName, err)
-	if fa.formatter.GetCollector() != nil {
-		fa.formatter.GetCollector().AddStderr(message, "error")
-	} else {
-		fmt.Fprint(os.Stderr, message)
-	}
-}
-
-func (fa *FormatterAdapter) PrintVerificationSuccess(archiveName string) {
-	message := fa.FormatVerificationSuccess(archiveName)
-	if fa.formatter.GetCollector() != nil {
-		fa.formatter.GetCollector().AddStdout(message, "info")
-	} else {
-		fmt.Print(message)
-	}
-}
-
-func (fa *FormatterAdapter) PrintVerificationWarning(archiveName string, err error) {
-	message := fa.FormatVerificationWarning(archiveName, err)
-	if fa.formatter.GetCollector() != nil {
-		fa.formatter.GetCollector().AddStderr(message, "warning")
-	} else {
-		fmt.Fprint(os.Stderr, message)
 	}
 }
 
@@ -561,15 +522,6 @@ func (fa *FormatterAdapter) PrintBackupCreated(path string) {
 }
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// PrintVerificationErrorDetail prints verification error details
-func (fa *FormatterAdapter) PrintVerificationErrorDetail(errMsg string) {
-	message := fmt.Sprintf("  - %s\n", errMsg)
-	if fa.formatter.IsDelayedMode() {
-		fa.formatter.GetCollector().AddStdout(message, "error")
-	} else {
-		fmt.Print(message)
-	}
-}
 
 // PrintArchiveListWithStatus prints archive list with status
 // [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: output may contain #{...} patterns if placeholder replacement failed

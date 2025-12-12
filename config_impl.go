@@ -251,23 +251,6 @@ func (b *BackupAppValidator) ValidateSchema(cfg *Config) error {
 		return fmt.Errorf("backup_dir_path cannot be empty")
 	}
 
-	// Validate verification configuration
-	if cfg.Verification != nil {
-		if cfg.Verification.ChecksumAlgorithm != "" {
-			allowed := []string{"sha256", "md5", "sha1"}
-			valid := false
-			for _, alg := range allowed {
-				if cfg.Verification.ChecksumAlgorithm == alg {
-					valid = true
-					break
-				}
-			}
-			if !valid {
-				return fmt.Errorf("invalid checksum algorithm: %s", cfg.Verification.ChecksumAlgorithm)
-			}
-		}
-	}
-
 	return nil
 }
 
@@ -307,10 +290,6 @@ func (b *BackupAppValidator) GetValidationRules() map[string]ValidationRule {
 		},
 		"exclude_patterns": {
 			Type: "[]string",
-		},
-		"verification.checksum_algorithm": {
-			Type:        "string",
-			ValidValues: []string{"sha256", "md5", "sha1"},
 		},
 	}
 }
@@ -383,7 +362,6 @@ func (b *BackupApplicationConfig) GetArchiveSettings() ArchiveSettings {
 		ExcludePatterns:    b.cfg.ExcludePatterns,
 		IncludeGitInfo:     b.cfg.IncludeGitInfo,
 		ShowGitDirtyStatus: b.cfg.ShowGitDirtyStatus,
-		Verification:       b.cfg.Verification,
 	}
 }
 
@@ -521,12 +499,6 @@ func (d *DefaultValueExtractor) ExtractBasicValues(cfg, defaultCfg *Config, getS
 // REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 func (d *DefaultValueExtractor) ExtractStatusCodeValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
 	return getStatusCodeValues(cfg, defaultCfg, getSource)
-}
-
-// ExtractVerificationValues extracts verification configuration values.
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
-func (d *DefaultValueExtractor) ExtractVerificationValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
-	return getVerificationValues(cfg, defaultCfg, getSource)
 }
 
 // ExtractFormatValues extracts format string configuration values.

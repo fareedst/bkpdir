@@ -15,6 +15,9 @@
 // Impact: Git service validation for Git package service implementation
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [REQ:GIT_INTEGRATION] Git integration testing
+// [ARCH:GIT_INTEGRATION] Git command-line integration architecture testing
+// [IMPL:GIT_CLI] Git command-line interface implementation testing
 package git
 
 import (

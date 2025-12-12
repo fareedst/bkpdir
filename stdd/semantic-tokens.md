@@ -173,7 +173,6 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:TEMPLATE_FORMATTING]` → See `requirements.md` § Template Formatting Requirements
 - `[REQ:CONFIGURATION]` → See `requirements.md` § Configuration Management Requirements
 - `[REQ:GIT_INTEGRATION]` → See `requirements.md` § Git Integration Requirements
-- `[REQ:ARCHIVE_VERIFICATION]` → See `requirements.md` § Archive Verification Requirements
 
 ### Incomplete Requirements
 - `[REQ:OUT_002]` → See `requirements.md` § Enhanced Command Output with File Statistics Requirements
@@ -213,7 +212,6 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:IMMUTABLE_FILE_BACKUP_OPERATIONS]` → See `requirements.md` § File Backup Operations Requirements (Immutable)
 - `[REQ:IMMUTABLE_FILE_EXCLUSION]` → See `requirements.md` § File Exclusion Requirements (Immutable)
 - `[REQ:IMMUTABLE_GIT_INTEGRATION]` → See `requirements.md` § Git Integration Requirements (Immutable)
-- `[REQ:IMMUTABLE_ARCHIVE_VERIFICATION]` → See `requirements.md` § Archive Verification Requirements (Immutable)
 - `[REQ:IMMUTABLE_ERROR_HANDLING]` → See `requirements.md` § Error Handling Requirements (Immutable)
 - `[REQ:IMMUTABLE_CODE_QUALITY]` → See `requirements.md` § Code Quality Standards (Immutable)
 - `[REQ:IMMUTABLE_BUILD_SYSTEM]` → See `requirements.md` § Build System Requirements (Immutable)
@@ -257,7 +255,6 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[ARCH:FILE_STATISTICS]` → See `architecture-decisions.md` § File Statistics Architecture
 - `[ARCH:DIRECTORY_COMPARISON]` → See `architecture-decisions.md` § Directory Comparison Architecture
 - `[ARCH:EXCLUSION_PATTERNS]` → See `architecture-decisions.md` § Exclusion Patterns Architecture
-- `[ARCH:VERIFICATION]` → See `architecture-decisions.md` § Verification Architecture
 - `[ARCH:SYSTEM_COMPONENTS]` → See `architecture-decisions.md` § System Components Architecture
 - `[ARCH:SECURITY]` → See `architecture-decisions.md` § Security Architecture
 - `[ARCH:EXTENSIBILITY]` → See `architecture-decisions.md` § Extensibility Architecture
@@ -282,7 +279,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:CFG_MIXED_MODE_MERGE_FIX]` → See `implementation-decisions.md` § Mixed-Mode Merge Strategy Fix [ARCH:CFG_005] [ARCH:CFG_001] [REQ:CFG_005]
 - `[IMPL:CFG_MIXED_SEQUENTIAL_INHERITANCE]` → See `implementation-decisions.md` § Mixed Sequential and Inheritance File Processing [ARCH:CFG_005] [REQ:CFG_005] [REQ:CFG_001]
 - `[IMPL:CFG_QUOTED_KEY_PREFIX]` → See `implementation-decisions.md` § Quoted YAML Key Prefix Support [ARCH:CFG_005] [REQ:CFG_005]
-- `[IMPL:ZIP_FORMAT]` → See `implementation-decisions.md` § ZIP Archive Format Implementation [ARCH:ARCHIVE_FORMAT] [REQ:ARCHIVE_VERIFICATION]
+- `[IMPL:ZIP_FORMAT]` → See `implementation-decisions.md` § ZIP Archive Format Implementation [ARCH:ARCHIVE_FORMAT]
 - `[IMPL:DUAL_FORMATTING]` → See `implementation-decisions.md` § Dual Printf/Template Formatting [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
 - `[IMPL:STRUCTURED_ERRORS]` → See `implementation-decisions.md` § Structured Error Handling [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]
 - `[IMPL:GIT_CLI]` → See `implementation-decisions.md` § Git Command-line Integration [ARCH:GIT_INTEGRATION] [REQ:GIT_INTEGRATION]
@@ -297,9 +294,8 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:PROCESSING_PATTERNS]` → See `implementation-decisions.md` § Processing Patterns Implementation [ARCH:PROCESSING_PATTERNS] [REQ:PERFORMANCE]
 - `[IMPL:AUTO_DETECTION]` → See `implementation-decisions.md` § Auto-Detection Implementation [ARCH:AUTO_DETECTION] [REQ:USABILITY]
 - `[IMPL:FILE_STATISTICS]` → See `implementation-decisions.md` § File Statistics Implementation [ARCH:FILE_STATISTICS] [REQ:OUTPUT_FORMATTING]
-- `[IMPL:DIRECTORY_COMPARISON]` → See `implementation-decisions.md` § Directory Comparison Implementation [ARCH:DIRECTORY_COMPARISON] [REQ:ARCHIVE_VERIFICATION]
+- `[IMPL:DIRECTORY_COMPARISON]` → See `implementation-decisions.md` § Directory Comparison Implementation [ARCH:DIRECTORY_COMPARISON]
 - `[IMPL:EXCLUSION_PATTERNS]` → See `implementation-decisions.md` § Exclusion Patterns Implementation [ARCH:EXCLUSION_PATTERNS] [REQ:CONFIGURATION]
-- `[IMPL:VERIFICATION]` → See `implementation-decisions.md` § Verification Implementation [ARCH:VERIFICATION] [REQ:ARCHIVE_VERIFICATION]
 - `[IMPL:CFG_006]` → See `implementation-decisions.md` § Configuration Reflection Implementation [ARCH:CFG_006] [REQ:CFG_006]
 - `[IMPL:DATA_MODELS]` → See `implementation-decisions.md` § Data Models [ARCH:SYSTEM_COMPONENTS] [REQ:*]
 - `[IMPL:DOC_ENHANCEMENT]` → See `implementation-decisions.md` § Documentation Enhancement Framework [ARCH:DOCUMENTATION_ARCHITECTURE] [REQ:DOC_001]
@@ -338,10 +334,10 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 ## Quick Reference Index
 
 ### Requirements Tokens by Category
-- **Core Functionality**: `CODE_QUALITY`, `RESOURCE_MANAGEMENT`, `ERROR_HANDLING`, `CONTEXT_SUPPORT`, `FILE_BACKUP`, `OUTPUT_FORMATTING`, `TEMPLATE_FORMATTING`, `CONFIGURATION`, `GIT_INTEGRATION`, `ARCHIVE_VERIFICATION`
+- **Core Functionality**: `CODE_QUALITY`, `RESOURCE_MANAGEMENT`, `ERROR_HANDLING`, `CONTEXT_SUPPORT`, `FILE_BACKUP`, `OUTPUT_FORMATTING`, `TEMPLATE_FORMATTING`, `CONFIGURATION`, `GIT_INTEGRATION`
 - **Configuration Enhancement**: `CFG_005`, `CFG_006`
 - **Non-Functional**: `PERFORMANCE`, `RELIABILITY`, `MAINTAINABILITY`, `USABILITY`
-- **Immutable Requirements**: `IMMUTABLE_ARCHIVE_NAMING`, `IMMUTABLE_FILE_BACKUP_NAMING`, `IMMUTABLE_DIRECTORY_OPERATIONS`, `IMMUTABLE_FILE_BACKUP_OPERATIONS`, `IMMUTABLE_FILE_EXCLUSION`, `IMMUTABLE_GIT_INTEGRATION`, `IMMUTABLE_ARCHIVE_VERIFICATION`, `IMMUTABLE_ERROR_HANDLING`, `IMMUTABLE_CODE_QUALITY`, `IMMUTABLE_BUILD_SYSTEM`, `IMMUTABLE_OUTPUT_FORMATTING`, `IMMUTABLE_TEMPLATE_FORMATTING`, `IMMUTABLE_CLI_COMMANDS`, `IMMUTABLE_CONFIGURATION_DEFAULTS`, `IMMUTABLE_PLATFORM_COMPATIBILITY`, `IMMUTABLE_GLOBAL_OPTIONS`, `IMMUTABLE_RESOURCE_MANAGEMENT`, `IMMUTABLE_PERFORMANCE`, `IMMUTABLE_FEATURE_PRESERVATION`, `IMMUTABLE_TESTING_INFRASTRUCTURE`
+- **Immutable Requirements**: `IMMUTABLE_ARCHIVE_NAMING`, `IMMUTABLE_FILE_BACKUP_NAMING`, `IMMUTABLE_DIRECTORY_OPERATIONS`, `IMMUTABLE_FILE_BACKUP_OPERATIONS`, `IMMUTABLE_FILE_EXCLUSION`, `IMMUTABLE_GIT_INTEGRATION`, `IMMUTABLE_ERROR_HANDLING`, `IMMUTABLE_CODE_QUALITY`, `IMMUTABLE_BUILD_SYSTEM`, `IMMUTABLE_OUTPUT_FORMATTING`, `IMMUTABLE_TEMPLATE_FORMATTING`, `IMMUTABLE_CLI_COMMANDS`, `IMMUTABLE_CONFIGURATION_DEFAULTS`, `IMMUTABLE_PLATFORM_COMPATIBILITY`, `IMMUTABLE_GLOBAL_OPTIONS`, `IMMUTABLE_RESOURCE_MANAGEMENT`, `IMMUTABLE_PERFORMANCE`, `IMMUTABLE_FEATURE_PRESERVATION`, `IMMUTABLE_TESTING_INFRASTRUCTURE`
 - **Incomplete Requirements**: `OUT_002`, `LINT_001`, `DOC_015`, `DOC_016`, `COV_003`, `CICD_001`, `DOC_011`, `DOC_013`
 
 ### Architecture Tokens
@@ -349,7 +345,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - **Archive Operations**: `ARCH_001`, `ARCH_002`, `ARCH_003`, `ARCH_004`
 - **CLI Features**: `CLI_015`, `CLI_COMMANDS`
 - **Extraction & Modularization**: `PACKAGE_EXTRACTION`, `CLI_FRAMEWORK`, `FILE_OPERATIONS`, `PROCESSING_PATTERNS`
-- **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`, `VERIFICATION`
+- **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`
 - **Security & Quality**: `SECURITY`, `EXTENSIBILITY`, `DEPLOYMENT`, `PERFORMANCE`, `PERF_VALIDATION`
 - **AI & CI/CD**: `CICD_PIPELINE`, `AI_DOCUMENTATION`, `TOKEN_SYSTEM`
 
@@ -365,6 +361,6 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - **Extraction & Modularization**: `PACKAGE_EXTRACTION`, `CLI_FRAMEWORK`, `FILE_OPERATIONS`, `PROCESSING_PATTERNS`, `EXTRACT_001` through `EXTRACT_010`, `EXTRACTION_PRINCIPLES`, `BACKWARD_COMPAT`, `INTERFACE_DRIVEN`, `ZERO_BREAKING`, `LAYERED_EXTRACTION`, `EXTRACTION_CHALLENGES`, `LARGE_FILE_CHALLENGE`, `DEPENDENCY_MGMT`
 - **Refactoring**: `REFACTOR_001` through `REFACTOR_006`, `REFACTOR_PREP`, `INTERFACE_FIRST`, `LARGE_FILE_DECOMP`
 - **Performance**: `PERF_001`
-- **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`, `VERIFICATION`
+- **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`
 - **Configuration Schema**: `CONFIG_SCHEMA_FLEX`
 - **Output Control**: `DEBUG-OUTPUT`, `DIAGNOSTIC-OUTPUT`

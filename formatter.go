@@ -1450,30 +1450,6 @@ func (f *OutputFormatter) FormatNoArchivesFound(archiveDir string) string {
 // IMMUTABLE-REF: String externalization requirements
 // TEST-REF: TestStringExternalization
 // DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatVerificationFailed(archiveName string, err error) string {
-	return fmt.Sprintf(f.cfg.FormatVerificationFailed, archiveName, err)
-}
-
-// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatVerificationSuccess(archiveName string) string {
-	return fmt.Sprintf(f.cfg.FormatVerificationSuccess, archiveName)
-}
-
-// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
-func (f *OutputFormatter) FormatVerificationWarning(archiveName string, err error) string {
-	return fmt.Sprintf(f.cfg.FormatVerificationWarning, archiveName, err)
-}
-
-// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// IMMUTABLE-REF: String externalization requirements
-// TEST-REF: TestStringExternalization
-// DECISION-REF: DEC-009
 func (f *OutputFormatter) FormatConfigurationUpdated(key string, value interface{}) string {
 	return fmt.Sprintf(f.cfg.FormatConfigurationUpdated, key, value)
 }
@@ -1520,39 +1496,6 @@ func (f *OutputFormatter) PrintNoArchivesFound(archiveDir string) {
 	if f.collector != nil {
 		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
 		f.collector.AddStdout(message, "info")
-	} else {
-		fmt.Print(message)
-	}
-}
-
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-func (f *OutputFormatter) PrintVerificationFailed(archiveName string, err error) {
-	message := f.FormatVerificationFailed(archiveName, err)
-	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-		f.collector.AddStdout(message, "error")
-	} else {
-		fmt.Print(message)
-	}
-}
-
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-func (f *OutputFormatter) PrintVerificationSuccess(archiveName string) {
-	message := f.FormatVerificationSuccess(archiveName)
-	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-		f.collector.AddStdout(message, "info")
-	} else {
-		fmt.Print(message)
-	}
-}
-
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-func (f *OutputFormatter) PrintVerificationWarning(archiveName string, err error) {
-	message := f.FormatVerificationWarning(archiveName, err)
-	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-		f.collector.AddStdout(message, "warning")
 	} else {
 		fmt.Print(message)
 	}
@@ -1986,18 +1929,6 @@ func (f *OutputFormatter) PrintFailedAccessFile(err error) {
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
-	}
-}
-
-// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-func (f *OutputFormatter) PrintVerificationErrorDetail(errMsg string) {
-	message := fmt.Sprintf("  - %s\n", errMsg)
-	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
-		f.collector.AddStdout(message, "error")
-	} else {
-		fmt.Print(message)
 	}
 }
 

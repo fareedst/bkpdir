@@ -50,12 +50,6 @@ import (
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
 // REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
-// VerificationConfig defines settings for archive verification.
-// It controls whether archives are verified on creation and which checksum algorithm to use.
-type VerificationConfig struct {
-	VerifyOnCreate    bool   `yaml:"verify_on_create"`
-	ChecksumAlgorithm string `yaml:"checksum_algorithm"`
-}
 
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
 // IMMUTABLE-REF: Configuration Defaults, Output Formatting Requirements
@@ -71,13 +65,12 @@ type VerificationConfig struct {
 type Config struct {
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Basic settings
-	ArchiveDirPath     string              `yaml:"archive_dir_path"`
-	UseCurrentDirName  bool                `yaml:"use_current_dir_name"`
-	ExcludePatterns    []string            `yaml:"exclude_patterns"`
-	IncludeGitInfo     bool                `yaml:"include_git_info"`      // Legacy - use Git.IncludeInfo
-	ShowGitDirtyStatus bool                `yaml:"show_git_dirty_status"` // Legacy - use Git.ShowDirtyStatus
-	SkipBrokenSymlinks bool                `yaml:"skip_broken_symlinks"`
-	Verification       *VerificationConfig `yaml:"verification"`
+	ArchiveDirPath     string   `yaml:"archive_dir_path"`
+	UseCurrentDirName  bool     `yaml:"use_current_dir_name"`
+	ExcludePatterns    []string `yaml:"exclude_patterns"`
+	IncludeGitInfo     bool     `yaml:"include_git_info"`      // Legacy - use Git.IncludeInfo
+	ShowGitDirtyStatus bool     `yaml:"show_git_dirty_status"` // Legacy - use Git.ShowDirtyStatus
+	SkipBrokenSymlinks bool     `yaml:"skip_broken_symlinks"`
 
 	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality] Core inheritance functionality
 	// Inherit specifies configuration files to inherit from
@@ -151,9 +144,6 @@ type Config struct {
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Archive operation messages
 	FormatNoArchivesFound      string `yaml:"format_no_archives_found"`
-	FormatVerificationFailed   string `yaml:"format_verification_failed"`
-	FormatVerificationSuccess  string `yaml:"format_verification_success"`
-	FormatVerificationWarning  string `yaml:"format_verification_warning"`
 	FormatConfigurationUpdated string `yaml:"format_configuration_updated"`
 	FormatConfigFilePath       string `yaml:"format_config_file_path"`
 	FormatDryRunFilesHeader    string `yaml:"format_dry_run_files_header"`
@@ -190,9 +180,6 @@ type Config struct {
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Template-based extended format strings
 	TemplateNoArchivesFound      string `yaml:"template_no_archives_found"`
-	TemplateVerificationFailed   string `yaml:"template_verification_failed"`
-	TemplateVerificationSuccess  string `yaml:"template_verification_success"`
-	TemplateVerificationWarning  string `yaml:"template_verification_warning"`
 	TemplateConfigurationUpdated string `yaml:"template_configuration_updated"`
 	TemplateConfigFilePath       string `yaml:"template_config_file_path"`
 	TemplateDryRunFilesHeader    string `yaml:"template_dry_run_files_header"`
@@ -272,10 +259,6 @@ func DefaultConfig() *Config {
 		IncludeGitInfo:     false,
 		ShowGitDirtyStatus: true,
 		SkipBrokenSymlinks: false,
-		Verification: &VerificationConfig{
-			VerifyOnCreate:    false,
-			ChecksumAlgorithm: "sha256",
-		},
 
 		// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 		Git: DefaultGitConfig(),
@@ -338,9 +321,6 @@ func DefaultConfig() *Config {
 		// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 		// Archive operation messages
 		FormatNoArchivesFound:      "No archives found in %s\n",
-		FormatVerificationFailed:   "Archive %s verification failed: %v\n",
-		FormatVerificationSuccess:  "Archive %s verified successfully\n",
-		FormatVerificationWarning:  "Warning: Could not store verification status for %s: %v\n",
 		FormatConfigurationUpdated: "Configuration updated: %s = %v\n",
 		FormatConfigFilePath:       "Config file: %s\n",
 		FormatDryRunFilesHeader:    "[Dry Run] Files to include:\n",
@@ -375,9 +355,6 @@ func DefaultConfig() *Config {
 
 		// Template-based extended format strings
 		TemplateNoArchivesFound:      "No archives found in #{archive_dir}\n",
-		TemplateVerificationFailed:   "Archive #{name} verification failed: #{error}\n",
-		TemplateVerificationSuccess:  "Archive #{name} verified successfully\n",
-		TemplateVerificationWarning:  "Warning: Could not store verification status for #{name}: #{error}\n",
 		TemplateConfigurationUpdated: "Configuration updated: #{key} = #{value}\n",
 		TemplateConfigFilePath:       "Config file: #{path}\n",
 		TemplateDryRunFilesHeader:    "[Dry Run] Files to include:\n",
@@ -799,9 +776,6 @@ func mergeBasicSettings(dst, src *Config, inheritContext bool, defaultCfg *Confi
 		if !explicitlySetByEarlier && explicitlySetInSrc && src.SkipBrokenSymlinks != defaultCfg.SkipBrokenSymlinks {
 			dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
 		}
-	}
-	if src.Verification != nil {
-		dst.Verification = src.Verification
 	}
 	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	// Support legacy Git fields for backward compatibility
@@ -1269,8 +1243,6 @@ func GetConfigValues(cfg *Config) []ConfigValue {
 		{Name: "include_git_info", Value: boolToString(cfg.IncludeGitInfo), Source: "config"},
 		{Name: "backup_dir_path", Value: cfg.BackupDirPath, Source: "config"},
 		{Name: "use_current_dir_name_for_files", Value: boolToString(cfg.UseCurrentDirNameForFiles), Source: "config"},
-		{Name: "verify_on_create", Value: boolToString(cfg.Verification.VerifyOnCreate), Source: "config"},
-		{Name: "checksum_algorithm", Value: cfg.Verification.ChecksumAlgorithm, Source: "config"},
 	}
 }
 
@@ -1428,22 +1400,6 @@ func getStatusCodeValues(cfg, defaultCfg *Config, getSource func(interface{}, in
 	}
 }
 
-// getVerificationValues returns verification configuration values
-func getVerificationValues(cfg, defaultCfg *Config, getSource func(interface{}, interface{}) string) []ConfigValue {
-	return []ConfigValue{
-		{
-			Name:   "verify_on_create",
-			Value:  boolToString(cfg.Verification.VerifyOnCreate),
-			Source: getSource(cfg.Verification.VerifyOnCreate, defaultCfg.Verification.VerifyOnCreate),
-		},
-		{
-			Name:   "checksum_algorithm",
-			Value:  cfg.Verification.ChecksumAlgorithm,
-			Source: getSource(cfg.Verification.ChecksumAlgorithm, defaultCfg.Verification.ChecksumAlgorithm),
-		},
-	}
-}
-
 func boolToString(b bool) string {
 	if b {
 		return "true"
@@ -1529,15 +1485,6 @@ func mergeExtendedFormatStrings(dst, src *Config, inheritContext bool, defaultCf
 	if src.FormatNoArchivesFound != defaultCfg.FormatNoArchivesFound {
 		dst.FormatNoArchivesFound = src.FormatNoArchivesFound
 	}
-	if src.FormatVerificationFailed != defaultCfg.FormatVerificationFailed {
-		dst.FormatVerificationFailed = src.FormatVerificationFailed
-	}
-	if src.FormatVerificationSuccess != defaultCfg.FormatVerificationSuccess {
-		dst.FormatVerificationSuccess = src.FormatVerificationSuccess
-	}
-	if src.FormatVerificationWarning != defaultCfg.FormatVerificationWarning {
-		dst.FormatVerificationWarning = src.FormatVerificationWarning
-	}
 	if src.FormatConfigurationUpdated != defaultCfg.FormatConfigurationUpdated {
 		dst.FormatConfigurationUpdated = src.FormatConfigurationUpdated
 	}
@@ -1587,15 +1534,6 @@ func mergeExtendedTemplates(dst, src *Config, inheritContext bool, defaultCfg *C
 	// Archive operation templates
 	if src.TemplateNoArchivesFound != defaultCfg.TemplateNoArchivesFound {
 		dst.TemplateNoArchivesFound = src.TemplateNoArchivesFound
-	}
-	if src.TemplateVerificationFailed != defaultCfg.TemplateVerificationFailed {
-		dst.TemplateVerificationFailed = src.TemplateVerificationFailed
-	}
-	if src.TemplateVerificationSuccess != defaultCfg.TemplateVerificationSuccess {
-		dst.TemplateVerificationSuccess = src.TemplateVerificationSuccess
-	}
-	if src.TemplateVerificationWarning != defaultCfg.TemplateVerificationWarning {
-		dst.TemplateVerificationWarning = src.TemplateVerificationWarning
 	}
 	if src.TemplateConfigurationUpdated != defaultCfg.TemplateConfigurationUpdated {
 		dst.TemplateConfigurationUpdated = src.TemplateConfigurationUpdated
@@ -3112,7 +3050,7 @@ type configFieldInfo struct {
 	IsSlice    bool         // Whether field is a slice type
 	IsStruct   bool         // Whether field is a struct type
 	Category   string       // Field category (basic, status, format, template, etc.)
-	Path       string       // Full path for nested fields (e.g., "verification.verify_on_create")
+	Path       string       // Full path for nested fields (e.g., "git.include_info")
 	Importance int          // Importance level (0=Critical, 1=High, 2=Medium, 3=Low)
 }
 
@@ -3152,7 +3090,6 @@ func getFieldImportance(name, category string) int {
 		"use_current_dir_name":           true,
 		"use_current_dir_name_for_files": true,
 		"git.enabled":                    true,
-		"verification.verify_on_create":  true,
 	}
 	if highFields[name] {
 		return ImportanceHigh
@@ -4379,8 +4316,6 @@ func generateRelatedFields(field configFieldInfo) []string {
 		related = append(related, "backup_dir_path", "use_current_dir_name_for_files")
 	case strings.Contains(field.Name, "Git"):
 		related = append(related, "git.enabled", "git.include_info")
-	case strings.Contains(field.Name, "Verification"):
-		related = append(related, "verification.verify_on_create", "verification.checksum_algorithm")
 	}
 
 	return related
@@ -4666,9 +4601,6 @@ func getExpectedPlaceholders(fieldName string) []string {
 		"TemplateDryRunBackup":    {"#{path}"},
 		// Extended format strings (examples)
 		"FormatNoArchivesFound":            {"%s"},
-		"FormatVerificationFailed":         {"%s", "%v"},
-		"FormatVerificationSuccess":        {"%s"},
-		"FormatVerificationWarning":        {"%s", "%v"},
 		"FormatConfigurationUpdated":       {"%s", "%v"},
 		"FormatConfigFilePath":             {"%s"},
 		"FormatDryRunFilesHeader":          {},
@@ -4689,9 +4621,6 @@ func getExpectedPlaceholders(fieldName string) []string {
 		"FormatFileNotFound":      {"%v"},
 		// Template-based extended format strings (examples)
 		"TemplateNoArchivesFound":            {"#{archive_dir}"},
-		"TemplateVerificationFailed":         {"#{name}", "#{error}"},
-		"TemplateVerificationSuccess":        {"#{name}"},
-		"TemplateVerificationWarning":        {"#{name}", "#{error}"},
 		"TemplateConfigurationUpdated":       {"#{key}", "#{value}"},
 		"TemplateConfigFilePath":             {"#{path}"},
 		"TemplateDryRunFilesHeader":          {},
@@ -4749,7 +4678,7 @@ func extractPlaceholders(formatString string) []string {
 // Format string fields validated:
 //   - Printf-style: FormatCreatedArchive, FormatIdenticalArchive, FormatListArchive, etc.
 //   - Template-style: TemplateCreatedArchive, TemplateIdenticalArchive, TemplateListArchive, etc.
-//   - Extended: FormatNoArchivesFound, FormatVerificationFailed, etc.
+//   - Extended: FormatNoArchivesFound, etc.
 //
 // Returns empty slice if all format strings are valid. Warnings are printed to
 // stderr during configuration load (non-fatal).
@@ -4789,9 +4718,6 @@ func validateAllFormatStrings(cfg *Config) []string {
 		"TemplateDryRunBackup":    cfg.TemplateDryRunBackup,
 		// Extended format strings (selected examples)
 		"FormatNoArchivesFound":            cfg.FormatNoArchivesFound,
-		"FormatVerificationFailed":         cfg.FormatVerificationFailed,
-		"FormatVerificationSuccess":        cfg.FormatVerificationSuccess,
-		"FormatVerificationWarning":        cfg.FormatVerificationWarning,
 		"FormatConfigurationUpdated":       cfg.FormatConfigurationUpdated,
 		"FormatConfigFilePath":             cfg.FormatConfigFilePath,
 		"FormatDryRunFilesHeader":          cfg.FormatDryRunFilesHeader,
@@ -4812,9 +4738,6 @@ func validateAllFormatStrings(cfg *Config) []string {
 		"FormatFileNotFound":      cfg.FormatFileNotFound,
 		// Template-based extended format strings (selected examples)
 		"TemplateNoArchivesFound":            cfg.TemplateNoArchivesFound,
-		"TemplateVerificationFailed":         cfg.TemplateVerificationFailed,
-		"TemplateVerificationSuccess":        cfg.TemplateVerificationSuccess,
-		"TemplateVerificationWarning":        cfg.TemplateVerificationWarning,
 		"TemplateConfigurationUpdated":       cfg.TemplateConfigurationUpdated,
 		"TemplateConfigFilePath":             cfg.TemplateConfigFilePath,
 		"TemplateDryRunFilesHeader":          cfg.TemplateDryRunFilesHeader,

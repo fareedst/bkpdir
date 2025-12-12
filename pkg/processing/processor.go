@@ -68,7 +68,6 @@ type ProcessingState string
 const (
 	StateInitializing ProcessingState = "initializing"
 	StateProcessing   ProcessingState = "processing"
-	StateVerifying    ProcessingState = "verifying"
 	StateCompleted    ProcessingState = "completed"
 	StateFailed       ProcessingState = "failed"
 	StateCancelled    ProcessingState = "cancelled"
@@ -110,10 +109,6 @@ type ProcessingOptions struct {
 	Timeout     time.Duration `json:"timeout"`
 	Concurrency int           `json:"concurrency"`
 
-	// Verification options
-	EnableVerification    bool   `json:"enable_verification"`
-	VerificationAlgorithm string `json:"verification_algorithm"`
-
 	// Error handling options
 	ContinueOnError bool          `json:"continue_on_error"`
 	MaxRetries      int           `json:"max_retries"`
@@ -123,14 +118,12 @@ type ProcessingOptions struct {
 // DefaultProcessingOptions returns sensible defaults for processing operations
 func DefaultProcessingOptions() *ProcessingOptions {
 	return &ProcessingOptions{
-		DryRun:                false,
-		Verbose:               false,
-		Timeout:               5 * time.Minute,
-		Concurrency:           4,
-		EnableVerification:    true,
-		VerificationAlgorithm: "sha256",
-		ContinueOnError:       false,
-		MaxRetries:            3,
-		RetryDelay:            time.Second,
+		DryRun:          false,
+		Verbose:         false,
+		Timeout:         5 * time.Minute,
+		Concurrency:     4,
+		ContinueOnError: false,
+		MaxRetries:      3,
+		RetryDelay:      time.Second,
 	}
 }

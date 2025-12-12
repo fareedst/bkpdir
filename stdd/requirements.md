@@ -38,7 +38,6 @@ Each requirement includes:
 | `[REQ:TEMPLATE_FORMATTING]` | Template Formatting | P0 | ✅ | See `architecture-decisions.md` § Output Formatting | See `implementation-decisions.md` § Dual Printf/Template Formatting |
 | `[REQ:CONFIGURATION]` | Configuration Management | P0 | ✅ | See `architecture-decisions.md` § Configuration System | See `implementation-decisions.md` § Configuration Structure |
 | `[REQ:GIT_INTEGRATION]` | Git Integration | P1 | ✅ | See `architecture-decisions.md` § Git Integration | See `implementation-decisions.md` § Git Command-line Integration |
-| `[REQ:ARCHIVE_VERIFICATION]` | Archive Verification | P1 | ✅ | See `architecture-decisions.md` § Archive Format | See `implementation-decisions.md` § ZIP Archive Format Implementation |
 
 ### Configuration System Enhancement Requirements
 
@@ -69,7 +68,6 @@ Each requirement includes:
 | `[REQ:IMMUTABLE_FILE_BACKUP_OPERATIONS]` | File Backup Operations | P0 | ✅ | See `architecture-decisions.md` § File Operations Architecture | See `implementation-decisions.md` § Atomic File Operations |
 | `[REQ:IMMUTABLE_FILE_EXCLUSION]` | File Exclusion | P0 | ✅ | See `architecture-decisions.md` § Exclusion Patterns Architecture | See `implementation-decisions.md` § Exclusion Patterns Implementation |
 | `[REQ:IMMUTABLE_GIT_INTEGRATION]` | Git Integration | P1 | ✅ | See `architecture-decisions.md` § Git Integration | See `implementation-decisions.md` § Git Command-line Integration |
-| `[REQ:IMMUTABLE_ARCHIVE_VERIFICATION]` | Archive Verification | P1 | ✅ | See `architecture-decisions.md` § Verification Architecture | See `implementation-decisions.md` § Verification Implementation |
 | `[REQ:IMMUTABLE_ERROR_HANDLING]` | Error Handling | P0 | ✅ | See `architecture-decisions.md` § Error Handling Strategy | See `implementation-decisions.md` § Structured Error Handling |
 | `[REQ:IMMUTABLE_CODE_QUALITY]` | Code Quality Standards | P0 | ✅ | See `architecture-decisions.md` § Code Organization Principles | See `implementation-decisions.md` § Code Style and Conventions |
 | `[REQ:IMMUTABLE_BUILD_SYSTEM]` | Build System | P0 | ✅ | See `architecture-decisions.md` § Build and Distribution | See `implementation-decisions.md` § Testing Implementation |
@@ -257,22 +255,6 @@ Each requirement includes:
 
 **Status**: ✅ Implemented
 
-### [REQ:ARCHIVE_VERIFICATION] Archive Verification Requirements
-
-**Priority: P1 (Important)**
-
-- **Description**: Archive verification with checksum validation. Verification on creation option. Comprehensive corruption testing framework. Archive repair detection.
-- **Rationale**: Ensures archive integrity and data reliability
-- **Satisfaction Criteria**:
-  - Archives can be verified for integrity
-  - Checksum validation available
-  - Corruption testing framework supports various types
-  - Verification status tracked
-- **Validation Criteria**: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
-- **Architecture**: See `architecture-decisions.md` § Archive Format [ARCH:ARCHIVE_FORMAT]
-- **Implementation**: See `implementation-decisions.md` § ZIP Archive Format Implementation [IMPL:ZIP_FORMAT]
-
-**Status**: ✅ Implemented
 
 ## Configuration System Enhancement
 
@@ -749,30 +731,6 @@ These requirements define core behaviors that MUST NOT be changed without a majo
 
 **Status**: ✅ Implemented (Immutable)
 
-### [REQ:IMMUTABLE_ARCHIVE_VERIFICATION] Archive Verification Requirements (Immutable)
-
-**Priority: P1 (Important - Immutable)**
-
-- **Description**: Archive verification requirements are mandatory and must be preserved:
-  - **Structure Check**: ZIP structure verification
-  - **Checksum Support**: SHA-256 checksum verification
-  - **Status Tracking**: Verification status tracking
-  - **Atomic Operations**: Atomic verification operations
-  - **Result Storage**: Verification result persistence
-  - **Error Reporting**: Error reporting for verification failures
-- **Rationale**: These verification requirements are mandatory behaviors that users depend on. Changing them would break existing verification workflows.
-- **Satisfaction Criteria**:
-  - ZIP structure is verified
-  - SHA-256 checksums are supported
-  - Verification status is tracked
-  - Verification operations are atomic
-  - Verification results are persisted
-  - Verification errors are reported appropriately
-- **Validation Criteria**: Archive verification tests verify all requirements. Breaking changes require major version bump.
-- **Architecture**: See `architecture-decisions.md` § Verification Architecture [ARCH:VERIFICATION]
-- **Implementation**: See `implementation-decisions.md` § Verification Implementation [IMPL:VERIFICATION]
-
-**Status**: ✅ Implemented (Immutable)
 
 ### [REQ:IMMUTABLE_ERROR_HANDLING] Error Handling Requirements (Immutable)
 
@@ -927,10 +885,9 @@ These requirements define core behaviors that MUST NOT be changed without a majo
   1. Create Archive: `bkpdir create` - Create full archive of current directory. Must use atomic operations with automatic cleanup. Must support context cancellation. Output formatting must use configurable format strings.
   2. Create Incremental Archive: `bkpdir create --incremental` - Create incremental archive of changes. Must use atomic operations with automatic cleanup. Must support context cancellation. Output formatting must use configurable format strings.
   3. Create File Backup: `bkpdir backup [FILE_PATH] [NOTE]` - Create backup of single file with comparison. Must use atomic operations with automatic cleanup. Must support context cancellation. Must detect identical files and report appropriately. Output formatting must use configurable format strings.
-  4. List Archives: `bkpdir list` - Sort by creation time (most recent first). Display format: `{path} (created: {time})`. Show verification status: [VERIFIED], [FAILED], or [UNVERIFIED]. Output formatting must use configurable printf-style format strings.
+  4. List Archives: `bkpdir list` - Sort by creation time (most recent first). Display format: `{path} (created: {time})`. Output formatting must use configurable printf-style format strings.
   5. List File Backups: `bkpdir --list [FILE_PATH]` - Sort by creation time (most recent first). Display format: `{path} (created: {time})`. Output formatting must use configurable printf-style format strings.
-  6. Verify Archive: `bkpdir verify [ARCHIVE_NAME]` - Support `--checksum` flag for checksum verification. Verify ZIP structure and integrity. Store verification results for display in list command. Output formatting must use configurable printf-style format strings.
-  7. Display Configuration: `bkpdir config` - Display computed configuration values with name, value, and source. Process configuration files from `BKPDIR_CONFIG` environment variable. Exit after displaying values. Output formatting must use configurable printf-style format strings.
+  6. Display Configuration: `bkpdir config` - Display computed configuration values with name, value, and source. Process configuration files from `BKPDIR_CONFIG` environment variable. Exit after displaying values. Output formatting must use configurable printf-style format strings.
   8. Backward Compatibility Commands: `bkpdir full [NOTE]` (alias for `bkpdir create`), `bkpdir inc [NOTE]` (alias for `bkpdir create --incremental`), `bkpdir --config` (alias for `bkpdir config`).
 - **Rationale**: CLI command structure is fundamental to user experience. Changing it would break user workflows and scripts.
 - **Satisfaction Criteria**:
@@ -958,8 +915,6 @@ These requirements define core behaviors that MUST NOT be changed without a majo
   - Default use_current_dir_name_for_files: true
   - Default include_git_info: true
   - Default exclude_patterns: `[".git/", "vendor/"]`
-  - Default verification.verify_on_create: false
-  - Default verification.checksum_algorithm: "sha256"
   - Default status codes: All status codes default to `0` (success) if not specified
   - Default output format strings: All format strings default to preserve existing output appearance
   - Default template format strings: All template strings default to preserve existing output appearance
@@ -1098,8 +1053,8 @@ These requirements define core behaviors that MUST NOT be changed without a majo
 
 - **Description**: Feature preservation rules must be followed:
   1. **New Features**: Must not interfere with existing functionality. Must maintain all current behaviors. Must be optional and not affect existing workflows. Must include automatic resource cleanup. Must support context cancellation where appropriate. Must pass all linting and testing requirements.
-  2. **Modifications**: Must preserve all existing command-line interfaces. Must maintain current directory handling behaviors. Must keep existing configuration options. Must not change established archive naming patterns. Must not introduce resource leaks. Must maintain error handling standards. Must preserve atomic operation guarantees. Must maintain Git integration compatibility. Must preserve verification functionality.
-  3. **Testing Requirements**: All new code must include tests for existing functionality. Regression tests must verify no existing features are broken. Platform compatibility tests must be maintained. Resource cleanup must be verified in all test scenarios. Context cancellation and timeout handling must be tested. Performance benchmarks must not regress. All code must pass linting before commit. Git integration tests must be maintained. Archive verification tests must be comprehensive.
+  2. **Modifications**: Must preserve all existing command-line interfaces. Must maintain current directory handling behaviors. Must keep existing configuration options. Must not change established archive naming patterns. Must not introduce resource leaks. Must maintain error handling standards. Must preserve atomic operation guarantees. Must maintain Git integration compatibility.
+  3. **Testing Requirements**: All new code must include tests for existing functionality. Regression tests must verify no existing features are broken. Platform compatibility tests must be maintained. Resource cleanup must be verified in all test scenarios. Context cancellation and timeout handling must be tested. Performance benchmarks must not regress. All code must pass linting before commit. Git integration tests must be maintained.
   4. **Quality Assurance**: Code must pass revive linter with zero warnings. All errors must be properly handled. All public functions must be documented. Test coverage must meet minimum thresholds. No temporary files may remain after any operation. Memory leaks are strictly prohibited. Archive integrity must be guaranteed. Git integration must be reliable.
 - **Rationale**: Feature preservation rules ensure backward compatibility and system reliability. Violating them would break existing functionality.
 - **Satisfaction Criteria**:

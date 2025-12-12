@@ -1,16 +1,19 @@
 // This file is part of bkpdir
 //
 // Package main provides archive creation and management for BkpDir.
-// It handles full and incremental archive creation, naming, and verification.
+// It handles full and incremental archive creation and naming.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// [REQ:ARCHIVE_VERIFICATION] Archive creation and management
+// [REQ:FILE_BACKUP] Archive creation for directory backups
+// [REQ:CONTEXT_SUPPORT] Context-aware archive operations
 // [ARCH:ARCHIVE_FORMAT] ZIP format for all archive operations
 // [ARCH:PROCESSING_PATTERNS] Uses processing patterns for archive creation
+// [ARCH:CONTEXT_SUPPORT] Context propagation for cancellation and timeouts
 // [IMPL:ZIP_FORMAT] Uses Go's archive/zip package
 // [IMPL:PROCESSING_PATTERNS] Pipeline-based processing with naming conventions
+// [IMPL:CONTEXT_OPS] Context parameter support in archive functions
 // ARCHIVE-FEATURES-001: Archive Operations Specification - Archive creation and management [ACTION:core-functionality]
 // Source: docs/context/specification.md - Archive Features section
 // Impact: Core functionality requirement for archive operations
@@ -55,23 +58,17 @@ type ArchiveConfig struct {
 // creation time, Git information, and verification status. It supports both
 // full and incremental archives.
 type Archive struct {
-	Name               string
-	Path               string
-	CreationTime       time.Time
-	IsIncremental      bool
-	GitBranch          string
-	GitHash            string
-	Note               string
-	BaseArchive        string // for incremental
-	VerificationStatus *VerificationStatus
+	Name          string
+	Path          string
+	CreationTime  time.Time
+	IsIncremental bool
+	GitBranch     string
+	GitHash       string
+	Note          string
+	BaseArchive   string // for incremental
 }
 
 // REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// ArchiveVerificationOptions holds configuration for archive verification
-type ArchiveVerificationOptions struct {
-	Path   string
-	Config ArchiveConfigInterface
-}
 
 // REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 // ArchiveConfigInterface abstracts configuration dependencies for archive operations
@@ -82,7 +79,6 @@ type ArchiveConfigInterface interface {
 	GetIncludeGitInfo() bool
 	GetShowGitDirtyStatus() bool
 	GetSkipBrokenSymlinks() bool
-	GetVerification() *VerificationConfig
 	GetStatusCodes() map[string]int
 	GetStatusDirectoryNotFound() int
 	GetStatusDiskFull() int
@@ -97,7 +93,6 @@ type ArchiveCreationOptions struct {
 	Path        string
 	Files       []string
 	Config      ArchiveConfigInterface
-	Verify      bool
 	ResourceMgr *ResourceManager
 }
 
@@ -138,10 +133,6 @@ func (a *ConfigToArchiveConfigAdapter) GetShowGitDirtyStatus() bool {
 
 func (a *ConfigToArchiveConfigAdapter) GetSkipBrokenSymlinks() bool {
 	return a.cfg.SkipBrokenSymlinks
-}
-
-func (a *ConfigToArchiveConfigAdapter) GetVerification() *VerificationConfig {
-	return a.cfg.Verification
 }
 
 func (a *ConfigToArchiveConfigAdapter) GetStatusCodes() map[string]int {
@@ -377,12 +368,6 @@ func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, erro
 		CreationTime:  fileInfo.ModTime(),
 	}
 
-	// Load verification status if available
-	status, err := LoadVerificationStatus(&archive)
-	if err == nil && status != nil {
-		archive.VerificationStatus = status
-	}
-
 	return archive, nil
 }
 
@@ -391,9 +376,9 @@ func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, erro
 // TEST-REF: TestCreateFullArchive
 // DECISION-REF: DEC-001
 // CreateArchiveWithContext creates a new archive with the given configuration and note.
-// It supports both dry-run mode and verification of the created archive.
-func CreateArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error {
-	return CreateFullArchiveWithContext(ctx, cfg, note, dryRun, verify)
+// It supports dry-run mode.
+func CreateArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool) error {
+	return CreateFullArchiveWithContext(ctx, cfg, note, dryRun)
 }
 
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
@@ -452,7 +437,7 @@ func checkContextCancellation(ctx context.Context) error {
 }
 
 // CreateFullArchiveWithContext creates a full archive with context support
-func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error {
+func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool) error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
@@ -504,7 +489,6 @@ func CreateFullArchiveWithContext(ctx context.Context, cfg *Config, note string,
 		Path:        archivePath,
 		Files:       files,
 		Config:      archiveConfig,
-		Verify:      verify,
 		ResourceMgr: rm,
 	})
 }
@@ -617,27 +601,6 @@ func printDryRunInfoWithInterface(files []string, archivePath string, cfg Archiv
 	}
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// verifyArchiveWithInterface verifies an archive using interface abstractions
-func verifyArchiveWithInterface(cfg ArchiveVerificationOptions) error {
-	status, err := VerifyArchive(cfg.Path)
-	if err != nil {
-		return NewArchiveErrorWithCause(
-			"Archive verification failed",
-			cfg.Config.GetStatusConfigError(),
-			err,
-		)
-	}
-	if !status.IsVerified {
-		return NewArchiveErrorWithCause(
-			"Archive verification failed",
-			cfg.Config.GetStatusConfigError(),
-			fmt.Errorf("verification errors: %v", status.Errors),
-		)
-	}
-	return nil
-}
-
 // prepareArchiveDirectory prepares the archive directory (backward compatibility).
 func prepareArchiveDirectory(cfg *Config, cwd string, dryRun bool) (string, error) {
 	// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
@@ -652,7 +615,7 @@ func printDryRunInfo(files []string, archivePath string, cfg *Config) {
 	printDryRunInfoWithInterface(files, archivePath, archiveConfig)
 }
 
-// createAndVerifyArchive creates and verifies an archive.
+// createAndVerifyArchive creates an archive.
 func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	tempFile := cfg.Path + ".tmp"
 	cfg.ResourceMgr.AddTempFile(tempFile)
@@ -675,16 +638,6 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 
 	cfg.ResourceMgr.RemoveResource(&TempFile{Path: tempFile})
 
-	if cfg.Verify {
-		verifyCfg := ArchiveVerificationOptions{
-			Path:   cfg.Path,
-			Config: cfg.Config,
-		}
-		if err := verifyArchiveWithInterface(verifyCfg); err != nil {
-			return err
-		}
-	}
-
 	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 	// Use the adapter to get the original config for FormatterAdapter
 	if concreteCfg, ok := cfg.Config.(*ConfigToArchiveConfigAdapter); ok {
@@ -695,20 +648,14 @@ func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	return nil
 }
 
-// verifyArchive verifies an archive (backward compatibility).
-func verifyArchive(cfg ArchiveVerificationOptions) error {
-	// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-	return verifyArchiveWithInterface(cfg)
-}
-
 // CreateFullArchive creates a full archive without context (backward compatibility)
-func CreateFullArchive(cfg *Config, note string, dryRun bool, verify bool) error {
-	return CreateFullArchiveWithContext(context.Background(), cfg, note, dryRun, verify)
+func CreateFullArchive(cfg *Config, note string, dryRun bool) error {
+	return CreateFullArchiveWithContext(context.Background(), cfg, note, dryRun)
 }
 
 // CreateFullArchiveWithCleanup creates a full archive with enhanced resource cleanup
-func CreateFullArchiveWithCleanup(cfg *Config, note string, dryRun bool, verify bool) error {
-	return CreateFullArchiveWithContext(context.Background(), cfg, note, dryRun, verify)
+func CreateFullArchiveWithCleanup(cfg *Config, note string, dryRun bool) error {
+	return CreateFullArchiveWithContext(context.Background(), cfg, note, dryRun)
 }
 
 // IncrementalArchiveConfig holds configuration for creating incremental archives
@@ -716,17 +663,15 @@ type IncrementalArchiveConfig struct {
 	Config  *Config
 	Note    string
 	DryRun  bool
-	Verify  bool
 	Context context.Context
 }
 
 // CreateIncrementalArchive creates an incremental archive without context (backward compatibility)
-func CreateIncrementalArchive(cfg *Config, note string, dryRun bool, verify bool) error {
+func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 	config := IncrementalArchiveConfig{
 		Config:  cfg,
 		Note:    note,
 		DryRun:  dryRun,
-		Verify:  verify,
 		Context: context.Background(),
 	}
 	return createIncrementalArchive(config)
@@ -782,7 +727,6 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		Path:    archivePath,
 		Files:   modifiedFiles,
 		Config:  archiveConfig,
-		Verify:  config.Verify,
 	})
 }
 
@@ -824,7 +768,7 @@ func prepareIncrementalArchiveWithInterface(
 	return archivePath, nil
 }
 
-// createAndVerifyIncrementalArchive creates and verifies an incremental archive
+// createAndVerifyIncrementalArchive creates an incremental archive
 func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
 	if err := createZipArchiveWithContextAndConfig(cfg.Context, cfg.CWD, cfg.Path, cfg.Files, cfg.Config); err != nil {
 		return NewArchiveErrorWithCause(
@@ -832,17 +776,6 @@ func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
 			cfg.Config.GetStatusDiskFull(),
 			err,
 		)
-	}
-
-	verificationConfig := cfg.Config.GetVerification()
-	if cfg.Verify || verificationConfig.VerifyOnCreate {
-		verifyCfg := ArchiveVerificationOptions{
-			Path:   cfg.Path,
-			Config: cfg.Config,
-		}
-		if err := verifyArchiveWithInterface(verifyCfg); err != nil {
-			return err
-		}
 	}
 
 	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
@@ -1109,12 +1042,11 @@ func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg Archive
 
 // CreateIncrementalArchiveWithContext creates an incremental archive with context support
 func CreateIncrementalArchiveWithContext(
-	ctx context.Context, cfg *Config, note string, dryRun bool, verify bool) error {
+	ctx context.Context, cfg *Config, note string, dryRun bool) error {
 	config := IncrementalArchiveConfig{
 		Config:  cfg,
 		Note:    note,
 		DryRun:  dryRun,
-		Verify:  verify,
 		Context: ctx,
 	}
 	return createIncrementalArchive(config)

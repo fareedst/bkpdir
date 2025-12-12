@@ -1,3 +1,6 @@
+// [REQ:GIT_INTEGRATION] Git integration for repository detection and metadata extraction
+// [ARCH:GIT_INTEGRATION] Git command-line integration architecture
+// [IMPL:GIT_CLI] Git command-line interface implementation
 // GIT-004: See specification.md - Git Integration System [DECISION:discovery]
 // This file is part of bkpdir
 //

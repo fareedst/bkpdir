@@ -63,13 +63,6 @@ func TestDefaultConfig(t *testing.T) {
 		assertStringSliceEqual(t, "ExcludePatterns", cfg.ExcludePatterns, defaultExcludePatterns)
 		assertBoolEqual(t, "IncludeGitInfo", cfg.IncludeGitInfo, false)
 
-		// Test verification config
-		if cfg.Verification == nil {
-			t.Error("Verification config should not be nil")
-		} else {
-			assertBoolEqual(t, "Verification.VerifyOnCreate", cfg.Verification.VerifyOnCreate, false)
-			assertStringEqual(t, "Verification.ChecksumAlgorithm", cfg.Verification.ChecksumAlgorithm, "sha256")
-		}
 	})
 }
 
@@ -296,8 +289,6 @@ func TestGetConfigValues(t *testing.T) {
 			"include_git_info",
 			"backup_dir_path",
 			"use_current_dir_name_for_files",
-			"verify_on_create",
-			"checksum_algorithm",
 		}
 
 		valueMap := make(map[string]ConfigValue)
@@ -452,18 +443,6 @@ func TestGetConfigValuesWithSources(t *testing.T) {
 			t.Errorf("Expected use_current_dir_name value 'true', got %q", val.Value)
 		}
 
-		// Test verification values
-		if val, exists := valueMap["verify_on_create"]; !exists {
-			t.Error("Expected verify_on_create in config values")
-		} else if val.Value != "false" {
-			t.Errorf("Expected verify_on_create value 'false', got %q", val.Value)
-		}
-
-		if val, exists := valueMap["checksum_algorithm"]; !exists {
-			t.Error("Expected checksum_algorithm in config values")
-		} else if val.Value != "sha256" {
-			t.Errorf("Expected checksum_algorithm value 'sha256', got %q", val.Value)
-		}
 	})
 
 	t.Run("configuration with custom file", func(t *testing.T) {
@@ -783,52 +762,6 @@ func TestGetStatusCodeValues(t *testing.T) {
 	}
 }
 
-// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
-func TestGetVerificationValues(t *testing.T) {
-	cfg := DefaultConfig()
-	defaultCfg := DefaultConfig()
-
-	// Modify verification values
-	cfg.Verification.VerifyOnCreate = true
-	cfg.Verification.ChecksumAlgorithm = "md5"
-
-	determiner := createSourceDeterminer("/test/config.yml")
-	values := getVerificationValues(cfg, defaultCfg, determiner)
-
-	if len(values) == 0 {
-		t.Error("getVerificationValues should return non-empty slice")
-	}
-
-	// Check specific values
-	valueMap := make(map[string]ConfigValue)
-	for _, v := range values {
-		valueMap[v.Name] = v
-	}
-
-	// Test modified values
-	if val, exists := valueMap["verify_on_create"]; !exists {
-		t.Error("Expected verify_on_create in verification values")
-	} else {
-		if val.Value != "true" {
-			t.Errorf("Expected verify_on_create value 'true', got %q", val.Value)
-		}
-		if val.Source != "/test/config.yml" {
-			t.Errorf("Expected config file source, got %q", val.Source)
-		}
-	}
-
-	if val, exists := valueMap["checksum_algorithm"]; !exists {
-		t.Error("Expected checksum_algorithm in verification values")
-	} else {
-		if val.Value != "md5" {
-			t.Errorf("Expected checksum_algorithm value 'md5', got %q", val.Value)
-		}
-		if val.Source != "/test/config.yml" {
-			t.Errorf("Expected config file source, got %q", val.Source)
-		}
-	}
-}
-
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 func TestMergeExtendedFormatStrings(t *testing.T) {
 	t.Run("merge non-default format strings", func(t *testing.T) {
@@ -837,13 +770,9 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 
 		// Modify source config with custom format strings
 		src.FormatNoArchivesFound = "Custom: No archives found in %s"
-		src.FormatVerificationSuccess = "Custom: Archive %s verified successfully"
 		src.FormatConfigurationUpdated = "Custom: Configuration %s updated to %s"
 		src.FormatNoBackupsFound = "Custom: No backups found for %s in %s"
 		src.FormatBackupCreated = "Custom: Backup created at %s"
-
-		// Keep some as default to test selective merging
-		// src.FormatVerificationFailed remains default
 
 		defaultCfg := DefaultConfig()
 		mergeExtendedFormatStrings(dst, src, true, defaultCfg)
@@ -851,10 +780,6 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 		// Verify custom values were merged
 		if dst.FormatNoArchivesFound != "Custom: No archives found in %s" {
 			t.Errorf("Expected custom FormatNoArchivesFound, got %q", dst.FormatNoArchivesFound)
-		}
-
-		if dst.FormatVerificationSuccess != "Custom: Archive %s verified successfully" {
-			t.Errorf("Expected custom FormatVerificationSuccess, got %q", dst.FormatVerificationSuccess)
 		}
 
 		if dst.FormatConfigurationUpdated != "Custom: Configuration %s updated to %s" {
@@ -869,10 +794,6 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 			t.Errorf("Expected custom FormatBackupCreated, got %q", dst.FormatBackupCreated)
 		}
 
-		// Verify default values were not overridden
-		if dst.FormatVerificationFailed != defaultCfg.FormatVerificationFailed {
-			t.Error("Default FormatVerificationFailed should not be overridden")
-		}
 	})
 
 	t.Run("all extended format strings covered", func(t *testing.T) {
@@ -881,19 +802,16 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 
 		// Set all format strings to custom values
 		src.FormatNoArchivesFound = "Custom1"
-		src.FormatVerificationFailed = "Custom2"
-		src.FormatVerificationSuccess = "Custom3"
-		src.FormatVerificationWarning = "Custom4"
-		src.FormatConfigurationUpdated = "Custom5"
-		src.FormatConfigFilePath = "Custom6"
-		src.FormatDryRunFilesHeader = "Custom7"
-		src.FormatDryRunFileEntry = "Custom8"
-		src.FormatNoFilesModified = "Custom9"
-		src.FormatIncrementalCreated = "Custom10"
-		src.FormatNoBackupsFound = "Custom11"
-		src.FormatBackupWouldCreate = "Custom12"
-		src.FormatBackupIdentical = "Custom13"
-		src.FormatBackupCreated = "Custom14"
+		src.FormatConfigurationUpdated = "Custom2"
+		src.FormatConfigFilePath = "Custom3"
+		src.FormatDryRunFilesHeader = "Custom4"
+		src.FormatDryRunFileEntry = "Custom5"
+		src.FormatNoFilesModified = "Custom6"
+		src.FormatIncrementalCreated = "Custom7"
+		src.FormatNoBackupsFound = "Custom8"
+		src.FormatBackupWouldCreate = "Custom9"
+		src.FormatBackupIdentical = "Custom10"
+		src.FormatBackupCreated = "Custom11"
 
 		defaultCfg := DefaultConfig()
 		mergeExtendedFormatStrings(dst, src, true, defaultCfg)
@@ -902,44 +820,35 @@ func TestMergeExtendedFormatStrings(t *testing.T) {
 		if dst.FormatNoArchivesFound != "Custom1" {
 			t.Errorf("Expected 'Custom1', got %q", dst.FormatNoArchivesFound)
 		}
-		if dst.FormatVerificationFailed != "Custom2" {
-			t.Errorf("Expected 'Custom2', got %q", dst.FormatVerificationFailed)
+		if dst.FormatConfigurationUpdated != "Custom2" {
+			t.Errorf("Expected 'Custom2', got %q", dst.FormatConfigurationUpdated)
 		}
-		if dst.FormatVerificationSuccess != "Custom3" {
-			t.Errorf("Expected 'Custom3', got %q", dst.FormatVerificationSuccess)
+		if dst.FormatConfigFilePath != "Custom3" {
+			t.Errorf("Expected 'Custom3', got %q", dst.FormatConfigFilePath)
 		}
-		if dst.FormatVerificationWarning != "Custom4" {
-			t.Errorf("Expected 'Custom4', got %q", dst.FormatVerificationWarning)
+		if dst.FormatDryRunFilesHeader != "Custom4" {
+			t.Errorf("Expected 'Custom4', got %q", dst.FormatDryRunFilesHeader)
 		}
-		if dst.FormatConfigurationUpdated != "Custom5" {
-			t.Errorf("Expected 'Custom5', got %q", dst.FormatConfigurationUpdated)
+		if dst.FormatDryRunFileEntry != "Custom5" {
+			t.Errorf("Expected 'Custom5', got %q", dst.FormatDryRunFileEntry)
 		}
-		if dst.FormatConfigFilePath != "Custom6" {
-			t.Errorf("Expected 'Custom6', got %q", dst.FormatConfigFilePath)
+		if dst.FormatNoFilesModified != "Custom6" {
+			t.Errorf("Expected 'Custom6', got %q", dst.FormatNoFilesModified)
 		}
-		if dst.FormatDryRunFilesHeader != "Custom7" {
-			t.Errorf("Expected 'Custom7', got %q", dst.FormatDryRunFilesHeader)
+		if dst.FormatIncrementalCreated != "Custom7" {
+			t.Errorf("Expected 'Custom7', got %q", dst.FormatIncrementalCreated)
 		}
-		if dst.FormatDryRunFileEntry != "Custom8" {
-			t.Errorf("Expected 'Custom8', got %q", dst.FormatDryRunFileEntry)
+		if dst.FormatNoBackupsFound != "Custom8" {
+			t.Errorf("Expected 'Custom8', got %q", dst.FormatNoBackupsFound)
 		}
-		if dst.FormatNoFilesModified != "Custom9" {
-			t.Errorf("Expected 'Custom9', got %q", dst.FormatNoFilesModified)
+		if dst.FormatBackupWouldCreate != "Custom9" {
+			t.Errorf("Expected 'Custom9', got %q", dst.FormatBackupWouldCreate)
 		}
-		if dst.FormatIncrementalCreated != "Custom10" {
-			t.Errorf("Expected 'Custom10', got %q", dst.FormatIncrementalCreated)
+		if dst.FormatBackupIdentical != "Custom10" {
+			t.Errorf("Expected 'Custom10', got %q", dst.FormatBackupIdentical)
 		}
-		if dst.FormatNoBackupsFound != "Custom11" {
-			t.Errorf("Expected 'Custom11', got %q", dst.FormatNoBackupsFound)
-		}
-		if dst.FormatBackupWouldCreate != "Custom12" {
-			t.Errorf("Expected 'Custom12', got %q", dst.FormatBackupWouldCreate)
-		}
-		if dst.FormatBackupIdentical != "Custom13" {
-			t.Errorf("Expected 'Custom13', got %q", dst.FormatBackupIdentical)
-		}
-		if dst.FormatBackupCreated != "Custom14" {
-			t.Errorf("Expected 'Custom14', got %q", dst.FormatBackupCreated)
+		if dst.FormatBackupCreated != "Custom11" {
+			t.Errorf("Expected 'Custom11', got %q", dst.FormatBackupCreated)
 		}
 	})
 }
@@ -952,13 +861,9 @@ func TestMergeExtendedTemplates(t *testing.T) {
 
 		// Modify source config with custom template strings
 		src.TemplateNoArchivesFound = "{{.custom}} template for no archives"
-		src.TemplateVerificationSuccess = "{{.archive}} verification success template"
 		src.TemplateConfigurationUpdated = "{{.key}} updated to {{.value}} template"
 		src.TemplateNoBackupsFound = "{{.file}} no backups template"
 		src.TemplateBackupCreated = "{{.path}} backup created template"
-
-		// Keep some as default to test selective merging
-		// src.TemplateVerificationFailed remains default
 
 		defaultCfg := DefaultConfig()
 		mergeExtendedTemplates(dst, src, true, defaultCfg, nil)
@@ -966,10 +871,6 @@ func TestMergeExtendedTemplates(t *testing.T) {
 		// Verify custom values were merged
 		if dst.TemplateNoArchivesFound != "{{.custom}} template for no archives" {
 			t.Errorf("Expected custom TemplateNoArchivesFound, got %q", dst.TemplateNoArchivesFound)
-		}
-
-		if dst.TemplateVerificationSuccess != "{{.archive}} verification success template" {
-			t.Errorf("Expected custom TemplateVerificationSuccess, got %q", dst.TemplateVerificationSuccess)
 		}
 
 		if dst.TemplateConfigurationUpdated != "{{.key}} updated to {{.value}} template" {
@@ -984,10 +885,6 @@ func TestMergeExtendedTemplates(t *testing.T) {
 			t.Errorf("Expected custom TemplateBackupCreated, got %q", dst.TemplateBackupCreated)
 		}
 
-		// Verify default values were not overridden
-		if dst.TemplateVerificationFailed != defaultCfg.TemplateVerificationFailed {
-			t.Error("Default TemplateVerificationFailed should not be overridden")
-		}
 	})
 
 	t.Run("all extended template strings covered", func(t *testing.T) {
@@ -996,19 +893,16 @@ func TestMergeExtendedTemplates(t *testing.T) {
 
 		// Set all template strings to custom values
 		src.TemplateNoArchivesFound = "Template1"
-		src.TemplateVerificationFailed = "Template2"
-		src.TemplateVerificationSuccess = "Template3"
-		src.TemplateVerificationWarning = "Template4"
-		src.TemplateConfigurationUpdated = "Template5"
-		src.TemplateConfigFilePath = "Template6"
-		src.TemplateDryRunFilesHeader = "Template7"
-		src.TemplateDryRunFileEntry = "Template8"
-		src.TemplateNoFilesModified = "Template9"
-		src.TemplateIncrementalCreated = "Template10"
-		src.TemplateNoBackupsFound = "Template11"
-		src.TemplateBackupWouldCreate = "Template12"
-		src.TemplateBackupIdentical = "Template13"
-		src.TemplateBackupCreated = "Template14"
+		src.TemplateConfigurationUpdated = "Template2"
+		src.TemplateConfigFilePath = "Template3"
+		src.TemplateDryRunFilesHeader = "Template4"
+		src.TemplateDryRunFileEntry = "Template5"
+		src.TemplateNoFilesModified = "Template6"
+		src.TemplateIncrementalCreated = "Template7"
+		src.TemplateNoBackupsFound = "Template8"
+		src.TemplateBackupWouldCreate = "Template9"
+		src.TemplateBackupIdentical = "Template10"
+		src.TemplateBackupCreated = "Template11"
 
 		defaultCfg := DefaultConfig()
 		mergeExtendedTemplates(dst, src, true, defaultCfg, nil)
@@ -1017,44 +911,35 @@ func TestMergeExtendedTemplates(t *testing.T) {
 		if dst.TemplateNoArchivesFound != "Template1" {
 			t.Errorf("Expected 'Template1', got %q", dst.TemplateNoArchivesFound)
 		}
-		if dst.TemplateVerificationFailed != "Template2" {
-			t.Errorf("Expected 'Template2', got %q", dst.TemplateVerificationFailed)
+		if dst.TemplateConfigurationUpdated != "Template2" {
+			t.Errorf("Expected 'Template2', got %q", dst.TemplateConfigurationUpdated)
 		}
-		if dst.TemplateVerificationSuccess != "Template3" {
-			t.Errorf("Expected 'Template3', got %q", dst.TemplateVerificationSuccess)
+		if dst.TemplateConfigFilePath != "Template3" {
+			t.Errorf("Expected 'Template3', got %q", dst.TemplateConfigFilePath)
 		}
-		if dst.TemplateVerificationWarning != "Template4" {
-			t.Errorf("Expected 'Template4', got %q", dst.TemplateVerificationWarning)
+		if dst.TemplateDryRunFilesHeader != "Template4" {
+			t.Errorf("Expected 'Template4', got %q", dst.TemplateDryRunFilesHeader)
 		}
-		if dst.TemplateConfigurationUpdated != "Template5" {
-			t.Errorf("Expected 'Template5', got %q", dst.TemplateConfigurationUpdated)
+		if dst.TemplateDryRunFileEntry != "Template5" {
+			t.Errorf("Expected 'Template5', got %q", dst.TemplateDryRunFileEntry)
 		}
-		if dst.TemplateConfigFilePath != "Template6" {
-			t.Errorf("Expected 'Template6', got %q", dst.TemplateConfigFilePath)
+		if dst.TemplateNoFilesModified != "Template6" {
+			t.Errorf("Expected 'Template6', got %q", dst.TemplateNoFilesModified)
 		}
-		if dst.TemplateDryRunFilesHeader != "Template7" {
-			t.Errorf("Expected 'Template7', got %q", dst.TemplateDryRunFilesHeader)
+		if dst.TemplateIncrementalCreated != "Template7" {
+			t.Errorf("Expected 'Template7', got %q", dst.TemplateIncrementalCreated)
 		}
-		if dst.TemplateDryRunFileEntry != "Template8" {
-			t.Errorf("Expected 'Template8', got %q", dst.TemplateDryRunFileEntry)
+		if dst.TemplateNoBackupsFound != "Template8" {
+			t.Errorf("Expected 'Template8', got %q", dst.TemplateNoBackupsFound)
 		}
-		if dst.TemplateNoFilesModified != "Template9" {
-			t.Errorf("Expected 'Template9', got %q", dst.TemplateNoFilesModified)
+		if dst.TemplateBackupWouldCreate != "Template9" {
+			t.Errorf("Expected 'Template9', got %q", dst.TemplateBackupWouldCreate)
 		}
-		if dst.TemplateIncrementalCreated != "Template10" {
-			t.Errorf("Expected 'Template10', got %q", dst.TemplateIncrementalCreated)
+		if dst.TemplateBackupIdentical != "Template10" {
+			t.Errorf("Expected 'Template10', got %q", dst.TemplateBackupIdentical)
 		}
-		if dst.TemplateNoBackupsFound != "Template11" {
-			t.Errorf("Expected 'Template11', got %q", dst.TemplateNoBackupsFound)
-		}
-		if dst.TemplateBackupWouldCreate != "Template12" {
-			t.Errorf("Expected 'Template12', got %q", dst.TemplateBackupWouldCreate)
-		}
-		if dst.TemplateBackupIdentical != "Template13" {
-			t.Errorf("Expected 'Template13', got %q", dst.TemplateBackupIdentical)
-		}
-		if dst.TemplateBackupCreated != "Template14" {
-			t.Errorf("Expected 'Template14', got %q", dst.TemplateBackupCreated)
+		if dst.TemplateBackupCreated != "Template11" {
+			t.Errorf("Expected 'Template11', got %q", dst.TemplateBackupCreated)
 		}
 	})
 }
@@ -1549,8 +1434,6 @@ func TestConfigReflection(t *testing.T) {
 		expectedFields := []string{
 			"archive_dir_path",
 			"exclude_patterns",
-			"verify_on_create",
-			"checksum_algorithm",
 			"status_created_archive",
 			"format_created_archive",
 			"template_created_archive",
@@ -1580,7 +1463,6 @@ func TestConfigReflection(t *testing.T) {
 			"format_strings",
 			"template_strings",
 			"regex_patterns",
-			"verification",
 		}
 
 		for _, category := range expectedCategories {
@@ -1595,35 +1477,17 @@ func TestConfigReflection(t *testing.T) {
 		fields := GetAllConfigFields(cfg)
 
 		// Find verification nested fields with correct path
-		var verifyOnCreateField *configFieldInfo
-		var checksumAlgorithmField *configFieldInfo
-
-		for i, field := range fields {
-			if field.YAMLName == "verify_on_create" {
-				verifyOnCreateField = &fields[i]
-			}
-			if field.YAMLName == "checksum_algorithm" {
-				checksumAlgorithmField = &fields[i]
+		// VerificationConfig removed - test other embedded structs like GitConfig
+		// Verify fields are discovered for remaining embedded structs
+		foundGitField := false
+		for _, field := range fields {
+			if strings.HasPrefix(field.Path, "Git.") {
+				foundGitField = true
+				break
 			}
 		}
-
-		if verifyOnCreateField == nil {
-			t.Error("verify_on_create field not found in nested struct")
-		} else {
-			if verifyOnCreateField.Type != "bool" {
-				t.Errorf("Expected bool type for verify_on_create, got %s", verifyOnCreateField.Type)
-			}
-			if verifyOnCreateField.Category != "verification" {
-				t.Errorf("Expected verification category, got %s", verifyOnCreateField.Category)
-			}
-		}
-
-		if checksumAlgorithmField == nil {
-			t.Error("checksum_algorithm field not found in nested struct")
-		} else {
-			if checksumAlgorithmField.Type != "string" {
-				t.Errorf("Expected string type for checksum_algorithm, got %s", checksumAlgorithmField.Type)
-			}
+		if !foundGitField {
+			t.Error("Expected to find Git.* nested fields")
 		}
 	})
 
@@ -1859,8 +1723,6 @@ exclude_patterns:
   - "*.tmp"
   - "node_modules"
 verification:
-  verify_on_create: true
-  checksum_algorithm: "sha512"
 status_created_archive: 100
 `
 
@@ -2116,39 +1978,10 @@ func TestAdvancedFieldDiscovery(t *testing.T) {
 		cfg := DefaultConfig()
 		fields := GetAllConfigFields(cfg)
 
-		// Find verification fields which come from embedded VerificationConfig
-		var verifyOnCreateField *configFieldInfo
-		var checksumAlgorithmField *configFieldInfo
-
-		for i, field := range fields {
-			if field.YAMLName == "verify_on_create" {
-				verifyOnCreateField = &fields[i]
-			}
-			if field.YAMLName == "checksum_algorithm" {
-				checksumAlgorithmField = &fields[i]
-			}
-		}
-
-		// Verify embedded struct fields are properly discovered
-		if verifyOnCreateField == nil {
-			t.Error("verify_on_create field from embedded VerificationConfig not found")
-		} else {
-			// Verify proper path construction for embedded fields
-			if verifyOnCreateField.Path != "Verification.VerifyOnCreate" {
-				t.Errorf("Incorrect path for embedded field: expected 'Verification.VerifyOnCreate', got '%s'", verifyOnCreateField.Path)
-			}
-			if verifyOnCreateField.Category != "verification" {
-				t.Errorf("Incorrect category for verification field: expected 'verification', got '%s'", verifyOnCreateField.Category)
-			}
-		}
-
-		if checksumAlgorithmField == nil {
-			t.Error("checksum_algorithm field from embedded VerificationConfig not found")
-		} else {
-			// Verify string type detection in embedded struct
-			if checksumAlgorithmField.Type != "string" {
-				t.Errorf("Incorrect type for checksum_algorithm: expected 'string', got '%s'", checksumAlgorithmField.Type)
-			}
+		// Test that embedded struct fields are properly discovered
+		// (VerificationConfig removed, but other embedded structs like GitConfig should still work)
+		if len(fields) == 0 {
+			t.Error("Expected to find config fields")
 		}
 	})
 }
@@ -2338,7 +2171,6 @@ func TestFieldDiscoveryErrorHandling(t *testing.T) {
 		// Test path resolution with invalid paths
 		invalidPaths := []string{
 			"NonExistent.Field",
-			"Verification.NonExistentField",
 			"",
 			"Too.Many.Nested.Levels.Field",
 		}
@@ -2353,7 +2185,6 @@ func TestFieldDiscoveryErrorHandling(t *testing.T) {
 		// Test that valid paths still work
 		validPaths := []string{
 			"ArchiveDirPath",
-			"Verification.VerifyOnCreate",
 			"StatusCreatedArchive",
 		}
 
@@ -2382,15 +2213,11 @@ func TestSourceAttributionAccuracy(t *testing.T) {
 		// Create a complex inheritance chain with multiple levels
 		dir := t.TempDir()
 
-		// Create config with complete verification section for proper merging
+		// Create config for proper merging
 		configPath := filepath.Join(dir, "child.yml")
 		configData := map[string]interface{}{
 			"archive_dir_path": "/child/archives", // Override base value
 			"status_disk_full": 20,                // New value
-			"verification": map[string]interface{}{
-				"verify_on_create":   true,  // Override default
-				"checksum_algorithm": "md5", // Override default
-			},
 		}
 		createTestConfigFileWithData(t, configPath, configData)
 
@@ -2433,13 +2260,6 @@ func TestSourceAttributionAccuracy(t *testing.T) {
 			}
 		}
 
-		// Test verification fields when verification section is provided
-		if val, exists := valueMap["verify_on_create"]; exists {
-			// Only test if the field exists in the values
-			if val.Value == "true" && val.Source == "default" {
-				t.Errorf("Expected verify_on_create not to be default source when config provides verification section, got %q", val.Source)
-			}
-		}
 	})
 
 	t.Run("CFG-005 integration accuracy", func(t *testing.T) {
@@ -2568,10 +2388,6 @@ func TestSourceConflictDetection(t *testing.T) {
 			"archive_dir_path":       "/custom/path", // Override default
 			"use_current_dir_name":   false,          // Override default
 			"status_created_archive": 42,             // Override default
-			"verification": map[string]interface{}{
-				"verify_on_create":   true,  // Override default
-				"checksum_algorithm": "md5", // Override default
-			},
 		}
 		createTestConfigFileWithData(t, configPath, configData)
 		os.Setenv("BKPDIR_CONFIG", configPath)
@@ -2619,20 +2435,6 @@ func TestSourceConflictDetection(t *testing.T) {
 			}
 		}
 
-		// Test verification fields separately since they depend on complete verification section
-		if val, exists := valueMap["verify_on_create"]; exists {
-			// If verification was properly loaded, it shouldn't be default
-			if val.Value == "true" {
-				t.Logf("verify_on_create has value 'true' with source '%s'", val.Source)
-			}
-		}
-
-		if val, exists := valueMap["checksum_algorithm"]; exists {
-			// If verification was properly loaded, it shouldn't be default
-			if val.Value == "md5" {
-				t.Logf("checksum_algorithm has value 'md5' with source '%s'", val.Source)
-			}
-		}
 	})
 }
 
@@ -2659,10 +2461,6 @@ func TestDisplayFormatting(t *testing.T) {
 			"use_current_dir_name":   true,
 			"status_created_archive": 42,
 			"exclude_patterns":       []string{"*.tmp", "*.log"},
-			"verification": map[string]interface{}{
-				"verify_on_create":   true,
-				"checksum_algorithm": "sha256",
-			},
 		}
 		createTestConfigFileWithData(t, configPath, configData)
 		os.Setenv("BKPDIR_CONFIG", configPath)
@@ -2727,19 +2525,6 @@ func TestDisplayFormatting(t *testing.T) {
 			}
 		}
 
-		// Test nested struct values
-		if val, exists := valueMap["verify_on_create"]; exists {
-			if val.Value != "true" {
-				t.Logf("verify_on_create value: %q (source: %s)", val.Value, val.Source)
-				// Note: verification config might not be set correctly in test config
-			}
-		}
-
-		if val, exists := valueMap["checksum_algorithm"]; exists {
-			if val.Value != "sha256" {
-				t.Errorf("Expected checksum_algorithm value 'sha256', got %q", val.Value)
-			}
-		}
 	})
 
 	t.Run("Tree format hierarchical display", func(t *testing.T) {
@@ -2784,7 +2569,7 @@ func TestDisplayFormatting(t *testing.T) {
 		}
 
 		// Test specific categories exist
-		expectedCategories := []string{"basic_settings", "status_codes", "format_strings", "template_strings", "verification"}
+		expectedCategories := []string{"basic_settings", "status_codes", "format_strings", "template_strings"}
 		for _, expectedCat := range expectedCategories {
 			if count, exists := categoryCount[expectedCat]; !exists || count == 0 {
 				t.Errorf("Expected category %s to exist with fields, got count %d", expectedCat, count)
@@ -2793,19 +2578,16 @@ func TestDisplayFormatting(t *testing.T) {
 
 		// Test nested field paths for tree structure
 		foundNestedFields := false
-		foundVerificationFields := false
 		foundGitFields := false
 
 		for _, field := range fields {
 			if strings.Contains(field.Path, ".") {
 				foundNestedFields = true
 				// Verify nested field path format - should be from known nested structures
-				if strings.HasPrefix(field.Path, "Verification.") {
-					foundVerificationFields = true
-				} else if strings.HasPrefix(field.Path, "Git.") {
+				if strings.HasPrefix(field.Path, "Git.") {
 					foundGitFields = true
 				} else {
-					t.Errorf("Unexpected nested field path format: %s (expected Verification.* or Git.*)", field.Path)
+					t.Errorf("Unexpected nested field path format: %s (expected Git.*)", field.Path)
 				}
 			}
 		}
@@ -2814,10 +2596,7 @@ func TestDisplayFormatting(t *testing.T) {
 			t.Error("Expected to find nested fields for tree structure")
 		}
 
-		// Verify we found fields from both expected nested structures
-		if !foundVerificationFields {
-			t.Error("Expected to find Verification.* nested fields")
-		}
+		// Verify we found fields from expected nested structures
 		if !foundGitFields {
 			t.Error("Expected to find Git.* nested fields")
 		}
@@ -3180,10 +2959,7 @@ func TestFilteringFunctionality(t *testing.T) {
 			t.Error("Expected exclude_patterns from basic_settings category")
 		}
 
-		// Should include verification settings
-		if _, exists := valueMap["verify_on_create"]; !exists {
-			t.Error("Expected verify_on_create from verification category")
-		}
+		// Verification category removed - test other categories
 	})
 
 	t.Run("Overrides only filtering", func(t *testing.T) {
@@ -4054,7 +3830,6 @@ func TestMergeStrategyTracking(t *testing.T) {
 		{"exclude_patterns", []string{"*.tmp"}, "append"},
 		{"archive_dir_path", "./archives", "override"},
 		{"git.enabled", true, "merge"},
-		{"verification.verify_on_create", true, "override"},
 		{"patterns.archive_filename", "*.zip", "prepend"},
 	}
 
@@ -5115,19 +4890,7 @@ func TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 			formatString:   "",
 			expectWarnings: false,
 		},
-		{
-			name:           "valid_verification_format",
-			fieldName:      "FormatVerificationFailed",
-			formatString:   "Archive %s verification failed: %v\n",
-			expectWarnings: false,
-		},
-		{
-			name:           "invalid_verification_format",
-			fieldName:      "FormatVerificationFailed",
-			formatString:   "Archive %s verification failed: #{error}\n",
-			expectWarnings: true,
-			expectedCount:  1,
-		},
+		{},
 	}
 
 	for _, tt := range tests {

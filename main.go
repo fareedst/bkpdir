@@ -2,7 +2,7 @@
 //
 // BkpDir provides directory archiving and file backup functionality with Git integration.
 // It supports creating ZIP archives of directories and individual file backups with timestamps,
-// verification, and optional Git branch/hash information in filenames.
+// and optional Git branch/hash information in filenames.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
@@ -38,10 +38,8 @@ var commit = "unknown"
 var (
 	createNote   string
 	createDryRun bool
-	createVerify bool
 	listFile     string
 	archiveName  string
-	withChecksum bool
 )
 
 // Short description for the main application
@@ -219,7 +217,7 @@ func handleAutoDetectedDirectoryArchive(args []string) {
 	}
 
 	// Create full archive using existing functionality
-	if err := CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun, false); err != nil {
+	if err := CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun); err != nil {
 		exitCode := HandleArchiveError(err, cfg, formatter)
 		os.Exit(exitCode)
 	}
@@ -230,7 +228,7 @@ const rootLongDesc = `bkpdir version %s (compiled %s) [%s]
 
 BkpDir is a command-line tool for archiving directories and backing up individual files on macOS and Linux. 
 It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
-Git-aware archive naming, and archive verification.`
+and Git-aware archive naming.`
 
 // [IMPL:AUTO_DETECTION] [ARCH:AUTO_DETECTION] [REQ:USABILITY]
 // executeWithAutoDetection handles Cobra command resolution issues by implementing
@@ -248,7 +246,7 @@ func executeWithAutoDetection(rootCmd *cobra.Command) error {
 
 	// List of known commands that should be handled by Cobra normally
 	knownCommands := []string{
-		"create", "config", "template", "full", "inc", "list", "verify", "backup", "version",
+		"create", "config", "template", "full", "inc", "list", "backup", "version",
 		"help", "--help", "-h", "--version", "-v",
 	}
 
@@ -334,9 +332,9 @@ func main() {
   bkpdir create "Initial backup"
   bkpdir full -n "Initial backup"  # backward compatibility
 
-  # Create an incremental directory archive with verification
-  bkpdir create --incremental "Changes after feature X" -v
-  bkpdir inc -n "Changes after feature X" -v  # backward compatibility
+  # Create an incremental directory archive
+  bkpdir create --incremental "Changes after feature X"
+  bkpdir inc -n "Changes after feature X"  # backward compatibility
 
   # Create a file backup (explicit command)
   bkpdir backup myfile.txt "Before changes"
@@ -346,9 +344,6 @@ func main() {
 
   # List backups for a specific file
   bkpdir --list myfile.txt
-
-  # Verify a specific archive with checksums
-  bkpdir verify backup-2024-03-20.zip -c
 
   # Show configuration
   bkpdir config
@@ -402,7 +397,6 @@ func main() {
 
 	// Add other commands
 	rootCmd.AddCommand(listCmd())
-	rootCmd.AddCommand(verifyCmd())
 	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
@@ -813,10 +807,6 @@ func handleListCommand() {
 	}
 }
 
-func handleVerifyCommand() {
-	// Implementation
-}
-
 func handleVersionCommand() {
 	// Implementation
 }
@@ -1014,7 +1004,7 @@ If the directory is identical to the most recent archive, no new archive is crea
 				archiveNote = args[0]
 			}
 
-			if err := CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun, false); err != nil {
+			if err := CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun); err != nil {
 				exitCode := HandleArchiveError(err, cfg, formatter)
 				os.Exit(exitCode)
 			}
@@ -1067,7 +1057,7 @@ If the directory is identical to the most recent archive, no new archive is crea
 				archiveNote = args[0]
 			}
 
-			if err := CreateIncrementalArchiveWithContext(ctx, cfg, archiveNote, dryRun, false); err != nil {
+			if err := CreateIncrementalArchiveWithContext(ctx, cfg, archiveNote, dryRun); err != nil {
 				exitCode := HandleArchiveError(err, cfg, formatter)
 				os.Exit(exitCode)
 			}
@@ -1085,19 +1075,6 @@ func listCmd() *cobra.Command {
 		Short: "List archives",
 		Run: func(*cobra.Command, []string) {
 			handleListCommand()
-		},
-	}
-	return cmd
-}
-
-func verifyCmd() *cobra.Command {
-	// Archive verification command
-	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-	cmd := &cobra.Command{
-		Use:   "verify",
-		Short: "Verify archives",
-		Run: func(*cobra.Command, []string) {
-			handleVerifyCommand()
 		},
 	}
 	return cmd
@@ -1123,7 +1100,6 @@ type ArchiveOptions struct {
 	Formatter formatter.OutputFormatterInterface
 	Note      string
 	DryRun    bool
-	Verify    bool
 }
 
 // CreateFullArchiveEnhanced creates a full archive of the current directory with enhanced error handling
@@ -1131,7 +1107,7 @@ type ArchiveOptions struct {
 func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
 	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// DECISION-REF: DEC-006, DEC-007
-	return CreateFullArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
+	return CreateFullArchive(opts.Config, opts.Note, opts.DryRun)
 }
 
 // CreateIncrementalArchiveEnhanced creates an incremental archive containing only files changed since
@@ -1139,7 +1115,7 @@ func CreateFullArchiveEnhanced(opts ArchiveOptions) error {
 func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
 	// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:core-functionality]
 	// DECISION-REF: DEC-006, DEC-007
-	return CreateIncrementalArchive(opts.Config, opts.Note, opts.DryRun, opts.Verify)
+	return CreateIncrementalArchive(opts.Config, opts.Note, opts.DryRun)
 }
 
 // ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
@@ -1178,173 +1154,24 @@ func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterf
 	})
 
 	for _, a := range archives {
-		status := ""
-		if a.VerificationStatus != nil {
-			if a.VerificationStatus.IsVerified {
-				status = " [VERIFIED]"
-			} else {
-				status = " [FAILED]"
-			}
-		} else {
-			status = " [UNVERIFIED]"
-		}
-
 		// Use enhanced formatting with extraction if possible
 		creationTime := a.CreationTime.Format("2006-01-02 15:04:05")
 		if formatterAdapter, ok := formatter.(*FormatterAdapter); ok {
 			// Use Path (full path) for file stats, Name (filename) for display
 			output := formatterAdapter.FormatListArchiveWithExtraction(a.Path, creationTime)
-			// Remove trailing newline from output to add status on same line
-			output = strings.TrimSuffix(output, "\n")
-			formatterAdapter.PrintArchiveListWithStatus(output, status)
+			fmt.Println(output)
 		} else if aiFormatterAdapter, ok := formatter.(*AIFormatterAdapter); ok {
 			// Use Path (full path) for file stats, Name (filename) for display
 			output := aiFormatterAdapter.FormatListArchiveWithExtraction(a.Path, creationTime)
-			// Remove trailing newline from output to add status on same line
-			output = strings.TrimSuffix(output, "\n")
 			// Use os.Stdout.WriteString to avoid fmt misinterpreting #{...} patterns
-			os.Stdout.WriteString(output + status + "\n")
+			os.Stdout.WriteString(output + "\n")
 		} else {
 			output := formatter.FormatListArchive(a.Name, creationTime)
-			fmt.Printf("%s%s\n", strings.TrimSuffix(output, "\n"), status)
+			fmt.Println(output)
 		}
 	}
 
 	return nil
-}
-
-// VerifyOptions holds parameters for archive verification functions
-type VerifyOptions struct {
-	Config       *Config
-	Formatter    formatter.OutputFormatterInterface
-	ArchiveName  string
-	WithChecksum bool
-}
-
-// VerifyArchiveEnhanced verifies the integrity of an archive with optional checksum verification.
-// It provides enhanced error handling and reporting.
-func VerifyArchiveEnhanced(opts VerifyOptions) error {
-	// Archive verification implementation
-	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-	archiveDir, err := getArchiveDirectory(opts.Config)
-	if err != nil {
-		return err
-	}
-
-	if opts.ArchiveName != "" {
-		return verifySingleArchive(opts, archiveDir)
-	}
-	return verifyAllArchives(opts, archiveDir)
-}
-
-// getArchiveDirectory determines the archive directory path
-func getArchiveDirectory(cfg *Config) (string, error) {
-	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
-	// DECISION-REF: DEC-002
-	cwd, err := os.Getwd()
-	if err != nil {
-		return "", NewArchiveErrorWithCause("Failed to get current directory",
-			cfg.StatusDirectoryNotFound, err)
-	}
-
-	archiveDir := cfg.ArchiveDirPath
-	if cfg.UseCurrentDirName {
-		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
-	}
-	return archiveDir, nil
-}
-
-// verifySingleArchive verifies a specific archive
-func verifySingleArchive(opts VerifyOptions, archiveDir string) error {
-	// Single archive verification
-	archivePath := filepath.Join(archiveDir, opts.ArchiveName)
-	archive := &Archive{
-		Name: opts.ArchiveName,
-		Path: archivePath,
-	}
-
-	status, err := performVerification(archive.Path, opts.WithChecksum)
-	if err != nil {
-		return err
-	}
-
-	return handleVerificationResult(archive, status, opts.ArchiveName)
-}
-
-// verifyAllArchives verifies all archives in the directory
-func verifyAllArchives(opts VerifyOptions, archiveDir string) error {
-	// All archives verification
-	archives, err := ListArchives(archiveDir)
-	if err != nil {
-		return NewArchiveErrorWithCause("Failed to list archives", 1, err)
-	}
-
-	allPassed := true
-	for _, archive := range archives {
-		status, err := performVerification(archive.Path, opts.WithChecksum)
-		if err != nil {
-			// Cast to FormatterAdapter to access extended methods
-			if formatterAdapter, ok := opts.Formatter.(*FormatterAdapter); ok {
-				formatterAdapter.PrintVerificationFailed(archive.Name, err)
-			} else {
-				opts.Formatter.PrintError(fmt.Sprintf("Verification failed for %s: %v", archive.Name, err))
-			}
-			allPassed = false
-			continue
-		}
-
-		if err := handleVerificationResult(&archive, status, archive.Name); err != nil {
-			allPassed = false
-		}
-	}
-
-	if !allPassed {
-		return NewArchiveError("Some archives failed verification", 1)
-	}
-	return nil
-}
-
-// performVerification performs the actual verification based on type
-func performVerification(archivePath string, withChecksum bool) (*VerificationStatus, error) {
-	// Archive verification execution
-	if withChecksum {
-		status, err := VerifyChecksums(archivePath)
-		if err != nil {
-			return nil, NewArchiveErrorWithCause("Archive checksum verification failed", 1, err)
-		}
-		return status, nil
-	}
-
-	status, err := VerifyArchive(archivePath)
-	if err != nil {
-		return nil, NewArchiveErrorWithCause("Archive verification failed", 1, err)
-	}
-	return status, nil
-}
-
-// handleVerificationResult handles the result of verification
-func handleVerificationResult(archive *Archive, status *VerificationStatus, name string) error {
-	// Get config and formatter for proper output formatting
-	cwd, _ := os.Getwd()
-	cfg, _ := LoadConfig(cwd)
-	formatter := NewOutputFormatter(cfg)
-
-	// Store verification status
-	if err := StoreVerificationStatus(archive, status); err != nil {
-		// Don't fail if we can't store status, just warn
-		formatter.PrintVerificationWarning(name, err)
-	}
-
-	if status.IsVerified {
-		formatter.PrintVerificationSuccess(name)
-		return nil
-	}
-
-	formatter.PrintVerificationFailed(name, fmt.Errorf("verification failed"))
-	for _, errMsg := range status.Errors {
-		formatter.PrintVerificationErrorDetail(errMsg)
-	}
-	return NewArchiveError("Archive verification failed", 1)
 }
 
 func handleListFileBackupsCommand(args []string) {
@@ -1488,17 +1315,17 @@ func loadExistingConfigData(configPath string) map[string]interface{} {
 func convertConfigValue(key, value string) interface{} {
 	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	switch key {
-	case "use_current_dir_name", "use_current_dir_name_for_files", "include_git_info", "verify_on_create":
+	case "use_current_dir_name", "use_current_dir_name_for_files", "include_git_info":
 		return convertBooleanValue(key, value)
 	case "status_config_error", "status_created_archive", "status_created_backup",
 		"status_disk_full", "status_permission_denied":
 		return convertIntegerValue(key, value)
-	case "archive_dir_path", "backup_dir_path", "checksum_algorithm":
+	case "archive_dir_path", "backup_dir_path":
 		return value
 	default:
 		fmt.Fprintf(os.Stderr, "Error: unknown configuration key: %s\n", key)
 		fmt.Fprintf(os.Stderr, "Valid keys: archive_dir_path, backup_dir_path, use_current_dir_name, "+
-			"use_current_dir_name_for_files, include_git_info, verify_on_create, checksum_algorithm, "+
+			"use_current_dir_name_for_files, include_git_info, "+
 			"status_config_error, status_created_archive, status_created_backup, status_disk_full, "+
 			"status_permission_denied\n")
 		os.Exit(1)
@@ -1531,19 +1358,7 @@ func convertIntegerValue(key, value string) int {
 
 func updateConfigData(configData map[string]interface{}, key string, convertedValue interface{}) {
 	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
-	if key == "verify_on_create" || key == "checksum_algorithm" {
-		if configData["verification"] == nil {
-			configData["verification"] = make(map[string]interface{})
-		}
-		verificationMap := configData["verification"].(map[string]interface{})
-		if key == "verify_on_create" {
-			verificationMap["verify_on_create"] = convertedValue
-		} else {
-			verificationMap["checksum_algorithm"] = convertedValue
-		}
-	} else {
-		configData[key] = convertedValue
-	}
+	configData[key] = convertedValue
 }
 
 func saveConfigData(configPath string, configData map[string]interface{}) {
@@ -1570,10 +1385,9 @@ type CommandConfig struct {
 
 // CommandHandlerInterface abstracts command execution for better testability
 type CommandHandlerInterface interface {
-	HandleFullArchive(args []string, note string, dryRun bool, verify bool) error
-	HandleIncrementalArchive(args []string, note string, dryRun bool, verify bool) error
+	HandleFullArchive(args []string, note string, dryRun bool) error
+	HandleIncrementalArchive(args []string, note string, dryRun bool) error
 	HandleListArchives(args []string) error
-	HandleVerifyArchive(args []string, archiveName string, withChecksum bool) error
 	HandleFileBackup(args []string, note string, dryRun bool) error
 	HandleListFileBackups(args []string, filePath string) error
 	HandleDisplayConfig(args []string) error
@@ -1590,20 +1404,26 @@ func NewCommandHandler(cfg CommandConfig) CommandHandlerInterface {
 }
 
 // HandleFullArchive handles full archive creation command
-func (h *CommandHandler) HandleFullArchive(args []string, note string, dryRun bool, verify bool) error {
-	return CreateFullArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)
+func (h *CommandHandler) HandleFullArchive(args []string, note string, dryRun bool) error {
+	return CreateFullArchiveWithContext(h.config.Context, h.config.Config, note, dryRun)
 }
 
 // HandleIncrementalArchive handles incremental archive creation command
-func (h *CommandHandler) HandleIncrementalArchive(args []string, note string, dryRun bool, verify bool) error {
-	return CreateIncrementalArchiveWithContext(h.config.Context, h.config.Config, note, dryRun, verify)
+func (h *CommandHandler) HandleIncrementalArchive(args []string, note string, dryRun bool) error {
+	return CreateIncrementalArchiveWithContext(h.config.Context, h.config.Config, note, dryRun)
 }
 
 // HandleListArchives handles archive listing command
 func (h *CommandHandler) HandleListArchives(args []string) error {
-	archiveDir, err := getArchiveDirectory(h.config.Config)
+	cwd, err := os.Getwd()
 	if err != nil {
-		return err
+		return NewArchiveErrorWithCause("Failed to get current directory",
+			h.config.Config.StatusDirectoryNotFound, err)
+	}
+
+	archiveDir := h.config.Config.ArchiveDirPath
+	if h.config.Config.UseCurrentDirName {
+		archiveDir = filepath.Join(archiveDir, filepath.Base(cwd))
 	}
 
 	archives, err := ListArchives(archiveDir)
@@ -1634,17 +1454,6 @@ func (h *CommandHandler) HandleListArchives(args []string) error {
 	}
 
 	return nil
-}
-
-// HandleVerifyArchive handles archive verification command
-func (h *CommandHandler) HandleVerifyArchive(args []string, archiveName string, withChecksum bool) error {
-	opts := VerifyOptions{
-		Config:       h.config.Config,
-		Formatter:    h.config.Formatter,
-		ArchiveName:  archiveName,
-		WithChecksum: withChecksum,
-	}
-	return VerifyArchiveEnhanced(opts)
 }
 
 // HandleFileBackup handles file backup creation command
@@ -1834,8 +1643,6 @@ func getFirstFieldOfStruct(fieldPath string) string {
 
 	parent := parts[0]
 	switch parent {
-	case "verification":
-		return "VerifyOnCreate"
 	case "git":
 		return "Enabled"
 	default:

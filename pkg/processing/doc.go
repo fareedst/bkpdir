@@ -3,7 +3,6 @@
 //
 // This package contains reusable patterns for:
 //   - Timestamp-based naming conventions with metadata integration
-//   - Data integrity verification with pluggable algorithms
 //   - Processing pipelines with context support and atomic operations
 //   - Concurrent processing with worker pools and resource management
 //
@@ -20,15 +19,11 @@
 //		Metadata:  map[string]string{"branch": "main", "note": "initial"},
 //	})
 //
-//	// Create a verification provider for data integrity
-//	verifier := processing.NewSHA256Verifier()
-//	checksum, err := verifier.Calculate(dataReader)
 //
 //	// Create a processing pipeline
 //	pipeline := processing.NewPipeline()
 //	pipeline.AddStage(processing.CollectionStage{})
 //	pipeline.AddStage(processing.ProcessingStage{})
-//	pipeline.AddStage(processing.VerificationStage{})
 //	result, err := pipeline.Execute(ctx, input)
 //
 // Copyright (c) 2024 BkpDir Contributors

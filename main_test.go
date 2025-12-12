@@ -218,7 +218,6 @@ func createTestRootCmd() *cobra.Command {
 	rootCmd.AddCommand(fullCmd())
 	rootCmd.AddCommand(incCmd())
 	rootCmd.AddCommand(listCmd())
-	rootCmd.AddCommand(verifyCmd())
 	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
@@ -358,8 +357,6 @@ func runListCommandTest(t *testing.T, archiveDir string) {
 	// Verify archive names
 	verifyArchiveNames(t, archives)
 
-	// Verify verification status
-	verifyVerificationStatus(t, archives)
 }
 
 func executeListCommand(t *testing.T) {
@@ -429,16 +426,6 @@ func verifyArchiveNames(t *testing.T, archives []Archive) {
 	}
 }
 
-func verifyVerificationStatus(t *testing.T, archives []Archive) {
-	t.Helper()
-
-	for i, archive := range archives {
-		if archive.VerificationStatus != nil && archive.VerificationStatus.IsVerified {
-			t.Errorf("Archive %d should be unverified initially", i)
-		}
-	}
-}
-
 // TEST-REF: TestMain_HandleConfigCommand
 func TestMain_HandleConfigCommand(t *testing.T) {
 	// TEST-MAIN-001: Test handleConfigCommand function [DECISION:discovery]
@@ -502,16 +489,6 @@ func TestMain_HandleCreateCommand(t *testing.T) {
 }
 
 // TEST-REF: TestMain_HandleVerifyCommand
-func TestMain_HandleVerifyCommand(t *testing.T) {
-	// TEST-MAIN-003: Test handleVerifyCommand function [DECISION:core-functionality]
-	// This is a placeholder function, so we just verify it doesn't panic
-	defer func() {
-		if r := recover(); r != nil {
-			t.Errorf("handleVerifyCommand panicked: %v", r)
-		}
-	}()
-	handleVerifyCommand()
-}
 
 // TEST-REF: TestMain_HandleVersionCommand
 func TestMain_HandleVersionCommand(t *testing.T) {
@@ -554,19 +531,6 @@ func TestMain_CreateCmd(t *testing.T) {
 	}
 }
 
-// TEST-REF: TestMain_VerifyCmd
-func TestMain_VerifyCmd(t *testing.T) {
-	// TEST-MAIN-007: Test verifyCmd function [DECISION:validation]
-	cmd := verifyCmd()
-
-	if cmd.Use != "verify" {
-		t.Errorf("Expected Use 'verify', got %s", cmd.Use)
-	}
-	if cmd.Short != "Verify archives" {
-		t.Errorf("Expected Short 'Verify archives', got %s", cmd.Short)
-	}
-}
-
 // TEST-REF: TestMain_VersionCmd
 func TestMain_VersionCmd(t *testing.T) {
 	// TEST-MAIN-008: Test versionCmd function [DECISION:core-functionality]
@@ -598,7 +562,6 @@ func TestMain_CreateFullArchiveEnhanced(t *testing.T) {
 		Formatter: formatter,
 		Note:      "test-note",
 		DryRun:    true, // Use dry-run to avoid creating actual archives
-		Verify:    false,
 	}
 
 	// Test should not return error in dry-run mode
@@ -633,7 +596,6 @@ func TestMain_CreateIncrementalArchiveEnhanced(t *testing.T) {
 		Formatter: formatter,
 		Note:      "initial",
 		DryRun:    false, // Create actual archive for incremental base
-		Verify:    false,
 	}
 	if err := CreateFullArchiveEnhanced(fullOpts); err != nil {
 		t.Fatalf("Failed to create full archive: %v", err)
@@ -645,7 +607,6 @@ func TestMain_CreateIncrementalArchiveEnhanced(t *testing.T) {
 		Formatter: formatter,
 		Note:      "test-note",
 		DryRun:    true, // Use dry-run for incremental test
-		Verify:    false,
 	}
 
 	// Test should not return error in dry-run mode with existing full archive
@@ -683,60 +644,6 @@ include_git_info: false
 		t.Fatalf("Failed to load config: %v", err)
 	}
 	return cfg
-}
-
-// TEST-REF: TestMain_VerifyArchiveEnhanced
-func TestMain_VerifyArchiveEnhanced(t *testing.T) {
-	// TEST-MAIN-011: Test VerifyArchiveEnhanced function [DECISION:discovery]
-	tmpDir := t.TempDir()
-	originalWd, _ := os.Getwd()
-	defer os.Chdir(originalWd)
-	os.Chdir(tmpDir)
-
-	cfg := createTestConfig(t, tmpDir)
-	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
-	formatter := NewOutputFormatter(cfg)
-
-	// Create archive directory
-	archiveDir := filepath.Join(tmpDir, "../.bkpdir", filepath.Base(tmpDir))
-	if err := os.MkdirAll(archiveDir, 0755); err != nil {
-		t.Fatalf("Failed to create archive dir: %v", err)
-	}
-
-	opts := VerifyOptions{
-		Config:       cfg,
-		Formatter:    formatter,
-		ArchiveName:  "", // Empty means verify all
-		WithChecksum: false,
-	}
-
-	// Should handle empty archive directory gracefully
-	err := VerifyArchiveEnhanced(opts)
-	// No error expected when no archives exist (verifyAllArchives returns nil in this case)
-	if err != nil {
-		t.Errorf("Expected no error when no archives exist, got: %v", err)
-	}
-}
-
-// TEST-REF: TestMain_GetArchiveDirectory
-func TestMain_GetArchiveDirectory(t *testing.T) {
-	// TEST-MAIN-012: Test getArchiveDirectory function [DECISION:discovery]
-	tmpDir := t.TempDir()
-	originalWd, _ := os.Getwd()
-	defer os.Chdir(originalWd)
-	os.Chdir(tmpDir)
-
-	cfg := createTestConfig(t, tmpDir)
-
-	archiveDir, err := getArchiveDirectory(cfg)
-	if err != nil {
-		t.Errorf("getArchiveDirectory failed: %v", err)
-	}
-
-	expectedPath := filepath.Join("../.bkpdir", filepath.Base(tmpDir))
-	if !strings.HasSuffix(archiveDir, expectedPath) {
-		t.Errorf("Expected archive directory to end with %s, got %s", expectedPath, archiveDir)
-	}
 }
 
 // TEST-REF: TestMain_HandleListFileBackupsCommand
@@ -987,26 +894,6 @@ func TestMain_UpdateConfigData(t *testing.T) {
 				"archive_dir_path": "/custom/path",
 			},
 		},
-		{
-			name:  "verification config - verify_on_create",
-			key:   "verify_on_create",
-			value: true,
-			expected: map[string]interface{}{
-				"verification": map[string]interface{}{
-					"verify_on_create": true,
-				},
-			},
-		},
-		{
-			name:  "verification config - checksum_algorithm",
-			key:   "checksum_algorithm",
-			value: "sha256",
-			expected: map[string]interface{}{
-				"verification": map[string]interface{}{
-					"checksum_algorithm": "sha256",
-				},
-			},
-		},
 	}
 
 	for _, tt := range tests {
@@ -1014,18 +901,8 @@ func TestMain_UpdateConfigData(t *testing.T) {
 			configData := make(map[string]interface{})
 			updateConfigData(configData, tt.key, tt.value)
 
-			if tt.key == "verify_on_create" || tt.key == "checksum_algorithm" {
-				verification, ok := configData["verification"].(map[string]interface{})
-				if !ok {
-					t.Fatalf("Expected verification section to be map[string]interface{}")
-				}
-				if verification[tt.key] != tt.value {
-					t.Errorf("Expected %s to be %v, got %v", tt.key, tt.value, verification[tt.key])
-				}
-			} else {
-				if configData[tt.key] != tt.value {
-					t.Errorf("Expected %s to be %v, got %v", tt.key, tt.value, configData[tt.key])
-				}
+			if configData[tt.key] != tt.value {
+				t.Errorf("Expected %s to be %v, got %v", tt.key, tt.value, configData[tt.key])
 			}
 		})
 	}
@@ -1040,10 +917,6 @@ func TestMain_SaveConfigData(t *testing.T) {
 	configData := map[string]interface{}{
 		"archive_dir_path":     "/test/path",
 		"use_current_dir_name": true,
-		"verification": map[string]interface{}{
-			"verify_on_create":   false,
-			"checksum_algorithm": "md5",
-		},
 	}
 
 	defer func() {
@@ -1069,132 +942,6 @@ func TestMain_SaveConfigData(t *testing.T) {
 	}
 	if !strings.Contains(content, "use_current_dir_name: true") {
 		t.Errorf("Expected saved config to contain use_current_dir_name")
-	}
-	if !strings.Contains(content, "verification:") {
-		t.Errorf("Expected saved config to contain verification section")
-	}
-}
-
-// TEST-REF: TestMain_VerifySingleArchive
-func TestMain_VerifySingleArchive(t *testing.T) {
-	// TEST-MAIN-022: Test verifySingleArchive function [DECISION:discovery]
-	tmpDir := t.TempDir()
-	originalWd, _ := os.Getwd()
-	defer os.Chdir(originalWd)
-	os.Chdir(tmpDir)
-
-	cfg := createTestConfig(t, tmpDir)
-	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
-	formatter := NewOutputFormatter(cfg)
-	archiveDir := filepath.Join(tmpDir, "../.bkpdir", filepath.Base(tmpDir))
-	if err := os.MkdirAll(archiveDir, 0755); err != nil {
-		t.Fatalf("Failed to create archive dir: %v", err)
-	}
-
-	opts := VerifyOptions{
-		Config:       cfg,
-		Formatter:    formatter,
-		ArchiveName:  "nonexistent.zip",
-		WithChecksum: false,
-	}
-
-	// Should fail for non-existent archive
-	err := verifySingleArchive(opts, archiveDir)
-	if err == nil {
-		t.Errorf("Expected error for non-existent archive")
-	}
-}
-
-// TEST-REF: TestMain_VerifyAllArchives
-func TestMain_VerifyAllArchives(t *testing.T) {
-	// TEST-MAIN-023: Test verifyAllArchives function [DECISION:discovery]
-	tmpDir := t.TempDir()
-	originalWd, _ := os.Getwd()
-	defer os.Chdir(originalWd)
-	os.Chdir(tmpDir)
-
-	cfg := createTestConfig(t, tmpDir)
-	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
-	formatter := NewOutputFormatter(cfg)
-	archiveDir := filepath.Join(tmpDir, "../.bkpdir", filepath.Base(tmpDir))
-	if err := os.MkdirAll(archiveDir, 0755); err != nil {
-		t.Fatalf("Failed to create archive dir: %v", err)
-	}
-
-	opts := VerifyOptions{
-		Config:       cfg,
-		Formatter:    formatter,
-		ArchiveName:  "",
-		WithChecksum: false,
-	}
-
-	// Should handle empty archive directory - returns nil when no archives exist
-	err := verifyAllArchives(opts, archiveDir)
-	if err != nil {
-		t.Errorf("Expected no error when no archives exist, got: %v", err)
-	}
-}
-
-// TEST-REF: TestMain_PerformVerification
-func TestMain_PerformVerification(t *testing.T) {
-	// TEST-MAIN-024: Test performVerification function [DECISION:core-functionality]
-	tmpDir := t.TempDir()
-	archivePath := filepath.Join(tmpDir, "nonexistent.zip")
-
-	// Test with non-existent archive - should return VerificationStatus with IsVerified: false
-	status, err := performVerification(archivePath, false)
-	if err != nil {
-		t.Errorf("Expected no error for non-existent archive, got: %v", err)
-	}
-	if status == nil || status.IsVerified {
-		t.Errorf("Expected VerificationStatus with IsVerified: false")
-	}
-
-	// Test with checksum verification - should return VerificationStatus with IsVerified: false
-	status, err = performVerification(archivePath, true)
-	if err != nil {
-		t.Errorf("Expected no error for non-existent archive with checksum, got: %v", err)
-	}
-	if status == nil || status.IsVerified {
-		t.Errorf("Expected VerificationStatus with IsVerified: false for checksum verification")
-	}
-}
-
-// TEST-REF: TestMain_HandleVerificationResult
-func TestMain_HandleVerificationResult(t *testing.T) {
-	// TEST-MAIN-025: Test handleVerificationResult function [DECISION:discovery]
-	tmpDir := t.TempDir()
-	originalWd, _ := os.Getwd()
-	defer os.Chdir(originalWd)
-	os.Chdir(tmpDir)
-
-	createTestConfig(t, tmpDir)
-
-	archive := &Archive{
-		Name: "test-archive.zip",
-		Path: filepath.Join(tmpDir, "test-archive.zip"),
-	}
-
-	// Test with successful verification
-	successStatus := &VerificationStatus{
-		IsVerified: true,
-		Errors:     []string{},
-	}
-
-	err := handleVerificationResult(archive, successStatus, "test-archive.zip")
-	if err != nil {
-		t.Errorf("Expected no error for successful verification, got: %v", err)
-	}
-
-	// Test with failed verification
-	failStatus := &VerificationStatus{
-		IsVerified: false,
-		Errors:     []string{"Test error"},
-	}
-
-	err = handleVerificationResult(archive, failStatus, "test-archive.zip")
-	if err == nil {
-		t.Errorf("Expected error for failed verification")
 	}
 }
 
@@ -1271,7 +1018,6 @@ func TestMain_Integration_CommandValidation(t *testing.T) {
 	}{
 		{"config command", configCmd, "config [KEY] [VALUE]"},
 		{"create command", createCmd, "create"},
-		{"verify command", verifyCmd, "verify"},
 		{"version command", versionCmd, "version"},
 		{"backup command", backupCmd, "backup [FILE_PATH] [NOTE]"},
 	}
