@@ -369,7 +369,8 @@ func ListFileBackups(backupDir, baseFilename string) ([]BackupInfo, error) {
 }
 
 // ListFileBackupsEnhanced lists backups with enhanced formatting
-func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, filePath string) error {
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Accept limit parameter and apply after sorting
+func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, filePath string, limit int) error {
 	baseFilename := filepath.Base(filePath)
 
 	backupDir := cfg.BackupDirPath
@@ -402,6 +403,12 @@ func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInt
 			formatter.PrintError(fmt.Sprintf("No backups found for %s in %s", baseFilename, backupDir))
 		}
 		return nil
+	}
+
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Apply limit after sorting (limit > 0 means limit, 0 means show all)
+	// Note: ListFileBackups already sorts by creation time (most recent first)
+	if limit > 0 && len(backups) > limit {
+		backups = backups[:limit]
 	}
 
 	for _, backup := range backups {

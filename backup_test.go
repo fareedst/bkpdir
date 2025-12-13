@@ -14,6 +14,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -957,5 +958,309 @@ func testPermissionDeniedDuringComparison(t *testing.T) {
 	}
 	if isIdentical {
 		t.Error("Should not report identical when backup file is not readable")
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test file backup list limit functionality
+func TestListFileBackupsEnhanced_WithLimit(t *testing.T) {
+	t.Run("default limit of 10", func(t *testing.T) {
+		testListFileBackupsDefaultLimit(t)
+	})
+
+	t.Run("custom limit values", func(t *testing.T) {
+		testListFileBackupsCustomLimit(t)
+	})
+
+	t.Run("limit of 0 shows all", func(t *testing.T) {
+		testListFileBackupsLimitZero(t)
+	})
+
+	t.Run("fewer backups than limit", func(t *testing.T) {
+		testListFileBackupsFewerThanLimit(t)
+	})
+
+	t.Run("exactly limit number of backups", func(t *testing.T) {
+		testListFileBackupsExactlyLimit(t)
+	})
+
+	t.Run("more backups than limit", func(t *testing.T) {
+		testListFileBackupsMoreThanLimit(t)
+	})
+
+	t.Run("sorting preserved with limit", func(t *testing.T) {
+		testListFileBackupsSortingWithLimit(t)
+	})
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test default limit of 10 for file backups
+func testListFileBackupsDefaultLimit(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create 15 backups to test default limit
+	for i := 0; i < 15; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		// Set different modification times to ensure sorting
+		modTime := time.Now().Add(-time.Duration(i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with default limit (10)
+	err := ListFileBackupsEnhanced(cfg, formatter, filePath, 10)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
+	}
+
+	// Verify we got backups
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+	if len(backups) != 15 {
+		t.Errorf("Expected 15 backups, got %d", len(backups))
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test custom limit values for file backups
+func testListFileBackupsCustomLimit(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create 20 backups
+	for i := 0; i < 20; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		modTime := time.Now().Add(-time.Duration(i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with custom limit of 5
+	err := ListFileBackupsEnhanced(cfg, formatter, filePath, 5)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
+	}
+
+	// Verify backups exist
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+	if len(backups) != 20 {
+		t.Errorf("Expected 20 backups, got %d", len(backups))
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test limit of 0 shows all file backups
+func testListFileBackupsLimitZero(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create 25 backups
+	for i := 0; i < 25; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		modTime := time.Now().Add(-time.Duration(i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with limit of 0 (should show all)
+	err := ListFileBackupsEnhanced(cfg, formatter, filePath, 0)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
+	}
+
+	// Verify all backups exist
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+	if len(backups) != 25 {
+		t.Errorf("Expected 25 backups, got %d", len(backups))
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test fewer backups than limit
+func testListFileBackupsFewerThanLimit(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create only 3 backups (less than default limit of 10)
+	for i := 0; i < 3; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		modTime := time.Now().Add(-time.Duration(i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with limit of 10 (more than available)
+	err := ListFileBackupsEnhanced(cfg, formatter, filePath, 10)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
+	}
+
+	// Verify all 3 backups are listed
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+	if len(backups) != 3 {
+		t.Errorf("Expected 3 backups, got %d", len(backups))
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test exactly limit number of backups
+func testListFileBackupsExactlyLimit(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create exactly 10 backups (matching default limit)
+	for i := 0; i < 10; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		modTime := time.Now().Add(-time.Duration(i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with limit of 10
+	err := ListFileBackupsEnhanced(cfg, formatter, filePath, 10)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
+	}
+
+	// Verify all 10 backups are listed
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+	if len(backups) != 10 {
+		t.Errorf("Expected 10 backups, got %d", len(backups))
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test more backups than limit
+func testListFileBackupsMoreThanLimit(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create 30 backups (more than any reasonable limit)
+	for i := 0; i < 30; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		modTime := time.Now().Add(-time.Duration(i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with limit of 5
+	err := ListFileBackupsEnhanced(cfg, formatter, filePath, 5)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
+	}
+
+	// Verify all 30 backups exist (limit only affects display, not storage)
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+	if len(backups) != 30 {
+		t.Errorf("Expected 30 backups, got %d", len(backups))
+	}
+}
+
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test sorting preserved with limit for file backups
+func testListFileBackupsSortingWithLimit(t *testing.T) {
+	tmpDir := t.TempDir()
+	backupDir := filepath.Join(tmpDir, "backups")
+	os.MkdirAll(backupDir, 0755)
+
+	filePath := "test.txt"
+	baseFilename := filepath.Base(filePath)
+
+	// Create backups with specific timestamps to verify sorting
+	baseTime := time.Now()
+	for i := 0; i < 15; i++ {
+		backupName := fmt.Sprintf("%s-2024-03-20-%02d-00", baseFilename, i)
+		backupPath := filepath.Join(backupDir, backupName)
+		os.WriteFile(backupPath, []byte("test"), 0644)
+		// Older backups have earlier timestamps
+		modTime := baseTime.Add(-time.Duration(15-i) * time.Minute)
+		os.Chtimes(backupPath, modTime, modTime)
+	}
+
+	// Get backups and verify sorting
+	backups, err := ListFileBackups(backupDir, baseFilename)
+	if err != nil {
+		t.Fatalf("ListFileBackups error: %v", err)
+	}
+
+	// Verify sorting (most recent first)
+	for i := 0; i < len(backups)-1; i++ {
+		if backups[i].CreationTime.Before(backups[i+1].CreationTime) {
+			t.Errorf("Backups not sorted correctly: backup %d is older than backup %d", i, i+1)
+		}
+	}
+
+	cfg := DefaultConfig()
+	cfg.BackupDirPath = backupDir
+	formatter := NewOutputFormatter(cfg)
+
+	// Test with limit - should preserve sorting
+	err = ListFileBackupsEnhanced(cfg, formatter, filePath, 5)
+	if err != nil {
+		t.Fatalf("ListFileBackupsEnhanced error: %v", err)
 	}
 }

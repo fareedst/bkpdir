@@ -173,6 +173,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:TEMPLATE_FORMATTING]` → See `requirements.md` § Template Formatting Requirements
 - `[REQ:CONFIGURATION]` → See `requirements.md` § Configuration Management Requirements
 - `[REQ:GIT_INTEGRATION]` → See `requirements.md` § Git Integration Requirements
+- `[REQ:LIST_LIMIT]` → See `requirements.md` § List Command Output Limit Requirements
 
 ### Incomplete Requirements
 - `[REQ:OUT_002]` → See `requirements.md` § Enhanced Command Output with File Statistics Requirements
@@ -266,6 +267,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[ARCH:PERF_VALIDATION]` → See `architecture-decisions.md` § Validation Performance Optimization Architecture
 - `[ARCH:TOKEN_SYSTEM]` → See `architecture-decisions.md` § Token System Architecture [REQ:DOC_016]
 - `[ARCH:CONFIG_OUTPUT_GROUPING]` → See `architecture-decisions.md` § Configuration Output Grouping [REQ:CONFIG_OUTPUT_GROUPING]
+- `[ARCH:LIST_LIMIT]` → See `architecture-decisions.md` § List Command Limit Architecture [REQ:LIST_LIMIT]
 
 ## Implementation Tokens Registry
 
@@ -330,12 +332,13 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:TEST_DEFAULT_STRATEGY_EDGES]` → See `implementation-decisions.md` § Default Strategy Edge Cases Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
 - `[IMPL:CFG_INHERITANCE_PATH_RESOLUTION]` → See `implementation-decisions.md` § Inheritance Path Resolution Fix [ARCH:CFG_005] [REQ:CFG_005] [REQ:CONFIGURATION]
 - `[IMPL:TEST_UNICODE_HANDLING]` → See `implementation-decisions.md` § Unicode and Special Character Handling Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
+- `[IMPL:LIST_LIMIT]` → See `implementation-decisions.md` § List Command Limit Implementation [ARCH:LIST_LIMIT] [REQ:LIST_LIMIT]
 
 
 ## Quick Reference Index
 
 ### Requirements Tokens by Category
-- **Core Functionality**: `CODE_QUALITY`, `RESOURCE_MANAGEMENT`, `ERROR_HANDLING`, `CONTEXT_SUPPORT`, `FILE_BACKUP`, `OUTPUT_FORMATTING`, `TEMPLATE_FORMATTING`, `CONFIGURATION`, `GIT_INTEGRATION`
+- **Core Functionality**: `CODE_QUALITY`, `RESOURCE_MANAGEMENT`, `ERROR_HANDLING`, `CONTEXT_SUPPORT`, `FILE_BACKUP`, `OUTPUT_FORMATTING`, `TEMPLATE_FORMATTING`, `CONFIGURATION`, `GIT_INTEGRATION`, `LIST_LIMIT`
 - **Configuration Enhancement**: `CFG_005`, `CFG_006`
 - **Non-Functional**: `PERFORMANCE`, `RELIABILITY`, `MAINTAINABILITY`, `USABILITY`
 - **Immutable Requirements**: `IMMUTABLE_ARCHIVE_NAMING`, `IMMUTABLE_FILE_BACKUP_NAMING`, `IMMUTABLE_DIRECTORY_OPERATIONS`, `IMMUTABLE_FILE_BACKUP_OPERATIONS`, `IMMUTABLE_FILE_EXCLUSION`, `IMMUTABLE_GIT_INTEGRATION`, `IMMUTABLE_ERROR_HANDLING`, `IMMUTABLE_CODE_QUALITY`, `IMMUTABLE_BUILD_SYSTEM`, `IMMUTABLE_OUTPUT_FORMATTING`, `IMMUTABLE_TEMPLATE_FORMATTING`, `IMMUTABLE_CLI_COMMANDS`, `IMMUTABLE_CONFIGURATION_DEFAULTS`, `IMMUTABLE_PLATFORM_COMPATIBILITY`, `IMMUTABLE_GLOBAL_OPTIONS`, `IMMUTABLE_RESOURCE_MANAGEMENT`, `IMMUTABLE_PERFORMANCE`, `IMMUTABLE_FEATURE_PRESERVATION`, `IMMUTABLE_TESTING_INFRASTRUCTURE`
@@ -344,7 +347,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 ### Architecture Tokens
 - **Core**: `LANGUAGE_SELECTION`, `PROJECT_STRUCTURE`, `SYSTEM_COMPONENTS`, `ARCHIVE_FORMAT`, `CONFIG_SYSTEM`, `CFG_005`, `CFG_006`, `ERROR_HANDLING`, `RESOURCE_MANAGEMENT`, `CONTEXT_SUPPORT`, `OUTPUT_FORMATTING`, `GIT_INTEGRATION`, `TESTING_STRATEGY`, `BUILD_DISTRIBUTION`, `CODE_ORGANIZATION`
 - **Archive Operations**: `ARCH_001`, `ARCH_002`, `ARCH_003`, `ARCH_004`
-- **CLI Features**: `CLI_015`, `CLI_COMMANDS`
+- **CLI Features**: `CLI_015`, `CLI_COMMANDS`, `LIST_LIMIT`
 - **Extraction & Modularization**: `PACKAGE_EXTRACTION`, `CLI_FRAMEWORK`, `FILE_OPERATIONS`, `PROCESSING_PATTERNS`
 - **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`
 - **Security & Quality**: `SECURITY`, `EXTENSIBILITY`, `DEPLOYMENT`, `PERFORMANCE`, `PERF_VALIDATION`
@@ -355,7 +358,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - **File Operations**: `FILE_001`, `FILE_002`, `FILE_003`
 - **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`, `CFG_PRECEDENCE_FIX`, `CFG_MERGE_PREPEND_PRECEDENCE_FIX`
 - **Git Integration**: `GIT_001`, `GIT_002`, `GIT_003`, `GIT_004`, `GIT_005`, `GIT_006`, `GIT_DIRTY_CONFIG`
-- **Output Management**: `OUT_001`, `OUT_002`, `DELAYED_OUTPUT`
+- **Output Management**: `OUT_001`, `OUT_002`, `DELAYED_OUTPUT`, `LIST_LIMIT`
 - **Testing Infrastructure**: `TEST_001`, `TEST_002`, `TEST_FIX_001`, `TEST_INFRA_001_B`, `TEST_INFRA_001_E`, `TEST_COVERAGE`, `TESTING_COMPLEXITY`, `TEST_UNICODE_HANDLING`, `TEST_EMPTY_STRING_HANDLING`, `TEST_PREPEND_ORDERING`, `TEST_DEFAULT_STRATEGY_EDGES`
 - **Code Quality**: `LINT_001`, `COV_001`, `COV_002`, `COV_003`
 - **Documentation**: `DOC_001` through `DOC_017`, `INSTALL_001`, `DOC_ENHANCEMENT`, `SEMANTIC_CROSS_REF`, `TRACEABILITY`, `TOKEN_SYSTEM`

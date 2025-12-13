@@ -2696,3 +2696,43 @@ func TestDefaultStrategyEdgeCases(t *testing.T) {
 **Code Markers**: `config_test.go` line ~6937-7155, `TestDefaultStrategyEdgeCases`, `createTestConfigFileWithData`, `applyDefault`, `isZeroValue`, `DefaultValueStrategy`
 
 **Cross-References**: [ARCH:TESTING_STRATEGY], [REQ:CONFIGURATION], [REQ:CFG_005]
+
+## N. List Command Limit Implementation [IMPL:LIST_LIMIT] [ARCH:LIST_LIMIT] [REQ:LIST_LIMIT]
+
+### Decision: Add --limit flag to list commands with default value of 10
+**Rationale:**
+- Simple command-line flag provides immediate control
+- Default of 10 prevents overwhelming output
+- Applies to both directory archives and file backups consistently
+- Maintains backward compatibility (existing behavior when limit not specified)
+
+### Implementation Approach:
+- Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`
+- Add `--limit` flag to `--list` flag handling for file backups
+- Default value: 10 (show newest 10 files)
+- Special handling: `--limit 0` or `--all` flag shows all files
+- Apply limit after sorting in `ListArchivesEnhanced()` and `ListFileBackupsEnhanced()`
+- Limit logic: `if limit > 0 && len(archives) > limit { archives = archives[:limit] }`
+
+**Code Structure:**
+- `main.go`: Global variable `listLimit` (default 10) added to persistent flags
+- `listCmd()`: Command inherits `--limit` flag from persistent flags
+- `handleListCommand()`: Passes `listLimit` to `ListArchivesEnhanced()`
+- `ListArchivesEnhanced()`: Accepts limit parameter, applies after sorting (line ~1157-1160)
+- `handleListFileBackupsCommand()`: Passes `listLimit` to `ListFileBackupsEnhanced()`
+- `ListFileBackupsEnhanced()`: Accepts limit parameter, applies after sorting (backup.go line ~392-396)
+- `HandleListArchives()`: CommandHandler applies default limit of 10
+- `HandleListFileBackups()`: CommandHandler applies default limit of 10
+
+**Code Markers**: 
+- `main.go` line ~41: `listLimit` global variable declaration
+- `main.go` line ~387: Persistent flag `--limit` definition
+- `main.go` line ~1069-1080: `listCmd()` function
+- `main.go` line ~780-807: `handleListCommand()` function
+- `main.go` line ~1128-1186: `ListArchivesEnhanced()` function with limit parameter
+- `main.go` line ~1188-1219: `handleListFileBackupsCommand()` function
+- `backup.go` line ~372-419: `ListFileBackupsEnhanced()` function with limit parameter
+- `main_test.go` line ~1301-1610: Comprehensive test suite `TestListArchivesEnhanced_WithLimit`
+- `backup_test.go` line ~964-1210: Comprehensive test suite `TestListFileBackupsEnhanced_WithLimit`
+
+**Cross-References**: [ARCH:LIST_LIMIT], [REQ:LIST_LIMIT], [REQ:USABILITY]

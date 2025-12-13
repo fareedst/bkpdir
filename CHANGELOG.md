@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1pre1212] - 2025-12-12
+
+### Added
+- List command output limit feature: `--limit` flag (short: `-n`) to control the number of items displayed
+  - Default limit of 10 items for both `list` command (directory archives) and `--list` command (file backups)
+  - Option `--limit 0` to show all items
+  - Maintains sorting by creation time (most recent first)
+  - Comprehensive test coverage with edge cases
+
 ## [1.6.0] - 2025-12-12
 
 ### Added

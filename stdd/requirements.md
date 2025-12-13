@@ -38,6 +38,7 @@ Each requirement includes:
 | `[REQ:TEMPLATE_FORMATTING]` | Template Formatting | P0 | ✅ | See `architecture-decisions.md` § Output Formatting | See `implementation-decisions.md` § Dual Printf/Template Formatting |
 | `[REQ:CONFIGURATION]` | Configuration Management | P0 | ✅ | See `architecture-decisions.md` § Configuration System | See `implementation-decisions.md` § Configuration Structure |
 | `[REQ:GIT_INTEGRATION]` | Git Integration | P1 | ✅ | See `architecture-decisions.md` § Git Integration | See `implementation-decisions.md` § Git Command-line Integration |
+| `[REQ:LIST_LIMIT]` | List Command Output Limit | P1 | ✅ | See `architecture-decisions.md` § List Command Limit Architecture | See `implementation-decisions.md` § List Command Limit Implementation |
 
 ### Configuration System Enhancement Requirements
 
@@ -432,6 +433,31 @@ Each requirement includes:
 **Related Requirements**: [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_006], [REQ:MAINTAINABILITY], [REQ:CODE_QUALITY]
 
 ## Incomplete Requirements
+
+### [REQ:LIST_LIMIT] List Command Output Limit Requirements
+
+**Priority: P1 (Important)**
+
+- **Description**: The `list` command must limit the display to the newest N files by default (N=10). Users must be able to control the length of the list via a command-line option. The list command displays all matching files sorted by creation time (most recent first), but only shows the first N entries by default.
+- **Rationale**: Prevents overwhelming output when there are many archives, while still allowing users to see all archives when needed. Improves usability by showing the most relevant (recent) archives first.
+- **Satisfaction Criteria**:
+  - Default behavior: Display only the newest 10 files
+  - Command-line option to control the limit (e.g., `--limit N` or `-n N`)
+  - Option to show all files (e.g., `--limit 0` or `--all`)
+  - Archives remain sorted by creation time (most recent first)
+  - Backward compatibility: Existing scripts and workflows continue to work
+  - Both `list` command (directory archives) and `--list` command (file backups) support the limit option
+- **Validation Criteria**: 
+  - Unit tests verify default limit of 10 files
+  - Unit tests verify custom limit values work correctly
+  - Unit tests verify `--all` or `--limit 0` shows all files
+  - Integration tests verify both `list` and `--list` commands respect the limit
+  - Backward compatibility tests ensure existing behavior preserved when limit not specified
+  - See `architecture-decisions.md` § List Command Limit Architecture [ARCH:LIST_LIMIT] and `implementation-decisions.md` § List Command Limit Implementation [IMPL:LIST_LIMIT] for detailed testing approach
+- **Architecture**: See `architecture-decisions.md` § List Command Limit Architecture [ARCH:LIST_LIMIT]
+- **Implementation**: See `implementation-decisions.md` § List Command Limit Implementation [IMPL:LIST_LIMIT]
+
+**Status**: ✅ Implemented
 
 ### [REQ:OUT_002] Enhanced Command Output with File Statistics Requirements
 

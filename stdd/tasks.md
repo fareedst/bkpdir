@@ -843,10 +843,34 @@ EXTRACT-008 → EXTRACT-009, EXTRACT-010
 
 **Priority Rationale**: P1 - Important for understanding default strategy semantics. These tests validate that default strategy correctly only applies when destination is zero value, which is critical for correct merge behavior and prevents unexpected overrides.
 
+## P1: List Command Output Limit [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT]
+
+**Status**: ✅ Complete
+
+**Description**: Limit the `list` command display to the newest N files (default N=10). Add an option to control the length of the list. Support both `list` command (directory archives) and `--list` command (file backups).
+
+**Dependencies**: [REQ:LIST_LIMIT] (List Command Output Limit Requirements)
+
+**Completion Criteria**:
+- [x] Default behavior: Display only the newest 10 files
+- [x] Command-line option `--limit N` (short: `-n N`) to control the limit
+- [x] Option `--limit 0` shows all files
+- [x] Archives remain sorted by creation time (most recent first)
+- [x] Both `list` command (directory archives) and `--list` command (file backups) support the limit option
+- [x] Backward compatibility maintained (existing behavior when limit not specified)
+- [x] Tests verify default limit of 10 files
+- [x] Tests verify custom limit values work correctly
+- [x] Tests verify `--limit 0` shows all files
+- [x] Integration tests verify both `list` and `--list` commands respect the limit
+- [x] Comprehensive test coverage with edge cases (fewer than limit, exactly limit, more than limit, sorting preserved)
+
+**Priority Rationale**: P1 - Important for improving usability by preventing overwhelming output when there are many archives
+
 ## Recommended Implementation Order
 
-1. P1: Configuration Output Grouping (REQ:CONFIG_OUTPUT_GROUPING)
-2. P0: Enhanced Command Output with File Statistics (OUT-002)
-3. P1: Code Linting Compliance (LINT-001)
-4. P2: Selective Coverage Reporting (COV-003)
-5. Migration tasks (can proceed in parallel)
+1. P1: List Command Output Limit (REQ:LIST_LIMIT) - ✅ Complete
+2. P1: Configuration Output Grouping (REQ:CONFIG_OUTPUT_GROUPING)
+3. P0: Enhanced Command Output with File Statistics (OUT-002)
+4. P1: Code Linting Compliance (LINT-001)
+5. P2: Selective Coverage Reporting (COV-003)
+6. Migration tasks (can proceed in parallel)

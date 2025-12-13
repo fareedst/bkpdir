@@ -872,7 +872,32 @@ type TemplateFormatter interface {
 
 **Cross-References**: [REQ:PERFORMANCE], [REQ:RELIABILITY]
 
-## 28. CLI Commands Architecture [ARCH:CLI_COMMANDS] [REQ:USABILITY]
+## 28. List Command Limit Architecture [ARCH:LIST_LIMIT] [REQ:LIST_LIMIT]
+
+### Decision: Command-line flag to limit list output with default of 10 entries
+**Rationale:**
+- Prevents overwhelming output when there are many archives
+- Shows most relevant (recent) archives by default
+- Allows users to see all archives when needed
+- Maintains backward compatibility with existing workflows
+- Improves usability for common use cases
+
+**Implementation Approach:**
+- Add `--limit` flag (short: `-n`) to `list` command
+- Default value: 10 (show newest 10 files)
+- Special value: 0 or `--all` flag to show all files
+- Apply limit after sorting (most recent first)
+- Support both `list` command (directory archives) and `--list` command (file backups)
+- Limit applies to the sorted list (take first N after sorting)
+
+**Alternatives Considered:**
+- **Configuration-based limit**: Rejected - command-line flag is more flexible and immediate
+- **Different defaults for different commands**: Rejected - consistency is more important
+- **Pagination**: Rejected - over-engineering for this use case, simple limit is sufficient
+
+**Cross-References**: [REQ:LIST_LIMIT], [REQ:USABILITY], [ARCH:CLI_COMMANDS]
+
+## 29. CLI Commands Architecture [ARCH:CLI_COMMANDS] [REQ:USABILITY]
 
 ### Decision: Intuitive command structure with backward compatibility
 **Rationale:**

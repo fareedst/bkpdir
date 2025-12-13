@@ -40,6 +40,7 @@ var (
 	createDryRun bool
 	listFile     string
 	archiveName  string
+	listLimit    int // [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Limit for list command output
 )
 
 // Short description for the main application
@@ -383,6 +384,8 @@ func main() {
 		"Display configuration values and exit (backward compatibility)")
 	rootCmd.PersistentFlags().StringVar(&listFile, "list", "",
 		"List backups for a specific file")
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Add --limit as persistent flag (works with both list command and --list flag)
+	rootCmd.PersistentFlags().IntVarP(&listLimit, "limit", "n", 10, "Limit the number of items to display (0 = show all)")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug output (AI-first semantic token: DEBUG-OUTPUT)")
 
 	// Add commands - new specification-compliant commands first
@@ -784,6 +787,7 @@ func handleListCommand() {
 	// Specification: Shows each archive with path and creation time using configurable format
 	// Specification: Shows verification status if available: [VERIFIED], [FAILED], or [UNVERIFIED]
 	// Specification: Archives are sorted by creation time (most recent first)
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Limit display to newest N files (default 10)
 
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -800,7 +804,8 @@ func handleListCommand() {
 	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(cfg)
 
-	if err := ListArchivesEnhanced(cfg, formatter); err != nil {
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Pass limit to ListArchivesEnhanced
+	if err := ListArchivesEnhanced(cfg, formatter, listLimit); err != nil {
 		exitCode := HandleArchiveError(err, cfg, formatter)
 		os.Exit(exitCode)
 	}
@@ -1069,6 +1074,7 @@ If the directory is identical to the most recent archive, no new archive is crea
 func listCmd() *cobra.Command {
 	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] --limit flag inherited from persistent flags
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List archives",
@@ -1119,9 +1125,10 @@ func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
 
 // ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
 // and error handling.
-func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface) error {
+func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, limit int) error {
 	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Accept limit parameter and apply after sorting
 	cwd, err := os.Getwd()
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
@@ -1152,6 +1159,11 @@ func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterf
 		return archives[i].CreationTime.After(archives[j].CreationTime)
 	})
 
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Apply limit after sorting (limit > 0 means limit, 0 means show all)
+	if limit > 0 && len(archives) > limit {
+		archives = archives[:limit]
+	}
+
 	for _, a := range archives {
 		// Use enhanced formatting with extraction if possible
 		creationTime := a.CreationTime.Format("2006-01-02 15:04:05")
@@ -1176,6 +1188,7 @@ func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterf
 func handleListFileBackupsCommand(args []string) {
 	// FILE-002: See specification.md - File Backup Listing [DECISION:format-processing]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Support limit for file backup listing
 	var filePath string
 	if listFile != "" {
 		filePath = listFile
@@ -1200,7 +1213,8 @@ func handleListFileBackupsCommand(args []string) {
 
 	formatter := NewOutputFormatter(cfg)
 
-	if err := ListFileBackupsEnhanced(cfg, formatter, filePath); err != nil {
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Pass limit to ListFileBackupsEnhanced
+	if err := ListFileBackupsEnhanced(cfg, formatter, filePath, listLimit); err != nil {
 		exitCode := HandleArchiveError(err, cfg, formatter)
 		os.Exit(exitCode)
 	}
@@ -1413,6 +1427,7 @@ func (h *CommandHandler) HandleIncrementalArchive(args []string, note string, dr
 }
 
 // HandleListArchives handles archive listing command
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Apply limit to archive listing
 func (h *CommandHandler) HandleListArchives(args []string) error {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -1438,6 +1453,17 @@ func (h *CommandHandler) HandleListArchives(args []string) error {
 			h.config.Formatter.PrintError(fmt.Sprintf("No archives found in %s", archiveDir))
 		}
 		return nil
+	}
+
+	// Requirement: Archives are sorted by creation time (most recent first)
+	sort.Slice(archives, func(i, j int) bool {
+		return archives[i].CreationTime.After(archives[j].CreationTime)
+	})
+
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Use default limit of 10 for CommandHandler
+	limit := 10
+	if limit > 0 && len(archives) > limit {
+		archives = archives[:limit]
 	}
 
 	for _, archive := range archives {
@@ -1483,7 +1509,8 @@ func (h *CommandHandler) HandleListFileBackups(args []string, filePath string) e
 		return fmt.Errorf("file path required for listing backups")
 	}
 
-	return ListFileBackupsEnhanced(h.config.Config, h.config.Formatter, targetFile)
+	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Use default limit of 10 for CommandHandler
+	return ListFileBackupsEnhanced(h.config.Config, h.config.Formatter, targetFile, 10)
 }
 
 // HandleDisplayConfig handles configuration display command
