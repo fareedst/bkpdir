@@ -53,7 +53,7 @@ Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
-	appVersion     = "1.6.0"
+	appVersion     = "1.7.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 
@@ -247,7 +247,7 @@ func executeWithAutoDetection(rootCmd *cobra.Command) error {
 
 	// List of known commands that should be handled by Cobra normally
 	knownCommands := []string{
-		"create", "config", "template", "full", "inc", "list", "backup", "version",
+		"create", "config", "template", "full", "inc", "list", "backup", "version", "diff",
 		"help", "--help", "-h", "--version", "-v",
 	}
 
@@ -337,8 +337,8 @@ func main() {
   # Explicit commands (alternative syntax)
   bkpdir create "Initial backup"            # Create full archive (explicit)
   bkpdir create --incremental "Changes"    # Create incremental archive (explicit)
-  bkpdir full -n "Initial backup"          # backward compatibility
-  bkpdir inc -n "Changes after feature X"  # backward compatibility
+  bkpdir full --note "Initial backup"          # backward compatibility
+  bkpdir inc --note "Changes after feature X"  # backward compatibility
 
   # File backup (explicit command)
   bkpdir backup myfile.txt "Before changes"
@@ -399,6 +399,7 @@ func main() {
 
 	// Add other commands
 	rootCmd.AddCommand(listCmd())
+	rootCmd.AddCommand(diffCmd())
 	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
@@ -1014,7 +1015,7 @@ If the directory is identical to the most recent archive, no new archive is crea
 			}
 		},
 	}
-	cmd.Flags().StringVarP(&note, "note", "n", "", "Add a note to the archive name")
+	cmd.Flags().StringVar(&note, "note", "", "Add a note to the archive name")
 	return cmd
 }
 
@@ -1067,7 +1068,7 @@ If the directory is identical to the most recent archive, no new archive is crea
 			}
 		},
 	}
-	cmd.Flags().StringVarP(&note, "note", "n", "", "Add a note to the archive name")
+	cmd.Flags().StringVar(&note, "note", "", "Add a note to the archive name")
 	return cmd
 }
 
@@ -1080,6 +1081,91 @@ func listCmd() *cobra.Command {
 		Short: "List archives",
 		Run: func(*cobra.Command, []string) {
 			handleListCommand()
+		},
+	}
+	return cmd
+}
+
+// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+func diffCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "diff",
+		Short: "Show differences between current directory and archive state",
+		Long: `Show differences between the current directory and the union of the most recent 
+incremental archive on top of the most recent full archive.
+
+The command reconstructs the effective archive state by applying incremental changes 
+to the full archive, then compares that state against the current directory.
+
+If no incremental archive exists, compares against the full archive only.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			// [REQ:CONTEXT_SUPPORT] [IMPL:DIFF_COMMAND] Support context cancellation
+			ctx := cmd.Context()
+			if ctx == nil {
+				ctx = context.Background()
+			}
+
+			cwd, err := os.Getwd()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error getting current directory: %v\n", err)
+				os.Exit(1)
+			}
+
+			cfg, err := LoadConfig(cwd)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error loading config: %v\n", err)
+				os.Exit(cfg.StatusConfigError)
+			}
+
+			formatter := NewOutputFormatter(cfg)
+
+			// Get archive directory
+			archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+			archiveDir, err := prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)
+			if err != nil {
+				exitCode := HandleArchiveError(err, cfg, formatter)
+				os.Exit(exitCode)
+			}
+
+			// [IMPL:DIFF_COMMAND] [REQ:DIFF_COMMAND] Reconstruct archive state
+			// Handle case where no archives exist
+			reconstructedState, err := ReconstructArchiveState(archiveDir)
+			if err != nil {
+				// Check if error is "No archives found" or "No full archive found"
+				if strings.Contains(err.Error(), "No archives found") || strings.Contains(err.Error(), "No full archive found") {
+					formatter.PrintNoArchivesFound(archiveDir)
+					os.Exit(0)
+				}
+				// For other errors, use proper error handling
+				exitCode := HandleArchiveError(err, cfg, formatter)
+				os.Exit(exitCode)
+			}
+
+			// [REQ:CONTEXT_SUPPORT] [IMPL:DIFF_COMMAND] Check for context cancellation before diff calculation
+			select {
+			case <-ctx.Done():
+				fmt.Fprintf(os.Stderr, "Operation cancelled: %v\n", ctx.Err())
+				os.Exit(1)
+			default:
+			}
+
+			// [IMPL:DIFF_COMMAND] [REQ:DIFF_COMMAND] Calculate diff
+			diff, err := CalculateDiff(cwd, reconstructedState, cfg.ExcludePatterns)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error calculating diff: %v\n", err)
+				os.Exit(1)
+			}
+
+			// [REQ:CONTEXT_SUPPORT] [IMPL:DIFF_COMMAND] Check for context cancellation before printing
+			select {
+			case <-ctx.Done():
+				fmt.Fprintf(os.Stderr, "Operation cancelled: %v\n", ctx.Err())
+				os.Exit(1)
+			default:
+			}
+
+			// [IMPL:DIFF_COMMAND] [REQ:OUTPUT_FORMATTING] Print diff result
+			formatter.PrintDiffResult(diff)
 		},
 	}
 	return cmd
@@ -1235,7 +1321,7 @@ If the file is identical to the most recent backup, no new backup is created.`,
   bkpdir backup myfile.txt
 
   # Create a file backup with a note
-  bkpdir backup myfile.txt -n "Before changes"
+  bkpdir backup myfile.txt --note "Before changes"
 
   # Show what would be backed up without creating backup
   bkpdir backup -d myfile.txt`,
@@ -1277,7 +1363,7 @@ If the file is identical to the most recent backup, no new backup is created.`,
 			}
 		},
 	}
-	cmd.Flags().StringVarP(&note, "note", "n", "", "Add a note to the backup name")
+	cmd.Flags().StringVar(&note, "note", "", "Add a note to the backup name")
 	return cmd
 }
 

@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPORT_FILE="${PROJECT_ROOT}/semantic-token-validation-report.md"
 
-# Semantic token patterns
+# [REQ:DOC_015] Semantic token patterns - Extended to include REQ/ARCH/IMPL tokens
 PRIORITY_TOKENS=(
     "\[CRITICAL\]"
     "\[HIGH\]"
@@ -31,6 +31,13 @@ ACTION_TOKENS=(
     "\[ACTION:maintenance\]"
     "\[ACTION:validation\]"
     "\[ACTION:migration\]"
+)
+
+# [REQ:DOC_015] STDD semantic tokens (REQ/ARCH/IMPL)
+STDD_TOKENS=(
+    "\[REQ:[A-Z0-9_]+\]"
+    "\[ARCH:[A-Z0-9_]+\]"
+    "\[IMPL:[A-Z0-9_]+\]"
 )
 
 # Unicode icons that should be replaced
@@ -101,8 +108,26 @@ validate_file() {
         echo -e "${GREEN}✅ Found ${action_count} semantic action tokens in ${file}${NC}"
     fi
     
-    # Check for proper token format
-    local malformed_tokens=$(grep -o "\[[A-Z]\+[^]]*\]" "${file}" 2>/dev/null | grep -v "\[CRITICAL\]\|\[HIGH\]\|\[MEDIUM\]\|\[LOW\]\|\[ACTION:" | wc -l || echo "0")
+    # [REQ:DOC_015] Check for STDD semantic tokens (REQ/ARCH/IMPL)
+    local stdd_count=0
+    for token_pattern in "${STDD_TOKENS[@]}"; do
+        local count=$(grep -oE "${token_pattern}" "${file}" 2>/dev/null | wc -l || echo "0")
+        stdd_count=$((stdd_count + count))
+    done
+    
+    if [ "$stdd_count" -gt 0 ]; then
+        echo -e "${GREEN}✅ Found ${stdd_count} STDD semantic tokens (REQ/ARCH/IMPL) in ${file}${NC}"
+    fi
+    
+    # [REQ:DOC_015] Check for proper STDD token format
+    local malformed_stdd_tokens=$(grep -oE "\[(REQ|ARCH|IMPL):[^]]+\]" "${file}" 2>/dev/null | grep -vE "\[(REQ|ARCH|IMPL):[A-Z0-9_]+\]" | wc -l || echo "0")
+    if [ "$malformed_stdd_tokens" -gt 0 ]; then
+        echo -e "${RED}❌ Found ${malformed_stdd_tokens} malformed STDD tokens in ${file}${NC}"
+        validation_errors=$((validation_errors + 1))
+    fi
+    
+    # Check for proper token format (legacy)
+    local malformed_tokens=$(grep -o "\[[A-Z]\+[^]]*\]" "${file}" 2>/dev/null | grep -v "\[CRITICAL\]\|\[HIGH\]\|\[MEDIUM\]\|\[LOW\]\|\[ACTION:" | grep -vE "\[(REQ|ARCH|IMPL):" | wc -l || echo "0")
     if [ "$malformed_tokens" -gt 0 ]; then
         echo -e "${YELLOW}⚠️  Found ${malformed_tokens} potentially malformed tokens in ${file}${NC}"
         validation_warnings=$((validation_warnings + 1))
@@ -125,10 +150,15 @@ generate_validation_report() {
     for file in $(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name "*.yml" | grep -v "node_modules" | grep -v ".git" | grep -v "backup-"); do
         total_files=$((total_files + 1))
         
-        # Count semantic tokens
+        # Count semantic tokens (including STDD tokens)
         local semantic_count=0
         for token in "${PRIORITY_TOKENS[@]}" "${ACTION_TOKENS[@]}"; do
             local count=$(count_occurrences "${token}" "${file}")
+            semantic_count=$((semantic_count + count))
+        done
+        # [REQ:DOC_015] Count STDD tokens
+        for token_pattern in "${STDD_TOKENS[@]}"; do
+            local count=$(grep -oE "${token_pattern}" "${file}" 2>/dev/null | wc -l || echo "0")
             semantic_count=$((semantic_count + count))
         done
         
@@ -179,6 +209,11 @@ $(for token in "${ACTION_TOKENS[@]}"; do
     echo "- \`${token}\`"
 done)
 
+#### STDD Semantic Tokens [REQ:DOC_015]
+$(for token_pattern in "${STDD_TOKENS[@]}"; do
+    echo "- \`${token_pattern}\` (REQ/ARCH/IMPL tokens)"
+done)
+
 ### Unicode Icons to Replace
 $(for icon in "${UNICODE_ICONS[@]}"; do
     echo "- \`${icon}\`"
@@ -188,7 +223,7 @@ done)
 
 ### Files with Semantic Tokens
 \`\`\`
-$(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name "*.yml" | grep -v "node_modules" | grep -v ".git" | grep -v "backup-" | xargs grep -l "\[CRITICAL\]\|\[HIGH\]\|\[MEDIUM\]\|\[LOW\]\|\[ACTION:" 2>/dev/null || echo "No files with semantic tokens found")
+$(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name "*.yml" | grep -v "node_modules" | grep -v ".git" | grep -v "backup-" | xargs grep -lE "\[CRITICAL\]|\[HIGH\]|\[MEDIUM\]|\[LOW\]|\[ACTION:|\[REQ:|\[ARCH:|\[IMPL:" 2>/dev/null || echo "No files with semantic tokens found")
 \`\`\`
 
 ### Files with Remaining Unicode Icons

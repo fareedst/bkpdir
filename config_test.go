@@ -4009,6 +4009,16 @@ func TestCFG006Integration(t *testing.T) {
 
 // CFG-007: Multi-File Inheritance Chain Processing [TEST]
 func TestLoadConfigWithInheritance_MultiFile(t *testing.T) {
+	// Save original environment and restore it after test
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+
 	dir := t.TempDir()
 
 	// Create base config file (inherited by both)

@@ -667,6 +667,53 @@ func (fa *AIFormatterAdapter) PrintIncrementalCreated(path string) {
 	fa.aiFormatter.PrintWithContext(ctx)
 }
 
+// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+func (fa *AIFormatterAdapter) FormatIncrementalSkippedNoChanges() string {
+	return fa.config.FormatIncrementalSkippedNoChanges
+}
+
+// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+func (fa *AIFormatterAdapter) PrintIncrementalSkippedNoChanges() {
+	ctx := formatter.PrintContext{
+		Message:     fa.FormatIncrementalSkippedNoChanges(),
+		Destination: formatter.AIOutputDestinationStdout,
+		Type:        formatter.AIMessageTypeInfo,
+	}
+	fa.aiFormatter.PrintWithContext(ctx)
+}
+
+// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
+	if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
+		return fa.config.FormatDiffNoChanges
+	}
+
+	var result strings.Builder
+	result.WriteString(fa.config.FormatDiffChanges)
+	
+	for _, file := range diff.Added {
+		result.WriteString(fmt.Sprintf(fa.config.FormatDiffAdded, file))
+	}
+	for _, file := range diff.Modified {
+		result.WriteString(fmt.Sprintf(fa.config.FormatDiffModified, file))
+	}
+	for _, file := range diff.Deleted {
+		result.WriteString(fmt.Sprintf(fa.config.FormatDiffDeleted, file))
+	}
+	
+	return result.String()
+}
+
+// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+func (fa *AIFormatterAdapter) PrintDiffResult(diff *DiffResult) {
+	ctx := formatter.PrintContext{
+		Message:     fa.FormatDiffResult(diff),
+		Destination: formatter.AIOutputDestinationStdout,
+		Type:        formatter.AIMessageTypeInfo,
+	}
+	fa.aiFormatter.PrintWithContext(ctx)
+}
+
 func (fa *AIFormatterAdapter) PrintNoBackupsFound(filename, backupDir string) {
 	ctx := formatter.PrintContext{
 		Message:     fa.FormatNoBackupsFound(filename, backupDir),
@@ -928,11 +975,17 @@ func (fa *AIFormatterAdapter) FormatListBackupWithExtraction(backupPath, creatio
 
 // [CRITICAL] FMT-001: Stats format operations - [ACTION:core-functionality]
 func (fa *AIFormatterAdapter) FormatCreatedArchiveWithStats(path string) string {
-	return fa.FormatCreatedArchive(path)
+	// Delegate to the OutputFormatter implementation which has the correct template processing
+	// Create a temporary OutputFormatter to use its implementation
+	outputFormatter := &OutputFormatter{cfg: fa.config}
+	return outputFormatter.FormatCreatedArchiveWithStats(path)
 }
 
 func (fa *AIFormatterAdapter) FormatIncrementalCreatedWithStats(path string) string {
-	return fa.FormatIncrementalCreated(path)
+	// Delegate to the OutputFormatter implementation which has the correct template processing
+	// Create a temporary OutputFormatter to use its implementation
+	outputFormatter := &OutputFormatter{cfg: fa.config}
+	return outputFormatter.FormatIncrementalCreatedWithStats(path)
 }
 
 func (fa *AIFormatterAdapter) TemplateCreatedArchiveWithStats(path string) string {

@@ -811,7 +811,7 @@ func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]str
 	// This prevents fmt.Sprintf from misinterpreting them as format verbs
 	// We MUST ensure no #{...} patterns remain before returning
 	if strings.Contains(result, "#{") {
-		// Replace any remaining known placeholders with safe defaults
+		// Replace any remaining known placeholders - CHECK DATA MAP FIRST!
 		finalReplacements := map[string]string{
 			"#{path}": func() string {
 				if p, ok := data["path"]; ok {
@@ -831,17 +831,45 @@ func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]str
 				}
 				return "unknown"
 			}(),
-			"#{size_human}": "unknown",
-			"#{size}":       "0",
+			"#{size_human}": func() string {
+				if sh, ok := data["size_human"]; ok {
+					return sh
+				}
+				return "unknown"
+			}(),
+			"#{size}": func() string {
+				if s, ok := data["size"]; ok {
+					return s
+				}
+				return "0"
+			}(),
 			"#{mtime}": func() string {
+				if mt, ok := data["mtime"]; ok {
+					return mt
+				}
 				if ct, ok := data["creation_time"]; ok {
 					return ct
 				}
 				return "unknown"
 			}(),
-			"#{mtime_unix}": "0",
-			"#{mode}":       "unknown",
-			"#{type}":       "unknown",
+			"#{mtime_unix}": func() string {
+				if mu, ok := data["mtime_unix"]; ok {
+					return mu
+				}
+				return "0"
+			}(),
+			"#{mode}": func() string {
+				if m, ok := data["mode"]; ok {
+					return m
+				}
+				return "unknown"
+			}(),
+			"#{type}": func() string {
+				if t, ok := data["type"]; ok {
+					return t
+				}
+				return "unknown"
+			}(),
 		}
 		for placeholder, value := range finalReplacements {
 			if strings.Contains(result, placeholder) {
@@ -977,11 +1005,31 @@ func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[stri
 		}
 	}
 
+	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// This allows mixed format strings like "%s (size: #{size_human})\n"
+	// We need to replace printf placeholders with values from the data map
+	// Common mappings: %s -> path or name, %d -> size, etc.
+	if strings.Contains(result, "%s") {
+		// Replace %s with path if available, otherwise name
+		if path, ok := data["path"]; ok {
+			result = strings.Replace(result, "%s", path, 1) // Replace first occurrence
+		} else if name, ok := data["name"]; ok {
+			result = strings.Replace(result, "%s", name, 1)
+		}
+		// If there are multiple %s, replace them with available values
+		// Second %s could be creation_time
+		if strings.Contains(result, "%s") {
+			if creationTime, ok := data["creation_time"]; ok {
+				result = strings.Replace(result, "%s", creationTime, 1)
+			}
+		}
+	}
+
 	// CRITICAL: Final safety check - replace any remaining #{...} patterns
 	// This prevents fmt.Sprintf from misinterpreting them as format verbs
 	// We MUST ensure no #{...} patterns remain before returning
 	if strings.Contains(result, "#{") {
-		// Replace any remaining known placeholders with safe defaults
+		// Replace any remaining known placeholders - CHECK DATA MAP FIRST!
 		finalReplacements := map[string]string{
 			"#{path}": func() string {
 				if p, ok := data["path"]; ok {
@@ -1001,17 +1049,45 @@ func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[stri
 				}
 				return "unknown"
 			}(),
-			"#{size_human}": "unknown",
-			"#{size}":       "0",
+			"#{size_human}": func() string {
+				if sh, ok := data["size_human"]; ok {
+					return sh
+				}
+				return "unknown"
+			}(),
+			"#{size}": func() string {
+				if s, ok := data["size"]; ok {
+					return s
+				}
+				return "0"
+			}(),
 			"#{mtime}": func() string {
+				if mt, ok := data["mtime"]; ok {
+					return mt
+				}
 				if ct, ok := data["creation_time"]; ok {
 					return ct
 				}
 				return "unknown"
 			}(),
-			"#{mtime_unix}": "0",
-			"#{mode}":       "unknown",
-			"#{type}":       "unknown",
+			"#{mtime_unix}": func() string {
+				if mu, ok := data["mtime_unix"]; ok {
+					return mu
+				}
+				return "0"
+			}(),
+			"#{mode}": func() string {
+				if m, ok := data["mode"]; ok {
+					return m
+				}
+				return "unknown"
+			}(),
+			"#{type}": func() string {
+				if t, ok := data["type"]; ok {
+					return t
+				}
+				return "unknown"
+			}(),
 		}
 		for placeholder, value := range finalReplacements {
 			if strings.Contains(result, placeholder) {
@@ -1255,6 +1331,15 @@ func (tf *TemplateFormatter) extractBackupData(filename string) map[string]strin
 	return result
 }
 
+// Helper function to get map keys for debugging
+func getDataKeys(m map[string]string) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
 // REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
 // Extended Printf Formatters (Lines 929-1084) - [CHECK] [DECISION:maintenance]
 // Complex formatting requiring data extraction - extends core printf functionality
@@ -1322,18 +1407,60 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 	}
 
 	// Use detailed template string with named replacements
-	result := f.formatTemplate(f.cfg.TemplateCreatedArchiveDetailed, data)
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+	templateStr := f.cfg.TemplateCreatedArchiveDetailed
+	if templateStr == "" {
+		// Fallback to basic format if template is not configured
+		return f.FormatCreatedArchive(path)
+	}
+	
+	// Use simple placeholder replacement (same approach as formatListArchiveSimple which works)
+	// This is more reliable than the complex formatTemplate function
+	result := templateStr
+	for key, value := range data {
+		placeholder := fmt.Sprintf("#{%s}", key)
+		result = strings.ReplaceAll(result, placeholder, value)
+	}
+	
+	// Final safety check: replace any remaining known placeholders with defaults
+	// This should not be needed if all placeholders are in the data map, but provides safety
 	if strings.Contains(result, "#{") {
-		if debug {
-			fmt.Fprintf(os.Stderr, "DEBUG: Template not processed correctly: %q\n", result)
-		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		if debug {
-			fmt.Fprintf(os.Stderr, "DEBUG: Template input was: %q\n", f.cfg.TemplateCreatedArchiveDetailed)
-		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-		if debug {
-			fmt.Fprintf(os.Stderr, "DEBUG: Data was: %+v\n", data)
-		} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+		// Replace any remaining placeholders with safe defaults (check data map first!)
+		finalReplacements := map[string]string{
+			"#{size_human}": func() string {
+				if sh, ok := data["size_human"]; ok {
+					return sh
+				}
+				return "unknown"
+			}(),
+			"#{size}": func() string {
+				if s, ok := data["size"]; ok {
+					return s
+				}
+				return "0"
+			}(),
+			"#{mtime}": func() string {
+				if mt, ok := data["mtime"]; ok {
+					return mt
+				}
+				if ct, ok := data["creation_time"]; ok {
+					return ct
+				}
+				return "unknown"
+			}(),
+			"#{mtime_unix}": "0",
+			"#{mode}":       "unknown",
+			"#{type}":       "unknown",
+		}
+		for placeholder, value := range finalReplacements {
+			result = strings.ReplaceAll(result, placeholder, value)
+		}
+	}
+	
+	// If still contains placeholders after all replacements, fall back to basic format
+	// This should never happen if the template and data map are correct
+	if strings.Contains(result, "#{") {
+		return f.FormatCreatedArchive(path)
 	}
 	return result
 }
@@ -1359,8 +1486,61 @@ func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string 
 		"type":       statInfo.Type,
 	}
 
-	// Use detailed format string with named replacements
-	return f.formatTemplate(f.cfg.FormatIncrementalCreatedDetailed, data)
+	// Use detailed template string with named replacements
+	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+	if f.cfg.TemplateIncrementalCreatedDetailed == "" {
+		// Fallback to basic format if template is not configured
+		return f.FormatIncrementalCreated(path)
+	}
+	
+	// Use simple placeholder replacement (same approach as formatListArchiveSimple which works)
+	// This is more reliable than the complex formatTemplate function
+	templateStr := f.cfg.TemplateIncrementalCreatedDetailed
+	result := templateStr
+	for key, value := range data {
+		placeholder := fmt.Sprintf("#{%s}", key)
+		result = strings.ReplaceAll(result, placeholder, value)
+	}
+	
+	// Final safety check: replace any remaining known placeholders with defaults
+	if strings.Contains(result, "#{") {
+		// Replace any remaining placeholders with safe defaults
+		finalReplacements := map[string]string{
+			"#{size_human}": func() string {
+				if sh, ok := data["size_human"]; ok {
+					return sh
+				}
+				return "unknown"
+			}(),
+			"#{size}": func() string {
+				if s, ok := data["size"]; ok {
+					return s
+				}
+				return "0"
+			}(),
+			"#{mtime}": func() string {
+				if mt, ok := data["mtime"]; ok {
+					return mt
+				}
+				if ct, ok := data["creation_time"]; ok {
+					return ct
+				}
+				return "unknown"
+			}(),
+			"#{mtime_unix}": "0",
+			"#{mode}":       "unknown",
+			"#{type}":       "unknown",
+		}
+		for placeholder, value := range finalReplacements {
+			result = strings.ReplaceAll(result, placeholder, value)
+		}
+	}
+	
+	// If still contains placeholders, fall back to basic format
+	if strings.Contains(result, "#{") {
+		return f.FormatIncrementalCreated(path)
+	}
+	return result
 }
 
 // PrintCreatedArchiveWithStats prints a created archive message with file statistics
@@ -1561,6 +1741,57 @@ func (f *OutputFormatter) PrintIncrementalCreated(path string) {
 	message := f.FormatIncrementalCreated(path)
 	if f.collector != nil {
 		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
+}
+
+// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+// FormatDiffResult formats the diff result for display
+func (f *OutputFormatter) FormatDiffResult(diff *DiffResult) string {
+	if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
+		return f.cfg.FormatDiffNoChanges
+	}
+
+	var result strings.Builder
+	result.WriteString(f.cfg.FormatDiffChanges)
+	
+	for _, file := range diff.Added {
+		result.WriteString(fmt.Sprintf(f.cfg.FormatDiffAdded, file))
+	}
+	for _, file := range diff.Modified {
+		result.WriteString(fmt.Sprintf(f.cfg.FormatDiffModified, file))
+	}
+	for _, file := range diff.Deleted {
+		result.WriteString(fmt.Sprintf(f.cfg.FormatDiffDeleted, file))
+	}
+	
+	return result.String()
+}
+
+// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+// PrintDiffResult prints the diff result
+func (f *OutputFormatter) PrintDiffResult(diff *DiffResult) {
+	message := f.FormatDiffResult(diff)
+	if f.collector != nil {
+		f.collector.AddStdout(message, "info")
+	} else {
+		fmt.Print(message)
+	}
+}
+
+// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+// FormatIncrementalSkippedNoChanges formats the message when incremental archive creation is skipped
+func (f *OutputFormatter) FormatIncrementalSkippedNoChanges() string {
+	return f.cfg.FormatIncrementalSkippedNoChanges
+}
+
+// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+// PrintIncrementalSkippedNoChanges prints the message when incremental archive creation is skipped
+func (f *OutputFormatter) PrintIncrementalSkippedNoChanges() {
+	message := f.FormatIncrementalSkippedNoChanges()
+	if f.collector != nil {
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)

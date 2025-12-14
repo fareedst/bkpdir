@@ -1003,8 +1003,10 @@ func TestMain_Integration_BackupCommandStructure(t *testing.T) {
 		t.Errorf("Expected note flag to be defined")
 	}
 
-	if noteFlag.Shorthand != "n" {
-		t.Errorf("Expected note flag shorthand 'n', got %s", noteFlag.Shorthand)
+	// Note: The shorthand 'n' was removed to avoid conflict with --limit flag's -n shorthand
+	// The note flag now only has the long form --note
+	if noteFlag.Shorthand != "" {
+		t.Errorf("Expected note flag to have no shorthand (conflicts with --limit -n), got %s", noteFlag.Shorthand)
 	}
 }
 

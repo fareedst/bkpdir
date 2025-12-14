@@ -187,9 +187,23 @@ func (v *DOC008Validator) parseWarningLine(line string, lineNum int) *Validation
 }
 
 // determineErrorCategory categorizes errors for AI assistant understanding
+// [REQ:DOC_015] Extended to recognize semantic tokens (REQ/ARCH/IMPL)
 func (v *DOC008Validator) determineErrorCategory(line string) string {
 	line = strings.ToLower(line)
 
+	// [REQ:DOC_015] Semantic token validation categories
+	if strings.Contains(line, "[req:") || strings.Contains(line, "[arch:") || strings.Contains(line, "[impl:") {
+		if strings.Contains(line, "format") || strings.Contains(line, "malformed") {
+			return "semantic_token_format"
+		}
+		if strings.Contains(line, "missing") {
+			return "missing_semantic_token"
+		}
+		if strings.Contains(line, "inconsistent") || strings.Contains(line, "mismatch") {
+			return "semantic_token_consistency"
+		}
+		return "semantic_token_validation"
+	}
 	if strings.Contains(line, "token") && strings.Contains(line, "format") {
 		return "token_format"
 	}

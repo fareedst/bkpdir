@@ -39,6 +39,8 @@ Each requirement includes:
 | `[REQ:CONFIGURATION]` | Configuration Management | P0 | ✅ | See `architecture-decisions.md` § Configuration System | See `implementation-decisions.md` § Configuration Structure |
 | `[REQ:GIT_INTEGRATION]` | Git Integration | P1 | ✅ | See `architecture-decisions.md` § Git Integration | See `implementation-decisions.md` § Git Command-line Integration |
 | `[REQ:LIST_LIMIT]` | List Command Output Limit | P1 | ✅ | See `architecture-decisions.md` § List Command Limit Architecture | See `implementation-decisions.md` § List Command Limit Implementation |
+| `[REQ:DIFF_COMMAND]` | Diff Command | P1 | ✅ | See `architecture-decisions.md` § Diff Command Architecture | See `implementation-decisions.md` § Diff Command Implementation |
+| `[REQ:INCREMENTAL_DUPLICATE_PREVENTION]` | Incremental Archive Duplicate Prevention | P1 | ⏳ | See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture | See `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation |
 
 ### Configuration System Enhancement Requirements
 
@@ -433,6 +435,70 @@ Each requirement includes:
 **Related Requirements**: [REQ:CONFIGURATION], [REQ:CFG_005], [REQ:CFG_006], [REQ:MAINTAINABILITY], [REQ:CODE_QUALITY]
 
 ## Incomplete Requirements
+
+### [REQ:DIFF_COMMAND] Diff Command Requirements
+
+**Priority: P1 (Important)**
+
+- **Description**: Implement a CLI `diff` command that reports if there are any changes between the current directory files and the union of the most recent incremental archive on top of the most recent full archive. The command must reconstruct the effective state by applying incremental changes to the full archive, then compare that reconstructed state against the current directory. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
+- **Rationale**: Provides users with visibility into what changes exist before creating a new incremental archive. Enables users to preview differences and understand what would be included in the next incremental backup. The diff analysis is also useful for preventing duplicate incremental archives when there are no observable changes. Name-based sorting is more reliable than file system modification times and consistent with archive naming conventions.
+- **Satisfaction Criteria**:
+  - CLI command `bkpdir diff` reports changes between current directory and reconstructed archive state
+  - Reconstructs effective state by applying most recent incremental archive on top of most recent full archive
+  - Archive selection uses name-based sorting (archive names include alphabetically sortable timestamps)
+  - Handles cases where no incremental archive exists (compares against full archive only)
+  - Handles cases where no archives exist (reports appropriate message)
+  - Output shows added files, modified files, and deleted files
+  - Output uses configurable format strings consistent with other commands
+  - Command supports context cancellation for long-running operations
+  - Command respects exclude patterns from configuration
+  - Command supports dry-run mode for preview
+- **Validation Criteria**: 
+  - Unit tests verify diff calculation logic with various archive combinations
+  - Integration tests verify diff command end-to-end with real archives
+  - Tests verify reconstruction of archive union (full + incremental)
+  - Tests verify handling of edge cases (no archives, no incremental, no full)
+  - Tests verify exclude patterns are respected
+  - Tests verify output formatting with configurable format strings
+  - Tests verify context cancellation support
+  - See `architecture-decisions.md` § Diff Command Architecture [ARCH:DIFF_COMMAND] and `implementation-decisions.md` § Diff Command Implementation [IMPL:DIFF_COMMAND] for detailed testing approach
+- **Architecture**: See `architecture-decisions.md` § Diff Command Architecture [ARCH:DIFF_COMMAND]
+- **Implementation**: See `implementation-decisions.md` § Diff Command Implementation [IMPL:DIFF_COMMAND]
+
+**Status**: ✅ Implemented
+
+**Cross-References**: [REQ:INCREMENTAL_DUPLICATE_PREVENTION] (Incremental Archive Duplicate Prevention), [REQ:OUTPUT_FORMATTING] (Output Formatting), [REQ:CONFIGURATION] (Configuration Management), [REQ:CONTEXT_SUPPORT] (Context Support)
+
+### [REQ:INCREMENTAL_DUPLICATE_PREVENTION] Incremental Archive Duplicate Prevention Requirements
+
+**Priority: P1 (Important)**
+
+- **Description**: Prevent creation of duplicate incremental archives when there are no observable changes compared to the most recent incremental archive. The system must compare the current directory state against the union of the most recent incremental archive applied on top of the most recent full archive, rather than comparing only against the full archive. If no changes are detected, the incremental archive creation must be skipped with an appropriate message. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
+- **Rationale**: Prevents unnecessary incremental archives from being created when no changes have occurred since the last incremental backup. This saves disk space and reduces archive clutter. Users should not have multiple identical incremental archives representing the same state. Name-based sorting is more reliable than file system modification times and consistent with archive naming conventions.
+- **Satisfaction Criteria**:
+  - Incremental archive creation compares against the union of most recent incremental + most recent full archive
+  - Archive selection uses name-based sorting (archive names include alphabetically sortable timestamps)
+  - If no changes detected compared to reconstructed state, skip archive creation
+  - Appropriate message displayed when archive creation is skipped due to no changes
+  - Comparison logic reuses diff command analysis for consistency
+  - Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)
+  - Comparison respects exclude patterns from configuration
+  - Behavior is consistent with diff command output
+- **Validation Criteria**: 
+  - Unit tests verify duplicate prevention logic with various archive combinations
+  - Integration tests verify incremental archive creation skips when no changes
+  - Tests verify incremental archive creation proceeds when changes exist
+  - Tests verify comparison against reconstructed state (full + incremental)
+  - Tests verify handling of edge cases (no incremental, no full, no archives)
+  - Tests verify exclude patterns are respected
+  - Tests verify consistency with diff command behavior
+  - See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] and `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] for detailed testing approach
+- **Architecture**: See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [ARCH:INCREMENTAL_DUPLICATE_PREVENTION]
+- **Implementation**: See `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+
+**Status**: ✅ Implemented
+
+**Cross-References**: [REQ:DIFF_COMMAND] (Diff Command), [REQ:OUTPUT_FORMATTING] (Output Formatting), [REQ:CONFIGURATION] (Configuration Management), [REQ:CONTEXT_SUPPORT] (Context Support)
 
 ### [REQ:LIST_LIMIT] List Command Output Limit Requirements
 

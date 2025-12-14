@@ -148,8 +148,14 @@ type Config struct {
 	FormatConfigFilePath       string `yaml:"format_config_file_path"`
 	FormatDryRunFilesHeader    string `yaml:"format_dry_run_files_header"`
 	FormatDryRunFileEntry      string `yaml:"format_dry_run_file_entry"`
-	FormatNoFilesModified      string `yaml:"format_no_files_modified"`
-	FormatIncrementalCreated   string `yaml:"format_incremental_created"`
+	FormatNoFilesModified            string `yaml:"format_no_files_modified"`
+	FormatIncrementalCreated         string `yaml:"format_incremental_created"`
+	FormatIncrementalSkippedNoChanges string `yaml:"format_incremental_skipped_no_changes"`
+	FormatDiffNoChanges              string `yaml:"format_diff_no_changes"`
+	FormatDiffChanges                string `yaml:"format_diff_changes"`
+	FormatDiffAdded                  string `yaml:"format_diff_added"`
+	FormatDiffModified               string `yaml:"format_diff_modified"`
+	FormatDiffDeleted                string `yaml:"format_diff_deleted"`
 
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	// Enhanced format strings with stat information support
@@ -325,8 +331,14 @@ func DefaultConfig() *Config {
 		FormatConfigFilePath:       "Config file: %s\n",
 		FormatDryRunFilesHeader:    "[Dry Run] Files to include:\n",
 		FormatDryRunFileEntry:      "  %s\n",
-		FormatNoFilesModified:      "No files modified since last full archive\n",
-		FormatIncrementalCreated:   "Created incremental archive: %s\n",
+		FormatNoFilesModified:            "No files modified since last full archive\n",
+		FormatIncrementalCreated:         "Created incremental archive: %s\n",
+		FormatIncrementalSkippedNoChanges: "No changes detected since last incremental archive. Skipping archive creation.\n",
+		FormatDiffNoChanges:              "No changes detected between current directory and archive state.\n",
+		FormatDiffChanges:                "Changes detected:\n",
+		FormatDiffAdded:                  "  Added:   %s\n",
+		FormatDiffModified:               "  Modified: %s\n",
+		FormatDiffDeleted:                "  Deleted:  %s\n",
 
 		// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 		// Enhanced format strings with stat information (backward compatible defaults)
@@ -1502,6 +1514,25 @@ func mergeExtendedFormatStrings(dst, src *Config, inheritContext bool, defaultCf
 	}
 	if src.FormatIncrementalCreated != defaultCfg.FormatIncrementalCreated {
 		dst.FormatIncrementalCreated = src.FormatIncrementalCreated
+	}
+	// [IMPL:DIFF_COMMAND] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:DIFF_COMMAND] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+	if src.FormatIncrementalSkippedNoChanges != defaultCfg.FormatIncrementalSkippedNoChanges {
+		dst.FormatIncrementalSkippedNoChanges = src.FormatIncrementalSkippedNoChanges
+	}
+	if src.FormatDiffNoChanges != defaultCfg.FormatDiffNoChanges {
+		dst.FormatDiffNoChanges = src.FormatDiffNoChanges
+	}
+	if src.FormatDiffChanges != defaultCfg.FormatDiffChanges {
+		dst.FormatDiffChanges = src.FormatDiffChanges
+	}
+	if src.FormatDiffAdded != defaultCfg.FormatDiffAdded {
+		dst.FormatDiffAdded = src.FormatDiffAdded
+	}
+	if src.FormatDiffModified != defaultCfg.FormatDiffModified {
+		dst.FormatDiffModified = src.FormatDiffModified
+	}
+	if src.FormatDiffDeleted != defaultCfg.FormatDiffDeleted {
+		dst.FormatDiffDeleted = src.FormatDiffDeleted
 	}
 
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
@@ -4607,6 +4638,12 @@ func getExpectedPlaceholders(fieldName string) []string {
 		"FormatDryRunFileEntry":            {"%s"},
 		"FormatNoFilesModified":            {},
 		"FormatIncrementalCreated":         {"%s"},
+		"FormatIncrementalSkippedNoChanges": {},
+		"FormatDiffNoChanges":              {},
+		"FormatDiffChanges":                {},
+		"FormatDiffAdded":                  {"%s"},
+		"FormatDiffModified":               {"%s"},
+		"FormatDiffDeleted":                {"%s"},
 		"FormatCreatedArchiveDetailed":     {"%s"}, // 3 occurrences
 		"FormatIncrementalCreatedDetailed": {"%s"}, // 3 occurrences
 		// Backup operation messages
@@ -4724,6 +4761,12 @@ func validateAllFormatStrings(cfg *Config) []string {
 		"FormatDryRunFileEntry":            cfg.FormatDryRunFileEntry,
 		"FormatNoFilesModified":            cfg.FormatNoFilesModified,
 		"FormatIncrementalCreated":         cfg.FormatIncrementalCreated,
+		"FormatIncrementalSkippedNoChanges": cfg.FormatIncrementalSkippedNoChanges,
+		"FormatDiffNoChanges":              cfg.FormatDiffNoChanges,
+		"FormatDiffChanges":                cfg.FormatDiffChanges,
+		"FormatDiffAdded":                  cfg.FormatDiffAdded,
+		"FormatDiffModified":               cfg.FormatDiffModified,
+		"FormatDiffDeleted":                cfg.FormatDiffDeleted,
 		"FormatCreatedArchiveDetailed":     cfg.FormatCreatedArchiveDetailed,
 		"FormatIncrementalCreatedDetailed": cfg.FormatIncrementalCreatedDetailed,
 		// Backup operation messages

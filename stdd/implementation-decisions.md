@@ -870,7 +870,78 @@ func getFileType(info os.FileInfo) string {
 
 **Code Markers**: `file_stats.go`, `FileStatInfo` struct, `GatherFileStatInfo()` function
 
-## 17. Directory Comparison Implementation [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON]
+**Cross-References**: [ARCH:FILE_STATISTICS], [REQ:OUTPUT_FORMATTING], [REQ:OUT_002]
+
+## 17. File Statistics Template Processing Fix [IMPL:FILE_STATISTICS_TEMPLATE_FIX] [ARCH:FILE_STATISTICS] [REQ:OUT_002] [REQ:OUTPUT_FORMATTING]
+
+### Decision: Simplified template processing with direct placeholder replacement and fixed AIFormatterAdapter delegation
+**Rationale:**
+- Fixed critical bug where `AIFormatterAdapter` was bypassing template processing
+- Simplified template processing to use direct placeholder replacement (same approach as `formatListArchiveSimple`)
+- More reliable than complex `formatTemplate` function which had issues with Go's `text/template` internal `fmt` usage
+- Ensures consistent behavior between `OutputFormatter` and `AIFormatterAdapter`
+- Final safety check now correctly checks data map first before using defaults
+
+### Implementation Approach:
+- **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`
+  - Direct `strings.ReplaceAll` loop for all placeholders from data map
+  - Final safety check that checks data map first before using defaults
+  - Avoids issues with Go's `text/template` internal `fmt` usage
+- **Fixed AIFormatterAdapter Delegation**: Updated `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats` in `AIFormatterAdapter` to correctly delegate to `OutputFormatter` implementation
+  - Previously was calling basic `FormatCreatedArchive` and `FormatIncrementalCreated`, bypassing template processing
+  - Now creates temporary `OutputFormatter` instance to use its template processing logic
+  - Ensures consistent behavior regardless of which formatter implementation is used
+
+### Template Processing Logic:
+```go
+// Simplified approach (same as formatListArchiveSimple)
+result := templateStr
+for key, value := range data {
+    placeholder := fmt.Sprintf("#{%s}", key)
+    result = strings.ReplaceAll(result, placeholder, value)
+}
+
+// Final safety check: check data map first before using defaults
+if strings.Contains(result, "#{") {
+    finalReplacements := map[string]string{
+        "#{size_human}": func() string {
+            if sh, ok := data["size_human"]; ok {
+                return sh
+            }
+            return "unknown"
+        }(),
+        // ... similar for other placeholders
+    }
+    for placeholder, value := range finalReplacements {
+        result = strings.ReplaceAll(result, placeholder, value)
+    }
+}
+```
+
+### AIFormatterAdapter Fix:
+```go
+func (fa *AIFormatterAdapter) FormatCreatedArchiveWithStats(path string) string {
+    // Delegate to the OutputFormatter implementation which has the correct template processing
+    outputFormatter := &OutputFormatter{cfg: fa.config}
+    return outputFormatter.FormatCreatedArchiveWithStats(path)
+}
+```
+
+**Code Structure:**
+- `formatter.go` lines ~1388-1467: `FormatCreatedArchiveWithStats()` - Simplified template processing with direct placeholder replacement
+- `formatter.go` lines ~1468-1547: `FormatIncrementalCreatedWithStats()` - Simplified template processing with direct placeholder replacement
+- `ai_formatter_adapter.go` lines ~977-989: `FormatCreatedArchiveWithStats()` and `FormatIncrementalCreatedWithStats()` - Fixed to delegate to `OutputFormatter`
+
+**Code Markers**:
+- `formatter.go` line ~1417-1423: Direct placeholder replacement loop in `FormatCreatedArchiveWithStats`
+- `formatter.go` line ~1427-1478: Final safety check with data map lookup first
+- `formatter.go` line ~1496-1503: Direct placeholder replacement loop in `FormatIncrementalCreatedWithStats`
+- `ai_formatter_adapter.go` line ~977-982: Fixed `FormatCreatedArchiveWithStats` delegation
+- `ai_formatter_adapter.go` line ~984-989: Fixed `FormatIncrementalCreatedWithStats` delegation
+
+**Cross-References**: [ARCH:FILE_STATISTICS], [REQ:OUT_002], [REQ:OUTPUT_FORMATTING], [IMPL:FILE_STATISTICS]
+
+## 18. Directory Comparison Implementation [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON]
 
 ### Decision: Snapshot-based comparison with hash-based content verification
 **Rationale:**
@@ -2736,3 +2807,135 @@ func TestDefaultStrategyEdgeCases(t *testing.T) {
 - `backup_test.go` line ~964-1210: Comprehensive test suite `TestListFileBackupsEnhanced_WithLimit`
 
 **Cross-References**: [ARCH:LIST_LIMIT], [REQ:LIST_LIMIT], [REQ:USABILITY]
+
+## N+1. Diff Command Implementation [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+
+### Decision: Implement diff command with archive state reconstruction and comparison engine
+**Rationale:**
+- Reconstructs effective state by applying incremental on top of full archive
+- Provides accurate change detection by comparing against reconstructed state
+- Reuses comparison logic for duplicate prevention consistency
+- Integrates with existing CLI framework and output formatting system
+- Supports context cancellation for long-running operations
+- Provides user-friendly error messages for edge cases
+
+### Implementation Approach:
+- **Archive State Reconstruction**: Function to reconstruct effective state from full + most recent incremental archive
+  - Load most recent full archive snapshot
+  - Load most recent incremental archive snapshot (if exists)
+  - Apply incremental changes on top of full archive state
+  - Return reconstructed directory snapshot
+  - Handle case where no archives exist with user-friendly message
+- **Directory Comparison**: Compare current directory against reconstructed state
+  - Create snapshot of current directory
+  - Compare snapshots using existing comparison infrastructure
+  - Identify added, modified, and deleted files
+  - Respect exclude patterns from configuration
+- **Change Reporting**: Format and display changes
+  - Use configurable format strings for output
+  - Display added files, modified files, deleted files
+  - Handle case where no changes exist
+- **CLI Command Integration**: Add `diff` command to CLI framework
+  - Add `diffCmd()` function in `main.go`
+  - Support context cancellation with periodic checks
+  - Add "diff" to known commands list in auto-detection logic
+  - Respect exclude patterns from configuration
+  - Improved error handling for "no archives" case
+
+### Implementation Details:
+- **Archive Selection Strategy**: All archive selection functions use name-based sorting instead of file modification times
+  - Archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable
+  - Functions filter appropriate archives (full vs incremental), sort alphabetically by name, and return the last archive (most recent when sorted ascending)
+  - More reliable than file system modification times, consistent with archive naming pattern, simpler implementation (no file system stat calls needed)
+  - Affected functions: `FindMostRecentArchive()`, `findLatestFullArchive()`, `findLatestIncrementalArchive()`
+- **Context Support**: Command handler checks for context cancellation before diff calculation and before printing results
+- **Error Handling**: Improved handling of "no archives found" case - displays user-friendly message using `PrintNoArchivesFound()` instead of generic error
+- **Auto-Detection Integration**: Added "diff" to `knownCommands` list in `executeWithAutoDetection()` to prevent path auto-detection from intercepting the command
+- **Testing**: Comprehensive test coverage including:
+  - Unit tests for archive state reconstruction (full only, full + incremental)
+  - Unit tests for diff calculation (added, modified, deleted, no changes)
+  - Integration test for end-to-end diff command
+  - Edge case test for no archives scenario
+  - Format and print method tests
+
+**Code Structure:**
+- `comparison.go`: `ReconstructArchiveState()` function to reconstruct state from full + incremental
+- `comparison.go`: `CalculateDiff()` function to compare current directory against reconstructed state
+- `comparison.go`: `DiffResult` struct to hold change information (added, modified, deleted files)
+- `comparison.go`: `findLatestIncrementalArchive()` helper function - sorts by name (timestamps are alphabetically sortable)
+- `comparison.go`: `FindMostRecentArchive()` function - sorts by name instead of modification time
+- `archive.go`: `findLatestFullArchive()` function - sorts by name instead of modification time
+- `main.go`: `diffCmd()` function for CLI command with context support
+- `main.go`: Added "diff" to `knownCommands` list in `executeWithAutoDetection()` (line ~250)
+- `formatter.go`: `FormatDiffResult()` and `PrintDiffResult()` methods for diff output
+- `config.go`: Format string configuration for diff output (`FormatDiffNoChanges`, `FormatDiffChanges`, `FormatDiffAdded`, `FormatDiffModified`, `FormatDiffDeleted`)
+- `diff_command_test.go`: Comprehensive test suite with semantic token references
+
+**Archive Selection Strategy:**
+- **Name-Based Sorting**: All archive selection functions (`FindMostRecentArchive`, `findLatestFullArchive`, `findLatestIncrementalArchive`) use name-based sorting instead of file modification times
+- **Rationale**: Archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable, making name-based sorting more reliable and consistent with archive naming conventions
+- **Implementation**: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
+- **Benefits**: More reliable than file system modification times, consistent with archive naming pattern, simpler implementation (no file system stat calls needed)
+
+**Code Markers**:
+- `comparison.go` line ~68-101: `FindMostRecentArchive(archiveDir string) (string, error)` - Finds most recent full archive by sorting names
+- `comparison.go` line ~177-226: `findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (*Archive, error)` - Finds most recent incremental archive by sorting names
+- `comparison.go` line ~231-330: `ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error)` - Reconstructs state from full + incremental
+- `comparison.go` line ~333-409: `CalculateDiff(cwd string, reconstructedState *DirectorySnapshot, excludePatterns []string) (*DiffResult, error)` - Calculates differences
+- `comparison.go` line ~169-174: `type DiffResult struct { Added []string; Modified []string; Deleted []string }` - Holds change information
+- `archive.go` line ~869-904: `findLatestFullArchive(archiveDir string) (*Archive, error)` - Finds most recent full archive by sorting names
+- `main.go` line ~1090-1143: `diffCmd() *cobra.Command` - CLI command implementation with context support
+- `main.go` line ~250: Added "diff" to `knownCommands` list
+- `formatter.go` line ~1752-1771: `FormatDiffResult(diff *DiffResult) string` - Format diff output
+- `formatter.go` line ~1775-1786: `PrintDiffResult(diff *DiffResult)` - Print diff output
+- `diff_command_test.go`: Comprehensive test suite with 8 test functions
+
+**Cross-References**: [ARCH:DIFF_COMMAND], [REQ:DIFF_COMMAND], [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [ARCH:DIRECTORY_COMPARISON], [REQ:OUTPUT_FORMATTING], [REQ:CONTEXT_SUPPORT], [ARCH:CLI_COMMANDS]
+
+## N+2. Incremental Archive Duplicate Prevention Implementation [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+
+### Decision: Reuse diff command analysis to prevent duplicate incremental archives
+**Rationale:**
+- Ensures consistency by using same comparison logic as diff command
+- Prevents code duplication
+- Compares against reconstructed state (full + most recent incremental) for accuracy
+- Provides clear user feedback when archive creation is skipped
+- Archive selection uses name-based sorting (consistent with diff command and archive naming conventions)
+
+### Implementation Approach:
+- **Reuse Diff Logic**: Leverage `CalculateDiff()` function from diff command implementation
+- **State Reconstruction**: Use `ReconstructArchiveState()` to get effective state
+- **Archive Selection**: Use `findLatestFullArchive()` which uses name-based sorting (consistent with diff command)
+- **Change Detection**: Use diff result to determine if changes exist
+- **Skip Creation**: Skip incremental archive creation if no changes detected
+- **User Feedback**: Display appropriate message using format strings
+
+**Code Structure:**
+- `archive.go`: Modify `createIncrementalArchive()` to use diff analysis before creating archive
+- `archive.go`: Add check for changes using `CalculateDiff()` function
+- `archive.go`: Skip archive creation if `diffResult` shows no changes
+- `formatter.go`: Add format method for skip message (`FormatIncrementalSkippedNoChanges()`, `PrintIncrementalSkippedNoChanges()`)
+- `config.go`: Add format string configuration for skip message (`FormatIncrementalSkippedNoChanges`)
+
+**Code Markers**:
+- `archive.go` line ~695-738: `createIncrementalArchive()` - Integrated diff analysis before archive creation
+  - Line ~697: Calls `ReconstructArchiveState()` to get effective state (full + most recent incremental)
+  - Line ~704: Calls `findLatestFullArchive()` for fallback path (uses name-based sorting)
+  - Line ~744: Calls `findLatestFullArchive()` to get base full archive for naming (uses name-based sorting)
+  - Line ~720: Calls `CalculateDiff()` to detect changes, passing exclude patterns
+  - Line ~726-729: Conditional skip when no changes detected, displays skip message
+  - Line ~700-717: Fallback to old behavior when reconstruction fails (backward compatibility)
+- `archive.go` line ~869-904: `findLatestFullArchive()` - Finds most recent full archive by sorting names (used by incremental archive creation)
+- `formatter.go` line ~1785-1799: `FormatIncrementalSkippedNoChanges()` and `PrintIncrementalSkippedNoChanges()` - Format and print skip message
+- `config.go` line ~153: `FormatIncrementalSkippedNoChanges` - Format string configuration field
+- `config.go` line ~336: Default format string: "No changes detected since last incremental archive. Skipping archive creation.\n"
+- `incremental_duplicate_prevention_test.go`: Comprehensive test suite with 4 test functions covering all scenarios
+
+**Implementation Status**: ✅ Complete
+- All code changes implemented and tested
+- All tests passing (4 test functions, all scenarios covered)
+- Exclude patterns respected via `archiveConfig.GetExcludePatterns()` passed to `CalculateDiff()`
+- Edge cases handled: no incremental (compares against full), no archives (falls back to old behavior)
+- Consistent with diff command behavior (reuses same comparison logic)
+
+**Cross-References**: [ARCH:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:DIFF_COMMAND], [IMPL:DIFF_COMMAND], [REQ:OUTPUT_FORMATTING]

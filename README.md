@@ -94,7 +94,18 @@ bkpdir config
 
 For more control and automation, use configuration files:
 
-**Step 1: Create a basic configuration file** (`.bkpdir.yml`):
+**Step 1: Generate a configuration template** (recommended first step):
+
+```bash
+# Generate a template with all available options and their default values
+bkpdir template
+```
+
+This command outputs a complete configuration template showing all available options and their default values. Save this output to `.bkpdir.yml` and customize as needed.
+
+**Step 2: Create a basic configuration file** (`.bkpdir.yml`):
+
+You can either use the template from Step 1, or create a minimal configuration file:
 
 ```yaml
 # .bkpdir.yml
@@ -116,7 +127,7 @@ include_branch: true
 
 ```
 
-**Step 2: Create archives using the configuration:**
+**Step 3: Create archives using the configuration:**
 
 ```bash
 # Navigate to your project directory
@@ -135,7 +146,7 @@ bkpdir list
 bkpdir config
 ```
 
-**Step 3: Use advanced configuration with inheritance:**
+**Step 4: Use advanced configuration with inheritance:**
 
 Create a base configuration (`base-config.yml`):
 
@@ -179,7 +190,7 @@ show_git_dirty_status: true
 include_branch: true
 ```
 
-**Step 4: Run operations with configuration:**
+**Step 5: Run operations with configuration:**
 
 ```bash
 # All commands now use the configuration file automatically
@@ -196,9 +207,6 @@ bkpdir list
 
 # View effective configuration
 bkpdir config
-
-# Generate configuration template
-bkpdir template
 ```
 
 ## Quick Start
@@ -306,6 +314,8 @@ bkpdir/
 - **Documentation**: AI-optimized documentation system
 
 ## Configuration
+
+> **💡 Tip**: Start with `bkpdir template` to see all available configuration options and their default values. This is the recommended first step when customizing bkpdir locally.
 
 ### Basic Configuration
 

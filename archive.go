@@ -31,6 +31,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 )
@@ -692,22 +693,57 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
+	// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+	// Reconstruct archive state (full + most recent incremental) and check for changes
+	reconstructedState, err := ReconstructArchiveState(archiveDir)
+	var modifiedFiles []string
+
+	if err != nil {
+		// If reconstruction fails (e.g., no archives), fall back to old behavior
+		// This maintains backward compatibility
+		latestFullArchive, err2 := findLatestFullArchive(archiveDir)
+		if err2 != nil {
+			return err2
+		}
+
+		modifiedFiles, err2 = collectModifiedFiles(cwd, latestFullArchive, archiveConfig.GetExcludePatterns())
+		if err2 != nil {
+			return err2
+		}
+
+		if len(modifiedFiles) == 0 {
+			formatter := NewOutputFormatter(config.Config)
+			formatter.PrintNoFilesModified()
+			return nil
+		}
+	} else {
+		// Calculate diff against reconstructed state
+		diff, err := CalculateDiff(cwd, reconstructedState, archiveConfig.GetExcludePatterns())
+		if err != nil {
+			return err
+		}
+
+		// If no changes detected, skip archive creation
+		if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
+			formatter := NewOutputFormatter(config.Config)
+			formatter.PrintIncrementalSkippedNoChanges()
+			return nil
+		}
+
+		// Convert diff result to modified files list for backward compatibility
+		// Only include added and modified files (deleted files don't exist, so can't be archived)
+		// Deleted files are tracked as changes but shouldn't be added to the archive
+		modifiedFiles = make([]string, 0, len(diff.Added)+len(diff.Modified))
+		modifiedFiles = append(modifiedFiles, diff.Added...)
+		modifiedFiles = append(modifiedFiles, diff.Modified...)
+		// Note: diff.Deleted files are changes that trigger archive creation,
+		// but they don't exist so they can't be added to the archive
+	}
+
+	// Get latest full archive for naming (needed in both paths)
 	latestFullArchive, err := findLatestFullArchive(archiveDir)
 	if err != nil {
 		return err
-	}
-
-	modifiedFiles, err := collectModifiedFiles(cwd, latestFullArchive, archiveConfig.GetExcludePatterns())
-	if err != nil {
-		return err
-	}
-
-	if len(modifiedFiles) == 0 {
-		// Use the adapter to get the original config for OutputFormatter
-		// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
-		formatter := NewOutputFormatter(config.Config)
-		formatter.PrintNoFilesModified()
-		return nil
 	}
 
 	archivePath, err := prepareIncrementalArchiveWithInterface(
@@ -831,6 +867,7 @@ func collectModifiedFiles(cwd string, latestFullArchive *Archive, excludePattern
 }
 
 // findLatestFullArchive finds the most recent full archive in the archive directory.
+// [IMPL:DIFF_COMMAND] Sorts by name since timestamps in archive names are alphabetically sortable
 func findLatestFullArchive(archiveDir string) (*Archive, error) {
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
@@ -840,29 +877,29 @@ func findLatestFullArchive(archiveDir string) (*Archive, error) {
 		return nil, NewArchiveError("No archives found", 1)
 	}
 
-	// Find the most recent full archive
-	var latestFullArchive *Archive
-	for i := len(archives) - 1; i >= 0; i-- {
+	// Filter full archives only (skip incremental archives)
+	var fullArchives []Archive
+	for i := range archives {
 		if !archives[i].IsIncremental {
-			latestFullArchive = &archives[i]
-			break
+			fullArchives = append(fullArchives, archives[i])
 		}
 	}
-	if latestFullArchive == nil {
+
+	if len(fullArchives) == 0 {
 		return nil, NewArchiveError("No full archive found", 1)
 	}
 
-	// Get the modification time of the latest full archive
-	latestFullInfo, err := os.Stat(latestFullArchive.Path)
-	if err != nil {
-		return nil, NewArchiveErrorWithCause(
-			"Failed to stat latest full archive",
-			1,
-			err,
-		)
-	}
-	latestFullArchive.CreationTime = latestFullInfo.ModTime()
+	// Sort by name (archive names include timestamps that are alphabetically sortable)
+	// Most recent archive will be last when sorted ascending
+	sort.Slice(fullArchives, func(i, j int) bool {
+		return fullArchives[i].Name < fullArchives[j].Name
+	})
 
+	// Get the last (most recent) archive
+	latestFullArchive := &fullArchives[len(fullArchives)-1]
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: findLatestFullArchive - Selected latest: %s\n", latestFullArchive.Name)
+	}
 	return latestFullArchive, nil
 }
 

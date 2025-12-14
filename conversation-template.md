@@ -31,6 +31,8 @@ This template demonstrates a realistic conversation between a developer and an A
 
 I'll help you add rate limiting to your API endpoints. Following STDD methodology, let me first understand the requirements and document the approach before writing any code.
 
+**Note**: All code, documentation, and comments will use semantic tokens `[REQ:*]`, `[ARCH:*]`, and `[IMPL:*]` for traceability. See `stdd/ai-assistant-compliance.md` for token usage guidelines.
+
 **Questions to clarify requirements:**
 
 1. **Rate limiting scope**: Should this apply to all endpoints, or specific endpoints? Do we need different limits for different endpoints?
@@ -96,7 +98,7 @@ Let me start:
 
 **AI** (updating documentation):
 
-I've documented the requirement `[REQ:RATE_LIMITING]` in `requirements.md` with:
+I've documented the requirement `[REQ:RATE_LIMITING]` in `stdd/requirements.md` with:
 
 - **Description**: Rate limiting for all API endpoints with configurable limits
 - **Rationale**: Prevent abuse and ensure fair resource usage
@@ -122,7 +124,7 @@ I've documented the requirement `[REQ:RATE_LIMITING]` in `requirements.md` with:
 
 **AI** (continuing):
 
-Now documenting architecture decisions in `architecture-decisions.md`:
+Now documenting architecture decisions in `stdd/architecture-decisions.md`:
 
 I've added `[ARCH:RATE_LIMITING_MIDDLEWARE]` which:
 - Uses middleware pattern to intercept requests before handlers
@@ -146,7 +148,7 @@ I've added `[ARCH:CONFIGURATION_MANAGEMENT]` which:
 
 **AI** (continuing):
 
-Now documenting implementation decisions in `implementation-decisions.md`:
+Now documenting implementation decisions in `stdd/implementation-decisions.md`:
 
 I've added `[IMPL:TOKEN_BUCKET_STRUCT]` which:
 - Defines data structure for token bucket state
@@ -172,9 +174,9 @@ I've added `[IMPL:METRICS_EXPOSURE]` which:
 
 **AI** (continuing):
 
-Updated `semantic-tokens.md` with all new tokens and their relationships.
+Updated `stdd/semantic-tokens.md` with all new tokens and their relationships.
 
-Now creating tasks in `tasks.md`:
+Now creating tasks in `stdd/tasks.md`:
 
 I've created the following tasks with priorities:
 
@@ -508,7 +510,7 @@ All tests passing! ✅
 
 **AI** (final documentation update):
 
-Updated `tasks.md`:
+Updated `stdd/tasks.md`:
 - All completed tasks marked as ✅ Complete
 - All subtasks removed from completed tasks
 

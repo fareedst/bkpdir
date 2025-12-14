@@ -174,8 +174,13 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:CONFIGURATION]` → See `requirements.md` § Configuration Management Requirements
 - `[REQ:GIT_INTEGRATION]` → See `requirements.md` § Git Integration Requirements
 - `[REQ:LIST_LIMIT]` → See `requirements.md` § List Command Output Limit Requirements
+- `[REQ:DIFF_COMMAND]` → See `requirements.md` § Diff Command Requirements
+- `[REQ:INCREMENTAL_DUPLICATE_PREVENTION]` → See `requirements.md` § Incremental Archive Duplicate Prevention Requirements
 
 ### Incomplete Requirements
+- `[REQ:INCREMENTAL_DUPLICATE_PREVENTION]` → See `requirements.md` § Incremental Archive Duplicate Prevention Requirements
+  - Architecture: `[ARCH:INCREMENTAL_DUPLICATE_PREVENTION]`
+  - Implementation: `[IMPL:INCREMENTAL_DUPLICATE_PREVENTION]`
 - `[REQ:OUT_002]` → See `requirements.md` § Enhanced Command Output with File Statistics Requirements
 - `[REQ:LINT_001]` → See `requirements.md` § Code Linting Compliance Requirements
 - `[REQ:DOC_015]` → See `requirements.md` § Unicode to Semantic Token Mapping Requirements
@@ -268,6 +273,8 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[ARCH:TOKEN_SYSTEM]` → See `architecture-decisions.md` § Token System Architecture [REQ:DOC_016]
 - `[ARCH:CONFIG_OUTPUT_GROUPING]` → See `architecture-decisions.md` § Configuration Output Grouping [REQ:CONFIG_OUTPUT_GROUPING]
 - `[ARCH:LIST_LIMIT]` → See `architecture-decisions.md` § List Command Limit Architecture [REQ:LIST_LIMIT]
+- `[ARCH:DIFF_COMMAND]` → See `architecture-decisions.md` § Diff Command Architecture [REQ:DIFF_COMMAND]
+- `[ARCH:INCREMENTAL_DUPLICATE_PREVENTION]` → See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
 
 ## Implementation Tokens Registry
 
@@ -297,6 +304,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:PROCESSING_PATTERNS]` → See `implementation-decisions.md` § Processing Patterns Implementation [ARCH:PROCESSING_PATTERNS] [REQ:PERFORMANCE]
 - `[IMPL:AUTO_DETECTION]` → See `implementation-decisions.md` § Auto-Detection Implementation [ARCH:AUTO_DETECTION] [REQ:USABILITY]
 - `[IMPL:FILE_STATISTICS]` → See `implementation-decisions.md` § File Statistics Implementation [ARCH:FILE_STATISTICS] [REQ:OUTPUT_FORMATTING]
+- `[IMPL:FILE_STATISTICS_TEMPLATE_FIX]` → See `implementation-decisions.md` § File Statistics Template Processing Fix [ARCH:FILE_STATISTICS] [REQ:OUT_002] [REQ:OUTPUT_FORMATTING]
 - `[IMPL:DIRECTORY_COMPARISON]` → See `implementation-decisions.md` § Directory Comparison Implementation [ARCH:DIRECTORY_COMPARISON]
 - `[IMPL:EXCLUSION_PATTERNS]` → See `implementation-decisions.md` § Exclusion Patterns Implementation [ARCH:EXCLUSION_PATTERNS] [REQ:CONFIGURATION]
 - `[IMPL:CFG_006]` → See `implementation-decisions.md` § Configuration Reflection Implementation [ARCH:CFG_006] [REQ:CFG_006]
@@ -333,6 +341,8 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:CFG_INHERITANCE_PATH_RESOLUTION]` → See `implementation-decisions.md` § Inheritance Path Resolution Fix [ARCH:CFG_005] [REQ:CFG_005] [REQ:CONFIGURATION]
 - `[IMPL:TEST_UNICODE_HANDLING]` → See `implementation-decisions.md` § Unicode and Special Character Handling Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
 - `[IMPL:LIST_LIMIT]` → See `implementation-decisions.md` § List Command Limit Implementation [ARCH:LIST_LIMIT] [REQ:LIST_LIMIT]
+- `[IMPL:DIFF_COMMAND]` → See `implementation-decisions.md` § Diff Command Implementation [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+- `[IMPL:INCREMENTAL_DUPLICATE_PREVENTION]` → See `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
 
 
 ## Quick Reference Index

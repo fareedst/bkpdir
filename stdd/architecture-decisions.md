@@ -1225,3 +1225,64 @@ We will implement a grouped and ranked presentation for configuration output.
 - **No validation**: Rejected - users can easily make mistakes without guidance
 
 **Cross-References**: [REQ:CUSTOMIZABLE_FORMAT_STRINGS], [REQ:CONFIGURATION], [REQ:OUTPUT_FORMATTING], [REQ:USABILITY], [ARCH:CONFIG_SYSTEM], [ARCH:OUTPUT_FORMATTING]
+
+## 50. Diff Command Architecture [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+
+### Decision: Implement diff command that reconstructs archive union state before comparison
+**Rationale:**
+- Users need visibility into changes before creating incremental archives
+- Comparing against the union (full + most recent incremental) provides accurate change detection
+- Reusing diff logic for duplicate prevention ensures consistency
+- Enables users to preview what would be included in next incremental backup
+
+**Architecture Approach:**
+- **Archive State Reconstruction**: Reconstruct effective state by applying most recent incremental archive on top of most recent full archive
+- **Archive Selection**: Use name-based sorting to find most recent archives (archive names include alphabetically sortable timestamps in ISO 8601 format)
+- **Comparison Engine**: Compare reconstructed archive state against current directory state
+- **Change Detection**: Identify added files, modified files, and deleted files
+- **Output Formatting**: Use configurable format strings consistent with other commands
+- **Integration with Incremental Creation**: Share comparison logic with incremental archive duplicate prevention
+
+**Key Components:**
+1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+3. **Directory Comparison**: Compare current directory against reconstructed state
+4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+5. **CLI Command Integration**: Add `diff` command to CLI framework
+
+**Alternatives Considered:**
+- **Compare only against full archive**: Rejected - doesn't account for existing incremental changes
+- **Compare only against most recent incremental**: Rejected - incremental archives are deltas, not complete states
+- **Separate diff logic from duplicate prevention**: Rejected - code duplication, inconsistency risk
+- **Use file modification times for archive selection**: Rejected - less reliable than name-based sorting, archive names include timestamps that are alphabetically sortable, simpler implementation without file system stat calls
+
+**Cross-References**: [REQ:DIFF_COMMAND], [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:OUTPUT_FORMATTING], [REQ:CONFIGURATION], [ARCH:DIRECTORY_COMPARISON], [ARCH:CLI_COMMANDS]
+
+## 51. Incremental Archive Duplicate Prevention Architecture [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+
+### Decision: Use diff command analysis to prevent duplicate incremental archives
+**Rationale:**
+- Prevents unnecessary incremental archives when no changes exist
+- Saves disk space and reduces archive clutter
+- Ensures consistency by reusing same comparison logic as diff command
+- Compares against reconstructed state (full + most recent incremental) for accuracy
+
+**Architecture Approach:**
+- **Reuse Diff Logic**: Leverage diff command comparison engine for duplicate detection
+- **State Reconstruction**: Reconstruct effective state from full + most recent incremental archive
+- **Change Detection**: Use same change detection logic as diff command
+- **Skip Creation**: Skip incremental archive creation if no changes detected
+- **User Feedback**: Display appropriate message when archive creation is skipped
+
+**Integration Points:**
+1. **Incremental Archive Creation**: Modify `createIncrementalArchive` to use diff analysis
+2. **Archive State Reconstruction**: Share reconstruction logic with diff command
+3. **Comparison Engine**: Reuse comparison logic from diff command
+4. **Output Formatting**: Use consistent format strings for skip messages
+
+**Alternatives Considered:**
+- **Compare only against full archive**: Rejected - allows duplicate incrementals with no changes
+- **Separate comparison logic**: Rejected - code duplication and potential inconsistency
+- **Always create incremental**: Rejected - wastes disk space and creates clutter
+
+**Cross-References**: [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:DIFF_COMMAND], [REQ:OUTPUT_FORMATTING], [ARCH:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON]
