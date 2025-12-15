@@ -1,12 +1,20 @@
-# BkpDir - AI-First Directory Archiving CLI
+# BkpDir - Intelligent Directory Archiving CLI
 
-A powerful command-line tool for creating and managing directory archives with AI-optimized development workflow.
+A powerful command-line tool for creating and managing directory archives with intelligent incremental backups, git integration, and flexible configuration.
 
-## 📹 Visual Demonstration
+## 📹 Visual Demonstrations
 
-**Watch the demo below to see bkpdir in action!** This GIF demonstrates how to use and configure bkpdir, including creating archives, managing incremental backups, and working with configuration files.
+**Explore short demos that show bkpdir’s help, everyday usage, and configuration workflows.** Each GIF links to the matching section in this README so you can jump straight into details.
 
-![bkpdir Demo - Usage and Configuration Example](images/bkpdir-demo-optimized.gif)
+![bkpdir Demo - Help and CLI Overview](images/bkpdir-demo-help-optimized.gif)
+
+In this demo, bkpdir turns one configuration file into a repeatable task runner for your backups, letting you standardize archive locations, exclusions, and naming across projects.  
+
+![bkpdir Demo - End-to-End Usage Example](images/bkpdir-demo-full-optimized.gif)
+
+The configuration system is highly flexible, with layered YAML files, inheritance, and customizable format strings that let you control archive naming, exclusions, and output formatting for different workflows.
+
+![bkpdir Demo - Configuration and Templates](images/bkpdir-demo-config-optimized.gif)
 
 ## Most Common Commands
 
