@@ -6,15 +6,15 @@ A powerful command-line tool for creating and managing directory archives with i
 
 **Explore short demos that show bkpdir’s help, everyday usage, and configuration workflows.** Each GIF links to the matching section in this README so you can jump straight into details.
 
-![bkpdir Demo - Help and CLI Overview](images/bkpdir-demo-help-optimized.gif)
+[![bkpdir Demo - Help and CLI Overview](images/bkpdir-demo-help-optimized.gif)](#most-common-commands)
 
 In this demo, bkpdir turns one configuration file into a repeatable task runner for your backups, letting you standardize archive locations, exclusions, and naming across projects.  
 
-![bkpdir Demo - End-to-End Usage Example](images/bkpdir-demo-full-optimized.gif)
+[![bkpdir Demo - End-to-End Usage Example](images/bkpdir-demo-full-optimized.gif)](#complex-usage-scenario)
 
 The configuration system is highly flexible, with layered YAML files, inheritance, and customizable format strings that let you control archive naming, exclusions, and output formatting for different workflows.
 
-![bkpdir Demo - Configuration and Templates](images/bkpdir-demo-config-optimized.gif)
+[![bkpdir Demo - Configuration and Templates](images/bkpdir-demo-config-optimized.gif)](#configuration)
 
 ## Most Common Commands
 
