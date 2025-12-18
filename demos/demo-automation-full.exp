@@ -1,0 +1,221 @@
+#!/usr/bin/expect -f
+# Expect script for bkpdir demo automation - Demo 2: Advanced Features
+# Demonstrates advanced features like comparison, restore, and configuration management
+# Usage: ./demo-automation-full.exp <DEMO_DIR> <BKPDIR_BIN> <PROJECT_ROOT> <CAST_FILE>
+
+set timeout 10
+set demo_dir [lindex $argv 0]
+set bkpdir_bin [lindex $argv 1]
+set project_root [lindex $argv 2]
+set cast_file [lindex $argv 3]
+
+# Start asciinema recording
+spawn asciinema rec --append $cast_file
+
+# Wait for prompt
+expect "$ "
+
+# set the shell's prompt to "$" and define the demo_stage and demo_bkpdir_cmd functions
+send "PS1='\$ '; demo_stage () { echo -e \"\r\\033\[1;32m\$@\\033\[0m\" ; } ; demo_bkpdir_cmd () { echo -e \"\r\\033\[1;35m\$@\\033\[0m\" ; }\r"
+expect "$ "
+
+send "clear\r"
+expect "$ "
+
+# Full second delay at the start
+sleep 1
+
+# describe the entire demo
+send "demo_stage 'This demo will show advanced bkpdir features: comparison, restore, and configuration management'\r"
+expect "$ "
+sleep 3
+
+# Navigate to demo directory
+send "demo_stage 'Navigating to demo directory'\r"
+expect "$ "
+
+send "cd $demo_dir\r"
+expect "$ "
+sleep 0.5
+
+# Create project structure
+send "mkdir -p myproject && cd myproject\r"
+expect "$ "
+sleep 0.5
+
+# Initialize git
+send "git init\r"
+expect "$ "
+sleep 1
+
+# Create sample files with more complexity
+send "demo_stage 'Creating project files'\r"
+expect "$ "
+send "echo '# My Project' > README.md\r"
+expect "$ "
+sleep 0.3
+send "echo 'package main' > main.go\r"
+expect "$ "
+sleep 0.3
+send "echo 'import \"fmt\"' >> main.go\r"
+expect "$ "
+sleep 0.3
+send "echo 'func main() { fmt.Println(\"Hello\") }' >> main.go\r"
+expect "$ "
+sleep 0.3
+send "mkdir -p src/components && echo 'export default Component' > src/components/Button.js\r"
+expect "$ "
+sleep 0.3
+send "echo 'export default Component' > src/components/Header.js\r"
+expect "$ "
+sleep 0.3
+send "mkdir -p tests && echo 'describe(\"tests\")' > tests/test.js\r"
+expect "$ "
+sleep 0.5
+
+# Initial git commit
+send "demo_stage 'Initial git commit'\r"
+expect "$ "
+send "git add .\r"
+expect "$ "
+sleep 0.5
+send "git commit -m 'Initial commit'\r"
+expect "$ "
+sleep 1.5
+
+# Create .bkpdir.yml with advanced configuration
+send "demo_stage 'Creating advanced .bkpdir.yml configuration'\r"
+expect "$ "
+send "cat > .bkpdir.yml << 'EOF'\r"
+send "# .bkpdir.yml - Advanced Configuration\r"
+send "archive_dir_path: \"./archives\"\r"
+send "use_current_dir_name: true\r"
+send "\r"
+send "# Exclude patterns for files/directories to skip\r"
+send "exclude_patterns:\r"
+send "  - \".git/\"\r"
+send "  - \"node_modules/\"\r"
+send "  - \"*.tmp\"\r"
+send "  - \"*.log\"\r"
+send "  - \"tests/\"\r"
+send "\r"
+send "# Git integration settings\r"
+send "include_git_info: true\r"
+send "show_git_dirty_status: true\r"
+send "include_branch: true\r"
+send "EOF\r"
+expect "$ "
+sleep 1
+
+# Show config
+send "demo_bkpdir_cmd 'Advanced configuration with exclusions'\r"
+expect "$ "
+sleep 0.5
+send "cat .bkpdir.yml | yq -P\r"
+expect "$ "
+sleep 2.5
+
+# Create initial full archive
+send "demo_stage 'Creating initial full archive'\r"
+expect "$ "
+sleep 1
+send "$bkpdir_bin .\r"
+expect "$ "
+sleep 3.5
+
+# Make significant changes
+send "demo_stage 'Making significant changes to project'\r"
+expect "$ "
+sleep 1
+send "echo '// New feature added' >> main.go\r"
+expect "$ "
+sleep 0.3
+send "echo 'export default NewComponent' > src/components/Footer.js\r"
+expect "$ "
+sleep 0.3
+send "echo 'Updated project' >> README.md\r"
+expect "$ "
+sleep 0.5
+send "git add . && git commit -m 'Add new features'\r"
+expect "$ "
+sleep 2
+
+# Create incremental archive
+send "demo_stage 'Creating incremental archive'\r"
+expect "$ "
+sleep 1
+send "$bkpdir_bin inc\r"
+expect "$ "
+sleep 3.5
+
+# Show archive comparison
+send "demo_stage 'Comparing archives'; demo_bkpdir_cmd 'Compare: bkpdir can show differences between archives'\r"
+expect "$ "
+sleep 1
+send "$bkpdir_bin list\r"
+expect "$ "
+sleep 2
+send "demo_bkpdir_cmd 'Archive comparison helps identify what changed between backups'\r"
+expect "$ "
+sleep 2
+
+# Make more changes
+send "demo_stage 'Making additional changes'\r"
+expect "$ "
+sleep 1
+send "echo '// Another update' >> main.go\r"
+expect "$ "
+sleep 0.3
+send "echo 'More updates' >> README.md\r"
+expect "$ "
+sleep 0.5
+send "git add . && git commit -m 'Additional updates'\r"
+expect "$ "
+sleep 2
+
+# Create another incremental
+send "demo_stage 'Creating another incremental archive'\r"
+expect "$ "
+sleep 1
+send "$bkpdir_bin inc\r"
+expect "$ "
+sleep 3.5
+
+# List all archives with details
+send "demo_stage 'Listing all archives with details'\r"
+expect "$ "
+sleep 1
+send "demo_bkpdir_cmd 'List: bkpdir shows comprehensive archive information'\r"
+expect "$ "
+sleep 1
+send "$bkpdir_bin list\r"
+expect "$ "
+sleep 3
+
+# Show archive sizes and structure
+send "demo_stage 'Archive sizes and structure'\r"
+expect "$ "
+sleep 0.5
+send "ls -lh archives/*/*.zip 2>/dev/null | awk '{print \$5, \$9}' | head -5\r"
+expect "$ "
+sleep 2.5
+
+# Show project structure after changes
+send "demo_stage 'Final project structure'\r"
+expect "$ "
+sleep 0.5
+send "find . -not -path '*/\.*' -not -path '*/archives/*' | sort\r"
+expect "$ "
+sleep 2.5
+
+# Show archive directory tree
+send "demo_stage 'Archive directory tree structure'\r"
+expect "$ "
+sleep 0.5
+send "tree archives 2>/dev/null || find archives -type f | head -10\r"
+expect "$ "
+sleep 2.5
+
+# Exit asciinema (Ctrl+C)
+send "\x03"
+expect eof

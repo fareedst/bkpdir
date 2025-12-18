@@ -1,6 +1,6 @@
 # STDD Conversation Template: Adding a Feature to an Existing Complex Application
 
-**STDD Methodology Version**: 1.0.0
+**STDD Methodology Version**: 1.0.1
 
 This template demonstrates a realistic conversation between a developer and an AI-coder following the STDD methodology when adding a feature to an existing, complex application.
 
@@ -30,8 +30,6 @@ This template demonstrates a realistic conversation between a developer and an A
 **AI**: "Observing AI principles!"
 
 I'll help you add rate limiting to your API endpoints. Following STDD methodology, let me first understand the requirements and document the approach before writing any code.
-
-**Note**: All code, documentation, and comments will use semantic tokens `[REQ:*]`, `[ARCH:*]`, and `[IMPL:*]` for traceability. See `stdd/ai-assistant-compliance.md` for token usage guidelines.
 
 **Questions to clarify requirements:**
 
