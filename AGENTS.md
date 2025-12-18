@@ -1,6 +1,6 @@
 # Cursor AI Agent Rules for STDD Projects
 
-**STDD Methodology Version**: 1.0.2
+**STDD Methodology Version**: 1.0.0
 
 ## 🎯 Semantic Token-Driven Development (STDD)
 
@@ -29,20 +29,15 @@ Then proceed to:
 2. **Semantic Token System** (Core to STDD)
    - Semantic tokens are the mechanism that preserves intent throughout the development lifecycle
    - Use semantic tokens for all cross-referencing
-   - Format: `[TYPE:IDENTIFIER]` (e.g., `[REQ:FEATURE]`, `[IMPL:IMPLEMENTATION]`)
+   - Format: `[TYPE:IDENTIFIER]` (e.g., `[REQ:MONITOR]`, `[IMPL:ASYNC_EXECUTION]`)
    - Reference tokens in code comments, test names, and documentation
    - Update `stdd/semantic-tokens.md` when creating new tokens
    - Maintain traceability: Requirements → Architecture → Implementation → Tests → Code
 
 3. **Development Process**
    - **Phase 1**: Expand requirements into pseudo-code and decisions (NO code changes)
-     - **MANDATORY**: Identify logical modules and document module boundaries [REQ:MODULE_VALIDATION]
    - **Phase 2**: Break down into trackable tasks with priorities
-     - **MANDATORY**: Create separate tasks for module development, module validation, and integration [REQ:MODULE_VALIDATION]
    - **Phase 3**: Implement tasks, starting with highest priority
-     - **MANDATORY**: Develop each logical module independently [REQ:MODULE_VALIDATION]
-     - **MANDATORY**: Validate each module independently (unit tests with mocks, contract tests, edge cases, error handling) before integration [REQ:MODULE_VALIDATION]
-     - **MANDATORY**: Only integrate modules after validation passes [REQ:MODULE_VALIDATION]
    - Always cross-reference using semantic tokens
 
 4. **Task Management**
@@ -137,13 +132,7 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
 3. Cross-reference: Requirements → Architecture → Implementation → Tests
 4. **MANDATORY**: Break work into trackable tasks in `stdd/tasks.md` BEFORE starting implementation
 5. **MANDATORY**: Assign appropriate priorities to all tasks
-6. **MANDATORY**: Module Validation [REQ:MODULE_VALIDATION]:
-   - Identify logical modules and document module boundaries before development
-   - Develop each module independently
-   - Validate each module independently (unit tests with mocks, contract tests, edge cases, error handling) BEFORE integration
-   - Only integrate modules after validation passes
-   - Document module validation results
-7. **MANDATORY**: Update documentation AS YOU WORK:
+6. **MANDATORY**: Update documentation AS YOU WORK:
    - Record architecture decisions in `stdd/architecture-decisions.md` immediately when made
    - Record implementation decisions in `stdd/implementation-decisions.md` immediately when made
    - Update `stdd/tasks.md` when planning new work or completing tasks
@@ -169,8 +158,6 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
 - Don't create tasks without priorities
 - Don't leave subtasks after parent task completes
 - Don't implement P2/P3 features before P0/P1 are complete
-- **Don't integrate modules before validating them independently** [REQ:MODULE_VALIDATION]
-- **Don't skip module validation** - it's mandatory to eliminate complexity-related bugs
 
 ## 📚 Key Files
 
@@ -189,22 +176,18 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
 
 ## 🎯 Example Workflow
 
-1. **User Request**: "Add feature X"
+1. **User Request**: "Add disk space checking"
 2. **AI Response (Planning Phase - NO CODE YET)**: 
-   - Creates `[REQ:FEATURE_X]` token in `stdd/requirements.md`
+   - Creates `[REQ:DISK_SPACE_CHECK]` token in `stdd/requirements.md`
    - Expands into pseudo-code and decisions
-   - **IMMEDIATELY** identifies logical modules and documents module boundaries [REQ:MODULE_VALIDATION]
-   - **IMMEDIATELY** documents architecture decisions in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens cross-referencing `[REQ:FEATURE_X]`
+   - **IMMEDIATELY** documents architecture decisions in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens cross-referencing `[REQ:DISK_SPACE_CHECK]`
    - **IMMEDIATELY** documents implementation decisions in `stdd/implementation-decisions.md` with `[IMPL:*]` tokens cross-referencing both `[ARCH:*]` and `[REQ:*]` tokens
    - **IMMEDIATELY** updates `stdd/semantic-tokens.md` with all new tokens
-   - **IMMEDIATELY** creates tasks in `stdd/tasks.md` with separate tasks for module development, module validation, and integration [REQ:MODULE_VALIDATION]
+   - **IMMEDIATELY** creates tasks in `stdd/tasks.md` with P1 priority and semantic token references
    - **NO code changes yet**
 3. **User Approval**: User reviews and approves planning documents
 4. **Implementation Phase**: 
    - AI implements tasks, starting with highest priority
-   - **MANDATORY**: Develops each module independently [REQ:MODULE_VALIDATION]
-   - **MANDATORY**: Validates each module independently (unit tests with mocks, contract tests, edge cases, error handling) before integration [REQ:MODULE_VALIDATION]
-   - **MANDATORY**: Only integrates modules after validation passes [REQ:MODULE_VALIDATION]
    - **DURING implementation**: Updates documentation as decisions are made or refined
    - **DURING implementation**: Updates `stdd/tasks.md` as subtasks are completed
 5. **Completion Phase**: 
@@ -212,5 +195,4 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
    - **MANDATORY**: Marks tasks complete in `stdd/tasks.md`
    - **MANDATORY**: Removes completed subtasks
    - **MANDATORY**: Ensures all semantic tokens are documented
-   - **MANDATORY**: Verifies module validation was completed before integration
 

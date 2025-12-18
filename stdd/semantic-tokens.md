@@ -1,6 +1,6 @@
 # Semantic Tokens Directory
 
-**STDD Methodology Version**: 1.0.1
+**STDD Methodology Version**: 1.0.2
 
 ## Overview
 This document serves as the **central directory/registry** for all semantic tokens used in the project. Semantic tokens (`[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`) provide a consistent vocabulary and traceability mechanism that ties together all documentation, code, and tests.
@@ -204,6 +204,19 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:TEST_EXCLUDE_MERGE]` → See `requirements.md` § Exclude Patterns Merge Testing Requirements
   - Architecture: `[ARCH:TEST_EXCLUDE_MERGE]`
   - Implementation: `[IMPL:TEST_EXCLUDE_MERGE]`
+
+### Governance Requirements
+
+- [REQ:GOVERNANCE_DOCUMENTATION] Governance rules must be documented with explicit anchors and cross-links to ARCH/IMPL decisions.
+- [REQ:GOV_POLICY_MIGRATION] Migration of governance policies into STDD decision documents.
+- [REQ:GOV_CHANGE_CONTROL] Requirements for proposing, approving, and rolling out governance changes.
+- [REQ:GOV_AUDIT] Regular auditing of governance rules; ensure alignment with decisions and tests.
+- [REQ:GOV_REGISTRY_COMPLETENESS] Registry must capture all governance-related tokens and their intents.
+- [REQ:GOV_DISCOVERABILITY] Centralized discoverability of governance content via docs/index.md with links to tokens and decisions.
+- [REQ:GOV_NAMING_CONVENTIONS] Establish and enforce token naming conventions for governance-related tokens.
+- [REQ:GOV_CROSS_LINKING] Each REQ token must be cross-linked to relevant ARCH/IMPL decisions.
+- [REQ:GOV_MIGRATION_STATUS] Track the progress/status of governance-content migration to ARCH/IMPL docs.
+- [REQ:REGISTRY_COMPLETION_VERIFICATION] Verification rule that ensures registry remains complete over time.
 
 ### Non-Functional Requirements
 - `[REQ:PERFORMANCE]` → See `requirements.md` § Performance Requirements
