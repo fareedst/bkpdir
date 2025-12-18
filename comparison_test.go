@@ -1,3 +1,4 @@
+// [REQ:DIFF_COMMAND]
 // This file is part of bkpdir
 
 // Directory comparison testing for incremental archive detection

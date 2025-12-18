@@ -1,3 +1,4 @@
+// [IMPL:TESTING] [ARCH:TESTING_STRATEGY] [REQ:CODE_QUALITY]
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
 

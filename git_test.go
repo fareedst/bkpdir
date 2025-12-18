@@ -1,3 +1,4 @@
+// [REQ:GIT_INTEGRATION]
 // This file is part of bkpdir
 // DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 

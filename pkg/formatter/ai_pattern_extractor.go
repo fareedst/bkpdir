@@ -1,3 +1,4 @@
+// [IMPL:DUAL_FORMATTING] [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
 // AI-First Pattern Extractor Implementation
 // Provides structured data extraction for optimal AI assistant comprehension.
 //

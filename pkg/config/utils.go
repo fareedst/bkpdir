@@ -1,3 +1,4 @@
+// [IMPL:CONFIG_STRUCT] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 // Package config provides utility components for configuration management.
 //
 // This file contains supporting utilities for the configuration system including

@@ -1,3 +1,4 @@
+// [REQ:IMMUTABLE_CLI_COMMANDS]
 // This file is part of bkpdir
 //
 // Package cli provides tests for the CLI framework components.

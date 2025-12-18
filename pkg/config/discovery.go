@@ -1,3 +1,4 @@
+// [IMPL:CONFIG_STRUCT] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 // Package config provides configuration discovery and path management.
 //
 // This file contains the generalized configuration discovery logic extracted

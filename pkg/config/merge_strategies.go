@@ -1,3 +1,4 @@
+// [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH:CFG_005] [REQ:CFG_005]
 // Package config provides merge strategies for layered configuration inheritance.
 //
 // This file implements the merge strategies that enable flexible configuration

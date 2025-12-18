@@ -241,6 +241,30 @@ This document tracks all tasks and subtasks for implementing this project. Tasks
 
 **Priority Rationale**: P0 - Critical foundation for AI-first development
 
+## P0: Legacy Token Registry Migration [REQ:DOC_016] [REQ:GOV_REGISTRY_COMPLETENESS] [ARCH:TOKEN_SYSTEM] [IMPL:TOKEN_SYSTEM]
+
+**Status**: ✅ Complete
+
+**Description**: Consolidate the legacy `project-tokens.yaml` registry into `stdd/semantic-tokens.md`, ensuring each token is linked to its requirement, architecture, implementation, and test references before retiring the YAML source.
+
+**Dependencies**: [REQ:DOC_016] (Token system requirements), [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM], [REQ:GOV_REGISTRY_COMPLETENESS]
+
+**Subtasks**:
+- [x] Inventory YAML-defined actions/features/specifications and map them to `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`, `[TEST:*]`, and `[GOV:*]` identifiers with source citations.
+- [x] Cross-check each token against `requirements.md`, `architecture-decisions.md`, `implementation-decisions.md`, code, and tests; open follow-up tasks for any missing anchors.
+- [x] Draft new sections in `stdd/semantic-tokens.md` with canonical entries per token, including status, scope, and cross-layer references.
+- [x] Append migrated tokens to `stdd/semantic-tokens.md` and create alias notes so existing documents retain traceability during the transition.
+- [x] Remove migrated entries from `project-tokens.yaml`, leaving a minimal stub pointing contributors to the new registry.
+- [x] Run semantic token validation scripts and targeted `trace` checks to confirm cross-layer coverage after each migration batch.
+
+**Completion Criteria**:
+- [x] All tokens listed in `project-tokens.yaml` represented in `stdd/semantic-tokens.md` with cross-references to requirements, architecture, implementation, tests, and code.
+- [x] `project-tokens.yaml` either empty or replaced by a stub referencing the STDD registry.
+- [x] Token validation scripts pass without missing-token warnings.
+- [x] Documentation (requirements, decisions, tasks) updated to reference the unified registry.
+
+**Priority Rationale**: P0 - Registry consolidation is critical for maintaining STDD-compliant traceability and governance.
+
 ## P0: Dependency Analysis and Interface Standardization [REFACTOR-001] [ARCH:CODE_ORGANIZATION] [IMPL:REFACTOR_PREP]
 
 **Status**: ⏳ Pending
@@ -887,3 +911,25 @@ EXTRACT-008 → EXTRACT-009, EXTRACT-010
 6. P1: Code Linting Compliance (LINT-001)
 7. P2: Selective Coverage Reporting (COV-003)
 8. Migration tasks (can proceed in parallel)
+
+## P1: Token Coverage Remediation [REQ:DOC_016]
+
+**Status**: ✅ Complete
+
+**Description**: Add missing semantic tokens to source functions and test functions identified by the token coverage analysis and update `stdd/semantic-tokens.md` where new tokens are introduced. Prioritize public APIs and tests.
+
+**Dependencies**: [REQ:DOC_016], [ARCH:TOKEN_SYSTEM], token-coverage-analysis results
+
+**Subtasks**:
+- [x] Add implementation tokens to public functions in `pkg/*`, `cmd/*`, and `internal/*` (batch 1..4)
+- [x] Add test tokens to test suites listed in the report (batch 1..4)
+- [x] Update `stdd/semantic-tokens.md` with any new tokens created
+- [x] Re-run `scripts/token-coverage-analysis.sh` and validate >= 100% coverage
+- [x] Iterate on remaining files until 100% coverage
+
+**Completion Criteria**:
+- [x] All public functions and tests include appropriate semantic tokens
+- [x] Token registry updated for any new tokens
+- [x] Token coverage report indicates progress and no regressions
+
+**Priority Rationale**: P1 - Improves AI navigation and ensures traceability; not blocking but high value

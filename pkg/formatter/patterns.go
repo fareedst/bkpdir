@@ -1,3 +1,4 @@
+// [IMPL:DUAL_FORMATTING] [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
 // Pattern extraction and regex-based data extraction for the formatter package.
 // Provides functionality to extract structured data from filenames and text
 // using named regex groups for template processing.

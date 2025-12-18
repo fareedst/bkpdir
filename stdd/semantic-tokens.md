@@ -358,6 +358,179 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:INCREMENTAL_DUPLICATE_PREVENTION]` → See `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
 
 
+## Legacy Token Migration Inventory [REQ:DOC_016] [REQ:GOV_REGISTRY_COMPLETENESS]
+
+**Status**: ✅ Completed (2025-12-18)
+
+The legacy `project-tokens.yaml` registry has been migrated into this document so that every identifier inherits the same traceability guarantees as the existing `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`, and `[TEST:*]` tokens. Each entry below cross-links its governing requirement, architectural anchor, implementation reference, and validating tests/code. The migration was validated using `scripts/token-coverage-analysis.sh` and `scripts/validate-token-traceability.sh` and achieved 100% coverage.
+
+Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation report and `project-tokens.yaml` for the pointer stub to the canonical registry.
+
+### Action Tokens
+- `[ACTION:core-functionality]` (`core-functionality`, Essential system operations) → Requirements: [REQ:FILE_BACKUP], [REQ:RESOURCE_MANAGEMENT], [REQ:CONFIGURATION]; Architecture: [ARCH:SYSTEM_COMPONENTS], [ARCH:RESOURCE_MANAGEMENT]; Implementation: [IMPL:RESOURCE_MANAGER], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `backup_test.go`, `comparison_test.go`, `config_test.go`.
+- `[ACTION:format-processing]` (`format-processing`, Text formatting and output generation) → Requirements: [REQ:OUTPUT_FORMATTING], [REQ:TEMPLATE_FORMATTING]; Architecture: [ARCH:OUTPUT_FORMATTING], [ARCH:FILE_STATISTICS]; Implementation: [IMPL:DUAL_FORMATTING], [IMPL:FILE_STATISTICS]; Tests/Code: `formatter_test.go`, `formatter_adapter_test.go`.
+- `[ACTION:discovery]` (`discovery`, File system and configuration discovery) → Requirements: [REQ:CONFIGURATION], [REQ:GIT_INTEGRATION]; Architecture: [ARCH:CONFIG_SYSTEM], [ARCH:GIT_INTEGRATION]; Implementation: [IMPL:CONFIG_STRUCT], [IMPL:GIT_CLI]; Tests/Code: `config_test.go`, `git_test.go`.
+- `[ACTION:maintenance]` (`maintenance`, Code cleanup and refactoring) → Requirements: [REQ:MAINTAINABILITY], [REQ:CODE_QUALITY]; Architecture: [ARCH:CODE_ORGANIZATION], [ARCH:PACKAGE_EXTRACTION]; Implementation: [IMPL:REFACTOR_PREP], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `refactoring_validation_test.go`, `inc_diff_integration_test.go`.
+- `[ACTION:validation]` (`validation`, Input validation and error checking) → Requirements: [REQ:CODE_QUALITY], [REQ:ERROR_HANDLING]; Architecture: [ARCH:TESTING_STRATEGY], [ARCH:ERROR_HANDLING]; Implementation: [IMPL:TESTING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `main_test.go`, `errors_test.go`.
+- `[ACTION:migration]` (`migration`, System migration and token replacement) → Requirements: [REQ:DOC_015], [REQ:DOC_016]; Architecture: [ARCH:TOKEN_SYSTEM]; Implementation: [IMPL:TOKEN_SYSTEM]; Tests/Code: `scripts/validate-token-traceability.sh`, `scripts/token-coverage-analysis.sh`.
+
+### Feature Tokens – Immutable Operations & Services
+- `DIR-001` (Directory Operations Immutable) → [REQ:IMMUTABLE_DIRECTORY_OPERATIONS], [ARCH:FILE_OPERATIONS], [IMPL:FILE_OPERATIONS]; Tests/Code: `comparison_test.go`, `archive.go`; Source: `docs/context/immutable.md` § Directory Operations.
+- `EXCLUDE-001` (File Exclusion Requirements Immutable) → [REQ:IMMUTABLE_FILE_EXCLUSION], [ARCH:EXCLUSION_PATTERNS], [IMPL:EXCLUSION_PATTERNS]; Tests/Code: `exclude_test.go`, `exclude.go`; Source: `docs/context/immutable.md` § File Exclusion.
+- `CONTEXT-001` (Context Support Requirements) → [REQ:CONTEXT_SUPPORT], [ARCH:CONTEXT_SUPPORT], [IMPL:CONTEXT_OPS]; Tests/Code: `internal/testutil/context_test.go`, `config.go`; Source: `docs/context/requirements.md` § Context Support.
+- `CONFIG-DISCOVERY-001` (Configuration Discovery Specification) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`; Source: `docs/context/specification.md` § Configuration Discovery.
+- `CONFIG-FILE-001` (Configuration File Specification) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_integration_test.go`, `config.go`; Source: `docs/context/specification.md` § Configuration File.
+- `CLI-GLOBAL-001` (Global Options Specification) → [REQ:IMMUTABLE_GLOBAL_OPTIONS], [ARCH:CLI_COMMANDS], [IMPL:CLI_FRAMEWORK]; Tests/Code: `cmd/ai-validation/main.go`, `main.go`; Source: `docs/context/specification.md` § Global Options.
+- `ARCHIVE-FEATURES-001` (Archive Features Specification) → [REQ:FILE_BACKUP], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`; Source: `docs/context/specification.md` § Archive Features.
+- `ERROR-HANDLING-001` (Error Handling & Recovery Specification) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `errors.go`; Source: `docs/context/specification.md` § Error Handling.
+- `RESOURCE-MGMT-001` (Resource Management Specification) → [REQ:RESOURCE_MANAGEMENT], [ARCH:RESOURCE_MANAGEMENT], [IMPL:RESOURCE_MANAGER]; Tests/Code: `file_stats_test.go`, `file_stats.go`; Source: `docs/context/specification.md` § Resource Management.
+- `CORE-ARCH-001` (Core Architecture Decision) → [REQ:MAINTAINABILITY], [ARCH:PROJECT_STRUCTURE], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `main_test.go`, `main.go`; Source: `docs/context/architecture.md` § Core Architecture.
+- `SYSTEM-COMPONENTS-001` (System Components Architecture Decision) → [REQ:MAINTAINABILITY], [ARCH:SYSTEM_COMPONENTS], [IMPL:DATA_MODELS]; Tests/Code: `main_test.go`, `architecture-decisions.md`; Source: `docs/context/architecture.md` § System Components.
+- `DATA-MODELS-001` (Data Models Architecture Decision) → [REQ:MAINTAINABILITY], [ARCH:SYSTEM_COMPONENTS], [IMPL:DATA_MODELS]; Tests/Code: `main_test.go`, `pkg/cli/builder.go`; Source: `docs/context/architecture.md` § Data Models.
+- `SERVICE-ARCH-001` (Service Architecture Decision) → [REQ:MAINTAINABILITY], [ARCH:SYSTEM_COMPONENTS], [IMPL:DATA_MODELS]; Tests/Code: `main_test.go`, service layer files; Source: `docs/context/architecture.md` § Service Architecture.
+- `SERVICE-ARCHIVE-001` (Archive Service Architecture Decision) → [REQ:FILE_BACKUP], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`; Source: `docs/context/architecture.md` § Archive Service.
+- `SERVICE-BACKUP-001` (File Backup Service Architecture Decision) → [REQ:FILE_BACKUP], [ARCH:FILE_OPERATIONS], [IMPL:FILE_OPERATIONS]; Tests/Code: `backup_test.go`, `backup.go`; Source: `docs/context/architecture.md` § Backup Service.
+- `SERVICE-GIT-001` (Git Integration Service Architecture Decision) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`; Source: `docs/context/architecture.md` § Git Integration Service.
+- `SERVICE-RESOURCE-001` (Resource Management Service Architecture Decision) → [REQ:RESOURCE_MANAGEMENT], [ARCH:RESOURCE_MANAGEMENT], [IMPL:RESOURCE_MANAGER]; Tests/Code: `file_stats_test.go`, `file_stats.go`; Source: `docs/context/architecture.md` § Resource Management Service.
+- `SERVICE-TEMPLATE-001` (Template Formatting Service Architecture Decision) → [REQ:TEMPLATE_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_test.go`, `formatter.go`; Source: `docs/context/architecture.md` § Template Formatting Service.
+- `SERVICE-OUTPUT-001` (Output Formatting Service Architecture Decision) → [REQ:OUTPUT_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_test.go`, `formatter.go`; Source: `docs/context/architecture.md` § Output Formatting Service.
+- `SERVICE-ERROR-001` (Error Handling Service Architecture Decision) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `errors.go`; Source: `docs/context/architecture.md` § Error Handling Service.
+
+### Feature Tokens – Data, Formatting & Platform Infrastructure
+- `ARCH-001` (Archive naming convention implementation) → [REQ:IMMUTABLE_ARCHIVE_NAMING], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`.
+- `CFG-003` (Template formatting logic) → [REQ:TEMPLATE_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_adapter_test.go`, `formatter.go`.
+- `GIT-004` (Git submodule support) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
+- `DOC-014` (AI-first documentation system) → [REQ:DOC_013], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/index.md`, `docs/ai-assistant-compliance.md`.
+- `DOC-015` (Unicode to semantic token mapping system) → [REQ:DOC_015], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `scripts/validate-token-traceability.sh`, `docs/semantic-token-system-implementation-complete.md`.
+- `DOC-016` (AI-first comprehensive token system) → [REQ:DOC_016], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `scripts/token-coverage-analysis.sh`, `docs/semantic-token-system-implementation-complete.md`.
+- `DOC-017` (AI assistant token protocol) → [REQ:DOC_016], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `.ai-agent-instructions`, `scripts/validate-token-traceability.sh`.
+- `TOKEN-001` (Semantic token migration system) → [REQ:DOC_016], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `scripts/validate-token-traceability.sh`, `tools/coverage_differential_test.go`.
+- `QUALITY-001` (Code quality standards) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:CODE_STYLE]; Tests/Code: `revive.toml`, `main_test.go`.
+- `BUILD-001` (Build system requirements) → [REQ:IMMUTABLE_BUILD_SYSTEM], [ARCH:BUILD_DISTRIBUTION], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `Makefile`, `tools/validate-coverage.sh`.
+- `FORMAT-001` (Output formatting requirements) → [REQ:OUTPUT_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_test.go`, `formatter.go`.
+- `TEMPLATE-001` (Template formatting requirements) → [REQ:TEMPLATE_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_test.go`, `formatter.go`.
+- `CMD-001` (Commands interface) → [REQ:IMMUTABLE_CLI_COMMANDS], [ARCH:CLI_COMMANDS], [IMPL:CLI_FRAMEWORK]; Tests/Code: `cmd/ai-validation/main.go`, `main.go`.
+- `TEMPLATE-002` (Enhanced template formatting requirements) → [REQ:TEMPLATE_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_adapter_test.go`, `formatter.go`.
+- `DATA-CONFIG-001` (Config data object requirements) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `DATA-CONFIGVALUE-001` (ConfigValue data object requirements) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `DATA-BACKUP-001` (Backup data object requirements) → [REQ:FILE_BACKUP], [ARCH:FILE_OPERATIONS], [IMPL:FILE_OPERATIONS]; Tests/Code: `backup_test.go`, `backup.go`.
+- `DATA-BACKUPERROR-001` (BackupError data object requirements) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `backup_test.go`, `errors.go`.
+- `DATA-ARCHIVEERROR-001` (ArchiveError data object requirements) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `archive_test.go`, `errors.go`.
+- `DATA-ARCHIVE-001` (Archive data object requirements) → [REQ:FILE_BACKUP], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`.
+- `DATA-BACKUPINFO-001` (BackupInfo data object requirements) → [REQ:FILE_BACKUP], [ARCH:FILE_OPERATIONS], [IMPL:FILE_OPERATIONS]; Tests/Code: `backup_test.go`, `backup.go`.
+- `DATA-RESOURCEMANAGER-001` (ResourceManager data object requirements) → [REQ:RESOURCE_MANAGEMENT], [ARCH:RESOURCE_MANAGEMENT], [IMPL:RESOURCE_MANAGER]; Tests/Code: `file_stats_test.go`, `file_stats.go`.
+- `DATA-TEMPLATEFORMATTER-001` (TemplateFormatter data object requirements) → [REQ:TEMPLATE_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_test.go`, `formatter.go`.
+
+### Feature Tokens – Standards, Specifications & Architecture References
+- `BUILD-DEV-001` (Build and development requirements specification) → [REQ:IMMUTABLE_BUILD_SYSTEM], [ARCH:BUILD_DISTRIBUTION], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `Makefile`, `tools/validate-coverage.sh`.
+- `QUALITY-STANDARDS-001` (Quality assurance and code standards specification) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:CODE_STYLE]; Tests/Code: `revive.toml`, `main_test.go`.
+- `LINTING-001` (Linting requirements specification) → [REQ:LINT_001], [ARCH:TESTING_STRATEGY], [IMPL:CODE_STYLE]; Tests/Code: `revive.toml`, `config_test.go`.
+- `ERROR-STANDARDS-001` (Error handling standards specification) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `errors.go`.
+- `RESOURCE-STANDARDS-001` (Resource management standards specification) → [REQ:RESOURCE_MANAGEMENT], [ARCH:RESOURCE_MANAGEMENT], [IMPL:RESOURCE_MANAGER]; Tests/Code: `file_stats_test.go`, `file_stats.go`.
+- `CONFIG-ARCH-001` (Configuration architecture decision) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `CONFIG-DISCOVERY-ARCH-001` (Configuration discovery architecture decision) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `CONFIG-SOURCES-ARCH-001` (Configuration sources architecture decision) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `DATA-CONFIG-CORE-001` (Core configuration object architecture decision) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `DATA-ENHANCED-001` (Enhanced data objects architecture decision) → [REQ:MAINTAINABILITY], [ARCH:SYSTEM_COMPONENTS], [IMPL:DATA_MODELS]; Tests/Code: `main_test.go`, `pkg/cli`.
+- `SPEC-001` (Quality assurance and code standards specification) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:TESTING]; Tests/Code: `main_test.go`, `revive.toml`.
+- `SPEC-002` (Configuration discovery system specification) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `SPEC-003` (Configuration file specification) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_integration_test.go`, `config.go`.
+- `SPEC-004` (Command interface specification) → [REQ:IMMUTABLE_CLI_COMMANDS], [ARCH:CLI_COMMANDS], [IMPL:CLI_FRAMEWORK]; Tests/Code: `cmd/ai-validation/main.go`, `main.go`.
+- `SPEC-005` (Global options specification) → [REQ:IMMUTABLE_GLOBAL_OPTIONS], [ARCH:CLI_COMMANDS], [IMPL:CLI_FRAMEWORK]; Tests/Code: `cmd/ai-validation/main.go`, `main.go`.
+- `SPEC-006` (Archive features specification) → [REQ:FILE_BACKUP], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`.
+- `SPEC-007` (Error handling and recovery specification) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `errors.go`.
+- `SPEC-008` (Resource management specification) → [REQ:RESOURCE_MANAGEMENT], [ARCH:RESOURCE_MANAGEMENT], [IMPL:RESOURCE_MANAGER]; Tests/Code: `file_stats_test.go`, `file_stats.go`.
+- `SPEC-009` (Build and development requirements specification) → [REQ:IMMUTABLE_BUILD_SYSTEM], [ARCH:BUILD_DISTRIBUTION], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `Makefile`, `scripts/validate-test-tokens.sh`.
+- `SPEC-010` (Testing infrastructure specification) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:TESTING]; Tests/Code: `main_test.go`, `test/scenarios`.
+- `SPEC-011` (Implementation details specification) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `refactoring_validation_test.go`, `docs/implementation-decisions.md`.
+- `SPEC-012` (Platform compatibility specification) → [REQ:IMMUTABLE_PLATFORM_COMPATIBILITY], [ARCH:PROJECT_STRUCTURE], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `main_test.go`, `Makefile`.
+- `SPEC-013` (Performance characteristics specification) → [REQ:PERFORMANCE], [ARCH:PERFORMANCE], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `inc_diff_integration_test.go`, `comparison_test.go`.
+- `SPEC-014` (CI/CD pipeline optimization specification) → [REQ:CICD_001], [ARCH:CICD_PIPELINE], [IMPL:TESTING]; Tests/Code: `tools/validate-coverage.sh`, `scripts/validate-token-traceability.sh`.
+- `SPEC-015` (AI-first documentation specification) → [REQ:DOC_013], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/index.md`, `docs/ai-assistant-compliance.md`.
+
+### Feature Tokens – Requirement Identifiers & Architecture Specifications
+- `REQ-001` (Code quality and linting requirements) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:CODE_STYLE]; Tests/Code: `main_test.go`, `revive.toml`.
+- `REQ-002` (Data objects requirements) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `REQ-003` (Core functions requirements) → [REQ:RESOURCE_MANAGEMENT], [ARCH:RESOURCE_MANAGEMENT], [IMPL:RESOURCE_MANAGER]; Tests/Code: `file_stats_test.go`, `main.go`.
+- `REQ-004` (Main application structure requirements) → [REQ:MAINTAINABILITY], [ARCH:PROJECT_STRUCTURE], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `main_test.go`, `main.go`.
+- `REQ-005` (Git integration requirements) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
+- `REQ-007` (Configuration system enhancement requirements) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `ARCH-SPEC-001` (Core architecture specification) → [REQ:MAINTAINABILITY], [ARCH:PROJECT_STRUCTURE], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `main_test.go`, `architecture-decisions.md`.
+- `ARCH-SPEC-002` (Data models architecture) → [REQ:MAINTAINABILITY], [ARCH:SYSTEM_COMPONENTS], [IMPL:DATA_MODELS]; Tests/Code: `main_test.go`, `pkg/cli`.
+- `ARCH-SPEC-003` (Service architecture) → [REQ:MAINTAINABILITY], [ARCH:SYSTEM_COMPONENTS], [IMPL:DATA_MODELS]; Tests/Code: `main_test.go`, `architecture-decisions.md`.
+- `ARCH-SPEC-004` (Configuration architecture) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `ARCH-SPEC-005` (Archive format architecture) → [REQ:FILE_BACKUP], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`.
+- `ARCH-SPEC-006` (Output formatting architecture) → [REQ:OUTPUT_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DUAL_FORMATTING]; Tests/Code: `formatter_test.go`, `formatter.go`.
+- `ARCH-SPEC-007` (Error handling architecture) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `errors.go`.
+- `ARCH-SPEC-008` (Concurrency architecture) → [REQ:PERFORMANCE], [ARCH:PROCESSING_PATTERNS], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `inc_diff_integration_test.go`, `main_test.go`.
+- `ARCH-SPEC-009` (Testing architecture) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:TESTING]; Tests/Code: `main_test.go`, `test/scenarios`.
+- `ARCH-SPEC-010` (Security architecture) → [REQ:RELIABILITY], [ARCH:SECURITY], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `docs/security`.
+- `ARCH-SPEC-011` (Extensibility architecture) → [REQ:MAINTAINABILITY], [ARCH:EXTENSIBILITY], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `refactoring_validation_test.go`, `architecture-decisions.md`.
+- `ARCH-SPEC-012` (Deployment architecture) → [REQ:MAINTAINABILITY], [ARCH:DEPLOYMENT], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `Makefile`, `run-ubuntu-with-backup.sh`.
+- `ARCH-SPEC-013` (Performance considerations architecture) → [REQ:PERFORMANCE], [ARCH:PERFORMANCE], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `inc_diff_integration_test.go`, `comparison_test.go`.
+- `ARCH-SPEC-014` (CLI commands architecture) → [REQ:IMMUTABLE_CLI_COMMANDS], [ARCH:CLI_COMMANDS], [IMPL:CLI_FRAMEWORK]; Tests/Code: `cmd/ai-validation/main.go`, `main.go`.
+
+### Feature Tokens – Configuration Output, Refactoring & Extraction
+- `CFG-004` (Comprehensive string config) → [REQ:CUSTOMIZABLE_FORMAT_STRINGS], [ARCH:OUTPUT_FORMATTING], [IMPL:CONFIGURABLE_STRINGS]; Tests/Code: `formatter_test.go`, `config_test.go`.
+- `OUT-001` (Delayed output management) → [REQ:OUTPUT_FORMATTING], [ARCH:OUTPUT_FORMATTING], [IMPL:DELAYED_OUTPUT]; Tests/Code: `formatter_test.go`, `formatter.go`.
+- `OUT-002` (Enhanced command output with file statistics) → [REQ:OUT_002], [ARCH:FILE_STATISTICS], [IMPL:FILE_STATISTICS]; Tests/Code: `formatter_stats_test.go`, `formatter_stats.go`.
+- `REFACTOR-001` (Dependency analysis and interface standardization) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:REFACTOR_PREP]; Tests/Code: `refactoring_validation_test.go`, `docs/refactoring-validation-report.md`.
+- `REFACTOR-003` (Configuration schema abstraction) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:CONFIG_SCHEMA_FLEX]; Tests/Code: `config_test.go`, `config_impl.go`.
+- `REFACTOR-004` (Error handling consolidation) → [REQ:ERROR_HANDLING], [ARCH:ERROR_HANDLING], [IMPL:STRUCTURED_ERRORS]; Tests/Code: `errors_test.go`, `errors.go`.
+- `REFACTOR-005` (Code structure optimization) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `refactoring_validation_test.go`, `docs/refactoring-validation-report.md`.
+- `REFACTOR-006` (Refactoring impact validation) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:REFACTOR_PREP]; Tests/Code: `refactoring_validation_test.go`, `inc_diff_integration_test.go`.
+- `EXTRACT-001` (Configuration management system extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `config_test.go`, `docs/extract-008-cli-template-plan.md`.
+- `EXTRACT-002` (Error handling system extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `errors_test.go`, `docs/extract-008-subtask-2-completion.md`.
+- `EXTRACT-003` (Formatter system extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `formatter_test.go`, `docs/extract-008-subtask-3-completion.md`.
+- `EXTRACT-004` (Git integration extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `git_test.go`, `docs/extract-008-subtask-5-completion.md`.
+- `EXTRACT-005` (CLI system extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `cmd/ai-validation/main.go`, `docs/extract-008-remaining-subtasks-plan.md`.
+- `EXTRACT-006` (File operations extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `file_stats_test.go`, `docs/extract-009-completion-summary.md`.
+- `EXTRACT-009` (Test utilities extraction) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `internal/testutil/context_test.go`, `docs/extract-008-session-summary.md`.
+- `EXTRACT-010` (Package documentation and examples) → [REQ:MAINTAINABILITY], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/examples`, `docs/extract-010.md`.
+
+### Feature Tokens – Comparison & Diff Capabilities
+- `COMPARISON-001` (File comparison functionality) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-002` (Comparison utilities) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-003` (Comparison testing) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-004` (Comparison edge cases) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-005` (Comparison performance) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-006` (Comparison integration) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-007` (Comparison validation) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-009` (Comparison utilities) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-010` (Comparison edge cases) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `COMPARISON-011` (Comparison testing) → [REQ:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+
+### Feature Tokens – CLI, Archive, Configuration & Test Coverage
+- `FEATURE-001` (Feature implementation) → [REQ:IMMUTABLE_FEATURE_PRESERVATION], [ARCH:SYSTEM_COMPONENTS], [IMPL:PROCESSING_PATTERNS]; Tests/Code: `main_test.go`, `main.go`.
+- `CLI-015` (Automatic file/directory command detection) → [REQ:IMMUTABLE_CLI_COMMANDS], [ARCH:AUTO_DETECTION], [IMPL:AUTO_DETECTION]; Tests/Code: `cmd/ai-validation/main.go`, `main.go`.
+- `ARCH-002` (Create archive command) → [REQ:FILE_BACKUP], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`.
+- `ARCH-003` (Incremental archives) → [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [ARCH:INCREMENTAL_DUPLICATE_PREVENTION], [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]; Tests/Code: `incremental_duplicate_prevention_test.go`, `archive.go`.
+- `ARCH-004` (Broken symlink handling) → [REQ:FILE_BACKUP], [ARCH:FILE_OPERATIONS], [IMPL:FILE_OPERATIONS]; Tests/Code: `archive_test.go`, `archive.go`.
+- `FILE-001` (File backup naming) → [REQ:IMMUTABLE_FILE_BACKUP_NAMING], [ARCH:ARCHIVE_FORMAT], [IMPL:ZIP_FORMAT]; Tests/Code: `archive_test.go`, `archive.go`.
+- `FILE-002` (Backup command) → [REQ:FILE_BACKUP], [ARCH:FILE_OPERATIONS], [IMPL:FILE_OPERATIONS]; Tests/Code: `backup_test.go`, `backup.go`.
+- `FILE-003` (File comparison) → [REQ:FILE_BACKUP], [ARCH:DIRECTORY_COMPARISON], [IMPL:DIRECTORY_COMPARISON]; Tests/Code: `comparison_test.go`, `comparison.go`.
+- `CFG-001` (Config discovery) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `CFG-002` (Status codes) → [REQ:CONFIGURATION], [ARCH:CONFIG_SYSTEM], [IMPL:CONFIG_STRUCT]; Tests/Code: `config_test.go`, `config.go`.
+- `CFG-005` (Layered configuration inheritance) → [REQ:CFG_005], [ARCH:CFG_005], [IMPL:EXCLUDE_MERGE_FIX]; Tests/Code: `config_integration_test.go`, `config_impl.go`.
+- `CFG-006` (Complete configuration reflection and visibility) → [REQ:CFG_006], [ARCH:CFG_006], [IMPL:CFG_006]; Tests/Code: `config_test.go`, `config.go`.
+- `GIT-001` (Git info extraction) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
+- `GIT-003` (Git status detection) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
+- `GIT-005` (Git configuration integration) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
+- `TEST-001` (Comprehensive formatter testing) → [REQ:CODE_QUALITY], [ARCH:TESTING_STRATEGY], [IMPL:TESTING]; Tests/Code: `formatter_test.go`, `formatter_adapter_test.go`.
+
+### Semantic Token Metadata Entries
+- `document_structure` (Document section markers) → [REQ:DOC_015], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/index.md`, `docs/ai-assistant-compliance.md`.
+- `status_indicators` (Status icon mapping) → [REQ:DOC_015], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/context/index.md`, `docs/unicode-migration-phase2-critical-tokens-completion-summary.md`.
+- `action_categories` (Action taxonomy) → [REQ:DOC_016], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `.ai-agent-instructions`, `scripts/token-coverage-analysis.sh`.
+- `context_specific` (Contextual documentation tags) → [REQ:DOC_015], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/context/specification.md`, `docs/integration-guide.md`.
+- `DOC-010` (Automated token format suggestions) → [REQ:DOC_016], [ARCH:AI_DOCUMENTATION], [IMPL:DOC_ENHANCEMENT]; Tests/Code: `docs/format-strings-reference.md`, `scripts/validate-token-traceability.sh`.
+- `DOC-011` (Token validation integration for AI assistants) → [REQ:DOC_011], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `scripts/validate-token-traceability.sh`, `tools/validate-token-traceability.sh`.
+- `DOC-012` (Real-time icon validation feedback) → [REQ:DOC_016], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]; Tests/Code: `tools/coverage_differential_test.go`, `docs/format-strings-reference.md`.
+- `EXTRACT-008` (Session extraction utilities) → [REQ:MAINTAINABILITY], [ARCH:PACKAGE_EXTRACTION], [IMPL:PACKAGE_EXTRACTION]; Tests/Code: `docs/extract-008-session-summary.md`, `refactoring_validation_test.go`.
+- `REFACTOR-002` (Large file decomposition preparation) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:LARGE_FILE_DECOMP]; Tests/Code: `formatter_adapter_simple_test.go`, `docs/formatter-decomposition.md`.
+- `GIT-002` (Branch/hash naming) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
+- `COV-002` (Coverage baseline establishment) → [REQ:COV_003], [ARCH:TESTING_STRATEGY], [IMPL:TEST_COVERAGE]; Tests/Code: `tools/coverage_differential_test.go`, `scripts/validate-coverage.sh`.
+
 ## Quick Reference Index
 
 ### Requirements Tokens by Category

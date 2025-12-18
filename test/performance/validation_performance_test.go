@@ -1,3 +1,4 @@
+// [REQ:PERFORMANCE]
 package performance
 
 import (

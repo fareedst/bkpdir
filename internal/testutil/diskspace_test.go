@@ -1,3 +1,4 @@
+// [REQ:CODE_QUALITY]
 // This file is part of bkpdir
 //
 // Package testutil provides comprehensive tests for disk space simulation utilities.

@@ -1,3 +1,4 @@
+// [IMPL:DOC_ENHANCEMENT] [ARCH:AI_DOCUMENTATION] [REQ:DOC_013]
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package main
 

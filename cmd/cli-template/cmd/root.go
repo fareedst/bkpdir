@@ -1,3 +1,5 @@
+// [IMPL:CLI_FRAMEWORK] [ARCH:CLI_COMMANDS] [REQ:IMMUTABLE_CLI_COMMANDS]
+// CLI template root command — links to STDD tokens for traceability.
 // DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package cmd
 

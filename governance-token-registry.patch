@@ -1,0 +1,1929 @@
+From 65172cfc84bf32dba18053c65f8a2c51df42e26c Mon Sep 17 00:00:00 2001
+From: Fareed Stevenson <fareed@phomento.com>
+Date: Wed, 17 Dec 2025 16:12:47 -0800
+Subject: [PATCH] feat: governance token registry, central hub docs, and
+ governance page; add cross-link mapping skeletons
+
+---
+ .cursorrules                       |  32 ++-
+ AGENTS.md                          | 198 +++++++++++++++
+ conversation-template.md           |   4 +-
+ demos/README.md                    | 128 ++++++++++
+ demos/demo-automation-full.exp     | 221 +++++++++++++++++
+ demos/generate-demonstrations.sh   | 372 +++++++++++++++++++++++++++++
+ demos/record-demo-1.sh             |  72 ++++++
+ docs/governance/cross-links.md     |  12 +
+ docs/governance/index.md           |  25 ++
+ docs/index.md                      |  27 +++
+ docs/test-fix-review.md            | 133 +++++++++++
+ scripts/token-coverage-analysis.sh | 188 +++++++++++++++
+ scripts/token-navigate.sh          | 293 +++++++++++++++++++++++
+ stdd/requirements.md               |   2 +-
+ stdd/semantic-tokens.md            |  15 +-
+ 15 files changed, 1710 insertions(+), 12 deletions(-)
+ create mode 100644 AGENTS.md
+ create mode 100644 demos/README.md
+ create mode 100755 demos/demo-automation-full.exp
+ create mode 100755 demos/generate-demonstrations.sh
+ create mode 100755 demos/record-demo-1.sh
+ create mode 100644 docs/governance/cross-links.md
+ create mode 100644 docs/governance/index.md
+ create mode 100644 docs/index.md
+ create mode 100644 docs/test-fix-review.md
+ create mode 100755 scripts/token-coverage-analysis.sh
+ create mode 100755 scripts/token-navigate.sh
+
+diff --git a/.cursorrules b/.cursorrules
+index f13a139..c951d80 100644
+--- a/.cursorrules
++++ b/.cursorrules
+@@ -1,6 +1,6 @@
+ # Cursor AI Agent Rules for STDD Projects
+ 
+-**STDD Methodology Version**: 1.0.0
++**STDD Methodology Version**: 1.0.2
+ 
+ ## 🎯 Semantic Token-Driven Development (STDD)
+ 
+@@ -29,15 +29,20 @@ Then proceed to:
+ 2. **Semantic Token System** (Core to STDD)
+    - Semantic tokens are the mechanism that preserves intent throughout the development lifecycle
+    - Use semantic tokens for all cross-referencing
+-   - Format: `[TYPE:IDENTIFIER]` (e.g., `[REQ:MONITOR]`, `[IMPL:ASYNC_EXECUTION]`)
++   - Format: `[TYPE:IDENTIFIER]` (e.g., `[REQ:FEATURE]`, `[IMPL:IMPLEMENTATION]`)
+    - Reference tokens in code comments, test names, and documentation
+    - Update `stdd/semantic-tokens.md` when creating new tokens
+    - Maintain traceability: Requirements → Architecture → Implementation → Tests → Code
+ 
+ 3. **Development Process**
+    - **Phase 1**: Expand requirements into pseudo-code and decisions (NO code changes)
++     - **MANDATORY**: Identify logical modules and document module boundaries [REQ:MODULE_VALIDATION]
+    - **Phase 2**: Break down into trackable tasks with priorities
++     - **MANDATORY**: Create separate tasks for module development, module validation, and integration [REQ:MODULE_VALIDATION]
+    - **Phase 3**: Implement tasks, starting with highest priority
++     - **MANDATORY**: Develop each logical module independently [REQ:MODULE_VALIDATION]
++     - **MANDATORY**: Validate each module independently (unit tests with mocks, contract tests, edge cases, error handling) before integration [REQ:MODULE_VALIDATION]
++     - **MANDATORY**: Only integrate modules after validation passes [REQ:MODULE_VALIDATION]
+    - Always cross-reference using semantic tokens
+ 
+ 4. **Task Management**
+@@ -132,7 +137,13 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
+ 3. Cross-reference: Requirements → Architecture → Implementation → Tests
+ 4. **MANDATORY**: Break work into trackable tasks in `stdd/tasks.md` BEFORE starting implementation
+ 5. **MANDATORY**: Assign appropriate priorities to all tasks
+-6. **MANDATORY**: Update documentation AS YOU WORK:
++6. **MANDATORY**: Module Validation [REQ:MODULE_VALIDATION]:
++   - Identify logical modules and document module boundaries before development
++   - Develop each module independently
++   - Validate each module independently (unit tests with mocks, contract tests, edge cases, error handling) BEFORE integration
++   - Only integrate modules after validation passes
++   - Document module validation results
++7. **MANDATORY**: Update documentation AS YOU WORK:
+    - Record architecture decisions in `stdd/architecture-decisions.md` immediately when made
+    - Record implementation decisions in `stdd/implementation-decisions.md` immediately when made
+    - Update `stdd/tasks.md` when planning new work or completing tasks
+@@ -158,6 +169,8 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
+ - Don't create tasks without priorities
+ - Don't leave subtasks after parent task completes
+ - Don't implement P2/P3 features before P0/P1 are complete
++- **Don't integrate modules before validating them independently** [REQ:MODULE_VALIDATION]
++- **Don't skip module validation** - it's mandatory to eliminate complexity-related bugs
+ 
+ ## 📚 Key Files
+ 
+@@ -176,18 +189,22 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
+ 
+ ## 🎯 Example Workflow
+ 
+-1. **User Request**: "Add disk space checking"
++1. **User Request**: "Add feature X"
+ 2. **AI Response (Planning Phase - NO CODE YET)**: 
+-   - Creates `[REQ:DISK_SPACE_CHECK]` token in `stdd/requirements.md`
++   - Creates `[REQ:FEATURE_X]` token in `stdd/requirements.md`
+    - Expands into pseudo-code and decisions
+-   - **IMMEDIATELY** documents architecture decisions in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens cross-referencing `[REQ:DISK_SPACE_CHECK]`
++   - **IMMEDIATELY** identifies logical modules and documents module boundaries [REQ:MODULE_VALIDATION]
++   - **IMMEDIATELY** documents architecture decisions in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens cross-referencing `[REQ:FEATURE_X]`
+    - **IMMEDIATELY** documents implementation decisions in `stdd/implementation-decisions.md` with `[IMPL:*]` tokens cross-referencing both `[ARCH:*]` and `[REQ:*]` tokens
+    - **IMMEDIATELY** updates `stdd/semantic-tokens.md` with all new tokens
+-   - **IMMEDIATELY** creates tasks in `stdd/tasks.md` with P1 priority and semantic token references
++   - **IMMEDIATELY** creates tasks in `stdd/tasks.md` with separate tasks for module development, module validation, and integration [REQ:MODULE_VALIDATION]
+    - **NO code changes yet**
+ 3. **User Approval**: User reviews and approves planning documents
+ 4. **Implementation Phase**: 
+    - AI implements tasks, starting with highest priority
++   - **MANDATORY**: Develops each module independently [REQ:MODULE_VALIDATION]
++   - **MANDATORY**: Validates each module independently (unit tests with mocks, contract tests, edge cases, error handling) before integration [REQ:MODULE_VALIDATION]
++   - **MANDATORY**: Only integrates modules after validation passes [REQ:MODULE_VALIDATION]
+    - **DURING implementation**: Updates documentation as decisions are made or refined
+    - **DURING implementation**: Updates `stdd/tasks.md` as subtasks are completed
+ 5. **Completion Phase**: 
+@@ -195,4 +212,5 @@ func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
+    - **MANDATORY**: Marks tasks complete in `stdd/tasks.md`
+    - **MANDATORY**: Removes completed subtasks
+    - **MANDATORY**: Ensures all semantic tokens are documented
++   - **MANDATORY**: Verifies module validation was completed before integration
+ 
+diff --git a/AGENTS.md b/AGENTS.md
+new file mode 100644
+index 0000000..f13a139
+--- /dev/null
++++ b/AGENTS.md
+@@ -0,0 +1,198 @@
++# Cursor AI Agent Rules for STDD Projects
++
++**STDD Methodology Version**: 1.0.0
++
++## 🎯 Semantic Token-Driven Development (STDD)
++
++This project follows **Semantic Token-Driven Development (STDD)**, where semantic tokens (`[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`) are the central mechanism for preserving intent throughout the development lifecycle. Semantic tokens create a traceable chain of intent from requirements → architecture → implementation → tests → code, ensuring the original purpose and reasoning are never lost.
++
++## ⚠️ MANDATORY: AI Principles Acknowledgment
++
++**YOU MUST** acknowledge that you have read and will follow the AI principles at the start of EVERY response by prefacing with:
++
++**"Observing AI principles!"**
++
++Then proceed to:
++1. Read `stdd/ai-principles.md` if not already read in this session
++2. Check `stdd/semantic-tokens.md` for existing tokens
++3. Review `stdd/tasks.md` for active tasks
++4. Follow all principles throughout your response
++
++## 🎯 Core Principles
++
++1. **Always Reference ai-principles.md**
++   - Read `stdd/ai-principles.md` at the start of each session
++   - Acknowledge with "Observing AI principles!" at the start of every response
++   - Follow the documented development process
++   - Use semantic tokens consistently
++
++2. **Semantic Token System** (Core to STDD)
++   - Semantic tokens are the mechanism that preserves intent throughout the development lifecycle
++   - Use semantic tokens for all cross-referencing
++   - Format: `[TYPE:IDENTIFIER]` (e.g., `[REQ:MONITOR]`, `[IMPL:ASYNC_EXECUTION]`)
++   - Reference tokens in code comments, test names, and documentation
++   - Update `stdd/semantic-tokens.md` when creating new tokens
++   - Maintain traceability: Requirements → Architecture → Implementation → Tests → Code
++
++3. **Development Process**
++   - **Phase 1**: Expand requirements into pseudo-code and decisions (NO code changes)
++   - **Phase 2**: Break down into trackable tasks with priorities
++   - **Phase 3**: Implement tasks, starting with highest priority
++   - Always cross-reference using semantic tokens
++
++4. **Task Management**
++   - Break work into trackable tasks in `stdd/tasks.md`
++   - Assign priorities: P0 (Critical) > P1 (Important) > P2 (Nice-to-have) > P3 (Future)
++   - Remove subtasks when parent task completes
++   - Always include semantic token references
++
++5. **Priority Order**
++   - **Most Important**: Tests, Code, Basic Functions
++   - **Least Important**: Environment Orchestration, Enhanced Security, Automated Deployment
++
++## 📝 Documentation Requirements
++
++### ⚠️ CRITICAL: Documentation is MANDATORY, Not Optional
++
++**Documentation updates are REQUIRED at every stage of development. They are not optional or deferrable.**
++
++### Required Sections in All Documentation
++
++1. **Requirements** - with `[REQ:*]` tokens (in `stdd/requirements.md`)
++2. **Architecture Decisions** - with `[ARCH:*]` tokens (in `stdd/architecture-decisions.md`)
++   - **MUST** be recorded in `stdd/architecture-decisions.md` IMMEDIATELY when made
++   - **MUST** cross-reference `[REQ:*]` tokens
++   - Architecture decisions are dependent on requirements
++   - **DO NOT** defer architecture documentation - record it as you make decisions
++3. **Implementation Decisions** - with `[IMPL:*]` tokens (in `stdd/implementation-decisions.md`)
++   - **MUST** be recorded in `stdd/implementation-decisions.md` IMMEDIATELY when made
++   - **MUST** cross-reference both `[ARCH:*]` and `[REQ:*]` tokens
++   - Implementation decisions are dependent on both architecture and requirements
++   - **DO NOT** defer implementation documentation - record it as you make decisions
++4. **Semantic Token Registry** - maintained in `stdd/semantic-tokens.md`
++   - **MUST** be updated immediately when creating new tokens
++5. **Task Planning** - maintained in `stdd/tasks.md`
++   - **MUST** be updated when planning new work
++   - **MUST** be updated when completing tasks
++   - **MUST** include semantic token references
++6. **Code References** - semantic tokens in code comments
++7. **Test References** - semantic tokens in test names/comments
++
++### Documentation Update Checklist (MANDATORY)
++
++**When making ANY architectural decision:**
++- [ ] Record in `stdd/architecture-decisions.md` with `[ARCH:*]` token
++- [ ] Cross-reference relevant `[REQ:*]` tokens
++- [ ] Update `stdd/semantic-tokens.md` if new token created
++
++**When making ANY implementation decision:**
++- [ ] Record in `stdd/implementation-decisions.md` with `[IMPL:*]` token
++- [ ] Cross-reference relevant `[ARCH:*]` and `[REQ:*]` tokens
++- [ ] Update `stdd/semantic-tokens.md` if new token created
++
++**When planning new work:**
++- [ ] Create tasks in `stdd/tasks.md` BEFORE starting implementation
++- [ ] Assign priorities to all tasks
++- [ ] Include semantic token references in task descriptions
++- [ ] Break down into subtasks if needed
++
++**When completing work:**
++- [ ] Mark tasks complete in `stdd/tasks.md`
++- [ ] Remove completed subtasks
++- [ ] Verify all documentation is up-to-date
++- [ ] Ensure all semantic tokens are documented
++
++### Cross-Reference Format
++
++When referencing tokens:
++```go
++// [REQ:DUPLICATE_PREVENTION] Skip if text matches lastText
++// [IMPL:DUPLICATE_PREVENTION] [REQ:DUPLICATE_PREVENTION]
++```
++
++Test names:
++```go
++func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
++```
++
++## 🔄 Before Starting Work
++
++1. **MANDATORY**: Read `stdd/ai-principles.md`
++2. **MANDATORY**: Check `stdd/semantic-tokens.md` for existing tokens
++3. **MANDATORY**: Review `stdd/tasks.md` for active tasks
++4. **MANDATORY**: Review `stdd/architecture-decisions.md` for existing architecture decisions
++5. **MANDATORY**: Review `stdd/implementation-decisions.md` for existing implementation decisions
++6. Understand priority levels
++7. **MANDATORY**: Plan work in `stdd/tasks.md` BEFORE writing any code
++
++## ⚙️ During Work
++
++1. Use semantic tokens in all code comments
++2. Use semantic tokens in test names/comments
++3. Cross-reference: Requirements → Architecture → Implementation → Tests
++4. **MANDATORY**: Break work into trackable tasks in `stdd/tasks.md` BEFORE starting implementation
++5. **MANDATORY**: Assign appropriate priorities to all tasks
++6. **MANDATORY**: Update documentation AS YOU WORK:
++   - Record architecture decisions in `stdd/architecture-decisions.md` immediately when made
++   - Record implementation decisions in `stdd/implementation-decisions.md` immediately when made
++   - Update `stdd/tasks.md` when planning new work or completing tasks
++   - Update `stdd/semantic-tokens.md` when creating new tokens
++   - **DO NOT** defer documentation updates until the end
++
++## ✅ After Completing Work
++
++1. **MANDATORY**: All semantic tokens documented in `stdd/semantic-tokens.md`
++2. **MANDATORY**: Documentation updated with implementation status:
++   - `stdd/architecture-decisions.md` updated with any new `[ARCH:*]` decisions
++   - `stdd/implementation-decisions.md` updated with any new `[IMPL:*]` decisions
++   - Both must cross-reference `[REQ:*]` tokens
++3. **MANDATORY**: Tests reference semantic tokens
++4. **MANDATORY**: Tasks marked complete in `stdd/tasks.md`
++5. **MANDATORY**: Subtasks removed from completed tasks
++6. **MANDATORY**: All documentation reflects current state (no stale information)
++
++## 🚫 What NOT to Do
++
++- Don't write code before expanding requirements into pseudo-code
++- Don't skip semantic token cross-referencing
++- Don't create tasks without priorities
++- Don't leave subtasks after parent task completes
++- Don't implement P2/P3 features before P0/P1 are complete
++
++## 📚 Key Files
++
++**Note**: These file names refer to your project's files. Copy the corresponding `.template.md` files from the STDD repository to your project.
++
++- `stdd/ai-principles.md` - Complete principles and process guide (reference from STDD repository)
++- `stdd/requirements.md` - Requirements with `[REQ:*]` tokens (copy from `requirements.template.md`)
++- `stdd/architecture-decisions.md` - **Semantic-token-linked record of architecture decisions dependent on requirements** (copy from `architecture-decisions.template.md`)
++  - All `[ARCH:*]` tokens must be documented here
++  - Must cross-reference `[REQ:*]` tokens
++- `stdd/implementation-decisions.md` - **Semantic-token-linked record of implementation decisions dependent on architecture and requirements** (copy from `implementation-decisions.template.md`)
++  - All `[IMPL:*]` tokens must be documented here
++  - Must cross-reference both `[ARCH:*]` and `[REQ:*]` tokens
++- `stdd/semantic-tokens.md` - Central registry of all tokens (copy from `semantic-tokens.template.md`)
++- `stdd/tasks.md` - Active task tracking (copy from `tasks.template.md`)
++
++## 🎯 Example Workflow
++
++1. **User Request**: "Add disk space checking"
++2. **AI Response (Planning Phase - NO CODE YET)**: 
++   - Creates `[REQ:DISK_SPACE_CHECK]` token in `stdd/requirements.md`
++   - Expands into pseudo-code and decisions
++   - **IMMEDIATELY** documents architecture decisions in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens cross-referencing `[REQ:DISK_SPACE_CHECK]`
++   - **IMMEDIATELY** documents implementation decisions in `stdd/implementation-decisions.md` with `[IMPL:*]` tokens cross-referencing both `[ARCH:*]` and `[REQ:*]` tokens
++   - **IMMEDIATELY** updates `stdd/semantic-tokens.md` with all new tokens
++   - **IMMEDIATELY** creates tasks in `stdd/tasks.md` with P1 priority and semantic token references
++   - **NO code changes yet**
++3. **User Approval**: User reviews and approves planning documents
++4. **Implementation Phase**: 
++   - AI implements tasks, starting with highest priority
++   - **DURING implementation**: Updates documentation as decisions are made or refined
++   - **DURING implementation**: Updates `stdd/tasks.md` as subtasks are completed
++5. **Completion Phase**: 
++   - **MANDATORY**: Verifies all documentation is up-to-date
++   - **MANDATORY**: Marks tasks complete in `stdd/tasks.md`
++   - **MANDATORY**: Removes completed subtasks
++   - **MANDATORY**: Ensures all semantic tokens are documented
++
+diff --git a/conversation-template.md b/conversation-template.md
+index d82668d..8f1ef06 100644
+--- a/conversation-template.md
++++ b/conversation-template.md
+@@ -1,6 +1,6 @@
+ # STDD Conversation Template: Adding a Feature to an Existing Complex Application
+ 
+-**STDD Methodology Version**: 1.0.0
++**STDD Methodology Version**: 1.0.1
+ 
+ This template demonstrates a realistic conversation between a developer and an AI-coder following the STDD methodology when adding a feature to an existing, complex application.
+ 
+@@ -31,8 +31,6 @@ This template demonstrates a realistic conversation between a developer and an A
+ 
+ I'll help you add rate limiting to your API endpoints. Following STDD methodology, let me first understand the requirements and document the approach before writing any code.
+ 
+-**Note**: All code, documentation, and comments will use semantic tokens `[REQ:*]`, `[ARCH:*]`, and `[IMPL:*]` for traceability. See `stdd/ai-assistant-compliance.md` for token usage guidelines.
+-
+ **Questions to clarify requirements:**
+ 
+ 1. **Rate limiting scope**: Should this apply to all endpoints, or specific endpoints? Do we need different limits for different endpoints?
+diff --git a/demos/README.md b/demos/README.md
+new file mode 100644
+index 0000000..9be4ad7
+--- /dev/null
++++ b/demos/README.md
+@@ -0,0 +1,128 @@
++# BkpDir Demo Scripts
++
++This directory contains scripts and documentation for creating demonstration GIFs and screen recordings of bkpdir functionality.
++
++## Demo Scripts
++
++### Demo 1: Basic Workflow (`demo-automation-1.exp`)
++
++Demonstrates the complete basic workflow:
++- Project setup and git initialization
++- Configuration file creation
++- Full archive creation
++- Incremental archive creation
++- Archive listing and inspection
++- Help and configuration display
++
++**Output**: `bkpdir-demo-1.cast` → `bkpdir-demo-1.gif`
++
++### Demo 2: Advanced Features (`demo-automation-2.exp`)
++
++Demonstrates advanced features and scenarios:
++- [To be defined - will show different aspects]
++
++**Output**: `bkpdir-demo-2.cast` → `bkpdir-demo-2.gif`
++
++## Quick Start
++
++### Prerequisites
++
++```bash
++# Install asciinema
++brew install asciinema
++# or
++pip install asciinema
++
++# Install agg for GIF conversion
++pip install agg
++
++# Install gifsicle for GIF optimization (optional)
++brew install gifsicle
++
++# Verify bkpdir is in PATH or set BKPDIR_BIN
++export BKPDIR_BIN="${HOME}/.local/bin/bkpdir"
++```
++
++### Running Demo 1
++
++```bash
++cd demos
++./demo-automation-1.exp \
++  "${HOME}/.bkpdir-demo" \
++  "${HOME}/.local/bin/bkpdir" \
++  "$(cd .. && pwd)"
++```
++
++### Running Demo 2
++
++```bash
++cd demos
++./demo-automation-2.exp \
++  "${HOME}/.bkpdir-demo-2" \
++  "${HOME}/.local/bin/bkpdir" \
++  "$(cd .. && pwd)"
++```
++
++### Converting to GIF
++
++After recording, convert the `.cast` file to GIF:
++
++```bash
++# Convert Demo 1
++agg --theme asciinema --last-frame-duration 1 \
++  bkpdir-demo-1.cast ../images/bkpdir-demo-1.gif
++
++# Convert Demo 2
++agg --theme asciinema --last-frame-duration 1 \
++  bkpdir-demo-2.cast ../images/bkpdir-demo-2.gif
++
++# Optimize GIFs (optional)
++gifsicle -O3 --colors 256 ../images/bkpdir-demo-1.gif \
++  -o ../images/bkpdir-demo-1-optimized.gif
++gifsicle -O3 --colors 256 ../images/bkpdir-demo-2.gif \
++  -o ../images/bkpdir-demo-2-optimized.gif
++```
++
++### Using the Generation Script
++
++The `generate-demonstrations.sh` script can generate both demos:
++
++```bash
++./generate-demonstrations.sh
++```
++
++## Files
++
++- `demo-automation-1.exp` - Expect script for Demo 1 (basic workflow)
++- `demo-automation-1.applescript` - AppleScript alternative for Demo 1
++- `demo-automation-2.exp` - Expect script for Demo 2 (advanced features)
++- `record-demo-1.sh` - Shell script wrapper for Demo 1
++- `generate-demonstrations.sh` - Comprehensive script to generate all demos
++- `README.md` - This file
++
++## Output Locations
++
++- Recordings: `../images/bkpdir-demo-*.cast`
++- GIFs: `../images/bkpdir-demo-*.gif`
++- Optimized GIFs: `../images/bkpdir-demo-*-optimized.gif`
++
++## Troubleshooting
++
++### Terminal Not Responding
++- Use expect scripts instead of AppleScript
++- Increase delay values in script
++
++### bkpdir Not Found
++- Set `BKPDIR_BIN` environment variable
++- Ensure bkpdir is in PATH
++- Use full path in script
++
++### Asciinema Issues
++- Verify installation: `which asciinema`
++- Check terminal permissions
++- Ensure terminal is in focus
++
++## See Also
++
++- [Visual Demonstration Suggestions](../docs/visual-demonstration-suggestions.md) - Overview
++- [Screen Recording Plan](../docs/screen-recording-plan.md) - Complete documentation
+diff --git a/demos/demo-automation-full.exp b/demos/demo-automation-full.exp
+new file mode 100755
+index 0000000..2ee4355
+--- /dev/null
++++ b/demos/demo-automation-full.exp
+@@ -0,0 +1,221 @@
++#!/usr/bin/expect -f
++# Expect script for bkpdir demo automation - Demo 2: Advanced Features
++# Demonstrates advanced features like comparison, restore, and configuration management
++# Usage: ./demo-automation-full.exp <DEMO_DIR> <BKPDIR_BIN> <PROJECT_ROOT> <CAST_FILE>
++
++set timeout 10
++set demo_dir [lindex $argv 0]
++set bkpdir_bin [lindex $argv 1]
++set project_root [lindex $argv 2]
++set cast_file [lindex $argv 3]
++
++# Start asciinema recording
++spawn asciinema rec --append $cast_file
++
++# Wait for prompt
++expect "$ "
++
++# set the shell's prompt to "$" and define the demo_stage and demo_bkpdir_cmd functions
++send "PS1='\$ '; demo_stage () { echo -e \"\r\\033\[1;32m\$@\\033\[0m\" ; } ; demo_bkpdir_cmd () { echo -e \"\r\\033\[1;35m\$@\\033\[0m\" ; }\r"
++expect "$ "
++
++send "clear\r"
++expect "$ "
++
++# Full second delay at the start
++sleep 1
++
++# describe the entire demo
++send "demo_stage 'This demo will show advanced bkpdir features: comparison, restore, and configuration management'\r"
++expect "$ "
++sleep 3
++
++# Navigate to demo directory
++send "demo_stage 'Navigating to demo directory'\r"
++expect "$ "
++
++send "cd $demo_dir\r"
++expect "$ "
++sleep 0.5
++
++# Create project structure
++send "mkdir -p myproject && cd myproject\r"
++expect "$ "
++sleep 0.5
++
++# Initialize git
++send "git init\r"
++expect "$ "
++sleep 1
++
++# Create sample files with more complexity
++send "demo_stage 'Creating project files'\r"
++expect "$ "
++send "echo '# My Project' > README.md\r"
++expect "$ "
++sleep 0.3
++send "echo 'package main' > main.go\r"
++expect "$ "
++sleep 0.3
++send "echo 'import \"fmt\"' >> main.go\r"
++expect "$ "
++sleep 0.3
++send "echo 'func main() { fmt.Println(\"Hello\") }' >> main.go\r"
++expect "$ "
++sleep 0.3
++send "mkdir -p src/components && echo 'export default Component' > src/components/Button.js\r"
++expect "$ "
++sleep 0.3
++send "echo 'export default Component' > src/components/Header.js\r"
++expect "$ "
++sleep 0.3
++send "mkdir -p tests && echo 'describe(\"tests\")' > tests/test.js\r"
++expect "$ "
++sleep 0.5
++
++# Initial git commit
++send "demo_stage 'Initial git commit'\r"
++expect "$ "
++send "git add .\r"
++expect "$ "
++sleep 0.5
++send "git commit -m 'Initial commit'\r"
++expect "$ "
++sleep 1.5
++
++# Create .bkpdir.yml with advanced configuration
++send "demo_stage 'Creating advanced .bkpdir.yml configuration'\r"
++expect "$ "
++send "cat > .bkpdir.yml << 'EOF'\r"
++send "# .bkpdir.yml - Advanced Configuration\r"
++send "archive_dir_path: \"./archives\"\r"
++send "use_current_dir_name: true\r"
++send "\r"
++send "# Exclude patterns for files/directories to skip\r"
++send "exclude_patterns:\r"
++send "  - \".git/\"\r"
++send "  - \"node_modules/\"\r"
++send "  - \"*.tmp\"\r"
++send "  - \"*.log\"\r"
++send "  - \"tests/\"\r"
++send "\r"
++send "# Git integration settings\r"
++send "include_git_info: true\r"
++send "show_git_dirty_status: true\r"
++send "include_branch: true\r"
++send "EOF\r"
++expect "$ "
++sleep 1
++
++# Show config
++send "demo_bkpdir_cmd 'Advanced configuration with exclusions'\r"
++expect "$ "
++sleep 0.5
++send "cat .bkpdir.yml | yq -P\r"
++expect "$ "
++sleep 2.5
++
++# Create initial full archive
++send "demo_stage 'Creating initial full archive'\r"
++expect "$ "
++sleep 1
++send "$bkpdir_bin .\r"
++expect "$ "
++sleep 3.5
++
++# Make significant changes
++send "demo_stage 'Making significant changes to project'\r"
++expect "$ "
++sleep 1
++send "echo '// New feature added' >> main.go\r"
++expect "$ "
++sleep 0.3
++send "echo 'export default NewComponent' > src/components/Footer.js\r"
++expect "$ "
++sleep 0.3
++send "echo 'Updated project' >> README.md\r"
++expect "$ "
++sleep 0.5
++send "git add . && git commit -m 'Add new features'\r"
++expect "$ "
++sleep 2
++
++# Create incremental archive
++send "demo_stage 'Creating incremental archive'\r"
++expect "$ "
++sleep 1
++send "$bkpdir_bin inc\r"
++expect "$ "
++sleep 3.5
++
++# Show archive comparison
++send "demo_stage 'Comparing archives'; demo_bkpdir_cmd 'Compare: bkpdir can show differences between archives'\r"
++expect "$ "
++sleep 1
++send "$bkpdir_bin list\r"
++expect "$ "
++sleep 2
++send "demo_bkpdir_cmd 'Archive comparison helps identify what changed between backups'\r"
++expect "$ "
++sleep 2
++
++# Make more changes
++send "demo_stage 'Making additional changes'\r"
++expect "$ "
++sleep 1
++send "echo '// Another update' >> main.go\r"
++expect "$ "
++sleep 0.3
++send "echo 'More updates' >> README.md\r"
++expect "$ "
++sleep 0.5
++send "git add . && git commit -m 'Additional updates'\r"
++expect "$ "
++sleep 2
++
++# Create another incremental
++send "demo_stage 'Creating another incremental archive'\r"
++expect "$ "
++sleep 1
++send "$bkpdir_bin inc\r"
++expect "$ "
++sleep 3.5
++
++# List all archives with details
++send "demo_stage 'Listing all archives with details'\r"
++expect "$ "
++sleep 1
++send "demo_bkpdir_cmd 'List: bkpdir shows comprehensive archive information'\r"
++expect "$ "
++sleep 1
++send "$bkpdir_bin list\r"
++expect "$ "
++sleep 3
++
++# Show archive sizes and structure
++send "demo_stage 'Archive sizes and structure'\r"
++expect "$ "
++sleep 0.5
++send "ls -lh archives/*/*.zip 2>/dev/null | awk '{print \$5, \$9}' | head -5\r"
++expect "$ "
++sleep 2.5
++
++# Show project structure after changes
++send "demo_stage 'Final project structure'\r"
++expect "$ "
++sleep 0.5
++send "find . -not -path '*/\.*' -not -path '*/archives/*' | sort\r"
++expect "$ "
++sleep 2.5
++
++# Show archive directory tree
++send "demo_stage 'Archive directory tree structure'\r"
++expect "$ "
++sleep 0.5
++send "tree archives 2>/dev/null || find archives -type f | head -10\r"
++expect "$ "
++sleep 2.5
++
++# Exit asciinema (Ctrl+C)
++send "\x03"
++expect eof
+diff --git a/demos/generate-demonstrations.sh b/demos/generate-demonstrations.sh
+new file mode 100755
+index 0000000..62d2c1f
+--- /dev/null
++++ b/demos/generate-demonstrations.sh
+@@ -0,0 +1,372 @@
++#!/bin/bash
++# Comprehensive script to generate all visual demonstrations for bkpdir
++# Generates: screen recordings for demos, diagrams, and before/after screenshots
++# Usage: ./generate-demonstrations.sh [1|2]
++#   - No argument: Generate both Demo 1 and Demo 2
++#   - Argument "1": Generate only Demo 1
++#   - Argument "2": Generate only Demo 2
++
++set -e
++
++# Parse optional argument
++DEMO_NUM="${1:-}"
++GENERATE_DEMO_config=true
++GENERATE_DEMO_full=true
++GENERATE_DEMO_help=true
++
++if [ -n "${DEMO_NUM}" ]; then
++    if [ "${DEMO_NUM}" = "help" ]; then
++        GENERATE_DEMO_config=false
++        GENERATE_DEMO_full=false
++        GENERATE_DEMO_help=true
++    elif [ "${DEMO_NUM}" = "full" ]; then
++        GENERATE_DEMO_config=false
++        GENERATE_DEMO_full=true
++        GENERATE_DEMO_help=false
++    elif [ "${DEMO_NUM}" = "config" ]; then
++        GENERATE_DEMO_config=true
++        GENERATE_DEMO_full=false
++        GENERATE_DEMO_help=false
++    else
++        echo "Error: Invalid argument '${DEMO_NUM}'"
++        echo "Usage: $0 [config|full|help]"
++        echo "  No argument: Generate all"
++        exit 1
++    fi
++fi
++
++SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
++PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
++DEMO_DIR_config="${HOME}/.bkpdir-demo-config"
++DEMO_DIR_full="${HOME}/.bkpdir-demo-full"
++DEMO_DIR_help="${HOME}/.bkpdir-demo-help"
++IMAGES_DIR="${PROJECT_ROOT}/images"
++# BKPDIR_BIN="${HOME}/.local/bin/bkpdir"
++BKPDIR_BIN="bkpdir"
++
++# Colors for output
++GREEN='\033[0;32m'
++BLUE='\033[0;34m'
++YELLOW='\033[1;33m'
++CYAN='\033[0;36m'
++NC='\033[0m' # No Color
++
++echo -e "${BLUE}=== BkpDir Visual Demonstrations Generator ===${NC}"
++if [ -n "${DEMO_NUM}" ]; then
++    echo -e "${CYAN}Generating Demo ${DEMO_NUM} only${NC}"
++else
++    echo -e "${CYAN}Generating both Demo 1 and Demo 2${NC}"
++fi
++echo ""
++
++# Check prerequisites
++echo -e "${YELLOW}Checking prerequisites...${NC}"
++if ! command -v bkpdir &> /dev/null && [ ! -f "${BKPDIR_BIN}" ]; then
++    echo "Error: bkpdir not found. Please install or set BKPDIR_BIN"
++    exit 1
++fi
++
++if [ -f "${BKPDIR_BIN}" ]; then
++    BKPDIR_BIN="${BKPDIR_BIN}"
++elif command -v bkpdir &> /dev/null; then
++    BKPDIR_BIN="bkpdir"
++fi
++
++if ! command -v asciinema &> /dev/null; then
++    echo "Warning: asciinema not found. Screen recording will be skipped."
++    echo "Install with: brew install asciinema or pip install asciinema"
++    SKIP_RECORDING=true
++else
++    SKIP_RECORDING=false
++fi
++
++# Create directories
++mkdir -p "${DEMO_DIR_config}"
++mkdir -p "${DEMO_DIR_full}"
++mkdir -p "${DEMO_DIR_help}"
++mkdir -p "${IMAGES_DIR}"
++
++cd "${PROJECT_ROOT}"
++
++# Function to convert cast to GIF
++convert_to_gif() {
++    local cast_file="$1"
++    local gif_file="$2"
++    local demo_name="$3"
++    
++    if command -v agg &> /dev/null; then
++        echo -e "${CYAN}Converting ${demo_name} to GIF...${NC}"
++        ARGS="--theme asciinema"
++        LFD="--last-frame-duration 1"
++        if agg $ARGS $LFD "${cast_file}" "${gif_file}"; then
++            echo -e "${GREEN}✓ GIF saved to ${gif_file}${NC}"
++            
++            # Optimize the GIF using gifsicle if available
++            if command -v gifsicle &> /dev/null; then
++                local optimized_file="${gif_file%.gif}-optimized.gif"
++                gifsicle -O3 --colors 256 "${gif_file}" -o "${optimized_file}" && \
++                    echo -e "${GREEN}✓ Optimized GIF saved to ${optimized_file}${NC}"
++            fi
++        else
++            echo "Warning: GIF conversion failed. Install agg: pip install agg"
++        fi
++    else
++        echo "To convert to GIF: pip install agg && agg ${cast_file} ${gif_file}"
++    fi
++}
++
++gen_call () {
++    local ID="$1"
++    local varname="GENERATE_DEMO_$ID"
++    local generate_demo="${!varname}"
++
++    export DEMO_ID="$ID"
++
++    # Step 1: Generate Demo 1 screen recording
++    if [ "$generate_demo" = true ] && [ "$SKIP_RECORDING" = false ]; then
++        echo -e "${GREEN}Step 1: Generating Demo 1 screen recording...${NC}"
++        true
++    elif [ "$generate_demo" = false ]; then
++        echo -e "${YELLOW}Skipping Demo 1 (not requested)${NC}"
++        false
++    elif [ "$SKIP_RECORDING" = true ]; then
++        echo -e "${YELLOW}Skipping screen recording (asciinema not available)${NC}"
++        false
++    fi
++}
++
++if gen_call help; then
++    demo_dir_varname="DEMO_DIR_${DEMO_ID}"
++    cd "${!demo_dir_varname}"
++    
++    fn_cast="bkpdir-demo-$DEMO_ID.cast"
++    asciinema rec --overwrite $fn_cast -c 'echo "\n\033[1;32mCommand help and usage\033[0m\n"'
++    asciinema rec --append $fn_cast -c 'stdbuf -oL -eL bkpdir --help | pv -q -L 4 --line-mode'
++
++    mv $fn_cast "${IMAGES_DIR}/$fn_cast"
++    echo -e "${GREEN}✓ Demo $DEMO_ID recording saved to ${IMAGES_DIR}/$fn_cast${NC}"
++
++    convert_to_gif "${IMAGES_DIR}/$fn_cast" "${IMAGES_DIR}/bkpdir-demo-$DEMO_ID.gif" "Demo $DEMO_ID"
++
++    cd "${PROJECT_ROOT}"
++fi
++
++if gen_call config; then
++    demo_dir_varname="DEMO_DIR_${DEMO_ID}"
++    cd "${!demo_dir_varname}"
++    
++    fn_cast="bkpdir-demo-$DEMO_ID.cast"
++    asciinema rec --overwrite $fn_cast -c 'echo "\n\033[1;32mCurrent configuration\033[0m\n"'
++    # Append the output of the command to the file
++    asciinema rec --append $fn_cast -c 'echo "\n\033[2;32mCurrent configuration\033[0m\n"'
++    asciinema rec --append $fn_cast -c 'stdbuf -oL -eL bkpdir config --format tree | pv -q -L 4 --line-mode'
++
++    mv $fn_cast "${IMAGES_DIR}/$fn_cast"
++    echo -e "${GREEN}✓ Demo $DEMO_ID recording saved to ${IMAGES_DIR}/$fn_cast${NC}"
++
++    convert_to_gif "${IMAGES_DIR}/$fn_cast" "${IMAGES_DIR}/bkpdir-demo-$DEMO_ID.gif" "Demo $DEMO_ID"
++
++    cd "${PROJECT_ROOT}"
++fi
++
++if gen_call full; then
++    demo_dir_varname="DEMO_DIR_${DEMO_ID}"
++    cd "${!demo_dir_varname}"
++    
++    fn_cast="bkpdir-demo-$DEMO_ID.cast"
++    # Use expect script for more reliable automation
++    if [ -f "${SCRIPT_DIR}/demo-automation-$DEMO_ID.exp" ]; then
++        [ -f "$fn_cast" ] && rm $fn_cast
++        # asciinema rec --append bkpdir-demo-2.cast -c 'echo "\033[1;36mThis demo will show advanced bkpdir features: comparison, restore, and configuration management\033[0m\n"'
++        # asciinema rec --append bkpdir-demo-2.cast -c 'echo "\033[1;36mThis demo will show advanced bkpdir features: comparison, restore, and configuration management\033[0m\n"; sleep 2; expect -c send -- "bash -lc '\''cd \"$DEMO_DIR_2\" && mkdir -p myproject && cd myproject && git init'\''\r"'
++
++        "${SCRIPT_DIR}/demo-automation-$DEMO_ID.exp" "${!demo_dir_varname}" "${BKPDIR_BIN}" "${PROJECT_ROOT}" "${fn_cast}" || {
++            echo "Warning: Demo $DEMO_ID recording may have issues. Check $fn_cast"
++        }
++        
++        set -x
++        if [ -f "$fn_cast" ]; then
++            # append summary
++            asciinema rec --append $fn_cast -c 'echo "\n\033[1;32mSummary: Advanced features demonstrated\033[0m\n"; sleep 1; echo "\033[1;33m✓ Advanced configuration with exclusions\033[0m"; sleep 1; echo "\033[1;33m✓ Multiple incremental archives\033[0m"; sleep 1; echo "\033[1;33m✓ Archive listing and inspection\033[0m"; sleep 1; echo "\033[1;33m✓ Configuration management\033[0m"; sleep 2'
++
++            mv $fn_cast "${IMAGES_DIR}/$fn_cast"
++            echo -e "${GREEN}✓ Demo $DEMO_ID recording saved to ${IMAGES_DIR}/$fn_cast${NC}"
++
++            convert_to_gif "${IMAGES_DIR}/$fn_cast" "${IMAGES_DIR}/bkpdir-demo-$DEMO_ID.gif" "Demo $DEMO_ID"
++            echo "- ${IMAGES_DIR}/bkpdir-demo-$DEMO_ID.gif" 
++            open "${IMAGES_DIR}/bkpdir-demo-$DEMO_ID.gif" 
++        fi
++    else
++        echo "Warning: demo-automation-$DEMO_ID.exp not found"
++    fi
++    cd "${PROJECT_ROOT}"
++fi
++
++if false; then
++    # Step 3: Create demo environment for screenshots (always generated)
++    STEP_NUM=3
++    echo -e "${GREEN}Step ${STEP_NUM}: Creating demo environment for screenshots...${NC}"
++    cd "${DEMO_DIR}"
++    rm -rf myapp
++    mkdir -p myapp
++    cd myapp
++
++    # Initialize git
++    git init -q
++    git config user.name "Demo User"
++    git config user.email "demo@example.com"
++
++    # Create sample files
++    echo '# My Application' > README.md
++    echo 'package main' > main.go
++    echo 'console.log("Hello")' > app.js
++    mkdir -p src
++    echo '// source file' > src/utils.js
++
++    # Initial commit
++    git add . > /dev/null 2>&1
++    git commit -m 'Initial commit' > /dev/null 2>&1
++
++    # Create .bkpdir.yml
++    cat > .bkpdir.yml << 'EOF'
++    # .bkpdir.yml
++    archive_dir_path: "./archives"
++    use_current_dir_name: true
++
++    # Exclude patterns for files/directories to skip
++    exclude_patterns:
++      - ".git/"
++      - "node_modules/"
++      - "*.tmp"
++      - "*.log"
++
++    # Git integration settings
++    include_git_info: true
++    show_git_dirty_status: true
++    include_branch: true
++    EOF
++
++    STEP_NUM=$((STEP_NUM + 1))
++    echo -e "${GREEN}Step ${STEP_NUM}: Generating before/after screenshots...${NC}"
++
++    # Before screenshot - directory structure
++    echo "=== Before: Project Structure ===" > "${IMAGES_DIR}/before-structure.txt"
++    find . -not -path '*/\.*' -not -path '*/archives/*' | sort >> "${IMAGES_DIR}/before-structure.txt"
++
++    # Create full archive
++    echo -e "${CYAN}Creating full archive...${NC}"
++    "${BKPDIR_BIN}" . > /dev/null 2>&1 || true
++
++    # Make changes
++    echo '// Updated code' >> main.go
++    echo '' >> README.md
++    echo 'Updated README' >> README.md
++    git add . > /dev/null 2>&1
++    git commit -m 'Add new features' > /dev/null 2>&1
++
++    # Create incremental archive
++    "${BKPDIR_BIN}" inc > /dev/null 2>&1 || true
++
++    # After screenshot - archive listing
++    echo "=== After: Archive Listing ===" > "${IMAGES_DIR}/after-archives.txt"
++    "${BKPDIR_BIN}" list >> "${IMAGES_DIR}/after-archives.txt" 2>&1 || true
++
++    # Archive directory structure
++    echo "" >> "${IMAGES_DIR}/after-archives.txt"
++    echo "=== Archive Directory Structure ===" >> "${IMAGES_DIR}/after-archives.txt"
++    find archives -name '*.zip' 2>/dev/null | sort >> "${IMAGES_DIR}/after-archives.txt" || true
++
++    echo -e "${GREEN}✓ Screenshots saved to ${IMAGES_DIR}/before-structure.txt and ${IMAGES_DIR}/after-archives.txt${NC}"
++
++    STEP_NUM=$((STEP_NUM + 1))
++    echo -e "${GREEN}Step ${STEP_NUM}: Generating timeline data...${NC}"
++    cd "${PROJECT_ROOT}"
++
++    # Create a simple timeline text representation
++    cat > "${IMAGES_DIR}/archive-timeline.txt" << 'EOF'
++    BkpDir Archive Timeline
++    =======================
++
++    Day 1: Initial Full Archive
++      ├─ Archive: myapp-YYYY-MM-DD-HH-MM=main=abc123.zip
++      ├─ Size: ~50 KB (full backup)
++      └─ Contains: All project files
++
++    Day 2: Incremental Archive
++      ├─ Archive: myapp_update=YYYY-MM-DD-HH-MM=main=def456.zip
++      ├─ Size: ~5 KB (only changes)
++      └─ Contains: Modified files only
++
++    Day 3: Incremental Archive
++      ├─ Archive: myapp_update=YYYY-MM-DD-HH-MM=main=ghi789.zip
++      ├─ Size: ~3 KB (only changes)
++      └─ Contains: Modified files only
++
++    Disk Space Usage Over Time:
++      Day 1: 50 KB
++      Day 2: 55 KB (50 + 5)
++      Day 3: 58 KB (50 + 5 + 3)
++
++    Archive Relationships:
++      Full Archive (Day 1)
++        └─> Incremental (Day 2) [depends on Day 1]
++        └─> Incremental (Day 3) [depends on Day 1]
++    EOF
++
++    echo -e "${GREEN}✓ Timeline data saved to ${IMAGES_DIR}/archive-timeline.txt${NC}"
++
++    STEP_NUM=$((STEP_NUM + 1))
++    echo -e "${GREEN}Step ${STEP_NUM}: Generating comparison output...${NC}"
++    cd "${DEMO_DIR}/myapp"
++
++    # Create comparison data
++    cat > "${IMAGES_DIR}/archive-comparison.txt" << 'EOF'
++    Archive Comparison
++    =================
++
++    Full Archive vs Incremental Archive
++
++    Full Archive (Day 1):
++      - Contains: All files in project
++      - Size: Larger (~50 KB)
++      - Use case: Initial backup, complete restore
++      - Naming: myapp-YYYY-MM-DD-HH-MM=BRANCH=HASH.zip
++
++    Incremental Archive (Day 2+):
++      - Contains: Only changed files
++      - Size: Smaller (~3-5 KB)
++      - Use case: Regular backups, space-efficient
++      - Naming: myapp_update=YYYY-MM-DD-HH-MM=BRANCH=HASH.zip
++      - Dependency: Requires base full archive
++
++    Benefits:
++      ✓ Incremental archives save disk space
++      ✓ Faster to create (only changed files)
++      ✓ Maintains full history with base archive
++      ✓ Git integration tracks branch and commit
++    EOF
++
++    echo -e "${GREEN}✓ Comparison data saved to ${IMAGES_DIR}/archive-comparison.txt${NC}"
++
++    cd "${PROJECT_ROOT}"
++
++    echo ""
++    echo -e "${BLUE}=== Generation Complete ===${NC}"
++    echo ""
++    echo -e "${CYAN}Generated files:${NC}"
++    # [ -f "${IMAGES_DIR}/bkpdir-demo-1.cast" ] && echo "  📹 Demo 1 recording: ${IMAGES_DIR}/bkpdir-demo-1.cast"
++    # [ -f "${IMAGES_DIR}/bkpdir-demo-1.gif" ] && echo "  🎬 Demo 1 GIF: ${IMAGES_DIR}/bkpdir-demo-1.gif"
++    # [ -f "${IMAGES_DIR}/bkpdir-demo-2.cast" ] && echo "  📹 Demo 2 recording: ${IMAGES_DIR}/bkpdir-demo-2.cast"
++    # [ -f "${IMAGES_DIR}/bkpdir-demo-2.gif" ] && echo "  🎬 Demo 2 GIF: ${IMAGES_DIR}/bkpdir-demo-2.gif"
++    echo "  📊 Timeline: ${IMAGES_DIR}/archive-timeline.txt"
++    echo "  📋 Comparison: ${IMAGES_DIR}/archive-comparison.txt"
++    echo "  📸 Before: ${IMAGES_DIR}/before-structure.txt"
++    echo "  📸 After: ${IMAGES_DIR}/after-archives.txt"
++    echo ""
++    echo -e "${CYAN}Next steps:${NC}"
++    echo "  1. Review generated files in ${IMAGES_DIR}/"
++    echo "  2. Convert .cast to GIF: pip install agg && agg <cast-file> <gif-file>"
++    echo "  3. Create visual diagrams from text files using your preferred tool"
++    echo "  4. Update documentation with generated demonstrations"
++    echo ""
++fi
+diff --git a/demos/record-demo-1.sh b/demos/record-demo-1.sh
+new file mode 100755
+index 0000000..2da1a93
+--- /dev/null
++++ b/demos/record-demo-1.sh
+@@ -0,0 +1,72 @@
++#!/bin/bash
++# Script to automate bkpdir demonstration recording - Demo 1
++# Uses osascript to control Terminal.app and asciinema to record
++
++set -e
++
++# Configuration
++DEMO_DIR="${HOME}/.bkpdir-demo"
++BKPDIR_BIN="${HOME}/.local/bin/bkpdir"  # Adjust path as needed
++TERMINAL_APP="Terminal"
++RECORDING_FILE="bkpdir-demo-1.cast"
++RECORDING_OUTPUT="../images/bkpdir-demo-1.gif"  # Optional: convert to GIF
++
++# Check prerequisites
++if ! command -v asciinema &> /dev/null; then
++    echo "Error: asciinema is not installed"
++    echo "Install with: brew install asciinema or pip install asciinema"
++    exit 1
++fi
++
++if ! command -v osascript &> /dev/null; then
++    echo "Error: osascript is not available (macOS required)"
++    exit 1
++fi
++
++# Check if bkpdir exists
++if [ ! -f "${BKPDIR_BIN}" ] && ! command -v bkpdir &> /dev/null; then
++    echo "Error: bkpdir binary not found at ${BKPDIR_BIN} and not in PATH"
++    echo "Please set BKPDIR_BIN environment variable or install bkpdir"
++    exit 1
++fi
++
++# Use bkpdir from PATH if binary not found at specified path
++if [ ! -f "${BKPDIR_BIN}" ]; then
++    BKPDIR_BIN="bkpdir"
++fi
++
++# Cleanup function
++cleanup() {
++    echo "Cleaning up..."
++    rm -rf "${DEMO_DIR}"
++    # Note: Terminal window cleanup handled by osascript
++}
++
++trap cleanup EXIT
++
++# Create demo directory
++echo "Setting up demo environment..."
++mkdir -p "${DEMO_DIR}"
++cd "${DEMO_DIR}"
++
++# Create images directory if it doesn't exist
++mkdir -p "$(dirname "${RECORDING_OUTPUT}")"
++
++# Get script directory for relative paths
++SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
++PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
++
++# Run automation script
++echo "Starting recording automation for Demo 1..."
++osascript "${SCRIPT_DIR}/demo-automation-1.applescript" "${DEMO_DIR}" "${BKPDIR_BIN}" "${PROJECT_ROOT}"
++
++echo ""
++echo "Recording complete!"
++echo "Recording file: ${RECORDING_FILE}"
++echo ""
++echo "To convert to GIF (requires agg):"
++echo "  pip install agg"
++echo "  agg ${RECORDING_FILE} ${RECORDING_OUTPUT}"
++echo ""
++echo "To upload to asciinema.org:"
++echo "  asciinema upload ${RECORDING_FILE}"
+diff --git a/docs/governance/cross-links.md b/docs/governance/cross-links.md
+new file mode 100644
+index 0000000..0f7c7c2
+--- /dev/null
++++ b/docs/governance/cross-links.md
+@@ -0,0 +1,12 @@
++# REQ to ARCH/IMPL Cross-Link Mapping (Governance Tokens)
++
++- REQ:GOVERNANCE_DOCUMENTATION → ARCH:REPO_GOV; ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
++- REQ:GOV_POLICY_MIGRATION → IMPL:POLICY_MIGRATION; IMPL:AUDIT_CHAIN
++- REQ:GOV_CHANGE_CONTROL → ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
++- REQ:GOV_AUDIT → IMPL:AUDIT_CHAIN
++- REQ:GOV_REGISTRY_COMPLETENESS → ARCH:REPO_GOV
++- REQ:GOV_DISCOVERABILITY → (docs/index.md) and docs/governance/index.md
++- REQ:GOV_NAMING_CONVENTIONS → ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
++- REQ:GOV_CROSS_LINKING → ARCH:REPO_GOV; ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
++- REQ:GOV_MIGRATION_STATUS → IMPL:POLICY_MIGRATION; IMPL:AUDIT_CHAIN
++- REQ:REGISTRY_COMPLETION_VERIFICATION → ARCH:REPO_GOV; IMPL:AUDIT_CHAIN
+diff --git a/docs/governance/index.md b/docs/governance/index.md
+new file mode 100644
+index 0000000..6123996
+--- /dev/null
++++ b/docs/governance/index.md
+@@ -0,0 +1,25 @@
++# Governance Decisions (Token-Linked)
++
++Overview: Substantive governance decisions, migration status, and cross-links to REQ tokens.
++
++## REQ Token References
++- [REQ:GOVERNANCE_DOCUMENTATION] Governance rules must be documented with explicit anchors and cross-links to ARCH/IMPL decisions.
++- [REQ:GOV_POLICY_MIGRATION] Migration of governance policies into STDD decision documents.
++- [REQ:GOV_CHANGE_CONTROL] Requirements for proposing, approving, and rolling out governance changes.
++- [REQ:GOV_AUDIT] Regular auditing of governance rules; ensure alignment with decisions and tests.
++- [REQ:GOV_REGISTRY_COMPLETENESS] Registry must capture all governance-related tokens and their intents.
++- [REQ:GOV_DISCOVERABILITY] Centralized discoverability of governance content via docs/index.md with links to tokens and decisions.
++- [REQ:GOV_NAMING_CONVENTIONS] Establish and enforce token naming conventions for governance-related tokens.
++- [REQ:GOV_CROSS_LINKING] Each REQ token must be cross-linked to relevant ARCH/IMPL decisions.
++- [REQ:GOV_MIGRATION_STATUS] Track the progress/status of governance-content migration to ARCH/IMPL docs.
++- [REQ:REGISTRY_COMPLETION_VERIFICATION] Verification rule that ensures registry remains complete over time.
++
++## Cross-links to ARCH/IMPL Decisions
++- ARCH:REPO_GOV, ARCH:CHANGE_CONTROL, IMPL:POLICY_MIGRATION, IMPL:AUDIT_CHAIN etc. (see registry cross-links in docs/index.md)
++
++## Migration Status
++- Placeholder for migration progress notes and upcoming changes.
++
++## Quick Links
++- `docs/index.md`
++- `stdd/tasks.md`
+diff --git a/docs/index.md b/docs/index.md
+new file mode 100644
+index 0000000..1233fe6
+--- /dev/null
++++ b/docs/index.md
+@@ -0,0 +1,27 @@
++# Governance Discovery Hub
++
++Overview: Central discovery point for governance tokens and their connected decisions. This hub links to the REQ token registry and to related ARCH/IMPL decisions.
++
++## Tokens (REQ-focused)
++- [REQ:GOVERNANCE_DOCUMENTATION] Governance rules must be documented with explicit anchors and cross-links to ARCH/IMPL decisions.
++- [REQ:GOV_POLICY_MIGRATION] Migration of governance policies into STDD decision documents.
++- [REQ:GOV_CHANGE_CONTROL] Requirements for proposing, approving, and rolling out governance changes.
++- [REQ:GOV_AUDIT] Regular auditing of governance rules; ensure alignment with decisions and tests.
++- [REQ:GOV_REGISTRY_COMPLETENESS] Registry must capture all governance-related tokens and their intents.
++- [REQ:GOV_DISCOVERABILITY] Centralized discoverability of governance content via docs/index.md with links to tokens and decisions.
++- [REQ:GOV_NAMING_CONVENTIONS] Establish and enforce token naming conventions for governance-related tokens.
++- [REQ:GOV_CROSS_LINKING] Each REQ token must be cross-linked to relevant ARCH/IMPL decisions.
++- [REQ:GOV_MIGRATION_STATUS] Track the progress/status of governance-content migration to ARCH/IMPL docs.
++- [REQ:REGISTRY_COMPLETION_VERIFICATION] Verification rule that ensures registry remains complete over time.
++
++## Cross-links (ARCH/IMPL)
++- See cross-link mappings in the governance page and the architecture/implementation decision docs for each REQ token.
++
++## Quick Links
++- `docs/governance/index.md` (governance page)
++- `docs/architecture-decisions.md`
++- `docs/implementation-decisions.md`
++- `stdd/tasks.md`
++
++## Discoverability
++- This hub is the primary entry point for governance token discovery. Use it to navigate to concrete decisions and migration efforts.
+diff --git a/docs/test-fix-review.md b/docs/test-fix-review.md
+new file mode 100644
+index 0000000..4862fd0
+--- /dev/null
++++ b/docs/test-fix-review.md
+@@ -0,0 +1,133 @@
++# Test Fix Review: Priority 0 Configuration Merge Tests
++
++**Date**: 2025-12-11  
++**Status**: ✅ Fixed and Complete  
++**Related**: [REQ:CFG_005], [REQ:CFG_001], [REQ:CONFIGURATION], [IMPL:CFG_MIXED_MODE_MERGE_FIX], [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]
++
++## Issue Identified
++
++The tests `TestAllStrategiesWithPrecedenceFields` for `+` and `^` prefixes on precedence fields (`archive_dir_path`) are failing because the implementation allows these prefixes to override earlier file values, which violates CFG-001.
++
++## Requirements Review
++
++### CFG-001: Configuration Discovery
++- **Requirement**: Earlier files take precedence over later files when processing sequential config files
++- **Applies to**: All fields, including precedence fields like `archive_dir_path`
++
++### CFG-005: Layered Configuration Inheritance  
++- **Requirement**: Array fields default to merge (accumulate) strategy
++- **Applies to**: Array fields like `exclude_patterns`, not scalar precedence fields
++
++### Implementation Decision (IMPL:CFG_MERGE_BEHAVIOR_REGISTRY)
++From `stdd/implementation-decisions.md` lines 2130-2132:
++
++> **MergeBehaviorPrecedence fields** (e.g., `archive_dir_path`, `include_git_info`):
++> - Default (no prefix): Earlier files take precedence (CFG-001)
++> - **Explicit prefixes: Work as normal, but precedence still applies for sequential files**
++
++## Root Cause Analysis
++
++### Current Implementation Behavior
++
++1. **`+archive_dir_path` (merge strategy)**:
++   - Processed as "merge" strategy
++   - Routes to `applyMerge()` function
++   - `applyMerge()` is designed for arrays, not scalars
++   - Falls back to `setConfigField(result, key, value)` for non-array values
++   - **Bypasses precedence check** → Later file overrides earlier file ❌
++
++2. **`^archive_dir_path` (prepend strategy)**:
++   - Processed as "prepend" strategy  
++   - Routes to `applyPrepend()` function
++   - `applyPrepend()` is designed for arrays, not scalars
++   - Falls back to `setConfigField(result, key, value)` for non-array values
++   - **Bypasses precedence check** → Later file overrides earlier file ❌
++
++3. **`!archive_dir_path` (replace strategy)**:
++   - Processed as "replace" strategy
++   - Routes to `applyReplace()` function
++   - `applyReplace()` **DOES check precedence** (lines 2776-2790 in config.go)
++   - Correctly respects earlier file precedence ✅
++
++4. **`archive_dir_path` (no prefix)**:
++   - Processed as "override" strategy
++   - Routes to `applyOverride()` function
++   - `applyOverride()` **DOES check precedence** (lines 2534-2553 in config.go)
++   - Correctly respects earlier file precedence ✅
++
++### Code Locations
++
++- `applyMerge()`: `config.go` lines 2558-2703 - No precedence check for scalar fallback
++- `applyPrepend()`: `config.go` lines 2705-2763 - No precedence check for scalar fallback
++- `applyReplace()`: `config.go` lines 2765-2796 - **Has precedence check** ✅
++- `applyOverride()`: `config.go` lines 2531-2556 - **Has precedence check** ✅
++
++## Test Fix Assessment
++
++### Current Fix (Incorrect)
++The current fix accepts either file1 or file2 value, which:
++- ✅ Makes tests pass
++- ❌ Masks a bug in the implementation
++- ❌ Doesn't validate CFG-001 requirement
++- ❌ Doesn't match implementation decision that "precedence still applies for sequential files"
++
++### Correct Expected Behavior
++Per CFG-001 and implementation decision:
++- `+archive_dir_path` in file2 should **NOT** override file1's value
++- `^archive_dir_path` in file2 should **NOT** override file1's value
++- Earlier file precedence should be maintained
++
++## Resolution
++
++**Status**: ✅ **IMPLEMENTED** - Option 1 (Fix Implementation) was chosen and completed.
++
++### Implementation Fix Applied
++
++Updated `applyMerge()` and `applyPrepend()` functions to check precedence for scalar/precedence fields before falling back to `setConfigField()`. This ensures CFG-001 requirement is respected even when `+` or `^` prefixes are used on precedence fields.
++
++**See**: [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX] in `stdd/implementation-decisions.md` for complete details.
++
++## Recommended Actions (Historical - Already Implemented)
++
++### Option 1: Fix Implementation (✅ Implemented)
++Update `applyMerge()` and `applyPrepend()` to check precedence for scalar/precedence fields:
++
++```go
++// In applyMerge() and applyPrepend()
++// If field is MergeBehaviorPrecedence and not an array, check precedence
++behavior := getFieldMergeBehavior(key)
++if behavior == MergeBehaviorPrecedence && !isArray(value) {
++    // Apply precedence check similar to applyOverride()
++    if !inheritContext && dstValue != nil && defaultCfg != nil {
++        // ... precedence check logic ...
++    }
++}
++```
++
++### Option 2: Document Edge Case (Temporary)
++If implementation fix is deferred:
++- Update tests to document that `+` and `^` on scalar precedence fields is an edge case
++- Add TODO comment noting this violates CFG-001
++- Create issue to track the bug
++
++### Option 3: Reject Invalid Usage
++- Update tests to verify that `+` and `^` prefixes on scalar fields are rejected/ignored
++- Document that these prefixes are only valid for array fields
++
++## Test Fix Recommendation
++
++**Revert the current fix** and implement one of:
++
++1. **Fix implementation** to respect precedence for `+` and `^` on precedence fields
++2. **Update tests** to expect earlier file precedence (will fail until implementation is fixed)
++3. **Document edge case** with clear notes that this is a known limitation
++
++The current fix that accepts either value is **not aligned with requirements** and should be corrected.
++
++## Cross-References
++
++- [REQ:CFG_001] - Configuration Discovery (earlier file precedence)
++- [REQ:CFG_005] - Configuration Inheritance (array field merge)
++- [ARCH:CFG_005] - Layered Configuration Inheritance Architecture
++- [IMPL:CFG_MERGE_BEHAVIOR_REGISTRY] - Field-Level Merge Behavior Registry
++- [IMPL:CFG_MIXED_MODE_MERGE_FIX] - Mixed-Mode Merge Strategy Fix
+diff --git a/scripts/token-coverage-analysis.sh b/scripts/token-coverage-analysis.sh
+new file mode 100755
+index 0000000..152f443
+--- /dev/null
++++ b/scripts/token-coverage-analysis.sh
+@@ -0,0 +1,188 @@
++#!/bin/bash
++# [REQ:DOC_016] Token Coverage Analysis Tool
++# Purpose: Analyze token coverage across source code and identify gaps
++
++set -euo pipefail
++
++# Colors for output
++RED='\033[0;31m'
++GREEN='\033[0;32m'
++YELLOW='\033[1;33m'
++BLUE='\033[0;34m'
++CYAN='\033[0;36m'
++NC='\033[0m' # No Color
++
++# Configuration
++PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
++REPORT_FILE="${PROJECT_ROOT}/docs/validation-reports/token-coverage-analysis.md"
++
++# Statistics
++TOTAL_FUNCTIONS=0
++FUNCTIONS_WITH_TOKENS=0
++FUNCTIONS_WITHOUT_TOKENS=0
++TOTAL_TEST_FUNCTIONS=0
++TEST_FUNCTIONS_WITH_TOKENS=0
++TEST_FUNCTIONS_WITHOUT_TOKENS=0
++
++echo -e "${BLUE}[REQ:DOC_016] Token Coverage Analysis${NC}\n"
++
++# Create report directory
++mkdir -p "$(dirname "${REPORT_FILE}")"
++
++# Initialize report
++cat > "${REPORT_FILE}" << EOF
++# Token Coverage Analysis Report
++
++**Generated**: $(date)
++**System**: DOC-016 Comprehensive Token System
++**Analysis Script**: token-coverage-analysis.sh
++
++## Summary
++
++EOF
++
++# Analyze source files
++analyze_source_files() {
++    echo -e "${CYAN}Analyzing source files...${NC}"
++    
++    local files_without_tokens=()
++    
++    while IFS= read -r file; do
++        if [[ ! -f "$file" ]]; then
++            continue
++        fi
++        
++        # Count functions in file
++        local func_count=$(grep -c "^func [A-Z]" "$file" 2>/dev/null || echo "0")
++        if [[ "$func_count" -eq 0 ]]; then
++            continue
++        fi
++        
++        TOTAL_FUNCTIONS=$((TOTAL_FUNCTIONS + func_count))
++        
++        # Check for tokens
++        if grep -qE "\[(REQ|ARCH|IMPL):[A-Z0-9_]+\]" "$file" 2>/dev/null; then
++            FUNCTIONS_WITH_TOKENS=$((FUNCTIONS_WITH_TOKENS + func_count))
++        else
++            FUNCTIONS_WITHOUT_TOKENS=$((FUNCTIONS_WITHOUT_TOKENS + func_count))
++            files_without_tokens+=("$file")
++        fi
++    done < <(find "${PROJECT_ROOT}" -name "*.go" -not -name "*_test.go" -not -path "*/vendor/*" -not -path "*/.git/*")
++    
++    # Report files without tokens
++    if [[ ${#files_without_tokens[@]} -gt 0 ]]; then
++        echo -e "\n${YELLOW}Files without tokens:${NC}"
++        for file in "${files_without_tokens[@]}"; do
++            echo "  - ${file#${PROJECT_ROOT}/}"
++        done
++    fi
++}
++
++# Analyze test files
++analyze_test_files() {
++    echo -e "\n${CYAN}Analyzing test files...${NC}"
++    
++    local tests_without_tokens=()
++    
++    while IFS= read -r file; do
++        if [[ ! -f "$file" ]]; then
++            continue
++        fi
++        
++        # Count test functions
++        local test_count=$(grep -c "^func Test" "$file" 2>/dev/null || echo "0")
++        if [[ "$test_count" -eq 0 ]]; then
++            continue
++        fi
++        
++        TOTAL_TEST_FUNCTIONS=$((TOTAL_TEST_FUNCTIONS + test_count))
++        
++        # Check for tokens
++        if grep -qE "\[REQ:[A-Z0-9_]+\]|REQ_[A-Z0-9_]+" "$file" 2>/dev/null; then
++            TEST_FUNCTIONS_WITH_TOKENS=$((TEST_FUNCTIONS_WITH_TOKENS + test_count))
++        else
++            TEST_FUNCTIONS_WITHOUT_TOKENS=$((TEST_FUNCTIONS_WITHOUT_TOKENS + test_count))
++            tests_without_tokens+=("$file")
++        fi
++    done < <(find "${PROJECT_ROOT}" -name "*_test.go" -not -path "*/vendor/*" -not -path "*/.git/*")
++    
++    # Report tests without tokens
++    if [[ ${#tests_without_tokens[@]} -gt 0 ]]; then
++        echo -e "\n${YELLOW}Test files without tokens:${NC}"
++        for file in "${tests_without_tokens[@]}"; do
++            echo "  - ${file#${PROJECT_ROOT}/}"
++        done
++    fi
++}
++
++# Generate report
++generate_report() {
++    local source_coverage test_coverage overall_coverage
++    
++    if [[ $TOTAL_FUNCTIONS -gt 0 ]]; then
++        source_coverage=$((FUNCTIONS_WITH_TOKENS * 100 / TOTAL_FUNCTIONS))
++    else
++        source_coverage=0
++    fi
++    
++    if [[ $TOTAL_TEST_FUNCTIONS -gt 0 ]]; then
++        test_coverage=$((TEST_FUNCTIONS_WITH_TOKENS * 100 / TOTAL_TEST_FUNCTIONS))
++    else
++        test_coverage=0
++    fi
++    
++    if [[ $((TOTAL_FUNCTIONS + TOTAL_TEST_FUNCTIONS)) -gt 0 ]]; then
++        overall_coverage=$(((FUNCTIONS_WITH_TOKENS + TEST_FUNCTIONS_WITH_TOKENS) * 100 / (TOTAL_FUNCTIONS + TOTAL_TEST_FUNCTIONS)))
++    else
++        overall_coverage=0
++    fi
++    
++    # Update report
++    cat >> "${REPORT_FILE}" << EOF
++### Source Code Coverage
++- **Total Functions**: ${TOTAL_FUNCTIONS}
++- **Functions with Tokens**: ${FUNCTIONS_WITH_TOKENS}
++- **Functions without Tokens**: ${FUNCTIONS_WITHOUT_TOKENS}
++- **Coverage**: ${source_coverage}%
++
++### Test Coverage
++- **Total Test Functions**: ${TOTAL_TEST_FUNCTIONS}
++- **Tests with Tokens**: ${TEST_FUNCTIONS_WITH_TOKENS}
++- **Tests without Tokens**: ${TEST_FUNCTIONS_WITHOUT_TOKENS}
++- **Coverage**: ${test_coverage}%
++
++### Overall Coverage
++- **Overall Coverage**: ${overall_coverage}%
++- **Target**: 100%
++
++## Recommendations
++
++1. **Priority**: Add tokens to functions without coverage
++2. **Focus**: Start with public functions and test functions
++3. **Validation**: Run \`./scripts/token-navigate.sh coverage TOKEN\` to verify
++4. **Documentation**: Update \`stdd/semantic-tokens.md\` when adding new tokens
++
++EOF
++    
++    echo -e "\n${BLUE}Report generated: ${REPORT_FILE}${NC}"
++    echo -e "${GREEN}Source Code Coverage: ${source_coverage}%${NC}"
++    echo -e "${GREEN}Test Coverage: ${test_coverage}%${NC}"
++    echo -e "${GREEN}Overall Coverage: ${overall_coverage}%${NC}"
++}
++
++# Main execution
++main() {
++    analyze_source_files
++    analyze_test_files
++    generate_report
++    
++    if [[ $overall_coverage -lt 100 ]]; then
++        echo -e "\n${YELLOW}⚠️  Token coverage is below 100%. Review the report for details.${NC}"
++        exit 0
++    else
++        echo -e "\n${GREEN}✅ 100% token coverage achieved!${NC}"
++        exit 0
++    fi
++}
++
++main "$@"
+diff --git a/scripts/token-navigate.sh b/scripts/token-navigate.sh
+new file mode 100755
+index 0000000..b311ada
+--- /dev/null
++++ b/scripts/token-navigate.sh
+@@ -0,0 +1,293 @@
++#!/bin/bash
++# [REQ:DOC_016] Token Navigation Tool
++# Purpose: Enable AI assistants to navigate codebase using semantic tokens
++
++set -euo pipefail
++
++# Colors for output
++RED='\033[0;31m'
++GREEN='\033[0;32m'
++YELLOW='\033[1;33m'
++BLUE='\033[0;34m'
++CYAN='\033[0;36m'
++NC='\033[0m' # No Color
++
++# Configuration
++PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
++SCRIPT_NAME="token-navigate"
++
++# Usage information
++usage() {
++    cat << EOF
++${BLUE}[REQ:DOC_016] Token Navigation Tool${NC}
++
++Usage: $SCRIPT_NAME <command> [options]
++
++Commands:
++  find-req <TOKEN>          Find all implementations of a requirement token
++  find-arch <TOKEN>          Find all implementations of an architecture token
++  find-impl <TOKEN>          Find all implementations of an implementation token
++  find-tests <TOKEN>         Find all tests for a requirement token
++  trace <TOKEN>              Trace a token across all layers (REQ → ARCH → IMPL → Code → Tests)
++  list-req                   List all requirement tokens in the codebase
++  list-arch                  List all architecture tokens in the codebase
++  list-impl                  List all implementation tokens in the codebase
++  coverage <TOKEN>           Show token coverage across all layers
++  help                       Show this help message
++
++Examples:
++  $SCRIPT_NAME find-req FILE_BACKUP
++  $SCRIPT_NAME find-arch RESOURCE_MANAGEMENT
++  $SCRIPT_NAME trace FILE_BACKUP
++  $SCRIPT_NAME coverage CONFIGURATION
++
++EOF
++}
++
++# Find requirement token implementations
++find_req() {
++    local token="$1"
++    echo -e "${CYAN}Finding implementations of [REQ:${token}]...${NC}\n"
++    
++    # Find in source code
++    echo -e "${BLUE}Source Code:${NC}"
++    grep -rn "\[REQ:${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No implementations found"
++    
++    echo ""
++    
++    # Find in tests
++    echo -e "${BLUE}Tests:${NC}"
++    grep -rn "REQ_${token}\|\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No tests found"
++    
++    echo ""
++    
++    # Find in documentation
++    echo -e "${BLUE}Documentation:${NC}"
++    grep -rn "\[REQ:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No documentation found"
++}
++
++# Find architecture token implementations
++find_arch() {
++    local token="$1"
++    echo -e "${CYAN}Finding implementations of [ARCH:${token}]...${NC}\n"
++    
++    # Find in source code
++    echo -e "${BLUE}Source Code:${NC}"
++    grep -rn "\[ARCH:${token}\]" --include="*.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No implementations found"
++    
++    echo ""
++    
++    # Find in documentation
++    echo -e "${BLUE}Documentation:${NC}"
++    grep -rn "\[ARCH:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No documentation found"
++}
++
++# Find implementation token usages
++find_impl() {
++    local token="$1"
++    echo -e "${CYAN}Finding usages of [IMPL:${token}]...${NC}\n"
++    
++    # Find in source code
++    echo -e "${BLUE}Source Code:${NC}"
++    grep -rn "\[IMPL:${token}\]" --include="*.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No usages found"
++    
++    echo ""
++    
++    # Find in documentation
++    echo -e "${BLUE}Documentation:${NC}"
++    grep -rn "\[IMPL:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No documentation found"
++}
++
++# Find tests for a requirement
++find_tests() {
++    local token="$1"
++    echo -e "${CYAN}Finding tests for [REQ:${token}]...${NC}\n"
++    
++    # Find test functions
++    echo -e "${BLUE}Test Functions:${NC}"
++    grep -rn "func Test.*REQ_${token}\|func Test.*\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No test functions found"
++    
++    echo ""
++    
++    # Find test comments
++    echo -e "${BLUE}Test Comments:${NC}"
++    grep -rn "\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        sed 's|^|  |' || echo "  No test comments found"
++}
++
++# Trace token across all layers
++trace_token() {
++    local token="$1"
++    echo -e "${CYAN}Tracing [REQ:${token}] across all layers...${NC}\n"
++    
++    # Requirements layer
++    echo -e "${GREEN}[1] Requirements Layer:${NC}"
++    grep -rn "\[REQ:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd/requirements.md" 2>/dev/null | \
++        head -5 | sed 's|^|  |' || echo "  Not found in requirements.md"
++    
++    echo ""
++    
++    # Architecture layer
++    echo -e "${GREEN}[2] Architecture Layer:${NC}"
++    grep -rn "\[ARCH:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[ARCH:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
++        head -5 | sed 's|^|  |' || echo "  Not found in architecture decisions"
++    
++    echo ""
++    
++    # Implementation layer
++    echo -e "${GREEN}[3] Implementation Layer:${NC}"
++    grep -rn "\[IMPL:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[IMPL:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
++        head -5 | sed 's|^|  |' || echo "  Not found in implementation decisions"
++    
++    echo ""
++    
++    # Source code
++    echo -e "${GREEN}[4] Source Code:${NC}"
++    grep -rn "\[REQ:${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        head -5 | sed 's|^|  |' || echo "  Not found in source code"
++    
++    echo ""
++    
++    # Tests
++    echo -e "${GREEN}[5] Tests:${NC}"
++    grep -rn "REQ_${token}\|\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
++        head -5 | sed 's|^|  |' || echo "  Not found in tests"
++}
++
++# List all requirement tokens
++list_req() {
++    echo -e "${CYAN}All Requirement Tokens:${NC}\n"
++    grep -roh "\[REQ:[A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" 2>/dev/null | \
++        sort -u | sed 's/\[REQ://;s/\]//' | sed 's/^/  [REQ:/;s/$/]/' | sort
++}
++
++# List all architecture tokens
++list_arch() {
++    echo -e "${CYAN}All Architecture Tokens:${NC}\n"
++    grep -roh "\[ARCH:[A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" 2>/dev/null | \
++        sort -u | sed 's/\[ARCH://;s/\]//' | sed 's/^/  [ARCH:/;s/$/]/' | sort
++}
++
++# List all implementation tokens
++list_impl() {
++    echo -e "${CYAN}All Implementation Tokens:${NC}\n"
++    grep -roh "\[IMPL:[A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" 2>/dev/null | \
++        sort -u | sed 's/\[IMPL://;s/\]//' | sed 's/^/  [IMPL:/;s/$/]/' | sort
++}
++
++# Show token coverage
++coverage() {
++    local token="$1"
++    echo -e "${CYAN}Token Coverage for [REQ:${token}]:${NC}\n"
++    
++    local req_count arch_count impl_count code_count test_count
++    
++    req_count=$(grep -r "\[REQ:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | wc -l | tr -d ' ')
++    arch_count=$(grep -r "\[ARCH:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[ARCH:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | wc -l | tr -d ' ')
++    impl_count=$(grep -r "\[IMPL:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[IMPL:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | wc -l | tr -d ' ')
++    code_count=$(grep -r "\[REQ:${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | wc -l | tr -d ' ')
++    test_count=$(grep -r "REQ_${token}\|\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | wc -l | tr -d ' ')
++    
++    echo -e "${BLUE}Requirements:${NC} ${req_count} references"
++    echo -e "${BLUE}Architecture:${NC} ${arch_count} references"
++    echo -e "${BLUE}Implementation:${NC} ${impl_count} references"
++    echo -e "${BLUE}Source Code:${NC} ${code_count} references"
++    echo -e "${BLUE}Tests:${NC} ${test_count} references"
++    
++    echo ""
++    
++    # Calculate coverage percentage
++    local total=$((req_count + arch_count + impl_count + code_count + test_count))
++    if [ "$total" -gt 0 ]; then
++        local coverage_pct=$(( (req_count + arch_count + impl_count + code_count + test_count) * 100 / 5 ))
++        echo -e "${GREEN}Overall Coverage: ${coverage_pct}%${NC}"
++    else
++        echo -e "${RED}No coverage found${NC}"
++    fi
++}
++
++# Main command dispatcher
++main() {
++    if [ $# -eq 0 ]; then
++        usage
++        exit 0
++    fi
++    
++    case "$1" in
++        find-req)
++            if [ $# -lt 2 ]; then
++                echo -e "${RED}Error: Token required${NC}"
++                usage
++                exit 1
++            fi
++            find_req "$2"
++            ;;
++        find-arch)
++            if [ $# -lt 2 ]; then
++                echo -e "${RED}Error: Token required${NC}"
++                usage
++                exit 1
++            fi
++            find_arch "$2"
++            ;;
++        find-impl)
++            if [ $# -lt 2 ]; then
++                echo -e "${RED}Error: Token required${NC}"
++                usage
++                exit 1
++            fi
++            find_impl "$2"
++            ;;
++        find-tests)
++            if [ $# -lt 2 ]; then
++                echo -e "${RED}Error: Token required${NC}"
++                usage
++                exit 1
++            fi
++            find_tests "$2"
++            ;;
++        trace)
++            if [ $# -lt 2 ]; then
++                echo -e "${RED}Error: Token required${NC}"
++                usage
++                exit 1
++            fi
++            trace_token "$2"
++            ;;
++        list-req)
++            list_req
++            ;;
++        list-arch)
++            list_arch
++            ;;
++        list-impl)
++            list_impl
++            ;;
++        coverage)
++            if [ $# -lt 2 ]; then
++                echo -e "${RED}Error: Token required${NC}"
++                usage
++                exit 1
++            fi
++            coverage "$2"
++            ;;
++        help|--help|-h)
++            usage
++            ;;
++        *)
++            echo -e "${RED}Error: Unknown command '$1'${NC}"
++            usage
++            exit 1
++            ;;
++    esac
++}
++
++main "$@"
+diff --git a/stdd/requirements.md b/stdd/requirements.md
+index e8bafcb..92f031b 100644
+--- a/stdd/requirements.md
++++ b/stdd/requirements.md
+@@ -1,6 +1,6 @@
+ # Requirements Directory
+ 
+-**STDD Methodology Version**: 1.0.1
++**STDD Methodology Version**: 1.0.2
+ 
+ ## Overview
+ This document serves as the **central listing/registry** for all requirements in this project. Each requirement has a unique semantic token `[REQ:IDENTIFIER]` for traceability.
+diff --git a/stdd/semantic-tokens.md b/stdd/semantic-tokens.md
+index f53508b..c979e8c 100644
+--- a/stdd/semantic-tokens.md
++++ b/stdd/semantic-tokens.md
+@@ -1,6 +1,6 @@
+ # Semantic Tokens Directory
+ 
+-**STDD Methodology Version**: 1.0.1
++**STDD Methodology Version**: 1.0.2
+ 
+ ## Overview
+ This document serves as the **central directory/registry** for all semantic tokens used in the project. Semantic tokens (`[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`) provide a consistent vocabulary and traceability mechanism that ties together all documentation, code, and tests.
+@@ -205,6 +205,19 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
+   - Architecture: `[ARCH:TEST_EXCLUDE_MERGE]`
+   - Implementation: `[IMPL:TEST_EXCLUDE_MERGE]`
+ 
++### Governance Requirements
++
++- [REQ:GOVERNANCE_DOCUMENTATION] Governance rules must be documented with explicit anchors and cross-links to ARCH/IMPL decisions.
++- [REQ:GOV_POLICY_MIGRATION] Migration of governance policies into STDD decision documents.
++- [REQ:GOV_CHANGE_CONTROL] Requirements for proposing, approving, and rolling out governance changes.
++- [REQ:GOV_AUDIT] Regular auditing of governance rules; ensure alignment with decisions and tests.
++- [REQ:GOV_REGISTRY_COMPLETENESS] Registry must capture all governance-related tokens and their intents.
++- [REQ:GOV_DISCOVERABILITY] Centralized discoverability of governance content via docs/index.md with links to tokens and decisions.
++- [REQ:GOV_NAMING_CONVENTIONS] Establish and enforce token naming conventions for governance-related tokens.
++- [REQ:GOV_CROSS_LINKING] Each REQ token must be cross-linked to relevant ARCH/IMPL decisions.
++- [REQ:GOV_MIGRATION_STATUS] Track the progress/status of governance-content migration to ARCH/IMPL docs.
++- [REQ:REGISTRY_COMPLETION_VERIFICATION] Verification rule that ensures registry remains complete over time.
++
+ ### Non-Functional Requirements
+ - `[REQ:PERFORMANCE]` → See `requirements.md` § Performance Requirements
+ - `[REQ:RELIABILITY]` → See `requirements.md` § Reliability Requirements
+-- 
+2.50.1 (Apple Git-155)
+
