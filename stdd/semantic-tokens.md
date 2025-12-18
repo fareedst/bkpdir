@@ -530,6 +530,11 @@ Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation
 - `REFACTOR-002` (Large file decomposition preparation) → [REQ:MAINTAINABILITY], [ARCH:CODE_ORGANIZATION], [IMPL:LARGE_FILE_DECOMP]; Tests/Code: `formatter_adapter_simple_test.go`, `docs/formatter-decomposition.md`.
 - `GIT-002` (Branch/hash naming) → [REQ:GIT_INTEGRATION], [ARCH:GIT_INTEGRATION], [IMPL:GIT_CLI]; Tests/Code: `git_test.go`, `git.go`.
 - `COV-002` (Coverage baseline establishment) → [REQ:COV_003], [ARCH:TESTING_STRATEGY], [IMPL:TEST_COVERAGE]; Tests/Code: `tools/coverage_differential_test.go`, `scripts/validate-coverage.sh`.
+### New EXTRACT-008 Tokens
+- `[REQ:EXTRACT_008_INTERDEP_MAPPING]` → Package interdependency mapping requirement for EXTRACT-008 (docs/package-interdependency-mapping.md)
+- `[ARCH:EXTRACT_008_INTERDEP]` → Architecture decision documenting inter-package dependency mapping for EXTRACT-008 [REQ:EXTRACT_008_INTERDEP_MAPPING]
+- `[IMPL:EXTRACT_008_DOC_MIGRATION]` → Implementation decision: migrate working-plan-extract-008.md contents into STDD docs and decommission the working-plan file [ARCH:EXTRACT_008_INTERDEP] [REQ:EXTRACT_008_INTERDEP_MAPPING]
+
 
 ## Quick Reference Index
 

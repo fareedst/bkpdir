@@ -1,5 +1,7 @@
 # Formatter Package
 
+**Tokens:** [REQ:OUTPUT_FORMATTING] [ARCH:OUTPUT_FORMATTING] [IMPL:DUAL_FORMATTING]
+
 The formatter package provides comprehensive output formatting functionality for BkpDir operations. It supports both printf-style and template-based formatting with optional delayed output collection.
 
 ## Architecture Overview
@@ -31,6 +33,14 @@ The formatter package follows AI-first design principles to ensure optimal AI as
                     │ (Configuration) │
                     └─────────────────┘
 ```
+
+## Public Interfaces
+
+- `AIFirstFormatter` — primary formatter interface (compose of CoreFormatter, AIPatternExtractor, AIOutputManager)
+- `CoreFormatter` — pure formatting methods (FormatWithTemplate, FormatArchive, etc.)
+- `AIPatternExtractor` — pattern extraction helpers
+- `AIOutputManager` — output collection and flush APIs
+- Factory helpers: `NewAIFirstFormatter(...)`, `NewAIFirstFormatterWithCollector(...)`
 
 ## Core Interfaces
 

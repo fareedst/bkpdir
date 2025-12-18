@@ -1,10 +1,18 @@
 # Resource Management Package (resources)
 
+**Tokens:** [REQ:RESOURCE_MANAGEMENT] [ARCH:RESOURCE_MANAGEMENT] [IMPL:RESOURCE_MANAGER]
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/resources.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/resources)
 
 [CRITICAL] **ARCH-001: Resource Management and Cleanup Patterns** [ACTION:core-functionality]
 
 This package provides comprehensive resource management utilities for CLI applications, including automatic cleanup, lifecycle management, and panic recovery patterns extracted from the BkpDir application.
+
+## Public Interfaces
+
+- `ResourceManager` — `NewResourceManager()`, `AddResource(resource Resource)`, `AddTempFile(path string)`, `AddTempDir(path string)`, `RemoveResource(resource Resource)`, `Cleanup() error`, `CleanupWithPanicRecovery() error`, `CleanupWithContext(ctx context.Context) error`, `GetResourceCount() int`, `GetResources() []Resource`
+- `Resource` interface — `Cleanup() error`, `String() string`
+- `TempFile`, `TempDir` — concrete resource types with `Cleanup()` implementations
 
 ## Overview
 

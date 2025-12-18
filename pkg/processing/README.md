@@ -1,6 +1,15 @@
 # Package processing
 
+**Tokens:** [REQ:PERFORMANCE] [ARCH:PROCESSING_PATTERNS] [IMPL:PROCESSING_PATTERNS]
+
 // EXTRACT-010: Package processing documentation - Comprehensive API documentation and usage examples - [HIGH]
+
+## Public Interfaces
+
+- `ProcessorInterface` — `Process(ctx context.Context, input *ProcessingInput) (*ProcessingResult, error)`
+- `PipelineInterface` — `Execute(ctx context.Context, input *ProcessingInput) (*ProcessingResult, error)`, `AddStage`, `GetProgress`
+- `NamingProviderInterface` — `GenerateName(template *NamingTemplate) (string, error)`
+- Factory helpers: `NewPipeline(name string)`, `NewNamingProvider()`
 
 ## Overview
 

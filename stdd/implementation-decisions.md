@@ -322,7 +322,35 @@ type TempDir struct {
 
 **Code Markers**: `.tmp` file extensions, `os.Rename()` calls
 
-## 9. Testing Implementation [IMPL:TESTING] [ARCH:TESTING_STRATEGY] [REQ:*]
+## 9. Testing Implementation
+
+## EXTRACT-009 Test Utilities Implementation [IMPL:EXTRACT-009_TESTUTIL] [ARCH:EXTRACT-009_TESTUTIL] [REQ:EXTRACT-009]
+
+### Summary
+Implement `pkg/testutil` with the following components:
+
+- `interfaces.go` — small interfaces for providers (TestUtilProvider) to avoid tight coupling
+- `assertions.go` — simple test assertion helpers (`AssertEqualString`, `AssertBool`, etc.)
+- `fshelpers.go` — temp directory and file helpers, `CreateTempDir`, `WriteFile`, `CreateTestDirectoryStructure`
+- `archivehelpers.go` — create zip archives for tests (`CreateTestZipArchive`)
+- `githelpers.go` — create lightweight git repos for testing (`InitTestGitRepo`)
+- `cmdhelpers.go` — helpers to execute Cobra commands and capture output (`ExecuteCommand`) with cleanup
+- `provider.go` — default provider that composes utilities for convenience
+- `doc.go` + godoc comments and examples
+- `testutil_test.go` — unit tests for all exported helpers
+
+### Key Implementation Notes
+- Keep `pkg/testutil` free of project-specific domain types — accept simple primitives or small interfaces.
+- Minimize external dependencies; prefer stdlib for file and zip operations.
+- Provide migration adapters so existing tests can switch incrementally to `pkg/testutil`.
+- Add `[IMPL:EXTRACT-009_TESTUTIL]` tokens in code comments for exported functions and tests that rely on this package.
+
+### Validation
+- Add unit tests exercising assertion helpers, temp dir lifecycle, archive creation, and command execution patterns.
+- Migrate a small set of tests (e.g., `pkg/config`, `pkg/formatter`, `pkg/fileops`) to demonstrate usage and validate no regressions.
+
+
+ [IMPL:TESTING] [ARCH:TESTING_STRATEGY] [REQ:*]
 
 **Note**: This implementation realizes the validation criteria specified in `requirements.md` and follows the testing strategy defined in `architecture-decisions.md`. Each test validates specific satisfaction criteria from requirements.
 
@@ -2978,3 +3006,22 @@ func TestDefaultStrategyEdgeCases(t *testing.T) {
 - Consistent with diff command behavior (reuses same comparison logic)
 
 **Cross-References**: [ARCH:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:DIFF_COMMAND], [IMPL:DIFF_COMMAND], [REQ:OUTPUT_FORMATTING]
+
+## EXTRACT-008 Documentation Migration & Preservation [IMPL:EXTRACT_008_DOC_MIGRATION] [ARCH:EXTRACT_008_INTERDEP] [REQ:EXTRACT_008_INTERDEP_MAPPING]
+
+### Decision: Preserve working-plan content by migrating it directly into STDD core documents and decommission the working-plan artifact.
+
+**Implementation Steps:**
+1. Record the requirement token `[REQ:EXTRACT_008_INTERDEP_MAPPING]` in `stdd/requirements.md` (done).
+2. Record the architecture decision `[ARCH:EXTRACT_008_INTERDEP]` in `stdd/architecture-decisions.md` (done).
+3. Record this implementation decision `[IMPL:EXTRACT_008_DOC_MIGRATION]` here to document the migration approach and rationale.
+4. Create the canonical deliverable `docs/package-interdependency-mapping.md` describing package relationships, interface contracts, and example integrations (outcome document—authoring to be performed as follow-up task).
+5. Remove any supplemental preservation files (they are not canonical) and remove or decommission `working-plan-extract-008.md` once migration is complete.
+
+**Rationale:**
+STDD requires authoritative records to live in the requirements, architecture, and implementation documents for traceability. Working-plan or supplemental files create duplication and risk drift; migrating content into the canonical STDD files preserves traceability.
+
+**Validation:**
+- Confirm tokens appear in `stdd/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
+- Confirm `docs/package-interdependency-mapping.md` exists and links back to these tokens.
+

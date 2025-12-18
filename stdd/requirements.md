@@ -103,6 +103,23 @@ Each requirement includes:
 
 ## Detailed Requirements
 
+### [REQ:EXTRACT-009] Testing Patterns & Utilities
+
+- **Description**: Extract common testing utilities and patterns into a reusable `pkg/testutil` package so extracted packages and future CLI applications can share reliable test fixtures, helpers, and infrastructure.
+- **Rationale**: Tests across the codebase share repeated patterns (config fixtures, temp file management, CLI helpers, archive fixtures). Centralizing these in `pkg/testutil` reduces duplication, improves test quality, and enables consistent validation across extracted packages.
+- **Satisfaction Criteria**:
+  - `pkg/testutil` package created and published in repo
+  - Reusable helpers for config fixtures, temp dirs, archive creation, git repo fixtures, CLI command execution
+  - Assertion helpers and benchmark helpers included
+  - No breaking changes to existing tests; tests updated to use `pkg/testutil` where appropriate
+  - Documentation (godoc + usage examples) present
+- **Validation Criteria**:
+  - Unit tests for `pkg/testutil` covering helpers (temp dirs, archive creation, assertions)
+  - Integration: at least three existing package test suites migrated to use `pkg/testutil` with green CI
+  - Token coverage: `[REQ:EXTRACT-009]` referenced in tests that validate migration
+- **Cross-References**: [ARCH:EXTRACT-009_TESTUTIL], [IMPL:EXTRACT-009_TESTUTIL]
+
+
 ### Core Functionality
 
 ### [REQ:CODE_QUALITY] Code Quality and Linting Requirements
@@ -1261,3 +1278,26 @@ The following features are documented but marked as future enhancements:
 - Advanced coverage controls (COV-003 planned but not started)
 
 These may be considered for future iterations but are not required for the initial implementation.
+
+## [REQ:EXTRACT_008_INTERDEP_MAPPING] Package Interdependency Mapping for EXTRACT-008
+
+**Priority:** P1 (Important)
+
+**Description:**
+Document clear usage patterns and dependency relationships for the packages extracted as part of EXTRACT-008 (CLI Application Template). Deliverables include:
+- `docs/package-interdependency-mapping.md` (visual diagrams + narrative)
+- Package usage patterns and integration examples
+- Performance impact notes and recommended integration strategies
+
+**Rationale:**
+Provides a canonical map showing how the extracted packages interact, so maintainers and downstream consumers can understand integration points and avoid circular dependencies during extraction.
+
+**Satisfaction Criteria:**
+- All extracted packages (pkg/config, pkg/errors, pkg/resources, pkg/formatter, pkg/git, pkg/cli, pkg/fileops, pkg/processing) are mapped
+- Visual diagrams (SVG or PNG) accompany the narrative doc
+- Integration examples exist for at least 3 common scenarios (example CLI templates)
+- Performance implications noted where coupling may introduce overhead
+
+**Validation:**
+- Review by maintainer shows coverage of all 8 packages
+- Diagrams render correctly in docs and link to package README entries

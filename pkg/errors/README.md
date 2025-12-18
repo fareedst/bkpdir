@@ -1,5 +1,7 @@
 # Package errors
 
+**Tokens:** [REQ:ERROR_HANDLING] [ARCH:ERROR_HANDLING] [IMPL:STRUCTURED_ERRORS]
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/errors.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/errors)
 
 ## Overview
@@ -106,6 +108,13 @@ func main() {
     fmt.Printf("Disk error severity: %v\n", diskSeverity) // ErrorSeverityCritical
 }
 ```
+
+## Public Interfaces
+
+- `ApplicationError` — structured error type with `GetStatusCode()`, `GetOperation()`, `GetPath()`
+- `ErrorInterface` — common error interface used across the package
+- `ErrorClassifier` — `ClassifyError(err error) ErrorCategory`, `IsRecoverable(err error) bool`
+- Factory helpers: `NewApplicationError*` and `NewDefaultErrorClassifier()`
 
 ## API Reference
 

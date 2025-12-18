@@ -1,10 +1,22 @@
 # File Operations Package (fileops)
 
+**Tokens:** [REQ:FILE_BACKUP] [ARCH:FILE_OPERATIONS] [IMPL:FILE_OPERATIONS]
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/fileops.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/fileops)
 
 [CRITICAL] **ARCH-001: File Operations and Utilities** [ACTION:core-functionality]
 
 This package provides comprehensive file operations and utilities for CLI applications, including atomic operations, path validation, directory traversal, and file comparison utilities extracted from the BkpDir application.
+
+## Public Interfaces
+
+- `AtomicWriteFile(filename string, data []byte, perm os.FileMode) error`
+- `NewAtomicWriter(filename string, perm os.FileMode) (*AtomicWriter, error)` and methods `Write`, `Commit`, `Rollback`
+- `ValidatePath(path string, options ValidationOptions) error`
+- `WalkWithExclusions(root string, exclusions []string, walkFn filepath.WalkFunc) error`
+- `CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error)`
+- `CompareSnapshots(snap1, snap2 *DirectorySnapshot) (*ComparisonResult, error)`
+- `PatternMatcher` — `NewPatternMatcher(patterns []string) *PatternMatcher`, `Match(path string) bool`
 
 ## Overview
 

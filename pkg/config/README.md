@@ -1,6 +1,16 @@
 # Package config
 
+**Tokens:** [REQ:CONFIGURATION] [ARCH:CONFIG_SYSTEM] [IMPL:CONFIG_STRUCT]
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/config.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/config)
+
+## Public Interfaces
+
+- `ConfigLoader` — `LoadConfig(root string, defaultConfig interface{}) (interface{}, error)`, `LoadConfigValues(root string, defaultConfig interface{}) (map[string]ConfigValue, error)`
+- `ConfigMerger` — `MergeConfigs(dst, src interface{}) error`, `GetConfigSearchPaths() []string`
+- `ConfigValidator` — `ValidateSchema(cfg interface{}) error`, `ValidateValues(values map[string]ConfigValue) error`
+- `ConfigValue` — structure for value + source metadata
+- `NewDefaultConfigLoader()` and `NewDefaultConfigMerger()` factory helpers
 
 ## Overview
 

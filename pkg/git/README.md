@@ -1,6 +1,14 @@
 # Package git
 
+**Tokens:** [REQ:GIT_INTEGRATION] [ARCH:GIT_INTEGRATION] [IMPL:GIT_CLI]
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/git.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/git)
+
+## Public Interfaces
+
+- `Repository` interface — `IsRepository() bool`, `GetBranch() (string, error)`, `GetShortHash() (string, error)`, `GetInfo() (*Info, error)`, `GetInfoWithStatus() (*Info, error)`
+- `Info` struct — `Branch`, `Hash`, `IsClean`, `IsRepo`, `Submodules`
+- Factory functions: `NewRepository() Repository`, `NewRepositoryWithConfig(config *Config) Repository`, `DefaultConfig()`
 
 ## Overview
 

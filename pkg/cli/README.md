@@ -1,6 +1,16 @@
 # Package cli
 
+**Tokens:** [REQ:IMMUTABLE_CLI_COMMANDS] [ARCH:CLI_COMMANDS] [IMPL:CLI_FRAMEWORK]
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/cli.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/cli)
+
+## Public Interfaces
+
+- `AppInfo` and `BuildInfo` — application metadata structures
+- `CommandBuilder` — `NewCommand(name, short, long string) *cobra.Command`, `WithHandler`, `WithFlags`
+- `FlagManager` — flag registration helpers (AddGlobalFlags, AddDryRunFlag, AddConfigFlag)
+- `DryRunOperation` — interface for operations supporting dry-run
+- Factory helpers: `NewRootCommandBuilder()`, `NewCommandBuilder()`, `NewFlagManager()`
 
 ## Overview
 

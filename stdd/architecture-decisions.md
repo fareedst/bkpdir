@@ -339,6 +339,28 @@ bkpdir/
 
 **Cross-References**: [REQ:RELIABILITY], [REQ:MAINTAINABILITY]
 
+
+## EXTRACT-009: Test Utilities Package [ARCH:EXTRACT-009_TESTUTIL] [REQ:EXTRACT-009]
+
+### Decision: Create a public `pkg/testutil` package for broadly-useful testing utilities
+
+**Rationale:**
+- Avoid circular dependencies by keeping `pkg/testutil` dependency-light and independent from the packages that will import it.
+- Provide a stable, well-documented API for test fixtures and helpers so multiple packages can migrate without duplication.
+- Preserve specialized tools in `internal/testutil/` for heavy integration tests while offering lightweight helpers for unit tests in `pkg/testutil`.
+
+**Consequences:**
+- `pkg/testutil` will expose assertion helpers, temp dir/file helpers, archive and git fixtures, and command execution helpers.
+- Specialized, heavy-weight testing infrastructure remains in `internal/testutil/` for integration/system tests.
+- Migration adapters/wrappers should be provided to enable incremental migration without breaking existing tests.
+
+**Alternatives Considered:**
+- Keep helpers in `internal/testutil/` only (rejected: not importable by `pkg/*` packages).
+- Leave helpers duplicated across packages (rejected: maintenance cost).
+
+**Cross-References:** [REQ:EXTRACT-009], [IMPL:EXTRACT-009_TESTUTIL]
+
+
 ## 12. Build and Distribution [ARCH:BUILD_DISTRIBUTION]
 
 ### Decision: Single binary distribution with cross-platform compilation
@@ -1309,3 +1331,18 @@ We will implement a grouped and ranked presentation for configuration output.
 - **Always create incremental**: Rejected - wastes disk space and creates clutter
 
 **Cross-References**: [REQ:INCREMENTAL_DUPLICATE_PREVENTION], [REQ:DIFF_COMMAND], [REQ:OUTPUT_FORMATTING], [ARCH:DIFF_COMMAND], [ARCH:DIRECTORY_COMPARISON]
+
+## EXTRACT-008: Package Interdependency Mapping [ARCH:EXTRACT_008_INTERDEP] [REQ:EXTRACT_008_INTERDEP_MAPPING]
+
+### Decision: Adopt a documented package interdependency mapping for EXTRACT-008 that specifies dependency direction, public interfaces, and common usage patterns.
+
+**Rationale:**
+Prevents circular dependencies and guides extractors to keep zero-breaking-change extraction principles intact. The mapping will be layered (foundation → utilities → framework → patterns) and will explicitly call out where lightweight interfaces should be introduced to break cycles.
+
+**Consequences:**
+- A canonical `docs/package-interdependency-mapping.md` is required and serves as the authoritative mapping for EXTRACT-008.
+- Where coupling is unavoidable, introduce small interfaces to break cycles and record these interface contracts in the mapping document and in `implementation-decisions.md`.
+
+**Cross-References:** [ARCH:PACKAGE_EXTRACTION], [REQ:MAINTAINABILITY]
+
+

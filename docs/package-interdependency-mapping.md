@@ -1,4 +1,6 @@
-# Package Interdependency Mapping
+# Package Interdependency Mapping — EXTRACT-008
+
+**Tokens:** [REQ:EXTRACT_008_INTERDEP_MAPPING] [ARCH:EXTRACT_008_INTERDEP] [IMPL:EXTRACT_008_DOC_MIGRATION]
 
 > **[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Clear usage patterns for extracted packages**
 
@@ -42,6 +44,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `gopkg.in/yaml.v3`
 **Performance**: 24.3μs per configuration load operation
 
+**Semantic Tokens**: [REQ:CONFIGURATION] [ARCH:CONFIG_SYSTEM] [IMPL:CONFIG_STRUCT]
+
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Configuration package analysis
 
 ### [ACTION:validation] pkg/errors - Error Handling & Classification
@@ -62,6 +66,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
+**Semantic Tokens**: [REQ:ERROR_HANDLING] [ARCH:ERROR_HANDLING] [IMPL:STRUCTURED_ERRORS]
+
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Error handling package analysis
 
 ### 🗂️ pkg/resources - Resource Management & Cleanup
@@ -80,6 +86,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 
 **External Dependencies**: None
 **Internal Dependencies**: None
+
+**Semantic Tokens**: [REQ:RESOURCE_MANAGEMENT] [ARCH:RESOURCE_MANAGEMENT] [IMPL:RESOURCE_MANAGER]
 
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Resource management package analysis
 
@@ -103,6 +111,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
+**Semantic Tokens**: [REQ:OUTPUT_FORMATTING] [ARCH:OUTPUT_FORMATTING] [IMPL:DUAL_FORMATTING]
+
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Output formatting package analysis
 
 ### 🔀 pkg/git - Git Integration Utilities
@@ -120,6 +130,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 
 **External Dependencies**: None (uses command-line git)
 **Internal Dependencies**: None
+
+**Semantic Tokens**: [REQ:GIT_INTEGRATION] [ARCH:GIT_INTEGRATION] [IMPL:GIT_CLI]
 
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Git integration package analysis
 
@@ -144,6 +156,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `github.com/spf13/cobra`
 **Internal Dependencies**: None
 
+**Semantic Tokens**: [REQ:IMMUTABLE_CLI_COMMANDS] [ARCH:CLI_COMMANDS] [IMPL:CLI_FRAMEWORK]
+
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] CLI framework package analysis
 
 ### 📁 pkg/fileops - File Operations & Utilities
@@ -167,6 +181,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `github.com/bmatcuk/doublestar/v4`
 **Internal Dependencies**: None
 
+**Semantic Tokens**: [REQ:FILE_BACKUP] [ARCH:FILE_OPERATIONS] [IMPL:FILE_OPERATIONS]
+
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] File operations package analysis
 
 ### ⚙️ pkg/processing - Data Processing Patterns
@@ -189,6 +205,8 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 
 **External Dependencies**: None
 **Internal Dependencies**: None
+
+**Semantic Tokens**: [REQ:PERFORMANCE] [ARCH:PROCESSING_PATTERNS] [IMPL:PROCESSING_PATTERNS]
 
 // [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Data processing package analysis 
 
@@ -634,4 +652,20 @@ The 8 extracted packages provide a comprehensive foundation for building robust 
 - Explore individual package documentation for detailed APIs
 - Consider contributing improvements back to the extracted packages
 
-**[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Complete package interdependency mapping with comprehensive usage patterns and integration guidance** 
+## ✅ Deliverables (EXTRACT-008) — Migration status
+
+- `docs/package-interdependency-mapping.md` — Canonical interdependency mapping and narrative (this document) ✅ Completed
+- `docs/images/package-interdependency-mapping.svg` — Visual diagram illustrating package relationships ✅ Completed
+- `pkg/*/README.md` — Package READMEs exist and were reviewed for public interface documentation (pkg/config, pkg/errors, pkg/resources, pkg/formatter, pkg/git, pkg/cli, pkg/fileops, pkg/processing, pkg/testutil) ✅ Reviewed
+- `docs/examples/` — Example integrations reviewed (basic-cli-app, git-aware-backup); pipeline example validated in narrative ✅ Reviewed
+- `stdd/` tokens — `[REQ:EXTRACT_008_INTERDEP_MAPPING]`, `[ARCH:EXTRACT_008_INTERDEP]`, `[IMPL:EXTRACT_008_DOC_MIGRATION]` present in `stdd/semantic-tokens.md` and cross-referenced ✅ Validated
+
+## 🔁 Remaining Actions
+
+- Add CI check for import-cycle detection and diagram presence (`go list -deps` / custom script) — Pending (postponed until GitHub integration)
+- Add automated token cross-reference validation into CI — Pending
+- Final verification run of token validation scripts (`scripts/validate-token-traceability.sh`) after CI check added — Pending
+
+**Migration Note**: Per `[IMPL:EXTRACT_008_DOC_MIGRATION]`, the working-plan artifacts were reviewed and their content consolidated into STDD canonical documents. No supplemental working-plan files remain as active canonical sources.
+
+**[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Complete package interdependency mapping with comprehensive usage patterns and integration guidance**

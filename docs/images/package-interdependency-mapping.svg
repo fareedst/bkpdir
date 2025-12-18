@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <style>
+    .box { fill:#f7fbff; stroke:#036; stroke-width:1.5; rx:6; }
+    .label { font: 14px sans-serif; fill:#012; }
+    .layer { font: 12px sans-serif; fill:#024; font-weight:600; }
+    .arrow { stroke:#036; stroke-width:1.5; fill:none; marker-end:url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#036" />
+    </marker>
+  </defs>
+
+  <!-- Layers labels -->
+  <text x="30" y="40" class="layer">Foundation</text>
+  <text x="30" y="200" class="layer">Utilities</text>
+  <text x="30" y="360" class="layer">Framework</text>
+  <text x="30" y="500" class="layer">Patterns</text>
+
+  <!-- Foundation boxes -->
+  <rect x="200" y="10" width="180" height="50" class="box"/>
+  <text x="210" y="40" class="label">pkg/config</text>
+  <rect x="420" y="10" width="140" height="50" class="box"/>
+  <text x="430" y="40" class="label">pkg/errors</text>
+
+  <!-- Utilities boxes -->
+  <rect x="120" y="170" width="140" height="50" class="box"/>
+  <text x="130" y="200" class="label">pkg/git</text>
+  <rect x="320" y="170" width="160" height="50" class="box"/>
+  <text x="335" y="200" class="label">pkg/fileops</text>
+  <rect x="540" y="170" width="160" height="50" class="box"/>
+  <text x="555" y="200" class="label">pkg/resources</text>
+
+  <!-- Framework boxes -->
+  <rect x="200" y="340" width="180" height="50" class="box"/>
+  <text x="210" y="370" class="label">pkg/formatter</text>
+  <rect x="420" y="340" width="140" height="50" class="box"/>
+  <text x="430" y="370" class="label">pkg/cli</text>
+
+  <!-- Patterns box -->
+  <rect x="300" y="480" width="300" height="60" class="box"/>
+  <text x="420" y="515" class="label" text-anchor="middle">pkg/processing</text>
+
+  <!-- Arrows from Foundation to Utilities -->
+  <path d="M290 60 L200 170" class="arrow" />
+  <path d="M500 60 L620 170" class="arrow" />
+
+  <!-- Arrows Utilities -> Framework -->
+  <path d="M200 220 L250 340" class="arrow" />
+  <path d="M380 220 L290 340" class="arrow" />
+  <path d="M620 220 L430 340" class="arrow" />
+
+  <!-- Framework -> Patterns -->
+  <path d="M320 390 L350 480" class="arrow" />
+  <path d="M460 390 L550 480" class="arrow" />
+
+  <!-- Title -->
+  <text x="60" y="580" class="label">Package Interdependency Mapping — EXTRACT-008</text>
+</svg>
