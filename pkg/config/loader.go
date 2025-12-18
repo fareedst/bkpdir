@@ -1,3 +1,5 @@
+// [IMPL:CONFIG_STRUCT] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
+// Configuration loader implementation — links to STDD tokens for traceability.
 // Package config provides schema-agnostic configuration loading and merging.
 //
 // This file contains the core configuration loading engine extracted from the

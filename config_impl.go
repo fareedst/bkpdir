@@ -1,3 +1,4 @@
+// [IMPL:CONFIG_STRUCT] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 // This file is part of bkpdir
 //
 // Package main provides concrete implementations of configuration interfaces.

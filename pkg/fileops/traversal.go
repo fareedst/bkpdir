@@ -1,3 +1,4 @@
+// [IMPL:FILE_OPERATIONS] [ARCH:FILE_OPERATIONS] [REQ:FILE_BACKUP]
 // Package fileops provides file operations and utilities for CLI applications.
 //
 // This file contains directory traversal functionality with exclusion support.

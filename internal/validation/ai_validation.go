@@ -1,3 +1,4 @@
+// [IMPL:TESTING] [ARCH:TESTING_STRATEGY] [REQ:CODE_QUALITY]
 // DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 // Integrated with DOC-014: AI Assistant Decision Framework
 package validation

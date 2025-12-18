@@ -23,6 +23,7 @@ FUNCTIONS_WITHOUT_TOKENS=0
 TOTAL_TEST_FUNCTIONS=0
 TEST_FUNCTIONS_WITH_TOKENS=0
 TEST_FUNCTIONS_WITHOUT_TOKENS=0
+OVERALL_COVERAGE=0
 
 echo -e "${BLUE}[REQ:DOC_016] Token Coverage Analysis${NC}\n"
 
@@ -52,9 +53,10 @@ analyze_source_files() {
             continue
         fi
         
-        # Count functions in file
-        local func_count=$(grep -c "^func [A-Z]" "$file" 2>/dev/null || echo "0")
-        if [[ "$func_count" -eq 0 ]]; then
+        # Count functions in file (exported functions)
+        local func_count
+        func_count=$(grep -cE "^func [A-Z]" "$file" 2>/dev/null || true)
+        if [[ -z "$func_count" || "$func_count" -eq 0 ]]; then
             continue
         fi
         
@@ -90,8 +92,9 @@ analyze_test_files() {
         fi
         
         # Count test functions
-        local test_count=$(grep -c "^func Test" "$file" 2>/dev/null || echo "0")
-        if [[ "$test_count" -eq 0 ]]; then
+        local test_count
+        test_count=$(grep -cE "^func Test" "$file" 2>/dev/null || true)
+        if [[ -z "$test_count" || "$test_count" -eq 0 ]]; then
             continue
         fi
         
@@ -117,7 +120,7 @@ analyze_test_files() {
 
 # Generate report
 generate_report() {
-    local source_coverage test_coverage overall_coverage
+    local source_coverage test_coverage
     
     if [[ $TOTAL_FUNCTIONS -gt 0 ]]; then
         source_coverage=$((FUNCTIONS_WITH_TOKENS * 100 / TOTAL_FUNCTIONS))
@@ -132,9 +135,9 @@ generate_report() {
     fi
     
     if [[ $((TOTAL_FUNCTIONS + TOTAL_TEST_FUNCTIONS)) -gt 0 ]]; then
-        overall_coverage=$(((FUNCTIONS_WITH_TOKENS + TEST_FUNCTIONS_WITH_TOKENS) * 100 / (TOTAL_FUNCTIONS + TOTAL_TEST_FUNCTIONS)))
+        OVERALL_COVERAGE=$(((FUNCTIONS_WITH_TOKENS + TEST_FUNCTIONS_WITH_TOKENS) * 100 / (TOTAL_FUNCTIONS + TOTAL_TEST_FUNCTIONS)))
     else
-        overall_coverage=0
+        OVERALL_COVERAGE=0
     fi
     
     # Update report
@@ -152,7 +155,7 @@ generate_report() {
 - **Coverage**: ${test_coverage}%
 
 ### Overall Coverage
-- **Overall Coverage**: ${overall_coverage}%
+- **Overall Coverage**: ${OVERALL_COVERAGE}%
 - **Target**: 100%
 
 ## Recommendations
@@ -167,7 +170,7 @@ EOF
     echo -e "\n${BLUE}Report generated: ${REPORT_FILE}${NC}"
     echo -e "${GREEN}Source Code Coverage: ${source_coverage}%${NC}"
     echo -e "${GREEN}Test Coverage: ${test_coverage}%${NC}"
-    echo -e "${GREEN}Overall Coverage: ${overall_coverage}%${NC}"
+    echo -e "${GREEN}Overall Coverage: ${OVERALL_COVERAGE}%${NC}"
 }
 
 # Main execution
@@ -176,11 +179,11 @@ main() {
     analyze_test_files
     generate_report
     
-    if [[ $overall_coverage -lt 100 ]]; then
-        echo -e "\n${YELLOW}⚠️  Token coverage is below 100%. Review the report for details.${NC}"
+    if [[ ${OVERALL_COVERAGE:-0} -lt 100 ]]; then
+        echo -e "\n${YELLOW}Token coverage is below 100%. Review the report for details.${NC}"
         exit 0
     else
-        echo -e "\n${GREEN}✅ 100% token coverage achieved!${NC}"
+        echo -e "\n${GREEN}100% token coverage achieved!${NC}"
         exit 0
     fi
 }

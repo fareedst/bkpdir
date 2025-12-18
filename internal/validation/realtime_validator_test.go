@@ -1,3 +1,4 @@
+// [REQ:CODE_QUALITY]
 // DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 

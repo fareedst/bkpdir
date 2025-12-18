@@ -1,3 +1,4 @@
+// [REQ:FILE_BACKUP]
 // This file is part of bkpdir
 
 // Copyright 2024 BkpDir Contributors

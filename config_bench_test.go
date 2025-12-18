@@ -1,3 +1,4 @@
+// [REQ:PERFORMANCE]
 // This file is part of bkpdir
 //
 // Package main provides performance benchmarks for configuration reflection and visibility.

@@ -1,3 +1,4 @@
+// [IMPL:FILE_STATISTICS] [ARCH:FILE_STATISTICS] [REQ:OUT_002]
 // File statistics gathering for enhanced output formatting.
 // Provides information about files for use in template and enhanced formatting.
 //

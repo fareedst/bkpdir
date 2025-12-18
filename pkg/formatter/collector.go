@@ -1,3 +1,5 @@
+// [IMPL:DELAYED_OUTPUT] [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
+// OutputCollector implementation — links to STDD tokens for traceability.
 // Output collection and delayed display functionality for the formatter package.
 // Provides the ability to collect output messages and display them later,
 // supporting both stdout and stderr destinations with message typing.

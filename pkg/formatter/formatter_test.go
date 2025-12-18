@@ -1,3 +1,4 @@
+// [REQ:OUTPUT_FORMATTING]
 // Tests for the pkg/formatter package to validate extracted formatting functionality.
 // These tests ensure the extracted formatter components work correctly
 // and maintain backward compatibility with the original functionality.

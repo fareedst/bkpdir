@@ -1,3 +1,4 @@
+// [REQ:CONFIGURATION]
 // Package config provides schema-agnostic configuration management for CLI applications.
 //
 // This test file verifies the extracted configuration system works independently

@@ -1632,6 +1632,45 @@ func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
 
 **Code Markers**: Token validation scripts, token registry maintenance, cross-reference validation
 
+### Legacy Registry Migration Implementation [IMPL:TOKEN_SYSTEM] [ARCH:TOKEN_SYSTEM] [REQ:DOC_016] [REQ:GOV_REGISTRY_COMPLETENESS]
+
+**Status**: ✅ Completed
+
+**Decision**: Implement a deterministic migration workflow that relocates every legacy token entry from `project-tokens.yaml` into `stdd/semantic-tokens.md`, generating STDD-compliant cross-links during the transfer.
+
+**Implementation Approach:**
+1. **Structured Extraction**
+   - Use `.venv/bin/python` helpers (PyYAML) to parse `project-tokens.yaml` and emit normalized JSON for each group (`actions`, `features`, `semantic_tokens`).
+   - Capture metadata (description, status, source paths, subtasks) for downstream documentation.
+2. **Cross-Link Synthesis**
+   - For each legacy token, resolve canonical `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`, and test references using prefix heuristics (e.g., `DIR-001 → [REQ:IMMUTABLE_DIRECTORY_OPERATIONS]`).
+   - Flag gaps by opening subtasks in `stdd/tasks.md` whenever a requirement/decision/test link is missing.
+3. **Registry Authoring**
+   - Generate Markdown tables per token category with columns: Description, Linked Requirement(s), Linked Architecture, Linked Implementation, Linked Tests/Code, Source Document, Status.
+   - Embed migration status badges so governance tooling can verify coverage.
+4. **YAML Decommissioning**
+   - After each category is represented in markdown, replace the YAML entries with a pointer stub until the file can be removed in a final cleanup change. `project-tokens.yaml` now contains a canonical pointer to `stdd/semantic-tokens.md`.
+5. **Validation Hooks**
+   - Run `scripts/validate-token-traceability.sh`, `scripts/token-coverage-analysis.sh`, and targeted `rg "\[TOKEN\]"` sweeps to prove each migrated token exists in requirements, architecture decisions, implementation notes, code, and tests.
+   - Record validation results inside the migration tables for auditability.
+
+**Migration Outcome:**
+- All legacy tokens were migrated into `stdd/semantic-tokens.md` and validated via `scripts/token-coverage-analysis.sh` and `scripts/validate-token-traceability.sh`.
+- Validation report: `docs/validation-reports/token-coverage-analysis.md` (100% source/test/overall coverage).
+- `project-tokens.yaml` replaced with a pointer stub to the canonical STDD registry.
+- Created implementation marker: `[IMPL:TOKEN_MIGRATION_COMPLETE]` to indicate the migration is finished and audited.
+
+**Pseudo-Code:**
+```bash
+# Extraction artifacts archived in docs/governance and migration logs
+.venv/bin/python scripts/token_inventory.py > /tmp/tokens.json
+.venv/bin/python scripts/render_token_tables.py --group features >> stdd/semantic-tokens.md
+scripts/validate-token-traceability.sh
+scripts/token-coverage-analysis.sh
+```
+
+**Code Markers**: `project-tokens.yaml` migration scripts, `stdd/semantic-tokens.md` tables annotated with `[REQ:DOC_016]`, validation logs appended to docs/governance summaries.
+
 ## 15. Pre-Extraction Refactoring Strategy [IMPL:REFACTOR_PREP] [ARCH:CODE_ORGANIZATION] [REQ:MAINTAINABILITY]
 
 ### Decision: Implement comprehensive pre-extraction refactoring to ensure clean component boundaries

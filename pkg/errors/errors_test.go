@@ -1,3 +1,4 @@
+// [REQ:ERROR_HANDLING]
 // Tests for the pkg/errors package to validate extracted error handling functionality.
 // These tests ensure the extracted error handling components work correctly
 // and maintain backward compatibility with the original functionality.

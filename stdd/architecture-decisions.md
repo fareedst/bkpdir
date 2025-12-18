@@ -1024,6 +1024,29 @@ bkpdir
 
 **Cross-References**: [REQ:DOC_016], [REQ:MAINTAINABILITY]
 
+### Legacy Registry Migration Plan [ARCH:TOKEN_SYSTEM] [REQ:DOC_016] [REQ:GOV_REGISTRY_COMPLETENESS]
+
+**Decision**: Migrate all semantic token definitions from `project-tokens.yaml` into `stdd/semantic-tokens.md` while preserving the requirements → architecture → implementation → tests → code chain for every identifier.
+
+**Rationale:**
+- Consolidates the single source of truth inside the STDD documentation tree for auditability.
+- Ensures governance requirements ([REQ:GOV_REGISTRY_COMPLETENESS], [REQ:GOV_DISCOVERABILITY]) are enforced through one registry.
+- Eliminates drift between YAML metadata and the STDD token registry.
+- Enables validation scripts to reason over one canonical markdown source.
+
+**Architectural Approach:**
+- **Inventory Layer**: Parse `project-tokens.yaml` into structured batches (actions, features, semantic token metadata) and normalize identifiers to STDD-compliant names.
+- **Cross-Link Layer**: For each legacy token, map to an explicit `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`, and referenced tests/files; open tasks whenever a mapping gap is detected.
+- **Registry Layer**: Extend `stdd/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
+- **Decommission Layer**: After each batch migrates, replace the YAML entry with a pointer to the markdown registry until the YAML file can be removed entirely.
+
+**Constraints:**
+- Migration must be performed in small, validated batches with checkpoints after every category to keep traceability intact.
+- All changes must keep `[ARCH:TOKEN_SYSTEM]` contracts (cross-layer references, validation hooks, AI navigation) satisfied before removing legacy records.
+- Governance reporting (`docs/governance/…`) must reference the new tables to maintain policy discoverability.
+
+**Cross-References**: [REQ:DOC_016], [REQ:GOV_REGISTRY_COMPLETENESS], [ARCH:TOKEN_SYSTEM], [IMPL:TOKEN_SYSTEM]
+
 ## 32. Validation Performance Optimization Architecture [ARCH:PERF_VALIDATION] [REQ:PERFORMANCE]
 
 ### Decision: Performance-optimized validation system with caching and fast mode

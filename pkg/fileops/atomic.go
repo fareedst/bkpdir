@@ -1,3 +1,4 @@
+// [IMPL:ATOMIC_OPS] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
 // Package fileops provides file operations and utilities for CLI applications.
 //
 // This file contains atomic file operation patterns for safe file writing.
