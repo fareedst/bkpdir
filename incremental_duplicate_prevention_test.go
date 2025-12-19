@@ -458,5 +458,3 @@ func TestIncrementalArchiveProceedWithNewFile_REQ_INCREMENTAL_DUPLICATE_PREVENTI
 		t.Errorf("Expected %d incremental archives after creation, got %d", incrementalCountBefore+1, incrementalCountAfter)
 	}
 }
-
-

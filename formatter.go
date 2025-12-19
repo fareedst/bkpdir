@@ -247,6 +247,7 @@ func (f *OutputFormatter) FormatIdenticalArchive(path string) string {
 // [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
+// [IMPL:LIST_FORMAT_SAFETY] Ensure safe formatting for list output
 func (f *OutputFormatter) FormatListArchive(path, creationTime string) string {
 	formatStr := f.cfg.FormatListArchive
 
@@ -292,7 +293,12 @@ func (f *OutputFormatter) FormatListArchive(path, creationTime string) string {
 	}
 
 	// Use printf formatting for backward compatibility
-	return fmt.Sprintf(formatStr, path, creationTime)
+	// Only use fmt.Sprintf if the format string contains printf verbs (e.g. %s).
+	if strings.Contains(formatStr, "%") {
+		return fmt.Sprintf(formatStr, path, creationTime)
+	}
+	// No printf verbs found; return the format string as-is to avoid printing EXTRA args.
+	return formatStr
 }
 
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
@@ -599,12 +605,32 @@ func (f *OutputFormatter) FormatListArchiveWithExtraction(archivePath, creationT
 		}
 	}
 
-	// Use template formatting if we have extracted data
-	if len(data) > 2 { // More than just "path" and "creation_time"
+	// Priority selection for formatting (IMPL:LIST_FORMAT_SAFETY):
+	// 1. If user-specified FormatListArchive contains template placeholders (#{}) -> use it with data
+	// 2. Else if user-specified FormatListArchive contains printf verbs (%%) -> use fmt.Sprintf with path/creationTime
+	// 3. Else if TemplateListArchive is provided -> use template with data
+	// 4. Else fall back to FormatListArchive (which handles printf vs template internally)
+
+	formatStr := f.cfg.FormatListArchive
+	if formatStr != "" {
+		if strings.Contains(formatStr, "#{") {
+			// Use the user-provided FormatListArchive as a template
+			return f.formatTemplate(formatStr, data)
+		}
+		// If it contains printf verbs, use fmt.Sprintf for backward compatibility
+		if strings.Contains(formatStr, "%") {
+			return fmt.Sprintf(formatStr, archivePath, creationTime)
+		}
+		// No template/placeholders and no printf verbs: return it as-is (safe)
+		return formatStr
+	}
+
+	// If no explicit FormatListArchive, fall back to TemplateListArchive when available
+	if f.cfg.TemplateListArchive != "" {
 		return f.FormatListArchiveTemplate(data)
 	}
 
-	// Fall back to printf-style formatting
+	// Final fallback: use FormatListArchive which contains its own printf/template handling
 	return f.FormatListArchive(archivePath, creationTime)
 }
 
@@ -643,6 +669,7 @@ func (f *OutputFormatter) FormatIdenticalBackup(path string) string {
 // [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
+// [IMPL:LIST_FORMAT_SAFETY] Ensure safe formatting for backup list output
 func (f *OutputFormatter) FormatListBackup(path, creationTime string) string {
 	formatStr := f.cfg.FormatListBackup
 
@@ -688,7 +715,12 @@ func (f *OutputFormatter) FormatListBackup(path, creationTime string) string {
 	}
 
 	// Use printf formatting for backward compatibility
-	return fmt.Sprintf(formatStr, path, creationTime)
+	// Only use fmt.Sprintf if the format string contains printf verbs (e.g. %s).
+	if strings.Contains(formatStr, "%") {
+		return fmt.Sprintf(formatStr, path, creationTime)
+	}
+	// No printf verbs found; return the format string as-is to avoid printing EXTRA args.
+	return formatStr
 }
 
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
@@ -1413,7 +1445,7 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 		// Fallback to basic format if template is not configured
 		return f.FormatCreatedArchive(path)
 	}
-	
+
 	// Use simple placeholder replacement (same approach as formatListArchiveSimple which works)
 	// This is more reliable than the complex formatTemplate function
 	result := templateStr
@@ -1421,7 +1453,7 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 		placeholder := fmt.Sprintf("#{%s}", key)
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
-	
+
 	// Final safety check: replace any remaining known placeholders with defaults
 	// This should not be needed if all placeholders are in the data map, but provides safety
 	if strings.Contains(result, "#{") {
@@ -1456,7 +1488,7 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 			result = strings.ReplaceAll(result, placeholder, value)
 		}
 	}
-	
+
 	// If still contains placeholders after all replacements, fall back to basic format
 	// This should never happen if the template and data map are correct
 	if strings.Contains(result, "#{") {
@@ -1492,7 +1524,7 @@ func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string 
 		// Fallback to basic format if template is not configured
 		return f.FormatIncrementalCreated(path)
 	}
-	
+
 	// Use simple placeholder replacement (same approach as formatListArchiveSimple which works)
 	// This is more reliable than the complex formatTemplate function
 	templateStr := f.cfg.TemplateIncrementalCreatedDetailed
@@ -1501,7 +1533,7 @@ func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string 
 		placeholder := fmt.Sprintf("#{%s}", key)
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
-	
+
 	// Final safety check: replace any remaining known placeholders with defaults
 	if strings.Contains(result, "#{") {
 		// Replace any remaining placeholders with safe defaults
@@ -1535,7 +1567,7 @@ func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string 
 			result = strings.ReplaceAll(result, placeholder, value)
 		}
 	}
-	
+
 	// If still contains placeholders, fall back to basic format
 	if strings.Contains(result, "#{") {
 		return f.FormatIncrementalCreated(path)
@@ -1756,7 +1788,7 @@ func (f *OutputFormatter) FormatDiffResult(diff *DiffResult) string {
 
 	var result strings.Builder
 	result.WriteString(f.cfg.FormatDiffChanges)
-	
+
 	for _, file := range diff.Added {
 		result.WriteString(fmt.Sprintf(f.cfg.FormatDiffAdded, file))
 	}
@@ -1766,7 +1798,7 @@ func (f *OutputFormatter) FormatDiffResult(diff *DiffResult) string {
 	for _, file := range diff.Deleted {
 		result.WriteString(fmt.Sprintf(f.cfg.FormatDiffDeleted, file))
 	}
-	
+
 	return result.String()
 }
 

@@ -690,7 +690,7 @@ func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
 
 	var result strings.Builder
 	result.WriteString(fa.config.FormatDiffChanges)
-	
+
 	for _, file := range diff.Added {
 		result.WriteString(fmt.Sprintf(fa.config.FormatDiffAdded, file))
 	}
@@ -700,7 +700,7 @@ func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
 	for _, file := range diff.Deleted {
 		result.WriteString(fmt.Sprintf(fa.config.FormatDiffDeleted, file))
 	}
-	
+
 	return result.String()
 }
 

@@ -1624,7 +1624,7 @@ func testListArchivesSortingWithLimit(t *testing.T) {
 	// Verify sorting (most recent first) - archive[i] should be newer than archive[i+1]
 	for i := 0; i < len(archivesAfter)-1; i++ {
 		if archivesAfter[i].CreationTime.Before(archivesAfter[i+1].CreationTime) {
-			t.Errorf("Archives not sorted correctly (most recent first): archive %d (time: %v) is older than archive %d (time: %v)", 
+			t.Errorf("Archives not sorted correctly (most recent first): archive %d (time: %v) is older than archive %d (time: %v)",
 				i, archivesAfter[i].CreationTime, i+1, archivesAfter[i+1].CreationTime)
 		}
 	}

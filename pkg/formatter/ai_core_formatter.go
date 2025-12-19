@@ -152,6 +152,7 @@ func (f *AICoreFormatter) FormatWithPlaceholders(format string, data map[string]
 }
 
 // [CRITICAL] FMT-001: AI-friendly context formatting - [ACTION:core-functionality]
+// [IMPL:LIST_FORMAT_SAFETY] Guard list formatting and use placeholder substitution when appropriate
 func (f *AICoreFormatter) FormatWithContext(ctx FormatContext) (string, error) {
 	switch ctx.FormatType {
 	case FormatTypeCreated, FormatTypeIdentical, FormatTypeDryRun:
@@ -170,8 +171,34 @@ func (f *AICoreFormatter) FormatWithContext(ctx FormatContext) (string, error) {
 				if formatStr == "" {
 					formatStr = "%s (created: %s)\n"
 				}
-				return fmt.Sprintf(formatStr, path, creationTime), nil
+				// If template-style placeholders are present, use placeholder formatting with stats
+				if strings.Contains(formatStr, "#{") {
+					data := make(map[string]string)
+					data["path"] = path
+					data["creation_time"] = creationTime
+					statInfo, err := GatherFileStatInfo(path)
+					if err == nil && statInfo != nil {
+						data["size"] = fmt.Sprintf("%d", statInfo.Size)
+						data["size_human"] = statInfo.SizeHuman
+						data["mtime"] = statInfo.MTime.Format("2006-01-02 15:04:05")
+						data["mtime_unix"] = fmt.Sprintf("%d", statInfo.MTimeUnix)
+						data["mode"] = statInfo.Mode.String()
+						data["type"] = statInfo.Type
+						data["name"] = statInfo.Name
+					}
+					res, err := f.FormatWithPlaceholders(formatStr, data)
+					if err != nil {
+						return "", err
+					}
+					return res, nil
+				}
+				// If printf verbs present, use fmt.Sprintf, otherwise fall back to a sensible default
+				if strings.Contains(formatStr, "%") {
+					return fmt.Sprintf(formatStr, path, creationTime), nil
+				}
+				return fmt.Sprintf("%s (created: %s)\n", path, creationTime), nil
 			}
+
 			// If creationTime is missing, fall back to just path (though this shouldn't happen with correct usage)
 			return f.FormatArchive(path, ctx.FormatType)
 		}

@@ -538,6 +538,11 @@ Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation
 
 ## Quick Reference Index
 
+### New Implementation Tokens
+- `[IMPL:LIST_FORMAT_SAFETY]` → See `implementation-decisions.md` § List Command Format Safety Fix [ARCH:OUTPUT_FORMATTING] [REQ:OUT_002]
+
+
+
 ### Requirements Tokens by Category
 - **Core Functionality**: `CODE_QUALITY`, `RESOURCE_MANAGEMENT`, `ERROR_HANDLING`, `CONTEXT_SUPPORT`, `FILE_BACKUP`, `OUTPUT_FORMATTING`, `TEMPLATE_FORMATTING`, `CONFIGURATION`, `GIT_INTEGRATION`, `LIST_LIMIT`
 - **Configuration Enhancement**: `CFG_005`, `CFG_006`
@@ -569,3 +574,7 @@ Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation
 - **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`
 - **Configuration Schema**: `CONFIG_SCHEMA_FLEX`
 - **Output Control**: `DEBUG-OUTPUT`, `DIAGNOSTIC-OUTPUT`
+
+### New Implementation Tokens
+- `[IMPL:LIST_FORMAT_SAFETY]` → See `implementation-decisions.md` § List Command Format Safety Fix [ARCH:OUTPUT_FORMATTING] [REQ:OUT_002]
+

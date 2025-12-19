@@ -2095,6 +2095,22 @@ scripts/token-coverage-analysis.sh
 
 **Cross-References**: [ARCH:CUSTOMIZABLE_FORMAT_STRINGS], [REQ:CUSTOMIZABLE_FORMAT_STRINGS], [ARCH:CONFIG_SYSTEM], [ARCH:OUTPUT_FORMATTING], [IMPL:CONFIG_STRUCT], [IMPL:DUAL_FORMATTING]
 
+## 23. List Command Format Safety Fix [IMPL:LIST_FORMAT_SAFETY] [ARCH:OUTPUT_FORMATTING] [REQ:OUT_002]
+
+### Decision: Guard printf usage and ensure template-style list formatting is used safely
+**Rationale:**
+- Prevent `fmt` from interpreting template placeholders or appending EXTRA args when format strings contain no printf verbs (this produced `%!(EXTRA ...)` in user output).
+- Ensure AI formatter and core formatter consistently handle template placeholders (`#{...}`) and printf formats.
+
+### Implementation Approach:
+- Added guarded printf usage in `FormatListArchive` and `FormatListBackup` to call `fmt.Sprintf` only when the format string contains printf verbs (`%`). Otherwise, return the template-format string as-is or perform placeholder replacement.
+- Updated AI core formatter (`pkg/formatter/ai_core_formatter.go`) `FormatWithContext` list handling to detect template placeholders (`#{`) and use `FormatWithPlaceholders` with gathered file stats when present; otherwise use `fmt.Sprintf` only when printf verbs exist.
+- Ensured `AIFormatterAdapter` and `AIFormatterAdapter.FormatListArchiveWithExtraction` delegate to placeholder-based formatting and gather file stats for `#{size_human}` and related placeholders.
+
+**Code Markers:** `formatter.go` (FormatListArchive, FormatListBackup), `pkg/formatter/ai_core_formatter.go` (FormatWithContext list handling), `ai_formatter_adapter.go` (FormatListArchiveWithExtraction, FormatListBackupWithExtraction)
+
+**Cross-References:** [ARCH:OUTPUT_FORMATTING], [REQ:OUT_002], [IMPL:FILE_STATISTICS]
+
 ## 23. Configuration File Precedence Fix [IMPL:CFG_PRECEDENCE_FIX] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 
 ### Decision: Fix configuration merge logic to respect earlier file precedence for sequential file processing

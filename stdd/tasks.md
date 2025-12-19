@@ -95,7 +95,7 @@ This document tracks all tasks and subtasks for implementing this project. Tasks
 - [x] Backward compatibility maintained
 - [x] Both inc and full commands behave consistently
 - [x] Tests pass with semantic token references
-- [ ] Documentation updated (remaining documentation task)
+- [x] Documentation updated (remaining documentation task)
 
 **Priority Rationale**: P0 - Enhances user experience and provides consistent output formatting across commands
 

@@ -628,5 +628,3 @@ func TestDiffCommandExcludePatterns_REQ_DIFF_COMMAND(t *testing.T) {
 		t.Errorf("Excluded file 'excluded.txt' should not appear in diff output, got: %s", output)
 	}
 }
-
-

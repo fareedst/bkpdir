@@ -15,7 +15,7 @@ import (
 func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-archive.zip")
-	
+
 	// Create a test archive file with known content
 	content := []byte("test archive content for statistics")
 	if err := os.WriteFile(testArchive, content, 0644); err != nil {
@@ -27,7 +27,7 @@ func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 
 	// Test with default template format string
 	result := formatter.FormatCreatedArchiveWithStats(testArchive)
-	
+
 	// Verify result contains file path
 	if !strings.Contains(result, testArchive) {
 		t.Errorf("Expected result to contain archive path %q, got %q", testArchive, result)
@@ -38,7 +38,7 @@ func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to gather file stats: %v", err)
 	}
-	
+
 	if !strings.Contains(result, statInfo.SizeHuman) && !strings.Contains(result, "unknown") {
 		t.Errorf("Expected result to contain size_human %q or 'unknown', got %q", statInfo.SizeHuman, result)
 	}
@@ -54,7 +54,7 @@ func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	result = formatter.FormatCreatedArchiveWithStats(testArchive)
 
 	// Verify all placeholders are replaced
-	if strings.Contains(result, "#{path}") || strings.Contains(result, "#{size_human}") || 
+	if strings.Contains(result, "#{path}") || strings.Contains(result, "#{size_human}") ||
 		strings.Contains(result, "#{type}") || strings.Contains(result, "#{mtime}") {
 		t.Errorf("Result contains unprocessed placeholders, got %q", result)
 	}
@@ -76,7 +76,7 @@ func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-incremental.zip")
-	
+
 	// Create a test archive file with known content
 	content := []byte("test incremental archive content")
 	if err := os.WriteFile(testArchive, content, 0644); err != nil {
@@ -88,7 +88,7 @@ func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 
 	// Test with default template format string
 	result := formatter.FormatIncrementalCreatedWithStats(testArchive)
-	
+
 	// Verify result contains file path
 	if !strings.Contains(result, testArchive) {
 		t.Errorf("Expected result to contain archive path %q, got %q", testArchive, result)
@@ -99,7 +99,7 @@ func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to gather file stats: %v", err)
 	}
-	
+
 	if !strings.Contains(result, statInfo.SizeHuman) && !strings.Contains(result, "unknown") {
 		t.Errorf("Expected result to contain size_human %q or 'unknown', got %q", statInfo.SizeHuman, result)
 	}
@@ -115,7 +115,7 @@ func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	result = formatter.FormatIncrementalCreatedWithStats(testArchive)
 
 	// Verify all placeholders are replaced
-	if strings.Contains(result, "#{path}") || strings.Contains(result, "#{size_human}") || 
+	if strings.Contains(result, "#{path}") || strings.Contains(result, "#{size_human}") ||
 		strings.Contains(result, "#{mtime}") {
 		t.Errorf("Result contains unprocessed placeholders, got %q", result)
 	}
@@ -131,7 +131,7 @@ func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 func TestFormatCreatedArchiveWithStatsAllPlaceholders_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-all-placeholders.zip")
-	
+
 	content := []byte("test content")
 	if err := os.WriteFile(testArchive, content, 0644); err != nil {
 		t.Fatalf("Failed to create test archive: %v", err)
@@ -212,7 +212,7 @@ func TestFormatCreatedArchiveWithStatsErrorHandling_REQ_OUT_002(t *testing.T) {
 func TestPrintCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-print.zip")
-	
+
 	content := []byte("test content")
 	if err := os.WriteFile(testArchive, content, 0644); err != nil {
 		t.Fatalf("Failed to create test archive: %v", err)
@@ -252,7 +252,7 @@ func TestPrintCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 func TestPrintIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-incremental-print.zip")
-	
+
 	content := []byte("test incremental content")
 	if err := os.WriteFile(testArchive, content, 0644); err != nil {
 		t.Fatalf("Failed to create test archive: %v", err)
@@ -292,7 +292,7 @@ func TestPrintIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 func TestBackwardCompatibilityFormatStrings_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-backward-compat.zip")
-	
+
 	content := []byte("test content")
 	if err := os.WriteFile(testArchive, content, 0644); err != nil {
 		t.Fatalf("Failed to create test archive: %v", err)
@@ -325,4 +325,3 @@ func TestBackwardCompatibilityFormatStrings_REQ_OUT_002(t *testing.T) {
 		t.Logf("Both methods produced same output (acceptable): %q", basicResult)
 	}
 }
-

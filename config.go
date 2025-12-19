@@ -143,19 +143,19 @@ type Config struct {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	// Archive operation messages
-	FormatNoArchivesFound      string `yaml:"format_no_archives_found"`
-	FormatConfigurationUpdated string `yaml:"format_configuration_updated"`
-	FormatConfigFilePath       string `yaml:"format_config_file_path"`
-	FormatDryRunFilesHeader    string `yaml:"format_dry_run_files_header"`
-	FormatDryRunFileEntry      string `yaml:"format_dry_run_file_entry"`
-	FormatNoFilesModified            string `yaml:"format_no_files_modified"`
-	FormatIncrementalCreated         string `yaml:"format_incremental_created"`
+	FormatNoArchivesFound             string `yaml:"format_no_archives_found"`
+	FormatConfigurationUpdated        string `yaml:"format_configuration_updated"`
+	FormatConfigFilePath              string `yaml:"format_config_file_path"`
+	FormatDryRunFilesHeader           string `yaml:"format_dry_run_files_header"`
+	FormatDryRunFileEntry             string `yaml:"format_dry_run_file_entry"`
+	FormatNoFilesModified             string `yaml:"format_no_files_modified"`
+	FormatIncrementalCreated          string `yaml:"format_incremental_created"`
 	FormatIncrementalSkippedNoChanges string `yaml:"format_incremental_skipped_no_changes"`
-	FormatDiffNoChanges              string `yaml:"format_diff_no_changes"`
-	FormatDiffChanges                string `yaml:"format_diff_changes"`
-	FormatDiffAdded                  string `yaml:"format_diff_added"`
-	FormatDiffModified               string `yaml:"format_diff_modified"`
-	FormatDiffDeleted                string `yaml:"format_diff_deleted"`
+	FormatDiffNoChanges               string `yaml:"format_diff_no_changes"`
+	FormatDiffChanges                 string `yaml:"format_diff_changes"`
+	FormatDiffAdded                   string `yaml:"format_diff_added"`
+	FormatDiffModified                string `yaml:"format_diff_modified"`
+	FormatDiffDeleted                 string `yaml:"format_diff_deleted"`
 
 	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 	// Enhanced format strings with stat information support
@@ -326,19 +326,19 @@ func DefaultConfig() *Config {
 
 		// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 		// Archive operation messages
-		FormatNoArchivesFound:      "No archives found in %s\n",
-		FormatConfigurationUpdated: "Configuration updated: %s = %v\n",
-		FormatConfigFilePath:       "Config file: %s\n",
-		FormatDryRunFilesHeader:    "[Dry Run] Files to include:\n",
-		FormatDryRunFileEntry:      "  %s\n",
-		FormatNoFilesModified:            "No files modified since last full archive\n",
-		FormatIncrementalCreated:         "Created incremental archive: %s\n",
+		FormatNoArchivesFound:             "No archives found in %s\n",
+		FormatConfigurationUpdated:        "Configuration updated: %s = %v\n",
+		FormatConfigFilePath:              "Config file: %s\n",
+		FormatDryRunFilesHeader:           "[Dry Run] Files to include:\n",
+		FormatDryRunFileEntry:             "  %s\n",
+		FormatNoFilesModified:             "No files modified since last full archive\n",
+		FormatIncrementalCreated:          "Created incremental archive: %s\n",
 		FormatIncrementalSkippedNoChanges: "No changes detected since last incremental archive. Skipping archive creation.\n",
-		FormatDiffNoChanges:              "No changes detected between current directory and archive state.\n",
-		FormatDiffChanges:                "Changes detected:\n",
-		FormatDiffAdded:                  "  Added:   %s\n",
-		FormatDiffModified:               "  Modified: %s\n",
-		FormatDiffDeleted:                "  Deleted:  %s\n",
+		FormatDiffNoChanges:               "No changes detected between current directory and archive state.\n",
+		FormatDiffChanges:                 "Changes detected:\n",
+		FormatDiffAdded:                   "  Added:   %s\n",
+		FormatDiffModified:                "  Modified: %s\n",
+		FormatDiffDeleted:                 "  Deleted:  %s\n",
 
 		// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
 		// Enhanced format strings with stat information (backward compatible defaults)
@@ -4631,21 +4631,21 @@ func getExpectedPlaceholders(fieldName string) []string {
 		"TemplateListBackup":      {"#{path}", "#{size_human}", "#{size}", "#{creation_time}", "#{mtime}", "#{mode}", "#{type}", "#{name}"},
 		"TemplateDryRunBackup":    {"#{path}"},
 		// Extended format strings (examples)
-		"FormatNoArchivesFound":            {"%s"},
-		"FormatConfigurationUpdated":       {"%s", "%v"},
-		"FormatConfigFilePath":             {"%s"},
-		"FormatDryRunFilesHeader":          {},
-		"FormatDryRunFileEntry":            {"%s"},
-		"FormatNoFilesModified":            {},
-		"FormatIncrementalCreated":         {"%s"},
+		"FormatNoArchivesFound":             {"%s"},
+		"FormatConfigurationUpdated":        {"%s", "%v"},
+		"FormatConfigFilePath":              {"%s"},
+		"FormatDryRunFilesHeader":           {},
+		"FormatDryRunFileEntry":             {"%s"},
+		"FormatNoFilesModified":             {},
+		"FormatIncrementalCreated":          {"%s"},
 		"FormatIncrementalSkippedNoChanges": {},
-		"FormatDiffNoChanges":              {},
-		"FormatDiffChanges":                {},
-		"FormatDiffAdded":                  {"%s"},
-		"FormatDiffModified":               {"%s"},
-		"FormatDiffDeleted":                {"%s"},
-		"FormatCreatedArchiveDetailed":     {"%s"}, // 3 occurrences
-		"FormatIncrementalCreatedDetailed": {"%s"}, // 3 occurrences
+		"FormatDiffNoChanges":               {},
+		"FormatDiffChanges":                 {},
+		"FormatDiffAdded":                   {"%s"},
+		"FormatDiffModified":                {"%s"},
+		"FormatDiffDeleted":                 {"%s"},
+		"FormatCreatedArchiveDetailed":      {"%s"}, // 3 occurrences
+		"FormatIncrementalCreatedDetailed":  {"%s"}, // 3 occurrences
 		// Backup operation messages
 		"FormatNoBackupsFound":    {"%s"},
 		"FormatBackupWouldCreate": {"%s"},
@@ -4754,21 +4754,21 @@ func validateAllFormatStrings(cfg *Config) []string {
 		"TemplateListBackup":      cfg.TemplateListBackup,
 		"TemplateDryRunBackup":    cfg.TemplateDryRunBackup,
 		// Extended format strings (selected examples)
-		"FormatNoArchivesFound":            cfg.FormatNoArchivesFound,
-		"FormatConfigurationUpdated":       cfg.FormatConfigurationUpdated,
-		"FormatConfigFilePath":             cfg.FormatConfigFilePath,
-		"FormatDryRunFilesHeader":          cfg.FormatDryRunFilesHeader,
-		"FormatDryRunFileEntry":            cfg.FormatDryRunFileEntry,
-		"FormatNoFilesModified":            cfg.FormatNoFilesModified,
-		"FormatIncrementalCreated":         cfg.FormatIncrementalCreated,
+		"FormatNoArchivesFound":             cfg.FormatNoArchivesFound,
+		"FormatConfigurationUpdated":        cfg.FormatConfigurationUpdated,
+		"FormatConfigFilePath":              cfg.FormatConfigFilePath,
+		"FormatDryRunFilesHeader":           cfg.FormatDryRunFilesHeader,
+		"FormatDryRunFileEntry":             cfg.FormatDryRunFileEntry,
+		"FormatNoFilesModified":             cfg.FormatNoFilesModified,
+		"FormatIncrementalCreated":          cfg.FormatIncrementalCreated,
 		"FormatIncrementalSkippedNoChanges": cfg.FormatIncrementalSkippedNoChanges,
-		"FormatDiffNoChanges":              cfg.FormatDiffNoChanges,
-		"FormatDiffChanges":                cfg.FormatDiffChanges,
-		"FormatDiffAdded":                  cfg.FormatDiffAdded,
-		"FormatDiffModified":               cfg.FormatDiffModified,
-		"FormatDiffDeleted":                cfg.FormatDiffDeleted,
-		"FormatCreatedArchiveDetailed":     cfg.FormatCreatedArchiveDetailed,
-		"FormatIncrementalCreatedDetailed": cfg.FormatIncrementalCreatedDetailed,
+		"FormatDiffNoChanges":               cfg.FormatDiffNoChanges,
+		"FormatDiffChanges":                 cfg.FormatDiffChanges,
+		"FormatDiffAdded":                   cfg.FormatDiffAdded,
+		"FormatDiffModified":                cfg.FormatDiffModified,
+		"FormatDiffDeleted":                 cfg.FormatDiffDeleted,
+		"FormatCreatedArchiveDetailed":      cfg.FormatCreatedArchiveDetailed,
+		"FormatIncrementalCreatedDetailed":  cfg.FormatIncrementalCreatedDetailed,
 		// Backup operation messages
 		"FormatNoBackupsFound":    cfg.FormatNoBackupsFound,
 		"FormatBackupWouldCreate": cfg.FormatBackupWouldCreate,
