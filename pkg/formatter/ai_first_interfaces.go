@@ -5,6 +5,9 @@
 // Licensed under the MIT License
 
 // [CRITICAL] FMT-001: AI-first formatter refactoring - [ACTION:core-functionality]
+// [REQ:OUTPUT_FORMATTING] Output formatting requirement
+// [ARCH:OUTPUT_FORMATTING] Output formatting architecture
+// [IMPL:DUAL_FORMATTING] Dual-mode formatting implementation
 package formatter
 
 import (

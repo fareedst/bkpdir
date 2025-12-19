@@ -343,6 +343,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:DEPENDENCY_MGMT]` → See `implementation-decisions.md` § Dependency Management [ARCH:CODE_ORGANIZATION] [REQ:MAINTAINABILITY]
 - `[IMPL:TESTING_COMPLEXITY]` → See `implementation-decisions.md` § Testing Complexity [ARCH:TESTING_STRATEGY] [REQ:*]
 - `[IMPL:TOKEN_SYSTEM]` → See `implementation-decisions.md` § Token System Implementation [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
+- `[IMPL:TOKEN_COVERAGE_AUDIT]` → See `implementation-decisions.md` § Semantic Token Coverage Audit [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
 - `[IMPL:CONFIG_OUTPUT_GROUPING]` → See `implementation-decisions.md` § Configuration Output Grouping Implementation [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
 - `[IMPL:CFG_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Configuration File Precedence Fix [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
 - `[IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Merge and Prepend Strategy Precedence Fix [ARCH:CFG_001] [ARCH:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]

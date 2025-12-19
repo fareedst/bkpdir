@@ -1,3 +1,7 @@
+// [REQ:DOC_016] Semantic token coverage audit marker
+// [ARCH:TOKEN_SYSTEM] Token system architecture
+// [IMPL:TOKEN_COVERAGE_AUDIT] Applied audit annotation
+
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package main
 

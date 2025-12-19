@@ -4,6 +4,9 @@
 //
 // This package is designed to accelerate development of new CLI applications
 // by providing tested patterns and reusable components.
+// [REQ:USABILITY] CLI usability requirement
+// [ARCH:CLI_FRAMEWORK] CLI framework architecture for command composition
+// [IMPL:CLI_FRAMEWORK] CLI framework implementation (builders, managers)
 package cli
 
 import (

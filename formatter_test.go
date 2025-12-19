@@ -1,4 +1,7 @@
 // This file is part of bkpdir
+// [REQ:OUTPUT_FORMATTING] Validates output formatting features via tests
+// [ARCH:OUTPUT_FORMATTING] Exercise output formatting architecture decisions
+// [IMPL:DUAL_FORMATTING] Targets printf/template formatter implementation
 
 package main
 

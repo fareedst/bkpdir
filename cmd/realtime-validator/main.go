@@ -1,3 +1,7 @@
+// [REQ:DOC_016] Semantic token coverage audit marker
+// [ARCH:TOKEN_SYSTEM] Token system architecture
+// [IMPL:TOKEN_COVERAGE_AUDIT] Applied audit annotation
+
 // DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 

@@ -21,6 +21,9 @@
 // SERVICE-FORMAT-001: Format service architecture decision - Format service implementation [ACTION:core-functionality]
 // Source: formatter.go - SERVICE-FORMAT-001
 // Impact: Format service implementation decision
+// [REQ:OUTPUT_FORMATTING] Output formatting requirement
+// [ARCH:OUTPUT_FORMATTING] Dual-mode output formatting architecture
+// [IMPL:DUAL_FORMATTING] printf/template formatting implementation
 
 // REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
 // Component boundaries identified: OutputCollector, PrintfFormatter, TemplateFormatter, PatternExtractor, ErrorFormatter

@@ -28,4 +28,8 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+//
+// [REQ:PERFORMANCE] Processing patterns must support high-performance concurrent execution
+// [ARCH:PROCESSING_PATTERNS] Processing pipeline architecture with worker pools and naming providers
+// [IMPL:PROCESSING_PATTERNS] Implementation of pipeline stages, naming providers, and concurrent processors
 package processing

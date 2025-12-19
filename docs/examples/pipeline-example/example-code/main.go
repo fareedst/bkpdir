@@ -1,3 +1,6 @@
+// [REQ:PERFORMANCE] Processing patterns must support high-performance concurrent execution
+// [ARCH:PROCESSING_PATTERNS] Processing pipeline architecture with worker pools
+// [IMPL:PROCESSING_PATTERNS] Pipeline implementation (stages, processors)
 package main
 
 import (

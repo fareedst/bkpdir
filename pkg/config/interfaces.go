@@ -11,6 +11,10 @@
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
+//
+// [REQ:CONFIGURATION] Configuration management and discovery requirement
+// [ARCH:CONFIG_SYSTEM] Configuration system architecture for discovery, merging, and validation
+// [IMPL:CONFIG_STRUCT] Configuration structure and interface implementation
 package config
 
 import (

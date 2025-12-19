@@ -99,6 +99,51 @@ This document tracks all tasks and subtasks for implementing this project. Tasks
 
 **Priority Rationale**: P0 - Enhances user experience and provides consistent output formatting across commands
 
+## P1: Semantic Token Coverage Audit for Small Modules [REQ:DOC_016] [ARCH:TOKEN_SYSTEM] [IMPL:TOKEN_SYSTEM]
+
+**Status**: ✅ Complete
+
+**Description**: Verified compact modules and their tests are annotated with requirement, architecture, and implementation tokens, and documented the gaps for token-linked traceability.
+
+**Dependencies**: [REQ:DOC_016] (AI-first token coverage), [ARCH:TOKEN_SYSTEM] (Token architecture), [IMPL:TOKEN_SYSTEM] (Token implementation)
+
+**Subtasks**:
+- [x] Catalog the smallest Go modules and identify their core logical blocks [REQ:DOC_016]
+- [x] Document existing semantic tokens per module/logical block [REQ:DOC_016]
+- [x] Review associated tests for precise token references [REQ:DOC_016]
+- [x] Identify gaps and outline required token mappings [REQ:DOC_016] [ARCH:TOKEN_SYSTEM]
+- [x] Plan documentation updates capturing the coverage findings [REQ:DOC_016] [ARCH:TOKEN_SYSTEM] [IMPL:TOKEN_SYSTEM]
+
+**Completion Criteria**:
+- [x] Each targeted module has its traceability tokens recorded
+- [x] Tests clearly reference the requirements they validate
+- [x] Documentation plan specifies updates for `stdd/semantic-tokens.md`, `stdd/architecture-decisions.md`, or `stdd/implementation-decisions.md`
+- [x] Task status updated once mappings and plans are documented
+
+
+## P1: Semantic Token Coverage Audit for Large Modules [REQ:DOC_016] [ARCH:TOKEN_SYSTEM] [IMPL:TOKEN_COVERAGE_AUDIT]
+
+**Status**: ✅ Complete
+
+**Description**: Extended the token coverage audit to larger modules and extracted packages (`pkg/config`, `pkg/fileops`, `pkg/formatter`, `pkg/processing`, `pkg/cli`, `tools`, `cmd`, `docs/examples`) and applied minimal audit anchors where missing. Documented token additions and registered audit decision in STDD docs.
+
+**Dependencies**: [REQ:DOC_016] (AI-first token coverage), [ARCH:TOKEN_SYSTEM] (Token architecture), [IMPL:TOKEN_COVERAGE_AUDIT] (Audit implementation)
+
+**Subtasks**:
+- [x] Catalog larger modules and their primary logical blocks [REQ:DOC_016]
+- [x] Document existing semantic tokens found in each larger module [REQ:DOC_016]
+- [x] Identify missing anchors and propose token mappings [REQ:DOC_016] [ARCH:TOKEN_SYSTEM]
+- [x] Apply minimal, non-invasive token annotations to source and tests where safe [REQ:DOC_016] [IMPL:TOKEN_COVERAGE_AUDIT]
+- [x] Draft STDD documentation updates for `stdd/semantic-tokens.md`, `stdd/implementation-decisions.md`, and `stdd/architecture-decisions.md` reflecting added tokens
+- [x] Mark task complete and summarize audit findings
+
+**Completion Criteria**:
+- [x] Each large module has a token coverage summary
+- [x] All applied token annotations are registered in `stdd/semantic-tokens.md`
+- [x] Implementation and architecture docs updated where new tokens were introduced
+- [x] Task status updated once mappings and doc updates are committed
+
+
 ## P1: Array Field Default Merge Strategy Implementation [REQ:CFG_005] [ARCH:EXCLUDE_MERGE_FIX] [IMPL:EXCLUDE_MERGE_FIX]
 
 **Status**: ✅ Complete

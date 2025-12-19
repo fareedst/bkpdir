@@ -1,4 +1,7 @@
 // DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
+// [REQ:MAINTAINABILITY] Example CLI template supports maintainability validation
+// [ARCH:CLI_FRAMEWORK] Uses extracted CLI framework for command patterns
+// [IMPL:CLI_FRAMEWORK] Example CLI implementation demonstrating framework usage
 package cmd
 
 import (

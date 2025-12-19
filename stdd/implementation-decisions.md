@@ -3041,3 +3041,25 @@ STDD requires authoritative records to live in the requirements, architecture, a
 - Confirm tokens appear in `stdd/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
 - Confirm `docs/package-interdependency-mapping.md` exists and links back to these tokens.
 
+## 19. Semantic Token Coverage Audit [IMPL:TOKEN_COVERAGE_AUDIT] [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
+
+### Decision: Verify that each small module and its tests carry semantic tokens linking them to their requirements, architecture decisions, and implementation anchors.
+**Rationale:**
+- Demonstrates that the AI-first toolchain can rely on tokens to trace code/tests back to intent.
+- Highlights gaps (e.g., `formatter.go`/`formatter_test.go`) and fixes them before broader refactors.
+- Provides a repeatable checklist for future module audits.
+
+### Implementation Approach:
+- **Archive module (`archive.go`, `archive_test.go`)**: Documented `[REQ:FILE_BACKUP]`, `[ARCH:ARCHIVE_FORMAT]`, `[ARCH:PROCESSING_PATTERNS]`, `[ARCH:CONTEXT_SUPPORT]`, `[IMPL:ZIP_FORMAT]`, `[IMPL:PROCESSING_PATTERNS]`, `[IMPL:CONTEXT_OPS]`, `[IMPL:INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).
+- **Backup module (`backup.go`, `backup_test.go`)**: Annotated `[REQ:FILE_BACKUP]`, `[ARCH:RESOURCE_MANAGEMENT]`, `[IMPL:ATOMIC_OPS]`, additional `[REQ:LIST_LIMIT]` tokens for list helpers so the requirement coverage remains visible.
+- **Errors module (`errors.go`, `errors_test.go`)**: Structured errors are marked with `[REQ:ERROR_HANDLING]`, `[ARCH:ERROR_HANDLING]`, `[IMPL:STRUCTURED_ERRORS]`; tests mirror these tags.
+- **Exclusion module (`exclude.go`, `exclude_test.go`)**: Pattern helpers keep `[REQ:CONFIGURATION]`, `[ARCH:EXCLUSION_PATTERNS]`, `[ARCH:PACKAGE_EXTRACTION]`, `[IMPL:EXCLUSION_PATTERNS]` references across adapters and wrappers.
+- **Comparison module (`comparison.go`, `comparison_test.go`)**: Snapshot utilities reference `[ARCH:DIRECTORY_COMPARISON]`, `[ARCH:DIFF_COMMAND]`, `[IMPL:DIRECTORY_COMPARISON]`, `[IMPL:DIFF_COMMAND]`, `[REQ:DIFF_COMMAND]` for diffing features.
+- **Formatter module (`formatter.go`, `formatter_test.go`)**: Added `[REQ:OUTPUT_FORMATTING]`, `[ARCH:OUTPUT_FORMATTING]`, `[IMPL:DUAL_FORMATTING]` anchors so the formatting requirement is traceable from both implementation and tests; helper functions continue to reference `[REQ:CUSTOMIZABLE_FORMAT_STRINGS]`, `[IMPL:DIFF_COMMAND]`, and `[IMPL:INCREMENTAL_DUPLICATE_PREVENTION]` for contextual behavior.
+- **Git module (`git.go`, `git_test.go`)**: Maintains `[REQ:GIT_INTEGRATION]`, `[ARCH:GIT_INTEGRATION]`, `[IMPL:GIT_CLI]`, and tests now restate them for repository detection and naming flows.
+
+### Documentation:
+- Capture this audit in `stdd/semantic-tokens.md` by registering `[IMPL:TOKEN_COVERAGE_AUDIT]` with the contexts above.
+- Point future audits to this decision to reuse the pattern and ensure coverage plans explicitly mention `REQ:DOC_016` and `ARCH:TOKEN_SYSTEM`.
+
+**Code Markers**: `archive.go`, `backup.go`, `errors.go`, `comparison.go`, `exclude.go`, `formatter.go`, `git.go` and their `_test.go` files that now consistently mention the appropriate tokens.
