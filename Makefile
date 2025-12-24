@@ -4,29 +4,85 @@
 #   Development:
 #     build-local     - Build for local development (current platform)
 #     dev             - Build and run basic functionality test
+#     dev-full        - Full development workflow (check, test-coverage-validate, build, token-suggester)
 #     install         - Install to ~/.local/bin (requires build-local first)
+#     install-link    - Install via symbolic link (macos-arm64 specific)
 #   
 #   Testing:
-#     test            - Run all tests
+#     test            - Run all tests (includes configuration hierarchy tests)
 #     test-verbose    - Run tests with verbose output
-#     test-coverage   - Run tests with coverage report
+#     test-coverage   - Run tests with coverage report (legacy)
 #     test-coverage-new - Run tests with selective coverage (COV-001)
 #     test-coverage-validate - Validate coverage with exclusion patterns
+#     test-coverage-baseline - Generate coverage baseline documentation (COV-002)
+#     test-coverage-differential - Generate differential coverage report (COV-002)
+#     test-coverage-trends - Update coverage trends and history (COV-002)
+#     test-coverage-full - Run full coverage suite with COV-002 features
+#     test-coverage-quality-gates - Validate quality gates with enhanced reporting (COV-002)
 #     test-race       - Run tests with race detection
 #     test-bench      - Run benchmark tests
 #     test-all        - Run all test variants
 #   
+#   Performance Testing:
+#     test-performance - Run smoke performance tests (< 30s)
+#     test-performance-smoke - Run smoke performance tests (< 30s)
+#     test-performance-integration - Run integration performance tests (< 5m)
+#     test-performance-full - Run full performance tests (< 30m)
+#     test-performance-comprehensive - Run original comprehensive tests (15+ min)
+#   
 #   Code Quality:
-#     lint            - Run linter (revive)
+#     lint            - Run linter (revive) with icon validation
 #     lint-unicode    - Run unicode icon linter for semantic token consistency
 #     fmt             - Format code with gofmt
 #     vet             - Run go vet
 #     check           - Run all code quality checks
 #   
 #   Semantic Token Validation:
-#     validate-tokens  - Validate implementation token semantic consistency (DOC-007)
+#     validate-tokens - Validate implementation token semantic consistency (DOC-007)
 #     validate-token-enforcement - Comprehensive semantic token validation and enforcement (DOC-008)
 #     validate-tokens-strict - Run DOC-008 validation in strict mode for CI/CD
+#     validate-token-traceability - Validate comprehensive token traceability (DOC-016)
+#     validate-all-tokens - Comprehensive token validation (traceability, features, architecture, tests)
+#     token-coverage  - Run token coverage analysis (DOC-016)
+#     token-navigate  - Token navigation tool for discovery (DOC-016)
+#   
+#   Token Standardization (DOC-009):
+#     standardize-tokens - Complete token standardization workflow (analysis + dry run)
+#     token-migration-dry-run - Run DOC-009 token migration in dry-run mode
+#     token-migration - Run DOC-009 mass token standardization
+#     token-migration-rollback - Rollback DOC-009 token migration
+#     analyze-priority-icons - Generate priority icon mappings from feature tracking
+#     validate-token-priorities - Validate token priorities against feature tracking
+#     suggest-action-icons - Generate action icon suggestions for tokens
+#   
+#   Token Suggestion Engine (DOC-010):
+#     token-suggester - Build token suggestion engine
+#     token-suggester-test - Run token suggestion engine tests
+#     token-suggester-benchmark - Run token suggestion benchmarks
+#     analyze-tokens - Analyze codebase for token suggestions
+#     suggest-tokens-batch - Generate batch token suggestions (JSON output)
+#     validate-token-formats - Validate existing token formats
+#     token-workflow - Complete token suggestion workflow
+#     token-dev - Development workflow for token suggestions
+#   
+#   Real-time Validation (DOC-012):
+#     build-realtime-validator - Build real-time validation service
+#     test-realtime-validation - Test real-time validation system
+#     benchmark-realtime-validation - Benchmark real-time validation performance
+#     start-realtime-server - Start real-time validation HTTP server (port 8080)
+#     validate-realtime-performance - Validate real-time performance targets
+#     demo-realtime-validation - Run real-time validation demonstration
+#     setup-realtime-validation - Complete real-time validation system setup
+#   
+#   Decision Validation (DOC-014):
+#     decision-framework-workflow - Complete Decision Framework validation and monitoring
+#     decision-validation-suite - Comprehensive decision framework compliance validation
+#     decision-validation-strict - Strict validation for CI/CD integration (zero tolerance)
+#     decision-validation-ci - JSON output validation for automated processing
+#     validate-decision-framework - Validate Decision Framework implementation
+#     validate-decision-context - Validate decision context in enhanced tokens
+#     track-decision-metrics - Collect and analyze decision quality metrics
+#     decision-quality-monitor - Generate decision quality dashboard with trends
 #   
 #   Production Builds:
 #     build-all       - Build for all platforms
@@ -36,6 +92,7 @@
 #   Utilities:
 #     clean           - Clean build artifacts and test cache
 #     deps            - Download and verify dependencies
+#     coverage-check  - Validate coverage with exclusion patterns (alias for test-coverage-validate)
 #     help            - Show this help message
 
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
@@ -72,7 +129,9 @@ help:
 	@echo "Development targets:"
 	@echo "  build-local     Build for local development (current platform)"
 	@echo "  dev             Build and run basic functionality test"
+	@echo "  dev-full        Full development workflow (check, test-coverage-validate, build, token-suggester)"
 	@echo "  install         Install to ~/.local/bin"
+	@echo "  install-link    Install via symbolic link (macos-arm64 specific)"
 	@echo ""
 	@echo "Testing targets:"
 	@echo "  test            Run all tests"
@@ -102,6 +161,8 @@ help:
 	@echo "  validate-tokens  Validate implementation token semantic consistency (DOC-007)"
 	@echo "  validate-token-enforcement Comprehensive semantic token validation and enforcement (DOC-008)"
 	@echo "  validate-tokens-strict Run DOC-008 validation in strict mode for CI/CD"
+	@echo "  validate-token-traceability Validate comprehensive token traceability (DOC-016)"
+	@echo "  validate-all-tokens Comprehensive token validation (traceability, features, architecture, tests)"
 	@echo "  fmt             Format code with gofmt"
 	@echo "  vet             Run go vet"
 	@echo "  check           Run all code quality checks"
@@ -114,6 +175,25 @@ help:
 	@echo "  analyze-priority-icons Generate priority icon mappings from feature tracking"
 	@echo "  validate-token-priorities Validate token priorities against feature tracking"
 	@echo "  suggest-action-icons Generate action icon suggestions for tokens"
+	@echo ""
+	@echo "Token suggestion engine targets (DOC-010):"
+	@echo "  token-suggester Build token suggestion engine"
+	@echo "  token-suggester-test Run token suggestion engine tests"
+	@echo "  token-suggester-benchmark Run token suggestion benchmarks"
+	@echo "  analyze-tokens Analyze codebase for token suggestions"
+	@echo "  suggest-tokens-batch Generate batch token suggestions (JSON output)"
+	@echo "  validate-token-formats Validate existing token formats"
+	@echo "  token-workflow Complete token suggestion workflow"
+	@echo "  token-dev Development workflow for token suggestions"
+	@echo ""
+	@echo "Real-time validation targets (DOC-012):"
+	@echo "  build-realtime-validator Build real-time validation service"
+	@echo "  test-realtime-validation Test real-time validation system"
+	@echo "  benchmark-realtime-validation Benchmark real-time validation performance"
+	@echo "  start-realtime-server Start real-time validation HTTP server (port 8080)"
+	@echo "  validate-realtime-performance Validate real-time performance targets"
+	@echo "  demo-realtime-validation Run real-time validation demonstration"
+	@echo "  setup-realtime-validation Complete real-time validation system setup"
 	@echo ""
 	@echo "Decision validation targets (DOC-014):"
 	@echo "  decision-framework-workflow Complete Decision Framework validation and monitoring"
@@ -133,6 +213,7 @@ help:
 	@echo "Utility targets:"
 	@echo "  clean           Clean build artifacts and test cache"
 	@echo "  deps            Download and verify dependencies"
+	@echo "  coverage-check  Validate coverage with exclusion patterns (alias for test-coverage-validate)"
 	@echo "  help            Show this help message"
 
 # Development targets

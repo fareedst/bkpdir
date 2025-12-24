@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.1] - 2025-12-24
+
+### Fixed
+- **Configuration Hierarchy Preservation**: Fixed bug where local config files would stop reading values from home directory config files
+  - When a local config file (`.bkpdir.yml`) exists but doesn't set a field (e.g., `archive_dir_path`), the system now correctly preserves values from home config files (`~/.bkpdir.yml`) instead of falling back to compiled defaults
+  - Compiled defaults now only apply when a value is not set anywhere in the configuration hierarchy
+  - Ensures proper configuration hierarchy: home config → local config → compiled defaults
+  - Updated `mergeBasicSettings` and `applyOverride` functions to correctly preserve values from earlier files when later files don't set those fields
+  - Added comprehensive test case to validate the fix
+
 ## [1.7.0] - 2025-12-13
 
 ### Added
