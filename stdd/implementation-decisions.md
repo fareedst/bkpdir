@@ -3063,3 +3063,47 @@ STDD requires authoritative records to live in the requirements, architecture, a
 - Point future audits to this decision to reuse the pattern and ensure coverage plans explicitly mention `REQ:DOC_016` and `ARCH:TOKEN_SYSTEM`.
 
 **Code Markers**: `archive.go`, `backup.go`, `errors.go`, `comparison.go`, `exclude.go`, `formatter.go`, `git.go` and their `_test.go` files that now consistently mention the appropriate tokens.
+
+## 50. Configuration Hierarchy Preservation Fix [IMPL:CFG_HIERARCHY_PRESERVATION] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION] [REQ:CFG_001]
+
+### Decision: Fix configuration hierarchy to preserve values from earlier files when later files don't set those fields
+**Rationale:**
+- Bug fix: When a local config file exists but doesn't set a field (e.g., `archive_dir_path`), the system was falling back to compiled defaults instead of preserving values from home directory config files
+- The expected behavior is that compiled defaults should only apply if the value is not set anywhere in the configuration hierarchy
+- If a home config file sets `archive_dir_path = /Users/fareed/.bkpdir`, and a local config file exists but doesn't set `archive_dir_path`, the home config value should be preserved, not replaced with the compiled default
+- This ensures proper configuration hierarchy: home config → local config → compiled defaults, with each level only applying when the previous level doesn't set a value
+
+### Implementation Approach:
+- **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:
+  - The earlier file didn't explicitly set it (`!explicitlySetByEarlier`)
+  - The destination value equals the default (`!dstDiffersFromDefault`)
+  - The source file explicitly sets it (`explicitlySetInSrc`)
+  - This ensures that if an earlier file set a field (even if not explicitly tracked), we preserve it, but if dstValue equals default (meaning earlier file didn't set it), allow later file to set it
+
+- **Updated `applyOverride`** (lines 2647-2652 in `config.go`): Changed the preservation logic to only preserve if:
+  - The field was explicitly set by an earlier file (`wasSetByEarlierFile`), OR
+  - The destination value differs from the default (`dstDiffersFromDefault`)
+  - Removed the `earlierFilesProcessed` check that was preserving fields when ANY field was set by earlier files, not just the specific field
+  - This ensures that if an earlier file didn't set a field (dstValue equals default), later files can set it
+
+**Key Changes:**
+1. `mergeBasicSettings` - Updated sequential file logic to check `dstDiffersFromDefault` in addition to `explicitlySetByEarlier`
+2. `applyOverride` - Simplified preservation logic to only check if the specific field was set or differs from default, not if any field was set
+
+**Behavior:**
+- **Sequential files** (`inheritContext=false`): 
+  - If earlier file set a field (even if equals default), preserve it
+  - If earlier file didn't set a field (dstValue equals default), allow later file to set it
+  - This ensures proper hierarchy: home config values are preserved when local config doesn't set them
+- **Inheritance chains** (`inheritContext=true`): Behavior unchanged - child configs override parent configs
+
+**Test Case:**
+- Home config (`~/.bkpdir.yml`): `archive_dir_path: /Users/fareed/.bkpdir`
+- Local config (`./.bkpdir.yml`): `archive_dir_path` is not set (commented out or missing)
+- Expected: Home config value (`/Users/fareed/.bkpdir`) is preserved
+- Before fix: Compiled default (`../.bkpdir`) was incorrectly used
+- After fix: Home config value (`/Users/fareed/.bkpdir`) is correctly preserved
+
+**Code Markers**: `mergeBasicSettings`, `applyOverride`, `dstDiffersFromDefault`, `explicitlySetByEarlier`, `explicitlySetInSrc`, `// CFG-001: Earlier files take precedence`
+
+**Cross-References**: [ARCH:CONFIG_SYSTEM], [REQ:CONFIGURATION], [REQ:CFG_001], [IMPL:CFG_PRECEDENCE_FIX]

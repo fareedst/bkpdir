@@ -346,6 +346,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[IMPL:TOKEN_COVERAGE_AUDIT]` → See `implementation-decisions.md` § Semantic Token Coverage Audit [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
 - `[IMPL:CONFIG_OUTPUT_GROUPING]` → See `implementation-decisions.md` § Configuration Output Grouping Implementation [ARCH:CONFIG_OUTPUT_GROUPING] [REQ:CONFIG_OUTPUT_GROUPING]
 - `[IMPL:CFG_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Configuration File Precedence Fix [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
+- `[IMPL:CFG_HIERARCHY_PRESERVATION]` → See `implementation-decisions.md` § Configuration Hierarchy Preservation Fix [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION] [REQ:CFG_001]
 - `[IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]` → See `implementation-decisions.md` § Merge and Prepend Strategy Precedence Fix [ARCH:CFG_001] [ARCH:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]
 - `[IMPL:TEST_CFG_005_P1]` → See `implementation-decisions.md` § Priority 1 Configuration Merge Tests Implementation [ARCH:CFG_005] [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION]
 - `[IMPL:TEST_UNICODE_HANDLING]` → See `implementation-decisions.md` § Unicode and Special Character Handling Tests [ARCH:TESTING_STRATEGY] [REQ:CONFIGURATION] [REQ:CFG_005]
@@ -563,7 +564,7 @@ Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation
 ### Implementation Tokens
 - **Core**: `CONFIG_STRUCT`, `CFG_006`, `ZIP_FORMAT`, `DUAL_FORMATTING`, `STRUCTURED_ERRORS`, `GIT_CLI`, `RESOURCE_MANAGER`, `CONTEXT_OPS`, `ATOMIC_OPS`, `TESTING`, `CODE_STYLE`, `DATA_MODELS`
 - **File Operations**: `FILE_001`, `FILE_002`, `FILE_003`
-- **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`, `CFG_PRECEDENCE_FIX`, `CFG_MERGE_PREPEND_PRECEDENCE_FIX`
+- **Configuration**: `CFG_001`, `CFG_002`, `CFG_003`, `CFG_004`, `CFG_005`, `CFG_TEMPLATE_001`, `CONFIGURABLE_STRINGS`, `CFG_PRECEDENCE_FIX`, `CFG_HIERARCHY_PRESERVATION`, `CFG_MERGE_PREPEND_PRECEDENCE_FIX`
 - **Git Integration**: `GIT_001`, `GIT_002`, `GIT_003`, `GIT_004`, `GIT_005`, `GIT_006`, `GIT_DIRTY_CONFIG`
 - **Output Management**: `OUT_001`, `OUT_002`, `DELAYED_OUTPUT`, `LIST_LIMIT`
 - **Testing Infrastructure**: `TEST_001`, `TEST_002`, `TEST_FIX_001`, `TEST_INFRA_001_B`, `TEST_INFRA_001_E`, `TEST_COVERAGE`, `TESTING_COMPLEXITY`, `TEST_UNICODE_HANDLING`, `TEST_EMPTY_STRING_HANDLING`, `TEST_PREPEND_ORDERING`, `TEST_DEFAULT_STRATEGY_EDGES`

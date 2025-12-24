@@ -681,11 +681,20 @@ func mergeBasicSettings(dst, src *Config, inheritContext bool, defaultCfg *Confi
 		}
 	} else {
 		// Sequential files: check if field was explicitly set by earlier files
+		// CFG-001: Earlier files take precedence - preserve value from earlier files if:
+		// 1. Field was explicitly set by earlier file (explicitlySetByEarlier), OR
+		// 2. Field was set in dst (from earlier file) and differs from default (meaning earlier file set it)
+		// Only override if field is explicitly set in source file AND earlier file didn't set it
 		_, explicitlySetInSrc := rawSrcMap["archive_dir_path"]
 		_, explicitlySetByEarlier := explicitlySetFields["archive_dir_path"]
-		if !explicitlySetByEarlier && explicitlySetInSrc && src.ArchiveDirPath != defaultCfg.ArchiveDirPath {
+		// Check if dst value differs from default (meaning it was set by earlier file processing)
+		dstDiffersFromDefault := dst.ArchiveDirPath != defaultCfg.ArchiveDirPath
+		if !explicitlySetByEarlier && !dstDiffersFromDefault && explicitlySetInSrc && src.ArchiveDirPath != defaultCfg.ArchiveDirPath {
+			// Only set if: earlier file didn't set it AND dst equals default AND source explicitly sets it
 			dst.ArchiveDirPath = src.ArchiveDirPath
 		}
+		// If explicitlySetByEarlier is true OR dstDiffersFromDefault is true, preserve dst value (earlier file precedence)
+		// This ensures values from earlier files (like home config) are preserved when local file doesn't set the field
 	}
 	if inheritContext {
 		// Inheritance context: allow overrides, but still respect earlier sequential file precedence
@@ -2631,13 +2640,16 @@ func applyOverride(result *Config, key string, value interface{}, dstValue inter
 		// Check if field was explicitly set by earlier file (even if it equals default)
 		wasSetByEarlierFile := explicitlySetFields != nil && explicitlySetFields[key]
 
-		// For sequential files (inheritContext=false), also check if any earlier file was processed
+		// For sequential files (inheritContext=false), preserve if field was explicitly set by earlier file
+		// OR if dstValue differs from default (meaning earlier file set it, even if not explicitly tracked)
 		// For inheritance chains (inheritContext=true), only check if this specific field was set by earlier sequential file
 		var shouldPreserve bool
 		if !inheritContext {
-			// Sequential files: preserve if field was set by earlier file OR if any earlier file was processed
-			earlierFilesProcessed := explicitlySetFields != nil && len(explicitlySetFields) > 0
-			shouldPreserve = !reflect.DeepEqual(dstValue, defaultValue) || wasSetByEarlierFile || earlierFilesProcessed
+			// Sequential files: preserve if field was explicitly set by earlier file OR if dstValue differs from default
+			// This ensures that if earlier file set the field (even if not explicitly tracked), we preserve it
+			// But if dstValue equals default (meaning earlier file didn't set it), allow later file to set it
+			dstDiffersFromDefault := !reflect.DeepEqual(dstValue, defaultValue)
+			shouldPreserve = wasSetByEarlierFile || dstDiffersFromDefault
 		} else {
 			// Inheritance chains: preserve if field was explicitly set by earlier sequential file
 			// Within inheritance chains, fields can override each other, but not fields from earlier sequential files

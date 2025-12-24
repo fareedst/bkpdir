@@ -233,8 +233,44 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 		// CFG-005 requires that exclude_patterns merges with defaults, so we expect [.git/ vendor/ local1 local2]
 		expectedExcludePatterns := []string{".git/", "vendor/", "local1", "local2"}
 		assertStringSliceEqual(t, "ExcludePatterns from local file (merged with defaults per CFG-005)", cfg.ExcludePatterns, expectedExcludePatterns)
-		// include_git_info from local file (default false) should remain, home file cannot override
-		assertBoolEqual(t, "IncludeGitInfo from local file", cfg.IncludeGitInfo, false)
+		// include_git_info: local file doesn't set it (default false), home file sets it to true
+		// Since local file didn't explicitly set it, home file can override the default
+		assertBoolEqual(t, "IncludeGitInfo from home file (local file didn't set it)", cfg.IncludeGitInfo, true)
+	})
+
+	t.Run("home config value preserved when local file doesn't set field", func(t *testing.T) {
+		// [REQ:CONFIGURATION] [REQ:CFG_001] Test that values from home config are preserved
+		// when local config file exists but doesn't set the field
+		dir := t.TempDir()
+
+		// Create home config file with archive_dir_path set
+		homeDir := t.TempDir()
+		homeConfigPath := filepath.Join(homeDir, ".bkpdir.yml")
+		homeConfigData := map[string]interface{}{
+			"archive_dir_path": "/Users/fareed/.bkpdir",
+		}
+		createTestConfigFileWithData(t, homeConfigPath, homeConfigData)
+
+		// Create local config file that does NOT set archive_dir_path (field is missing/commented)
+		localConfigPath := filepath.Join(dir, ".bkpdir.yml")
+		localConfigData := map[string]interface{}{
+			// archive_dir_path is NOT set in local file
+			"exclude_patterns": []string{"local1"},
+		}
+		createTestConfigFileWithData(t, localConfigPath, localConfigData)
+
+		// Set BKPDIR_CONFIG to use both files (local first, then home)
+		// Per CFG-001: Earlier files take precedence, but if earlier file doesn't set a field,
+		// values from later files should be preserved (not fall back to defaults)
+		os.Setenv("BKPDIR_CONFIG", localConfigPath+":"+homeConfigPath)
+
+		cfg, err := LoadConfig(dir)
+		if err != nil {
+			t.Fatalf("LoadConfig error: %v", err)
+		}
+
+		// archive_dir_path from home config should be preserved since local file didn't set it
+		assertStringEqual(t, "ArchiveDirPath from home config (local file doesn't set it)", cfg.ArchiveDirPath, "/Users/fareed/.bkpdir")
 	})
 
 	t.Run("invalid files are skipped and processing continues", func(t *testing.T) {
