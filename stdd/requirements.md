@@ -98,6 +98,7 @@ Each requirement includes:
 | `[REQ:DOC_011]` | Token Validation Integration for AI Assistants | P1 | ⏳ | See `architecture-decisions.md` § AI-First Documentation Architecture | See `implementation-decisions.md` § Testing Implementation |
 | `[REQ:DOC_013]` | AI-First Documentation and Code Maintenance | P2 | ⏳ | See `architecture-decisions.md` § AI-First Documentation Architecture | See `implementation-decisions.md` § Code Style and Conventions |
 | `[REQ:CUSTOMIZABLE_FORMAT_STRINGS]` | User-Customizable Format Strings | P1 | ✅ | See `architecture-decisions.md` § User-Customizable Format Strings [ARCH:CUSTOMIZABLE_FORMAT_STRINGS] | See `implementation-decisions.md` § User-Customizable Format Strings Implementation [IMPL:CUSTOMIZABLE_FORMAT_STRINGS] |
+| `[REQ:STDD_VIS]` | STDD Visualization and Storytelling | P1 | ⏳ | See `architecture-decisions.md` § STDD Visualization Flow Architecture | See `implementation-decisions.md` § STDD Visualization Asset Plan |
 
 ---
 
@@ -118,6 +119,24 @@ Each requirement includes:
   - Integration: at least three existing package test suites migrated to use `pkg/testutil` with green CI
   - Token coverage: `[REQ:EXTRACT-009]` referenced in tests that validate migration
 - **Cross-References**: [ARCH:EXTRACT-009_TESTUTIL], [IMPL:EXTRACT-009_TESTUTIL]
+
+### [REQ:STDD_VIS] STDD Visualization and Storytelling Requirements
+
+- **Priority**: P1 (Important)
+- **Description**: Create token-first visuals where semantic tokens are the central characters, showing how `[REQ:*]` → `[ARCH:*]` → `[IMPL:*]` → tests/code chains preserve intent. The visuals must foreground tokens (color, size, labels), with everything else supporting their story.
+- **Rationale**: Stakeholders and new contributors need a concise, token-centric narrative to understand how the STDD registry drives decisions, code, and validation. Keeping tokens as the star accelerates onboarding, audits, and change-impact discussions.
+- **Satisfaction Criteria**:
+  - At least two complementary token-first visuals: (1) layered flow/graph emphasizing tokens as primary nodes; (2) timeline/animation highlighting token handoffs over time.
+  - Each visual annotates at least two real token chains (e.g., `[REQ:CFG_005] → [ARCH:CFG_005] → [IMPL:EXCLUDE_MERGE_FIX] → tests/code refs`) with token-forward callouts and a legend that explains token roles.
+  - Tokens visually dominate (color/weight/position); edges and captions reinforce token traceability.
+  - Assets live under `docs/` (e.g., `docs/images/`) and are referenced from STDD docs; include backward links to source docs per token.
+  - Module boundaries captured per [REQ:MODULE_VALIDATION] (data extraction, visualization rendering, animation/timeline, integration) with validation notes before integration.
+- **Validation Criteria**:
+  - Storyboard and data-source plan explicitly show how token prominence is achieved (legend, color, size, ordering).
+  - Traceability sample set validated (minimum two end-to-end token chains) against repo artifacts with token presence verified in every step.
+  - Module validation evidence for each module (data extraction correctness; visual token prominence checklist; animation step accuracy) recorded before integration.
+  - Maintainer review checklist confirms token emphasis, legend clarity, and alignment with the registry.
+- **Cross-References**: [ARCH:STDD_VIS_FLOW], [IMPL:STDD_VIS_DATA_PIPELINE], [IMPL:STDD_VIS_ASSETS], [REQ:MODULE_VALIDATION]
 
 
 ### Core Functionality

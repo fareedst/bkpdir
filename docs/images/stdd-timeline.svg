@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- STDD Token Timeline: Static SVG substitute for animation -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .title { font-family: "Helvetica", "Arial", sans-serif; font-size: 24px; font-weight: bold; fill: #333; }
+    .subtitle { font-family: "Helvetica", "Arial", sans-serif; font-size: 14px; fill: #555; }
+    .step-box { rx: 10; ry: 10; }
+    .step-text { font-family: "Helvetica", "Arial", sans-serif; font-size: 12px; fill: #fff; pointer-events: none; }
+    .note-text { font-family: "Helvetica", "Arial", sans-serif; font-size: 12px; fill: #444; }
+    .arrow { stroke: #888; stroke-width: 2; marker-end: url(#arrowhead); }
+    .step-num { font-family: "Helvetica", "Arial", sans-serif; font-size: 11px; fill: #fff; font-weight: bold; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#888"/>
+    </marker>
+  </defs>
+
+  <text class="title" x="50%" y="35" text-anchor="middle">STDD Token Timeline</text>
+  <text class="subtitle" x="50%" y="55" text-anchor="middle">Static SVG replacement for animation (tokens remain protagonists)</text>
+
+  <!-- Step layout parameters -->
+  <!-- Row 1: CFG_005 requirement -> architecture -> implementation -->
+  <rect class="step-box" x="80" y="90" width="180" height="60" fill="#4C78A8"/>
+  <text class="step-num" x="100" y="112">1</text>
+  <text class="step-text" x="170" y="120" text-anchor="middle">[REQ:CFG_005]</text>
+  <text class="step-text" x="170" y="140" text-anchor="middle">Requirement established</text>
+
+  <rect class="step-box" x="320" y="90" width="200" height="60" fill="#9C755F"/>
+  <text class="step-num" x="340" y="112">2</text>
+  <text class="step-text" x="420" y="120" text-anchor="middle">[ARCH:CFG_005]</text>
+  <text class="step-text" x="420" y="140" text-anchor="middle">Architecture links to REQ</text>
+
+  <rect class="step-box" x="580" y="90" width="230" height="60" fill="#D2724D"/>
+  <text class="step-num" x="600" y="112">3</text>
+  <text class="step-text" x="695" y="120" text-anchor="middle">[IMPL:EXCLUDE_MERGE_FIX]</text>
+  <text class="step-text" x="695" y="140" text-anchor="middle">Implementation enforces behavior</text>
+
+  <!-- Arrows row 1 -->
+  <line class="arrow" x1="260" y1="120" x2="320" y2="120"/>
+  <line class="arrow" x1="520" y1="120" x2="580" y2="120"/>
+
+  <!-- Row 2: CFG_005 tests/code -->
+  <rect class="step-box" x="200" y="190" width="230" height="60" fill="#59A14F"/>
+  <text class="step-num" x="220" y="212">4</text>
+  <text class="step-text" x="315" y="220" text-anchor="middle">[TEST:EXCLUDE_MERGE]</text>
+  <text class="step-text" x="315" y="240" text-anchor="middle">Tests validate merge behavior</text>
+
+  <rect class="step-box" x="500" y="190" width="250" height="60" fill="#BAB0AC"/>
+  <text class="step-num" x="520" y="212">5</text>
+  <text class="step-text" x="625" y="220" text-anchor="middle">config.go::applyMergeStrategies</text>
+  <text class="step-text" x="625" y="240" text-anchor="middle">Code anchors the same tokens</text>
+
+  <line class="arrow" x1="430" y1="220" x2="500" y2="220"/>
+
+  <!-- Row 3: LIST_LIMIT requirement -> architecture -> implementation -->
+  <rect class="step-box" x="80" y="290" width="180" height="60" fill="#4C78A8"/>
+  <text class="step-num" x="100" y="312">6</text>
+  <text class="step-text" x="170" y="320" text-anchor="middle">[REQ:LIST_LIMIT]</text>
+  <text class="step-text" x="170" y="340" text-anchor="middle">Requirement captured</text>
+
+  <rect class="step-box" x="320" y="290" width="200" height="60" fill="#9C755F"/>
+  <text class="step-num" x="340" y="312">7</text>
+  <text class="step-text" x="420" y="320" text-anchor="middle">[ARCH:LIST_LIMIT]</text>
+  <text class="step-text" x="420" y="340" text-anchor="middle">Architecture ties to REQ</text>
+
+  <rect class="step-box" x="580" y="290" width="230" height="60" fill="#D2724D"/>
+  <text class="step-num" x="600" y="312">8</text>
+  <text class="step-text" x="695" y="320" text-anchor="middle">[IMPL:LIST_LIMIT]</text>
+  <text class="step-text" x="695" y="340" text-anchor="middle">Implementation updates CLI</text>
+
+  <line class="arrow" x1="260" y1="320" x2="320" y2="320"/>
+  <line class="arrow" x1="520" y1="320" x2="580" y2="320"/>
+
+  <!-- Row 4: LIST_LIMIT tests/code -->
+  <rect class="step-box" x="200" y="370" width="230" height="40" fill="#59A14F"/>
+  <text class="step-text" x="315" y="395" text-anchor="middle">[TEST:LIST_LIMIT]</text>
+
+  <rect class="step-box" x="500" y="370" width="230" height="40" fill="#BAB0AC"/>
+  <text class="step-text" x="615" y="395" text-anchor="middle">list.go::applyLimit</text>
+
+  <line class="arrow" x1="430" y1="390" x2="500" y2="390"/>
+
+  <!-- Notes -->
+  <text class="note-text" x="820" y="210">Use storyboard JSON</text>
+  <text class="note-text" x="820" y="230">for future animation.</text>
+</svg>
+

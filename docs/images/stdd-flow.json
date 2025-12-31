@@ -1,0 +1,25 @@
+{
+  "lanes": ["REQ", "ARCH", "IMPL", "TEST", "CODE"],
+  "theme": {
+    "colors": {
+      "REQ": "#4C78A8",
+      "ARCH": "#9C755F",
+      "IMPL": "#D2724D",
+      "TEST": "#59A14F",
+      "CODE": "#BAB0AC"
+    }
+  },
+  "chains": [
+    {
+      "id": "cfg_005_chain",
+      "label": "CFG_005 Merge Flow",
+      "nodes": ["req_cfg_005", "arch_cfg_005", "impl_exclude_merge_fix", "test_exclude_merge", "code_cfg_merge"]
+    },
+    {
+      "id": "list_limit_chain",
+      "label": "List Limit Flow",
+      "nodes": ["req_list_limit", "arch_list_limit", "impl_list_limit", "test_list_limit", "code_list_limit"]
+    }
+  ]
+}
+

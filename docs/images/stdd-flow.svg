@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- STDD Token-First Flow Diagram -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .lane-label { font-family: "Helvetica", "Arial", sans-serif; font-size: 14px; font-weight: bold; fill: #555; }
+    .node-text { font-family: "Helvetica", "Arial", sans-serif; font-size: 12px; fill: #fff; pointer-events: none; }
+    .node { rx: 6; ry: 6; }
+    .arrow { stroke: #888; stroke-width: 2; marker-end: url(#arrowhead); }
+    .chain-label { font-family: "Helvetica", "Arial", sans-serif; font-size: 13px; fill: #333; font-weight: bold; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Lane backgrounds -->
+  <rect x="0" y="40" width="1100" height="60" fill="#e9f0f9"/>
+  <rect x="0" y="120" width="1100" height="60" fill="#f3ece6"/>
+  <rect x="0" y="200" width="1100" height="60" fill="#f9e7df"/>
+  <rect x="0" y="280" width="1100" height="60" fill="#e7f5e4"/>
+  <rect x="0" y="360" width="1100" height="60" fill="#edeceb"/>
+
+  <!-- Lane labels -->
+  <text class="lane-label" x="20" y="75">REQ Lane</text>
+  <text class="lane-label" x="20" y="155">ARCH Lane</text>
+  <text class="lane-label" x="20" y="235">IMPL Lane</text>
+  <text class="lane-label" x="20" y="315">TEST Lane</text>
+  <text class="lane-label" x="20" y="395">CODE Lane</text>
+
+  <!-- Chain labels -->
+  <text class="chain-label" x="200" y="30">CFG_005 Merge Flow</text>
+  <text class="chain-label" x="700" y="30">List Limit Flow</text>
+
+  <!-- CFG_005 chain nodes -->
+  <rect class="node" x="180" y="55" width="160" height="40" fill="#4C78A8"/>
+  <text class="node-text" x="260" y="80" text-anchor="middle">[REQ:CFG_005]</text>
+
+  <rect class="node" x="180" y="135" width="180" height="40" fill="#9C755F"/>
+  <text class="node-text" x="270" y="160" text-anchor="middle">[ARCH:CFG_005]</text>
+
+  <rect class="node" x="180" y="215" width="210" height="40" fill="#D2724D"/>
+  <text class="node-text" x="285" y="240" text-anchor="middle">[IMPL:EXCLUDE_MERGE_FIX]</text>
+
+  <rect class="node" x="180" y="295" width="210" height="40" fill="#59A14F"/>
+  <text class="node-text" x="285" y="320" text-anchor="middle">[TEST:EXCLUDE_MERGE]</text>
+
+  <rect class="node" x="180" y="375" width="210" height="40" fill="#BAB0AC"/>
+  <text class="node-text" x="285" y="400" text-anchor="middle">config.go::applyMergeStrategies</text>
+
+  <!-- CFG_005 arrows -->
+  <line class="arrow" x1="260" y1="95" x2="270" y2="135"/>
+  <line class="arrow" x1="270" y1="175" x2="285" y2="215"/>
+  <line class="arrow" x1="285" y1="255" x2="285" y2="295"/>
+  <line class="arrow" x1="285" y1="335" x2="285" y2="375"/>
+
+  <!-- LIST_LIMIT chain nodes -->
+  <rect class="node" x="680" y="55" width="160" height="40" fill="#4C78A8"/>
+  <text class="node-text" x="760" y="80" text-anchor="middle">[REQ:LIST_LIMIT]</text>
+
+  <rect class="node" x="680" y="135" width="180" height="40" fill="#9C755F"/>
+  <text class="node-text" x="770" y="160" text-anchor="middle">[ARCH:LIST_LIMIT]</text>
+
+  <rect class="node" x="680" y="215" width="200" height="40" fill="#D2724D"/>
+  <text class="node-text" x="780" y="240" text-anchor="middle">[IMPL:LIST_LIMIT]</text>
+
+  <rect class="node" x="680" y="295" width="200" height="40" fill="#59A14F"/>
+  <text class="node-text" x="780" y="320" text-anchor="middle">[TEST:LIST_LIMIT]</text>
+
+  <rect class="node" x="680" y="375" width="200" height="40" fill="#BAB0AC"/>
+  <text class="node-text" x="780" y="400" text-anchor="middle">list.go::applyLimit</text>
+
+  <!-- LIST_LIMIT arrows -->
+  <line class="arrow" x1="760" y1="95" x2="770" y2="135"/>
+  <line class="arrow" x1="770" y1="175" x2="780" y2="215"/>
+  <line class="arrow" x1="780" y1="255" x2="780" y2="295"/>
+  <line class="arrow" x1="780" y1="335" x2="780" y2="375"/>
+</svg>
+

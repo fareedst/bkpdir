@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2025-12-31T00:00:00Z",
+  "categories": [
+    {
+      "name": "Defaults",
+      "tokens": {
+        "REQ": ["REQ:CONFIGURATION", "REQ:CFG_004", "REQ:IMMUTABLE_CONFIGURATION_DEFAULTS"],
+        "ARCH": ["ARCH:CONFIG_SYSTEM", "ARCH:CONFIG_OUTPUT_GROUPING"],
+        "IMPL": ["IMPL:CONFIG_STRUCT", "IMPL:CONFIGURABLE_STRINGS", "IMPL:CONFIG_PRECEDENCE_FIX"],
+        "TEST": ["REQ:CFG_006"]
+      }
+    },
+    {
+      "name": "Inheritance",
+      "tokens": {
+        "REQ": ["REQ:CFG_005"],
+        "ARCH": ["ARCH:CFG_005"],
+        "IMPL": ["IMPL:EXCLUDE_MERGE_FIX", "IMPL:CFG_INHERITANCE_PATH_RESOLUTION"],
+        "TEST": ["TEST:EXCLUDE_MERGE"]
+      }
+    },
+    {
+      "name": "Reflection",
+      "tokens": {
+        "REQ": ["REQ:CFG_006"],
+        "ARCH": ["ARCH:CFG_006"],
+        "IMPL": ["IMPL:CFG_006", "IMPL:CONFIG_OUTPUT_GROUPING", "IMPL:CONFIG_DISPLAY_FLATTENING"],
+        "TEST": ["REQ:CFG_006", "TEST:EXCLUDE_MERGE"]
+      }
+    },
+    {
+      "name": "CLI Output",
+      "tokens": {
+        "REQ": ["REQ:CFG_006", "REQ:CONFIG_OUTPUT_GROUPING"],
+        "ARCH": ["ARCH:CONFIG_OUTPUT_GROUPING", "ARCH:CFG_006"],
+        "IMPL": ["IMPL:CONFIG_OUTPUT_GROUPING", "IMPL:CONFIG_DISPLAY_FLATTENING"],
+        "TEST": ["REQ:CFG_006"]
+      }
+    }
+  ]
+}
+

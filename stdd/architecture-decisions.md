@@ -1346,3 +1346,30 @@ Prevents circular dependencies and guides extractors to keep zero-breaking-chang
 **Cross-References:** [ARCH:PACKAGE_EXTRACTION], [REQ:MAINTAINABILITY]
 
 
+## STDD Visualization Flow Architecture [ARCH:STDD_VIS_FLOW] [REQ:STDD_VIS]
+
+### Decision: Build a token-first visualization pipeline that produces two complementary artifacts showing requirement → architecture → implementation → tests/code traceability, with semantic tokens as the primary visual elements.
+
+**Rationale:**
+- Stakeholders need a concise, token-centric narrative of how STDD preserves intent across layers.
+- A data-driven pipeline (sourced from existing `stdd/*.md` plus representative code/test anchors) keeps token prominence accurate as the registry evolves.
+- Complementary artifacts (layered flow + timeline/animation) address both static comprehension and process storytelling while keeping tokens in the spotlight.
+
+**Architecture Outline (token-first):**
+- **Data Extraction Module**: Parse `stdd/semantic-tokens.md`, `requirements.md`, `architecture-decisions.md`, `implementation-decisions.md`, and sampled code/test anchors to build a token graph (nodes: REQ/ARCH/IMPL/TEST/CODE; edges: traceability links) with token metadata (type, status, sample refs) for visual prominence.
+- **Visualization Module**: Generate a layered flow (e.g., swimlane/graph or Sankey-style) where tokens are the dominant nodes (color/weight/labels), edges clarify trace paths, and legends explain token roles.
+- **Animation/Timeline Module**: Render an animated sequence or stepwise storyboard that highlights token handoffs over time (REQ → ARCH → IMPL → TEST/CODE), with on-frame token callouts.
+- **Integration & Storage**: Export assets to `docs/images/` (SVG/PNG/GIF/MP4 as needed) and embed into STDD docs with captions and token callouts; include a data snapshot (JSON/CSV) to keep visuals reproducible and token-accurate.
+
+**Module Boundaries (for [REQ:MODULE_VALIDATION], token emphasis):**
+- `DataExtraction`: input = STDD docs + selected code/test anchors; output = normalized token graph/JSON with token metadata for styling.
+- `Visualization`: input = token graph; output = static layered diagram with tokens visually dominant; legends articulate token roles.
+- `AnimationTimeline`: input = ordered trace steps; output = animated timeline/multi-frame storyboard with token callouts per step.
+- `Integration`: links assets into docs, preserves token prominence guidance, and records validation notes.
+
+**Alternatives Considered:**
+- Manual, non-data-driven sketches: rejected (drift risk, no repeatability).
+- Single static diagram only: rejected (does not convey lifecycle/time dimension or evolving token story).
+
+**Cross-References**: [REQ:STDD_VIS], [REQ:MODULE_VALIDATION]
+

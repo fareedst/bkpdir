@@ -25,3 +25,12 @@ Overview: Central discovery point for governance tokens and their connected deci
 
 ## Discoverability
 - This hub is the primary entry point for governance token discovery. Use it to navigate to concrete decisions and migration efforts.
+
+## STDD Visualization Gallery
+- `[REQ:STDD_VIS]` token-first visuals demonstrate how requirements, architecture, implementation, tests, and code stay linked via semantic tokens.
+- Layered flow diagram (static SVG): `docs/images/stdd-flow.svg` — highlights `[REQ:CFG_005]` and `[REQ:LIST_LIMIT]` chains across REQ/ARCH/IMPL/TEST/CODE lanes ([ARCH:STDD_VIS_FLOW], [IMPL:STDD_VIS_DATA_PIPELINE]).
+- Token timeline storyboard (static SVG substitute for animation): `docs/images/stdd-timeline.svg` — shows sequential hand-offs for both chains, referencing `[IMPL:STDD_VIS_ASSETS]`.
+- Storyboard + data sources live in `docs/images/stdd-timeline.json` and `docs/images/stdd-timeline.md` for future upgrades to animated media.
+- Token statistics snapshot: `docs/images/stdd-token-stats.svg` (data in `docs/data/stdd-token-stats.json`) visualizes aggregate counts for `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`, `[TEST:*]`.
+- Configuration hierarchy map: `docs/images/stdd-config-flow.svg` (data in `docs/data/stdd-config-trace.json`) details how configuration tokens (`[REQ:CONFIGURATION]`, `[REQ:CFG_005]`, `[REQ:CFG_006]`, etc.) propagate through architecture, implementation, tests, and code.
+- Configuration heatmap: `docs/images/stdd-config-heatmap.svg` (data in `docs/data/stdd-config-token-stats.json`) highlights token distribution across Defaults, Inheritance, Reflection, and CLI Output categories.

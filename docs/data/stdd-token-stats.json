@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2025-12-31T00:00:00Z",
+  "counts": {
+    "REQ": 293,
+    "ARCH": 268,
+    "IMPL": 227,
+    "TEST": 2,
+    "TOTAL": 790
+  },
+  "coverage": {
+    "chainsSampled": 2,
+    "nodesInSamples": 10,
+    "edgesInSamples": 8
+  },
+  "notes": [
+    "Counts derived from stdd/semantic-tokens.md on 2025-12-31.",
+    "TEST tokens intentionally low because most tests reference REQ tokens directly; `[TEST:EXCLUDE_MERGE]` and `[TEST:LIST_LIMIT]` recently added."
+  ]
+}
+

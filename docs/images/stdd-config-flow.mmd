@@ -1,0 +1,39 @@
+%% Configuration Token Hierarchy Map
+flowchart LR
+  subgraph REQ["Requirements"]
+    req_configuration["[REQ:CONFIGURATION]"]
+    req_cfg_005["[REQ:CFG_005]"]
+    req_cfg_006["[REQ:CFG_006]"]
+  end
+
+  subgraph ARCH["Architecture"]
+    arch_config_system["[ARCH:CONFIG_SYSTEM]"]
+    arch_cfg_005["[ARCH:CFG_005]"]
+    arch_cfg_006["[ARCH:CFG_006]"]
+  end
+
+  subgraph IMPL["Implementation"]
+    impl_config_struct["[IMPL:CONFIG_STRUCT]"]
+    impl_exclude_merge_fix["[IMPL:EXCLUDE_MERGE_FIX]"]
+    impl_cfg_006["[IMPL:CFG_006]"]
+    impl_config_output_grouping["[IMPL:CONFIG_OUTPUT_GROUPING]"]
+  end
+
+  subgraph TEST["Tests"]
+    test_exclude_merge["[TEST:EXCLUDE_MERGE]"]
+    test_config_output["Config Reflection Tests (REQ:CFG_006)"]
+  end
+
+  subgraph CODE["Code Anchors"]
+    code_default_config["config.go::DefaultConfig"]
+    code_apply_merge["config.go::applyMergeStrategies"]
+    code_reflect_fields["config.go::reflectConfigFields"]
+    code_config_command["main.go::handleConfigCommand"]
+  end
+
+  req_configuration --> arch_config_system --> impl_config_struct --> code_default_config
+  req_cfg_005 --> arch_cfg_005 --> impl_exclude_merge_fix --> test_exclude_merge --> code_apply_merge
+  req_cfg_006 --> arch_cfg_006 --> impl_cfg_006 --> test_config_output --> code_reflect_fields
+  req_cfg_006 --> impl_config_output_grouping --> code_config_command
+  impl_config_output_grouping --> test_config_output
+

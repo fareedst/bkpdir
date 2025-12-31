@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2025-12-31T00:00:00Z",
+  "sourceDocs": [
+    "stdd/semantic-tokens.md",
+    "stdd/requirements.md",
+    "stdd/architecture-decisions.md",
+    "stdd/implementation-decisions.md"
+  ],
+  "validation": {
+    "nodesCount": 10,
+    "edgesCount": 8,
+    "sampleChains": 2,
+    "registryTokensSampled": 10,
+    "registryTokensTotal": {
+      "REQ": 293,
+      "ARCH": 268,
+      "IMPL": 227,
+      "TEST": 0,
+      "allTypesTotal": 788
+    },
+    "sampleValidation": [
+      {
+        "chain": "cfg_005_chain",
+        "status": "ok",
+        "details": "Tokens present for REQ/ARCH/IMPL/TEST chain (CFG_005)."
+      },
+      {
+        "chain": "list_limit_chain",
+        "status": "ok",
+        "details": "Tokens present for REQ/ARCH/IMPL/TEST chain (LIST_LIMIT)."
+      }
+    ],
+    "status": "sampled_with_full_registry_counts_and_validation_pass",
+    "notes": [
+      "Snapshot is intentionally sampled (CFG_005 and LIST_LIMIT chains).",
+      "Counts match the sampled graph; full registry counts captured from stdd/semantic-tokens.md (REQ/ARCH/IMPL/TEST).",
+      "Validation: both sample chains include tokens at every hop after registering TEST tokens."
+    ]
+  },
+  "nodes": [
+    {
+      "id": "req_cfg_005",
+      "token": "REQ:CFG_005",
+      "type": "REQ",
+      "title": "Layered Configuration Inheritance",
+      "status": "complete",
+      "source": "stdd/requirements.md#reqcfg_005",
+      "styling": { "lane": "REQ", "colorHint": "blue", "weight": 1.0 }
+    },
+    {
+      "id": "arch_cfg_005",
+      "token": "ARCH:CFG_005",
+      "type": "ARCH",
+      "title": "Layered Configuration Inheritance Architecture",
+      "status": "complete",
+      "source": "stdd/architecture-decisions.md#5-layered-configuration-inheritance-archcfg_005-reqcfg_005",
+      "styling": { "lane": "ARCH", "colorHint": "indigo", "weight": 1.0 }
+    },
+    {
+      "id": "impl_exclude_merge_fix",
+      "token": "IMPL:EXCLUDE_MERGE_FIX",
+      "type": "IMPL",
+      "title": "Array Field Default Merge Strategy Implementation",
+      "status": "complete",
+      "source": "stdd/implementation-decisions.md#array-field-default-merge-strategy-implementation-implexclude_merge_fix",
+      "styling": { "lane": "IMPL", "colorHint": "purple", "weight": 1.0 },
+      "examples": [
+        { "path": "config.go", "symbol": "applyMergeStrategies" }
+      ]
+    },
+    {
+      "id": "test_exclude_merge",
+      "token": "TEST:EXCLUDE_MERGE",
+      "type": "TEST",
+      "title": "Exclude Patterns Merge Tests",
+      "status": "complete",
+      "source": "config_integration_test.go::TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE",
+      "styling": { "lane": "TEST", "colorHint": "green", "weight": 0.9 }
+    },
+    {
+      "id": "code_cfg_merge",
+      "token": "IMPL:EXCLUDE_MERGE_FIX",
+      "type": "CODE",
+      "title": "Config Merge Logic",
+      "status": "complete",
+      "source": "config.go::applyMergeStrategies",
+      "styling": { "lane": "CODE", "colorHint": "gray", "weight": 0.8 }
+    },
+
+    {
+      "id": "req_list_limit",
+      "token": "REQ:LIST_LIMIT",
+      "type": "REQ",
+      "title": "List Command Output Limit",
+      "status": "complete",
+      "source": "stdd/requirements.md#reqlist_limit",
+      "styling": { "lane": "REQ", "colorHint": "blue", "weight": 1.0 }
+    },
+    {
+      "id": "arch_list_limit",
+      "token": "ARCH:LIST_LIMIT",
+      "type": "ARCH",
+      "title": "List Command Limit Architecture",
+      "status": "complete",
+      "source": "stdd/architecture-decisions.md#28-list-command-limit-architecture-archlist_limit-reqlist_limit",
+      "styling": { "lane": "ARCH", "colorHint": "indigo", "weight": 1.0 }
+    },
+    {
+      "id": "impl_list_limit",
+      "token": "IMPL:LIST_LIMIT",
+      "type": "IMPL",
+      "title": "List Command Limit Implementation",
+      "status": "complete",
+      "source": "stdd/implementation-decisions.md#list-command-output-limit-impllist_limit",
+      "styling": { "lane": "IMPL", "colorHint": "purple", "weight": 1.0 },
+      "examples": [
+        { "path": "list.go", "symbol": "ListArchivesWithLimit" }
+      ]
+    },
+    {
+      "id": "test_list_limit",
+      "token": "TEST:LIST_LIMIT",
+      "type": "TEST",
+      "title": "List Limit Tests",
+      "status": "complete",
+      "source": "list_limit_test.go::TestListLimitDefault",
+      "styling": { "lane": "TEST", "colorHint": "green", "weight": 0.9 }
+    },
+    {
+      "id": "code_list_limit",
+      "token": "IMPL:LIST_LIMIT",
+      "type": "CODE",
+      "title": "List Command Implementation",
+      "status": "complete",
+      "source": "list.go::applyLimit",
+      "styling": { "lane": "CODE", "colorHint": "gray", "weight": 0.8 }
+    }
+  ],
+  "edges": [
+    { "from": "req_cfg_005", "to": "arch_cfg_005", "relation": "realized_by" },
+    { "from": "arch_cfg_005", "to": "impl_exclude_merge_fix", "relation": "implemented_by" },
+    { "from": "impl_exclude_merge_fix", "to": "test_exclude_merge", "relation": "validated_by" },
+    { "from": "impl_exclude_merge_fix", "to": "code_cfg_merge", "relation": "located_in" },
+
+    { "from": "req_list_limit", "to": "arch_list_limit", "relation": "realized_by" },
+    { "from": "arch_list_limit", "to": "impl_list_limit", "relation": "implemented_by" },
+    { "from": "impl_list_limit", "to": "test_list_limit", "relation": "validated_by" },
+    { "from": "impl_list_limit", "to": "code_list_limit", "relation": "located_in" }
+  ]
+}
+

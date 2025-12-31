@@ -1300,7 +1300,7 @@ func TestDebugFlagControlsOutput(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test list command limit functionality
+// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] [TEST:LIST_LIMIT] Test list command limit functionality
 func TestListArchivesEnhanced_WithLimit(t *testing.T) {
 	t.Run("default limit of 10", func(t *testing.T) {
 		testListArchivesDefaultLimit(t)

@@ -198,6 +198,90 @@ This document tracks all tasks and subtasks for implementing this project. Tasks
 
 **Priority Rationale**: P1 - Important for code quality and maintainability
 
+
+## P1: STDD Visualization Storyboard (Token-First) [REQ:STDD_VIS] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_ASSETS]
+
+**Status**: ⏳ Pending
+
+**Description**: Define the token-first visual narrative (flow + timeline/animation) that spotlights semantic tokens as the primary elements while illustrating STDD traceability from requirements to code/tests using real tokens.
+
+**Dependencies**: [REQ:MODULE_VALIDATION], token sample selection
+
+**Subtasks**:
+- [ ] Select two end-to-end token chains to illustrate (e.g., `[REQ:CFG_005]` and `[REQ:LIST_LIMIT]`) with token-forward callouts
+- [ ] Draft storyboard frames and legends emphasizing token prominence (color/size/labels) for both the layered flow and the animation
+- [ ] Identify asset formats and placement under `docs/images/`, noting token legend placement
+
+**Completion Criteria**:
+- [ ] Storyboard approved with sample chains identified
+- [ ] Legends and callouts drafted with token prominence guidance
+- [ ] Asset format and storage paths agreed, including token legend location
+
+**Priority Rationale**: P1 - Needed to communicate STDD impact with tokens as the star and guide asset production
+
+
+## P1: STDD Visualization Data Pipeline (Token-First) [REQ:STDD_VIS] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_DATA_PIPELINE]
+
+**Status**: 🟡 In Progress
+
+**Description**: Build the token-first data extraction module that produces a token graph/JSON and sample chains (with styling hints) feeding the visuals.
+
+**Dependencies**: Storyboard task, [REQ:MODULE_VALIDATION]
+
+**Subtasks**:
+- [x] Define data schema for nodes/edges and sample chains including token metadata for prominence (type, status, styling hints)
+- [x] Identify source queries (STDD docs + code/test anchors) and validation checks, ensuring tokens appear at every hop
+- [x] Generate initial `docs/data/stdd-trace.json` and `docs/data/stdd-samples.csv` with token-first styling hints
+
+**Completion Criteria**:
+- [x] Schema documented and validated with token prominence fields
+- [ ] Data snapshot generated and checked against token registry counts
+- [x] Sample chains validated for two feature paths with token presence confirmed at each hop
+
+**Priority Rationale**: P1 - Foundation for accurate visuals; must be validated before rendering
+
+
+## P1: STDD Visualization Module Validation (Token-First) [REQ:STDD_VIS] [REQ:MODULE_VALIDATION] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_DATA_PIPELINE]
+
+**Status**: ⏳ Pending
+
+**Description**: Validate each visualization module (DataExtraction, Visualization, AnimationTimeline) independently before integration, with explicit checks for token prominence and correctness.
+
+**Dependencies**: Data pipeline and storyboard tasks
+
+**Subtasks**:
+- [x] Validate `DataExtraction` outputs (schema + count checks + spot-check chains) including token metadata
+- [x] Validate `Visualization` static diagram accuracy (legend, edges, token labels, color map) with token prominence checklist
+- [x] Validate `AnimationTimeline` sequence accuracy (step order, token callouts persist per step)
+
+**Completion Criteria**:
+- [ ] Validation notes recorded for each module with evidence, including token prominence results
+- [ ] Issues logged for any mismatches and resolved
+- [ ] Modules approved for integration after token-focused review
+
+**Priority Rationale**: P1 - Required by [REQ:MODULE_VALIDATION] before integration
+
+
+## P1: STDD Visualization Integration (Token-First) [REQ:STDD_VIS] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_ASSETS]
+
+**Status**: 🟡 In Progress
+
+**Description**: Integrate validated, token-first assets into STDD documentation and link data snapshots for reproducibility, ensuring tokens remain the focal point.
+
+**Dependencies**: Module validation task
+
+**Subtasks**:
+- [x] Place assets under `docs/images/` and link from STDD docs with token-focused legends/captions
+- [x] Publish data snapshots under `docs/data/` with captions referencing tokens and chain examples
+- [x] Add review checklist results and validation notes, including token prominence confirmation
+
+**Completion Criteria**:
+- [ ] Assets render in docs with legends and token callouts; tokens are visually dominant
+- [ ] Data snapshots available and referenced with token chains
+- [ ] Validation evidence linked; tokens cross-referenced and prominence confirmed
+
+**Priority Rationale**: P1 - Completes the visualization feature for stakeholders
+
 ## P2: Selective Coverage Reporting [REQ:COV_003] [ARCH:TESTING_STRATEGY] [IMPL:TESTING]
 
 **Status**: ⏳ Pending

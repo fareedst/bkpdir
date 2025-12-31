@@ -1,0 +1,36 @@
+%% STDD Token-First Flow (Mermaid)
+%% Renders layered view of tokens from requirements to code/tests
+%% Lanes represented with subgraphs for clarity
+
+flowchart LR
+  subgraph L1["REQ Lane"]
+    req_cfg_005["[REQ:CFG_005] Layered Config Inheritance"]
+    req_list_limit["[REQ:LIST_LIMIT] List Command Limit"]
+  end
+
+  subgraph L2["ARCH Lane"]
+    arch_cfg_005["[ARCH:CFG_005] Inheritance Architecture"]
+    arch_list_limit["[ARCH:LIST_LIMIT] List Limit Architecture"]
+  end
+
+  subgraph L3["IMPL Lane"]
+    impl_exclude_merge_fix["[IMPL:EXCLUDE_MERGE_FIX] Merge Strategy Fix"]
+    impl_list_limit["[IMPL:LIST_LIMIT] List Limit Implementation"]
+  end
+
+  subgraph L4["TEST Lane"]
+    test_exclude_merge["[TEST:EXCLUDE_MERGE] Merge Tests"]
+    test_list_limit["[TEST:LIST_LIMIT] List Limit Tests"]
+  end
+
+  subgraph L5["CODE Lane"]
+    code_cfg_merge["config.go::applyMergeStrategies"]
+    code_list_limit["list.go::applyLimit"]
+  end
+
+  %% CFG_005 Chain
+  req_cfg_005 --> arch_cfg_005 --> impl_exclude_merge_fix --> test_exclude_merge --> code_cfg_merge
+
+  %% LIST_LIMIT Chain
+  req_list_limit --> arch_list_limit --> impl_list_limit --> test_list_limit --> code_list_limit
+

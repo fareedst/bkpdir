@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Configuration Token Heatmap -->
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="380" viewBox="0 0 700 380">
+  <style>
+    .title { font-family: "Helvetica", "Arial", sans-serif; font-size: 24px; font-weight: bold; fill: #333; }
+    .subtitle { font-family: "Helvetica", "Arial", sans-serif; font-size: 13px; fill: #555; }
+    .label { font-family: "Helvetica", "Arial", sans-serif; font-size: 13px; fill: #333; }
+    .cell-text { font-family: "Helvetica", "Arial", sans-serif; font-size: 12px; fill: #fff; }
+  </style>
+
+  <text class="title" x="50%" y="35" text-anchor="middle">Configuration Token Coverage</text>
+  <text class="subtitle" x="50%" y="60" text-anchor="middle">Counts per category and token type (REQ/ARCH/IMPL/TEST)</text>
+
+  <!-- Grid labels -->
+  <text class="label" x="120" y="100" text-anchor="middle">REQ</text>
+  <text class="label" x="220" y="100" text-anchor="middle">ARCH</text>
+  <text class="label" x="320" y="100" text-anchor="middle">IMPL</text>
+  <text class="label" x="420" y="100" text-anchor="middle">TEST</text>
+
+  <text class="label" x="80" y="140">Defaults</text>
+  <text class="label" x="80" y="200">Inheritance</text>
+  <text class="label" x="80" y="260">Reflection</text>
+  <text class="label" x="80" y="320">CLI Output</text>
+
+  <!-- Colors -->
+  <!-- Defaults row -->
+  <rect x="90" y="120" width="60" height="40" fill="#4C78A8"/>
+  <text class="cell-text" x="120" y="145" text-anchor="middle">3</text>
+
+  <rect x="190" y="120" width="60" height="40" fill="#9C755F"/>
+  <text class="cell-text" x="220" y="145" text-anchor="middle">2</text>
+
+  <rect x="290" y="120" width="60" height="40" fill="#D2724D"/>
+  <text class="cell-text" x="320" y="145" text-anchor="middle">3</text>
+
+  <rect x="390" y="120" width="60" height="40" fill="#59A14F"/>
+  <text class="cell-text" x="420" y="145" text-anchor="middle">1</text>
+
+  <!-- Inheritance row -->
+  <rect x="90" y="180" width="60" height="40" fill="#4C78A8"/>
+  <text class="cell-text" x="120" y="205" text-anchor="middle">1</text>
+
+  <rect x="190" y="180" width="60" height="40" fill="#9C755F"/>
+  <text class="cell-text" x="220" y="205" text-anchor="middle">1</text>
+
+  <rect x="290" y="180" width="60" height="40" fill="#D2724D"/>
+  <text class="cell-text" x="320" y="205" text-anchor="middle">2</text>
+
+  <rect x="390" y="180" width="60" height="40" fill="#59A14F"/>
+  <text class="cell-text" x="420" y="205" text-anchor="middle">1</text>
+
+  <!-- Reflection row -->
+  <rect x="90" y="240" width="60" height="40" fill="#4C78A8"/>
+  <text class="cell-text" x="120" y="265" text-anchor="middle">1</text>
+
+  <rect x="190" y="240" width="60" height="40" fill="#9C755F"/>
+  <text class="cell-text" x="220" y="265" text-anchor="middle">1</text>
+
+  <rect x="290" y="240" width="60" height="40" fill="#D2724D"/>
+  <text class="cell-text" x="320" y="265" text-anchor="middle">3</text>
+
+  <rect x="390" y="240" width="60" height="40" fill="#59A14F"/>
+  <text class="cell-text" x="420" y="265" text-anchor="middle">2</text>
+
+  <!-- CLI Output row -->
+  <rect x="90" y="300" width="60" height="40" fill="#4C78A8"/>
+  <text class="cell-text" x="120" y="325" text-anchor="middle">2</text>
+
+  <rect x="190" y="300" width="60" height="40" fill="#9C755F"/>
+  <text class="cell-text" x="220" y="325" text-anchor="middle">2</text>
+
+  <rect x="290" y="300" width="60" height="40" fill="#D2724D"/>
+  <text class="cell-text" x="320" y="325" text-anchor="middle">2</text>
+
+  <rect x="390" y="300" width="60" height="40" fill="#59A14F"/>
+  <text class="cell-text" x="420" y="325" text-anchor="middle">1</text>
+</svg>
+

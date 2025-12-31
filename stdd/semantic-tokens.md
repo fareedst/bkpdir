@@ -223,6 +223,7 @@ See `scripts/validate-token-traceability.sh` for validation implementation.
 - `[REQ:RELIABILITY]` → See `requirements.md` § Reliability Requirements
 - `[REQ:MAINTAINABILITY]` → See `requirements.md` § Maintainability Requirements
 - `[REQ:USABILITY]` → See `requirements.md` § Usability Requirements
+- `[REQ:STDD_VIS]` → See `requirements.md` § STDD Visualization and Storytelling Requirements
 
 ### Immutable Requirements (Major Version Change Required)
 - `[REQ:IMMUTABLE_ARCHIVE_NAMING]` → See `requirements.md` § Archive Naming Convention (Immutable)
@@ -560,6 +561,7 @@ Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation
 - **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`
 - **Security & Quality**: `SECURITY`, `EXTENSIBILITY`, `DEPLOYMENT`, `PERFORMANCE`, `PERF_VALIDATION`
 - **AI & CI/CD**: `CICD_PIPELINE`, `AI_DOCUMENTATION`, `TOKEN_SYSTEM`
+- **Visualization**: `STDD_VIS_FLOW`
 
 ### Implementation Tokens
 - **Core**: `CONFIG_STRUCT`, `CFG_006`, `ZIP_FORMAT`, `DUAL_FORMATTING`, `STRUCTURED_ERRORS`, `GIT_CLI`, `RESOURCE_MANAGER`, `CONTEXT_OPS`, `ATOMIC_OPS`, `TESTING`, `CODE_STYLE`, `DATA_MODELS`
@@ -576,6 +578,11 @@ Refer to `docs/validation-reports/token-coverage-analysis.md` for the validation
 - **Features**: `AUTO_DETECTION`, `FILE_STATISTICS`, `DIRECTORY_COMPARISON`, `EXCLUSION_PATTERNS`
 - **Configuration Schema**: `CONFIG_SCHEMA_FLEX`
 - **Output Control**: `DEBUG-OUTPUT`, `DIAGNOSTIC-OUTPUT`
+- **Visualization**: `STDD_VIS_DATA_PIPELINE`, `STDD_VIS_ASSETS`
+
+### Test Tokens
+- `[TEST:EXCLUDE_MERGE]` → `config_integration_test.go::TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE` validates `[REQ:TEST_EXCLUDE_MERGE]`, `[ARCH:TEST_EXCLUDE_MERGE]`, `[IMPL:TEST_EXCLUDE_MERGE]`
+- `[TEST:LIST_LIMIT]` → `list_limit_test.go::TestListLimitDefault` validates `[REQ:LIST_LIMIT]`, `[ARCH:LIST_LIMIT]`, `[IMPL:LIST_LIMIT]`
 
 ### New Implementation Tokens
 - `[IMPL:LIST_FORMAT_SAFETY]` → See `implementation-decisions.md` § List Command Format Safety Fix [ARCH:OUTPUT_FORMATTING] [REQ:OUT_002]

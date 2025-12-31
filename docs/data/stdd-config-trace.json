@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2025-12-31T00:00:00Z",
+  "focus": "Configuration requirements, defaults, and state reflection",
+  "nodes": [
+    { "id": "req_configuration", "token": "REQ:CONFIGURATION", "type": "REQ", "title": "Config Management", "source": "stdd/requirements.md#reqconfiguration", "styling": { "lane": "REQ", "colorHint": "#4C78A8", "weight": 1 } },
+    { "id": "req_cfg_005", "token": "REQ:CFG_005", "type": "REQ", "title": "Layered Inheritance", "source": "stdd/requirements.md#reqcfg_005", "styling": { "lane": "REQ", "colorHint": "#4C78A8", "weight": 1 } },
+    { "id": "req_cfg_006", "token": "REQ:CFG_006", "type": "REQ", "title": "Config Reflection", "source": "stdd/requirements.md#reqcfg_006", "styling": { "lane": "REQ", "colorHint": "#4C78A8", "weight": 1 } },
+
+    { "id": "arch_config_system", "token": "ARCH:CONFIG_SYSTEM", "type": "ARCH", "title": "Config System Architecture", "source": "stdd/architecture-decisions.md#4-configuration-system-archconfig_system-reqconfiguration", "styling": { "lane": "ARCH", "colorHint": "#9C755F", "weight": 1 } },
+    { "id": "arch_cfg_005", "token": "ARCH:CFG_005", "type": "ARCH", "title": "Layered Inheritance Architecture", "source": "stdd/architecture-decisions.md#5-layered-configuration-inheritance-archcfg_005-reqcfg_005", "styling": { "lane": "ARCH", "colorHint": "#9C755F", "weight": 1 } },
+    { "id": "arch_cfg_006", "token": "ARCH:CFG_006", "type": "ARCH", "title": "Reflection Architecture", "source": "stdd/architecture-decisions.md#23-configuration-reflection-architecture-archcfg_006-reqcfg_006", "styling": { "lane": "ARCH", "colorHint": "#9C755F", "weight": 1 } },
+
+    { "id": "impl_config_struct", "token": "IMPL:CONFIG_STRUCT", "type": "IMPL", "title": "Config Struct Implementation", "source": "stdd/implementation-decisions.md#1-configuration-structure-implconfig_struct-archconfig_system-reqconfiguration", "styling": { "lane": "IMPL", "colorHint": "#D2724D", "weight": 1 } },
+    { "id": "impl_exclude_merge_fix", "token": "IMPL:EXCLUDE_MERGE_FIX", "type": "IMPL", "title": "Array Merge Strategy", "source": "stdd/implementation-decisions.md#array-field-default-merge-strategy-implementation-implexclude_merge_fix", "styling": { "lane": "IMPL", "colorHint": "#D2724D", "weight": 1 } },
+    { "id": "impl_cfg_006", "token": "IMPL:CFG_006", "type": "IMPL", "title": "Reflection Implementation", "source": "stdd/implementation-decisions.md#configuration-reflection-implementation-implcfg_006", "styling": { "lane": "IMPL", "colorHint": "#D2724D", "weight": 1 } },
+    { "id": "impl_config_output_grouping", "token": "IMPL:CONFIG_OUTPUT_GROUPING", "type": "IMPL", "title": "Config Output Grouping", "source": "stdd/implementation-decisions.md#configuration-output-grouping-implementation-implconfig_output_grouping", "styling": { "lane": "IMPL", "colorHint": "#D2724D", "weight": 0.9 } },
+
+    { "id": "test_exclude_merge", "token": "TEST:EXCLUDE_MERGE", "type": "TEST", "title": "Exclude Merge Tests", "source": "config_test.go::TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE", "styling": { "lane": "TEST", "colorHint": "#59A14F", "weight": 0.9 } },
+    { "id": "test_config_output", "token": "REQ:CFG_006", "type": "TEST", "title": "Config Reflection Tests", "source": "config_test.go::TestConfigCommandReflection", "styling": { "lane": "TEST", "colorHint": "#59A14F", "weight": 0.8 } },
+
+    { "id": "code_default_config", "token": "IMPL:CONFIG_STRUCT", "type": "CODE", "title": "config.go::DefaultConfig", "source": "config.go::DefaultConfig", "styling": { "lane": "CODE", "colorHint": "#BAB0AC", "weight": 0.8 } },
+    { "id": "code_apply_merge", "token": "IMPL:EXCLUDE_MERGE_FIX", "type": "CODE", "title": "config.go::applyMergeStrategies", "source": "config.go::applyMergeStrategies", "styling": { "lane": "CODE", "colorHint": "#BAB0AC", "weight": 0.8 } },
+    { "id": "code_reflect_fields", "token": "IMPL:CFG_006", "type": "CODE", "title": "config.go::reflectConfigFields", "source": "config.go::reflectConfigFields", "styling": { "lane": "CODE", "colorHint": "#BAB0AC", "weight": 0.8 } },
+    { "id": "code_config_command", "token": "IMPL:CONFIG_OUTPUT_GROUPING", "type": "CODE", "title": "cmd/config command", "source": "main.go::handleConfigCommand", "styling": { "lane": "CODE", "colorHint": "#BAB0AC", "weight": 0.8 } }
+  ],
+  "edges": [
+    { "from": "req_configuration", "to": "arch_config_system", "relation": "realized_by" },
+    { "from": "arch_config_system", "to": "impl_config_struct", "relation": "implemented_by" },
+    { "from": "impl_config_struct", "to": "code_default_config", "relation": "located_in" },
+
+    { "from": "req_cfg_005", "to": "arch_cfg_005", "relation": "realized_by" },
+    { "from": "arch_cfg_005", "to": "impl_exclude_merge_fix", "relation": "implemented_by" },
+    { "from": "impl_exclude_merge_fix", "to": "test_exclude_merge", "relation": "validated_by" },
+    { "from": "impl_exclude_merge_fix", "to": "code_apply_merge", "relation": "located_in" },
+
+    { "from": "req_cfg_006", "to": "arch_cfg_006", "relation": "realized_by" },
+    { "from": "arch_cfg_006", "to": "impl_cfg_006", "relation": "implemented_by" },
+    { "from": "impl_cfg_006", "to": "test_config_output", "relation": "validated_by" },
+    { "from": "impl_cfg_006", "to": "code_reflect_fields", "relation": "located_in" },
+
+    { "from": "req_cfg_006", "to": "impl_config_output_grouping", "relation": "implemented_by" },
+    { "from": "impl_config_output_grouping", "to": "code_config_command", "relation": "located_in" },
+    { "from": "impl_config_output_grouping", "to": "test_config_output", "relation": "validated_by" }
+  ]
+}
+

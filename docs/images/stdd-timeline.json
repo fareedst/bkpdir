@@ -1,0 +1,35 @@
+{
+  "frames": [
+    {
+      "step": 1,
+      "title": "Requirement Raised",
+      "narration": "Token `[REQ:CFG_005]` captures the Layered Configuration Inheritance requirement.",
+      "highlight": ["req_cfg_005"]
+    },
+    {
+      "step": 2,
+      "title": "Architecture Decision",
+      "narration": "`[ARCH:CFG_005]` formalizes how inheritance behaves, referencing the requirement.",
+      "highlight": ["arch_cfg_005"]
+    },
+    {
+      "step": 3,
+      "title": "Implementation Detail",
+      "narration": "`[IMPL:EXCLUDE_MERGE_FIX]` ensures arrays default to merge strategy per architecture.",
+      "highlight": ["impl_exclude_merge_fix"]
+    },
+    {
+      "step": 4,
+      "title": "Tests & Code",
+      "narration": "`[TEST:EXCLUDE_MERGE]` and config.go anchor the behavior in tests/code.",
+      "highlight": ["test_exclude_merge", "code_cfg_merge"]
+    },
+    {
+      "step": 5,
+      "title": "Parallel Example",
+      "narration": "Repeat for `[REQ:LIST_LIMIT]` chain through `[ARCH:LIST_LIMIT]`, `[IMPL:LIST_LIMIT]`, `[TEST:LIST_LIMIT]`.",
+      "highlight": ["req_list_limit", "arch_list_limit", "impl_list_limit", "test_list_limit", "code_list_limit"]
+    }
+  ]
+}
+

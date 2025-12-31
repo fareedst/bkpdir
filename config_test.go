@@ -4177,7 +4177,7 @@ func TestMixedSequentialAndInheritance(t *testing.T) {
 	assertStringSliceEqual(t, "exclude_patterns merged from sequential and inheritance chain", cfg.ExcludePatterns, expectedPatterns)
 }
 
-// [REQ:TEST_EXCLUDE_MERGE] [ARCH:TEST_EXCLUDE_MERGE] [IMPL:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006]
+// [REQ:TEST_EXCLUDE_MERGE] [ARCH:TEST_EXCLUDE_MERGE] [IMPL:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006] [TEST:EXCLUDE_MERGE]
 // TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE verifies that exclude_patterns are correctly merged
 // from multiple configuration files and that the config command shows correct source attribution
 func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {

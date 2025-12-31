@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- STDD Token Statistics Visualization -->
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420">
+  <style>
+    .title { font-family: "Helvetica", "Arial", sans-serif; font-size: 24px; font-weight: bold; fill: #333; }
+    .subtitle { font-family: "Helvetica", "Arial", sans-serif; font-size: 14px; fill: #555; }
+    .bar-label { font-family: "Helvetica", "Arial", sans-serif; font-size: 14px; fill: #333; }
+    .bar-value { font-family: "Helvetica", "Arial", sans-serif; font-size: 12px; fill: #fff; font-weight: bold; }
+    .link-note { font-family: "Helvetica", "Arial", sans-serif; font-size: 12px; fill: #444; }
+  </style>
+
+  <text class="title" x="50%" y="40" text-anchor="middle">Semantic Token Coverage</text>
+  <text class="subtitle" x="50%" y="65" text-anchor="middle">Counts from `stdd/semantic-tokens.md` (2025-12-31)</text>
+
+  <!-- Axes -->
+  <line x1="80" y1="90" x2="80" y2="340" stroke="#999" stroke-width="1"/>
+  <line x1="80" y1="340" x2="660" y2="340" stroke="#999" stroke-width="1"/>
+
+  <!-- Bars -->
+  <rect x="120" y="140" width="120" height="200" fill="#4C78A8"/>
+  <text class="bar-label" x="180" y="360" text-anchor="middle">REQ</text>
+  <text class="bar-value" x="180" y="150" text-anchor="middle">293</text>
+
+  <rect x="300" y="170" width="120" height="170" fill="#9C755F"/>
+  <text class="bar-label" x="360" y="360" text-anchor="middle">ARCH</text>
+  <text class="bar-value" x="360" y="185" text-anchor="middle">268</text>
+
+  <rect x="480" y="210" width="120" height="130" fill="#D2724D"/>
+  <text class="bar-label" x="540" y="360" text-anchor="middle">IMPL</text>
+  <text class="bar-value" x="540" y="225" text-anchor="middle">227</text>
+
+  <rect x="620" y="330" width="40" height="10" fill="#59A14F"/>
+  <text class="bar-label" x="640" y="360" text-anchor="middle">TEST</text>
+  <text class="bar-value" x="640" y="337" text-anchor="middle">2</text>
+
+  <!-- Notes -->
+  <text class="link-note" x="80" y="380">
+    Chains sampled: 2 (CFG_005, LIST_LIMIT). Each chain links REQ → ARCH → IMPL → TEST/CODE nodes.
+  </text>
+  <text class="link-note" x="80" y="400">
+    Tests mostly reference REQ tokens directly; dedicated TEST tokens added as needed (e.g., `[TEST:EXCLUDE_MERGE]`, `[TEST:LIST_LIMIT]`).
+  </text>
+</svg>
+

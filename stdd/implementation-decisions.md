@@ -3107,3 +3107,40 @@ STDD requires authoritative records to live in the requirements, architecture, a
 **Code Markers**: `mergeBasicSettings`, `applyOverride`, `dstDiffersFromDefault`, `explicitlySetByEarlier`, `explicitlySetInSrc`, `// CFG-001: Earlier files take precedence`
 
 **Cross-References**: [ARCH:CONFIG_SYSTEM], [REQ:CONFIGURATION], [REQ:CFG_001], [IMPL:CFG_PRECEDENCE_FIX]
+
+
+## STDD Visualization Data Pipeline [IMPL:STDD_VIS_DATA_PIPELINE] [ARCH:STDD_VIS_FLOW] [REQ:STDD_VIS]
+
+### Decision: Build a repeatable data pipeline that derives a token graph from STDD documents and representative code/tests to feed visualization artifacts.
+
+**Rationale:**
+- Keeps visuals synchronized with the canonical token registry.
+- Enables regeneration when tokens or docs change.
+- Provides a small, reviewable JSON/CSV snapshot that reviewers can validate.
+
+**Implementation Approach (planning, no code yet):**
+- Input sources: `stdd/semantic-tokens.md`, `stdd/requirements.md`, `stdd/architecture-decisions.md`, `stdd/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`).
+- Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references found in docs and inline token comments; capture token metadata (type, status, sample refs) to drive token prominence in visuals.
+- Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).
+- Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ:CFG_005]` and `[REQ:LIST_LIMIT]`), confirming tokens appear at every hop.
+- Module boundary: `DataExtraction` outputs normalized graph once; downstream modules consume it without re-parsing docs, preserving token-centric styling data.
+
+**Cross-References**: [ARCH:STDD_VIS_FLOW], [REQ:STDD_VIS], [REQ:MODULE_VALIDATION]
+
+
+## STDD Visualization Asset Plan [IMPL:STDD_VIS_ASSETS] [ARCH:STDD_VIS_FLOW] [REQ:STDD_VIS]
+
+### Decision: Produce two complementary artifacts (layered flow + timeline/animation) sourced from the data pipeline, with embedded token callouts and legends.
+
+**Rationale:**
+- Combines static clarity (layered flow) with process storytelling (timeline/animation).
+- Ensures artifacts stay anchored to real tokens and code/test references.
+
+**Implementation Approach (planning, no code yet):**
+- **Layered Flow Diagram**: Use the token graph to render a swimlane/Sankey-style view: lanes for REQ/ARCH/IMPL/TEST/CODE; tokens are visually dominant (size/color/labels); callouts for example chains; legend explaining token roles and color map.
+- **Timeline/Animation**: Stepwise frames showing a requirement moving through architecture, implementation, tests, and code; token badges stay visible per step so the token remains the protagonist. Output as lightweight GIF/MP4 or animated SVG.
+- **Asset locations**: `docs/images/stdd-trace-flow.svg` (or .png) and `docs/images/stdd-trace-timeline.gif/mp4`; link from STDD docs with captions describing token chains.
+- **Validation**: Visual review checklist centered on token prominence (label clarity, color map alignment, edge correctness), alignment with two sample chains from the data snapshot, and confirmation that assets load in docs.
+- Module boundaries: `Visualization` (static) and `AnimationTimeline` (dynamic) consume the same data snapshot; `Integration` links assets into docs and records validation notes with token focus.
+
+**Cross-References**: [ARCH:STDD_VIS_FLOW], [REQ:STDD_VIS], [REQ:MODULE_VALIDATION]
