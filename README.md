@@ -482,4 +482,5 @@ MIT License - see LICENSE file for details.
 - [Migration Guide](docs/migration-guide.md)
 - [Unicode Migration Status](docs/unicode-migration-current-status.md)
 - [Migration Next Steps](docs/unicode-migration-next-steps.md)
-- [Traceability-Enhanced Migration Plan](docs/unicode-migration-traceability-plan.md) 
+- [Traceability-Enhanced Migration Plan](docs/unicode-migration-traceability-plan.md)
+- [STDD Comparison Analysis](docs/stdd-comparison-analysis.md) - Architecture vs Implementation token flow analysis 

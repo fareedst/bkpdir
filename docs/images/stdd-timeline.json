@@ -1,35 +1,178 @@
 {
-  "frames": [
+  "title": "STDD Token Flow Timeline",
+  "description": "Visualization of how semantic tokens flow through the STDD methodology layers",
+  "version": "1.0.0",
+  "generated": "2026-01-14",
+  "tokens": {
+    "REQ:STDD_VIS": true,
+    "ARCH:STDD_VIS_FLOW": true,
+    "IMPL:STDD_VIS_DATA_PIPELINE": true
+  },
+  "stages": [
     {
-      "step": 1,
-      "title": "Requirement Raised",
-      "narration": "Token `[REQ:CFG_005]` captures the Layered Configuration Inheritance requirement.",
-      "highlight": ["req_cfg_005"]
+      "stage": 1,
+      "name": "Requirements Definition",
+      "layer": "REQ",
+      "description": "User need is captured as a requirement with semantic token",
+      "example_tokens": [
+        "REQ:CONFIGURATION",
+        "REQ:CFG_005",
+        "REQ:OUTPUT_FORMATTING",
+        "REQ:DIFF_COMMAND",
+        "REQ:MAINTAINABILITY"
+      ],
+      "metrics": {
+        "total_unique_tokens": 32,
+        "avg_references_per_token": 5.9
+      },
+      "color": "#4A90D9"
     },
     {
-      "step": 2,
-      "title": "Architecture Decision",
-      "narration": "`[ARCH:CFG_005]` formalizes how inheritance behaves, referencing the requirement.",
-      "highlight": ["arch_cfg_005"]
+      "stage": 2,
+      "name": "Architecture Decision",
+      "layer": "ARCH",
+      "description": "High-level design choices are made and linked to requirements",
+      "example_tokens": [
+        "ARCH:CONFIG_SYSTEM",
+        "ARCH:CFG_005",
+        "ARCH:CFG_006",
+        "ARCH:OUTPUT_FORMATTING",
+        "ARCH:DIFF_COMMAND"
+      ],
+      "metrics": {
+        "total_unique_tokens": 43,
+        "coverage_of_req": "75%",
+        "avg_references_per_token": 4.4
+      },
+      "color": "#7B68EE"
     },
     {
-      "step": 3,
-      "title": "Implementation Detail",
-      "narration": "`[IMPL:EXCLUDE_MERGE_FIX]` ensures arrays default to merge strategy per architecture.",
-      "highlight": ["impl_exclude_merge_fix"]
+      "stage": 3,
+      "name": "Implementation Decision",
+      "layer": "IMPL",
+      "description": "Low-level implementation choices are documented with cross-references",
+      "example_tokens": [
+        "IMPL:CONFIG_STRUCT",
+        "IMPL:CFG_006",
+        "IMPL:EXCLUDE_MERGE_FIX",
+        "IMPL:DUAL_FORMATTING",
+        "IMPL:DIFF_COMMAND"
+      ],
+      "metrics": {
+        "total_unique_tokens": 70,
+        "coverage_of_arch": "79.1%",
+        "avg_references_per_token": 5.7
+      },
+      "color": "#50C878"
     },
     {
-      "step": 4,
-      "title": "Tests & Code",
-      "narration": "`[TEST:EXCLUDE_MERGE]` and config.go anchor the behavior in tests/code.",
-      "highlight": ["test_exclude_merge", "code_cfg_merge"]
+      "stage": 4,
+      "name": "Code Implementation",
+      "layer": "CODE",
+      "description": "Code is written with semantic token comments",
+      "example_markers": [
+        "// [REQ:CFG_005] Configuration inheritance",
+        "// [IMPL:EXCLUDE_MERGE_FIX] Array merge strategy",
+        "// [ARCH:CONFIG_SYSTEM] Configuration loading"
+      ],
+      "color": "#FFB347"
     },
     {
-      "step": 5,
-      "title": "Parallel Example",
-      "narration": "Repeat for `[REQ:LIST_LIMIT]` chain through `[ARCH:LIST_LIMIT]`, `[IMPL:LIST_LIMIT]`, `[TEST:LIST_LIMIT]`.",
-      "highlight": ["req_list_limit", "arch_list_limit", "impl_list_limit", "test_list_limit", "code_list_limit"]
+      "stage": 5,
+      "name": "Test Validation",
+      "layer": "TEST",
+      "description": "Tests reference requirements they validate",
+      "example_tests": [
+        "TestConfigMerge_REQ_CFG_005",
+        "TestExcludePatterns_REQ_CONFIGURATION",
+        "TestDiffCommand_REQ_DIFF_COMMAND"
+      ],
+      "color": "#FF6B6B"
     }
-  ]
+  ],
+  "flows": [
+    {
+      "from": "REQ:CONFIGURATION",
+      "to": "ARCH:CONFIG_SYSTEM",
+      "strength": 10
+    },
+    {
+      "from": "ARCH:CONFIG_SYSTEM",
+      "to": "IMPL:CONFIG_STRUCT",
+      "strength": 4
+    },
+    {
+      "from": "REQ:CFG_005",
+      "to": "ARCH:CFG_005",
+      "strength": 29
+    },
+    {
+      "from": "ARCH:CFG_005",
+      "to": "IMPL:EXCLUDE_MERGE_FIX",
+      "strength": 2
+    },
+    {
+      "from": "ARCH:CFG_005",
+      "to": "IMPL:CFG_MIXED_MODE_MERGE_FIX",
+      "strength": 3
+    },
+    {
+      "from": "REQ:OUTPUT_FORMATTING",
+      "to": "ARCH:OUTPUT_FORMATTING",
+      "strength": 8
+    },
+    {
+      "from": "ARCH:OUTPUT_FORMATTING",
+      "to": "IMPL:DUAL_FORMATTING",
+      "strength": 3
+    },
+    {
+      "from": "REQ:DIFF_COMMAND",
+      "to": "ARCH:DIFF_COMMAND",
+      "strength": 4
+    },
+    {
+      "from": "ARCH:DIFF_COMMAND",
+      "to": "IMPL:DIFF_COMMAND",
+      "strength": 4
+    },
+    {
+      "from": "ARCH:DIRECTORY_COMPARISON",
+      "to": "IMPL:DIRECTORY_COMPARISON",
+      "strength": 2
+    }
+  ],
+  "category_summary": {
+    "Configuration": {
+      "architecture_tokens": 34,
+      "implementation_tokens": 153,
+      "expansion_ratio": 4.5
+    },
+    "Testing": {
+      "architecture_tokens": 5,
+      "implementation_tokens": 26,
+      "expansion_ratio": 5.2
+    },
+    "File Operations": {
+      "architecture_tokens": 6,
+      "implementation_tokens": 29,
+      "expansion_ratio": 4.83
+    },
+    "Output/Formatting": {
+      "architecture_tokens": 16,
+      "implementation_tokens": 34,
+      "expansion_ratio": 2.12
+    },
+    "Documentation": {
+      "architecture_tokens": 27,
+      "implementation_tokens": 31,
+      "expansion_ratio": 1.15
+    }
+  },
+  "effectiveness_metrics": {
+    "arch_traceability_pct": 79.1,
+    "req_coverage_pct": 75.0,
+    "token_density_ratio": 2.1,
+    "line_expansion_ratio": 2.3
+  }
 }
-

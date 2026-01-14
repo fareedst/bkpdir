@@ -1,0 +1,836 @@
+{
+  "architecture": {
+    "total_tokens": 188,
+    "line_count": 1376,
+    "unique_tokens": {
+      "ARCH": 43,
+      "REQ": 26,
+      "IMPL": 2
+    },
+    "categories": {
+      "Other": {
+        "ARCH": 9,
+        "REQ": 7
+      },
+      "Performance": {
+        "REQ": 11,
+        "ARCH": 3
+      },
+      "Documentation": {
+        "REQ": 21,
+        "ARCH": 5,
+        "IMPL": 1
+      },
+      "CLI/UX": {
+        "REQ": 17,
+        "ARCH": 5
+      },
+      "File Operations": {
+        "ARCH": 6
+      },
+      "Security": {
+        "REQ": 9,
+        "ARCH": 1
+      },
+      "Configuration": {
+        "ARCH": 12,
+        "REQ": 21,
+        "IMPL": 1
+      },
+      "Error Handling": {
+        "ARCH": 1,
+        "REQ": 2
+      },
+      "Resource Management": {
+        "ARCH": 2,
+        "REQ": 6
+      },
+      "Output/Formatting": {
+        "ARCH": 4,
+        "REQ": 12
+      },
+      "Git Integration": {
+        "ARCH": 1,
+        "REQ": 2
+      },
+      "Testing": {
+        "ARCH": 2,
+        "REQ": 3
+      },
+      "Build/Deployment": {
+        "ARCH": 3
+      },
+      "Code Organization": {
+        "ARCH": 4,
+        "REQ": 5
+      },
+      "Comparison": {
+        "ARCH": 3,
+        "REQ": 6
+      },
+      "Visualization": {
+        "ARCH": 1,
+        "REQ": 2
+      }
+    },
+    "top_req": [
+      [
+        "MAINTAINABILITY",
+        17
+      ],
+      [
+        "USABILITY",
+        17
+      ],
+      [
+        "PERFORMANCE",
+        11
+      ],
+      [
+        "CONFIGURATION",
+        10
+      ],
+      [
+        "RELIABILITY",
+        9
+      ],
+      [
+        "OUTPUT_FORMATTING",
+        8
+      ],
+      [
+        "CFG_005",
+        4
+      ],
+      [
+        "CFG_006",
+        4
+      ],
+      [
+        "CODE_QUALITY",
+        4
+      ],
+      [
+        "DOC_016",
+        4
+      ],
+      [
+        "RESOURCE_MANAGEMENT",
+        4
+      ],
+      [
+        "CONFIG_OUTPUT_GROUPING",
+        3
+      ],
+      [
+        "DIFF_COMMAND",
+        3
+      ],
+      [
+        "GOV_REGISTRY_COMPLETENESS",
+        3
+      ],
+      [
+        "INCREMENTAL_DUPLICATE_PREVENTION",
+        3
+      ],
+      [
+        "CONTEXT_SUPPORT",
+        2
+      ],
+      [
+        "CUSTOMIZABLE_FORMAT_STRINGS",
+        2
+      ],
+      [
+        "ERROR_HANDLING",
+        2
+      ],
+      [
+        "GIT_INTEGRATION",
+        2
+      ],
+      [
+        "LIST_LIMIT",
+        2
+      ]
+    ],
+    "top_arch": [
+      [
+        "CFG_006",
+        4
+      ],
+      [
+        "TOKEN_SYSTEM",
+        4
+      ],
+      [
+        "CFG_005",
+        3
+      ],
+      [
+        "CLI_COMMANDS",
+        3
+      ],
+      [
+        "CONFIG_SYSTEM",
+        3
+      ],
+      [
+        "DIRECTORY_COMPARISON",
+        3
+      ],
+      [
+        "CONFIG_OUTPUT_GROUPING",
+        2
+      ],
+      [
+        "DIFF_COMMAND",
+        2
+      ],
+      [
+        "LANGUAGE_SELECTION",
+        2
+      ],
+      [
+        "OUTPUT_FORMATTING",
+        2
+      ],
+      [
+        "PACKAGE_EXTRACTION",
+        2
+      ],
+      [
+        "AI_DOCUMENTATION",
+        1
+      ],
+      [
+        "ARCHIVE_FORMAT",
+        1
+      ],
+      [
+        "AUTO_DETECTION",
+        1
+      ],
+      [
+        "BUILD_DISTRIBUTION",
+        1
+      ],
+      [
+        "CICD_PIPELINE",
+        1
+      ],
+      [
+        "CLI_FRAMEWORK",
+        1
+      ],
+      [
+        "CODE_ORGANIZATION",
+        1
+      ],
+      [
+        "CONTEXT_SUPPORT",
+        1
+      ],
+      [
+        "CUSTOMIZABLE_FORMAT_STRINGS",
+        1
+      ]
+    ]
+  },
+  "implementation": {
+    "total_tokens": 397,
+    "line_count": 3147,
+    "unique_tokens": {
+      "IMPL": 70,
+      "ARCH": 34,
+      "REQ": 30
+    },
+    "categories": {
+      "Other": {
+        "IMPL": 13,
+        "ARCH": 7,
+        "REQ": 10
+      },
+      "Configuration": {
+        "IMPL": 30,
+        "ARCH": 33,
+        "REQ": 90
+      },
+      "File Operations": {
+        "IMPL": 14,
+        "ARCH": 10,
+        "REQ": 5
+      },
+      "Output/Formatting": {
+        "IMPL": 7,
+        "ARCH": 10,
+        "REQ": 17
+      },
+      "Error Handling": {
+        "IMPL": 2,
+        "ARCH": 2,
+        "REQ": 2
+      },
+      "Git Integration": {
+        "IMPL": 2,
+        "ARCH": 3,
+        "REQ": 3
+      },
+      "Resource Management": {
+        "IMPL": 3,
+        "ARCH": 6,
+        "REQ": 5
+      },
+      "Testing": {
+        "IMPL": 10,
+        "ARCH": 13,
+        "REQ": 3
+      },
+      "Code Organization": {
+        "IMPL": 6,
+        "ARCH": 15,
+        "REQ": 2
+      },
+      "Documentation": {
+        "REQ": 19,
+        "IMPL": 6,
+        "ARCH": 6
+      },
+      "CLI/UX": {
+        "IMPL": 2,
+        "ARCH": 3,
+        "REQ": 3
+      },
+      "Security": {
+        "REQ": 1
+      },
+      "Performance": {
+        "IMPL": 2,
+        "ARCH": 2,
+        "REQ": 1
+      },
+      "Comparison": {
+        "IMPL": 7,
+        "ARCH": 5,
+        "REQ": 7
+      },
+      "Visualization": {
+        "IMPL": 2,
+        "ARCH": 4,
+        "REQ": 4
+      }
+    },
+    "top_req": [
+      [
+        "CONFIGURATION",
+        39
+      ],
+      [
+        "CFG_005",
+        29
+      ],
+      [
+        "CFG_001",
+        15
+      ],
+      [
+        "MAINTAINABILITY",
+        12
+      ],
+      [
+        "OUTPUT_FORMATTING",
+        9
+      ],
+      [
+        "CFG_006",
+        5
+      ],
+      [
+        "OUT_002",
+        5
+      ],
+      [
+        "CUSTOMIZABLE_FORMAT_STRINGS",
+        4
+      ],
+      [
+        "DIFF_COMMAND",
+        4
+      ],
+      [
+        "DOC_016",
+        4
+      ],
+      [
+        "FILE_BACKUP",
+        4
+      ],
+      [
+        "LIST_LIMIT",
+        4
+      ],
+      [
+        "STDD_VIS",
+        4
+      ],
+      [
+        "GIT_INTEGRATION",
+        3
+      ],
+      [
+        "INCREMENTAL_DUPLICATE_PREVENTION",
+        3
+      ],
+      [
+        "RESOURCE_MANAGEMENT",
+        3
+      ],
+      [
+        "TEST_EXCLUDE_MERGE",
+        3
+      ],
+      [
+        "USABILITY",
+        3
+      ],
+      [
+        "CONFIG_OUTPUT_GROUPING",
+        2
+      ],
+      [
+        "CONTEXT_SUPPORT",
+        2
+      ]
+    ],
+    "top_impl": [
+      [
+        "CFG_PRECEDENCE_FIX",
+        4
+      ],
+      [
+        "DIFF_COMMAND",
+        4
+      ],
+      [
+        "ATOMIC_OPS",
+        3
+      ],
+      [
+        "CFG_MERGE_BEHAVIOR_REGISTRY",
+        3
+      ],
+      [
+        "CFG_MERGE_PREPEND_PRECEDENCE_FIX",
+        3
+      ],
+      [
+        "CFG_MIXED_MODE_MERGE_FIX",
+        3
+      ],
+      [
+        "CONFIG_STRUCT",
+        3
+      ],
+      [
+        "DUAL_FORMATTING",
+        3
+      ],
+      [
+        "FILE_STATISTICS",
+        3
+      ],
+      [
+        "INCREMENTAL_DUPLICATE_PREVENTION",
+        3
+      ],
+      [
+        "CFG_006",
+        2
+      ],
+      [
+        "CFG_INHERITANCE_PATH_RESOLUTION",
+        2
+      ],
+      [
+        "CONTEXT_OPS",
+        2
+      ],
+      [
+        "DIRECTORY_COMPARISON",
+        2
+      ],
+      [
+        "EXCLUDE_MERGE_FIX",
+        2
+      ],
+      [
+        "EXCLUSION_PATTERNS",
+        2
+      ],
+      [
+        "EXTRACT_008_DOC_MIGRATION",
+        2
+      ],
+      [
+        "GIT_CLI",
+        2
+      ],
+      [
+        "PROCESSING_PATTERNS",
+        2
+      ],
+      [
+        "STRUCTURED_ERRORS",
+        2
+      ]
+    ]
+  },
+  "traceability": {
+    "arch_tokens_defined": [
+      "AI_DOCUMENTATION",
+      "ARCHIVE_FORMAT",
+      "AUTO_DETECTION",
+      "BUILD_DISTRIBUTION",
+      "CFG_005",
+      "CFG_006",
+      "CICD_PIPELINE",
+      "CLI_COMMANDS",
+      "CLI_FRAMEWORK",
+      "CODE_ORGANIZATION",
+      "CONFIG_OUTPUT_GROUPING",
+      "CONFIG_SYSTEM",
+      "CONTEXT_SUPPORT",
+      "CUSTOMIZABLE_FORMAT_STRINGS",
+      "DEPLOYMENT",
+      "DIFF_COMMAND",
+      "DIRECTORY_COMPARISON",
+      "ERROR_HANDLING",
+      "EXCLUDE_MERGE_FIX",
+      "EXCLUSION_PATTERNS",
+      "EXTENSIBILITY",
+      "EXTRACT_008_INTERDEP",
+      "FILE_OPERATIONS",
+      "FILE_STATISTICS",
+      "GIT_INTEGRATION",
+      "IDENTIFIER",
+      "INCREMENTAL_DUPLICATE_PREVENTION",
+      "LANGUAGE_SELECTION",
+      "LIST_LIMIT",
+      "OTHER_DECISION",
+      "OUTPUT_FORMATTING",
+      "PACKAGE_EXTRACTION",
+      "PERFORMANCE",
+      "PERF_VALIDATION",
+      "PROCESSING_PATTERNS",
+      "PROJECT_STRUCTURE",
+      "RESOURCE_MANAGEMENT",
+      "SECURITY",
+      "STDD_VIS_FLOW",
+      "SYSTEM_COMPONENTS",
+      "TESTING_STRATEGY",
+      "TEST_EXCLUDE_MERGE",
+      "TOKEN_SYSTEM"
+    ],
+    "impl_tokens_defined": [
+      "ATOMIC_OPS",
+      "AUTO_DETECTION",
+      "BACKWARD_COMPAT",
+      "CFG_006",
+      "CFG_HIERARCHY_PRESERVATION",
+      "CFG_INHERITANCE_PATH_RESOLUTION",
+      "CFG_MERGE_BEHAVIOR_REGISTRY",
+      "CFG_MERGE_PREPEND_PRECEDENCE_FIX",
+      "CFG_MIXED_MODE_MERGE_FIX",
+      "CFG_MIXED_SEQUENTIAL_INHERITANCE",
+      "CFG_PRECEDENCE_FIX",
+      "CFG_QUOTED_KEY_PREFIX",
+      "CLI_FRAMEWORK",
+      "CODE_STYLE",
+      "CONFIGURABLE_STRINGS",
+      "CONFIG_DISPLAY_FLATTENING",
+      "CONFIG_OUTPUT_GROUPING",
+      "CONFIG_SCHEMA_FLEX",
+      "CONFIG_STRUCT",
+      "CONTEXT_OPS",
+      "CUSTOMIZABLE_FORMAT_STRINGS",
+      "DATA_MODELS",
+      "DELAYED_OUTPUT",
+      "DEPENDENCY_MGMT",
+      "DIFF_COMMAND",
+      "DIRECTORY_COMPARISON",
+      "DOC_ENHANCEMENT",
+      "DUAL_FORMATTING",
+      "EXCLUDE_MERGE_FIX",
+      "EXCLUSION_PATTERNS",
+      "EXTRACTION_CHALLENGES",
+      "EXTRACTION_PRINCIPLES",
+      "EXTRACT_008_DOC_MIGRATION",
+      "FILE_OPERATIONS",
+      "FILE_STATISTICS",
+      "FILE_STATISTICS_TEMPLATE_FIX",
+      "GIT_CLI",
+      "GIT_DIRTY_CONFIG",
+      "IDENTIFIER",
+      "INCREMENTAL_DUPLICATE_PREVENTION",
+      "INTERFACE_DRIVEN",
+      "INTERFACE_FIRST",
+      "LARGE_FILE_CHALLENGE",
+      "LARGE_FILE_DECOMP",
+      "LAYERED_EXTRACTION",
+      "LIST_FORMAT_SAFETY",
+      "LIST_LIMIT",
+      "PACKAGE_EXTRACTION",
+      "PROCESSING_PATTERNS",
+      "REFACTOR_PREP",
+      "RESOURCE_MANAGER",
+      "SEMANTIC_CROSS_REF",
+      "STDD_VIS_ASSETS",
+      "STDD_VIS_DATA_PIPELINE",
+      "STRUCTURED_ERRORS",
+      "TESTING",
+      "TESTING_COMPLEXITY",
+      "TEST_CFG_005_P1",
+      "TEST_COVERAGE",
+      "TEST_DEFAULT_STRATEGY_EDGES",
+      "TEST_EMPTY_STRING_HANDLING",
+      "TEST_EXCLUDE_MERGE",
+      "TEST_PREPEND_ORDERING",
+      "TEST_UNICODE_HANDLING",
+      "TOKEN_COVERAGE_AUDIT",
+      "TOKEN_MIGRATION_COMPLETE",
+      "TOKEN_SYSTEM",
+      "TRACEABILITY",
+      "ZERO_BREAKING",
+      "ZIP_FORMAT"
+    ],
+    "arch_referenced_in_impl": [
+      "ARCHIVE_FORMAT",
+      "AUTO_DETECTION",
+      "CFG_001",
+      "CFG_005",
+      "CFG_006",
+      "CLI_COMMANDS",
+      "CLI_FRAMEWORK",
+      "CODE_ORGANIZATION",
+      "CONFIG_OUTPUT_GROUPING",
+      "CONFIG_SYSTEM",
+      "CONTEXT_SUPPORT",
+      "CUSTOMIZABLE_FORMAT_STRINGS",
+      "DIFF_COMMAND",
+      "DIRECTORY_COMPARISON",
+      "DOCUMENTATION_ARCHITECTURE",
+      "ERROR_HANDLING",
+      "EXCLUDE_MERGE_FIX",
+      "EXCLUSION_PATTERNS",
+      "EXTRACT_008_INTERDEP",
+      "FILE_OPERATIONS",
+      "FILE_STATISTICS",
+      "GIT_INTEGRATION",
+      "INCREMENTAL_DUPLICATE_PREVENTION",
+      "LIST_LIMIT",
+      "OUTPUT_FORMATTING",
+      "PACKAGE_EXTRACTION",
+      "PROCESSING_PATTERNS",
+      "RELATED_ARCHITECTURE",
+      "RESOURCE_MANAGEMENT",
+      "STDD_VIS_FLOW",
+      "SYSTEM_COMPONENTS",
+      "TESTING_STRATEGY",
+      "TEST_EXCLUDE_MERGE",
+      "TOKEN_SYSTEM"
+    ],
+    "impl_referenced_in_arch": [
+      "CONFIG_DISPLAY_FLATTENING",
+      "TOKEN_SYSTEM"
+    ],
+    "req_in_architecture": [
+      "CFG_005",
+      "CFG_006",
+      "CODE_QUALITY",
+      "CONFIGURATION",
+      "CONFIG_OUTPUT_GROUPING",
+      "CONTEXT_SUPPORT",
+      "CUSTOMIZABLE_FORMAT_STRINGS",
+      "DIFF_COMMAND",
+      "DOC_016",
+      "ERROR_HANDLING",
+      "EXTRACT_008_INTERDEP_MAPPING",
+      "GIT_INTEGRATION",
+      "GOV_DISCOVERABILITY",
+      "GOV_REGISTRY_COMPLETENESS",
+      "INCREMENTAL_DUPLICATE_PREVENTION",
+      "LIST_LIMIT",
+      "MAINTAINABILITY",
+      "MODULE_VALIDATION",
+      "OUTPUT_FORMATTING",
+      "PERFORMANCE",
+      "RELATED_REQUIREMENT",
+      "RELIABILITY",
+      "RESOURCE_MANAGEMENT",
+      "STDD_VIS",
+      "TEST_EXCLUDE_MERGE",
+      "USABILITY"
+    ],
+    "req_in_implementation": [
+      "CFG_001",
+      "CFG_005",
+      "CFG_006",
+      "CONFIGURATION",
+      "CONFIG_OUTPUT_GROUPING",
+      "CONTEXT_SUPPORT",
+      "CUSTOMIZABLE_FORMAT_STRINGS",
+      "DIFF_COMMAND",
+      "DOC_001",
+      "DOC_003",
+      "DOC_016",
+      "ERROR_HANDLING",
+      "EXTRACT_008_INTERDEP_MAPPING",
+      "FILE_BACKUP",
+      "GIT_INTEGRATION",
+      "GOV_REGISTRY_COMPLETENESS",
+      "IMMUTABLE_DIRECTORY_OPERATIONS",
+      "INCREMENTAL_DUPLICATE_PREVENTION",
+      "LIST_LIMIT",
+      "MAINTAINABILITY",
+      "MODULE_VALIDATION",
+      "OUTPUT_FORMATTING",
+      "OUT_002",
+      "PERFORMANCE",
+      "RELATED_REQUIREMENT",
+      "RELIABILITY",
+      "RESOURCE_MANAGEMENT",
+      "STDD_VIS",
+      "TEST_EXCLUDE_MERGE",
+      "USABILITY"
+    ],
+    "req_in_both_layers": [
+      "CFG_005",
+      "CFG_006",
+      "CONFIGURATION",
+      "CONFIG_OUTPUT_GROUPING",
+      "CONTEXT_SUPPORT",
+      "CUSTOMIZABLE_FORMAT_STRINGS",
+      "DIFF_COMMAND",
+      "DOC_016",
+      "ERROR_HANDLING",
+      "EXTRACT_008_INTERDEP_MAPPING",
+      "GIT_INTEGRATION",
+      "GOV_REGISTRY_COMPLETENESS",
+      "INCREMENTAL_DUPLICATE_PREVENTION",
+      "LIST_LIMIT",
+      "MAINTAINABILITY",
+      "MODULE_VALIDATION",
+      "OUTPUT_FORMATTING",
+      "PERFORMANCE",
+      "RELATED_REQUIREMENT",
+      "RELIABILITY",
+      "RESOURCE_MANAGEMENT",
+      "STDD_VIS",
+      "TEST_EXCLUDE_MERGE",
+      "USABILITY"
+    ],
+    "arch_without_impl_reference": [
+      "AI_DOCUMENTATION",
+      "BUILD_DISTRIBUTION",
+      "CICD_PIPELINE",
+      "DEPLOYMENT",
+      "EXTENSIBILITY",
+      "IDENTIFIER",
+      "LANGUAGE_SELECTION",
+      "OTHER_DECISION",
+      "PERFORMANCE",
+      "PERF_VALIDATION",
+      "PROJECT_STRUCTURE",
+      "SECURITY"
+    ],
+    "coverage": {
+      "arch_with_impl_refs": 34,
+      "total_arch": 43,
+      "arch_coverage_pct": 79.1,
+      "req_coverage_pct": 75.0
+    }
+  },
+  "category_comparison": {
+    "Build/Deployment": {
+      "architecture": 3,
+      "implementation": 0,
+      "ratio": 0.0
+    },
+    "CLI/UX": {
+      "architecture": 22,
+      "implementation": 8,
+      "ratio": 0.36
+    },
+    "Code Organization": {
+      "architecture": 9,
+      "implementation": 23,
+      "ratio": 2.56
+    },
+    "Comparison": {
+      "architecture": 9,
+      "implementation": 19,
+      "ratio": 2.11
+    },
+    "Configuration": {
+      "architecture": 34,
+      "implementation": 153,
+      "ratio": 4.5
+    },
+    "Documentation": {
+      "architecture": 27,
+      "implementation": 31,
+      "ratio": 1.15
+    },
+    "Error Handling": {
+      "architecture": 3,
+      "implementation": 6,
+      "ratio": 2.0
+    },
+    "File Operations": {
+      "architecture": 6,
+      "implementation": 29,
+      "ratio": 4.83
+    },
+    "Git Integration": {
+      "architecture": 3,
+      "implementation": 8,
+      "ratio": 2.67
+    },
+    "Other": {
+      "architecture": 16,
+      "implementation": 30,
+      "ratio": 1.88
+    },
+    "Output/Formatting": {
+      "architecture": 16,
+      "implementation": 34,
+      "ratio": 2.12
+    },
+    "Performance": {
+      "architecture": 14,
+      "implementation": 5,
+      "ratio": 0.36
+    },
+    "Resource Management": {
+      "architecture": 8,
+      "implementation": 14,
+      "ratio": 1.75
+    },
+    "Security": {
+      "architecture": 10,
+      "implementation": 1,
+      "ratio": 0.1
+    },
+    "Testing": {
+      "architecture": 5,
+      "implementation": 26,
+      "ratio": 5.2
+    },
+    "Visualization": {
+      "architecture": 3,
+      "implementation": 10,
+      "ratio": 3.33
+    }
+  }
+}

@@ -31,36 +31,36 @@
   <text class="cell-text" x="220" y="145" text-anchor="middle">2</text>
 
   <rect x="290" y="120" width="60" height="40" fill="#D2724D"/>
-  <text class="cell-text" x="320" y="145" text-anchor="middle">3</text>
+  <text class="cell-text" x="320" y="145" text-anchor="middle">4</text>
 
-  <rect x="390" y="120" width="60" height="40" fill="#59A14F"/>
-  <text class="cell-text" x="420" y="145" text-anchor="middle">1</text>
+  <rect x="390" y="120" width="60" height="40" fill="#ccc"/>
+  <text class="cell-text" x="420" y="145" text-anchor="middle">0</text>
 
   <!-- Inheritance row -->
   <rect x="90" y="180" width="60" height="40" fill="#4C78A8"/>
-  <text class="cell-text" x="120" y="205" text-anchor="middle">1</text>
+  <text class="cell-text" x="120" y="205" text-anchor="middle">2</text>
 
   <rect x="190" y="180" width="60" height="40" fill="#9C755F"/>
-  <text class="cell-text" x="220" y="205" text-anchor="middle">1</text>
+  <text class="cell-text" x="220" y="205" text-anchor="middle">2</text>
 
   <rect x="290" y="180" width="60" height="40" fill="#D2724D"/>
-  <text class="cell-text" x="320" y="205" text-anchor="middle">2</text>
+  <text class="cell-text" x="320" y="205" text-anchor="middle">5</text>
 
   <rect x="390" y="180" width="60" height="40" fill="#59A14F"/>
   <text class="cell-text" x="420" y="205" text-anchor="middle">1</text>
 
   <!-- Reflection row -->
   <rect x="90" y="240" width="60" height="40" fill="#4C78A8"/>
-  <text class="cell-text" x="120" y="265" text-anchor="middle">1</text>
+  <text class="cell-text" x="120" y="265" text-anchor="middle">2</text>
 
   <rect x="190" y="240" width="60" height="40" fill="#9C755F"/>
-  <text class="cell-text" x="220" y="265" text-anchor="middle">1</text>
+  <text class="cell-text" x="220" y="265" text-anchor="middle">2</text>
 
   <rect x="290" y="240" width="60" height="40" fill="#D2724D"/>
   <text class="cell-text" x="320" y="265" text-anchor="middle">3</text>
 
-  <rect x="390" y="240" width="60" height="40" fill="#59A14F"/>
-  <text class="cell-text" x="420" y="265" text-anchor="middle">2</text>
+  <rect x="390" y="240" width="60" height="40" fill="#ccc"/>
+  <text class="cell-text" x="420" y="265" text-anchor="middle">0</text>
 
   <!-- CLI Output row -->
   <rect x="90" y="300" width="60" height="40" fill="#4C78A8"/>
@@ -70,9 +70,9 @@
   <text class="cell-text" x="220" y="325" text-anchor="middle">2</text>
 
   <rect x="290" y="300" width="60" height="40" fill="#D2724D"/>
-  <text class="cell-text" x="320" y="325" text-anchor="middle">2</text>
+  <text class="cell-text" x="320" y="325" text-anchor="middle">3</text>
 
-  <rect x="390" y="300" width="60" height="40" fill="#59A14F"/>
-  <text class="cell-text" x="420" y="325" text-anchor="middle">1</text>
+  <rect x="390" y="300" width="60" height="40" fill="#ccc"/>
+  <text class="cell-text" x="420" y="325" text-anchor="middle">0</text>
 </svg>
 
