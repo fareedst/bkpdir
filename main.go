@@ -457,8 +457,7 @@ func handleConfigCommand() {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 4: Enhanced config command interface
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // handleEnhancedConfigCommand provides comprehensive configuration inspection with filtering options.
 func handleEnhancedConfigCommand(showAll, showOverrides, showSources bool, outputFormat, filterPattern string) {
 	cwd, err := os.Getwd()
@@ -493,8 +492,7 @@ func handleEnhancedConfigCommand(showAll, showOverrides, showSources bool, outpu
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 5: Command-line options and filtering
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // applyConfigFiltering filters configuration values based on user criteria.
 func applyConfigFiltering(values []ConfigValueWithMetadata, showOverridesOnly bool, filterPattern string) []ConfigValueWithMetadata {
 	var filtered []ConfigValueWithMetadata
@@ -519,8 +517,7 @@ func applyConfigFiltering(values []ConfigValueWithMetadata, showOverridesOnly bo
 	return filtered
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 3: Hierarchical value resolution display
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // displayConfigTree shows configuration in tree format with inheritance chains.
 func displayConfigTree(values []ConfigValueWithMetadata, showSources bool) {
 	// Group by category for tree display
@@ -554,8 +551,7 @@ func displayConfigTree(values []ConfigValueWithMetadata, showSources bool) {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 4: Multiple display formats
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // displayConfigJSON outputs configuration in JSON format for programmatic use.
 func displayConfigJSON(values []ConfigValueWithMetadata, showSources bool) {
 	type ConfigOutput struct {
@@ -598,8 +594,7 @@ func displayConfigJSON(values []ConfigValueWithMetadata, showSources bool) {
 	fmt.Println(string(jsonData))
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 4: Enhanced display with source attribution
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // displayConfigFlat shows configuration in traditional flat table format with enhanced metadata.
 func displayConfigFlat(values []ConfigValueWithMetadata, showSources bool) {
 	// Display configuration file paths first
@@ -636,8 +631,7 @@ func displayConfigFlat(values []ConfigValueWithMetadata, showSources bool) {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 4: Grouped display
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
 // displayConfigGrouped shows configuration grouped by category and ranked by importance.
 func displayConfigGrouped(values []ConfigValueWithMetadata, showSources bool) {
 	// Group by category

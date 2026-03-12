@@ -18,8 +18,10 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
     summary: '- **TestEmptyStringHandling**: Tests empty string handling in various merge scenarios'
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - config_test.go
+    functions:
+      - TestEmptyStringHandling
   traceability:
     architecture:
       - ARCH-TESTING_STRATEGY
@@ -27,7 +29,11 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
       - REQ-CONFIGURATION
       - REQ-CFG_001
       - REQ-CFG_005
-    tests: []
+    tests:
+      - TestEmptyStringHandling
+      - TestEmptyStringHandling/first_file_empty_string,_second_file_value
+      - TestEmptyStringHandling/first_file_value,_second_file_empty_string
+      - TestEmptyStringHandling/both_files_empty_string
     code_annotations:
       - IMPL-TEST_EMPTY_STRING_HANDLING
       - ARCH-TESTING_STRATEGY
@@ -50,8 +56,8 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -79,9 +85,33 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
     ```
   testemptystringhandling: Tests empty string handling in various merge scenarios
   essence_pseudocode: |-
-    # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] — - **TestEmptyStringHandling**: Tests empty string handling in various merge scenarios
+    # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] — Tests empty string handling in configuration merge scenarios
 
-    procedure empty_string_handling_tests():
-      # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] Ensures configuration system correctly handles empty strings in merging scenarios
-      execute()
+    procedure TestEmptyStringHandling():
+      # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] — validates empty string treatment as zero value vs explicit empty during merge
+      save BKPDIR_CONFIG env; defer restore
+      create temp dir
+
+      subtest "first file empty string, second file value":
+        # [REQ-CFG_001] — tests whether empty string in first file is treated as explicit value or zero value
+        create file1.yml with archive_dir_path: "" (empty string)
+        create file2.yml with archive_dir_path: "/new/path"
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        if cfg.ArchiveDirPath == "": empty string treated as explicit (CFG-001 precedence)
+        elif cfg.ArchiveDirPath == "/new/path": empty string treated as zero value
+        else: unexpected — assert error
+
+      subtest "first file value, second file empty string":
+        # [REQ-CFG_001] — verifies first file takes precedence per CFG-001 (earlier files win)
+        create file1-value.yml with archive_dir_path: "/first/path"
+        create file2-empty.yml with archive_dir_path: ""
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ArchiveDirPath == "/first/path" (first file preserved)
+
+      subtest "both files empty string":
+        # [REQ-CFG_001] [REQ-CFG_005] — verifies empty string preserved when both files set it
+        create file1-both-empty.yml with archive_dir_path: ""
+        create file2-both-empty.yml with archive_dir_path: ""
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ArchiveDirPath == "" (empty string preserved)
       end

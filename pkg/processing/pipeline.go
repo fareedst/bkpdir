@@ -84,7 +84,7 @@ type Pipeline struct {
 	processedItems  int64
 }
 
-// NewPipeline creates a new processing pipeline
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] NewPipeline creates a new processing pipeline with default configuration
 func NewPipeline(name string) *Pipeline {
 	return &Pipeline{
 		name:            name,
@@ -130,7 +130,7 @@ func (p *Pipeline) SetProgressCallback(callback func(*PipelineProgress)) {
 	p.progressCallback = callback
 }
 
-// Execute runs the pipeline with context support (extracted from context-aware patterns)
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Execute runs the pipeline stages sequentially with context support and retry logic
 func (p *Pipeline) Execute(ctx context.Context, input *ProcessingInput) (*ProcessingResult, error) {
 	start := time.Now()
 
@@ -218,7 +218,7 @@ func (p *Pipeline) initializeExecution(startTime time.Time) {
 	}
 }
 
-// executeStageWithRetries executes a stage with retry logic
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] executeStageWithRetries executes a stage with configurable retry logic
 func (p *Pipeline) executeStageWithRetries(ctx context.Context, stage PipelineStage, input *ProcessingInput, output *ProcessingResult) *StageResult {
 	stageResult := &StageResult{
 		Name:      stage.GetName(),

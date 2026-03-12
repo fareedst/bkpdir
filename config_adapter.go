@@ -25,10 +25,9 @@ import (
 	"bkpdir/pkg/config"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // ConfigAdapter provides backward compatibility between the original Config struct
-// and the extracted pkg/config package. This allows the original application to
-// continue working unchanged while using the extracted configuration system.
+// and the extracted pkg/config package.
 type ConfigAdapter struct {
 	loader      config.ConfigLoader
 	merger      config.ConfigMerger
@@ -38,8 +37,7 @@ type ConfigAdapter struct {
 	envProvider config.EnvironmentProvider
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// NewConfigAdapter creates a new configuration adapter using the extracted package.
+// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 func NewConfigAdapter() *ConfigAdapter {
 	pathDiscovery := config.NewDefaultPathDiscovery()
 	envProvider := config.NewBackupEnvironmentProvider()
@@ -56,9 +54,8 @@ func NewConfigAdapter() *ConfigAdapter {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// LoadConfig loads configuration using the extracted package but returns the original Config struct.
-// This maintains backward compatibility with existing code.
+// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
+// LoadConfig delegates to GenericConfigLoader then type-asserts back to *Config.
 func (a *ConfigAdapter) LoadConfig(root string) (*Config, error) {
 	// Use the extracted package to load configuration with default config
 	defaultConfig := DefaultConfig()

@@ -9,13 +9,6 @@
 // [REQ-ERROR_HANDLING] Enhanced error handling with structured error types
 // [ARCH-ERROR_HANDLING] Structured error handling strategy
 // [IMPL-STRUCTURED_ERRORS] Structured error types with status codes and operation context
-// ERROR-HANDLING-001: Error handling specification - Error handling and resource management [ACTION:core-functionality]
-// Source: errors.go - ERROR-HANDLING-001
-// Impact: Core functionality requirement for error handling
-
-// SERVICE-ERROR-001: Error service architecture decision - Error service implementation [ACTION:core-functionality]
-// Source: errors.go - SERVICE-ERROR-001
-// Impact: Error service implementation decision
 package main
 
 import (
@@ -30,7 +23,7 @@ import (
 	"syscall"
 )
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // ErrorConfig abstracts configuration dependencies for error handling
 type ErrorConfig interface {
@@ -83,9 +76,7 @@ type ArchiveError struct {
 }
 
 func (e *ArchiveError) Error() string {
-	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
-	// DECISION-REF: DEC-004
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
@@ -96,7 +87,7 @@ func (e *ArchiveError) Unwrap() error {
 	return e.Err
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ArchiveError) GetStatusCode() int {
 	return e.StatusCode
 }
@@ -114,7 +105,7 @@ func (e *ArchiveError) GetMessage() string {
 }
 
 // BackupError represents a structured error with status code for backup operations
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 type BackupError struct {
 	Message    string
 	StatusCode int
@@ -124,7 +115,7 @@ type BackupError struct {
 }
 
 func (e *BackupError) Error() string {
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
@@ -135,7 +126,7 @@ func (e *BackupError) Unwrap() error {
 	return e.Err
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *BackupError) GetStatusCode() int {
 	return e.StatusCode
 }
@@ -152,8 +143,7 @@ func (e *BackupError) GetMessage() string {
 	return e.Message
 }
 
-// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewArchiveError(message string, statusCode int) *ArchiveError {
 	return &ArchiveError{
 		Message:    message,
@@ -161,8 +151,7 @@ func NewArchiveError(message string, statusCode int) *ArchiveError {
 	}
 }
 
-// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewArchiveErrorWithCause(message string, statusCode int, err error) *ArchiveError {
 	return &ArchiveError{
 		Message:    message,
@@ -171,8 +160,7 @@ func NewArchiveErrorWithCause(message string, statusCode int, err error) *Archiv
 	}
 }
 
-// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewArchiveErrorWithContext(
 	message string,
 	statusCode int,
@@ -188,7 +176,7 @@ func NewArchiveErrorWithContext(
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewBackupError(message string, statusCode int) *BackupError {
 	return &BackupError{
 		Message:    message,
@@ -196,7 +184,7 @@ func NewBackupError(message string, statusCode int) *BackupError {
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewBackupErrorWithCause(message string, statusCode int, err error) *BackupError {
 	return &BackupError{
 		Message:    message,
@@ -205,7 +193,7 @@ func NewBackupErrorWithCause(message string, statusCode int, err error) *BackupE
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewBackupErrorWithContext(
 	message string,
 	statusCode int,
@@ -221,12 +209,12 @@ func NewBackupErrorWithContext(
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func IsDiskFullError(err error) bool {
 	if err == nil {
 		return false
 	}
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	errStr := strings.ToLower(err.Error())
 	return strings.Contains(errStr, "no space left on device") ||
 		strings.Contains(errStr, "disk full") ||
@@ -259,7 +247,7 @@ func IsDiskFullError(err error) bool {
 		}()
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func IsPermissionError(err error) bool {
 	if err == nil {
 		return false
@@ -284,7 +272,7 @@ func IsPermissionError(err error) bool {
 		}()
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func IsDirectoryNotFoundError(err error) bool {
 	if err == nil {
 		return false
@@ -304,7 +292,7 @@ func IsDirectoryNotFoundError(err error) bool {
 		}()
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // Resource represents a resource that needs cleanup
 type Resource interface {
@@ -319,8 +307,7 @@ type TempFile struct {
 
 // Cleanup removes the temporary file from the filesystem.
 func (tf *TempFile) Cleanup() error {
-	// DECISION-REF: DEC-006
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return os.Remove(tf.Path)
 }
 
@@ -335,8 +322,7 @@ type TempDir struct {
 
 // Cleanup removes the temporary directory and its contents from the filesystem.
 func (td *TempDir) Cleanup() error {
-	// DECISION-REF: DEC-006
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return os.RemoveAll(td.Path)
 }
 
@@ -344,7 +330,7 @@ func (td *TempDir) String() string {
 	return fmt.Sprintf("temp dir: %s", td.Path)
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 type ResourceManager struct {
 	resources []Resource
 	mutex     sync.RWMutex
@@ -352,31 +338,30 @@ type ResourceManager struct {
 
 // NewResourceManager creates a new ResourceManager for tracking resources.
 func NewResourceManager() *ResourceManager {
-	// DECISION-REF: DEC-006
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return &ResourceManager{
 		resources: make([]Resource, 0),
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) AddResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 	rm.resources = append(rm.resources, resource)
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) AddTempFile(path string) {
 	rm.AddResource(&TempFile{Path: path})
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) AddTempDir(path string) {
 	rm.AddResource(&TempDir{Path: path})
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) RemoveResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -388,7 +373,7 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) Cleanup() error {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -410,7 +395,7 @@ func (rm *ResourceManager) Cleanup() error {
 	return nil
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -420,7 +405,7 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	return rm.Cleanup()
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // ContextualOperation provides context and resource management for operations.
 type ContextualOperation struct {
@@ -428,34 +413,30 @@ type ContextualOperation struct {
 	rm  *ResourceManager
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewContextualOperation(ctx context.Context) *ContextualOperation {
-	// DECISION-REF: DEC-006, DEC-007
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return &ContextualOperation{
 		ctx: ctx,
 		rm:  NewResourceManager(),
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) Context() context.Context {
-	// DECISION-REF: DEC-007
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return co.ctx
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) ResourceManager() *ResourceManager {
-	// DECISION-REF: DEC-006
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return co.rm
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) IsCancelled() bool {
-	// DECISION-REF: DEC-007
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	select {
 	case <-co.ctx.Done():
 		return true
@@ -464,10 +445,9 @@ func (co *ContextualOperation) IsCancelled() bool {
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) CheckCancellation() error {
-	// DECISION-REF: DEC-007
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	select {
 	case <-co.ctx.Done():
 		return co.ctx.Err()
@@ -476,16 +456,15 @@ func (co *ContextualOperation) CheckCancellation() error {
 	}
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) Cleanup() error {
-	// DECISION-REF: DEC-006
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return co.rm.Cleanup()
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if err == nil {
 		return 0
 	}
@@ -520,17 +499,17 @@ func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
 	return cfg.GetStatusCodes()["general_error"]
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleArchiveErrorWithInterface(err *ArchiveError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	return err.GetStatusCode()
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleBackupErrorWithInterface(err *BackupError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	return err.GetStatusCode()
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleArchiveError(err error, cfg *Config, formatter formatter.OutputFormatterInterface) int {
 	if err == nil {
 		return 0
@@ -566,18 +545,16 @@ func HandleArchiveError(err error, cfg *Config, formatter formatter.OutputFormat
 	return 1
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleBackupError(err error, cfg *Config, formatter *OutputFormatter) int {
 	return HandleError(err, cfg, formatter)
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
-	// DECISION-REF: DEC-006, DEC-008
-	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	dir := filepath.Dir(path)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return NewArchiveErrorWithContext("Failed to write temporary file", 1, "atomic_write", path, err)
@@ -607,7 +584,7 @@ func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 	return nil
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, rm *ResourceManager) error {
 	// Check for cancellation before starting
 	select {
@@ -652,9 +629,9 @@ func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, r
 	return nil
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) error {
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsPermissionError(err) {
 			return fmt.Errorf("permission denied creating directory %s: %w", path, err)
@@ -667,9 +644,9 @@ func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) e
 	return nil
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm os.FileMode, cfg ErrorConfig) error {
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	select {
 	case <-ctx.Done():
 		return ctx.Err()
@@ -679,19 +656,18 @@ func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm 
 	return SafeMkdirAllWithInterface(path, perm, cfg)
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 	return SafeMkdirAllWithInterface(path, perm, cfg)
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode, cfg *Config) error {
 	return SafeMkdirAllWithContextAndInterface(ctx, path, perm, cfg)
 }
 
 func ValidateDirectoryPath(path string, cfg *Config) error {
-	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if path == "" {
 		return fmt.Errorf("directory path cannot be empty")
 	}
@@ -719,8 +695,7 @@ func ValidateDirectoryPath(path string, cfg *Config) error {
 }
 
 func ValidateFilePath(path string, cfg *Config) error {
-	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if path == "" {
 		return fmt.Errorf("file path cannot be empty")
 	}
@@ -747,14 +722,14 @@ func ValidateFilePath(path string, cfg *Config) error {
 	return nil
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func WithResourceManager(ctx context.Context) (context.Context, *ResourceManager) {
 	rm := NewResourceManager()
-	// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return context.WithValue(ctx, "resource_manager", rm), rm
 }
 
-// REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func CheckContextAndCleanup(ctx context.Context, rm *ResourceManager) error {
 	select {
 	case <-ctx.Done():

@@ -1,4 +1,4 @@
-// [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 // Package config provides inheritance chain building and path resolution.
 //
 // This file implements the core inheritance functionality that builds dependency
@@ -60,7 +60,7 @@ func (b *DefaultInheritanceChainBuilder) BuildChain(configPath string, pathResol
 	return chain, nil
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (b *DefaultInheritanceChainBuilder) buildChainRecursive(configPath, basePath string, pathResolver PathResolver, chain *InheritanceChain) error {
 	// Resolve the full path
 	resolvedPath, err := pathResolver.ResolvePath(configPath, basePath)
@@ -206,7 +206,7 @@ func NewPathResolver(fileOps ConfigFileOperations) *DefaultPathResolver {
 	}
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (r *DefaultPathResolver) ResolvePath(path string, basePath string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")
@@ -239,7 +239,7 @@ func (r *DefaultPathResolver) ResolvePath(path string, basePath string) (string,
 	return filepath.Clean(resolvedPath), nil
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (r *DefaultPathResolver) ExpandPath(path string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")

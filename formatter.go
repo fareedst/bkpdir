@@ -6,28 +6,9 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// SERVICE-TEMPLATE-001: Template Formatting Service Architecture Decision - Template formatting service implementation [ACTION:format-processing]
-// Source: docs/context/architecture.md - Template Formatting Service section
-// Impact: Template formatting service architecture decision
-
-// SERVICE-OUTPUT-001: Output Formatting Service Architecture Decision - Output formatting service implementation [ACTION:format-processing]
-// Source: docs/context/architecture.md - Output Formatting Service section
-// Impact: Output formatting service architecture decision
-
-// OUTPUT-FORMATTING-001: Output formatting specification - Output formatting and display [ACTION:format-processing]
-// Source: formatter.go - OUTPUT-FORMATTING-001
-// Impact: Core functionality requirement for output formatting
-
-// SERVICE-FORMAT-001: Format service architecture decision - Format service implementation [ACTION:core-functionality]
-// Source: formatter.go - SERVICE-FORMAT-001
-// Impact: Format service implementation decision
 // [REQ-OUTPUT_FORMATTING] Output formatting requirement
 // [ARCH-OUTPUT_FORMATTING] Dual-mode output formatting architecture
 // [IMPL-DUAL_FORMATTING] printf/template formatting implementation
-
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// Component boundaries identified: OutputCollector, PrintfFormatter, TemplateFormatter, PatternExtractor, ErrorFormatter
-// Ready for EXTRACT-003 (Output Formatting System) with config interface abstraction
 package main
 
 import (
@@ -38,11 +19,7 @@ import (
 	"text/template"
 )
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// These interfaces define contracts for clean component extraction
-
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// Abstracts configuration dependency for formatter components
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Configuration abstraction for formatter components
 type FormatProvider interface {
 	GetFormatString(formatType string) string
 	GetTemplateString(templateType string) string
@@ -50,8 +27,7 @@ type FormatProvider interface {
 	GetErrorFormat(errorType string) string
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// Abstracts output handling for formatter components
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Output handling abstraction
 type OutputDestination interface {
 	Print(message string)
 	PrintError(message string)
@@ -59,16 +35,14 @@ type OutputDestination interface {
 	SetCollector(collector *OutputCollector)
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// Defines contract for regex-based data extraction
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Regex-based data extraction contract
 type PatternExtractor interface {
 	ExtractArchiveFilenameData(filename string) map[string]string
 	ExtractBackupFilenameData(filename string) map[string]string
 	ExtractPatternData(pattern, text string) map[string]string
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// Primary formatter interface for printf-style formatting
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Printf-style formatting contract
 type FormatterInterface interface {
 	FormatCreatedArchive(path string) string
 	FormatIdenticalArchive(path string) string
@@ -77,7 +51,7 @@ type FormatterInterface interface {
 	FormatError(message string) string
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Interface for template-based formatting operations
 type TemplateFormatterInterface interface {
 	FormatWithTemplate(input, pattern, tmplStr string) (string, error)
@@ -86,15 +60,14 @@ type TemplateFormatterInterface interface {
 	TemplateIdenticalArchive(data map[string]string) string
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
-// OutputMessage represents a message that can be displayed later
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 type OutputMessage struct {
 	Content     string
 	Destination string // "stdout" or "stderr"
 	Type        string // "info", "error", "warning", etc.
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Output collector ready for immediate extraction
 // OutputCollector collects output messages for delayed display
 type OutputCollector struct {
@@ -110,7 +83,7 @@ func NewOutputCollector() *OutputCollector {
 
 // AddStdout adds a stdout message to the collector
 func (oc *OutputCollector) AddStdout(content, messageType string) {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	oc.messages = append(oc.messages, OutputMessage{
 		Content:     content,
 		Destination: "stdout",
@@ -120,7 +93,7 @@ func (oc *OutputCollector) AddStdout(content, messageType string) {
 
 // AddStderr adds a stderr message to the collector
 func (oc *OutputCollector) AddStderr(content, messageType string) {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	oc.messages = append(oc.messages, OutputMessage{
 		Content:     content,
 		Destination: "stderr",
@@ -130,13 +103,13 @@ func (oc *OutputCollector) AddStderr(content, messageType string) {
 
 // GetMessages returns all collected messages
 func (oc *OutputCollector) GetMessages() []OutputMessage {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	return oc.messages
 }
 
 // FlushAll displays all collected messages and clears the collector
 func (oc *OutputCollector) FlushAll() {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	for _, msg := range oc.messages {
 		if msg.Destination == "stderr" {
 			fmt.Fprint(os.Stderr, msg.Content)
@@ -149,7 +122,7 @@ func (oc *OutputCollector) FlushAll() {
 
 // FlushStdout displays only stdout messages and removes them from the collector
 func (oc *OutputCollector) FlushStdout() {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	remaining := make([]OutputMessage, 0)
 	for _, msg := range oc.messages {
 		if msg.Destination == "stdout" {
@@ -163,7 +136,7 @@ func (oc *OutputCollector) FlushStdout() {
 
 // FlushStderr displays only stderr messages and removes them from the collector
 func (oc *OutputCollector) FlushStderr() {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	remaining := make([]OutputMessage, 0)
 	for _, msg := range oc.messages {
 		if msg.Destination == "stderr" {
@@ -177,46 +150,46 @@ func (oc *OutputCollector) FlushStderr() {
 
 // Clear removes all collected messages without displaying them
 func (oc *OutputCollector) Clear() {
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	oc.messages = make([]OutputMessage, 0)
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Printf Formatter Component (Lines 120-610) - [NOTE] [DECISION:maintenance]
 // Configuration dependency requires interface abstraction for extraction
 // OutputFormatter provides methods for formatting and printing output for BkpDir operations.
 // It supports both printf-style and template-based formatting, with optional delayed output.
 type OutputFormatter struct {
 	cfg *Config
-	// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+	// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 	collector *OutputCollector
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // IsDelayedMode returns true if the formatter is collecting output instead of printing immediately.
 func (f *OutputFormatter) IsDelayedMode() bool {
 	return f.collector != nil
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // GetCollector returns the OutputCollector if in delayed mode, nil otherwise.
 func (f *OutputFormatter) GetCollector() *OutputCollector {
 	return f.collector
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // SetCollector sets the output collector for delayed output, or removes it if nil.
 func (f *OutputFormatter) SetCollector(collector *OutputCollector) {
 	f.collector = collector
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Core Printf Formatters (Lines 166-226) - [NOTE] [DECISION:maintenance]
 // Direct config dependency - format string access needs interface abstraction
 // FormatCreatedArchive formats a message for a created archive.
 // It uses the configured format string to create the output message.
 func (f *OutputFormatter) FormatCreatedArchive(path string) string {
-	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+	// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 	result := fmt.Sprintf(f.cfg.FormatCreatedArchive, path)
 	if debug {
 		fmt.Fprintf(os.Stderr, "DEBUG: FormatCreatedArchive called with path: %s\n", path)
@@ -244,13 +217,11 @@ func (f *OutputFormatter) FormatIdenticalArchive(path string) string {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// FormatListArchive formats a message for listing an archive.
-// It uses the configured format string to create the output message with path and creation time.
 // FormatListArchive formats a list archive message.
-// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]
+// Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
-// [IMPL-LIST_FORMAT_SAFETY] Ensure safe formatting for list output
 func (f *OutputFormatter) FormatListArchive(path, creationTime string) string {
 	formatStr := f.cfg.FormatListArchive
 
@@ -334,7 +305,7 @@ func (f *OutputFormatter) FormatError(message string) string {
 	return fmt.Sprintf(f.cfg.FormatError, message)
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Print Output Methods (Lines 228-405) - [NOTE] [DECISION:maintenance]
 // Format + Print with optional delayed output via collector
 // PrintCreatedArchive prints a message for a created archive.
@@ -342,7 +313,7 @@ func (f *OutputFormatter) FormatError(message string) string {
 func (f *OutputFormatter) PrintCreatedArchive(path string) {
 	message := f.FormatCreatedArchive(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -353,14 +324,14 @@ func (f *OutputFormatter) PrintCreatedArchive(path string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintIdenticalArchive prints an identical archive message to stdout.
 // It formats the message using FormatIdenticalArchive and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintIdenticalArchive(path string) {
 	message := f.FormatIdenticalArchive(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -371,14 +342,14 @@ func (f *OutputFormatter) PrintIdenticalArchive(path string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintListArchive prints a list archive message to stdout.
 // It formats the message using FormatListArchive and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintListArchive(path, creationTime string) {
 	message := f.FormatListArchive(path, creationTime)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -389,14 +360,14 @@ func (f *OutputFormatter) PrintListArchive(path, creationTime string) {
 // IMMUTABLE-REF: Output Formatting Requirements, Commands - Display Configuration
 // TEST-REF: TestDisplayConfig
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintConfigValue prints a config value message to stdout.
 // It formats the message using FormatConfigValue and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintConfigValue(name, value, source string) {
 	message := f.FormatConfigValue(name, value, source)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "config")
 	} else {
 		fmt.Print(message)
@@ -407,14 +378,14 @@ func (f *OutputFormatter) PrintConfigValue(name, value, source string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintDryRunArchive prints a dry-run archive message to stdout.
 // It formats the message using FormatDryRunArchive and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintDryRunArchive(path string) {
 	message := f.FormatDryRunArchive(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "dry-run")
 	} else {
 		fmt.Print(message)
@@ -425,14 +396,14 @@ func (f *OutputFormatter) PrintDryRunArchive(path string) {
 // IMMUTABLE-REF: Output Formatting Requirements, Error Handling Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintError prints an error message to stderr.
 // It formats the message using FormatError and writes it to stderr.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintError(message string) {
 	errorMessage := f.FormatError(message)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(errorMessage, "error")
 	} else {
 		fmt.Fprint(os.Stderr, errorMessage)
@@ -443,14 +414,14 @@ func (f *OutputFormatter) PrintError(message string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintCreatedBackup prints a created backup message to stdout.
 // It formats the message using FormatCreatedBackup and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintCreatedBackup(path string) {
 	message := f.FormatCreatedBackup(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -461,14 +432,14 @@ func (f *OutputFormatter) PrintCreatedBackup(path string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintIdenticalBackup prints an identical backup message to stdout.
 // It formats the message using FormatIdenticalBackup and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintIdenticalBackup(path string) {
 	message := f.FormatIdenticalBackup(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -479,14 +450,14 @@ func (f *OutputFormatter) PrintIdenticalBackup(path string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintListBackup prints a list backup message to stdout.
 // It formats the message using FormatListBackup and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintListBackup(path, creationTime string) {
 	message := f.FormatListBackup(path, creationTime)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -497,21 +468,21 @@ func (f *OutputFormatter) PrintListBackup(path, creationTime string) {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // PrintDryRunBackup prints a dry-run backup message to stdout.
 // It formats the message using FormatDryRunBackup and writes it to stdout.
 // If in delayed mode, the message is collected instead of printed immediately.
 func (f *OutputFormatter) PrintDryRunBackup(path string) {
 	message := f.FormatDryRunBackup(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "dry-run")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Pattern Extraction Methods (Lines 406-482) - [NOTE] [DECISION:maintenance]
 // Regex-based data extraction - shared functionality
 // ExtractArchiveFilenameData extracts data from archive filename patterns.
@@ -608,7 +579,7 @@ func (f *OutputFormatter) FormatListArchiveWithExtraction(archivePath, creationT
 		}
 	}
 
-	// Priority selection for formatting (IMPL:LIST_FORMAT_SAFETY):
+	// [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] Priority selection for formatting:
 	// 1. If user-specified FormatListArchive contains template placeholders (#{}) -> use it with data
 	// 2. Else if user-specified FormatListArchive contains printf verbs (%%) -> use fmt.Sprintf with path/creationTime
 	// 3. Else if TemplateListArchive is provided -> use template with data
@@ -667,12 +638,11 @@ func (f *OutputFormatter) FormatIdenticalBackup(path string) string {
 // IMMUTABLE-REF: Output Formatting Requirements
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// FormatListBackup formats a message for listing a backup.
 // FormatListBackup formats a list backup message.
-// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]
+// Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
-// [IMPL-LIST_FORMAT_SAFETY] Ensure safe formatting for backup list output
 func (f *OutputFormatter) FormatListBackup(path, creationTime string) string {
 	formatStr := f.cfg.FormatListBackup
 
@@ -735,7 +705,7 @@ func (f *OutputFormatter) FormatDryRunBackup(path string) string {
 	return fmt.Sprintf(f.cfg.FormatDryRunBackup, path)
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Template Integration Methods (Lines 532-609) - [NOTE] [DECISION:maintenance]
 // Bridge between printf and template systems
 // FormatCreatedArchiveTemplate formats using template with extracted data.
@@ -938,7 +908,7 @@ func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]str
 	return result
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Pattern Extraction Methods (Lines 406-482) - [NOTE] [DECISION:maintenance]
 // Regex-based data extraction - shared functionality
 // ExtractArchiveFilenameData extracts data from archive filename patterns.
@@ -963,7 +933,7 @@ func (f *OutputFormatter) extractPatternData(pattern, text string) map[string]st
 	return result
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Template Formatter Component (Lines 637-928) - [NOTE] [DECISION:maintenance]
 // Configuration dependency requires interface abstraction for extraction
 // TemplateFormatter provides methods for template-based output formatting.
@@ -978,7 +948,7 @@ func NewTemplateFormatter(cfg *Config) *TemplateFormatter {
 	return &TemplateFormatter{config: cfg}
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Template Engine Core (Lines 657-717) - [NOTE] [DECISION:maintenance]
 // Self-contained template processing with pattern extraction
 // FormatWithTemplate formats input using a pattern and template string.
@@ -1156,7 +1126,7 @@ func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[stri
 	return result
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Template Method Series (Lines 718-817) - [NOTE] [DECISION:maintenance]
 // Direct config template dependency - needs interface abstraction
 // TemplateCreatedArchive formats a created archive message using a template.
@@ -1375,7 +1345,7 @@ func getDataKeys(m map[string]string) []string {
 	return keys
 }
 
-// REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Extended Printf Formatters (Lines 929-1084) - [CHECK] [DECISION:maintenance]
 // Complex formatting requiring data extraction - extends core printf functionality
 func (f *OutputFormatter) FormatBackupWithExtraction(backupPath string) string {
@@ -1419,7 +1389,7 @@ func (f *OutputFormatter) FormatIncrementalCreated(path string) string {
 	return fmt.Sprintf(f.cfg.FormatIncrementalCreated, path)
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
 // FormatCreatedArchiveWithStats formats a created archive message with file statistics using named replacements
 func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 	// Gather file statistics
@@ -1442,7 +1412,7 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 	}
 
 	// Use detailed template string with named replacements
-	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+	// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 	templateStr := f.cfg.TemplateCreatedArchiveDetailed
 	if templateStr == "" {
 		// Fallback to basic format if template is not configured
@@ -1500,6 +1470,7 @@ func (f *OutputFormatter) FormatCreatedArchiveWithStats(path string) string {
 	return result
 }
 
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
 // FormatIncrementalCreatedWithStats formats an incremental archive message with file statistics using named replacements
 func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string {
 	// Gather file statistics
@@ -1522,7 +1493,7 @@ func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string 
 	}
 
 	// Use detailed template string with named replacements
-	// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+	// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 	if f.cfg.TemplateIncrementalCreatedDetailed == "" {
 		// Fallback to basic format if template is not configured
 		return f.FormatIncrementalCreated(path)
@@ -1582,7 +1553,7 @@ func (f *OutputFormatter) FormatIncrementalCreatedWithStats(path string) string 
 func (f *OutputFormatter) PrintCreatedArchiveWithStats(path string) {
 	message := f.FormatCreatedArchiveWithStats(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -1593,14 +1564,14 @@ func (f *OutputFormatter) PrintCreatedArchiveWithStats(path string) {
 func (f *OutputFormatter) PrintIncrementalCreatedWithStats(path string) {
 	message := f.FormatIncrementalCreatedWithStats(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 // TemplateCreatedArchiveWithStats formats a created archive message using template with file statistics
 func (f *OutputFormatter) TemplateCreatedArchiveWithStats(path string) string {
 	// Gather file statistics
@@ -1709,73 +1680,73 @@ func (f *OutputFormatter) FormatNoFilesModified() string {
 func (f *OutputFormatter) PrintNoArchivesFound(archiveDir string) {
 	message := f.FormatNoArchivesFound(archiveDir)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintConfigurationUpdated(key string, value interface{}) {
 	message := f.FormatConfigurationUpdated(key, value)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "config")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintConfigFilePath(path string) {
 	message := f.FormatConfigFilePath(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "config")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintDryRunFilesHeader() {
 	message := f.FormatDryRunFilesHeader()
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "dry-run")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintDryRunFileEntry(file string) {
 	message := f.FormatDryRunFileEntry(file)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "dry-run")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintNoFilesModified() {
 	message := f.FormatNoFilesModified()
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintIncrementalCreated(path string) {
 	message := f.FormatIncrementalCreated(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -1833,7 +1804,7 @@ func (f *OutputFormatter) PrintIncrementalSkippedNoChanges() {
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 func (f *OutputFormatter) FormatNoBackupsFound(filename, backupDir string) string {
 	return fmt.Sprintf(f.cfg.FormatNoBackupsFound, filename, backupDir)
 }
@@ -1851,44 +1822,44 @@ func (f *OutputFormatter) FormatBackupCreated(path string) string {
 }
 
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintNoBackupsFound(filename, backupDir string) {
 	message := f.FormatNoBackupsFound(filename, backupDir)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintBackupWouldCreate(path string) {
 	message := f.FormatBackupWouldCreate(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "dry-run")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintBackupIdentical(path string) {
 	message := f.FormatBackupIdentical(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintBackupCreated(path string) {
 	message := f.FormatBackupCreated(path)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		fmt.Print(message)
@@ -2054,144 +2025,144 @@ func (f *OutputFormatter) TemplateFailedAccessFile(err error) string {
 }
 
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintDiskFullError(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatDiskFullError(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintPermissionError(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatPermissionError(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintDirectoryNotFound(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatDirectoryNotFound(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFileNotFound(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFileNotFound(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintInvalidDirectory(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatInvalidDirectory(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintInvalidFile(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatInvalidFile(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFailedWriteTemp(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFailedWriteTemp(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFailedFinalizeFile(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFailedFinalizeFile(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFailedCreateDirDisk(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFailedCreateDirDisk(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFailedCreateDir(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFailedCreateDir(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFailedAccessDir(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFailedAccessDir(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
 	}
 }
 
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintFailedAccessFile(err error) {
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 	message := f.FormatFailedAccessFile(err)
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStderr(message, "error")
 	} else {
 		fmt.Fprint(os.Stderr, message)
@@ -2199,14 +2170,14 @@ func (f *OutputFormatter) PrintFailedAccessFile(err error) {
 }
 
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func (f *OutputFormatter) PrintArchiveListWithStatus(output, status string) {
 	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use os.Stdout.WriteString, NOT fmt.Print
 	// to avoid fmt misinterpreting #{...} patterns as format verbs
 	// fmt.Print internally uses fmt.Sprintf("%v", ...) which can misinterpret #{...} as format verbs
 	message := output + status + "\n"
 	if f.collector != nil {
-		// OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
+		// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 		f.collector.AddStdout(message, "info")
 	} else {
 		os.Stdout.WriteString(message)

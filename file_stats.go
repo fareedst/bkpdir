@@ -9,13 +9,6 @@
 // [REQ-OUTPUT_FORMATTING] File statistics and information gathering
 // [ARCH-FILE_STATISTICS] File statistics gathering for enhanced output formatting
 // [IMPL-FILE_STATISTICS] FileStatInfo structure with human-readable formatting
-// STATS-FEATURES-001: Statistics features specification - File statistics and information gathering [ACTION:format-processing]
-// Source: file_stats.go - STATS-FEATURES-001
-// Impact: Core functionality requirement for statistics features
-
-// SERVICE-STATS-001: Statistics service architecture decision - Statistics service implementation [ACTION:core-functionality]
-// Source: file_stats.go - SERVICE-STATS-001
-// Impact: Statistics service implementation decision
 package main
 
 import (

@@ -11,9 +11,8 @@ import (
 	"path/filepath"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-
 // AtomicWriter provides atomic file writing capabilities
+// [IMPL-ATOMIC_OPS] AtomicWriter — temp-file lifecycle for a single atomic write target
 type AtomicWriter struct {
 	targetPath  string
 	tempPath    string
@@ -23,6 +22,7 @@ type AtomicWriter struct {
 }
 
 // AtomicOp defines the interface for atomic file operations
+// [IMPL-ATOMIC_OPS] AtomicOp — contract for atomic write/commit/rollback
 type AtomicOp interface {
 	Write(data []byte) (int, error)
 	WriteString(s string) (int, error)
@@ -32,9 +32,8 @@ type AtomicOp interface {
 }
 
 // NewAtomicWriter creates a new atomic writer for the target path
+// [IMPL-ATOMIC_OPS] NewAtomicWriter — creates temp file in same dir for same-filesystem rename
 func NewAtomicWriter(targetPath string) (*AtomicWriter, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-
 	// Validate the target path
 	if err := ValidatePath(targetPath); err != nil {
 		return nil, fmt.Errorf("invalid target path: %v", err)
@@ -64,8 +63,8 @@ func NewAtomicWriter(targetPath string) (*AtomicWriter, error) {
 }
 
 // Write writes data to the temporary file
+// [IMPL-ATOMIC_OPS] AtomicWriter.Write — writes bytes to temp file, guards closed state
 func (aw *AtomicWriter) Write(data []byte) (int, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isClosed {
 		return 0, fmt.Errorf("writer is closed")
 	}
@@ -77,14 +76,14 @@ func (aw *AtomicWriter) Write(data []byte) (int, error) {
 }
 
 // WriteString writes a string to the temporary file
+// [IMPL-ATOMIC_OPS] AtomicWriter.WriteString — converts string to bytes and delegates
 func (aw *AtomicWriter) WriteString(s string) (int, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return aw.Write([]byte(s))
 }
 
 // Commit atomically moves the temporary file to the target location
+// [IMPL-ATOMIC_OPS] AtomicWriter.Commit — closes temp file then renames to target
 func (aw *AtomicWriter) Commit() error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isCommitted {
 		return fmt.Errorf("already committed")
 	}
@@ -113,8 +112,8 @@ func (aw *AtomicWriter) Commit() error {
 }
 
 // Rollback removes the temporary file without committing
+// [IMPL-ATOMIC_OPS] AtomicWriter.Rollback — removes temp file, prevents committed rollback
 func (aw *AtomicWriter) Rollback() error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isCommitted {
 		return fmt.Errorf("cannot rollback after commit")
 	}
@@ -123,8 +122,8 @@ func (aw *AtomicWriter) Rollback() error {
 }
 
 // Close closes the writer and cleans up if not committed
+// [IMPL-ATOMIC_OPS] AtomicWriter.Close — idempotent close, rolls back if not committed
 func (aw *AtomicWriter) Close() error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	if aw.isClosed {
 		return nil
 	}
@@ -138,8 +137,8 @@ func (aw *AtomicWriter) Close() error {
 }
 
 // cleanup removes the temporary file
+// [IMPL-ATOMIC_OPS] AtomicWriter.cleanup — closes handle and removes temp from disk
 func (aw *AtomicWriter) cleanup() error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	var err error
 
 	if aw.tempFile != nil {
@@ -158,9 +157,8 @@ func (aw *AtomicWriter) cleanup() error {
 }
 
 // AtomicCopy copies a file atomically from source to destination
+// [IMPL-ATOMIC_OPS] AtomicCopy — streams src to AtomicWriter, sets perms, commits
 func AtomicCopy(src, dst string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-
 	// Validate paths
 	if err := ValidateReadable(src); err != nil {
 		return fmt.Errorf("source file validation failed: %v", err)
@@ -209,9 +207,8 @@ func AtomicCopy(src, dst string) error {
 }
 
 // AtomicWriteFile writes data to a file atomically
+// [IMPL-ATOMIC_OPS] AtomicWriteFile — writes byte slice atomically with given permissions
 func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-
 	writer, err := NewAtomicWriter(filename)
 	if err != nil {
 		return err
@@ -231,7 +228,7 @@ func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
 }
 
 // AtomicWriteString writes a string to a file atomically
+// [IMPL-ATOMIC_OPS] AtomicWriteString — converts string and delegates to AtomicWriteFile
 func AtomicWriteString(filename, data string, perm os.FileMode) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 	return AtomicWriteFile(filename, []byte(data), perm)
 }

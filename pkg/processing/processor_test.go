@@ -9,9 +9,7 @@ import (
 	"time"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Naming System
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] TestNamingProvider validates naming provider generation and parsing
 func TestNamingProvider(t *testing.T) {
 	np := NewNamingProvider()
 
@@ -59,9 +57,7 @@ func TestNamingProvider(t *testing.T) {
 	}
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Pipeline System
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] TestPipeline validates pipeline execution with stages
 func TestPipeline(t *testing.T) {
 	pipeline := NewPipeline("test-pipeline")
 
@@ -103,9 +99,7 @@ func TestPipeline(t *testing.T) {
 	}
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Concurrent System
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] TestConcurrentProcessor validates concurrent worker pool processing
 func TestConcurrentProcessor(t *testing.T) {
 	// Create test processor function
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {
@@ -153,9 +147,7 @@ func TestConcurrentProcessor(t *testing.T) {
 	}
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Context System
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] TestContextCancellation validates context cancellation behavior
 func TestContextCancellation(t *testing.T) {
 	// Create a slow processor function that always checks for cancellation
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {
@@ -225,9 +217,7 @@ func TestContextCancellation(t *testing.T) {
 		err, result.FailedItems, result.SuccessfulItems, result.TotalItems, len(items))
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Processing Utility System
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] TestUtilityFunctions validates convenience processing functions
 func TestUtilityFunctions(t *testing.T) {
 	// Test ProcessItems convenience function
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {

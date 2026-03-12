@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
 func TestGetFieldImportance(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -29,6 +30,7 @@ func TestGetFieldImportance(t *testing.T) {
 	}
 }
 
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
 func TestCategoryPriority(t *testing.T) {
 	// Verify critical categories have lower priority values (appear first)
 	if CategoryPriority["basic_settings"] >= CategoryPriority["advanced"] {

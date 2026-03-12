@@ -4,15 +4,11 @@
 // It handles individual file backup creation, comparison, and management.
 
 // [REQ-FILE_BACKUP] File backup creation and management
+// [REQ-CODE_QUALITY] Type-safe data structures for backup operations
 // [ARCH-RESOURCE_MANAGEMENT] Atomic operations for file backups
+// [ARCH-SYSTEM_COMPONENTS] Backup data models and interface adapters
 // [IMPL-ATOMIC_OPS] Temporary files with atomic rename
-// BACKUP-FEATURES-001: File Backup Operations Specification - File backup creation and management [ACTION:core-functionality]
-// Source: docs/context/specification.md - File Backup Operations section
-// Impact: Core functionality requirement for file backup operations
-
-// SERVICE-BACKUP-001: Backup Service Architecture Decision - Backup service implementation [ACTION:core-functionality]
-// Source: docs/context/architecture.md - File Backup Service section
-// Impact: Backup service architecture decision
+// [IMPL-DATA_MODELS] BackupInfo, Backup, BackupOptions structs; BackupConfigInterface, BackupFormatterInterface; adapter types
 package main
 
 import (

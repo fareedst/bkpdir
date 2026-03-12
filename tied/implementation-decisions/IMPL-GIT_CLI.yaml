@@ -21,14 +21,130 @@ IMPL-GIT_CLI:
       Status detection: `git status --porcelain`
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - path: git.go
+        description: Root-level adapter layer — backward-compatible API delegating to pkg/git
+      - path: pkg/git/git.go
+        description: Core Git CLI implementation — Config, Repo, Repository interface, convenience functions
+    functions:
+      - name: DefaultConfig
+        file: pkg/git/git.go
+        description: Returns Config with sensible defaults for all git settings
+      - name: NewRepository
+        file: pkg/git/git.go
+        description: Creates Repo with DefaultConfig
+      - name: NewRepositoryWithConfig
+        file: pkg/git/git.go
+        description: Creates Repo with caller-supplied Config
+      - name: Repo.executeGitCommand
+        file: pkg/git/git.go
+        description: Runs exec.Command("git", args...) with configured dir; returns trimmed output or GitError
+      - name: Repo.IsRepository
+        file: pkg/git/git.go
+        description: Checks git rev-parse --is-inside-work-tree == "true"
+      - name: Repo.GetBranch
+        file: pkg/git/git.go
+        description: Returns current branch via git rev-parse --abbrev-ref HEAD
+      - name: Repo.GetShortHash
+        file: pkg/git/git.go
+        description: Returns short commit hash via git rev-parse --short HEAD
+      - name: Repo.IsWorkingDirectoryClean
+        file: pkg/git/git.go
+        description: Returns true when git status --porcelain is empty
+      - name: Repo.GetInfo
+        file: pkg/git/git.go
+        description: Aggregates IsRepository + GetBranch + GetShortHash into Info struct
+      - name: Repo.GetInfoWithStatus
+        file: pkg/git/git.go
+        description: Extends GetInfo with dirty-status and submodule info per config flags
+      - name: Repo.IsSubmodule
+        file: pkg/git/git.go
+        description: Checks git rev-parse --show-superproject-working-tree for non-empty output
+      - name: Repo.GetSubmodules
+        file: pkg/git/git.go
+        description: Parses git submodule status --recursive output into []SubmoduleInfo
+      - name: Repo.GetSubmoduleStatus
+        file: pkg/git/git.go
+        description: Returns status string (clean/dirty/uninitialized/conflict/unknown) for a submodule path
+      - name: Repo.parseSubmoduleStatusLine
+        file: pkg/git/git.go
+        description: Parses one line of git submodule status into SubmoduleInfo
+      - name: Repo.getSubmoduleURL
+        file: pkg/git/git.go
+        description: Reads submodule URL from .gitmodules via git config --file
+      - name: IsGitRepository
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to IsRepository
+      - name: GetGitBranch
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to GetBranch
+      - name: GetGitShortHash
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to GetShortHash
+      - name: GetGitInfo
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, returns branch+hash
+      - name: IsGitWorkingDirectoryClean
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to IsWorkingDirectoryClean
+      - name: GetGitInfoWithStatus
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo with dirty-status enabled
+      - name: IsGitSubmodule
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to IsSubmodule
+      - name: GetGitSubmodules
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to GetSubmodules
+      - name: GetGitSubmoduleStatus
+        file: pkg/git/git.go
+        description: Package-level convenience — ephemeral Repo, delegates to GetSubmoduleStatus
+      - name: IsGitRepository
+        file: git.go
+        description: Root adapter — delegates to git.IsGitRepository
+      - name: GetGitBranch
+        file: git.go
+        description: Root adapter — delegates to git.GetGitBranch
+      - name: GetGitShortHash
+        file: git.go
+        description: Root adapter — delegates to git.GetGitShortHash
+      - name: GetGitInfo
+        file: git.go
+        description: Root adapter — delegates to git.GetGitInfo
+      - name: IsGitWorkingDirectoryClean
+        file: git.go
+        description: Root adapter — delegates to git.IsGitWorkingDirectoryClean
+      - name: GetGitInfoWithStatus
+        file: git.go
+        description: Root adapter — delegates to git.GetGitInfoWithStatus
+      - name: IsGitSubmodule
+        file: git.go
+        description: Root adapter — delegates to git.IsGitSubmodule
+      - name: GetGitSubmodules
+        file: git.go
+        description: Root adapter — delegates to git.GetGitSubmodules
+      - name: GetGitSubmoduleStatus
+        file: git.go
+        description: Root adapter — delegates to git.GetGitSubmoduleStatus
   traceability:
     architecture:
       - ARCH-GIT_INTEGRATION
     requirements:
       - REQ-GIT_INTEGRATION
-    tests: []
+    tests:
+      # git_test.go (root — adapter-level tests)
+      - TestGitIntegration
+      - TestGitNaming
+      - TestGitStatus
+      - TestGitSubmoduleIntegration
+      # pkg/git/git_test.go (package-level tests)
+      - TestGitIntegration # pkg/git package
+      - TestGitConfiguration
+      - TestGitBranchExtraction
+      - TestGitStatus # pkg/git package
+      - TestBackwardCompatibilityFunctions
+      - TestGitError
+      - TestGitSubmodules
     code_annotations:
       - IMPL-GIT_CLI
       - ARCH-GIT_INTEGRATION
@@ -39,6 +155,7 @@ IMPL-GIT_CLI:
     see_also:
       - ARCH-GIT_INTEGRATION
       - REQ-GIT_INTEGRATION
+      - IMPL-GIT_DIRTY_CONFIG
     composed_with: []
   detail_file: implementation-decisions/IMPL-GIT_CLI.yaml
   metadata:
@@ -47,17 +164,195 @@ IMPL-GIT_CLI:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
   code_markers: '`exec.Command("git", ...)` calls, Git command parsing'
   essence_pseudocode: |-
-    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Uses `exec.Command("git", ...)` for Git operations
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Git CLI integration using exec.Command("git", ...) for repository detection,
+    # branch/hash extraction, working-directory status, and submodule operations.
+    # Two-layer design: pkg/git implements logic; git.go is a backward-compatible adapter.
 
-    procedure git_command_line_integration():
-      # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Simplicity over Git library dependencies
-      execute()
-      end
+    # ── Data Structures ───────────────────────────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Config, Info, SubmoduleInfo, GitError supporting the Repository interface.
+
+    DATA Config:
+      Enabled, IncludeInfo, ShowDirtyStatus       bool
+      Command, WorkingDirectory                   string
+      RequireCleanRepo, AutoDetectRepo            bool
+      IncludeSubmodules                           bool
+      IncludeBranch, IncludeHash, IncludeStatus   bool
+      CommandTimeout                              string
+      MaxSubmoduleDepth                           int
+      # Legacy compat
+      IncludeDirtyStatus                          bool
+      GitCommand                                  string
+
+    DATA Info:
+      Branch, Hash  string
+      IsClean       bool
+      IsRepo        bool
+      IsSubmodule   bool
+      Submodules    []SubmoduleInfo
+
+    DATA SubmoduleInfo:
+      Name, Path, URL, Hash, Status  string
+
+    DATA GitError:
+      Operation  string
+      Err        error
+
+    INTERFACE Repository:
+      IsRepository() -> bool
+      GetBranch() -> (string, error)
+      GetShortHash() -> (string, error)
+      IsWorkingDirectoryClean() -> (bool, error)
+      GetInfo() -> (*Info, error)
+      GetInfoWithStatus() -> (*Info, error)
+      IsSubmodule() -> (bool, error)
+      GetSubmodules() -> ([]SubmoduleInfo, error)
+      GetSubmoduleStatus(path) -> (string, error)
+
+    # ── Core Execution ────────────────────────────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # All git operations go through executeGitCommand.
+
+    procedure DEFAULT_CONFIG() -> *Config:
+      RETURN Config with sensible defaults:
+        Enabled=true, Command="git", WorkingDirectory=".",
+        AutoDetectRepo=true, IncludeBranch=true, IncludeHash=true,
+        IncludeStatus=true, CommandTimeout="30s", MaxSubmoduleDepth=3
+
+    procedure EXECUTE_GIT_COMMAND(args...) -> (string, error):
+      # Resolve git command with legacy fallback
+      gitCmd = config.Command OR config.GitCommand OR "git"
+      cmd = exec.Command(gitCmd, args...)
+      cmd.Dir = config.WorkingDirectory
+      output, err = cmd.Output()
+      IF err: RETURN "", GitError{Operation=join(args), Err=err}
+      RETURN TrimSpace(output), nil
+
+    # ── Repository Detection ──────────────────────────────────────────
+    # Delegates to git rev-parse --is-inside-work-tree.
+    procedure IS_REPOSITORY() -> bool:
+      out, err = EXECUTE_GIT_COMMAND("rev-parse", "--is-inside-work-tree")
+      RETURN err == nil AND out == "true"
+
+    # ── Branch Extraction ─────────────────────────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Guards with IS_REPOSITORY check, then extracts branch name.
+    procedure GET_BRANCH() -> (string, error):
+      IF NOT IS_REPOSITORY(): RETURN "", GitError{Op="branch detection", not a repo}
+      RETURN EXECUTE_GIT_COMMAND("rev-parse", "--abbrev-ref", "HEAD")
+
+    # ── Hash Extraction ───────────────────────────────────────────────
+    # Guards with IS_REPOSITORY check, then extracts short hash.
+    procedure GET_SHORT_HASH() -> (string, error):
+      IF NOT IS_REPOSITORY(): RETURN "", GitError{Op="hash extraction", not a repo}
+      RETURN EXECUTE_GIT_COMMAND("rev-parse", "--short", "HEAD")
+
+    # ── Status Detection ──────────────────────────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Clean when git status --porcelain returns empty output.
+    procedure IS_WORKING_DIRECTORY_CLEAN() -> (bool, error):
+      IF NOT IS_REPOSITORY(): RETURN false, GitError{Op="status check", not a repo}
+      out, err = EXECUTE_GIT_COMMAND("status", "--porcelain")
+      IF err: RETURN false, err
+      RETURN len(out) == 0, nil
+
+    # ── Aggregated Info ───────────────────────────────────────────────
+    # Composes IsRepository, GetBranch, GetShortHash into Info.
+    procedure GET_INFO() -> (*Info, error):
+      info = Info{ IsRepo = IS_REPOSITORY() }
+      IF NOT info.IsRepo: RETURN info, nil
+      info.Branch, err = GET_BRANCH()
+      IF err: RETURN info, err
+      info.Hash, err = GET_SHORT_HASH()
+      IF err: RETURN info, err
+      RETURN info, nil
+
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Extends GET_INFO with dirty status and submodule info based on config flags.
+    procedure GET_INFO_WITH_STATUS() -> (*Info, error):
+      info, err = GET_INFO()
+      IF err OR NOT info.IsRepo: RETURN info, err
+      # [IMPL-GIT_CLI] Dirty status conditional on config
+      IF config.ShowDirtyStatus OR config.IncludeDirtyStatus:
+        info.IsClean, err = IS_WORKING_DIRECTORY_CLEAN()
+        IF err: RETURN info, err
+      # [IMPL-GIT_CLI] Submodule info conditional on config
+      IF config.IncludeSubmodules:
+        info.IsSubmodule, err = IS_SUBMODULE()
+        IF err: RETURN info, err
+        info.Submodules, err = GET_SUBMODULES()
+        IF err: RETURN info, err
+      RETURN info, nil
+
+    # ── Submodule Operations ──────────────────────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Submodule detection, listing, and status via git CLI commands.
+
+    procedure IS_SUBMODULE() -> (bool, error):
+      IF NOT IS_REPOSITORY(): RETURN false, nil
+      out, err = EXECUTE_GIT_COMMAND("rev-parse", "--show-superproject-working-tree")
+      IF err: RETURN false, nil
+      RETURN TrimSpace(out) != "", nil
+
+    procedure GET_SUBMODULES() -> ([]SubmoduleInfo, error):
+      IF NOT IS_REPOSITORY(): RETURN nil, GitError{Op="submodule listing"}
+      out, err = EXECUTE_GIT_COMMAND("submodule", "status", "--recursive")
+      IF err: RETURN [], nil  # no submodules
+      submodules = []
+      FOR line IN split(out, "\n"):
+        IF line == "": CONTINUE
+        sub, err = PARSE_SUBMODULE_STATUS_LINE(line)
+        IF err: CONTINUE  # skip malformed
+        submodules.append(sub)
+      RETURN submodules, nil
+
+    procedure GET_SUBMODULE_STATUS(path) -> (string, error):
+      IF NOT IS_REPOSITORY(): RETURN "", GitError{Op="submodule status"}
+      out, err = EXECUTE_GIT_COMMAND("submodule", "status", path)
+      IF err: RETURN "", GitError{Op="submodule status", Err=err}
+      IF len(out) == 0: RETURN "unknown", nil
+      SWITCH out[0]:
+        ' ': RETURN "clean"
+        '+': RETURN "dirty"
+        '-': RETURN "uninitialized"
+        'U': RETURN "conflict"
+        default: RETURN "unknown"
+
+    # [IMPL-GIT_CLI] Parses "[status][hash] [path] [(desc)]" format.
+    procedure PARSE_SUBMODULE_STATUS_LINE(line) -> (SubmoduleInfo, error):
+      IF len(line) < 2: RETURN error("invalid line")
+      status = map line[0] to clean/dirty/uninitialized/conflict/unknown
+      parts = Fields(line[1:])
+      IF len(parts) < 2: RETURN error("invalid format")
+      hash = parts[0]; path = parts[1]
+      name = last path component of path
+      url = GET_SUBMODULE_URL(path) or ""
+      RETURN SubmoduleInfo{name, path, url, hash, status}, nil
+
+    procedure GET_SUBMODULE_URL(path) -> (string, error):
+      RETURN EXECUTE_GIT_COMMAND("config", "--file", ".gitmodules", "--get", "submodule."+path+".url")
+
+    # ── Package-Level Convenience Functions ───────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Each creates ephemeral Config+Repo, calls the corresponding method,
+    # and returns simplified results (empty/false on error).
+    # Functions: IsGitRepository, GetGitBranch, GetGitShortHash, GetGitInfo,
+    #   IsGitWorkingDirectoryClean, GetGitInfoWithStatus,
+    #   IsGitSubmodule, GetGitSubmodules, GetGitSubmoduleStatus
+
+    # ── Root Adapter (git.go) ─────────────────────────────────────────
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
+    # Thin backward-compatibility layer: type alias GitError = git.GitError;
+    # each function delegates directly to pkg/git counterpart.
+    # Functions: IsGitRepository, GetGitBranch, GetGitShortHash, GetGitInfo,
+    #   IsGitWorkingDirectoryClean, GetGitInfoWithStatus,
+    #   IsGitSubmodule, GetGitSubmodules, GetGitSubmoduleStatus

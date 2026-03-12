@@ -50,8 +50,8 @@ IMPL-EXTRACTION_CHALLENGES:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -61,9 +61,55 @@ IMPL-EXTRACTION_CHALLENGES:
   design_note: Comprehensive testing ensures extracted components are production-ready
   solution: Create package-specific tests while ensuring original integration tests still pass
   essence_pseudocode: |-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION] — See detail file
+    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM]
+    # [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION]
+    # Strategies for handling challenges that arise during package extraction:
+    # test migration, config coupling, and integration test preservation.
 
-    procedure extraction_challenges_and_solutions():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION] See detail file
-      execute()
-      end
+    DATA challenge_registry:
+      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY]
+      # [REQ-MAINTAINABILITY]
+      # Known extraction challenges with their resolution strategies.
+      test_duplication:
+        problem: "Extracted packages need tests without duplicating root-level tests"
+        solution: "Create package-specific unit tests; keep root integration tests"
+      config_coupling:
+        problem: "Config struct used across all packages creates tight coupling"
+        solution: "Define per-package config interfaces; adapter pattern at boundaries"
+      integration_breakage:
+        problem: "Moving code to packages may break existing integration tests"
+        solution: "Maintain wrapper functions and type aliases during transition"
+
+    PROCEDURE extract_test_utilities():
+      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
+      # Extract shared test helpers first so package-specific tests can use them.
+      identify shared test helpers (builders, fixtures, assertions)
+      move helpers to testutil package or package-internal test helpers
+      update import paths in all consuming test files
+      VALIDATE all existing tests still pass after helper extraction
+
+    PROCEDURE create_package_specific_tests():
+      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
+      # Each extracted package gets focused unit tests covering its interface contract.
+      FOR each extracted_package:
+        write unit tests for public API surface
+        write edge-case tests for error paths
+        mock dependencies using interfaces (not concrete types)
+        VALIDATE package tests pass in isolation (no root-level imports)
+      END FOR
+
+    PROCEDURE resolve_config_coupling():
+      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
+      # Config coupling is the hardest extraction challenge; resolved via interfaces.
+      define ConfigProvider interface per package (minimal method set)
+      implement adapter in root package that wraps full Config struct
+      extracted package depends only on its ConfigProvider interface
+      VALIDATE no extracted package imports root config directly
+
+    VALIDATE integration_test_preservation():
+      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
+      # Original integration tests must continue to pass throughout extraction.
+      run full integration test suite after each package extraction
+      CHECK no test failures introduced by extraction
+      CHECK test coverage does not decrease
+      REPORT any tests that need updating due to import path changes

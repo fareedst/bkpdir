@@ -1,17 +1,9 @@
-// [REQ-GIT_INTEGRATION]
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI]
 // This file is part of bkpdir
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-
-// TEST-GIT-INTEGRATION-001: Git integration test validation - Git integration and metadata testing [ACTION-validation]
-// Source: git.go - GIT-INTEGRATION-001
-// Impact: Validates Git integration functionality
-
-// TEST-SERVICE-GIT-001: Git service test validation - Git service implementation testing [ACTION-validation]
-// Source: git.go - SERVICE-GIT-001
-// Impact: Validates Git service implementation
-// [REQ-GIT_INTEGRATION] Git integration validation trace
-// [ARCH-GIT_INTEGRATION] Bridges Git architecture decisions to tests
-// [IMPL-GIT_CLI] Exercises the Git CLI implementation
+//
+// Tests for the root-level Git adapter functions (git.go).
+// Validates repository detection, branch/hash extraction, status detection,
+// and submodule operations via the backward-compatible adapter API.
 package main
 
 import (
@@ -23,12 +15,9 @@ import (
 	"testing"
 )
 
-// TestGitIntegration tests the Git integration functionality for GIT-001 feature
+// TestGitIntegration tests repository detection and info extraction via adapter
 // [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates repository detection flows
 func TestGitIntegration(t *testing.T) {
-	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
-	// TEST-REF: Feature tracking matrix GIT-001
-	// IMMUTABLE-REF: Git Integration Requirements
 
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_test_")
@@ -115,12 +104,9 @@ func TestGitIntegration(t *testing.T) {
 	})
 }
 
-// TestGitNaming tests the Git naming functionality for GIT-002 feature
+// TestGitNaming tests branch and hash extraction via adapter
 // [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates branch/hash extraction flows
 func TestGitNaming(t *testing.T) {
-	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
-	// TEST-REF: Feature tracking matrix GIT-002
-	// IMMUTABLE-REF: Git Integration Requirements
 
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_naming_test_")
@@ -235,11 +221,9 @@ func TestGitNaming(t *testing.T) {
 	})
 }
 
-// TestGitStatus tests the Git status detection functionality for GIT-003 feature
+// TestGitStatus tests working directory clean/dirty detection via adapter
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates status detection flows
 func TestGitStatus(t *testing.T) {
-	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
-	// TEST-REF: Feature tracking matrix GIT-003
-	// IMMUTABLE-REF: Git Integration Requirements
 
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_status_test_")
@@ -388,12 +372,9 @@ func runGitCommand(t *testing.T, dir string, args ...string) {
 	}
 }
 
-// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
-// TestGitSubmoduleIntegration tests the Git submodule integration functionality
+// TestGitSubmoduleIntegration tests submodule detection and status via adapter
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates submodule operations
 func TestGitSubmoduleIntegration(t *testing.T) {
-	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
-	// TEST-REF: Feature tracking matrix GIT-004
-	// IMMUTABLE-REF: Git Integration Requirements
 
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_submodule_integration_test_")

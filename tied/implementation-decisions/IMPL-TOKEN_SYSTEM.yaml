@@ -76,8 +76,8 @@ IMPL-TOKEN_SYSTEM:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -118,9 +118,41 @@ IMPL-TOKEN_SYSTEM:
     - 'Traceability validation: Ensure all requirements have implementation tokens'
     - 'Missing token detection: Identify features without proper token coverage'
   essence_pseudocode: |-
-    # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [REQ-DOC_016] [REQ-FILE_BACKUP] [REQ-RESOURCE_MANAGEMENT] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] — 1. **Structured Extraction**
+    # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [REQ-DOC_016] [REQ-FILE_BACKUP] [REQ-RESOURCE_MANAGEMENT] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] — Deterministic migration of legacy tokens to STDD canonical registry with full traceability
 
-    procedure token_system_implementation():
-      # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [REQ-DOC_016] [REQ-FILE_BACKUP] [REQ-RESOURCE_MANAGEMENT] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] Ensures complete traceability from requirements through architecture to implementation
-      execute()
-      end
+    PROCEDURE structured_extraction():
+      # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] — Parse legacy token YAML and emit normalized JSON per group
+      parse project-tokens.yaml using PyYAML helpers
+      for each group in [actions, features, semantic_tokens]:
+        emit normalized JSON with metadata (description, status, source_paths, subtasks)
+      archive extraction artifacts in docs/governance/
+
+    PROCEDURE cross_link_synthesis():
+      # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] — Resolve canonical token references for each legacy token
+      for each legacy_token in extracted_tokens:
+        resolve canonical [REQ-*], [ARCH-*], [IMPL-*] references using prefix heuristics
+        # [REQ-FILE_BACKUP] [REQ-RESOURCE_MANAGEMENT] — Map domain identifiers to STDD tokens
+        map legacy identifiers to STDD tokens (e.g., DIR-001 -> REQ-IMMUTABLE_DIRECTORY_OPERATIONS)
+        if any requirement/decision/test link is missing:
+          flag gap and open subtask in tasks tracking
+
+    PROCEDURE registry_authoring():
+      # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [ARCH-RESOURCE_MANAGEMENT] — Generate Markdown tables per token category
+      DATA table_columns: [Description, Linked_REQ, Linked_ARCH, Linked_IMPL, Linked_Tests, Source_Document, Status]
+      for each token_category in extracted_groups:
+        generate Markdown table with table_columns
+        embed migration status badges for governance verification
+      write tables to stdd/semantic-tokens.md
+
+    PROCEDURE yaml_decommissioning():
+      # [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [REQ-GOV_REGISTRY_COMPLETENESS] — Replace legacy YAML with pointer stubs
+      for each migrated_category:
+        replace YAML entries in project-tokens.yaml with pointer stub
+      final project-tokens.yaml contains canonical pointer to stdd/semantic-tokens.md
+
+    VALIDATE token_migration():
+      # [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-DOC_016] — Prove each token exists across all layers
+      CHECK run scripts/validate-token-traceability.sh passes
+      CHECK run scripts/token-coverage-analysis.sh shows 100% coverage
+      CHECK each migrated token exists in requirements, architecture, implementation, code, and tests
+      CHECK record validation results in migration tables for auditability

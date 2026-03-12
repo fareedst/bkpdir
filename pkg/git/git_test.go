@@ -1,23 +1,13 @@
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI]
 // This file is part of bkpdir
 //
 // Package git provides tests for the Git integration components.
-// It tests repository detection, info extraction, and Git operations.
+// Tests cover repository detection, info extraction, configuration,
+// branch/hash extraction, status detection, submodule operations,
+// backward-compatibility functions, and error handling.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
-
-// TEST-GIT-PKG-001: Git package test validation - Git integration and metadata testing [ACTION-validation]
-// Source: pkg/git/git.go - Git integration implementation
-// Impact: Core functionality validation for Git package
-
-// TEST-SERVICE-GIT-PKG-001: Git package service test validation - Git service implementation testing [ACTION-validation]
-// Source: pkg/git/git.go - Git service implementation
-// Impact: Git service validation for Git package service implementation
-
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// [REQ-GIT_INTEGRATION] Git integration testing
-// [ARCH-GIT_INTEGRATION] Git command-line integration architecture testing
-// [IMPL-GIT_CLI] Git command-line interface implementation testing
 package git
 
 import (
@@ -30,11 +20,9 @@ import (
 	"testing"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Integration System
+// TestGitIntegration tests repository detection and info extraction
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates core repo operations
 func TestGitIntegration(t *testing.T) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_test_")
@@ -146,11 +134,9 @@ func TestGitIntegration(t *testing.T) {
 	})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Configuration System
+// TestGitConfiguration tests Config defaults and custom configuration
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates configuration handling
 func TestGitConfiguration(t *testing.T) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	t.Run("DefaultConfig", func(t *testing.T) {
 		config := DefaultConfig()
@@ -194,11 +180,9 @@ func TestGitConfiguration(t *testing.T) {
 	})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Branch System
+// TestGitBranchExtraction tests branch extraction and hash extraction via Repo
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates branch/hash methods
 func TestGitBranchExtraction(t *testing.T) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Skip if git is not available
 	if !isGitAvailable() {
@@ -286,11 +270,9 @@ func TestGitBranchExtraction(t *testing.T) {
 	})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Status System
+// TestGitStatus tests clean/dirty working directory detection via Repo
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates status detection
 func TestGitStatus(t *testing.T) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	// Skip if git is not available
 	if !isGitAvailable() {
@@ -388,11 +370,9 @@ func TestGitStatus(t *testing.T) {
 	})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Compatibility System
+// TestBackwardCompatibilityFunctions tests package-level convenience functions
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates backward-compat API
 func TestBackwardCompatibilityFunctions(t *testing.T) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	tmpDir, err := ioutil.TempDir("", "git_compat_test_")
 	if err != nil {
@@ -473,11 +453,9 @@ func TestBackwardCompatibilityFunctions(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Error System
+// TestGitError tests GitError formatting and non-repo error returns
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates error handling
 func TestGitError(t *testing.T) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 	t.Run("GitErrorFormatting", func(t *testing.T) {
 		gitErr := &GitError{
@@ -543,9 +521,8 @@ func runGitCommand(t *testing.T, dir string, args ...string) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-004
-// IMMUTABLE-REF: Git Submodule System
+// TestGitSubmodules tests submodule detection, listing, status parsing, and compat functions
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates submodule operations
 func TestGitSubmodules(t *testing.T) {
 	// Create temporary directory for testing
 	tmpDir, err := ioutil.TempDir("", "git_submodule_test_")

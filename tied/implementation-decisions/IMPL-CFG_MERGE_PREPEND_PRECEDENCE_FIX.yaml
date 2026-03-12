@@ -18,8 +18,22 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
     summary: '- Updated `applyMerge()` and `applyPrepend()` function signatures to accept `inheritContext`, `defaultCfg`, and `explicitlySetFields` parameters'
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - path: config.go
+        description: Merge strategy application functions with precedence enforcement for scalar fields
+    functions:
+      - name: applyMerge
+        file: config.go
+        description: Applies merge (+) strategy; checks precedence for scalar/precedence fields via getFieldMergeBehavior and explicitlySetFields
+      - name: applyPrepend
+        file: config.go
+        description: Applies prepend (^) strategy; checks precedence for scalar/precedence fields before falling back to setConfigField
+      - name: applyMergeOperation
+        file: config.go
+        description: Dispatches to strategy-specific apply functions passing inheritContext, defaultCfg, and explicitlySetFields
+      - name: applyOverride
+        file: config.go
+        description: Applies override strategy with shouldPreserve logic respecting earlier file precedence
   traceability:
     architecture:
       - ARCH-CFG_001
@@ -27,7 +41,11 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
     requirements:
       - REQ-CFG_001
       - REQ-CONFIGURATION
-    tests: []
+    tests:
+      - TestAllStrategiesWithPrecedenceFields/merge_strategy_(+)
+      - TestAllStrategiesWithPrecedenceFields/prepend_strategy_(^)
+      - TestAllStrategiesWithPrecedenceFields/replace_strategy_(!)
+      - TestAllStrategiesWithPrecedenceFields/no_prefix
     code_annotations:
       - IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
       - ARCH-CFG_001
@@ -50,8 +68,8 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -88,9 +106,44 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
     - '`TestAllStrategiesWithPrecedenceFields/replace_strategy (!)` - Validates `!` prefix respects precedence (already working)'
     - '`TestAllStrategiesWithPrecedenceFields/no prefix` - Validates no prefix respects precedence (already working)'
   essence_pseudocode: |-
-    # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — - Updated `applyMerge()` and `applyPrepend()` function signatures to accept `inheritContext`, `defaultCfg`, and `explicitlySetFields` parameters
+    # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
+    # Bug fix: + and ^ prefixes on scalar/precedence fields were bypassing precedence checks.
+    # applyMerge and applyPrepend now accept inheritContext, defaultCfg, and explicitlySetFields
+    # to enforce CFG-001 earlier-file precedence for non-array fields.
 
-    procedure merge_and_prepend_strategy_precedence_fix():
-      # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] Bug fix: `+` and `^` prefixes on scalar/precedence fields (e.g., `+archive_dir_path`, `^archive_dir_path`) were bypassing precedence checks
-      execute()
-      end
+    procedure applyMergeOperation(result, key, operation, dstValue, originalDstValue, inheritContext, defaultCfg, explicitlySetFields):
+      # Dispatches to strategy-specific handler, passing precedence context.
+      SWITCH operation.strategy:
+        "override" -> applyOverride(result, key, value, originalDstValue, inheritContext, defaultCfg, explicitlySetFields)
+        "merge"    -> applyMerge(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields)
+        "prepend"  -> applyPrepend(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields)
+        "replace"  -> applyReplace(result, key, value, originalDstValue, inheritContext, defaultCfg, explicitlySetFields)
+        "default"  -> applyDefault(result, key, value, dstValue)
+
+    procedure applyMerge(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
+      # Handles array merge with deduplication; for scalar/precedence fields checks CFG-001 precedence.
+      IF value is array THEN
+        convert []interface{} to []string
+        merge srcSlice into dstSlice with deduplication
+      ELSE
+        # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] — scalar precedence check
+        behavior = getFieldMergeBehavior(key)
+        IF behavior == MergeBehaviorPrecedence AND NOT inheritContext AND dstValue != nil THEN
+          defaultValue = getDefaultValueForKey(key, defaultCfg)
+          IF dstValue differs from defaultValue OR wasSetByEarlierFile OR earlierFilesProcessed THEN
+            RETURN setConfigField(result, key, dstValue)  # preserve earlier file value
+        RETURN setConfigField(result, key, value)
+
+    procedure applyPrepend(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
+      # Handles array prepend (source before destination); for scalars checks CFG-001 precedence.
+      IF value is array THEN
+        convert to []string
+        prepend srcSlice before dstSlice with deduplication
+      ELSE
+        # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] — scalar precedence check (same as applyMerge)
+        behavior = getFieldMergeBehavior(key)
+        IF behavior == MergeBehaviorPrecedence AND NOT inheritContext AND dstValue != nil THEN
+          defaultValue = getDefaultValueForKey(key, defaultCfg)
+          IF dstValue differs from defaultValue OR wasSetByEarlierFile THEN
+            RETURN setConfigField(result, key, dstValue)  # preserve earlier file value
+        RETURN setConfigField(result, key, value)

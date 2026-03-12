@@ -46,17 +46,59 @@ IMPL-INTERFACE_FIRST:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
   code_markers: 'Interface definitions with `// REFACTOR-001: Interface standardization`'
   essence_pseudocode: |-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Define interfaces before concrete implementations
+    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+    # Interface-first design: define Go interfaces before concrete implementations,
+    # enabling independent testing, loose coupling, and versioned evolution.
 
-    procedure interface_first_extraction_approach():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prevents tight coupling between extracted packages
-      execute()
-      end
+    DATA interface_design_principles:
+      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Guiding rules for interface design in extracted packages.
+      minimal_surface: "Interfaces expose only what consumers need (ISP)"
+      consumer_defined: "Interfaces live in the consuming package, not the provider"
+      no_concrete_exports: "Packages export interfaces; concrete types are internal"
+      testability: "Every interface must be mockable for unit testing"
+
+    PROCEDURE design_package_interfaces():
+      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Interfaces are designed before any implementation code is extracted.
+      FOR each package targeted for extraction:
+        analyze consumer call sites to determine required methods
+        define minimal interface (only methods consumers actually call)
+        place interface definition in consuming package (Go convention)
+        document interface contract with godoc comments
+      END FOR
+
+    PROCEDURE implement_against_interfaces():
+      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Concrete implementations satisfy interfaces; consumers never import them.
+      FOR each defined interface:
+        create concrete implementation in provider package
+        verify implementation satisfies interface (compile-time check)
+        wire concrete type to interface at composition root (main/cmd)
+      END FOR
+
+    PROCEDURE enable_independent_testing():
+      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Interface-first design enables package-level testing with mocks.
+      FOR each extracted package:
+        generate mock implementations of consumed interfaces
+        write unit tests using mocks (no real dependencies)
+        VALIDATE package compiles and tests pass without other packages
+      END FOR
+
+    PROCEDURE version_interface_evolution():
+      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Interfaces evolve via versioning, not modification, to preserve compatibility.
+      WHEN interface change is needed:
+        IF additive (new methods): extend with embedding or new interface
+        IF breaking (changed signatures): create v2 interface
+        maintain adapter between old and new versions during transition
+      END WHEN

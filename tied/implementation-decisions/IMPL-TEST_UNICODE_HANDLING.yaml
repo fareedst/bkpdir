@@ -18,8 +18,11 @@ IMPL-TEST_UNICODE_HANDLING:
     summary: '- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values'
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - config_test.go
+    functions:
+      - TestUnicodeHandling
+      - TestSpecialCharactersInPaths
   traceability:
     architecture:
       - ARCH-TESTING_STRATEGY
@@ -27,7 +30,12 @@ IMPL-TEST_UNICODE_HANDLING:
       - REQ-CONFIGURATION
       - REQ-CFG_005
       - REQ-CFG_001
-    tests: []
+    tests:
+      - TestUnicodeHandling
+      - TestSpecialCharactersInPaths
+      - TestSpecialCharactersInPaths/config_file_path_with_spaces
+      - TestSpecialCharactersInPaths/config_file_path_with_special_characters
+      - TestSpecialCharactersInPaths/config_file_path_with_both_spaces_and_special_characters
     code_annotations:
       - IMPL-TEST_UNICODE_HANDLING
       - ARCH-TESTING_STRATEGY
@@ -50,8 +58,8 @@ IMPL-TEST_UNICODE_HANDLING:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -90,10 +98,4 @@ IMPL-TEST_UNICODE_HANDLING:
   testunicodehandling: Tests Unicode characters (émojis, 特殊字符) in configuration values
   unicode_in_patterns: Unicode patterns work correctly in exclude_patterns
   unicode_in_values: All Unicode characters preserved exactly as specified
-  essence_pseudocode: |-
-    # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — - **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values
-
-    procedure unicode_and_special_character_handling_tests():
-      # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] Ensures configuration system correctly handles Unicode characters in paths and patterns
-      execute()
-      end
+  essence_pseudocode: "# [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — Tests Unicode characters and special characters in configuration values and file paths\n\nprocedure TestUnicodeHandling():\n  # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — validates Unicode character preservation in config values\n  save BKPDIR_CONFIG env; defer restore\n  create temp dir\n  create .bkpdir.yml with:\n    archive_dir_path: \"/path/with/émojis/\U0001F680/and/特殊字符\"\n    exclude_patterns: [\"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]\n  set BKPDIR_CONFIG = configPath\n  call LoadConfig(dir)\n\n  # [REQ-CFG_005] — Unicode values merged with defaults per CFG-005\n  assert cfg.ArchiveDirPath == \"/path/with/émojis/\U0001F680/and/特殊字符\"\n  assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]\n  for each Unicode pattern, assert it is found in cfg.ExcludePatterns\n  end\n\nprocedure TestSpecialCharactersInPaths():\n  # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] — validates config file loading with special characters in file paths\n  save BKPDIR_CONFIG env; defer restore\n  create temp dir\n\n  subtest \"config file path with spaces\":\n    # [REQ-CFG_001] — verifies LoadConfig works with spaces in directory path\n    create dir \"path with spaces\", write .bkpdir.yml with archive_dir_path and exclude_patterns\n    set BKPDIR_CONFIG, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/test/archive\"\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.tmp\"] (merged per CFG-005)\n\n  subtest \"config file path with special characters\":\n    # [REQ-CFG_001] — verifies LoadConfig works with Unicode in directory path\n    create dir \"path-with-特殊\", write .bkpdir.yml\n    set BKPDIR_CONFIG, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/test/archive\"\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.log\"]\n\n  subtest \"config file path with both spaces and special characters\":\n    # [REQ-CFG_001] — verifies LoadConfig works with both spaces and Unicode in directory path\n    create dir \"path with 特殊 chars\", write .bkpdir.yml\n    set BKPDIR_CONFIG, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/test/archive\"\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.tmp\", \"*.log\"]\n  end"

@@ -24,16 +24,45 @@ IMPL-CONFIG_SCHEMA_FLEX:
     - REQ-CONFIGURATION
   code_locations:
     files:
-      - config.go
+      - path: config.go
+        description: Original ConfigLoader interface and LoadConfig functions in main package
+      - path: config_interfaces.go
+        description: ConfigLoader, ConfigMerger, ConfigSource, ConfigValidator, ValueExtractor interfaces
+      - path: config_adapter.go
+        description: ConfigAdapter bridging original Config struct with extracted pkg/config package
+      - path: config_impl.go
+        description: DefaultConfigLoader and DefaultConfigMerger implementing main-package interfaces
+      - path: pkg/config/interfaces.go
+        description: Extracted generic ConfigLoader interface with interface{} parameter types
+      - path: pkg/config/loader.go
+        description: GenericConfigLoader implementing extracted ConfigLoader with reflection-based merging
     functions:
-      - ConfigLoader
+      - name: ConfigLoader (interface)
+        file: config_interfaces.go
+        description: Schema-agnostic configuration management interface (LoadConfig, LoadConfigValues, GetConfigValues, ValidateConfig)
+      - name: ConfigAdapter
+        file: config_adapter.go
+        description: Backward-compatibility adapter bridging original Config struct with pkg/config
+      - name: NewConfigAdapter
+        file: config_adapter.go
+        description: Creates ConfigAdapter with PathDiscovery, EnvironmentProvider, FileOps, Validator
+      - name: GenericConfigLoader
+        file: pkg/config/loader.go
+        description: Generic config loader using reflection to handle different struct types
+      - name: LoadConfig
+        file: pkg/config/loader.go
+        description: Loads config from root with generic defaultConfig parameter (interface{})
   traceability:
     architecture:
       - ARCH-CONFIG_SYSTEM
     requirements:
       - REQ-CONFIGURATION
-    tests: []
-    code_annotations: []
+    tests:
+      - TestGenericConfigLoader
+    code_annotations:
+      - IMPL-CONFIG_SCHEMA_FLEX
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
   related_decisions:
     depends_on: []
     supersedes: []
@@ -41,17 +70,54 @@ IMPL-CONFIG_SCHEMA_FLEX:
       - IMPL-CONFIG_STRUCT
       - IMPL-CONFIGURABLE_STRINGS
   metadata:
-    created: "2026-03-12"
-    author: AI Agent
-    last_updated: "2026-03-12"
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
   essence_pseudocode: |-
-    # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Create ConfigLoader interface that can handle different struct types with pluggable schema validation
+    # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
+    # Configuration schema flexibility: ConfigLoader interface accepts interface{}
+    # parameters so different struct types can be loaded/merged/validated.
+    # ConfigAdapter bridges the original backup-specific Config struct with the
+    # extracted generic pkg/config package.
 
-    procedure configuration_schema_flexibility():
-      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Extract configuration loading/merging logic from backup-specific code
-      extract_configuration_loading_merging_logic()
-      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Create ConfigLoader interface for pluggable schema support
-      create_configloader_interface_for()
-      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Preserve powerful discovery and merging while enabling different schemas
-      preserve_powerful_discovery_and()
-      end
+    interface ConfigLoader:
+      # [IMPL-CONFIG_SCHEMA_FLEX] — schema-agnostic config management operations.
+      LoadConfig(root string, defaultConfig interface{}) -> (interface{}, error)
+      LoadConfigValues(root string, defaultConfig interface{}) -> (map[string]ConfigValue, error)
+      GetConfigValues(cfg interface{}) -> []ConfigValue
+      GetConfigValuesWithSources(cfg interface{}, root string) -> []ConfigValue
+      ValidateConfig(cfg interface{}) -> error
+
+    procedure GenericConfigLoader.LoadConfig(root, defaultConfig):
+      # Loads config files from search paths and merges into a clone of defaultConfig.
+      config = cloneConfig(defaultConfig)
+      searchPaths = pathDiscovery.GetConfigSearchPaths()
+      FOR EACH path IN searchPaths:
+        expandedPath = pathDiscovery.ExpandPath(path)
+        IF fileOps.FileExists(expandedPath) THEN
+          loadConfigFromFile(config, expandedPath)  # YAML unmarshal into config
+      applyEnvironmentOverrides(config)  # env vars override file values
+      RETURN config
+
+    procedure GenericConfigLoader.MergeConfigs(dst, src):
+      # Reflection-based deep merge: struct fields, slices, maps, pointers.
+      IF dst or src is not pointer THEN RETURN error
+      mergeValues(dst.Elem(), src.Elem())
+
+    class ConfigAdapter:
+      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
+      # Backward-compatible bridge: wraps GenericConfigLoader to return *Config.
+      loader: config.ConfigLoader
+      merger: config.ConfigMerger
+      validator: config.ConfigValidator
+
+    procedure ConfigAdapter.LoadConfig(root):
+      # Delegates to generic loader then type-asserts back to *Config.
+      defaultConfig = DefaultConfig()
+      genericCfg = loader.LoadConfig(root, defaultConfig)
+      IF genericCfg is *Config THEN RETURN genericCfg
+      RETURN DefaultConfig()  # fallback

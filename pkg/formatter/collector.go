@@ -13,7 +13,7 @@ import (
 	"os"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // OutputMessage represents a message that can be displayed later
 type OutputMessage struct {
 	Content     string
@@ -21,13 +21,13 @@ type OutputMessage struct {
 	Type        string // "info", "error", "warning", etc.
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // OutputCollector collects output messages for delayed display
 type OutputCollector struct {
 	messages []OutputMessage
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewOutputCollector creates a new OutputCollector
 func NewOutputCollector() *OutputCollector {
 	return &OutputCollector{
@@ -35,7 +35,7 @@ func NewOutputCollector() *OutputCollector {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // AddStdout adds a stdout message to the collector
 func (oc *OutputCollector) AddStdout(content, messageType string) {
 	oc.messages = append(oc.messages, OutputMessage{
@@ -45,7 +45,7 @@ func (oc *OutputCollector) AddStdout(content, messageType string) {
 	})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // AddStderr adds a stderr message to the collector
 func (oc *OutputCollector) AddStderr(content, messageType string) {
 	oc.messages = append(oc.messages, OutputMessage{
@@ -55,13 +55,13 @@ func (oc *OutputCollector) AddStderr(content, messageType string) {
 	})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // GetMessages returns all collected messages
 func (oc *OutputCollector) GetMessages() []OutputMessage {
 	return oc.messages
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FlushAll displays all collected messages and clears the collector
 func (oc *OutputCollector) FlushAll() {
 	for _, msg := range oc.messages {
@@ -74,7 +74,7 @@ func (oc *OutputCollector) FlushAll() {
 	oc.messages = make([]OutputMessage, 0)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FlushStdout displays only stdout messages and removes them from the collector
 func (oc *OutputCollector) FlushStdout() {
 	remaining := make([]OutputMessage, 0)
@@ -88,7 +88,7 @@ func (oc *OutputCollector) FlushStdout() {
 	oc.messages = remaining
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FlushStderr displays only stderr messages and removes them from the collector
 func (oc *OutputCollector) FlushStderr() {
 	remaining := make([]OutputMessage, 0)
@@ -102,7 +102,7 @@ func (oc *OutputCollector) FlushStderr() {
 	oc.messages = remaining
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Clear removes all collected messages without displaying them
 func (oc *OutputCollector) Clear() {
 	oc.messages = make([]OutputMessage, 0)

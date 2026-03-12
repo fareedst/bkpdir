@@ -6,13 +6,6 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-ERROR-HANDLING-001: Error handling test validation - Error handling and resource management testing [ACTION-validation]
-// Source: errors.go - ERROR-HANDLING-001
-// Impact: Validates error handling functionality
-
-// TEST-SERVICE-ERROR-001: Error service test validation - Error service implementation testing [ACTION-validation]
-// Source: errors.go - SERVICE-ERROR-001
-// Impact: Validates error service implementation
 // [REQ-ERROR_HANDLING] Enhanced error handling testing
 // [ARCH-ERROR_HANDLING] Structured error handling strategy testing
 // [IMPL-STRUCTURED_ERRORS] Structured error types testing
@@ -703,7 +696,8 @@ func TestHandleArchiveError(t *testing.T) {
 	}
 }
 
-// Test AtomicWriteFile function - 0% coverage
+// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// TestAtomicWriteFile validates atomic file writing with temp-file-then-rename pattern
 func TestAtomicWriteFile(t *testing.T) {
 	tempDir := t.TempDir()
 	targetFile := filepath.Join(tempDir, "target.txt")
@@ -940,7 +934,8 @@ func (tpr *TestPanicResource) String() string {
 	return fmt.Sprintf("panic resource: %s", tpr.path)
 }
 
-// Test AtomicWriteFile with rename failure scenario
+// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// TestAtomicWriteFile_RenameFailure validates error handling when atomic rename fails
 func TestAtomicWriteFile_RenameFailure(t *testing.T) {
 	rm := NewResourceManager()
 	defer rm.CleanupWithPanicRecovery()

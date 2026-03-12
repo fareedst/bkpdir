@@ -64,8 +64,8 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -96,9 +96,45 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
   updated_`mergebasicsettings`: '(lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
   validation: Visual review checklist centered on token prominence (label clarity, color map alignment, edge correctness), alignment with two sample chains from the data snapshot, and confirmation that assets load in docs.
   essence_pseudocode: |-
-    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-STDD_VIS] [REQ-CFG_005] [REQ-LIST_LIMIT] [REQ-MODULE_VALIDATION] — - **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:
+    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-STDD_VIS] [REQ-CFG_005] [REQ-LIST_LIMIT] [REQ-MODULE_VALIDATION] — Preserve config field values from earlier sequential files; earlier-file precedence for non-inheritance merges
 
-    procedure configuration_hierarchy_preservation_fix():
-      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-STDD_VIS] [REQ-CFG_005] [REQ-LIST_LIMIT] [REQ-MODULE_VALIDATION] Combines static clarity (layered flow) with process storytelling (timeline/animation).
-      execute()
-      end
+    DATA config_merge_context:
+      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CFG_001] — Inputs for hierarchy-aware config merge
+      inherit_context: boolean        # true = parent-child inheritance, false = sequential file merge
+      dst_config: Config              # accumulated destination config
+      src_config: Config              # new config file being merged
+      explicitly_set_tracker: map[field -> source_file]  # which file explicitly set each field
+
+    PROCEDURE merge_basic_settings_with_preservation(dst, src, inherit_context):
+      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CFG_001] [REQ-CFG_005] — For sequential files, earlier files take precedence over later files
+      for each field in basic_settings:
+        if inherit_context:
+          # [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Inheritance chains: child configs override parent (behavior unchanged)
+          if src.field is explicitly set:
+            dst.field = src.field
+        else:
+          # [IMPL-CFG_HIERARCHY_PRESERVATION] [REQ-CFG_001] — Sequential: override only if source is explicit AND no earlier file set this field
+          if src.field is explicitly_set:
+            if NOT dst_differs_from_default(dst.field) AND NOT explicitly_set_by_earlier(field):
+              dst.field = src.field
+              record field in explicitly_set_tracker
+
+    PROCEDURE apply_override_with_preservation(dst, src, field):
+      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CFG_001] — Simplified field-level preservation logic
+      if field was explicitly set by an earlier config file:
+        preserve dst.field              # earlier file takes precedence
+      elif dst.field differs from compiled default:
+        preserve dst.field              # non-default value kept
+      else:
+        dst.field = src.field           # apply new value
+
+    VALIDATE hierarchy_preservation:
+      # [IMPL-CFG_HIERARCHY_PRESERVATION] [REQ-CFG_001] [REQ-MODULE_VALIDATION] — Verify precedence behavior with concrete scenarios
+      CHECK home config sets archive_dir_path to user-specific path
+      CHECK local config omits archive_dir_path (not set)
+      CHECK merged result preserves home config value, not compiled default
+      CHECK inheritance chains still allow child to override parent
+      # [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] — Visualization artifacts remain anchored to real tokens
+      CHECK layered-flow and timeline assets reference correct token chains
+      # [REQ-LIST_LIMIT] — List limit settings follow same precedence rules
+      CHECK list_limit from earlier file preserved when later file omits it

@@ -8,19 +8,15 @@
 
 // [REQ-FILE_BACKUP] Archive creation for directory backups
 // [REQ-CONTEXT_SUPPORT] Context-aware archive operations
+// [REQ-CODE_QUALITY] Type-safe data structures for archive operations
 // [ARCH-ARCHIVE_FORMAT] ZIP format for all archive operations
 // [ARCH-PROCESSING_PATTERNS] Uses processing patterns for archive creation
 // [ARCH-CONTEXT_SUPPORT] Context propagation for cancellation and timeouts
+// [ARCH-SYSTEM_COMPONENTS] Archive data models and interface adapters
 // [IMPL-ZIP_FORMAT] Uses Go's archive/zip package
 // [IMPL-PROCESSING_PATTERNS] Pipeline-based processing with naming conventions
 // [IMPL-CONTEXT_OPS] Context parameter support in archive functions
-// ARCHIVE-FEATURES-001: Archive Operations Specification - Archive creation and management [ACTION:core-functionality]
-// Source: docs/context/specification.md - Archive Features section
-// Impact: Core functionality requirement for archive operations
-
-// SERVICE-ARCHIVE-001: Archive Service Architecture Decision - Archive service implementation [ACTION:core-functionality]
-// Source: docs/context/architecture.md - Archive Service section
-// Impact: Archive service architecture decision
+// [IMPL-DATA_MODELS] Archive, ArchiveConfig, ArchiveCreationOptions, IncrementalArchiveConfig structs; ArchiveConfigInterface, ArchiveFormatterInterface; adapter types
 package main
 
 import (
@@ -128,6 +124,7 @@ func (a *ConfigToArchiveConfigAdapter) GetIncludeGitInfo() bool {
 	return a.cfg.IncludeGitInfo
 }
 
+// [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 func (a *ConfigToArchiveConfigAdapter) GetShowGitDirtyStatus() bool {
 	return a.cfg.ShowGitDirtyStatus
 }
@@ -207,8 +204,7 @@ func (a *OutputFormatterToArchiveFormatterAdapter) PrintIncrementalCreated(path 
 	}
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// GenerateArchiveNameWithInterface creates an archive name using interface abstractions
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] GenerateArchiveNameWithInterface creates an archive name using interface abstractions
 func GenerateArchiveNameWithInterface(cfg ArchiveConfig) string {
 	if cfg.IsIncremental && cfg.BaseName != "" {
 		return generateIncrementalArchiveName(cfg)
@@ -216,14 +212,8 @@ func GenerateArchiveNameWithInterface(cfg ArchiveConfig) string {
 	return generateFullArchiveNameFromConfig(cfg)
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Archive Naming Convention
-// TEST-REF: TestGenerateArchiveName
-// DECISION-REF: DEC-001
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// GenerateArchiveName creates an archive name according to the spec.
-// It handles both full and incremental archive naming based on the provided configuration.
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] GenerateArchiveName creates an archive name according to the spec.
+// Handles both full and incremental archive naming based on configuration.
 func GenerateArchiveName(cfg ArchiveConfig) string {
 	if cfg.IsIncremental && cfg.BaseName != "" {
 		return generateIncrementalArchiveName(cfg)
@@ -231,12 +221,8 @@ func GenerateArchiveName(cfg ArchiveConfig) string {
 	return generateFullArchiveNameFromConfig(cfg)
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Archive Naming Convention
-// TEST-REF: TestGenerateArchiveName
-// DECISION-REF: DEC-001
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// generateIncrementalArchiveName generates name for incremental archives
+// [IMPL-GIT_DIRTY_CONFIG] [IMPL-ZIP_FORMAT] [ARCH-GIT_INTEGRATION] [ARCH-ARCHIVE_FORMAT] [REQ-GIT_INTEGRATION]
+// generateIncrementalArchiveName generates name for incremental archives with conditional dirty suffix.
 func generateIncrementalArchiveName(cfg ArchiveConfig) string {
 	baseName := strings.TrimSuffix(cfg.BaseName, ".zip")
 	name := baseName + "_update=" + cfg.Timestamp
@@ -252,12 +238,8 @@ func generateIncrementalArchiveName(cfg ArchiveConfig) string {
 	return name + ".zip"
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Archive Naming Convention
-// TEST-REF: TestGenerateArchiveName
-// DECISION-REF: DEC-001
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// generateFullArchiveNameFromConfig generates name for full archives from config
+// [IMPL-GIT_DIRTY_CONFIG] [IMPL-ZIP_FORMAT] [ARCH-GIT_INTEGRATION] [ARCH-ARCHIVE_FORMAT] [REQ-GIT_INTEGRATION]
+// generateFullArchiveNameFromConfig generates name for full archives with conditional dirty suffix.
 func generateFullArchiveNameFromConfig(cfg ArchiveConfig) string {
 	var name string
 	if cfg.Prefix != "" {
@@ -280,15 +262,9 @@ func generateFullArchiveNameFromConfig(cfg ArchiveConfig) string {
 	return name + ".zip"
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// GIT-001: See specification.md - Git Information Extraction [DECISION:maintenance]
-// GIT-003: See specification.md - Git Status Detection [DECISION:maintenance]
-// IMMUTABLE-REF: Archive Naming Convention, Git Integration Requirements
-// TEST-REF: TestGenerateArchiveName
-// DECISION-REF: DEC-001
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
+// [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // GenerateFullArchiveName creates a full archive name with optional Git integration and note.
-// It uses the current directory name as prefix and includes Git branch/hash if available.
+// Propagates ShowGitDirtyStatus from Config to ArchiveConfig.
 func GenerateFullArchiveName(cfg *Config, cwd string, note string) (string, error) {
 	timestamp := time.Now().Format("2006-01-02-15-04")
 	prefix := filepath.Base(cwd)
@@ -319,12 +295,7 @@ func generateFullArchiveName(cfg *Config, cwd string, note string) (string, erro
 	return GenerateFullArchiveName(cfg, cwd, note)
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Commands - List Archives
-// TEST-REF: TestListArchives
-// DECISION-REF: DEC-001
-// ListArchives lists all archives in the archive directory for the current source.
-// It returns a slice of Archive structs containing metadata for each archive found.
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] ListArchives lists all .zip archives in the archive directory for the current source.
 func ListArchives(archiveDir string) ([]Archive, error) {
 	if err := os.MkdirAll(archiveDir, 0o755); err != nil {
 		return nil, fmt.Errorf("failed to create archive directory: %w", err)
@@ -350,11 +321,7 @@ func ListArchives(archiveDir string) ([]Archive, error) {
 	return archives, nil
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Archive Naming Convention
-// TEST-REF: TestListArchives
-// DECISION-REF: DEC-001
-// createArchiveFromEntry creates an Archive from a directory entry.
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] createArchiveFromEntry creates an Archive from a directory entry.
 func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, error) {
 	archivePath := filepath.Join(archiveDir, entry.Name())
 	fileInfo, err := entry.Info()
@@ -372,21 +339,12 @@ func createArchiveFromEntry(archiveDir string, entry os.DirEntry) (Archive, erro
 	return archive, nil
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Commands - Create Archive
-// TEST-REF: TestCreateFullArchive
-// DECISION-REF: DEC-001
-// CreateArchiveWithContext creates a new archive with the given configuration and note.
-// It supports dry-run mode.
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] CreateArchiveWithContext creates a new archive with context support.
 func CreateArchiveWithContext(ctx context.Context, cfg *Config, note string, dryRun bool) error {
 	return CreateFullArchiveWithContext(ctx, cfg, note, dryRun)
 }
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// IMMUTABLE-REF: Directory Operations, File Exclusion Requirements
-// TEST-REF: TestCreateFullArchive
-// DECISION-REF: DEC-001
-// collectFilesToArchive walks the directory and collects files to archive
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] collectFilesToArchive walks the directory and collects files to archive
 func collectFilesToArchive(ctx context.Context, cwd string, excludePatterns []string) ([]string, error) {
 	var files []string
 	err := filepath.Walk(cwd, func(path string, info os.FileInfo, err error) error {
@@ -616,7 +574,7 @@ func printDryRunInfo(files []string, archivePath string, cfg *Config) {
 	printDryRunInfoWithInterface(files, archivePath, archiveConfig)
 }
 
-// createAndVerifyArchive creates an archive.
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] createAndVerifyArchive creates a zip archive using atomic write pattern (temp file + rename)
 func createAndVerifyArchive(cfg ArchiveCreationOptions) error {
 	tempFile := cfg.Path + ".tmp"
 	cfg.ResourceMgr.AddTempFile(tempFile)
@@ -808,7 +766,7 @@ func prepareIncrementalArchiveWithInterface(
 	return archivePath, nil
 }
 
-// createAndVerifyIncrementalArchive creates an incremental archive
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] createAndVerifyIncrementalArchive creates an incremental zip archive
 func createAndVerifyIncrementalArchive(cfg ArchiveCreationOptions) error {
 	if err := createZipArchiveWithContextAndConfig(cfg.Context, cfg.CWD, cfg.Path, cfg.Files, cfg.Config); err != nil {
 		return NewArchiveErrorWithCause(
@@ -903,7 +861,7 @@ func findLatestFullArchive(archiveDir string) (*Archive, error) {
 	return latestFullArchive, nil
 }
 
-// createZipArchiveWithContext creates a ZIP archive with context cancellation support
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] createZipArchiveWithContext creates a ZIP archive with context cancellation support
 func createZipArchiveWithContext(ctx context.Context, sourceDir, archivePath string, files []string) error {
 	if err := checkContextCancellation(ctx); err != nil {
 		return err
@@ -921,7 +879,7 @@ func createZipArchiveWithContext(ctx context.Context, sourceDir, archivePath str
 	return addFilesToZip(ctx, sourceDir, files, zipw)
 }
 
-// createZipArchiveWithContextAndConfig creates a ZIP archive with context cancellation support and configuration
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] createZipArchiveWithContextAndConfig creates a ZIP archive with context and configuration
 func createZipArchiveWithContextAndConfig(ctx context.Context, sourceDir, archivePath string, files []string, cfg ArchiveConfigInterface) error {
 	if err := checkContextCancellation(ctx); err != nil {
 		return err
@@ -939,7 +897,7 @@ func createZipArchiveWithContextAndConfig(ctx context.Context, sourceDir, archiv
 	return addFilesToZipWithConfig(ctx, sourceDir, files, zipw, cfg)
 }
 
-// addFilesToZip adds files to a zip archive
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] addFilesToZip adds files to a zip archive
 func addFilesToZip(ctx context.Context, sourceDir string, files []string, zipw *zip.Writer) error {
 	for _, rel := range files {
 		if err := checkContextCancellation(ctx); err != nil {
@@ -953,7 +911,7 @@ func addFilesToZip(ctx context.Context, sourceDir string, files []string, zipw *
 	return nil
 }
 
-// addFilesToZipWithConfig adds files to a zip archive with configuration support
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] addFilesToZipWithConfig adds files to a zip archive with configuration support
 func addFilesToZipWithConfig(ctx context.Context, sourceDir string, files []string, zipw *zip.Writer, cfg ArchiveConfigInterface) error {
 	for _, rel := range files {
 		if err := checkContextCancellation(ctx); err != nil {
@@ -967,7 +925,7 @@ func addFilesToZipWithConfig(ctx context.Context, sourceDir string, files []stri
 	return nil
 }
 
-// addFileToZip adds a single file to a zip archive
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] addFileToZip adds a single file to a zip archive with deflate compression
 func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 	abs := filepath.Join(sourceDir, rel)
 	info, err := os.Lstat(abs)
@@ -1014,7 +972,7 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 	return nil
 }
 
-// addFileToZipWithConfig adds a single file to a zip archive with configuration support for handling broken symlinks
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] addFileToZipWithConfig adds a single file to a zip archive with broken symlink handling
 func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg ArchiveConfigInterface) error {
 	abs := filepath.Join(sourceDir, rel)
 	info, err := os.Lstat(abs)

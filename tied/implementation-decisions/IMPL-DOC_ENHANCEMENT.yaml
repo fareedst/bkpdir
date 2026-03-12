@@ -46,17 +46,60 @@ IMPL-DOC_ENHANCEMENT:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
   code_markers: '`// DOC-XXX: Documentation enhancement` tokens'
   essence_pseudocode: |-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Semantic token system for cross-referencing
+    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
+    # Documentation quality improvement via semantic tokens, automated validation,
+    # behavioral contracts, and dependency mapping for change-impact analysis.
 
-    procedure documentation_enhancement_framework():
-      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] Cross-document repetition identified as highly valuable for LLM consumption
-      execute()
-      end
+    DATA semantic_token_registry:
+      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
+      # Canonical registry of all tokens used across documents, code, and tests.
+      tokens: map[token_id -> { type, name, status, cross_references }]
+      token_types: [REQ, ARCH, IMPL, PROC]
+      format_convention: "[TYPE-IDENTIFIER]"
+
+    PROCEDURE maintain_cross_document_consistency():
+      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
+      # Intentional cross-document repetition aids LLM comprehension and ensures
+      # each document layer is self-contained while linked to others.
+      FOR each document in documentation_set:
+        embed semantic tokens inline at every reference point
+        replicate critical context across layers (REQ, ARCH, IMPL)
+        link each section to its corresponding tokens in the registry
+      END FOR
+
+    PROCEDURE validate_documentation_consistency():
+      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
+      # Automated checks prevent drift between documents and code.
+      CHECK all tokens in code appear in semantic_token_registry
+      CHECK all tokens in tests reference valid IMPL/ARCH/REQ entries
+      CHECK bi-directional links: if A references B, B references A
+      CHECK no orphaned tokens exist (tokens without code or test references)
+      REPORT inconsistencies with file, line, and token context
+
+    PROCEDURE define_behavioral_contracts():
+      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
+      # Behavioral contracts specify invariants that must hold across changes.
+      FOR each feature in documented_features:
+        define input/output contracts
+        define invariants that cannot change without version bump
+        link contracts to requirement tokens
+      END FOR
+
+    PROCEDURE analyze_change_impact():
+      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
+      # Dependency mapping reveals which documents, tests, and code are affected
+      # when a requirement, architecture, or implementation decision changes.
+      build dependency_graph from semantic_token_registry cross_references
+      FOR each proposed change:
+        trace affected tokens through dependency_graph
+        identify impacted documents, code files, and test files
+        report change-impact summary
+      END FOR

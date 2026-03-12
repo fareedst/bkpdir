@@ -8,13 +8,6 @@
 // [ARCH-PACKAGE_EXTRACTION] Uses extracted fileops package for comparison
 // [IMPL-DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms
 
-// COMPARISON-FEATURES-001: Comparison features specification - Directory comparison and change detection [ACTION:core-functionality]
-// Source: comparison.go - COMPARISON-FEATURES-001
-// Impact: Core functionality requirement for comparison features
-
-// SERVICE-COMPARISON-001: Comparison service architecture decision - Comparison service implementation [ACTION:core-functionality]
-// Source: comparison.go - SERVICE-COMPARISON-001
-// Impact: Comparison service implementation decision
 package main
 
 import (
@@ -26,7 +19,7 @@ import (
 	"bkpdir/pkg/fileops"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 
 // Legacy type aliases for backward compatibility
 type (
@@ -39,35 +32,35 @@ type (
 // [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 // CreateDirectorySnapshot creates a snapshot of the given directory using the extracted package
 func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
 }
 
 // [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 // CreateArchiveSnapshot creates a snapshot from a ZIP archive using the extracted package
 func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
-	// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.CreateArchiveSnapshot(archivePath)
 }
 
 // [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 // CompareSnapshots compares two directory snapshots using the extracted package
 func CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.CompareSnapshots(snapshot1, snapshot2)
 }
 
 // [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 // IsDirectoryIdenticalToArchive checks if a directory is identical to an archive using the extracted package
 func IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns []string) (bool, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.IsDirectoryIdenticalToArchive(dirPath, archivePath, excludePatterns)
 }
 
 // FindMostRecentArchive finds the most recent archive in the archive directory
 // [IMPL-DIFF_COMMAND] Sorts by name since timestamps in archive names are alphabetically sortable
 func FindMostRecentArchive(archiveDir string) (string, error) {
-	// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:discovery]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
 		return "", err
@@ -102,7 +95,7 @@ func FindMostRecentArchive(archiveDir string) (string, error) {
 
 // CheckForIdenticalArchive checks if the directory is identical to the most recent archive
 func CheckForIdenticalArchive(dirPath, archiveDir string, excludePatterns []string) (bool, string, error) {
-	// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:discovery]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	// Find most recent archive
 	mostRecentArchive, err := FindMostRecentArchive(archiveDir)
 	if err != nil {
@@ -125,7 +118,7 @@ func CheckForIdenticalArchive(dirPath, archiveDir string, excludePatterns []stri
 
 // GetDirectoryTreeSummary returns a summary of directory structure and content
 func GetDirectoryTreeSummary(dirPath string, excludePatterns []string) (string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	snapshot, err := CreateDirectorySnapshot(dirPath, excludePatterns)
 	if err != nil {
 		return "", err
@@ -145,7 +138,7 @@ func GetDirectoryTreeSummary(dirPath string, excludePatterns []string) (string, 
 
 // GetArchiveTreeSummary returns a summary of archive structure and content
 func GetArchiveTreeSummary(archivePath string) (string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	snapshot, err := CreateArchiveSnapshot(archivePath)
 	if err != nil {
 		return "", err

@@ -734,6 +734,252 @@ Active
 
 ---
 
+## `[PROC-IMPL_CODE_TEST_SYNC]` IMPL-to-Code-and-Tests Linkage
+
+### Purpose
+Govern how an agent discovers, analyzes, documents, and synchronizes an IMPL of interest with all related IMPLs, managed code, and tests. This process fills the gap between "IMPL pseudo-code exists" and "code and tests carry identical IMPL-derived token comments and logic." It operationalizes the linkage so that `essence_pseudocode`, tests, and source code remain a three-way aligned representation of the same intent — from initial IMPL discovery through unit TDD, composition testing, and E2E behavior.
+
+### Scope
+Applies whenever an agent reads, creates, or modifies an IMPL detail file, or modifies managed code or tests that reference IMPL tokens. Integrates with and extends [PROC-TIED_DEV_CYCLE] (steps 2–9), [PROC-IMPL_PSEUDOCODE_TOKENS], [PROC-TEST_STRATEGY], and [PROC-LEAP].
+
+### Token references
+- [PROC-IMPL_PSEUDOCODE_TOKENS] — block-level token comment rules for pseudo-code
+- [PROC-TIED_DEV_CYCLE] — session workflow; steps 3–7 (TDD inner loop) and step 9 (sync)
+- [PROC-LEAP] — bidirectional propagation when code/tests diverge from IMPL
+- [PROC-TEST_STRATEGY] — testability classification; minimize E2E-only code
+- [PROC-CITDP] — change-analysis procedure that may invoke this process
+- [PROC-TOKEN_AUDIT], [PROC-TOKEN_VALIDATION] — token coverage and registry checks
+- [REQ-MODULE_VALIDATION] — validate modules independently before integration
+
+### Status
+Active
+
+### Core Activities
+
+This checklist is organized into nine phases (A–I). Phases A–C are analytical (discovery, reasoning, documentation). Phases D–F are the unit-level TDD cycle with comment synchronization. Phases G–H expand to composition and E2E. Phase I validates the final state. LEAP feedback arrows connect later phases back to earlier ones when divergence is detected.
+
+#### Phase A — Discovery (IMPL neighborhood)
+
+1. **A1. Load the IMPL of interest.** Use MCP `yaml_detail_read` (or file read) for the IMPL detail file. Record its `cross_references`, `related_decisions` (`depends_on`, `composed_with`, `see_also`), and `traceability` fields (architecture, requirements, tests, code_annotations).
+
+2. **A2. Discover related IMPLs.** Build the set of all IMPLs relevant to the work by following four paths:
+   - (a) **Composition and dependency links** — follow `composed_with` and `depends_on` in `related_decisions`; load each linked IMPL detail.
+   - (b) **Shared REQ/ARCH tokens** — for each REQ or ARCH in the IMPL's `traceability.architecture` and `traceability.requirements`, query MCP `get_decisions_for_requirement` (or grep the implementation-decisions index) to find other IMPLs that share the same REQ/ARCH. These IMPLs may affect the same behavior.
+   - (c) **Code-location overlaps** — compare `code_locations.files` and `code_locations.functions` across IMPLs; when two IMPLs list the same file or function, they interact in that code and must be analyzed together.
+   - (d) **Source search** — search managed source and tests for `[IMPL-*]` token references (grep/ripgrep) to find code that references the IMPL of interest or its neighbors. This catches references not yet recorded in `code_locations`.
+
+3. **A3. Build an IMPL inventory table.** For every IMPL in the discovered set, load `essence_pseudocode`, `code_locations`, and `traceability.tests`. Organize into a table:
+
+   | IMPL token | Pseudo-code loaded | Code files | Test files | Testability |
+   |---|---|---|---|---|
+   | IMPL-X | yes | `src/x.ts` | `tests/x.test.ts` | unit |
+   | IMPL-Y | yes | `src/y.ts` | `tests/y.test.ts` | integration |
+   | IMPL-Z | yes | (none) | (none) | e2e_only |
+
+   This table is the working context for all subsequent phases.
+
+#### Phase B — Reasoning with pseudo-code (resolve spec issues)
+
+4. **B1. Read and catalog contracts.** Read each IMPL's `essence_pseudocode` sequentially. For each, note:
+   - INPUT/OUTPUT/DATA declarations (and CONTROL when present)
+   - Procedure names (UPPER_SNAKE or camelCase)
+   - Key branches (IF/ELSE), loops (FOR ... IN), error paths (ON error, RETURN error)
+   - Async boundaries (AWAIT, Promise)
+
+5. **B2. Identify insufficient specifications.** Flag any of these as incomplete and requiring resolution before tests or code:
+   - Missing INPUT or OUTPUT declarations
+   - Procedures referenced but not defined (called by name but body absent)
+   - Branches without error handling (no ON error, no RETURN error on a fallible path)
+   - Stub or template pseudo-code (`Template: placeholder for ...`) on an IMPL with `status: Active`
+   - Blocks with no token comment (violates [PROC-IMPL_PSEUDOCODE_TOKENS])
+
+6. **B3. Identify contradictory specifications.** Compare across IMPLs in the set:
+   - **Shared DATA conflict** — two IMPLs read/write the same DATA key or structure with different assumptions (e.g., one assumes sync storage, another assumes async).
+   - **Ordering conflict** — IMPL-A expects to run before IMPL-B (e.g., index must be loaded before lookup), but IMPL-B has no such ordering constraint or assumes the reverse.
+   - **Incompatible OUTPUT types** — IMPL-A produces `{ result }` but IMPL-B expects `{ result, metadata }` from the same procedure.
+   - **Duplicate logic** — the same step appears in two IMPLs with different parameters or behavior; one must defer to the other or a shared procedure must be extracted.
+
+7. **B4. Resolve and update.** For each issue found in B2–B3:
+   - Update the affected IMPL's `essence_pseudocode` so contracts are compatible, ordering is explicit, and every block is complete.
+   - When resolution changes the scope of an ARCH or REQ, propagate per [PROC-LEAP] (IMPL → ARCH → REQ).
+   - Run `yq -i -P` on every changed detail file per [PROC-YAML_EDIT_LOOP].
+
+#### Phase C — Document pseudo-code (block token comments)
+
+8. **C1. Apply [PROC-IMPL_PSEUDOCODE_TOKENS] to every IMPL in the set.**
+   - **Top-level comment**: `# [IMPL-X] [ARCH-Y] [REQ-Z]` followed by a one-line summary of what the pseudo-code implements.
+   - **Each logical sub-block** (INPUT/OUTPUT, a procedure, an event handler, a branch):
+     - If it implements the **same** REQ/ARCH/IMPL set as the top level → comment only the *how* (no token list repetition).
+     - If it implements a **different** set (e.g., introduces another IMPL or REQ dependency) → start that sub-block with `# [IMPL-...] [ARCH-...] [REQ-...]` naming that set and stating how the sub-block implements them.
+
+9. **C2. Cross-IMPL dependency comments.** When a procedure in IMPL-A calls or depends on behavior defined in IMPL-B, the calling block in IMPL-A must name IMPL-B (and its ARCH/REQ) so the dependency is visible in the pseudo-code. Example:
+
+   ```
+   # [IMPL-A] [ARCH-A] [REQ-A] — orchestrates the save workflow.
+   SAVE_WORKFLOW(input):
+     validated = VALIDATE(input)
+     # [IMPL-B] [ARCH-B] [REQ-B] — delegates index update to IMPL-B's procedure.
+     INDEX_UPDATE(validated)
+     RETURN { ok }
+   ```
+
+10. **C3. Collision and composition notes.** For each pair of IMPLs in `composed_with` (or that share code paths per Phase A), document in the pseudo-code or in `related_decisions.see_also`:
+    - **Ordering**: which IMPL's procedure runs first and why.
+    - **Shared data**: which DATA keys or structures are read/written by both, and the expected state at each boundary.
+    - **Pre/post conditions**: what each IMPL expects to be true before it runs and what it guarantees after.
+
+#### Phase D — Derive tests from pseudo-code (TDD, unit layer)
+
+11. **D1. Map pseudo-code blocks to test groups.** Each procedure or logical block in `essence_pseudocode` maps to one test case or `describe`/`it` group. One block ≈ one test group. Name the test group after the procedure and include the REQ token (e.g., `describe("SAVE_WORKFLOW REQ_DATA_PERSISTENCE", ...)` or `testSaveWorkflow_REQ_DATA_PERSISTENCE`).
+
+12. **D2. Carry token comments into tests.** Each test (or describe block) carries the **same** REQ/ARCH/IMPL token comment as the pseudo-code block it validates:
+    ```
+    // [IMPL-A] [ARCH-A] [REQ-A] — validates SAVE_WORKFLOW returns { ok }
+    //   when input is valid and INDEX_UPDATE succeeds.
+    test("SAVE_WORKFLOW returns ok for valid input REQ_DATA_PERSISTENCE", ...)
+    ```
+    The comment names the tokens and states *what the test validates* (vs. the code comment which states *how the code implements*).
+
+13. **D3. RED — write failing tests before production code.** Per [PROC-TIED_DEV_CYCLE] inner loop: write the test, run the suite, confirm the test fails for the expected reason. No production code in this step.
+
+14. **D4. Verify assertion matches pseudo-code OUTPUT.** For each test, check that the assertion corresponds to the OUTPUT or effect described in the pseudo-code block. If no programmatic assertion can be written for a block (e.g., platform-only behavior), mark it as `testability: e2e_only` in the IMPL detail and document the `e2e_only_reason` naming the platform constraint. Do not leave blocks silently untested.
+
+#### Phase E — Derive code from pseudo-code (TDD, unit layer)
+
+15. **E1. GREEN — write minimum production code.** Write only enough code to make the failing test pass. Run tests and language-specific lint. Both must pass before proceeding.
+
+16. **E2. Carry token comments into code.** Each code block carries the **same** REQ/ARCH/IMPL token comment as the pseudo-code block it implements:
+    ```
+    // [IMPL-A] [ARCH-A] [REQ-A] — SAVE_WORKFLOW: validates input, delegates
+    //   index update to IMPL-B, returns { ok }.
+    function saveWorkflow(input) { ... }
+    ```
+    Same nesting rules as pseudo-code: nested blocks with the same token set comment only *how*; nested blocks with a different set name that set.
+
+17. **E3. LEAP micro-cycle when code diverges from pseudo-code.** If the GREEN implementation reveals that the pseudo-code is incomplete, incorrect, or requires a new dependency: **do not silently diverge**. Apply LEAP within the TDD iteration:
+    1. Update IMPL `essence_pseudocode` first (add the missing block, fix the contract, add the new dependency comment).
+    2. Update or add the test to match the corrected pseudo-code.
+    3. Update the production code to pass the corrected test.
+    4. Run `yq -i -P` on the changed IMPL detail file.
+
+    This keeps pseudo-code authoritative at every point during TDD, not just at the end.
+
+#### Phase F — Synchronize comments across pseudo-code, tests, and code
+
+18. **F1. Three-way alignment check.** After each TDD iteration (or after a batch of iterations), verify that the following three artifacts carry the same token set and logically corresponding descriptions for every block:
+
+    | Artifact | Comment content |
+    |---|---|
+    | **Pseudo-code block** | `# [IMPL-X] [ARCH-Y] [REQ-Z] — how this block implements ...` |
+    | **Test block** | `// [IMPL-X] [ARCH-Y] [REQ-Z] — validates that ...` (same token set; describes what the test validates) |
+    | **Code block** | `// [IMPL-X] [ARCH-Y] [REQ-Z] — how this code implements ...` (same token set; describes how the code implements) |
+
+    If any artifact names a token not present in the other two, or omits a token that the others carry, alignment is broken.
+
+19. **F2. Fix divergence via LEAP.** If any of the three diverge (e.g., code introduced a dependency on IMPL-C that is not reflected in pseudo-code or tests):
+    1. Update pseudo-code first (add the IMPL-C dependency comment to the relevant block).
+    2. Update the test comment to match.
+    3. Update the code comment to match.
+    4. If the divergence changes ARCH or REQ scope, propagate per [PROC-LEAP].
+
+20. **F3. Token audit.** Every IMPL, ARCH, REQ named in pseudo-code, tests, or code must exist in `semantic-tokens.yaml`. Run [PROC-TOKEN_AUDIT]. Missing tokens block completion.
+
+#### Phase G — Expand to composition testing
+
+21. **G1. Identify bindings.** After all unit tests pass, identify the bindings between validated modules: event listeners, IPC channels, entry-point delegation, function wiring, platform hooks. Each binding connects two or more units that were validated independently in Phases D–F.
+
+22. **G2. Find or create IMPL coverage for each binding.** For each binding, locate the IMPL(s) whose `essence_pseudocode` describes the composition (often in ON/WHEN event handlers or wiring procedures). If no IMPL covers the binding:
+    - Extend an existing IMPL's pseudo-code to add a composition block describing the binding, **or**
+    - Create a new IMPL if the binding represents a distinct decision. Follow [PROC-YAML_EDIT_LOOP] for the new detail file.
+
+23. **G3. Write failing composition tests.** Per [PROC-TIED_DEV_CYCLE] step 5: write a failing component, integration, or contract test for each binding **before** writing composition code. The test:
+    - Carries the token comments of the IMPL block that describes the binding.
+    - Verifies: trigger X fires → correct unit called → correct arguments → correct effect.
+    - Does **not** invoke the UI. If it would require UI invocation, it belongs in Phase H (E2E), not here.
+
+24. **G4. Write composition code via TDD.** Per [PROC-TIED_DEV_CYCLE] step 6: implement binding/wiring/entry-point code **only** to satisfy the composition tests. Apply the same three-way alignment rules from Phase F (pseudo-code block ↔ test block ↔ code block carry identical token comments).
+
+#### Phase H — Expand to E2E behavior
+
+25. **H1. Identify E2E-only behavior.** Identify behavior that requires UI invocation to test: native OS menus, visual rendering, platform behavior that cannot be simulated below E2E. Everything else should already be covered by unit or composition tests from Phases D–G.
+
+26. **H2. Confirm IMPL classification.** For each E2E-only behavior, verify the IMPL detail file has:
+    - `testability: e2e_only`
+    - `e2e_only_reason` naming the specific platform constraint (e.g., "native OS menu click cannot be simulated in JSDOM or Playwright").
+    - A block in `essence_pseudocode` that documents the E2E-only boundary with a comment (e.g., `# E2E-only: platform onMessage binding`).
+
+27. **H3. Write E2E test.** The test references the REQ token and the IMPL token. A comment in the test justifies why composition-level testing is insufficient (repeating or referencing the `e2e_only_reason` from the IMPL).
+
+28. **H4. E2E does not substitute for composition.** E2E confirms the UI surface; it does not replace the composition tests of the logic and wiring behind the UI. If a binding is discoverable in Phase G, it must have a composition test even if E2E also covers it.
+
+#### Phase I — Final validation
+
+29. **I1. Run full test suite** (unit, composition, E2E). All must pass.
+
+30. **I2. Run lint** for each language in scope per [PROC-TIED_DEV_CYCLE] inner-loop gate.
+
+31. **I3. Run token and consistency validation.** Run [PROC-TOKEN_VALIDATION] (e.g., `./scripts/validate_tokens.sh`) and `tied_validate_consistency` (MCP). Fix any issues before proceeding.
+
+32. **I4. Final three-way alignment audit.** For every IMPL touched during this process, verify the three-way alignment (pseudo-code / tests / code) one last time per Phase F rules. Document any remaining `e2e_only` blocks and confirm each has `e2e_only_reason`.
+
+33. **I5. Update IMPL detail metadata.** For each IMPL detail file changed:
+    - Update `traceability.tests` to list all tests that validate this IMPL.
+    - Update `code_locations` (files and functions) to reflect the current code.
+    - Update `metadata.last_updated` with date, author, and reason.
+    - Run `yq -i -P` on the detail file per [PROC-YAML_EDIT_LOOP].
+
+### Process Diagram
+
+```mermaid
+flowchart TD
+    Start(["Begin:\nIMPL of interest"]) --> A
+
+    subgraph discovery ["Phase A: Discovery"]
+        A["A1-A3. Load IMPL\nDiscover related IMPLs\nBuild inventory table"]
+    end
+
+    subgraph reasoning ["Phase B: Reasoning"]
+        B["B1-B4. Read contracts\nFind insufficient specs\nFind contradictions\nResolve and update"]
+    end
+
+    subgraph document ["Phase C: Document"]
+        C["C1-C3. Token comments\nin every block\nCross-IMPL dependencies\nCollision notes"]
+    end
+
+    subgraph unitTDD ["Phases D-F: Unit TDD + Sync"]
+        D["D1-D4. Map blocks\nto test groups\nRED: failing tests"]
+        E["E1-E3. GREEN:\nminimum code\nLEAP micro-cycle\nif pseudo-code wrong"]
+        F["F1-F3. Three-way\nalignment check\nFix divergence\nToken audit"]
+        D --> E --> F
+    end
+
+    subgraph composition ["Phase G: Composition"]
+        G["G1-G4. Identify bindings\nFind/create IMPL coverage\nFailing composition tests\nComposition code via TDD"]
+    end
+
+    subgraph e2e ["Phase H: E2E"]
+        H["H1-H4. E2E-only behavior\nConfirm IMPL classification\nWrite E2E test\nDoes not substitute composition"]
+    end
+
+    subgraph validation ["Phase I: Final Validation"]
+        I["I1-I5. Full test suite\nLint gate\nToken validation\nFinal three-way audit\nUpdate IMPL metadata"]
+    end
+
+    A --> B --> C --> D
+    F --> G --> H --> I
+    I --> Done(["Complete:\nthree-way aligned"])
+
+    E -.->|"LEAP micro-cycle:\npseudo-code incomplete\nor wrong during GREEN"| C
+    G -.->|"No IMPL covers\nbinding: extend\nor create IMPL"| C
+    H -.->|"E2E reveals\nmissing IMPL block"| C
+```
+
+### Artifacts & Metrics
+- **Artifacts**: Updated IMPL detail files with complete `essence_pseudocode` (block token comments, resolved specs, collision notes); tests with IMPL-matching token comments; code with IMPL-matching token comments; IMPL inventory table (Phase A3).
+- **Success Metrics**: Three-way alignment (pseudo-code ↔ tests ↔ code) verified for all IMPLs in scope; all tests pass; lint clean; `tied_validate_consistency` passes; `[PROC-TOKEN_AUDIT]` succeeds; every IMPL `traceability.tests` and `code_locations` reflects the final state.
+
+---
+
 ## `[PROC-SWIFT_BUILD]` Swift Build and Validation Process
 
 ### Purpose

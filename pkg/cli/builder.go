@@ -9,8 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-
 // DefaultCommandBuilder provides standard command building functionality
 type DefaultCommandBuilder struct {
 	flagManager FlagManager

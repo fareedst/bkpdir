@@ -8,18 +8,65 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
     - REQ-CONFIGURATION
   rationale:
     why: |-
-      Conflict resolution: CFG-005 requires array fields to merge/accumulate by default, while CFG-001 requires earlier files to take precedence
-      Solution: Field-level registry specifies merge behavior per field, allowing different fields to have different precedence rules
-      Enables fine-grained control: Some fields (like `exclude_patterns`) should always merge, while others (like `archive_dir_path`) should respect earlier file precedence
-      Maintains backward compatibility: Default behavior preserved, explicit prefixes still work
-    problems_solved: []
-    benefits: []
+      Conflict resolution: CFG-005 requires array fields to merge/accumulate by default, while CFG-001 requires earlier files to take precedence.
+      Solution: Field-level registry specifies merge behavior per field, allowing different fields to have different precedence rules.
+      Enables fine-grained control: Some fields (like exclude_patterns) should always merge, while others (like archive_dir_path) should respect earlier file precedence.
+      Maintains backward compatibility: Default behavior preserved, explicit prefixes still work.
+    problems_solved:
+      - CFG-005 and CFG-001 have conflicting merge requirements for different field types
+      - No mechanism existed to specify per-field merge behavior
+      - Explicit prefix (!, +, ^, =) interaction with default behavior was undefined
+    benefits:
+      - Per-field merge behavior control via registry map
+      - Clean separation of accumulate vs precedence fields
+      - Explicit prefixes still override default behavior
+      - Unknown fields default to precedence (safe default)
   implementation_approach:
-    summary: '- Created `FieldMergeBehavior` type with two behaviors: `MergeBehaviorAccumulate` and `MergeBehaviorPrecedence`'
-    details: []
+    summary: FieldMergeBehavior type with Accumulate and Precedence constants; fieldMergeBehaviors registry map specifies behavior per field; getFieldMergeBehavior() lookups drive merge and replace logic.
+    details:
+      - FieldMergeBehavior type (int enum) with MergeBehaviorAccumulate and MergeBehaviorPrecedence
+      - fieldMergeBehaviors map registers per-field behavior (exclude_patterns=Accumulate, scalars=Precedence)
+      - getFieldMergeBehavior() returns registered behavior, defaults to MergeBehaviorPrecedence
+      - applyMergeStrategies() uses registry to determine default strategy for accumulate fields
+      - applyReplace() uses registry to determine if precedence check applies
   code_locations:
-    files: []
-    functions: []
+    files:
+      - path: config.go
+        description: FieldMergeBehavior type, constants, fieldMergeBehaviors map, getFieldMergeBehavior(), and usage in applyMergeStrategies() and applyReplace()
+      - path: pkg/config/merge_strategies.go
+        description: Extracted merge strategy implementations (StandardOverrideStrategy, ArrayMergeStrategy, ArrayPrependStrategy, ArrayReplaceStrategy, DefaultValueStrategy, PrefixedKeyProcessor)
+    functions:
+      - name: FieldMergeBehavior type
+        file: config.go
+        line: 2403
+      - name: MergeBehaviorAccumulate / MergeBehaviorPrecedence
+        file: config.go
+        line: 2405
+      - name: fieldMergeBehaviors
+        file: config.go
+        line: 2416
+      - name: getFieldMergeBehavior
+        file: config.go
+        line: 2429
+      - name: applyReplace
+        file: config.go
+        line: 2877
+        description: Uses registry for precedence check in sequential file processing
+      - name: StandardOverrideStrategy
+        file: pkg/config/merge_strategies.go
+        line: 21
+      - name: ArrayMergeStrategy
+        file: pkg/config/merge_strategies.go
+        line: 43
+      - name: ArrayPrependStrategy
+        file: pkg/config/merge_strategies.go
+        line: 96
+      - name: ArrayReplaceStrategy
+        file: pkg/config/merge_strategies.go
+        line: 149
+      - name: PrefixedKeyProcessor
+        file: pkg/config/merge_strategies.go
+        line: 199
   traceability:
     architecture:
       - ARCH-CFG_005
@@ -27,7 +74,13 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
     requirements:
       - REQ-CFG_005
       - REQ-CONFIGURATION
-    tests: []
+    tests:
+      - TestMixedFieldBehaviors
+      - TestAllStrategiesWithAccumulateFields
+      - TestAllStrategiesWithPrecedenceFields
+      - TestMergeStrategiesInSequentialFiles
+      - TestMergeStrategiesInInheritanceChains
+      - TestOverrideDefaultsWithPrefix
     code_annotations:
       - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
       - ARCH-CFG_005
@@ -35,14 +88,16 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
       - REQ-CFG_005
       - REQ-CONFIGURATION
   related_decisions:
-    depends_on: []
+    depends_on:
+      - IMPL-CONFIG_STRUCT
     supersedes: []
     see_also:
-      - ARCH-CFG_005
-      - ARCH-CFG_001
-      - REQ-CFG_005
-      - REQ-CONFIGURATION
-    composed_with: []
+      - IMPL-CFG_PRECEDENCE_FIX
+      - IMPL-CFG_MIXED_MODE_MERGE_FIX
+      - IMPL-EXCLUDE_MERGE_FIX
+    composed_with:
+      - IMPL-CFG_PRECEDENCE_FIX
+      - IMPL-CFG_MIXED_MODE_MERGE_FIX
   detail_file: implementation-decisions/IMPL-CFG_MERGE_BEHAVIOR_REGISTRY.yaml
   metadata:
     created:
@@ -50,44 +105,47 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
-      validator: MCP converter
+      validator: AI agent
       result: pass
-  code_markers: '`FieldMergeBehavior`, `fieldMergeBehaviors`, `getFieldMergeBehavior`, `applyMergeStrategies`, `applyReplace`, `// CFG-001 + CFG-005: Field merge behavior configuration`'
-  cross-references: '[ARCH-CFG_005], [ARCH-CFG_001], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-CFG_PRECEDENCE_FIX]'
-  field_behavior_matrix: |-
-    | Field | Behavior | Default Strategy | Sequential Files | Inheritance Chains |
-    |-------|----------|------------------|------------------|-------------------|
-    | `exclude_patterns` | Accumulate | Merge | Merge | Merge |
-    | `archive_dir_path` | Precedence | Override | Earlier wins | Child overrides |
-    | `include_git_info` | Precedence | Override | Earlier wins | Child overrides |
-    | `!exclude_patterns` | Accumulate* | Replace | Earlier wins** | Replace |
-
-    *Note: Even with `!` prefix, `exclude_patterns` is still marked as accumulate, but explicit prefix overrides default merge strategy.
-  key_changes: |-
-    1. `FieldMergeBehavior` type and constants (`MergeBehaviorAccumulate`, `MergeBehaviorPrecedence`)
-    2. `fieldMergeBehaviors` registry map with field-specific behaviors
-    3. `getFieldMergeBehavior(fieldName string) FieldMergeBehavior` helper function
-    4. `applyMergeStrategies()`: Uses registry to determine default strategy for accumulate fields
-    5. `applyReplace()`: Checks registry to determine if precedence check should apply
-    6. Explicit prefix detection: Now works for all fields via `hasExplicitPrefix` map
-  mergebehavioraccumulate_fields: '(e.g., `exclude_patterns`):'
-  mergebehaviorprecedence_fields: '(e.g., `archive_dir_path`, `include_git_info`):'
-  note: For sequential files, earlier file precedence applies even with `!` prefix if field was set by earlier file (CFG-001).
-  test_cases:
-    - '`exclude_patterns` without prefix: Merges from all files (CFG-005)'
-    - '`exclude_patterns` with `!` prefix in later file: Respects earlier file if it was set (CFG-001)'
-    - '`archive_dir_path` in later file: Earlier file value preserved (CFG-001)'
-    - '`include_git_info` in later file: Earlier file value preserved (CFG-001)'
-    - '`+archive_dir_path` in later file: Earlier file value preserved (CFG-001) - Fixed in [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]'
-    - '`^archive_dir_path` in later file: Earlier file value preserved (CFG-001) - Fixed in [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]'
   essence_pseudocode: |-
-    # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — - Created `FieldMergeBehavior` type with two behaviors: `MergeBehaviorAccumulate` and `MergeBehaviorPrecedence`
+    # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
+    # Field-level merge behavior registry resolving conflict between CFG-005 (array merge) and CFG-001 (precedence).
 
-    procedure field_level_merge_behavior_registry():
-      # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] Conflict resolution: CFG-005 requires array fields to merge/accumulate by default, while CFG-001 requires earlier files to take precedence
-      execute()
-      end
+    DATA FieldMergeBehavior int:
+      MergeBehaviorAccumulate = 0   # Field accumulates values from all files (CFG-005)
+      MergeBehaviorPrecedence = 1   # Field respects earlier file precedence (CFG-001)
+
+    DATA fieldMergeBehaviors map[string]FieldMergeBehavior:
+      # Registry specifying merge behavior per configuration field
+      "exclude_patterns"               -> MergeBehaviorAccumulate   # CFG-005: Merge by default
+      "archive_dir_path"               -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+      "include_git_info"               -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+      "show_git_dirty_status"          -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+      "skip_broken_symlinks"           -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+      "use_current_dir_name"           -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+      "backup_dir_path"                -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+      "use_current_dir_name_for_files" -> MergeBehaviorPrecedence   # CFG-001: Earlier files win
+
+    PROCEDURE getFieldMergeBehavior(fieldName string) -> FieldMergeBehavior:
+      # Returns registered behavior for field, defaults to Precedence for unknown fields
+      IF fieldName in fieldMergeBehaviors THEN
+        RETURN fieldMergeBehaviors[fieldName]
+      END
+      RETURN MergeBehaviorPrecedence   # Safe default (CFG-001)
+
+    PROCEDURE applyReplace(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields) -> error:
+      # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CFG_001] [REQ-CONFIGURATION]
+      # Uses registry in precedence check for replace (!) strategy
+      IF NOT inheritContext AND dstValue != nil AND defaultCfg != nil THEN
+        defaultValue := getDefaultValueForKey(key, defaultCfg)
+        wasSetByEarlierFile := explicitlySetFields != nil AND explicitlySetFields[key]
+        # Earlier file precedence applies to both Accumulate and Precedence fields
+        IF dstValue != defaultValue OR wasSetByEarlierFile THEN
+          RETURN nil   # Skip replace to respect earlier file precedence
+        END
+      END
+      setConfigField(result, key, value)

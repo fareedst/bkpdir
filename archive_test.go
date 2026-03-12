@@ -20,14 +20,9 @@
 
 // Archive creation and management testing
 // [ARCH-ARCHIVE_FORMAT] [ARCH-PROCESSING_PATTERNS] Archive format and processing patterns validation
+// [ARCH-SYSTEM_COMPONENTS] Archive data model validation
 // [IMPL-ZIP_FORMAT] [IMPL-PROCESSING_PATTERNS] ZIP format and processing implementation validation
-// TEST-ARCHIVE-FEATURES-001: Archive features test validation - Archive creation and management testing [ACTION-validation]
-// Source: archive.go - ARCHIVE-FEATURES-001
-// Impact: Core functionality validation for archive features
-
-// TEST-SERVICE-ARCHIVE-001: Archive service test validation - Archive service implementation testing [ACTION-validation]
-// Source: archive.go - SERVICE-ARCHIVE-001
-// Impact: Archive service validation for archive service implementation
+// [IMPL-DATA_MODELS] Archive struct, ArchiveConfig struct, and adapter validation
 package main
 
 import (
@@ -40,9 +35,8 @@ import (
 	"testing"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-001
-// IMMUTABLE-REF: Archive Naming Convention
+// [IMPL-GIT_DIRTY_CONFIG] [IMPL-ZIP_FORMAT] [ARCH-GIT_INTEGRATION] [ARCH-ARCHIVE_FORMAT] [REQ-GIT_INTEGRATION]
+// TestGenerateArchiveName validates archive naming including conditional dirty suffix.
 func TestGenerateArchiveName(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -166,9 +160,7 @@ func TestGenerateArchiveName(t *testing.T) {
 	}
 }
 
-// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix ARCH-002
-// IMMUTABLE-REF: Commands - Create Archive
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] TestCreateFullArchive validates full archive creation
 func TestCreateFullArchive(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -259,9 +251,7 @@ func TestCreateFullArchive(t *testing.T) {
 	})
 }
 
-// ARCH-003: See architecture.md - Incremental Archive Validation [DECISION:configuration]
-// TEST-REF: Feature tracking matrix ARCH-003
-// IMMUTABLE-REF: Commands - Create Incremental Archive
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] TestCreateIncremental validates incremental archive creation
 func TestCreateIncremental(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -367,10 +357,7 @@ func TestCreateIncremental(t *testing.T) {
 	})
 }
 
-// ARCH-005: Incremental Archive Directory Structure Validation [DECISION:core-functionality]
-// TEST-REF: Feature tracking matrix ARCH-005
-// IMMUTABLE-REF: Archive Directory Structure - Source Directory Name Preservation
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] TestIncrementalArchiveDirectoryStructure validates archive directory structure
 func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -528,9 +515,7 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 	})
 }
 
-// ARCH-004: Symlink handling validation [DECISION:validation]
-// TEST-REF: Feature tracking matrix ARCH-004
-// IMMUTABLE-REF: Symlink Handling Requirements
+// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] TestSkipBrokenSymlinks validates broken symlink handling in zip archives
 func TestSkipBrokenSymlinks(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir, err := os.MkdirTemp("", "bkpdir_symlink_test")

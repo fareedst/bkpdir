@@ -1,96 +1,158 @@
 IMPL-AUTO_DETECTION:
   name: Auto-Detection Implementation
   status: Active
+  description: Path type detection with command routing logic enabling intuitive CLI usage where users can pass a file or directory path directly instead of using explicit subcommands
   cross_references:
     - ARCH-AUTO_DETECTION
     - REQ-USABILITY
   rationale:
-    why: |-
-      Improves user experience
-      Reduces command verbosity
-      Maintains backward compatibility
-      Supports intuitive CLI usage
-    problems_solved: []
-    benefits: []
+    why: Improves user experience by allowing direct path arguments instead of requiring explicit subcommands, reduces command verbosity, maintains backward compatibility with existing commands
+    problems_solved:
+      - Users must remember subcommand names for common operations
+      - Verbose CLI invocation for simple file backup or directory archive
+    benefits:
+      - Intuitive CLI usage (bkpdir ./file.txt or bkpdir ./dir/)
+      - Backward compatibility with explicit commands preserved
+      - Graceful error handling for nonexistent or unsupported paths
   implementation_approach:
-    summary: Path type detection with command routing logic
-    details: []
+    summary: Intercept CLI args before Cobra dispatches; if first arg is not a known command or flag, treat it as a path and auto-detect file vs directory
+    details:
+      - isFile(path) and isDirectory(path) use os.Stat to classify path type
+      - validatePath(path) checks existence and accessibility with specific error messages
+      - executeWithAutoDetection(rootCmd) intercepts args, filters known commands/flags, extracts global flags (--dry-run, --note), then delegates to handleAutoDetectedCommand
+      - handleAutoDetectedCommand routes to handleAutoDetectedFileBackup or handleAutoDetectedDirectoryArchive based on path type
+      - handleAutoDetectedFileBackup loads config, creates BackupOptions, calls CreateFileBackupEnhanced
+      - handleAutoDetectedDirectoryArchive changes to target dir, loads config, calls CreateFullArchiveWithContext
   code_locations:
-    files: []
-    functions: []
+    files:
+      - main.go
+      - main_test.go
+    functions:
+      - isFile
+      - isDirectory
+      - validatePath
+      - executeWithAutoDetection
+      - handleAutoDetectedCommand
+      - handleAutoDetectedFileBackup
+      - handleAutoDetectedDirectoryArchive
   traceability:
     architecture:
       - ARCH-AUTO_DETECTION
     requirements:
       - REQ-USABILITY
-    tests: []
+    tests:
+      - TestMain_Integration_CLI015_AutoDetection
+      - TestMain_Integration_CLI015_BackwardCompatibility
+      - TestMain_Integration_CLI015_EdgeCases
     code_annotations:
       - IMPL-AUTO_DETECTION
       - ARCH-AUTO_DETECTION
       - REQ-USABILITY
   related_decisions:
-    depends_on: []
+    depends_on:
+      - IMPL-CLI_FRAMEWORK
     supersedes: []
     see_also:
       - ARCH-AUTO_DETECTION
       - REQ-USABILITY
+      - IMPL-DATA_MODELS
     composed_with: []
-  detail_file: implementation-decisions/IMPL-AUTO_DETECTION.yaml
   metadata:
     created:
       date: "2026-03-12"
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
-      validator: MCP converter
+      validator: AI agent
       result: pass
-  code_markers: '`main.go` path detection functions, `executeWithAutoDetection()`, `handleAutoDetectedCommand()`'
-  detection_functions: |-
-    ```go
-    func isFile(path string) bool {
-        info, err := os.Stat(path)
-        if err != nil {
-            return false
-        }
-        return info.Mode().IsRegular()
-    }
-
-    func isDirectory(path string) bool {
-        info, err := os.Stat(path)
-        if err != nil {
-            return false
-        }
-        return info.IsDir()
-    }
-
-    func validatePath(path string) error {
-        _, err := os.Stat(path)
-        if err != nil {
-            if os.IsNotExist(err) {
-                return fmt.Errorf("path does not exist: %s", path)
-            }
-            if os.IsPermission(err) {
-                return fmt.Errorf("permission denied accessing path: %s", path)
-            }
-            return fmt.Errorf("error accessing path %s: %v", path, err)
-        }
-        return nil
-    }
-    ```
-  integration_with_cobra: "```go\nfunc executeWithAutoDetection(rootCmd *cobra.Command) error {\n    args := os.Args[1:]\n    \n    // Check for known commands/flags\n    // If not known, trigger auto-detection\n    // Otherwise execute normally\n}\n```"
   known_commands_bypass:
-    - 'Explicit commands: `create`, `config`, `list`, `verify`, `backup`, `version`'
-    - 'Global flags: `--config`, `--dry-run`, `--list`'
-    - 'Help flags: `--help`, `-h`, `--version`, `-v`'
-  routing_logic: "```go\nfunc handleAutoDetectedCommand(args []string) {\n    path := args[0]\n    \n    if err := validatePath(path); err != nil {\n        // Handle error\n    }\n    \n    if isFile(path) {\n        handleAutoDetectedFileBackup(args)\n    } else if isDirectory(path) {\n        handleAutoDetectedDirectoryArchive(args)\n    } else {\n        // Handle unsupported types\n    }\n}\n```"
+    - 'Explicit commands: create, config, template, full, inc, list, backup, version, diff, help'
+    - 'Help flags: --help, -h, --version, -v'
+    - 'Global flags: --config, --dry-run, -d, --list'
   essence_pseudocode: |-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Path type detection with command routing logic
+    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Path type detection with command routing logic for intuitive CLI usage
 
-    procedure auto_detection_implementation():
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Improves user experience
-      execute()
-      end
+    function isFile(path string) -> bool:
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Detect if path is a regular file using os.Stat
+      info, err := os.Stat(path)
+      if err != nil: return false
+      return info.Mode().IsRegular()
+
+    function isDirectory(path string) -> bool:
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Detect if path is a directory using os.Stat
+      info, err := os.Stat(path)
+      if err != nil: return false
+      return info.IsDir()
+
+    function validatePath(path string) -> error:
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Validate path exists and is accessible with specific error messages
+      _, err := os.Stat(path)
+      if err:
+        if os.IsNotExist(err): return "path does not exist: {path}"
+        if os.IsPermission(err): return "permission denied accessing path: {path}"
+        return "error accessing path {path}: {err}"
+      return nil
+
+    function executeWithAutoDetection(rootCmd *cobra.Command) -> error:
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Intercept CLI args before Cobra; route to auto-detection if first arg is not a known command or flag
+      args := os.Args[1:]
+      if len(args) == 0: return rootCmd.Execute()
+
+      firstArg := args[0]
+
+      # Check if first arg is a known command (create, config, list, etc.) or flag (--help, -h, etc.)
+      knownCommands := [create, config, template, full, inc, list, backup, version, diff, help, --help, -h, --version, -v]
+      globalFlags := [--config, --dry-run, -d, --list]
+      if firstArg in knownCommands or firstArg in globalFlags or firstArg starts with "-":
+        return rootCmd.Execute()
+
+      # Parse remaining args to extract global flags (--dry-run, --note) and filter path args
+      filteredArgs, dryRunFlag, noteFlag := parseGlobalFlags(args)
+
+      # Set global variables dryRun and note for handlers
+      dryRun = dryRunFlag
+      if noteFlag != "": note = noteFlag
+
+      # Delegate to auto-detection handler
+      handleAutoDetectedCommand(filteredArgs)
+      return nil
+
+    function handleAutoDetectedCommand(args []string):
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Route to file backup or directory archive based on detected path type
+      if len(args) == 0: exit with "no path provided"
+      path := args[0]
+
+      if err := validatePath(path); err != nil:
+        exit with error
+
+      if isFile(path):
+        handleAutoDetectedFileBackup(args)
+      else if isDirectory(path):
+        handleAutoDetectedDirectoryArchive(args)
+      else:
+        exit with "unsupported file type for path: {path}"
+
+    function handleAutoDetectedFileBackup(args []string):
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Load config, build BackupOptions, call CreateFileBackupEnhanced for file path
+      ctx := context.Background()
+      cwd := os.Getwd()
+      cfg := LoadConfig(cwd)
+      formatter := NewOutputFormatter(cfg)
+      filePath := args[0]
+      backupNote := note  # use global --note flag, or args[1] if present
+      CreateFileBackupEnhanced(BackupOptions{ctx, cfg, formatter, filePath, backupNote, dryRun})
+
+    function handleAutoDetectedDirectoryArchive(args []string):
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Chdir to target dir, load config, call CreateFullArchiveWithContext for directory path
+      ctx := context.Background()
+      dirPath := args[0]
+      originalDir := os.Getwd()
+      os.Chdir(dirPath)
+      defer os.Chdir(originalDir)
+      cfg := LoadConfig(".")
+      archiveNote := note  # use global --note flag, or args[1] if present
+      CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun)

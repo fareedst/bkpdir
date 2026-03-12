@@ -14,8 +14,7 @@ import (
 	"time"
 )
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.4: Add benchmark validation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 
 // BenchmarkGetAllConfigFields benchmarks field discovery performance.
 // Target: <50ms for cache miss, <10ms for cache hit.

@@ -5,8 +5,6 @@ import (
 	"fmt"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-
 // DefaultDryRunManager provides standard dry-run functionality
 type DefaultDryRunManager struct{}
 

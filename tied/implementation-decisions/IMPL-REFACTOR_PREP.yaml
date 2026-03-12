@@ -46,17 +46,56 @@ IMPL-REFACTOR_PREP:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
   code_markers: '`// REFACTOR-XXX: Preparation for extraction` tokens'
   essence_pseudocode: |-
-    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Interface-first design before extraction
+    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+    # Pre-extraction preparation: interface definition, large file decomposition,
+    # dependency analysis, and comprehensive testing before any code moves.
 
-    procedure pre_extraction_refactoring_strategy():
-      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prevents circular dependencies in extracted packages
-      execute()
-      end
+    PROCEDURE define_interfaces_before_extraction():
+      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Interfaces must exist before extraction so packages depend on abstractions.
+      FOR each component targeted for extraction:
+        identify all inbound dependencies (what calls this component)
+        identify all outbound dependencies (what this component calls)
+        define interface for each dependency boundary
+        replace direct struct usage with interface usage at call sites
+      END FOR
+      VALIDATE no concrete type crosses a package boundary
+
+    PROCEDURE decompose_large_files():
+      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Large files with mixed concerns must be split before extraction to
+      # establish clear boundaries.
+      FOR each source_file exceeding complexity threshold:
+        identify distinct responsibilities within the file
+        split into focused files (one responsibility per file)
+        preserve package-level API (no external behavior change)
+        update internal imports within the package
+      END FOR
+
+    PROCEDURE analyze_and_cleanup_dependencies():
+      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Dependency analysis reveals hidden coupling that would create circular
+      # imports after extraction.
+      build import_graph of current codebase
+      identify clusters of mutual imports (potential circular deps)
+      FOR each circular dependency cluster:
+        introduce interface to break the cycle
+        OR restructure to move shared code to a lower layer
+      END FOR
+
+    VALIDATE pre_extraction_readiness():
+      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Comprehensive testing before extraction ensures a stable baseline.
+      CHECK all existing tests pass (unit, integration)
+      CHECK test coverage meets minimum threshold for extraction targets
+      CHECK no circular dependency clusters remain
+      CHECK all cross-package boundaries use interfaces
+      CHECK each extraction target has clearly defined public API

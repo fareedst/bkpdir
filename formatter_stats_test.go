@@ -1,6 +1,6 @@
 // [REQ-OUT_002] Enhanced Command Output with File Statistics testing
 // [ARCH-FILE_STATISTICS] File statistics output formatting validation
-// [IMPL-FILE_STATISTICS] FormatCreatedArchiveWithStats and FormatIncrementalCreatedWithStats validation
+// [IMPL-FILE_STATISTICS] [IMPL-FILE_STATISTICS_TEMPLATE_FIX] FormatCreatedArchiveWithStats and FormatIncrementalCreatedWithStats validation
 package main
 
 import (

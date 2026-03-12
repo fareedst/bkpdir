@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - **Token format**: All semantic tokens switched from colon delimiter (`[REQ:TOKEN]`) to hyphen delimiter (`[REQ-TOKEN]`) across 238 files (149 Go source/test files, 89 non-Go files), totaling 1,026 line changes
 - **Semantic token validator**: Updated `internal/validation/semantic_token_validator.go` to detect both colon and hyphen token formats for backward compatibility
 - **Shell scripts**: Updated `scripts/validate-semantic-tokens.sh`, `scripts/token-coverage-analysis.sh`, and `scripts/token-navigate.sh` to support both token formats and reference `tied/` paths instead of `stdd/`
+- **Legacy comment replacement**: Replaced ad-hoc comment styles (`ARCH-001:`, `REFACTOR-*:`, `SERVICE-*-001:`, `IMMUTABLE-REF:`, etc.) with standardized TIED semantic token annotations (`[IMPL-*]`, `[ARCH-*]`, `[REQ-*]`) across all Go source and test files (~68 files); no functional code or test logic changes
 
 ### Added
 - **TIED YAML database**: 177 detail YAML files with matching index records
@@ -23,6 +24,9 @@ All notable changes to this project will be documented in this file.
   - `scripts/generate_pseudocode.rb` — generates `essence_pseudocode` for IMPL detail files
   - `scripts/register_semantic_tokens.rb` — registers tokens in `semantic-tokens.yaml` from indexes
   - `scripts/fix_stdd_refs.rb` — cleans stale `stdd/` path references in `tied/` markdown files
+- **IMPL-to-code-and-tests linkage**: All ~50 IMPL detail YAML files enriched with detailed `essence_pseudocode`, `code_locations`, and `traceability.tests` per `[PROC-IMPL_CODE_TEST_SYNC]`
+- **Process `[PROC-IMPL_CODE_TEST_SYNC]`**: New 9-phase IMPL-to-Code-and-Tests linkage workflow in `tied/processes.md`
+- **Linkage guide**: New `tied/impl-code-test-linkage.md` — practical reference for the three-way alignment principle (pseudo-code, tests, code)
 
 ### Removed
 - **STDD directory**: `stdd/` monolithic markdown files replaced by structured `tied/` YAML files

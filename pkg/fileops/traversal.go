@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
 // TraversalOptions configures directory traversal behavior
 type TraversalOptions struct {
@@ -40,13 +40,13 @@ type DefaultTraverser struct {
 
 // NewTraverser creates a new DefaultTraverser instance
 func NewTraverser() Traverser {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	return &DefaultTraverser{}
 }
 
 // NewTraverserWithPatterns creates a traverser with exclusion patterns
 func NewTraverserWithPatterns(patterns []string) Traverser {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	return &DefaultTraverser{
 		matcher: NewPatternMatcher(patterns),
 	}
@@ -54,7 +54,7 @@ func NewTraverserWithPatterns(patterns []string) Traverser {
 
 // Walk performs a basic directory walk
 func (dt *DefaultTraverser) Walk(root string, visitor FileVisitor) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	options := TraversalOptions{
 		FollowSymlinks:   false,
 		MaxDepth:         -1, // No limit
@@ -66,7 +66,7 @@ func (dt *DefaultTraverser) Walk(root string, visitor FileVisitor) error {
 
 // WalkWithOptions performs directory walk with specified options
 func (dt *DefaultTraverser) WalkWithOptions(root string, options TraversalOptions, visitor FileVisitor) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
 	// Validate the root path
 	if err := ValidatePath(root); err != nil {
@@ -97,7 +97,7 @@ func (dt *DefaultTraverser) walkRecursive(
 	exclusionMatcher *PatternMatcher,
 	visitor FileVisitor,
 ) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
 	// Check depth limit
 	if options.MaxDepth >= 0 && currentDepth > options.MaxDepth {
@@ -197,13 +197,13 @@ func (dt *DefaultTraverser) walkRecursive(
 
 // ListFiles returns a list of files in a directory
 func (dt *DefaultTraverser) ListFiles(root string, recursive bool) ([]string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	return dt.ListFilesWithExclusions(root, nil, recursive)
 }
 
 // ListFilesWithExclusions returns a list of files with exclusion patterns applied
 func (dt *DefaultTraverser) ListFilesWithExclusions(root string, excludePatterns []string, recursive bool) ([]string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	var files []string
 
 	options := TraversalOptions{
@@ -237,14 +237,14 @@ func (dt *DefaultTraverser) ListFilesWithExclusions(root string, excludePatterns
 
 // Walk performs a basic directory walk using the default traverser
 func Walk(root string, visitor FileVisitor) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	traverser := NewTraverser()
 	return traverser.Walk(root, visitor)
 }
 
 // WalkWithExclusions performs directory walk with exclusion patterns
 func WalkWithExclusions(root string, excludePatterns []string, visitor FileVisitor) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	traverser := NewTraverser()
 	options := TraversalOptions{
 		ExcludePatterns:  excludePatterns,
@@ -256,14 +256,14 @@ func WalkWithExclusions(root string, excludePatterns []string, visitor FileVisit
 
 // ListFiles returns all files in a directory
 func ListFiles(root string, recursive bool) ([]string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	traverser := NewTraverser()
 	return traverser.ListFiles(root, recursive)
 }
 
 // ListFilesWithExclusions returns files with exclusion patterns applied
 func ListFilesWithExclusions(root string, excludePatterns []string, recursive bool) ([]string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	traverser := NewTraverser()
 	return traverser.ListFilesWithExclusions(root, excludePatterns, recursive)
 }

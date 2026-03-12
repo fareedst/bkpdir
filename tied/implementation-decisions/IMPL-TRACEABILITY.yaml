@@ -46,17 +46,65 @@ IMPL-TRACEABILITY:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
   code_markers: TraceabilitySystem, behavioral contract validation, dependency analysis
   essence_pseudocode: |-
-    # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — Feature fingerprint generation and validation
+    # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003]
+    # Requirements traceability via feature fingerprints, behavioral contracts,
+    # dependency graphs, and automated regression prevention.
 
-    procedure enhanced_traceability_design():
-      # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] Feature fingerprints ensure stable identity through changes
-      execute()
-      end
+    DATA feature_fingerprint:
+      # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003]
+      # Stable identity for a feature across code evolution.
+      feature_id: string (semantic token)
+      signature_hash: hash of (interface signatures, behavioral contracts)
+      version: semver
+      linked_tokens: list[REQ, ARCH, IMPL tokens]
+
+    PROCEDURE generate_feature_fingerprints():
+      # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003]
+      # Fingerprints provide stable identity so features can be tracked through
+      # refactors, renames, and restructuring.
+      FOR each feature in tracked_features:
+        extract interface signatures from code
+        extract behavioral contracts from documentation
+        compute signature_hash from signatures + contracts
+        store fingerprint with linked semantic tokens
+      END FOR
+
+    PROCEDURE define_behavioral_contracts():
+      # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003]
+      # Contracts define what cannot change without a version bump.
+      FOR each feature in tracked_features:
+        define input_contracts: accepted parameter types and ranges
+        define output_contracts: guaranteed return types and invariants
+        define side_effect_contracts: filesystem, network, state changes
+        link contracts to REQ tokens for requirement coverage
+      END FOR
+
+    PROCEDURE build_dependency_graph():
+      # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003]
+      # Dependency mapping shows change-impact chains across the stack.
+      FOR each token in semantic_token_registry:
+        resolve all cross_references (forward and backward)
+        add edges to dependency_graph
+      END FOR
+      detect_cycles in dependency_graph
+      REPORT cycle violations
+
+    VALIDATE regression_prevention():
+      # [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003]
+      # Automated checks prevent functionality loss during evolution.
+      FOR each feature_fingerprint in stored_fingerprints:
+        recompute current_hash from code and contracts
+        CHECK current_hash == fingerprint.signature_hash
+        IF mismatch:
+          CHECK version has been bumped
+          CHECK behavioral contract changes are documented
+          REPORT unacknowledged regressions
+      END FOR

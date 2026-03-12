@@ -17,15 +17,25 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
     summary: '- **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios'
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - config_test.go
+    functions:
+      - TestDefaultStrategyEdgeCases
   traceability:
     architecture:
       - ARCH-TESTING_STRATEGY
     requirements:
       - REQ-CONFIGURATION
       - REQ-CFG_005
-    tests: []
+    tests:
+      - TestDefaultStrategyEdgeCases
+      - TestDefaultStrategyEdgeCases/default_strategy_when_field_is_zero_value
+      - TestDefaultStrategyEdgeCases/default_strategy_when_field_is_non-zero
+      - TestDefaultStrategyEdgeCases/default_strategy_when_field_equals_default
+      - TestDefaultStrategyEdgeCases/default_strategy_with_array_field_-_zero_value
+      - TestDefaultStrategyEdgeCases/default_strategy_with_array_field_-_non-zero
+      - TestDefaultStrategyEdgeCases/default_strategy_with_bool_field_-_zero_value
+      - TestDefaultStrategyEdgeCases/default_strategy_with_bool_field_-_non-zero
     code_annotations:
       - IMPL-TEST_DEFAULT_STRATEGY_EDGES
       - ARCH-TESTING_STRATEGY
@@ -46,8 +56,8 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -82,9 +92,59 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   zero_value_check: Default strategy uses `isZeroValue()` to check if destination is zero value
   zero_value_types: Empty string `""`, empty slice `[]`, `false` for bool, `0` for int, `nil`
   essence_pseudocode: |-
-    # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — - **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios
+    # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — Tests default strategy (= prefix) edge cases: only applies when destination is zero value
 
-    procedure default_strategy_edge_cases_tests():
-      # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] Ensures default strategy only applies when destination is zero value
-      execute()
+    procedure TestDefaultStrategyEdgeCases():
+      # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — validates default strategy semantics with isZeroValue check
+      save BKPDIR_CONFIG env; defer restore
+      create temp dir
+
+      subtest "default strategy when field is zero value":
+        # [REQ-CFG_005] — verifies =archive_dir_path applies when destination is "" (zero value)
+        create file1-zero.yml with archive_dir_path: "" (zero value)
+        create file2-default.yml with "=archive_dir_path": "/custom/path"
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ArchiveDirPath == "/custom/path" (default strategy applied)
+
+      subtest "default strategy when field is non-zero":
+        # [REQ-CFG_005] — verifies =archive_dir_path does NOT apply when destination has a value
+        create file1-nonzero.yml with archive_dir_path: "/existing/path"
+        create file2-default-nonzero.yml with "=archive_dir_path": "/custom/path"
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ArchiveDirPath == "/existing/path" (first file preserved, default ignored)
+
+      subtest "default strategy when field equals default":
+        # [REQ-CFG_005] — verifies =archive_dir_path does NOT apply even when value equals default (not zero value)
+        create file1-equals-default.yml with archive_dir_path: "../.bkpdir"
+        create file2-default-equals.yml with "=archive_dir_path": "/custom/path"
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ArchiveDirPath == "../.bkpdir" (equals default but not zero → default strategy ignored)
+
+      subtest "default strategy with array field - zero value":
+        # [REQ-CFG_005] — verifies empty array merges with defaults first (CFG-005), making destination non-zero before default strategy evaluation
+        create file1-array-zero.yml with exclude_patterns: [] (empty)
+        create file2-array-default.yml with "=exclude_patterns": ["custom1", "custom2"]
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ExcludePatterns == [".git/", "vendor/"] (defaults merged first → non-zero → default strategy NOT applied)
+
+      subtest "default strategy with array field - non-zero":
+        # [REQ-CFG_005] — verifies default strategy does NOT apply when array has values
+        create file1-array-nonzero.yml with exclude_patterns: ["existing1", "existing2"]
+        create file2-array-default-nonzero.yml with "=exclude_patterns": ["custom1", "custom2"]
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.ExcludePatterns == [".git/", "vendor/", "existing1", "existing2"] (default strategy ignored)
+
+      subtest "default strategy with bool field - zero value":
+        # [REQ-CFG_005] — verifies =include_git_info applies when destination is false (zero value for bool)
+        create file1-bool-zero.yml with include_git_info: false
+        create file2-bool-default.yml with "=include_git_info": true
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.IncludeGitInfo == true (default strategy applied)
+
+      subtest "default strategy with bool field - non-zero":
+        # [REQ-CFG_005] — verifies =include_git_info does NOT apply when destination is true (non-zero for bool)
+        create file1-bool-nonzero.yml with include_git_info: true
+        create file2-bool-default-nonzero.yml with "=include_git_info": false
+        set BKPDIR_CONFIG = file1:file2, call LoadConfig
+        assert cfg.IncludeGitInfo == true (first file preserved, default strategy ignored)
       end

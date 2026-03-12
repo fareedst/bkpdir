@@ -15,13 +15,45 @@ IMPL-DIRECTORY_COMPARISON:
     summary: Snapshot-based comparison with hash-based content verification
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - comparison.go
+      - pkg/fileops/comparison.go
+    functions:
+      - CreateDirectorySnapshot
+      - CreateArchiveSnapshot
+      - CompareSnapshots
+      - IsDirectoryIdenticalToArchive
+      - FindMostRecentArchive
+      - CheckForIdenticalArchive
+      - GetDirectoryTreeSummary
+      - GetArchiveTreeSummary
+      - DefaultComparer.CreateDirectorySnapshot
+      - DefaultComparer.CreateArchiveSnapshot
+      - DefaultComparer.CompareSnapshots
+      - DefaultComparer.IsDirectoryIdenticalToArchive
+      - DefaultComparer.calculateFileHash
+      - DefaultComparer.calculateArchiveFileHash
+      - NewComparer
   traceability:
     architecture:
       - ARCH-DIRECTORY_COMPARISON
     requirements: []
-    tests: []
+    tests:
+      - TestCreateArchiveSnapshot
+      - TestCreateArchiveSnapshot_ErrorCases
+      - TestCalculateArchiveFileHash
+      - TestIsDirectoryIdenticalToArchive
+      - TestIsDirectoryIdenticalToArchive_ErrorCases
+      - TestFindMostRecentArchive
+      - TestFindMostRecentArchive_ErrorCases
+      - TestCheckForIdenticalArchive
+      - TestGetDirectoryTreeSummary
+      - TestGetDirectoryTreeSummary_ErrorCases
+      - TestGetArchiveTreeSummary
+      - TestGetArchiveTreeSummary_ErrorCases
+      - TestCompareFiles
+      - TestCreateDirectorySnapshot
+      - TestCompareSnapshots
     code_annotations:
       - IMPL-DIRECTORY_COMPARISON
       - ARCH-DIRECTORY_COMPARISON
@@ -38,8 +70,8 @@ IMPL-DIRECTORY_COMPARISON:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -66,7 +98,93 @@ IMPL-DIRECTORY_COMPARISON:
   essence_pseudocode: |-
     # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — Snapshot-based comparison with hash-based content verification
 
-    procedure directory_comparison_implementation():
-      # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] Enables efficient comparison
-      execute()
-      end
+    ## Data types (pkg/fileops/comparison.go)
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — core comparison data structures
+
+    TYPE FileInfo { RelativePath string, Size int64, ModTime time.Time, IsDir bool, Hash string }
+    TYPE DirectorySnapshot { Files []FileInfo }
+
+    ## Snapshot creation
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — walk tree, compute SHA-256 hashes
+
+    procedure CreateDirectorySnapshot(rootPath, excludePatterns) -> (*DirectorySnapshot, error):
+      INPUT: rootPath string, excludePatterns []string
+      OUTPUT: snapshot with sorted FileInfo entries for all non-excluded files/dirs
+      Walk(rootPath):
+        FOR EACH path, info:
+          relPath = Rel(rootPath, path)
+          IF relPath == "." THEN skip
+          IF ShouldExcludeFile(relPath, excludePatterns) THEN SkipDir or skip
+          fileInfo = { RelativePath, Size, ModTime, IsDir }
+          IF !IsDir THEN fileInfo.Hash = calculateFileHash(path)
+          append(files, fileInfo)
+      Sort files by RelativePath
+      RETURN &DirectorySnapshot{files}
+
+    procedure CreateArchiveSnapshot(archivePath) -> (*DirectorySnapshot, error):
+      INPUT: archivePath string (ZIP file path)
+      OUTPUT: snapshot with sorted FileInfo entries for archive contents
+      reader = zip.OpenReader(archivePath)
+      FOR EACH file in reader:
+        IF name ends with "/" THEN skip  # directories are implicit
+        fileInfo = { RelativePath: file.Name, Size: file.UncompressedSize64, ModTime: file.Modified }
+        fileInfo.Hash = calculateArchiveFileHash(file)
+        append(files, fileInfo)
+      Sort files by RelativePath
+      RETURN &DirectorySnapshot{files}
+
+    ## Hash calculation
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — SHA-256 content hashing
+
+    procedure calculateFileHash(filePath) -> (string, error):
+      file = Open(filePath); hash = sha256.New(); io.Copy(hash, file)
+      RETURN hex(hash.Sum(nil))
+
+    procedure calculateArchiveFileHash(zipFile) -> (string, error):
+      reader = zipFile.Open(); hash = sha256.New(); io.Copy(hash, reader)
+      RETURN hex(hash.Sum(nil))
+
+    ## Snapshot comparison
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — sorted element-wise comparison
+
+    procedure CompareSnapshots(snapshot1, snapshot2) -> bool:
+      IF len(snapshot1.Files) != len(snapshot2.Files) THEN RETURN false
+      FOR i, file1 in snapshot1.Files:
+        file2 = snapshot2.Files[i]
+        IF file1.RelativePath != file2.RelativePath THEN RETURN false
+        IF file1.Size != file2.Size OR file1.IsDir != file2.IsDir THEN RETURN false
+        IF !file1.IsDir AND file1.Hash != file2.Hash THEN RETURN false
+      RETURN true
+
+    procedure IsDirectoryIdenticalToArchive(dirPath, archivePath, excludePatterns) -> (bool, error):
+      dirSnapshot = CreateDirectorySnapshot(dirPath, excludePatterns)
+      archiveSnapshot = CreateArchiveSnapshot(archivePath)
+      RETURN CompareSnapshots(dirSnapshot, archiveSnapshot)
+
+    ## Archive discovery (comparison.go adapter)
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — find most recent archives
+
+    procedure FindMostRecentArchive(archiveDir) -> (string, error):
+      archives = ListArchives(archiveDir)
+      Filter: keep only non-incremental (full) archives
+      Sort by name ascending (timestamps in names are alphabetically sortable)
+      RETURN last archive path (most recent)
+
+    procedure CheckForIdenticalArchive(dirPath, archiveDir, excludePatterns) -> (bool, string, error):
+      mostRecent = FindMostRecentArchive(archiveDir)
+      IF mostRecent == "" THEN RETURN false, "", nil
+      identical = IsDirectoryIdenticalToArchive(dirPath, mostRecent, excludePatterns)
+      RETURN identical, mostRecent, nil
+
+    ## Summary generation (comparison.go adapter)
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — textual summary of directory/archive contents
+
+    procedure GetDirectoryTreeSummary(dirPath, excludePatterns) -> (string, error):
+      snapshot = CreateDirectorySnapshot(dirPath, excludePatterns)
+      FOR EACH file: format as [DIR] or [FILE] with size
+      RETURN formatted summary
+
+    procedure GetArchiveTreeSummary(archivePath) -> (string, error):
+      snapshot = CreateArchiveSnapshot(archivePath)
+      FOR EACH file: format as [FILE] with size
+      RETURN formatted summary

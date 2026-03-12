@@ -50,8 +50,8 @@ IMPL-TEST_CFG_005_P1:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -75,9 +75,72 @@ IMPL-TEST_CFG_005_P1:
   testtypemismatchhandling_req_cfg_005: Tests type mismatches (array vs string)
   testwhitespacestringhandling_req_cfg_005: Tests whitespace-only string handling
   essence_pseudocode: |-
-    # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — - **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)
+    # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — P1 test suite validating edge cases for config inheritance and merging
 
-    procedure priority_1_configuration_merge_tests_implementatio():
-      # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] Validates important edge cases for configuration inheritance and merging
-      execute()
-      end
+    PROCEDURE test_multiple_inheritance_sources():
+      # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] — Child config inherits from multiple parent files with correct merge precedence
+      DATA parent1 = create_temp_config("parent1.yml", {format: "zip", exclude: ["*.log"]})
+      DATA parent2 = create_temp_config("parent2.yml", {format: "tar", dirs: ["/data"]})
+      DATA child = create_temp_config("child.yml", {inherit: [parent1, parent2]})
+      PROCEDURE load_and_merge(child)
+      VALIDATE merged config contains fields from both parents
+      VALIDATE child overrides take precedence over parent values
+
+    PROCEDURE test_relative_path_inheritance():
+      # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] — Relative path resolution (../base.yml, ./sibling.yml) in inherit directives
+      DATA base = create_temp_config("../base.yml", {format: "zip"})
+      DATA sibling = create_temp_config("./sibling.yml", {dirs: ["/home"]})
+      DATA child = create_temp_config("child.yml", {inherit: ["../base.yml", "./sibling.yml"]})
+      PROCEDURE load_and_merge(child)
+      VALIDATE paths resolved relative to child config location
+      VALIDATE inherited values merged correctly
+
+    PROCEDURE test_home_directory_expansion():
+      # [IMPL-TEST_CFG_005_P1] [REQ-CFG_001] [REQ-CONFIGURATION] — Tilde expansion in inherit paths (~/.bkpdir-base.yml)
+      DATA config = create_temp_config("child.yml", {inherit: ["~/.bkpdir-base.yml"]})
+      PROCEDURE load_and_merge(config)
+      VALIDATE ~ expanded to user home directory
+      VALIDATE inherited config loaded from expanded path
+
+    PROCEDURE test_missing_inheritance_file():
+      # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] — Error handling when inheritance file does not exist
+      DATA config = create_temp_config("child.yml", {inherit: ["nonexistent.yml"]})
+      PROCEDURE attempt load_and_merge(config)
+      CHECK error returned with descriptive message about missing file
+      CHECK no partial merge results
+
+    PROCEDURE test_invalid_yaml_handling():
+      # [IMPL-TEST_CFG_005_P1] [REQ-CFG_001] [REQ-CONFIGURATION] — Error handling for malformed YAML in inheritance chain
+      DATA invalid_parent = create_temp_file("parent.yml", "{{invalid yaml content")
+      DATA child = create_temp_config("child.yml", {inherit: ["parent.yml"]})
+      PROCEDURE attempt load_and_merge(child)
+      CHECK error returned indicating YAML parse failure
+      CHECK error identifies the problematic file
+
+    PROCEDURE test_deep_inheritance_chain():
+      # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] — Very long inheritance chain (12 files deep)
+      DATA chain = create_inheritance_chain(depth=12)
+      PROCEDURE load_and_merge(chain.leaf)
+      VALIDATE all 12 levels merged correctly
+      VALIDATE precedence: leaf overrides all ancestors
+
+    PROCEDURE test_type_mismatch_handling():
+      # [IMPL-TEST_CFG_005_P1] [REQ-CFG_001] [REQ-CONFIGURATION] — Type mismatches between parent (array) and child (string)
+      DATA parent = create_temp_config("parent.yml", {exclude: ["*.log", "*.tmp"]})
+      DATA child = create_temp_config("child.yml", {inherit: ["parent.yml"], exclude: "single-string"})
+      PROCEDURE load_and_merge(child)
+      VALIDATE type mismatch handled gracefully (array vs string)
+
+    PROCEDURE test_null_value_handling():
+      # [IMPL-TEST_CFG_005_P1] [REQ-CFG_001] [REQ-CONFIGURATION] — Nil/null values in merged configs
+      DATA parent = create_temp_config("parent.yml", {format: "zip", dirs: ["/data"]})
+      DATA child = create_temp_config("child.yml", {inherit: ["parent.yml"], format: null})
+      PROCEDURE load_and_merge(child)
+      VALIDATE null values handled per merge strategy
+
+    PROCEDURE test_whitespace_string_handling():
+      # [IMPL-TEST_CFG_005_P1] [REQ-CFG_001] [REQ-CONFIGURATION] — Whitespace-only and padded string handling
+      DATA config = create_temp_config("child.yml", {format: "   ", dirs: ["  /data  "]})
+      PROCEDURE load_and_merge(config)
+      VALIDATE whitespace-only values treated appropriately
+      VALIDATE leading/trailing whitespace in values handled correctly

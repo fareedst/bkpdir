@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
 func TestConfigOutputGrouping(t *testing.T) {
 	tests := []struct {
 		name           string

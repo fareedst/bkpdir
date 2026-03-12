@@ -16,7 +16,7 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 // GenericConfigLoader provides schema-agnostic configuration loading and merging.
 // This replaces the backup-specific LoadConfig function with a generalized implementation.
 type GenericConfigLoader struct {
@@ -27,7 +27,7 @@ type GenericConfigLoader struct {
 }
 
 // NewGenericConfigLoader creates a new GenericConfigLoader with specified components.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func NewGenericConfigLoader(pathDiscovery *PathDiscovery, envProvider EnvironmentProvider, fileOps ConfigFileOperations, validator ConfigValidator) *GenericConfigLoader {
 	return &GenericConfigLoader{
 		pathDiscovery: pathDiscovery,
@@ -39,7 +39,7 @@ func NewGenericConfigLoader(pathDiscovery *PathDiscovery, envProvider Environmen
 
 // NewDefaultConfigLoader creates a GenericConfigLoader with backup application defaults.
 // This maintains backward compatibility while providing the new generic interface.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func NewDefaultConfigLoader() *GenericConfigLoader {
 	return NewGenericConfigLoader(
 		NewDefaultPathDiscovery(),
@@ -51,7 +51,7 @@ func NewDefaultConfigLoader() *GenericConfigLoader {
 
 // LoadConfig loads configuration from multiple sources with the specified default.
 // This generalizes the original LoadConfig function to work with any configuration type.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) LoadConfig(root string, defaultConfig interface{}) (interface{}, error) {
 	// Start with default configuration (clone to avoid modifying original)
 	config := g.cloneConfig(defaultConfig)
@@ -85,7 +85,7 @@ func (g *GenericConfigLoader) LoadConfig(root string, defaultConfig interface{})
 
 // LoadConfigValues loads configuration values with source tracking.
 // This generalizes the original LoadConfigValues function.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) LoadConfigValues(root string, defaultConfig interface{}) (map[string]ConfigValue, error) {
 	config, err := g.LoadConfig(root, defaultConfig)
 	if err != nil {
@@ -104,7 +104,7 @@ func (g *GenericConfigLoader) LoadConfigValues(root string, defaultConfig interf
 
 // GetConfigValues extracts configuration values from a configuration struct.
 // This generalizes configuration value extraction for any struct type.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) GetConfigValues(cfg interface{}) []ConfigValue {
 	var values []ConfigValue
 
@@ -146,7 +146,7 @@ func (g *GenericConfigLoader) GetConfigValues(cfg interface{}) []ConfigValue {
 
 // GetConfigValuesWithSources extracts configuration values with source information.
 // This provides enhanced source tracking for configuration debugging.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) GetConfigValuesWithSources(cfg interface{}, root string) []ConfigValue {
 	// Start with basic values
 	values := g.GetConfigValues(cfg)
@@ -163,7 +163,7 @@ func (g *GenericConfigLoader) GetConfigValuesWithSources(cfg interface{}, root s
 }
 
 // ValidateConfig validates a configuration structure.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) ValidateConfig(cfg interface{}) error {
 	if g.validator == nil {
 		return nil
@@ -173,21 +173,21 @@ func (g *GenericConfigLoader) ValidateConfig(cfg interface{}) error {
 
 // GetConfigSearchPaths returns the search paths for configuration files.
 // This implements the ConfigMerger interface method.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) GetConfigSearchPaths() []string {
 	return g.pathDiscovery.GetConfigSearchPaths()
 }
 
 // ExpandPath expands path variables and returns absolute path.
 // This implements the ConfigMerger interface method.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) ExpandPath(path string) string {
 	return g.pathDiscovery.ExpandPath(path)
 }
 
 // MergeConfigValues merges configuration value maps.
 // This implements the ConfigMerger interface method.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) MergeConfigValues(dst, src map[string]ConfigValue) {
 	for key, value := range src {
 		dst[key] = value
@@ -196,7 +196,7 @@ func (g *GenericConfigLoader) MergeConfigValues(dst, src map[string]ConfigValue)
 
 // MergeConfigs merges source configuration into destination configuration.
 // This provides generic configuration merging using reflection.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) MergeConfigs(dst, src interface{}) error {
 	dstVal := reflect.ValueOf(dst)
 	srcVal := reflect.ValueOf(src)
@@ -216,7 +216,7 @@ func (g *GenericConfigLoader) MergeConfigs(dst, src interface{}) error {
 }
 
 // mergeValues recursively merges values using reflection.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) mergeValues(dst, src reflect.Value) error {
 	switch src.Kind() {
 	case reflect.Struct:
@@ -237,7 +237,7 @@ func (g *GenericConfigLoader) mergeValues(dst, src reflect.Value) error {
 }
 
 // mergeStruct merges struct fields.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) mergeStruct(dst, src reflect.Value) error {
 	for i := 0; i < src.NumField(); i++ {
 		srcField := src.Field(i)
@@ -255,7 +255,7 @@ func (g *GenericConfigLoader) mergeStruct(dst, src reflect.Value) error {
 }
 
 // mergeSlice merges slice values (src overwrites dst if non-empty).
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) mergeSlice(dst, src reflect.Value) error {
 	if src.Len() > 0 {
 		dst.Set(src)
@@ -264,7 +264,7 @@ func (g *GenericConfigLoader) mergeSlice(dst, src reflect.Value) error {
 }
 
 // mergeMap merges map values.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) mergeMap(dst, src reflect.Value) error {
 	if src.IsNil() {
 		return nil
@@ -281,7 +281,7 @@ func (g *GenericConfigLoader) mergeMap(dst, src reflect.Value) error {
 }
 
 // mergePointer merges pointer values.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) mergePointer(dst, src reflect.Value) error {
 	if src.IsNil() {
 		return nil
@@ -295,7 +295,7 @@ func (g *GenericConfigLoader) mergePointer(dst, src reflect.Value) error {
 }
 
 // loadConfigFromFile loads configuration from a specific file.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) loadConfigFromFile(config interface{}, path string) error {
 	data, err := g.fileOps.ReadFile(path)
 	if err != nil {
@@ -313,7 +313,7 @@ func (g *GenericConfigLoader) loadConfigFromFile(config interface{}, path string
 }
 
 // applyEnvironmentOverrides applies environment variable overrides to configuration.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) applyEnvironmentOverrides(config interface{}) error {
 	if g.envProvider == nil {
 		return nil
@@ -355,7 +355,7 @@ func (g *GenericConfigLoader) applyEnvironmentOverrides(config interface{}) erro
 }
 
 // cloneConfig creates a deep copy of the configuration.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) cloneConfig(config interface{}) interface{} {
 	v := reflect.ValueOf(config)
 	if v.Kind() == reflect.Ptr {
@@ -370,7 +370,7 @@ func (g *GenericConfigLoader) cloneConfig(config interface{}) interface{} {
 }
 
 // getDefaultForType creates a default instance of the given configuration type.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) getDefaultForType(config interface{}) interface{} {
 	v := reflect.ValueOf(config)
 	if v.Kind() == reflect.Ptr {
@@ -381,7 +381,7 @@ func (g *GenericConfigLoader) getDefaultForType(config interface{}) interface{} 
 }
 
 // getDefaultValue gets the default value for a field name.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) getDefaultValue(defaultConfig interface{}, fieldName string) interface{} {
 	v := reflect.ValueOf(defaultConfig)
 	if v.Kind() == reflect.Ptr {
@@ -411,7 +411,7 @@ func (g *GenericConfigLoader) getDefaultValue(defaultConfig interface{}, fieldNa
 }
 
 // setFieldFromString sets a field value from a string representation.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigLoader) setFieldFromString(field reflect.Value, value string) error {
 	switch field.Kind() {
 	case reflect.String:
@@ -437,7 +437,7 @@ func (g *GenericConfigLoader) setFieldFromString(field reflect.Value, value stri
 	return nil
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 // GenericConfigMerger provides standalone configuration merging functionality.
 // This is a separate component that can be used independently of the loader.
 type GenericConfigMerger struct {
@@ -445,7 +445,7 @@ type GenericConfigMerger struct {
 }
 
 // NewGenericConfigMerger creates a new GenericConfigMerger.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func NewGenericConfigMerger() *GenericConfigMerger {
 	return &GenericConfigMerger{
 		pathDiscovery: NewDefaultPathDiscovery(),
@@ -453,7 +453,7 @@ func NewGenericConfigMerger() *GenericConfigMerger {
 }
 
 // NewGenericConfigMergerWithDiscovery creates a new GenericConfigMerger with custom path discovery.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func NewGenericConfigMergerWithDiscovery(pathDiscovery *PathDiscovery) *GenericConfigMerger {
 	return &GenericConfigMerger{
 		pathDiscovery: pathDiscovery,
@@ -462,7 +462,7 @@ func NewGenericConfigMergerWithDiscovery(pathDiscovery *PathDiscovery) *GenericC
 
 // MergeConfigs merges source configuration into destination configuration.
 // This provides generic configuration merging using reflection.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) MergeConfigs(dst, src interface{}) error {
 	dstVal := reflect.ValueOf(dst)
 	srcVal := reflect.ValueOf(src)
@@ -482,7 +482,7 @@ func (g *GenericConfigMerger) MergeConfigs(dst, src interface{}) error {
 }
 
 // MergeConfigValues merges configuration value maps.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) MergeConfigValues(dst, src map[string]ConfigValue) {
 	for key, value := range src {
 		dst[key] = value
@@ -490,19 +490,19 @@ func (g *GenericConfigMerger) MergeConfigValues(dst, src map[string]ConfigValue)
 }
 
 // GetConfigSearchPaths returns the search paths for configuration files.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) GetConfigSearchPaths() []string {
 	return g.pathDiscovery.GetConfigSearchPaths()
 }
 
 // ExpandPath expands path variables and returns absolute path.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) ExpandPath(path string) string {
 	return g.pathDiscovery.ExpandPath(path)
 }
 
 // mergeValues recursively merges values using reflection (from GenericConfigMerger).
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) mergeValues(dst, src reflect.Value) error {
 	switch src.Kind() {
 	case reflect.Struct:
@@ -523,7 +523,7 @@ func (g *GenericConfigMerger) mergeValues(dst, src reflect.Value) error {
 }
 
 // mergeStruct merges struct fields (from GenericConfigMerger).
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) mergeStruct(dst, src reflect.Value) error {
 	for i := 0; i < src.NumField(); i++ {
 		srcField := src.Field(i)
@@ -541,7 +541,7 @@ func (g *GenericConfigMerger) mergeStruct(dst, src reflect.Value) error {
 }
 
 // mergeSlice merges slice values (from GenericConfigMerger).
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) mergeSlice(dst, src reflect.Value) error {
 	if src.Len() > 0 {
 		dst.Set(src)
@@ -550,7 +550,7 @@ func (g *GenericConfigMerger) mergeSlice(dst, src reflect.Value) error {
 }
 
 // mergeMap merges map values (from GenericConfigMerger).
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) mergeMap(dst, src reflect.Value) error {
 	if src.IsNil() {
 		return nil
@@ -567,7 +567,7 @@ func (g *GenericConfigMerger) mergeMap(dst, src reflect.Value) error {
 }
 
 // mergePointer merges pointer values (from GenericConfigMerger).
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+
 func (g *GenericConfigMerger) mergePointer(dst, src reflect.Value) error {
 	if src.IsNil() {
 		return nil

@@ -60,7 +60,7 @@ type NamingProvider struct {
 	patterns map[string]*regexp.Regexp
 }
 
-// NewNamingProvider creates a new naming provider with default formats
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] NewNamingProvider creates a new naming provider with default timestamp formats
 func NewNamingProvider() *NamingProvider {
 	provider := &NamingProvider{
 		ArchiveTimestampFormat: "2006-01-02T150405", // ISO 8601 format from archive.go
@@ -93,7 +93,7 @@ func (np *NamingProvider) initializePatterns() {
 	)
 }
 
-// GenerateName creates a name using the provided template
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] GenerateName creates a name from template components (prefix, timestamp, git info, note)
 func (np *NamingProvider) GenerateName(template *NamingTemplate) (string, error) {
 	if template == nil {
 		return "", NewProcessingError("INVALID_TEMPLATE", "GenerateName", "template cannot be nil")
@@ -182,7 +182,7 @@ func (np *NamingProvider) GenerateBackupName(sourcePath, timestamp, note string)
 	return name
 }
 
-// ParseName extracts components from a filename using the specified pattern
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] ParseName extracts components from a filename using regex pattern matching
 func (np *NamingProvider) ParseName(name string, pattern string) (*NameComponents, error) {
 	regex, exists := np.patterns[pattern]
 	if !exists {

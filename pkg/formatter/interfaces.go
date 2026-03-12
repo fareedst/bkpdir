@@ -10,8 +10,7 @@
 // [IMPL-DUAL_FORMATTING] Formatter interfaces implementation (printf + template)
 package formatter
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-// ConfigProvider abstracts configuration access for formatter components
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] ConfigProvider abstracts configuration access for formatter components
 type ConfigProvider interface {
 	GetFormatString(formatType string) string
 	GetTemplateString(templateType string) string
@@ -22,7 +21,7 @@ type ConfigProvider interface {
 	GetDetailedTemplateString(templateType string) string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // OutputDestination abstracts output handling for formatter components
 type OutputDestination interface {
 	Print(message string)
@@ -31,7 +30,7 @@ type OutputDestination interface {
 	SetCollector(collector *OutputCollector)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // PatternExtractor defines contract for regex-based data extraction
 type PatternExtractor interface {
 	ExtractArchiveFilenameData(filename string) map[string]string
@@ -39,7 +38,7 @@ type PatternExtractor interface {
 	ExtractPatternData(pattern, text string) map[string]string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // Formatter provides printf-style formatting operations
 type Formatter interface {
 	FormatCreatedArchive(path string) string
@@ -58,7 +57,7 @@ type Formatter interface {
 	FormatIncrementalCreatedWithStats(path string) string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateFormatter provides template-based formatting operations
 type TemplateFormatter interface {
 	FormatWithTemplate(input, pattern, tmplStr string) (string, error)
@@ -75,7 +74,7 @@ type TemplateFormatter interface {
 	TemplateIncrementalCreatedWithStats(path string) string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ErrorFormatter provides specialized error formatting
 type ErrorFormatter interface {
 	FormatDiskFullError(err error) string
@@ -91,7 +90,7 @@ type ErrorFormatter interface {
 	TemplateFileNotFound(err error) string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // PrintFormatter provides print operations with output destination support
 type PrintFormatter interface {
 	PrintCreatedArchive(path string)
@@ -110,7 +109,7 @@ type PrintFormatter interface {
 	PrintIncrementalCreatedWithStats(path string)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // OutputFormatterInterface combines all formatting capabilities
 type OutputFormatterInterface interface {
 	Formatter

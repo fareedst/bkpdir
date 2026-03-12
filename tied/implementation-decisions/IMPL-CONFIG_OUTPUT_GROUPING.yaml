@@ -12,17 +12,31 @@ IMPL-CONFIG_OUTPUT_GROUPING:
     problems_solved: []
     benefits: []
   implementation_approach:
-    summary: '1.  **Metadata Extension**:'
+    summary: Metadata extension with importance levels and category priorities for grouped config display
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - path: config.go
+      - path: main.go
+      - path: config_grouping_test.go
+      - path: config_integration_test.go
+    functions:
+      - getFieldImportance
+      - displayConfigGrouped
+      - ImportanceCritical
+      - ImportanceHigh
+      - ImportanceMedium
+      - ImportanceLow
+      - CategoryPriority
   traceability:
     architecture:
       - ARCH-CONFIG_OUTPUT_GROUPING
     requirements:
       - REQ-CONFIG_OUTPUT_GROUPING
-    tests: []
+    tests:
+      - TestGetFieldImportance
+      - TestCategoryPriority
+      - TestConfigOutputGrouping
     code_annotations:
       - IMPL-CONFIG_OUTPUT_GROUPING
       - ARCH-CONFIG_OUTPUT_GROUPING
@@ -41,8 +55,8 @@ IMPL-CONFIG_OUTPUT_GROUPING:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -50,9 +64,61 @@ IMPL-CONFIG_OUTPUT_GROUPING:
   code_markers: '`displayConfigGrouped`, `Importance`, `CategoryPriority`'
   cross-references: '[ARCH-CONFIG_OUTPUT_GROUPING], [REQ-CONFIG_OUTPUT_GROUPING]'
   essence_pseudocode: |-
-    # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] — 1.  **Metadata Extension**:
+    # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] — Grouped config display with importance ranking and category priorities
 
-    procedure configuration_output_grouping_implementation():
-      # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] Extends existing metadata system without breaking changes
-      execute()
-      end
+    constants ImportanceLevels:
+      # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] Define importance tiers for field ranking
+      ImportanceCritical = 0
+      ImportanceHigh     = 1
+      ImportanceMedium   = 2
+      ImportanceLow      = 3
+
+    map CategoryPriority:
+      # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] Define display order for categories (lower value = higher priority)
+      basic_settings   = 0
+      archive_settings = 1
+      backup_settings  = 2
+      git_settings     = 3
+      verification     = 4
+      output_format    = 5
+      status_codes     = 6
+      advanced         = 7
+
+    procedure getFieldImportance(name, category):
+      # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] Classify field importance based on name/category
+      if name in {archive_dir_path, backup_dir_path}: return ImportanceCritical
+      if name in {use_current_dir_name, use_current_dir_name_for_files, git.enabled}: return ImportanceHigh
+      if name contains "format" or "template": return ImportanceLow
+      if name contains "status": return ImportanceLow
+      return ImportanceMedium
+
+    procedure displayConfigGrouped(values, showSources):
+      # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] Group values by category and display sorted by priority then importance
+
+      # Group values by their FieldInfo.Category
+      categories = map[category] -> list of ConfigValueWithMetadata
+      for each value in values:
+        categories[value.FieldInfo.Category].append(value)
+
+      # Sort categories by CategoryPriority (lower value first, unknown = 999)
+      sortedCategories = sort categories keys by CategoryPriority lookup, tie-break alphabetically
+
+      # Print configuration source paths header
+      print "Configuration Sources: <expanded config search paths>"
+
+      # Display each category section
+      for each category in sortedCategories:
+        categoryValues = categories[category]
+
+        # Sort within category: by Importance ascending, then by Name alphabetically
+        sort categoryValues by (FieldInfo.Importance, ConfigValue.Name)
+
+        # Print category header as "## Title Case Category"
+        print "## " + titleCase(category)
+
+        for each value in categoryValues:
+          print "  " + value.Name + ": " + value.Value
+          if showSources:
+            print " (source: " + value.Source + ")"
+            if value.IsOverridden: print " [overridden]"
+            if len(value.InheritanceChain) > 1: print " [chain: ...]"

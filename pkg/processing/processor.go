@@ -92,7 +92,7 @@ func (e *ProcessingError) Error() string {
 	return fmt.Sprintf("%s: %s", e.Operation, e.Message)
 }
 
-// NewProcessingError creates a new processing error
+// [IMPL-PROCESSING_PATTERNS] NewProcessingError creates a new processing error with code, operation, and message
 func NewProcessingError(code, operation, message string) *ProcessingError {
 	return &ProcessingError{
 		Code:      code,
@@ -116,7 +116,7 @@ type ProcessingOptions struct {
 	RetryDelay      time.Duration `json:"retry_delay"`
 }
 
-// DefaultProcessingOptions returns sensible defaults for processing operations
+// [IMPL-PROCESSING_PATTERNS] DefaultProcessingOptions returns sensible defaults for processing operations
 func DefaultProcessingOptions() *ProcessingOptions {
 	return &ProcessingOptions{
 		DryRun:          false,

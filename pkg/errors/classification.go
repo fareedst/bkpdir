@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsDiskFullError checks if an error indicates disk space exhaustion
 // Extracted from original errors.go with comprehensive disk space error detection
 func IsDiskFullError(err error) bool {
@@ -44,7 +44,7 @@ func IsDiskFullError(err error) bool {
 	return false
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsPermissionError checks if an error indicates permission or access issues
 // Extracted from original errors.go with enhanced permission error detection
 func IsPermissionError(err error) bool {
@@ -76,7 +76,7 @@ func IsPermissionError(err error) bool {
 	return false
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsDirectoryNotFoundError checks if an error indicates a directory doesn't exist
 // Extracted from original errors.go with enhanced path existence detection
 func IsDirectoryNotFoundError(err error) bool {
@@ -107,7 +107,7 @@ func IsDirectoryNotFoundError(err error) bool {
 	return false
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsFileNotFoundError checks if an error indicates a file doesn't exist
 func IsFileNotFoundError(err error) bool {
 	if err == nil {
@@ -136,7 +136,7 @@ func IsFileNotFoundError(err error) bool {
 	return false
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsNetworkError checks if an error indicates network connectivity issues
 func IsNetworkError(err error) bool {
 	if err == nil {
@@ -166,7 +166,7 @@ func IsNetworkError(err error) bool {
 	return false
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // DefaultErrorClassifier provides a default implementation of ErrorClassifier
 type DefaultErrorClassifier struct{}
 
@@ -175,7 +175,7 @@ func NewDefaultErrorClassifier() *DefaultErrorClassifier {
 	return &DefaultErrorClassifier{}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ClassifyError categorizes an error into one of the predefined categories
 func (c *DefaultErrorClassifier) ClassifyError(err error) ErrorCategory {
 	if err == nil {
@@ -196,7 +196,7 @@ func (c *DefaultErrorClassifier) ClassifyError(err error) ErrorCategory {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsRecoverable determines if an error can potentially be recovered from
 func (c *DefaultErrorClassifier) IsRecoverable(err error) bool {
 	if err == nil {
@@ -229,7 +229,7 @@ func (c *DefaultErrorClassifier) IsRecoverable(err error) bool {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // GetSeverity determines the severity level of an error
 func (c *DefaultErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	if err == nil {
@@ -262,7 +262,7 @@ func (c *DefaultErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ErrorPattern represents a configurable error detection pattern
 type ErrorPattern struct {
 	Name        string   // Name of the error pattern
@@ -272,7 +272,7 @@ type ErrorPattern struct {
 	Recoverable bool
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ConfigurableErrorClassifier allows customizing error classification patterns
 type ConfigurableErrorClassifier struct {
 	patterns []ErrorPattern
@@ -290,7 +290,7 @@ func NewConfigurableErrorClassifier(patterns []ErrorPattern, fallback ErrorClass
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ClassifyError classifies errors using configured patterns, falling back to default
 func (c *ConfigurableErrorClassifier) ClassifyError(err error) ErrorCategory {
 	if err == nil {
@@ -312,7 +312,7 @@ func (c *ConfigurableErrorClassifier) ClassifyError(err error) ErrorCategory {
 	return c.fallback.ClassifyError(err)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsRecoverable determines recoverability using configured patterns
 func (c *ConfigurableErrorClassifier) IsRecoverable(err error) bool {
 	if err == nil {
@@ -334,7 +334,7 @@ func (c *ConfigurableErrorClassifier) IsRecoverable(err error) bool {
 	return c.fallback.IsRecoverable(err)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // GetSeverity determines severity using configured patterns
 func (c *ConfigurableErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	if err == nil {

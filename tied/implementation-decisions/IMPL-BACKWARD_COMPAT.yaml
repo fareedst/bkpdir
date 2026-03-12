@@ -39,15 +39,55 @@ IMPL-BACKWARD_COMPAT:
   metadata:
     created: "2026-03-12"
     author: AI Agent
-    last_updated: "2026-03-12"
+    last_updated:
+      date: "2026-03-12"
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
   essence_pseudocode: |-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Use Go modules and interfaces to isolate extracted code
+    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+    # Backward compatibility during extraction: type aliases, wrapper functions,
+    # interface isolation, and gradual migration so the original app never breaks.
 
-    procedure maintain_backward_compatibility():
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Extract components as separate Go modules
-      extract_components_as_separate()
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Use interfaces to isolate extracted code from existing application
-      use_interfaces_to_isolate()
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Original application continues to work while providing reusable components
-      original_application_continues_to()
-      end
+    DATA compatibility_mechanisms:
+      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Tools available to maintain backward compatibility during extraction.
+      type_aliases: "type FileInfo = fileops.FileInfo (re-export extracted types)"
+      wrapper_functions: "func CreateSnapshot(...) wraps fileops.CreateSnapshot(...)"
+      interface_adapters: "root-level adapters bridge old API to new package interfaces"
+      deprecation_markers: "// Deprecated: use pkg/fileops.X instead"
+
+    PROCEDURE provide_type_aliases():
+      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Type aliases in root package re-export types from extracted packages
+      # so existing consumers see no change.
+      FOR each type moved to an extracted package:
+        create type alias in original location: type T = pkg.T
+        add deprecation comment pointing to new location
+        VALIDATE all existing consumers compile without changes
+      END FOR
+
+    PROCEDURE provide_wrapper_functions():
+      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Wrapper functions in root package delegate to extracted packages.
+      FOR each function moved to an extracted package:
+        create wrapper in original location that calls pkg.Function(...)
+        preserve original function signature exactly
+        add deprecation comment pointing to new location
+      END FOR
+
+    PROCEDURE isolate_via_interfaces():
+      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # Interface isolation ensures extracted packages have no back-dependencies.
+      FOR each extracted package:
+        CHECK package imports only Go stdlib + declared dependencies
+        CHECK package does not import root-level code
+        CHECK all communication with root is via interfaces
+      END FOR
+
+    VALIDATE backward_compatibility():
+      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
+      # The original application must build and pass all tests at every step.
+      run full test suite (unit + integration) after each extraction step
+      CHECK no public API signatures have changed in root package
+      CHECK existing CLI commands produce identical output
+      CHECK go build ./... succeeds with no import errors

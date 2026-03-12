@@ -11,8 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-
 // Example shows how to use the CLI framework
 func ExampleCLIApp() {
 	// Define application information

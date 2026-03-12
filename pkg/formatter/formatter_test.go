@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // MockConfigProvider provides test configuration values
 type MockConfigProvider struct {
 	formatStrings   map[string]string
@@ -56,7 +56,7 @@ func (mcp *MockConfigProvider) GetDetailedTemplateString(templateType string) st
 	return mcp.templateStrings[templateType+"_detailed"]
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestOutputCollector(t *testing.T) {
 	collector := NewOutputCollector()
 
@@ -89,7 +89,7 @@ func TestOutputCollector(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestPatternExtractor(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	extractor := NewDefaultPatternExtractor(configProvider)
@@ -121,7 +121,7 @@ func TestPatternExtractor(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]
 func TestTemplateFormatter(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultTemplateFormatter(configProvider)
@@ -162,7 +162,7 @@ func TestTemplateFormatter(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestDefaultOutputFormatter(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -194,7 +194,7 @@ func TestDefaultOutputFormatter(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestDelayedOutputMode(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	collector := NewOutputCollector()
@@ -234,7 +234,7 @@ func TestDelayedOutputMode(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestTemplateDelegation(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -256,7 +256,7 @@ func TestTemplateDelegation(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestErrorTemplateFormatting(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -280,7 +280,7 @@ func TestErrorTemplateFormatting(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestPatternExtractionEdgeCases(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	extractor := NewDefaultPatternExtractor(configProvider)
@@ -307,7 +307,7 @@ func TestPatternExtractionEdgeCases(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DELAYED_OUTPUT] [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func TestInterfaceCompliance(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 
@@ -339,7 +339,7 @@ func TestInterfaceCompliance(t *testing.T) {
 	formatter.SetCollector(NewOutputCollector())
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 func BenchmarkFormatterOperations(b *testing.B) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)

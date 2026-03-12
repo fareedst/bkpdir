@@ -23,9 +23,8 @@ import (
 	"os"
 )
 
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // ConfigLoader provides schema-agnostic configuration management operations.
-// This interface abstracts configuration loading from specific application schemas.
 type ConfigLoader interface {
 	// LoadConfig loads configuration from the specified root directory
 	LoadConfig(root string) (*Config, error)

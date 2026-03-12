@@ -24,8 +24,18 @@ IMPL-LIST_LIMIT:
     summary: '- Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`'
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - main.go
+      - backup.go
+    functions:
+      - listLimit var (main.go:43) — persistent limit flag variable
+      - main (main.go:387-388) — registers --limit/-n persistent flag with default 10
+      - listCmd (main.go:1069-1081) — creates list subcommand, inherits --limit from persistent flags
+      - handleListCommand (main.go:778-807) — passes listLimit to ListArchivesEnhanced
+      - handleListFileBackupsCommand (main.go:1268-1300) — passes listLimit to ListFileBackupsEnhanced
+      - ListArchivesEnhanced (main.go:1208-1258) — sorts archives most-recent-first, applies limit truncation
+      - CommandHandler.HandleListArchives (main.go:1511-1594) — applies default limit of 10
+      - ListFileBackupsEnhanced (backup.go:369-399) — lists file backups with limit parameter
   traceability:
     architecture:
       - ARCH-LIST_LIMIT
@@ -42,7 +52,16 @@ IMPL-LIST_LIMIT:
       - REQ-OUTPUT_FORMATTING
       - REQ-CONTEXT_SUPPORT
       - REQ-EXTRACT_008_INTERDEP_MAPPING
-    tests: []
+    tests:
+      - TestListFileBackupsEnhanced_WithLimit (backup_test.go) — parent test with 7 subtests
+      - testListFileBackupsDefaultLimit (backup_test.go) — verifies default limit of 10
+      - testListFileBackupsCustomLimit (backup_test.go) — verifies custom limit values
+      - testListFileBackupsLimitZero (backup_test.go) — verifies limit=0 shows all
+      - testListFileBackupsFewerThanLimit (backup_test.go) — verifies fewer results than limit
+      - testListFileBackupsExactlyLimit (backup_test.go) — verifies exact match to limit
+      - testListFileBackupsMoreThanLimit (backup_test.go) — verifies truncation beyond limit
+      - testListFileBackupsSortingWithLimit (backup_test.go) — verifies sort order preserved with limit
+      - TestListCmd (main_test.go) — integration test for list command
     code_annotations:
       - IMPL-LIST_LIMIT
       - ARCH-LIST_LIMIT
@@ -83,11 +102,11 @@ IMPL-LIST_LIMIT:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
-      validator: MCP converter
+      validator: AI agent
       result: pass
   code_markers: |-
     `archive.go` line ~695-738: `createIncrementalArchive()` - Integrated diff analysis before archive creation
@@ -138,9 +157,71 @@ IMPL-LIST_LIMIT:
     - Confirm tokens appear in `stdd/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
     - Confirm `docs/package-interdependency-mapping.md` exists and links back to these tokens.
   essence_pseudocode: |-
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-EXTRACT_008_INTERDEP] [REQ-LIST_LIMIT] [REQ-USABILITY] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] [REQ-EXTRACT_008_INTERDEP_MAPPING] — - Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`
+    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-USABILITY] — Limit list command output to newest N items
 
-    procedure list_command_limit_implementation():
-      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-EXTRACT_008_INTERDEP] [REQ-LIST_LIMIT] [REQ-USABILITY] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] [REQ-EXTRACT_008_INTERDEP_MAPPING] STDD requires authoritative records to live in the requirements, architecture, and implementation documents for traceability. Working-plan or supplemental files create duplication and risk drift; migrating content into the canonical STDD files preserves traceability.
-      execute()
-      end
+    # --- Flag registration (main.go) ---
+    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-CLI_COMMANDS] [REQ-LIST_LIMIT] [REQ-USABILITY] Register --limit as persistent flag
+    procedure register_limit_flag():
+      var listLimit int
+      rootCmd.PersistentFlags.IntVarP(&listLimit, "limit", "n", 10, "Limit the number of items to display (0 = show all)")
+      # Persistent so it applies to both `list` subcommand and `--list` flag on root
+
+    # --- List archives (main.go: handleListCommand + ListArchivesEnhanced) ---
+    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] Limit archive listing output
+    procedure handleListCommand():
+      cwd = os.Getwd()
+      cfg = LoadConfig(cwd)
+      formatter = NewOutputFormatter(cfg)
+      ListArchivesEnhanced(cfg, formatter, listLimit)
+
+    procedure ListArchivesEnhanced(cfg, formatter, limit):
+      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Accept limit and apply after sorting
+      cwd = os.Getwd()
+      archiveDir = resolve archive directory from cfg
+      archives = ListArchives(archiveDir)
+      if archives is empty: print "no archives found", return
+
+      # [IMPL-LIST_LIMIT] [REQ-LIST_LIMIT] Sort most recent first
+      sort archives by CreationTime descending
+
+      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Apply limit (0 = show all)
+      if limit > 0 and len(archives) > limit:
+        archives = archives[:limit]
+
+      # [IMPL-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] Format and print each archive
+      for each archive in archives:
+        output = formatter.FormatListArchiveWithExtraction(archive.Path, creationTime)
+        print output
+
+    # --- List file backups (main.go: handleListFileBackupsCommand, backup.go: ListFileBackupsEnhanced) ---
+    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-USABILITY] Limit file backup listing output
+    procedure handleListFileBackupsCommand(args):
+      filePath = listFile or args[0]
+      cfg = LoadConfig(cwd)
+      formatter = NewOutputFormatter(cfg)
+      ListFileBackupsEnhanced(cfg, formatter, filePath, listLimit)
+
+    procedure ListFileBackupsEnhanced(cfg, formatter, filePath, limit):
+      backupDir = resolve backup directory from cfg
+      backups = ListFileBackups(backupDir, baseFilename)
+      if backups is empty: print "no backups found", return
+
+      # Sort most recent first
+      sort backups by modification time descending
+
+      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Apply limit (0 = show all)
+      if limit > 0 and len(backups) > limit:
+        backups = backups[:limit]
+
+      for each backup in backups:
+        print formatted backup info
+
+    # --- CommandHandler path (main.go: HandleListArchives) ---
+    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Default limit for CommandHandler
+    procedure CommandHandler.HandleListArchives(args):
+      archives = ListArchives(archiveDir)
+      sort archives most-recent-first
+      limit = 10  # default for CommandHandler path
+      if limit > 0 and len(archives) > limit:
+        archives = archives[:limit]
+      format and print archives

@@ -42,8 +42,8 @@ IMPL-PACKAGE_EXTRACTION:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -74,9 +74,59 @@ IMPL-PACKAGE_EXTRACTION:
     }
     ```
   essence_pseudocode: |-
-    # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — Interface-driven extraction with layered dependency order
+    # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
+    # Package extraction strategy: 4-phase interface-driven extraction with
+    # type aliases, wrapper functions, and legacy compatibility layer.
 
-    procedure package_extraction_implementation():
-      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] Enables clean component boundaries
-      execute()
-      end
+    DATA extraction_phases:
+      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
+      # Four phases ordered by dependency depth.
+      phase_1_foundation:
+        description: "Foundation Components (No Dependencies)"
+        packages: [pkg/config, pkg/errors]
+        deps: [Go stdlib only]
+      phase_2_interface_dependent:
+        description: "Interface-Dependent Components"
+        packages: [pkg/formatter, pkg/git, pkg/fileops]
+        deps: [phase_1_foundation]
+      phase_3_framework:
+        description: "Framework Layer"
+        packages: [pkg/cli]
+        deps: [phase_1_foundation, phase_2_interface_dependent]
+      phase_4_patterns:
+        description: "Pattern Layer"
+        packages: [pkg/processing, pkg/resources]
+        deps: [phase_1_foundation, phase_2_interface_dependent]
+
+    PROCEDURE extract_phase(phase):
+      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
+      # Each phase follows the same extraction procedure.
+      FOR each package in phase.packages:
+        define interfaces for all component dependencies (before extraction)
+        move code to pkg/<package>/ preserving internal structure
+        create legacy type aliases in root: type T = pkg.T
+        create wrapper functions in root: func F(...) = pkg.F(...)
+        update internal imports to use new package paths
+        VALIDATE go build ./... succeeds
+        VALIDATE all tests pass (unit + integration)
+      END FOR
+
+    PROCEDURE maintain_legacy_compatibility():
+      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
+      # Legacy layer ensures existing consumers see no breaking changes.
+      provide type aliases: type FileInfo = fileops.FileInfo
+      provide type aliases: type DirectorySnapshot = fileops.DirectorySnapshot
+      provide wrapper functions that delegate to extracted packages
+      add deprecation comments pointing to new package locations
+      VALIDATE original CLI entry points produce identical behavior
+
+    VALIDATE post_extraction_invariants():
+      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
+      # After extraction, each package must be independently viable.
+      FOR each extracted package:
+        CHECK package compiles independently (go build ./pkg/<name>/...)
+        CHECK package tests pass independently (go test ./pkg/<name>/...)
+        CHECK package has no imports from root-level source files
+        CHECK package exposes clean interfaces at its boundary
+        CHECK no circular dependencies exist in import graph
+      END FOR

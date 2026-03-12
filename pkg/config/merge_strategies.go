@@ -1,8 +1,7 @@
-// [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 // Package config provides merge strategies for layered configuration inheritance.
-//
-// This file implements the merge strategies that enable flexible configuration
-// inheritance with different behaviors for arrays, objects, and primitive values.
+// Implements strategies for override, array merge, array prepend, array replace,
+// and default value behaviors using prefix-based key processing.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
@@ -14,13 +13,11 @@ import (
 	"strings"
 )
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
-
 // StandardOverrideStrategy implements the default override behavior (no prefix).
 // Child values completely replace parent values.
 type StandardOverrideStrategy struct{}
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] Standard override: child value completely replaces parent value.
 func (s *StandardOverrideStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	// Standard override: child value completely replaces parent value
 	return src, nil
@@ -42,7 +39,7 @@ func (s *StandardOverrideStrategy) SupportsType(valueType string) bool {
 // Child array elements are appended to parent array elements.
 type ArrayMergeStrategy struct{}
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func (a *ArrayMergeStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	destVal := reflect.ValueOf(dest)
 	srcVal := reflect.ValueOf(src)
@@ -95,7 +92,7 @@ func (a *ArrayMergeStrategy) SupportsType(valueType string) bool {
 // Child array elements are prepended to parent array elements (higher priority).
 type ArrayPrependStrategy struct{}
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func (a *ArrayPrependStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	destVal := reflect.ValueOf(dest)
 	srcVal := reflect.ValueOf(src)
@@ -148,7 +145,7 @@ func (a *ArrayPrependStrategy) SupportsType(valueType string) bool {
 // Child array completely replaces parent array.
 type ArrayReplaceStrategy struct{}
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func (a *ArrayReplaceStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	// Array replace: child array completely replaces parent array
 	return src, nil
@@ -170,7 +167,7 @@ func (a *ArrayReplaceStrategy) SupportsType(valueType string) bool {
 // Child value is used only if parent value is not set or is zero value.
 type DefaultValueStrategy struct{}
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func (d *DefaultValueStrategy) Merge(dest, src interface{}) (interface{}, error) {
 	destVal := reflect.ValueOf(dest)
 
@@ -200,7 +197,7 @@ type PrefixedKeyProcessor struct {
 	strategies map[string]MergeStrategy
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func NewPrefixedKeyProcessor() *PrefixedKeyProcessor {
 	processor := &PrefixedKeyProcessor{
 		strategies: make(map[string]MergeStrategy),
@@ -235,7 +232,7 @@ func (p *PrefixedKeyProcessor) GetAvailableStrategies() map[string]MergeStrategy
 	return strategies
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func (p *PrefixedKeyProcessor) ProcessKeys(config map[string]interface{}) (*ProcessedConfig, error) {
 	processed := &ProcessedConfig{
 		Config:     make(map[string]interface{}),
@@ -285,7 +282,7 @@ type DefaultMergeStrategyProcessor struct {
 	*PrefixedKeyProcessor
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [REQ-CFG_005]
 func NewDefaultMergeStrategyProcessor() *DefaultMergeStrategyProcessor {
 	return &DefaultMergeStrategyProcessor{
 		PrefixedKeyProcessor: NewPrefixedKeyProcessor(),

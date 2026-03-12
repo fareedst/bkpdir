@@ -36,7 +36,6 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
       - archive.go
       - formatter.go
       - config.go
-      - incremental_duplicate_prevention_test.go
     functions:
       - createIncrementalArchive
       - ReconstructArchiveState
@@ -52,13 +51,19 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
       - REQ-DIFF_COMMAND
       - REQ-OUTPUT_FORMATTING
     tests:
-      - incremental_duplicate_prevention_test.go
+      - TestIncrementalArchiveSkipNoChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestIncrementalArchiveProceedWithChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestIncrementalArchiveSkipWithFullOnly_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestIncrementalArchiveProceedWithNewFile_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestIncCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestIncCommandWithNoteFlag_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestIncCommandNoFullArchive_REQ_INCREMENTAL_DUPLICATE_PREVENTION
     code_annotations:
-      - 'archive.go line ~695-738: createIncrementalArchive with diff analysis'
-      - 'archive.go line ~869-904: findLatestFullArchive with name-based sorting'
-      - 'formatter.go line ~1785-1799: FormatIncrementalSkippedNoChanges and PrintIncrementalSkippedNoChanges'
-      - 'config.go line ~153: FormatIncrementalSkippedNoChanges field'
-      - 'config.go line ~336: Default format string'
+      - 'archive.go: createIncrementalArchive — core function with duplicate prevention via ReconstructArchiveState + CalculateDiff'
+      - 'archive.go: findLatestFullArchive — name-based sorting for archive selection'
+      - 'formatter.go: FormatIncrementalSkippedNoChanges — returns configurable skip message'
+      - 'formatter.go: PrintIncrementalSkippedNoChanges — prints skip message to stdout or collector'
+      - 'config.go: FormatIncrementalSkippedNoChanges field and default format string'
   related_decisions:
     depends_on:
       - IMPL-DIFF_COMMAND
@@ -68,25 +73,59 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
   metadata:
     created: "2026-03-12"
     author: AI Agent
-    last_updated: "2026-03-12"
+    last_updated:
+      date: "2026-03-12"
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
   essence_pseudocode: |-
-    # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] — Leverage CalculateDiff() and ReconstructArchiveState() from diff command to detect changes before creating incremental archives
+    # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING]
+    # — Reuse diff command's ReconstructArchiveState + CalculateDiff to prevent duplicate incremental archives
 
-    procedure incremental_archive_duplicate_prevention():
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Reuse CalculateDiff() function from diff command implementation
-      reuse_calculatediff_function_from()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Use ReconstructArchiveState() to get effective state from full + most recent incremental
-      use_reconstructarchivestate_to_get()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Use findLatestFullArchive() with name-based sorting
-      use_findlatestfullarchive_with_name_based()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Use diff result to determine if changes exist
-      use_diff_result_to()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Skip incremental archive creation if no changes detected
-      skip_incremental_archive_creation()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Display appropriate message using format strings
-      display_appropriate_message_using()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Fallback to old behavior when reconstruction fails (backward compatibility)
-      fallback_to_old_behavior()
-      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Exclude patterns respected via archiveConfig.GetExcludePatterns()
-      exclude_patterns_respected_via()
-      end
+    PROCEDURE createIncrementalArchive(config IncrementalArchiveConfig) -> error:
+      cwd = os.Getwd()
+      archiveConfig = ConfigToArchiveConfigAdapter(config.Config)
+      archiveDir = prepareArchiveDirectoryWithInterface(archiveConfig, cwd, config.DryRun)
+
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — Reconstruct archive state and check for changes
+      # [IMPL-DIFF_COMMAND] — Reuses ReconstructArchiveState from diff command
+      reconstructedState, err = ReconstructArchiveState(archiveDir)
+
+      IF err (reconstruction failed):
+        # Fallback to legacy behavior for backward compatibility
+        latestFullArchive = findLatestFullArchive(archiveDir)
+        ON error RETURN error
+        modifiedFiles = collectModifiedFiles(cwd, latestFullArchive, archiveConfig.GetExcludePatterns())
+        ON error RETURN error
+        IF modifiedFiles is empty:
+          formatter = NewOutputFormatter(config.Config)
+          formatter.PrintNoFilesModified()
+          RETURN nil
+      ELSE:
+        # [IMPL-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Reuses CalculateDiff from diff command
+        diff = CalculateDiff(cwd, reconstructedState, archiveConfig.GetExcludePatterns())
+        ON error RETURN error
+
+        # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — Skip if no changes detected
+        IF diff.Added is empty AND diff.Modified is empty AND diff.Deleted is empty:
+          formatter = NewOutputFormatter(config.Config)
+          formatter.PrintIncrementalSkippedNoChanges()
+          RETURN nil
+
+        # Convert diff to modified files list (added + modified only; deleted files cannot be archived)
+        modifiedFiles = diff.Added + diff.Modified
+
+      # Proceed with archive creation
+      latestFullArchive = findLatestFullArchive(archiveDir)
+      archivePath = prepareIncrementalArchiveWithInterface(cwd, latestFullArchive, archiveConfig, config.Note)
+      IF config.DryRun THEN printDryRunInfo; RETURN nil
+      rm = NewResourceManager()
+      DEFER rm.CleanupWithPanicRecovery()
+      RETURN createAndVerifyIncrementalArchive(options)
+
+    # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — Format skip message
+    PROCEDURE FormatIncrementalSkippedNoChanges() -> string:
+      RETURN cfg.FormatIncrementalSkippedNoChanges
+
+    PROCEDURE PrintIncrementalSkippedNoChanges():
+      message = FormatIncrementalSkippedNoChanges()
+      IF collector THEN collector.AddStdout(message) ELSE fmt.Print(message)

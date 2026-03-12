@@ -7,13 +7,6 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-CONFIG-PKG-001: Config package test validation - Configuration discovery and loading testing [ACTION-validation]
-// Source: pkg/config/discovery.go - Config discovery implementation
-// Impact: Core functionality validation for config package
-
-// TEST-SERVICE-CONFIG-PKG-001: Config package service test validation - Configuration service implementation testing [ACTION-validation]
-// Source: pkg/config/loader.go - Config service implementation
-// Impact: Config service validation for config package service implementation
 package config
 
 import (
@@ -32,9 +25,8 @@ type TestConfig struct {
 	Environment string   `yaml:"environment"`
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config Loader System
+// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
+// TestGenericConfigLoader validates the generic config loader with pluggable schema.
 func TestGenericConfigLoader(t *testing.T) {
 	// Create a temporary directory for test
 	tempDir, err := os.MkdirTemp("", "config_test")
@@ -112,9 +104,7 @@ environment: testing
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config Value System
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates config value extraction.
 func TestConfigValueExtraction(t *testing.T) {
 	config := &TestConfig{
 		Name:        "example-app",
@@ -150,9 +140,7 @@ func TestConfigValueExtraction(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config Merge System
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates config merging behavior.
 func TestConfigMerging(t *testing.T) {
 	merger := NewGenericConfigMerger()
 
@@ -196,9 +184,7 @@ func TestConfigMerging(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config Path System
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates config path discovery.
 func TestPathDiscovery(t *testing.T) {
 	discovery := NewGenericPathDiscovery("myapp", ".myapp.yml")
 
@@ -220,9 +206,7 @@ func TestPathDiscovery(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config Environment System
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates environment provider.
 func TestEnvironmentProvider(t *testing.T) {
 	provider := NewDefaultEnvironmentProvider()
 
@@ -254,9 +238,7 @@ func TestEnvironmentProvider(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config FileOps System
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates file operations.
 func TestFileOperations(t *testing.T) {
 	fileOps := NewDefaultFileOperations()
 
@@ -299,9 +281,7 @@ func TestFileOperations(t *testing.T) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix EXTRACT-001
-// IMMUTABLE-REF: Config ValueExtractor System
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates value extractor.
 func TestValueExtractor(t *testing.T) {
 	extractor := NewGenericValueExtractor()
 
@@ -343,8 +323,8 @@ func TestValueExtractor(t *testing.T) {
 	}
 }
 
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // BenchmarkConfigLoading benchmarks the configuration loading performance.
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 func BenchmarkConfigLoading(b *testing.B) {
 	// Create test setup
 	tempDir, err := os.MkdirTemp("", "benchmark_config")

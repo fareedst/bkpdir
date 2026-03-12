@@ -14,12 +14,19 @@ IMPL-DATA_MODELS:
       - Supports serialization and persistence
       - Facilitates testing and validation
   implementation_approach:
-    summary: Define comprehensive Go structs for archive, backup, and backup options data
+    summary: Define comprehensive Go structs for archive, backup, and backup options data with interface adapters for dependency abstraction
     details:
       - Archive struct with Name, Path, CreationTime, IsIncremental, GitBranch, GitHash, Note, BaseArchive fields
+      - ArchiveConfig struct with Prefix, Timestamp, GitBranch, GitHash, GitIsClean, ShowGitDirtyStatus, Note, IsGit, IsIncremental, BaseName fields
+      - ArchiveCreationOptions struct with Context, CWD, Path, Files, Config, ResourceMgr fields
+      - IncrementalArchiveConfig struct with Config, Note, DryRun, Context fields
+      - ArchiveConfigInterface and ArchiveFormatterInterface for dependency abstraction
+      - ConfigToArchiveConfigAdapter adapts Config to ArchiveConfigInterface
       - Backup struct with Name, Path, CreationTime, SourceFile, Note fields
       - BackupInfo struct with Name, Path, CreationTime, Size fields
-      - BackupOptions struct with Context, Config and other operation parameters
+      - BackupOptions struct with Context, Config, Formatter, FilePath, Note, DryRun fields
+      - BackupConfigInterface and BackupFormatterInterface for dependency abstraction
+      - ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
   cross_references:
     - ARCH-SYSTEM_COMPONENTS
     - REQ-CODE_QUALITY
@@ -27,38 +34,201 @@ IMPL-DATA_MODELS:
     files:
       - archive.go
       - backup.go
+      - archive_test.go
+      - backup_test.go
     functions:
       - Archive
-      - Backup
+      - ArchiveConfig
+      - ArchiveConfigInterface
+      - ArchiveCreationOptions
+      - ArchiveFormatterInterface
+      - ConfigToArchiveConfigAdapter
+      - OutputFormatterToArchiveFormatterAdapter
+      - IncrementalArchiveConfig
       - BackupInfo
+      - Backup
       - BackupOptions
+      - BackupConfigInterface
+      - BackupFormatterInterface
+      - ConfigToBackupConfigAdapter
+      - OutputFormatterToBackupFormatterAdapter
   traceability:
     architecture:
       - ARCH-SYSTEM_COMPONENTS
     requirements:
       - REQ-CODE_QUALITY
-    tests: []
-    code_annotations: []
+    tests:
+      - TestGenerateArchiveName
+      - TestCreateFullArchive
+      - TestCreateIncremental
+      - TestIncrementalArchiveDirectoryStructure
+      - TestSkipBrokenSymlinks
+      - TestGenerateBackupName
+      - TestListFileBackups
+      - TestCreateFileBackup
+      - TestCreateFileBackupWithContext
+      - TestCheckForIdenticalFileBackup
+      - TestListFileBackupsEnhanced_WithLimit
+    code_annotations:
+      - IMPL-DATA_MODELS
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-CODE_QUALITY
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
       - IMPL-FILE_OPERATIONS
       - IMPL-ZIP_FORMAT
+      - IMPL-ATOMIC_OPS
+      - IMPL-CONTEXT_OPS
   metadata:
     created: "2026-03-12"
     author: AI Agent
-    last_updated: "2026-03-12"
+    last_updated:
+      date: "2026-03-12"
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
   essence_pseudocode: |-
-    # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] — Define comprehensive Go structs for archive, backup, and backup options data
+    # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] — Comprehensive Go data structs for archive and backup operations with interface adapters
 
-    procedure data_models():
-      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Archive struct with Name, Path, CreationTime, IsIncremental, GitBranch, GitHash, Note, BaseArchive fields
-      archive_struct_with_name()
-      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Backup struct with Name, Path, CreationTime, SourceFile, Note fields
-      backup_struct_with_name()
-      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] BackupInfo struct with Name, Path, CreationTime, Size fields
-      backupinfo_struct_with_name()
-      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] BackupOptions struct with Context, Config and other operation parameters
-      backupoptions_struct_with_context()
-      end
+    # --- Archive domain models (archive.go) ---
+
+    struct ArchiveConfig:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Configuration value object for generating archive names
+      Prefix             string
+      Timestamp          string
+      GitBranch          string
+      GitHash            string
+      GitIsClean         bool
+      ShowGitDirtyStatus bool
+      Note               string
+      IsGit              bool
+      IsIncremental      bool
+      BaseName           string
+
+    struct Archive:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Represents a directory archive with metadata (full or incremental)
+      Name          string
+      Path          string
+      CreationTime  time.Time
+      IsIncremental bool
+      GitBranch     string
+      GitHash       string
+      Note          string
+      BaseArchive   string  # for incremental archives
+
+    interface ArchiveConfigInterface:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Abstracts configuration dependencies for archive operations
+      GetArchiveDirPath() string
+      GetUseCurrentDirName() bool
+      GetExcludePatterns() []string
+      GetIncludeGitInfo() bool
+      GetShowGitDirtyStatus() bool
+      GetSkipBrokenSymlinks() bool
+      GetStatusCodes() map[string]int
+      GetStatusDirectoryNotFound() int
+      GetStatusDiskFull() int
+      GetStatusConfigError() int
+
+    struct ArchiveCreationOptions:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Groups all parameters needed for archive creation into a single value object
+      Context     context.Context
+      CWD         string
+      Path        string
+      Files       []string
+      Config      ArchiveConfigInterface
+      ResourceMgr *ResourceManager
+
+    interface ArchiveFormatterInterface:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Abstracts formatter dependencies for archive operations
+      PrintDryRunFilesHeader()
+      PrintDryRunFileEntry(file string)
+      PrintDryRunArchive(path string)
+      PrintIncrementalCreated(path string)
+
+    struct ConfigToArchiveConfigAdapter:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Adapter: wraps *Config, delegates each ArchiveConfigInterface method to the corresponding Config field
+      cfg *Config
+      implements ArchiveConfigInterface by delegating:
+        GetArchiveDirPath()       -> cfg.ArchiveDirPath
+        GetUseCurrentDirName()    -> cfg.UseCurrentDirName
+        GetExcludePatterns()      -> cfg.ExcludePatterns
+        GetIncludeGitInfo()       -> cfg.IncludeGitInfo
+        GetShowGitDirtyStatus()   -> cfg.ShowGitDirtyStatus
+        GetSkipBrokenSymlinks()   -> cfg.SkipBrokenSymlinks
+        GetStatusCodes()          -> cfg.GetStatusCodes()
+        GetStatusDirectoryNotFound() -> cfg.StatusDirectoryNotFound
+        GetStatusDiskFull()       -> cfg.StatusDiskFull
+        GetStatusConfigError()    -> cfg.StatusConfigError
+
+    struct OutputFormatterToArchiveFormatterAdapter:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Adapter: wraps OutputFormatterInterface, type-asserts to FormatterAdapter/AIFormatterAdapter for extended methods
+      formatter OutputFormatterInterface
+      implements ArchiveFormatterInterface by type-asserting formatter to concrete types
+
+    struct IncrementalArchiveConfig:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Value object grouping parameters for incremental archive creation
+      Config  *Config
+      Note    string
+      DryRun  bool
+      Context context.Context
+
+    # --- Backup domain models (backup.go) ---
+
+    interface BackupConfigInterface:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Abstracts configuration dependencies for backup operations
+      GetBackupDirPath() string
+      GetUseCurrentDirNameForFiles() bool
+      GetStatusFileNotFound() int
+      GetStatusPermissionDenied() int
+      GetStatusInvalidFileType() int
+      GetStatusDiskFull() int
+      GetStatusFileIsIdenticalToExistingBackup() int
+
+    interface BackupFormatterInterface:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Abstracts formatter dependencies for backup operations
+      PrintDryRunBackup(path string)
+      PrintIdenticalBackup(path string)
+      PrintBackupCreated(path string)
+      PrintNoBackupsFound(filename, backupDir string)
+
+    struct ConfigToBackupConfigAdapter:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Adapter: wraps *Config, delegates each BackupConfigInterface method to the corresponding Config field
+      cfg *Config
+      implements BackupConfigInterface by delegating:
+        GetBackupDirPath()      -> cfg.BackupDirPath
+        GetUseCurrentDirNameForFiles() -> cfg.UseCurrentDirNameForFiles
+        GetStatusFileNotFound() -> cfg.StatusFileNotFound
+        GetStatusPermissionDenied()    -> cfg.StatusPermissionDenied
+        GetStatusInvalidFileType()     -> cfg.StatusInvalidFileType
+        GetStatusDiskFull()            -> cfg.StatusDiskFull
+        GetStatusFileIsIdenticalToExistingBackup() -> cfg.StatusFileIsIdenticalToExistingBackup
+
+    struct OutputFormatterToBackupFormatterAdapter:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Adapter: wraps *OutputFormatter, delegates each BackupFormatterInterface method directly
+      formatter *OutputFormatter
+      implements BackupFormatterInterface by delegating to formatter.*
+
+    struct BackupInfo:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Represents information about a file backup (listing and comparison)
+      Name         string
+      Path         string
+      CreationTime time.Time
+      Size         int64
+
+    struct Backup:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Represents a single file backup with metadata and source tracking
+      Name         string
+      Path         string
+      CreationTime time.Time
+      SourceFile   string
+      Note         string
+
+    struct BackupOptions:
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Groups all parameters for backup creation into a single value object
+      Context   context.Context
+      Config    *Config
+      Formatter OutputFormatterInterface
+      FilePath  string
+      Note      string
+      DryRun    bool

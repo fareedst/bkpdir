@@ -23,8 +23,20 @@ IMPL-EXCLUDE_MERGE_FIX:
       - '`config_test.go`'
   code_locations:
     files:
+      - path: config.go
       - path: config_test.go
-    functions: []
+    functions:
+      - applyMergeStrategies
+      - applyMergeOperation
+      - applyMerge
+      - applyOverride
+      - applyPrepend
+      - applyReplace
+      - applyDefault
+      - setConfigField
+      - isKnownConfigField
+      - getDefaultValueForKey
+      - getFieldMergeBehavior
   traceability:
     architecture:
       - ARCH-EXCLUDE_MERGE_FIX
@@ -32,7 +44,13 @@ IMPL-EXCLUDE_MERGE_FIX:
       - REQ-CFG_005
       - REQ-CONFIGURATION
       - REQ-TEST_EXCLUDE_MERGE
-    tests: []
+    tests:
+      - TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE
+      - TestMergeStrategies
+      - TestArrayMergeStrategies
+      - TestMergeStrategiesInSequentialFiles
+      - TestMergeStrategiesInInheritanceChains
+      - TestMergeStrategyTracking
     code_annotations:
       - IMPL-EXCLUDE_MERGE_FIX
       - ARCH-EXCLUDE_MERGE_FIX
@@ -55,8 +73,8 @@ IMPL-EXCLUDE_MERGE_FIX:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -80,9 +98,70 @@ IMPL-EXCLUDE_MERGE_FIX:
   implementation_changes: '#### 1. Merge Strategy Detection Fix (`extractStrategy`)'
   new_function: '`isKnownConfigField` helper function checks if a field name is a valid config field before processing.'
   essence_pseudocode: |-
-    # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — Implement array field default merge strategy to satisfy CFG-005 requirement
+    # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — Array fields default to merge (accumulate) in all contexts per CFG-005
 
-    procedure array_field_default_merge_strategy_implementation():
-      # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] `config_test.go`
-      config_test_go()
-      end
+    procedure applyMergeStrategies(dst, src, inheritContext, rawSrcMap, initialDefaultCfg, explicitlySetFields):
+      # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] Process merge strategy prefixes from raw YAML keys
+      processor = newMergeStrategyProcessor()
+
+      # Use rawSrcMap if available (preserves !, +, ^, = prefixes), else convert Config to map
+      srcMap = rawSrcMap ?? configToMap(src)
+      if exclude_patterns not in srcMap and src has patterns:
+        srcMap["exclude_patterns"] = src.ExcludePatterns
+
+      # Process keys through strategy processor (strips prefixes, determines strategy)
+      processed = processor.processKeys(srcMap)
+
+      # [IMPL-EXCLUDE_MERGE_FIX] [REQ-CFG_005] Detect explicit prefix usage per field
+      hasExplicitPrefix = {}
+      for each origKey in rawSrcMap:
+        cleanKey = strip surrounding quotes from origKey
+        if cleanKey starts with !, +, ^, or =:
+          hasExplicitPrefix[cleanKey without prefix] = true
+
+      # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] Apply field-specific merge behavior
+      for each (key, operation) in processed.operations:
+        behavior = getFieldMergeBehavior(key)
+        if behavior == MergeBehaviorAccumulate:
+          # [IMPL-EXCLUDE_MERGE_FIX] [REQ-CFG_005] Array fields default to merge in ALL contexts
+          if operation.strategy == "override" and not hasExplicitPrefix[key]:
+            operation.strategy = "merge"   # CFG-005 fix: override → merge for accumulate fields
+
+        # Get current dst value for merge operation
+        dstValue = getCurrentFieldValue(result, key)
+        applyMergeOperation(result, key, operation, dstValue, originalDstValue, inheritContext, defaultCfg, explicitlySetFields)
+
+      return result
+
+    procedure applyMerge(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
+      # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] Merge arrays with deduplication
+
+      # [IMPL-EXCLUDE_MERGE_FIX] [REQ-CONFIGURATION] Handle YAML type conversion: []interface{} → []string
+      srcSlice = value as []string
+      if conversion fails, try converting []interface{} element-by-element
+
+      # Get current destination slice from result (use current state, not original)
+      dstSlice = getFieldSlice(result, key)
+
+      # [IMPL-EXCLUDE_MERGE_FIX] [REQ-CFG_005] Merge with deduplication
+      existing = set from dstSlice
+      merged = copy of dstSlice
+      for each item in srcSlice:
+        if item not in existing:
+          merged.append(item)
+          existing.add(item)
+
+      setConfigField(result, key, merged)
+
+    procedure setConfigField(cfg, key, value):
+      # [IMPL-EXCLUDE_MERGE_FIX] [REQ-CONFIGURATION] Set field with YAML type conversion
+      switch key:
+        "exclude_patterns":
+          if value is []string: cfg.ExcludePatterns = value
+          if value is []interface{}: convert to []string then set
+        "archive_dir_path", "backup_dir_path", etc.: set corresponding field
+        default: return error "unknown config field"
+
+    procedure isKnownConfigField(key):
+      # [IMPL-EXCLUDE_MERGE_FIX] [REQ-CONFIGURATION] Guard against unknown fields in merge
+      return key in {archive_dir_path, use_current_dir_name, exclude_patterns, include_git_info, backup_dir_path, skip_broken_symlinks, status_created_archive, status_disk_full}

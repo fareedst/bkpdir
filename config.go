@@ -49,21 +49,15 @@ import (
 // IMMUTABLE-REF: Archive Verification Requirements
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-// IMMUTABLE-REF: Configuration Defaults, Output Formatting Requirements
-// TEST-REF: TestDefaultConfig
-// DECISION-REF: DEC-002
-// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
-// REFACTOR-001: See architecture.md - Interface Contracts [DECISION:maintenance]
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // Config holds all configuration settings for the BkpDir application.
 // It includes settings for archive creation, file backup, status codes,
 // and output formatting.
 // The configuration can be loaded from YAML files and environment variables.
 type Config struct {
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+	// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Configuration struct with YAML tags for serialization and reflection-based discovery
 	// Basic settings
 	ArchiveDirPath     string   `yaml:"archive_dir_path"`
 	UseCurrentDirName  bool     `yaml:"use_current_dir_name"`
@@ -80,12 +74,12 @@ type Config struct {
 	// Git configuration for repository detection and information extraction
 	Git *GitConfig `yaml:"git,omitempty"`
 
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// File backup settings
 	BackupDirPath             string `yaml:"backup_dir_path"`
 	UseCurrentDirNameForFiles bool   `yaml:"use_current_dir_name_for_files"`
 
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// Status codes for directory operations
 	StatusCreatedArchive                        int `yaml:"status_created_archive"`
 	StatusFailedToCreateArchiveDirectory        int `yaml:"status_failed_to_create_archive_directory"`
@@ -103,7 +97,7 @@ type Config struct {
 	StatusFileNotFound                    int `yaml:"status_file_not_found"`
 	StatusInvalidFileType                 int `yaml:"status_invalid_file_type"`
 
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// Printf-style format strings for directory operations
 	FormatCreatedArchive   string `yaml:"format_created_archive"`
 	FormatIdenticalArchive string `yaml:"format_identical_archive"`
@@ -118,7 +112,7 @@ type Config struct {
 	FormatListBackup      string `yaml:"format_list_backup"`
 	FormatDryRunBackup    string `yaml:"format_dry_run_backup"`
 
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// Template-based format strings for directory operations
 	TemplateCreatedArchive   string `yaml:"template_created_archive"`
 	TemplateIdenticalArchive string `yaml:"template_identical_archive"`
@@ -133,7 +127,7 @@ type Config struct {
 	TemplateListBackup      string `yaml:"template_list_backup"`
 	TemplateDryRunBackup    string `yaml:"template_dry_run_backup"`
 
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// Regex patterns
 	PatternArchiveFilename string `yaml:"pattern_archive_filename"`
 	PatternBackupFilename  string `yaml:"pattern_backup_filename"`
@@ -141,7 +135,7 @@ type Config struct {
 	PatternTimestamp       string `yaml:"pattern_timestamp"`
 
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// Archive operation messages
 	FormatNoArchivesFound             string `yaml:"format_no_archives_found"`
 	FormatConfigurationUpdated        string `yaml:"format_configuration_updated"`
@@ -169,7 +163,7 @@ type Config struct {
 	FormatBackupCreated     string `yaml:"format_backup_created"`
 
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	FormatDiskFullError       string `yaml:"format_disk_full_error"`
 	FormatPermissionError     string `yaml:"format_permission_error"`
 	FormatDirectoryNotFound   string `yaml:"format_directory_not_found"`
@@ -183,7 +177,7 @@ type Config struct {
 	FormatFailedAccessDir     string `yaml:"format_failed_access_dir"`
 	FormatFailedAccessFile    string `yaml:"format_failed_access_file"`
 
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	// Template-based extended format strings
 	TemplateNoArchivesFound      string `yaml:"template_no_archives_found"`
 	TemplateConfigurationUpdated string `yaml:"template_configuration_updated"`
@@ -205,7 +199,7 @@ type Config struct {
 	TemplateBackupCreated     string `yaml:"template_backup_created"`
 
 	// CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	TemplateDiskFullError       string `yaml:"template_disk_full_error"`
 	TemplatePermissionError     string `yaml:"template_permission_error"`
 	TemplateDirectoryNotFound   string `yaml:"template_directory_not_found"`
@@ -224,7 +218,7 @@ type Config struct {
 // IMMUTABLE-REF: Commands - Display Configuration
 // TEST-REF: TestDisplayConfig
 // DECISION-REF: DEC-002
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 // ConfigValue represents a single configuration value with its source.
 // It is used for displaying configuration values and their origins.
 type ConfigValue struct {
@@ -237,7 +231,7 @@ type ConfigValue struct {
 // IMMUTABLE-REF: Template Formatting Requirements, Configuration Defaults
 // TEST-REF: TestTemplateFormatter
 // DECISION-REF: DEC-003
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 // Default regex patterns
 const (
 	defaultArchivePattern = `(?P<prefix>[^-]*)-(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})-` +
@@ -253,7 +247,7 @@ const (
 // IMMUTABLE-REF: Configuration Defaults
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 // DefaultConfig returns a new Config instance with default values.
 // These values are used when no configuration is provided or when merging configurations.
 func DefaultConfig() *Config {
@@ -434,18 +428,13 @@ func expandPath(path string) string {
 	return path
 }
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-// IMMUTABLE-REF: Configuration Discovery
-// TEST-REF: TestGetConfigSearchPath
-// DECISION-REF: DEC-002
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+// [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // LoadConfig loads configuration from YAML files and environment variables.
 // It searches for configuration files in the standard locations and merges them with defaults.
 func LoadConfig(root string) (*Config, error) {
 	if debug {
 		fmt.Printf("DEBUG: Entered LoadConfig with root: %s\n", root)
 	} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
 	// Check if any config files exist first
 	searchPaths := getConfigSearchPaths()
 	foundAnyFile := false
@@ -492,12 +481,12 @@ func LoadConfig(root string) (*Config, error) {
 	}
 
 	// If inheritance loading fails, fallback to original method for backward compatibility
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+
 	cfg := DefaultConfig()
-	initialDefaultCfg := DefaultConfig() // Save initial defaults to detect if any file has been processed
-	// CFG-001: Track which fields were explicitly set by earlier files (even if they equal defaults)
-	explicitlySetFields := make(map[string]bool) // Track fields explicitly set by earlier files
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+	initialDefaultCfg := DefaultConfig()
+	// [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Track fields explicitly set by earlier files (even if they equal defaults)
+	explicitlySetFields := make(map[string]bool)
+
 	// searchPaths already declared above
 	if debug {
 		fmt.Printf("DEBUG: searchPaths = %v\n", searchPaths)
@@ -509,7 +498,7 @@ func LoadConfig(root string) (*Config, error) {
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	fileProcessed := false // Track if we've processed any file yet
 	for i, configPath := range searchPaths {
-		// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+	
 		expandedPath := expandPath(configPath)
 		if debug {
 			fmt.Printf("DEBUG: configPath = %s, expandedPath = %s\n", configPath, expandedPath)
@@ -562,9 +551,9 @@ func LoadConfig(root string) (*Config, error) {
 				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
-			// Determine merge context: first file merges with defaults, subsequent files respect earlier file precedence
-			// CFG-001: Earlier files take precedence - use inheritContext=false for sequential files after the first
-			inheritContext := !fileProcessed // First file merges with defaults (true), subsequent files respect precedence (false)
+		// [IMPL-CFG_PRECEDENCE_FIX] First file merges with defaults (inheritContext=true),
+		// subsequent files respect earlier file precedence (inheritContext=false)
+		inheritContext := !fileProcessed
 			if debug {
 				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] fileProcessed=%v, inheritContext=%v\n", i, fileProcessed, inheritContext)
 			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
@@ -618,20 +607,10 @@ func LoadConfig(root string) (*Config, error) {
 	return cfg, nil
 }
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-// IMMUTABLE-REF: Configuration Discovery
-// TEST-REF: TestGetConfigSearchPath
-// DECISION-REF: DEC-002
-// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
+// [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // mergeConfigs merges source configuration into destination configuration.
-// It preserves non-zero values from the source configuration.
-// When inheritContext is false (sequential file processing), earlier files take precedence.
-// rawSrcMap is used to check if fields were explicitly set in the source file.
-// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
-// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
-// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+// Orchestrates merge by delegating to sub-merge functions with precedence tracking.
 func mergeConfigs(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
-	// REFACTOR-003: See architecture.md - Configuration Abstraction [DECISION:format-processing]
 	mergeBasicSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
 	mergeFileBackupSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
 	mergeStatusCodes(dst, src, inheritContext, defaultCfg, rawSrcMap)
@@ -640,27 +619,14 @@ func mergeConfigs(dst, src *Config, inheritContext bool, defaultCfg *Config, raw
 	mergePatterns(dst, src, inheritContext, defaultCfg, rawSrcMap)
 	mergeExtendedFormatStrings(dst, src, inheritContext, defaultCfg)
 	mergeExtendedTemplates(dst, src, inheritContext, defaultCfg, rawSrcMap)
-	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 	mergeGitSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields)
 }
 
-// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
-// IMMUTABLE-REF: Configuration Discovery
-// TEST-REF: TestGetConfigSearchPath
-// DECISION-REF: DEC-002
-// mergeBasicSettings merges basic configuration settings.
-// It handles archive directory path, Git integration, and verification settings.
-// When inheritContext is false (sequential file processing), earlier files take precedence.
-// rawSrcMap is used to check if fields were explicitly set in the source file.
-// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
-// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
-// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+// [IMPL-CFG_PRECEDENCE_FIX] [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CONFIG_SYSTEM] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
+// mergeBasicSettings checks explicitlySetFields to preserve sequential file precedence.
 func mergeBasicSettings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
-	// CFG-001: Earlier files take precedence over later files when processing sequential config files
-	// When processing sequential files (inheritContext=false), only set if:
-	// 1. Field was explicitly set in source file (checked via rawSrcMap)
-	// 2. Field was NOT explicitly set by earlier files (checked via explicitlySetFields)
-	// 3. Source differs from default
+	// [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Earlier files take precedence.
+	// Sequential files (inheritContext=false): only set if field is in rawSrcMap AND not in explicitlySetFields.
 	if inheritContext {
 		// Inheritance context: allow overrides, but still respect earlier sequential file precedence
 		_, explicitlySetByEarlier := explicitlySetFields["archive_dir_path"]
@@ -804,14 +770,8 @@ func mergeBasicSettings(dst, src *Config, inheritContext bool, defaultCfg *Confi
 	// This code is kept for backward compatibility but should not override precedence
 }
 
-// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
-// mergeGitSettings merges Git configuration settings between configs.
-// It handles both the new Git configuration and legacy fields for backward compatibility.
-// When inheritContext is false (sequential file processing), earlier files take precedence.
-// rawSrcMap is used to check if fields were explicitly set in the source file.
-// initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
-// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
-// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+// [IMPL-CFG_PRECEDENCE_FIX] [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CONFIG_SYSTEM] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
+// mergeGitSettings checks explicitlySetFields to preserve sequential file precedence for git settings.
 func mergeGitSettings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
 	defaultGit := DefaultGitConfig()
 
@@ -928,8 +888,8 @@ func mergeGitConfigStruct(dst, src, defaultCfg *GitConfig) {
 // When inheritContext is false (sequential file processing), earlier files take precedence.
 // rawSrcMap is used to check if fields were explicitly set in the source file.
 // initialDefaultCfg is used to detect if dst was modified from initial defaults by earlier files.
-// dstBeforeMerge is the state of dst before this merge (used to detect if earlier files modified values).
-// explicitlySetFields tracks which fields were explicitly set by earlier files (even if they equal defaults).
+// [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
+// mergeFileBackupSettings checks explicitlySetFields to preserve sequential file precedence for file backup settings.
 func mergeFileBackupSettings(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config, explicitlySetFields map[string]bool) {
 	// CFG-001: Respect earlier file precedence for sequential file processing
 	if inheritContext {
@@ -1253,8 +1213,8 @@ func equalStringSlices(a, b []string) bool {
 	return true
 }
 
-// GetConfigValues returns a slice of ConfigValue containing all configuration
-// values and their sources.
+// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
+// GetConfigValues returns a slice of ConfigValue containing all configuration values.
 func GetConfigValues(cfg *Config) []ConfigValue {
 	// This would be used by the --config command to display all configuration values
 	// For now, return basic values - this can be expanded
@@ -1270,8 +1230,7 @@ func GetConfigValues(cfg *Config) []ConfigValue {
 // GetConfigValuesWithSources returns a slice of ConfigValue containing all configuration
 // values with their actual sources (default, config file, etc.).
 // The returned values are sorted alphabetically by configuration name.
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Step 4.5: Preserve backward compatibility
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GetConfigValuesWithSources maintains backward compatibility while using the new reflection system.
 // This function now uses automatic field discovery instead of manual enumeration.
 func GetConfigValuesWithSources(cfg *Config, root string) []ConfigValue {
@@ -1669,9 +1628,9 @@ func (c *Config) GetFilePermissions() os.FileMode {
 	return 0644 // Standard file permissions
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
 // LoadConfigWithInheritance loads configuration with inheritance chain processing.
-// This extends the original LoadConfig function to support layered configuration inheritance.
+// Processes sequential files and inheritance chains, tracking explicitlySetFields for precedence.
 func LoadConfigWithInheritance(root string) (*Config, error) {
 	fileOps := &configFileOperations{}
 	pathResolver := newPathResolver(fileOps)
@@ -1941,10 +1900,9 @@ func loadSingleConfigFile(configPath string) (*configFileLoadResult, error) {
 	return &configFileLoadResult{config: cfg, rawMap: rawMap}, nil
 }
 
-// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality]
+// [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
 // applyMergeStrategies applies merge strategies when combining configurations.
-// inheritContext indicates if this merge is within an inheritance chain (true) or between sequential files (false).
-// Array fields default to merge only within inheritance chains, not between sequential files.
+// Ensures MergeBehaviorAccumulate fields always merge (unless explicit prefix).
 // rawSrcMap is the original map with merge strategy prefixes preserved (can be nil if not available)
 // initialDefaultCfg is the initial default config before any files were processed (used to detect if dst was modified)
 // explicitlySetFields tracks which fields were explicitly set by earlier files (used for precedence checking)
@@ -2013,8 +1971,7 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 	}
 
 	for key, operation := range processed.operations {
-		// CFG-001 + CFG-005: Apply field-specific merge behavior
-		// Check if this field should default to merge (accumulate) behavior
+		// [IMPL-CFG_MIXED_MODE_MERGE_FIX] [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] Apply field-specific merge behavior
 		behavior := getFieldMergeBehavior(key)
 		hasExplicitPrefixForField := hasExplicitPrefix[key]
 		if behavior == MergeBehaviorAccumulate {
@@ -2270,6 +2227,7 @@ func newPathResolver(fileOps *configFileOperations) pathResolver {
 	return &defaultPathResolver{fileOps: fileOps}
 }
 
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (r *defaultPathResolver) resolvePath(path string, basePath string) (string, error) {
 	// Expand home directory first (before checking if absolute)
 	expandedPath, err := r.ExpandPath(path)
@@ -2306,6 +2264,7 @@ func (r *defaultPathResolver) resolvePath(path string, basePath string) (string,
 	return filepath.Clean(resolved), nil
 }
 
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (r *defaultPathResolver) ExpandPath(path string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")
@@ -2362,6 +2321,7 @@ func (b *defaultInheritanceChainBuilder) buildChain(configPath string, pathResol
 	return chain, b.buildChainRecursive(configPath, "", pathResolver, chain)
 }
 
+// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (b *defaultInheritanceChainBuilder) buildChainRecursive(configPath, basePath string, pathResolver pathResolver, chain *inheritanceChain) error {
 	// Resolve path
 	resolvedPath, err := pathResolver.resolvePath(configPath, basePath)
@@ -2437,38 +2397,35 @@ type mergeOperation struct {
 	key      string
 }
 
-// CFG-001 + CFG-005: Field merge behavior configuration
-// FieldMergeBehavior specifies how a field should behave during sequential file processing
-// when there's a conflict between CFG-001 (earlier files take precedence) and CFG-005 (array fields merge)
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
+// FieldMergeBehavior specifies per-field merge strategy resolving conflict between
+// accumulate (CFG-005) and precedence (CFG-001) requirements.
 type FieldMergeBehavior int
 
 const (
-	// MergeBehaviorAccumulate: Field accumulates values from all files (CFG-005 style)
-	// Used for fields like exclude_patterns that should merge/accumulate by default
+	// MergeBehaviorAccumulate: Field accumulates values from all files [REQ-CFG_005]
 	MergeBehaviorAccumulate FieldMergeBehavior = iota
-	// MergeBehaviorPrecedence: Field respects earlier file precedence (CFG-001 style)
-	// Used for scalar fields that should respect earlier file values
+	// MergeBehaviorPrecedence: Field respects earlier file precedence [REQ-CFG_001]
 	MergeBehaviorPrecedence
 )
 
-// CFG-001 + CFG-005: Field merge behavior registry
-// Specifies merge behavior per field to resolve conflict between CFG-001 and CFG-005
-// - Fields with MergeBehaviorAccumulate: Always merge, even in sequential file processing
-// - Fields with MergeBehaviorPrecedence: Respect earlier file precedence, even for array fields
-// - Explicit prefixes (!, +, ^, =) override the default behavior
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
+// Field merge behavior registry resolving conflict between CFG-001 (precedence) and CFG-005 (accumulate).
+// Fields with MergeBehaviorAccumulate always merge; MergeBehaviorPrecedence respects earlier file values.
+// Explicit prefixes (!, +, ^, =) override the default behavior.
 var fieldMergeBehaviors = map[string]FieldMergeBehavior{
-	"exclude_patterns":               MergeBehaviorAccumulate, // CFG-005: Merge by default
-	"archive_dir_path":               MergeBehaviorPrecedence, // CFG-001: Earlier files win
-	"include_git_info":               MergeBehaviorPrecedence, // CFG-001: Earlier files win
-	"show_git_dirty_status":          MergeBehaviorPrecedence, // CFG-001: Earlier files win
-	"skip_broken_symlinks":           MergeBehaviorPrecedence, // CFG-001: Earlier files win
-	"use_current_dir_name":           MergeBehaviorPrecedence, // CFG-001: Earlier files win
-	"backup_dir_path":                MergeBehaviorPrecedence, // CFG-001: Earlier files win
-	"use_current_dir_name_for_files": MergeBehaviorPrecedence, // CFG-001: Earlier files win
+	"exclude_patterns":               MergeBehaviorAccumulate, // [REQ-CFG_005] Merge by default
+	"archive_dir_path":               MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
+	"include_git_info":               MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
+	"show_git_dirty_status":          MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
+	"skip_broken_symlinks":           MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
+	"use_current_dir_name":           MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
+	"backup_dir_path":                MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
+	"use_current_dir_name_for_files": MergeBehaviorPrecedence, // [REQ-CFG_001] Earlier files win
 }
 
-// getFieldMergeBehavior returns the merge behavior for a given field
-// Returns MergeBehaviorPrecedence as default if field is not in registry
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] getFieldMergeBehavior returns the registered merge behavior for a field.
+// Returns MergeBehaviorPrecedence as default if field is not in registry.
 func getFieldMergeBehavior(fieldName string) FieldMergeBehavior {
 	if behavior, exists := fieldMergeBehaviors[fieldName]; exists {
 		return behavior
@@ -2484,6 +2441,7 @@ func newMergeStrategyProcessor() mergeStrategyProcessor {
 	return &defaultMergeStrategyProcessor{}
 }
 
+// [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (p *defaultMergeStrategyProcessor) processKeys(config map[string]interface{}) (*processedConfig, error) {
 	result := &processedConfig{
 		operations: make(map[string]*mergeOperation),
@@ -2559,6 +2517,7 @@ func (p *defaultMergeStrategyProcessor) processKeys(config map[string]interface{
 	return result, nil
 }
 
+// [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 func (p *defaultMergeStrategyProcessor) extractStrategy(key string) (string, string) {
 	if len(key) == 0 {
 		return "override", key
@@ -2608,8 +2567,8 @@ func configToMap(cfg *Config) map[string]interface{} {
 	}
 }
 
-// applyMergeOperation applies a merge operation to the result configuration
-// originalDstValue is the value from dst before mergeConfigs modified result (needed for precedence checking)
+// [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
+// applyMergeOperation dispatches to strategy-specific handlers with precedence context.
 func applyMergeOperation(result *Config, key string, operation *mergeOperation, dstValue interface{}, originalDstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	switch operation.strategy {
 	case "override":
@@ -2627,11 +2586,8 @@ func applyMergeOperation(result *Config, key string, operation *mergeOperation, 
 	}
 }
 
-// Helper functions for applying different merge strategies
-// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
-// Earlier files take precedence over later files when processing sequential config files.
-// When inheritContext is false (sequential file processing), don't override non-default values
-// that were already set by earlier files.
+// [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [REQ-CFG_001] [REQ-CONFIGURATION]
+// applyOverride respects earlier file precedence via explicitlySetFields.
 func applyOverride(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	// Respect earlier file precedence by not overriding values that were set by earlier files
 	// This applies to both sequential files (inheritContext=false) and inheritance chains after sequential files (inheritContext=true)
@@ -2669,11 +2625,8 @@ func applyOverride(result *Config, key string, value interface{}, dstValue inter
 	return setConfigField(result, key, value)
 }
 
-// CFG-001 + CFG-005: See specification.md - Configuration Discovery and Configuration Inheritance
+// [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
 // applyMerge applies merge strategy, respecting precedence for scalar/precedence fields
-// inheritContext indicates if this merge is within an inheritance chain (true) or between sequential files (false)
-// defaultCfg is used to check if values differ from defaults for precedence checking
-// explicitlySetFields tracks which fields were explicitly set by earlier files
 func applyMerge(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	// CFG-002: See specification.md - Configuration Merging [DECISION:discovery]
 	// CFG-005: Array fields default to merge (accumulate) strategy
@@ -2839,11 +2792,8 @@ func applyMerge(result *Config, key string, value interface{}, dstValue interfac
 	return nil // No merge needed, preserve existing value
 }
 
-// CFG-001 + CFG-005: See specification.md - Configuration Discovery and Configuration Inheritance
+// [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
 // applyPrepend applies prepend strategy, respecting precedence for scalar/precedence fields
-// inheritContext indicates if this merge is within an inheritance chain (true) or between sequential files (false)
-// defaultCfg is used to check if values differ from defaults for precedence checking
-// explicitlySetFields tracks which fields were explicitly set by earlier files
 func applyPrepend(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	// For arrays, prepend source to destination
 	// Convert []interface{} to []string if needed (common from YAML unmarshaling)
@@ -2922,6 +2872,8 @@ func applyPrepend(result *Config, key string, value interface{}, dstValue interf
 	return setConfigField(result, key, srcSlice)
 }
 
+// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CFG_001] [REQ-CONFIGURATION]
+// applyReplace applies replace (!) strategy with precedence check using merge behavior registry.
 func applyReplace(result *Config, key string, value interface{}, dstValue interface{}, inheritContext bool, defaultCfg *Config, explicitlySetFields map[string]bool) error {
 	if debug && key == "exclude_patterns" {
 		fmt.Printf("=== DIAGNOSTIC: applyReplace for exclude_patterns ===\n")
@@ -2929,10 +2881,9 @@ func applyReplace(result *Config, key string, value interface{}, dstValue interf
 		fmt.Printf("result.ExcludePatterns BEFORE: %v (len=%d)\n", result.ExcludePatterns, len(result.ExcludePatterns))
 		fmt.Printf("fieldMergeBehavior: %v\n", getFieldMergeBehavior(key))
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
-	// CFG-001 + CFG-005: When processing sequential files (inheritContext=false), respect earlier file precedence
-	// For both MergeBehaviorPrecedence and MergeBehaviorAccumulate fields, earlier files take precedence
-	// Even with explicit "replace" strategy (! prefix), earlier file values are preserved (CFG-001)
-	// The difference is in default behavior (merge vs override), not in precedence rules
+	// [IMPL-CFG_PRECEDENCE_FIX] When processing sequential files (inheritContext=false), respect earlier file precedence.
+	// [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] Both Accumulate and Precedence fields respect earlier file values.
+	// Even with explicit "replace" strategy (! prefix), earlier file values are preserved.
 	if !inheritContext && dstValue != nil && defaultCfg != nil {
 		defaultValue := getDefaultValueForKey(key, defaultCfg)
 		// Check if field was explicitly set by earlier file (even if it equals default)
@@ -2969,7 +2920,8 @@ func applyDefault(result *Config, key string, value interface{}, dstValue interf
 	return nil
 }
 
-// setConfigField sets a field in the Config struct based on the key
+// [IMPL-EXCLUDE_MERGE_FIX] [REQ-CONFIGURATION]
+// setConfigField sets a field in the Config struct based on the key.
 func setConfigField(cfg *Config, key string, value interface{}) error {
 	switch key {
 	case "archive_dir_path":
@@ -3020,7 +2972,8 @@ func setConfigField(cfg *Config, key string, value interface{}) error {
 	return nil
 }
 
-// isKnownConfigField checks if a field name is a known config field
+// [IMPL-EXCLUDE_MERGE_FIX] [REQ-CONFIGURATION]
+// isKnownConfigField checks if a field name is a known config field.
 func isKnownConfigField(key string) bool {
 	knownFields := map[string]bool{
 		"archive_dir_path":       true,
@@ -3035,7 +2988,8 @@ func isKnownConfigField(key string) bool {
 	return knownFields[key]
 }
 
-// getDefaultValueForKey returns the default value for a given configuration key
+// [IMPL-EXCLUDE_MERGE_FIX] [REQ-CONFIGURATION]
+// getDefaultValueForKey returns the default value for a given configuration key.
 func getDefaultValueForKey(key string, defaultCfg *Config) interface{} {
 	switch key {
 	case "archive_dir_path":
@@ -3079,8 +3033,7 @@ func isZeroValue(value interface{}) bool {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Automatic field discovery
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // configFieldInfo represents metadata about a configuration field discovered through reflection.
 // It provides complete information about field structure, type, and documentation.
 type configFieldInfo struct {
@@ -3097,7 +3050,7 @@ type configFieldInfo struct {
 	Importance int          // Importance level (0=Critical, 1=High, 2=Medium, 3=Low)
 }
 
-// Importance levels for configuration fields
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
 const (
 	ImportanceCritical = 0
 	ImportanceHigh     = 1
@@ -3105,7 +3058,7 @@ const (
 	ImportanceLow      = 3
 )
 
-// CategoryPriority defines the display order for categories
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
 var CategoryPriority = map[string]int{
 	"basic_settings":   0,
 	"archive_settings": 1,
@@ -3117,7 +3070,8 @@ var CategoryPriority = map[string]int{
 	"advanced":         7,
 }
 
-// getFieldImportance determines the importance level of a configuration field
+// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
+// getFieldImportance determines the importance level of a configuration field.
 func getFieldImportance(name, category string) int {
 	// Critical settings
 	criticalFields := map[string]bool{
@@ -3149,8 +3103,7 @@ func getFieldImportance(name, category string) int {
 	return ImportanceMedium
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Source tracking extension
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // ConfigValueWithMetadata extends ConfigValue with complete field information and inheritance tracking.
 type ConfigValueWithMetadata struct {
 	ConfigValue
@@ -3161,13 +3114,11 @@ type ConfigValueWithMetadata struct {
 	ConflictSources  []string // Sources that had conflicting values
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 1: Automatic Field Discovery System
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // GetAllConfigFields discovers all configuration fields using reflection.
 // It provides comprehensive field enumeration without manual maintenance.
 // Performance optimized with caching to reduce reflection overhead.
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] Reflection-based discovery of all config fields with caching.
 func GetAllConfigFields(cfg *Config) []configFieldInfo {
 	// Try to get cached results first for performance
 	if cachedFields := globalFieldCache.getCachedFields(); cachedFields != nil {
@@ -3213,8 +3164,7 @@ func GetAllConfigFields(cfg *Config) []configFieldInfo {
 	return fields
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // updateFieldValues updates cached field metadata with current config values.
 // This avoids expensive reflection while keeping values current.
 func updateFieldValues(cachedFields []configFieldInfo, cfg *Config) []configFieldInfo {
@@ -3237,8 +3187,7 @@ func updateFieldValues(cachedFields []configFieldInfo, cfg *Config) []configFiel
 	return result
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // getFieldValueByPath retrieves a field value from a struct using dot-separated path.
 func getFieldValueByPath(structValue reflect.Value, path string) (interface{}, error) {
 	parts := strings.Split(path, ".")
@@ -3277,9 +3226,8 @@ func getFieldValueByPath(structValue reflect.Value, path string) (interface{}, e
 	return currentValue.Interface(), nil
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Step 1.2: Implement reflectConfigFields() function
-// reflectConfigFields recursively discovers fields in structs, handling nested types.
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
+// reflectConfigFields recursively discovers fields in structs, using YAML tag names for display.
 func reflectConfigFields(structType reflect.Type, structValue reflect.Value, prefix string, category string) []configFieldInfo {
 	var fields []configFieldInfo
 
@@ -3376,7 +3324,7 @@ func reflectConfigFields(structType reflect.Type, structValue reflect.Value, pre
 }
 
 // CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Step 1.5: Create field filtering and categorization
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // determineFieldCategory categorizes configuration fields by their purpose and type.
 func determineFieldCategory(fieldName string, parentCategory string) string {
 	if parentCategory != "" {
@@ -3406,8 +3354,7 @@ func determineFieldCategory(fieldName string, parentCategory string) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 2: Enhanced Source Tracking Extension
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // GetAllConfigValuesWithSources provides comprehensive configuration visibility using reflection.
 // It replaces the manual field enumeration with automatic discovery and enhanced source tracking.
 func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {
@@ -3486,8 +3433,7 @@ func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMe
 	return results
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Step 3.2: Implement type-aware value formatting
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // formatFieldValue formats configuration values based on their Go type.
 func formatFieldValue(value interface{}, kind reflect.Kind) string {
 	if value == nil {
@@ -3524,8 +3470,7 @@ func formatFieldValue(value interface{}, kind reflect.Kind) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Helper functions for reflection system
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // getZeroValueForKind returns the appropriate zero value for a given reflect.Kind.
 func getZeroValueForKind(kind reflect.Kind) interface{} {
 	switch kind {
@@ -3546,9 +3491,7 @@ func getZeroValueForKind(kind reflect.Kind) interface{} {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.1: Add reflection result caching
-
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // ConfigFieldCache provides thread-safe caching of configuration field discovery results.
 // It significantly reduces reflection overhead for repeated GetAllConfigFields() calls.
 type ConfigFieldCache struct {
@@ -3571,8 +3514,8 @@ type ConfigFilter struct {
 // Global cache instance for configuration field discovery
 var globalFieldCache = &ConfigFieldCache{}
 
+// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // getConfigStructHash computes a hash of the Config struct type to detect schema changes.
-// This enables cache invalidation when the struct definition is modified.
 func getConfigStructHash() uint64 {
 	h := fnv.New64a()
 	configType := reflect.TypeOf(Config{})
@@ -3647,8 +3590,7 @@ func (c *ConfigFieldCache) invalidateCache() {
 	c.valid = false
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.2: Implement lazy source evaluation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GetConfigValuesWithSourcesFiltered provides configuration visibility with filtering.
 // It only resolves sources for fields that match the filter criteria for better performance.
 func GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {
@@ -3738,8 +3680,7 @@ func GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *Config
 	return results
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.2: Implement lazy source evaluation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // applyConfigFilter filters configuration fields based on filter criteria.
 func applyConfigFilter(fields []configFieldInfo, filter *ConfigFilter) []configFieldInfo {
 	if filter == nil {
@@ -3792,8 +3733,7 @@ func applyConfigFilter(fields []configFieldInfo, filter *ConfigFilter) []configF
 	return filtered
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GetConfigFieldByPattern retrieves specific configuration fields matching a pattern.
 // This enables efficient single-field or pattern-based queries without full enumeration.
 func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {
@@ -3826,8 +3766,7 @@ func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, er
 	return matchingFields, nil
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GetConfigFieldValue retrieves a single configuration field value with complete metadata.
 // This is the most efficient way to access a specific configuration field.
 func GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {
@@ -3892,8 +3831,7 @@ func GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata
 	}, nil
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6.3: Create incremental resolution support
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // HasConfigField checks if a configuration field exists without full field enumeration.
 func HasConfigField(cfg *Config, fieldPath string) bool {
 	configValue := reflect.ValueOf(*cfg)
@@ -3949,8 +3887,7 @@ func DefaultGitConfig() *GitConfig {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 5: Full Inheritance Chain Tracking
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // trackInheritanceChain tracks the complete inheritance chain for a configuration field.
 // It analyzes the inheritance hierarchy to determine which files contributed to each value.
 func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string, string, []string) {
@@ -4042,8 +3979,7 @@ func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string
 	return inheritanceChain, mergeStrategy, conflictSources
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 5: Helper function for inheritance tracking
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // determineMergeStrategyForField determines the merge strategy used for a specific field.
 func determineMergeStrategyForField(fieldPath string, newValue, oldValue interface{}) string {
 	// Check for exclude_patterns first (should use append strategy)
@@ -4090,8 +4026,7 @@ func determineMergeStrategyForField(fieldPath string, newValue, oldValue interfa
 	return "override"
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 5: Helper function for conflict detection
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // hasConflict checks if there's a conflict between two values.
 func hasConflict(newValue, oldValue interface{}) bool {
 	// This is a simplified conflict detection
@@ -4109,8 +4044,7 @@ func hasConflict(newValue, oldValue interface{}) bool {
 	return !newIsZero && !oldIsZero
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 6: Enhanced merge strategy detection
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // detectMergeStrategyFromField analyzes field characteristics to determine merge strategy.
 func detectMergeStrategyFromField(field configFieldInfo) string {
 	// Analyze field type and characteristics
@@ -4139,8 +4073,7 @@ func detectMergeStrategyFromField(field configFieldInfo) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Configuration Validation and Documentation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // ConfigValidationRule represents a validation rule for a configuration field.
 type ConfigValidationRule struct {
 	FieldPath   string
@@ -4152,8 +4085,7 @@ type ConfigValidationRule struct {
 	Description string
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Field documentation structure
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // ConfigFieldDocumentation provides documentation for a configuration field.
 type ConfigFieldDocumentation struct {
 	FieldPath     string
@@ -4167,8 +4099,7 @@ type ConfigFieldDocumentation struct {
 	Replacement   string
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Validation and documentation functions
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // validateConfigField validates a configuration field against defined rules.
 func validateConfigField(fieldPath string, value interface{}, rules []ConfigValidationRule) []error {
 	var errors []error
@@ -4203,8 +4134,7 @@ func validateConfigField(fieldPath string, value interface{}, rules []ConfigVali
 	return errors
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Validation helper functions
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // validateRange validates that a value is within the specified range.
 func validateRange(value interface{}, min, max interface{}) error {
 	switch v := value.(type) {
@@ -4226,8 +4156,7 @@ func validateRange(value interface{}, min, max interface{}) error {
 	return nil
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Pattern validation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // validatePattern validates a value against a regex pattern.
 func validatePattern(value interface{}, pattern string) error {
 	if pattern == "" {
@@ -4251,8 +4180,7 @@ func validatePattern(value interface{}, pattern string) error {
 	return nil
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Required field validation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // validateRequired validates that a required field is not empty.
 func validateRequired(value interface{}) error {
 	if isZeroValue(value) {
@@ -4261,8 +4189,7 @@ func validateRequired(value interface{}) error {
 	return nil
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Documentation generation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GenerateConfigDocumentation generates comprehensive documentation for all configuration fields.
 func GenerateConfigDocumentation(cfg *Config) []ConfigFieldDocumentation {
 	fields := GetAllConfigFields(cfg)
@@ -4283,8 +4210,7 @@ func GenerateConfigDocumentation(cfg *Config) []ConfigFieldDocumentation {
 	return docs
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Documentation helper functions
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // generateFieldDescription generates a description for a configuration field.
 func generateFieldDescription(field configFieldInfo) string {
 	switch {
@@ -4309,8 +4235,7 @@ func generateFieldDescription(field configFieldInfo) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Range generation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // generateValidRange generates valid range information for a field.
 func generateValidRange(field configFieldInfo) string {
 	switch field.Kind {
@@ -4327,8 +4252,7 @@ func generateValidRange(field configFieldInfo) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Example generation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // generateFieldExamples generates example values for a field.
 func generateFieldExamples(field configFieldInfo) []string {
 	switch {
@@ -4345,8 +4269,7 @@ func generateFieldExamples(field configFieldInfo) []string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 7: Related fields generation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // generateRelatedFields generates a list of related configuration fields.
 func generateRelatedFields(field configFieldInfo) []string {
 	var related []string
@@ -4364,8 +4287,7 @@ func generateRelatedFields(field configFieldInfo) []string {
 	return related
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: Documentation Plan
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GenerateMarkdownDocumentation generates markdown documentation for configuration.
 func GenerateMarkdownDocumentation(cfg *Config) string {
 	docs := GenerateConfigDocumentation(cfg)
@@ -4423,8 +4345,7 @@ func GenerateMarkdownDocumentation(cfg *Config) string {
 	return buf.String()
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: Documentation helper functions
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // groupFieldsByCategory groups configuration fields by their category.
 func groupFieldsByCategory(docs []ConfigFieldDocumentation) map[string][]ConfigFieldDocumentation {
 	categories := make(map[string][]ConfigFieldDocumentation)
@@ -4437,8 +4358,7 @@ func groupFieldsByCategory(docs []ConfigFieldDocumentation) map[string][]ConfigF
 	return categories
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: JSON Schema generation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GenerateJSONSchema generates a JSON schema for the configuration structure.
 func GenerateJSONSchema(cfg *Config) string {
 	fields := GetAllConfigFields(cfg)
@@ -4478,8 +4398,7 @@ func GenerateJSONSchema(cfg *Config) string {
 	return buf.String()
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: JSON Schema helper functions
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // getJSONSchemaType converts Go reflect.Kind to JSON schema type.
 func getJSONSchemaType(kind reflect.Kind) string {
 	switch kind {
@@ -4500,8 +4419,7 @@ func getJSONSchemaType(kind reflect.Kind) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: JSON value formatting
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // formatJSONValue formats a value for JSON schema.
 func formatJSONValue(value string, kind reflect.Kind) string {
 	switch kind {
@@ -4516,8 +4434,7 @@ func formatJSONValue(value string, kind reflect.Kind) string {
 	}
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: Configuration validation
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // ValidateConfiguration validates the entire configuration against defined rules.
 func ValidateConfiguration(cfg *Config, rules []ConfigValidationRule) []error {
 	var errors []error
@@ -4531,8 +4448,7 @@ func ValidateConfiguration(cfg *Config, rules []ConfigValidationRule) []error {
 	return errors
 }
 
-// CFG-006: See specification.md - Configuration Performance [DECISION:maintenance]
-// IMPLEMENTATION-REF: CFG-006 Subtask 8: Default validation rules
+// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // GetDefaultValidationRules returns default validation rules for configuration fields.
 func GetDefaultValidationRules() []ConfigValidationRule {
 	return []ConfigValidationRule{
@@ -4557,7 +4473,7 @@ func GetDefaultValidationRules() []ConfigValidationRule {
 	}
 }
 
-// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Format string validation utilities
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Format string validation utilities
 //
 // ValidateFormatString validates a format string against expected placeholders.
 //
@@ -4591,7 +4507,7 @@ func ValidateFormatString(fieldName, formatString string) []string {
 	return warnings
 }
 
-// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] getExpectedPlaceholders returns the list of expected placeholders for a given field.
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] getExpectedPlaceholders returns the list of expected placeholders for a given field.
 //
 // This function defines the validation rules for each format string field. It returns
 // a slice of expected placeholder strings (e.g., ["%s"], ["#{path}", "#{size_human}"]).
@@ -4692,7 +4608,7 @@ func getExpectedPlaceholders(fieldName string) []string {
 	return placeholderMap[fieldName]
 }
 
-// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] extractPlaceholders finds all placeholders in a format string using regex.
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] extractPlaceholders finds all placeholders in a format string using regex.
 //
 // This function extracts both printf-style and template-style placeholders from
 // a format string. It uses regex patterns to find:
@@ -4718,7 +4634,7 @@ func extractPlaceholders(formatString string) []string {
 	return placeholders
 }
 
-// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] validateAllFormatStrings validates all format string fields in the Config.
+// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] validateAllFormatStrings validates all format string fields in the Config.
 //
 // This function iterates over all format string fields in the Config struct and
 // validates each one using ValidateFormatString(). It collects all warnings and

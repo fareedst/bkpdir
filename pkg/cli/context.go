@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-
 // DefaultContextManager provides standard context management functionality
 type DefaultContextManager struct{}
 

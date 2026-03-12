@@ -14,13 +14,13 @@ import (
 	"text/template"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // DefaultTemplateFormatter provides template-based formatting functionality
 type DefaultTemplateFormatter struct {
 	configProvider ConfigProvider
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewDefaultTemplateFormatter creates a new DefaultTemplateFormatter
 func NewDefaultTemplateFormatter(configProvider ConfigProvider) *DefaultTemplateFormatter {
 	return &DefaultTemplateFormatter{
@@ -28,7 +28,7 @@ func NewDefaultTemplateFormatter(configProvider ConfigProvider) *DefaultTemplate
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FormatWithTemplate formats input using a pattern and template string
 func (tf *DefaultTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
 	// Extract data using regex pattern
@@ -54,7 +54,7 @@ func (tf *DefaultTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr s
 	return tf.FormatWithPlaceholders(tmplStr, data), nil
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FormatWithPlaceholders formats a string using placeholder-based template formatting
 func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
@@ -132,7 +132,7 @@ func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data m
 	return result
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateCreatedArchive formats a created archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("created_archive")
@@ -142,7 +142,7 @@ func (tf *DefaultTemplateFormatter) TemplateCreatedArchive(data map[string]strin
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateIdenticalArchive formats an identical archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateIdenticalArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("identical_archive")
@@ -152,7 +152,7 @@ func (tf *DefaultTemplateFormatter) TemplateIdenticalArchive(data map[string]str
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateListArchive formats a list archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateListArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("list_archive")
@@ -162,7 +162,7 @@ func (tf *DefaultTemplateFormatter) TemplateListArchive(data map[string]string) 
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateConfigValue formats a configuration value message using a template
 func (tf *DefaultTemplateFormatter) TemplateConfigValue(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("config_value")
@@ -172,7 +172,7 @@ func (tf *DefaultTemplateFormatter) TemplateConfigValue(data map[string]string) 
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateDryRunArchive formats a dry-run archive message using a template
 func (tf *DefaultTemplateFormatter) TemplateDryRunArchive(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("dry_run_archive")
@@ -182,7 +182,7 @@ func (tf *DefaultTemplateFormatter) TemplateDryRunArchive(data map[string]string
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateError formats an error message using a template
 func (tf *DefaultTemplateFormatter) TemplateError(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("error")
@@ -192,7 +192,7 @@ func (tf *DefaultTemplateFormatter) TemplateError(data map[string]string) string
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateCreatedBackup formats a created backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateCreatedBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("created_backup")
@@ -202,7 +202,7 @@ func (tf *DefaultTemplateFormatter) TemplateCreatedBackup(data map[string]string
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateIdenticalBackup formats an identical backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateIdenticalBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("identical_backup")
@@ -212,7 +212,7 @@ func (tf *DefaultTemplateFormatter) TemplateIdenticalBackup(data map[string]stri
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateListBackup formats a list backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateListBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("list_backup")
@@ -222,7 +222,7 @@ func (tf *DefaultTemplateFormatter) TemplateListBackup(data map[string]string) s
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateDryRunBackup formats a dry-run backup message using a template
 func (tf *DefaultTemplateFormatter) TemplateDryRunBackup(data map[string]string) string {
 	templateStr := tf.configProvider.GetTemplateString("dry_run_backup")
@@ -232,17 +232,17 @@ func (tf *DefaultTemplateFormatter) TemplateDryRunBackup(data map[string]string)
 	return tf.FormatWithPlaceholders(templateStr, data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // SimpleTemplateFormatter provides template formatting without configuration dependency
 type SimpleTemplateFormatter struct{}
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewSimpleTemplateFormatter creates a SimpleTemplateFormatter
 func NewSimpleTemplateFormatter() *SimpleTemplateFormatter {
 	return &SimpleTemplateFormatter{}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FormatWithTemplate formats input using a pattern and template string
 func (stf *SimpleTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
 	// Extract data using regex pattern
@@ -268,7 +268,7 @@ func (stf *SimpleTemplateFormatter) FormatWithTemplate(input, pattern, tmplStr s
 	return stf.FormatWithPlaceholders(tmplStr, data), nil
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // FormatWithPlaceholders formats a string using placeholder-based template formatting
 func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data map[string]string) string {
 	result := format
@@ -346,44 +346,43 @@ func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data m
 	return result
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateCreatedArchive formats a created archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateCreatedArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Created archive: #{path}", data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateIdenticalArchive formats an identical archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateIdenticalArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Identical archive: #{path}", data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateListArchive formats a list archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateListArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("#{path} (created: #{creation_time})", data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateConfigValue formats a configuration value message using default template
 func (stf *SimpleTemplateFormatter) TemplateConfigValue(data map[string]string) string {
 	return stf.FormatWithPlaceholders("#{name}=#{value} (source: #{source})", data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateDryRunArchive formats a dry-run archive message using default template
 func (stf *SimpleTemplateFormatter) TemplateDryRunArchive(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Would create archive: #{path}", data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // TemplateError formats an error message using default template
 func (stf *SimpleTemplateFormatter) TemplateError(data map[string]string) string {
 	return stf.FormatWithPlaceholders("Error: #{message}", data)
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
-// Enhanced template operations using file statistics for detailed output
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 
 // TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics (DefaultTemplateFormatter)
 func (tf *DefaultTemplateFormatter) TemplateCreatedArchiveWithStats(path string) string {
@@ -447,7 +446,7 @@ func (stf *SimpleTemplateFormatter) TemplateIncrementalCreatedWithStats(path str
 	return formatTemplate("Created incremental archive: {path} ({size_human}, {mtime})", data)
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 
 // buildStatsTemplateData builds template data from file statistics
 func buildStatsTemplateData(stats *FileStatInfo) map[string]string {

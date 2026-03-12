@@ -17,15 +17,15 @@ import (
 	"sync"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// Resource represents any resource that can be cleaned up
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// Resource interface: any resource that can be cleaned up.
 type Resource interface {
 	Cleanup() error
 	String() string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// ResourceManagerInterface defines clean resource management contract
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// ResourceManagerInterface: contract for resource tracking and cleanup.
 type ResourceManagerInterface interface {
 	AddResource(resource Resource)
 	AddTempFile(path string)
@@ -35,80 +35,70 @@ type ResourceManagerInterface interface {
 	CleanupWithPanicRecovery() error
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TempFile represents a temporary file that can be cleaned up
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// TempFile: cleans up via os.Remove.
 type TempFile struct {
 	Path string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// Cleanup removes the temporary file from the filesystem
+// [IMPL-RESOURCE_MANAGER] — TempFile.Cleanup: removes file from filesystem.
 func (tf *TempFile) Cleanup() error {
 	return os.Remove(tf.Path)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// String returns a string representation of the temporary file
+// [IMPL-RESOURCE_MANAGER] — TempFile.String: path-based identity for resource matching.
 func (tf *TempFile) String() string {
 	return fmt.Sprintf("TempFile{Path: %s}", tf.Path)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// TempDir represents a temporary directory that can be cleaned up
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// TempDir: cleans up via os.RemoveAll.
 type TempDir struct {
 	Path string
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// Cleanup removes the temporary directory and all its contents from the filesystem
+// [IMPL-RESOURCE_MANAGER] — TempDir.Cleanup: removes directory recursively.
 func (td *TempDir) Cleanup() error {
 	return os.RemoveAll(td.Path)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// String returns a string representation of the temporary directory
+// [IMPL-RESOURCE_MANAGER] — TempDir.String: path-based identity for resource matching.
 func (td *TempDir) String() string {
 	return fmt.Sprintf("TempDir{Path: %s}", td.Path)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// ResourceManager manages a collection of resources for automatic cleanup
-// Extracted from original errors.go with enhanced thread safety
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// ResourceManager: thread-safe collection of resources for automatic cleanup.
 type ResourceManager struct {
 	resources []Resource
 	mutex     sync.RWMutex
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// NewResourceManager creates a new ResourceManager instance
+// [IMPL-RESOURCE_MANAGER] — creates a new ResourceManager with empty resource list.
 func NewResourceManager() *ResourceManager {
 	return &ResourceManager{
 		resources: make([]Resource, 0),
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// AddResource adds a resource to be tracked for cleanup
+// [IMPL-RESOURCE_MANAGER] — ADD_RESOURCE: thread-safe resource registration.
 func (rm *ResourceManager) AddResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 	rm.resources = append(rm.resources, resource)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// AddTempFile adds a temporary file to be tracked for cleanup
+// [IMPL-RESOURCE_MANAGER] — ADD_TEMP_FILE: convenience wrapper for TempFile.
 func (rm *ResourceManager) AddTempFile(path string) {
 	rm.AddResource(&TempFile{Path: path})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// AddTempDir adds a temporary directory to be tracked for cleanup
+// [IMPL-RESOURCE_MANAGER] — ADD_TEMP_DIR: convenience wrapper for TempDir.
 func (rm *ResourceManager) AddTempDir(path string) {
 	rm.AddResource(&TempDir{Path: path})
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// RemoveResource removes a resource from tracking (typically after successful completion)
+// [IMPL-RESOURCE_MANAGER] — REMOVE_RESOURCE: removes by String() match without cleanup.
 func (rm *ResourceManager) RemoveResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -123,8 +113,8 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// Cleanup cleans up all tracked resources in the ResourceManager
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// CLEANUP: cleans all tracked resources, continues on individual failure.
 func (rm *ResourceManager) Cleanup() error {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -141,8 +131,8 @@ func (rm *ResourceManager) Cleanup() error {
 	return lastError
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// CleanupWithPanicRecovery cleans up all resources and recovers from panics during cleanup
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// CLEANUP_WITH_PANIC_RECOVERY: wraps Cleanup with defer/recover.
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -153,16 +143,14 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	return rm.Cleanup()
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// GetResourceCount returns the number of currently tracked resources
+// [IMPL-RESOURCE_MANAGER] — GetResourceCount: read-locked resource count.
 func (rm *ResourceManager) GetResourceCount() int {
 	rm.mutex.RLock()
 	defer rm.mutex.RUnlock()
 	return len(rm.resources)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// GetResources returns a copy of the currently tracked resources
+// [IMPL-RESOURCE_MANAGER] — GetResources: returns defensive copy of tracked resources.
 func (rm *ResourceManager) GetResources() []Resource {
 	rm.mutex.RLock()
 	defer rm.mutex.RUnlock()
@@ -173,8 +161,8 @@ func (rm *ResourceManager) GetResources() []Resource {
 	return resources
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// CleanupIf cleans up resources that match a given predicate
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+// CLEANUP_IF: predicate-based selective cleanup.
 func (rm *ResourceManager) CleanupIf(predicate func(Resource) bool) error {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -197,8 +185,7 @@ func (rm *ResourceManager) CleanupIf(predicate func(Resource) bool) error {
 	return lastError
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// GetResourcesByType returns resources of a specific type
+// [IMPL-RESOURCE_MANAGER] — GetResourcesByType: filters by "file" or "directory" type.
 func (rm *ResourceManager) GetResourcesByType(resourceType string) []Resource {
 	rm.mutex.RLock()
 	defer rm.mutex.RUnlock()
@@ -225,8 +212,8 @@ func (rm *ResourceManager) GetResourcesByType(resourceType string) []Resource {
 	return matchingResources
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// CleanupWithContext cleans up resources with context cancellation support
+// [IMPL-RESOURCE_MANAGER] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]
+// CLEANUP_WITH_CONTEXT: checks cancellation between resource cleanup operations.
 func (rm *ResourceManager) CleanupWithContext(ctx context.Context) error {
 	// Check for cancellation before starting
 	if err := ctx.Err(); err != nil {

@@ -16,7 +16,7 @@ import (
 	"os"
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ErrorInterface provides a common interface for all structured errors in CLI applications
 type ErrorInterface interface {
 	Error() string
@@ -27,7 +27,7 @@ type ErrorInterface interface {
 	Unwrap() error
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ErrorConfig abstracts configuration dependencies for error handling
 type ErrorConfig interface {
 	GetStatusCodes() map[string]int
@@ -36,7 +36,7 @@ type ErrorConfig interface {
 	GetFilePermissions() os.FileMode
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ErrorFormatter abstracts formatter dependencies for error handling
 type ErrorFormatter interface {
 	FormatError(message string) string
@@ -50,7 +50,7 @@ type ErrorFormatter interface {
 	PrintDirectoryNotFound(err error)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ApplicationError represents a structured error with status code and operation context
 // This generalizes the ArchiveError/BackupError pattern for any CLI application
 type ApplicationError struct {
@@ -61,7 +61,7 @@ type ApplicationError struct {
 	Err        error  // Underlying error for debugging and error chaining
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ApplicationError) Error() string {
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
@@ -69,32 +69,32 @@ func (e *ApplicationError) Error() string {
 	return e.Message
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ApplicationError) Unwrap() error {
 	return e.Err
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ApplicationError) GetStatusCode() int {
 	return e.StatusCode
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ApplicationError) GetOperation() string {
 	return e.Operation
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ApplicationError) GetPath() string {
 	return e.Path
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ApplicationError) GetMessage() string {
 	return e.Message
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // NewApplicationError creates a new structured error with message and status code
 func NewApplicationError(message string, statusCode int) *ApplicationError {
@@ -129,7 +129,7 @@ func NewApplicationErrorWithContext(
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // ErrorClassifier defines an interface for classifying different types of errors
 type ErrorClassifier interface {
@@ -174,7 +174,7 @@ const (
 	ErrorSeverityFatal
 )
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ErrorContext provides context information for error handling operations
 type ErrorContext struct {
 	Operation string                 // The operation being performed

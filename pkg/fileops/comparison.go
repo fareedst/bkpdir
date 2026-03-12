@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 
 // FileInfo represents information about a file for comparison
 type FileInfo struct {
@@ -47,13 +47,13 @@ type DefaultComparer struct{}
 
 // NewComparer creates a new DefaultComparer instance
 func NewComparer() Comparer {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return &DefaultComparer{}
 }
 
 // CreateDirectorySnapshot creates a snapshot of the given directory
 func (c *DefaultComparer) CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	var files []FileInfo
 
 	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
@@ -114,7 +114,7 @@ func (c *DefaultComparer) CreateDirectorySnapshot(rootPath string, excludePatter
 
 // CreateArchiveSnapshot creates a snapshot from a ZIP archive
 func (c *DefaultComparer) CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	reader, err := zip.OpenReader(archivePath)
 	if err != nil {
 		return nil, err
@@ -156,7 +156,7 @@ func (c *DefaultComparer) CreateArchiveSnapshot(archivePath string) (*DirectoryS
 
 // CompareSnapshots compares two directory snapshots
 func (c *DefaultComparer) CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	if len(snapshot1.Files) != len(snapshot2.Files) {
 		return false
 	}
@@ -182,7 +182,7 @@ func (c *DefaultComparer) CompareSnapshots(snapshot1, snapshot2 *DirectorySnapsh
 
 // IsDirectoryIdenticalToArchive checks if a directory is identical to an archive
 func (c *DefaultComparer) IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns []string) (bool, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	// Create snapshot of directory
 	dirSnapshot, err := c.CreateDirectorySnapshot(dirPath, excludePatterns)
 	if err != nil {
@@ -201,7 +201,7 @@ func (c *DefaultComparer) IsDirectoryIdenticalToArchive(dirPath, archivePath str
 
 // calculateFileHash calculates SHA-256 hash of a file
 func (c *DefaultComparer) calculateFileHash(filePath string) (string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	file, err := os.Open(filePath)
 	if err != nil {
 		return "", err
@@ -218,7 +218,7 @@ func (c *DefaultComparer) calculateFileHash(filePath string) (string, error) {
 
 // calculateArchiveFileHash calculates SHA-256 hash of a file in an archive
 func (c *DefaultComparer) calculateArchiveFileHash(file *zip.File) (string, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	reader, err := file.Open()
 	if err != nil {
 		return "", err
@@ -237,28 +237,28 @@ func (c *DefaultComparer) calculateArchiveFileHash(file *zip.File) (string, erro
 
 // CreateDirectorySnapshot creates a snapshot using the default comparer
 func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	comparer := NewComparer()
 	return comparer.CreateDirectorySnapshot(rootPath, excludePatterns)
 }
 
 // CreateArchiveSnapshot creates a snapshot using the default comparer
 func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	comparer := NewComparer()
 	return comparer.CreateArchiveSnapshot(archivePath)
 }
 
 // CompareSnapshots compares snapshots using the default comparer
 func CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	comparer := NewComparer()
 	return comparer.CompareSnapshots(snapshot1, snapshot2)
 }
 
 // IsDirectoryIdenticalToArchive checks identity using the default comparer
 func IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns []string) (bool, error) {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	comparer := NewComparer()
 	return comparer.IsDirectoryIdenticalToArchive(dirPath, archivePath, excludePatterns)
 }

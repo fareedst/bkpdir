@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 // FileStatInfo contains statistical information about a file for output formatting
 type FileStatInfo struct {
 	Path      string      // Full file path
@@ -25,8 +26,8 @@ type FileStatInfo struct {
 	Type      string      // File type (regular, directory, symlink)
 }
 
+// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
 // GatherFileStatInfo gathers statistical information about a file for output formatting.
-// It returns a FileStatInfo struct containing path, size, modification time, permissions, and type.
 func GatherFileStatInfo(path string) (*FileStatInfo, error) {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -45,8 +46,8 @@ func GatherFileStatInfo(path string) (*FileStatInfo, error) {
 	}, nil
 }
 
+// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
 // formatHumanSize converts a size in bytes to a human-readable format.
-// Examples: 1024 -> "1.0KB", 1536 -> "1.5KB", 1048576 -> "1.0MB"
 func formatHumanSize(size int64) string {
 	const (
 		KB = 1024
@@ -69,8 +70,8 @@ func formatHumanSize(size int64) string {
 	}
 }
 
+// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
 // getFileType determines the type of a file based on its FileInfo.
-// Returns "regular", "directory", "symlink", "device", "pipe", "socket", or "other".
 func getFileType(info os.FileInfo) string {
 	mode := info.Mode()
 	switch {

@@ -69,7 +69,7 @@
 // [IMPL-FILE_OPERATIONS] File operations implementation (AtomicWriter, WalkWithOptions, PatternMatcher)
 package fileops
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
 // Version information
 const (
@@ -80,4 +80,4 @@ const (
 	PackageName = "fileops"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]

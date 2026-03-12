@@ -30,8 +30,8 @@ IMPL-CODE_STYLE:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched stub pseudo-code with convention rules per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -51,9 +51,39 @@ IMPL-CODE_STYLE:
     - 'Exported types/functions: PascalCase'
     - 'Unexported: camelCase'
   essence_pseudocode: |-
-    # [IMPL-CODE_STYLE] — See detail file
+    # [IMPL-CODE_STYLE] — Go code style and convention rules applied across the project.
 
-    procedure code_style_and_conventions():
-      # [IMPL-CODE_STYLE] See detail file
-      execute()
-      end
+    DATA NAMING_RULES:
+      exported: PascalCase
+      unexported: camelCase
+      acronyms: preserve case (e.g. HTTPServer, xmlParser)
+
+    DATA FORMATTING_RULES:
+      formatter: go fmt
+      linter: revive
+      standard: Go standard formatting
+
+    DATA DOCUMENTATION_RULES:
+      package_level: every package has a doc.go or package-level comment
+      exported_symbols: every exported type, function, and method has a doc comment
+      complex_logic: inline comments for non-obvious logic only
+      examples: test files contain usage examples
+
+    # [IMPL-CODE_STYLE] — How naming conventions are enforced.
+    VALIDATE_NAMING(symbol):
+      IF symbol.exported: ASSERT symbol.name matches PascalCase
+      ELSE: ASSERT symbol.name matches camelCase
+      RETURN pass/fail
+
+    # [IMPL-CODE_STYLE] — How formatting is enforced.
+    VALIDATE_FORMATTING(file):
+      RUN go fmt on file
+      RUN revive on file
+      RETURN lint results
+
+    # [IMPL-CODE_STYLE] — How documentation coverage is enforced.
+    VALIDATE_DOCUMENTATION(package):
+      FOR EACH exported symbol in package:
+        ASSERT doc comment exists
+      ASSERT package-level comment exists
+      RETURN pass/fail

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
+// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
 // PathValidator provides path validation and security checking functionality
 type PathValidator struct{}
@@ -27,13 +27,13 @@ type Validator interface {
 
 // NewPathValidator creates a new PathValidator instance
 func NewPathValidator() Validator {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	return &PathValidator{}
 }
 
 // ValidatePath performs comprehensive path validation including security checks
 func (pv *PathValidator) ValidatePath(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if path == "" {
 		return fmt.Errorf("path cannot be empty")
 	}
@@ -54,7 +54,7 @@ func (pv *PathValidator) ValidatePath(path string) error {
 
 // ValidateExistence checks if a path exists
 func (pv *PathValidator) ValidateExistence(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if err := pv.ValidatePath(path); err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (pv *PathValidator) ValidateExistence(path string) error {
 
 // ValidateReadable checks if a path is readable
 func (pv *PathValidator) ValidateReadable(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if err := pv.ValidateExistence(path); err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (pv *PathValidator) ValidateReadable(path string) error {
 
 // ValidateWritable checks if a path is writable
 func (pv *PathValidator) ValidateWritable(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if err := pv.ValidatePath(path); err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func (pv *PathValidator) ValidateWritable(path string) error {
 
 // IsSecurePath checks if a path is secure (no path traversal, etc.)
 func (pv *PathValidator) IsSecurePath(path string) bool {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
 	// Check for path traversal attempts
 	if strings.Contains(path, "..") {
@@ -163,35 +163,35 @@ func (pv *PathValidator) IsSecurePath(path string) bool {
 
 // ValidatePath validates a path using the default validator
 func ValidatePath(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidatePath(path)
 }
 
 // ValidateExistence validates path existence using the default validator
 func ValidateExistence(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidateExistence(path)
 }
 
 // ValidateReadable validates path readability using the default validator
 func ValidateReadable(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidateReadable(path)
 }
 
 // ValidateWritable validates path writability using the default validator
 func ValidateWritable(path string) error {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidateWritable(path)
 }
 
 // IsSecurePath checks path security using the default validator
 func IsSecurePath(path string) bool {
-	// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.IsSecurePath(path)
 }

@@ -116,7 +116,7 @@ type Worker struct {
 	wg          *sync.WaitGroup
 }
 
-// NewConcurrentProcessor creates a new concurrent processor
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] NewConcurrentProcessor creates a new concurrent processor with NumCPU workers
 func NewConcurrentProcessor(processFunc func(ctx context.Context, item *ProcessingItem) (interface{}, error)) *ConcurrentProcessor {
 	workerCount := runtime.NumCPU()
 
@@ -176,7 +176,7 @@ func (cp *ConcurrentProcessor) GetStatus() *ConcurrentStatus {
 	return &status
 }
 
-// Process processes items concurrently using worker pools (extracted from collectFilesToArchive patterns)
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Process executes concurrent processing using worker pools
 func (cp *ConcurrentProcessor) Process(ctx context.Context, items []ProcessingItem) (*ConcurrentResult, error) {
 	start := time.Now()
 
@@ -402,7 +402,7 @@ func (cp *ConcurrentProcessor) createFinalResult(results []*TaskResult, duration
 
 // Worker implementation
 
-// run executes the worker main loop
+// [IMPL-PROCESSING_PATTERNS] [REQ-PERFORMANCE] run executes the worker main loop, reading tasks from queue
 func (w *Worker) run() {
 	defer w.wg.Done()
 

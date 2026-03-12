@@ -13,8 +13,7 @@ import (
 	"strings"
 )
 
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-// DefaultOutputFormatter provides comprehensive output formatting functionality
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] DefaultOutputFormatter provides comprehensive output formatting functionality
 type DefaultOutputFormatter struct {
 	configProvider    ConfigProvider
 	templateFormatter TemplateFormatter
@@ -22,7 +21,7 @@ type DefaultOutputFormatter struct {
 	collector         *OutputCollector
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewDefaultOutputFormatter creates a new DefaultOutputFormatter
 func NewDefaultOutputFormatter(configProvider ConfigProvider) *DefaultOutputFormatter {
 	return &DefaultOutputFormatter{
@@ -33,7 +32,7 @@ func NewDefaultOutputFormatter(configProvider ConfigProvider) *DefaultOutputForm
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewDefaultOutputFormatterWithCollector creates a formatter with delayed output support
 func NewDefaultOutputFormatterWithCollector(configProvider ConfigProvider, collector *OutputCollector) *DefaultOutputFormatter {
 	return &DefaultOutputFormatter{
@@ -44,25 +43,25 @@ func NewDefaultOutputFormatterWithCollector(configProvider ConfigProvider, colle
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // IsDelayedMode returns true if the formatter is collecting output instead of printing immediately
 func (f *DefaultOutputFormatter) IsDelayedMode() bool {
 	return f.collector != nil
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // GetCollector returns the OutputCollector if in delayed mode, nil otherwise
 func (f *DefaultOutputFormatter) GetCollector() *OutputCollector {
 	return f.collector
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // SetCollector sets the OutputCollector for delayed output mode
 func (f *DefaultOutputFormatter) SetCollector(collector *OutputCollector) {
 	f.collector = collector
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // FormatCreatedArchive formats a created archive message using printf-style formatting
 func (f *DefaultOutputFormatter) FormatCreatedArchive(path string) string {
@@ -247,7 +246,7 @@ func (f *DefaultOutputFormatter) FormatDryRunBackup(path string) string {
 	return fmt.Sprintf(formatStr, path)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // PrintCreatedArchive prints a created archive message
 func (f *DefaultOutputFormatter) PrintCreatedArchive(path string) {
@@ -349,7 +348,7 @@ func (f *DefaultOutputFormatter) PrintDryRunBackup(path string) {
 	}
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // FormatWithTemplate delegates to the template formatter
 func (f *DefaultOutputFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
@@ -391,7 +390,7 @@ func (f *DefaultOutputFormatter) TemplateError(data map[string]string) string {
 	return f.templateFormatter.TemplateError(data)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // ExtractArchiveFilenameData delegates to the pattern extractor
 func (f *DefaultOutputFormatter) ExtractArchiveFilenameData(filename string) map[string]string {
@@ -408,7 +407,7 @@ func (f *DefaultOutputFormatter) ExtractPatternData(pattern, text string) map[st
 	return f.patternExtractor.ExtractPatternData(pattern, text)
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // FormatDiskFullError formats a disk full error message
 func (f *DefaultOutputFormatter) FormatDiskFullError(err error) string {
@@ -464,7 +463,7 @@ func (f *DefaultOutputFormatter) FormatInvalidFile(err error) string {
 	return fmt.Sprintf(formatStr, err.Error())
 }
 
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // TemplateDiskFullError formats a disk full error using template
 func (f *DefaultOutputFormatter) TemplateDiskFullError(err error) string {
@@ -506,8 +505,7 @@ func (f *DefaultOutputFormatter) TemplateFileNotFound(err error) string {
 	return f.FormatWithPlaceholders(templateStr, data)
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
-// Enhanced formatting operations using file statistics for detailed output
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
 
 // FormatCreatedArchiveWithStats formats a created archive message with detailed file statistics
 func (f *DefaultOutputFormatter) FormatCreatedArchiveWithStats(path string) string {
@@ -532,6 +530,7 @@ func (f *DefaultOutputFormatter) FormatCreatedArchiveWithStats(path string) stri
 	return fmt.Sprintf(formatStr, stats.Path, stats.SizeHuman, stats.MTime.Format("2006-01-02 15:04:05"))
 }
 
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
 // FormatIncrementalCreatedWithStats formats an incremental created message with detailed file statistics
 func (f *DefaultOutputFormatter) FormatIncrementalCreatedWithStats(path string) string {
 	stats, err := GatherFileStatInfo(path)
@@ -555,7 +554,7 @@ func (f *DefaultOutputFormatter) FormatIncrementalCreatedWithStats(path string) 
 	return fmt.Sprintf(formatStr, stats.Path, stats.SizeHuman, stats.MTime.Format("2006-01-02 15:04:05"))
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 
 // TemplateCreatedArchiveWithStats formats a created archive message using templates with file statistics
 func (f *DefaultOutputFormatter) TemplateCreatedArchiveWithStats(path string) string {
@@ -575,6 +574,7 @@ func (f *DefaultOutputFormatter) TemplateCreatedArchiveWithStats(path string) st
 	return f.formatTemplate(templateStr, data)
 }
 
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 // TemplateIncrementalCreatedWithStats formats an incremental created message using templates with file statistics
 func (f *DefaultOutputFormatter) TemplateIncrementalCreatedWithStats(path string) string {
 	stats, err := GatherFileStatInfo(path)
@@ -593,7 +593,7 @@ func (f *DefaultOutputFormatter) TemplateIncrementalCreatedWithStats(path string
 	return f.formatTemplate(templateStr, data)
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 
 // PrintCreatedArchiveWithStats prints a created archive message with detailed file statistics
 func (f *DefaultOutputFormatter) PrintCreatedArchiveWithStats(path string) {
@@ -605,6 +605,7 @@ func (f *DefaultOutputFormatter) PrintCreatedArchiveWithStats(path string) {
 	}
 }
 
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [IMPL-DELAYED_OUTPUT] [REQ-OUT_002]
 // PrintIncrementalCreatedWithStats prints an incremental created message with detailed file statistics
 func (f *DefaultOutputFormatter) PrintIncrementalCreatedWithStats(path string) {
 	message := f.FormatIncrementalCreatedWithStats(path)
@@ -615,7 +616,7 @@ func (f *DefaultOutputFormatter) PrintIncrementalCreatedWithStats(path string) {
 	}
 }
 
-// OUT-002: See specification.md - Output Formatting [DECISION:format-processing]
+// [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
 
 // buildStatsTemplateData builds template data from file statistics
 func (f *DefaultOutputFormatter) buildStatsTemplateData(stats *FileStatInfo) map[string]string {

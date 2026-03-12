@@ -1040,9 +1040,7 @@ func TestMain_Integration_CommandValidation(t *testing.T) {
 	}
 }
 
-// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix CLI-015
-// IMMUTABLE-REF: CLI Interface Requirements
+// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Path type detection and command routing validation
 func TestMain_Integration_CLI015_AutoDetection(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1145,9 +1143,7 @@ func TestMain_Integration_CLI015_AutoDetection(t *testing.T) {
 	}
 }
 
-// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix CLI-015
-// IMMUTABLE-REF: CLI Interface Requirements
+// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Backward compatibility with explicit commands
 func TestMain_Integration_CLI015_BackwardCompatibility(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1185,9 +1181,7 @@ func TestMain_Integration_CLI015_BackwardCompatibility(t *testing.T) {
 	}
 }
 
-// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
-// TEST-REF: Feature tracking matrix CLI-015
-// IMMUTABLE-REF: CLI Interface Requirements
+// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Edge cases: symlinks, special characters in paths
 func TestMain_Integration_CLI015_EdgeCases(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()

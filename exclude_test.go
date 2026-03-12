@@ -1,14 +1,6 @@
-// This file is part of bkpdir
-
-// Package main provides tests for file exclusion logic in BkpDir.
-// It verifies pattern matching and exclusion behavior.
-
-// [REQ-CONFIGURATION] File exclusion and pattern matching testing
-// [ARCH-EXCLUSION_PATTERNS] Pattern-based exclusion validation
-// [IMPL-EXCLUSION_PATTERNS] Doublestar glob pattern matching validation
-// TEST-EXCLUDE-001: File Exclusion Test Validation - File exclusion and pattern matching testing [ACTION-validation]
-// Source: exclude_test.go - TEST-EXCLUDE-001
-// Impact: Test validation for file exclusion functionality
+// [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
+// Tests for file exclusion logic: validates pattern matching and exclusion behavior
+// for directory patterns, glob patterns, and exact matches.
 package main
 
 import "testing"

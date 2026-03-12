@@ -16,8 +16,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
-
 // BuildInfo contains version and build-time information for the application
 type BuildInfo struct {
 	// Version is the application version (e.g., "1.0.0")

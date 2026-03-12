@@ -21,15 +21,32 @@ IMPL-ATOMIC_OPS:
       Register temporary files with ResourceManager
     details: []
   code_locations:
-    files: []
-    functions: []
+    files:
+      - pkg/fileops/atomic.go
+      - pkg/resources/context.go
+    functions:
+      - fileops.NewAtomicWriter
+      - fileops.AtomicWriter.Write
+      - fileops.AtomicWriter.WriteString
+      - fileops.AtomicWriter.Commit
+      - fileops.AtomicWriter.Rollback
+      - fileops.AtomicWriter.Close
+      - fileops.AtomicWriter.cleanup
+      - fileops.AtomicCopy
+      - fileops.AtomicWriteFile
+      - fileops.AtomicWriteString
+      - resources.AtomicWriteFile
+      - resources.AtomicWriteFileWithContext
   traceability:
     architecture:
       - ARCH-RESOURCE_MANAGEMENT
       - ARCH-TESTING_STRATEGY
     requirements:
       - REQ-RESOURCE_MANAGEMENT
-    tests: []
+    tests:
+      - errors_test.go::TestAtomicWriteFile
+      - errors_test.go::TestAtomicWriteFile_RenameFailure
+      - pkg/resources/resources_test.go::TestAtomicWriteFile
     code_annotations:
       - IMPL-ATOMIC_OPS
       - ARCH-RESOURCE_MANAGEMENT
@@ -50,8 +67,8 @@ IMPL-ATOMIC_OPS:
       author: MCP converter
     last_updated:
       date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
+      author: AI agent
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
       date: "2026-03-12"
       validator: MCP converter
@@ -115,9 +132,96 @@ IMPL-ATOMIC_OPS:
 
      [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-*]
   essence_pseudocode: |-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — Create temporary files with `.tmp` extension
+    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+    # Atomic file operations: write-to-temp then rename for corruption-safe file I/O.
 
-    procedure atomic_file_operations():
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] Prevents corruption on operation failure
-      execute()
-      end
+    TYPE AtomicWriter:
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Encapsulates temp-file lifecycle for a single atomic write target.
+      FIELDS: targetPath, tempPath, tempFile, isCommitted, isClosed
+
+    INTERFACE AtomicOp:
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Contract for atomic write/commit/rollback operations.
+      Write(data) -> (n, error)
+      WriteString(s) -> (n, error)
+      Commit() -> error
+      Rollback() -> error
+      Close() -> error
+
+    procedure NewAtomicWriter(targetPath) -> (*AtomicWriter, error):
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Creates temp file in same dir as target for same-filesystem rename.
+      INPUT: targetPath string
+      OUTPUT: *AtomicWriter or error
+      validate targetPath via ValidatePath
+      dir = directory of targetPath
+      ensure dir exists (os.MkdirAll)
+      create temp file in dir with pattern base+".tmp.*"
+      return AtomicWriter{targetPath, tempPath, tempFile, committed=false, closed=false}
+
+    procedure AtomicWriter.Write(data) -> (int, error):
+      # [IMPL-ATOMIC_OPS] — Writes bytes to the temp file; guards closed state.
+      if writer is closed -> error
+      if tempFile is nil -> error
+      delegate to tempFile.Write(data)
+
+    procedure AtomicWriter.WriteString(s) -> (int, error):
+      # [IMPL-ATOMIC_OPS] — Convenience wrapper converting string to bytes.
+      return Write([]byte(s))
+
+    procedure AtomicWriter.Commit() -> error:
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Closes temp file then atomically renames to target; cleans up on failure.
+      if already committed -> error
+      if closed but tempFile not nil -> error (inconsistent state)
+      close tempFile
+      os.Rename(tempPath, targetPath)   # atomic on same filesystem
+      on rename failure -> cleanup temp file
+      mark committed=true, closed=true
+
+    procedure AtomicWriter.Rollback() -> error:
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Removes temp file without committing; prevents committed rollback.
+      if committed -> error
+      call cleanup()
+
+    procedure AtomicWriter.Close() -> error:
+      # [IMPL-ATOMIC_OPS] — Idempotent close; rolls back if not committed.
+      if already closed -> no-op
+      if not committed -> Rollback()
+      mark closed=true
+
+    procedure AtomicWriter.cleanup() -> error:
+      # [IMPL-ATOMIC_OPS] — Closes temp file handle and removes temp file from disk.
+      close tempFile if open
+      remove tempPath (ignore not-exist errors)
+      mark closed=true
+
+    procedure AtomicCopy(src, dst) -> error:
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Copies a file atomically: validate paths, stream to AtomicWriter, set perms, commit.
+      INPUT: src, dst strings
+      OUTPUT: error
+      validate src readable (ValidateReadable)
+      validate dst path (ValidatePath)
+      open src
+      get src file info for permissions
+      create AtomicWriter for dst (defer Close)
+      io.Copy from src to writer
+      chmod tempPath to match src permissions
+      writer.Commit()
+
+    procedure AtomicWriteFile(filename, data, perm) -> error:
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+      # Convenience: writes byte slice to file atomically with given permissions.
+      INPUT: filename string, data []byte, perm FileMode
+      OUTPUT: error
+      create AtomicWriter for filename (defer Close)
+      writer.Write(data)
+      chmod tempPath to perm
+      writer.Commit()
+
+    procedure AtomicWriteString(filename, data, perm) -> error:
+      # [IMPL-ATOMIC_OPS] — Convenience: converts string and delegates to AtomicWriteFile.
+      return AtomicWriteFile(filename, []byte(data), perm)
