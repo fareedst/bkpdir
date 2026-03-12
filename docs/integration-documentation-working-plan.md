@@ -11,9 +11,9 @@
 ## 🚀 PHASE 1: CRITICAL VALIDATION COMPLETED
 
 ### ✅ Validation Results
-1. **[ACTION:validation] Immutable Requirements Check**: ✅ VERIFIED - No conflicts with immutable.md
+1. **[ACTION-validation] Immutable Requirements Check**: ✅ VERIFIED - No conflicts with immutable.md
 2. **📋 Feature Tracking Registry**: ✅ VERIFIED - EXTRACT-008 exists with valid subtasks
-3. **[ACTION:discovery] AI Assistant Compliance**: ✅ VERIFIED - Token requirements reviewed
+3. **[ACTION-discovery] AI Assistant Compliance**: ✅ VERIFIED - Token requirements reviewed
 4. **[CRITICAL] AI Assistant Protocol**: ✅ VERIFIED - Using NEW FEATURE Protocol
 
 ### 📊 Change Type Classification
@@ -130,7 +130,7 @@ Following DOC-007/008 standardized format:
 3. **Missing Cross-References**: Broken links between documents
 4. **Incomplete Coverage**: Missing package functionality
 
-### [ACTION:validation] Mitigation Strategies
+### [ACTION-validation] Mitigation Strategies
 1. **Testing Strategy**: Test all code examples before documentation
 2. **Template Consistency**: Use established documentation patterns
 3. **Link Validation**: Systematic cross-reference checking

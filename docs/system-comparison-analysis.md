@@ -1,4 +1,4 @@
-# [ACTION:discovery] System Comparison: Unicode Icons vs Semantic Tokens
+# [ACTION-discovery] System Comparison: Unicode Icons vs Semantic Tokens
 
 ## 📊 **Dramatic Improvement Analysis**
 
@@ -19,7 +19,7 @@
 
 ### **Current System Failure**
 ```bash
-[ACTION:validation] DOC-008: Running comprehensive token validation...
+[ACTION-validation] DOC-008: Running comprehensive token validation...
 📋 Step 1: Loading validation patterns...
   ❌ Complex validation infrastructure
   ✅ Token definitions loaded
@@ -31,7 +31,7 @@
 
 ### **Semantic System Success**
 ```bash
-[ACTION:discovery] Validating semantic tokens...
+[ACTION-discovery] Validating semantic tokens...
 ✅ Token registry found
 📋 Checking token format in Go files...
 ⚠️ Potential invalid format in 124 files (expected - migration needed)

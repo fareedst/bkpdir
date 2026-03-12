@@ -1,0 +1,62 @@
+IMPL-INTERFACE_FIRST:
+  name: Interface-First Extraction Approach
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Prevents tight coupling between extracted packages
+      Enables independent testing and development of components
+      Provides clear contracts for component interaction
+      Facilitates future evolution of implementations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Define interfaces before concrete implementations
+      Use Go interfaces for abstraction
+      Independent package testing
+      Versioned interface evolution
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-INTERFACE_FIRST
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-INTERFACE_FIRST.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: 'Interface definitions with `// REFACTOR-001: Interface standardization`'
+  essence_pseudocode: |-
+    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Define interfaces before concrete implementations
+
+    procedure interface_first_extraction_approach():
+      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prevents tight coupling between extracted packages
+      execute()
+      end

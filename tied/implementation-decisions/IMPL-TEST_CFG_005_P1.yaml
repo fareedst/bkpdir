@@ -1,0 +1,83 @@
+IMPL-TEST_CFG_005_P1:
+  name: Priority 1 Configuration Merge Tests Implementation
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Validates important edge cases for configuration inheritance and merging
+      Ensures relative path resolution, home directory expansion, and error handling work correctly
+      Tests cover multiple inheritance sources, deep chains, type mismatches, and null value handling
+      Provides comprehensive coverage beyond Priority 0 critical tests
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-TEST_CFG_005_P1
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_CFG_005_P1.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go`: TestMultipleInheritanceSources_REQ_CFG_005, TestRelativePathInheritance_REQ_CFG_005, TestHomeDirectoryExpansion_REQ_CFG_005, TestMissingInheritanceFile_REQ_CFG_005, TestInvalidYAMLHandling_REQ_CFG_005, TestDeepInheritanceChain_REQ_CFG_005, TestTypeMismatchHandling_REQ_CFG_005, TestNullValueHandling_REQ_CFG_005, TestWhitespaceStringHandling_REQ_CFG_005'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CFG_001], [REQ-CONFIGURATION], [IMPL-CFG_INHERITANCE_PATH_RESOLUTION]'
+  date: "2025-12-11"
+  priority: P1 (Important)
+  test_expectations:
+    - All tests account for default merging behavior (defaults included in accumulate fields)
+    - 'Inheritance chains: child overrides parent for precedence fields'
+    - 'Sequential files: first file merges with defaults, subsequent files respect precedence'
+    - Tests use semantic token references `[REQ-CFG_005]` in test names and comments
+  testdeepinheritancechain_req_cfg_005: Tests very long inheritance chain (12 files)
+  testhomedirectoryexpansion_req_cfg_005: Tests home directory expansion in inherit paths (~/.bkpdir-base.yml)
+  testinvalidyamlhandling_req_cfg_005: Tests invalid YAML in one file
+  testmissinginheritancefile_req_cfg_005: Tests error handling when inheritance file is missing
+  testmultipleinheritancesources_req_cfg_005: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)
+  testnullvaluehandling_req_cfg_005: Tests nil/null value handling
+  testrelativepathinheritance_req_cfg_005: Tests relative path resolution (../base.yml, ./sibling.yml)
+  testtypemismatchhandling_req_cfg_005: Tests type mismatches (array vs string)
+  testwhitespacestringhandling_req_cfg_005: Tests whitespace-only string handling
+  essence_pseudocode: |-
+    # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — - **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)
+
+    procedure priority_1_configuration_merge_tests_implementatio():
+      # [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] Validates important edge cases for configuration inheritance and merging
+      execute()
+      end

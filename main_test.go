@@ -2,11 +2,11 @@
 
 // Package main provides tests for the BkpDir CLI application.
 
-// TEST-CORE-ARCH-001: Core architecture test validation - Main application structure testing [ACTION:validation]
+// TEST-CORE-ARCH-001: Core architecture test validation - Main application structure testing [ACTION-validation]
 // Source: main.go - CORE-ARCH-001
 // Impact: Validates core system architecture
 
-// TEST-CLI-GLOBAL-001: Global options test validation - Path type detection and validation testing [ACTION:validation]
+// TEST-CLI-GLOBAL-001: Global options test validation - Path type detection and validation testing [ACTION-validation]
 // Source: main.go - CLI-GLOBAL-001
 // Impact: Validates global CLI options functionality
 package main
@@ -1300,7 +1300,7 @@ func TestDebugFlagControlsOutput(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] [TEST:LIST_LIMIT] Test list command limit functionality
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] [TEST-LIST_LIMIT] Test list command limit functionality
 func TestListArchivesEnhanced_WithLimit(t *testing.T) {
 	t.Run("default limit of 10", func(t *testing.T) {
 		testListArchivesDefaultLimit(t)
@@ -1331,7 +1331,7 @@ func TestListArchivesEnhanced_WithLimit(t *testing.T) {
 	})
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test default limit of 10
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test default limit of 10
 func testListArchivesDefaultLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1372,7 +1372,7 @@ func testListArchivesDefaultLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test custom limit values
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test custom limit values
 func testListArchivesCustomLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1411,7 +1411,7 @@ func testListArchivesCustomLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test limit of 0 shows all
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test limit of 0 shows all
 func testListArchivesLimitZero(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1450,7 +1450,7 @@ func testListArchivesLimitZero(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test fewer archives than limit
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test fewer archives than limit
 func testListArchivesFewerThanLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1489,7 +1489,7 @@ func testListArchivesFewerThanLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test exactly limit number of archives
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test exactly limit number of archives
 func testListArchivesExactlyLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1528,7 +1528,7 @@ func testListArchivesExactlyLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test more archives than limit
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test more archives than limit
 func testListArchivesMoreThanLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1567,7 +1567,7 @@ func testListArchivesMoreThanLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test sorting preserved with limit
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test sorting preserved with limit
 func testListArchivesSortingWithLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()

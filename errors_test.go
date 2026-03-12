@@ -6,16 +6,16 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-ERROR-HANDLING-001: Error handling test validation - Error handling and resource management testing [ACTION:validation]
+// TEST-ERROR-HANDLING-001: Error handling test validation - Error handling and resource management testing [ACTION-validation]
 // Source: errors.go - ERROR-HANDLING-001
 // Impact: Validates error handling functionality
 
-// TEST-SERVICE-ERROR-001: Error service test validation - Error service implementation testing [ACTION:validation]
+// TEST-SERVICE-ERROR-001: Error service test validation - Error service implementation testing [ACTION-validation]
 // Source: errors.go - SERVICE-ERROR-001
 // Impact: Validates error service implementation
-// [REQ:ERROR_HANDLING] Enhanced error handling testing
-// [ARCH:ERROR_HANDLING] Structured error handling strategy testing
-// [IMPL:STRUCTURED_ERRORS] Structured error types testing
+// [REQ-ERROR_HANDLING] Enhanced error handling testing
+// [ARCH-ERROR_HANDLING] Structured error handling strategy testing
+// [IMPL-STRUCTURED_ERRORS] Structured error types testing
 package main
 
 import (

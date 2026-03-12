@@ -4,7 +4,7 @@
 
 This document provides practical examples for using the enhanced configuration inspection capabilities introduced in CFG-006. All examples are tested and verified to work with the current implementation.
 
-## [ACTION:discovery] Basic Inspection Examples
+## [ACTION-discovery] Basic Inspection Examples
 
 ### Example 1: Display All Configuration Values
 
@@ -145,7 +145,7 @@ $ bkpdir config --format json --filter "archive"
 }
 ```
 
-## [ACTION:discovery] Advanced Filtering Examples
+## [ACTION-discovery] Advanced Filtering Examples
 
 ### Example 6: Filter by Configuration Category
 
@@ -245,7 +245,7 @@ $ bkpdir config --sources --format json | jq '.configuration[] | select(.merge_s
 ]
 ```
 
-## [ACTION:maintenance] Troubleshooting Examples
+## [ACTION-maintenance] Troubleshooting Examples
 
 ### Example 11: Debugging Configuration Values
 
@@ -446,11 +446,11 @@ build:
 
 These examples demonstrate the power and flexibility of the CFG-006 configuration inspection system:
 
-- **[ACTION:discovery] Basic inspection** for quick configuration overview
+- **[ACTION-discovery] Basic inspection** for quick configuration overview
 - **🎨 Multiple formats** for different use cases and automation
 - **[ACTION:core-functionality] Advanced filtering** for focused analysis
 - **🔗 Inheritance debugging** for complex configuration setups
-- **[ACTION:maintenance] Troubleshooting** for configuration issue resolution
+- **[ACTION-maintenance] Troubleshooting** for configuration issue resolution
 - **📊 Automation integration** for scripts and CI/CD pipelines
 - **🎯 Real-world scenarios** for practical application
 

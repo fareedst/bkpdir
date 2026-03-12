@@ -1,0 +1,44 @@
+REQ-GIT_INTEGRATION:
+  name: Git Integration Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Provides version control information in archives
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Git repository detected automatically
+    - criterion: Branch and hash extracted correctly
+    - criterion: Status detection works for clean/dirty state
+    - criterion: Archive names include Git info when enabled
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    implementation:
+      - IMPL-GIT_CLI
+    tests: []
+    code_annotations:
+      - REQ-GIT_INTEGRATION
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-GIT_INTEGRATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Git Integration [ARCH-GIT_INTEGRATION]
+  description: Automatic Git repository detection. Git branch and commit hash extraction. Git status detection for clean/dirty state. Integration with archive naming.
+  implementation: See `implementation-decisions.md` § Git Command-line Integration [IMPL-GIT_CLI]

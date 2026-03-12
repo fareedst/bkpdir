@@ -176,7 +176,7 @@ type FormatSettings struct {
 }
 ```
 
-### [ACTION:migration] Backward Compatibility
+### [ACTION-migration] Backward Compatibility
 
 The abstraction maintains complete backward compatibility:
 

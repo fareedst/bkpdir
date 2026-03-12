@@ -1,0 +1,50 @@
+REQ-DOC_011:
+  name: Token Validation Integration for AI Assistants Requirements
+  category: Functional
+  priority: P1
+  status: Planned
+  rationale:
+    why: Enables AI assistants to validate changes automatically before submission, reducing errors and improving code quality
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: AI workflow validation hooks integrate with existing validation framework
+    - criterion: Pre-submission validation prevents non-compliant changes
+    - criterion: Validation feedback optimized for AI comprehension
+    - criterion: Zero-friction validation without disrupting workflows
+    - criterion: Automated execution support for AI assistants
+    - criterion: Error messages structured for AI parsing
+    - criterion: Validation feedback includes clear remediation steps
+    - criterion: Error formatting is consistent and machine-readable
+    - criterion: Validation results include file and line references
+    - criterion: Error categorization enables prioritization
+  validation_criteria:
+    - method: Validation integration tests verify all requirements. AI workflow tests verify automated execution.
+  traceability:
+    architecture:
+      - ARCH-AI_DOCUMENTATION
+    implementation:
+      - IMPL-TESTING
+    tests: []
+    code_annotations:
+      - REQ-DOC_011
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-DOC_011.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § AI-First Documentation Architecture [ARCH-AI_DOCUMENTATION]
+  description: AI workflow validation hooks must integrate seamlessly with existing validation framework. Pre-submission validation must prevent non-compliant changes from being submitted. Validation feedback must be optimized for AI assistant comprehension and remediation. Integration must provide zero-friction validation without disrupting AI workflows. All validation processes must support automated execution by AI assistants.
+  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]

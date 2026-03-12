@@ -1,4 +1,4 @@
-// [IMPL:STRUCTURED_ERRORS] [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // Package errors provides structured error handling and error classification utilities
 // for CLI applications. It includes generic error types, error classification,
 // and integration patterns for reliable error handling across applications.

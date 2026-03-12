@@ -1,4 +1,4 @@
-// [IMPL:STRUCTURED_ERRORS] [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // Error handling functions for processing and responding to different types of errors.
 // This file contains the error handler functions extracted from the original
 // errors.go file, generalized for reuse across CLI applications.

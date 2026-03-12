@@ -3,9 +3,9 @@
 // Package main provides file backup functionality for BkpDir.
 // It handles individual file backup creation, comparison, and management.
 
-// [REQ:FILE_BACKUP] File backup creation and management
-// [ARCH:RESOURCE_MANAGEMENT] Atomic operations for file backups
-// [IMPL:ATOMIC_OPS] Temporary files with atomic rename
+// [REQ-FILE_BACKUP] File backup creation and management
+// [ARCH-RESOURCE_MANAGEMENT] Atomic operations for file backups
+// [IMPL-ATOMIC_OPS] Temporary files with atomic rename
 // BACKUP-FEATURES-001: File Backup Operations Specification - File backup creation and management [ACTION:core-functionality]
 // Source: docs/context/specification.md - File Backup Operations section
 // Impact: Core functionality requirement for file backup operations
@@ -369,7 +369,7 @@ func ListFileBackups(backupDir, baseFilename string) ([]BackupInfo, error) {
 }
 
 // ListFileBackupsEnhanced lists backups with enhanced formatting
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Accept limit parameter and apply after sorting
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Accept limit parameter and apply after sorting
 func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, filePath string, limit int) error {
 	baseFilename := filepath.Base(filePath)
 
@@ -405,7 +405,7 @@ func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInt
 		return nil
 	}
 
-	// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Apply limit after sorting (limit > 0 means limit, 0 means show all)
+	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Apply limit after sorting (limit > 0 means limit, 0 means show all)
 	// Note: ListFileBackups already sorts by creation time (most recent first)
 	if limit > 0 && len(backups) > limit {
 		backups = backups[:limit]

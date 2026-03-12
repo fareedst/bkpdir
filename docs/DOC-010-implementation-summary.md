@@ -10,9 +10,9 @@
 
 ## 🎯 Core Features Implemented
 
-### [ACTION:discovery] **1. Token Analysis Engine**
+### [ACTION-discovery] **1. Token Analysis Engine**
 ```go
-// [MEDIUM] DOC-010: Token analysis engine - [ACTION:discovery] Core analysis and suggestion logic
+// [MEDIUM] DOC-010: Token analysis engine - [ACTION-discovery] Core analysis and suggestion logic
 type TokenAnalyzer struct {
     config     *AnalysisConfig
     fileSet    *token.FileSet
@@ -50,10 +50,10 @@ func (ta *TokenAnalyzer) determineAction(signature FunctionSignature, context ma
 ```
 
 **Action Pattern Recognition:**
-- **[ACTION:discovery] Analysis**: `get`, `find`, `search`, `discover`, `detect`, `analyze`, `check`, `validate`, `parse`
+- **[ACTION-discovery] Analysis**: `get`, `find`, `search`, `discover`, `detect`, `analyze`, `check`, `validate`, `parse`
 - **[ACTION:format-processing] Documentation**: `format`, `print`, `write`, `update`, `log`, `output`, `render`, `display`
 - **[ACTION:core-functionality] Configuration**: `set`, `config`, `init`, `setup`, `create`, `build`, `generate`, `make`
-- **[ACTION:validation] Protection**: `protect`, `secure`, `validate`, `verify`, `guard`, `ensure`, `handle`, `recover`
+- **[ACTION-validation] Protection**: `protect`, `secure`, `validate`, `verify`, `guard`, `ensure`, `handle`, `recover`
 
 ### 🎯 **4. Feature ID Mapping**
 ```go
@@ -105,9 +105,9 @@ token-suggester batch-suggest . --output-json  # Comprehensive batch analysis
 
 ## 📊 Advanced Analysis Features
 
-### [ACTION:discovery] **Context Analysis Engine**
+### [ACTION-discovery] **Context Analysis Engine**
 ```go
-// [MEDIUM] DOC-010: Context analysis - [ACTION:discovery] Surrounding code analysis
+// [MEDIUM] DOC-010: Context analysis - [ACTION-discovery] Surrounding code analysis
 func (ta *TokenAnalyzer) analyzeContext(filePath string, lineNumber int, src []byte) (map[string]string, error)
 ```
 
@@ -118,9 +118,9 @@ func (ta *TokenAnalyzer) analyzeContext(filePath string, lineNumber int, src []b
 - **File Operations**: File I/O patterns and operations
 - **Surrounding Code Window**: 5 lines before/after for context
 
-### [ACTION:validation] **Token Validation Framework**
+### [ACTION-validation] **Token Validation Framework**
 ```go
-// [MEDIUM] DOC-010: Token validation - [ACTION:validation] Standards compliance checking
+// [MEDIUM] DOC-010: Token validation - [ACTION-validation] Standards compliance checking
 func (tv *TokenValidator) ValidateTokens(directory string) ([]TokenViolation, error)
 ```
 
@@ -182,7 +182,7 @@ func BenchmarkAnalyzeTarget(b *testing.B)    // Performance benchmarking
 - Leverages existing priority icon mappings from feature-tracking.md
 - Builds on established token format standards
 
-### [ACTION:validation] **DOC-008 Integration**
+### [ACTION-validation] **DOC-008 Integration**
 **Validation Infrastructure:**
 - Uses existing icon validation engine for consistency checking
 - Leverages master icon legend for valid icon sets
@@ -214,7 +214,7 @@ token-workflow              # Complete analysis pipeline
 token-dev                   # Development workflow with testing
 ```
 
-### [ACTION:migration] **Integration Updates**
+### [ACTION-migration] **Integration Updates**
 - **Updated `all` target** to include token-suggester build
 - **Enhanced `clean` target** to remove token suggestion artifacts
 - **Extended `dev-full` target** for complete development workflow with token analysis

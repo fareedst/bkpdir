@@ -64,9 +64,9 @@
 // All operations maintain the security and reliability patterns from the
 // original implementation while providing clean, reusable interfaces.
 //
-// [REQ:RELIABILITY] File operations must be reliable and safe
-// [ARCH:FILE_OPERATIONS] File operations architecture (atomic writes, validation, traversal)
-// [IMPL:FILE_OPERATIONS] File operations implementation (AtomicWriter, WalkWithOptions, PatternMatcher)
+// [REQ-RELIABILITY] File operations must be reliable and safe
+// [ARCH-FILE_OPERATIONS] File operations architecture (atomic writes, validation, traversal)
+// [IMPL-FILE_OPERATIONS] File operations implementation (AtomicWriter, WalkWithOptions, PatternMatcher)
 package fileops
 
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]

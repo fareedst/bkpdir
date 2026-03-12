@@ -1,0 +1,66 @@
+ARCH-TEST_EXCLUDE_MERGE:
+  name: Configuration Testing Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-TEST_EXCLUDE_MERGE
+    - REQ-CONFIGURATION
+    - REQ-CFG_006
+    - REQ-CONFIG_OUTPUT_GROUPING
+  rationale:
+    why: |-
+      Validates that configuration merging works correctly for array fields
+      Ensures source tracking accurately reflects merged values
+      Provides regression protection for merge behavior changes
+      Enables debugging of configuration issues through test scenarios
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Test-driven validation of exclude patterns merging and source tracking
+    details: []
+    integration_points: &ref_1
+      - Uses existing config loading infrastructure
+      - Leverages CFG-006 source tracking system
+      - Validates CFG-005 merge strategy behavior
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-TEST_EXCLUDE_MERGE
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+      - REQ-CONFIG_OUTPUT_GROUPING
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-TEST_EXCLUDE_MERGE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Test-driven validation of exclude patterns merging and source tracking
+  compliance: '[REQ-CONFIG_OUTPUT_GROUPING]'
+  cons: Slightly more complex display logic.
+  context: The current configuration output is a flat, sorted list. As the number of configuration options grows (100+), this becomes difficult to navigate. Users need a way to see related options together and see the most important options first.
+  cross-references: '[REQ-TEST_EXCLUDE_MERGE], [REQ-CONFIGURATION], [REQ-CFG_006], [ARCH-CFG_006]'
+  edge_case_coverage: Empty arrays, duplicates, order preservation
+  integration_points: *ref_1
+  merge_validation: Verify patterns from all sources are accumulated, not replaced
+  pros: Improved usability, better discoverability of options, logical organization.
+  source_tracking_validation: Verify config command shows correct source attribution
+  test_scenario_setup: Create temporary directory structure with multiple config files
+  test_structure:
+    - Unit test for merge logic validation
+    - Integration test for config command output validation
+    - Test fixtures with realistic config file scenarios

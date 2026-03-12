@@ -1,6 +1,6 @@
 # Unicode Migration - Week 3: Command Structure Migration Plan
 
-> **[HIGH] DOC-014: Week 3 command structure migration with systematic approach [ACTION:maintenance]**
+> **[HIGH] DOC-014: Week 3 command structure migration with systematic approach [ACTION-maintenance]**
 
 **Date**: 2025-01-02  
 **Status**: ✅ **WEEK 3 COMPLETED** - All command directories migrated successfully  
@@ -46,10 +46,10 @@ Total: 281 instances
 ### Established Patterns (From Weeks 1-2)
 ```go
 // Command-specific patterns
-[CRITICAL] EXTRACT-008 → [HIGH] DOC-014 [ACTION:maintenance]
+[CRITICAL] EXTRACT-008 → [HIGH] DOC-014 [ACTION-maintenance]
 [HIGH] EXTRACT-008 → [HIGH] CFG-003 [ACTION:format-processing]
-[MEDIUM] DOC-012 → [MEDIUM] DOC-012 [ACTION:validation]
-[LOW] EXTRACT-005 → [HIGH] DOC-014 [ACTION:maintenance]
+[MEDIUM] DOC-012 → [MEDIUM] DOC-012 [ACTION-validation]
+[LOW] EXTRACT-005 → [HIGH] DOC-014 [ACTION-maintenance]
 ```
 
 ### Quality Assurance Framework
@@ -74,7 +74,7 @@ Total: 281 instances
 ```go
 // Scaffolding tokens → DOC-014 (maintenance)
 // Before: [CRITICAL] EXTRACT-008: Project scaffolding system - [ACTION:core-functionality]
-// After:  [HIGH] DOC-014: Project scaffolding system [ACTION:maintenance]
+// After:  [HIGH] DOC-014: Project scaffolding system [ACTION-maintenance]
 ```
 
 #### Success Criteria
@@ -116,8 +116,8 @@ Total: 281 instances
 #### Migration Pattern
 ```go
 // Validation tokens → DOC-012 (validation)
-// Before: [MEDIUM] DOC-012: Real-time validation service - [ACTION:discovery]
-// After:  [MEDIUM] DOC-012: Real-time validation service [ACTION:validation]
+// Before: [MEDIUM] DOC-012: Real-time validation service - [ACTION-discovery]
+// After:  [MEDIUM] DOC-012: Real-time validation service [ACTION-validation]
 ```
 
 #### Success Criteria
@@ -137,8 +137,8 @@ Total: 281 instances
 #### Migration Pattern
 ```go
 // AI validation tokens → DOC-014 (maintenance)
-// Before: [LOW] EXTRACT-005: AI validation system - [ACTION:validation]
-// After:  [HIGH] DOC-014: AI validation system [ACTION:maintenance]
+// Before: [LOW] EXTRACT-005: AI validation system - [ACTION-validation]
+// After:  [HIGH] DOC-014: AI validation system [ACTION-maintenance]
 ```
 
 #### Success Criteria
@@ -161,11 +161,11 @@ Total: 281 instances
 ```go
 // Token suggester tokens → DOC-014 (maintenance)
 // Before: [CRITICAL] EXTRACT-008: Token suggestion system - [ACTION:core-functionality]
-// After:  [HIGH] DOC-014: Token suggestion system [ACTION:maintenance]
+// After:  [HIGH] DOC-014: Token suggestion system [ACTION-maintenance]
 
 // Analysis tokens → DOC-012 (validation)
-// Before: [MEDIUM] DOC-012: Token analysis logic - [ACTION:discovery]
-// After:  [MEDIUM] DOC-012: Token analysis logic [ACTION:validation]
+// Before: [MEDIUM] DOC-012: Token analysis logic - [ACTION-discovery]
+// After:  [MEDIUM] DOC-012: Token analysis logic [ACTION-validation]
 ```
 
 #### Success Criteria
@@ -303,4 +303,4 @@ Success Rate: 100% (target)
 
 ---
 
-**[HIGH] DOC-014: Week 3 command structure migration plan - Systematic approach for migrating 281 Unicode icons across command directories with quality assurance and validation framework [ACTION:maintenance]** 
+**[HIGH] DOC-014: Week 3 command structure migration plan - Systematic approach for migrating 281 Unicode icons across command directories with quality assurance and validation framework [ACTION-maintenance]** 

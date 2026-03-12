@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2026-03-12
+
+### Changed
+- **STDD to TIED migration**: Converted entire project from STDD monolithic markdown files (v1.0.2) to TIED YAML-driven methodology (v2.2.0) with MCP server support
+- **Token format**: All semantic tokens switched from colon delimiter (`[REQ:TOKEN]`) to hyphen delimiter (`[REQ-TOKEN]`) across 238 files (149 Go source/test files, 89 non-Go files), totaling 1,026 line changes
+- **Semantic token validator**: Updated `internal/validation/semantic_token_validator.go` to detect both colon and hyphen token formats for backward compatibility
+- **Shell scripts**: Updated `scripts/validate-semantic-tokens.sh`, `scripts/token-coverage-analysis.sh`, and `scripts/token-navigate.sh` to support both token formats and reference `tied/` paths instead of `stdd/`
+
+### Added
+- **TIED YAML database**: 177 detail YAML files with matching index records
+  - 59 REQ records (56 project-specific + 3 inherited methodology tokens)
+  - 46 ARCH records (43 project-specific + 3 inherited)
+  - 72 IMPL records (69 project-specific + 3 inherited)
+- **Semantic tokens registry**: 147 tokens registered in `tied/semantic-tokens.yaml`
+- **IMPL pseudo-code**: All 72 IMPL detail files enriched with `essence_pseudocode` containing semantic token comments per `[PROC-IMPL_PSEUDOCODE_TOKENS]`
+- **Conversion scripts** (Ruby 3.0.3):
+  - `scripts/convert_tokens.rb` — converts colon-format tokens to hyphen-format in Go files
+  - `scripts/convert_tokens_nongo.rb` — same for non-Go files (shell, markdown, etc.)
+  - `scripts/generate_pseudocode.rb` — generates `essence_pseudocode` for IMPL detail files
+  - `scripts/register_semantic_tokens.rb` — registers tokens in `semantic-tokens.yaml` from indexes
+  - `scripts/fix_stdd_refs.rb` — cleans stale `stdd/` path references in `tied/` markdown files
+
+### Removed
+- **STDD directory**: `stdd/` monolithic markdown files replaced by structured `tied/` YAML files
+
 ## [1.7.1] - 2025-12-24
 
 ### Fixed

@@ -12,7 +12,7 @@
 
 **Audit Date**: 2025-01-02
 
-## [ACTION:discovery] Current State Analysis
+## [ACTION-discovery] Current State Analysis
 
 ### ✅ Specifications Currently Represented with Tokens
 

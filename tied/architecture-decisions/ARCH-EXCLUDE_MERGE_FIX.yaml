@@ -1,0 +1,59 @@
+ARCH-EXCLUDE_MERGE_FIX:
+  name: Array Field Default Merge Strategy Implementation
+  status: Active
+  cross_references: &ref_0
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts
+      Ensures default patterns (`.git/`, `vendor/`) are preserved when users add local patterns
+      Fixes implementation bug where array fields were using "override" instead of "merge" by default
+      Provides graceful handling of unknown config fields to prevent merge failures
+      Handles YAML type conversions robustly
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Array fields default to "merge" strategy to satisfy CFG-005 requirement
+    details: []
+    integration_points: &ref_1
+      - Implements CFG-005 merge strategy system requirement
+      - Integrates with CFG-006 source tracking
+      - Preserves CFG-002 merge behavior specification
+      - Ensures backward compatibility with existing config files
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-EXCLUDE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-EXCLUDE_MERGE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Array fields default to "merge" strategy to satisfy CFG-005 requirement
+  cross-references: '[REQ-CFG_005], [REQ-CONFIGURATION], [ARCH-CFG_005], [ARCH-CFG_006]'
+  deduplication: Merge operations deduplicate values to prevent duplicates
+  integration_points: *ref_1
+  merge_strategy_detection: '`extractStrategy` function detects array field keys (like `exclude_patterns`) and defaults to "merge" strategy instead of "override" in all contexts (inheritance chains and sequential file processing)'
+  metadata_field_filtering: Metadata fields used for inheritance processing (like `inherit`) are filtered out before merge operations
+  pattern_preservation: Default patterns explicitly copied into result before merge operations
+  state_management: '`applyMergeStrategies` uses current state (`resultMap`) instead of original state (`dstMap`) for merge operations to ensure proper accumulation'
+  unknown_field_handling: Unknown config fields (like `inherit`) are gracefully skipped instead of aborting merge operations
+  yaml_type_conversion: Robust handling of `[]interface{}` types from YAML unmarshaling, converting to `[]string` as needed

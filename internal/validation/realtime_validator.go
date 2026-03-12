@@ -1,4 +1,4 @@
-// [IMPL:TESTING] [ARCH:TESTING_STRATEGY] [REQ:CODE_QUALITY]
+// [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]
 // DOC-012: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 
@@ -709,7 +709,7 @@ func (rtv *RealTimeValidator) generateIconFormatFix(error AIOptimizedError) stri
 		return "Add appropriate priority icon ([CRITICAL][HIGH][MEDIUM][LOW]) based on feature importance"
 	}
 	if strings.Contains(error.Message, "missing action icon") {
-		return "Add appropriate action icon ([CHECK][NOTE][ACTION][ACTION:validation]) based on function behavior"
+		return "Add appropriate action icon ([CHECK][NOTE][ACTION][ACTION-validation]) based on function behavior"
 	}
 	return "Review icon format requirements in documentation"
 }

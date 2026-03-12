@@ -6,7 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// CONFIG-DISCOVERY-001: Configuration discovery specification - Configuration discovery and loading [ACTION:discovery]
+// CONFIG-DISCOVERY-001: Configuration discovery specification - Configuration discovery and loading [ACTION-discovery]
 // Source: config.go - CONFIG-DISCOVERY-001
 // Impact: Core functionality requirement for configuration discovery
 
@@ -608,7 +608,7 @@ func LoadConfig(root string) (*Config, error) {
 		fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Final cfg exclude_patterns: %v\n", cfg.ExcludePatterns)
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
 	if warnings := validateAllFormatStrings(cfg); len(warnings) > 0 {
 		for _, w := range warnings {
 			fmt.Fprintf(os.Stderr, "Warning: %s\n", w)
@@ -1524,7 +1524,7 @@ func mergeExtendedFormatStrings(dst, src *Config, inheritContext bool, defaultCf
 	if src.FormatIncrementalCreated != defaultCfg.FormatIncrementalCreated {
 		dst.FormatIncrementalCreated = src.FormatIncrementalCreated
 	}
-	// [IMPL:DIFF_COMMAND] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:DIFF_COMMAND] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+	// [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION]
 	if src.FormatIncrementalSkippedNoChanges != defaultCfg.FormatIncrementalSkippedNoChanges {
 		dst.FormatIncrementalSkippedNoChanges = src.FormatIncrementalSkippedNoChanges
 	}
@@ -1838,7 +1838,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 
 	if !foundAny {
 		cfg := DefaultConfig()
-		// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
+		// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
 		if warnings := validateAllFormatStrings(cfg); len(warnings) > 0 {
 			for _, w := range warnings {
 				fmt.Fprintf(os.Stderr, "Warning: %s\n", w)
@@ -1847,7 +1847,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 		return cfg, nil
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Validate format strings on load
 	if warnings := validateAllFormatStrings(finalCfg); len(warnings) > 0 {
 		for _, w := range warnings {
 			fmt.Fprintf(os.Stderr, "Warning: %s\n", w)
@@ -4557,7 +4557,7 @@ func GetDefaultValidationRules() []ConfigValidationRule {
 	}
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Format string validation utilities
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Format string validation utilities
 //
 // ValidateFormatString validates a format string against expected placeholders.
 //
@@ -4591,7 +4591,7 @@ func ValidateFormatString(fieldName, formatString string) []string {
 	return warnings
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] getExpectedPlaceholders returns the list of expected placeholders for a given field.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] getExpectedPlaceholders returns the list of expected placeholders for a given field.
 //
 // This function defines the validation rules for each format string field. It returns
 // a slice of expected placeholder strings (e.g., ["%s"], ["#{path}", "#{size_human}"]).
@@ -4692,7 +4692,7 @@ func getExpectedPlaceholders(fieldName string) []string {
 	return placeholderMap[fieldName]
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] extractPlaceholders finds all placeholders in a format string using regex.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] extractPlaceholders finds all placeholders in a format string using regex.
 //
 // This function extracts both printf-style and template-style placeholders from
 // a format string. It uses regex patterns to find:
@@ -4718,7 +4718,7 @@ func extractPlaceholders(formatString string) []string {
 	return placeholders
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] validateAllFormatStrings validates all format string fields in the Config.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] validateAllFormatStrings validates all format string fields in the Config.
 //
 // This function iterates over all format string fields in the Config struct and
 // validates each one using ValidateFormatString(). It collects all warnings and

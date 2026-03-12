@@ -698,7 +698,7 @@ if same {
 }
 ```
 
-### [ACTION:validation] Safety Features
+### [ACTION-validation] Safety Features
 
 | Feature | Description | Benefit |
 |---------|-------------|---------|

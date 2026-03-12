@@ -1,0 +1,2639 @@
+ARCH-LANGUAGE_SELECTION:
+  name: Language and Runtime
+  status: Active
+  cross_references: &ref_0
+    - REQ-PERFORMANCE
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Excellent standard library support for file operations, ZIP archives, and CLI tools
+      Strong concurrency support with goroutines and channels
+      Cross-platform compilation to single binaries
+      Excellent tooling (go fmt, go test, go vet)
+      Fast compilation and execution
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Python: Rejected due to runtime dependencies and slower performance
+        Rust: Rejected due to complexity and longer development time
+        C/C++: Rejected due to manual memory management complexity
+  implementation_approach:
+    summary: Go (Golang)
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-LANGUAGE_SELECTION
+      - REQ-PERFORMANCE
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Go (Golang)
+  cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
+ARCH-PROJECT_STRUCTURE:
+  name: Project Structure
+  status: Active
+  cross_references: &ref_1
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Clear separation of concerns
+      Standard Go project layout
+      Testable components
+      Supports future package extraction
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Flat structure with internal packages
+    details: []
+  traceability:
+    requirements: *ref_1
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PROJECT_STRUCTURE
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_1
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PROJECT_STRUCTURE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Flat structure with internal packages
+  cross-references: '[REQ-MAINTAINABILITY]'
+  decision_flat_structure_with_internal_packages: |-
+    ```
+    bkpdir/
+    ├── main.go              # Main application entry point
+    ├── archive.go           # Archive creation and management
+    ├── backup.go            # File backup operations
+    ├── config.go            # Configuration management
+    ├── formatter.go         # Output formatting
+    ├── errors.go            # Error handling
+    ├── comparison.go        # Directory comparison
+    ├── exclude.go           # File exclusion patterns
+    ├── git.go              # Git integration
+    ├── internal/           # Internal packages
+    │   ├── testutil/       # Test utilities
+    │   └── validation/     # Validation utilities
+    ├── pkg/                # Extracted packages (future)
+    └── docs/               # Documentation
+    ```
+ARCH-SYSTEM_COMPONENTS:
+  name: System Components Architecture
+  status: Active
+  cross_references: &ref_2
+    - REQ-MAINTAINABILITY
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Clear separation of concerns across layers
+      CLI layer handles user interaction and command routing
+      Configuration layer manages all configuration sources and merging
+      Core services provide business logic and orchestration
+      Storage layer handles all file system and archive operations
+      Enables testability and maintainability
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Layered architecture with clear component boundaries
+    details: []
+  traceability:
+    requirements: *ref_2
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_2
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Layered architecture with clear component boundaries
+  cross-references: '[REQ-MAINTAINABILITY], [REQ-USABILITY]'
+  system_components_diagram: |-
+    ```
+    ┌─────────────────────────────────────────────────────────────┐
+    │                        CLI Layer                            │
+    ├─────────────────────────────────────────────────────────────┤
+    │  Command Handlers  │  Flag Processing  │  Output Formatting │
+    │  Context Support   │  Error Handling   │  Resource Cleanup  │
+    │  Dual-Mode Ops     │  Backward Compat  │  File Operations   │
+    └─────────────────────────────────────────────────────────────┘
+                                    │
+    ┌─────────────────────────────────────────────────────────────┐
+    │                    Configuration Layer                      │
+    ├─────────────────────────────────────────────────────────────┤
+    │  Config Discovery  │  Environment Vars │  Status Codes      │
+    │  Template Configs  │  Format Strings   │  Regex Patterns    │
+    │  Dual-Mode Config  │  File Backup Cfg  │  Archive Config    │
+    └─────────────────────────────────────────────────────────────┘
+                                    │
+    ┌─────────────────────────────────────────────────────────────┐
+    │                      Core Services                          │
+    ├─────────────────────────────────────────────────────────────┤
+    │  Archive Service   │  Git Service      │                    │
+    │  Resource Manager  │  Template Engine  │  Error Handler     │
+    │  Context Manager   │  File Operations  │  Backup Service    │
+    │  Comparison Svc    │  Formatter Svc    │  Config Service    │
+    └─────────────────────────────────────────────────────────────┘
+                                    │
+    ┌─────────────────────────────────────────────────────────────┐
+    │                     Storage Layer                           │
+    ├─────────────────────────────────────────────────────────────┤
+    │  File System        │  ZIP Archives    │  Checksums         │
+    │  File Backups       │  Metadata        │                    │
+    │  Directory Trees    │  Atomic Ops      │  Resource Cleanup  │
+    └─────────────────────────────────────────────────────────────┘
+    ```
+ARCH-ARCHIVE_FORMAT:
+  name: Archive Format
+  status: Active
+  cross_references: &ref_3
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Cross-platform compatibility
+      Built-in compression
+      Wide tool support
+      Standard library support in Go (`archive/zip`)
+      Supports incremental archives
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        tar.gz: Rejected due to less universal support
+        tar.bz2: Rejected due to slower compression
+        Custom format: Rejected due to compatibility concerns
+  implementation_approach:
+    summary: |-
+      - Uses Go's `archive/zip` package
+      - Supports compression levels
+      - Atomic file operations prevent corruption
+    details: []
+  traceability:
+    requirements: *ref_3
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-ARCHIVE_FORMAT
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_3
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: ZIP format for all archive operations
+  cross-references: '[REQ-RELIABILITY]'
+  implementation:
+    - Uses Go's `archive/zip` package
+    - Supports compression levels
+    - Atomic file operations prevent corruption
+ARCH-CONFIG_SYSTEM:
+  name: Configuration System
+  status: Active
+  cross_references: &ref_4
+    - REQ-CONFIGURATION
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Human-readable format
+      Supports complex nested structures
+      Good Go library support (`gopkg.in/yaml.v3`)
+      Industry standard for configuration
+      Environment variable support for flexibility
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        JSON: Rejected due to lack of comments
+        TOML: Rejected due to less common usage
+        INI: Rejected due to limited nesting support
+  implementation_approach:
+    summary: YAML configuration files with environment variable support
+    details: []
+  traceability:
+    requirements: *ref_4
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_4
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: YAML configuration files with environment variable support
+  configuration_discovery: |-
+    1. Command line flags (highest priority)
+    2. Environment variables (`BKPDIR_CONFIG` for search paths)
+    3. Configuration files in search path order:
+       - `./.bkpdir.yml` (current directory)
+       - `~/.bkpdir.yml` (home directory)
+       - Custom paths from `BKPDIR_CONFIG`
+       - **Precedence Rule**: Earlier files in the search path take precedence over later files. When processing sequential config files (not inheritance chains), values set by earlier files are preserved and cannot be overridden by later files, even if those values equal the defaults. The implementation tracks the initial default state and compares the destination state before merge to detect if earlier files modified values.
+    4. Default values (lowest priority)
+  configuration_key_structure:
+    - All configuration keys are displayed as top-level keys in `bkpdir config` output
+    - Internal struct may have nested fields (e.g., `Git *GitConfig`), but the reflection-based display system flattens them using YAML tag names
+    - 'Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.'
+    - YAML files use top-level keys for all configuration options (see [IMPL-CONFIG_DISPLAY_FLATTENING])
+  cross-references: '[REQ-CONFIGURATION], [REQ-USABILITY]'
+ARCH-CFG_005:
+  name: Layered Configuration Inheritance
+  status: Active
+  cross_references: &ref_5
+    - REQ-CFG_005
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables hierarchical configuration management
+      Supports complex project structures
+      Flexible merge strategies for different use cases
+      Maintains backward compatibility
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - Inheritance chain processing with circular dependency detection
+      - Source tracking for debugging
+      - Performance optimization with caching
+      - Thread-safe configuration loading
+    details: []
+  traceability:
+    requirements: *ref_5
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_5
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CFG_005.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Configuration files support explicit inheritance with merge strategies
+  array_field_default_behavior:
+    - Array fields (like `exclude_patterns`) default to merge (accumulate) strategy when no prefix is specified
+    - This applies to both inheritance chains and sequential file processing
+    - Explicit prefixes (`!`, `+`, `^`, `=`) override the default merge behavior
+    - Default patterns are preserved when child configs add values
+  cross-references: '[REQ-CFG_005], [REQ-PERFORMANCE]'
+  explicit_prefixes_override: Explicit prefixes (`!`, `+`, `^`, `=`) override the default behavior, but precedence rules still apply for sequential files
+  field_merge_behavior_registry: Each field has a configured merge behavior to resolve conflicts between CFG-001 (earlier files take precedence) and CFG-005 (array fields merge)
+  implementation:
+    - Inheritance chain processing with circular dependency detection
+    - Source tracking for debugging
+    - Performance optimization with caching
+    - Thread-safe configuration loading
+  merge_strategies:
+    - 'Standard override (no prefix): Replace parent values (for non-array fields)'
+    - 'Array merge (no prefix for array fields): Default merge strategy for array fields per CFG-005'
+    - 'Array merge (`+` prefix): Explicit append to parent arrays'
+    - 'Array prepend (`^` prefix): Prepend to parent arrays'
+    - 'Array replace (`!` prefix): Replace parent arrays completely'
+    - 'Default value (`=` prefix): Use only if parent not set'
+  mergebehavioraccumulate: Fields that always merge/accumulate (e.g., `exclude_patterns`) - CFG-005 behavior
+  mergebehaviorprecedence: Fields that respect earlier file precedence (e.g., `archive_dir_path`, `include_git_info`) - CFG-001 behavior
+ARCH-ERROR_HANDLING:
+  name: Error Handling Strategy
+  status: Active
+  cross_references: &ref_6
+    - REQ-ERROR_HANDLING
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Consistent error handling across operations
+      Machine-readable status codes for scripting
+      Enhanced debugging with operation context
+      Supports template-based error formatting
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Structured error types with status codes and operation context
+    details: []
+  traceability:
+    requirements: *ref_6
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-ERROR_HANDLING
+      - REQ-ERROR_HANDLING
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_6
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-ERROR_HANDLING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Structured error types with status codes and operation context
+  cross-references: '[REQ-ERROR_HANDLING], [REQ-RELIABILITY]'
+  error_detection:
+    - '`isDiskFullError()`: Comprehensive disk space error detection'
+    - Enhanced error messages with operation context
+    - Panic recovery mechanisms
+  error_types:
+    - '`ArchiveError`: Structured errors for archive operations'
+    - '`BackupError`: Structured errors for backup operations'
+    - 'Both include: Message, StatusCode, Operation, Path, Err'
+ARCH-RESOURCE_MANAGEMENT:
+  name: Resource Management
+  status: Active
+  cross_references: &ref_7
+    - REQ-RESOURCE_MANAGEMENT
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Prevents resource leaks on operation failure
+      Handles panic scenarios gracefully
+      Thread-safe for concurrent operations
+      Simplifies error handling in operations
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - `ResourceManager` struct with mutex protection
+      - Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`
+      - Thread-safe resource tracking
+      - Error-resilient cleanup operations
+    details: []
+  traceability:
+    requirements: *ref_7
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-RESOURCE_MANAGEMENT
+      - REQ-RESOURCE_MANAGEMENT
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_7
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: ResourceManager for automatic cleanup with panic recovery
+  cross-references: '[REQ-RESOURCE_MANAGEMENT], [REQ-RELIABILITY]'
+  implementation:
+    - '`ResourceManager` struct with mutex protection'
+    - 'Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`'
+    - Thread-safe resource tracking
+    - Error-resilient cleanup operations
+ARCH-CONTEXT_SUPPORT:
+  name: Context-Aware Operations
+  status: Active
+  cross_references: &ref_8
+    - REQ-CONTEXT_SUPPORT
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Enables operation timeouts
+      Supports graceful cancellation
+      Better user experience for long operations
+      Standard Go pattern for cancellable operations
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - All long-running operations accept `context.Context`
+      - Periodic cancellation checks during operations
+      - Context-aware file operations
+      - Timeout support via `context.WithTimeout()`
+    details: []
+  traceability:
+    requirements: *ref_8
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CONTEXT_SUPPORT
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_8
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CONTEXT_SUPPORT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Support context cancellation for long-running operations
+  cross-references: '[REQ-CONTEXT_SUPPORT], [REQ-USABILITY]'
+  implementation:
+    - All long-running operations accept `context.Context`
+    - Periodic cancellation checks during operations
+    - Context-aware file operations
+    - Timeout support via `context.WithTimeout()`
+ARCH-OUTPUT_FORMATTING:
+  name: Output Formatting
+  status: Active
+  cross_references: &ref_9
+    - REQ-OUTPUT_FORMATTING
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Printf for simple, backward-compatible formatting
+      Templates for rich data extraction and advanced formatting
+      Graceful fallback from template to printf
+      Supports ANSI colors and structured output
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - `OutputFormatter`: Printf-style formatting
+      - `TemplateFormatter`: Advanced template processing
+      - Regex extraction for rich data formatting
+      - Support for both Go text/template and placeholder syntax
+    details: []
+  traceability:
+    requirements: *ref_9
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_9
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Dual-mode formatting (printf-style and template-based)
+  cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
+  implementation:
+    - '`OutputFormatter`: Printf-style formatting'
+    - '`TemplateFormatter`: Advanced template processing'
+    - Regex extraction for rich data formatting
+    - Support for both Go text/template and placeholder syntax
+ARCH-GIT_INTEGRATION:
+  name: Git Integration
+  status: Active
+  cross_references: &ref_10
+    - REQ-GIT_INTEGRATION
+  rationale:
+    why: |-
+      Simplicity over Git library dependencies
+      Relies on user's Git installation
+      Consistent with user's Git configuration
+      Lightweight implementation
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - Uses `exec.Command("git", ...)` for Git operations
+      - Repository detection via `git rev-parse --is-inside-work-tree`
+      - Branch and hash extraction via `git rev-parse`
+      - Status detection via `git status --porcelain`
+    details: []
+  traceability:
+    requirements: *ref_10
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+  related_decisions:
+    depends_on: *ref_10
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-GIT_INTEGRATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Git command-line interface for repository information
+  cross-references: '[REQ-GIT_INTEGRATION]'
+  implementation:
+    - Uses `exec.Command("git", ...)` for Git operations
+    - Repository detection via `git rev-parse --is-inside-work-tree`
+    - Branch and hash extraction via `git rev-parse`
+    - Status detection via `git status --porcelain`
+ARCH-TESTING_STRATEGY:
+  name: Testing Strategy
+  status: Active
+  cross_references: &ref_11
+    - REQ-RELIABILITY
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Avoid circular dependencies by keeping `pkg/testutil` dependency-light and independent from the packages that will import it.
+      Provide a stable, well-documented API for test fixtures and helpers so multiple packages can migrate without duplication.
+      Preserve specialized tools in `internal/testutil/` for heavy integration tests while offering lightweight helpers for unit tests in `pkg/testutil`.
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Keep helpers in `internal/testutil/` only (rejected: not importable by `pkg/*` packages).
+        Leave helpers duplicated across packages (rejected: maintenance cost).
+  implementation_approach:
+    summary: Comprehensive testing with unit, integration, and infrastructure tests
+    details: []
+  traceability:
+    requirements: *ref_11
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-TESTING_STRATEGY
+      - REQ-RELIABILITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_11
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-TESTING_STRATEGY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Comprehensive testing with unit, integration, and infrastructure tests
+  consequences:
+    - '`pkg/testutil` will expose assertion helpers, temp dir/file helpers, archive and git fixtures, and command execution helpers.'
+    - Specialized, heavy-weight testing infrastructure remains in `internal/testutil/` for integration/system tests.
+    - Migration adapters/wrappers should be provided to enable incremental migration without breaking existing tests.
+  cross-references: '[REQ-EXTRACT-009], [IMPL-EXTRACT-009_TESTUTIL]'
+  note: This testing strategy implements the validation criteria specified in `requirements.md`. Each requirement's validation criteria informs what types of tests are needed.
+  structure:
+    - Unit tests for individual functions
+    - Integration tests for workflows
+    - Test utilities for complex scenarios (corruption, disk space, permissions)
+    - Performance benchmarks for critical functions
+ARCH-BUILD_DISTRIBUTION:
+  name: Build and Distribution
+  status: Active
+  cross_references: &ref_12
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Easy deployment (no runtime dependencies)
+      Cross-platform support (macOS, Linux)
+      Fast execution
+      Simple installation
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - Makefile with build targets
+      - Version information injected via `-ldflags`
+      - Quality gates: linting and testing before build
+    details: []
+  traceability:
+    requirements: *ref_12
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-BUILD_DISTRIBUTION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_12
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Single binary distribution with cross-platform compilation
+  build_targets:
+    - macOS (ARM64 and AMD64)
+    - Ubuntu (20.04, 22.04, 24.04)
+    - Single binary per platform
+  cross-references: '[REQ-USABILITY]'
+  implementation:
+    - Makefile with build targets
+    - Version information injected via `-ldflags`
+    - 'Quality gates: linting and testing before build'
+ARCH-CODE_ORGANIZATION:
+  name: Code Organization Principles
+  status: Active
+  cross_references: &ref_13
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Testable components
+      Clear responsibilities
+      Easy to extend
+      Maintainable codebase
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Clear responsibilities with interfaces for testability
+    details: []
+  traceability:
+    requirements: *ref_13
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_13
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Clear responsibilities with interfaces for testability
+  cross-references: '[REQ-MAINTAINABILITY]'
+  principles:
+    - Each module has a single, clear responsibility
+    - Functions are small and focused
+    - Interfaces where appropriate for testability
+    - Avoid global state where possible
+    - Resource management centralized
+ARCH-PACKAGE_EXTRACTION:
+  name: Package Extraction Architecture
+  status: Active
+  cross_references: &ref_14
+    - REQ-MAINTAINABILITY
+    - REQ-CODE_QUALITY
+  rationale:
+    why: |-
+      Enables code reuse across projects
+      Improves maintainability through modularization
+      Supports gradual migration without breaking existing functionality
+      Creates reusable components for CLI application development
+      Follows interface-driven design for flexibility
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Big-bang extraction: Rejected due to high risk of breaking changes
+        No extraction: Rejected due to code duplication and maintainability concerns
+  implementation_approach:
+    summary: Layered extraction approach with zero-breaking-change principle
+    details: []
+  traceability:
+    requirements: *ref_14
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+      - REQ-CODE_QUALITY
+  related_decisions:
+    depends_on: *ref_14
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Layered extraction approach with zero-breaking-change principle
+  backward_compatibility:
+    - Legacy type aliases maintain compatibility
+    - Wrapper functions preserve existing API
+    - Original application continues to work unchanged
+  circular_dependency_prevention: Extract components with no internal dependencies first
+  cross-references: '[REQ-MAINTAINABILITY], [REQ-CODE_QUALITY]'
+  extracted_packages:
+    - '`pkg/config`: Configuration management (1,322 lines)'
+    - '`pkg/errors`: Error handling and classification (918 lines)'
+    - '`pkg/resources`: Resource management and cleanup (486 lines)'
+    - '`pkg/formatter`: Output formatting and templates (1,056 lines)'
+    - '`pkg/git`: Git integration utilities (255 lines)'
+    - '`pkg/cli`: CLI command framework (722 lines)'
+    - '`pkg/fileops`: File operations and utilities (1,173 lines)'
+    - '`pkg/processing`: Data processing patterns (1,705 lines)'
+  interface-driven: Define interfaces before extraction to prevent coupling
+  layered_approach: Extract in dependency order
+  total_extracted: 7,637 lines across 33 files
+  zero-breaking-change: Maintain backward compatibility through wrapper functions
+ARCH-CLI_FRAMEWORK:
+  name: CLI Framework Architecture
+  status: Active
+  cross_references: &ref_15
+    - REQ-USABILITY
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Provides reusable CLI building blocks
+      Standardizes command construction patterns
+      Supports rapid CLI application development
+      Enables consistent user experience across applications
+      Integrates with popular Cobra framework
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Custom CLI framework: Rejected due to maintenance overhead
+        Direct Cobra usage: Rejected due to code duplication across projects
+  implementation_approach:
+    summary: Extracted CLI framework with builder patterns and Cobra integration
+    details: []
+  traceability:
+    requirements: *ref_15
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CLI_FRAMEWORK
+      - REQ-USABILITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_15
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CLI_FRAMEWORK.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extracted CLI framework with builder patterns and Cobra integration
+  command_builder: Builder pattern for constructing Cobra commands
+  context_manager: Context propagation for cancellation and timeouts
+  cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
+  design_patterns:
+    - Builder pattern for command construction
+    - Interface-based design for testability
+    - Manager pattern for cross-cutting concerns
+    - Template pattern for command structure
+  dry-run_manager: Built-in dry-run operation support
+  flag_manager: Standardized flag registration and binding
+  integration:
+    - Built on Cobra CLI framework
+    - Supports standard Cobra features (flags, subcommands, help)
+    - Extends Cobra with additional patterns and utilities
+  version_manager: Version display and build information handling
+ARCH-FILE_OPERATIONS:
+  name: File Operations Architecture
+  status: Active
+  cross_references: &ref_16
+    - REQ-RELIABILITY
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Provides safe, reliable file operations
+      Prevents data corruption through atomic operations
+      Enhances security with path validation
+      Supports complex directory traversal scenarios
+      Enables file comparison and snapshot capabilities
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Direct standard library usage: Rejected due to lack of atomic operations and security checks
+        Third-party file libraries: Rejected due to dependency concerns
+  implementation_approach:
+    summary: Extracted file operations package with atomic operations and security focus
+    details: []
+  traceability:
+    requirements: *ref_16
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: *ref_16
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-FILE_OPERATIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extracted file operations package with atomic operations and security focus
+  atomic_operations: Safe file writing with rollback capabilities
+  cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
+  directory_traversal: Configurable walking with exclusion patterns
+  file_comparison: Hash-based content verification and snapshot comparison
+  path_validation: Security and existence checking with comprehensive validation
+  pattern_exclusion: Doublestar glob pattern matching for file filtering
+  performance_characteristics:
+    - 'Atomic operations: ~2x slower than direct writes (acceptable trade-off for safety)'
+    - 'Path validation: ~50μs per path'
+    - 'Directory traversal: ~1000 files/ms on modern SSDs'
+    - 'Hash calculation: ~100MB/s for SHA-256'
+  security_focus:
+    - Path traversal attack prevention
+    - Permission validation
+    - Secure path checking
+    - Input sanitization
+ARCH-PROCESSING_PATTERNS:
+  name: Processing Patterns Architecture
+  status: Active
+  cross_references: &ref_17
+    - REQ-PERFORMANCE
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Provides reusable processing patterns from archive/backup operations
+      Enables pipeline-based data processing
+      Supports concurrent processing for performance
+      Standardizes naming conventions
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Inline processing logic: Rejected due to code duplication
+        Third-party processing libraries: Rejected due to dependency and customization concerns
+  implementation_approach:
+    summary: Extracted data processing patterns with pipeline and concurrent processing support
+    details: []
+  traceability:
+    requirements: *ref_17
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_17
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PROCESSING_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extracted data processing patterns with pipeline and concurrent processing support
+  concurrent_processing:
+    - Worker pool management
+    - Context propagation for cancellation
+    - Atomic counters for progress tracking
+    - Resource cleanup on completion
+  cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
+  naming_conventions:
+    - ISO 8601 timestamp formatting (2006-01-02T150405)
+    - Git branch/hash integration with dirty status
+    - Metadata and note support
+    - Archive, backup, and incremental patterns
+    - Manager pattern for algorithm selection
+  pipeline_pattern: Stage-based processing with composition
+  pipeline_stages:
+    - 'Collection: Gather files/directories'
+    - 'Processing: Transform or process data'
+    - 'Output: Generate results'
+ARCH-AUTO_DETECTION:
+  name: Auto-Detection Architecture
+  status: Active
+  cross_references: &ref_18
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Improves user experience by reducing command verbosity
+      Enables intuitive CLI usage (just provide path)
+      Maintains backward compatibility with explicit commands
+      Supports both file and directory operations seamlessly
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Separate auto-detect command: Rejected due to reduced usability
+        No auto-detection: Rejected due to user experience concerns
+  implementation_approach:
+    summary: |-
+      - `isFile()`: Detects regular files
+      - `isDirectory()`: Detects directories
+      - `validatePath()`: Validates path existence and accessibility
+      - `handleAutoDetectedCommand()`: Routes to appropriate handler
+      - `executeWithAutoDetection()`: Integrates with Cobra command execution
+    details: []
+  traceability:
+    requirements: *ref_18
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-AUTO_DETECTION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_18
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-AUTO_DETECTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Automatic command detection based on path type (CLI-015)
+  backward_compatibility:
+    - All existing explicit commands continue to work
+    - Auto-detection only activates for unrecognized positional arguments
+    - No breaking changes to existing CLI interface
+  command_routing:
+    - Known commands bypass auto-detection (create, config, list, verify, backup, etc.)
+    - Global flags handled normally (--config, --dry-run, --list)
+    - Positional arguments trigger auto-detection when not a known command
+    - Error handling provides clear feedback for unsupported types
+  cross-references: '[REQ-USABILITY]'
+  detection_logic:
+    - Path type detection via `os.Stat()` and file mode checking
+    - 'File detection: Routes to file backup operation'
+    - 'Directory detection: Routes to directory archive operation'
+    - 'Unsupported types: Clear error messages with guidance'
+  implementation:
+    - '`isFile()`: Detects regular files'
+    - '`isDirectory()`: Detects directories'
+    - '`validatePath()`: Validates path existence and accessibility'
+    - '`handleAutoDetectedCommand()`: Routes to appropriate handler'
+    - '`executeWithAutoDetection()`: Integrates with Cobra command execution'
+ARCH-FILE_STATISTICS:
+  name: File Statistics Architecture
+  status: Active
+  cross_references: &ref_19
+    - REQ-OUTPUT_FORMATTING
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Provides rich file information for output display
+      Enables human-readable size formatting
+      Supports file type detection
+      Enhances user experience with detailed file information
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        No statistics: Rejected due to limited output information
+        External library: Rejected due to dependency concerns
+  implementation_approach:
+    summary: File statistics gathering for enhanced output formatting
+    details: []
+  traceability:
+    requirements: *ref_19
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_19
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-FILE_STATISTICS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: File statistics gathering for enhanced output formatting
+  cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
+  file_type_detection:
+    - Based on `os.FileMode` flags
+    - Supports all standard Unix file types
+    - Returns descriptive string identifiers
+  human-readable_formatting:
+    - 'Size conversion: bytes → KB → MB → GB → TB'
+    - 'Format: "1.2MB", "455KB", "1.0GB"'
+    - 'Precision: One decimal place for readability'
+  integration:
+    - Used by output formatter for enhanced display
+    - Supports template-based formatting with named placeholders
+    - Integrates with archive and backup output
+  statistics_collected:
+    - File path and name
+    - File size (bytes and human-readable)
+    - Modification time (time.Time and Unix timestamp)
+    - File permissions/mode
+    - File type (regular, directory, symlink, device, pipe, socket, other)
+ARCH-DIRECTORY_COMPARISON:
+  name: Directory Comparison Architecture
+  status: Active
+  cross_references: &ref_20
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables efficient directory comparison without full traversal
+      Supports archive-to-directory comparison
+      Provides hash-based content verification
+      Enables incremental archive detection
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Timestamp-only comparison: Rejected due to accuracy concerns
+        Full content comparison: Rejected due to performance impact
+  implementation_approach:
+    summary: Snapshot-based directory comparison system
+    details: []
+  traceability:
+    requirements: *ref_20
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-DIRECTORY_COMPARISON
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_20
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-DIRECTORY_COMPARISON.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Snapshot-based directory comparison system
+  comparesnapshots: Compare two snapshots for differences
+  createarchivesnapshot: Build snapshot from ZIP archive
+  createdirectorysnapshot: Build snapshot from directory with exclusions
+  cross-references: '[REQ-PERFORMANCE]'
+  directorysnapshot: Map of file paths to FileInfo
+  fileinfo: Path, size, modification time, hash, directory flag
+  hash-based_comparison:
+    - Uses file content hashes for accurate comparison
+    - Handles file renames and moves correctly
+    - Detects content changes even with same modification time
+    - Supports exclusion patterns for filtering
+  isdirectoryidenticaltoarchive: Direct directory-to-archive comparison
+  use_cases:
+    - Incremental archive detection (compare directory to previous archive)
+    - Archive verification (compare archive to source directory)
+    - Directory synchronization (identify differences)
+ARCH-EXCLUSION_PATTERNS:
+  name: Exclusion Patterns Architecture
+  status: Active
+  cross_references: &ref_21
+    - REQ-CONFIGURATION
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables flexible file filtering for archives and backups
+      Supports common exclusion patterns (version control, build artifacts)
+      Provides consistent exclusion behavior across operations
+      Integrates with configuration system
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Regex patterns: Rejected due to complexity and performance
+        Simple string matching: Rejected due to limited functionality
+  implementation_approach:
+    summary: Pattern-based file exclusion system with glob support
+    details: []
+  traceability:
+    requirements: *ref_21
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_21
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Pattern-based file exclusion system with glob support
+  common_patterns:
+    - 'Version control: `.git/`, `.svn/`, `.hg/`'
+    - 'Build artifacts: `build/`, `dist/`, `target/`, `*.o`'
+    - 'Dependencies: `node_modules/`, `vendor/`'
+    - 'Temporary files: `*.tmp`, `*.temp`, `*.swp`'
+    - 'OS files: `.DS_Store`, `Thumbs.db`'
+  cross-references: '[REQ-CONFIGURATION], [REQ-PERFORMANCE]'
+  doublestar_glob_patterns: Supports `**` for recursive matching
+  integration:
+    - Used by directory traversal for filtering
+    - Configurable via configuration files
+    - Supports per-operation exclusion patterns
+    - Integrates with archive and backup operations
+  multiple_patterns: Supports arrays of exclusion patterns
+  path-based_matching: Matches against full file paths
+  pattern_matcher: Compiled pattern matcher for efficient matching
+  performance:
+    - Pattern compilation for efficiency
+    - ~10μs per file for complex glob patterns
+    - Supports large pattern sets
+ARCH-CFG_006:
+  name: Configuration Reflection Architecture
+  status: Active
+  cross_references: &ref_22
+    - REQ-CFG_006
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Zero maintenance: New configuration fields automatically appear without manual updates
+      Complete visibility: Shows inheritance chains, merge strategies, and source attribution
+      Debugging support: Clear source attribution enables troubleshooting configuration issues
+      Performance optimized: Fast inspection suitable for development workflow
+      Backward compatible: Existing configuration command functionality preserved and enhanced
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Reflection-based automatic field discovery with hierarchical source attribution
+    details: []
+  traceability:
+    requirements: *ref_22
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CFG_006
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_22
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CFG_006.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Reflection-based automatic field discovery with hierarchical source attribution
+  architecture_components: |-
+    1. **Automatic Field Discovery System**
+       - Go reflection-based enumeration of all Config struct fields
+       - Recursive traversal of nested structures
+       - Type-aware processing for strings, bools, ints, slices, pointers, structs
+       - Field categorization (archive, backup, formatting, etc.)
+       - Metadata extraction (field names, types, YAML tags, categories)
+
+    2. **Source Tracking Architecture**
+       - Integration with CFG-005 layered inheritance system
+       - Complete source chain visualization (environment → inheritance → defaults)
+       - Merge strategy attribution (override, append, prepend, replace, default)
+       - Override point identification in inheritance chain
+       - Environment variable detection and attribution
+
+    3. **Display Formatting Architecture**
+       - Multiple output formats: table (quick scanning), tree (hierarchical), JSON (programmatic)
+       - Category-based field organization
+       - Type-aware value formatting
+       - Zero value detection and display
+       - Hierarchical tree visualization with inheritance paths
+
+    4. **Performance Optimization Architecture**
+       - Reflection result caching with thread-safe access (sync.RWMutex)
+       - Schema hash-based cache invalidation
+       - Lazy source evaluation (only resolve sources for displayed fields)
+       - Incremental resolution support (single field access without full enumeration)
+       - Pattern-based field filtering for efficient queries
+
+    5. **CLI Interface Architecture**
+       - Enhanced config command with comprehensive filtering options
+       - --all flag: Show all configuration fields (default behavior)
+       - --overrides-only flag: Display only non-default values
+       - --sources flag: Show detailed source attribution
+       - --format flag: Choose output format (table, tree, JSON)
+       - --filter flag: Filter fields by pattern or category
+  cfg-005_integration: Leverages layered inheritance system for source tracking
+  cli_framework: Integrates with existing Cobra command structure
+  code_generation: Rejected due to complexity, build-time dependencies, and reduced flexibility
+  configuration_system: Builds on existing Config struct and loading mechanisms
+  cross-references: '[REQ-CFG_006], [ARCH-CONFIG_SYSTEM], [ARCH-CFG_005], [REQ-PERFORMANCE]'
+  external_configuration_registry: Rejected due to dependency concerns and synchronization issues
+  manual_maintenance: Rejected due to maintenance overhead and risk of missing new fields
+  performance_characteristics:
+    - 'Field discovery: <50ms for cache miss, <10ms for cache hit'
+    - 'Config command: <100ms end-to-end response time'
+    - 'Single field access: <10ms with incremental resolution'
+    - 'Memory overhead: <5% increase for caching infrastructure'
+    - 'Reflection caching: 60%+ performance improvement over uncached reflection'
+  testing_infrastructure: Comprehensive test coverage with performance benchmarks
+ARCH-SECURITY:
+  name: Security Architecture
+  status: Active
+  cross_references: &ref_23
+    - REQ-RELIABILITY
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Prevents security vulnerabilities
+      Protects against malicious input
+      Ensures data integrity
+      Maintains system reliability
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Comprehensive security measures for file system and archive operations
+    details: []
+  traceability:
+    requirements: *ref_23
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-SECURITY
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: *ref_23
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-SECURITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Comprehensive security measures for file system and archive operations
+  compression_bombs: ZIP bomb protection during creation
+  cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
+  path_sanitization: Safe archive extraction with validation
+  path_validation: Prevent directory traversal with enhanced validation
+  permission_checking: Verify access rights with structured errors
+  symlink_handling: Safe symbolic link processing
+  temporary_files: Secure temporary file creation with automatic cleanup
+ARCH-EXTENSIBILITY:
+  name: Extensibility Architecture
+  status: Active
+  cross_references: &ref_24
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Enables future feature extensions
+      Supports custom formatters and processors
+      Maintains backward compatibility
+      Provides flexible integration points
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        No extensibility: Rejected due to limited flexibility
+        Full plugin system: Deferred due to complexity
+  implementation_approach:
+    summary: Plugin-based extensibility with hook system
+    details: []
+  traceability:
+    requirements: *ref_24
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-EXTENSIBILITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_24
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-EXTENSIBILITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Plugin-based extensibility with hook system
+  cross-references: '[REQ-MAINTAINABILITY]'
+  custom_formatters: |-
+    ```go
+    type OutputFormatter interface {
+        Format(template string, data interface{}) (string, error)
+        RegisterFunction(name string, fn interface{})
+    }
+
+    type TemplateFormatter interface {
+        FormatWithTemplate(input, pattern, tmplStr string) (string, error)
+        FormatWithPlaceholders(format string, data map[string]string) string
+    }
+    ```
+  plugin_interface: |-
+    ```go
+    type ArchivePlugin interface {
+        Name() string
+        Process(ctx context.Context, archive *Archive) error
+        Cleanup() error
+    }
+
+    type BackupPlugin interface {
+        Name() string
+        Process(ctx context.Context, backup *BackupInfo) error
+        Cleanup() error
+    }
+    ```
+  post-archive: After archive creation
+  post-backup: After file backup creation
+  pre-archive: Before archive creation with context
+  pre-backup: Before file backup creation
+ARCH-DEPLOYMENT:
+  name: Deployment Architecture
+  status: Active
+  cross_references: &ref_25
+    - REQ-USABILITY
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Easy deployment (no runtime dependencies)
+      Cross-platform support
+      Fast execution
+      Simple installation
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Single binary distribution with embedded configuration
+    details: []
+  traceability:
+    requirements: *ref_25
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-DEPLOYMENT
+      - REQ-USABILITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_25
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-DEPLOYMENT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Single binary distribution with embedded configuration
+  configuration_validation: Schema-based validation with error reporting
+  cross-platform: Linux, macOS, Windows support
+  cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
+  default_configuration: Embedded defaults with immutable specifications
+  environment_integration: Container-friendly configuration with BKPDIR_CONFIG
+  migration_support: Configuration version upgrades
+  single_binary: Self-contained executable with embedded defaults
+  static_linking: No external dependencies
+  version_embedding: Build-time version info with Git integration
+ARCH-PERFORMANCE:
+  name: Performance Architecture
+  status: Active
+  cross_references: &ref_26
+    - REQ-PERFORMANCE
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Ensures responsive user experience
+      Handles large directories efficiently
+      Minimizes resource usage
+      Supports scalable operations
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Optimized performance with streaming, caching, and concurrent processing
+    details: []
+  traceability:
+    requirements: *ref_26
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PERFORMANCE
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_26
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PERFORMANCE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Optimized performance with streaming, caching, and concurrent processing
+  buffer_pooling: Memory reuse with efficient allocation
+  buffered_i/o: Efficient file operations with context cancellation
+  compression_tuning: Optimal compression settings with performance monitoring
+  cross-references: '[REQ-PERFORMANCE], [REQ-RELIABILITY]'
+  deep_hierarchies: Stack-safe recursion with cancellation checks
+  disk_space_monitoring: Available space checking with enhanced error detection
+  garbage_collection: Minimal allocation with resource cleanup
+  large_directories: Efficient directory traversal with context support
+  long-running_operations: Progress reporting with context cancellation
+  many_files: Scalable file processing with resource management
+  parallel_processing: Concurrent file handling with thread safety
+  resource_cleanup: Automatic resource management with panic recovery
+  streaming_processing: Large file handling with context support
+ARCH-LIST_LIMIT:
+  name: List Command Limit Architecture
+  status: Active
+  cross_references: &ref_27
+    - REQ-LIST_LIMIT
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Prevents overwhelming output when there are many archives
+      Shows most relevant (recent) archives by default
+      Allows users to see all archives when needed
+      Maintains backward compatibility with existing workflows
+      Improves usability for common use cases
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      Add `--limit` flag (short: `-n`) to `list` command
+      Default value: 10 (show newest 10 files)
+      Special value: 0 or `--all` flag to show all files
+      Apply limit after sorting (most recent first)
+      Support both `list` command (directory archives) and `--list` command (file backups)
+      Limit applies to the sorted list (take first N after sorting)
+    details: []
+  traceability:
+    requirements: *ref_27
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-LIST_LIMIT
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_27
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-LIST_LIMIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Command-line flag to limit list output with default of 10 entries
+  configuration-based_limit: Rejected - command-line flag is more flexible and immediate
+  cross-references: '[REQ-LIST_LIMIT], [REQ-USABILITY], [ARCH-CLI_COMMANDS]'
+  different_defaults_for_different_commands: Rejected - consistency is more important
+  pagination: Rejected - over-engineering for this use case, simple limit is sufficient
+ARCH-CLI_COMMANDS:
+  name: CLI Commands Architecture
+  status: Active
+  cross_references: &ref_28
+    - REQ-USABILITY
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      Easy to learn and use
+      Maintains backward compatibility
+      Supports both directory and file operations
+      Clear command hierarchy
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Intuitive command structure with backward compatibility
+    details: []
+  traceability:
+    requirements: *ref_28
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CLI_COMMANDS
+      - REQ-USABILITY
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: *ref_28
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CLI_COMMANDS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Intuitive command structure with backward compatibility
+  command_structure: |-
+    ```
+    bkpdir
+    ├── create [NOTE]                    # Create full directory archive
+    ├── create --incremental [NOTE]     # Create incremental directory archive
+    ├── backup FILE_PATH [NOTE]         # Create file backup
+    ├── list                            # List directory archives
+    ├── --list FILE_PATH                # List file backups for specific file
+    ├── config                          # Display configuration
+    ├── full [NOTE]                     # Backward compatibility: create full archive
+    ├── inc [NOTE]                      # Backward compatibility: create incremental archive
+    └── --config                        # Backward compatibility: display configuration
+    ```
+  context_support: All long-running operations support context cancellation
+  cross-references: '[REQ-USABILITY], [REQ-OUTPUT_FORMATTING]'
+  directory_archive_commands: '`create`, `create --incremental`, `full`, `inc`'
+  file_backup_commands: '`backup FILE_PATH [NOTE]`, `--list FILE_PATH`'
+  global_flags: '`--dry-run`, `--note`, `--config`, `--list`'
+  management_commands: '`list`, `config`'
+  output_formatting: Configurable output with printf-style and template-based formatting
+ARCH-CICD_PIPELINE:
+  name: CI/CD Pipeline Architecture
+  status: Active
+  cross_references: &ref_29
+    - REQ-CODE_QUALITY
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Supports AI-first development workflow
+      Automated quality validation
+      Non-blocking execution for AI assistants
+      Comprehensive validation reporting
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Traditional CI/CD: Rejected due to lack of AI-first optimization
+        Manual validation: Rejected due to overhead
+  implementation_approach:
+    summary: AI-optimized CI/CD pipeline with automated quality gates
+    details: []
+  traceability:
+    requirements: *ref_29
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CICD_PIPELINE
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_29
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CICD_PIPELINE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: AI-optimized CI/CD pipeline with automated quality gates
+  ai-optimized_reporting: Structured output, icon integration, token attribution
+  ai_protocol_validation_engine: Token validation, documentation sync, protocol compliance
+  cross-references: '[REQ-CODE_QUALITY], [REQ-MAINTAINABILITY]'
+  phase_1: AI Protocol Validation
+  phase_2: Automated Quality Gates
+  phase_3: AI-Optimized Reporting
+  pipeline_orchestration: Low-priority task scheduling, background processing
+  quality_gate_automation: Zero-human gates, configurable thresholds, failure recovery
+ARCH-AI_DOCUMENTATION:
+  name: AI-First Documentation Architecture
+  status: Active
+  cross_references: &ref_30
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Enhances AI assistant comprehension
+      Enables automated validation
+      Maintains consistency across documentation
+      Supports AI-first development workflow
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Traditional documentation: Rejected due to lack of AI optimization
+        Manual documentation: Rejected due to maintenance overhead
+  implementation_approach:
+    summary: AI-optimized documentation with semantic tokens and validation framework
+    details: []
+  traceability:
+    requirements: *ref_30
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-AI_DOCUMENTATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_30
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: AI-optimized documentation with semantic tokens and validation framework
+  ai-first_documentation_strategy: Implementation token standardization, icon usage guidelines, cross-reference integrity
+  ai-optimized_error_processing: AI-readable error messages, remediation guidance, structured error responses
+  ai_validation_framework: Integration with validation systems, pre-submission hooks, real-time validation
+  compliance_monitoring: AI behavior tracking, adherence monitoring, bypass audit trail
+  content_structure_optimizer: AI-friendly formatting and hierarchy management
+  cross-reference_validator: Automated link validation and bidirectional reference checking
+  cross-references: '[REQ-MAINTAINABILITY]'
+  implementation_token_manager: Standardized token format with priority and action icons
+  template_management_system: Comprehensive template library for all documentation types
+ARCH-TOKEN_SYSTEM:
+  name: Token System Architecture
+  status: Active
+  cross_references: &ref_31
+    - REQ-DOC_016
+    - REQ-MAINTAINABILITY
+    - REQ-GOV_REGISTRY_COMPLETENESS
+    - REQ-GOV_DISCOVERABILITY
+  rationale:
+    why: |-
+      Consolidates the single source of truth inside the STDD documentation tree for auditability.
+      Ensures governance requirements ([REQ-GOV_REGISTRY_COMPLETENESS], [REQ-GOV_DISCOVERABILITY]) are enforced through one registry.
+      Eliminates drift between YAML metadata and the STDD token registry.
+      Enables validation scripts to reason over one canonical markdown source.
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Feature IDs without tokens: Rejected due to lack of traceability
+        Manual documentation only: Rejected due to maintenance overhead
+        External tooling: Rejected due to dependency complexity
+  implementation_approach:
+    summary: Comprehensive semantic token system for feature traceability across all layers
+    details: []
+  traceability:
+    requirements: *ref_31
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-TOKEN_SYSTEM
+      - REQ-DOC_016
+      - REQ-MAINTAINABILITY
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-GOV_DISCOVERABILITY
+  related_decisions:
+    depends_on: *ref_31
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-TOKEN_SYSTEM.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Comprehensive semantic token system for feature traceability across all layers
+  ai_assistant_integration: Token-based navigation and feature discovery
+  automated_validation: Scripts validate token format, consistency, and traceability
+  constraints:
+    - Migration must be performed in small, validated batches with checkpoints after every category to keep traceability intact.
+    - All changes must keep `[ARCH-TOKEN_SYSTEM]` contracts (cross-layer references, validation hooks, AI navigation) satisfied before removing legacy records.
+    - Governance reporting (`docs/governance/…`) must reference the new tables to maintain policy discoverability.
+  cross-layer_traceability: Requirements → Architecture → Implementation → Tests → Code
+  cross-link_layer: For each legacy token, map to an explicit `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and referenced tests/files; open tasks whenever a mapping gap is detected.
+  cross-references: '[REQ-DOC_016], [REQ-GOV_REGISTRY_COMPLETENESS], [ARCH-TOKEN_SYSTEM], [IMPL-TOKEN_SYSTEM]'
+  decommission_layer: After each batch migrates, replace the YAML entry with a pointer to the markdown registry until the YAML file can be removed entirely.
+  inventory_layer: Parse `project-tokens.yaml` into structured batches (actions, features, semantic token metadata) and normalize identifiers to STDD-compliant names.
+  registry_layer: Extend `stdd/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
+  token_format_standards:
+    - 'Format: `[TYPE:IDENTIFIER]` with UPPER_SNAKE_CASE identifiers'
+    - 'Cross-references: Implementation tokens must reference `[ARCH-*]` and `[REQ-*]` tokens'
+    - 'Consistency: Same token must be used consistently across all layers'
+  token_registry: Central registry in `semantic-tokens.md` with cross-references to all documentation layers
+  token_types:
+    - '`[REQ-*]` - Requirements tokens in `requirements.md`'
+    - '`[ARCH-*]` - Architecture decision tokens in `architecture-decisions.md`'
+    - '`[IMPL-*]` - Implementation tokens in code comments'
+    - '`[TEST:*]` - Test specification tokens (referenced via `[REQ-*]` in test names)'
+  validation_requirements:
+    - Token format compliance across all files
+    - Cross-layer token consistency validation
+    - Token traceability completeness checking
+    - Missing token detection
+ARCH-PERF_VALIDATION:
+  name: Validation Performance Optimization Architecture
+  status: Active
+  cross_references: &ref_32
+    - REQ-PERFORMANCE
+    - REQ-CODE_QUALITY
+  rationale:
+    why: |-
+      Addresses performance bottlenecks in validation
+      Improves throughput and latency
+      Reduces resource utilization
+      Enables CI/CD integration
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Performance-optimized validation system with caching and fast mode
+    details: []
+  traceability:
+    requirements: *ref_32
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PERF_VALIDATION
+      - REQ-PERFORMANCE
+      - REQ-CODE_QUALITY
+  related_decisions:
+    depends_on: *ref_32
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PERF_VALIDATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Performance-optimized validation system with caching and fast mode
+  cross-references: '[REQ-PERFORMANCE], [REQ-CODE_QUALITY]'
+  fast_mode_architecture:
+    - Skip expensive operations in CI/CD environments
+    - Fast mode execution for quick validation
+    - Performance monitoring during execution
+    - Realistic performance targets
+  intelligent_caching_system: SHA-256 content hash, cache TTL (1hr), cache validation, file modification time-based keys
+  latency_improvements: 81ms average latency, 53ms fast mode, 4.6-14.7% cache hit improvement
+  memory_measurement: 4-25MB realistic memory usage, accurate measurement with `/usr/bin/time`
+  memory_measurement_system: '`/usr/bin/time` integration, realistic models, platform detection, actual memory stats'
+  optimized_validation_scripts: Fast mode execution, batch processing, file size limits, token caching, memory controls
+  throughput_improvements: 2,500% improvement for primary validation script
+ARCH-TEST_EXCLUDE_MERGE:
+  name: Configuration Testing Architecture
+  status: Active
+  cross_references: &ref_33
+    - REQ-TEST_EXCLUDE_MERGE
+    - REQ-CONFIGURATION
+    - REQ-CFG_006
+    - REQ-CONFIG_OUTPUT_GROUPING
+  rationale:
+    why: |-
+      Validates that configuration merging works correctly for array fields
+      Ensures source tracking accurately reflects merged values
+      Provides regression protection for merge behavior changes
+      Enables debugging of configuration issues through test scenarios
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Test-driven validation of exclude patterns merging and source tracking
+    details: []
+    integration_points: &ref_34
+      - Uses existing config loading infrastructure
+      - Leverages CFG-006 source tracking system
+      - Validates CFG-005 merge strategy behavior
+  traceability:
+    requirements: *ref_33
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-TEST_EXCLUDE_MERGE
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+      - REQ-CONFIG_OUTPUT_GROUPING
+  related_decisions:
+    depends_on: *ref_33
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-TEST_EXCLUDE_MERGE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Test-driven validation of exclude patterns merging and source tracking
+  compliance: '[REQ-CONFIG_OUTPUT_GROUPING]'
+  cons: Slightly more complex display logic.
+  context: The current configuration output is a flat, sorted list. As the number of configuration options grows (100+), this becomes difficult to navigate. Users need a way to see related options together and see the most important options first.
+  cross-references: '[REQ-TEST_EXCLUDE_MERGE], [REQ-CONFIGURATION], [REQ-CFG_006], [ARCH-CFG_006]'
+  edge_case_coverage: Empty arrays, duplicates, order preservation
+  integration_points: *ref_34
+  merge_validation: Verify patterns from all sources are accumulated, not replaced
+  pros: Improved usability, better discoverability of options, logical organization.
+  source_tracking_validation: Verify config command shows correct source attribution
+  test_scenario_setup: Create temporary directory structure with multiple config files
+  test_structure:
+    - Unit test for merge logic validation
+    - Integration test for config command output validation
+    - Test fixtures with realistic config file scenarios
+ARCH-EXCLUDE_MERGE_FIX:
+  name: Array Field Default Merge Strategy Implementation
+  status: Active
+  cross_references: &ref_35
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts
+      Ensures default patterns (`.git/`, `vendor/`) are preserved when users add local patterns
+      Fixes implementation bug where array fields were using "override" instead of "merge" by default
+      Provides graceful handling of unknown config fields to prevent merge failures
+      Handles YAML type conversions robustly
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Array fields default to "merge" strategy to satisfy CFG-005 requirement
+    details: []
+    integration_points: &ref_36
+      - Implements CFG-005 merge strategy system requirement
+      - Integrates with CFG-006 source tracking
+      - Preserves CFG-002 merge behavior specification
+      - Ensures backward compatibility with existing config files
+  traceability:
+    requirements: *ref_35
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-EXCLUDE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: *ref_35
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-EXCLUDE_MERGE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Array fields default to "merge" strategy to satisfy CFG-005 requirement
+  cross-references: '[REQ-CFG_005], [REQ-CONFIGURATION], [ARCH-CFG_005], [ARCH-CFG_006]'
+  deduplication: Merge operations deduplicate values to prevent duplicates
+  integration_points: *ref_36
+  merge_strategy_detection: '`extractStrategy` function detects array field keys (like `exclude_patterns`) and defaults to "merge" strategy instead of "override" in all contexts (inheritance chains and sequential file processing)'
+  metadata_field_filtering: Metadata fields used for inheritance processing (like `inherit`) are filtered out before merge operations
+  pattern_preservation: Default patterns explicitly copied into result before merge operations
+  state_management: '`applyMergeStrategies` uses current state (`resultMap`) instead of original state (`dstMap`) for merge operations to ensure proper accumulation'
+  unknown_field_handling: Unknown config fields (like `inherit`) are gracefully skipped instead of aborting merge operations
+  yaml_type_conversion: Robust handling of `[]interface{}` types from YAML unmarshaling, converting to `[]string` as needed
+ARCH-CONFIG_OUTPUT_GROUPING:
+  name: Configuration Output Grouping
+  status: Active
+  cross_references: &ref_37
+    - REQ-CONFIG_OUTPUT_GROUPING
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Improves usability by organizing numerous configuration options
+      Highlights critical settings for better visibility
+      Maintains backward compatibility via flags
+      Aligns with standard CLI best practices
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Group configuration output by category and rank by importance
+    details: []
+  traceability:
+    requirements: *ref_37
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_37
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CONFIG_OUTPUT_GROUPING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Group configuration output by category and rank by importance
+  categories: Defined logical groups (Basic, Archive, Backup, Git, Output, Advanced)
+  cross-references: '[REQ-CONFIG_OUTPUT_GROUPING], [REQ-USABILITY]'
+  flat_(legacy): Single alphabetical list, accessible via `--flat`
+  grouped_(default): Categories with headers, sorted by importance
+  importance: Critical, High, Medium, Low
+  sorting: Category Priority -> Importance -> Name
+ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
+  name: User-Customizable Format Strings
+  status: Active
+  cross_references: &ref_38
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-CONFIGURATION
+    - REQ-OUTPUT_FORMATTING
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Users have different preferences for output formatting (emoji, colors, verbosity, language)
+      Internationalization may require different message formats
+      Integration with other tools may require specific output formats
+      Existing infrastructure (YAML tags, config loading) already supports customization
+      Validation prevents common mistakes and improves user experience
+      Enhances usability without requiring source code modifications
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Enable user customization of all output format strings through configuration files with validation
+    details: []
+  traceability:
+    requirements: *ref_38
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_38
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CUSTOMIZABLE_FORMAT_STRINGS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Enable user customization of all output format strings through configuration files with validation
+  architecture_components: |-
+    1. **Configuration Integration**:
+       - Leverage existing `LoadConfig()` and `mergeFormatStrings()` infrastructure
+       - All format strings already have YAML field tags (e.g., `yaml:"format_created_archive"`)
+       - Configuration merging already handles format string overrides
+       - No code changes required to core configuration system
+
+    2. **Format String Validation**:
+       - Validate format strings on configuration load
+       - Check for expected placeholders (e.g., `%s`, `#{path}`, `#{size_human}`)
+       - Warn users of invalid or unexpected placeholders
+       - Provide helpful error messages indicating expected placeholders
+       - **CRITICAL**: Only template-style placeholders (`#{name}`) are supported. Printf-style placeholders (`%s`, `%d`) are NOT supported.
+       - **REQUIRED**: `FormatListArchive` and `FormatListBackup` MUST support template-style placeholders (`#{name}`) to enable file attribute display (e.g., `#{size_human}`)
+       - **REQUIRED**: The list command implementation MUST use a single, simplified code path (`formatListArchiveSimple`)
+       - **REQUIRED**: File statistics MUST always be gathered (needed for template placeholders)
+       - **REQUIRED**: Format selection priority: `FormatListArchive` (if contains `#{`) > `TemplateListArchive` > default template
+       - **REQUIRED**: Template formatting MUST ONLY handle template (`#{name}`) placeholders - no printf support
+       - **REQUIRED**: Comprehensive tests MUST validate all scenarios: template placeholders, missing files, unknown placeholders
+       - **CRITICAL**: Template-style format strings (`TemplateListArchive`, etc.) can contain template-style placeholders (`#{name}`)
+       - **REQUIRED**: The list command output MUST use template-style format strings (`TemplateListArchive` or `FormatListArchive` with template placeholders) to support named file attributes
+       - **REQUIRED**: Template-style placeholders for list output MUST include: `#{path}`, `#{size_human}`, `#{size}`, `#{creation_time}`, `#{mtime}`, `#{mode}`, `#{type}`, `#{name}`, and other file attributes
+       - **REQUIRED**: Users MUST be able to customize list output with formats like `#{path} (size: #{size_human})` to display file attributes
+       - **CRITICAL**: Template-style placeholders (`#{name}`) must be replaced BEFORE any Go text/template processing
+       - **CRITICAL**: Go text/template engine (`tmpl.Execute`) must NEVER be called on strings containing `#{...}` patterns, as Go's fmt package will misinterpret them as format verbs
+       - **MIGRATION COMPLETE**: All placeholder syntax migrated from `%{...}` to `#{...}` to eliminate fmt package conflicts
+       - **ROOT CAUSE RESOLVED**: The `%{...}` syntax conflicted with Go's fmt package, causing `%!(EXTRA ...)` errors. Migration to `#{...}` syntax completely resolves this issue.
+
+    3. **Documentation Architecture**:
+       - Comprehensive reference document (`docs/format-strings-reference.md`)
+       - Lists all available format strings with YAML field names
+       - Documents supported placeholders for each format string
+       - Explains printf-style vs template-style formats
+       - Provides examples of common customizations
+
+    4. **Example Configuration**:
+       - Brief example file showing common customizations
+       - Demonstrates both printf-style and template-style formats
+       - Shows special placeholders like `#{size_human}`
+       - Includes emoji and internationalization examples
+  backward_compatibility:
+    - All format strings have defaults in `DefaultConfig()`
+    - Users who don't specify format strings get default behavior
+    - Existing configurations continue to work unchanged
+    - No breaking changes to configuration schema
+  cross-references: '[REQ-CUSTOMIZABLE_FORMAT_STRINGS], [REQ-CONFIGURATION], [REQ-OUTPUT_FORMATTING], [REQ-USABILITY], [ARCH-CONFIG_SYSTEM], [ARCH-OUTPUT_FORMATTING]'
+  directory_operations: '(6 strings): `format_created_archive`, `format_identical_archive`, `format_list_archive`, `format_config_value`, `format_dry_run_archive`, `format_error`'
+  extended_messages: '(~20 strings): Incremental, error messages'
+  file_operations: '(4 strings): `format_created_backup`, `format_identical_backup`, `format_list_backup`, `format_dry_run_backup`'
+  hardcoded_strings_only: Rejected - limits user customization and internationalization
+  no_validation: Rejected - users can easily make mistakes without guidance
+  plugin_system_for_formatters: Rejected - over-engineering for this use case
+  separate_format_string_files: Rejected - adds complexity, YAML config sufficient
+  template-based: '(~30 strings): Template versions of all format strings'
+  validation_strategy:
+    - Define expected placeholders for each format string field
+    - Validate on configuration load (non-fatal warnings)
+    - Provide clear error messages with expected placeholder list
+    - Support both strict validation (error) and lenient validation (warning)
+    - Allow users to disable validation if needed
+ARCH-DIFF_COMMAND:
+  name: Diff Command Architecture
+  status: Active
+  cross_references: &ref_39
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Users need visibility into changes before creating incremental archives
+      Comparing against the union (full + most recent incremental) provides accurate change detection
+      Reusing diff logic for duplicate prevention ensures consistency
+      Enables users to preview what would be included in next incremental backup
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Implement diff command that reconstructs archive union state before comparison
+    details:
+      - |-
+        1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+        2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+        3. **Directory Comparison**: Compare current directory against reconstructed state
+        4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+        5. **CLI Command Integration**: Add `diff` command to CLI framework
+    key_components: |-
+      1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+      2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+      3. **Directory Comparison**: Compare current directory against reconstructed state
+      4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+      5. **CLI Command Integration**: Add `diff` command to CLI framework
+  traceability:
+    requirements: *ref_39
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-DIFF_COMMAND
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: *ref_39
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-DIFF_COMMAND.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Implement diff command that reconstructs archive union state before comparison
+  archive_selection: Use name-based sorting to find most recent archives (archive names include alphabetically sortable timestamps in ISO 8601 format)
+  archive_state_reconstruction: Reconstruct effective state by applying most recent incremental archive on top of most recent full archive
+  change_detection: Identify added files, modified files, and deleted files
+  compare_only_against_full_archive: Rejected - doesn't account for existing incremental changes
+  compare_only_against_most_recent_incremental: Rejected - incremental archives are deltas, not complete states
+  comparison_engine: Compare reconstructed archive state against current directory state
+  cross-references: '[REQ-DIFF_COMMAND], [REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-OUTPUT_FORMATTING], [REQ-CONFIGURATION], [ARCH-DIRECTORY_COMPARISON], [ARCH-CLI_COMMANDS]'
+  integration_with_incremental_creation: Share comparison logic with incremental archive duplicate prevention
+  key_components: |-
+    1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+    2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+    3. **Directory Comparison**: Compare current directory against reconstructed state
+    4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+    5. **CLI Command Integration**: Add `diff` command to CLI framework
+  output_formatting: Use configurable format strings consistent with other commands
+  separate_diff_logic_from_duplicate_prevention: Rejected - code duplication, inconsistency risk
+  use_file_modification_times_for_archive_selection: Rejected - less reliable than name-based sorting, archive names include timestamps that are alphabetically sortable, simpler implementation without file system stat calls
+ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
+  name: Incremental Archive Duplicate Prevention Architecture
+  status: Active
+  cross_references: &ref_40
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-DIFF_COMMAND
+    - REQ-OUTPUT_FORMATTING
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+    - REQ-MAINTAINABILITY
+    - REQ-STDD_VIS
+    - REQ-MODULE_VALIDATION
+  rationale:
+    why: |-
+      Stakeholders need a concise, token-centric narrative of how STDD preserves intent across layers.
+      A data-driven pipeline (sourced from existing `stdd/*.md` plus representative code/test anchors) keeps token prominence accurate as the registry evolves.
+      Complementary artifacts (layered flow + timeline/animation) address both static comprehension and process storytelling while keeping tokens in the spotlight.
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Manual, non-data-driven sketches: rejected (drift risk, no repeatability).
+        Single static diagram only: rejected (does not convey lifecycle/time dimension or evolving token story).
+  implementation_approach:
+    summary: Use diff command analysis to prevent duplicate incremental archives
+    details: []
+    integration_points: |-
+      1. **Incremental Archive Creation**: Modify `createIncrementalArchive` to use diff analysis
+      2. **Archive State Reconstruction**: Share reconstruction logic with diff command
+      3. **Comparison Engine**: Reuse comparison logic from diff command
+      4. **Output Formatting**: Use consistent format strings for skip messages
+  traceability:
+    requirements: *ref_40
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+      - REQ-MAINTAINABILITY
+      - REQ-STDD_VIS
+      - REQ-MODULE_VALIDATION
+  related_decisions:
+    depends_on: *ref_40
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Use diff command analysis to prevent duplicate incremental archives
+  always_create_incremental: Rejected - wastes disk space and creates clutter
+  animation/timeline_module: Render an animated sequence or stepwise storyboard that highlights token handoffs over time (REQ → ARCH → IMPL → TEST/CODE), with on-frame token callouts.
+  change_detection: Use same change detection logic as diff command
+  compare_only_against_full_archive: Rejected - allows duplicate incrementals with no changes
+  consequences:
+    - A canonical `docs/package-interdependency-mapping.md` is required and serves as the authoritative mapping for EXTRACT-008.
+    - Where coupling is unavoidable, introduce small interfaces to break cycles and record these interface contracts in the mapping document and in `implementation-decisions.md`.
+  cross-references: '[REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
+  data_extraction_module: 'Parse `stdd/semantic-tokens.md`, `requirements.md`, `architecture-decisions.md`, `implementation-decisions.md`, and sampled code/test anchors to build a token graph (nodes: REQ/ARCH/IMPL/TEST/CODE; edges: traceability links) with token metadata (type, status, sample refs) for visual prominence.'
+  integration_&_storage: Export assets to `docs/images/` (SVG/PNG/GIF/MP4 as needed) and embed into STDD docs with captions and token callouts; include a data snapshot (JSON/CSV) to keep visuals reproducible and token-accurate.
+  integration_points: |-
+    1. **Incremental Archive Creation**: Modify `createIncrementalArchive` to use diff analysis
+    2. **Archive State Reconstruction**: Share reconstruction logic with diff command
+    3. **Comparison Engine**: Reuse comparison logic from diff command
+    4. **Output Formatting**: Use consistent format strings for skip messages
+  module_boundaries_(for_[req-module_validation],_token_emphasis):
+    - '`DataExtraction`: input = STDD docs + selected code/test anchors; output = normalized token graph/JSON with token metadata for styling.'
+    - '`Visualization`: input = token graph; output = static layered diagram with tokens visually dominant; legends articulate token roles.'
+    - '`AnimationTimeline`: input = ordered trace steps; output = animated timeline/multi-frame storyboard with token callouts per step.'
+    - '`Integration`: links assets into docs, preserves token prominence guidance, and records validation notes.'
+  reuse_diff_logic: Leverage diff command comparison engine for duplicate detection
+  separate_comparison_logic: Rejected - code duplication and potential inconsistency
+  skip_creation: Skip incremental archive creation if no changes detected
+  state_reconstruction: Reconstruct effective state from full + most recent incremental archive
+  user_feedback: Display appropriate message when archive creation is skipped
+  visualization_module: Generate a layered flow (e.g., swimlane/graph or Sankey-style) where tokens are the dominant nodes (color/weight/labels), edges clarify trace paths, and legends explain token roles.
+ARCH-TIED_STRUCTURE:
+  name: TIED Project Structure
+  status: Active
+  description: TIED project structure decision
+  cross_references:
+    - REQ-TIED_SETUP
+    - IMPL-TIED_FILES
+  detail_file: architecture-decisions/ARCH-TIED_STRUCTURE.yaml
+  metadata:
+    created:
+      date: "2025-12-18"
+      author: AI Agent
+    last_updated:
+      date: "2026-02-06"
+      author: AI Agent
+ARCH-MODULE_VALIDATION:
+  name: Module Validation Strategy
+  status: Active
+  description: Module validation strategy decision
+  cross_references:
+    - REQ-MODULE_VALIDATION
+    - IMPL-MODULE_VALIDATION
+  detail_file: architecture-decisions/ARCH-MODULE_VALIDATION.yaml
+  metadata:
+    created:
+      date: "2025-12-18"
+      author: AI Agent
+    last_updated:
+      date: "2026-02-06"
+      author: AI Agent
+ARCH-FEEDBACK_STORAGE:
+  name: Feedback Storage for TIED Reporting
+  status: Active
+  description: Feedback stored in single file tied/feedback.yaml; MCP tools read/write via base path resolution
+  cross_references:
+    - REQ-FEEDBACK_TO_TIED
+    - IMPL-MCP_FEEDBACK_TOOLS
+  detail_file: architecture-decisions/ARCH-FEEDBACK_STORAGE.yaml
+  metadata:
+    created:
+      date: "2026-03-03"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-03"
+      author: AI Agent
+ARCH-EXTRACT_008_INTERDEP:
+  name: Package Interdependency Mapping for EXTRACT-008
+  status: Active
+  description: Documented package interdependency mapping specifying dependency direction, public interfaces, and common usage patterns
+  cross_references:
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
+  detail_file: architecture-decisions/ARCH-EXTRACT_008_INTERDEP.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI Agent
+ARCH-STDD_VIS_FLOW:
+  name: STDD Visualization Flow Architecture
+  status: Active
+  description: Token-first visualization pipeline producing layered flow and timeline artifacts for traceability visualization
+  cross_references:
+    - REQ-STDD_VIS
+    - REQ-MODULE_VALIDATION
+  detail_file: architecture-decisions/ARCH-STDD_VIS_FLOW.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI Agent
+ARCH-CFG_001:
+  name: Basic Configuration Architecture
+  status: Active
+  cross_references:
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+    - IMPL-CONFIG_STRUCT
+  description: Architecture decision for base configuration system design including YAML loading and merge strategies
+  detail_file: architecture-decisions/ARCH-CFG_001.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI Agent
+      reason: Initial creation of missing token
+ARCH-DOCUMENTATION_ARCHITECTURE:
+  name: Documentation System Architecture
+  status: Active
+  cross_references:
+    - REQ-DOC_001
+    - REQ-DOC_003
+    - IMPL-DOC_ENHANCEMENT
+    - IMPL-SEMANTIC_CROSS_REF
+    - IMPL-TRACEABILITY
+  description: Architecture decision for documentation system including semantic cross-referencing and traceability
+  detail_file: architecture-decisions/ARCH-DOCUMENTATION_ARCHITECTURE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI Agent
+      reason: Initial creation of missing token

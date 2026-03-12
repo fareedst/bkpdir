@@ -1,6 +1,6 @@
 # Unicode Migration Project - Phase 1 Completion Summary
 
-> **[CRITICAL] DOC-014: Phase 1 completion summary with comprehensive audit findings [ACTION:validation]**
+> **[CRITICAL] DOC-014: Phase 1 completion summary with comprehensive audit findings [ACTION-validation]**
 
 **Date**: 2025-07-13  
 **Status**: ✅ **PHASE 1 COMPLETED**  
@@ -143,7 +143,7 @@ Phase 1 of the Unicode migration project has been **successfully completed** wit
 ## Next Steps for Phase 2
 
 ### Phase 2: Token Gap Analysis and Remediation (Week 2)
-**Status**: [ACTION:migration] **READY TO BEGIN**  
+**Status**: [ACTION-migration] **READY TO BEGIN**  
 **Start Date**: 2025-07-13  
 **Target Completion**: 2025-07-20  
 
@@ -189,7 +189,7 @@ Phase 1 of the Unicode migration project has been **successfully completed** wit
 
 ### Current Project State
 - **Phase**: 1 ✅ **COMPLETED**
-- **Next Phase**: 2 [ACTION:migration] **READY TO BEGIN**
+- **Next Phase**: 2 [ACTION-migration] **READY TO BEGIN**
 - **Last Checkpoint**: Phase 1 completion
 - **Next Action**: Begin Subtask 2.1 (Missing Token Identification)
 

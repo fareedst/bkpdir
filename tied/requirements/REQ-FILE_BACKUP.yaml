@@ -1,0 +1,45 @@
+REQ-FILE_BACKUP:
+  name: File Backup Requirements
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Provides individual file backup capability with comparison and listing
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: File backups created with timestamp and note
+    - criterion: Identical file detection available
+    - criterion: Backup listing sorted by creation time
+    - criterion: Atomic operations prevent corruption
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+    implementation:
+      - IMPL-ATOMIC_OPS
+      - IMPL-CONTEXT_OPS
+    tests: []
+    code_annotations:
+      - REQ-FILE_BACKUP
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-FILE_BACKUP.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Resource Management [ARCH-RESOURCE_MANAGEMENT]
+  description: Create backups of single files with comparison. Detect identical backups. List backups for specific files. File operations use atomic operations and context support.
+  implementation: See `implementation-decisions.md` § Atomic File Operations [IMPL-ATOMIC_OPS], § Context-Aware Operations [IMPL-CONTEXT_OPS]

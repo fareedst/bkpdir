@@ -1,6 +1,6 @@
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] Incremental Archive Duplicate Prevention testing
-// [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] Duplicate prevention architecture validation
-// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] Incremental archive creation with duplicate prevention validation
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] Incremental Archive Duplicate Prevention testing
+// [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] Duplicate prevention architecture validation
+// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] Incremental archive creation with duplicate prevention validation
 package main
 
 import (
@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncrementalArchiveSkipNoChanges tests that incremental archive creation is skipped when no changes exist
 func TestIncrementalArchiveSkipNoChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -157,7 +157,7 @@ func TestIncrementalArchiveSkipNoChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t 
 	}
 }
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncrementalArchiveProceedWithChanges tests that incremental archive creation proceeds when changes exist
 func TestIncrementalArchiveProceedWithChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -258,7 +258,7 @@ func TestIncrementalArchiveProceedWithChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTI
 	}
 }
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncrementalArchiveSkipWithFullOnly tests skip behavior when only full archive exists
 func TestIncrementalArchiveSkipWithFullOnly_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -359,7 +359,7 @@ func TestIncrementalArchiveSkipWithFullOnly_REQ_INCREMENTAL_DUPLICATE_PREVENTION
 	}
 }
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncrementalArchiveProceedWithNewFile tests that new files trigger archive creation
 func TestIncrementalArchiveProceedWithNewFile_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()

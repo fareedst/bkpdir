@@ -1,4 +1,4 @@
-// [REQ:CONFIGURATION]
+// [REQ-CONFIGURATION]
 // Package config provides schema-agnostic configuration management for CLI applications.
 //
 // This test file verifies the extracted configuration system works independently
@@ -7,11 +7,11 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-CONFIG-PKG-001: Config package test validation - Configuration discovery and loading testing [ACTION:validation]
+// TEST-CONFIG-PKG-001: Config package test validation - Configuration discovery and loading testing [ACTION-validation]
 // Source: pkg/config/discovery.go - Config discovery implementation
 // Impact: Core functionality validation for config package
 
-// TEST-SERVICE-CONFIG-PKG-001: Config package service test validation - Configuration service implementation testing [ACTION:validation]
+// TEST-SERVICE-CONFIG-PKG-001: Config package service test validation - Configuration service implementation testing [ACTION-validation]
 // Source: pkg/config/loader.go - Config service implementation
 // Impact: Config service validation for config package service implementation
 package config

@@ -1,0 +1,64 @@
+IMPL-EXCLUSION_PATTERNS:
+  name: Exclusion Patterns Implementation
+  status: Active
+  cross_references:
+    - ARCH-EXCLUSION_PATTERNS
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Supports flexible file filtering
+      Enables efficient pattern matching
+      Handles recursive patterns (`**`)
+      Integrates with configuration system
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Doublestar glob pattern matching with compiled matcher
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-EXCLUSION_PATTERNS
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-EXCLUSION_PATTERNS
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/fileops/exclusion.go`, `PatternMatcher` struct, doublestar imports'
+  convenience_functions: "```go\nfunc ShouldExcludeFile(path string, exclusions []string) bool {\n    if len(exclusions) == 0 {\n        return false\n    }\n    \n    matcher := NewPatternMatcher(exclusions)\n    return matcher.Match(path)\n}\n\nfunc FilterPaths(paths []string, exclusions []string) []string {\n    matcher := NewPatternMatcher(exclusions)\n    var filtered []string\n    \n    for _, path := range paths {\n        if !matcher.Match(path) {\n            filtered = append(filtered, path)\n        }\n    }\n    \n    return filtered\n}\n```"
+  directory_patterns: '`.git/`, `node_modules/`'
+  doublestar: '`**` for recursive matching'
+  glob_patterns: '`*.tmp`, `*.log`, `build/`'
+  multiple_patterns: Array of patterns for complex exclusions
+  patternmatcher_implementation: "```go\ntype PatternMatcher struct {\n    patterns []string\n    compiled []glob.Glob\n}\n\nfunc NewPatternMatcher(patterns []string) *PatternMatcher {\n    pm := &PatternMatcher{\n        patterns: patterns,\n        compiled: make([]glob.Glob, 0, len(patterns)),\n    }\n    \n    for _, pattern := range patterns {\n        if g, err := glob.Compile(pattern); err == nil {\n            pm.compiled = append(pm.compiled, g)\n        }\n    }\n    \n    return pm\n}\n\nfunc (pm *PatternMatcher) Match(path string) bool {\n    for _, g := range pm.compiled {\n        if g.Match(path) {\n            return true\n        }\n    }\n    return false\n}\n```"
+  essence_pseudocode: |-
+    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Doublestar glob pattern matching with compiled matcher
+
+    procedure exclusion_patterns_implementation():
+      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] Supports flexible file filtering
+      execute()
+      end

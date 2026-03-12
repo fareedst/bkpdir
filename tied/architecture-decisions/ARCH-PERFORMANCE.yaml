@@ -1,0 +1,57 @@
+ARCH-PERFORMANCE:
+  name: Performance Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-PERFORMANCE
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Ensures responsive user experience
+      Handles large directories efficiently
+      Minimizes resource usage
+      Supports scalable operations
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Optimized performance with streaming, caching, and concurrent processing
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PERFORMANCE
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PERFORMANCE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Optimized performance with streaming, caching, and concurrent processing
+  buffer_pooling: Memory reuse with efficient allocation
+  buffered_i/o: Efficient file operations with context cancellation
+  compression_tuning: Optimal compression settings with performance monitoring
+  cross-references: '[REQ-PERFORMANCE], [REQ-RELIABILITY]'
+  deep_hierarchies: Stack-safe recursion with cancellation checks
+  disk_space_monitoring: Available space checking with enhanced error detection
+  garbage_collection: Minimal allocation with resource cleanup
+  large_directories: Efficient directory traversal with context support
+  long-running_operations: Progress reporting with context cancellation
+  many_files: Scalable file processing with resource management
+  parallel_processing: Concurrent file handling with thread safety
+  resource_cleanup: Automatic resource management with panic recovery
+  streaming_processing: Large file handling with context support

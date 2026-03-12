@@ -1,6 +1,6 @@
 # Unicode Migration Audit Report - Phase 1, Subtask 1.4
 
-> **[CRITICAL] DOC-014: Architectural decision token audit report [ACTION:validation]**
+> **[CRITICAL] DOC-014: Architectural decision token audit report [ACTION-validation]**
 
 **Date**: 2025-07-13  
 **Status**: ✅ **COMPLETED**  
@@ -261,4 +261,4 @@ This audit examined all architectural decisions defined in `docs/context/archite
 
 ---
 
-**[CRITICAL] DOC-014: Architectural decision token audit completed with 18 missing tokens identified - Phase 1 complete, ready to begin Phase 2 [ACTION:validation]** 
+**[CRITICAL] DOC-014: Architectural decision token audit completed with 18 missing tokens identified - Phase 1 complete, ready to begin Phase 2 [ACTION-validation]** 

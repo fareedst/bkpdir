@@ -1,4 +1,4 @@
-// [REQ:DOC_015] Semantic Token Validator
+// [REQ-DOC_015] Semantic Token Validator
 // Validates semantic token usage and consistency across the codebase
 package validation
 
@@ -50,7 +50,7 @@ func NewSemanticTokenValidator(projectRoot string) *SemanticTokenValidator {
 }
 
 // ValidateSemanticTokens validates semantic token usage across the codebase
-// [REQ:DOC_015] Validates REQ/ARCH/IMPL token usage and consistency
+// [REQ-DOC_015] Validates REQ/ARCH/IMPL token usage and consistency
 func (v *SemanticTokenValidator) ValidateSemanticTokens(ctx context.Context) (*SemanticTokenValidationResult, error) {
 	result := &SemanticTokenValidationResult{
 		MissingTokens:      []TokenError{},
@@ -61,10 +61,10 @@ func (v *SemanticTokenValidator) ValidateSemanticTokens(ctx context.Context) (*S
 		Status:             "pass",
 	}
 
-	// [REQ:DOC_015] Semantic token patterns
-	reqTokenPattern := regexp.MustCompile(`\[REQ:([A-Z0-9_]+)\]`)
-	archTokenPattern := regexp.MustCompile(`\[ARCH:([A-Z0-9_]+)\]`)
-	implTokenPattern := regexp.MustCompile(`\[IMPL:([A-Z0-9_]+)\]`)
+	// [REQ-DOC_015] Semantic token patterns (supports both colon and hyphen delimiters)
+	reqTokenPattern := regexp.MustCompile(`\[REQ[:\-]([A-Z0-9_]+)\]`)
+	archTokenPattern := regexp.MustCompile(`\[ARCH[:\-]([A-Z0-9_]+)\]`)
+	implTokenPattern := regexp.MustCompile(`\[IMPL[:\-]([A-Z0-9_]+)\]`)
 
 	// Walk through all relevant files
 	err := filepath.Walk(v.projectRoot, func(path string, info os.FileInfo, err error) error {
@@ -158,14 +158,14 @@ func (v *SemanticTokenValidator) ValidateSemanticTokens(ctx context.Context) (*S
 			}
 		}
 
-		// Count files with tokens
-		if strings.Contains(string(content), "[REQ:") {
+		// Count files with tokens (supports both colon and hyphen delimiters)
+		if strings.Contains(string(content), "[REQ-") || strings.Contains(string(content), "[REQ:") {
 			result.FilesWithREQTokens++
 		}
-		if strings.Contains(string(content), "[ARCH:") {
+		if strings.Contains(string(content), "[ARCH-") || strings.Contains(string(content), "[ARCH:") {
 			result.FilesWithARCHTokens++
 		}
-		if strings.Contains(string(content), "[IMPL:") {
+		if strings.Contains(string(content), "[IMPL-") || strings.Contains(string(content), "[IMPL:") {
 			result.FilesWithIMPLTokens++
 		}
 
@@ -200,7 +200,7 @@ func (v *SemanticTokenValidator) ValidateSemanticTokens(ctx context.Context) (*S
 }
 
 // isValidTokenIdentifier validates that a token identifier follows the naming convention
-// [REQ:DOC_015] Token identifiers must use UPPER_SNAKE_CASE
+// [REQ-DOC_015] Token identifiers must use UPPER_SNAKE_CASE
 func (v *SemanticTokenValidator) isValidTokenIdentifier(identifier string) bool {
 	// Must be non-empty
 	if len(identifier) == 0 {
@@ -213,7 +213,7 @@ func (v *SemanticTokenValidator) isValidTokenIdentifier(identifier string) bool 
 }
 
 // ValidateTokenConsistency validates cross-layer token consistency
-// [REQ:DOC_015] Ensures tokens are used consistently across requirements, architecture, and implementation
+// [REQ-DOC_015] Ensures tokens are used consistently across requirements, architecture, and implementation
 func (v *SemanticTokenValidator) ValidateTokenConsistency(ctx context.Context) ([]TokenError, error) {
 	// This would check that:
 	// - REQ tokens have corresponding ARCH tokens

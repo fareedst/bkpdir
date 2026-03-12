@@ -1,6 +1,6 @@
-// [REQ:OUTPUT_FORMATTING] File statistics gathering testing
-// [ARCH:FILE_STATISTICS] File statistics architecture validation
-// [IMPL:FILE_STATISTICS] FileStatInfo structure and formatting validation
+// [REQ-OUTPUT_FORMATTING] File statistics gathering testing
+// [ARCH-FILE_STATISTICS] File statistics architecture validation
+// [IMPL-FILE_STATISTICS] FileStatInfo structure and formatting validation
 package main
 
 import (
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUTPUT_FORMATTING] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestGatherFileStatInfo tests the file statistics gathering functionality
 func TestGatherFileStatInfo_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	// Create a temporary file for testing
@@ -63,7 +63,7 @@ func TestGatherFileStatInfo_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	}
 }
 
-// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUTPUT_FORMATTING] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestGatherFileStatInfoDirectory tests file stats for directories
 func TestGatherFileStatInfoDirectory_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -82,7 +82,7 @@ func TestGatherFileStatInfoDirectory_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	}
 }
 
-// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUTPUT_FORMATTING] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestGatherFileStatInfoNonexistent tests error handling for nonexistent files
 func TestGatherFileStatInfoNonexistent_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	nonexistentFile := "/path/that/does/not/exist"
@@ -93,7 +93,7 @@ func TestGatherFileStatInfoNonexistent_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	}
 }
 
-// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUTPUT_FORMATTING] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestFormatHumanSize tests the human-readable size formatting
 func TestFormatHumanSize_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	tests := []struct {
@@ -121,7 +121,7 @@ func TestFormatHumanSize_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	}
 }
 
-// [REQ:OUTPUT_FORMATTING] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUTPUT_FORMATTING] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestGetFileType tests file type detection
 func TestGetFileType_REQ_OUTPUT_FORMATTING(t *testing.T) {
 	// Create a temporary file

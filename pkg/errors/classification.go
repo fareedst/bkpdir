@@ -1,4 +1,4 @@
-// [IMPL:STRUCTURED_ERRORS] [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // Error classification utilities for detecting and categorizing different types of errors.
 // This file contains the error detection functions extracted from the original
 // errors.go file, generalized for reuse across CLI applications.

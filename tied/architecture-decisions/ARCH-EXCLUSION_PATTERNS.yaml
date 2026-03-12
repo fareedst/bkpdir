@@ -1,0 +1,70 @@
+ARCH-EXCLUSION_PATTERNS:
+  name: Exclusion Patterns Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-CONFIGURATION
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables flexible file filtering for archives and backups
+      Supports common exclusion patterns (version control, build artifacts)
+      Provides consistent exclusion behavior across operations
+      Integrates with configuration system
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Regex patterns: Rejected due to complexity and performance
+        Simple string matching: Rejected due to limited functionality
+  implementation_approach:
+    summary: Pattern-based file exclusion system with glob support
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Pattern-based file exclusion system with glob support
+  common_patterns:
+    - 'Version control: `.git/`, `.svn/`, `.hg/`'
+    - 'Build artifacts: `build/`, `dist/`, `target/`, `*.o`'
+    - 'Dependencies: `node_modules/`, `vendor/`'
+    - 'Temporary files: `*.tmp`, `*.temp`, `*.swp`'
+    - 'OS files: `.DS_Store`, `Thumbs.db`'
+  cross-references: '[REQ-CONFIGURATION], [REQ-PERFORMANCE]'
+  doublestar_glob_patterns: Supports `**` for recursive matching
+  integration:
+    - Used by directory traversal for filtering
+    - Configurable via configuration files
+    - Supports per-operation exclusion patterns
+    - Integrates with archive and backup operations
+  multiple_patterns: Supports arrays of exclusion patterns
+  path-based_matching: Matches against full file paths
+  pattern_matcher: Compiled pattern matcher for efficient matching
+  performance:
+    - Pattern compilation for efficiency
+    - ~10μs per file for complex glob patterns
+    - Supports large pattern sets

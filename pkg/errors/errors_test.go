@@ -1,4 +1,4 @@
-// [REQ:ERROR_HANDLING]
+// [REQ-ERROR_HANDLING]
 // Tests for the pkg/errors package to validate extracted error handling functionality.
 // These tests ensure the extracted error handling components work correctly
 // and maintain backward compatibility with the original functionality.
@@ -6,11 +6,11 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-ERRORS-PKG-001: Errors package test validation - Error handling and resource management testing [ACTION:validation]
+// TEST-ERRORS-PKG-001: Errors package test validation - Error handling and resource management testing [ACTION-validation]
 // Source: pkg/errors/classification.go - Error handling implementation
 // Impact: Core functionality validation for errors package
 
-// TEST-SERVICE-ERRORS-PKG-001: Errors package service test validation - Error service implementation testing [ACTION:validation]
+// TEST-SERVICE-ERRORS-PKG-001: Errors package service test validation - Error service implementation testing [ACTION-validation]
 // Source: pkg/errors/handlers.go - Error service implementation
 // Impact: Error service validation for errors package service implementation
 package errors

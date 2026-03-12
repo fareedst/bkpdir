@@ -83,7 +83,7 @@ func (f *DefaultOutputFormatter) FormatIdenticalArchive(path string) string {
 }
 
 // FormatListArchive formats a list archive message.
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
 func (f *DefaultOutputFormatter) FormatListArchive(path, creationTime string) string {
@@ -92,7 +92,7 @@ func (f *DefaultOutputFormatter) FormatListArchive(path, creationTime string) st
 		formatStr = "%s (created: %s)\n"
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
 	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
 
 	if hasTemplatePlaceholders {
@@ -184,7 +184,7 @@ func (f *DefaultOutputFormatter) FormatIdenticalBackup(path string) string {
 
 // FormatListBackup formats a list backup message using printf-style formatting
 // FormatListBackup formats a list backup message.
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
 func (f *DefaultOutputFormatter) FormatListBackup(path, creationTime string) string {
@@ -193,7 +193,7 @@ func (f *DefaultOutputFormatter) FormatListBackup(path, creationTime string) str
 		formatStr = "%s (created: %s)\n"
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
 	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
 
 	if hasTemplatePlaceholders {

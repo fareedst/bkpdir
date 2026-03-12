@@ -21,9 +21,9 @@
 // SERVICE-FORMAT-001: Format service architecture decision - Format service implementation [ACTION:core-functionality]
 // Source: formatter.go - SERVICE-FORMAT-001
 // Impact: Format service implementation decision
-// [REQ:OUTPUT_FORMATTING] Output formatting requirement
-// [ARCH:OUTPUT_FORMATTING] Dual-mode output formatting architecture
-// [IMPL:DUAL_FORMATTING] printf/template formatting implementation
+// [REQ-OUTPUT_FORMATTING] Output formatting requirement
+// [ARCH-OUTPUT_FORMATTING] Dual-mode output formatting architecture
+// [IMPL-DUAL_FORMATTING] printf/template formatting implementation
 
 // REFACTOR-002: See architecture.md - Formatter Decomposition [DECISION:maintenance]
 // Component boundaries identified: OutputCollector, PrintfFormatter, TemplateFormatter, PatternExtractor, ErrorFormatter
@@ -247,14 +247,14 @@ func (f *OutputFormatter) FormatIdenticalArchive(path string) string {
 // FormatListArchive formats a message for listing an archive.
 // It uses the configured format string to create the output message with path and creation time.
 // FormatListArchive formats a list archive message.
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
-// [IMPL:LIST_FORMAT_SAFETY] Ensure safe formatting for list output
+// [IMPL-LIST_FORMAT_SAFETY] Ensure safe formatting for list output
 func (f *OutputFormatter) FormatListArchive(path, creationTime string) string {
 	formatStr := f.cfg.FormatListArchive
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
 	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
 
 	if hasTemplatePlaceholders {
@@ -669,14 +669,14 @@ func (f *OutputFormatter) FormatIdenticalBackup(path string) string {
 // DECISION-REF: DEC-003
 // FormatListBackup formats a message for listing a backup.
 // FormatListBackup formats a list backup message.
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
-// [IMPL:LIST_FORMAT_SAFETY] Ensure safe formatting for backup list output
+// [IMPL-LIST_FORMAT_SAFETY] Ensure safe formatting for backup list output
 func (f *OutputFormatter) FormatListBackup(path, creationTime string) string {
 	formatStr := f.cfg.FormatListBackup
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Check if format string contains template placeholders
 	hasTemplatePlaceholders := strings.Contains(formatStr, "#{")
 
 	if hasTemplatePlaceholders {
@@ -800,7 +800,7 @@ func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]str
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
 	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
 	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
 	// Only replace known placeholders, leave unknown ones as-is
@@ -822,7 +822,7 @@ func (f *OutputFormatter) formatTemplate(templateStr string, data map[string]str
 		}
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
 	// This allows mixed format strings like "%s (size: #{size_human})\n"
 	// We need to replace printf placeholders with values from the data map
 	// Common mappings: %s -> path or name, %d -> size, etc.
@@ -1018,7 +1018,7 @@ func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[stri
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
 	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
 	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
 	// Only replace known placeholders, leave unknown ones as-is
@@ -1040,7 +1040,7 @@ func (tf *TemplateFormatter) FormatWithPlaceholders(format string, data map[stri
 		}
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
 	// This allows mixed format strings like "%s (size: #{size_human})\n"
 	// We need to replace printf placeholders with values from the data map
 	// Common mappings: %s -> path or name, %d -> size, etc.
@@ -1782,7 +1782,7 @@ func (f *OutputFormatter) PrintIncrementalCreated(path string) {
 	}
 }
 
-// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
 // FormatDiffResult formats the diff result for display
 func (f *OutputFormatter) FormatDiffResult(diff *DiffResult) string {
 	if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
@@ -1805,7 +1805,7 @@ func (f *OutputFormatter) FormatDiffResult(diff *DiffResult) string {
 	return result.String()
 }
 
-// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
 // PrintDiffResult prints the diff result
 func (f *OutputFormatter) PrintDiffResult(diff *DiffResult) {
 	message := f.FormatDiffResult(diff)
@@ -1816,13 +1816,13 @@ func (f *OutputFormatter) PrintDiffResult(diff *DiffResult) {
 	}
 }
 
-// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION]
 // FormatIncrementalSkippedNoChanges formats the message when incremental archive creation is skipped
 func (f *OutputFormatter) FormatIncrementalSkippedNoChanges() string {
 	return f.cfg.FormatIncrementalSkippedNoChanges
 }
 
-// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION]
 // PrintIncrementalSkippedNoChanges prints the message when incremental archive creation is skipped
 func (f *OutputFormatter) PrintIncrementalSkippedNoChanges() {
 	message := f.FormatIncrementalSkippedNoChanges()
@@ -2201,7 +2201,7 @@ func (f *OutputFormatter) PrintFailedAccessFile(err error) {
 // CFG-004: See specification.md - Configuration Format [DECISION:format-processing]
 // OUT-001: See specification.md - Delayed Output [DECISION:maintenance]
 func (f *OutputFormatter) PrintArchiveListWithStatus(output, status string) {
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use os.Stdout.WriteString, NOT fmt.Print
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use os.Stdout.WriteString, NOT fmt.Print
 	// to avoid fmt misinterpreting #{...} patterns as format verbs
 	// fmt.Print internally uses fmt.Sprintf("%v", ...) which can misinterpret #{...} as format verbs
 	message := output + status + "\n"

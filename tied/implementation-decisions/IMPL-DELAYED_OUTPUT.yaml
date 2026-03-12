@@ -1,0 +1,73 @@
+IMPL-DELAYED_OUTPUT:
+  name: Delayed Output Management
+  status: Active
+  description: Implement delayed output functionality by returning output messages to calling functions instead of direct stdout/stderr printing, enabling better control over when and how output is displayed
+  rationale:
+    why: Direct stdout/stderr printing limits control over output timing and destination
+    problems_solved:
+      - Lack of control over when output is displayed
+      - Inability to buffer and reorder output
+      - Difficulty testing output generation separately from display
+    benefits:
+      - Better control over when and how output is displayed
+      - Output messages can be buffered and flushed selectively
+      - Full backward compatibility maintained - existing code works unchanged
+  implementation_approach:
+    summary: Add OutputCollector with OutputMessage structs and enhance OutputFormatter with optional delayed mode
+    details:
+      - Added OutputMessage struct with Content, Destination, and Type fields
+      - 'Added OutputCollector with methods: AddStdout, AddStderr, FlushAll, FlushStdout, FlushStderr, Clear'
+      - Enhanced OutputFormatter with optional collector field and delayed mode support
+      - Added NewOutputFormatterWithCollector constructor for delayed output mode
+      - Updated all Print methods to check for collector and route messages accordingly
+      - Maintained full backward compatibility - existing code works unchanged
+  cross_references:
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
+  code_locations:
+    files:
+      - formatter.go
+    functions:
+      - OutputCollector
+      - OutputMessage
+      - NewOutputFormatterWithCollector
+      - AddStdout
+      - AddStderr
+      - FlushAll
+      - FlushStdout
+      - FlushStderr
+      - Clear
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - 'OUT-001: Delayed output'
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-DUAL_FORMATTING
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Add OutputCollector with OutputMessage structs and enhance OutputFormatter with optional delayed mode
+
+    procedure delayed_output_management():
+      # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Added OutputMessage struct with Content, Destination, and Type fields
+      added_outputmessage_struct_with()
+      # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Added OutputCollector with methods: AddStdout, AddStderr, FlushAll, FlushStdout, FlushStderr, Clear
+      added_outputcollector_with_methods("AddStdout, AddStderr, FlushAll, FlushStdout, FlushStderr, Cl")
+      # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Enhanced OutputFormatter with optional collector field and delayed mode support
+      enhanced_outputformatter_with_optional()
+      # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Added NewOutputFormatterWithCollector constructor for delayed output mode
+      added_newoutputformatterwithcollector_constructor_()
+      # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Updated all Print methods to check for collector and route messages accordingly
+      updated_all_print_methods()
+      # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Maintained full backward compatibility - existing code works unchanged
+      maintained_full_backward_compatibility()
+      end

@@ -9,7 +9,7 @@
 
 ### ✅ **All Critical Requirements Met**
 
-1. **[ACTION:validation] Immutable Requirements Check**: ✅ **PASSED**
+1. **[ACTION-validation] Immutable Requirements Check**: ✅ **PASSED**
    - No conflicts with archive naming conventions
    - All atomic operations preserved
    - Git integration patterns maintained
@@ -21,7 +21,7 @@
    - **FIXED**: Updated timeline section to show completion status
    - Now compliant with DOC-008 dual-location requirement
 
-3. **[ACTION:discovery] AI Assistant Compliance**: ✅ **VALIDATED**
+3. **[ACTION-discovery] AI Assistant Compliance**: ✅ **VALIDATED**
    - All implementation tokens follow DOC-007 standardized format
    - 99% token standardization rate achieved
    - Cross-references properly maintained

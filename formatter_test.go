@@ -1,7 +1,7 @@
 // This file is part of bkpdir
-// [REQ:OUTPUT_FORMATTING] Validates output formatting features via tests
-// [ARCH:OUTPUT_FORMATTING] Exercise output formatting architecture decisions
-// [IMPL:DUAL_FORMATTING] Targets printf/template formatter implementation
+// [REQ-OUTPUT_FORMATTING] Validates output formatting features via tests
+// [ARCH-OUTPUT_FORMATTING] Exercise output formatting architecture decisions
+// [IMPL-DUAL_FORMATTING] Targets printf/template formatter implementation
 
 package main
 
@@ -51,7 +51,7 @@ func TestTemplateFormatter(t *testing.T) {
 		}
 	})
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test that list output displays size correctly with #{size_human} placeholder
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Test that list output displays size correctly with #{size_human} placeholder
 	t.Run("ListOutputWithSizeHuman", func(t *testing.T) {
 		// Create a temporary file to get real file stats
 		tmpDir := t.TempDir()
@@ -108,7 +108,7 @@ func TestTemplateFormatter(t *testing.T) {
 		t.Logf("Result: %q", result)
 	})
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Comprehensive test for mixed placeholder format strings
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Comprehensive test for mixed placeholder format strings
 	// This test validates that FormatListArchive correctly processes format strings with both
 	// printf-style (%s) and template-style (#{size_human}) placeholders
 	t.Run("FormatListArchive_MixedPlaceholders", func(t *testing.T) {

@@ -1,0 +1,143 @@
+IMPL-TOKEN_COVERAGE_AUDIT:
+  name: Semantic Token Coverage Audit
+  status: Active
+  cross_references:
+    - ARCH-TOKEN_SYSTEM
+    - ARCH-ARCHIVE_FORMAT
+    - ARCH-PROCESSING_PATTERNS
+    - ARCH-CONTEXT_SUPPORT
+    - ARCH-RESOURCE_MANAGEMENT
+    - ARCH-ERROR_HANDLING
+    - ARCH-EXCLUSION_PATTERNS
+    - ARCH-PACKAGE_EXTRACTION
+    - ARCH-DIRECTORY_COMPARISON
+    - ARCH-DIFF_COMMAND
+    - ARCH-OUTPUT_FORMATTING
+    - ARCH-GIT_INTEGRATION
+    - REQ-DOC_016
+    - REQ-FILE_BACKUP
+    - REQ-LIST_LIMIT
+    - REQ-ERROR_HANDLING
+    - REQ-CONFIGURATION
+    - REQ-DIFF_COMMAND
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-GIT_INTEGRATION
+  rationale:
+    why: |-
+      Demonstrates that the AI-first toolchain can rely on tokens to trace code/tests back to intent.
+      Highlights gaps (e.g., `formatter.go`/`formatter_test.go`) and fixes them before broader refactors.
+      Provides a repeatable checklist for future module audits.
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Archive module (`archive.go`, `archive_test.go`)**: Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-DIFF_COMMAND
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-GIT_INTEGRATION
+    requirements:
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-LIST_LIMIT
+      - REQ-ERROR_HANDLING
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-GIT_INTEGRATION
+    tests: []
+    code_annotations:
+      - IMPL-TOKEN_COVERAGE_AUDIT
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-DIFF_COMMAND
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-GIT_INTEGRATION
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-LIST_LIMIT
+      - REQ-ERROR_HANDLING
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-GIT_INTEGRATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-DIFF_COMMAND
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-GIT_INTEGRATION
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-LIST_LIMIT
+      - REQ-ERROR_HANDLING
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-GIT_INTEGRATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`archive.go`, `backup.go`, `errors.go`, `comparison.go`, `exclude.go`, `formatter.go`, `git.go` and their `_test.go` files that now consistently mention the appropriate tokens.'
+  archive_module_(`archive_go`,_`archive_test_go`): Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).
+  backup_module_(`backup_go`,_`backup_test_go`): Annotated `[REQ-FILE_BACKUP]`, `[ARCH-RESOURCE_MANAGEMENT]`, `[IMPL-ATOMIC_OPS]`, additional `[REQ-LIST_LIMIT]` tokens for list helpers so the requirement coverage remains visible.
+  comparison_module_(`comparison_go`,_`comparison_test_go`): Snapshot utilities reference `[ARCH-DIRECTORY_COMPARISON]`, `[ARCH-DIFF_COMMAND]`, `[IMPL-DIRECTORY_COMPARISON]`, `[IMPL-DIFF_COMMAND]`, `[REQ-DIFF_COMMAND]` for diffing features.
+  documentation:
+    - Capture this audit in `stdd/semantic-tokens.md` by registering `[IMPL-TOKEN_COVERAGE_AUDIT]` with the contexts above.
+    - Point future audits to this decision to reuse the pattern and ensure coverage plans explicitly mention `REQ:DOC_016` and `ARCH:TOKEN_SYSTEM`.
+  errors_module_(`errors_go`,_`errors_test_go`): Structured errors are marked with `[REQ-ERROR_HANDLING]`, `[ARCH-ERROR_HANDLING]`, `[IMPL-STRUCTURED_ERRORS]`; tests mirror these tags.
+  exclusion_module_(`exclude_go`,_`exclude_test_go`): Pattern helpers keep `[REQ-CONFIGURATION]`, `[ARCH-EXCLUSION_PATTERNS]`, `[ARCH-PACKAGE_EXTRACTION]`, `[IMPL-EXCLUSION_PATTERNS]` references across adapters and wrappers.
+  formatter_module_(`formatter_go`,_`formatter_test_go`): Added `[REQ-OUTPUT_FORMATTING]`, `[ARCH-OUTPUT_FORMATTING]`, `[IMPL-DUAL_FORMATTING]` anchors so the formatting requirement is traceable from both implementation and tests; helper functions continue to reference `[REQ-CUSTOMIZABLE_FORMAT_STRINGS]`, `[IMPL-DIFF_COMMAND]`, and `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` for contextual behavior.
+  git_module_(`git_go`,_`git_test_go`): Maintains `[REQ-GIT_INTEGRATION]`, `[ARCH-GIT_INTEGRATION]`, `[IMPL-GIT_CLI]`, and tests now restate them for repository detection and naming flows.
+  essence_pseudocode: |-
+    # [IMPL-TOKEN_COVERAGE_AUDIT] [ARCH-TOKEN_SYSTEM] [ARCH-ARCHIVE_FORMAT] [ARCH-PROCESSING_PATTERNS] [ARCH-CONTEXT_SUPPORT] [ARCH-RESOURCE_MANAGEMENT] [ARCH-ERROR_HANDLING] [ARCH-EXCLUSION_PATTERNS] [ARCH-PACKAGE_EXTRACTION] [ARCH-DIRECTORY_COMPARISON] [ARCH-DIFF_COMMAND] [ARCH-OUTPUT_FORMATTING] [ARCH-GIT_INTEGRATION] [REQ-DOC_016] [REQ-FILE_BACKUP] [REQ-LIST_LIMIT] [REQ-ERROR_HANDLING] [REQ-CONFIGURATION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-GIT_INTEGRATION] — - **Archive module (`archive.go`, `archive_test.go`)**: Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).
+
+    procedure semantic_token_coverage_audit():
+      # [IMPL-TOKEN_COVERAGE_AUDIT] [ARCH-TOKEN_SYSTEM] [ARCH-ARCHIVE_FORMAT] [ARCH-PROCESSING_PATTERNS] [ARCH-CONTEXT_SUPPORT] [ARCH-RESOURCE_MANAGEMENT] [ARCH-ERROR_HANDLING] [ARCH-EXCLUSION_PATTERNS] [ARCH-PACKAGE_EXTRACTION] [ARCH-DIRECTORY_COMPARISON] [ARCH-DIFF_COMMAND] [ARCH-OUTPUT_FORMATTING] [ARCH-GIT_INTEGRATION] [REQ-DOC_016] [REQ-FILE_BACKUP] [REQ-LIST_LIMIT] [REQ-ERROR_HANDLING] [REQ-CONFIGURATION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-GIT_INTEGRATION] Demonstrates that the AI-first toolchain can rely on tokens to trace code/tests back to intent.
+      execute()
+      end

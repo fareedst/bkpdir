@@ -1,6 +1,6 @@
-// [REQ:DIFF_COMMAND] Diff Command testing
-// [ARCH:DIFF_COMMAND] Diff command architecture validation
-// [IMPL:DIFF_COMMAND] ReconstructArchiveState and CalculateDiff validation
+// [REQ-DIFF_COMMAND] Diff Command testing
+// [ARCH-DIFF_COMMAND] Diff command architecture validation
+// [IMPL-DIFF_COMMAND] ReconstructArchiveState and CalculateDiff validation
 package main
 
 import (
@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestReconstructArchiveStateFullOnly tests reconstruction with full archive only
 func TestReconstructArchiveStateFullOnly_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -76,7 +76,7 @@ func TestReconstructArchiveStateFullOnly_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestReconstructArchiveStateMultipleFullAndIncremental tests that reconstruction correctly
 // finds the most recent full archive and its most recent incremental archive, even when
 // multiple full archives and incrementals exist
@@ -240,7 +240,7 @@ func TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND(t *t
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestReconstructArchiveStateFullAndIncremental tests reconstruction with full + incremental archive
 func TestReconstructArchiveStateFullAndIncremental_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -338,7 +338,7 @@ func TestReconstructArchiveStateFullAndIncremental_REQ_DIFF_COMMAND(t *testing.T
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestCalculateDiffAddedFiles tests diff calculation with added files
 func TestCalculateDiffAddedFiles_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -418,7 +418,7 @@ func TestCalculateDiffAddedFiles_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestCalculateDiffModifiedFiles tests diff calculation with modified files
 func TestCalculateDiffModifiedFiles_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -492,7 +492,7 @@ func TestCalculateDiffModifiedFiles_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestCalculateDiffDeletedFiles tests diff calculation with deleted files
 func TestCalculateDiffDeletedFiles_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -568,7 +568,7 @@ func TestCalculateDiffDeletedFiles_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestCalculateDiffNoChanges tests diff calculation with no changes
 func TestCalculateDiffNoChanges_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -637,7 +637,7 @@ func TestCalculateDiffNoChanges_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestFormatDiffResult tests diff result formatting
 func TestFormatDiffResult_REQ_DIFF_COMMAND(t *testing.T) {
 	cfg := DefaultConfig()
@@ -677,7 +677,7 @@ func TestFormatDiffResult_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestPrintDiffResult tests diff result printing
 func TestPrintDiffResult_REQ_DIFF_COMMAND(t *testing.T) {
 	cfg := DefaultConfig()
@@ -734,7 +734,7 @@ func createTestArchive(archivePath string, sourceDir string, files map[string]st
 	return nil
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestDiffCommandNoArchives tests diff command when no archives exist
 func TestDiffCommandNoArchives_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -753,7 +753,7 @@ func TestDiffCommandNoArchives_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestDiffCommandIntegration tests the full diff command integration
 func TestDiffCommandIntegration_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()

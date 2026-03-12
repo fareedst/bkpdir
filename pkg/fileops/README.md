@@ -1,6 +1,6 @@
 # File Operations Package (fileops)
 
-**Tokens:** [REQ:FILE_BACKUP] [ARCH:FILE_OPERATIONS] [IMPL:FILE_OPERATIONS]
+**Tokens:** [REQ-FILE_BACKUP] [ARCH-FILE_OPERATIONS] [IMPL-FILE_OPERATIONS]
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/fileops.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/fileops)
 

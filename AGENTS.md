@@ -1,198 +1,150 @@
-# Cursor AI Agent Rules for STDD Projects
+# AI Agent Operating Guide
 
-**STDD Methodology Version**: 1.0.0
+**Scope**: Entire repository (root unless overridden by nested `AGENTS.md` files)
 
-## 🎯 Semantic Token-Driven Development (STDD)
+**TIED Methodology Version**: 2.2.0
 
-This project follows **Semantic Token-Driven Development (STDD)**, where semantic tokens (`[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`) are the central mechanism for preserving intent throughout the development lifecycle. Semantic tokens create a traceable chain of intent from requirements → architecture → implementation → tests → code, ensuring the original purpose and reasoning are never lost.
+This document centralizes every instruction AI coding assistants must follow while working in TIED repositories. It supersedes reminders in `.ai-agent-instructions`, `.cursorrules`, and README snippets. Treat it as the canonical reference when configuring prompts, IDE rules, or agent workflows. For methodology background (what TIED is, costs and benefits, LEAP rationale), see the human-facing docs in the TIED repo (e.g. TIED.md, docs/LEAP.md).
 
-## ⚠️ MANDATORY: AI Principles Acknowledgment
+---
 
-**YOU MUST** acknowledge that you have read and will follow the AI principles at the start of EVERY response by prefacing with:
+## 1. Mandatory Acknowledgment & Session Bootstrap
 
-**"Observing AI principles!"**
+1. Preface **every** assistant response with:
+   > `Observing AI principles!`
+2. At session start (or when instructions may have changed), immediately:
+   - Read `ai-principles.md` completely
+   - Review `semantic-tokens.yaml` (token registry YAML index) and `semantic-tokens.md` (token guide)
+   - Review `architecture-decisions.yaml` and `implementation-decisions.yaml` (YAML indexes)
+   - Review `implementation-decisions.md` (implementation guide) for IMPL pseudo-code and block token rules ([PROC-IMPL_PSEUDOCODE_TOKENS])
+   - Understand priority order: Tests > Code > Basic Functions > Infrastructure
+   - Note: same filename everywhere—at repo root these files are templates; in `tied/` they are the project indexes.
+3. Confirm access to the documents above before continuing.
 
-Then proceed to:
-1. Read `stdd/ai-principles.md` if not already read in this session
-2. Check `stdd/semantic-tokens.md` for existing tokens
-3. Review `stdd/tasks.md` for active tasks
-4. Follow all principles throughout your response
+---
 
-## 🎯 Core Principles
+## 2. Core TIED Obligations
 
-1. **Always Reference ai-principles.md**
-   - Read `stdd/ai-principles.md` at the start of each session
-   - Acknowledge with "Observing AI principles!" at the start of every response
-   - Follow the documented development process
-   - Use semantic tokens consistently
+- **Semantic Token Discipline**
+  - Use `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and other TIED tokens everywhere (requirements, docs, code, tests).
+  - Maintain traceability: Requirements → Architecture → Implementation → Tests → Code.
+  - Update `semantic-tokens.yaml` immediately when introducing new tokens.
+- **IMPL pseudo-code token comments (most critical)** `[PROC-IMPL_PSEUDOCODE_TOKENS]`
+  - IMPL `essence_pseudocode` is the **most critical artifact** for implementation traceability. Without token comments in pseudo-code, traceability from REQ→ARCH→IMPL breaks at the pseudo-code layer and tests/code cannot be reliably aligned to requirements.
+  - **Every block** in `essence_pseudocode` must have a comment that (1) names all REQ, ARCH, and IMPL reflected in that block and (2) states how that block implements those requirements. Top-level: one comment naming IMPL, ARCH, and REQ plus a one-line summary; sub-blocks with the same set → comment only the "how"; sub-blocks with a different set → comment listing that set and how the sub-block implements it.
+- **Documentation-First Flow**
+  - Expand requirements into pseudo-code and decisions before any code changes.
+  - Address all implementation issues (logical and flow) in IMPL pseudo-code before tests or code; IMPL `essence_pseudocode` is the **source of consistent logic** for implementation.
+  - Record architecture decisions (`architecture-decisions.md`) with `[ARCH-*]` tokens cross-referencing requirements.
+  - Record implementation decisions (`implementation-decisions.md`) with `[IMPL-*]` tokens cross-referencing `[ARCH-*]` and `[REQ-*]` tokens.
+  - Never defer documentation; update as you think, design, and implement.
+- **LEAP: Logic Elevation And Propagation** (see `tied/processes.md` § LEAP / [PROC-LEAP])
+  - When code or tests written during TDD/E2E differ from IMPL, update the stack in **reverse order**: **IMPL → ARCH → REQ** in the same work item so tokens stay consistent and testable.
+  - Work may start at any layer (REQ, ARCH, IMPL, or code/tests); for work to be **complete**, apply changes **up and down** the stack as needed. Code is valid only when **all tests pass** and **all requirements are met**.
+- **Implementation order** (see `tied/processes.md` § PROC-TIED_DEV_CYCLE): (1) **Unit tests first** — tests conform to IMPL pseudo-code, written before production code (strict TDD). (2) **Unit code via TDD** — code is written to satisfy the tests; entire IMPL pseudo-code is implemented via TDD. (3) **Composition tests first** — for every binding between units (event listeners, IPC, entry-point wiring), write failing component/integration/contract tests before composition code; each test verifies the connection without invoking the UI. (4) **Composition code via TDD** — binding/wiring/entry-point code written to satisfy composition tests; no composition code without a failing test. (5) **E2E** — only for behavior that requires UI invocation; each E2E test must justify why it cannot be tested at composition level. (6) **Closing the loop** — update TIED data; run `tied_validate_consistency` (or equivalent).
+- **Module Validation Mandate `[REQ-MODULE_VALIDATION]`**
+  - Identify logical modules and their boundaries before implementation.
+  - Develop and validate each module independently (unit tests with mocks, contract tests, edge cases, error handling) before integration.
+  - Only integrate modules after validation passes. Document validation results.
+- **Priority Order**
+  - Always prioritize: Tests, Code, Basic Functions ➜ Developer experience ➜ Infrastructure ➜ Security.
+- **TIED data access (MCP-first)**
+  - Use the **TIED MCP server** (tools and resources) as the **primary** way to read and write TIED data. TIED is the db that controls/directs the build; significant code is created in TIED first, then implemented with TDD. **Direct file access** to TIED content (under `tied/` or `TIED_BASE_PATH`) is permitted **only when** no MCP tool supports the operation; document such cases so they can be considered for new MCP tooling.
+  - **When using MCP:** Prefer tools for index read/list/filter, detail read/write, traceability (`get_decisions_for_requirement`, `get_requirements_for_decision`), validation (`yaml_index_validate`, `tied_validate_consistency`), and token creation (`tied_token_create_with_detail`). Prefer resources (e.g. `tied://requirements`, `tied://requirement/{token}/detail`) for loading context. Before changing TIED content, read via MCP; after changing, use the appropriate write/update tool. Validate all changed TIED YAML with `yq -i -P` (or equivalent) per [PROC-YAML_EDIT_LOOP]; YAML that does not validate is invalid for use. Run **`tied_validate_consistency`** before marking work complete.
+- **Client inheritance of LEAP R+A+I**
+  - **All TIED projects inherit the LEAP R+A+I** via `copy_files.sh`: the client's `tied/` contains the methodology-enforcing REQ/ARCH/IMPL and PROC tokens (e.g. REQ-TIED_SETUP, REQ-MODULE_VALIDATION, ARCH-TIED_STRUCTURE, ARCH-MODULE_VALIDATION, IMPL-TIED_FILES, IMPL-MODULE_VALIDATION, [PROC-LEAP], and related process tokens) and their detail files so that TIED and LEAP behaviors exist in every project. These tokens are **mandatory for TIED success** and must not be removed.
+  - For structure and sample records, agents refer to **`templates/`** in the TIED repository—the same content that `copy_files.sh` copies to the client's `tied/`. The client's `tied/` has that inherited set plus any project-specific entries added by the project.
 
-2. **Semantic Token System** (Core to STDD)
-   - Semantic tokens are the mechanism that preserves intent throughout the development lifecycle
-   - Use semantic tokens for all cross-referencing
-   - Format: `[TYPE:IDENTIFIER]` (e.g., `[REQ:MONITOR]`, `[IMPL:ASYNC_EXECUTION]`)
-   - Reference tokens in code comments, test names, and documentation
-   - Update `stdd/semantic-tokens.md` when creating new tokens
-   - Maintain traceability: Requirements → Architecture → Implementation → Tests → Code
+---
 
-3. **Development Process**
-   - **Phase 1**: Expand requirements into pseudo-code and decisions (NO code changes)
-   - **Phase 2**: Break down into trackable tasks with priorities
-   - **Phase 3**: Implement tasks, starting with highest priority
-   - Always cross-reference using semantic tokens
+## 3. Operational Checklists
 
-4. **Task Management**
-   - Break work into trackable tasks in `stdd/tasks.md`
-   - Assign priorities: P0 (Critical) > P1 (Important) > P2 (Nice-to-have) > P3 (Future)
-   - Remove subtasks when parent task completes
-   - Always include semantic token references
+### 3.1 Start-of-Response Checklist (repeat every turn)
+- `"Observing AI principles!"` acknowledgment
+- Confirm `ai-principles.md` has been read this session
+- Reference current semantic tokens, architecture, and implementation decisions
 
-5. **Priority Order**
-   - **Most Important**: Tests, Code, Basic Functions
-   - **Least Important**: Environment Orchestration, Enhanced Security, Automated Deployment
+### 3.2 Before Starting Work
+- [ ] Verify all documents in Section 1 have been reviewed
+- [ ] Understand current priorities and dependencies
+- [ ] Review existing semantic tokens, architecture decisions, and implementation decisions related to the work
+- [ ] **IMPL `essence_pseudocode`**: Every block has a comment naming REQ/ARCH/IMPL and how the block implements them ([PROC-IMPL_PSEUDOCODE_TOKENS])
 
-## 📝 Documentation Requirements
+### 3.3 During Work
+- [ ] Use semantic tokens in code comments and test names
+- [ ] **IMPL `essence_pseudocode`**: Every block has a comment naming REQ/ARCH/IMPL and how the block implements them; add/update when authoring or editing IMPL pseudo-code
+- [ ] Keep documentation synced as decisions change
+- [ ] Maintain module boundaries and validate independently before integration
+- [ ] **Run language-specific lint after each code-generation iteration**: **Rust** → `bun run lint:rust` [PROC-RUST_LINT]; **TypeScript** → `bunx tsc -b` or `bun run lint:ts` [PROC-TS_CHECK]; **Swift** → `swift build && swift test` [PROC-SWIFT_BUILD]; **YAML** → `yq -i -P <changed files>` [PROC-YAML_EDIT_LOOP] (when TIED YAML is created or updated). Fix before proceeding. Code and YAML that do not pass lint are incomplete ([PROC-TIED_DEV_CYCLE] inner loop).
+- [ ] Keep descriptive debug output (e.g., `DEBUG:`, `TRACE:`, `DIAGNOSTIC:`) to document decision points and execution flow; retain unless explicitly asked to remove
+- [ ] Record new `[ARCH-*]` and `[IMPL-*]` entries immediately with cross-references
+- [ ] **Validate all changed TIED YAML** with `yq -i -P <file>` (or equivalent) per [PROC-YAML_EDIT_LOOP]; YAML that does not validate is invalid for use
 
-### ⚠️ CRITICAL: Documentation is MANDATORY, Not Optional
+### 3.4 After Completing Work
+- [ ] `semantic-tokens.yaml` reflects every token referenced in code/tests/docs
+- [ ] Architecture and implementation decision logs are current and cross-referenced
+- [ ] If code or tests diverged from IMPL: IMPL (and ARCH/REQ if scope changed) updated in reverse order so the stack is consistent
+- [ ] Tests reference their corresponding semantic tokens
+- [ ] Module validation status is documented
+- [ ] All documentation matches the implemented state (no drift)
+- [ ] Verify all code and tests are consistently linked to requirements and decisions; update code and documentation where necessary
+- [ ] **Validate all changed TIED YAML** with `yq -i -P <file>` (or equivalent) per [PROC-YAML_EDIT_LOOP]; YAML that does not validate is invalid for use
+- [ ] Run **`tied_validate_consistency`** (TIED MCP tool) and fix any reported issues so REQ→ARCH→IMPL indexes, detail files, and token references remain consistent; align with `[PROC-TOKEN_VALIDATION]` and any project `validate_tokens.sh`.
+- [ ] Do not create a stand-alone summary document for the session (e.g. no SESSION_SUMMARY.md or similar)
 
-**Documentation updates are REQUIRED at every stage of development. They are not optional or deferrable.**
+---
 
-### Required Sections in All Documentation
+## 4. Debug & Logging Expectations
 
-1. **Requirements** - with `[REQ:*]` tokens (in `stdd/requirements.md`)
-2. **Architecture Decisions** - with `[ARCH:*]` tokens (in `stdd/architecture-decisions.md`)
-   - **MUST** be recorded in `stdd/architecture-decisions.md` IMMEDIATELY when made
-   - **MUST** cross-reference `[REQ:*]` tokens
-   - Architecture decisions are dependent on requirements
-   - **DO NOT** defer architecture documentation - record it as you make decisions
-3. **Implementation Decisions** - with `[IMPL:*]` tokens (in `stdd/implementation-decisions.md`)
-   - **MUST** be recorded in `stdd/implementation-decisions.md` IMMEDIATELY when made
-   - **MUST** cross-reference both `[ARCH:*]` and `[REQ:*]` tokens
-   - Implementation decisions are dependent on both architecture and requirements
-   - **DO NOT** defer implementation documentation - record it as you make decisions
-4. **Semantic Token Registry** - maintained in `stdd/semantic-tokens.md`
-   - **MUST** be updated immediately when creating new tokens
-5. **Task Planning** - maintained in `stdd/tasks.md`
-   - **MUST** be updated when planning new work
-   - **MUST** be updated when completing tasks
-   - **MUST** include semantic token references
-6. **Code References** - semantic tokens in code comments
-7. **Test References** - semantic tokens in test names/comments
+- Provide rich debug output during implementation to trace execution flow, state transitions, and decision points.
+- Prefix diagnostic logs with clear labels (`DEBUG:`, `TRACE:`, `DIAGNOSTIC:`) to aid future analysis.
+- Preserve debug statements unless stakeholders explicitly request removal; they serve as inline documentation of architecture/implementation rationale.
 
-### Documentation Update Checklist (MANDATORY)
+---
 
-**When making ANY architectural decision:**
-- [ ] Record in `stdd/architecture-decisions.md` with `[ARCH:*]` token
-- [ ] Cross-reference relevant `[REQ:*]` tokens
-- [ ] Update `stdd/semantic-tokens.md` if new token created
+## 5. Key Files & Responsibilities
 
-**When making ANY implementation decision:**
-- [ ] Record in `stdd/implementation-decisions.md` with `[IMPL:*]` token
-- [ ] Cross-reference relevant `[ARCH:*]` and `[REQ:*]` tokens
-- [ ] Update `stdd/semantic-tokens.md` if new token created
+Same filename at repo root (template) and in `tied/` (project index); location distinguishes use. Index YAMLs and detail files copied to the client come from **`templates/`** (core methodology / inherited LEAP R+A+I). Agents refer to `templates/` in the TIED repo for the canonical structure and sample records.
 
-**When planning new work:**
-- [ ] Create tasks in `stdd/tasks.md` BEFORE starting implementation
-- [ ] Assign priorities to all tasks
-- [ ] Include semantic token references in task descriptions
-- [ ] Break down into subtasks if needed
+| File | Purpose |
+| --- | --- |
+| `ai-principles.md` | Master principles and process guide (read fully every session) |
+| `semantic-tokens.yaml` | YAML index/database of all semantic tokens (canonical registry) |
+| `semantic-tokens.md` | Semantic tokens guide with format, naming conventions, and usage examples |
+| `requirements.md` | Requirements guide with documentation (copy from root into project's tied/) |
+| `requirements.yaml` | Requirements YAML index/database with all requirement records |
+| `requirements/` | Individual requirement detail files (YAML, e.g., `REQ-TIED_SETUP.yaml`); schema: `detail-files-schema.md` |
+| `architecture-decisions.md` | Architecture decisions guide with documentation (copy from template per project) |
+| `architecture-decisions.yaml` | Architecture decisions YAML index/database with `[ARCH-*]` records tied to requirements |
+| `architecture-decisions/` | Individual architecture decision detail files (YAML, e.g., `ARCH-TIED_STRUCTURE.yaml`) |
+| `implementation-decisions.md` | Implementation decisions guide with documentation (copy from template per project) |
+| `implementation-decisions.yaml` | Implementation decisions YAML index/database with `[IMPL-*]` records tied to requirements + architecture |
+| `implementation-decisions/` | Individual implementation decision detail files (YAML, e.g., `IMPL-MODULE_VALIDATION.yaml`) |
+| `detail-files-schema.md` | Schema for REQ/ARCH/IMPL detail YAML files (in TIED repo or tied/) |
+| `processes.md` | Process tracking including `[PROC-YAML_DB_OPERATIONS]`, LEAP, PROC-TIED_DEV_CYCLE; use TIED MCP as primary interface to TIED data (see §2 TIED data access). |
+| `.cursorrules` | IDE loader that points back to this document |
+| `.ai-agent-instructions` | Quick reminder pointing to this document |
 
-**When completing work:**
-- [ ] Mark tasks complete in `stdd/tasks.md`
-- [ ] Remove completed subtasks
-- [ ] Verify all documentation is up-to-date
-- [ ] Ensure all semantic tokens are documented
+---
 
-### Cross-Reference Format
+## 6. Presenting These Instructions to Agents
 
-When referencing tokens:
-```go
-// [REQ:DUPLICATE_PREVENTION] Skip if text matches lastText
-// [IMPL:DUPLICATE_PREVENTION] [REQ:DUPLICATE_PREVENTION]
-```
+You can apply these rules in several ways:
 
-Test names:
-```go
-func TestDuplicatePrevention_REQ_DUPLICATE_PREVENTION(t *testing.T)
-```
+1. **System Prompt Snippet**
+   ```
+   MANDATORY: Preface every response with "Observing AI principles!"
+   Then follow the AGENTS.md checklists (read ai-principles.md, review semantic tokens, architecture, implementation decisions, maintain semantic traceability, module validation, documentation, and priority order).
+   ```
+2. **IDE Integration (`.cursorrules`)** – keep a lightweight loader that links directly to `AGENTS.md` so Cursor automatically enforces the rules.
+3. **README / Onboarding** – reference `AGENTS.md` in project READMEs or onboarding docs to remind contributors where the canonical rules live.
 
-## 🔄 Before Starting Work
+---
 
-1. **MANDATORY**: Read `stdd/ai-principles.md`
-2. **MANDATORY**: Check `stdd/semantic-tokens.md` for existing tokens
-3. **MANDATORY**: Review `stdd/tasks.md` for active tasks
-4. **MANDATORY**: Review `stdd/architecture-decisions.md` for existing architecture decisions
-5. **MANDATORY**: Review `stdd/implementation-decisions.md` for existing implementation decisions
-6. Understand priority levels
-7. **MANDATORY**: Plan work in `stdd/tasks.md` BEFORE writing any code
+## 7. Maintenance
 
-## ⚙️ During Work
+- Update `AGENTS.md` whenever AI-facing processes change.
+- Mirror changes into `ai-principles.md` and related docs as needed.
+- Nested directories may introduce their own `AGENTS.md` to extend or override these rules within their subtree; the most specific file wins.
 
-1. Use semantic tokens in all code comments
-2. Use semantic tokens in test names/comments
-3. Cross-reference: Requirements → Architecture → Implementation → Tests
-4. **MANDATORY**: Break work into trackable tasks in `stdd/tasks.md` BEFORE starting implementation
-5. **MANDATORY**: Assign appropriate priorities to all tasks
-6. **MANDATORY**: Update documentation AS YOU WORK:
-   - Record architecture decisions in `stdd/architecture-decisions.md` immediately when made
-   - Record implementation decisions in `stdd/implementation-decisions.md` immediately when made
-   - Update `stdd/tasks.md` when planning new work or completing tasks
-   - Update `stdd/semantic-tokens.md` when creating new tokens
-   - **DO NOT** defer documentation updates until the end
-
-## ✅ After Completing Work
-
-1. **MANDATORY**: All semantic tokens documented in `stdd/semantic-tokens.md`
-2. **MANDATORY**: Documentation updated with implementation status:
-   - `stdd/architecture-decisions.md` updated with any new `[ARCH:*]` decisions
-   - `stdd/implementation-decisions.md` updated with any new `[IMPL:*]` decisions
-   - Both must cross-reference `[REQ:*]` tokens
-3. **MANDATORY**: Tests reference semantic tokens
-4. **MANDATORY**: Tasks marked complete in `stdd/tasks.md`
-5. **MANDATORY**: Subtasks removed from completed tasks
-6. **MANDATORY**: All documentation reflects current state (no stale information)
-
-## 🚫 What NOT to Do
-
-- Don't write code before expanding requirements into pseudo-code
-- Don't skip semantic token cross-referencing
-- Don't create tasks without priorities
-- Don't leave subtasks after parent task completes
-- Don't implement P2/P3 features before P0/P1 are complete
-
-## 📚 Key Files
-
-**Note**: These file names refer to your project's files. Copy the corresponding `.template.md` files from the STDD repository to your project.
-
-- `stdd/ai-principles.md` - Complete principles and process guide (reference from STDD repository)
-- `stdd/requirements.md` - Requirements with `[REQ:*]` tokens (copy from `requirements.template.md`)
-- `stdd/architecture-decisions.md` - **Semantic-token-linked record of architecture decisions dependent on requirements** (copy from `architecture-decisions.template.md`)
-  - All `[ARCH:*]` tokens must be documented here
-  - Must cross-reference `[REQ:*]` tokens
-- `stdd/implementation-decisions.md` - **Semantic-token-linked record of implementation decisions dependent on architecture and requirements** (copy from `implementation-decisions.template.md`)
-  - All `[IMPL:*]` tokens must be documented here
-  - Must cross-reference both `[ARCH:*]` and `[REQ:*]` tokens
-- `stdd/semantic-tokens.md` - Central registry of all tokens (copy from `semantic-tokens.template.md`)
-- `stdd/tasks.md` - Active task tracking (copy from `tasks.template.md`)
-
-## 🎯 Example Workflow
-
-1. **User Request**: "Add disk space checking"
-2. **AI Response (Planning Phase - NO CODE YET)**: 
-   - Creates `[REQ:DISK_SPACE_CHECK]` token in `stdd/requirements.md`
-   - Expands into pseudo-code and decisions
-   - **IMMEDIATELY** documents architecture decisions in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens cross-referencing `[REQ:DISK_SPACE_CHECK]`
-   - **IMMEDIATELY** documents implementation decisions in `stdd/implementation-decisions.md` with `[IMPL:*]` tokens cross-referencing both `[ARCH:*]` and `[REQ:*]` tokens
-   - **IMMEDIATELY** updates `stdd/semantic-tokens.md` with all new tokens
-   - **IMMEDIATELY** creates tasks in `stdd/tasks.md` with P1 priority and semantic token references
-   - **NO code changes yet**
-3. **User Approval**: User reviews and approves planning documents
-4. **Implementation Phase**: 
-   - AI implements tasks, starting with highest priority
-   - **DURING implementation**: Updates documentation as decisions are made or refined
-   - **DURING implementation**: Updates `stdd/tasks.md` as subtasks are completed
-5. **Completion Phase**: 
-   - **MANDATORY**: Verifies all documentation is up-to-date
-   - **MANDATORY**: Marks tasks complete in `stdd/tasks.md`
-   - **MANDATORY**: Removes completed subtasks
-   - **MANDATORY**: Ensures all semantic tokens are documented
-
+**Last Updated**: 2026-03-05

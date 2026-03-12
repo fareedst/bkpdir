@@ -3,14 +3,14 @@
 ## 🎯 Overview
 BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories and backups of individual files. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives and file backups, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
 
-> **[ACTION:validation] Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
+> **[ACTION-validation] Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
 
 ## 🤖 AI Assistant Navigation Guide
 
 ### 🚨 CRITICAL PRIORITY [AI Must Read First]
-- **[ACTION:validation] [Immutable Specifications](immutable.md)** - Core behaviors that cannot change
+- **[ACTION-validation] [Immutable Specifications](immutable.md)** - Core behaviors that cannot change
 - **📋 [Feature Tracking](feature-tracking.md)** - Master feature registry with tokens
-- **[ACTION:discovery] [AI Assistant Compliance](ai-assistant-compliance.md)** - Mandatory token requirements
+- **[ACTION-discovery] [AI Assistant Compliance](ai-assistant-compliance.md)** - Mandatory token requirements
 
 ### 🎯 HIGH PRIORITY [AI Core References]
 - **🏗️ [Architecture](architecture.md)** - System design and technical implementation
@@ -64,7 +64,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - Context support for operation cancellation and timeouts
 - Comprehensive error logging without exposing sensitive information
 
-### [ACTION:validation] Resource Management
+### [ACTION-validation] Resource Management
 - Automatic cleanup of temporary files and directories
 - Thread-safe resource tracking for concurrent operations
 - Atomic file operations to prevent data corruption
@@ -73,7 +73,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Configuration Discovery
 
-### CONFIG-DISCOVERY-001: Configuration Discovery Specification [ACTION:discovery]
+### CONFIG-DISCOVERY-001: Configuration Discovery Specification [ACTION-discovery]
 **Source**: docs/context/specification.md - Configuration Discovery section
 **Impact**: Core functionality requirement for configuration discovery
 **Cross-Layer Requirements**: Documentation, Code, Tests
@@ -540,7 +540,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Error Handling and Recovery
 
-### ERROR-HANDLING-001: Error Handling and Recovery Specification [ACTION:validation]
+### ERROR-HANDLING-001: Error Handling and Recovery Specification [ACTION-validation]
 **Source**: docs/context/specification.md - Error Handling and Recovery section
 **Impact**: Core functionality requirement for error handling
 **Cross-Layer Requirements**: Documentation, Code, Tests
@@ -788,7 +788,7 @@ The CI/CD pipeline shall be optimized for AI-first development workflows where:
 
 ### DOC-011: Token Validation Integration for AI Assistants
 **Priority**: [HIGH] HIGH  
-**Status**: [ACTION:migration] In Progress
+**Status**: [ACTION-migration] In Progress
 
 The token validation integration system shall provide seamless validation workflow integration for AI assistants where:
 

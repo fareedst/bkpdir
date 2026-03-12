@@ -1,0 +1,67 @@
+ARCH-FILE_OPERATIONS:
+  name: File Operations Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-RELIABILITY
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Provides safe, reliable file operations
+      Prevents data corruption through atomic operations
+      Enhances security with path validation
+      Supports complex directory traversal scenarios
+      Enables file comparison and snapshot capabilities
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Direct standard library usage: Rejected due to lack of atomic operations and security checks
+        Third-party file libraries: Rejected due to dependency concerns
+  implementation_approach:
+    summary: Extracted file operations package with atomic operations and security focus
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-FILE_OPERATIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extracted file operations package with atomic operations and security focus
+  atomic_operations: Safe file writing with rollback capabilities
+  cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
+  directory_traversal: Configurable walking with exclusion patterns
+  file_comparison: Hash-based content verification and snapshot comparison
+  path_validation: Security and existence checking with comprehensive validation
+  pattern_exclusion: Doublestar glob pattern matching for file filtering
+  performance_characteristics:
+    - 'Atomic operations: ~2x slower than direct writes (acceptable trade-off for safety)'
+    - 'Path validation: ~50μs per path'
+    - 'Directory traversal: ~1000 files/ms on modern SSDs'
+    - 'Hash calculation: ~100MB/s for SHA-256'
+  security_focus:
+    - Path traversal attack prevention
+    - Permission validation
+    - Secure path checking
+    - Input sanitization

@@ -1,6 +1,6 @@
 # Package cli
 
-**Tokens:** [REQ:IMMUTABLE_CLI_COMMANDS] [ARCH:CLI_COMMANDS] [IMPL:CLI_FRAMEWORK]
+**Tokens:** [REQ-IMMUTABLE_CLI_COMMANDS] [ARCH-CLI_COMMANDS] [IMPL-CLI_FRAMEWORK]
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/cli.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/cli)
 

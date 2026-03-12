@@ -473,7 +473,7 @@ go build -o my-cli-app
 - Template-based formatting for complex output
 - Configuration-driven output behavior
 
-## [ACTION:migration] Next Steps
+## [ACTION-migration] Next Steps
 
 Now that you have a basic CLI application working, you can:
 

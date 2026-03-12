@@ -1,0 +1,70 @@
+ARCH-PACKAGE_EXTRACTION:
+  name: Package Extraction Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-MAINTAINABILITY
+    - REQ-CODE_QUALITY
+  rationale:
+    why: |-
+      Enables code reuse across projects
+      Improves maintainability through modularization
+      Supports gradual migration without breaking existing functionality
+      Creates reusable components for CLI application development
+      Follows interface-driven design for flexibility
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Big-bang extraction: Rejected due to high risk of breaking changes
+        No extraction: Rejected due to code duplication and maintainability concerns
+  implementation_approach:
+    summary: Layered extraction approach with zero-breaking-change principle
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+      - REQ-CODE_QUALITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Layered extraction approach with zero-breaking-change principle
+  backward_compatibility:
+    - Legacy type aliases maintain compatibility
+    - Wrapper functions preserve existing API
+    - Original application continues to work unchanged
+  circular_dependency_prevention: Extract components with no internal dependencies first
+  cross-references: '[REQ-MAINTAINABILITY], [REQ-CODE_QUALITY]'
+  extracted_packages:
+    - '`pkg/config`: Configuration management (1,322 lines)'
+    - '`pkg/errors`: Error handling and classification (918 lines)'
+    - '`pkg/resources`: Resource management and cleanup (486 lines)'
+    - '`pkg/formatter`: Output formatting and templates (1,056 lines)'
+    - '`pkg/git`: Git integration utilities (255 lines)'
+    - '`pkg/cli`: CLI command framework (722 lines)'
+    - '`pkg/fileops`: File operations and utilities (1,173 lines)'
+    - '`pkg/processing`: Data processing patterns (1,705 lines)'
+  interface-driven: Define interfaces before extraction to prevent coupling
+  layered_approach: Extract in dependency order
+  total_extracted: 7,637 lines across 33 files
+  zero-breaking-change: Maintain backward compatibility through wrapper functions

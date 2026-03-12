@@ -1,0 +1,59 @@
+IMPL-EXTRACT_008_DOC_MIGRATION:
+  name: EXTRACT-008 Documentation Migration and Preservation
+  status: Active
+  description: Preserve working-plan content by migrating it directly into STDD core documents and decommission the working-plan artifact. STDD requires authoritative records to live in the requirements, architecture, and implementation documents for traceability.
+  rationale:
+    why: STDD requires authoritative records in canonical documents for traceability; working-plan files create duplication and risk drift
+    problems_solved:
+      - Content duplication between working-plan and canonical STDD documents
+      - Risk of drift between supplemental files and canonical records
+      - Loss of traceability when content lives outside STDD structure
+    benefits:
+      - All authoritative records in canonical STDD/TIED documents
+      - Traceability maintained through proper token references
+      - No duplication or drift risk from working-plan artifacts
+  implementation_approach:
+    summary: Migrate working-plan content into STDD requirements, architecture, and implementation documents then decommission working-plan
+    details:
+      - Record REQ-EXTRACT_008_INTERDEP_MAPPING in requirements.md
+      - Record ARCH-EXTRACT_008_INTERDEP in architecture-decisions.md
+      - Record IMPL-EXTRACT_008_DOC_MIGRATION in implementation-decisions.md
+      - Create canonical deliverable docs/package-interdependency-mapping.md
+      - Remove supplemental preservation files and decommission working-plan-extract-008.md
+  cross_references:
+    - ARCH-EXTRACT_008_INTERDEP
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+  code_locations:
+    files:
+      - docs/package-interdependency-mapping.md
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-EXTRACT_008_INTERDEP
+    requirements:
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also: []
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] — Migrate working-plan content into STDD requirements, architecture, and implementation documents then decommission working-plan
+
+    procedure extract_008_documentation_migration_and_preservati():
+      # [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] Record REQ-EXTRACT_008_INTERDEP_MAPPING in requirements.md
+      record_req_extract_008_interdep_mapping_in_require()
+      # [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] Record ARCH-EXTRACT_008_INTERDEP in architecture-decisions.md
+      record_arch_extract_008_interdep_in_architecture_d()
+      # [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] Record IMPL-EXTRACT_008_DOC_MIGRATION in implementation-decisions.md
+      record_impl_extract_008_doc_migration_in_implement()
+      # [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] Create canonical deliverable docs/package-interdependency-mapping.md
+      create_canonical_deliverable_docs_package_interdep()
+      # [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] Remove supplemental preservation files and decommission working-plan-extract-008.md
+      remove_supplemental_preservation_files()
+      end

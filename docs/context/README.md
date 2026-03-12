@@ -72,8 +72,8 @@ For ANY code changes, you MUST:
 ### Code Comment Format
 
 ```go
-// [REQ:FILE_BACKUP] Create backup of single file with comparison
-// [IMPL:ATOMIC_OPS] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
+// [REQ-FILE_BACKUP] Create backup of single file with comparison
+// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
     // ...
 }

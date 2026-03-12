@@ -5,9 +5,9 @@
 // Licensed under the MIT License
 
 // [CRITICAL] FMT-001: AI-first formatter refactoring - [ACTION:core-functionality]
-// [REQ:OUTPUT_FORMATTING] Output formatting requirement
-// [ARCH:OUTPUT_FORMATTING] Output formatting architecture
-// [IMPL:DUAL_FORMATTING] Dual-mode formatting implementation
+// [REQ-OUTPUT_FORMATTING] Output formatting requirement
+// [ARCH-OUTPUT_FORMATTING] Output formatting architecture
+// [IMPL-DUAL_FORMATTING] Dual-mode formatting implementation
 package formatter
 
 import (
@@ -40,7 +40,7 @@ const (
 	ErrorTypeGeneric           ErrorType = "generic"
 )
 
-// [CRITICAL] FMT-001: Pattern type enumeration - [ACTION:discovery]
+// [CRITICAL] FMT-001: Pattern type enumeration - [ACTION-discovery]
 type PatternType string
 
 const (
@@ -171,7 +171,7 @@ type CoreFormatter interface {
 	FormatWithContext(ctx FormatContext) (string, error)
 }
 
-// [CRITICAL] FMT-001: AI-first pattern extraction engine - [ACTION:discovery]
+// [CRITICAL] FMT-001: AI-first pattern extraction engine - [ACTION-discovery]
 type AIPatternExtractor interface {
 	// Core extraction operations
 	ExtractArchiveData(filename string) (AIArchiveData, error)

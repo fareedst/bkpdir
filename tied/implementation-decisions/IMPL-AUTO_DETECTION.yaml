@@ -1,0 +1,96 @@
+IMPL-AUTO_DETECTION:
+  name: Auto-Detection Implementation
+  status: Active
+  cross_references:
+    - ARCH-AUTO_DETECTION
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Improves user experience
+      Reduces command verbosity
+      Maintains backward compatibility
+      Supports intuitive CLI usage
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Path type detection with command routing logic
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-AUTO_DETECTION
+    requirements:
+      - REQ-USABILITY
+    tests: []
+    code_annotations:
+      - IMPL-AUTO_DETECTION
+      - ARCH-AUTO_DETECTION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-AUTO_DETECTION
+      - REQ-USABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-AUTO_DETECTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`main.go` path detection functions, `executeWithAutoDetection()`, `handleAutoDetectedCommand()`'
+  detection_functions: |-
+    ```go
+    func isFile(path string) bool {
+        info, err := os.Stat(path)
+        if err != nil {
+            return false
+        }
+        return info.Mode().IsRegular()
+    }
+
+    func isDirectory(path string) bool {
+        info, err := os.Stat(path)
+        if err != nil {
+            return false
+        }
+        return info.IsDir()
+    }
+
+    func validatePath(path string) error {
+        _, err := os.Stat(path)
+        if err != nil {
+            if os.IsNotExist(err) {
+                return fmt.Errorf("path does not exist: %s", path)
+            }
+            if os.IsPermission(err) {
+                return fmt.Errorf("permission denied accessing path: %s", path)
+            }
+            return fmt.Errorf("error accessing path %s: %v", path, err)
+        }
+        return nil
+    }
+    ```
+  integration_with_cobra: "```go\nfunc executeWithAutoDetection(rootCmd *cobra.Command) error {\n    args := os.Args[1:]\n    \n    // Check for known commands/flags\n    // If not known, trigger auto-detection\n    // Otherwise execute normally\n}\n```"
+  known_commands_bypass:
+    - 'Explicit commands: `create`, `config`, `list`, `verify`, `backup`, `version`'
+    - 'Global flags: `--config`, `--dry-run`, `--list`'
+    - 'Help flags: `--help`, `-h`, `--version`, `-v`'
+  routing_logic: "```go\nfunc handleAutoDetectedCommand(args []string) {\n    path := args[0]\n    \n    if err := validatePath(path); err != nil {\n        // Handle error\n    }\n    \n    if isFile(path) {\n        handleAutoDetectedFileBackup(args)\n    } else if isDirectory(path) {\n        handleAutoDetectedDirectoryArchive(args)\n    } else {\n        // Handle unsupported types\n    }\n}\n```"
+  essence_pseudocode: |-
+    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Path type detection with command routing logic
+
+    procedure auto_detection_implementation():
+      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Improves user experience
+      execute()
+      end

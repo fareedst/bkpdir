@@ -1,0 +1,55 @@
+ARCH-LIST_LIMIT:
+  name: List Command Limit Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-LIST_LIMIT
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Prevents overwhelming output when there are many archives
+      Shows most relevant (recent) archives by default
+      Allows users to see all archives when needed
+      Maintains backward compatibility with existing workflows
+      Improves usability for common use cases
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      Add `--limit` flag (short: `-n`) to `list` command
+      Default value: 10 (show newest 10 files)
+      Special value: 0 or `--all` flag to show all files
+      Apply limit after sorting (most recent first)
+      Support both `list` command (directory archives) and `--list` command (file backups)
+      Limit applies to the sorted list (take first N after sorting)
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-LIST_LIMIT
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-LIST_LIMIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Command-line flag to limit list output with default of 10 entries
+  configuration-based_limit: Rejected - command-line flag is more flexible and immediate
+  cross-references: '[REQ-LIST_LIMIT], [REQ-USABILITY], [ARCH-CLI_COMMANDS]'
+  different_defaults_for_different_commands: Rejected - consistency is more important
+  pagination: Rejected - over-engineering for this use case, simple limit is sufficient

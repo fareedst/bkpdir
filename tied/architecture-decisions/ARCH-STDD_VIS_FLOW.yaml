@@ -1,0 +1,59 @@
+ARCH-STDD_VIS_FLOW:
+  name: STDD Visualization Flow Architecture
+  status: Active
+  cross_references:
+    - REQ-STDD_VIS
+    - REQ-MODULE_VALIDATION
+  decision: Build a token-first visualization pipeline that produces two complementary artifacts showing requirement to architecture to implementation to tests/code traceability
+  rationale:
+    why: Stakeholders need a concise, token-centric narrative of how TIED preserves intent across layers
+    problems_solved:
+      - Lack of visual representation of traceability chain
+      - No data-driven pipeline for visualization
+    benefits:
+      - Data-driven pipeline keeps token prominence accurate as registry evolves
+      - Complementary artifacts address both static comprehension and process storytelling
+  implementation_approach:
+    summary: 'Four-module pipeline: DataExtraction, Visualization, AnimationTimeline, Integration'
+    details:
+      - 'DataExtraction: Parse TIED docs and sampled code/test anchors to build token graph'
+      - 'Visualization: Generate layered flow diagram with tokens as dominant nodes'
+      - 'AnimationTimeline: Render animated sequence highlighting token handoffs over time'
+      - 'Integration: Export assets to docs/images/ and embed into docs'
+  alternatives_considered:
+    - name: Manual non-data-driven sketches
+      pros:
+        - Quick to create
+      cons:
+        - Drift risk
+        - No repeatability
+      rejected_reason: Drift risk and no repeatability
+    - name: Single static diagram only
+      pros:
+        - Simple
+      cons:
+        - Does not convey lifecycle or time dimension
+      rejected_reason: Does not convey lifecycle/time dimension
+  traceability:
+    requirements:
+      - REQ-STDD_VIS
+      - REQ-MODULE_VALIDATION
+    implementation:
+      - IMPL-STDD_VIS_DATA_PIPELINE
+      - IMPL-STDD_VIS_ASSETS
+    tests: []
+    code_annotations:
+      - ARCH-STDD_VIS_FLOW
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TOKEN_SYSTEM
+  detail_file: architecture-decisions/ARCH-STDD_VIS_FLOW.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI Agent

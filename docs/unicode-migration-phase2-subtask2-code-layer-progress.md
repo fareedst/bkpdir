@@ -77,7 +77,7 @@ This report documents the completion of the Code Layer Implementation phase for 
 ### Token Structure
 Each token follows the established pattern:
 ```
-// TOKEN-ID: Token description - Specific functionality [ACTION:category]
+// TOKEN-ID: Token description - Specific functionality [ACTION-category]
 // Source: docs/context/specification.md - Section name
 // Impact: Core functionality requirement for specific feature
 ```

@@ -1,0 +1,44 @@
+REQ-IMMUTABLE_CLI_COMMANDS:
+  name: CLI Commands Structure (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: CLI command structure is fundamental to user experience. Changing it would break user workflows and scripts.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All commands work as specified
+    - criterion: Command aliases are preserved
+    - criterion: Output formatting uses configurable format strings
+    - criterion: Atomic operations and context cancellation are supported
+  validation_criteria:
+    - method: CLI command tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-CLI_COMMANDS
+    implementation:
+      - IMPL-CLI_FRAMEWORK
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_CLI_COMMANDS
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_CLI_COMMANDS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § CLI Commands Architecture [ARCH-CLI_COMMANDS]
+  description: 'CLI command structure must be preserved:'
+  implementation: See `implementation-decisions.md` § CLI Framework Implementation [IMPL-CLI_FRAMEWORK]

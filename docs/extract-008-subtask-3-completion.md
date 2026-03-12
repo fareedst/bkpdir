@@ -13,9 +13,9 @@
 ## 📋 PHASE 1 CRITICAL VALIDATION Completed
 
 ### ✅ Pre-Work Validation Results
-1. **[ACTION:validation] Immutable Requirements Check**: ✅ VERIFIED - No conflicts found
+1. **[ACTION-validation] Immutable Requirements Check**: ✅ VERIFIED - No conflicts found
 2. **📋 Feature Tracking Registry**: ✅ VERIFIED - EXTRACT-008 exists with valid subtasks
-3. **[ACTION:discovery] AI Assistant Compliance**: ✅ VERIFIED - Implementation tokens required
+3. **[ACTION-discovery] AI Assistant Compliance**: ✅ VERIFIED - Implementation tokens required
 4. **[CRITICAL] AI Assistant Protocol**: ✅ VERIFIED - Following NEW FEATURE Protocol (subtask creation)
 
 ### ✅ Change Type Classification
@@ -155,7 +155,7 @@ Following DOC-007/008 standardized format, added 145+ implementation tokens:
 - **Implementation Tokens**: ✅ Added to appropriate locations following DOC-007/008
 - **Feature Tracking Update**: ✅ EXTRACT-008 subtask 3 marked complete
 
-## [ACTION:migration] Integration with EXTRACT-008
+## [ACTION-migration] Integration with EXTRACT-008
 
 ### ✅ Subtask Dependencies Satisfied
 - **Subtask 1 (CLI Template)**: ✅ Used as foundation for integration examples
@@ -185,7 +185,7 @@ The integration documentation provides:
 - **Best Practices**: Production-tested approaches for reliability and performance
 - **API Reference**: Complete function and configuration documentation
 
-### [ACTION:validation] Quality Assurance
+### [ACTION-validation] Quality Assurance
 - **Error Handling**: Comprehensive error management patterns
 - **Resource Management**: Safe resource usage and cleanup patterns
 - **Testing Strategies**: Unit and integration testing approaches

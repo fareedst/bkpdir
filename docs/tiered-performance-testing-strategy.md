@@ -167,7 +167,7 @@ make test-performance-full
 make test-performance-comprehensive
 ```
 
-## [ACTION:migration] **Maintenance Strategy**
+## [ACTION-migration] **Maintenance Strategy**
 
 ### **Performance Regression Detection**
 - **Baseline Storage**: Store performance baselines per tier

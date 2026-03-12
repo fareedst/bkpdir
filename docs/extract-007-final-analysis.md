@@ -2,7 +2,7 @@
 
 ## 📋 **PHASE 1 CRITICAL VALIDATION - COMPLETED**
 
-### [ACTION:validation] **Immutable Requirements Check** ✅ **PASSED**
+### [ACTION-validation] **Immutable Requirements Check** ✅ **PASSED**
 - **Status**: No conflicts with immutable specifications
 - **Analysis**: EXTRACT-007 extracts generic patterns while preserving all immutable behaviors:
   - Archive naming conventions remain unchanged in original application
@@ -18,7 +18,7 @@
   - ❌ Violates DOC-008 enforcement requirement for dual-location updates
   - [ACTION:core-functionality] **IMMEDIATE ACTION REQUIRED**: Update subtask checkboxes to `[x]`
 
-### [ACTION:discovery] **AI Assistant Compliance** ✅ **VALIDATED**
+### [ACTION-discovery] **AI Assistant Compliance** ✅ **VALIDATED**
 - **Token Requirements**: All implementation tokens properly formatted with [CRITICAL] priority icon
 - **Icon Validation**: DOC-007 standardized format confirmed in pkg/processing/
 - **Cross-References**: Implementation properly linked to feature tracking
@@ -108,7 +108,7 @@ The task implementation is complete, but `docs/context/feature-tracking.md` show
     - [x] **Extract concurrent processing** - Worker pool patterns
 ```
 
-### **2. Verify All Task Locations** [ACTION:discovery] **VALIDATION**
+### **2. Verify All Task Locations** [ACTION-discovery] **VALIDATION**
 
 Search for other locations where EXTRACT-007 subtasks might be referenced:
 - Implementation status document

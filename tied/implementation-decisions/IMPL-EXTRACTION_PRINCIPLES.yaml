@@ -1,0 +1,56 @@
+IMPL-EXTRACTION_PRINCIPLES:
+  name: Extraction Principles and Design Decisions
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: Prevents circular dependencies and ensures stable foundation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-EXTRACTION_PRINCIPLES
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXTRACTION_PRINCIPLES.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extract in dependency order - core utilities first, then higher-level components
+  design_note: Each layer builds on previous layers without circular references
+  implementation: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+  essence_pseudocode: |-
+    # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+
+    procedure extraction_principles_and_design_decisions():
+      # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prevents circular dependencies and ensures stable foundation
+      execute()
+      end

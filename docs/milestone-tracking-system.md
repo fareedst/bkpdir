@@ -1,6 +1,6 @@
 # Milestone Tracking System
 
-> **[HIGH] DOC-014: Development milestone tracking requirement [ACTION:maintenance]**
+> **[HIGH] DOC-014: Development milestone tracking requirement [ACTION-maintenance]**
 
 ## 📑 Purpose
 
@@ -66,7 +66,7 @@ This document establishes milestone tracking as a **mandatory development requir
 - Continue from last completed milestone
 - Maintain momentum and context
 
-## [ACTION:migration] Integration with Development Workflow
+## [ACTION-migration] Integration with Development Workflow
 
 ### Todo List Integration
 

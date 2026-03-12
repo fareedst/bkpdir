@@ -1,6 +1,6 @@
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:DIFF_COMMAND] Integration tests for inc and diff CLI commands
-// [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:DIFF_COMMAND] End-to-end command execution validation
-// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:DIFF_COMMAND] CLI command integration testing
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] Integration tests for inc and diff CLI commands
+// [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-DIFF_COMMAND] End-to-end command execution validation
+// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] CLI command integration testing
 package main
 
 import (
@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncCommandIntegration tests the inc command end-to-end execution
 func TestIncCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -155,7 +155,7 @@ func TestIncCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T
 	}
 }
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncCommandWithNoteFlag tests the inc command with --note flag
 func TestIncCommandWithNoteFlag_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -237,7 +237,7 @@ func TestIncCommandWithNoteFlag_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.
 	}
 }
 
-// [REQ:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [IMPL:INCREMENTAL_DUPLICATE_PREVENTION]
+// [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
 // TestIncCommandNoFullArchive tests inc command when no full archive exists
 func TestIncCommandNoFullArchive_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -292,7 +292,7 @@ func TestIncCommandNoFullArchive_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestDiffCommandCLI tests the diff command CLI end-to-end execution
 func TestDiffCommandCLI_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -406,7 +406,7 @@ func TestDiffCommandCLI_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestDiffCommandWithIncremental tests diff command with full + incremental archives
 func TestDiffCommandWithIncremental_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -497,7 +497,7 @@ func TestDiffCommandWithIncremental_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestDiffCommandCLINoArchives tests diff CLI command when no archives exist
 func TestDiffCommandCLINoArchives_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -547,7 +547,7 @@ func TestDiffCommandCLINoArchives_REQ_DIFF_COMMAND(t *testing.T) {
 	}
 }
 
-// [REQ:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [IMPL:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [IMPL-DIFF_COMMAND]
 // TestDiffCommandExcludePatterns tests that diff command respects exclude patterns
 func TestDiffCommandExcludePatterns_REQ_DIFF_COMMAND(t *testing.T) {
 	tmpDir := t.TempDir()

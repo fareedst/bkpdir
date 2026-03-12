@@ -1,13 +1,13 @@
 // This file is part of bkpdir
 
-// [REQ:FILE_BACKUP] File backup creation and management testing
-// [ARCH:RESOURCE_MANAGEMENT] Atomic operations validation
-// [IMPL:ATOMIC_OPS] Atomic file operations implementation validation
-// TEST-BACKUP-FEATURES-001: Backup features test validation - File backup creation and management testing [ACTION:validation]
+// [REQ-FILE_BACKUP] File backup creation and management testing
+// [ARCH-RESOURCE_MANAGEMENT] Atomic operations validation
+// [IMPL-ATOMIC_OPS] Atomic file operations implementation validation
+// TEST-BACKUP-FEATURES-001: Backup features test validation - File backup creation and management testing [ACTION-validation]
 // Source: backup.go - BACKUP-FEATURES-001
 // Impact: Validates backup features functionality
 
-// TEST-SERVICE-BACKUP-001: Backup service test validation - Backup service implementation testing [ACTION:validation]
+// TEST-SERVICE-BACKUP-001: Backup service test validation - Backup service implementation testing [ACTION-validation]
 // Source: backup.go - SERVICE-BACKUP-001
 // Impact: Validates backup service implementation
 package main
@@ -961,7 +961,7 @@ func testPermissionDeniedDuringComparison(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test file backup list limit functionality
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test file backup list limit functionality
 func TestListFileBackupsEnhanced_WithLimit(t *testing.T) {
 	t.Run("default limit of 10", func(t *testing.T) {
 		testListFileBackupsDefaultLimit(t)
@@ -992,7 +992,7 @@ func TestListFileBackupsEnhanced_WithLimit(t *testing.T) {
 	})
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test default limit of 10 for file backups
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test default limit of 10 for file backups
 func testListFileBackupsDefaultLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")
@@ -1031,7 +1031,7 @@ func testListFileBackupsDefaultLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test custom limit values for file backups
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test custom limit values for file backups
 func testListFileBackupsCustomLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")
@@ -1069,7 +1069,7 @@ func testListFileBackupsCustomLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test limit of 0 shows all file backups
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test limit of 0 shows all file backups
 func testListFileBackupsLimitZero(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")
@@ -1107,7 +1107,7 @@ func testListFileBackupsLimitZero(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test fewer backups than limit
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test fewer backups than limit
 func testListFileBackupsFewerThanLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")
@@ -1145,7 +1145,7 @@ func testListFileBackupsFewerThanLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test exactly limit number of backups
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test exactly limit number of backups
 func testListFileBackupsExactlyLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")
@@ -1183,7 +1183,7 @@ func testListFileBackupsExactlyLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test more backups than limit
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test more backups than limit
 func testListFileBackupsMoreThanLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")
@@ -1221,7 +1221,7 @@ func testListFileBackupsMoreThanLimit(t *testing.T) {
 	}
 }
 
-// [REQ:LIST_LIMIT] [ARCH:LIST_LIMIT] [IMPL:LIST_LIMIT] Test sorting preserved with limit for file backups
+// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test sorting preserved with limit for file backups
 func testListFileBackupsSortingWithLimit(t *testing.T) {
 	tmpDir := t.TempDir()
 	backupDir := filepath.Join(tmpDir, "backups")

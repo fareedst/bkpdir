@@ -1,0 +1,64 @@
+ARCH-CLI_COMMANDS:
+  name: CLI Commands Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-USABILITY
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      Easy to learn and use
+      Maintains backward compatibility
+      Supports both directory and file operations
+      Clear command hierarchy
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Intuitive command structure with backward compatibility
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CLI_COMMANDS
+      - REQ-USABILITY
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CLI_COMMANDS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Intuitive command structure with backward compatibility
+  command_structure: |-
+    ```
+    bkpdir
+    ├── create [NOTE]                    # Create full directory archive
+    ├── create --incremental [NOTE]     # Create incremental directory archive
+    ├── backup FILE_PATH [NOTE]         # Create file backup
+    ├── list                            # List directory archives
+    ├── --list FILE_PATH                # List file backups for specific file
+    ├── config                          # Display configuration
+    ├── full [NOTE]                     # Backward compatibility: create full archive
+    ├── inc [NOTE]                      # Backward compatibility: create incremental archive
+    └── --config                        # Backward compatibility: display configuration
+    ```
+  context_support: All long-running operations support context cancellation
+  cross-references: '[REQ-USABILITY], [REQ-OUTPUT_FORMATTING]'
+  directory_archive_commands: '`create`, `create --incremental`, `full`, `inc`'
+  file_backup_commands: '`backup FILE_PATH [NOTE]`, `--list FILE_PATH`'
+  global_flags: '`--dry-run`, `--note`, `--config`, `--list`'
+  management_commands: '`list`, `config`'
+  output_formatting: Configurable output with printf-style and template-based formatting

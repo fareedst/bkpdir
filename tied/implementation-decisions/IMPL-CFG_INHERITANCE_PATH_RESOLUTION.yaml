@@ -1,0 +1,75 @@
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
+  name: Inheritance Path Resolution Fix
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: `buildChainRecursive` was passing `resolvedPath` (file path) instead of `filepath.Dir(resolvedPath)` (directory) as basePath
+      Bug fix: `resolvePath` was not expanding `~` before resolving relative paths
+      Bug fix: `resolvePath` was not handling directory paths correctly (was calling `filepath.Dir()` on directories)
+      These bugs prevented inheritance chains from resolving parent files correctly, especially with relative paths and home directory expansion
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Fixed buildChainRecursive basePath**: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_INHERITANCE_PATH_RESOLUTION
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  added_expandpath_method: Added `ExpandPath` method to `defaultPathResolver` to handle `~` expansion
+  code_changes:
+    - '`config.go` line 2289: `buildChainRecursive(parentPath, filepath.Dir(resolvedPath), pathResolver, chain)`'
+    - '`config.go` line 2212-2240: Updated `resolvePath` to expand `~` and handle directories correctly'
+    - '`config.go` line 2241-2253: Added `ExpandPath` method to `defaultPathResolver`'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-TEST_CFG_005_P1]'
+  date: "2025-12-11"
+  fixed_buildchainrecursive_basepath: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls
+  fixed_resolvepath_directory_handling: 'Updated `resolvePath` to:'
+  priority: P1 (Important)
+  test_coverage:
+    - 'TestConfigInheritance: Now passes with relative path `base.yml` resolving correctly'
+    - 'TestRelativePathInheritance_REQ_CFG_005: Tests `../base/base.yml` and `./sibling.yml` resolution'
+    - 'TestHomeDirectoryExpansion_REQ_CFG_005: Tests `~/.bkpdir-base.yml` expansion in inherit paths'
+  essence_pseudocode: |-
+    # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — - **Fixed buildChainRecursive basePath**: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls
+
+    procedure inheritance_path_resolution_fix():
+      # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] Bug fix: `buildChainRecursive` was passing `resolvedPath` (file path) instead of `filepath.Dir(resolvedPath)` (directory) as basePath
+      execute()
+      end

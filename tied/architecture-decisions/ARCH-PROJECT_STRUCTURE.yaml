@@ -1,0 +1,61 @@
+ARCH-PROJECT_STRUCTURE:
+  name: Project Structure
+  status: Active
+  cross_references: &ref_0
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Clear separation of concerns
+      Standard Go project layout
+      Testable components
+      Supports future package extraction
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Flat structure with internal packages
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PROJECT_STRUCTURE
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PROJECT_STRUCTURE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Flat structure with internal packages
+  cross-references: '[REQ-MAINTAINABILITY]'
+  decision_flat_structure_with_internal_packages: |-
+    ```
+    bkpdir/
+    ├── main.go              # Main application entry point
+    ├── archive.go           # Archive creation and management
+    ├── backup.go            # File backup operations
+    ├── config.go            # Configuration management
+    ├── formatter.go         # Output formatting
+    ├── errors.go            # Error handling
+    ├── comparison.go        # Directory comparison
+    ├── exclude.go           # File exclusion patterns
+    ├── git.go              # Git integration
+    ├── internal/           # Internal packages
+    │   ├── testutil/       # Test utilities
+    │   └── validation/     # Validation utilities
+    ├── pkg/                # Extracted packages (future)
+    └── docs/               # Documentation
+    ```

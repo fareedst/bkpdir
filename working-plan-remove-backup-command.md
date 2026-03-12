@@ -34,7 +34,7 @@
 
 ## ⚡ PHASE 2: CORE IMPLEMENTATION PLANNING
 
-### [ACTION:discovery] STEP 1: Analysis and Discovery
+### [ACTION-discovery] STEP 1: Analysis and Discovery
 
 #### Current State Analysis:
 - **Current CLI Structure**: 
@@ -86,7 +86,7 @@
 - ⚠️ `immutable.md` - **CRITICAL CONFLICT**: May need to update command structure or preserve old alongside new
 - ⚠️ `implementation-decisions.md` - Document CLI design decisions
 
-## [ACTION:migration] PHASE 3: DETAILED SUBTASKS
+## [ACTION-migration] PHASE 3: DETAILED SUBTASKS
 
 ### **Subtask 1: Path Type Detection** ([CRITICAL] CRITICAL)
 - **Description**: Implement function to detect if path is file or directory

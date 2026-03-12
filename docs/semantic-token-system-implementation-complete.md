@@ -22,7 +22,7 @@ The semantic token system has been successfully implemented as a **core requirem
 - **File:** `scripts/validate-icon-enforcement.sh` (renamed from icon to semantic)
 - **Performance:** <1 second validation vs 25+ seconds for legacy system
 - **Features:**
-  - Format validation: `[CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION:context]`
+  - Format validation: `[CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION-context]`
   - Registry compliance checking
   - Legacy icon detection (215 instances found)
   - Strict mode for CI/CD
@@ -76,7 +76,7 @@ Errors: 0
 - **Maintenance:** Single registry vs multiple files
 - **AI-Compatibility:** Semantic parsing vs visual interpretation
 
-## [ACTION:migration] Migration Status
+## [ACTION-migration] Migration Status
 
 ### Legacy System Analysis
 - **Total Unicode icons found:** 215 instances
@@ -88,7 +88,7 @@ Errors: 0
 - **Validation Framework:** ✅ Complete
 - **Build Integration:** ✅ Complete
 - **Documentation:** ✅ Complete
-- **Legacy Migration:** [ACTION:migration] In Progress (215 icons identified)
+- **Legacy Migration:** [ACTION-migration] In Progress (215 icons identified)
 
 ## 📋 Token Registry Details
 
@@ -121,15 +121,15 @@ DOC-014: "AI-first documentation system"
 
 ### Format Specification
 ```go
-// [CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION:context]
+// [CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION-context]
 ```
 
 ### Examples
 ```go
 // [CRITICAL] ARCH-001: Archive naming convention [ACTION:core-functionality]
 // [HIGH] CFG-003: Template formatting logic [ACTION:format-processing]
-// [MEDIUM] GIT-004: Git submodule support [ACTION:discovery]
-// [LOW] DOC-014: Interface cleanup [ACTION:maintenance]
+// [MEDIUM] GIT-004: Git submodule support [ACTION-discovery]
+// [LOW] DOC-014: Interface cleanup [ACTION-maintenance]
 ```
 
 ### Validation Commands

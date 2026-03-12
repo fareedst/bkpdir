@@ -1,5 +1,5 @@
 #!/bin/bash
-# [REQ:DOC_016] Token Navigation Tool
+# [REQ-DOC_016] Token Navigation Tool
 # Purpose: Enable AI assistants to navigate codebase using semantic tokens
 
 set -euo pipefail
@@ -19,7 +19,7 @@ SCRIPT_NAME="token-navigate"
 # Usage information
 usage() {
     cat << EOF
-${BLUE}[REQ:DOC_016] Token Navigation Tool${NC}
+${BLUE}[REQ-DOC_016] Token Navigation Tool${NC}
 
 Usage: $SCRIPT_NAME <command> [options]
 
@@ -47,154 +47,154 @@ EOF
 # Find requirement token implementations
 find_req() {
     local token="$1"
-    echo -e "${CYAN}Finding implementations of [REQ:${token}]...${NC}\n"
+    echo -e "${CYAN}Finding implementations of [REQ-${token}]...${NC}\n"
     
     # Find in source code
     echo -e "${BLUE}Source Code:${NC}"
-    grep -rn "\[REQ:${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "\[REQ[:\-]${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
         sed 's|^|  |' || echo "  No implementations found"
     
     echo ""
     
     # Find in tests
     echo -e "${BLUE}Tests:${NC}"
-    grep -rn "REQ_${token}\|\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "REQ_${token}\|\[REQ[:\-]${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
         sed 's|^|  |' || echo "  No tests found"
     
     echo ""
     
     # Find in documentation
     echo -e "${BLUE}Documentation:${NC}"
-    grep -rn "\[REQ:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
+    grep -rn "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | \
         sed 's|^|  |' || echo "  No documentation found"
 }
 
 # Find architecture token implementations
 find_arch() {
     local token="$1"
-    echo -e "${CYAN}Finding implementations of [ARCH:${token}]...${NC}\n"
+    echo -e "${CYAN}Finding implementations of [ARCH-${token}]...${NC}\n"
     
     # Find in source code
     echo -e "${BLUE}Source Code:${NC}"
-    grep -rn "\[ARCH:${token}\]" --include="*.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "\[ARCH[:\-]${token}\]" --include="*.go" "${PROJECT_ROOT}" 2>/dev/null | \
         sed 's|^|  |' || echo "  No implementations found"
     
     echo ""
     
     # Find in documentation
     echo -e "${BLUE}Documentation:${NC}"
-    grep -rn "\[ARCH:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
+    grep -rn "\[ARCH[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | \
         sed 's|^|  |' || echo "  No documentation found"
 }
 
 # Find implementation token usages
 find_impl() {
     local token="$1"
-    echo -e "${CYAN}Finding usages of [IMPL:${token}]...${NC}\n"
+    echo -e "${CYAN}Finding usages of [IMPL-${token}]...${NC}\n"
     
     # Find in source code
     echo -e "${BLUE}Source Code:${NC}"
-    grep -rn "\[IMPL:${token}\]" --include="*.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "\[IMPL[:\-]${token}\]" --include="*.go" "${PROJECT_ROOT}" 2>/dev/null | \
         sed 's|^|  |' || echo "  No usages found"
     
     echo ""
     
     # Find in documentation
     echo -e "${BLUE}Documentation:${NC}"
-    grep -rn "\[IMPL:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
+    grep -rn "\[IMPL[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | \
         sed 's|^|  |' || echo "  No documentation found"
 }
 
 # Find tests for a requirement
 find_tests() {
     local token="$1"
-    echo -e "${CYAN}Finding tests for [REQ:${token}]...${NC}\n"
+    echo -e "${CYAN}Finding tests for [REQ-${token}]...${NC}\n"
     
     # Find test functions
     echo -e "${BLUE}Test Functions:${NC}"
-    grep -rn "func Test.*REQ_${token}\|func Test.*\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "func Test.*REQ_${token}\|func Test.*\[REQ[:\-]${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
         sed 's|^|  |' || echo "  No test functions found"
     
     echo ""
     
     # Find test comments
     echo -e "${BLUE}Test Comments:${NC}"
-    grep -rn "\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "\[REQ[:\-]${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
         sed 's|^|  |' || echo "  No test comments found"
 }
 
 # Trace token across all layers
 trace_token() {
     local token="$1"
-    echo -e "${CYAN}Tracing [REQ:${token}] across all layers...${NC}\n"
+    echo -e "${CYAN}Tracing [REQ-${token}] across all layers...${NC}\n"
     
     # Requirements layer
     echo -e "${GREEN}[1] Requirements Layer:${NC}"
-    grep -rn "\[REQ:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd/requirements.md" 2>/dev/null | \
-        head -5 | sed 's|^|  |' || echo "  Not found in requirements.md"
+    grep -rn "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied/requirements.yaml" 2>/dev/null | \
+        head -5 | sed 's|^|  |' || echo "  Not found in requirements.yaml"
     
     echo ""
     
     # Architecture layer
     echo -e "${GREEN}[2] Architecture Layer:${NC}"
-    grep -rn "\[ARCH:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[ARCH:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
+    grep -rn "\[ARCH[:\-].*\].*\[REQ[:\-]${token}\]\|\[REQ[:\-]${token}\].*\[ARCH[:\-]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | \
         head -5 | sed 's|^|  |' || echo "  Not found in architecture decisions"
     
     echo ""
     
     # Implementation layer
     echo -e "${GREEN}[3] Implementation Layer:${NC}"
-    grep -rn "\[IMPL:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[IMPL:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | \
+    grep -rn "\[IMPL[:\-].*\].*\[REQ[:\-]${token}\]\|\[REQ[:\-]${token}\].*\[IMPL[:\-]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | \
         head -5 | sed 's|^|  |' || echo "  Not found in implementation decisions"
     
     echo ""
     
     # Source code
     echo -e "${GREEN}[4] Source Code:${NC}"
-    grep -rn "\[REQ:${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "\[REQ[:\-]${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
         head -5 | sed 's|^|  |' || echo "  Not found in source code"
     
     echo ""
     
     # Tests
     echo -e "${GREEN}[5] Tests:${NC}"
-    grep -rn "REQ_${token}\|\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
+    grep -rn "REQ_${token}\|\[REQ[:\-]${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | \
         head -5 | sed 's|^|  |' || echo "  Not found in tests"
 }
 
 # List all requirement tokens
 list_req() {
     echo -e "${CYAN}All Requirement Tokens:${NC}\n"
-    grep -roh "\[REQ:[A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" 2>/dev/null | \
-        sort -u | sed 's/\[REQ://;s/\]//' | sed 's/^/  [REQ:/;s/$/]/' | sort
+    grep -roh "\[REQ[:\-][A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" --include="*.yaml" 2>/dev/null | \
+        sort -u | sed 's/\[REQ[:-]//;s/\]//' | sed 's/^/  [REQ-/;s/$/]/' | sort
 }
 
 # List all architecture tokens
 list_arch() {
     echo -e "${CYAN}All Architecture Tokens:${NC}\n"
-    grep -roh "\[ARCH:[A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" 2>/dev/null | \
-        sort -u | sed 's/\[ARCH://;s/\]//' | sed 's/^/  [ARCH:/;s/$/]/' | sort
+    grep -roh "\[ARCH[:\-][A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" --include="*.yaml" 2>/dev/null | \
+        sort -u | sed 's/\[ARCH[:-]//;s/\]//' | sed 's/^/  [ARCH-/;s/$/]/' | sort
 }
 
 # List all implementation tokens
 list_impl() {
     echo -e "${CYAN}All Implementation Tokens:${NC}\n"
-    grep -roh "\[IMPL:[A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" 2>/dev/null | \
-        sort -u | sed 's/\[IMPL://;s/\]//' | sed 's/^/  [IMPL:/;s/$/]/' | sort
+    grep -roh "\[IMPL[:\-][A-Z0-9_]\+\]" "${PROJECT_ROOT}" --include="*.go" --include="*.md" --include="*.yaml" 2>/dev/null | \
+        sort -u | sed 's/\[IMPL[:-]//;s/\]//' | sed 's/^/  [IMPL-/;s/$/]/' | sort
 }
 
 # Show token coverage
 coverage() {
     local token="$1"
-    echo -e "${CYAN}Token Coverage for [REQ:${token}]:${NC}\n"
+    echo -e "${CYAN}Token Coverage for [REQ-${token}]:${NC}\n"
     
     local req_count arch_count impl_count code_count test_count
     
-    req_count=$(grep -r "\[REQ:${token}\]" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | wc -l | tr -d ' ')
-    arch_count=$(grep -r "\[ARCH:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[ARCH:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | wc -l | tr -d ' ')
-    impl_count=$(grep -r "\[IMPL:.*\].*\[REQ:${token}\]\|\[REQ:${token}\].*\[IMPL:" --include="*.md" "${PROJECT_ROOT}/stdd" 2>/dev/null | wc -l | tr -d ' ')
-    code_count=$(grep -r "\[REQ:${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | wc -l | tr -d ' ')
-    test_count=$(grep -r "REQ_${token}\|\[REQ:${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | wc -l | tr -d ' ')
+    req_count=$(grep -r "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | wc -l | tr -d ' ')
+    arch_count=$(grep -r "\[ARCH[:\-].*\].*\[REQ[:\-]${token}\]\|\[REQ[:\-]${token}\].*\[ARCH[:\-]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | wc -l | tr -d ' ')
+    impl_count=$(grep -r "\[IMPL[:\-].*\].*\[REQ[:\-]${token}\]\|\[REQ[:\-]${token}\].*\[IMPL[:\-]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied" 2>/dev/null | wc -l | tr -d ' ')
+    code_count=$(grep -r "\[REQ[:\-]${token}\]" --include="*.go" --exclude="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | wc -l | tr -d ' ')
+    test_count=$(grep -r "REQ_${token}\|\[REQ[:\-]${token}\]" --include="*_test.go" "${PROJECT_ROOT}" 2>/dev/null | wc -l | tr -d ' ')
     
     echo -e "${BLUE}Requirements:${NC} ${req_count} references"
     echo -e "${BLUE}Architecture:${NC} ${arch_count} references"

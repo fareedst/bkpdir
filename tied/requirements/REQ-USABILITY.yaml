@@ -1,0 +1,44 @@
+REQ-USABILITY:
+  name: Usability Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Ensures good user experience
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: CLI commands are intuitive
+    - criterion: Error messages are clear and actionable
+    - criterion: Configuration options are discoverable
+    - criterion: Output formatting is readable
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    implementation:
+      - IMPL-DUAL_FORMATTING
+    tests: []
+    code_annotations:
+      - REQ-USABILITY
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-USABILITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Output Formatting [ARCH-OUTPUT_FORMATTING]
+  description: CLI interface must be intuitive. Error messages must be clear. Configuration must be discoverable. Output must be readable.
+  implementation: See `implementation-decisions.md` § Dual Printf/Template Formatting [IMPL-DUAL_FORMATTING]

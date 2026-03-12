@@ -2,7 +2,7 @@
 
 ## 🚀 PHASE 1: CRITICAL VALIDATION [COMPLETED ✅]
 
-### 1. [ACTION:validation] Immutable Requirements Check ✅
+### 1. [ACTION-validation] Immutable Requirements Check ✅
 - **Status**: VALIDATED - Documentation task, no code conflicts
 - **Finding**: Package interdependency mapping is pure documentation
 - **Verification**: No immutable.md conflicts with documentation creation
@@ -13,7 +13,7 @@
 - **Current Status**: 4/5 subtasks completed (80% complete)
 - **Location**: feature-tracking.md line 672
 
-### 3. [ACTION:discovery] AI Assistant Compliance ✅
+### 3. [ACTION-discovery] AI Assistant Compliance ✅
 - **Protocol**: NEW FEATURE Protocol (continuing EXTRACT-008)
 - **Priority**: HIGH - Demonstrates value and accelerates adoption
 - **Implementation Tokens**: Required with `EXTRACT-008` prefix
@@ -26,7 +26,7 @@
 
 ## ⚡ PHASE 2: CORE ANALYSIS AND PLANNING
 
-### [ACTION:discovery] Current Package Inventory Analysis
+### [ACTION-discovery] Current Package Inventory Analysis
 
 **Extracted Packages Identified** (8 total):
 1. **pkg/config** - Configuration management system
@@ -68,7 +68,7 @@
 7. **Best Practices**: Recommended usage patterns
 8. **Troubleshooting Guide**: Common integration issues and solutions
 
-## [ACTION:migration] PHASE 3: DETAILED SUBTASK BREAKDOWN
+## [ACTION-migration] PHASE 3: DETAILED SUBTASK BREAKDOWN
 
 ### [ACTION:format-processing] Subtask 1: Package Inventory and Analysis
 **Objective**: Create comprehensive overview of all extracted packages
@@ -91,7 +91,7 @@
   - Test coverage analysis
   - Documentation completeness review
 
-**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Package inventory analysis`
+**Implementation Token**: `// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Package inventory analysis`
 
 ### 🔗 Subtask 2: Dependency Matrix Creation
 **Objective**: Map all package-to-package relationships
@@ -212,7 +212,7 @@
 - [ ] Cross-references to related documentation
 - [ ] Visual elements enhance understanding (diagrams, matrices)
 
-### [ACTION:migration] Final Integration Tasks
+### [ACTION-migration] Final Integration Tasks
 
 **Documentation Updates Required**:
 - [ ] **Update feature-tracking.md**

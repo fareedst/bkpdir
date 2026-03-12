@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# [CRITICAL] TOKEN-002: Semantic token validation script - [ACTION:validation]
+# [CRITICAL] TOKEN-002: Semantic token validation script - [ACTION-validation]
 # Purpose: Validate semantic token system implementation and usage
 
 set -e
@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPORT_FILE="${PROJECT_ROOT}/semantic-token-validation-report.md"
 
-# [REQ:DOC_015] Semantic token patterns - Extended to include REQ/ARCH/IMPL tokens
+# [REQ-DOC_015] Semantic token patterns - Extended to include REQ/ARCH/IMPL tokens
 PRIORITY_TOKENS=(
     "\[CRITICAL\]"
     "\[HIGH\]"
@@ -33,11 +33,11 @@ ACTION_TOKENS=(
     "\[ACTION:migration\]"
 )
 
-# [REQ:DOC_015] STDD semantic tokens (REQ/ARCH/IMPL)
+# [REQ-DOC_015] STDD semantic tokens (REQ/ARCH/IMPL)
 STDD_TOKENS=(
-    "\[REQ:[A-Z0-9_]+\]"
-    "\[ARCH:[A-Z0-9_]+\]"
-    "\[IMPL:[A-Z0-9_]+\]"
+    "\[REQ[:\-][A-Z0-9_]+\]"
+    "\[ARCH[:\-][A-Z0-9_]+\]"
+    "\[IMPL[:\-][A-Z0-9_]+\]"
 )
 
 # Unicode icons that should be replaced
@@ -108,7 +108,7 @@ validate_file() {
         echo -e "${GREEN}✅ Found ${action_count} semantic action tokens in ${file}${NC}"
     fi
     
-    # [REQ:DOC_015] Check for STDD semantic tokens (REQ/ARCH/IMPL)
+    # [REQ-DOC_015] Check for STDD semantic tokens (REQ/ARCH/IMPL)
     local stdd_count=0
     for token_pattern in "${STDD_TOKENS[@]}"; do
         local count=$(grep -oE "${token_pattern}" "${file}" 2>/dev/null | wc -l || echo "0")
@@ -119,15 +119,15 @@ validate_file() {
         echo -e "${GREEN}✅ Found ${stdd_count} STDD semantic tokens (REQ/ARCH/IMPL) in ${file}${NC}"
     fi
     
-    # [REQ:DOC_015] Check for proper STDD token format
-    local malformed_stdd_tokens=$(grep -oE "\[(REQ|ARCH|IMPL):[^]]+\]" "${file}" 2>/dev/null | grep -vE "\[(REQ|ARCH|IMPL):[A-Z0-9_]+\]" | wc -l || echo "0")
+    # [REQ-DOC_015] Check for proper STDD token format
+    local malformed_stdd_tokens=$(grep -oE "\[(REQ|ARCH|IMPL)[:\-][^]]+\]" "${file}" 2>/dev/null | grep -vE "\[(REQ|ARCH|IMPL)[:\-][A-Z0-9_]+\]" | wc -l || echo "0")
     if [ "$malformed_stdd_tokens" -gt 0 ]; then
         echo -e "${RED}❌ Found ${malformed_stdd_tokens} malformed STDD tokens in ${file}${NC}"
         validation_errors=$((validation_errors + 1))
     fi
     
     # Check for proper token format (legacy)
-    local malformed_tokens=$(grep -o "\[[A-Z]\+[^]]*\]" "${file}" 2>/dev/null | grep -v "\[CRITICAL\]\|\[HIGH\]\|\[MEDIUM\]\|\[LOW\]\|\[ACTION:" | grep -vE "\[(REQ|ARCH|IMPL):" | wc -l || echo "0")
+    local malformed_tokens=$(grep -o "\[[A-Z]\+[^]]*\]" "${file}" 2>/dev/null | grep -v "\[CRITICAL\]\|\[HIGH\]\|\[MEDIUM\]\|\[LOW\]\|\[ACTION:" | grep -vE "\[(REQ|ARCH|IMPL)[:\-]" | wc -l || echo "0")
     if [ "$malformed_tokens" -gt 0 ]; then
         echo -e "${YELLOW}⚠️  Found ${malformed_tokens} potentially malformed tokens in ${file}${NC}"
         validation_warnings=$((validation_warnings + 1))
@@ -156,7 +156,7 @@ generate_validation_report() {
             local count=$(count_occurrences "${token}" "${file}")
             semantic_count=$((semantic_count + count))
         done
-        # [REQ:DOC_015] Count STDD tokens
+        # [REQ-DOC_015] Count STDD tokens
         for token_pattern in "${STDD_TOKENS[@]}"; do
             local count=$(grep -oE "${token_pattern}" "${file}" 2>/dev/null | wc -l || echo "0")
             semantic_count=$((semantic_count + count))
@@ -209,7 +209,7 @@ $(for token in "${ACTION_TOKENS[@]}"; do
     echo "- \`${token}\`"
 done)
 
-#### STDD Semantic Tokens [REQ:DOC_015]
+#### STDD Semantic Tokens [REQ-DOC_015]
 $(for token_pattern in "${STDD_TOKENS[@]}"; do
     echo "- \`${token_pattern}\` (REQ/ARCH/IMPL tokens)"
 done)
@@ -223,7 +223,7 @@ done)
 
 ### Files with Semantic Tokens
 \`\`\`
-$(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name "*.yml" | grep -v "node_modules" | grep -v ".git" | grep -v "backup-" | xargs grep -lE "\[CRITICAL\]|\[HIGH\]|\[MEDIUM\]|\[LOW\]|\[ACTION:|\[REQ:|\[ARCH:|\[IMPL:" 2>/dev/null || echo "No files with semantic tokens found")
+$(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name "*.yml" | grep -v "node_modules" | grep -v ".git" | grep -v "backup-" | xargs grep -lE "\[CRITICAL\]|\[HIGH\]|\[MEDIUM\]|\[LOW\]|\[ACTION[:\-]|\[REQ[:\-]|\[ARCH[:\-]|\[IMPL[:\-]" 2>/dev/null || echo "No files with semantic tokens found")
 \`\`\`
 
 ### Files with Remaining Unicode Icons
@@ -258,10 +258,10 @@ $(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name
 ### Action Tokens
 - Use \`[ACTION:core-functionality]\` for essential operations
 - Use \`[ACTION:format-processing]\` for text formatting
-- Use \`[ACTION:discovery]\` for file system operations
-- Use \`[ACTION:maintenance]\` for code cleanup
-- Use \`[ACTION:validation]\` for error checking
-- Use \`[ACTION:migration]\` for system migrations
+- Use \`[ACTION-discovery]\` for file system operations
+- Use \`[ACTION-maintenance]\` for code cleanup
+- Use \`[ACTION-validation]\` for error checking
+- Use \`[ACTION-migration]\` for system migrations
 
 ## Compliance Status
 

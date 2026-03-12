@@ -150,16 +150,16 @@ generated-project/
 3. **Maintenance Reduction**: Standardized project structure reduces support burden
 4. **Innovation Acceleration**: Developers can focus on business logic, not boilerplate
 
-## [ACTION:discovery] Implementation Tokens
+## [ACTION-discovery] Implementation Tokens
 
 Following DOC-007 standardized format:
 
 ```go
 // [HIGH] EXTRACT-008: Project scaffolding system - [ACTION:core-functionality] Interactive generator core
-// [HIGH] EXTRACT-008: Component selection interface - [ACTION:discovery] Package discovery and configuration
+// [HIGH] EXTRACT-008: Component selection interface - [ACTION-discovery] Package discovery and configuration
 // [HIGH] EXTRACT-008: Project template generation - [ACTION:format-processing] Template processing and file creation
 // [HIGH] EXTRACT-008: Template management system - [ACTION:format-processing] File generation coordination
-// [HIGH] EXTRACT-008: Interactive CLI configuration - [ACTION:discovery] User input collection and validation
+// [HIGH] EXTRACT-008: Interactive CLI configuration - [ACTION-discovery] User input collection and validation
 // [HIGH] EXTRACT-008: Project directory creation - [ACTION:core-functionality] Directory structure setup
 // [HIGH] EXTRACT-008: Core file generation - [ACTION:format-processing] Template-based file creation
 // [HIGH] EXTRACT-008: Package-specific generation - [ACTION:core-functionality] Component integration
@@ -202,13 +202,13 @@ Following DOC-007 standardized format:
 - ✅ Generated Makefiles work properly
 - ✅ Documentation generation accurate
 
-## [ACTION:migration] Integration with EXTRACT-008
+## [ACTION-migration] Integration with EXTRACT-008
 
 ### Relationship to Other Subtasks
 - **Subtask 1** (CLI Template): ✅ Provides foundation and examples
-- **Subtask 3** (Integration Documentation): [ACTION:migration] Will document scaffolding usage
-- **Subtask 4** (Migration Guide): [ACTION:migration] Will reference scaffolding for new projects
-- **Subtask 5** (Dependency Mapping): [ACTION:migration] Will use scaffolding examples
+- **Subtask 3** (Integration Documentation): [ACTION-migration] Will document scaffolding usage
+- **Subtask 4** (Migration Guide): [ACTION-migration] Will reference scaffolding for new projects
+- **Subtask 5** (Dependency Mapping): [ACTION-migration] Will use scaffolding examples
 
 ### Package Utilization
 - **All 8 Packages**: Scaffolding system demonstrates integration of all extracted packages

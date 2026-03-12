@@ -1,6 +1,6 @@
 # Package processing
 
-**Tokens:** [REQ:PERFORMANCE] [ARCH:PROCESSING_PATTERNS] [IMPL:PROCESSING_PATTERNS]
+**Tokens:** [REQ-PERFORMANCE] [ARCH-PROCESSING_PATTERNS] [IMPL-PROCESSING_PATTERNS]
 
 // EXTRACT-010: Package processing documentation - Comprehensive API documentation and usage examples - [HIGH]
 

@@ -1,4 +1,4 @@
-// [IMPL:STRUCTURED_ERRORS] [ARCH:ERROR_HANDLING] [REQ:ERROR_HANDLING]
+// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // Package fileops provides file operations and utilities for CLI applications.
 //
 // This file contains path validation functionality including security checks.

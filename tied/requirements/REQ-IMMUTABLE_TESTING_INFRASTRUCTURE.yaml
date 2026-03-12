@@ -1,0 +1,44 @@
+REQ-IMMUTABLE_TESTING_INFRASTRUCTURE:
+  name: Testing Infrastructure Immutable Requirements
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Testing infrastructure requirements ensure test reliability and reproducibility. Changing them would break test infrastructure.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Corruption types remain stable
+    - criterion: Corruption behavior is deterministic
+    - criterion: Testing is safe (no data loss)
+    - criterion: Performance baselines are maintained
+  validation_criteria:
+    - method: Testing infrastructure tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    implementation:
+      - IMPL-TESTING
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_TESTING_INFRASTRUCTURE
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_TESTING_INFRASTRUCTURE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Testing Strategy [ARCH-TESTING_STRATEGY]
+  description: 'Testing infrastructure requirements are immutable:'
+  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]

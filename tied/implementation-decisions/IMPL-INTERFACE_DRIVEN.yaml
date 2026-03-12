@@ -1,0 +1,54 @@
+IMPL-INTERFACE_DRIVEN:
+  name: Interface-Driven Design
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: Enables flexibility, testing, and future evolution of implementations
+    problems_solved:
+      - Tight coupling between extracted packages
+      - Difficulty testing components in isolation
+      - Lack of flexibility for future implementation changes
+    benefits:
+      - Clean separation of concerns
+      - Easier unit testing with mocks
+      - Future-proof component evolution
+  implementation_approach:
+    summary: Define contracts before extracting concrete implementations
+    details:
+      - Create clear interfaces for all extracted components
+      - Define contracts before extracting concrete implementations
+      - Prevents tight coupling between extracted packages
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_PRINCIPLES
+    supersedes: []
+    see_also:
+      - IMPL-ZERO_BREAKING
+      - IMPL-LAYERED_EXTRACTION
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Define contracts before extracting concrete implementations
+
+    procedure interface_driven_design():
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Create clear interfaces for all extracted components
+      create_clear_interfaces_for()
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Define contracts before extracting concrete implementations
+      define_contracts_before_extracting()
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prevents tight coupling between extracted packages
+      prevents_tight_coupling_between()
+      end

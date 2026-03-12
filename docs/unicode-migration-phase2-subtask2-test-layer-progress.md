@@ -69,7 +69,7 @@ This report documents the completion of the Test Layer Implementation phase for 
 ### Token Structure
 Each test token follows the established pattern:
 ```
-// TEST-TOKEN-ID: Test validation description - Specific functionality testing [ACTION:validation]
+// TEST-TOKEN-ID: Test validation description - Specific functionality testing [ACTION-validation]
 // Source: source_file.go - SOURCE-TOKEN-ID
 // Impact: Core functionality validation for specific feature
 ```

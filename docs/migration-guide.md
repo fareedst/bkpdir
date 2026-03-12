@@ -56,7 +56,7 @@ myapp/
 
 ### Step 1: Assess Current Structure
 
-**[ACTION:discovery] Analyze your monolithic application:**
+**[ACTION-discovery] Analyze your monolithic application:**
 
 ```bash
 # 1. Count lines of code in major files
@@ -183,7 +183,7 @@ func initConfig() {
 }
 ```
 
-**[ACTION:discovery] Migration Steps:**
+**[ACTION-discovery] Migration Steps:**
 
 1. **Extract Schema-Specific Settings:**
    ```go
@@ -247,7 +247,7 @@ func ProcessFile(path string) error {
 }
 ```
 
-**[ACTION:discovery] Migration Steps:**
+**[ACTION-discovery] Migration Steps:**
 
 1. **Identify Error Categories:**
    - File operation errors
@@ -369,7 +369,7 @@ func handleProcess(cmd *cobra.Command, args []string) error {
 }
 ```
 
-## [ACTION:migration] Phase 3: Integration and Testing
+## [ACTION-migration] Phase 3: Integration and Testing
 
 ### Step 1: Validate Component Integration
 
@@ -395,7 +395,7 @@ func TestMigrationComponents(t *testing.T) {
 }
 ```
 
-**[ACTION:discovery] Verify functionality:**
+**[ACTION-discovery] Verify functionality:**
 
 ```bash
 # 1. Run integration tests
@@ -435,7 +435,7 @@ go test -bench=. ./...
 
 ### Step 1: Gradual Rollout Strategy
 
-**[ACTION:migration] Blue-Green Deployment:**
+**[ACTION-migration] Blue-Green Deployment:**
 
 ```bash
 # 1. Deploy new version alongside old
@@ -452,7 +452,7 @@ cp new-app app-v2
 mv app-v2 app
 ```
 
-**[ACTION:migration] Feature Flag Migration:**
+**[ACTION-migration] Feature Flag Migration:**
 
 ```go
 // Use feature flags for gradual migration
@@ -486,7 +486,7 @@ tail -f /var/log/myapp.log
 - Critical functionality broken
 - User complaints or support tickets
 
-## [ACTION:maintenance] Common Migration Patterns
+## [ACTION-maintenance] Common Migration Patterns
 
 ### Pattern 1: Configuration Migration
 
@@ -668,7 +668,7 @@ func (a *App) Initialize() error {
 - **Deploy Success Rate**: Target 100% successful deployments
 - **Rollback Time**: <5 minutes for emergency rollback
 
-**[ACTION:validation] Reliability:**
+**[ACTION-validation] Reliability:**
 - **Error Rate**: No increase in error rates
 - **Uptime**: Maintain current SLA levels
 - **Resource Usage**: Monitor memory and CPU patterns

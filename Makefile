@@ -437,10 +437,10 @@ validate-tokens:
 	fi
 
 # [CRITICAL] DOC-008: Comprehensive semantic token validation and enforcement [ACTION:system-validation]
-# [REQ:DOC_015] Extended to validate STDD semantic tokens (REQ/ARCH/IMPL)
+# [REQ-DOC_015] Extended to validate STDD semantic tokens (REQ/ARCH/IMPL)
 validate-token-enforcement:
 	@echo "[CRITICAL] DOC-008: Running comprehensive semantic token validation and enforcement..."
-	@echo "[REQ:DOC_015] Validating STDD semantic tokens (REQ/ARCH/IMPL)..."
+	@echo "[REQ-DOC_015] Validating STDD semantic tokens (REQ/ARCH/IMPL)..."
 	@if [ -f "scripts/validate-semantic-tokens.sh" ]; then \
 		chmod +x scripts/validate-semantic-tokens.sh; \
 		./scripts/validate-semantic-tokens.sh; \
@@ -453,10 +453,10 @@ validate-token-enforcement:
 	fi
 
 # [CRITICAL] DOC-008: Strict mode validation for CI/CD pipelines [ACTION:ci-cd-validation]
-# [REQ:DOC_015] Extended to validate STDD semantic tokens (REQ/ARCH/IMPL) in strict mode
+# [REQ-DOC_015] Extended to validate STDD semantic tokens (REQ/ARCH/IMPL) in strict mode
 validate-tokens-strict:
 	@echo "[CRITICAL] DOC-008: Running semantic token validation in strict mode (CI/CD)..."
-	@echo "[REQ:DOC_015] Validating STDD semantic tokens (REQ/ARCH/IMPL) in strict mode..."
+	@echo "[REQ-DOC_015] Validating STDD semantic tokens (REQ/ARCH/IMPL) in strict mode..."
 	@if [ -f "scripts/validate-semantic-tokens.sh" ]; then \
 		chmod +x scripts/validate-semantic-tokens.sh; \
 		./scripts/validate-semantic-tokens.sh --strict; \
@@ -468,9 +468,9 @@ validate-tokens-strict:
 		exit 1; \
 	fi
 
-# [REQ:DOC_016] Token Navigation Tool [ACTION:discovery]
+# [REQ-DOC_016] Token Navigation Tool [ACTION-discovery]
 token-navigate:
-	@echo "[REQ:DOC_016] Token Navigation Tool"
+	@echo "[REQ-DOC_016] Token Navigation Tool"
 	@echo "Usage: make token-navigate CMD=<command> TOKEN=<token>"
 	@echo "Commands: find-req, find-arch, find-impl, find-tests, trace, list-req, list-arch, list-impl, coverage"
 	@if [ -f "scripts/token-navigate.sh" ]; then \
@@ -488,9 +488,9 @@ token-navigate:
 		exit 1; \
 	fi
 
-# [REQ:DOC_016] Token Coverage Analysis [ACTION:validation]
+# [REQ-DOC_016] Token Coverage Analysis [ACTION-validation]
 token-coverage:
-	@echo "[REQ:DOC_016] Running token coverage analysis..."
+	@echo "[REQ-DOC_016] Running token coverage analysis..."
 	@if [ -f "scripts/token-coverage-analysis.sh" ]; then \
 		chmod +x scripts/token-coverage-analysis.sh; \
 		./scripts/token-coverage-analysis.sh; \

@@ -1,0 +1,88 @@
+IMPL-EXCLUDE_MERGE_FIX:
+  name: Array Field Default Merge Strategy Implementation
+  status: Active
+  cross_references:
+    - ARCH-EXCLUDE_MERGE_FIX
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+    - REQ-TEST_EXCLUDE_MERGE
+  rationale:
+    why: |-
+      Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts (inheritance chains and sequential file processing)
+      Fixes implementation bug where array fields were using "override" instead of "merge" by default
+      Ensures default patterns are preserved when local config adds patterns
+      Provides proper deduplication during merge
+      Uses current state for merge operations to ensure proper accumulation
+      Handles YAML unmarshaling type conversions gracefully
+      Gracefully skips unknown config fields instead of aborting merge operations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Implement array field default merge strategy to satisfy CFG-005 requirement
+    details:
+      - '`config_test.go`'
+  code_locations:
+    files:
+      - path: config_test.go
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-EXCLUDE_MERGE_FIX
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
+    tests: []
+    code_annotations:
+      - IMPL-EXCLUDE_MERGE_FIX
+      - ARCH-EXCLUDE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-EXCLUDE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXCLUDE_MERGE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  location: config_test.go
+  code_markers: '`config.go`, `extractStrategy`, `applyMergeStrategies`, `applyMerge`, `setConfigField`, `isKnownConfigField`'
+  change: Removed `inheritContext` condition that was preventing array fields from defaulting to merge in sequential file processing. Array fields now default to merge in all contexts (inheritance chains and sequential files), per CFG-005 requirement. Explicit prefixes (`!`, `+`, `^`, `=`) are still respected.
+  changes:
+    - Updated `TestLoadConfigMultipleFiles/default_search_path_processes_multiple_files` to use `!exclude_patterns` prefix where override behavior is expected
+    - Tests now explicitly use merge strategy prefixes to align with CFG-005 requirement that array fields default to merge
+  cross-references: '[REQ-CFG_005], [ARCH-EXCLUDE_MERGE_FIX], [REQ-CONFIGURATION], [REQ-TEST_EXCLUDE_MERGE]'
+  fix_summary: |-
+    1. **Strategy Detection**: Array fields default to "merge" instead of "override" in all contexts
+    2. **State Management**: Uses current state (`resultMap`) instead of original state (`dstMap`)
+    3. **Pattern Preservation**: Explicitly copies default patterns before merge
+    4. **Deduplication**: Proper deduplication during merge operations
+    5. **Nil Handling**: Handles nil `dstValue` by getting current value from result
+    6. **YAML Type Conversion**: Handles `[]interface{}` from YAML unmarshaling in both `applyMerge` and `setConfigField`
+    7. **Unknown Field Handling**: Gracefully skips unknown config fields instead of aborting merge
+    8. **Metadata Field Handling**: Skips `inherit` and other metadata fields that aren't part of Config struct
+  implementation_changes: '#### 1. Merge Strategy Detection Fix (`extractStrategy`)'
+  new_function: '`isKnownConfigField` helper function checks if a field name is a valid config field before processing.'
+  essence_pseudocode: |-
+    # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — Implement array field default merge strategy to satisfy CFG-005 requirement
+
+    procedure array_field_default_merge_strategy_implementation():
+      # [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] `config_test.go`
+      config_test_go()
+      end

@@ -1,0 +1,48 @@
+REQ-CFG_005:
+  name: Layered Configuration Inheritance Requirements
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Enables hierarchical configuration management for complex project structures. Array fields accumulating by default ensures that default values (like `.git/`, `vendor/`) are preserved when users add local values.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Configuration files can inherit from other files
+    - criterion: Circular dependencies detected and prevented
+    - criterion: Inheritance chains processed in correct order
+    - criterion: Merge strategies (override, append, prepend, replace, default) work correctly
+    - criterion: Array fields default to merge (accumulate) strategy when no prefix is specified
+    - criterion: Array field values from defaults and parent configs are preserved when child configs add values
+    - criterion: Duplicate values in arrays are deduplicated during merge
+    - criterion: 'Order is preserved: defaults/parent values first, then child additions'
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    implementation:
+      - IMPL-CONFIG_STRUCT
+    tests: []
+    code_annotations:
+      - REQ-CFG_005
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-CFG_005.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Layered Configuration Inheritance [ARCH-CFG_005]
+  description: Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported. Array configuration fields (such as `exclude_patterns`) default to merge (accumulate) strategy to preserve values from defaults and parent configs when child configs add values.
+  implementation: See `implementation-decisions.md` § Configuration Structure [IMPL-CONFIG_STRUCT]

@@ -1,0 +1,4273 @@
+IMPL-CONFIG_STRUCT:
+  name: Configuration Structure
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-CFG_006
+    - REQ-CONFIGURATION
+    - REQ-CFG_006
+  rationale:
+    why: |-
+      The reflection-based configuration discovery system (`GetAllConfigFields`) uses YAML tag names for display
+      Nested struct fields (like `Git.IncludeBranch`) are displayed using their YAML tag names (e.g., `include_branch`) as top-level keys
+      This provides a flat, consistent view of all configuration options regardless of internal struct organization
+      Users see configuration keys as they appear in YAML files, not as nested struct paths
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Configuration keys are displayed as top-level keys in `bkpdir config` output, even when they are nested in the internal struct.
+    details:
+      - Internal struct has `Git *GitConfig` with nested fields
+      - 'YAML files can use either:'
+      - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
+      - 'Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)'
+      - The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
+      - Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
+      - Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
+      - |-
+        Internal struct has `Git *GitConfig` with nested fields
+        YAML files can use either:
+        Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)
+        Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)
+        The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
+        Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
+        Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-CFG_006
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+    tests: []
+    code_annotations:
+      - IMPL-CONFIG_STRUCT
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-CFG_006
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-CFG_006
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CONFIG_STRUCT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`GetAllConfigFields`, `reflectConfigFields`, `field.YAMLName`, `config.go` line 3424'
+  config_type: "```go\ntype Config struct {\n    // Directory archiving settings\n    ArchiveDirPath    string   `yaml:\"archive_dir_path\"`\n    UseCurrentDirName bool     `yaml:\"use_current_dir_name\"`\n    ExcludePatterns   []string `yaml:\"exclude_patterns\"`\n    IncludeGitInfo    bool     `yaml:\"include_git_info\"`      // Legacy - use Git.IncludeInfo\n    ShowGitDirtyStatus bool    `yaml:\"show_git_dirty_status\"` // Legacy - use Git.ShowDirtyStatus\n    \n    // GIT-005: Git configuration for repository detection and information extraction\n    Git *GitConfig `yaml:\"git,omitempty\"`\n    \n    // File backup settings\n    BackupDirPath             string `yaml:\"backup_dir_path\"`\n    UseCurrentDirNameForFiles bool   `yaml:\"use_current_dir_name_for_files\"`\n    \n    \n    // Status codes for directory operations\n    StatusCreatedArchive                        int `yaml:\"status_created_archive\"`\n    StatusFailedToCreateArchiveDirectory        int `yaml:\"status_failed_to_create_archive_directory\"`\n    StatusDirectoryIsIdenticalToExistingArchive int `yaml:\"status_directory_is_identical_to_existing_archive\"`\n    StatusDirectoryNotFound                     int `yaml:\"status_directory_not_found\"`\n    StatusInvalidDirectoryType                  int `yaml:\"status_invalid_directory_type\"`\n    StatusPermissionDenied                      int `yaml:\"status_permission_denied\"`\n    StatusDiskFull                              int `yaml:\"status_disk_full\"`\n    StatusConfigError                           int `yaml:\"status_config_error\"`\n    \n    // Status codes for file operations\n    StatusCreatedBackup                   int `yaml:\"status_created_backup\"`\n    StatusFailedToCreateBackupDirectory   int `yaml:\"status_failed_to_create_backup_directory\"`\n    StatusFileIsIdenticalToExistingBackup int `yaml:\"status_file_is_identical_to_existing_backup\"`\n    StatusFileNotFound                    int `yaml:\"status_file_not_found\"`\n    StatusInvalidFileType                 int `yaml:\"status_invalid_file_type\"`\n    \n    // Printf-style format strings\n    FormatCreatedArchive   string `yaml:\"format_created_archive\"`\n    FormatIdenticalArchive string `yaml:\"format_identical_archive\"`\n    FormatListArchive      string `yaml:\"format_list_archive\"`\n    FormatCreatedBackup    string `yaml:\"format_created_backup\"`\n    FormatIdenticalBackup  string `yaml:\"format_identical_backup\"`\n    FormatListBackup       string `yaml:\"format_list_backup\"`\n    FormatError            string `yaml:\"format_error\"`\n    \n    // Template-based format strings\n    TemplateCreatedArchive   string `yaml:\"template_created_archive\"`\n    TemplateIdenticalArchive string `yaml:\"template_identical_archive\"`\n    TemplateListArchive      string `yaml:\"template_list_archive\"`\n    TemplateCreatedBackup    string `yaml:\"template_created_backup\"`\n    TemplateIdenticalBackup  string `yaml:\"template_identical_backup\"`\n    TemplateListBackup       string `yaml:\"template_list_backup\"`\n    TemplateError            string `yaml:\"template_error\"`\n    \n    // Regex patterns for data extraction\n    PatternArchiveFilename string `yaml:\"pattern_archive_filename\"`\n    PatternBackupFilename  string `yaml:\"pattern_backup_filename\"`\n    PatternConfigLine      string `yaml:\"pattern_config_line\"`\n    PatternTimestamp       string `yaml:\"pattern_timestamp\"`\n}\n```"
+  configuration_file_format: |-
+    ```yaml
+    # Top-level keys (actual format used in practice)
+    include_git_info: true
+    show_git_dirty_status: true
+    include_branch: true
+    include_hash: true
+
+    # Nested format (also supported internally, but displayed as top-level)
+    # git:
+    #   include_info: true
+    #   include_branch: true
+    ```
+  cross-references: '[ARCH-CFG_006], [REQ-CFG_006], [IMPL-CFG_006]'
+  decision: Configuration keys are displayed as top-level keys in `bkpdir config` output, even when they are nested in the internal struct.
+  default_values:
+    - 'ArchiveDirPath: "../.bkpdir"'
+    - 'UseCurrentDirName: true'
+    - 'ExcludePatterns: [".git/", "vendor/"]'
+    - 'IncludeGitInfo: false'
+    - 'ShowGitDirtyStatus: true'
+    - 'Git: DefaultGitConfig() (includes nested GitConfig with defaults)'
+    - 'BackupDirPath: "../.bkpdir"'
+    - 'UseCurrentDirNameForFiles: true'
+    - 'Status codes: Various defaults (0 for success, non-zero for errors)'
+    - 'Format strings: Default printf-style formats'
+    - 'Template strings: Default template formats with placeholders'
+  implementation_details:
+    - Internal struct has `Git *GitConfig` with nested fields
+    - 'YAML files can use either:'
+    - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
+    - 'Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)'
+    - The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
+    - Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
+    - Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
+IMPL-ZIP_FORMAT:
+  name: ZIP Archive Format Implementation
+  status: Active
+  cross_references:
+    - ARCH-ARCHIVE_FORMAT
+  rationale:
+    why: |-
+      Cross-platform compatibility
+      Built-in compression
+      Wide tool support
+      Standard library support in Go
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Uses Go's `archive/zip` package
+      Atomic file operations with temporary files
+      Compression level configurable
+      Supports incremental archives
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-ARCHIVE_FORMAT
+    requirements: []
+    tests: []
+    code_annotations:
+      - IMPL-ZIP_FORMAT
+      - ARCH-ARCHIVE_FORMAT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-ARCHIVE_FORMAT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-ZIP_FORMAT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`archive/zip` imports, `*.zip` file extensions'
+IMPL-DUAL_FORMATTING:
+  name: Dual Printf/Template Formatting
+  status: Active
+  cross_references:
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      Printf for simple, backward-compatible formatting
+      Templates for rich data extraction and advanced formatting
+      Graceful fallback from template to printf
+      Supports ANSI colors and structured output
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      `OutputFormatter`: Printf-style formatting methods
+      `TemplateFormatter`: Advanced template processing
+      Regex extraction for rich data formatting
+      Support for both Go text/template and placeholder syntax
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - IMPL-DUAL_FORMATTING
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUTPUT_FORMATTING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`FormatXXX()` and `TemplateXXX()` functions, regex patterns'
+IMPL-STRUCTURED_ERRORS:
+  name: Structured Error Handling
+  status: Active
+  cross_references:
+    - ARCH-ERROR_HANDLING
+    - REQ-ERROR_HANDLING
+  rationale:
+    why: |-
+      Consistent error handling across operations
+      Machine-readable status codes for scripting
+      Enhanced debugging with operation context
+      Supports template-based error formatting
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Use structured error types with status codes and operation context
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-ERROR_HANDLING
+    requirements:
+      - REQ-ERROR_HANDLING
+    tests: []
+    code_annotations:
+      - IMPL-STRUCTURED_ERRORS
+      - ARCH-ERROR_HANDLING
+      - REQ-ERROR_HANDLING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-ERROR_HANDLING
+      - REQ-ERROR_HANDLING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`ArchiveError`, `BackupError` types, `NewXXXError()` functions'
+  error_reporting:
+    - Error logging to stderr
+    - Status code propagation
+    - Operation context in error messages
+    - Template formatting support
+  error_types: |-
+    ```go
+    type ArchiveError struct {
+        Message    string
+        StatusCode int
+        Operation  string
+        Path       string
+        Err        error
+    }
+
+    type BackupError struct {
+        Message    string
+        StatusCode int
+        Operation  string
+        Path       string
+        Err        error
+    }
+    ```
+  error_wrapping: |-
+    ```go
+    if err != nil {
+        return fmt.Errorf("context: %w", err)
+    }
+    ```
+IMPL-GIT_CLI:
+  name: Git Command-line Integration
+  status: Active
+  cross_references:
+    - ARCH-GIT_INTEGRATION
+    - REQ-GIT_INTEGRATION
+  rationale:
+    why: |-
+      Simplicity over Git library dependencies
+      Relies on user's Git installation
+      Consistent with user's Git configuration
+      Lightweight implementation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Uses `exec.Command("git", ...)` for Git operations
+      Repository detection: `git rev-parse --is-inside-work-tree`
+      Branch extraction: `git rev-parse --abbrev-ref HEAD`
+      Hash extraction: `git rev-parse --short HEAD`
+      Status detection: `git status --porcelain`
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    requirements:
+      - REQ-GIT_INTEGRATION
+    tests: []
+    code_annotations:
+      - IMPL-GIT_CLI
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-GIT_CLI.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`exec.Command("git", ...)` calls, Git command parsing'
+IMPL-RESOURCE_MANAGER:
+  name: Resource Management with Cleanup
+  status: Active
+  cross_references:
+    - ARCH-RESOURCE_MANAGEMENT
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Prevents resource leaks on operation failure
+      Handles panic scenarios gracefully
+      Thread-safe for concurrent operations
+      Simplifies error handling in operations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Implement ResourceManager for automatic cleanup with panic recovery
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+    requirements:
+      - REQ-RESOURCE_MANAGEMENT
+    tests: []
+    code_annotations:
+      - IMPL-RESOURCE_MANAGER
+      - ARCH-RESOURCE_MANAGEMENT
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-RESOURCE_MANAGEMENT
+      - REQ-RESOURCE_MANAGEMENT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-RESOURCE_MANAGER.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`ResourceManager` type, `CleanupWithPanicRecovery()` calls'
+  methods:
+    - '`NewResourceManager()`: Create new resource manager'
+    - '`AddTempFile(path string)`: Register temporary file for cleanup'
+    - '`AddTempDir(path string)`: Register temporary directory for cleanup'
+    - '`RemoveResource(resource Resource)`: Remove resource from tracking'
+    - '`Cleanup()`: Clean up all registered resources'
+    - '`CleanupWithPanicRecovery()`: Clean up with panic recovery'
+  resourcemanager_structure: |-
+    ```go
+    type ResourceManager struct {
+        tempFiles []*TempFile
+        tempDirs  []*TempDir
+        mutex     sync.RWMutex
+    }
+
+    type TempFile struct {
+        Path string
+    }
+
+    type TempDir struct {
+        Path string
+    }
+    ```
+IMPL-CONTEXT_OPS:
+  name: Context-Aware Operations
+  status: Active
+  cross_references:
+    - ARCH-CONTEXT_SUPPORT
+    - REQ-CONTEXT_SUPPORT
+  rationale:
+    why: |-
+      Enables operation timeouts
+      Supports graceful cancellation
+      Better user experience for long operations
+      Standard Go pattern for cancellable operations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      All long-running operations accept `context.Context`
+      Periodic cancellation checks during operations
+      Context-aware file operations
+      Timeout support via `context.WithTimeout()`
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONTEXT_SUPPORT
+    requirements:
+      - REQ-CONTEXT_SUPPORT
+    tests: []
+    code_annotations:
+      - IMPL-CONTEXT_OPS
+      - ARCH-CONTEXT_SUPPORT
+      - REQ-CONTEXT_SUPPORT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONTEXT_SUPPORT
+      - REQ-CONTEXT_SUPPORT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CONTEXT_OPS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`context.Context` parameters, `checkContextCancellation()` calls'
+  functions:
+    - '`CreateArchiveWithContext(ctx context.Context, ...)`'
+    - '`CreateFileBackupWithContext(ctx context.Context, ...)`'
+    - '`CopyFileWithContext(ctx context.Context, src, dst string)`'
+    - '`CompareFilesWithContext(ctx context.Context, file1, file2 string)`'
+IMPL-ATOMIC_OPS:
+  name: Atomic File Operations
+  status: Active
+  cross_references:
+    - ARCH-RESOURCE_MANAGEMENT
+    - ARCH-TESTING_STRATEGY
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Prevents corruption on operation failure
+      Ensures consistency during concurrent access
+      Standard pattern for safe file operations
+      Integrates with resource cleanup
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Create temporary files with `.tmp` extension
+      Write content to temporary file
+      Atomic rename to final location
+      Register temporary files with ResourceManager
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-RESOURCE_MANAGEMENT
+    tests: []
+    code_annotations:
+      - IMPL-ATOMIC_OPS
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TESTING_STRATEGY
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TESTING_STRATEGY
+      - REQ-RESOURCE_MANAGEMENT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-ATOMIC_OPS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`.tmp` file extensions, `os.Rename()` calls'
+  integration_test_structure: |-
+    ```go
+    func TestIntegrationScenario(t *testing.T) {
+        // Setup
+        // Execute
+        // Verify
+    }
+    ```
+  key_implementation_notes:
+    - Keep `pkg/testutil` free of project-specific domain types — accept simple primitives or small interfaces.
+    - Minimize external dependencies; prefer stdlib for file and zip operations.
+    - Provide migration adapters so existing tests can switch incrementally to `pkg/testutil`.
+    - Add `[IMPL-EXTRACT-009_TESTUTIL]` tokens in code comments for exported functions and tests that rely on this package.
+  note: This implementation realizes the validation criteria specified in `requirements.md` and follows the testing strategy defined in `architecture-decisions.md`. Each test validates specific satisfaction criteria from requirements.
+  quality_gates:
+    - 'Code coverage: Minimum 90% overall, 100% for critical functions'
+    - 'Performance benchmarks: Must not regress'
+    - 'Memory usage: Must stay within reasonable bounds, no leaks'
+    - 'Concurrent safety: No race conditions'
+    - 'Resource cleanup: 100% cleanup verification'
+    - 'Platform compatibility: Tests pass on Linux and macOS'
+  summary: |-
+    Implement `pkg/testutil` with the following components:
+
+    - `interfaces.go` — small interfaces for providers (TestUtilProvider) to avoid tight coupling
+    - `assertions.go` — simple test assertion helpers (`AssertEqualString`, `AssertBool`, etc.)
+    - `fshelpers.go` — temp directory and file helpers, `CreateTempDir`, `WriteFile`, `CreateTestDirectoryStructure`
+    - `archivehelpers.go` — create zip archives for tests (`CreateTestZipArchive`)
+    - `githelpers.go` — create lightweight git repos for testing (`InitTestGitRepo`)
+    - `cmdhelpers.go` — helpers to execute Cobra commands and capture output (`ExecuteCommand`) with cleanup
+    - `provider.go` — default provider that composes utilities for convenience
+    - `doc.go` + godoc comments and examples
+    - `testutil_test.go` — unit tests for all exported helpers
+  test_categories:
+    - 'Unit tests: Individual function testing with table-driven tests'
+    - 'Integration tests: End-to-end workflow testing'
+    - 'Performance tests: Benchmark testing for various scenarios'
+    - 'Stress tests: Resource exhaustion and high concurrency testing'
+  test_execution:
+    - 'Local development: `make test`, `go test -cover ./...`'
+    - 'Build tags: `-tags=integration`, `-tags=performance`, `-tags=stress`, `-tags=context`'
+    - 'Race detection: `go test -race ./...`'
+    - 'Coverage requirements: Minimum 90% overall, 100% for critical functions'
+  test_utilities: '(`testutil/` package):'
+  testing_frameworks:
+    - Archive corruption testing framework
+    - Disk space simulation framework
+    - Permission testing framework
+    - Context cancellation testing helpers
+    - Error injection framework
+  unit_test_structure: "```go\nfunc TestExampleFeature(t *testing.T) {\n    tests := []struct {\n        name     string\n        input    InputType\n        expected OutputType\n    }{\n        {\n            name:     \"test case 1\",\n            input:    inputValue,\n            expected: expectedValue,\n        },\n    }\n    \n    for _, tt := range tests {\n        t.Run(tt.name, func(t *testing.T) {\n            result := functionUnderTest(tt.input)\n            if result != tt.expected {\n                t.Errorf(\"expected %v, got %v\", tt.expected, result)\n            }\n        })\n    }\n}\n```"
+  validation: |-
+    - Add unit tests exercising assertion helpers, temp dir lifecycle, archive creation, and command execution patterns.
+    - Migrate a small set of tests (e.g., `pkg/config`, `pkg/formatter`, `pkg/fileops`) to demonstrate usage and validate no regressions.
+
+
+     [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-*]
+IMPL-CODE_STYLE:
+  name: Code Style and Conventions
+  status: Active
+  cross_references: []
+  rationale:
+    why: See detail file
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: See detail file
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture: []
+    requirements: []
+    tests: []
+    code_annotations:
+      - IMPL-CODE_STYLE
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also: []
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  documentation:
+    - Package-level documentation
+    - Exported function documentation
+    - Inline comments for complex logic
+    - Examples in test files
+  formatting:
+    - Use `go fmt` for code formatting
+    - Use `revive` linter for code quality
+    - Follow Go standard formatting
+  naming:
+    - Use descriptive names
+    - Follow Go naming conventions
+    - 'Exported types/functions: PascalCase'
+    - 'Unexported: camelCase'
+IMPL-PACKAGE_EXTRACTION:
+  name: Package Extraction Implementation
+  status: Active
+  cross_references:
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Enables clean component boundaries
+      Prevents circular dependencies
+      Maintains backward compatibility
+      Supports gradual migration
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Interface-driven extraction with layered dependency order
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-PACKAGE_EXTRACTION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-PACKAGE_EXTRACTION
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-PACKAGE_EXTRACTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`EXTRACT-*` tokens, interface definitions, wrapper functions'
+  after_extraction:
+    - Components expose clean interfaces
+    - No internal package dependencies
+    - External dependencies only (standard library, third-party)
+  before_extraction:
+    - Define interfaces for all component dependencies
+    - 'Example: `ConfigProvider`, `ConfigMerger` for config package'
+    - 'Example: `ArchiveConfigInterface`, `ArchiveFormatterInterface` for archive operations'
+  legacy_type_aliases: |-
+    ```go
+    type FileInfo = fileops.FileInfo
+    type DirectorySnapshot = fileops.DirectorySnapshot
+    type PatternMatcher = fileops.PatternMatcher
+    ```
+  phase_1: Foundation Components (No Dependencies)
+  phase_2: Interface-Dependent Components
+  phase_3: Framework Layer
+  phase_4: Pattern Layer
+  wrapper_functions: |-
+    ```go
+    func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
+        return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
+    }
+    ```
+IMPL-CLI_FRAMEWORK:
+  name: CLI Framework Implementation
+  status: Active
+  cross_references:
+    - ARCH-CLI_FRAMEWORK
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Standardizes command construction
+      Enables testability through interfaces
+      Provides consistent flag management
+      Supports context-aware execution
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Builder pattern with manager interfaces for CLI construction
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CLI_FRAMEWORK
+    requirements:
+      - REQ-USABILITY
+    tests: []
+    code_annotations:
+      - IMPL-CLI_FRAMEWORK
+      - ARCH-CLI_FRAMEWORK
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CLI_FRAMEWORK
+      - REQ-USABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CLI_FRAMEWORK.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/cli/` package, builder methods, manager interfaces'
+  cliapp:
+    - Complete CLI application container
+    - Manages all managers and builders
+    - Provides unified API for application setup
+  commandbuilder: |-
+    ```go
+    type CommandBuilder interface {
+        NewCommand(name, short, long string) *cobra.Command
+        WithHandler(cmd *cobra.Command, handler func(*cobra.Command, []string) error) *cobra.Command
+        WithFlags(cmd *cobra.Command, flags []string) *cobra.Command
+        WithSubcommands(parent *cobra.Command, children ...*cobra.Command) *cobra.Command
+    }
+    ```
+  contextmanager: |-
+    ```go
+    type ContextManager interface {
+        Create(parent context.Context) (context.Context, context.CancelFunc)
+        WithTimeout(parent context.Context, timeout string) (context.Context, context.CancelFunc)
+        HandleSignals(cancel context.CancelFunc)
+    }
+    ```
+  defaultcommandbuilder:
+    - Wraps Cobra command creation
+    - Provides fluent API for command setup
+    - Integrates with FlagManager
+  defaultflagmanager:
+    - Standard flag registration methods
+    - FlagSet structure for batch flag addition
+    - Consistent flag naming conventions
+  dryrunmanager: |-
+    ```go
+    type DryRunManager interface {
+        Execute(ctx CommandContext, op DryRunOperation) error
+        Log(ctx CommandContext, message string)
+    }
+    ```
+  flagmanager: |-
+    ```go
+    type FlagManager interface {
+        AddGlobalFlags(cmd *cobra.Command) error
+        AddDryRunFlag(cmd *cobra.Command, target *bool) error
+        AddNoteFlag(cmd *cobra.Command, target *string) error
+        AddConfigFlag(cmd *cobra.Command, target *bool) error
+    }
+    ```
+IMPL-FILE_OPERATIONS:
+  name: File Operations Implementation
+  status: Active
+  cross_references:
+    - ARCH-FILE_OPERATIONS
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Prevents data corruption
+      Enhances security
+      Supports complex traversal scenarios
+      Enables efficient file comparison
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Atomic operations with comprehensive validation and pattern-based exclusion
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    requirements:
+      - REQ-RELIABILITY
+    tests: []
+    code_annotations:
+      - IMPL-FILE_OPERATIONS
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-FILE_OPERATIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/fileops/` package, atomic operations, validation functions'
+  atomic_functions:
+    - '`AtomicWriteFile(filename string, data []byte, perm os.FileMode) error`'
+    - '`AtomicCopy(src, dst string) error`'
+  atomicwriter: |-
+    ```go
+    type AtomicWriter struct {
+        filename string
+        tempFile *os.File
+        perm     os.FileMode
+    }
+
+    func NewAtomicWriter(filename string, perm os.FileMode) (*AtomicWriter, error)
+    func (aw *AtomicWriter) Write(p []byte) (n int, err error)
+    func (aw *AtomicWriter) Commit() error
+    func (aw *AtomicWriter) Rollback() error
+    ```
+  patternmatcher: |-
+    ```go
+    type PatternMatcher struct {
+        patterns []string
+    }
+
+    func NewPatternMatcher(patterns []string) *PatternMatcher
+    func (pm *PatternMatcher) Match(path string) bool
+    func (pm *PatternMatcher) AddPattern(pattern string)
+    ```
+  traversal_functions:
+    - '`Walk(root string, walkFn filepath.WalkFunc) error`'
+    - '`WalkWithExclusions(root string, exclusions []string, walkFn filepath.WalkFunc) error`'
+    - '`WalkWithOptions(root string, options TraversalOptions, walkFn filepath.WalkFunc) error`'
+  traversaloptions: |-
+    ```go
+    type TraversalOptions struct {
+        Exclusions     []string
+        FollowSymlinks bool
+        MaxDepth       int
+        IncludeHidden  bool
+        SortOrder      SortOrder
+    }
+    ```
+  validation_functions:
+    - '`ValidatePath(path string, options ValidationOptions) error`'
+    - '`ValidateExistence(path string) error`'
+    - '`ValidateReadable(path string) error`'
+    - '`ValidateWritable(path string) error`'
+    - '`IsSecurePath(path string) bool`'
+  validationoptions: |-
+    ```go
+    type ValidationOptions struct {
+        MustExist      bool
+        MustBeReadable bool
+        MustBeWritable bool
+        MustBeFile     bool
+        MustBeDir      bool
+        CheckSecurity  bool
+    }
+    ```
+IMPL-PROCESSING_PATTERNS:
+  name: Processing Patterns Implementation
+  status: Active
+  cross_references:
+    - ARCH-PROCESSING_PATTERNS
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables reusable processing patterns
+      Supports high-performance concurrent operations
+      Standardizes naming conventions
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Pipeline-based processing with concurrent execution support
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-PROCESSING_PATTERNS
+    requirements:
+      - REQ-PERFORMANCE
+    tests: []
+    code_annotations:
+      - IMPL-PROCESSING_PATTERNS
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-PROCESSING_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/processing/` package, pipeline stages, worker pools'
+  concurrentprocessor: |-
+    ```go
+    type ConcurrentProcessor struct {
+        workers    int
+        queue      chan WorkItem
+        results    chan Result
+        ctx        context.Context
+        cancel     context.CancelFunc
+        wg         sync.WaitGroup
+        processed  int64
+        failed     int64
+    }
+
+    func NewConcurrentProcessor(workers int) *ConcurrentProcessor
+    func (cp *ConcurrentProcessor) Submit(item WorkItem) error
+    func (cp *ConcurrentProcessor) Process(ctx context.Context) error
+    func (cp *ConcurrentProcessor) GetStats() Stats
+    ```
+  naming_patterns:
+    - 'ISO 8601 timestamp: `2006-01-02T150405`'
+    - 'Git integration: `{branch}-{hash}-{dirty}`'
+    - 'Archive pattern: `{prefix}-{timestamp}-{note}.zip`'
+    - 'Backup pattern: `{name}-{timestamp}-{note}.bak`'
+  namingprovider: |-
+    ```go
+    type NamingProviderInterface interface {
+        GenerateName(pattern string, metadata map[string]string) (string, error)
+        ParseName(name string, pattern string) (map[string]string, error)
+    }
+    ```
+  pipeline_interface: |-
+    ```go
+    type PipelineInterface interface {
+        AddStage(stage Stage) PipelineInterface
+        Execute(ctx context.Context, input interface{}) (interface{}, error)
+        GetProgress() Progress
+    }
+    ```
+  stage_interface: |-
+    ```go
+    type Stage interface {
+        Process(ctx context.Context, input interface{}) (interface{}, error)
+        Name() string
+    }
+    ```
+IMPL-AUTO_DETECTION:
+  name: Auto-Detection Implementation
+  status: Active
+  cross_references:
+    - ARCH-AUTO_DETECTION
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Improves user experience
+      Reduces command verbosity
+      Maintains backward compatibility
+      Supports intuitive CLI usage
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Path type detection with command routing logic
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-AUTO_DETECTION
+    requirements:
+      - REQ-USABILITY
+    tests: []
+    code_annotations:
+      - IMPL-AUTO_DETECTION
+      - ARCH-AUTO_DETECTION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-AUTO_DETECTION
+      - REQ-USABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-AUTO_DETECTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`main.go` path detection functions, `executeWithAutoDetection()`, `handleAutoDetectedCommand()`'
+  detection_functions: |-
+    ```go
+    func isFile(path string) bool {
+        info, err := os.Stat(path)
+        if err != nil {
+            return false
+        }
+        return info.Mode().IsRegular()
+    }
+
+    func isDirectory(path string) bool {
+        info, err := os.Stat(path)
+        if err != nil {
+            return false
+        }
+        return info.IsDir()
+    }
+
+    func validatePath(path string) error {
+        _, err := os.Stat(path)
+        if err != nil {
+            if os.IsNotExist(err) {
+                return fmt.Errorf("path does not exist: %s", path)
+            }
+            if os.IsPermission(err) {
+                return fmt.Errorf("permission denied accessing path: %s", path)
+            }
+            return fmt.Errorf("error accessing path %s: %v", path, err)
+        }
+        return nil
+    }
+    ```
+  integration_with_cobra: "```go\nfunc executeWithAutoDetection(rootCmd *cobra.Command) error {\n    args := os.Args[1:]\n    \n    // Check for known commands/flags\n    // If not known, trigger auto-detection\n    // Otherwise execute normally\n}\n```"
+  known_commands_bypass:
+    - 'Explicit commands: `create`, `config`, `list`, `verify`, `backup`, `version`'
+    - 'Global flags: `--config`, `--dry-run`, `--list`'
+    - 'Help flags: `--help`, `-h`, `--version`, `-v`'
+  routing_logic: "```go\nfunc handleAutoDetectedCommand(args []string) {\n    path := args[0]\n    \n    if err := validatePath(path); err != nil {\n        // Handle error\n    }\n    \n    if isFile(path) {\n        handleAutoDetectedFileBackup(args)\n    } else if isDirectory(path) {\n        handleAutoDetectedDirectoryArchive(args)\n    } else {\n        // Handle unsupported types\n    }\n}\n```"
+IMPL-FILE_STATISTICS:
+  name: File Statistics Implementation
+  status: Active
+  cross_references:
+    - ARCH-FILE_STATISTICS
+    - REQ-OUTPUT_FORMATTING
+    - REQ-OUT_002
+  rationale:
+    why: |-
+      Provides rich file information
+      Enhances output display
+      Supports template formatting
+      Improves user experience
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: FileStatInfo structure with human-readable formatting
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-OUT_002
+    tests: []
+    code_annotations:
+      - IMPL-FILE_STATISTICS
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-OUT_002
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-OUT_002
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-FILE_STATISTICS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`file_stats.go`, `FileStatInfo` struct, `GatherFileStatInfo()` function'
+  cross-references: '[ARCH-FILE_STATISTICS], [REQ-OUTPUT_FORMATTING], [REQ-OUT_002]'
+  file_type_detection: |-
+    ```go
+    func getFileType(info os.FileInfo) string {
+        mode := info.Mode()
+        switch {
+        case mode.IsRegular():
+            return "regular"
+        case mode.IsDir():
+            return "directory"
+        case mode&os.ModeSymlink != 0:
+            return "symlink"
+        case mode&os.ModeDevice != 0:
+            return "device"
+        case mode&os.ModeNamedPipe != 0:
+            return "pipe"
+        case mode&os.ModeSocket != 0:
+            return "socket"
+        default:
+            return "other"
+        }
+    }
+    ```
+  filestatinfo_structure: |-
+    ```go
+    type FileStatInfo struct {
+        Path      string      // Full file path
+        Name      string      // File name only
+        Size      int64       // File size in bytes
+        SizeHuman string      // Human-readable size (1.2MB, 455KB, etc.)
+        MTime     time.Time   // Modification time
+        MTimeUnix int64       // Modification time as unix timestamp
+        Mode      os.FileMode // File permissions/mode
+        Type      string      // File type (regular, directory, symlink)
+    }
+    ```
+  gathering_function: "```go\nfunc GatherFileStatInfo(path string) (*FileStatInfo, error) {\n    info, err := os.Stat(path)\n    if err != nil {\n        return nil, fmt.Errorf(\"failed to stat file %s: %w\", path, err)\n    }\n    \n    return &FileStatInfo{\n        Path:      path,\n        Name:      filepath.Base(path),\n        Size:      info.Size(),\n        SizeHuman: formatHumanSize(info.Size()),\n        MTime:     info.ModTime(),\n        MTimeUnix: info.ModTime().Unix(),\n        Mode:      info.Mode(),\n        Type:      getFileType(info),\n    }, nil\n}\n```"
+  human-readable_size_formatting: "```go\nfunc formatHumanSize(size int64) string {\n    const (\n        KB = 1024\n        MB = KB * 1024\n        GB = MB * 1024\n        TB = GB * 1024\n    )\n    \n    switch {\n    case size >= TB:\n        return fmt.Sprintf(\"%.1fTB\", float64(size)/TB)\n    case size >= GB:\n        return fmt.Sprintf(\"%.1fGB\", float64(size)/GB)\n    case size >= MB:\n        return fmt.Sprintf(\"%.1fMB\", float64(size)/MB)\n    case size >= KB:\n        return fmt.Sprintf(\"%.1fKB\", float64(size)/KB)\n    default:\n        return fmt.Sprintf(\"%dB\", size)\n    }\n}\n```"
+IMPL-FILE_STATISTICS_TEMPLATE_FIX:
+  name: File Statistics Template Processing Fix
+  status: Active
+  cross_references:
+    - ARCH-FILE_STATISTICS
+    - REQ-OUT_002
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      Fixed critical bug where `AIFormatterAdapter` was bypassing template processing
+      Simplified template processing to use direct placeholder replacement (same approach as `formatListArchiveSimple`)
+      More reliable than complex `formatTemplate` function which had issues with Go's `text/template` internal `fmt` usage
+      Ensures consistent behavior between `OutputFormatter` and `AIFormatterAdapter`
+      Final safety check now correctly checks data map first before using defaults
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    requirements:
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - IMPL-FILE_STATISTICS_TEMPLATE_FIX
+      - ARCH-FILE_STATISTICS
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: |-
+    `formatter.go` line ~1417-1423: Direct placeholder replacement loop in `FormatCreatedArchiveWithStats`
+    `formatter.go` line ~1427-1478: Final safety check with data map lookup first
+    `formatter.go` line ~1496-1503: Direct placeholder replacement loop in `FormatIncrementalCreatedWithStats`
+    `ai_formatter_adapter.go` line ~977-982: Fixed `FormatCreatedArchiveWithStats` delegation
+    `ai_formatter_adapter.go` line ~984-989: Fixed `FormatIncrementalCreatedWithStats` delegation
+  aiformatteradapter_fix: |-
+    ```go
+    func (fa *AIFormatterAdapter) FormatCreatedArchiveWithStats(path string) string {
+        // Delegate to the OutputFormatter implementation which has the correct template processing
+        outputFormatter := &OutputFormatter{cfg: fa.config}
+        return outputFormatter.FormatCreatedArchiveWithStats(path)
+    }
+    ```
+  code_structure:
+    - '`formatter.go` lines ~1388-1467: `FormatCreatedArchiveWithStats()` - Simplified template processing with direct placeholder replacement'
+    - '`formatter.go` lines ~1468-1547: `FormatIncrementalCreatedWithStats()` - Simplified template processing with direct placeholder replacement'
+    - '`ai_formatter_adapter.go` lines ~977-989: `FormatCreatedArchiveWithStats()` and `FormatIncrementalCreatedWithStats()` - Fixed to delegate to `OutputFormatter`'
+  cross-references: '[ARCH-FILE_STATISTICS], [REQ-OUT_002], [REQ-OUTPUT_FORMATTING], [IMPL-FILE_STATISTICS]'
+  fixed_aiformatteradapter_delegation: Updated `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats` in `AIFormatterAdapter` to correctly delegate to `OutputFormatter` implementation
+  simplified_template_processing: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`
+  template_processing_logic: |-
+    ```go
+    // Simplified approach (same as formatListArchiveSimple)
+    result := templateStr
+    for key, value := range data {
+        placeholder := fmt.Sprintf("#{%s}", key)
+        result = strings.ReplaceAll(result, placeholder, value)
+    }
+
+    // Final safety check: check data map first before using defaults
+    if strings.Contains(result, "#{") {
+        finalReplacements := map[string]string{
+            "#{size_human}": func() string {
+                if sh, ok := data["size_human"]; ok {
+                    return sh
+                }
+                return "unknown"
+            }(),
+            // ... similar for other placeholders
+        }
+        for placeholder, value := range finalReplacements {
+            result = strings.ReplaceAll(result, placeholder, value)
+        }
+    }
+    ```
+IMPL-DIRECTORY_COMPARISON:
+  name: Directory Comparison Implementation
+  status: Active
+  cross_references:
+    - ARCH-DIRECTORY_COMPARISON
+  rationale:
+    why: |-
+      Enables efficient comparison
+      Supports archive-to-directory comparison
+      Provides accurate change detection
+      Handles file renames and moves
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Snapshot-based comparison with hash-based content verification
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-DIRECTORY_COMPARISON
+    requirements: []
+    tests: []
+    code_annotations:
+      - IMPL-DIRECTORY_COMPARISON
+      - ARCH-DIRECTORY_COMPARISON
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-DIRECTORY_COMPARISON
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/fileops/comparison.go`, snapshot structures, comparison functions'
+  comparison_algorithm: "```go\nfunc CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {\n    if len(snap1.Files) != len(snap2.Files) {\n        return false\n    }\n    \n    for path, info1 := range snap1.Files {\n        info2, exists := snap2.Files[path]\n        if !exists {\n            return false\n        }\n        \n        if info1.Hash != info2.Hash || info1.Size != info2.Size {\n            return false\n        }\n    }\n    \n    return true\n}\n```"
+  directorysnapshot: |-
+    ```go
+    type DirectorySnapshot struct {
+        Files map[string]FileInfo
+        Root  string
+    }
+
+    type FileInfo struct {
+        Path     string
+        Size     int64
+        ModTime  time.Time
+        Hash     string
+        IsDir    bool
+    }
+    ```
+  from_archive: "```go\nfunc CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {\n    reader, err := zip.OpenReader(archivePath)\n    if err != nil {\n        return nil, err\n    }\n    defer reader.Close()\n    \n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  archivePath,\n    }\n    \n    for _, file := range reader.File {\n        hash := calculateArchiveFileHash(file)\n        snapshot.Files[file.Name] = FileInfo{\n            Path:    file.Name,\n            Size:    int64(file.UncompressedSize64),\n            ModTime: file.ModTime(),\n            Hash:    hash,\n            IsDir:   file.FileInfo().IsDir(),\n        }\n    }\n    \n    return snapshot, nil\n}\n```"
+  from_directory: "```go\nfunc CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {\n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  root,\n    }\n    \n    err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {\n        if err != nil {\n            return err\n        }\n        \n        hash := calculateFileHash(path)\n        snapshot.Files[path] = FileInfo{\n            Path:    path,\n            Size:    info.Size(),\n            ModTime: info.ModTime(),\n            Hash:    hash,\n            IsDir:   info.IsDir(),\n        }\n        return nil\n    })\n    \n    return snapshot, err\n}\n```"
+IMPL-EXCLUSION_PATTERNS:
+  name: Exclusion Patterns Implementation
+  status: Active
+  cross_references:
+    - ARCH-EXCLUSION_PATTERNS
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Supports flexible file filtering
+      Enables efficient pattern matching
+      Handles recursive patterns (`**`)
+      Integrates with configuration system
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Doublestar glob pattern matching with compiled matcher
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-EXCLUSION_PATTERNS
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-EXCLUSION_PATTERNS
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/fileops/exclusion.go`, `PatternMatcher` struct, doublestar imports'
+  convenience_functions: "```go\nfunc ShouldExcludeFile(path string, exclusions []string) bool {\n    if len(exclusions) == 0 {\n        return false\n    }\n    \n    matcher := NewPatternMatcher(exclusions)\n    return matcher.Match(path)\n}\n\nfunc FilterPaths(paths []string, exclusions []string) []string {\n    matcher := NewPatternMatcher(exclusions)\n    var filtered []string\n    \n    for _, path := range paths {\n        if !matcher.Match(path) {\n            filtered = append(filtered, path)\n        }\n    }\n    \n    return filtered\n}\n```"
+  directory_patterns: '`.git/`, `node_modules/`'
+  doublestar: '`**` for recursive matching'
+  glob_patterns: '`*.tmp`, `*.log`, `build/`'
+  multiple_patterns: Array of patterns for complex exclusions
+  patternmatcher_implementation: "```go\ntype PatternMatcher struct {\n    patterns []string\n    compiled []glob.Glob\n}\n\nfunc NewPatternMatcher(patterns []string) *PatternMatcher {\n    pm := &PatternMatcher{\n        patterns: patterns,\n        compiled: make([]glob.Glob, 0, len(patterns)),\n    }\n    \n    for _, pattern := range patterns {\n        if g, err := glob.Compile(pattern); err == nil {\n            pm.compiled = append(pm.compiled, g)\n        }\n    }\n    \n    return pm\n}\n\nfunc (pm *PatternMatcher) Match(path string) bool {\n    for _, g := range pm.compiled {\n        if g.Match(path) {\n            return true\n        }\n    }\n    return false\n}\n```"
+IMPL-TEST_EXCLUDE_MERGE:
+  name: Exclude Patterns Merge Testing
+  status: Active
+  cross_references:
+    - ARCH-TEST_EXCLUDE_MERGE
+    - REQ-TEST_EXCLUDE_MERGE
+    - REQ-CONFIGURATION
+    - REQ-CFG_006
+  rationale:
+    why: |-
+      Validates merge behavior fix for exclude patterns
+      Ensures source tracking shows correct attribution
+      Provides regression protection
+      Enables debugging through test scenarios
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Comprehensive test scenario for exclude patterns merging and source tracking
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TEST_EXCLUDE_MERGE
+    requirements:
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+    tests: []
+    code_annotations:
+      - IMPL-TEST_EXCLUDE_MERGE
+      - ARCH-TEST_EXCLUDE_MERGE
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TEST_EXCLUDE_MERGE
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_EXCLUDE_MERGE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go`, `TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE`'
+  cross-references: '[REQ-TEST_EXCLUDE_MERGE], [ARCH-TEST_EXCLUDE_MERGE], [REQ-CONFIGURATION], [REQ-CFG_006]'
+  test_implementation_structure: |-
+    ```go
+    // Test scenario setup
+    func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
+        // 1. Create temp directory with config files
+        // 2. Load config and verify merge
+        // 3. Verify config command output
+        // 4. Validate source attribution
+    }
+    ```
+  test_scenarios: |-
+    1. **Basic Merge Test**: Default + local config merge
+    2. **Source Attribution Test**: Config command shows correct source
+    3. **Deduplication Test**: Duplicate patterns handled correctly
+    4. **Order Preservation Test**: Defaults first, then additions
+  test_validation_points:
+    - Merged patterns contain all patterns from all sources
+    - Config command output shows config file path (not "default")
+    - Inheritance chain shows all contributing files
+    - Patterns are deduplicated
+    - Order is preserved
+IMPL-EXCLUDE_MERGE_FIX:
+  name: Array Field Default Merge Strategy Implementation
+  status: Active
+  cross_references:
+    - ARCH-EXCLUDE_MERGE_FIX
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+    - REQ-TEST_EXCLUDE_MERGE
+  rationale:
+    why: |-
+      Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts (inheritance chains and sequential file processing)
+      Fixes implementation bug where array fields were using "override" instead of "merge" by default
+      Ensures default patterns are preserved when local config adds patterns
+      Provides proper deduplication during merge
+      Uses current state for merge operations to ensure proper accumulation
+      Handles YAML unmarshaling type conversions gracefully
+      Gracefully skips unknown config fields instead of aborting merge operations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Implement array field default merge strategy to satisfy CFG-005 requirement
+    details:
+      - '`config_test.go`'
+  code_locations:
+    files:
+      - path: config_test.go
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-EXCLUDE_MERGE_FIX
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
+    tests: []
+    code_annotations:
+      - IMPL-EXCLUDE_MERGE_FIX
+      - ARCH-EXCLUDE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-EXCLUDE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXCLUDE_MERGE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  location: config_test.go
+  code_markers: '`config.go`, `extractStrategy`, `applyMergeStrategies`, `applyMerge`, `setConfigField`, `isKnownConfigField`'
+  change: Removed `inheritContext` condition that was preventing array fields from defaulting to merge in sequential file processing. Array fields now default to merge in all contexts (inheritance chains and sequential files), per CFG-005 requirement. Explicit prefixes (`!`, `+`, `^`, `=`) are still respected.
+  changes:
+    - Updated `TestLoadConfigMultipleFiles/default_search_path_processes_multiple_files` to use `!exclude_patterns` prefix where override behavior is expected
+    - Tests now explicitly use merge strategy prefixes to align with CFG-005 requirement that array fields default to merge
+  cross-references: '[REQ-CFG_005], [ARCH-EXCLUDE_MERGE_FIX], [REQ-CONFIGURATION], [REQ-TEST_EXCLUDE_MERGE]'
+  fix_summary: |-
+    1. **Strategy Detection**: Array fields default to "merge" instead of "override" in all contexts
+    2. **State Management**: Uses current state (`resultMap`) instead of original state (`dstMap`)
+    3. **Pattern Preservation**: Explicitly copies default patterns before merge
+    4. **Deduplication**: Proper deduplication during merge operations
+    5. **Nil Handling**: Handles nil `dstValue` by getting current value from result
+    6. **YAML Type Conversion**: Handles `[]interface{}` from YAML unmarshaling in both `applyMerge` and `setConfigField`
+    7. **Unknown Field Handling**: Gracefully skips unknown config fields instead of aborting merge
+    8. **Metadata Field Handling**: Skips `inherit` and other metadata fields that aren't part of Config struct
+  implementation_changes: '#### 1. Merge Strategy Detection Fix (`extractStrategy`)'
+  new_function: '`isKnownConfigField` helper function checks if a field name is a valid config field before processing.'
+IMPL-CFG_006:
+  name: Configuration Reflection Implementation
+  status: Active
+  cross_references:
+    - ARCH-CFG_006
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CFG_006
+  rationale:
+    why: |-
+      Provides structured data representation
+      Enables type safety
+      Supports serialization and persistence
+      Facilitates testing and validation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Reflection-based field discovery with caching and lazy evaluation
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_006
+      - ARCH-SYSTEM_COMPONENTS
+    requirements:
+      - REQ-CFG_006
+    tests: []
+    code_annotations:
+      - IMPL-CFG_006
+      - ARCH-CFG_006
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-CFG_006
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_006
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-CFG_006
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_006.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: Archive and backup struct definitions, formatter types
+  archive_structure: |-
+    ```go
+    type Archive struct {
+        Name               string
+        Path               string
+        CreationTime       time.Time
+        IsIncremental      bool
+        GitBranch          string
+        GitHash            string
+        Note               string
+        BaseArchive        string
+    }
+    ```
+  backup_structure: |-
+    ```go
+    type Backup struct {
+        Name         string
+        Path         string
+        CreationTime time.Time
+        SourceFile   string
+        Note         string
+    }
+
+    type BackupInfo struct {
+        Name         string
+        Path         string
+        CreationTime time.Time
+        Size         int64
+    }
+
+    type BackupOptions struct {
+        Context   context.Context
+        Config    *Config
+        Formatter *OutputFormatter
+        FilePath  string
+        Note      string
+        DryRun    bool
+    }
+    ```
+  caching_strategy:
+    - Thread-safe caching with sync.RWMutex
+    - Schema hash-based cache invalidation
+    - Automatic cache refresh on struct changes
+    - Singleton pattern for optimal memory usage
+  configfieldcache_structure: |-
+    ```go
+    // [MEDIUM] CFG-006: Performance optimization - Reflection result caching
+    type configFieldCache struct {
+        mu         sync.RWMutex
+        fields     []configFieldInfo
+        structHash uint64        // Hash of Config struct to detect changes
+        lastUpdate time.Time
+        valid      bool
+    }
+
+    var globalFieldCache = &configFieldCache{}
+    ```
+  configvaluewithmetadata_structure: |-
+    ```go
+    type ConfigValueWithMetadata struct {
+        Field         configFieldInfo
+        Value         interface{}
+        Source        string              // Source type (default, file, environment, inheritance)
+        SourceFile    string              // Source file path (if applicable)
+        InheritanceChain []string         // Complete inheritance chain
+        MergeStrategy string              // Merge strategy used (override, append, etc.)
+        IsOverride    bool                // Whether value was overridden
+    }
+    ```
+  field_categorization:
+    - Automatic categorization based on field name patterns
+    - 'Categories: archive, backup, formatting, verification, status, template, pattern'
+    - Supports custom category assignment
+  field_metadata_structure: |-
+    ```go
+    type configFieldInfo struct {
+        Path     string   // Full field path (e.g., "Git.IncludeInfo")
+        Name     string   // Field name
+        Type     string   // Type string representation
+        Category string   // Field category (archive, backup, formatting, etc.)
+        Value    interface{} // Current field value
+    }
+    ```
+  format_functions: |-
+    ```go
+    // [HIGH] CFG-006: Complete config visibility - Type-aware formatting
+    func formatFieldValue(value interface{}, fieldType reflect.Kind) string {
+        switch fieldType {
+        case reflect.String:
+            return formatStringValue(value)
+        case reflect.Slice:
+            return formatSliceValue(value)
+        case reflect.Bool:
+            return formatBoolValue(value)
+        // ... other types
+        }
+    }
+    ```
+  formatter_structures: |-
+    ```go
+    type OutputFormatter struct {
+        cfg *Config
+    }
+
+    type TemplateFormatter struct {
+        config *Config
+    }
+    ```
+  getallconfigfields()_function: "```go\n// [HIGH] CFG-006: Complete config visibility - Automatic field discovery\nfunc GetAllConfigFields(cfg *Config) []configFieldInfo {\n    // Check cache first\n    if cached := getCachedFields(); cached != nil {\n        return cached\n    }\n    \n    // Perform reflection-based discovery\n    fields := reflectConfigFields(reflect.TypeOf(*cfg), \"\", nil)\n    \n    // Cache results\n    cacheFields(fields)\n    \n    return fields\n}\n```"
+  getallconfigvalueswithsources()_function: "```go\n// [HIGH] CFG-006: Complete config visibility - Enhanced source tracking\nfunc GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    values := make([]ConfigValueWithMetadata, 0, len(fields))\n    \n    for _, field := range fields {\n        value := getFieldValue(cfg, field.Path)\n        source := determineSource(cfg, field.Path)\n        \n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Value:  value,\n            Source: source,\n            // ... additional metadata\n        })\n    }\n    \n    return values\n}\n```"
+  incremental_resolution: "```go\n// [MEDIUM] CFG-006: Performance optimization - Incremental resolution\nfunc GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {\n    // Direct field access without full enumeration\n    field := findFieldByPath(fieldPath)\n    value := getFieldValue(cfg, fieldPath)\n    source := determineSource(cfg, fieldPath)\n    \n    return ConfigValueWithMetadata{\n        Field:  field,\n        Value:  value,\n        Source: source,\n    }, nil\n}\n```"
+  json_format: Structured JSON output for programmatic use
+  lazy_source_evaluation: "```go\n// [MEDIUM] CFG-006: Performance optimization - Lazy source evaluation\nfunc GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    \n    // Pre-filter fields before source evaluation\n    filteredFields := applyFilter(fields, filter)\n    \n    // Only resolve sources for filtered fields\n    values := make([]ConfigValueWithMetadata, 0, len(filteredFields))\n    for _, field := range filteredFields {\n        source := determineSource(cfg, field.Path) // Lazy evaluation\n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Source: source,\n        })\n    }\n    \n    return values\n}\n```"
+  pattern-based_queries: "```go\n// [MEDIUM] CFG-006: Performance optimization - Pattern-based queries\nfunc GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {\n    fields := GetAllConfigFields(cfg)\n    matched := make([]configFieldInfo, 0)\n    \n    for _, field := range fields {\n        if matchPattern(field.Path, pattern) {\n            matched = append(matched, field)\n        }\n    }\n    \n    return matched, nil\n}\n```"
+  recursive_field_traversal:
+    - Handles nested structs (e.g., GitConfig)
+    - Supports embedded fields and anonymous structs
+    - Prevents circular references with visited type tracking
+    - Maximum depth limiting for safety
+    - Type-aware value extraction
+  source_determination:
+    - Integration with CFG-005 inheritance system
+    - Environment variable detection
+    - Default value identification
+    - Inheritance chain tracking
+    - Merge strategy attribution
+  table_format: Tabular display with columns (Field, Value, Source, Category)
+  test_coverage:
+    - '>95% coverage for all CFG-006 functionality'
+    - 'Edge cases: anonymous fields, circular refs, error recovery'
+    - Integration testing with CFG-005
+    - Performance validation with benchmarks
+  test_functions:
+    - '`TestConfigReflection()`: Main functionality tests'
+    - '`TestAdvancedFieldDiscovery()`: Edge case testing'
+    - '`TestSourceAttributionAccuracy()`: Source tracking validation'
+    - '`TestDisplayFormatting()`: Output format testing'
+    - '`TestFilteringFunctionality()`: Filtering validation'
+    - '`TestPerformanceOptimization()`: Performance benchmarks'
+    - '`BenchmarkConfigReflectionOperations()`: Performance benchmarks'
+  tree_format: Hierarchical display showing inheritance relationships
+  zero_value_detection:
+    - Detects zero values for all types
+    - Displays appropriate zero value representation
+    - Handles nil pointers and empty collections
+IMPL-DOC_ENHANCEMENT:
+  name: Documentation Enhancement Framework
+  status: Active
+  cross_references:
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_001
+  rationale:
+    why: |-
+      Cross-document repetition identified as highly valuable for LLM consumption
+      Need automated systems to maintain consistency during changes
+      Enhanced traceability prevents functionality loss during evolution
+      Semantic linking improves understanding and change impact analysis
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Semantic token system for cross-referencing
+      Automated validation and consistency checking
+      Behavioral contracts for feature stability
+      Dependency mapping for change impact analysis
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+    requirements:
+      - REQ-DOC_001
+    tests: []
+    code_annotations:
+      - IMPL-DOC_ENHANCEMENT
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-DOC_ENHANCEMENT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`// DOC-XXX: Documentation enhancement` tokens'
+IMPL-SEMANTIC_CROSS_REF:
+  name: Semantic Cross-Referencing Strategy
+  status: Active
+  cross_references:
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_001
+  rationale:
+    why: |-
+      LLMs benefit from rich cross-references to understand relationships
+      Bi-directional links prevent orphaned references
+      Standardized format ensures consistency across documents
+      Forward/backward/sibling links provide comprehensive navigation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Feature reference blocks with links to all documentation layers
+      Automated link validation
+      Cross-reference consistency checking
+      Semantic token-based linking
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+    requirements:
+      - REQ-DOC_001
+    tests: []
+    code_annotations:
+      - IMPL-SEMANTIC_CROSS_REF
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-SEMANTIC_CROSS_REF.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: LinkingEngine implementation, automated link validation
+IMPL-TRACEABILITY:
+  name: Enhanced Traceability Design
+  status: Active
+  cross_references:
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_003
+  rationale:
+    why: |-
+      Feature fingerprints ensure stable identity through changes
+      Behavioral contracts define what cannot change without version bump
+      Dependency mapping shows change impact chains
+      Automated regression prevention protects against functionality loss
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Feature fingerprint generation and validation
+      Behavioral contract definition and enforcement
+      Dependency graph construction and analysis
+      Automated change impact assessment
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+    requirements:
+      - REQ-DOC_003
+    tests: []
+    code_annotations:
+      - IMPL-TRACEABILITY
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_003
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_003
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TRACEABILITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: TraceabilitySystem, behavioral contract validation, dependency analysis
+IMPL-TOKEN_SYSTEM:
+  name: Token System Implementation
+  status: Active
+  cross_references:
+    - ARCH-TOKEN_SYSTEM
+    - ARCH-RESOURCE_MANAGEMENT
+    - REQ-DOC_016
+    - REQ-FILE_BACKUP
+    - REQ-RESOURCE_MANAGEMENT
+    - REQ-GOV_REGISTRY_COMPLETENESS
+    - REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+  rationale:
+    why: |-
+      Ensures complete traceability from requirements through architecture to implementation
+      Enables AI assistant navigation and feature discovery
+      Supports automated validation of token consistency
+      Maintains long-term code maintainability
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      1. **Structured Extraction**
+         - Use `.venv/bin/python` helpers (PyYAML) to parse `project-tokens.yaml` and emit normalized JSON for each group (`actions`, `features`, `semantic_tokens`).
+         - Capture metadata (description, status, source paths, subtasks) for downstream documentation.
+      2. **Cross-Link Synthesis**
+         - For each legacy token, resolve canonical `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and test references using prefix heuristics (e.g., `DIR-001 → [REQ-IMMUTABLE_DIRECTORY_OPERATIONS]`).
+         - Flag gaps by opening subtasks in `stdd/tasks.md` whenever a requirement/decision/test link is missing.
+      3. **Registry Authoring**
+         - Generate Markdown tables per token category with columns: Description, Linked Requirement(s), Linked Architecture, Linked Implementation, Linked Tests/Code, Source Document, Status.
+         - Embed migration status badges so governance tooling can verify coverage.
+      4. **YAML Decommissioning**
+         - After each category is represented in markdown, replace the YAML entries with a pointer stub until the file can be removed in a final cleanup change. `project-tokens.yaml` now contains a canonical pointer to `stdd/semantic-tokens.md`.
+      5. **Validation Hooks**
+         - Run `scripts/validate-token-traceability.sh`, `scripts/token-coverage-analysis.sh`, and targeted `rg "\[TOKEN\]"` sweeps to prove each migrated token exists in requirements, architecture decisions, implementation notes, code, and tests.
+         - Record validation results inside the migration tables for auditability.
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-RESOURCE_MANAGEMENT
+    requirements:
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-RESOURCE_MANAGEMENT
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+    tests: []
+    code_annotations:
+      - IMPL-TOKEN_SYSTEM
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-RESOURCE_MANAGEMENT
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-RESOURCE_MANAGEMENT
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-RESOURCE_MANAGEMENT
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-RESOURCE_MANAGEMENT
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TOKEN_SYSTEM.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`project-tokens.yaml` migration scripts, `stdd/semantic-tokens.md` tables annotated with `[REQ-DOC_016]`, validation logs appended to docs/governance summaries.'
+  decision: Implement a deterministic migration workflow that relocates every legacy token entry from `project-tokens.yaml` into `stdd/semantic-tokens.md`, generating STDD-compliant cross-links during the transfer.
+  migration_outcome:
+    - All legacy tokens were migrated into `stdd/semantic-tokens.md` and validated via `scripts/token-coverage-analysis.sh` and `scripts/validate-token-traceability.sh`.
+    - 'Validation report: `docs/validation-reports/token-coverage-analysis.md` (100% source/test/overall coverage).'
+    - '`project-tokens.yaml` replaced with a pointer stub to the canonical STDD registry.'
+    - 'Created implementation marker: `[IMPL-TOKEN_MIGRATION_COMPLETE]` to indicate the migration is finished and audited.'
+  pseudo-code: |-
+    ```bash
+    # Extraction artifacts archived in docs/governance and migration logs
+    .venv/bin/python scripts/token_inventory.py > /tmp/tokens.json
+    .venv/bin/python scripts/render_token_tables.py --group features >> stdd/semantic-tokens.md
+    scripts/validate-token-traceability.sh
+    scripts/token-coverage-analysis.sh
+    ```
+  token_usage_in_code: |-
+    ```go
+    // [REQ-FILE_BACKUP] Create backup of single file with comparison
+    // [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
+    func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) error {
+        // ...
+    }
+    ```
+  token_usage_in_tests: |-
+    ```go
+    // Test validates [REQ-FILE_BACKUP] is met
+    func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
+        // ...
+    }
+    ```
+  validation_implementation:
+    - 'Token format validation: Check `[TYPE:IDENTIFIER]` pattern compliance'
+    - 'Cross-layer consistency: Verify tokens exist in all required layers'
+    - 'Traceability validation: Ensure all requirements have implementation tokens'
+    - 'Missing token detection: Identify features without proper token coverage'
+IMPL-REFACTOR_PREP:
+  name: Pre-Extraction Refactoring Strategy
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Prevents circular dependencies in extracted packages
+      Ensures clean interfaces and minimal coupling
+      Preserves backward compatibility during extraction
+      Enables reliable, maintainable extracted components
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Interface-first design before extraction
+      Large file decomposition for better boundaries
+      Dependency analysis and cleanup
+      Comprehensive testing before extraction
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-REFACTOR_PREP
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-REFACTOR_PREP.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`// REFACTOR-XXX: Preparation for extraction` tokens'
+IMPL-INTERFACE_FIRST:
+  name: Interface-First Extraction Approach
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Prevents tight coupling between extracted packages
+      Enables independent testing and development of components
+      Provides clear contracts for component interaction
+      Facilitates future evolution of implementations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Define interfaces before concrete implementations
+      Use Go interfaces for abstraction
+      Independent package testing
+      Versioned interface evolution
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-INTERFACE_FIRST
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-INTERFACE_FIRST.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: 'Interface definitions with `// REFACTOR-001: Interface standardization`'
+IMPL-LARGE_FILE_DECOMP:
+  name: Large File Decomposition Strategy
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-GIT_INTEGRATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-OUTPUT_FORMATTING
+    - ARCH-TESTING_STRATEGY
+    - REQ-MAINTAINABILITY
+    - REQ-GIT_INTEGRATION
+    - REQ-CONFIGURATION
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      1675-line formatter.go contains multiple logical components
+      Clean separation enables focused extracted packages
+      Reduces complexity and improves maintainability
+      Enables independent evolution of formatter components
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Identify logical component boundaries
+      Extract components into separate files/packages
+      Maintain interface compatibility
+      Comprehensive testing after decomposition
+    details:
+      - Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+      - Added TestDelayedOutputMode testing OutputFormatter with collector integration
+      - Added TestTemplateFormattingMethods for all template functions with 0% coverage
+      - Added TestErrorFormattingMethods for error formatting functions
+      - Added TestPrintMethods testing Print methods in delayed mode
+      - Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+      - Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+      - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+      - Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+      - |-
+        Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+        Added TestDelayedOutputMode testing OutputFormatter with collector integration
+        Added TestTemplateFormattingMethods for all template functions with 0% coverage
+        Added TestErrorFormattingMethods for error formatting functions
+        Added TestPrintMethods testing Print methods in delayed mode
+        Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+        Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+        Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+        Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-GIT_INTEGRATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-GIT_INTEGRATION
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - IMPL-LARGE_FILE_DECOMP
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-GIT_INTEGRATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-GIT_INTEGRATION
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-GIT_INTEGRATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-GIT_INTEGRATION
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: Comprehensive test coverage for OutputCollector, template methods, and error formatting
+  description: Test all 0% coverage functions in formatter.go to improve code coverage and ensure reliability of OutputCollector, template methods, and error formatting functionality.
+  files_modified:
+    - '`formatter_test.go` - Added comprehensive test suites for previously untested functions'
+  implementation_details:
+    - Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+    - Added TestDelayedOutputMode testing OutputFormatter with collector integration
+    - Added TestTemplateFormattingMethods for all template functions with 0% coverage
+    - Added TestErrorFormattingMethods for error formatting functions
+    - Added TestPrintMethods testing Print methods in delayed mode
+    - Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+    - Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+    - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+    - Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+  priority: Medium
+IMPL-EXTRACTION_PRINCIPLES:
+  name: Extraction Principles and Design Decisions
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: Prevents circular dependencies and ensures stable foundation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-EXTRACTION_PRINCIPLES
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXTRACTION_PRINCIPLES.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extract in dependency order - core utilities first, then higher-level components
+  design_note: Each layer builds on previous layers without circular references
+  implementation: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+IMPL-EXTRACTION_CHALLENGES:
+  name: Extraction Challenges and Solutions
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-TESTING_STRATEGY
+    - REQ-MAINTAINABILITY
+    - REQ-CONFIGURATION
+  rationale:
+    why: See detail file
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: See detail file
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-EXTRACTION_CHALLENGES
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXTRACTION_CHALLENGES.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  approach: Extract test utilities first, then create focused tests for each package
+  challenge: Extracted components need comprehensive testing without duplicating existing tests
+  design_note: Comprehensive testing ensures extracted components are production-ready
+  solution: Create package-specific tests while ensuring original integration tests still pass
+IMPL-CONFIG_OUTPUT_GROUPING:
+  name: Configuration Output Grouping Implementation
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_OUTPUT_GROUPING
+    - REQ-CONFIG_OUTPUT_GROUPING
+  rationale:
+    why: |-
+      Extends existing metadata system without breaking changes
+      Reuses existing display logic where possible
+      Provides flexible ranking system
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '1.  **Metadata Extension**:'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_OUTPUT_GROUPING
+    requirements:
+      - REQ-CONFIG_OUTPUT_GROUPING
+    tests: []
+    code_annotations:
+      - IMPL-CONFIG_OUTPUT_GROUPING
+      - ARCH-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIG_OUTPUT_GROUPING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIG_OUTPUT_GROUPING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`displayConfigGrouped`, `Importance`, `CategoryPriority`'
+  cross-references: '[ARCH-CONFIG_OUTPUT_GROUPING], [REQ-CONFIG_OUTPUT_GROUPING]'
+IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
+  name: User-Customizable Format Strings Implementation
+  status: Active
+  cross_references:
+    - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+  rationale:
+    why: |-
+      Existing infrastructure already supports customization (YAML tags, config loading)
+      Main work is validation and documentation to prevent user mistakes
+      Validation provides helpful guidance for correct placeholder usage
+      Documentation enables users to discover and customize format strings
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Implement format string validation and comprehensive documentation for user customization. FormatListArchive and FormatListBackup support both printf-style and template-style placeholders.
+    details:
+      - All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
+      - All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
+      - 'All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)'
+      - All validation logic updated to recognize `#{}` placeholders
+      - All test assertions updated to check for `#{}` instead of `%{}`
+      - All documentation examples updated to use `#{}` syntax
+      - |-
+        All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
+        All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
+        All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)
+        All validation logic updated to recognize `#{}` placeholders
+        All test assertions updated to check for `#{}` instead of `%{}`
+        All documentation examples updated to use `#{}` syntax
+      - All format string processing code - `pkg/formatter/ai_core_formatter.go`, `pkg/formatter/placeholder_replace.go`, `pkg/formatter/template.go`, `ai_formatter_adapter.go`, `formatter_adapter_simple.go`, `config.go`, and all test files
+  code_locations:
+    files:
+      - path: All format string processing code - `pkg/formatter/ai_core_formatter.go`, `pkg/formatter/placeholder_replace.go`, `pkg/formatter/template.go`, `ai_formatter_adapter.go`, `formatter_adapter_simple.go`, `config.go`, and all test files
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+    requirements:
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    tests: []
+    code_annotations:
+      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  location: All format string processing code - `pkg/formatter/ai_core_formatter.go`, `pkg/formatter/placeholder_replace.go`, `pkg/formatter/template.go`, `ai_formatter_adapter.go`, `formatter_adapter_simple.go`, `config.go`, and all test files
+  code_markers: '`ValidateFormatString`, `validateAllFormatStrings`, `getExpectedPlaceholders`, `extractPlaceholders`, `// [REQ-CUSTOMIZABLE_FORMAT_STRINGS]`'
+  adapters: '`ai_formatter_adapter.go`, `formatter_adapter.go` - Updated fallback replacement logic to use `#{}`'
+  always_gather_stats: File statistics are always gathered (needed for template placeholders)
+  backward_compatibility: Breaking change - users with old `%{...}` format strings must update to `#{...}` syntax
+  clarity: '`#{}` syntax is clearly distinct from Go''s fmt format verbs'
+  comprehensive_testing: 'Detailed test suite validates all scenarios including:'
+  configuration: '`config.go` - Updated all default format strings and validation to use `#{}`'
+  consistency: Single placeholder syntax throughout the codebase
+  core_implementation: '`pkg/formatter/ai_core_formatter.go` - Updated `FormatWithPlaceholders` to use `#{}` syntax'
+  critical_decision: If any `#{...}` patterns remain after replacement, Go text/template processing is skipped to prevent fmt package errors
+  cross-references: '[ARCH-CUSTOMIZABLE_FORMAT_STRINGS], [REQ-CUSTOMIZABLE_FORMAT_STRINGS], [ARCH-CONFIG_SYSTEM], [ARCH-OUTPUT_FORMATTING], [IMPL-CONFIG_STRUCT], [IMPL-DUAL_FORMATTING]'
+  documentation: All documentation files updated to reflect `#{}` syntax
+  documentation_features: |-
+    - Lists all available format strings with YAML field names
+    - Documents supported placeholders for each format string
+    - Explains printf-style vs template-style formats
+    - Provides examples of common customizations (emoji, internationalization)
+
+    #### 3. Testing Implementation
+  error_message_format:
+    - '`Warning: Field ''FieldName'': unexpected placeholder ''placeholder''. Expected one of: [list]`'
+    - Clear indication of field, unexpected placeholder, and expected alternatives
+  files_created:
+    - '`docs/format-strings-reference.md`: Comprehensive reference documentation'
+    - '`example-custom-formats.yml`: Brief example configuration'
+  files_modified:
+    - '`config.go`: Added validation functions and integrated into load process. Updated default format strings and validation for `FormatListArchive` and `FormatListBackup`.'
+    - '`formatter.go`: Enhanced template formatter to handle missing `#{size_human}` with fallback. Updated `FormatListArchive` and `FormatListBackup` to support template placeholders.'
+    - '`pkg/formatter/formatter.go`: Updated `FormatListArchive` and `FormatListBackup` to support template placeholders with automatic file statistics gathering.'
+    - '`formatter_adapter.go`: Enhanced to gather file statistics for template formatting'
+    - '`pkg/formatter/template.go`: Added fallback handling for missing placeholders'
+  impact: Eliminates fmt package misinterpretation errors, simplifies code, improves maintainability
+  implementation_components: '#### 1. Format String Validation'
+  implementation_details:
+    - All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
+    - All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
+    - 'All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)'
+    - All validation logic updated to recognize `#{}` placeholders
+    - All test assertions updated to check for `#{}` instead of `%{}`
+    - All documentation examples updated to use `#{}` syntax
+  integration_points: |-
+    - Integrated into `LoadConfig()` and `LoadConfigWithInheritance()` functions
+    - Validation occurs after configuration merging and before returning config
+    - See code comments in `config.go` for detailed implementation
+
+    #### 2. Documentation Structure
+  key_decisions:
+    - Validation runs automatically on configuration load (non-fatal warnings)
+    - Supports both printf-style (`%s`, `%d`) and template-style (`#{path}`, `#{name}`) placeholders
+    - Special placeholders like `#{size_human}` are validated per field
+    - Warnings printed to stderr, configuration loading continues
+    - Expected placeholders defined per field in `getExpectedPlaceholders()`
+  maintainability: No complex template engine means fewer bugs and easier updates
+  migration_complete: All placeholder syntax migrated from `%{...}` to `#{...}` to avoid conflicts with Go's `fmt` package
+  migration_status: ✅ Complete - All code, tests, and documentation updated
+  no_changes_required:
+    - '`config.go` struct: Already has YAML tags'
+    - '`LoadConfig()`: Already loads format strings (validation added)'
+    - '`mergeFormatStrings()`: Already merges format strings'
+    - '`DefaultConfig()`: Already provides defaults'
+  non-fatal_warnings:
+    - Validation warnings printed to stderr
+    - Configuration loading continues
+    - Users informed of potential issues but not blocked
+  performance_considerations: |-
+    - Validation runs once at configuration load time
+    - Regex compilation cached for efficiency
+
+    #### 6. Placeholder Syntax Migration: %{...} to #{...}
+  placeholder_replacement: '`pkg/formatter/placeholder_replace.go` - Already using `#{}` syntax (no change needed)'
+  priority-based_format_selection: |-
+    1. Use `FormatListArchive` if it contains template placeholders (`#{`)
+      2. If `FormatListArchive` is empty or doesn't contain `#{`, use `TemplateListArchive`
+      3. If both are empty, use default template format `#{path} (size: #{size_human})\n`
+  reliability: Eliminates fmt package conflicts that caused `%!(EXTRA ...)` errors
+  root_cause: Go's `fmt` package interprets `%{` as the start of a format verb, causing `%!(EXTRA ...)` errors when placeholders weren't replaced
+  simple_string_replacement: Uses `strings.ReplaceAll()` for placeholder replacement - no complex template engine
+  simplicity: No need for complex escaping or workarounds to prevent fmt misinterpretation
+  simplified_design: Single, clear code path for list formatting
+  solution: Changed all placeholder syntax from `%{key}` to `#{key}` throughout the codebase
+  template-only_placeholders: Only supports `#{name}` style placeholders. Printf-style (`%s`, `%d`) is NOT supported.
+  template_processing: '`pkg/formatter/template.go` - Updated all placeholder generation and replacement to use `#{}`'
+  test_coverage: |-
+    - Validates correct placeholder detection for printf and template styles
+    - Verifies custom format strings load correctly from configuration
+    - Ensures default format strings work when not specified
+    - Confirms validation warnings are printed to stderr
+
+    #### 4. Simplified List Formatting Implementation
+  test_files:
+    - '`config_test.go`: Format string validation tests (`TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS`, `TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS`, `TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS`, `TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS`)'
+  testability: Clear function boundaries enable comprehensive unit testing
+  tests: All test files updated to use `#{}` syntax in format strings and assertions
+IMPL-LIST_FORMAT_SAFETY:
+  name: List Command Format Safety Fix
+  status: Active
+  cross_references:
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUT_002
+  rationale:
+    why: |-
+      Prevent `fmt` from interpreting template placeholders or appending EXTRA args when format strings contain no printf verbs (this produced `%!(EXTRA ...)` in user output).
+      Ensure AI formatter and core formatter consistently handle template placeholders (`#{...}`) and printf formats.
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Added guarded printf usage in `FormatListArchive` and `FormatListBackup` to call `fmt.Sprintf` only when the format string contains printf verbs (`%`). Otherwise, return the template-format string as-is or perform placeholder replacement.'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUT_002
+    tests: []
+    code_annotations:
+      - IMPL-LIST_FORMAT_SAFETY
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUT_002
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUT_002
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-LIST_FORMAT_SAFETY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`formatter.go` (FormatListArchive, FormatListBackup), `pkg/formatter/ai_core_formatter.go` (FormatWithContext list handling), `ai_formatter_adapter.go` (FormatListArchiveWithExtraction, FormatListBackupWithExtraction)'
+  cross-references: '[ARCH-OUTPUT_FORMATTING], [REQ-OUT_002], [IMPL-FILE_STATISTICS]'
+IMPL-CFG_PRECEDENCE_FIX:
+  name: Configuration File Precedence Fix
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: Configuration files were not respecting the requirement that "earlier files take precedence over later files" when processing sequential config files
+      The `mergeConfigs` and `mergeBasicSettings` functions were unconditionally overriding values without checking if they were already set by earlier files
+      This caused local config files (e.g., `./.bkpdir.yml`) to be overridden by home directory config files (e.g., `~/.bkpdir.yml`), violating the precedence specification
+      Special case: When an earlier file explicitly sets a value to the default (e.g., `include_git_info: false`), we need to detect that it was explicitly set, not just compare against defaults
+      The fix ensures that when processing sequential files (not inheritance chains), values set by earlier files are preserved, even if they equal the default
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Modified `LoadConfig` fallback path to use `fileProcessed` flag instead of checking if cfg equals defaults (which fails when first file sets values to defaults)'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_PRECEDENCE_FIX
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_PRECEDENCE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`mergeConfigs`, `mergeBasicSettings`, `applyOverride`, `applyReplace`, `inheritContext`, `fileProcessed`, `initialDefaultCfg`, `dstBeforeMerge`, `rawSrcMap`, `// CFG-001: Earlier files take precedence`'
+  cross-references: '[ARCH-CONFIG_SYSTEM], [REQ-CONFIGURATION], [IMPL-CONFIG_STRUCT]'
+  default_value_handling: 'When first file sets `include_git_info: false` (default), `dstBeforeMerge` for second file will have `false` (from first file), which equals `initialDefaultCfg.IncludeGitInfo` (also `false`), so we correctly detect that no earlier file modified it from initial default'
+  explicit_field_setting: Use `rawSrcMap` to check if a field was explicitly set in the source file (not just present due to defaults)
+  inheritance_chains: '(`inheritContext=true`): Child configs override parent configs (normal inheritance behavior)'
+  key_changes: |-
+    1. `LoadConfig` fallback: Uses `fileProcessed` flag and `initialDefaultCfg` to track initial state
+    2. `applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}, initialDefaultCfg *Config)` - Added `initialDefaultCfg` parameter
+    3. `mergeConfigs(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config)` - Added context and state tracking parameters
+    4. `mergeBasicSettings` - Added precedence check: `dstWasNotModified := dstBeforeMerge != nil && initialDefaultCfg != nil && dstBeforeMerge.IncludeGitInfo == initialDefaultCfg.IncludeGitInfo`
+    5. `applyReplace` - Added precedence check for sequential file processing
+    6. All merge functions updated to accept and use new parameters
+  sequential_files: '(`inheritContext=false`): Earlier files take precedence - if `dstBeforeMerge` equals `initialDefaultCfg`, no earlier file modified the field, so allow setting; otherwise preserve earlier file''s value'
+  test_case:
+    - 'Local config: `/tmp/myapp/.bkpdir.yml` with `archive_dir_path: "./archives"` and `include_git_info: false`'
+    - 'Home config: `/Users/fareed/.bkpdir.yml` with `archive_dir_path: "/Users/fareed/.bkpdir"` and `include_git_info: true`'
+    - 'Expected: Local config values (`"./archives"` and `false`) are preserved'
+    - 'Before fix: Home config values (`"/Users/fareed/.bkpdir"` and `true`) were incorrectly used'
+    - 'After fix: Local config values (`"./archives"` and `false`) are correctly preserved'
+IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
+  name: Field-Level Merge Behavior Registry
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - ARCH-CFG_001
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Conflict resolution: CFG-005 requires array fields to merge/accumulate by default, while CFG-001 requires earlier files to take precedence
+      Solution: Field-level registry specifies merge behavior per field, allowing different fields to have different precedence rules
+      Enables fine-grained control: Some fields (like `exclude_patterns`) should always merge, while others (like `archive_dir_path`) should respect earlier file precedence
+      Maintains backward compatibility: Default behavior preserved, explicit prefixes still work
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Created `FieldMergeBehavior` type with two behaviors: `MergeBehaviorAccumulate` and `MergeBehaviorPrecedence`'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_MERGE_BEHAVIOR_REGISTRY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`FieldMergeBehavior`, `fieldMergeBehaviors`, `getFieldMergeBehavior`, `applyMergeStrategies`, `applyReplace`, `// CFG-001 + CFG-005: Field merge behavior configuration`'
+  cross-references: '[ARCH-CFG_005], [ARCH-CFG_001], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-CFG_PRECEDENCE_FIX]'
+  field_behavior_matrix: |-
+    | Field | Behavior | Default Strategy | Sequential Files | Inheritance Chains |
+    |-------|----------|------------------|------------------|-------------------|
+    | `exclude_patterns` | Accumulate | Merge | Merge | Merge |
+    | `archive_dir_path` | Precedence | Override | Earlier wins | Child overrides |
+    | `include_git_info` | Precedence | Override | Earlier wins | Child overrides |
+    | `!exclude_patterns` | Accumulate* | Replace | Earlier wins** | Replace |
+
+    *Note: Even with `!` prefix, `exclude_patterns` is still marked as accumulate, but explicit prefix overrides default merge strategy.
+  key_changes: |-
+    1. `FieldMergeBehavior` type and constants (`MergeBehaviorAccumulate`, `MergeBehaviorPrecedence`)
+    2. `fieldMergeBehaviors` registry map with field-specific behaviors
+    3. `getFieldMergeBehavior(fieldName string) FieldMergeBehavior` helper function
+    4. `applyMergeStrategies()`: Uses registry to determine default strategy for accumulate fields
+    5. `applyReplace()`: Checks registry to determine if precedence check should apply
+    6. Explicit prefix detection: Now works for all fields via `hasExplicitPrefix` map
+  mergebehavioraccumulate_fields: '(e.g., `exclude_patterns`):'
+  mergebehaviorprecedence_fields: '(e.g., `archive_dir_path`, `include_git_info`):'
+  note: For sequential files, earlier file precedence applies even with `!` prefix if field was set by earlier file (CFG-001).
+  test_cases:
+    - '`exclude_patterns` without prefix: Merges from all files (CFG-005)'
+    - '`exclude_patterns` with `!` prefix in later file: Respects earlier file if it was set (CFG-001)'
+    - '`archive_dir_path` in later file: Earlier file value preserved (CFG-001)'
+    - '`include_git_info` in later file: Earlier file value preserved (CFG-001)'
+    - '`+archive_dir_path` in later file: Earlier file value preserved (CFG-001) - Fixed in [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]'
+    - '`^archive_dir_path` in later file: Earlier file value preserved (CFG-001) - Fixed in [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]'
+IMPL-CFG_MIXED_MODE_MERGE_FIX:
+  name: Mixed-Mode Merge Strategy Fix
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - ARCH-CFG_001
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: `exclude_patterns` and other `MergeBehaviorAccumulate` fields were not consistently merging with defaults per CFG-005 requirement
+      The logic was incorrectly keeping "override" strategy for first file in sequential processing, causing defaults to be replaced instead of merged
+      Test expectations were misaligned with CFG-005 requirement - updated to reflect correct merge behavior
+      Ensures consistent behavior: accumulate fields always merge (unless explicit `!` prefix), regardless of context
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Simplified merge strategy logic in `applyMergeStrategies` to always change "override" to "merge" for `MergeBehaviorAccumulate` fields (unless explicit prefix)'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_MIXED_MODE_MERGE_FIX
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`applyMergeStrategies`, `applyOverride`, `applyMergeOperation`, `applyReplace`, `originalDstValue`, `earlierFilesProcessed`, `// CFG-005: Array fields default to merge`, `// CFG-001: Earlier files take precedence`'
+  after: Expected `[.git/ vendor/ local1, local2]` (merge behavior per CFG-005)
+  before: Expected `[local1, local2]` (replacement behavior)
+  change: Updated test expectation to match CFG-005 behavior - `exclude_patterns` should merge with defaults, not replace them.
+  code_location: '`config_test.go`, `TestLoadConfigMultipleFiles` function, line ~240'
+  cross-references: '[ARCH-CFG_005], [ARCH-CFG_001], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-CFG_PRECEDENCE_FIX], [IMPL-EXCLUDE_MERGE_FIX]'
+  earlier_file_precedence: For `MergeBehaviorPrecedence` fields, earlier files take precedence even if values equal defaults
+  explicit_`!`_prefix: Replaces, but still respects earlier file precedence if field was set by earlier file (CFG-001)
+  key_changes: '#### 1. Simplified Merge Strategy Logic (`applyMergeStrategies`)'
+  multiple_files,_first_file: Merges with defaults → `[.git/ vendor/ first_file_patterns]` (CFG-005)
+  multiple_files,_subsequent_files: Merges with accumulated result → `[.git/ vendor/ first_file_patterns second_file_patterns]` (CFG-005)
+  single_file_scenario: '`exclude_patterns` merges with defaults → `[.git/ vendor/ user_patterns]` (CFG-005)'
+  test_cases:
+    - '`TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE`: Validates merge with defaults for single file'
+    - '`TestLoadConfigMultipleFiles`: Validates merge with defaults and earlier file precedence'
+    - '`TestLoadConfigMultipleFiles/default_search_path_processes_multiple_files`: Validates earlier file precedence for non-accumulate fields'
+  validation:
+    - ✅ `exclude_patterns` merges with defaults in all contexts (CFG-005)
+    - ✅ Earlier file precedence preserved for `MergeBehaviorPrecedence` fields (CFG-001)
+    - ✅ Explicit `!` prefix still respects earlier file precedence (CFG-001)
+    - ✅ All tests pass with updated expectations
+IMPL-CFG_QUOTED_KEY_PREFIX:
+  name: Quoted YAML Key Prefix Support
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      - First pass: Identify all keys with explicit prefixes and map them to their base keys
+      - Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
+      - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      - First pass: Identify all keys with explicit prefixes and map them to their base keys
+      - Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
+      - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+    details:
+      - '#### 1. Quote Handling in `extractStrategy`'
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_QUOTED_KEY_PREFIX
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`extractStrategy`, `hasExplicitPrefix`, `processKeys`, `quoted YAML keys`, `cleanKey`, `explicitPrefixKeys`'
+  after: |-
+    ```go
+    // Handle quoted YAML keys
+    cleanKey := origKey
+    if len(origKey) >= 2 && ((origKey[0] == '"' && origKey[len(origKey)-1] == '"') || (origKey[0] == '\'' && origKey[len(origKey)-1] == '\'')) {
+        cleanKey = origKey[1 : len(origKey)-1]
+    }
+    if len(cleanKey) > 0 && (cleanKey[0] == '!' || cleanKey[0] == '+' || cleanKey[0] == '^' || cleanKey[0] == '=') {
+    ```
+  before: |-
+    ```go
+    if len(origKey) > 0 && (origKey[0] == '!' || origKey[0] == '+' || origKey[0] == '^' || origKey[0] == '=') {
+    ```
+  both_quote_types: Supports both double quotes (`"`) and single quotes (`'`)
+  change: Added logic to identify keys with explicit prefixes and prioritize them when duplicate keys exist (one with prefix, one without).
+  code_location: '`config.go`, `processKeys` function, lines ~2383-2465'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-CFG_MIXED_MODE_MERGE_FIX]'
+  date: "2025-12-11"
+  duplicate_keys: Keys with explicit prefixes take precedence over plain keys
+  implementation:
+    - 'First pass: Identify all keys with explicit prefixes and map them to their base keys'
+    - 'Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key'
+    - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+  implementation_details: '#### 1. Quote Handling in `extractStrategy`'
+  priority: P1 (Important)
+  problem: When YAML keys with merge strategy prefixes (`+`, `^`, `!`, `=`) are quoted (e.g., `"+exclude_patterns"`), the YAML parser preserves the quotes as part of the key string. This caused the prefix detection logic to fail because it was checking the first character of the key, which was `"` instead of `+`.
+  quoted_keys_with_prefixes: '`"+exclude_patterns"` is correctly recognized as merge strategy'
+  solution: |-
+    Updated three key functions to handle quoted YAML keys:
+
+    1. **`extractStrategy` function**: Strip quotes before checking for merge strategy prefixes
+    2. **`hasExplicitPrefix` detection**: Strip quotes before checking for prefix characters
+    3. **`processKeys` function**: Prioritize keys with explicit prefixes when duplicate keys exist
+  symptoms:
+    - Merge strategy prefixes in quoted YAML keys were not recognized
+    - Tests using quoted keys (e.g., `"+exclude_patterns":`) failed because the strategy was extracted as "override" instead of "merge"
+    - Inheritance chain merge strategies with quoted keys did not work correctly
+  test_cases:
+    - '`TestMergeStrategiesInInheritanceChains/merge_strategy_(+)_in_inheritance_chain`: Validates merge strategy with quoted `"+exclude_patterns"` key'
+    - '`TestMergeStrategiesInSequentialFiles/merge_strategy_(+)_appends_in_sequential_files`: Validates merge strategy with quoted keys in sequential files'
+    - '`TestMergeStrategiesInSequentialFiles/prepend_strategy_(^)_prepends_in_sequential_files`: Validates prepend strategy with quoted keys'
+  unquoted_keys_with_prefixes: '`+exclude_patterns` continues to work as before'
+  validation:
+    - ✅ Quoted YAML keys with merge strategy prefixes are correctly recognized
+    - ✅ Merge strategies work correctly with quoted keys in inheritance chains
+    - ✅ Merge strategies work correctly with quoted keys in sequential files
+    - ✅ Duplicate keys are handled correctly (explicit prefix keys take precedence)
+    - ✅ All tests pass with quoted key syntax
+IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
+  name: Merge and Prepend Strategy Precedence Fix
+  status: Active
+  cross_references:
+    - ARCH-CFG_001
+    - ARCH-CFG_005
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: `+` and `^` prefixes on scalar/precedence fields (e.g., `+archive_dir_path`, `^archive_dir_path`) were bypassing precedence checks
+      Per CFG-001 and implementation decision [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY], explicit prefixes should "work as normal, but precedence still applies for sequential files"
+      `applyMerge()` and `applyPrepend()` were designed for arrays and fell back to `setConfigField()` for scalars without checking precedence
+      This violated CFG-001 requirement that earlier files take precedence over later files
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Updated `applyMerge()` and `applyPrepend()` function signatures to accept `inheritContext`, `defaultCfg`, and `explicitlySetFields` parameters'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: |-
+    `applyMerge`, `applyPrepend`, `applyMergeOperation`
+    `// CFG-001 + CFG-005: For scalar/precedence fields with +/^ prefix, respect earlier file precedence`
+    `getFieldMergeBehavior`, `MergeBehaviorPrecedence`
+  after: Tests expect file1's value to be preserved (correct CFG-001 behavior)
+  after_fix:
+    - '`+archive_dir_path` in file2: Respects file1''s value ✅'
+    - '`^archive_dir_path` in file2: Respects file1''s value ✅'
+    - '`!archive_dir_path` in file2: Respects file1''s value ✅'
+    - '`archive_dir_path` (no prefix) in file2: Respects file1''s value ✅'
+  before: Tests accepted either file1 or file2 value (masking the bug)
+  before_fix:
+    - '`+archive_dir_path` in file2: Overrode file1''s value ❌'
+    - '`^archive_dir_path` in file2: Overrode file1''s value ❌'
+    - '`!archive_dir_path` in file2: Correctly respected file1''s value ✅'
+    - '`archive_dir_path` (no prefix) in file2: Correctly respected file1''s value ✅'
+  change: Updated `TestAllStrategiesWithPrecedenceFields` tests to expect earlier file precedence for `+` and `^` prefixes.
+  code_location: '`config_test.go`, `TestAllStrategiesWithPrecedenceFields` function, lines ~5617-5665'
+  cross-references:
+    - '[ARCH-CFG_001] - Configuration Discovery Architecture'
+    - '[ARCH-CFG_005] - Layered Configuration Inheritance Architecture'
+    - '[REQ-CFG_001] - Configuration Discovery (earlier file precedence)'
+    - '[REQ-CONFIGURATION] - Configuration Management'
+    - '[IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] - Field-Level Merge Behavior Registry'
+    - '[IMPL-CFG_MIXED_MODE_MERGE_FIX] - Mixed-Mode Merge Strategy Fix'
+  key_changes: '#### 1. Updated `applyMerge()` Function Signature'
+  test_coverage:
+    - '`TestAllStrategiesWithPrecedenceFields/merge_strategy (+)` - Validates `+` prefix respects precedence'
+    - '`TestAllStrategiesWithPrecedenceFields/prepend_strategy (^)` - Validates `^` prefix respects precedence'
+    - '`TestAllStrategiesWithPrecedenceFields/replace_strategy (!)` - Validates `!` prefix respects precedence (already working)'
+    - '`TestAllStrategiesWithPrecedenceFields/no prefix` - Validates no prefix respects precedence (already working)'
+IMPL-TEST_CFG_005_P1:
+  name: Priority 1 Configuration Merge Tests Implementation
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Validates important edge cases for configuration inheritance and merging
+      Ensures relative path resolution, home directory expansion, and error handling work correctly
+      Tests cover multiple inheritance sources, deep chains, type mismatches, and null value handling
+      Provides comprehensive coverage beyond Priority 0 critical tests
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-TEST_CFG_005_P1
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_CFG_005_P1.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go`: TestMultipleInheritanceSources_REQ_CFG_005, TestRelativePathInheritance_REQ_CFG_005, TestHomeDirectoryExpansion_REQ_CFG_005, TestMissingInheritanceFile_REQ_CFG_005, TestInvalidYAMLHandling_REQ_CFG_005, TestDeepInheritanceChain_REQ_CFG_005, TestTypeMismatchHandling_REQ_CFG_005, TestNullValueHandling_REQ_CFG_005, TestWhitespaceStringHandling_REQ_CFG_005'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CFG_001], [REQ-CONFIGURATION], [IMPL-CFG_INHERITANCE_PATH_RESOLUTION]'
+  date: "2025-12-11"
+  priority: P1 (Important)
+  test_expectations:
+    - All tests account for default merging behavior (defaults included in accumulate fields)
+    - 'Inheritance chains: child overrides parent for precedence fields'
+    - 'Sequential files: first file merges with defaults, subsequent files respect precedence'
+    - Tests use semantic token references `[REQ-CFG_005]` in test names and comments
+  testdeepinheritancechain_req_cfg_005: Tests very long inheritance chain (12 files)
+  testhomedirectoryexpansion_req_cfg_005: Tests home directory expansion in inherit paths (~/.bkpdir-base.yml)
+  testinvalidyamlhandling_req_cfg_005: Tests invalid YAML in one file
+  testmissinginheritancefile_req_cfg_005: Tests error handling when inheritance file is missing
+  testmultipleinheritancesources_req_cfg_005: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)
+  testnullvaluehandling_req_cfg_005: Tests nil/null value handling
+  testrelativepathinheritance_req_cfg_005: Tests relative path resolution (../base.yml, ./sibling.yml)
+  testtypemismatchhandling_req_cfg_005: Tests type mismatches (array vs string)
+  testwhitespacestringhandling_req_cfg_005: Tests whitespace-only string handling
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
+  name: Inheritance Path Resolution Fix
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: `buildChainRecursive` was passing `resolvedPath` (file path) instead of `filepath.Dir(resolvedPath)` (directory) as basePath
+      Bug fix: `resolvePath` was not expanding `~` before resolving relative paths
+      Bug fix: `resolvePath` was not handling directory paths correctly (was calling `filepath.Dir()` on directories)
+      These bugs prevented inheritance chains from resolving parent files correctly, especially with relative paths and home directory expansion
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Fixed buildChainRecursive basePath**: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_INHERITANCE_PATH_RESOLUTION
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  added_expandpath_method: Added `ExpandPath` method to `defaultPathResolver` to handle `~` expansion
+  code_changes:
+    - '`config.go` line 2289: `buildChainRecursive(parentPath, filepath.Dir(resolvedPath), pathResolver, chain)`'
+    - '`config.go` line 2212-2240: Updated `resolvePath` to expand `~` and handle directories correctly'
+    - '`config.go` line 2241-2253: Added `ExpandPath` method to `defaultPathResolver`'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-TEST_CFG_005_P1]'
+  date: "2025-12-11"
+  fixed_buildchainrecursive_basepath: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls
+  fixed_resolvepath_directory_handling: 'Updated `resolvePath` to:'
+  priority: P1 (Important)
+  test_coverage:
+    - 'TestConfigInheritance: Now passes with relative path `base.yml` resolving correctly'
+    - 'TestRelativePathInheritance_REQ_CFG_005: Tests `../base/base.yml` and `./sibling.yml` resolution'
+    - 'TestHomeDirectoryExpansion_REQ_CFG_005: Tests `~/.bkpdir-base.yml` expansion in inherit paths'
+IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
+  name: Mixed Sequential and Inheritance File Processing
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Requirement: When a sequential file (no inheritance) is processed first, followed by an inheritance chain, the sequential file's precedence fields should be preserved [REQ-CFG_001]
+      Requirement: Within inheritance chains, child files should override parent files (normal inheritance behavior) [REQ-CFG_005]
+      Problem: Without field tracking, inheritance chain files would override sequential file values, violating CFG-001 precedence rules
+      Solution: Track fields from sequential files (single-file chains) in `explicitlySetFields`, but do NOT track fields from true inheritance chain files, allowing child files to override parent files while preserving sequential file values
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Field Tracking Strategy**:'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`isSingleFileChain`, `explicitlySetFields`, `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings`, `applyOverride`, `// CFG-001: Track fields explicitly set in this file for later precedence checks`'
+  code_changes:
+    - '`config.go` line 1789: Added `isSingleFileChain := len(chain.files) == 1` detection'
+    - '`config.go` line 1833-1843: Track fields from single-file chains in `explicitlySetFields`'
+    - '`config.go` line 675-692: Updated `mergeBasicSettings` to check `explicitlySetFields` when `inheritContext=true`'
+    - '`config.go` line 728-747: Updated `mergeBasicSettings` for `include_git_info` to check `explicitlySetFields`'
+    - '`config.go` line 806-837: Updated `mergeGitSettings` to check `explicitlySetFields` when `inheritContext=true`'
+    - '`config.go` line 928-940: Updated `mergeFileBackupSettings` to check `explicitlySetFields` when `inheritContext=true`'
+    - '`config.go` line 2649-2681: Updated `applyOverride` to check `explicitlySetFields` when `inheritContext=true`'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CFG_001], [REQ-CONFIGURATION]'
+  field_tracking_strategy:
+    - Track fields in `explicitlySetFields` only from sequential files (single-file chains, `len(chain.files) == 1`)
+    - Do NOT track fields from true inheritance chain files (`len(chain.files) > 1`) to allow child files to override parent files
+    - When processing inheritance chain files, check `explicitlySetFields` to preserve sequential file values for precedence fields
+  inheritance_chains_processed_after_sequential_files:
+    - Precedence fields from sequential files are preserved (checked via `explicitlySetFields`)
+    - Accumulate fields from sequential files and inheritance chain merge correctly
+  merge_function_updates:
+    - Updated `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings` to check `explicitlySetFields` even when `inheritContext=true` (inheritance chains)
+    - Updated `applyOverride` to check `explicitlySetFields` when `inheritContext=true` to preserve sequential file values
+    - Within inheritance chains, fields can still override each other (normal inheritance), but cannot override sequential file values
+  sequential_files_processed_first: Fields are tracked in `explicitlySetFields`
+  single-file_chain_detection:
+    - Added `isSingleFileChain` flag to detect when `buildChain` returns a single-file chain (file without inheritance)
+    - Single-file chains are processed through the inheritance chain path but have their fields tracked
+    - This handles the case where `buildChain` succeeds for files without `inherit` field (returns single-file chain)
+  single-file_chains: Fields are tracked to preserve values when inheritance chains are processed later
+  test_coverage:
+    - '`TestMixedSequentialAndInheritance`: Verifies that sequential file precedence fields are preserved when processing inheritance chains'
+    - Sequential file sets `archive_dir_path`, `include_git_info`, `skip_broken_symlinks` (precedence fields)
+    - Inheritance chain (base.yml + inherited.yml) tries to override these fields
+    - 'Expected: Sequential file values are preserved, accumulate fields (`exclude_patterns`) merge correctly'
+  within_inheritance_chains: Child files can override parent files (normal inheritance behavior)
+IMPL-TEST_UNICODE_HANDLING:
+  name: Unicode and Special Character Handling Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
+    - REQ-CFG_001
+  rationale:
+    why: |-
+      Ensures configuration system correctly handles Unicode characters in paths and patterns
+      Validates that special characters in config file paths don't break loading
+      Critical for internationalization and real-world usage scenarios
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    tests: []
+    code_annotations:
+      - IMPL-TEST_UNICODE_HANDLING
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_UNICODE_HANDLING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6470-6600, `TestUnicodeHandling`, `TestSpecialCharactersInPaths`, `createTestConfigFileWithData`'
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005], [REQ-CFG_001]'
+  merge_behavior: Unicode patterns merge with defaults per CFG-005 (array fields default to merge)
+  special_chars_in_paths: Config files load correctly regardless of path characters
+  test_coverage:
+    - "Unicode characters in `archive_dir_path`: `/path/with/émojis/\U0001F680/and/特殊字符`"
+    - "Unicode patterns in `exclude_patterns`: `[\"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]`"
+    - 'Config file paths with spaces: `path with spaces/.bkpdir.yml`'
+    - 'Config file paths with Unicode: `path-with-特殊/.bkpdir.yml`'
+    - 'Config file paths with both: `path with 特殊 chars/.bkpdir.yml`'
+    - 'Merge behavior validation: Unicode patterns merge correctly with defaults per CFG-005'
+  test_structure: |-
+    ```go
+    // TestUnicodeHandling tests Unicode and special characters in configuration values
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates Unicode character preservation
+    func TestUnicodeHandling(t *testing.T) {
+        // Creates config with Unicode in archive_dir_path and exclude_patterns
+        // Verifies all Unicode characters preserved correctly
+        // Validates merge behavior with defaults (CFG-005)
+    }
+
+    // TestSpecialCharactersInPaths tests special characters in config file paths
+    // [REQ-CONFIGURATION] [REQ-CFG_001] Validates config file loading with special paths
+    func TestSpecialCharactersInPaths(t *testing.T) {
+        // Tests spaces in path
+        // Tests Unicode in path
+        // Tests both spaces and Unicode in path
+        // Verifies LoadConfig works correctly
+    }
+    ```
+  testspecialcharactersinpaths: Tests special characters in config file paths
+  testunicodehandling: Tests Unicode characters (émojis, 特殊字符) in configuration values
+  unicode_in_patterns: Unicode patterns work correctly in exclude_patterns
+  unicode_in_values: All Unicode characters preserved exactly as specified
+IMPL-TEST_EMPTY_STRING_HANDLING:
+  name: Empty String Handling Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_001
+    - REQ-CFG_005
+  rationale:
+    why: |-
+      Ensures configuration system correctly handles empty strings in merging scenarios
+      Validates whether empty strings are treated as zero values or explicit empty values
+      Critical for understanding precedence behavior when empty strings are explicitly set
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestEmptyStringHandling**: Tests empty string handling in various merge scenarios'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-CFG_005
+    tests: []
+    code_annotations:
+      - IMPL-TEST_EMPTY_STRING_HANDLING
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-CFG_005
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-CFG_005
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_EMPTY_STRING_HANDLING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6643-6750, `TestEmptyStringHandling`, `createTestConfigFileWithData`, `isZeroValue`'
+  both_files_empty: Result is empty string
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_001], [REQ-CFG_005]'
+  empty_string_as_explicit_value: If treated as explicit, CFG-001 precedence applies (first file preserved)
+  empty_string_as_zero_value: If treated as zero value, later files can override
+  precedence_with_empty_strings: First file's value (even if empty) takes precedence per CFG-001
+  test_coverage:
+    - 'Empty string in first file, value in second file: Verifies behavior (zero value vs explicit empty)'
+    - 'Value in first file, empty string in second file: Verifies CFG-001 precedence (first file preserved)'
+    - 'Empty string in both files: Verifies empty string is preserved'
+    - 'Merge behavior validation: Empty strings handled correctly per CFG-001 and CFG-005'
+  test_structure: |-
+    ```go
+    // TestEmptyStringHandling tests empty string handling in configuration merging
+    // [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] Validates empty string treatment
+    func TestEmptyStringHandling(t *testing.T) {
+        // Test: first file empty, second file value
+        // Test: first file value, second file empty
+        // Test: both files empty
+    }
+    ```
+  testemptystringhandling: Tests empty string handling in various merge scenarios
+IMPL-TEST_PREPEND_ORDERING:
+  name: Prepend Strategy Ordering Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
+    - REQ-CFG_001
+  rationale:
+    why: |-
+      Ensures prepend strategy (`^` prefix) correctly maintains order (new values before existing values)
+      Validates prepend behavior in both inheritance chains and sequential file processing
+      Critical for understanding merge strategy ordering semantics
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    tests: []
+    code_annotations:
+      - IMPL-TEST_PREPEND_ORDERING
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_PREPEND_ORDERING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6753-6850, `TestPrependStrategyOrdering`, `createTestConfigFileWithData`, `ArrayPrependStrategy`, `applyPrepend`'
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005], [REQ-CFG_001]'
+  inheritance_chains: Child prepended values come before parent values
+  multiple_prepends: CFG-001 precedence ensures earlier file prepends are preserved
+  prepend_ordering: New values (source) are placed before existing values (destination)
+  sequential_files: Later file prepended values come before earlier file values (but CFG-001 precedence may apply)
+  test_coverage:
+    - 'Inheritance chain prepend: Parent `["parent1", "parent2"]`, child `^["child1", "child2"]` → `["child1", "child2", "parent1", "parent2"]`'
+    - 'Sequential files prepend: First file patterns, second file prepends → new values before existing'
+    - 'Prepend with defaults: Prepend patterns come before default patterns'
+    - 'Multiple prepend operations: CFG-001 precedence applies (earlier prepends preserved)'
+  test_structure: |-
+    ```go
+    // TestPrependStrategyOrdering tests prepend strategy ordering in configuration merging
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates prepend strategy maintains correct order
+    func TestPrependStrategyOrdering(t *testing.T) {
+        // Test: prepend in inheritance chain
+        // Test: prepend in sequential files
+        // Test: prepend with defaults
+        // Test: multiple prepend operations
+    }
+    ```
+  testprependstrategyordering: Tests prepend strategy ordering in various scenarios
+  with_defaults: Prepended values come before default values
+IMPL-TEST_DEFAULT_STRATEGY_EDGES:
+  name: Default Strategy Edge Cases Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
+  rationale:
+    why: |-
+      Ensures default strategy only applies when destination is zero value
+      Validates that default strategy does NOT apply when destination is non-zero or equals default
+      Critical for understanding default strategy semantics
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+    tests: []
+    code_annotations:
+      - IMPL-TEST_DEFAULT_STRATEGY_EDGES
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6937-7155, `TestDefaultStrategyEdgeCases`, `createTestConfigFileWithData`, `applyDefault`, `isZeroValue`, `DefaultValueStrategy`'
+  array_field_special_case: When first file has empty array `[]`, it merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is non-zero (contains defaults), and default strategy does NOT apply
+  core_principle: Default strategy only applies when destination is zero value at the time of evaluation, regardless of whether it equals the default
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005]'
+  equals_default_but_not_zero: Even if value equals default (e.g., `"../.bkpdir"`), if it's not zero value, default strategy does NOT apply
+  non-zero_values: Any non-zero value prevents default strategy from applying
+  test_coverage:
+    - 'String field zero value: `=archive_dir_path: "/custom/path"` when destination is `""` → applies'
+    - 'String field non-zero: `=archive_dir_path: "/custom/path"` when destination is `"/existing/path"` → does NOT apply'
+    - 'String field equals default: `=archive_dir_path: "/custom/path"` when destination is `"../.bkpdir"` → does NOT apply (not zero, even if equals default)'
+    - 'Array field zero value: `=exclude_patterns: ["custom1"]` when destination is `[]` → **Important**: Empty array in first file merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is `[".git/", "vendor/"]` (non-zero), and default strategy does NOT apply. Result: defaults preserved, not custom values.'
+    - 'Array field non-zero: `=exclude_patterns: ["custom1"]` when destination is `["existing1"]` → does NOT apply'
+    - 'Bool field zero value: `=include_git_info: true` when destination is `false` → applies'
+    - 'Bool field non-zero: `=include_git_info: false` when destination is `true` → does NOT apply'
+  test_structure: |-
+    ```go
+    // TestDefaultStrategyEdgeCases tests default strategy edge cases
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates default strategy only applies when destination is zero value
+    func TestDefaultStrategyEdgeCases(t *testing.T) {
+        // Test: default strategy when field is zero value
+        // Test: default strategy when field is non-zero
+        // Test: default strategy when field equals default
+        // Test: default strategy with array field (zero and non-zero)
+        // Test: default strategy with bool field (zero and non-zero)
+    }
+    ```
+  testdefaultstrategyedgecases: Tests default strategy in various edge case scenarios
+  zero_value_check: Default strategy uses `isZeroValue()` to check if destination is zero value
+  zero_value_types: Empty string `""`, empty slice `[]`, `false` for bool, `0` for int, `nil`
+IMPL-LIST_LIMIT:
+  name: List Command Limit Implementation
+  status: Active
+  cross_references:
+    - ARCH-LIST_LIMIT
+    - ARCH-DIFF_COMMAND
+    - ARCH-DIRECTORY_COMPARISON
+    - ARCH-CLI_COMMANDS
+    - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    - ARCH-EXTRACT_008_INTERDEP
+    - REQ-LIST_LIMIT
+    - REQ-USABILITY
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CONTEXT_SUPPORT
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+  rationale:
+    why: STDD requires authoritative records to live in the requirements, architecture, and implementation documents for traceability. Working-plan or supplemental files create duplication and risk drift; migrating content into the canonical STDD files preserves traceability.
+    problems_solved: []
+    benefits:
+      - More reliable than file system modification times, consistent with archive naming pattern, simpler implementation (no file system stat calls needed)
+  implementation_approach:
+    summary: '- Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-LIST_LIMIT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - ARCH-EXTRACT_008_INTERDEP
+    requirements:
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+    tests: []
+    code_annotations:
+      - IMPL-LIST_LIMIT
+      - ARCH-LIST_LIMIT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - ARCH-EXTRACT_008_INTERDEP
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-LIST_LIMIT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - ARCH-EXTRACT_008_INTERDEP
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-LIST_LIMIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: |-
+    `archive.go` line ~695-738: `createIncrementalArchive()` - Integrated diff analysis before archive creation
+    Line ~697: Calls `ReconstructArchiveState()` to get effective state (full + most recent incremental)
+    Line ~704: Calls `findLatestFullArchive()` for fallback path (uses name-based sorting)
+    Line ~744: Calls `findLatestFullArchive()` to get base full archive for naming (uses name-based sorting)
+    Line ~720: Calls `CalculateDiff()` to detect changes, passing exclude patterns
+    Line ~726-729: Conditional skip when no changes detected, displays skip message
+    Line ~700-717: Fallback to old behavior when reconstruction fails (backward compatibility)
+    `archive.go` line ~869-904: `findLatestFullArchive()` - Finds most recent full archive by sorting names (used by incremental archive creation)
+    `formatter.go` line ~1785-1799: `FormatIncrementalSkippedNoChanges()` and `PrintIncrementalSkippedNoChanges()` - Format and print skip message
+    `config.go` line ~153: `FormatIncrementalSkippedNoChanges` - Format string configuration field
+    `config.go` line ~336: Default format string: "No changes detected since last incremental archive. Skipping archive creation.\n"
+    `incremental_duplicate_prevention_test.go`: Comprehensive test suite with 4 test functions covering all scenarios
+  archive_selection: Use `findLatestFullArchive()` which uses name-based sorting (consistent with diff command)
+  archive_selection_strategy: All archive selection functions use name-based sorting instead of file modification times
+  archive_state_reconstruction: Function to reconstruct effective state from full + most recent incremental archive
+  auto-detection_integration: Added "diff" to `knownCommands` list in `executeWithAutoDetection()` to prevent path auto-detection from intercepting the command
+  benefits: More reliable than file system modification times, consistent with archive naming pattern, simpler implementation (no file system stat calls needed)
+  change_detection: Use diff result to determine if changes exist
+  change_reporting: Format and display changes
+  cli_command_integration: Add `diff` command to CLI framework
+  code_structure:
+    - '`archive.go`: Modify `createIncrementalArchive()` to use diff analysis before creating archive'
+    - '`archive.go`: Add check for changes using `CalculateDiff()` function'
+    - '`archive.go`: Skip archive creation if `diffResult` shows no changes'
+    - '`formatter.go`: Add format method for skip message (`FormatIncrementalSkippedNoChanges()`, `PrintIncrementalSkippedNoChanges()`)'
+    - '`config.go`: Add format string configuration for skip message (`FormatIncrementalSkippedNoChanges`)'
+  context_support: Command handler checks for context cancellation before diff calculation and before printing results
+  cross-references: '[ARCH-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-DIFF_COMMAND], [IMPL-DIFF_COMMAND], [REQ-OUTPUT_FORMATTING]'
+  directory_comparison: Compare current directory against reconstructed state
+  error_handling: Improved handling of "no archives found" case - displays user-friendly message using `PrintNoArchivesFound()` instead of generic error
+  implementation: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
+  implementation_status: ✅ Complete
+  implementation_steps: |-
+    1. Record the requirement token `[REQ-EXTRACT_008_INTERDEP_MAPPING]` in `stdd/requirements.md` (done).
+    2. Record the architecture decision `[ARCH-EXTRACT_008_INTERDEP]` in `stdd/architecture-decisions.md` (done).
+    3. Record this implementation decision `[IMPL-EXTRACT_008_DOC_MIGRATION]` here to document the migration approach and rationale.
+    4. Create the canonical deliverable `docs/package-interdependency-mapping.md` describing package relationships, interface contracts, and example integrations (outcome document—authoring to be performed as follow-up task).
+    5. Remove any supplemental preservation files (they are not canonical) and remove or decommission `working-plan-extract-008.md` once migration is complete.
+  name-based_sorting: All archive selection functions (`FindMostRecentArchive`, `findLatestFullArchive`, `findLatestIncrementalArchive`) use name-based sorting instead of file modification times
+  reuse_diff_logic: Leverage `CalculateDiff()` function from diff command implementation
+  skip_creation: Skip incremental archive creation if no changes detected
+  state_reconstruction: Use `ReconstructArchiveState()` to get effective state
+  testing: 'Comprehensive test coverage including:'
+  user_feedback: Display appropriate message using format strings
+  validation:
+    - Confirm tokens appear in `stdd/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
+    - Confirm `docs/package-interdependency-mapping.md` exists and links back to these tokens.
+IMPL-TOKEN_COVERAGE_AUDIT:
+  name: Semantic Token Coverage Audit
+  status: Active
+  cross_references:
+    - ARCH-TOKEN_SYSTEM
+    - ARCH-ARCHIVE_FORMAT
+    - ARCH-PROCESSING_PATTERNS
+    - ARCH-CONTEXT_SUPPORT
+    - ARCH-RESOURCE_MANAGEMENT
+    - ARCH-ERROR_HANDLING
+    - ARCH-EXCLUSION_PATTERNS
+    - ARCH-PACKAGE_EXTRACTION
+    - ARCH-DIRECTORY_COMPARISON
+    - ARCH-DIFF_COMMAND
+    - ARCH-OUTPUT_FORMATTING
+    - ARCH-GIT_INTEGRATION
+    - REQ-DOC_016
+    - REQ-FILE_BACKUP
+    - REQ-LIST_LIMIT
+    - REQ-ERROR_HANDLING
+    - REQ-CONFIGURATION
+    - REQ-DIFF_COMMAND
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-GIT_INTEGRATION
+  rationale:
+    why: |-
+      Demonstrates that the AI-first toolchain can rely on tokens to trace code/tests back to intent.
+      Highlights gaps (e.g., `formatter.go`/`formatter_test.go`) and fixes them before broader refactors.
+      Provides a repeatable checklist for future module audits.
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Archive module (`archive.go`, `archive_test.go`)**: Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-DIFF_COMMAND
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-GIT_INTEGRATION
+    requirements:
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-LIST_LIMIT
+      - REQ-ERROR_HANDLING
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-GIT_INTEGRATION
+    tests: []
+    code_annotations:
+      - IMPL-TOKEN_COVERAGE_AUDIT
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-DIFF_COMMAND
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-GIT_INTEGRATION
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-LIST_LIMIT
+      - REQ-ERROR_HANDLING
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-GIT_INTEGRATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TOKEN_SYSTEM
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-DIFF_COMMAND
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-GIT_INTEGRATION
+      - REQ-DOC_016
+      - REQ-FILE_BACKUP
+      - REQ-LIST_LIMIT
+      - REQ-ERROR_HANDLING
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-GIT_INTEGRATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`archive.go`, `backup.go`, `errors.go`, `comparison.go`, `exclude.go`, `formatter.go`, `git.go` and their `_test.go` files that now consistently mention the appropriate tokens.'
+  archive_module_(`archive_go`,_`archive_test_go`): Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).
+  backup_module_(`backup_go`,_`backup_test_go`): Annotated `[REQ-FILE_BACKUP]`, `[ARCH-RESOURCE_MANAGEMENT]`, `[IMPL-ATOMIC_OPS]`, additional `[REQ-LIST_LIMIT]` tokens for list helpers so the requirement coverage remains visible.
+  comparison_module_(`comparison_go`,_`comparison_test_go`): Snapshot utilities reference `[ARCH-DIRECTORY_COMPARISON]`, `[ARCH-DIFF_COMMAND]`, `[IMPL-DIRECTORY_COMPARISON]`, `[IMPL-DIFF_COMMAND]`, `[REQ-DIFF_COMMAND]` for diffing features.
+  documentation:
+    - Capture this audit in `stdd/semantic-tokens.md` by registering `[IMPL-TOKEN_COVERAGE_AUDIT]` with the contexts above.
+    - Point future audits to this decision to reuse the pattern and ensure coverage plans explicitly mention `REQ:DOC_016` and `ARCH:TOKEN_SYSTEM`.
+  errors_module_(`errors_go`,_`errors_test_go`): Structured errors are marked with `[REQ-ERROR_HANDLING]`, `[ARCH-ERROR_HANDLING]`, `[IMPL-STRUCTURED_ERRORS]`; tests mirror these tags.
+  exclusion_module_(`exclude_go`,_`exclude_test_go`): Pattern helpers keep `[REQ-CONFIGURATION]`, `[ARCH-EXCLUSION_PATTERNS]`, `[ARCH-PACKAGE_EXTRACTION]`, `[IMPL-EXCLUSION_PATTERNS]` references across adapters and wrappers.
+  formatter_module_(`formatter_go`,_`formatter_test_go`): Added `[REQ-OUTPUT_FORMATTING]`, `[ARCH-OUTPUT_FORMATTING]`, `[IMPL-DUAL_FORMATTING]` anchors so the formatting requirement is traceable from both implementation and tests; helper functions continue to reference `[REQ-CUSTOMIZABLE_FORMAT_STRINGS]`, `[IMPL-DIFF_COMMAND]`, and `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` for contextual behavior.
+  git_module_(`git_go`,_`git_test_go`): Maintains `[REQ-GIT_INTEGRATION]`, `[ARCH-GIT_INTEGRATION]`, `[IMPL-GIT_CLI]`, and tests now restate them for repository detection and naming flows.
+IMPL-CFG_HIERARCHY_PRESERVATION:
+  name: Configuration Hierarchy Preservation Fix
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-STDD_VIS_FLOW
+    - REQ-CONFIGURATION
+    - REQ-CFG_001
+    - REQ-STDD_VIS
+    - REQ-CFG_005
+    - REQ-LIST_LIMIT
+    - REQ-MODULE_VALIDATION
+  rationale:
+    why: |-
+      Combines static clarity (layered flow) with process storytelling (timeline/animation).
+      Ensures artifacts stay anchored to real tokens and code/test references.
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-STDD_VIS_FLOW
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-STDD_VIS
+      - REQ-CFG_005
+      - REQ-LIST_LIMIT
+      - REQ-MODULE_VALIDATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_HIERARCHY_PRESERVATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-STDD_VIS_FLOW
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-STDD_VIS
+      - REQ-CFG_005
+      - REQ-LIST_LIMIT
+      - REQ-MODULE_VALIDATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-STDD_VIS_FLOW
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-STDD_VIS
+      - REQ-CFG_005
+      - REQ-LIST_LIMIT
+      - REQ-MODULE_VALIDATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`mergeBasicSettings`, `applyOverride`, `dstDiffersFromDefault`, `explicitlySetByEarlier`, `explicitlySetInSrc`, `// CFG-001: Earlier files take precedence`'
+  asset_locations: '`docs/images/stdd-trace-flow.svg` (or .png) and `docs/images/stdd-trace-timeline.gif/mp4`; link from STDD docs with captions describing token chains.'
+  cross-references: '[ARCH-STDD_VIS_FLOW], [REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
+  implementation_approach_(planning,_no_code_yet):
+    - 'Input sources: `stdd/semantic-tokens.md`, `stdd/requirements.md`, `stdd/architecture-decisions.md`, `stdd/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
+    - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references found in docs and inline token comments; capture token metadata (type, status, sample refs) to drive token prominence in visuals.
+    - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
+    - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'
+    - 'Module boundary: `DataExtraction` outputs normalized graph once; downstream modules consume it without re-parsing docs, preserving token-centric styling data.'
+  inheritance_chains: '(`inheritContext=true`): Behavior unchanged - child configs override parent configs'
+  key_changes: |-
+    1. `mergeBasicSettings` - Updated sequential file logic to check `dstDiffersFromDefault` in addition to `explicitlySetByEarlier`
+    2. `applyOverride` - Simplified preservation logic to only check if the specific field was set or differs from default, not if any field was set
+  layered_flow_diagram: 'Use the token graph to render a swimlane/Sankey-style view: lanes for REQ/ARCH/IMPL/TEST/CODE; tokens are visually dominant (size/color/labels); callouts for example chains; legend explaining token roles and color map.'
+  sequential_files: '(`inheritContext=false`):'
+  test_case:
+    - 'Home config (`~/.bkpdir.yml`): `archive_dir_path: /Users/fareed/.bkpdir`'
+    - 'Local config (`./.bkpdir.yml`): `archive_dir_path` is not set (commented out or missing)'
+    - 'Expected: Home config value (`/Users/fareed/.bkpdir`) is preserved'
+    - 'Before fix: Compiled default (`../.bkpdir`) was incorrectly used'
+    - 'After fix: Home config value (`/Users/fareed/.bkpdir`) is correctly preserved'
+  timeline/animation: Stepwise frames showing a requirement moving through architecture, implementation, tests, and code; token badges stay visible per step so the token remains the protagonist. Output as lightweight GIF/MP4 or animated SVG.
+  updated_`applyoverride`: '(lines 2647-2652 in `config.go`): Changed the preservation logic to only preserve if:'
+  updated_`mergebasicsettings`: '(lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
+  validation: Visual review checklist centered on token prominence (label clarity, color map alignment, edge correctness), alignment with two sample chains from the data snapshot, and confirmation that assets load in docs.
+IMPL-TIED_FILES:
+  name: TIED File Creation
+  status: Active
+  description: TIED file creation implementation
+  cross_references:
+    - ARCH-TIED_STRUCTURE
+    - REQ-TIED_SETUP
+  detail_file: implementation-decisions/IMPL-TIED_FILES.yaml
+  metadata:
+    created:
+      date: "2025-12-18"
+      author: AI Agent
+    last_updated:
+      date: "2026-02-06"
+      author: AI Agent
+IMPL-MODULE_VALIDATION:
+  name: Module Validation Implementation
+  status: Active
+  description: Module validation implementation
+  cross_references:
+    - ARCH-MODULE_VALIDATION
+    - REQ-MODULE_VALIDATION
+  detail_file: implementation-decisions/IMPL-MODULE_VALIDATION.yaml
+  metadata:
+    created:
+      date: "2025-12-18"
+      author: AI Agent
+    last_updated:
+      date: "2026-02-06"
+      author: AI Agent
+IMPL-MCP_FEEDBACK_TOOLS:
+  name: MCP Feedback Tools
+  status: Active
+  description: Two MCP tools (tied_feedback_add, tied_feedback_export) and feedback module for load/append/export
+  cross_references:
+    - ARCH-FEEDBACK_STORAGE
+    - REQ-FEEDBACK_TO_TIED
+  detail_file: implementation-decisions/IMPL-MCP_FEEDBACK_TOOLS.yaml
+  metadata:
+    created:
+      date: "2026-03-03"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-03"
+      author: AI Agent
+IMPL-BACKWARD_COMPAT:
+  name: Maintain Backward Compatibility
+  status: Active
+  description: Extract components without breaking existing backup application using Go modules and interfaces to isolate extracted code
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  detail_file: implementation-decisions/IMPL-BACKWARD_COMPAT.yaml
+IMPL-CONFIGURABLE_STRINGS:
+  name: Eliminate Hardcoded Strings and Enhance Template Formatting
+  status: Active
+  description: Comprehensive string externalization system allowing all user-facing strings to be loaded from configuration files with enhanced template formatting using named elements
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  detail_file: implementation-decisions/IMPL-CONFIGURABLE_STRINGS.yaml
+IMPL-CONFIG_DISPLAY_FLATTENING:
+  name: Configuration Display Flattening
+  status: Active
+  description: Configuration keys displayed as top-level keys in bkpdir config output even when nested in internal struct, using reflection-based YAML tag discovery
+  cross_references:
+    - ARCH-CFG_006
+    - REQ-CFG_006
+  detail_file: implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING.yaml
+IMPL-CONFIG_SCHEMA_FLEX:
+  name: Configuration Schema Flexibility
+  status: Active
+  description: Extract configuration loading/merging logic with pluggable schema validation using ConfigLoader interface for different struct types
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  detail_file: implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX.yaml
+IMPL-DATA_MODELS:
+  name: Data Models
+  status: Active
+  description: Comprehensive data structures for archive and backup operations providing structured data representation, type safety, serialization support, and testing facilitation
+  cross_references:
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CODE_QUALITY
+  detail_file: implementation-decisions/IMPL-DATA_MODELS.yaml
+IMPL-DELAYED_OUTPUT:
+  name: Delayed Output Management
+  status: Active
+  description: Delayed output functionality returning output messages to calling functions instead of direct stdout/stderr printing for better control over output display
+  cross_references:
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
+  detail_file: implementation-decisions/IMPL-DELAYED_OUTPUT.yaml
+IMPL-DEPENDENCY_MGMT:
+  name: Dependency Management
+  status: Active
+  description: Clear dependency hierarchy using Go modules for versioning with core packages having no internal dependencies and higher-level packages composing core packages
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  detail_file: implementation-decisions/IMPL-DEPENDENCY_MGMT.yaml
+IMPL-DIFF_COMMAND:
+  name: Diff Command Implementation
+  status: Active
+  description: Diff command with archive state reconstruction, directory comparison engine, change reporting, and CLI integration with context cancellation support
+  cross_references:
+    - ARCH-DIFF_COMMAND
+    - REQ-DIFF_COMMAND
+  detail_file: implementation-decisions/IMPL-DIFF_COMMAND.yaml
+IMPL-EXTRACT_008_DOC_MIGRATION:
+  name: EXTRACT-008 Documentation Migration and Preservation
+  status: Active
+  description: Preserve working-plan content by migrating it into STDD/TIED core documents and decommissioning the working-plan artifact
+  cross_references:
+    - ARCH-EXTRACT_008_INTERDEP
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+  detail_file: implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION.yaml
+IMPL-GIT_DIRTY_CONFIG:
+  name: Configurable Git Dirty Status
+  status: Active
+  description: Make Git dirty status indicator (-dirty suffix) configurable through the configuration system with show_git_dirty_status boolean option
+  cross_references:
+    - ARCH-GIT_INTEGRATION
+    - REQ-GIT_INTEGRATION
+  detail_file: implementation-decisions/IMPL-GIT_DIRTY_CONFIG.yaml
+IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
+  name: Incremental Archive Duplicate Prevention
+  status: Active
+  description: Reuse diff command analysis to prevent duplicate incremental archives by comparing current state against reconstructed archive state
+  cross_references:
+    - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+  detail_file: implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
+IMPL-INTERFACE_DRIVEN:
+  name: Interface-Driven Design
+  status: Active
+  description: Create clear interfaces for all extracted components to enable flexibility, testing, and future evolution
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  detail_file: implementation-decisions/IMPL-INTERFACE_DRIVEN.yaml
+IMPL-LARGE_FILE_CHALLENGE:
+  name: Large File Decomposition Challenge
+  status: Active
+  description: Challenge and solution for decomposing formatter.go (1675 lines) into multiple focused packages while maintaining interface compatibility
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  detail_file: implementation-decisions/IMPL-LARGE_FILE_CHALLENGE.yaml
+IMPL-LAYERED_EXTRACTION:
+  name: Layered Extraction Approach
+  status: Active
+  description: Extract in dependency order - core utilities first, then higher-level components to prevent circular dependencies
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  detail_file: implementation-decisions/IMPL-LAYERED_EXTRACTION.yaml
+IMPL-ZERO_BREAKING:
+  name: Zero-Breaking-Change Extraction
+  status: Active
+  description: Extraction must not change existing application behavior; maintains confidence in extraction process
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  detail_file: implementation-decisions/IMPL-ZERO_BREAKING.yaml
+IMPL-STDD_VIS_ASSETS:
+  name: STDD Visualization Asset Plan
+  status: Active
+  description: Produce two complementary artifacts (layered flow diagram + timeline/animation) sourced from the data pipeline, with embedded token callouts and legends
+  cross_references:
+    - ARCH-STDD_VIS_FLOW
+    - REQ-STDD_VIS
+    - REQ-MODULE_VALIDATION
+  detail_file: implementation-decisions/IMPL-STDD_VIS_ASSETS.yaml
+IMPL-STDD_VIS_DATA_PIPELINE:
+  name: STDD Visualization Data Pipeline
+  status: Active
+  description: Build a repeatable data pipeline that derives a token graph from STDD documents and representative code/tests to feed visualization artifacts
+  cross_references:
+    - ARCH-STDD_VIS_FLOW
+    - REQ-STDD_VIS
+    - REQ-MODULE_VALIDATION
+  detail_file: implementation-decisions/IMPL-STDD_VIS_DATA_PIPELINE.yaml
+IMPL-TESTING:
+  name: Testing Implementation Strategy
+  status: Active
+  description: Comprehensive testing strategy including unit, integration, performance, and stress tests with table-driven test patterns and rich test utilities
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-RELIABILITY
+  detail_file: implementation-decisions/IMPL-TESTING.yaml
+IMPL-TESTING_COMPLEXITY:
+  name: Testing Complexity Challenge
+  status: Active
+  description: Challenge and solution for comprehensive testing of extracted components without duplicating existing tests
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-RELIABILITY
+  detail_file: implementation-decisions/IMPL-TESTING_COMPLEXITY.yaml
+IMPL-TEST_COVERAGE:
+  name: Comprehensive formatter.go Test Coverage
+  status: Active
+  description: Comprehensive test coverage for all 0% coverage functions in formatter.go including OutputCollector, template methods, and error formatting
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CODE_QUALITY
+  detail_file: implementation-decisions/IMPL-TEST_COVERAGE.yaml
+IMPL-TOKEN_MIGRATION_COMPLETE:
+  name: Token Migration Complete
+  status: Active
+  description: Status marker indicating all legacy tokens have been migrated into STDD semantic-tokens.md and validated via coverage and traceability scripts
+  cross_references:
+    - ARCH-TOKEN_SYSTEM
+    - REQ-CODE_QUALITY
+  detail_file: implementation-decisions/IMPL-TOKEN_MIGRATION_COMPLETE.yaml

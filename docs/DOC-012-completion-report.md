@@ -83,7 +83,7 @@ make build-realtime-validator
 📄 File: main.go
 ⏱️  Processing Time: 9.319022958s
 📊 Status: ✅ PASS (excellent compliance)
-[ACTION:discovery] Validation Summary:
+[ACTION-discovery] Validation Summary:
   Status: pass
   Errors: 0, Warnings: 0
   Suggestions: 0

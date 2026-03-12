@@ -60,3 +60,4 @@ docs/cli-app-spec.zip
 
 /test-dir/
 /bkpdir-test
+.cursor/mcp.json

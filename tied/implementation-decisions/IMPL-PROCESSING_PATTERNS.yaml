@@ -1,0 +1,102 @@
+IMPL-PROCESSING_PATTERNS:
+  name: Processing Patterns Implementation
+  status: Active
+  cross_references:
+    - ARCH-PROCESSING_PATTERNS
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables reusable processing patterns
+      Supports high-performance concurrent operations
+      Standardizes naming conventions
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Pipeline-based processing with concurrent execution support
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-PROCESSING_PATTERNS
+    requirements:
+      - REQ-PERFORMANCE
+    tests: []
+    code_annotations:
+      - IMPL-PROCESSING_PATTERNS
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-PROCESSING_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/processing/` package, pipeline stages, worker pools'
+  concurrentprocessor: |-
+    ```go
+    type ConcurrentProcessor struct {
+        workers    int
+        queue      chan WorkItem
+        results    chan Result
+        ctx        context.Context
+        cancel     context.CancelFunc
+        wg         sync.WaitGroup
+        processed  int64
+        failed     int64
+    }
+
+    func NewConcurrentProcessor(workers int) *ConcurrentProcessor
+    func (cp *ConcurrentProcessor) Submit(item WorkItem) error
+    func (cp *ConcurrentProcessor) Process(ctx context.Context) error
+    func (cp *ConcurrentProcessor) GetStats() Stats
+    ```
+  naming_patterns:
+    - 'ISO 8601 timestamp: `2006-01-02T150405`'
+    - 'Git integration: `{branch}-{hash}-{dirty}`'
+    - 'Archive pattern: `{prefix}-{timestamp}-{note}.zip`'
+    - 'Backup pattern: `{name}-{timestamp}-{note}.bak`'
+  namingprovider: |-
+    ```go
+    type NamingProviderInterface interface {
+        GenerateName(pattern string, metadata map[string]string) (string, error)
+        ParseName(name string, pattern string) (map[string]string, error)
+    }
+    ```
+  pipeline_interface: |-
+    ```go
+    type PipelineInterface interface {
+        AddStage(stage Stage) PipelineInterface
+        Execute(ctx context.Context, input interface{}) (interface{}, error)
+        GetProgress() Progress
+    }
+    ```
+  stage_interface: |-
+    ```go
+    type Stage interface {
+        Process(ctx context.Context, input interface{}) (interface{}, error)
+        Name() string
+    }
+    ```
+  essence_pseudocode: |-
+    # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Pipeline-based processing with concurrent execution support
+
+    procedure processing_patterns_implementation():
+      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Enables reusable processing patterns
+      execute()
+      end

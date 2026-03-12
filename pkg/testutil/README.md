@@ -1,8 +1,8 @@
 # Testing Utilities Package (testutil)
 
-**Tokens:** [REQ:CODE_QUALITY] [ARCH:TESTING_STRATEGY] [IMPL:TESTING]
+**Tokens:** [REQ-CODE_QUALITY] [ARCH-TESTING_STRATEGY] [IMPL-TESTING]
 
-[HIGH] **DOC-014: Testing Patterns and Utilities** [ACTION:maintenance]
+[HIGH] **DOC-014: Testing Patterns and Utilities** [ACTION-maintenance]
 
 This package provides comprehensive testing utilities extracted from the bkpdir codebase, offering reusable testing patterns and infrastructure for Go applications.
 

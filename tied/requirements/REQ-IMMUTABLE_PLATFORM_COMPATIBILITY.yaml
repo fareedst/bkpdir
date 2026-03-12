@@ -1,0 +1,48 @@
+REQ-IMMUTABLE_PLATFORM_COMPATIBILITY:
+  name: Platform Compatibility Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Platform compatibility is fundamental to user experience. Reducing support would break existing users.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: macOS and Linux are supported
+    - criterion: Platform-specific differences are handled
+    - criterion: File permissions are preserved
+    - criterion: Operations are thread-safe
+    - criterion: Resource management is efficient
+    - criterion: Character encodings are handled
+    - criterion: Line endings are handled
+    - criterion: Path separators are handled
+  validation_criteria:
+    - method: Platform compatibility tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-LANGUAGE_SELECTION
+    implementation:
+      - IMPL-FILE_OPERATIONS
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_PLATFORM_COMPATIBILITY
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_PLATFORM_COMPATIBILITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Language and Runtime [ARCH-LANGUAGE_SELECTION]
+  description: 'Platform support must never be reduced or modified:'
+  implementation: See `implementation-decisions.md` § File Operations Implementation [IMPL-FILE_OPERATIONS]

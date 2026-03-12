@@ -1,0 +1,61 @@
+IMPL-LARGE_FILE_CHALLENGE:
+  name: Large File Decomposition Challenge
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: formatter.go at 1675 lines is large and complex, indicating rich functionality perfect for reuse but needing careful decomposition
+    problems_solved:
+      - Large monolithic file difficult to maintain
+      - Complex file hindering code comprehension
+      - Rich functionality locked in single file preventing reuse
+    benefits:
+      - Focused packages with single responsibilities
+      - Improved maintainability and comprehension
+      - Reusable components extracted from monolith
+  implementation_approach:
+    summary: Break formatter.go into multiple focused packages while maintaining interface compatibility
+    details:
+      - Extract template engine as separate package
+      - Extract printf formatter as separate package
+      - Extract output collector as separate package
+      - Extract ANSI support as separate package
+      - Maintain interface compatibility throughout extraction
+  code_locations:
+    files:
+      - formatter.go
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_CHALLENGES
+    supersedes: []
+    see_also:
+      - IMPL-LAYERED_EXTRACTION
+      - IMPL-INTERFACE_DRIVEN
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Break formatter.go into multiple focused packages while maintaining interface compatibility
+
+    procedure large_file_decomposition_challenge():
+      # [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Extract template engine as separate package
+      extract_template_engine_as()
+      # [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Extract printf formatter as separate package
+      extract_printf_formatter_as()
+      # [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Extract output collector as separate package
+      extract_output_collector_as()
+      # [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Extract ANSI support as separate package
+      extract_ansi_support_as()
+      # [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Maintain interface compatibility throughout extraction
+      maintain_interface_compatibility_throughout()
+      end

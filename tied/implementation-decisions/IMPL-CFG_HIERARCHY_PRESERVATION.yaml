@@ -1,0 +1,104 @@
+IMPL-CFG_HIERARCHY_PRESERVATION:
+  name: Configuration Hierarchy Preservation Fix
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-STDD_VIS_FLOW
+    - REQ-CONFIGURATION
+    - REQ-CFG_001
+    - REQ-STDD_VIS
+    - REQ-CFG_005
+    - REQ-LIST_LIMIT
+    - REQ-MODULE_VALIDATION
+  rationale:
+    why: |-
+      Combines static clarity (layered flow) with process storytelling (timeline/animation).
+      Ensures artifacts stay anchored to real tokens and code/test references.
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-STDD_VIS_FLOW
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-STDD_VIS
+      - REQ-CFG_005
+      - REQ-LIST_LIMIT
+      - REQ-MODULE_VALIDATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_HIERARCHY_PRESERVATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-STDD_VIS_FLOW
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-STDD_VIS
+      - REQ-CFG_005
+      - REQ-LIST_LIMIT
+      - REQ-MODULE_VALIDATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-STDD_VIS_FLOW
+      - REQ-CONFIGURATION
+      - REQ-CFG_001
+      - REQ-STDD_VIS
+      - REQ-CFG_005
+      - REQ-LIST_LIMIT
+      - REQ-MODULE_VALIDATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`mergeBasicSettings`, `applyOverride`, `dstDiffersFromDefault`, `explicitlySetByEarlier`, `explicitlySetInSrc`, `// CFG-001: Earlier files take precedence`'
+  asset_locations: '`docs/images/stdd-trace-flow.svg` (or .png) and `docs/images/stdd-trace-timeline.gif/mp4`; link from STDD docs with captions describing token chains.'
+  cross-references: '[ARCH-STDD_VIS_FLOW], [REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
+  implementation_approach_(planning,_no_code_yet):
+    - 'Input sources: `stdd/semantic-tokens.md`, `stdd/requirements.md`, `stdd/architecture-decisions.md`, `stdd/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
+    - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references found in docs and inline token comments; capture token metadata (type, status, sample refs) to drive token prominence in visuals.
+    - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
+    - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'
+    - 'Module boundary: `DataExtraction` outputs normalized graph once; downstream modules consume it without re-parsing docs, preserving token-centric styling data.'
+  inheritance_chains: '(`inheritContext=true`): Behavior unchanged - child configs override parent configs'
+  key_changes: |-
+    1. `mergeBasicSettings` - Updated sequential file logic to check `dstDiffersFromDefault` in addition to `explicitlySetByEarlier`
+    2. `applyOverride` - Simplified preservation logic to only check if the specific field was set or differs from default, not if any field was set
+  layered_flow_diagram: 'Use the token graph to render a swimlane/Sankey-style view: lanes for REQ/ARCH/IMPL/TEST/CODE; tokens are visually dominant (size/color/labels); callouts for example chains; legend explaining token roles and color map.'
+  sequential_files: '(`inheritContext=false`):'
+  test_case:
+    - 'Home config (`~/.bkpdir.yml`): `archive_dir_path: /Users/fareed/.bkpdir`'
+    - 'Local config (`./.bkpdir.yml`): `archive_dir_path` is not set (commented out or missing)'
+    - 'Expected: Home config value (`/Users/fareed/.bkpdir`) is preserved'
+    - 'Before fix: Compiled default (`../.bkpdir`) was incorrectly used'
+    - 'After fix: Home config value (`/Users/fareed/.bkpdir`) is correctly preserved'
+  timeline/animation: Stepwise frames showing a requirement moving through architecture, implementation, tests, and code; token badges stay visible per step so the token remains the protagonist. Output as lightweight GIF/MP4 or animated SVG.
+  updated_`applyoverride`: '(lines 2647-2652 in `config.go`): Changed the preservation logic to only preserve if:'
+  updated_`mergebasicsettings`: '(lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
+  validation: Visual review checklist centered on token prominence (label clarity, color map alignment, edge correctness), alignment with two sample chains from the data snapshot, and confirmation that assets load in docs.
+  essence_pseudocode: |-
+    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-STDD_VIS] [REQ-CFG_005] [REQ-LIST_LIMIT] [REQ-MODULE_VALIDATION] — - **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:
+
+    procedure configuration_hierarchy_preservation_fix():
+      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-STDD_VIS] [REQ-CFG_005] [REQ-LIST_LIMIT] [REQ-MODULE_VALIDATION] Combines static clarity (layered flow) with process storytelling (timeline/animation).
+      execute()
+      end

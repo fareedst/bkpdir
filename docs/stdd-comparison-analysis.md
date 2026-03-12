@@ -2,7 +2,7 @@
 
 **Generated**: Automated analysis of semantic token usage across STDD documentation layers.
 
-[REQ:STDD_VIS] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_ASSETS]
+[REQ-STDD_VIS] [ARCH-STDD_VIS_FLOW] [IMPL-STDD_VIS_ASSETS]
 
 ## Executive Summary
 
@@ -79,81 +79,81 @@ Build/Deployment          |                |
 
 | Rank | Token | References |
 |------|-------|------------|
-| 1 | `[REQ:MAINTAINABILITY]` | 17 |
-| 2 | `[REQ:USABILITY]` | 17 |
-| 3 | `[REQ:PERFORMANCE]` | 11 |
-| 4 | `[REQ:CONFIGURATION]` | 10 |
-| 5 | `[REQ:RELIABILITY]` | 9 |
-| 6 | `[REQ:OUTPUT_FORMATTING]` | 8 |
-| 7 | `[REQ:CFG_005]` | 4 |
-| 8 | `[REQ:CFG_006]` | 4 |
-| 9 | `[REQ:CODE_QUALITY]` | 4 |
-| 10 | `[REQ:DOC_016]` | 4 |
-| 11 | `[REQ:RESOURCE_MANAGEMENT]` | 4 |
-| 12 | `[REQ:CONFIG_OUTPUT_GROUPING]` | 3 |
-| 13 | `[REQ:DIFF_COMMAND]` | 3 |
-| 14 | `[REQ:GOV_REGISTRY_COMPLETENESS]` | 3 |
-| 15 | `[REQ:INCREMENTAL_DUPLICATE_PREVENTION]` | 3 |
+| 1 | `[REQ-MAINTAINABILITY]` | 17 |
+| 2 | `[REQ-USABILITY]` | 17 |
+| 3 | `[REQ-PERFORMANCE]` | 11 |
+| 4 | `[REQ-CONFIGURATION]` | 10 |
+| 5 | `[REQ-RELIABILITY]` | 9 |
+| 6 | `[REQ-OUTPUT_FORMATTING]` | 8 |
+| 7 | `[REQ-CFG_005]` | 4 |
+| 8 | `[REQ-CFG_006]` | 4 |
+| 9 | `[REQ-CODE_QUALITY]` | 4 |
+| 10 | `[REQ-DOC_016]` | 4 |
+| 11 | `[REQ-RESOURCE_MANAGEMENT]` | 4 |
+| 12 | `[REQ-CONFIG_OUTPUT_GROUPING]` | 3 |
+| 13 | `[REQ-DIFF_COMMAND]` | 3 |
+| 14 | `[REQ-GOV_REGISTRY_COMPLETENESS]` | 3 |
+| 15 | `[REQ-INCREMENTAL_DUPLICATE_PREVENTION]` | 3 |
 
 ### Top Requirements in Implementation Decisions
 
 | Rank | Token | References |
 |------|-------|------------|
-| 1 | `[REQ:CONFIGURATION]` | 39 |
-| 2 | `[REQ:CFG_005]` | 29 |
-| 3 | `[REQ:CFG_001]` | 15 |
-| 4 | `[REQ:MAINTAINABILITY]` | 12 |
-| 5 | `[REQ:OUTPUT_FORMATTING]` | 9 |
-| 6 | `[REQ:CFG_006]` | 5 |
-| 7 | `[REQ:OUT_002]` | 5 |
-| 8 | `[REQ:CUSTOMIZABLE_FORMAT_STRINGS]` | 4 |
-| 9 | `[REQ:DIFF_COMMAND]` | 4 |
-| 10 | `[REQ:DOC_016]` | 4 |
-| 11 | `[REQ:FILE_BACKUP]` | 4 |
-| 12 | `[REQ:LIST_LIMIT]` | 4 |
-| 13 | `[REQ:STDD_VIS]` | 4 |
-| 14 | `[REQ:GIT_INTEGRATION]` | 3 |
-| 15 | `[REQ:INCREMENTAL_DUPLICATE_PREVENTION]` | 3 |
+| 1 | `[REQ-CONFIGURATION]` | 39 |
+| 2 | `[REQ-CFG_005]` | 29 |
+| 3 | `[REQ-CFG_001]` | 15 |
+| 4 | `[REQ-MAINTAINABILITY]` | 12 |
+| 5 | `[REQ-OUTPUT_FORMATTING]` | 9 |
+| 6 | `[REQ-CFG_006]` | 5 |
+| 7 | `[REQ-OUT_002]` | 5 |
+| 8 | `[REQ-CUSTOMIZABLE_FORMAT_STRINGS]` | 4 |
+| 9 | `[REQ-DIFF_COMMAND]` | 4 |
+| 10 | `[REQ-DOC_016]` | 4 |
+| 11 | `[REQ-FILE_BACKUP]` | 4 |
+| 12 | `[REQ-LIST_LIMIT]` | 4 |
+| 13 | `[REQ-STDD_VIS]` | 4 |
+| 14 | `[REQ-GIT_INTEGRATION]` | 3 |
+| 15 | `[REQ-INCREMENTAL_DUPLICATE_PREVENTION]` | 3 |
 
 ### Top Architecture Tokens (Defined)
 
 | Rank | Token | References |
 |------|-------|------------|
-| 1 | `[ARCH:CFG_006]` | 4 |
-| 2 | `[ARCH:TOKEN_SYSTEM]` | 4 |
-| 3 | `[ARCH:CFG_005]` | 3 |
-| 4 | `[ARCH:CLI_COMMANDS]` | 3 |
-| 5 | `[ARCH:CONFIG_SYSTEM]` | 3 |
-| 6 | `[ARCH:DIRECTORY_COMPARISON]` | 3 |
-| 7 | `[ARCH:CONFIG_OUTPUT_GROUPING]` | 2 |
-| 8 | `[ARCH:DIFF_COMMAND]` | 2 |
-| 9 | `[ARCH:LANGUAGE_SELECTION]` | 2 |
-| 10 | `[ARCH:OUTPUT_FORMATTING]` | 2 |
-| 11 | `[ARCH:PACKAGE_EXTRACTION]` | 2 |
-| 12 | `[ARCH:AI_DOCUMENTATION]` | 1 |
-| 13 | `[ARCH:ARCHIVE_FORMAT]` | 1 |
-| 14 | `[ARCH:AUTO_DETECTION]` | 1 |
-| 15 | `[ARCH:BUILD_DISTRIBUTION]` | 1 |
+| 1 | `[ARCH-CFG_006]` | 4 |
+| 2 | `[ARCH-TOKEN_SYSTEM]` | 4 |
+| 3 | `[ARCH-CFG_005]` | 3 |
+| 4 | `[ARCH-CLI_COMMANDS]` | 3 |
+| 5 | `[ARCH-CONFIG_SYSTEM]` | 3 |
+| 6 | `[ARCH-DIRECTORY_COMPARISON]` | 3 |
+| 7 | `[ARCH-CONFIG_OUTPUT_GROUPING]` | 2 |
+| 8 | `[ARCH-DIFF_COMMAND]` | 2 |
+| 9 | `[ARCH-LANGUAGE_SELECTION]` | 2 |
+| 10 | `[ARCH-OUTPUT_FORMATTING]` | 2 |
+| 11 | `[ARCH-PACKAGE_EXTRACTION]` | 2 |
+| 12 | `[ARCH-AI_DOCUMENTATION]` | 1 |
+| 13 | `[ARCH-ARCHIVE_FORMAT]` | 1 |
+| 14 | `[ARCH-AUTO_DETECTION]` | 1 |
+| 15 | `[ARCH-BUILD_DISTRIBUTION]` | 1 |
 
 ### Top Implementation Tokens (Defined)
 
 | Rank | Token | References |
 |------|-------|------------|
-| 1 | `[IMPL:CFG_PRECEDENCE_FIX]` | 4 |
-| 2 | `[IMPL:DIFF_COMMAND]` | 4 |
-| 3 | `[IMPL:ATOMIC_OPS]` | 3 |
-| 4 | `[IMPL:CFG_MERGE_BEHAVIOR_REGISTRY]` | 3 |
-| 5 | `[IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]` | 3 |
-| 6 | `[IMPL:CFG_MIXED_MODE_MERGE_FIX]` | 3 |
-| 7 | `[IMPL:CONFIG_STRUCT]` | 3 |
-| 8 | `[IMPL:DUAL_FORMATTING]` | 3 |
-| 9 | `[IMPL:FILE_STATISTICS]` | 3 |
-| 10 | `[IMPL:INCREMENTAL_DUPLICATE_PREVENTION]` | 3 |
-| 11 | `[IMPL:CFG_006]` | 2 |
-| 12 | `[IMPL:CFG_INHERITANCE_PATH_RESOLUTION]` | 2 |
-| 13 | `[IMPL:CONTEXT_OPS]` | 2 |
-| 14 | `[IMPL:DIRECTORY_COMPARISON]` | 2 |
-| 15 | `[IMPL:EXCLUDE_MERGE_FIX]` | 2 |
+| 1 | `[IMPL-CFG_PRECEDENCE_FIX]` | 4 |
+| 2 | `[IMPL-DIFF_COMMAND]` | 4 |
+| 3 | `[IMPL-ATOMIC_OPS]` | 3 |
+| 4 | `[IMPL-CFG_MERGE_BEHAVIOR_REGISTRY]` | 3 |
+| 5 | `[IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]` | 3 |
+| 6 | `[IMPL-CFG_MIXED_MODE_MERGE_FIX]` | 3 |
+| 7 | `[IMPL-CONFIG_STRUCT]` | 3 |
+| 8 | `[IMPL-DUAL_FORMATTING]` | 3 |
+| 9 | `[IMPL-FILE_STATISTICS]` | 3 |
+| 10 | `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` | 3 |
+| 11 | `[IMPL-CFG_006]` | 2 |
+| 12 | `[IMPL-CFG_INHERITANCE_PATH_RESOLUTION]` | 2 |
+| 13 | `[IMPL-CONTEXT_OPS]` | 2 |
+| 14 | `[IMPL-DIRECTORY_COMPARISON]` | 2 |
+| 15 | `[IMPL-EXCLUDE_MERGE_FIX]` | 2 |
 
 ## Token Flow Visualization
 
@@ -259,44 +259,44 @@ flowchart LR
 
 These requirements have traceability through both architecture and implementation:
 
-- `[REQ:CFG_005]`
-- `[REQ:CFG_006]`
-- `[REQ:CONFIGURATION]`
-- `[REQ:CONFIG_OUTPUT_GROUPING]`
-- `[REQ:CONTEXT_SUPPORT]`
-- `[REQ:CUSTOMIZABLE_FORMAT_STRINGS]`
-- `[REQ:DIFF_COMMAND]`
-- `[REQ:DOC_016]`
-- `[REQ:ERROR_HANDLING]`
-- `[REQ:EXTRACT_008_INTERDEP_MAPPING]`
-- `[REQ:GIT_INTEGRATION]`
-- `[REQ:GOV_REGISTRY_COMPLETENESS]`
-- `[REQ:INCREMENTAL_DUPLICATE_PREVENTION]`
-- `[REQ:LIST_LIMIT]`
-- `[REQ:MAINTAINABILITY]`
-- `[REQ:MODULE_VALIDATION]`
-- `[REQ:OUTPUT_FORMATTING]`
-- `[REQ:PERFORMANCE]`
-- `[REQ:RELATED_REQUIREMENT]`
-- `[REQ:RELIABILITY]`
-- `[REQ:RESOURCE_MANAGEMENT]`
-- `[REQ:STDD_VIS]`
-- `[REQ:TEST_EXCLUDE_MERGE]`
-- `[REQ:USABILITY]`
+- `[REQ-CFG_005]`
+- `[REQ-CFG_006]`
+- `[REQ-CONFIGURATION]`
+- `[REQ-CONFIG_OUTPUT_GROUPING]`
+- `[REQ-CONTEXT_SUPPORT]`
+- `[REQ-CUSTOMIZABLE_FORMAT_STRINGS]`
+- `[REQ-DIFF_COMMAND]`
+- `[REQ-DOC_016]`
+- `[REQ-ERROR_HANDLING]`
+- `[REQ-EXTRACT_008_INTERDEP_MAPPING]`
+- `[REQ-GIT_INTEGRATION]`
+- `[REQ-GOV_REGISTRY_COMPLETENESS]`
+- `[REQ-INCREMENTAL_DUPLICATE_PREVENTION]`
+- `[REQ-LIST_LIMIT]`
+- `[REQ-MAINTAINABILITY]`
+- `[REQ-MODULE_VALIDATION]`
+- `[REQ-OUTPUT_FORMATTING]`
+- `[REQ-PERFORMANCE]`
+- `[REQ-RELATED_REQUIREMENT]`
+- `[REQ-RELIABILITY]`
+- `[REQ-RESOURCE_MANAGEMENT]`
+- `[REQ-STDD_VIS]`
+- `[REQ-TEST_EXCLUDE_MERGE]`
+- `[REQ-USABILITY]`
 
 ### Requirements Only in Architecture
 
-- `[REQ:CODE_QUALITY]`
-- `[REQ:GOV_DISCOVERABILITY]`
+- `[REQ-CODE_QUALITY]`
+- `[REQ-GOV_DISCOVERABILITY]`
 
 ### Requirements Only in Implementation
 
-- `[REQ:CFG_001]`
-- `[REQ:DOC_001]`
-- `[REQ:DOC_003]`
-- `[REQ:FILE_BACKUP]`
-- `[REQ:IMMUTABLE_DIRECTORY_OPERATIONS]`
-- `[REQ:OUT_002]`
+- `[REQ-CFG_001]`
+- `[REQ-DOC_001]`
+- `[REQ-DOC_003]`
+- `[REQ-FILE_BACKUP]`
+- `[REQ-IMMUTABLE_DIRECTORY_OPERATIONS]`
+- `[REQ-OUT_002]`
 
 ## Gap Analysis
 
@@ -304,18 +304,18 @@ These requirements have traceability through both architecture and implementatio
 
 These architecture tokens may need corresponding implementation documentation:
 
-- `[ARCH:AI_DOCUMENTATION]`
-- `[ARCH:BUILD_DISTRIBUTION]`
-- `[ARCH:CICD_PIPELINE]`
-- `[ARCH:DEPLOYMENT]`
-- `[ARCH:EXTENSIBILITY]`
-- `[ARCH:IDENTIFIER]`
-- `[ARCH:LANGUAGE_SELECTION]`
-- `[ARCH:OTHER_DECISION]`
-- `[ARCH:PERFORMANCE]`
-- `[ARCH:PERF_VALIDATION]`
-- `[ARCH:PROJECT_STRUCTURE]`
-- `[ARCH:SECURITY]`
+- `[ARCH-AI_DOCUMENTATION]`
+- `[ARCH-BUILD_DISTRIBUTION]`
+- `[ARCH-CICD_PIPELINE]`
+- `[ARCH-DEPLOYMENT]`
+- `[ARCH-EXTENSIBILITY]`
+- `[ARCH-IDENTIFIER]`
+- `[ARCH-LANGUAGE_SELECTION]`
+- `[ARCH-OTHER_DECISION]`
+- `[ARCH-PERFORMANCE]`
+- `[ARCH-PERF_VALIDATION]`
+- `[ARCH-PROJECT_STRUCTURE]`
+- `[ARCH-SECURITY]`
 
 ## Category Expansion Analysis
 

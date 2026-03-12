@@ -1,0 +1,53 @@
+REQ-TEST_EXCLUDE_MERGE:
+  name: Exclude Patterns Merge Testing Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Ensures configuration merging works correctly for exclude patterns and that users can debug configuration issues by seeing where each pattern comes from. Critical for validating the fix to exclude pattern merging behavior.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Test creates scenario with default config and local config file
+    - criterion: Test verifies exclude patterns from both sources are merged (accumulated, not replaced)
+    - criterion: Test verifies merged patterns contain all patterns from all sources
+    - criterion: Test verifies `config` command shows correct source attribution (not just "default")
+    - criterion: Test validates that patterns are deduplicated during merge
+    - criterion: Test validates that order is preserved (defaults first, then local additions)
+  validation_criteria:
+    - method: Test passes with merged exclude patterns containing patterns from all sources
+    - method: Test validates config command output shows source as config file path (not "default") when local patterns are present
+    - method: Test validates inheritance chain tracking shows all contributing files
+    - method: 'Test covers edge cases: empty arrays, duplicate patterns, pattern order'
+  traceability:
+    architecture:
+      - ARCH-TEST_EXCLUDE_MERGE
+    implementation:
+      - IMPL-TEST_EXCLUDE_MERGE
+    tests: []
+    code_annotations:
+      - REQ-TEST_EXCLUDE_MERGE
+  related_requirements:
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+      - REQ-IMMUTABLE_FILE_EXCLUSION
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-TEST_EXCLUDE_MERGE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Configuration Testing Architecture [ARCH-TEST_EXCLUDE_MERGE]
+  cross-references: '[REQ-CONFIGURATION] (Configuration Management), [REQ-CFG_006] (Configuration Reflection and Visibility), [REQ-IMMUTABLE_FILE_EXCLUSION] (File Exclusion Requirements)'
+  description: Test scenario that verifies `exclude_patterns` are correctly merged from multiple configuration files and that the `config` command accurately displays the source of merged exclude patterns. Test must validate that patterns from multiple config files (e.g., default config and local `.bkpdir.yml`) are properly accumulated and that source tracking shows all contributing sources.
+  implementation: See `implementation-decisions.md` § Exclude Patterns Merge Testing [IMPL-TEST_EXCLUDE_MERGE]

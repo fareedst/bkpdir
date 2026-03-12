@@ -1,0 +1,149 @@
+IMPL-LARGE_FILE_DECOMP:
+  name: Large File Decomposition Strategy
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-GIT_INTEGRATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-OUTPUT_FORMATTING
+    - ARCH-TESTING_STRATEGY
+    - REQ-MAINTAINABILITY
+    - REQ-GIT_INTEGRATION
+    - REQ-CONFIGURATION
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      1675-line formatter.go contains multiple logical components
+      Clean separation enables focused extracted packages
+      Reduces complexity and improves maintainability
+      Enables independent evolution of formatter components
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Identify logical component boundaries
+      Extract components into separate files/packages
+      Maintain interface compatibility
+      Comprehensive testing after decomposition
+    details:
+      - Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+      - Added TestDelayedOutputMode testing OutputFormatter with collector integration
+      - Added TestTemplateFormattingMethods for all template functions with 0% coverage
+      - Added TestErrorFormattingMethods for error formatting functions
+      - Added TestPrintMethods testing Print methods in delayed mode
+      - Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+      - Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+      - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+      - Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+      - |-
+        Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+        Added TestDelayedOutputMode testing OutputFormatter with collector integration
+        Added TestTemplateFormattingMethods for all template functions with 0% coverage
+        Added TestErrorFormattingMethods for error formatting functions
+        Added TestPrintMethods testing Print methods in delayed mode
+        Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+        Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+        Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+        Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-GIT_INTEGRATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-GIT_INTEGRATION
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - IMPL-LARGE_FILE_DECOMP
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-GIT_INTEGRATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-GIT_INTEGRATION
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-GIT_INTEGRATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-GIT_INTEGRATION
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: Comprehensive test coverage for OutputCollector, template methods, and error formatting
+  description: Test all 0% coverage functions in formatter.go to improve code coverage and ensure reliability of OutputCollector, template methods, and error formatting functionality.
+  files_modified:
+    - '`formatter_test.go` - Added comprehensive test suites for previously untested functions'
+  implementation_details:
+    - Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+    - Added TestDelayedOutputMode testing OutputFormatter with collector integration
+    - Added TestTemplateFormattingMethods for all template functions with 0% coverage
+    - Added TestErrorFormattingMethods for error formatting functions
+    - Added TestPrintMethods testing Print methods in delayed mode
+    - Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+    - Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+    - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+    - Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+  priority: Medium
+  essence_pseudocode: |-
+    # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] — Identify logical component boundaries
+
+    procedure large_file_decomposition_strategy():
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+      added_testoutputcollector_with_tests()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestDelayedOutputMode testing OutputFormatter with collector integration
+      added_testdelayedoutputmode_testing_outputformatte()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestTemplateFormattingMethods for all template functions with 0% coverage
+      added_testtemplateformattingmethods_for_all()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestErrorFormattingMethods for error formatting functions
+      added_testerrorformattingmethods_for_error()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestPrintMethods testing Print methods in delayed mode
+      added_testprintmethods_testing_print()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+      added_testtemplateformatteradvanced_for_templatefo()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+      added_testoutputcollectorflushmethods_for_comprehe()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+      eliminated_all_0_coverage()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+      achieved_116_functions_at()
+      # [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-GIT_INTEGRATION] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-GIT_INTEGRATION] [REQ-CONFIGURATION] [REQ-OUTPUT_FORMATTING] Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+    Added TestDelayedOutputMode testing OutputFormatter with collector integration
+    Added TestTemplateFormattingMethods for all template functions with 0% coverage
+    Added TestErrorFormattingMethods for error formatting functions
+    Added TestPrintMethods testing Print methods in delayed mode
+    Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+    Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+    Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+    Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+      added_testoutputcollector_with_tests()
+      end

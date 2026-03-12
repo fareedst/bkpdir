@@ -1,0 +1,57 @@
+IMPL-CONFIG_SCHEMA_FLEX:
+  name: Configuration Schema Flexibility
+  status: Active
+  description: Extract configuration loading/merging logic with pluggable schema validation. Current config is backup-specific but needs to be generic. Create ConfigLoader interface that can handle different struct types while preserving powerful discovery and merging.
+  rationale:
+    why: Current config is backup-specific but needs to be generic for reuse in other applications
+    problems_solved:
+      - Backup-specific configuration that cannot be reused
+      - Tightly coupled schema validation
+      - Inability to use config system with different struct types
+    benefits:
+      - Pluggable schema validation
+      - ConfigLoader interface handles different struct types
+      - Preserves powerful discovery and merging capabilities
+      - Enables different schemas for different applications
+  implementation_approach:
+    summary: Create ConfigLoader interface that can handle different struct types with pluggable schema validation
+    details:
+      - Extract configuration loading/merging logic from backup-specific code
+      - Create ConfigLoader interface for pluggable schema support
+      - Preserve powerful discovery and merging while enabling different schemas
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  code_locations:
+    files:
+      - config.go
+    functions:
+      - ConfigLoader
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-CONFIG_STRUCT
+      - IMPL-CONFIGURABLE_STRINGS
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Create ConfigLoader interface that can handle different struct types with pluggable schema validation
+
+    procedure configuration_schema_flexibility():
+      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Extract configuration loading/merging logic from backup-specific code
+      extract_configuration_loading_merging_logic()
+      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Create ConfigLoader interface for pluggable schema support
+      create_configloader_interface_for()
+      # [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Preserve powerful discovery and merging while enabling different schemas
+      preserve_powerful_discovery_and()
+      end

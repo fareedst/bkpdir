@@ -1,0 +1,72 @@
+IMPL-DIRECTORY_COMPARISON:
+  name: Directory Comparison Implementation
+  status: Active
+  cross_references:
+    - ARCH-DIRECTORY_COMPARISON
+  rationale:
+    why: |-
+      Enables efficient comparison
+      Supports archive-to-directory comparison
+      Provides accurate change detection
+      Handles file renames and moves
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Snapshot-based comparison with hash-based content verification
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-DIRECTORY_COMPARISON
+    requirements: []
+    tests: []
+    code_annotations:
+      - IMPL-DIRECTORY_COMPARISON
+      - ARCH-DIRECTORY_COMPARISON
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-DIRECTORY_COMPARISON
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/fileops/comparison.go`, snapshot structures, comparison functions'
+  comparison_algorithm: "```go\nfunc CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {\n    if len(snap1.Files) != len(snap2.Files) {\n        return false\n    }\n    \n    for path, info1 := range snap1.Files {\n        info2, exists := snap2.Files[path]\n        if !exists {\n            return false\n        }\n        \n        if info1.Hash != info2.Hash || info1.Size != info2.Size {\n            return false\n        }\n    }\n    \n    return true\n}\n```"
+  directorysnapshot: |-
+    ```go
+    type DirectorySnapshot struct {
+        Files map[string]FileInfo
+        Root  string
+    }
+
+    type FileInfo struct {
+        Path     string
+        Size     int64
+        ModTime  time.Time
+        Hash     string
+        IsDir    bool
+    }
+    ```
+  from_archive: "```go\nfunc CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {\n    reader, err := zip.OpenReader(archivePath)\n    if err != nil {\n        return nil, err\n    }\n    defer reader.Close()\n    \n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  archivePath,\n    }\n    \n    for _, file := range reader.File {\n        hash := calculateArchiveFileHash(file)\n        snapshot.Files[file.Name] = FileInfo{\n            Path:    file.Name,\n            Size:    int64(file.UncompressedSize64),\n            ModTime: file.ModTime(),\n            Hash:    hash,\n            IsDir:   file.FileInfo().IsDir(),\n        }\n    }\n    \n    return snapshot, nil\n}\n```"
+  from_directory: "```go\nfunc CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {\n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  root,\n    }\n    \n    err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {\n        if err != nil {\n            return err\n        }\n        \n        hash := calculateFileHash(path)\n        snapshot.Files[path] = FileInfo{\n            Path:    path,\n            Size:    info.Size(),\n            ModTime: info.ModTime(),\n            Hash:    hash,\n            IsDir:   info.IsDir(),\n        }\n        return nil\n    })\n    \n    return snapshot, err\n}\n```"
+  essence_pseudocode: |-
+    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — Snapshot-based comparison with hash-based content verification
+
+    procedure directory_comparison_implementation():
+      # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] Enables efficient comparison
+      execute()
+      end

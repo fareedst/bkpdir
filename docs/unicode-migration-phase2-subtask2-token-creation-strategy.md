@@ -3,7 +3,7 @@
 > **[CRITICAL] DOC-014: Token creation strategy and implementation plan [ACTION:core-functionality]**
 
 **Date**: 2025-07-13  
-**Status**: [ACTION:migration] **IN PROGRESS**  
+**Status**: [ACTION-migration] **IN PROGRESS**  
 **Subtask**: 2.2 - Token Creation Strategy  
 **Phase**: 2 - Token Gap Analysis and Remediation  
 
@@ -17,12 +17,12 @@ This document defines the comprehensive strategy for creating the 62 missing tok
 
 #### Primary Token Format
 ```
-[CATEGORY]-[NUMBER]: [DESCRIPTION] [ACTION:priority]
+[CATEGORY]-[NUMBER]: [DESCRIPTION] [ACTION-priority]
 ```
 
 **Examples**:
 - `DIR-001: Directory Operations Immutable [ACTION:core-functionality]`
-- `QUALITY-001: Code Quality and Linting Requirements [ACTION:validation]`
+- `QUALITY-001: Code Quality and Linting Requirements [ACTION-validation]`
 - `SERVICE-ARCH-001: Service Architecture Decision [ACTION:core-functionality]`
 
 #### Token Categories
@@ -37,8 +37,8 @@ This document defines the comprehensive strategy for creating the 62 missing tok
 
 #### Action Priority Levels
 - `[ACTION:core-functionality]` - Critical system functionality
-- `[ACTION:validation]` - Validation and testing requirements
-- `[ACTION:maintenance]` - Maintenance and documentation requirements
+- `[ACTION-validation]` - Validation and testing requirements
+- `[ACTION-maintenance]` - Maintenance and documentation requirements
 
 ### Feature ID Naming Conventions
 
@@ -99,7 +99,7 @@ This document defines the comprehensive strategy for creating the 62 missing tok
 ```markdown
 ## [Section Title]
 
-### [Token ID]: [Description] [ACTION:priority]
+### [Token ID]: [Description] [ACTION-priority]
 **Source**: [Source file and section]
 **Impact**: [Impact description]
 **Cross-Layer Requirements**: Documentation, Code, Tests
@@ -110,7 +110,7 @@ This document defines the comprehensive strategy for creating the 62 missing tok
 
 #### Code Comment Pattern
 ```go
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 // Impact: [Impact description]
 func functionName() {
@@ -121,7 +121,7 @@ func functionName() {
 #### File Header Pattern
 ```go
 // Package: [package name]
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 // Cross-Layer: Documentation, Code, Tests
 package packagename
@@ -129,7 +129,7 @@ package packagename
 
 #### Interface Pattern
 ```go
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 type InterfaceName interface {
     // Interface methods
@@ -140,7 +140,7 @@ type InterfaceName interface {
 
 #### Test Function Pattern
 ```go
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 // Test: Validates [specific requirement]
 func Test[TokenID]_[Description](t *testing.T) {
@@ -151,7 +151,7 @@ func Test[TokenID]_[Description](t *testing.T) {
 #### Test File Pattern
 ```go
 // Package: [package name] tests
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 // Test Coverage: [specific test coverage]
 package packagename_test

@@ -1,0 +1,70 @@
+ARCH-CFG_005:
+  name: Layered Configuration Inheritance
+  status: Active
+  cross_references: &ref_0
+    - REQ-CFG_005
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables hierarchical configuration management
+      Supports complex project structures
+      Flexible merge strategies for different use cases
+      Maintains backward compatibility
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - Inheritance chain processing with circular dependency detection
+      - Source tracking for debugging
+      - Performance optimization with caching
+      - Thread-safe configuration loading
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CFG_005.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Configuration files support explicit inheritance with merge strategies
+  array_field_default_behavior:
+    - Array fields (like `exclude_patterns`) default to merge (accumulate) strategy when no prefix is specified
+    - This applies to both inheritance chains and sequential file processing
+    - Explicit prefixes (`!`, `+`, `^`, `=`) override the default merge behavior
+    - Default patterns are preserved when child configs add values
+  cross-references: '[REQ-CFG_005], [REQ-PERFORMANCE]'
+  explicit_prefixes_override: Explicit prefixes (`!`, `+`, `^`, `=`) override the default behavior, but precedence rules still apply for sequential files
+  field_merge_behavior_registry: Each field has a configured merge behavior to resolve conflicts between CFG-001 (earlier files take precedence) and CFG-005 (array fields merge)
+  implementation:
+    - Inheritance chain processing with circular dependency detection
+    - Source tracking for debugging
+    - Performance optimization with caching
+    - Thread-safe configuration loading
+  merge_strategies:
+    - 'Standard override (no prefix): Replace parent values (for non-array fields)'
+    - 'Array merge (no prefix for array fields): Default merge strategy for array fields per CFG-005'
+    - 'Array merge (`+` prefix): Explicit append to parent arrays'
+    - 'Array prepend (`^` prefix): Prepend to parent arrays'
+    - 'Array replace (`!` prefix): Replace parent arrays completely'
+    - 'Default value (`=` prefix): Use only if parent not set'
+  mergebehavioraccumulate: Fields that always merge/accumulate (e.g., `exclude_patterns`) - CFG-005 behavior
+  mergebehaviorprecedence: Fields that respect earlier file precedence (e.g., `archive_dir_path`, `include_git_info`) - CFG-001 behavior

@@ -1,6 +1,6 @@
 # Unicode Migration - Week 2 High Priority Token Implementation Summary
 
-> **[HIGH] DOC-014: Week 2 high priority token implementation completion summary [ACTION:maintenance]**
+> **[HIGH] DOC-014: Week 2 high priority token implementation completion summary [ACTION-maintenance]**
 
 **Date**: 2025-01-02  
 **Status**: ✅ **WEEK 2 COMPLETED** - High Priority Token Implementation  
@@ -79,8 +79,8 @@ Week 2 of the Unicode-to-semantic token migration has been **successfully comple
 ```yaml
 [ACTION:core-functionality] → core-functionality: "Essential system operations"
 [ACTION:format-processing] → format-processing: "Text formatting and output generation"
-[ACTION:discovery] → discovery: "File system and configuration discovery"
-[ACTION:validation] → validation: "Input validation and error checking"
+[ACTION-discovery] → discovery: "File system and configuration discovery"
+[ACTION-validation] → validation: "Input validation and error checking"
 ```
 
 ### Feature ID Mapping
@@ -111,7 +111,7 @@ TEST-MAIN-* → Test function implementations
 
 ### New High Priority Tokens Added
 ```yaml
-QUALITY-001: "Code quality standards" [ACTION:validation]
+QUALITY-001: "Code quality standards" [ACTION-validation]
 BUILD-001: "Build system requirements" [ACTION:core-functionality]
 FORMAT-001: "Output formatting requirements" [ACTION:format-processing]
 TEMPLATE-001: "Template formatting requirements" [ACTION:format-processing]
@@ -131,8 +131,8 @@ DATA-BACKUP-001: "Backup data object requirements" [ACTION:core-functionality]
 
 ### Migration Pattern
 ```go
-// Before: [HIGH] CFG-001: Configuration display handling - [ACTION:discovery]
-// After:  [HIGH] CFG-001: Configuration display handling [ACTION:discovery]
+// Before: [HIGH] CFG-001: Configuration display handling - [ACTION-discovery]
+// After:  [HIGH] CFG-001: Configuration display handling [ACTION-discovery]
 ```
 
 ### Registry Integration
@@ -197,4 +197,4 @@ The project is well-positioned to continue with Week 3 (medium priority tokens) 
 
 ---
 
-**[HIGH] DOC-014: Week 2 high priority token implementation completed - 97 tokens migrated with zero errors and complete registry compliance [ACTION:maintenance]** 
+**[HIGH] DOC-014: Week 2 high priority token implementation completed - 97 tokens migrated with zero errors and complete registry compliance [ACTION-maintenance]** 

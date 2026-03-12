@@ -1,7 +1,7 @@
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// [REQ:CODE_QUALITY] Testing helpers requirement
-// [ARCH:TESTING_STRATEGY] Testing strategy architecture
-// [IMPL:TESTING] Test utilities implementation
+// [REQ-CODE_QUALITY] Testing helpers requirement
+// [ARCH-TESTING_STRATEGY] Testing strategy architecture
+// [IMPL-TESTING] Test utilities implementation
 package testutil
 
 import (

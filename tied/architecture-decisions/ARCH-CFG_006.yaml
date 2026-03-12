@@ -1,0 +1,95 @@
+ARCH-CFG_006:
+  name: Configuration Reflection Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-CFG_006
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Zero maintenance: New configuration fields automatically appear without manual updates
+      Complete visibility: Shows inheritance chains, merge strategies, and source attribution
+      Debugging support: Clear source attribution enables troubleshooting configuration issues
+      Performance optimized: Fast inspection suitable for development workflow
+      Backward compatible: Existing configuration command functionality preserved and enhanced
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Reflection-based automatic field discovery with hierarchical source attribution
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CFG_006
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CFG_006.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Reflection-based automatic field discovery with hierarchical source attribution
+  architecture_components: |-
+    1. **Automatic Field Discovery System**
+       - Go reflection-based enumeration of all Config struct fields
+       - Recursive traversal of nested structures
+       - Type-aware processing for strings, bools, ints, slices, pointers, structs
+       - Field categorization (archive, backup, formatting, etc.)
+       - Metadata extraction (field names, types, YAML tags, categories)
+
+    2. **Source Tracking Architecture**
+       - Integration with CFG-005 layered inheritance system
+       - Complete source chain visualization (environment → inheritance → defaults)
+       - Merge strategy attribution (override, append, prepend, replace, default)
+       - Override point identification in inheritance chain
+       - Environment variable detection and attribution
+
+    3. **Display Formatting Architecture**
+       - Multiple output formats: table (quick scanning), tree (hierarchical), JSON (programmatic)
+       - Category-based field organization
+       - Type-aware value formatting
+       - Zero value detection and display
+       - Hierarchical tree visualization with inheritance paths
+
+    4. **Performance Optimization Architecture**
+       - Reflection result caching with thread-safe access (sync.RWMutex)
+       - Schema hash-based cache invalidation
+       - Lazy source evaluation (only resolve sources for displayed fields)
+       - Incremental resolution support (single field access without full enumeration)
+       - Pattern-based field filtering for efficient queries
+
+    5. **CLI Interface Architecture**
+       - Enhanced config command with comprehensive filtering options
+       - --all flag: Show all configuration fields (default behavior)
+       - --overrides-only flag: Display only non-default values
+       - --sources flag: Show detailed source attribution
+       - --format flag: Choose output format (table, tree, JSON)
+       - --filter flag: Filter fields by pattern or category
+  cfg-005_integration: Leverages layered inheritance system for source tracking
+  cli_framework: Integrates with existing Cobra command structure
+  code_generation: Rejected due to complexity, build-time dependencies, and reduced flexibility
+  configuration_system: Builds on existing Config struct and loading mechanisms
+  cross-references: '[REQ-CFG_006], [ARCH-CONFIG_SYSTEM], [ARCH-CFG_005], [REQ-PERFORMANCE]'
+  external_configuration_registry: Rejected due to dependency concerns and synchronization issues
+  manual_maintenance: Rejected due to maintenance overhead and risk of missing new fields
+  performance_characteristics:
+    - 'Field discovery: <50ms for cache miss, <10ms for cache hit'
+    - 'Config command: <100ms end-to-end response time'
+    - 'Single field access: <10ms with incremental resolution'
+    - 'Memory overhead: <5% increase for caching infrastructure'
+    - 'Reflection caching: 60%+ performance improvement over uncached reflection'
+  testing_infrastructure: Comprehensive test coverage with performance benchmarks

@@ -1,0 +1,78 @@
+IMPL-TESTING:
+  name: Testing Implementation Strategy
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-RELIABILITY
+  rationale:
+    why: Realizes validation criteria from requirements.md and follows testing strategy from architecture-decisions.md to ensure comprehensive quality
+    problems_solved:
+      - Need for structured testing across all code layers
+      - Ensuring reliability through comprehensive test coverage
+      - Providing reusable test infrastructure
+    benefits:
+      - Table-driven test patterns for consistency
+      - Rich test utility library for common operations
+      - Multiple test categories covering unit, integration, performance, and stress
+      - Quality gates enforcing minimum coverage and performance standards
+  implementation_approach:
+    summary: Table-driven unit tests, integration test structure, comprehensive test utilities in testutil/ package, and quality gates
+    details:
+      - 'Unit tests: table-driven pattern with struct slices for test cases'
+      - 'Integration tests: Setup/Execute/Verify pattern'
+      - 'Test utilities (testutil/): CreateTestDirectory, CreateTestFile, CreateTestGitRepo, CreateTestArchive, CreateTestBackup, AssertNoTempFiles, AssertArchiveContents, MockFileSystem, CaptureOutput, SetupTestConfig, CleanupTestResources, and more'
+      - 'Testing frameworks: archive corruption, disk space simulation, permission testing, context cancellation, error injection'
+      - 'Test categories: unit, integration, performance, stress'
+      - 'Test execution: make test, go test -cover, build tags for integration/performance/stress, race detection'
+      - 'Quality gates: 90% min coverage (100% critical), no benchmark regression, no memory leaks, no race conditions, 100% cleanup verification'
+  code_locations:
+    files:
+      - testutil/
+    functions:
+      - CreateTestDirectory
+      - CreateTestFile
+      - CreateTestGitRepo
+      - CreateTestArchive
+      - CreateTestBackup
+      - AssertNoTempFiles
+      - AssertArchiveContents
+      - MockFileSystem
+      - CaptureOutput
+      - SetupTestConfig
+      - CleanupTestResources
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-RELIABILITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-TESTING_COMPLEXITY
+      - IMPL-TEST_COVERAGE
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — Table-driven unit tests, integration test structure, comprehensive test utilities in testutil/ package, and quality gates
+
+    procedure testing_implementation_strategy():
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Unit tests: table-driven pattern with struct slices for test cases
+      unit_tests("table-driven pattern with struct slices for test cases")
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Integration tests: Setup/Execute/Verify pattern
+      integration_tests("Setup/Execute/Verify pattern")
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Test utilities (testutil/): CreateTestDirectory, CreateTestFile, CreateTestGitRepo, CreateTestArchive, CreateTestBackup, AssertNoTempFiles, AssertArchiveContents, MockFileSystem, CaptureOutput, SetupTestConfig, CleanupTestResources, and more
+      test_utilities_testutil("CreateTestDirectory, CreateTestFile, CreateTestGitRepo, Crea")
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Testing frameworks: archive corruption, disk space simulation, permission testing, context cancellation, error injection
+      testing_frameworks("archive corruption, disk space simulation, permission testin")
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Test categories: unit, integration, performance, stress
+      test_categories("unit, integration, performance, stress")
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Test execution: make test, go test -cover, build tags for integration/performance/stress, race detection
+      test_execution("make test, go test -cover, build tags for integration/perfor")
+      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Quality gates: 90% min coverage (100% critical), no benchmark regression, no memory leaks, no race conditions, 100% cleanup verification
+      quality_gates("90% min coverage (100% critical), no benchmark regression, n")
+      end

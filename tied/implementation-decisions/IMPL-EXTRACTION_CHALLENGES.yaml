@@ -1,0 +1,69 @@
+IMPL-EXTRACTION_CHALLENGES:
+  name: Extraction Challenges and Solutions
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-TESTING_STRATEGY
+    - REQ-MAINTAINABILITY
+    - REQ-CONFIGURATION
+  rationale:
+    why: See detail file
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: See detail file
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-EXTRACTION_CHALLENGES
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+      - REQ-MAINTAINABILITY
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-EXTRACTION_CHALLENGES.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  approach: Extract test utilities first, then create focused tests for each package
+  challenge: Extracted components need comprehensive testing without duplicating existing tests
+  design_note: Comprehensive testing ensures extracted components are production-ready
+  solution: Create package-specific tests while ensuring original integration tests still pass
+  essence_pseudocode: |-
+    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION] — See detail file
+
+    procedure extraction_challenges_and_solutions():
+      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION] See detail file
+      execute()
+      end

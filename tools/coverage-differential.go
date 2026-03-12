@@ -1,9 +1,9 @@
 // COV-002: See specification.md - Coverage Differential Reporting [DECISION:core-functionality]
 // Compares current coverage against baseline and reports changes for modified code only
 //
-// [REQ:COV_003] Selective coverage reporting requirement
-// [ARCH:TESTING_STRATEGY] Testing strategy architecture for differential coverage
-// [IMPL:TEST_COVERAGE] Coverage differential implementation and reporting
+// [REQ-COV_003] Selective coverage reporting requirement
+// [ARCH-TESTING_STRATEGY] Testing strategy architecture for differential coverage
+// [IMPL-TEST_COVERAGE] Coverage differential implementation and reporting
 package main
 
 import (

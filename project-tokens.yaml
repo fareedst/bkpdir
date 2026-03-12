@@ -7,7 +7,7 @@ registry:
   rationale: |
     All semantic tokens—requirements, architecture decisions, implementation decisions, governance metadata,
     and action categories—now live in the STDD registry to guarantee traceability across documentation,
-    code, and tests as mandated by [REQ:DOC_016] and [REQ:GOV_REGISTRY_COMPLETENESS].
+    code, and tests as mandated by [REQ-DOC_016] and [REQ-GOV_REGISTRY_COMPLETENESS].
   migration_notes:
     - see `stdd/semantic-tokens.md` for the authoritative token directory
     - see `stdd/architecture-decisions.md` § "Legacy Registry Migration Plan" for architectural context

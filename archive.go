@@ -6,14 +6,14 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// [REQ:FILE_BACKUP] Archive creation for directory backups
-// [REQ:CONTEXT_SUPPORT] Context-aware archive operations
-// [ARCH:ARCHIVE_FORMAT] ZIP format for all archive operations
-// [ARCH:PROCESSING_PATTERNS] Uses processing patterns for archive creation
-// [ARCH:CONTEXT_SUPPORT] Context propagation for cancellation and timeouts
-// [IMPL:ZIP_FORMAT] Uses Go's archive/zip package
-// [IMPL:PROCESSING_PATTERNS] Pipeline-based processing with naming conventions
-// [IMPL:CONTEXT_OPS] Context parameter support in archive functions
+// [REQ-FILE_BACKUP] Archive creation for directory backups
+// [REQ-CONTEXT_SUPPORT] Context-aware archive operations
+// [ARCH-ARCHIVE_FORMAT] ZIP format for all archive operations
+// [ARCH-PROCESSING_PATTERNS] Uses processing patterns for archive creation
+// [ARCH-CONTEXT_SUPPORT] Context propagation for cancellation and timeouts
+// [IMPL-ZIP_FORMAT] Uses Go's archive/zip package
+// [IMPL-PROCESSING_PATTERNS] Pipeline-based processing with naming conventions
+// [IMPL-CONTEXT_OPS] Context parameter support in archive functions
 // ARCHIVE-FEATURES-001: Archive Operations Specification - Archive creation and management [ACTION:core-functionality]
 // Source: docs/context/specification.md - Archive Features section
 // Impact: Core functionality requirement for archive operations
@@ -693,7 +693,7 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
-	// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+	// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION]
 	// Reconstruct archive state (full + most recent incremental) and check for changes
 	reconstructedState, err := ReconstructArchiveState(archiveDir)
 	var modifiedFiles []string
@@ -867,7 +867,7 @@ func collectModifiedFiles(cwd string, latestFullArchive *Archive, excludePattern
 }
 
 // findLatestFullArchive finds the most recent full archive in the archive directory.
-// [IMPL:DIFF_COMMAND] Sorts by name since timestamps in archive names are alphabetically sortable
+// [IMPL-DIFF_COMMAND] Sorts by name since timestamps in archive names are alphabetically sortable
 func findLatestFullArchive(archiveDir string) (*Archive, error) {
 	archives, err := ListArchives(archiveDir)
 	if err != nil {

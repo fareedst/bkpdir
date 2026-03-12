@@ -6,9 +6,9 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// [REQ:ERROR_HANDLING] Enhanced error handling with structured error types
-// [ARCH:ERROR_HANDLING] Structured error handling strategy
-// [IMPL:STRUCTURED_ERRORS] Structured error types with status codes and operation context
+// [REQ-ERROR_HANDLING] Enhanced error handling with structured error types
+// [ARCH-ERROR_HANDLING] Structured error handling strategy
+// [IMPL-STRUCTURED_ERRORS] Structured error types with status codes and operation context
 // ERROR-HANDLING-001: Error handling specification - Error handling and resource management [ACTION:core-functionality]
 // Source: errors.go - ERROR-HANDLING-001
 // Impact: Core functionality requirement for error handling

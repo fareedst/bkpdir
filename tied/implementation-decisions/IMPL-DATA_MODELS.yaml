@@ -1,0 +1,64 @@
+IMPL-DATA_MODELS:
+  name: Data Models
+  status: Active
+  description: Comprehensive data structures for archive and backup operations providing structured data representation, type safety, serialization and persistence support, and testing/validation facilitation
+  rationale:
+    why: Operations need structured data representation for type safety, serialization, and testability
+    problems_solved:
+      - Unstructured data passing between functions
+      - Lack of type safety in archive and backup operations
+      - Difficulty testing and validating operation parameters
+    benefits:
+      - Structured data representation
+      - Type safety
+      - Supports serialization and persistence
+      - Facilitates testing and validation
+  implementation_approach:
+    summary: Define comprehensive Go structs for archive, backup, and backup options data
+    details:
+      - Archive struct with Name, Path, CreationTime, IsIncremental, GitBranch, GitHash, Note, BaseArchive fields
+      - Backup struct with Name, Path, CreationTime, SourceFile, Note fields
+      - BackupInfo struct with Name, Path, CreationTime, Size fields
+      - BackupOptions struct with Context, Config and other operation parameters
+  cross_references:
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CODE_QUALITY
+  code_locations:
+    files:
+      - archive.go
+      - backup.go
+    functions:
+      - Archive
+      - Backup
+      - BackupInfo
+      - BackupOptions
+  traceability:
+    architecture:
+      - ARCH-SYSTEM_COMPONENTS
+    requirements:
+      - REQ-CODE_QUALITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-FILE_OPERATIONS
+      - IMPL-ZIP_FORMAT
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] — Define comprehensive Go structs for archive, backup, and backup options data
+
+    procedure data_models():
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Archive struct with Name, Path, CreationTime, IsIncremental, GitBranch, GitHash, Note, BaseArchive fields
+      archive_struct_with_name()
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] Backup struct with Name, Path, CreationTime, SourceFile, Note fields
+      backup_struct_with_name()
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] BackupInfo struct with Name, Path, CreationTime, Size fields
+      backupinfo_struct_with_name()
+      # [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] BackupOptions struct with Context, Config and other operation parameters
+      backupoptions_struct_with_context()
+      end

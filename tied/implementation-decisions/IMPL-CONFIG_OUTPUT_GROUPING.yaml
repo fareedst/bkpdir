@@ -1,0 +1,58 @@
+IMPL-CONFIG_OUTPUT_GROUPING:
+  name: Configuration Output Grouping Implementation
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_OUTPUT_GROUPING
+    - REQ-CONFIG_OUTPUT_GROUPING
+  rationale:
+    why: |-
+      Extends existing metadata system without breaking changes
+      Reuses existing display logic where possible
+      Provides flexible ranking system
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '1.  **Metadata Extension**:'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_OUTPUT_GROUPING
+    requirements:
+      - REQ-CONFIG_OUTPUT_GROUPING
+    tests: []
+    code_annotations:
+      - IMPL-CONFIG_OUTPUT_GROUPING
+      - ARCH-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIG_OUTPUT_GROUPING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIG_OUTPUT_GROUPING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`displayConfigGrouped`, `Importance`, `CategoryPriority`'
+  cross-references: '[ARCH-CONFIG_OUTPUT_GROUPING], [REQ-CONFIG_OUTPUT_GROUPING]'
+  essence_pseudocode: |-
+    # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] — 1.  **Metadata Extension**:
+
+    procedure configuration_output_grouping_implementation():
+      # [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] Extends existing metadata system without breaking changes
+      execute()
+      end

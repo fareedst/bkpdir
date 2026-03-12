@@ -67,7 +67,7 @@ func (f *AIFirstFormatterImpl) FormatWithContext(ctx FormatContext) (string, err
 		}
 		return "", fmt.Errorf("missing path in format context")
 	case FormatTypeList:
-		// [IMPL:DUAL_FORMATTING] [REQ:OUTPUT_FORMATTING] Delegate to core formatter for correct list formatting
+		// [IMPL-DUAL_FORMATTING] [REQ-OUTPUT_FORMATTING] Delegate to core formatter for correct list formatting
 		return f.coreFormatter.FormatWithContext(ctx)
 	case FormatTypeError:
 		if err, ok := ctx.Data["error"].(error); ok {
@@ -140,7 +140,7 @@ func (f *AIFirstFormatterImpl) FormatWithPlaceholders(format string, data map[st
 	return f.coreFormatter.FormatWithPlaceholders(format, data)
 }
 
-// [CRITICAL] FMT-001: Delegate to pattern extractor - [ACTION:discovery]
+// [CRITICAL] FMT-001: Delegate to pattern extractor - [ACTION-discovery]
 func (f *AIFirstFormatterImpl) ExtractArchiveData(filename string) (AIArchiveData, error) {
 	return f.patternExtractor.ExtractArchiveData(filename)
 }

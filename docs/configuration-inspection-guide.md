@@ -8,7 +8,7 @@ The BkpDir configuration system provides comprehensive configuration inspection 
 
 This guide covers the powerful configuration visibility features introduced in CFG-006, including automatic field discovery, inheritance chain visualization, multiple output formats, and advanced filtering options.
 
-## [ACTION:discovery] Key Features
+## [ACTION-discovery] Key Features
 
 ### Automatic Field Discovery
 - **Zero Maintenance**: New configuration fields appear automatically
@@ -135,7 +135,7 @@ bkpdir config --format json
 }
 ```
 
-## [ACTION:discovery] Advanced Filtering
+## [ACTION-discovery] Advanced Filtering
 
 ### Filter by Pattern
 
@@ -358,7 +358,7 @@ bkpdir config --format json | jq -r '.configuration[] | "- **\(.name)**: \(.valu
 
 The CFG-006 configuration inspection system provides:
 
-- **[ACTION:discovery] Zero-maintenance discovery**: 100+ fields automatically discovered
+- **[ACTION-discovery] Zero-maintenance discovery**: 100+ fields automatically discovered
 - **📊 Complete visibility**: Full inheritance chain and source attribution
 - **⚡ High performance**: Sub-second response with reflection caching
 - **🎨 Flexible display**: Table, tree, and JSON output formats

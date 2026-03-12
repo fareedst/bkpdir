@@ -1,0 +1,123 @@
+IMPL-ATOMIC_OPS:
+  name: Atomic File Operations
+  status: Active
+  cross_references:
+    - ARCH-RESOURCE_MANAGEMENT
+    - ARCH-TESTING_STRATEGY
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Prevents corruption on operation failure
+      Ensures consistency during concurrent access
+      Standard pattern for safe file operations
+      Integrates with resource cleanup
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Create temporary files with `.tmp` extension
+      Write content to temporary file
+      Atomic rename to final location
+      Register temporary files with ResourceManager
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-RESOURCE_MANAGEMENT
+    tests: []
+    code_annotations:
+      - IMPL-ATOMIC_OPS
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TESTING_STRATEGY
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TESTING_STRATEGY
+      - REQ-RESOURCE_MANAGEMENT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-ATOMIC_OPS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`.tmp` file extensions, `os.Rename()` calls'
+  integration_test_structure: |-
+    ```go
+    func TestIntegrationScenario(t *testing.T) {
+        // Setup
+        // Execute
+        // Verify
+    }
+    ```
+  key_implementation_notes:
+    - Keep `pkg/testutil` free of project-specific domain types — accept simple primitives or small interfaces.
+    - Minimize external dependencies; prefer stdlib for file and zip operations.
+    - Provide migration adapters so existing tests can switch incrementally to `pkg/testutil`.
+    - Add `[IMPL-EXTRACT-009_TESTUTIL]` tokens in code comments for exported functions and tests that rely on this package.
+  note: This implementation realizes the validation criteria specified in `requirements.md` and follows the testing strategy defined in `architecture-decisions.md`. Each test validates specific satisfaction criteria from requirements.
+  quality_gates:
+    - 'Code coverage: Minimum 90% overall, 100% for critical functions'
+    - 'Performance benchmarks: Must not regress'
+    - 'Memory usage: Must stay within reasonable bounds, no leaks'
+    - 'Concurrent safety: No race conditions'
+    - 'Resource cleanup: 100% cleanup verification'
+    - 'Platform compatibility: Tests pass on Linux and macOS'
+  summary: |-
+    Implement `pkg/testutil` with the following components:
+
+    - `interfaces.go` — small interfaces for providers (TestUtilProvider) to avoid tight coupling
+    - `assertions.go` — simple test assertion helpers (`AssertEqualString`, `AssertBool`, etc.)
+    - `fshelpers.go` — temp directory and file helpers, `CreateTempDir`, `WriteFile`, `CreateTestDirectoryStructure`
+    - `archivehelpers.go` — create zip archives for tests (`CreateTestZipArchive`)
+    - `githelpers.go` — create lightweight git repos for testing (`InitTestGitRepo`)
+    - `cmdhelpers.go` — helpers to execute Cobra commands and capture output (`ExecuteCommand`) with cleanup
+    - `provider.go` — default provider that composes utilities for convenience
+    - `doc.go` + godoc comments and examples
+    - `testutil_test.go` — unit tests for all exported helpers
+  test_categories:
+    - 'Unit tests: Individual function testing with table-driven tests'
+    - 'Integration tests: End-to-end workflow testing'
+    - 'Performance tests: Benchmark testing for various scenarios'
+    - 'Stress tests: Resource exhaustion and high concurrency testing'
+  test_execution:
+    - 'Local development: `make test`, `go test -cover ./...`'
+    - 'Build tags: `-tags=integration`, `-tags=performance`, `-tags=stress`, `-tags=context`'
+    - 'Race detection: `go test -race ./...`'
+    - 'Coverage requirements: Minimum 90% overall, 100% for critical functions'
+  test_utilities: '(`testutil/` package):'
+  testing_frameworks:
+    - Archive corruption testing framework
+    - Disk space simulation framework
+    - Permission testing framework
+    - Context cancellation testing helpers
+    - Error injection framework
+  unit_test_structure: "```go\nfunc TestExampleFeature(t *testing.T) {\n    tests := []struct {\n        name     string\n        input    InputType\n        expected OutputType\n    }{\n        {\n            name:     \"test case 1\",\n            input:    inputValue,\n            expected: expectedValue,\n        },\n    }\n    \n    for _, tt := range tests {\n        t.Run(tt.name, func(t *testing.T) {\n            result := functionUnderTest(tt.input)\n            if result != tt.expected {\n                t.Errorf(\"expected %v, got %v\", tt.expected, result)\n            }\n        })\n    }\n}\n```"
+  validation: |-
+    - Add unit tests exercising assertion helpers, temp dir lifecycle, archive creation, and command execution patterns.
+    - Migrate a small set of tests (e.g., `pkg/config`, `pkg/formatter`, `pkg/fileops`) to demonstrate usage and validate no regressions.
+
+
+     [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-*]
+  essence_pseudocode: |-
+    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — Create temporary files with `.tmp` extension
+
+    procedure atomic_file_operations():
+      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] Prevents corruption on operation failure
+      execute()
+      end

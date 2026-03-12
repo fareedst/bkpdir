@@ -65,7 +65,7 @@ func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data m
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
 	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
 	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
 	// Only replace known placeholders, leave unknown ones as-is
@@ -87,7 +87,7 @@ func (tf *DefaultTemplateFormatter) FormatWithPlaceholders(format string, data m
 		}
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
 	// This allows mixed format strings like "%s (size: #{size_human})\n"
 	// We need to replace printf placeholders with values from the data map
 	// Common mappings: %s -> path or name, %d -> size, etc.
@@ -279,7 +279,7 @@ func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data m
 		result = strings.ReplaceAll(result, placeholder, value)
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace known placeholders that might be missing with defaults
 	// This handles cases where placeholders weren't in the data map (e.g., missing file stats)
 	// CRITICAL: This must happen AFTER the data map replacement to catch any that weren't replaced
 	// Only replace known placeholders, leave unknown ones as-is
@@ -301,7 +301,7 @@ func (stf *SimpleTemplateFormatter) FormatWithPlaceholders(format string, data m
 		}
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle printf-style placeholders (%s, %d, etc.) after template placeholders are replaced
 	// This allows mixed format strings like "%s (size: #{size_human})\n"
 	// We need to replace printf placeholders with values from the data map
 	// Common mappings: %s -> path or name, %d -> size, etc.

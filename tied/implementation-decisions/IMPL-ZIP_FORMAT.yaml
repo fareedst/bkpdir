@@ -1,0 +1,58 @@
+IMPL-ZIP_FORMAT:
+  name: ZIP Archive Format Implementation
+  status: Active
+  cross_references:
+    - ARCH-ARCHIVE_FORMAT
+  rationale:
+    why: |-
+      Cross-platform compatibility
+      Built-in compression
+      Wide tool support
+      Standard library support in Go
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Uses Go's `archive/zip` package
+      Atomic file operations with temporary files
+      Compression level configurable
+      Supports incremental archives
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-ARCHIVE_FORMAT
+    requirements: []
+    tests: []
+    code_annotations:
+      - IMPL-ZIP_FORMAT
+      - ARCH-ARCHIVE_FORMAT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-ARCHIVE_FORMAT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-ZIP_FORMAT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`archive/zip` imports, `*.zip` file extensions'
+  essence_pseudocode: |-
+    # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] — Uses Go's `archive/zip` package
+
+    procedure zip_archive_format_implementation():
+      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Cross-platform compatibility
+      execute()
+      end

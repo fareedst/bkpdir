@@ -90,7 +90,7 @@ func (a *Application) Close() error {
 }
 ```
 
-## [ACTION:migration] Concurrent Processing Patterns
+## [ACTION-migration] Concurrent Processing Patterns
 
 ### Pattern 1: Pipeline Processing
 
@@ -239,7 +239,7 @@ func (a *Application) reportResults(results []ProcessResult) {
 }
 ```
 
-## [ACTION:validation] Advanced Resource Management
+## [ACTION-validation] Advanced Resource Management
 
 ### Pattern 1: Resource Pools
 

@@ -1,0 +1,49 @@
+REQ-GOV_DISCOVERABILITY:
+  REQ-GOV_DISCOVERABILITY:
+    name: Token Discoverability
+    category: Functional
+    priority: P1
+    status: Implemented
+    rationale:
+      why: Semantic tokens must be discoverable through the registry and tooling to enable efficient navigation, searching, and understanding of the traceability chain.
+      problems_solved:
+        - Difficulty finding relevant tokens for a given feature or requirement
+        - Lack of tooling support for token navigation
+        - Poor discoverability of token relationships and chains
+      benefits:
+        - Efficient token discovery through registry search and tooling
+        - Better developer experience when navigating traceability chains
+        - Tooling-enabled token exploration and relationship mapping
+    satisfaction_criteria:
+      - criterion: Tokens are searchable in the registry by name, type, and cross-references
+      - criterion: Tooling supports token navigation and relationship exploration
+      - criterion: Token relationships are discoverable through cross-reference chains
+    validation_criteria:
+      - method: Token tooling demonstrates search and navigation capabilities
+    traceability:
+      architecture:
+        - ARCH-TOKEN_SYSTEM
+      implementation:
+        - IMPL-TOKEN_SYSTEM
+      tests: []
+      code_annotations:
+        - REQ-GOV_DISCOVERABILITY
+    related_requirements:
+      depends_on: []
+      related_to:
+        - REQ-GOV_REGISTRY_COMPLETENESS
+      supersedes: []
+    description: Governance requirement ensuring semantic tokens are discoverable through the registry and tooling
+    detail_file: requirements/REQ-GOV_DISCOVERABILITY.yaml
+    metadata:
+      created:
+        date: "2026-03-12"
+        author: AI Agent
+      last_updated:
+        date: "2026-03-12"
+        author: AI Agent
+        reason: Initial creation of missing token
+      last_validated:
+        date: "2026-03-12"
+        validator: AI Agent
+        result: pass

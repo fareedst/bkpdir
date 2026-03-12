@@ -1,0 +1,58 @@
+ARCH-ARCHIVE_FORMAT:
+  name: Archive Format
+  status: Active
+  cross_references: &ref_0
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Cross-platform compatibility
+      Built-in compression
+      Wide tool support
+      Standard library support in Go (`archive/zip`)
+      Supports incremental archives
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        tar.gz: Rejected due to less universal support
+        tar.bz2: Rejected due to slower compression
+        Custom format: Rejected due to compatibility concerns
+  implementation_approach:
+    summary: |-
+      - Uses Go's `archive/zip` package
+      - Supports compression levels
+      - Atomic file operations prevent corruption
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-ARCHIVE_FORMAT
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: ZIP format for all archive operations
+  cross-references: '[REQ-RELIABILITY]'
+  implementation:
+    - Uses Go's `archive/zip` package
+    - Supports compression levels
+    - Atomic file operations prevent corruption

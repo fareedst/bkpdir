@@ -1,0 +1,52 @@
+REQ-STDD_VIS:
+  name: STDD Visualization and Storytelling Requirements
+  category: Functional
+  priority: P1
+  status: Planned
+  rationale:
+    why: Stakeholders and new contributors need a concise, token-centric narrative to understand how the STDD registry drives decisions, code, and validation. Keeping tokens as the star accelerates onboarding, audits, and change-impact discussions.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: 'At least two complementary token-first visuals: (1) layered flow/graph emphasizing tokens as primary nodes; (2) timeline/animation highlighting token handoffs over time.'
+    - criterion: Each visual annotates at least two real token chains (e.g., `[REQ-CFG_005] → [ARCH-CFG_005] → [IMPL-EXCLUDE_MERGE_FIX] → tests/code refs`) with token-forward callouts and a legend that explains token roles.
+    - criterion: Tokens visually dominate (color/weight/position); edges and captions reinforce token traceability.
+    - criterion: Assets live under `docs/` (e.g., `docs/images/`) and are referenced from STDD docs; include backward links to source docs per token.
+    - criterion: Module boundaries captured per [REQ-MODULE_VALIDATION] (data extraction, visualization rendering, animation/timeline, integration) with validation notes before integration.
+  validation_criteria:
+    - method: Storyboard and data-source plan explicitly show how token prominence is achieved (legend, color, size, ordering).
+    - method: Traceability sample set validated (minimum two end-to-end token chains) against repo artifacts with token presence verified in every step.
+    - method: Module validation evidence for each module (data extraction correctness; visual token prominence checklist; animation step accuracy) recorded before integration.
+    - method: Maintainer review checklist confirms token emphasis, legend clarity, and alignment with the registry.
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+      - ARCH-STDD_VIS_FLOW
+    implementation:
+      - IMPL-EXCLUDE_MERGE_FIX
+      - IMPL-STDD_VIS_DATA_PIPELINE
+      - IMPL-STDD_VIS_ASSETS
+    tests: []
+    code_annotations:
+      - REQ-STDD_VIS
+  related_requirements:
+    depends_on:
+      - REQ-CFG_005
+      - REQ-MODULE_VALIDATION
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-STDD_VIS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  cross-references: '[ARCH-STDD_VIS_FLOW], [IMPL-STDD_VIS_DATA_PIPELINE], [IMPL-STDD_VIS_ASSETS], [REQ-MODULE_VALIDATION]'
+  description: Create token-first visuals where semantic tokens are the central characters, showing how `[REQ-*]` → `[ARCH-*]` → `[IMPL-*]` → tests/code chains preserve intent. The visuals must foreground tokens (color, size, labels), with everything else supporting their story.

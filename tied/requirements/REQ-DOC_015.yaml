@@ -1,0 +1,46 @@
+REQ-DOC_015:
+  name: Unicode to Semantic Token Mapping Requirements
+  category: Functional
+  priority: P1
+  status: Planned
+  rationale:
+    why: Enhances AI assistant navigation and comprehension through searchable semantic tokens
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Zero unicode icons in documentation headers and structure
+    - criterion: All validation systems recognize semantic tokens
+    - criterion: Semantic tokens used consistently across all documentation
+    - criterion: AI assistants use semantic tokens for navigation and comprehension
+    - criterion: Backward compatibility preserved with existing priority system
+  validation_criteria:
+    - method: Validation integration with DOC-008 system
+    - method: Semantic token validation for consistency
+    - method: AI assistant comprehension testing
+    - method: See `architecture-decisions.md` § Documentation Architecture and `implementation-decisions.md` § Documentation Implementation for detailed approach
+  traceability:
+    architecture: []
+    implementation: []
+    tests: []
+    code_annotations:
+      - REQ-DOC_015
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-DOC_015.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Documentation Architecture
+  description: Replace all unicode icons with AI-first semantic tokens to improve AI assistant comprehension, enable automated validation, and create searchable documentation structure. Maintains backward compatibility with existing priority system ([CRITICAL][HIGH][MEDIUM][LOW]) while replacing decorative unicode icons with machine-readable semantic tokens.
+  implementation: See `implementation-decisions.md` § Documentation Implementation

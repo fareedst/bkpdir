@@ -1,6 +1,6 @@
-// [REQ:DOC_016] Semantic token coverage audit marker
-// [ARCH:TOKEN_SYSTEM] Token system architecture
-// [IMPL:TOKEN_COVERAGE_AUDIT] Applied audit annotation
+// [REQ-DOC_016] Semantic token coverage audit marker
+// [ARCH-TOKEN_SYSTEM] Token system architecture
+// [IMPL-TOKEN_COVERAGE_AUDIT] Applied audit annotation
 
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
@@ -108,7 +108,7 @@ them against DOC-007/DOC-008 standards. Provide suggestions for improvements.`,
 
 		// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 		if verbose {
-			fmt.Printf("[ACTION:validation] Validating tokens in %s...\n", args[0])
+			fmt.Printf("[ACTION-validation] Validating tokens in %s...\n", args[0])
 		}
 
 		violations, err := validator.ValidateTokens(args[0])
@@ -220,7 +220,7 @@ func outputViolationsJSON(violations []TokenViolation) error {
 }
 
 func outputViolationsText(violations []TokenViolation, dryRun bool) error {
-	fmt.Printf("[ACTION:validation] Token Validation Results\n")
+	fmt.Printf("[ACTION-validation] Token Validation Results\n")
 	fmt.Printf("============================\n\n")
 
 	if len(violations) == 0 {
@@ -274,7 +274,7 @@ func outputBatchResultsText(results *BatchResults) error {
 	fmt.Printf("   [CHECK] Analysis: %d suggestions\n", results.ActionBreakdown.Analysis)
 	fmt.Printf("   [NOTE] Documentation: %d suggestions\n", results.ActionBreakdown.Documentation)
 	fmt.Printf("   [ACTION] Configuration: %d suggestions\n", results.ActionBreakdown.Configuration)
-	fmt.Printf("   [ACTION:validation] Protection: %d suggestions\n\n", results.ActionBreakdown.Protection)
+	fmt.Printf("   [ACTION-validation] Protection: %d suggestions\n\n", results.ActionBreakdown.Protection)
 
 	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 	if len(results.TopSuggestions) > 0 {

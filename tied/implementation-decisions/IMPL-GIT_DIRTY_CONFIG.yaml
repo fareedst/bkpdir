@@ -1,0 +1,63 @@
+IMPL-GIT_DIRTY_CONFIG:
+  name: Configurable Git Dirty Status
+  status: Active
+  description: Make the Git dirty status indicator (-dirty suffix) configurable through the configuration system, allowing users to enable/disable this feature via show_git_dirty_status boolean option
+  rationale:
+    why: Users need control over whether the -dirty suffix appears in archive names based on Git working tree status
+    problems_solved:
+      - Forced -dirty suffix in archive names with no way to disable
+      - Users who do not want Git dirty status in archive naming
+    benefits:
+      - Configurable via show_git_dirty_status boolean option
+      - Defaults to true for backward compatibility
+      - Users can enable/disable dirty status indicator
+  implementation_approach:
+    summary: Add show_git_dirty_status boolean option to Config struct with proper merging and conditional dirty suffix logic
+    details:
+      - Added show_git_dirty_status boolean option to Config struct
+      - Default to true for backward compatibility
+      - Updated Git status detection to respect configuration
+      - Modified archive naming functions to check the option before adding -dirty suffix
+      - Added proper merging of the new option in mergeBasicSettings
+  cross_references:
+    - ARCH-GIT_INTEGRATION
+    - REQ-GIT_INTEGRATION
+  code_locations:
+    files:
+      - config.go
+      - archive.go
+    functions:
+      - mergeBasicSettings
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    requirements:
+      - REQ-GIT_INTEGRATION
+    tests: []
+    code_annotations:
+      - show_git_dirty_status configuration option
+      - conditional dirty status in archive naming
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-GIT_CLI
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Add show_git_dirty_status boolean option to Config struct with proper merging and conditional dirty suffix logic
+
+    procedure configurable_git_dirty_status():
+      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Added show_git_dirty_status boolean option to Config struct
+      added_show_git_dirty_status_boolean_option()
+      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Default to true for backward compatibility
+      default_to_true_for()
+      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Updated Git status detection to respect configuration
+      updated_git_status_detection()
+      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Modified archive naming functions to check the option before adding -dirty suffix
+      modified_archive_naming_functions()
+      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Added proper merging of the new option in mergeBasicSettings
+      added_proper_merging_of()
+      end

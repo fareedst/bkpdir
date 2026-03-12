@@ -1,0 +1,146 @@
+IMPL-LIST_LIMIT:
+  name: List Command Limit Implementation
+  status: Active
+  cross_references:
+    - ARCH-LIST_LIMIT
+    - ARCH-DIFF_COMMAND
+    - ARCH-DIRECTORY_COMPARISON
+    - ARCH-CLI_COMMANDS
+    - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    - ARCH-EXTRACT_008_INTERDEP
+    - REQ-LIST_LIMIT
+    - REQ-USABILITY
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CONTEXT_SUPPORT
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+  rationale:
+    why: STDD requires authoritative records to live in the requirements, architecture, and implementation documents for traceability. Working-plan or supplemental files create duplication and risk drift; migrating content into the canonical STDD files preserves traceability.
+    problems_solved: []
+    benefits:
+      - More reliable than file system modification times, consistent with archive naming pattern, simpler implementation (no file system stat calls needed)
+  implementation_approach:
+    summary: '- Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-LIST_LIMIT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - ARCH-EXTRACT_008_INTERDEP
+    requirements:
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+    tests: []
+    code_annotations:
+      - IMPL-LIST_LIMIT
+      - ARCH-LIST_LIMIT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - ARCH-EXTRACT_008_INTERDEP
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-LIST_LIMIT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+      - ARCH-EXTRACT_008_INTERDEP
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-LIST_LIMIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: |-
+    `archive.go` line ~695-738: `createIncrementalArchive()` - Integrated diff analysis before archive creation
+    Line ~697: Calls `ReconstructArchiveState()` to get effective state (full + most recent incremental)
+    Line ~704: Calls `findLatestFullArchive()` for fallback path (uses name-based sorting)
+    Line ~744: Calls `findLatestFullArchive()` to get base full archive for naming (uses name-based sorting)
+    Line ~720: Calls `CalculateDiff()` to detect changes, passing exclude patterns
+    Line ~726-729: Conditional skip when no changes detected, displays skip message
+    Line ~700-717: Fallback to old behavior when reconstruction fails (backward compatibility)
+    `archive.go` line ~869-904: `findLatestFullArchive()` - Finds most recent full archive by sorting names (used by incremental archive creation)
+    `formatter.go` line ~1785-1799: `FormatIncrementalSkippedNoChanges()` and `PrintIncrementalSkippedNoChanges()` - Format and print skip message
+    `config.go` line ~153: `FormatIncrementalSkippedNoChanges` - Format string configuration field
+    `config.go` line ~336: Default format string: "No changes detected since last incremental archive. Skipping archive creation.\n"
+    `incremental_duplicate_prevention_test.go`: Comprehensive test suite with 4 test functions covering all scenarios
+  archive_selection: Use `findLatestFullArchive()` which uses name-based sorting (consistent with diff command)
+  archive_selection_strategy: All archive selection functions use name-based sorting instead of file modification times
+  archive_state_reconstruction: Function to reconstruct effective state from full + most recent incremental archive
+  auto-detection_integration: Added "diff" to `knownCommands` list in `executeWithAutoDetection()` to prevent path auto-detection from intercepting the command
+  benefits: More reliable than file system modification times, consistent with archive naming pattern, simpler implementation (no file system stat calls needed)
+  change_detection: Use diff result to determine if changes exist
+  change_reporting: Format and display changes
+  cli_command_integration: Add `diff` command to CLI framework
+  code_structure:
+    - '`archive.go`: Modify `createIncrementalArchive()` to use diff analysis before creating archive'
+    - '`archive.go`: Add check for changes using `CalculateDiff()` function'
+    - '`archive.go`: Skip archive creation if `diffResult` shows no changes'
+    - '`formatter.go`: Add format method for skip message (`FormatIncrementalSkippedNoChanges()`, `PrintIncrementalSkippedNoChanges()`)'
+    - '`config.go`: Add format string configuration for skip message (`FormatIncrementalSkippedNoChanges`)'
+  context_support: Command handler checks for context cancellation before diff calculation and before printing results
+  cross-references: '[ARCH-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-DIFF_COMMAND], [IMPL-DIFF_COMMAND], [REQ-OUTPUT_FORMATTING]'
+  directory_comparison: Compare current directory against reconstructed state
+  error_handling: Improved handling of "no archives found" case - displays user-friendly message using `PrintNoArchivesFound()` instead of generic error
+  implementation: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
+  implementation_status: ✅ Complete
+  implementation_steps: |-
+    1. Record the requirement token `[REQ-EXTRACT_008_INTERDEP_MAPPING]` in `stdd/requirements.md` (done).
+    2. Record the architecture decision `[ARCH-EXTRACT_008_INTERDEP]` in `stdd/architecture-decisions.md` (done).
+    3. Record this implementation decision `[IMPL-EXTRACT_008_DOC_MIGRATION]` here to document the migration approach and rationale.
+    4. Create the canonical deliverable `docs/package-interdependency-mapping.md` describing package relationships, interface contracts, and example integrations (outcome document—authoring to be performed as follow-up task).
+    5. Remove any supplemental preservation files (they are not canonical) and remove or decommission `working-plan-extract-008.md` once migration is complete.
+  name-based_sorting: All archive selection functions (`FindMostRecentArchive`, `findLatestFullArchive`, `findLatestIncrementalArchive`) use name-based sorting instead of file modification times
+  reuse_diff_logic: Leverage `CalculateDiff()` function from diff command implementation
+  skip_creation: Skip incremental archive creation if no changes detected
+  state_reconstruction: Use `ReconstructArchiveState()` to get effective state
+  testing: 'Comprehensive test coverage including:'
+  user_feedback: Display appropriate message using format strings
+  validation:
+    - Confirm tokens appear in `stdd/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
+    - Confirm `docs/package-interdependency-mapping.md` exists and links back to these tokens.
+  essence_pseudocode: |-
+    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-EXTRACT_008_INTERDEP] [REQ-LIST_LIMIT] [REQ-USABILITY] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] [REQ-EXTRACT_008_INTERDEP_MAPPING] — - Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`
+
+    procedure list_command_limit_implementation():
+      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-EXTRACT_008_INTERDEP] [REQ-LIST_LIMIT] [REQ-USABILITY] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] [REQ-EXTRACT_008_INTERDEP_MAPPING] STDD requires authoritative records to live in the requirements, architecture, and implementation documents for traceability. Working-plan or supplemental files create duplication and risk drift; migrating content into the canonical STDD files preserves traceability.
+      execute()
+      end

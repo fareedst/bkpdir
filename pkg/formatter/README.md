@@ -1,6 +1,6 @@
 # Formatter Package
 
-**Tokens:** [REQ:OUTPUT_FORMATTING] [ARCH:OUTPUT_FORMATTING] [IMPL:DUAL_FORMATTING]
+**Tokens:** [REQ-OUTPUT_FORMATTING] [ARCH-OUTPUT_FORMATTING] [IMPL-DUAL_FORMATTING]
 
 The formatter package provides comprehensive output formatting functionality for BkpDir operations. It supports both printf-style and template-based formatting with optional delayed output collection.
 

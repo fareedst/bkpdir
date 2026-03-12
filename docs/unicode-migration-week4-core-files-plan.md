@@ -1,6 +1,6 @@
 # Unicode Migration - Week 4: Core Source Files Migration Plan
 
-> **[HIGH] DOC-014: Week 4 core source files migration with systematic approach [ACTION:maintenance]**
+> **[HIGH] DOC-014: Week 4 core source files migration with systematic approach [ACTION-maintenance]**
 
 **Date**: 2025-01-02  
 **Status**: 🚀 **WEEK 4 STARTED**  
@@ -71,7 +71,7 @@ Week 4 focuses on migrating Unicode icons in the core source files (~409 instanc
 // Legacy Format → Semantic Format
 [CRITICAL] MAIN-001: Application entry point → [CRITICAL] MAIN-001: Application entry point [ACTION:core-functionality]
 [HIGH] CFG-001: Configuration loading → [HIGH] CFG-001: Configuration loading [ACTION:format-processing]
-[MEDIUM] UTIL-001: Helper function → [MEDIUM] UTIL-001: Helper function [ACTION:validation]
+[MEDIUM] UTIL-001: Helper function → [MEDIUM] UTIL-001: Helper function [ACTION-validation]
 [LOW] DEBUG-001: Debug output → [LOW] DEBUG-001: Debug output [ACTION:format-processing]
 ```
 
@@ -80,8 +80,8 @@ Week 4 focuses on migrating Unicode icons in the core source files (~409 instanc
 // Core functionality actions
 [ACTION:core-functionality] → core-functionality: "Essential application operations"
 [ACTION:format-processing] → format-processing: "Text formatting and output generation"
-[ACTION:discovery] → discovery: "File system and configuration discovery"
-[ACTION:validation] → validation: "Input validation and error checking"
+[ACTION-discovery] → discovery: "File system and configuration discovery"
+[ACTION-validation] → validation: "Input validation and error checking"
 ```
 
 ## Quality Assurance Framework
@@ -169,4 +169,4 @@ The established patterns from Weeks 1-3 provide a solid foundation for this migr
 
 ---
 
-**[HIGH] DOC-014: Week 4 core source files migration plan documented - Systematic approach for migrating 409 Unicode icons in core application files [ACTION:maintenance]** 
+**[HIGH] DOC-014: Week 4 core source files migration plan documented - Systematic approach for migrating 409 Unicode icons in core application files [ACTION-maintenance]** 

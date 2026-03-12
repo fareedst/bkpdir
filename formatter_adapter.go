@@ -524,7 +524,7 @@ func (fa *FormatterAdapter) PrintBackupCreated(path string) {
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 
 // PrintArchiveListWithStatus prints archive list with status
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: output may contain #{...} patterns if placeholder replacement failed
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: output may contain #{...} patterns if placeholder replacement failed
 // Use os.Stdout.WriteString instead of fmt.Print to avoid fmt misinterpreting #{...} as format verbs
 func (fa *FormatterAdapter) PrintArchiveListWithStatus(output, status string) {
 	// CRITICAL: Use os.Stdout.WriteString, NOT fmt.Print, to avoid fmt misinterpreting #{...} patterns
@@ -540,7 +540,7 @@ func (fa *FormatterAdapter) PrintArchiveListWithStatus(output, status string) {
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // FormatListArchiveWithExtraction formats archive listing with data extraction
 // FormatListArchiveWithExtraction formats archive listing with a simplified, testable implementation.
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] This implementation:
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] This implementation:
 // 1. Always gathers file statistics (needed for template placeholders)
 // 2. Uses FormatListArchive if it contains template placeholders, otherwise TemplateListArchive
 // 3. Processes all placeholders in a single, clear code path
@@ -560,7 +560,7 @@ func (fa *FormatterAdapter) FormatListBackupWithExtraction(backupPath, creationT
 	data["path"] = backupPath
 	data["creation_time"] = creationTime
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Gather file statistics to populate size_human and other stat fields
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Gather file statistics to populate size_human and other stat fields
 	// Per requirements: list output MUST support template-style placeholders for file attributes
 	statInfo, err := formatter.GatherFileStatInfo(backupPath)
 	if err == nil {
@@ -573,7 +573,7 @@ func (fa *FormatterAdapter) FormatListBackupWithExtraction(backupPath, creationT
 		data["type"] = statInfo.Type
 		data["name"] = statInfo.Name
 	} else {
-		// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Provide default values for file attributes when stats can't be gathered
+		// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Provide default values for file attributes when stats can't be gathered
 		// This ensures placeholders like #{size_human} are always available in the data map
 		if _, exists := data["size"]; !exists {
 			data["size"] = "0"
@@ -604,7 +604,7 @@ func (fa *FormatterAdapter) FormatListBackupWithExtraction(backupPath, creationT
 		}
 	}
 
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Per requirements: list output MUST use template-style format strings
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Per requirements: list output MUST use template-style format strings
 	// Always prefer TemplateListBackup for list output to support file attributes
 	templateStr := fa.config.TemplateListBackup
 	if templateStr == "" {

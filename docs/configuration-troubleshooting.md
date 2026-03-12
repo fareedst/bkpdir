@@ -4,7 +4,7 @@
 
 This guide helps you diagnose and resolve common configuration issues with the enhanced configuration inspection system (CFG-006). Use the powerful configuration visibility features to debug problems quickly.
 
-## [ACTION:discovery] Quick Diagnosis Commands
+## [ACTION-discovery] Quick Diagnosis Commands
 
 Before diving into specific issues, use these commands for quick diagnosis:
 
@@ -19,7 +19,7 @@ bkpdir config --overrides-only --sources
 time bkpdir config >/dev/null
 ```
 
-## [ACTION:maintenance] Configuration Value Issues
+## [ACTION-maintenance] Configuration Value Issues
 
 ### Issue 1: Configuration Value Not Being Applied
 

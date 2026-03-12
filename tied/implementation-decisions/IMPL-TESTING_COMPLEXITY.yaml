@@ -1,0 +1,57 @@
+IMPL-TESTING_COMPLEXITY:
+  name: Testing Complexity Challenge
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-RELIABILITY
+  rationale:
+    why: Extracted components need comprehensive testing without duplicating existing tests to ensure they are production-ready
+    problems_solved:
+      - Risk of duplicating existing tests during extraction
+      - Ensuring extracted components have sufficient test coverage
+      - Maintaining original integration test validity
+    benefits:
+      - No test duplication between original and extracted components
+      - Focused package-specific tests
+      - Original integration tests continue to validate end-to-end behavior
+  implementation_approach:
+    summary: Extract test utilities first, then create focused tests for each package while ensuring original integration tests still pass
+    details:
+      - Extract test utilities as foundation for package-specific tests
+      - Create package-specific tests for each extracted component
+      - Ensure original integration tests continue to pass unmodified
+      - Comprehensive testing ensures extracted components are production-ready
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-RELIABILITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on:
+      - IMPL-TESTING
+    supersedes: []
+    see_also:
+      - IMPL-TEST_COVERAGE
+      - IMPL-EXTRACTION_CHALLENGES
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — Extract test utilities first, then create focused tests for each package while ensuring original integration tests still pass
+
+    procedure testing_complexity_challenge():
+      # [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Extract test utilities as foundation for package-specific tests
+      extract_test_utilities_as()
+      # [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Create package-specific tests for each extracted component
+      create_package_specific_tests_for()
+      # [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Ensure original integration tests continue to pass unmodified
+      ensure_original_integration_tests()
+      # [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Comprehensive testing ensures extracted components are production-ready
+      comprehensive_testing_ensures_extracted()
+      end

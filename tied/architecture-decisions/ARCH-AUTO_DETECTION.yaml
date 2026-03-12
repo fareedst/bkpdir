@@ -1,0 +1,74 @@
+ARCH-AUTO_DETECTION:
+  name: Auto-Detection Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Improves user experience by reducing command verbosity
+      Enables intuitive CLI usage (just provide path)
+      Maintains backward compatibility with explicit commands
+      Supports both file and directory operations seamlessly
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Separate auto-detect command: Rejected due to reduced usability
+        No auto-detection: Rejected due to user experience concerns
+  implementation_approach:
+    summary: |-
+      - `isFile()`: Detects regular files
+      - `isDirectory()`: Detects directories
+      - `validatePath()`: Validates path existence and accessibility
+      - `handleAutoDetectedCommand()`: Routes to appropriate handler
+      - `executeWithAutoDetection()`: Integrates with Cobra command execution
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-AUTO_DETECTION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-AUTO_DETECTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Automatic command detection based on path type (CLI-015)
+  backward_compatibility:
+    - All existing explicit commands continue to work
+    - Auto-detection only activates for unrecognized positional arguments
+    - No breaking changes to existing CLI interface
+  command_routing:
+    - Known commands bypass auto-detection (create, config, list, verify, backup, etc.)
+    - Global flags handled normally (--config, --dry-run, --list)
+    - Positional arguments trigger auto-detection when not a known command
+    - Error handling provides clear feedback for unsupported types
+  cross-references: '[REQ-USABILITY]'
+  detection_logic:
+    - Path type detection via `os.Stat()` and file mode checking
+    - 'File detection: Routes to file backup operation'
+    - 'Directory detection: Routes to directory archive operation'
+    - 'Unsupported types: Clear error messages with guidance'
+  implementation:
+    - '`isFile()`: Detects regular files'
+    - '`isDirectory()`: Detects directories'
+    - '`validatePath()`: Validates path existence and accessibility'
+    - '`handleAutoDetectedCommand()`: Routes to appropriate handler'
+    - '`executeWithAutoDetection()`: Integrates with Cobra command execution'

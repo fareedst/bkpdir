@@ -1,0 +1,103 @@
+IMPL-CLI_FRAMEWORK:
+  name: CLI Framework Implementation
+  status: Active
+  cross_references:
+    - ARCH-CLI_FRAMEWORK
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Standardizes command construction
+      Enables testability through interfaces
+      Provides consistent flag management
+      Supports context-aware execution
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Builder pattern with manager interfaces for CLI construction
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CLI_FRAMEWORK
+    requirements:
+      - REQ-USABILITY
+    tests: []
+    code_annotations:
+      - IMPL-CLI_FRAMEWORK
+      - ARCH-CLI_FRAMEWORK
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CLI_FRAMEWORK
+      - REQ-USABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CLI_FRAMEWORK.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/cli/` package, builder methods, manager interfaces'
+  cliapp:
+    - Complete CLI application container
+    - Manages all managers and builders
+    - Provides unified API for application setup
+  commandbuilder: |-
+    ```go
+    type CommandBuilder interface {
+        NewCommand(name, short, long string) *cobra.Command
+        WithHandler(cmd *cobra.Command, handler func(*cobra.Command, []string) error) *cobra.Command
+        WithFlags(cmd *cobra.Command, flags []string) *cobra.Command
+        WithSubcommands(parent *cobra.Command, children ...*cobra.Command) *cobra.Command
+    }
+    ```
+  contextmanager: |-
+    ```go
+    type ContextManager interface {
+        Create(parent context.Context) (context.Context, context.CancelFunc)
+        WithTimeout(parent context.Context, timeout string) (context.Context, context.CancelFunc)
+        HandleSignals(cancel context.CancelFunc)
+    }
+    ```
+  defaultcommandbuilder:
+    - Wraps Cobra command creation
+    - Provides fluent API for command setup
+    - Integrates with FlagManager
+  defaultflagmanager:
+    - Standard flag registration methods
+    - FlagSet structure for batch flag addition
+    - Consistent flag naming conventions
+  dryrunmanager: |-
+    ```go
+    type DryRunManager interface {
+        Execute(ctx CommandContext, op DryRunOperation) error
+        Log(ctx CommandContext, message string)
+    }
+    ```
+  flagmanager: |-
+    ```go
+    type FlagManager interface {
+        AddGlobalFlags(cmd *cobra.Command) error
+        AddDryRunFlag(cmd *cobra.Command, target *bool) error
+        AddNoteFlag(cmd *cobra.Command, target *string) error
+        AddConfigFlag(cmd *cobra.Command, target *bool) error
+    }
+    ```
+  essence_pseudocode: |-
+    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Builder pattern with manager interfaces for CLI construction
+
+    procedure cli_framework_implementation():
+      # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Standardizes command construction
+      execute()
+      end

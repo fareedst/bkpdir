@@ -1,7 +1,7 @@
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-// [REQ:USABILITY] Scaffolding CLI usability requirement
-// [ARCH:CLI_FRAMEWORK] CLI framework architecture (scaffolding UX)
-// [IMPL:CLI_FRAMEWORK] CLI scaffolding implementation
+// [REQ-USABILITY] Scaffolding CLI usability requirement
+// [ARCH-CLI_FRAMEWORK] CLI framework architecture (scaffolding UX)
+// [IMPL-CLI_FRAMEWORK] CLI scaffolding implementation
 package main
 
 import (

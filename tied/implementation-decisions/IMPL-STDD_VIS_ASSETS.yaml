@@ -1,0 +1,62 @@
+IMPL-STDD_VIS_ASSETS:
+  name: STDD Visualization Asset Plan
+  status: Active
+  cross_references:
+    - ARCH-STDD_VIS_FLOW
+    - REQ-STDD_VIS
+    - REQ-MODULE_VALIDATION
+  rationale:
+    why: Combines static clarity (layered flow) with process storytelling (timeline/animation) to communicate STDD traceability
+    problems_solved:
+      - Need for visual representation of STDD token traceability
+      - Communicating complex token chains to stakeholders
+      - Anchoring visualization artifacts to real tokens and code/test references
+    benefits:
+      - Static clarity via layered flow diagram
+      - Process storytelling via timeline/animation
+      - Artifacts anchored to real tokens and references
+  implementation_approach:
+    summary: Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
+    details:
+      - 'Layered Flow Diagram: swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST/CODE; tokens visually dominant'
+      - 'Timeline/Animation: stepwise frames showing requirement through architecture, implementation, tests, and code; token badges visible per step'
+      - 'Asset locations: docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-timeline.gif/mp4'
+      - 'Validation: visual review checklist centered on token prominence, color map alignment, edge correctness'
+      - 'Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot'
+  code_locations:
+    files:
+      - docs/images/stdd-trace-flow.svg
+      - docs/images/stdd-trace-timeline.gif
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-STDD_VIS_FLOW
+    requirements:
+      - REQ-STDD_VIS
+      - REQ-MODULE_VALIDATION
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on:
+      - IMPL-STDD_VIS_DATA_PIPELINE
+    supersedes: []
+    see_also: []
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
+
+    procedure stdd_visualization_asset_plan():
+      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Layered Flow Diagram: swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST/CODE; tokens visually dominant
+      layered_flow_diagram("swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST")
+      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Timeline/Animation: stepwise frames showing requirement through architecture, implementation, tests, and code; token badges visible per step
+      timeline_animation("stepwise frames showing requirement through architecture, im")
+      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Asset locations: docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-timeline.gif/mp4
+      asset_locations("docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-t")
+      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Validation: visual review checklist centered on token prominence, color map alignment, edge correctness
+      validation("visual review checklist centered on token prominence, color ")
+      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot
+      module_boundaries("Visualization (static) and AnimationTimeline (dynamic) consu")
+      end

@@ -1,4 +1,4 @@
-// [REQ:MAINTAINABILITY]
+// [REQ-MAINTAINABILITY]
 package testutil_test
 
 import (

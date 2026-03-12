@@ -1,4 +1,4 @@
-// [IMPL:CLI_FRAMEWORK] [ARCH:CLI_COMMANDS] [REQ:IMMUTABLE_CLI_COMMANDS]
+// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_COMMANDS] [REQ-IMMUTABLE_CLI_COMMANDS]
 // CLI command builder implementation — links to STDD tokens for traceability.
 package cli
 

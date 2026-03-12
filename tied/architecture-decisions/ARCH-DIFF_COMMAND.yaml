@@ -1,0 +1,77 @@
+ARCH-DIFF_COMMAND:
+  name: Diff Command Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Users need visibility into changes before creating incremental archives
+      Comparing against the union (full + most recent incremental) provides accurate change detection
+      Reusing diff logic for duplicate prevention ensures consistency
+      Enables users to preview what would be included in next incremental backup
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Implement diff command that reconstructs archive union state before comparison
+    details:
+      - |-
+        1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+        2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+        3. **Directory Comparison**: Compare current directory against reconstructed state
+        4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+        5. **CLI Command Integration**: Add `diff` command to CLI framework
+    key_components: |-
+      1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+      2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+      3. **Directory Comparison**: Compare current directory against reconstructed state
+      4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+      5. **CLI Command Integration**: Add `diff` command to CLI framework
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-DIFF_COMMAND
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-DIFF_COMMAND.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Implement diff command that reconstructs archive union state before comparison
+  archive_selection: Use name-based sorting to find most recent archives (archive names include alphabetically sortable timestamps in ISO 8601 format)
+  archive_state_reconstruction: Reconstruct effective state by applying most recent incremental archive on top of most recent full archive
+  change_detection: Identify added files, modified files, and deleted files
+  compare_only_against_full_archive: Rejected - doesn't account for existing incremental changes
+  compare_only_against_most_recent_incremental: Rejected - incremental archives are deltas, not complete states
+  comparison_engine: Compare reconstructed archive state against current directory state
+  cross-references: '[REQ-DIFF_COMMAND], [REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-OUTPUT_FORMATTING], [REQ-CONFIGURATION], [ARCH-DIRECTORY_COMPARISON], [ARCH-CLI_COMMANDS]'
+  integration_with_incremental_creation: Share comparison logic with incremental archive duplicate prevention
+  key_components: |-
+    1. **Archive Selection**: Name-based sorting to find most recent full and incremental archives (timestamps in archive names are alphabetically sortable)
+    2. **Archive Union Reconstruction**: Function to reconstruct effective state from full + incremental archives
+    3. **Directory Comparison**: Compare current directory against reconstructed state
+    4. **Change Reporting**: Format and display changes (added, modified, deleted files)
+    5. **CLI Command Integration**: Add `diff` command to CLI framework
+  output_formatting: Use configurable format strings consistent with other commands
+  separate_diff_logic_from_duplicate_prevention: Rejected - code duplication, inconsistency risk
+  use_file_modification_times_for_archive_selection: Rejected - less reliable than name-based sorting, archive names include timestamps that are alphabetically sortable, simpler implementation without file system stat calls

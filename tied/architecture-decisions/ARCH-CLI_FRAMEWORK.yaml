@@ -1,0 +1,66 @@
+ARCH-CLI_FRAMEWORK:
+  name: CLI Framework Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-USABILITY
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Provides reusable CLI building blocks
+      Standardizes command construction patterns
+      Supports rapid CLI application development
+      Enables consistent user experience across applications
+      Integrates with popular Cobra framework
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Custom CLI framework: Rejected due to maintenance overhead
+        Direct Cobra usage: Rejected due to code duplication across projects
+  implementation_approach:
+    summary: Extracted CLI framework with builder patterns and Cobra integration
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CLI_FRAMEWORK
+      - REQ-USABILITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CLI_FRAMEWORK.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extracted CLI framework with builder patterns and Cobra integration
+  command_builder: Builder pattern for constructing Cobra commands
+  context_manager: Context propagation for cancellation and timeouts
+  cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
+  design_patterns:
+    - Builder pattern for command construction
+    - Interface-based design for testability
+    - Manager pattern for cross-cutting concerns
+    - Template pattern for command structure
+  dry-run_manager: Built-in dry-run operation support
+  flag_manager: Standardized flag registration and binding
+  integration:
+    - Built on Cobra CLI framework
+    - Supports standard Cobra features (flags, subcommands, help)
+    - Extends Cobra with additional patterns and utilities
+  version_manager: Version display and build information handling

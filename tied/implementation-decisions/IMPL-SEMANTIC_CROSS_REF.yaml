@@ -1,0 +1,62 @@
+IMPL-SEMANTIC_CROSS_REF:
+  name: Semantic Cross-Referencing Strategy
+  status: Active
+  cross_references:
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_001
+  rationale:
+    why: |-
+      LLMs benefit from rich cross-references to understand relationships
+      Bi-directional links prevent orphaned references
+      Standardized format ensures consistency across documents
+      Forward/backward/sibling links provide comprehensive navigation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Feature reference blocks with links to all documentation layers
+      Automated link validation
+      Cross-reference consistency checking
+      Semantic token-based linking
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+    requirements:
+      - REQ-DOC_001
+    tests: []
+    code_annotations:
+      - IMPL-SEMANTIC_CROSS_REF
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-SEMANTIC_CROSS_REF.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: LinkingEngine implementation, automated link validation
+  essence_pseudocode: |-
+    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Feature reference blocks with links to all documentation layers
+
+    procedure semantic_cross_referencing_strategy():
+      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] LLMs benefit from rich cross-references to understand relationships
+      execute()
+      end

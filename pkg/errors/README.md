@@ -1,6 +1,6 @@
 # Package errors
 
-**Tokens:** [REQ:ERROR_HANDLING] [ARCH:ERROR_HANDLING] [IMPL:STRUCTURED_ERRORS]
+**Tokens:** [REQ-ERROR_HANDLING] [ARCH-ERROR_HANDLING] [IMPL-STRUCTURED_ERRORS]
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/errors.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/errors)
 

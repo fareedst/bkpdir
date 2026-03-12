@@ -152,7 +152,7 @@ func (f *AICoreFormatter) FormatWithPlaceholders(format string, data map[string]
 }
 
 // [CRITICAL] FMT-001: AI-friendly context formatting - [ACTION:core-functionality]
-// [IMPL:LIST_FORMAT_SAFETY] Guard list formatting and use placeholder substitution when appropriate
+// [IMPL-LIST_FORMAT_SAFETY] Guard list formatting and use placeholder substitution when appropriate
 func (f *AICoreFormatter) FormatWithContext(ctx FormatContext) (string, error) {
 	switch ctx.FormatType {
 	case FormatTypeCreated, FormatTypeIdentical, FormatTypeDryRun:
@@ -161,7 +161,7 @@ func (f *AICoreFormatter) FormatWithContext(ctx FormatContext) (string, error) {
 		}
 		return "", fmt.Errorf("missing path in format context")
 	case FormatTypeList:
-		// [IMPL:DUAL_FORMATTING] [REQ:OUTPUT_FORMATTING] Handle list format with creation time
+		// [IMPL-DUAL_FORMATTING] [REQ-OUTPUT_FORMATTING] Handle list format with creation time
 		if path, ok := ctx.Data["path"].(string); ok {
 			if creationTime, ok := ctx.Data["creationTime"].(string); ok {
 				formatStr, err := f.config.GetFormatString(FormatTypeList)

@@ -1,0 +1,49 @@
+ARCH-CODE_ORGANIZATION:
+  name: Code Organization Principles
+  status: Active
+  cross_references: &ref_0
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Testable components
+      Clear responsibilities
+      Easy to extend
+      Maintainable codebase
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Clear responsibilities with interfaces for testability
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Clear responsibilities with interfaces for testability
+  cross-references: '[REQ-MAINTAINABILITY]'
+  principles:
+    - Each module has a single, clear responsibility
+    - Functions are small and focused
+    - Interfaces where appropriate for testability
+    - Avoid global state where possible
+    - Resource management centralized

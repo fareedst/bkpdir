@@ -5,7 +5,7 @@ STDD Architecture vs Implementation Comparison Analysis
 This script extracts and analyzes semantic tokens from STDD documentation files
 to demonstrate how the methodology preserves intent across layers.
 
-[REQ:STDD_VIS] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_DATA_PIPELINE]
+[REQ-STDD_VIS] [ARCH-STDD_VIS_FLOW] [IMPL-STDD_VIS_DATA_PIPELINE]
 """
 
 import re
@@ -339,7 +339,7 @@ def generate_report(arch_data: Dict, impl_data: Dict, matrix: Dict, comparison: 
     report.append('')
     report.append('**Generated**: Automated analysis of semantic token usage across STDD documentation layers.')
     report.append('')
-    report.append('[REQ:STDD_VIS] [ARCH:STDD_VIS_FLOW] [IMPL:STDD_VIS_ASSETS]')
+    report.append('[REQ-STDD_VIS] [ARCH-STDD_VIS_FLOW] [IMPL-STDD_VIS_ASSETS]')
     report.append('')
     
     # Executive Summary

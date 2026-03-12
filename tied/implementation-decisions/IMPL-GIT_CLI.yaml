@@ -1,0 +1,63 @@
+IMPL-GIT_CLI:
+  name: Git Command-line Integration
+  status: Active
+  cross_references:
+    - ARCH-GIT_INTEGRATION
+    - REQ-GIT_INTEGRATION
+  rationale:
+    why: |-
+      Simplicity over Git library dependencies
+      Relies on user's Git installation
+      Consistent with user's Git configuration
+      Lightweight implementation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      Uses `exec.Command("git", ...)` for Git operations
+      Repository detection: `git rev-parse --is-inside-work-tree`
+      Branch extraction: `git rev-parse --abbrev-ref HEAD`
+      Hash extraction: `git rev-parse --short HEAD`
+      Status detection: `git status --porcelain`
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    requirements:
+      - REQ-GIT_INTEGRATION
+    tests: []
+    code_annotations:
+      - IMPL-GIT_CLI
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-GIT_CLI.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`exec.Command("git", ...)` calls, Git command parsing'
+  essence_pseudocode: |-
+    # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Uses `exec.Command("git", ...)` for Git operations
+
+    procedure git_command_line_integration():
+      # [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Simplicity over Git library dependencies
+      execute()
+      end

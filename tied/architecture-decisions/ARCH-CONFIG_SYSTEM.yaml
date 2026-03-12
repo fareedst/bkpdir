@@ -1,0 +1,67 @@
+ARCH-CONFIG_SYSTEM:
+  name: Configuration System
+  status: Active
+  cross_references: &ref_0
+    - REQ-CONFIGURATION
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Human-readable format
+      Supports complex nested structures
+      Good Go library support (`gopkg.in/yaml.v3`)
+      Industry standard for configuration
+      Environment variable support for flexibility
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        JSON: Rejected due to lack of comments
+        TOML: Rejected due to less common usage
+        INI: Rejected due to limited nesting support
+  implementation_approach:
+    summary: YAML configuration files with environment variable support
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: YAML configuration files with environment variable support
+  configuration_discovery: |-
+    1. Command line flags (highest priority)
+    2. Environment variables (`BKPDIR_CONFIG` for search paths)
+    3. Configuration files in search path order:
+       - `./.bkpdir.yml` (current directory)
+       - `~/.bkpdir.yml` (home directory)
+       - Custom paths from `BKPDIR_CONFIG`
+       - **Precedence Rule**: Earlier files in the search path take precedence over later files. When processing sequential config files (not inheritance chains), values set by earlier files are preserved and cannot be overridden by later files, even if those values equal the defaults. The implementation tracks the initial default state and compares the destination state before merge to detect if earlier files modified values.
+    4. Default values (lowest priority)
+  configuration_key_structure:
+    - All configuration keys are displayed as top-level keys in `bkpdir config` output
+    - Internal struct may have nested fields (e.g., `Git *GitConfig`), but the reflection-based display system flattens them using YAML tag names
+    - 'Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.'
+    - YAML files use top-level keys for all configuration options (see [IMPL-CONFIG_DISPLAY_FLATTENING])
+  cross-references: '[REQ-CONFIGURATION], [REQ-USABILITY]'

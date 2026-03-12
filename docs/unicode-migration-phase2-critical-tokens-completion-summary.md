@@ -47,7 +47,7 @@ All **29 critical priority tokens** have been successfully implemented with comp
 
 ### ✅ **Completed: Requirements (6 tokens)**
 
-#### 6. QUALITY-001: Code Quality and Linting Requirements [ACTION:validation]
+#### 6. QUALITY-001: Code Quality and Linting Requirements [ACTION-validation]
 - **Source**: `docs/context/requirements.md` - Code Quality and Linting Requirements section
 - **Implementation**: Complete cross-layer traceability established
 - **Impact**: Development standards requirement for code quality
@@ -267,7 +267,7 @@ All **29 critical priority tokens** have been successfully implemented with comp
 ## Recovery Information
 
 ### Current Project State
-- **Phase**: 2 [ACTION:migration] **IN PROGRESS**
+- **Phase**: 2 [ACTION-migration] **IN PROGRESS**
 - **Critical Priority**: ✅ **COMPLETED** (29/29 tokens)
 - **High Priority**: ⏳ **PENDING** (0/28 tokens)
 - **Medium Priority**: ⏳ **PENDING** (0/5 tokens)

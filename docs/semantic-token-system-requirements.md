@@ -13,7 +13,7 @@ The semantic token system is a **core requirement** for all development work on 
 All implementation work MUST use the standardized semantic token format:
 
 ```go
-// FEATURE-ID: Description [ACTION:context]
+// FEATURE-ID: Description [ACTION-context]
 ```
 
 **Example:**
@@ -63,7 +63,7 @@ The system has migrated from Unicode icons to semantic tokens:
 When implementing new features:
 
 1. **Check registry** - Verify feature ID exists in `project-tokens.yaml`
-2. **Use correct format** - `FEATURE-ID: Description [ACTION:context]`
+2. **Use correct format** - `FEATURE-ID: Description [ACTION-context]`
 3. **Validate immediately** - Run `make validate-token-enforcement`
 
 ### 2. Token Maintenance

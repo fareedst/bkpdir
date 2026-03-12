@@ -447,7 +447,7 @@ func preventProcessingDeadlock() error {
 }
 ```
 
-## [ACTION:discovery] Debugging Techniques
+## [ACTION-discovery] Debugging Techniques
 
 ### 1. Enable Debug Logging
 
@@ -497,7 +497,7 @@ func monitorResources() {
 }
 ```
 
-## [ACTION:maintenance] Development Tools
+## [ACTION-maintenance] Development Tools
 
 ### Configuration Validation
 

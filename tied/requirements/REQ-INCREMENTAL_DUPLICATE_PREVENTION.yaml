@@ -1,0 +1,60 @@
+REQ-INCREMENTAL_DUPLICATE_PREVENTION:
+  name: Incremental Archive Duplicate Prevention Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Prevents unnecessary incremental archives from being created when no changes have occurred since the last incremental backup. This saves disk space and reduces archive clutter. Users should not have multiple identical incremental archives representing the same state. Name-based sorting is more reliable than file system modification times and consistent with archive naming conventions.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Incremental archive creation compares against the union of most recent incremental + most recent full archive
+    - criterion: Archive selection uses name-based sorting (archive names include alphabetically sortable timestamps)
+    - criterion: If no changes detected compared to reconstructed state, skip archive creation
+    - criterion: Appropriate message displayed when archive creation is skipped due to no changes
+    - criterion: Comparison logic reuses diff command analysis for consistency
+    - criterion: 'Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)'
+    - criterion: Comparison respects exclude patterns from configuration
+    - criterion: Behavior is consistent with diff command output
+  validation_criteria:
+    - method: Unit tests verify duplicate prevention logic with various archive combinations
+    - method: Integration tests verify incremental archive creation skips when no changes
+    - method: Tests verify incremental archive creation proceeds when changes exist
+    - method: Tests verify comparison against reconstructed state (full + incremental)
+    - method: Tests verify handling of edge cases (no incremental, no full, no archives)
+    - method: Tests verify exclude patterns are respected
+    - method: Tests verify consistency with diff command behavior
+    - method: See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] and `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] for detailed testing approach
+  traceability:
+    architecture:
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    implementation:
+      - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    tests: []
+    code_annotations:
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+  related_requirements:
+    depends_on:
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONFIGURATION
+      - REQ-CONTEXT_SUPPORT
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-INCREMENTAL_DUPLICATE_PREVENTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [ARCH-INCREMENTAL_DUPLICATE_PREVENTION]
+  cross-references: '[REQ-DIFF_COMMAND] (Diff Command), [REQ-OUTPUT_FORMATTING] (Output Formatting), [REQ-CONFIGURATION] (Configuration Management), [REQ-CONTEXT_SUPPORT] (Context Support)'
+  description: Prevent creation of duplicate incremental archives when there are no observable changes compared to the most recent incremental archive. The system must compare the current directory state against the union of the most recent incremental archive applied on top of the most recent full archive, rather than comparing only against the full archive. If no changes are detected, the incremental archive creation must be skipped with an appropriate message. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
+  implementation: See `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]

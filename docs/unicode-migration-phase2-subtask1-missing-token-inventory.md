@@ -1,9 +1,9 @@
 # Unicode Migration - Phase 2, Subtask 2.1: Missing Token Inventory
 
-> **[CRITICAL] DOC-014: Missing token identification and inventory [ACTION:validation]**
+> **[CRITICAL] DOC-014: Missing token identification and inventory [ACTION-validation]**
 
 **Date**: 2025-07-13  
-**Status**: [ACTION:migration] **IN PROGRESS**  
+**Status**: [ACTION-migration] **IN PROGRESS**  
 **Subtask**: 2.1 - Missing Token Identification  
 **Phase**: 2 - Token Gap Analysis and Remediation  
 
@@ -469,4 +469,4 @@ This document compiles all missing tokens identified during Phase 1 audits into 
 
 ---
 
-**[CRITICAL] DOC-014: Missing token inventory completed with 62 tokens identified and prioritized - Ready to proceed to Subtask 2.2 [ACTION:validation]** 
+**[CRITICAL] DOC-014: Missing token inventory completed with 62 tokens identified and prioritized - Ready to proceed to Subtask 2.2 [ACTION-validation]** 

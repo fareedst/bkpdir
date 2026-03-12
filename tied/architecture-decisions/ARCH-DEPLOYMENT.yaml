@@ -1,0 +1,53 @@
+ARCH-DEPLOYMENT:
+  name: Deployment Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-USABILITY
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Easy deployment (no runtime dependencies)
+      Cross-platform support
+      Fast execution
+      Simple installation
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Single binary distribution with embedded configuration
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-DEPLOYMENT
+      - REQ-USABILITY
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-DEPLOYMENT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Single binary distribution with embedded configuration
+  configuration_validation: Schema-based validation with error reporting
+  cross-platform: Linux, macOS, Windows support
+  cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
+  default_configuration: Embedded defaults with immutable specifications
+  environment_integration: Container-friendly configuration with BKPDIR_CONFIG
+  migration_support: Configuration version upgrades
+  single_binary: Self-contained executable with embedded defaults
+  static_linking: No external dependencies
+  version_embedding: Build-time version info with Git integration

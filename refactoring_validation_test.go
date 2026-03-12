@@ -1,4 +1,4 @@
-// [REQ:MAINTAINABILITY]
+// [REQ-MAINTAINABILITY]
 package main
 
 import (

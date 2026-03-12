@@ -1,0 +1,70 @@
+REQ-CUSTOMIZABLE_FORMAT_STRINGS:
+  name: User-Customizable Format Strings Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Enables users to customize output format to match their preferences, workflows, and internationalization needs without modifying source code. Validation prevents common mistakes and improves user experience.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All format strings can be overridden in `.bkpdir.yml`
+    - criterion: Format string validation warns users of invalid or unexpected placeholders
+    - criterion: Validation provides helpful error messages indicating expected placeholders
+    - criterion: Comprehensive reference documentation lists all available format strings with their placeholders
+    - criterion: Brief example configuration file demonstrates common customizations
+    - criterion: Placeholder documentation explains available variables for each format string
+    - criterion: Backward compatibility maintained (defaults work when not specified)
+    - criterion: '*CRITICAL**: Only template-style placeholders (`#{name}`) are supported. Printf-style placeholders (`%s`, `%d`) are NOT supported.'
+    - criterion: 'All placeholders MUST use the named format: `#{path}`, `#{size_human}`, `#{creation_time}`, etc.'
+    - criterion: Special placeholders like `#{size_human}` documented and validated
+    - criterion: '*REQUIRED**: The `list` command output MUST support template-style placeholders to display file attributes'
+    - criterion: '*REQUIRED**: Users MUST be able to use placeholders like `#{size_human}`, `#{path}`, `#{creation_time}`, and other named attributes in the list output format'
+    - criterion: '*REQUIRED**: The substring `(size: #{size_human})` MUST be supported and display as `(size: 1 byte)` or similar human-readable size format (e.g., `(size: 1.2MB)`, `(size: 455KB)`)'
+    - criterion: '*REQUIRED**: All named file attributes (size, size_human, mtime, mode, type, name, etc.) MUST be equally accessible as template-style placeholders in list output'
+    - criterion: '*REQUIRED**: The default list output format MUST include file size information using `#{size_human}` placeholder (e.g., `#{path} (size: #{size_human})`)'
+  validation_criteria:
+    - method: Integration tests verify format string customization works end-to-end
+    - method: Tests verify format string validation catches invalid placeholders
+    - method: Tests verify validation provides helpful error messages
+    - method: Tests verify defaults work when not specified
+    - method: Tests verify custom format strings are loaded and used correctly
+    - method: Tests verify both printf-style and template-style formats work
+    - method: Documentation is complete, accurate, and tested
+    - method: Example configuration files work as documented
+  traceability:
+    architecture:
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+    implementation:
+      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+    tests: []
+    code_annotations:
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+  related_requirements:
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-IMMUTABLE_CONFIGURATION_DEFAULTS
+      - REQ-USABILITY
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-CUSTOMIZABLE_FORMAT_STRINGS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § User-Customizable Format Strings [ARCH-CUSTOMIZABLE_FORMAT_STRINGS]
+  breaking_change: Users with old `%{...}` format strings must update to `#{...}` syntax
+  description: All output format strings must be customizable by users through configuration files. Users should be able to override any format string in their `.bkpdir.yml` to customize the application's output interface. Format string validation must warn users of invalid placeholders. Comprehensive documentation and examples must be provided.
+  immutable_requirements_(major_version_change_required): These requirements define core behaviors that MUST NOT be changed without a major version bump. These are fundamental specifications that users and other systems depend on.
+  implementation: See `implementation-decisions.md` § User-Customizable Format Strings Implementation [IMPL-CUSTOMIZABLE_FORMAT_STRINGS]
+  migration_complete: All code, tests, and documentation updated to use `#{...}` syntax exclusively
+  placeholder_syntax_migration: All placeholders migrated from `%{...}` to `#{...}` syntax to avoid conflicts with Go's `fmt` package

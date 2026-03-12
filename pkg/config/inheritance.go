@@ -1,4 +1,4 @@
-// [IMPL:CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH:CFG_005] [REQ:CFG_005]
+// [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
 // Package config provides inheritance chain building and path resolution.
 //
 // This file implements the core inheritance functionality that builds dependency

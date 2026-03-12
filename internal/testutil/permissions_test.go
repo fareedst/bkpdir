@@ -1,4 +1,4 @@
-// [REQ:CODE_QUALITY]
+// [REQ-CODE_QUALITY]
 package testutil
 
 import (

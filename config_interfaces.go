@@ -14,9 +14,9 @@
 // Source: config_interfaces.go - SERVICE-INTERFACE-001
 // Impact: Interface service implementation decision
 
-// [REQ:CONFIGURATION] Configuration discovery and schema management requirement
-// [ARCH:CONFIG_SYSTEM] Configuration system architecture
-// [IMPL:CONFIG_STRUCT] Configuration structure and interfaces implementation
+// [REQ-CONFIGURATION] Configuration discovery and schema management requirement
+// [ARCH-CONFIG_SYSTEM] Configuration system architecture
+// [IMPL-CONFIG_STRUCT] Configuration structure and interfaces implementation
 package main
 
 import (

@@ -1,0 +1,113 @@
+IMPL-CFG_QUOTED_KEY_PREFIX:
+  name: Quoted YAML Key Prefix Support
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      - First pass: Identify all keys with explicit prefixes and map them to their base keys
+      - Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
+      - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      - First pass: Identify all keys with explicit prefixes and map them to their base keys
+      - Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
+      - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+    details:
+      - '#### 1. Quote Handling in `extractStrategy`'
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_QUOTED_KEY_PREFIX
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`extractStrategy`, `hasExplicitPrefix`, `processKeys`, `quoted YAML keys`, `cleanKey`, `explicitPrefixKeys`'
+  after: |-
+    ```go
+    // Handle quoted YAML keys
+    cleanKey := origKey
+    if len(origKey) >= 2 && ((origKey[0] == '"' && origKey[len(origKey)-1] == '"') || (origKey[0] == '\'' && origKey[len(origKey)-1] == '\'')) {
+        cleanKey = origKey[1 : len(origKey)-1]
+    }
+    if len(cleanKey) > 0 && (cleanKey[0] == '!' || cleanKey[0] == '+' || cleanKey[0] == '^' || cleanKey[0] == '=') {
+    ```
+  before: |-
+    ```go
+    if len(origKey) > 0 && (origKey[0] == '!' || origKey[0] == '+' || origKey[0] == '^' || origKey[0] == '=') {
+    ```
+  both_quote_types: Supports both double quotes (`"`) and single quotes (`'`)
+  change: Added logic to identify keys with explicit prefixes and prioritize them when duplicate keys exist (one with prefix, one without).
+  code_location: '`config.go`, `processKeys` function, lines ~2383-2465'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-CFG_MIXED_MODE_MERGE_FIX]'
+  date: "2025-12-11"
+  duplicate_keys: Keys with explicit prefixes take precedence over plain keys
+  implementation:
+    - 'First pass: Identify all keys with explicit prefixes and map them to their base keys'
+    - 'Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key'
+    - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+  implementation_details: '#### 1. Quote Handling in `extractStrategy`'
+  priority: P1 (Important)
+  problem: When YAML keys with merge strategy prefixes (`+`, `^`, `!`, `=`) are quoted (e.g., `"+exclude_patterns"`), the YAML parser preserves the quotes as part of the key string. This caused the prefix detection logic to fail because it was checking the first character of the key, which was `"` instead of `+`.
+  quoted_keys_with_prefixes: '`"+exclude_patterns"` is correctly recognized as merge strategy'
+  solution: |-
+    Updated three key functions to handle quoted YAML keys:
+
+    1. **`extractStrategy` function**: Strip quotes before checking for merge strategy prefixes
+    2. **`hasExplicitPrefix` detection**: Strip quotes before checking for prefix characters
+    3. **`processKeys` function**: Prioritize keys with explicit prefixes when duplicate keys exist
+  symptoms:
+    - Merge strategy prefixes in quoted YAML keys were not recognized
+    - Tests using quoted keys (e.g., `"+exclude_patterns":`) failed because the strategy was extracted as "override" instead of "merge"
+    - Inheritance chain merge strategies with quoted keys did not work correctly
+  test_cases:
+    - '`TestMergeStrategiesInInheritanceChains/merge_strategy_(+)_in_inheritance_chain`: Validates merge strategy with quoted `"+exclude_patterns"` key'
+    - '`TestMergeStrategiesInSequentialFiles/merge_strategy_(+)_appends_in_sequential_files`: Validates merge strategy with quoted keys in sequential files'
+    - '`TestMergeStrategiesInSequentialFiles/prepend_strategy_(^)_prepends_in_sequential_files`: Validates prepend strategy with quoted keys'
+  unquoted_keys_with_prefixes: '`+exclude_patterns` continues to work as before'
+  validation:
+    - ✅ Quoted YAML keys with merge strategy prefixes are correctly recognized
+    - ✅ Merge strategies work correctly with quoted keys in inheritance chains
+    - ✅ Merge strategies work correctly with quoted keys in sequential files
+    - ✅ Duplicate keys are handled correctly (explicit prefix keys take precedence)
+    - ✅ All tests pass with quoted key syntax
+  essence_pseudocode: |-
+    # [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — - First pass: Identify all keys with explicit prefixes and map them to their base keys
+
+    procedure quoted_yaml_key_prefix_support():
+      # [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] #### 1. Quote Handling in `extractStrategy`
+      1_quote_handling()
+      end

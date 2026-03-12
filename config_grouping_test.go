@@ -1,4 +1,4 @@
-// [REQ:CONFIGURATION]
+// [REQ-CONFIGURATION]
 package main
 
 import (

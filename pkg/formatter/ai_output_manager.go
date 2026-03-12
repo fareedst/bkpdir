@@ -1,4 +1,4 @@
-// [IMPL:DUAL_FORMATTING] [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // AI-First Output Manager Implementation
 // Provides output handling with delayed output support for optimal AI assistant comprehension.
 //

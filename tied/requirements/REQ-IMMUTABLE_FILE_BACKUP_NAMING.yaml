@@ -1,0 +1,43 @@
+REQ-IMMUTABLE_FILE_BACKUP_NAMING:
+  name: File Backup Naming Convention (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: File backup names follow the exact format specified
+    - criterion: Timestamp format is YYYY-MM-DD-HH-MM
+    - criterion: Optional notes are appended with equals sign
+  validation_criteria:
+    - method: File backup naming tests verify format compliance. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    implementation:
+      - IMPL-ATOMIC_OPS
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_FILE_BACKUP_NAMING
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_FILE_BACKUP_NAMING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § File Operations Architecture [ARCH-FILE_OPERATIONS]
+  description: 'File backup naming convention is fixed and must not be modified. Format: `{filename}-{timestamp}[={note}]`'
+  implementation: See `implementation-decisions.md` § Atomic File Operations [IMPL-ATOMIC_OPS]

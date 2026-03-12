@@ -1,0 +1,47 @@
+REQ-IMMUTABLE_CODE_QUALITY:
+  name: Code Quality Standards (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These quality standards are immutable behaviors that ensure code quality. Changing them would reduce code quality.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All code passes `revive` linter checks
+    - criterion: All errors are properly handled
+    - criterion: All code has comprehensive test coverage
+    - criterion: All public functions are documented
+    - criterion: New features maintain backward compatibility
+    - criterion: Code organization is consistent
+    - criterion: Naming conventions are standard
+  validation_criteria:
+    - method: Code quality tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_CODE_QUALITY
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Code Organization Principles [ARCH-CODE_ORGANIZATION]
+  description: 'Code quality standards are immutable and must be maintained:'
+  implementation: See `implementation-decisions.md` § Code Style and Conventions [IMPL-CODE_STYLE]

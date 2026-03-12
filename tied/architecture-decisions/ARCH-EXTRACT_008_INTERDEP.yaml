@@ -1,0 +1,46 @@
+ARCH-EXTRACT_008_INTERDEP:
+  name: Package Interdependency Mapping for EXTRACT-008
+  status: Active
+  cross_references:
+    - REQ-EXTRACT_008_INTERDEP_MAPPING
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
+  decision: Adopt a documented package interdependency mapping for EXTRACT-008 that specifies dependency direction, public interfaces, and common usage patterns
+  rationale:
+    why: Prevents circular dependencies and guides extractors to keep zero-breaking-change extraction principles intact
+    problems_solved:
+      - Circular dependencies between packages
+      - Unclear dependency direction during extraction
+    benefits:
+      - Clear layered dependency model (foundation to utilities to framework to patterns)
+      - Small interfaces to break cycles where coupling is unavoidable
+  implementation_approach:
+    summary: Layered dependency mapping with canonical docs/package-interdependency-mapping.md
+    details:
+      - Create canonical docs/package-interdependency-mapping.md
+      - 'Layer packages: foundation, utilities, framework, patterns'
+      - Introduce small interfaces to break cycles
+      - Record interface contracts in mapping document and implementation-decisions
+  traceability:
+    requirements:
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+      - REQ-MAINTAINABILITY
+    implementation:
+      - IMPL-EXTRACT_008_DOC_MIGRATION
+    tests: []
+    code_annotations:
+      - ARCH-EXTRACT_008_INTERDEP
+  related_decisions:
+    depends_on:
+      - ARCH-PACKAGE_EXTRACTION
+    supersedes: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+  detail_file: architecture-decisions/ARCH-EXTRACT_008_INTERDEP.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: AI Agent
+    last_updated:
+      date: "2026-03-12"
+      author: AI Agent

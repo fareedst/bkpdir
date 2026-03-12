@@ -1,4 +1,4 @@
-// [IMPL:DIRECTORY_COMPARISON] [ARCH:DIRECTORY_COMPARISON] [REQ:DIFF_COMMAND]
+// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND]
 // Directory comparison implementation — links to STDD tokens for traceability.
 // Package fileops provides file operations and utilities for CLI applications.
 //

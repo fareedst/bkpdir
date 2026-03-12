@@ -108,7 +108,7 @@
 - [x] Cross-references to related documentation
 - [x] Visual elements enhance understanding (matrices, tables)
 
-## [ACTION:migration] EXTRACT-008 Overall Status
+## [ACTION-migration] EXTRACT-008 Overall Status
 
 ### Subtask Completion Summary
 - **Subtask 1**: ✅ CLI Template Application (2025-01-02)

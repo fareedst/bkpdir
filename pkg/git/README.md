@@ -1,6 +1,6 @@
 # Package git
 
-**Tokens:** [REQ:GIT_INTEGRATION] [ARCH:GIT_INTEGRATION] [IMPL:GIT_CLI]
+**Tokens:** [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI]
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/git.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/git)
 

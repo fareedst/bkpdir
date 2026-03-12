@@ -1,6 +1,6 @@
 # Unicode Migration Audit Report - Phase 1, Subtask 1.3
 
-> **[CRITICAL] DOC-014: Specification token audit report [ACTION:validation]**
+> **[CRITICAL] DOC-014: Specification token audit report [ACTION-validation]**
 
 **Date**: 2025-07-13  
 **Status**: ✅ **COMPLETED**  
@@ -232,4 +232,4 @@ This audit examined all specifications defined in `docs/context/specification.md
 
 ---
 
-**[CRITICAL] DOC-014: Specification token audit completed with 13 missing tokens identified - Ready to proceed to Subtask 1.4 [ACTION:validation]** 
+**[CRITICAL] DOC-014: Specification token audit completed with 13 missing tokens identified - Ready to proceed to Subtask 1.4 [ACTION-validation]** 

@@ -1,0 +1,54 @@
+ARCH-BUILD_DISTRIBUTION:
+  name: Build and Distribution
+  status: Active
+  cross_references: &ref_0
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Easy deployment (no runtime dependencies)
+      Cross-platform support (macOS, Linux)
+      Fast execution
+      Simple installation
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - Makefile with build targets
+      - Version information injected via `-ldflags`
+      - Quality gates: linting and testing before build
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-BUILD_DISTRIBUTION
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Single binary distribution with cross-platform compilation
+  build_targets:
+    - macOS (ARM64 and AMD64)
+    - Ubuntu (20.04, 22.04, 24.04)
+    - Single binary per platform
+  cross-references: '[REQ-USABILITY]'
+  implementation:
+    - Makefile with build targets
+    - Version information injected via `-ldflags`
+    - 'Quality gates: linting and testing before build'

@@ -1,0 +1,54 @@
+ARCH-RESOURCE_MANAGEMENT:
+  name: Resource Management
+  status: Active
+  cross_references: &ref_0
+    - REQ-RESOURCE_MANAGEMENT
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Prevents resource leaks on operation failure
+      Handles panic scenarios gracefully
+      Thread-safe for concurrent operations
+      Simplifies error handling in operations
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: |-
+      - `ResourceManager` struct with mutex protection
+      - Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`
+      - Thread-safe resource tracking
+      - Error-resilient cleanup operations
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-RESOURCE_MANAGEMENT
+      - REQ-RESOURCE_MANAGEMENT
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: ResourceManager for automatic cleanup with panic recovery
+  cross-references: '[REQ-RESOURCE_MANAGEMENT], [REQ-RELIABILITY]'
+  implementation:
+    - '`ResourceManager` struct with mutex protection'
+    - 'Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`'
+    - Thread-safe resource tracking
+    - Error-resilient cleanup operations

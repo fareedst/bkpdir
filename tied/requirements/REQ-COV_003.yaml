@@ -1,0 +1,45 @@
+REQ-COV_003:
+  name: Selective Coverage Reporting Requirements
+  category: Functional
+  priority: P2
+  status: Planned
+  rationale:
+    why: Provides fine-grained control over coverage reporting while maintaining comprehensive testing
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Function-level exclusion works correctly
+    - criterion: Comment directives supported with `//coverage:ignore` style
+    - criterion: Coverage exception documentation maintained
+    - criterion: Integration with development workflow complete
+    - criterion: Coverage visualization tools available
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    implementation:
+      - IMPL-TESTING
+    tests: []
+    code_annotations:
+      - REQ-COV_003
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-COV_003.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Testing Strategy [ARCH-TESTING_STRATEGY]
+  description: Implement function-level coverage exclusion and coverage comment directives for granular control over coverage metrics. Support `//coverage:ignore` style annotations for specific code blocks.
+  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]

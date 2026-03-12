@@ -1,0 +1,44 @@
+REQ-IMMUTABLE_CONFIGURATION_DEFAULTS:
+  name: Configuration Defaults (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Configuration defaults are fundamental behaviors that users depend on. Changing them would break existing configurations.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All defaults are as specified
+    - criterion: Defaults can be overridden by user configuration
+    - criterion: Configuration discovery works as specified
+    - criterion: Precedence rules are followed
+  validation_criteria:
+    - method: Configuration tests verify all defaults. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    implementation:
+      - IMPL-CONFIG_STRUCT
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_CONFIGURATION_DEFAULTS
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Configuration System [ARCH-CONFIG_SYSTEM]
+  description: 'Configuration defaults must never be changed without explicit user override:'
+  implementation: See `implementation-decisions.md` § Configuration Structure [IMPL-CONFIG_STRUCT]

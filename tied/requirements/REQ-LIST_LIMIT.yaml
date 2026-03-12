@@ -1,0 +1,51 @@
+REQ-LIST_LIMIT:
+  name: List Command Output Limit Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Prevents overwhelming output when there are many archives, while still allowing users to see all archives when needed. Improves usability by showing the most relevant (recent) archives first.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: 'Default behavior: Display only the newest 10 files'
+    - criterion: Command-line option to control the limit (e.g., `--limit N` or `-n N`)
+    - criterion: Option to show all files (e.g., `--limit 0` or `--all`)
+    - criterion: Archives remain sorted by creation time (most recent first)
+    - criterion: 'Backward compatibility: Existing scripts and workflows continue to work'
+    - criterion: Both `list` command (directory archives) and `--list` command (file backups) support the limit option
+  validation_criteria:
+    - method: Unit tests verify default limit of 10 files
+    - method: Unit tests verify custom limit values work correctly
+    - method: Unit tests verify `--all` or `--limit 0` shows all files
+    - method: Integration tests verify both `list` and `--list` commands respect the limit
+    - method: Backward compatibility tests ensure existing behavior preserved when limit not specified
+    - method: See `architecture-decisions.md` § List Command Limit Architecture [ARCH-LIST_LIMIT] and `implementation-decisions.md` § List Command Limit Implementation [IMPL-LIST_LIMIT] for detailed testing approach
+  traceability:
+    architecture:
+      - ARCH-LIST_LIMIT
+    implementation:
+      - IMPL-LIST_LIMIT
+    tests: []
+    code_annotations:
+      - REQ-LIST_LIMIT
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-LIST_LIMIT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § List Command Limit Architecture [ARCH-LIST_LIMIT]
+  description: The `list` command must limit the display to the newest N files by default (N=10). Users must be able to control the length of the list via a command-line option. The list command displays all matching files sorted by creation time (most recent first), but only shows the first N entries by default.
+  implementation: See `implementation-decisions.md` § List Command Limit Implementation [IMPL-LIST_LIMIT]

@@ -1,0 +1,44 @@
+REQ-IMMUTABLE_GLOBAL_OPTIONS:
+  name: Global Options (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Global options are fundamental to user experience. Changing them would break user workflows.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: '`--dry-run` flag works as specified'
+    - criterion: Resource cleanup is verified in dry-run
+    - criterion: Output formatting uses configurable format strings
+    - criterion: Flag behavior is maintained
+  validation_criteria:
+    - method: Global options tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-CLI_COMMANDS
+    implementation:
+      - IMPL-CLI_FRAMEWORK
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_GLOBAL_OPTIONS
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_GLOBAL_OPTIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § CLI Commands Architecture [ARCH-CLI_COMMANDS]
+  description: 'Global options must be maintained:'
+  implementation: See `implementation-decisions.md` § CLI Framework Implementation [IMPL-CLI_FRAMEWORK]

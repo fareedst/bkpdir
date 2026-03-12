@@ -30,7 +30,7 @@ DOC-011 delivers a comprehensive zero-friction validation workflow integration s
 - **Metrics Collection**: Detailed statistics on validation success rates
 - **Dashboard Generation**: Real-time compliance reports and insights
 
-#### 4. [ACTION:validation] Bypass Management (`internal/validation/ai_validation.go`)
+#### 4. [ACTION-validation] Bypass Management (`internal/validation/ai_validation.go`)
 - **Safe Override Mechanism**: Controlled bypass with mandatory documentation
 - **Audit Trail**: Comprehensive tracking of all bypass events
 - **Justification Requirements**: Mandatory reason and detailed justification
@@ -50,7 +50,7 @@ DOC-011 delivers a comprehensive zero-friction validation workflow integration s
 - **Non-disruptive Validation**: Background processing with minimal workflow impact
 - **Context Preservation**: Full context tracking throughout validation process
 
-### [ACTION:discovery] Intelligent Validation Modes
+### [ACTION-discovery] Intelligent Validation Modes
 1. **Standard Mode**: Default validation for regular development work
 2. **Strict Mode**: Enhanced validation for critical changes
 3. **Legacy Mode**: Compatibility mode for existing codebases
@@ -61,7 +61,7 @@ DOC-011 delivers a comprehensive zero-friction validation workflow integration s
 - **Step-by-Step Guidance**: Detailed instructions for manual fixes
 - **Reference Documentation**: Links to relevant documentation and examples
 
-### [ACTION:validation] Safety and Accountability
+### [ACTION-validation] Safety and Accountability
 - **Bypass Documentation**: Mandatory justification for validation overrides
 - **Comprehensive Audit Trails**: Full tracking of all validation activities
 - **Compliance Monitoring**: Ongoing assessment of AI assistant behavior

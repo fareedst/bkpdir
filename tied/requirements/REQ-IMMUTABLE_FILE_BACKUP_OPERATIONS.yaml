@@ -1,0 +1,47 @@
+REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS:
+  name: File Backup Operations Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These file backup operation rules are fundamental behaviors that users depend on. Changing them would break existing functionality.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All file backup operations are atomic
+    - criterion: Identical files are detected via byte-by-byte comparison
+    - criterion: Directory structure is preserved in backup paths
+    - criterion: File modification times are preserved
+    - criterion: File permissions are preserved where applicable
+    - criterion: Both absolute and relative paths are handled
+    - criterion: Backup directories are created automatically
+  validation_criteria:
+    - method: File backup operation tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    implementation:
+      - IMPL-ATOMIC_OPS
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § File Operations Architecture [ARCH-FILE_OPERATIONS]
+  description: 'File backup operation rules are fundamental and must not be altered:'
+  implementation: See `implementation-decisions.md` § Atomic File Operations [IMPL-ATOMIC_OPS]

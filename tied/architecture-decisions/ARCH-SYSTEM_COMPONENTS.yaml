@@ -1,0 +1,82 @@
+ARCH-SYSTEM_COMPONENTS:
+  name: System Components Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-MAINTAINABILITY
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Clear separation of concerns across layers
+      CLI layer handles user interaction and command routing
+      Configuration layer manages all configuration sources and merging
+      Core services provide business logic and orchestration
+      Storage layer handles all file system and archive operations
+      Enables testability and maintainability
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Layered architecture with clear component boundaries
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Layered architecture with clear component boundaries
+  cross-references: '[REQ-MAINTAINABILITY], [REQ-USABILITY]'
+  system_components_diagram: |-
+    ```
+    ┌─────────────────────────────────────────────────────────────┐
+    │                        CLI Layer                            │
+    ├─────────────────────────────────────────────────────────────┤
+    │  Command Handlers  │  Flag Processing  │  Output Formatting │
+    │  Context Support   │  Error Handling   │  Resource Cleanup  │
+    │  Dual-Mode Ops     │  Backward Compat  │  File Operations   │
+    └─────────────────────────────────────────────────────────────┘
+                                    │
+    ┌─────────────────────────────────────────────────────────────┐
+    │                    Configuration Layer                      │
+    ├─────────────────────────────────────────────────────────────┤
+    │  Config Discovery  │  Environment Vars │  Status Codes      │
+    │  Template Configs  │  Format Strings   │  Regex Patterns    │
+    │  Dual-Mode Config  │  File Backup Cfg  │  Archive Config    │
+    └─────────────────────────────────────────────────────────────┘
+                                    │
+    ┌─────────────────────────────────────────────────────────────┐
+    │                      Core Services                          │
+    ├─────────────────────────────────────────────────────────────┤
+    │  Archive Service   │  Git Service      │                    │
+    │  Resource Manager  │  Template Engine  │  Error Handler     │
+    │  Context Manager   │  File Operations  │  Backup Service    │
+    │  Comparison Svc    │  Formatter Svc    │  Config Service    │
+    └─────────────────────────────────────────────────────────────┘
+                                    │
+    ┌─────────────────────────────────────────────────────────────┐
+    │                     Storage Layer                           │
+    ├─────────────────────────────────────────────────────────────┤
+    │  File System        │  ZIP Archives    │  Checksums         │
+    │  File Backups       │  Metadata        │                    │
+    │  Directory Trees    │  Atomic Ops      │  Resource Cleanup  │
+    └─────────────────────────────────────────────────────────────┘
+    ```

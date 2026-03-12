@@ -1,0 +1,54 @@
+REQ-CFG_006:
+  name: Complete Configuration Reflection and Visibility Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Provides complete configuration visibility without manual maintenance. Enables zero-maintenance configuration inspection where new fields automatically appear. Supports debugging through complete source attribution and inheritance chain visualization.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: '*Automatic Field Discovery**: All configuration fields (100+ fields) discovered automatically using Go reflection without manual maintenance'
+    - criterion: '*Type Support**: Correct handling of strings, bools, ints, slices, pointers, structs, nested structures, embedded fields, and collections'
+    - criterion: '*Source Tracking**: Complete source tracking showing inheritance chain with environment → inheritance → defaults resolution'
+    - criterion: '*Inheritance Integration**: Integration with CFG-005 inheritance system showing merge strategies and override points'
+    - criterion: '*Multiple Output Formats**: Support for table format (quick scanning), tree format (hierarchical view), and JSON format (programmatic use)'
+    - criterion: '*Filtering Options**: Command-line filtering with --all, --overrides-only, --sources, --filter pattern, and --format flags'
+    - criterion: '*Performance**: Configuration inspection completes in <100ms for typical usage, <10ms for cached results'
+    - criterion: '*Backward Compatibility**: Existing GetConfigValuesWithSources() function works unchanged'
+    - criterion: '*Test Coverage**: Comprehensive test suite with >95% coverage including edge cases'
+  validation_criteria:
+    - method: '*Test Coverage**: >95% coverage for all CFG-006 functionality including field discovery, source attribution, display formatting, filtering, and performance'
+    - method: '*Performance Benchmarks**: Field discovery <50ms for cache miss, <10ms for cache hit; config command <100ms end-to-end; single field access <10ms'
+    - method: '*Edge Case Testing**: Anonymous embedded fields, unexported field exclusion, interface{} handling, circular reference prevention, malformed struct handling, depth limitation, error recovery'
+    - method: '*Integration Testing**: CFG-005 inheritance integration, source tracking accuracy, display formatting validation, filtering functionality'
+    - method: '*Performance Validation**: Reflection result caching (60%+ improvement), lazy source evaluation, incremental resolution, memory allocation efficiency, concurrent access safety'
+    - method: See `architecture-decisions.md` § Configuration Reflection Architecture [ARCH-CFG_006] and `implementation-decisions.md` § Configuration Reflection Implementation [IMPL-CFG_006] for detailed testing approach
+  traceability:
+    architecture:
+      - ARCH-CFG_006
+    implementation:
+      - IMPL-CFG_006
+    tests: []
+    code_annotations:
+      - REQ-CFG_006
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-CFG_006.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Configuration Reflection Architecture [ARCH-CFG_006]
+  description: Configuration command displays ALL configuration parameters automatically through reflection-based field discovery. Field discovery handles nested structures, embedded fields, collections, and complex types. Source tracking shows complete inheritance chain with merge strategy attribution. Multiple output formats (table, tree, JSON) supported with comprehensive filtering options.
+  implementation: See `implementation-decisions.md` § Configuration Reflection Implementation [IMPL-CFG_006]

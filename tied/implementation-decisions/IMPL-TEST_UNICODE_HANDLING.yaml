@@ -1,0 +1,99 @@
+IMPL-TEST_UNICODE_HANDLING:
+  name: Unicode and Special Character Handling Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
+    - REQ-CFG_001
+  rationale:
+    why: |-
+      Ensures configuration system correctly handles Unicode characters in paths and patterns
+      Validates that special characters in config file paths don't break loading
+      Critical for internationalization and real-world usage scenarios
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    tests: []
+    code_annotations:
+      - IMPL-TEST_UNICODE_HANDLING
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_UNICODE_HANDLING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6470-6600, `TestUnicodeHandling`, `TestSpecialCharactersInPaths`, `createTestConfigFileWithData`'
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005], [REQ-CFG_001]'
+  merge_behavior: Unicode patterns merge with defaults per CFG-005 (array fields default to merge)
+  special_chars_in_paths: Config files load correctly regardless of path characters
+  test_coverage:
+    - "Unicode characters in `archive_dir_path`: `/path/with/émojis/\U0001F680/and/特殊字符`"
+    - "Unicode patterns in `exclude_patterns`: `[\"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]`"
+    - 'Config file paths with spaces: `path with spaces/.bkpdir.yml`'
+    - 'Config file paths with Unicode: `path-with-特殊/.bkpdir.yml`'
+    - 'Config file paths with both: `path with 特殊 chars/.bkpdir.yml`'
+    - 'Merge behavior validation: Unicode patterns merge correctly with defaults per CFG-005'
+  test_structure: |-
+    ```go
+    // TestUnicodeHandling tests Unicode and special characters in configuration values
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates Unicode character preservation
+    func TestUnicodeHandling(t *testing.T) {
+        // Creates config with Unicode in archive_dir_path and exclude_patterns
+        // Verifies all Unicode characters preserved correctly
+        // Validates merge behavior with defaults (CFG-005)
+    }
+
+    // TestSpecialCharactersInPaths tests special characters in config file paths
+    // [REQ-CONFIGURATION] [REQ-CFG_001] Validates config file loading with special paths
+    func TestSpecialCharactersInPaths(t *testing.T) {
+        // Tests spaces in path
+        // Tests Unicode in path
+        // Tests both spaces and Unicode in path
+        // Verifies LoadConfig works correctly
+    }
+    ```
+  testspecialcharactersinpaths: Tests special characters in config file paths
+  testunicodehandling: Tests Unicode characters (émojis, 特殊字符) in configuration values
+  unicode_in_patterns: Unicode patterns work correctly in exclude_patterns
+  unicode_in_values: All Unicode characters preserved exactly as specified
+  essence_pseudocode: |-
+    # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — - **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values
+
+    procedure unicode_and_special_character_handling_tests():
+      # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] Ensures configuration system correctly handles Unicode characters in paths and patterns
+      execute()
+      end

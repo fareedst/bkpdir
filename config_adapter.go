@@ -1,4 +1,4 @@
-// [IMPL:CONFIG_SCHEMA_FLEX] [ARCH:CONFIG_SYSTEM] [REQ:CONFIGURATION]
+// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // This file is part of bkpdir
 //
 // Package main provides backward compatibility adapter for the extracted configuration system.

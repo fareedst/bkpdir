@@ -1,4 +1,4 @@
-// [REQ:DOC_016]
+// [REQ-DOC_016]
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 

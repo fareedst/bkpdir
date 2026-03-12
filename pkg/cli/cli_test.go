@@ -1,4 +1,4 @@
-// [REQ:IMMUTABLE_CLI_COMMANDS]
+// [REQ-IMMUTABLE_CLI_COMMANDS]
 // This file is part of bkpdir
 //
 // Package cli provides tests for the CLI framework components.
@@ -7,11 +7,11 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-CLI-FRAMEWORK-001: CLI framework test validation - CLI framework and command building testing [ACTION:validation]
+// TEST-CLI-FRAMEWORK-001: CLI framework test validation - CLI framework and command building testing [ACTION-validation]
 // Source: pkg/cli/builder.go - CLI framework implementation
 // Impact: Core functionality validation for CLI framework
 
-// TEST-SERVICE-CLI-001: CLI service test validation - CLI service implementation testing [ACTION:validation]
+// TEST-SERVICE-CLI-001: CLI service test validation - CLI service implementation testing [ACTION-validation]
 // Source: pkg/cli/context.go - CLI service implementation
 // Impact: CLI service validation for CLI service implementation
 package cli

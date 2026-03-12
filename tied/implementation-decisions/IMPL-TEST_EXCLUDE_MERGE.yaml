@@ -1,0 +1,88 @@
+IMPL-TEST_EXCLUDE_MERGE:
+  name: Exclude Patterns Merge Testing
+  status: Active
+  cross_references:
+    - ARCH-TEST_EXCLUDE_MERGE
+    - REQ-TEST_EXCLUDE_MERGE
+    - REQ-CONFIGURATION
+    - REQ-CFG_006
+  rationale:
+    why: |-
+      Validates merge behavior fix for exclude patterns
+      Ensures source tracking shows correct attribution
+      Provides regression protection
+      Enables debugging through test scenarios
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Comprehensive test scenario for exclude patterns merging and source tracking
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TEST_EXCLUDE_MERGE
+    requirements:
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+    tests: []
+    code_annotations:
+      - IMPL-TEST_EXCLUDE_MERGE
+      - ARCH-TEST_EXCLUDE_MERGE
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TEST_EXCLUDE_MERGE
+      - REQ-TEST_EXCLUDE_MERGE
+      - REQ-CONFIGURATION
+      - REQ-CFG_006
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_EXCLUDE_MERGE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go`, `TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE`'
+  cross-references: '[REQ-TEST_EXCLUDE_MERGE], [ARCH-TEST_EXCLUDE_MERGE], [REQ-CONFIGURATION], [REQ-CFG_006]'
+  test_implementation_structure: |-
+    ```go
+    // Test scenario setup
+    func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
+        // 1. Create temp directory with config files
+        // 2. Load config and verify merge
+        // 3. Verify config command output
+        // 4. Validate source attribution
+    }
+    ```
+  test_scenarios: |-
+    1. **Basic Merge Test**: Default + local config merge
+    2. **Source Attribution Test**: Config command shows correct source
+    3. **Deduplication Test**: Duplicate patterns handled correctly
+    4. **Order Preservation Test**: Defaults first, then additions
+  test_validation_points:
+    - Merged patterns contain all patterns from all sources
+    - Config command output shows config file path (not "default")
+    - Inheritance chain shows all contributing files
+    - Patterns are deduplicated
+    - Order is preserved
+  essence_pseudocode: |-
+    # [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006] — Comprehensive test scenario for exclude patterns merging and source tracking
+
+    procedure exclude_patterns_merge_testing():
+      # [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006] Validates merge behavior fix for exclude patterns
+      execute()
+      end

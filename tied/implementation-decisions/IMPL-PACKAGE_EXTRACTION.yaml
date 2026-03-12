@@ -1,0 +1,82 @@
+IMPL-PACKAGE_EXTRACTION:
+  name: Package Extraction Implementation
+  status: Active
+  cross_references:
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Enables clean component boundaries
+      Prevents circular dependencies
+      Maintains backward compatibility
+      Supports gradual migration
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Interface-driven extraction with layered dependency order
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-PACKAGE_EXTRACTION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations:
+      - IMPL-PACKAGE_EXTRACTION
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-PACKAGE_EXTRACTION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`EXTRACT-*` tokens, interface definitions, wrapper functions'
+  after_extraction:
+    - Components expose clean interfaces
+    - No internal package dependencies
+    - External dependencies only (standard library, third-party)
+  before_extraction:
+    - Define interfaces for all component dependencies
+    - 'Example: `ConfigProvider`, `ConfigMerger` for config package'
+    - 'Example: `ArchiveConfigInterface`, `ArchiveFormatterInterface` for archive operations'
+  legacy_type_aliases: |-
+    ```go
+    type FileInfo = fileops.FileInfo
+    type DirectorySnapshot = fileops.DirectorySnapshot
+    type PatternMatcher = fileops.PatternMatcher
+    ```
+  phase_1: Foundation Components (No Dependencies)
+  phase_2: Interface-Dependent Components
+  phase_3: Framework Layer
+  phase_4: Pattern Layer
+  wrapper_functions: |-
+    ```go
+    func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
+        return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
+    }
+    ```
+  essence_pseudocode: |-
+    # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — Interface-driven extraction with layered dependency order
+
+    procedure package_extraction_implementation():
+      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] Enables clean component boundaries
+      execute()
+      end

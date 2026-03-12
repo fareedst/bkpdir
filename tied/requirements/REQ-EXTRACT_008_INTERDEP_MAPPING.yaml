@@ -1,0 +1,48 @@
+REQ-EXTRACT_008_INTERDEP_MAPPING:
+  name: Package Interdependency Mapping for EXTRACT-008
+  category: Functional
+  priority: P1
+  status: Planned
+  rationale:
+    why: Provides a canonical map showing how the extracted packages interact, so maintainers and downstream consumers can understand integration points and avoid circular dependencies during extraction.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All extracted packages (pkg/config, pkg/errors, pkg/resources, pkg/formatter, pkg/git, pkg/cli, pkg/fileops, pkg/processing) are mapped
+    - criterion: Visual diagrams (SVG or PNG) accompany the narrative doc
+    - criterion: Integration examples exist for at least 3 common scenarios (example CLI templates)
+    - criterion: Performance implications noted where coupling may introduce overhead
+  validation_criteria:
+    - method: Manual verification
+      coverage: See detail file
+  traceability:
+    architecture: []
+    implementation: []
+    tests: []
+    code_annotations:
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  description: |-
+    Document clear usage patterns and dependency relationships for the packages extracted as part of EXTRACT-008 (CLI Application Template). Deliverables include:
+    - `docs/package-interdependency-mapping.md` (visual diagrams + narrative)
+    - Package usage patterns and integration examples
+    - Performance impact notes and recommended integration strategies
+  validation:
+    - Review by maintainer shows coverage of all 8 packages
+    - Diagrams render correctly in docs and link to package README entries

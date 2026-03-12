@@ -1,0 +1,50 @@
+REQ-OUT_002:
+  name: Enhanced Command Output with File Statistics Requirements
+  category: Functional
+  priority: P0
+  status: Planned
+  rationale:
+    why: Provides consistent, informative output across all backup commands with detailed file statistics
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Full command outputs single line to stdout when archive created successfully with file info
+    - criterion: Inc command output includes stat-like information, not just path
+    - criterion: Format string support with named replacements for file statistics ({path}, {size}, {mtime}, etc.)
+    - criterion: Backward compatibility maintained with existing format strings
+    - criterion: Both inc and full commands behave consistently
+    - criterion: Configuration control allows users to customize output format
+  validation_criteria:
+    - method: Unit tests for stat gathering functionality
+    - method: Format string processing tests with named replacement validation
+    - method: Command output behavior tests for inc and full commands
+    - method: Backward compatibility tests ensuring existing format strings work unchanged
+    - method: See `architecture-decisions.md` § File Statistics Architecture [ARCH-FILE_STATISTICS] and `implementation-decisions.md` § File Statistics Implementation [IMPL-FILE_STATISTICS] for detailed testing approach
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    implementation:
+      - IMPL-FILE_STATISTICS
+    tests: []
+    code_annotations:
+      - REQ-OUT_002
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-OUT_002.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § File Statistics Architecture [ARCH-FILE_STATISTICS]
+  description: Enhance backup commands to output formatted file information with stat-like details. All commands must output to stdout a single line about any files generated or existing to satisfy a backup request, using format strings with named replacements for stat information.
+  implementation: See `implementation-decisions.md` § File Statistics Implementation [IMPL-FILE_STATISTICS]

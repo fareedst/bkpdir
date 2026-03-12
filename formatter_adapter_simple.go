@@ -1,4 +1,4 @@
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Simplified list formatting implementation
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Simplified list formatting implementation
 // This file contains a simplified, testable implementation for list command formatting
 // CRITICAL: Only supports #{name} style placeholders, NOT printf-style (%s, %d)
 package main

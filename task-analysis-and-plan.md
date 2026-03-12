@@ -8,7 +8,7 @@
 - Provide `stat`-like info for the file as named replacements for the format string
 - Currently: "inc" command displays the file name, "full" command displays nothing
 
-## [ACTION:discovery] Current State Analysis
+## [ACTION-discovery] Current State Analysis
 
 ### Command Output Analysis
 
@@ -185,7 +185,7 @@ format_created_archive: "Created archive: {path} (size: {size_human}, modified: 
 5. **Consistent behavior**: Both inc and full commands behave similarly
 6. **Configuration**: Users can customize output format via configuration
 
-## [ACTION:migration] Risk Assessment
+## [ACTION-migration] Risk Assessment
 
 **Low Risk**:
 - Adding new functionality alongside existing code

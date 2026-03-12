@@ -1,0 +1,47 @@
+REQ-IMMUTABLE_ERROR_HANDLING:
+  name: Error Handling Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These error handling requirements are mandatory behaviors that users and scripts depend on. Changing them would break error handling workflows.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All operations return structured errors with status codes
+    - criterion: No temporary resources remain after operations
+    - criterion: Panics are recovered without leaving temporary resources
+    - criterion: Long-running operations support context cancellation
+    - criterion: Disk space and permission errors are detected
+    - criterion: Error messages are consistently formatted
+    - criterion: Errors are comprehensively logged
+  validation_criteria:
+    - method: Error handling tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-ERROR_HANDLING
+    implementation:
+      - IMPL-STRUCTURED_ERRORS
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_ERROR_HANDLING
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_ERROR_HANDLING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Error Handling Strategy [ARCH-ERROR_HANDLING]
+  description: 'Error handling requirements are mandatory and must be preserved:'
+  implementation: See `implementation-decisions.md` § Structured Error Handling [IMPL-STRUCTURED_ERRORS]

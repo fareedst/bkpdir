@@ -1,0 +1,89 @@
+IMPL-TEST_PREPEND_ORDERING:
+  name: Prepend Strategy Ordering Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
+    - REQ-CFG_001
+  rationale:
+    why: |-
+      Ensures prepend strategy (`^` prefix) correctly maintains order (new values before existing values)
+      Validates prepend behavior in both inheritance chains and sequential file processing
+      Critical for understanding merge strategy ordering semantics
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    tests: []
+    code_annotations:
+      - IMPL-TEST_PREPEND_ORDERING
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+      - REQ-CFG_001
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_PREPEND_ORDERING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6753-6850, `TestPrependStrategyOrdering`, `createTestConfigFileWithData`, `ArrayPrependStrategy`, `applyPrepend`'
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005], [REQ-CFG_001]'
+  inheritance_chains: Child prepended values come before parent values
+  multiple_prepends: CFG-001 precedence ensures earlier file prepends are preserved
+  prepend_ordering: New values (source) are placed before existing values (destination)
+  sequential_files: Later file prepended values come before earlier file values (but CFG-001 precedence may apply)
+  test_coverage:
+    - 'Inheritance chain prepend: Parent `["parent1", "parent2"]`, child `^["child1", "child2"]` → `["child1", "child2", "parent1", "parent2"]`'
+    - 'Sequential files prepend: First file patterns, second file prepends → new values before existing'
+    - 'Prepend with defaults: Prepend patterns come before default patterns'
+    - 'Multiple prepend operations: CFG-001 precedence applies (earlier prepends preserved)'
+  test_structure: |-
+    ```go
+    // TestPrependStrategyOrdering tests prepend strategy ordering in configuration merging
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates prepend strategy maintains correct order
+    func TestPrependStrategyOrdering(t *testing.T) {
+        // Test: prepend in inheritance chain
+        // Test: prepend in sequential files
+        // Test: prepend with defaults
+        // Test: multiple prepend operations
+    }
+    ```
+  testprependstrategyordering: Tests prepend strategy ordering in various scenarios
+  with_defaults: Prepended values come before default values
+  essence_pseudocode: |-
+    # [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — - **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios
+
+    procedure prepend_strategy_ordering_tests():
+      # [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] Ensures prepend strategy (`^` prefix) correctly maintains order (new values before existing values)
+      execute()
+      end

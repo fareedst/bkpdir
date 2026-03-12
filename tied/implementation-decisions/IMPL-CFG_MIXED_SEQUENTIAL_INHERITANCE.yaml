@@ -1,0 +1,98 @@
+IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
+  name: Mixed Sequential and Inheritance File Processing
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Requirement: When a sequential file (no inheritance) is processed first, followed by an inheritance chain, the sequential file's precedence fields should be preserved [REQ-CFG_001]
+      Requirement: Within inheritance chains, child files should override parent files (normal inheritance behavior) [REQ-CFG_005]
+      Problem: Without field tracking, inheritance chain files would override sequential file values, violating CFG-001 precedence rules
+      Solution: Track fields from sequential files (single-file chains) in `explicitlySetFields`, but do NOT track fields from true inheritance chain files, allowing child files to override parent files while preserving sequential file values
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Field Tracking Strategy**:'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    requirements:
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - REQ-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`isSingleFileChain`, `explicitlySetFields`, `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings`, `applyOverride`, `// CFG-001: Track fields explicitly set in this file for later precedence checks`'
+  code_changes:
+    - '`config.go` line 1789: Added `isSingleFileChain := len(chain.files) == 1` detection'
+    - '`config.go` line 1833-1843: Track fields from single-file chains in `explicitlySetFields`'
+    - '`config.go` line 675-692: Updated `mergeBasicSettings` to check `explicitlySetFields` when `inheritContext=true`'
+    - '`config.go` line 728-747: Updated `mergeBasicSettings` for `include_git_info` to check `explicitlySetFields`'
+    - '`config.go` line 806-837: Updated `mergeGitSettings` to check `explicitlySetFields` when `inheritContext=true`'
+    - '`config.go` line 928-940: Updated `mergeFileBackupSettings` to check `explicitlySetFields` when `inheritContext=true`'
+    - '`config.go` line 2649-2681: Updated `applyOverride` to check `explicitlySetFields` when `inheritContext=true`'
+  cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CFG_001], [REQ-CONFIGURATION]'
+  field_tracking_strategy:
+    - Track fields in `explicitlySetFields` only from sequential files (single-file chains, `len(chain.files) == 1`)
+    - Do NOT track fields from true inheritance chain files (`len(chain.files) > 1`) to allow child files to override parent files
+    - When processing inheritance chain files, check `explicitlySetFields` to preserve sequential file values for precedence fields
+  inheritance_chains_processed_after_sequential_files:
+    - Precedence fields from sequential files are preserved (checked via `explicitlySetFields`)
+    - Accumulate fields from sequential files and inheritance chain merge correctly
+  merge_function_updates:
+    - Updated `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings` to check `explicitlySetFields` even when `inheritContext=true` (inheritance chains)
+    - Updated `applyOverride` to check `explicitlySetFields` when `inheritContext=true` to preserve sequential file values
+    - Within inheritance chains, fields can still override each other (normal inheritance), but cannot override sequential file values
+  sequential_files_processed_first: Fields are tracked in `explicitlySetFields`
+  single-file_chain_detection:
+    - Added `isSingleFileChain` flag to detect when `buildChain` returns a single-file chain (file without inheritance)
+    - Single-file chains are processed through the inheritance chain path but have their fields tracked
+    - This handles the case where `buildChain` succeeds for files without `inherit` field (returns single-file chain)
+  single-file_chains: Fields are tracked to preserve values when inheritance chains are processed later
+  test_coverage:
+    - '`TestMixedSequentialAndInheritance`: Verifies that sequential file precedence fields are preserved when processing inheritance chains'
+    - Sequential file sets `archive_dir_path`, `include_git_info`, `skip_broken_symlinks` (precedence fields)
+    - Inheritance chain (base.yml + inherited.yml) tries to override these fields
+    - 'Expected: Sequential file values are preserved, accumulate fields (`exclude_patterns`) merge correctly'
+  within_inheritance_chains: Child files can override parent files (normal inheritance behavior)
+  essence_pseudocode: |-
+    # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — - **Field Tracking Strategy**:
+
+    procedure mixed_sequential_and_inheritance_file_processing():
+      # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] Requirement: When a sequential file (no inheritance) is processed first, followed by an inheritance chain, the sequential file's precedence fields should be preserved [REQ-CFG_001]
+      execute()
+      end

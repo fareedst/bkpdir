@@ -1,4 +1,4 @@
-// [IMPL:RESOURCE_MANAGER] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Package resources provides resource management utilities for CLI applications.
 // It includes resource tracking, cleanup, and lifecycle management patterns
 // extracted from the BkpDir application for reuse across Go CLI applications.

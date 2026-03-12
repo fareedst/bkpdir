@@ -1,14 +1,14 @@
 // This file is part of bkpdir
 
-// TEST-CONFIG-DISCOVERY-001: Configuration discovery test validation - Configuration discovery and loading testing [ACTION:validation]
+// TEST-CONFIG-DISCOVERY-001: Configuration discovery test validation - Configuration discovery and loading testing [ACTION-validation]
 // Source: config.go - CONFIG-DISCOVERY-001
 // Impact: Validates configuration discovery functionality
 
-// TEST-CONFIG-FILE-001: Configuration file test validation - Configuration file handling testing [ACTION:validation]
+// TEST-CONFIG-FILE-001: Configuration file test validation - Configuration file handling testing [ACTION-validation]
 // Source: config.go - CONFIG-FILE-001
 // Impact: Validates configuration file handling functionality
 
-// TEST-SERVICE-ARCH-001: Service architecture test validation - Configuration service implementation testing [ACTION:validation]
+// TEST-SERVICE-ARCH-001: Service architecture test validation - Configuration service implementation testing [ACTION-validation]
 // Source: config.go - SERVICE-ARCH-001
 // Impact: Validates configuration service implementation
 package main
@@ -239,7 +239,7 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 	})
 
 	t.Run("home config value preserved when local file doesn't set field", func(t *testing.T) {
-		// [REQ:CONFIGURATION] [REQ:CFG_001] Test that values from home config are preserved
+		// [REQ-CONFIGURATION] [REQ-CFG_001] Test that values from home config are preserved
 		// when local config file exists but doesn't set the field
 		dir := t.TempDir()
 
@@ -4099,7 +4099,7 @@ func TestLoadConfigWithInheritance_MultiFile(t *testing.T) {
 	assertBoolEqual(t, "include_git_info from config2", cfg.IncludeGitInfo, true)
 }
 
-// [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_SEQUENTIAL_INHERITANCE]
+// [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE]
 // TestMixedSequentialAndInheritance verifies mixing sequential files and inheritance chains
 // Scenario: First file sequential (no inheritance), second file has inheritance chain
 // Expected: Sequential file processed first, then inheritance chain
@@ -4177,7 +4177,7 @@ func TestMixedSequentialAndInheritance(t *testing.T) {
 	assertStringSliceEqual(t, "exclude_patterns merged from sequential and inheritance chain", cfg.ExcludePatterns, expectedPatterns)
 }
 
-// [REQ:TEST_EXCLUDE_MERGE] [ARCH:TEST_EXCLUDE_MERGE] [IMPL:TEST_EXCLUDE_MERGE] [REQ:CONFIGURATION] [REQ:CFG_006] [TEST:EXCLUDE_MERGE]
+// [REQ-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [IMPL-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006] [TEST-EXCLUDE_MERGE]
 // TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE verifies that exclude_patterns are correctly merged
 // from multiple configuration files and that the config command shows correct source attribution
 func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
@@ -4424,7 +4424,7 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestMergeStrategiesInSequentialFiles verifies all merge strategies work correctly in sequential file processing
 func TestMergeStrategiesInSequentialFiles(t *testing.T) {
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -4559,7 +4559,7 @@ func TestMergeStrategiesInSequentialFiles(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestEmptyArrayHandling verifies empty arrays are handled correctly in merging
 func TestEmptyArrayHandling(t *testing.T) {
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -4628,7 +4628,7 @@ func TestEmptyArrayHandling(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_001] [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestMixedFieldBehaviors verifies accumulate and precedence fields work together correctly
 func TestMixedFieldBehaviors(t *testing.T) {
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -4679,7 +4679,7 @@ func TestMixedFieldBehaviors(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestMergeStrategiesInInheritanceChains verifies all merge strategies work correctly in inheritance chains
 func TestMergeStrategiesInInheritanceChains(t *testing.T) {
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -4757,7 +4757,7 @@ func TestMergeStrategiesInInheritanceChains(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestUnsetFieldsUseDefaults verifies fields not set in any file use defaults
 func TestUnsetFieldsUseDefaults(t *testing.T) {
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -4822,7 +4822,7 @@ func TestUnsetFieldsUseDefaults(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestExplicitDefaultValue verifies explicitly setting a field to its default value is preserved
 func TestExplicitDefaultValue(t *testing.T) {
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -4862,7 +4862,7 @@ func TestExplicitDefaultValue(t *testing.T) {
 	})
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test format string validation
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Test format string validation
 func TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	tests := []struct {
 		name           string
@@ -4967,7 +4967,7 @@ func TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	}
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test custom format strings load correctly
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Test custom format strings load correctly
 func TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5013,7 +5013,7 @@ template_created_archive: "✅ Created: #{path}\n"
 	}
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test defaults work when not specified
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Test defaults work when not specified
 func TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5047,7 +5047,7 @@ func TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	}
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test validation warnings are printed
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Test validation warnings are printed
 func TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5112,7 +5112,7 @@ format_created_archive: "Created: #{path}\n"
 	}
 }
 
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Test placeholder extraction through validation
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Test placeholder extraction through validation
 // Note: extractPlaceholders is not exported, so we test it indirectly through ValidateFormatString
 func TestPlaceholderExtraction_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	tests := []struct {
@@ -5178,7 +5178,7 @@ func TestPlaceholderExtraction_REQ_CUSTOMIZABLE_FORMAT_STRINGS(t *testing.T) {
 	}
 }
 
-// [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestMultipleFilesSameField verifies behavior when 3+ files all set the same field
 // Priority 0: Critical - Common real-world scenario
 func TestMultipleFilesSameField(t *testing.T) {
@@ -5261,7 +5261,7 @@ func TestMultipleFilesSameField(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestPartialFieldUpdates verifies behavior when files set different fields
 // Priority 0: Critical - Ensures no field loss during merging
 func TestPartialFieldUpdates(t *testing.T) {
@@ -5324,7 +5324,7 @@ func TestPartialFieldUpdates(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestAllStrategiesWithAccumulateFields comprehensively tests all merge strategies with exclude_patterns
 // Priority 0: Critical - Comprehensive coverage of all strategies
 func TestAllStrategiesWithAccumulateFields(t *testing.T) {
@@ -5488,7 +5488,7 @@ func TestAllStrategiesWithAccumulateFields(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestAllStrategiesWithPrecedenceFields comprehensively tests all merge strategies with precedence fields
 // Priority 0: Critical - Ensures precedence fields work correctly
 func TestAllStrategiesWithPrecedenceFields(t *testing.T) {
@@ -5636,7 +5636,7 @@ func TestAllStrategiesWithPrecedenceFields(t *testing.T) {
 	})
 }
 
-// [REQ:CFG_005] [REQ:CONFIGURATION] [IMPL:CFG_MIXED_MODE_MERGE_FIX]
+// [REQ-CFG_005] [REQ-CONFIGURATION] [IMPL-CFG_MIXED_MODE_MERGE_FIX]
 // TestOverrideDefaultsWithPrefix verifies explicit ! prefix can override defaults
 // Priority 0: Critical - Validates explicit override behavior
 func TestOverrideDefaultsWithPrefix(t *testing.T) {
@@ -5694,11 +5694,11 @@ func TestOverrideDefaultsWithPrefix(t *testing.T) {
 // ============================================================================
 // Priority 1: Important Edge Cases - Configuration Merge Tests
 // ============================================================================
-// [REQ:CFG_005] [REQ:CFG_001] [REQ:CONFIGURATION] [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]
+// [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]
 // These tests cover important edge cases for configuration merging and inheritance
 
 // TestMultipleInheritanceSources_REQ_CFG_005 tests child inheriting from multiple parent files
-// [REQ:CFG_005] Child inherits from both parent1.yml and parent2.yml
+// [REQ-CFG_005] Child inherits from both parent1.yml and parent2.yml
 func TestMultipleInheritanceSources_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5760,7 +5760,7 @@ func TestMultipleInheritanceSources_REQ_CFG_005(t *testing.T) {
 }
 
 // TestRelativePathInheritance_REQ_CFG_005 tests relative path resolution in inheritance
-// [REQ:CFG_005] Relative paths like "../base.yml", "./sibling.yml" should resolve correctly
+// [REQ-CFG_005] Relative paths like "../base.yml", "./sibling.yml" should resolve correctly
 func TestRelativePathInheritance_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5831,7 +5831,7 @@ func TestRelativePathInheritance_REQ_CFG_005(t *testing.T) {
 }
 
 // TestHomeDirectoryExpansion_REQ_CFG_005 tests home directory expansion in inheritance
-// [REQ:CFG_005] Paths like "~/.bkpdir-base.yml" should expand to user's home directory
+// [REQ-CFG_005] Paths like "~/.bkpdir-base.yml" should expand to user's home directory
 // NOTE: This test verifies that home directory expansion works in inherit paths.
 // If the test shows only defaults + child patterns (missing home-1, home-2), it indicates
 // that home directory expansion in inherit paths may not be working correctly.
@@ -5931,7 +5931,7 @@ archive_dir_path: "/child/archives"
 }
 
 // TestMissingInheritanceFile_REQ_CFG_005 tests error handling when inheritance file is missing
-// [REQ:CFG_005] Config file has inherit: ["nonexistent.yml"] should error or skip gracefully
+// [REQ-CFG_005] Config file has inherit: ["nonexistent.yml"] should error or skip gracefully
 func TestMissingInheritanceFile_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5980,7 +5980,7 @@ func TestMissingInheritanceFile_REQ_CFG_005(t *testing.T) {
 }
 
 // TestInvalidYAMLHandling_REQ_CFG_005 tests invalid YAML in one file
-// [REQ:CFG_005] First file valid, second file invalid YAML should skip invalid file with error logged
+// [REQ-CFG_005] First file valid, second file invalid YAML should skip invalid file with error logged
 func TestInvalidYAMLHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6030,7 +6030,7 @@ func TestInvalidYAMLHandling_REQ_CFG_005(t *testing.T) {
 }
 
 // TestDeepInheritanceChain_REQ_CFG_005 tests very long inheritance chain
-// [REQ:CFG_005] Chain of 10+ files should process correctly
+// [REQ-CFG_005] Chain of 10+ files should process correctly
 // NOTE: This test currently exposes a bug in deep inheritance chain processing.
 // The inheritance chain should process all 12 levels and merge their patterns,
 // but currently only the last level's patterns are being included.
@@ -6124,7 +6124,7 @@ archive_dir_path: "/level%d/archives"
 }
 
 // TestTypeMismatchHandling_REQ_CFG_005 tests type mismatches
-// [REQ:CFG_005] First file: array, second file: string (same field) should error or handle gracefully
+// [REQ-CFG_005] First file: array, second file: string (same field) should error or handle gracefully
 func TestTypeMismatchHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6180,7 +6180,7 @@ func TestTypeMismatchHandling_REQ_CFG_005(t *testing.T) {
 }
 
 // TestNullValueHandling_REQ_CFG_005 tests nil/null value handling
-// [REQ:CFG_005] Config file: exclude_patterns: null should be treated as not set
+// [REQ-CFG_005] Config file: exclude_patterns: null should be treated as not set
 func TestNullValueHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6225,7 +6225,7 @@ func TestNullValueHandling_REQ_CFG_005(t *testing.T) {
 }
 
 // TestWhitespaceStringHandling_REQ_CFG_005 tests whitespace-only string handling
-// [REQ:CFG_005] archive_dir_path: "   " (whitespace only) should be treated as empty or as-is
+// [REQ-CFG_005] archive_dir_path: "   " (whitespace only) should be treated as empty or as-is
 func TestWhitespaceStringHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6276,7 +6276,7 @@ func TestWhitespaceStringHandling_REQ_CFG_005(t *testing.T) {
 }
 
 // TestUnicodeHandling tests Unicode and special characters in configuration values
-// [REQ:CONFIGURATION] [REQ:CFG_005] Validates Unicode character preservation in paths and patterns
+// [REQ-CONFIGURATION] [REQ-CFG_005] Validates Unicode character preservation in paths and patterns
 func TestUnicodeHandling(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6342,7 +6342,7 @@ func TestUnicodeHandling(t *testing.T) {
 }
 
 // TestSpecialCharactersInPaths tests special characters in config file paths
-// [REQ:CONFIGURATION] [REQ:CFG_001] Validates config file loading with spaces and special characters in file paths
+// [REQ-CONFIGURATION] [REQ-CFG_001] Validates config file loading with spaces and special characters in file paths
 func TestSpecialCharactersInPaths(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6451,7 +6451,7 @@ func TestSpecialCharactersInPaths(t *testing.T) {
 }
 
 // TestEmptyStringHandling tests empty string handling in configuration merging
-// [REQ:CONFIGURATION] [REQ:CFG_001] [REQ:CFG_005] Validates empty string treatment as zero value or explicit empty
+// [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] Validates empty string treatment as zero value or explicit empty
 func TestEmptyStringHandling(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6561,7 +6561,7 @@ func TestEmptyStringHandling(t *testing.T) {
 }
 
 // TestPrependStrategyOrdering tests prepend strategy ordering in configuration merging
-// [REQ:CONFIGURATION] [REQ:CFG_005] Validates prepend strategy maintains correct order (new values before existing values)
+// [REQ-CONFIGURATION] [REQ-CFG_005] Validates prepend strategy maintains correct order (new values before existing values)
 func TestPrependStrategyOrdering(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6744,7 +6744,7 @@ func TestPrependStrategyOrdering(t *testing.T) {
 }
 
 // TestDefaultStrategyEdgeCases tests default strategy edge cases
-// [REQ:CONFIGURATION] [REQ:CFG_005] Validates default strategy only applies when destination is zero value
+// [REQ-CONFIGURATION] [REQ-CFG_005] Validates default strategy only applies when destination is zero value
 func TestDefaultStrategyEdgeCases(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")

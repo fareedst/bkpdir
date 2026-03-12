@@ -96,7 +96,7 @@ Let me start:
 
 **AI** (updating documentation):
 
-I've documented the requirement `[REQ:RATE_LIMITING]` in `stdd/requirements.md` with:
+I've documented the requirement `[REQ-RATE_LIMITING]` in `stdd/requirements.md` with:
 
 - **Description**: Rate limiting for all API endpoints with configurable limits
 - **Rationale**: Prevent abuse and ensure fair resource usage
@@ -124,23 +124,23 @@ I've documented the requirement `[REQ:RATE_LIMITING]` in `stdd/requirements.md` 
 
 Now documenting architecture decisions in `stdd/architecture-decisions.md`:
 
-I've added `[ARCH:RATE_LIMITING_MIDDLEWARE]` which:
+I've added `[ARCH-RATE_LIMITING_MIDDLEWARE]` which:
 - Uses middleware pattern to intercept requests before handlers
 - Integrates with existing middleware chain
-- References `[REQ:RATE_LIMITING]`
+- References `[REQ-RATE_LIMITING]`
 
-I've added `[ARCH:TOKEN_BUCKET_ALGORITHM]` which:
+I've added `[ARCH-TOKEN_BUCKET_ALGORITHM]` which:
 - Implements token bucket for flexible rate limiting
-- References `[REQ:RATE_LIMITING]`
+- References `[REQ-RATE_LIMITING]`
 
-I've added `[ARCH:REDIS_STORAGE]` which:
+I've added `[ARCH-REDIS_STORAGE]` which:
 - Uses Redis for distributed rate limit counter storage
-- References `[REQ:RATE_LIMITING]`
+- References `[REQ-RATE_LIMITING]`
 
-I've added `[ARCH:CONFIGURATION_MANAGEMENT]` which:
+I've added `[ARCH-CONFIGURATION_MANAGEMENT]` which:
 - Extends existing config structure for rate limit settings
 - Supports per-endpoint overrides
-- References `[REQ:RATE_LIMITING]`
+- References `[REQ-RATE_LIMITING]`
 
 ---
 
@@ -148,25 +148,25 @@ I've added `[ARCH:CONFIGURATION_MANAGEMENT]` which:
 
 Now documenting implementation decisions in `stdd/implementation-decisions.md`:
 
-I've added `[IMPL:TOKEN_BUCKET_STRUCT]` which:
+I've added `[IMPL-TOKEN_BUCKET_STRUCT]` which:
 - Defines data structure for token bucket state
-- References `[ARCH:TOKEN_BUCKET_ALGORITHM]` and `[REQ:RATE_LIMITING]`
+- References `[ARCH-TOKEN_BUCKET_ALGORITHM]` and `[REQ-RATE_LIMITING]`
 
-I've added `[IMPL:RATE_LIMIT_MIDDLEWARE_FUNC]` which:
+I've added `[IMPL-RATE_LIMIT_MIDDLEWARE_FUNC]` which:
 - Implements middleware function signature
-- References `[ARCH:RATE_LIMITING_MIDDLEWARE]` and `[REQ:RATE_LIMITING]`
+- References `[ARCH-RATE_LIMITING_MIDDLEWARE]` and `[REQ-RATE_LIMITING]`
 
-I've added `[IMPL:REDIS_COUNTER_KEYS]` which:
+I've added `[IMPL-REDIS_COUNTER_KEYS]` which:
 - Defines Redis key naming strategy for rate limit counters
-- References `[ARCH:REDIS_STORAGE]` and `[REQ:RATE_LIMITING]`
+- References `[ARCH-REDIS_STORAGE]` and `[REQ-RATE_LIMITING]`
 
-I've added `[IMPL:ADMIN_KEY_EXEMPTION]` which:
+I've added `[IMPL-ADMIN_KEY_EXEMPTION]` which:
 - Implements logic to check and exempt admin API keys
-- References `[ARCH:RATE_LIMITING_MIDDLEWARE]` and `[REQ:RATE_LIMITING]`
+- References `[ARCH-RATE_LIMITING_MIDDLEWARE]` and `[REQ-RATE_LIMITING]`
 
-I've added `[IMPL:METRICS_EXPOSURE]` which:
+I've added `[IMPL-METRICS_EXPOSURE]` which:
 - Integrates with existing metrics system
-- References `[ARCH:RATE_LIMITING_MIDDLEWARE]` and `[REQ:RATE_LIMITING]`
+- References `[ARCH-RATE_LIMITING_MIDDLEWARE]` and `[REQ-RATE_LIMITING]`
 
 ---
 
@@ -179,19 +179,19 @@ Now creating tasks in `stdd/tasks.md`:
 I've created the following tasks with priorities:
 
 **P0 Tasks (Critical)**:
-- `[REQ:RATE_LIMITING]` Implement token bucket algorithm core logic
-- `[REQ:RATE_LIMITING]` Implement rate limiting middleware
-- `[REQ:RATE_LIMITING]` Write unit tests for token bucket
+- `[REQ-RATE_LIMITING]` Implement token bucket algorithm core logic
+- `[REQ-RATE_LIMITING]` Implement rate limiting middleware
+- `[REQ-RATE_LIMITING]` Write unit tests for token bucket
 
 **P1 Tasks (Important)**:
-- `[REQ:RATE_LIMITING]` Integrate Redis storage
-- `[REQ:RATE_LIMITING]` Add configuration support
-- `[REQ:RATE_LIMITING]` Implement admin key exemption
-- `[REQ:RATE_LIMITING]` Write integration tests
+- `[REQ-RATE_LIMITING]` Integrate Redis storage
+- `[REQ-RATE_LIMITING]` Add configuration support
+- `[REQ-RATE_LIMITING]` Implement admin key exemption
+- `[REQ-RATE_LIMITING]` Write integration tests
 
 **P2 Tasks (Nice-to-Have)**:
-- `[REQ:RATE_LIMITING]` Add metrics and logging
-- `[REQ:RATE_LIMITING]` Add per-endpoint configuration
+- `[REQ-RATE_LIMITING]` Add metrics and logging
+- `[REQ-RATE_LIMITING]` Add per-endpoint configuration
 
 ---
 
@@ -200,19 +200,19 @@ I've created the following tasks with priorities:
 Here's the pseudo-code approach:
 
 ```text
-// [REQ:RATE_LIMITING] Rate Limiting Middleware
-// [ARCH:RATE_LIMITING_MIDDLEWARE] [IMPL:RATE_LIMIT_MIDDLEWARE_FUNC]
+// [REQ-RATE_LIMITING] Rate Limiting Middleware
+// [ARCH-RATE_LIMITING_MIDDLEWARE] [IMPL-RATE_LIMIT_MIDDLEWARE_FUNC]
 function rateLimitMiddleware(config, redisClient):
     return function(next):
         return function(request, response):
-            // [IMPL:ADMIN_KEY_EXEMPTION] Check if admin key
+            // [IMPL-ADMIN_KEY_EXEMPTION] Check if admin key
             if isAdminKey(request.apiKey):
                 return next(request, response)
             
-            // [IMPL:REDIS_COUNTER_KEYS] Get endpoint-specific config
+            // [IMPL-REDIS_COUNTER_KEYS] Get endpoint-specific config
             endpointConfig = getEndpointConfig(request.path, config)
             
-            // [IMPL:TOKEN_BUCKET_STRUCT] Check rate limit
+            // [IMPL-TOKEN_BUCKET_STRUCT] Check rate limit
             allowed = checkTokenBucket(
                 redisClient,
                 request.apiKey,
@@ -222,20 +222,20 @@ function rateLimitMiddleware(config, redisClient):
             )
             
             if not allowed:
-                // [REQ:RATE_LIMITING] Return 429 with Retry-After
+                // [REQ-RATE_LIMITING] Return 429 with Retry-After
                 response.status = 429
                 response.headers["Retry-After"] = calculateRetryAfter(...)
-                // [REQ:RATE_LIMITING] Log event
+                // [REQ-RATE_LIMITING] Log event
                 logRateLimitExceeded(request)
-                // [IMPL:METRICS_EXPOSURE] Record metric
+                // [IMPL-METRICS_EXPOSURE] Record metric
                 recordMetric("rate_limit_exceeded")
                 return response
             
-            // [REQ:RATE_LIMITING] Continue to next handler
+            // [REQ-RATE_LIMITING] Continue to next handler
             return next(request, response)
 
-// [REQ:RATE_LIMITING] Token Bucket Algorithm
-// [ARCH:TOKEN_BUCKET_ALGORITHM] [IMPL:TOKEN_BUCKET_STRUCT]
+// [REQ-RATE_LIMITING] Token Bucket Algorithm
+// [ARCH-TOKEN_BUCKET_ALGORITHM] [IMPL-TOKEN_BUCKET_STRUCT]
 function checkTokenBucket(redis, key, path, limit, window):
     bucketKey = formatRedisKey(key, path)
     currentTime = now()
@@ -304,11 +304,11 @@ Updated `requirements.md`:
 - Added to validation criteria: "Tests for different refill rates"
 
 Updated `architecture-decisions.md`:
-- Enhanced `[ARCH:TOKEN_BUCKET_ALGORITHM]` to include configurable refill rate
-- Enhanced `[ARCH:CONFIGURATION_MANAGEMENT]` to include refill rate in config
+- Enhanced `[ARCH-TOKEN_BUCKET_ALGORITHM]` to include configurable refill rate
+- Enhanced `[ARCH-CONFIGURATION_MANAGEMENT]` to include refill rate in config
 
 Updated `implementation-decisions.md`:
-- Enhanced `[IMPL:TOKEN_BUCKET_STRUCT]` to include refill rate parameter
+- Enhanced `[IMPL-TOKEN_BUCKET_STRUCT]` to include refill rate parameter
 
 Updated pseudo-code to show refill rate calculation using config value.
 
@@ -330,7 +330,7 @@ Breaking down tasks into implementable subtasks in `tasks.md`. Each subtask is a
 
 I've broken down each task into subtasks:
 
-**P0: Implement token bucket algorithm core logic [REQ:RATE_LIMITING]**
+**P0: Implement token bucket algorithm core logic [REQ-RATE_LIMITING]**
 - [ ] Create `TokenBucket` struct with fields: tokens, lastRefill, limit, refillRate
 - [ ] Implement `NewTokenBucket(limit, refillRate)` constructor
 - [ ] Implement `AllowRequest()` method that checks and consumes tokens
@@ -339,7 +339,7 @@ I've broken down each task into subtasks:
 - [ ] Write unit test `TestTokenBucketRefill_REQ_RATE_LIMITING` for refill logic
 - [ ] Write unit test `TestTokenBucketExhausted_REQ_RATE_LIMITING` for limit exceeded
 
-**P0: Implement rate limiting middleware [REQ:RATE_LIMITING]**
+**P0: Implement rate limiting middleware [REQ-RATE_LIMITING]**
 - [ ] Create middleware function signature matching existing middleware pattern
 - [ ] Extract API key from request
 - [ ] Extract endpoint path from request
@@ -347,46 +347,46 @@ I've broken down each task into subtasks:
 - [ ] Return 429 response with Retry-After header when limit exceeded
 - [ ] Write integration test `TestRateLimitMiddleware_REQ_RATE_LIMITING`
 
-**P0: Write unit tests for token bucket [REQ:RATE_LIMITING]**
+**P0: Write unit tests for token bucket [REQ-RATE_LIMITING]**
 - [ ] Test token consumption
 - [ ] Test token refill with different rates
 - [ ] Test bucket exhaustion
 - [ ] Test concurrent access (if applicable)
 
-**P1: Integrate Redis storage [REQ:RATE_LIMITING]**
+**P1: Integrate Redis storage [REQ-RATE_LIMITING]**
 - [ ] Create Redis client wrapper for rate limiting
 - [ ] Implement `GetBucketState(key)` function
 - [ ] Implement `SetBucketState(key, state, ttl)` function
 - [ ] Implement Redis key naming strategy
 - [ ] Write integration test `TestRedisStorage_REQ_RATE_LIMITING`
 
-**P1: Add configuration support [REQ:RATE_LIMITING]**
+**P1: Add configuration support [REQ-RATE_LIMITING]**
 - [ ] Extend config struct with rate limit settings
 - [ ] Add default rate limit values
 - [ ] Add per-endpoint override structure
 - [ ] Implement config loading and parsing
 - [ ] Write test `TestConfigLoading_REQ_RATE_LIMITING`
 
-**P1: Implement admin key exemption [REQ:RATE_LIMITING]**
+**P1: Implement admin key exemption [REQ-RATE_LIMITING]**
 - [ ] Create function `IsAdminKey(apiKey)` to check admin keys
 - [ ] Load admin keys from configuration
 - [ ] Add exemption check in middleware before rate limit check
 - [ ] Write test `TestAdminKeyExemption_REQ_RATE_LIMITING`
 
-**P1: Write integration tests [REQ:RATE_LIMITING]**
+**P1: Write integration tests [REQ-RATE_LIMITING]**
 - [ ] Test rate limiting with real Redis
 - [ ] Test HTTP 429 response format
 - [ ] Test Retry-After header calculation
 - [ ] Test admin key bypass
 - [ ] Test per-endpoint limits
 
-**P2: Add metrics and logging [REQ:RATE_LIMITING]**
+**P2: Add metrics and logging [REQ-RATE_LIMITING]**
 - [ ] Integrate with existing metrics system
 - [ ] Add metric for rate limit exceeded events
 - [ ] Add logging for rate limit events
 - [ ] Write test `TestMetrics_REQ_RATE_LIMITING`
 
-**P2: Add per-endpoint configuration [REQ:RATE_LIMITING]**
+**P2: Add per-endpoint configuration [REQ-RATE_LIMITING]**
 - [ ] Implement endpoint path matching logic
 - [ ] Implement config lookup with endpoint override
 - [ ] Write test `TestPerEndpointConfig_REQ_RATE_LIMITING`
@@ -472,7 +472,7 @@ Continuing with remaining P1 tasks...
 **AI** (updating documentation):
 
 Updating `requirements.md`:
-- Marked `[REQ:RATE_LIMITING]` as ✅ Implemented
+- Marked `[REQ-RATE_LIMITING]` as ✅ Implemented
 
 Updating `semantic-tokens.md`:
 - Updated all token statuses to Implemented

@@ -85,7 +85,7 @@ func (a *AIFormatterConfigAdapter) GetErrorFormat(errorType formatter.ErrorType)
 	}
 }
 
-// [CRITICAL] FMT-001: Pattern access - [ACTION:discovery]
+// [CRITICAL] FMT-001: Pattern access - [ACTION-discovery]
 func (a *AIFormatterConfigAdapter) GetPattern(patternType formatter.PatternType) (string, error) {
 	switch patternType {
 	case formatter.PatternTypeArchiveFilename:
@@ -439,7 +439,7 @@ func (fa *AIFormatterAdapter) TemplateError(data map[string]string) string {
 	return fa.FormatWithPlaceholders(template, data)
 }
 
-// [CRITICAL] FMT-001: Pattern extraction operations - [ACTION:discovery]
+// [CRITICAL] FMT-001: Pattern extraction operations - [ACTION-discovery]
 func (fa *AIFormatterAdapter) ExtractArchiveFilenameData(filename string) map[string]string {
 	data, err := fa.aiFormatter.ExtractArchiveData(filename)
 	if err != nil {
@@ -667,12 +667,12 @@ func (fa *AIFormatterAdapter) PrintIncrementalCreated(path string) {
 	fa.aiFormatter.PrintWithContext(ctx)
 }
 
-// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION]
 func (fa *AIFormatterAdapter) FormatIncrementalSkippedNoChanges() string {
 	return fa.config.FormatIncrementalSkippedNoChanges
 }
 
-// [IMPL:INCREMENTAL_DUPLICATE_PREVENTION] [ARCH:INCREMENTAL_DUPLICATE_PREVENTION] [REQ:INCREMENTAL_DUPLICATE_PREVENTION]
+// [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION]
 func (fa *AIFormatterAdapter) PrintIncrementalSkippedNoChanges() {
 	ctx := formatter.PrintContext{
 		Message:     fa.FormatIncrementalSkippedNoChanges(),
@@ -682,7 +682,7 @@ func (fa *AIFormatterAdapter) PrintIncrementalSkippedNoChanges() {
 	fa.aiFormatter.PrintWithContext(ctx)
 }
 
-// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
 func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
 	if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
 		return fa.config.FormatDiffNoChanges
@@ -704,7 +704,7 @@ func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
 	return result.String()
 }
 
-// [IMPL:DIFF_COMMAND] [ARCH:DIFF_COMMAND] [REQ:DIFF_COMMAND]
+// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
 func (fa *AIFormatterAdapter) PrintDiffResult(diff *DiffResult) {
 	ctx := formatter.PrintContext{
 		Message:     fa.FormatDiffResult(diff),
@@ -869,7 +869,7 @@ func (fa *AIFormatterAdapter) PrintFailedAccessFile(err error) {
 }
 
 func (fa *AIFormatterAdapter) PrintArchiveListWithStatus(output, status string) {
-	// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use string concatenation, NOT fmt.Sprintf
+	// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] CRITICAL: Use string concatenation, NOT fmt.Sprintf
 	// to avoid fmt misinterpreting #{...} patterns as format verbs
 	ctx := formatter.PrintContext{
 		Message:     output + status + "\n",

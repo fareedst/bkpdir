@@ -1,0 +1,82 @@
+ARCH-TOKEN_SYSTEM:
+  name: Token System Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-DOC_016
+    - REQ-MAINTAINABILITY
+    - REQ-GOV_REGISTRY_COMPLETENESS
+    - REQ-GOV_DISCOVERABILITY
+  rationale:
+    why: |-
+      Consolidates the single source of truth inside the STDD documentation tree for auditability.
+      Ensures governance requirements ([REQ-GOV_REGISTRY_COMPLETENESS], [REQ-GOV_DISCOVERABILITY]) are enforced through one registry.
+      Eliminates drift between YAML metadata and the STDD token registry.
+      Enables validation scripts to reason over one canonical markdown source.
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Feature IDs without tokens: Rejected due to lack of traceability
+        Manual documentation only: Rejected due to maintenance overhead
+        External tooling: Rejected due to dependency complexity
+  implementation_approach:
+    summary: Comprehensive semantic token system for feature traceability across all layers
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-TOKEN_SYSTEM
+      - REQ-DOC_016
+      - REQ-MAINTAINABILITY
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-GOV_DISCOVERABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-TOKEN_SYSTEM.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Comprehensive semantic token system for feature traceability across all layers
+  ai_assistant_integration: Token-based navigation and feature discovery
+  automated_validation: Scripts validate token format, consistency, and traceability
+  constraints:
+    - Migration must be performed in small, validated batches with checkpoints after every category to keep traceability intact.
+    - All changes must keep `[ARCH-TOKEN_SYSTEM]` contracts (cross-layer references, validation hooks, AI navigation) satisfied before removing legacy records.
+    - Governance reporting (`docs/governance/…`) must reference the new tables to maintain policy discoverability.
+  cross-layer_traceability: Requirements → Architecture → Implementation → Tests → Code
+  cross-link_layer: For each legacy token, map to an explicit `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and referenced tests/files; open tasks whenever a mapping gap is detected.
+  cross-references: '[REQ-DOC_016], [REQ-GOV_REGISTRY_COMPLETENESS], [ARCH-TOKEN_SYSTEM], [IMPL-TOKEN_SYSTEM]'
+  decommission_layer: After each batch migrates, replace the YAML entry with a pointer to the markdown registry until the YAML file can be removed entirely.
+  inventory_layer: Parse `project-tokens.yaml` into structured batches (actions, features, semantic token metadata) and normalize identifiers to STDD-compliant names.
+  registry_layer: Extend `stdd/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
+  token_format_standards:
+    - 'Format: `[TYPE:IDENTIFIER]` with UPPER_SNAKE_CASE identifiers'
+    - 'Cross-references: Implementation tokens must reference `[ARCH-*]` and `[REQ-*]` tokens'
+    - 'Consistency: Same token must be used consistently across all layers'
+  token_registry: Central registry in `semantic-tokens.md` with cross-references to all documentation layers
+  token_types:
+    - '`[REQ-*]` - Requirements tokens in `requirements.md`'
+    - '`[ARCH-*]` - Architecture decision tokens in `architecture-decisions.md`'
+    - '`[IMPL-*]` - Implementation tokens in code comments'
+    - '`[TEST:*]` - Test specification tokens (referenced via `[REQ-*]` in test names)'
+  validation_requirements:
+    - Token format compliance across all files
+    - Cross-layer token consistency validation
+    - Token traceability completeness checking
+    - Missing token detection

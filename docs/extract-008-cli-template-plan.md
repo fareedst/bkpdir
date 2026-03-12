@@ -11,7 +11,7 @@
 ### 📋 Task Description
 Create a complete working CLI application template that showcases all extracted packages and provides a foundation for new CLI projects. This template will demonstrate the value of the extracted components and accelerate adoption by providing a complete, working example.
 
-## [ACTION:discovery] PHASE 1: CRITICAL VALIDATION (COMPLETED)
+## [ACTION-discovery] PHASE 1: CRITICAL VALIDATION (COMPLETED)
 
 ### ✅ Task Verification
 - [x] **Feature ID Verification**: EXTRACT-008 exists in `feature-tracking.md` ✅
@@ -102,7 +102,7 @@ Create a complete working CLI application template that showcases all extracted 
 - [x] Git integration framework ready ✅
 - [x] Concurrent processing simulation working ✅
 
-### 2. [ACTION:maintenance] Develop Project Scaffolding
+### 2. [ACTION-maintenance] Develop Project Scaffolding
 **Status**: [ ] Not Started  
 **Priority**: [HIGH] HIGH  
 **Estimated Time**: 6-8 hours  
@@ -346,7 +346,7 @@ Create a complete working CLI application template that showcases all extracted 
 - [ ] **Documentation Quality**: Documentation enables independent usage
 - [ ] **Migration Viability**: Migration guide enables successful transitions
 
-## [ACTION:migration] Risk Mitigation
+## [ACTION-migration] Risk Mitigation
 
 ### Technical Risks
 - **Package Integration Issues**: Extensive testing of package combinations

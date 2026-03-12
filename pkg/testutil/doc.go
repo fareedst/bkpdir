@@ -76,7 +76,7 @@
 //
 // Applications can use both packages together for comprehensive testing capabilities.
 //
-// [REQ:DOC_016] Semantic token coverage audit marker
-// [ARCH:TOKEN_SYSTEM] Token system architecture
-// [IMPL:TOKEN_COVERAGE_AUDIT] Applied audit annotation
+// [REQ-DOC_016] Semantic token coverage audit marker
+// [ARCH-TOKEN_SYSTEM] Token system architecture
+// [IMPL-TOKEN_COVERAGE_AUDIT] Applied audit annotation
 package testutil

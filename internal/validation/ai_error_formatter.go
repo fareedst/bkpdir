@@ -1,4 +1,4 @@
-// [IMPL:TESTING] [ARCH:TESTING_STRATEGY] [REQ:CODE_QUALITY]
+// [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]
 // DOC-011: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package validation
 
@@ -146,7 +146,7 @@ func (f *AIErrorFormatter) initializeRemediationGuides() {
 		Steps: []string{
 			"1. Identify the implementation token in the source file",
 			"2. Add priority icon based on feature priority ([CRITICAL][HIGH][MEDIUM][LOW])",
-			"3. Add action icon based on function behavior ([CHECK][NOTE][ACTION][ACTION:validation])",
+			"3. Add action icon based on function behavior ([CHECK][NOTE][ACTION][ACTION-validation])",
 			"4. Ensure format: '// [PRIORITY] FEATURE-ID: Description - [ACTION] Context'",
 			"5. Run validation: make validate-icon-enforcement",
 		},

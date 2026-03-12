@@ -3,7 +3,7 @@
 > **[CRITICAL] DOC-014: Token implementation progress and next steps [ACTION:core-functionality]**
 
 **Date**: 2025-01-02  
-**Status**: [ACTION:migration] **IN PROGRESS**  
+**Status**: [ACTION-migration] **IN PROGRESS**  
 **Subtask**: 2.2 - Token Implementation Progress  
 **Phase**: 2 - Token Gap Analysis and Remediation  
 
@@ -51,39 +51,39 @@ This document provides a comprehensive progress report on the implementation of 
 - **Status**: COMPLETED
 - **Cross-Layer Requirements**: Documentation, Code, Tests
 
-### [ACTION:migration] In Progress: Code Layer Implementation
+### [ACTION-migration] In Progress: Code Layer Implementation
 
-**Main Package Files** [ACTION:migration]
+**Main Package Files** [ACTION-migration]
 - **File**: `main.go`
 - **Tokens**: CLI-GLOBAL-001, CORE-ARCH-001
 - **Status**: PENDING
 - **Implementation**: Add token comments to relevant functions
 
-**Archive Operations** [ACTION:migration]
+**Archive Operations** [ACTION-migration]
 - **File**: `archive.go`
 - **Tokens**: ARCHIVE-FEATURES-001, SERVICE-ARCHIVE-001
 - **Status**: PENDING
 - **Implementation**: Add token comments to relevant functions
 
-**Configuration System** [ACTION:migration]
+**Configuration System** [ACTION-migration]
 - **File**: `config.go`, `config_impl.go`
 - **Tokens**: CONFIG-DISCOVERY-001, CONFIG-FILE-001, SERVICE-ARCH-001
 - **Status**: PENDING
 - **Implementation**: Add token comments to relevant functions
 
-**Error Handling** [ACTION:migration]
+**Error Handling** [ACTION-migration]
 - **File**: `errors.go`
 - **Tokens**: ERROR-HANDLING-001, SERVICE-ERROR-001
 - **Status**: PENDING
 - **Implementation**: Add token comments to relevant functions
 
-**File Operations** [ACTION:migration]
+**File Operations** [ACTION-migration]
 - **File**: `backup.go`, `exclude.go`
 - **Tokens**: EXCLUDE-001, SERVICE-BACKUP-001
 - **Status**: PENDING
 - **Implementation**: Add token comments to relevant functions
 
-**Verification System** [ACTION:migration]
+**Verification System** [ACTION-migration]
 - **File**: `verify.go`
 - **Tokens**: VERIFY-001
 - **Status**: PENDING
@@ -154,7 +154,7 @@ This document provides a comprehensive progress report on the implementation of 
 20. **SERVICE-OUTPUT-001**: Output Formatting Service Architecture Decision ✅
 21. **SERVICE-ERROR-001**: Error Handling Service Architecture Decision ✅
 
-#### [ACTION:migration] In Progress Code Layer (0/29)
+#### [ACTION-migration] In Progress Code Layer (0/29)
 - All tokens pending implementation in code files
 
 #### ⏳ Pending Test Layer (0/29)
@@ -234,7 +234,7 @@ This document provides a comprehensive progress report on the implementation of 
 
 ### Quantitative Metrics
 - **Documentation Layer**: ✅ 100% Complete (29/29 tokens)
-- **Code Layer**: [ACTION:migration] 0% Complete (0/29 tokens)
+- **Code Layer**: [ACTION-migration] 0% Complete (0/29 tokens)
 - **Test Layer**: ⏳ 0% Complete (0/29 tokens)
 - **Registry Layer**: ✅ 100% Complete (29/29 tokens)
 
@@ -251,7 +251,7 @@ This document provides a comprehensive progress report on the implementation of 
 - **Registry Layer**: Successfully completed with comprehensive metadata
 - **Token Format**: Standardized format established and validated
 
-### Medium Risk Areas [ACTION:migration]
+### Medium Risk Areas [ACTION-migration]
 - **Code Layer**: Pending implementation - requires careful integration
 - **Test Layer**: Pending implementation - requires comprehensive test coverage
 

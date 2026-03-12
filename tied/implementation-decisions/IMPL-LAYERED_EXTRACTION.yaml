@@ -1,0 +1,61 @@
+IMPL-LAYERED_EXTRACTION:
+  name: Layered Extraction Approach
+  status: Active
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: Prevents circular dependencies and ensures stable foundation for extracted components
+    problems_solved:
+      - Circular dependency risk during extraction
+      - Unstable foundation when extracting higher-level components first
+      - Unclear extraction ordering
+    benefits:
+      - No circular references between layers
+      - Each layer builds on stable previous layers
+      - Clear dependency hierarchy
+  implementation_approach:
+    summary: 'Extract in dependency order: Infrastructure → Utilities → Framework → Patterns'
+    details:
+      - Infrastructure layer first (config, errors)
+      - Utilities layer second (formatter, git)
+      - Framework layer third (cli)
+      - Patterns layer last (processing)
+      - Each layer builds on previous layers without circular references
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_PRINCIPLES
+    supersedes: []
+    see_also:
+      - IMPL-INTERFACE_DRIVEN
+      - IMPL-ZERO_BREAKING
+      - IMPL-LARGE_FILE_CHALLENGE
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Extract in dependency order: Infrastructure → Utilities → Framework → Patterns
+
+    procedure layered_extraction_approach():
+      # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Infrastructure layer first (config, errors)
+      infrastructure_layer_first_config()
+      # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Utilities layer second (formatter, git)
+      utilities_layer_second_formatter()
+      # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Framework layer third (cli)
+      framework_layer_third_cli()
+      # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Patterns layer last (processing)
+      patterns_layer_last_processing()
+      # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Each layer builds on previous layers without circular references
+      each_layer_builds_on()
+      end

@@ -1,5 +1,5 @@
 #!/bin/bash
-# [REQ:DOC_016] Token Coverage Analysis Tool
+# [REQ-DOC_016] Token Coverage Analysis Tool
 # Purpose: Analyze token coverage across source code and identify gaps
 
 set -euo pipefail
@@ -25,7 +25,7 @@ TEST_FUNCTIONS_WITH_TOKENS=0
 TEST_FUNCTIONS_WITHOUT_TOKENS=0
 OVERALL_COVERAGE=0
 
-echo -e "${BLUE}[REQ:DOC_016] Token Coverage Analysis${NC}\n"
+echo -e "${BLUE}[REQ-DOC_016] Token Coverage Analysis${NC}\n"
 
 # Create report directory
 mkdir -p "$(dirname "${REPORT_FILE}")"
@@ -63,7 +63,7 @@ analyze_source_files() {
         TOTAL_FUNCTIONS=$((TOTAL_FUNCTIONS + func_count))
         
         # Check for tokens
-        if grep -qE "\[(REQ|ARCH|IMPL):[A-Z0-9_]+\]" "$file" 2>/dev/null; then
+        if grep -qE "\[(REQ|ARCH|IMPL)[:\-][A-Z0-9_]+\]" "$file" 2>/dev/null; then
             FUNCTIONS_WITH_TOKENS=$((FUNCTIONS_WITH_TOKENS + func_count))
         else
             FUNCTIONS_WITHOUT_TOKENS=$((FUNCTIONS_WITHOUT_TOKENS + func_count))
@@ -101,7 +101,7 @@ analyze_test_files() {
         TOTAL_TEST_FUNCTIONS=$((TOTAL_TEST_FUNCTIONS + test_count))
         
         # Check for tokens
-        if grep -qE "\[REQ:[A-Z0-9_]+\]|REQ_[A-Z0-9_]+" "$file" 2>/dev/null; then
+        if grep -qE "\[REQ[:\-][A-Z0-9_]+\]|REQ_[A-Z0-9_]+" "$file" 2>/dev/null; then
             TEST_FUNCTIONS_WITH_TOKENS=$((TEST_FUNCTIONS_WITH_TOKENS + test_count))
         else
             TEST_FUNCTIONS_WITHOUT_TOKENS=$((TEST_FUNCTIONS_WITHOUT_TOKENS + test_count))

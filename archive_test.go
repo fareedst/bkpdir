@@ -1,4 +1,4 @@
-// [REQ:FILE_BACKUP]
+// [REQ-FILE_BACKUP]
 // This file is part of bkpdir
 
 // Copyright 2024 BkpDir Contributors
@@ -19,13 +19,13 @@
 // It tests both full and incremental archive operations with various configurations.
 
 // Archive creation and management testing
-// [ARCH:ARCHIVE_FORMAT] [ARCH:PROCESSING_PATTERNS] Archive format and processing patterns validation
-// [IMPL:ZIP_FORMAT] [IMPL:PROCESSING_PATTERNS] ZIP format and processing implementation validation
-// TEST-ARCHIVE-FEATURES-001: Archive features test validation - Archive creation and management testing [ACTION:validation]
+// [ARCH-ARCHIVE_FORMAT] [ARCH-PROCESSING_PATTERNS] Archive format and processing patterns validation
+// [IMPL-ZIP_FORMAT] [IMPL-PROCESSING_PATTERNS] ZIP format and processing implementation validation
+// TEST-ARCHIVE-FEATURES-001: Archive features test validation - Archive creation and management testing [ACTION-validation]
 // Source: archive.go - ARCHIVE-FEATURES-001
 // Impact: Core functionality validation for archive features
 
-// TEST-SERVICE-ARCHIVE-001: Archive service test validation - Archive service implementation testing [ACTION:validation]
+// TEST-SERVICE-ARCHIVE-001: Archive service test validation - Archive service implementation testing [ACTION-validation]
 // Source: archive.go - SERVICE-ARCHIVE-001
 // Impact: Archive service validation for archive service implementation
 package main

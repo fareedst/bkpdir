@@ -1,4 +1,4 @@
-// [REQ:PERFORMANCE]
+// [REQ-PERFORMANCE]
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 

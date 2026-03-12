@@ -2,7 +2,7 @@
 
 **Date**: 2025-12-11  
 **Status**: ✅ Fixed and Complete  
-**Related**: [REQ:CFG_005], [REQ:CFG_001], [REQ:CONFIGURATION], [IMPL:CFG_MIXED_MODE_MERGE_FIX], [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX]
+**Related**: [REQ-CFG_005], [REQ-CFG_001], [REQ-CONFIGURATION], [IMPL-CFG_MIXED_MODE_MERGE_FIX], [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX]
 
 ## Issue Identified
 
@@ -85,7 +85,7 @@ Per CFG-001 and implementation decision:
 
 Updated `applyMerge()` and `applyPrepend()` functions to check precedence for scalar/precedence fields before falling back to `setConfigField()`. This ensures CFG-001 requirement is respected even when `+` or `^` prefixes are used on precedence fields.
 
-**See**: [IMPL:CFG_MERGE_PREPEND_PRECEDENCE_FIX] in `stdd/implementation-decisions.md` for complete details.
+**See**: [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] in `stdd/implementation-decisions.md` for complete details.
 
 ## Recommended Actions (Historical - Already Implemented)
 
@@ -126,8 +126,8 @@ The current fix that accepts either value is **not aligned with requirements** a
 
 ## Cross-References
 
-- [REQ:CFG_001] - Configuration Discovery (earlier file precedence)
-- [REQ:CFG_005] - Configuration Inheritance (array field merge)
-- [ARCH:CFG_005] - Layered Configuration Inheritance Architecture
-- [IMPL:CFG_MERGE_BEHAVIOR_REGISTRY] - Field-Level Merge Behavior Registry
-- [IMPL:CFG_MIXED_MODE_MERGE_FIX] - Mixed-Mode Merge Strategy Fix
+- [REQ-CFG_001] - Configuration Discovery (earlier file precedence)
+- [REQ-CFG_005] - Configuration Inheritance (array field merge)
+- [ARCH-CFG_005] - Layered Configuration Inheritance Architecture
+- [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] - Field-Level Merge Behavior Registry
+- [IMPL-CFG_MIXED_MODE_MERGE_FIX] - Mixed-Mode Merge Strategy Fix

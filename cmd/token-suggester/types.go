@@ -1,4 +1,4 @@
-// [IMPL:TOKEN_SYSTEM] [ARCH:TOKEN_SYSTEM] [REQ:DOC_016]
+// [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016]
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 

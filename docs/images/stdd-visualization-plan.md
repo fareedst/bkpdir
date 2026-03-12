@@ -1,9 +1,9 @@
 # STDD Visualization Definitions & Upgrade Plan
 
-> Tokens: [REQ:STDD_VIS], [ARCH:STDD_VIS_FLOW], [IMPL:STDD_VIS_DATA_PIPELINE], [IMPL:STDD_VIS_ASSETS]
+> Tokens: [REQ-STDD_VIS], [ARCH-STDD_VIS_FLOW], [IMPL-STDD_VIS_DATA_PIPELINE], [IMPL-STDD_VIS_ASSETS]
 
 ## Layered Flow (docs/images/stdd-flow.svg)
-- **Definition**: Static SVG generated from `stdd-flow.mmd`/`stdd-flow.json`; shows `[REQ:CFG_005]` and `[REQ:LIST_LIMIT]` chains traversing REQ → ARCH → IMPL → TEST → CODE lanes.
+- **Definition**: Static SVG generated from `stdd-flow.mmd`/`stdd-flow.json`; shows `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]` chains traversing REQ → ARCH → IMPL → TEST → CODE lanes.
 - **Data Source**: `docs/data/stdd-trace.json` (nodes/edges/styling hints) ensures reproducibility.
 - **Upgrade Plan**: When adding more chains, append nodes/edges to `stdd-trace.json` and regenerate the Mermaid/SVG; keep color palette consistent for token recognition.
 
@@ -21,11 +21,11 @@
 ## Configuration Token Visuals
 - **Config Hierarchy Map (SVG)**:
   - **Status**: ✅ Implemented (`docs/images/stdd-config-flow.svg`) using `docs/data/stdd-config-trace.json`.
-  - **Description**: Layered diagram showing `[REQ:CONFIGURATION]`, `[REQ:CFG_005]`, `[REQ:CFG_006]`, `[ARCH:CONFIG_SYSTEM]`, `[ARCH:CFG_005]`, `[ARCH:CFG_006]`, `[IMPL:CONFIG_STRUCT]`, `[IMPL:EXCLUDE_MERGE_FIX]`, `[IMPL:CFG_006]`, `[IMPL:CONFIG_OUTPUT_GROUPING]`, and their test/code anchors.
+  - **Description**: Layered diagram showing `[REQ-CONFIGURATION]`, `[REQ-CFG_005]`, `[REQ-CFG_006]`, `[ARCH-CONFIG_SYSTEM]`, `[ARCH-CFG_005]`, `[ARCH-CFG_006]`, `[IMPL-CONFIG_STRUCT]`, `[IMPL-EXCLUDE_MERGE_FIX]`, `[IMPL-CFG_006]`, `[IMPL-CONFIG_OUTPUT_GROUPING]`, and their test/code anchors.
 
 - **Configuration State Timeline (SVG)**:
   - **Status**: 🔜 Planned.
-  - **Goal**: Depict how defaults propagate and are overridden via layered configs, referencing `[REQ:CFG_005]`, `[REQ:CFG_006]`, `[IMPL:CFG_INHERITANCE_PATH_RESOLUTION]`, `[IMPL:CONFIG_OUTPUT_GROUPING]`.
+  - **Goal**: Depict how defaults propagate and are overridden via layered configs, referencing `[REQ-CFG_005]`, `[REQ-CFG_006]`, `[IMPL-CFG_INHERITANCE_PATH_RESOLUTION]`, `[IMPL-CONFIG_OUTPUT_GROUPING]`.
   - **Format**: Timeline storyboard/animation similar to `stdd-timeline`.
 
 - **Configuration Defaults Heatmap (SVG)**:

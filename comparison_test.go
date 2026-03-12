@@ -1,9 +1,9 @@
-// [REQ:DIFF_COMMAND]
+// [REQ-DIFF_COMMAND]
 // This file is part of bkpdir
 
 // Directory comparison testing for incremental archive detection
-// [ARCH:DIRECTORY_COMPARISON] Snapshot-based comparison validation
-// [IMPL:DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms validation
+// [ARCH-DIRECTORY_COMPARISON] Snapshot-based comparison validation
+// [IMPL-DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms validation
 // Directory comparison test validation
 // Impact: Test validation for archive verification functionality
 

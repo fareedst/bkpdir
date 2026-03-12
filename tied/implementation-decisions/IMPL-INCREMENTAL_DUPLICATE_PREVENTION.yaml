@@ -1,0 +1,92 @@
+IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
+  name: Incremental Archive Duplicate Prevention
+  status: Active
+  description: Reuse diff command analysis to prevent duplicate incremental archives. Ensures consistency by using same comparison logic as diff command, prevents code duplication, compares against reconstructed state (full + most recent incremental) for accuracy.
+  rationale:
+    why: Creating duplicate incremental archives wastes storage and creates confusion when no actual changes exist
+    problems_solved:
+      - Duplicate incremental archives created when no changes exist
+      - Inconsistent comparison logic between diff and archive creation
+      - Code duplication for change detection
+    benefits:
+      - Consistency by using same comparison logic as diff command
+      - Prevents code duplication
+      - Compares against reconstructed state for accuracy
+      - Clear user feedback when archive creation is skipped
+      - Name-based archive sorting consistent with diff command
+  implementation_approach:
+    summary: Leverage CalculateDiff() and ReconstructArchiveState() from diff command to detect changes before creating incremental archives
+    details:
+      - Reuse CalculateDiff() function from diff command implementation
+      - Use ReconstructArchiveState() to get effective state from full + most recent incremental
+      - Use findLatestFullArchive() with name-based sorting
+      - Use diff result to determine if changes exist
+      - Skip incremental archive creation if no changes detected
+      - Display appropriate message using format strings
+      - Fallback to old behavior when reconstruction fails (backward compatibility)
+      - Exclude patterns respected via archiveConfig.GetExcludePatterns()
+  cross_references:
+    - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-DIFF_COMMAND
+    - IMPL-DIFF_COMMAND
+    - REQ-OUTPUT_FORMATTING
+  code_locations:
+    files:
+      - archive.go
+      - formatter.go
+      - config.go
+      - incremental_duplicate_prevention_test.go
+    functions:
+      - createIncrementalArchive
+      - ReconstructArchiveState
+      - CalculateDiff
+      - findLatestFullArchive
+      - FormatIncrementalSkippedNoChanges
+      - PrintIncrementalSkippedNoChanges
+  traceability:
+    architecture:
+      - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    requirements:
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-DIFF_COMMAND
+      - REQ-OUTPUT_FORMATTING
+    tests:
+      - incremental_duplicate_prevention_test.go
+    code_annotations:
+      - 'archive.go line ~695-738: createIncrementalArchive with diff analysis'
+      - 'archive.go line ~869-904: findLatestFullArchive with name-based sorting'
+      - 'formatter.go line ~1785-1799: FormatIncrementalSkippedNoChanges and PrintIncrementalSkippedNoChanges'
+      - 'config.go line ~153: FormatIncrementalSkippedNoChanges field'
+      - 'config.go line ~336: Default format string'
+  related_decisions:
+    depends_on:
+      - IMPL-DIFF_COMMAND
+    supersedes: []
+    see_also:
+      - IMPL-DIRECTORY_COMPARISON
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] — Leverage CalculateDiff() and ReconstructArchiveState() from diff command to detect changes before creating incremental archives
+
+    procedure incremental_archive_duplicate_prevention():
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Reuse CalculateDiff() function from diff command implementation
+      reuse_calculatediff_function_from()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Use ReconstructArchiveState() to get effective state from full + most recent incremental
+      use_reconstructarchivestate_to_get()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Use findLatestFullArchive() with name-based sorting
+      use_findlatestfullarchive_with_name_based()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Use diff result to determine if changes exist
+      use_diff_result_to()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Skip incremental archive creation if no changes detected
+      skip_incremental_archive_creation()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Display appropriate message using format strings
+      display_appropriate_message_using()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Fallback to old behavior when reconstruction fails (backward compatibility)
+      fallback_to_old_behavior()
+      # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Exclude patterns respected via archiveConfig.GetExcludePatterns()
+      exclude_patterns_respected_via()
+      end

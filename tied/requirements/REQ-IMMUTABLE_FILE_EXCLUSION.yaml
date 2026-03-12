@@ -1,0 +1,46 @@
+REQ-IMMUTABLE_FILE_EXCLUSION:
+  name: File Exclusion Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These exclusion requirements are mandatory behaviors that users depend on. Changing them would break existing configurations.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Doublestar glob patterns are supported
+    - criterion: Exclusion patterns are configurable
+    - criterion: Default system file exclusions are applied
+    - criterion: Pattern matching is case-sensitive
+    - criterion: Directories can be excluded
+    - criterion: Pattern precedence rules are followed
+  validation_criteria:
+    - method: File exclusion tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-EXCLUSION_PATTERNS
+    implementation:
+      - IMPL-EXCLUSION_PATTERNS
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_FILE_EXCLUSION
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Exclusion Patterns Architecture [ARCH-EXCLUSION_PATTERNS]
+  description: 'File exclusion requirements are mandatory and must be preserved:'
+  implementation: See `implementation-decisions.md` § Exclusion Patterns Implementation [IMPL-EXCLUSION_PATTERNS]

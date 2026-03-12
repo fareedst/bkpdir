@@ -1,0 +1,57 @@
+IMPL-LIST_FORMAT_SAFETY:
+  name: List Command Format Safety Fix
+  status: Active
+  cross_references:
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUT_002
+  rationale:
+    why: |-
+      Prevent `fmt` from interpreting template placeholders or appending EXTRA args when format strings contain no printf verbs (this produced `%!(EXTRA ...)` in user output).
+      Ensure AI formatter and core formatter consistently handle template placeholders (`#{...}`) and printf formats.
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Added guarded printf usage in `FormatListArchive` and `FormatListBackup` to call `fmt.Sprintf` only when the format string contains printf verbs (`%`). Otherwise, return the template-format string as-is or perform placeholder replacement.'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUT_002
+    tests: []
+    code_annotations:
+      - IMPL-LIST_FORMAT_SAFETY
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUT_002
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUT_002
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-LIST_FORMAT_SAFETY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`formatter.go` (FormatListArchive, FormatListBackup), `pkg/formatter/ai_core_formatter.go` (FormatWithContext list handling), `ai_formatter_adapter.go` (FormatListArchiveWithExtraction, FormatListBackupWithExtraction)'
+  cross-references: '[ARCH-OUTPUT_FORMATTING], [REQ-OUT_002], [IMPL-FILE_STATISTICS]'
+  essence_pseudocode: |-
+    # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — - Added guarded printf usage in `FormatListArchive` and `FormatListBackup` to call `fmt.Sprintf` only when the format string contains printf verbs (`%`). Otherwise, return the template-format string as-is or perform placeholder replacement.
+
+    procedure list_command_format_safety_fix():
+      # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] Prevent `fmt` from interpreting template placeholders or appending EXTRA args when format strings contain no printf verbs (this produced `%!(EXTRA ...)` in user output).
+      execute()
+      end

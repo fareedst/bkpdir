@@ -1,0 +1,67 @@
+ARCH-PROCESSING_PATTERNS:
+  name: Processing Patterns Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-PERFORMANCE
+    - REQ-MAINTAINABILITY
+  rationale:
+    why: |-
+      Provides reusable processing patterns from archive/backup operations
+      Enables pipeline-based data processing
+      Supports concurrent processing for performance
+      Standardizes naming conventions
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Inline processing logic: Rejected due to code duplication
+        Third-party processing libraries: Rejected due to dependency and customization concerns
+  implementation_approach:
+    summary: Extracted data processing patterns with pipeline and concurrent processing support
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+      - REQ-MAINTAINABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-PROCESSING_PATTERNS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Extracted data processing patterns with pipeline and concurrent processing support
+  concurrent_processing:
+    - Worker pool management
+    - Context propagation for cancellation
+    - Atomic counters for progress tracking
+    - Resource cleanup on completion
+  cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
+  naming_conventions:
+    - ISO 8601 timestamp formatting (2006-01-02T150405)
+    - Git branch/hash integration with dirty status
+    - Metadata and note support
+    - Archive, backup, and incremental patterns
+    - Manager pattern for algorithm selection
+  pipeline_pattern: Stage-based processing with composition
+  pipeline_stages:
+    - 'Collection: Gather files/directories'
+    - 'Processing: Transform or process data'
+    - 'Output: Generate results'

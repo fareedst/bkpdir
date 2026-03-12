@@ -1,0 +1,49 @@
+REQ-IMMUTABLE_OUTPUT_FORMATTING:
+  name: Output Formatting Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These output formatting requirements are mandatory behaviors that users and scripts depend on. Changing them would break output parsing.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All standard output uses printf-style format specifications
+    - criterion: Template-based formatting supports text/template and placeholder syntax
+    - criterion: Format strings and templates are retrieved from configuration
+    - criterion: Text highlighting is available
+    - criterion: User-facing text is extracted from code
+    - criterion: Both template syntaxes are supported
+    - criterion: Named regex groups are supported
+    - criterion: Default format strings preserve existing output appearance
+    - criterion: Default format specifications are immutable
+  validation_criteria:
+    - method: Output formatting tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    implementation:
+      - IMPL-DUAL_FORMATTING
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_OUTPUT_FORMATTING
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_OUTPUT_FORMATTING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Output Formatting [ARCH-OUTPUT_FORMATTING]
+  description: 'Output formatting requirements are mandatory and must be preserved:'
+  implementation: See `implementation-decisions.md` § Dual Printf/Template Formatting [IMPL-DUAL_FORMATTING]

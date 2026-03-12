@@ -1,0 +1,115 @@
+IMPL-FILE_OPERATIONS:
+  name: File Operations Implementation
+  status: Active
+  cross_references:
+    - ARCH-FILE_OPERATIONS
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Prevents data corruption
+      Enhances security
+      Supports complex traversal scenarios
+      Enables efficient file comparison
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Atomic operations with comprehensive validation and pattern-based exclusion
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    requirements:
+      - REQ-RELIABILITY
+    tests: []
+    code_annotations:
+      - IMPL-FILE_OPERATIONS
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-FILE_OPERATIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`pkg/fileops/` package, atomic operations, validation functions'
+  atomic_functions:
+    - '`AtomicWriteFile(filename string, data []byte, perm os.FileMode) error`'
+    - '`AtomicCopy(src, dst string) error`'
+  atomicwriter: |-
+    ```go
+    type AtomicWriter struct {
+        filename string
+        tempFile *os.File
+        perm     os.FileMode
+    }
+
+    func NewAtomicWriter(filename string, perm os.FileMode) (*AtomicWriter, error)
+    func (aw *AtomicWriter) Write(p []byte) (n int, err error)
+    func (aw *AtomicWriter) Commit() error
+    func (aw *AtomicWriter) Rollback() error
+    ```
+  patternmatcher: |-
+    ```go
+    type PatternMatcher struct {
+        patterns []string
+    }
+
+    func NewPatternMatcher(patterns []string) *PatternMatcher
+    func (pm *PatternMatcher) Match(path string) bool
+    func (pm *PatternMatcher) AddPattern(pattern string)
+    ```
+  traversal_functions:
+    - '`Walk(root string, walkFn filepath.WalkFunc) error`'
+    - '`WalkWithExclusions(root string, exclusions []string, walkFn filepath.WalkFunc) error`'
+    - '`WalkWithOptions(root string, options TraversalOptions, walkFn filepath.WalkFunc) error`'
+  traversaloptions: |-
+    ```go
+    type TraversalOptions struct {
+        Exclusions     []string
+        FollowSymlinks bool
+        MaxDepth       int
+        IncludeHidden  bool
+        SortOrder      SortOrder
+    }
+    ```
+  validation_functions:
+    - '`ValidatePath(path string, options ValidationOptions) error`'
+    - '`ValidateExistence(path string) error`'
+    - '`ValidateReadable(path string) error`'
+    - '`ValidateWritable(path string) error`'
+    - '`IsSecurePath(path string) bool`'
+  validationoptions: |-
+    ```go
+    type ValidationOptions struct {
+        MustExist      bool
+        MustBeReadable bool
+        MustBeWritable bool
+        MustBeFile     bool
+        MustBeDir      bool
+        CheckSecurity  bool
+    }
+    ```
+  essence_pseudocode: |-
+    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Atomic operations with comprehensive validation and pattern-based exclusion
+
+    procedure file_operations_implementation():
+      # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] Prevents data corruption
+      execute()
+      end

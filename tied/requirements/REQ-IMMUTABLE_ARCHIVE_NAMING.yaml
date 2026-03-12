@@ -1,0 +1,43 @@
+REQ-IMMUTABLE_ARCHIVE_NAMING:
+  name: Archive Naming Convention (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Archive names follow the exact format specified
+    - criterion: All components (prefix, timestamp, git_info, note) are correctly formatted
+    - criterion: Default prefix is "bkp" when not specified
+  validation_criteria:
+    - method: Archive naming tests verify format compliance. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-ARCHIVE_FORMAT
+    implementation:
+      - IMPL-ZIP_FORMAT
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_ARCHIVE_NAMING
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_ARCHIVE_NAMING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Archive Format [ARCH-ARCHIVE_FORMAT]
+  description: 'Archive naming convention is fixed and must not be modified. Format: `{prefix}-{timestamp}-{git_info}-{note}.zip`'
+  implementation: See `implementation-decisions.md` § ZIP Archive Format Implementation [IMPL-ZIP_FORMAT]

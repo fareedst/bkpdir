@@ -1,0 +1,44 @@
+REQ-CONTEXT_SUPPORT:
+  name: Context Support Requirements
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Enables operation timeouts and graceful cancellation for better user experience
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All operations accept context parameter
+    - criterion: Operations check for cancellation periodically
+    - criterion: Timeout support available
+    - criterion: File operations support context cancellation
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-CONTEXT_SUPPORT
+    implementation:
+      - IMPL-CONTEXT_OPS
+    tests: []
+    code_annotations:
+      - REQ-CONTEXT_SUPPORT
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-CONTEXT_SUPPORT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Context-Aware Operations [ARCH-CONTEXT_SUPPORT]
+  description: All long-running operations must support cancellation and timeouts. Operations must check for cancellation at multiple points. File operations support context cancellation.
+  implementation: See `implementation-decisions.md` § Context-Aware Operations [IMPL-CONTEXT_OPS]

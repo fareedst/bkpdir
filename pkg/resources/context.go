@@ -1,4 +1,4 @@
-// [IMPL:RESOURCE_MANAGER] [ARCH:RESOURCE_MANAGEMENT] [REQ:RESOURCE_MANAGEMENT]
+// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Context-aware operations for resource management and cancellation support.
 // This file contains the context operations extracted from the original
 // errors.go file, providing cancellation and timeout support for resource operations.

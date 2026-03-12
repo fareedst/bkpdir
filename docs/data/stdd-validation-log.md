@@ -33,7 +33,7 @@
 - **Result**: ✅ Passed. Heatmap accurately reflects current configuration token distribution.
 - **Inputs**: `docs/data/stdd-config-trace.json`, `docs/images/stdd-config-flow.mmd`, `docs/images/stdd-config-flow.svg`.
 - **Checks**:
-  - Configuration-focused nodes/edges capture `[REQ:CONFIGURATION]`, `[REQ:CFG_005]`, `[REQ:CFG_006]` through `[ARCH:CONFIG_SYSTEM]`, `[ARCH:CFG_005]`, `[ARCH:CFG_006]`, `[IMPL:CONFIG_STRUCT]`, `[IMPL:EXCLUDE_MERGE_FIX]`, `[IMPL:CFG_006]`, `[IMPL:CONFIG_OUTPUT_GROUPING]`, and associated tests/code.
+  - Configuration-focused nodes/edges capture `[REQ-CONFIGURATION]`, `[REQ-CFG_005]`, `[REQ-CFG_006]` through `[ARCH-CONFIG_SYSTEM]`, `[ARCH-CFG_005]`, `[ARCH-CFG_006]`, `[IMPL-CONFIG_STRUCT]`, `[IMPL-EXCLUDE_MERGE_FIX]`, `[IMPL-CFG_006]`, `[IMPL-CONFIG_OUTPUT_GROUPING]`, and associated tests/code.
   - SVG layout shows distinct lanes (REQ→ARCH→IMPL→TEST→CODE) with arrows demonstrating configuration state propagation.
 - **Result**: ✅ Passed. Config hierarchy visual aligned with data file and token references.
 - **Next Steps**: Optional timeline/heatmap enhancements can reuse the same token set.

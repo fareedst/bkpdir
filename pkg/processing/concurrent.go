@@ -1,4 +1,4 @@
-// [IMPL:PROCESSING_PATTERNS] [ARCH:PERFORMANCE] [REQ:PERFORMANCE]
+// [IMPL-PROCESSING_PATTERNS] [ARCH-PERFORMANCE] [REQ-PERFORMANCE]
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 

@@ -1,4 +1,4 @@
-// [REQ:RESOURCE_MANAGEMENT]
+// [REQ-RESOURCE_MANAGEMENT]
 // Tests for the pkg/resources package to validate extracted resource management functionality.
 // These tests ensure the extracted resource management components work correctly
 // and maintain backward compatibility with the original functionality.

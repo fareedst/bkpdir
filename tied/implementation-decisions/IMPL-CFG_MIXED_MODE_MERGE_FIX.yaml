@@ -1,0 +1,86 @@
+IMPL-CFG_MIXED_MODE_MERGE_FIX:
+  name: Mixed-Mode Merge Strategy Fix
+  status: Active
+  cross_references:
+    - ARCH-CFG_005
+    - ARCH-CFG_001
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: `exclude_patterns` and other `MergeBehaviorAccumulate` fields were not consistently merging with defaults per CFG-005 requirement
+      The logic was incorrectly keeping "override" strategy for first file in sequential processing, causing defaults to be replaced instead of merged
+      Test expectations were misaligned with CFG-005 requirement - updated to reflect correct merge behavior
+      Ensures consistent behavior: accumulate fields always merge (unless explicit `!` prefix), regardless of context
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Simplified merge strategy logic in `applyMergeStrategies` to always change "override" to "merge" for `MergeBehaviorAccumulate` fields (unless explicit prefix)'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_MIXED_MODE_MERGE_FIX
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_005
+      - ARCH-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`applyMergeStrategies`, `applyOverride`, `applyMergeOperation`, `applyReplace`, `originalDstValue`, `earlierFilesProcessed`, `// CFG-005: Array fields default to merge`, `// CFG-001: Earlier files take precedence`'
+  after: Expected `[.git/ vendor/ local1, local2]` (merge behavior per CFG-005)
+  before: Expected `[local1, local2]` (replacement behavior)
+  change: Updated test expectation to match CFG-005 behavior - `exclude_patterns` should merge with defaults, not replace them.
+  code_location: '`config_test.go`, `TestLoadConfigMultipleFiles` function, line ~240'
+  cross-references: '[ARCH-CFG_005], [ARCH-CFG_001], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-CFG_PRECEDENCE_FIX], [IMPL-EXCLUDE_MERGE_FIX]'
+  earlier_file_precedence: For `MergeBehaviorPrecedence` fields, earlier files take precedence even if values equal defaults
+  explicit_`!`_prefix: Replaces, but still respects earlier file precedence if field was set by earlier file (CFG-001)
+  key_changes: '#### 1. Simplified Merge Strategy Logic (`applyMergeStrategies`)'
+  multiple_files,_first_file: Merges with defaults → `[.git/ vendor/ first_file_patterns]` (CFG-005)
+  multiple_files,_subsequent_files: Merges with accumulated result → `[.git/ vendor/ first_file_patterns second_file_patterns]` (CFG-005)
+  single_file_scenario: '`exclude_patterns` merges with defaults → `[.git/ vendor/ user_patterns]` (CFG-005)'
+  test_cases:
+    - '`TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE`: Validates merge with defaults for single file'
+    - '`TestLoadConfigMultipleFiles`: Validates merge with defaults and earlier file precedence'
+    - '`TestLoadConfigMultipleFiles/default_search_path_processes_multiple_files`: Validates earlier file precedence for non-accumulate fields'
+  validation:
+    - ✅ `exclude_patterns` merges with defaults in all contexts (CFG-005)
+    - ✅ Earlier file precedence preserved for `MergeBehaviorPrecedence` fields (CFG-001)
+    - ✅ Explicit `!` prefix still respects earlier file precedence (CFG-001)
+    - ✅ All tests pass with updated expectations
+  essence_pseudocode: |-
+    # [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — - Simplified merge strategy logic in `applyMergeStrategies` to always change "override" to "merge" for `MergeBehaviorAccumulate` fields (unless explicit prefix)
+
+    procedure mixed_mode_merge_strategy_fix():
+      # [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] Bug fix: `exclude_patterns` and other `MergeBehaviorAccumulate` fields were not consistently merging with defaults per CFG-005 requirement
+      execute()
+      end

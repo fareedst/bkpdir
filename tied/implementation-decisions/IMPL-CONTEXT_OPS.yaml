@@ -1,0 +1,67 @@
+IMPL-CONTEXT_OPS:
+  name: Context-Aware Operations
+  status: Active
+  cross_references:
+    - ARCH-CONTEXT_SUPPORT
+    - REQ-CONTEXT_SUPPORT
+  rationale:
+    why: |-
+      Enables operation timeouts
+      Supports graceful cancellation
+      Better user experience for long operations
+      Standard Go pattern for cancellable operations
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      All long-running operations accept `context.Context`
+      Periodic cancellation checks during operations
+      Context-aware file operations
+      Timeout support via `context.WithTimeout()`
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONTEXT_SUPPORT
+    requirements:
+      - REQ-CONTEXT_SUPPORT
+    tests: []
+    code_annotations:
+      - IMPL-CONTEXT_OPS
+      - ARCH-CONTEXT_SUPPORT
+      - REQ-CONTEXT_SUPPORT
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONTEXT_SUPPORT
+      - REQ-CONTEXT_SUPPORT
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CONTEXT_OPS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`context.Context` parameters, `checkContextCancellation()` calls'
+  functions:
+    - '`CreateArchiveWithContext(ctx context.Context, ...)`'
+    - '`CreateFileBackupWithContext(ctx context.Context, ...)`'
+    - '`CopyFileWithContext(ctx context.Context, src, dst string)`'
+    - '`CompareFilesWithContext(ctx context.Context, file1, file2 string)`'
+  essence_pseudocode: |-
+    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — All long-running operations accept `context.Context`
+
+    procedure context_aware_operations():
+      # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Enables operation timeouts
+      execute()
+      end

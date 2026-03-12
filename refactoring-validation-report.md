@@ -95,7 +95,7 @@ BenchmarkBatchProcessing-10             2,607 ops   478,975 ns/op   182,773 B/op
 
 ### Token Standardization Analysis
 
-**[HIGH] REFACTOR-006: Token consistency validation - Standards compliance verified - [ACTION:discovery]**
+**[HIGH] REFACTOR-006: Token consistency validation - Standards compliance verified - [ACTION-discovery]**
 
 ```
 📊 Implementation Token Summary:
@@ -166,7 +166,7 @@ Feature IDs in source code: 194
 
 ### Pre-Extraction Criteria Validation
 
-**[HIGH] REFACTOR-006: Extraction readiness assessment - All criteria satisfied - [ACTION:validation]**
+**[HIGH] REFACTOR-006: Extraction readiness assessment - All criteria satisfied - [ACTION-validation]**
 
 #### ✅ REFACTOR-001: Dependency Analysis Complete
 - **Status**: ✅ COMPLETED
@@ -302,7 +302,7 @@ Files checked: 61
 3. **Documentation Evolution**: Maintain context file synchronization during extraction
 4. **Quality Preservation**: Apply same validation rigor to extraction phase
 
-## [ACTION:validation] Implementation Tokens
+## [ACTION-validation] Implementation Tokens
 
 **[HIGH] REFACTOR-006: Validation framework - Comprehensive validation completed - 🧪**
 **[HIGH] REFACTOR-006: Quality assurance - All quality gates passed - ✅**

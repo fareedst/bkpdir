@@ -1,0 +1,90 @@
+IMPL-TEST_DEFAULT_STRATEGY_EDGES:
+  name: Default Strategy Edge Cases Tests
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
+  rationale:
+    why: |-
+      Ensures default strategy only applies when destination is zero value
+      Validates that default strategy does NOT apply when destination is non-zero or equals default
+      Critical for understanding default strategy semantics
+      Part of comprehensive configuration merge test plan
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+    tests: []
+    code_annotations:
+      - IMPL-TEST_DEFAULT_STRATEGY_EDGES
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-CFG_005
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`config_test.go` line ~6937-7155, `TestDefaultStrategyEdgeCases`, `createTestConfigFileWithData`, `applyDefault`, `isZeroValue`, `DefaultValueStrategy`'
+  array_field_special_case: When first file has empty array `[]`, it merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is non-zero (contains defaults), and default strategy does NOT apply
+  core_principle: Default strategy only applies when destination is zero value at the time of evaluation, regardless of whether it equals the default
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005]'
+  equals_default_but_not_zero: Even if value equals default (e.g., `"../.bkpdir"`), if it's not zero value, default strategy does NOT apply
+  non-zero_values: Any non-zero value prevents default strategy from applying
+  test_coverage:
+    - 'String field zero value: `=archive_dir_path: "/custom/path"` when destination is `""` → applies'
+    - 'String field non-zero: `=archive_dir_path: "/custom/path"` when destination is `"/existing/path"` → does NOT apply'
+    - 'String field equals default: `=archive_dir_path: "/custom/path"` when destination is `"../.bkpdir"` → does NOT apply (not zero, even if equals default)'
+    - 'Array field zero value: `=exclude_patterns: ["custom1"]` when destination is `[]` → **Important**: Empty array in first file merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is `[".git/", "vendor/"]` (non-zero), and default strategy does NOT apply. Result: defaults preserved, not custom values.'
+    - 'Array field non-zero: `=exclude_patterns: ["custom1"]` when destination is `["existing1"]` → does NOT apply'
+    - 'Bool field zero value: `=include_git_info: true` when destination is `false` → applies'
+    - 'Bool field non-zero: `=include_git_info: false` when destination is `true` → does NOT apply'
+  test_structure: |-
+    ```go
+    // TestDefaultStrategyEdgeCases tests default strategy edge cases
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates default strategy only applies when destination is zero value
+    func TestDefaultStrategyEdgeCases(t *testing.T) {
+        // Test: default strategy when field is zero value
+        // Test: default strategy when field is non-zero
+        // Test: default strategy when field equals default
+        // Test: default strategy with array field (zero and non-zero)
+        // Test: default strategy with bool field (zero and non-zero)
+    }
+    ```
+  testdefaultstrategyedgecases: Tests default strategy in various edge case scenarios
+  zero_value_check: Default strategy uses `isZeroValue()` to check if destination is zero value
+  zero_value_types: Empty string `""`, empty slice `[]`, `false` for bool, `0` for int, `nil`
+  essence_pseudocode: |-
+    # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — - **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios
+
+    procedure default_strategy_edge_cases_tests():
+      # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] Ensures default strategy only applies when destination is zero value
+      execute()
+      end

@@ -1,0 +1,80 @@
+IMPL-TEST_COVERAGE:
+  name: Comprehensive formatter.go Test Coverage
+  status: Active
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CODE_QUALITY
+  rationale:
+    why: Improve code coverage and ensure reliability of OutputCollector, template methods, and error formatting functionality in formatter.go
+    problems_solved:
+      - Multiple functions at 0% test coverage in formatter.go
+      - Unreliable OutputCollector, template methods, and error formatting
+      - Insufficient confidence in formatter.go functionality
+    benefits:
+      - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+      - 116 functions at 100% coverage
+      - 36 functions with partial coverage (75%+ typical)
+  implementation_approach:
+    summary: Added comprehensive test suites for previously untested functions including OutputCollector, template methods, error formatting, and print methods
+    details:
+      - 'TestOutputCollector: tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear'
+      - 'TestDelayedOutputMode: OutputFormatter with collector integration'
+      - 'TestTemplateFormattingMethods: all template functions with 0% coverage'
+      - 'TestErrorFormattingMethods: error formatting functions'
+      - 'TestPrintMethods: Print methods in delayed mode'
+      - 'TestTemplateFormatterAdvanced: TemplateFormatter functionality'
+      - 'TestOutputCollectorFlushMethods: comprehensive FlushAll, FlushStdout, FlushStderr testing'
+  code_locations:
+    files:
+      - formatter_test.go
+    functions:
+      - TestOutputCollector
+      - TestDelayedOutputMode
+      - TestTemplateFormattingMethods
+      - TestErrorFormattingMethods
+      - TestPrintMethods
+      - TestTemplateFormatterAdvanced
+      - TestOutputCollectorFlushMethods
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    requirements:
+      - REQ-CODE_QUALITY
+    tests:
+      - TestOutputCollector
+      - TestDelayedOutputMode
+      - TestTemplateFormattingMethods
+      - TestErrorFormattingMethods
+      - TestPrintMethods
+      - TestTemplateFormatterAdvanced
+      - TestOutputCollectorFlushMethods
+    code_annotations: []
+  related_decisions:
+    depends_on:
+      - IMPL-TESTING
+    supersedes: []
+    see_also:
+      - IMPL-TESTING_COMPLEXITY
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Added comprehensive test suites for previously untested functions including OutputCollector, template methods, error formatting, and print methods
+
+    procedure comprehensive_formatter_go_test_coverage():
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestOutputCollector: tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
+      testoutputcollector("tests for NewOutputCollector, AddStdout, AddStderr, GetMessa")
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestDelayedOutputMode: OutputFormatter with collector integration
+      testdelayedoutputmode("OutputFormatter with collector integration")
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestTemplateFormattingMethods: all template functions with 0% coverage
+      testtemplateformattingmethods("all template functions with 0% coverage")
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestErrorFormattingMethods: error formatting functions
+      testerrorformattingmethods("error formatting functions")
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestPrintMethods: Print methods in delayed mode
+      testprintmethods("Print methods in delayed mode")
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestTemplateFormatterAdvanced: TemplateFormatter functionality
+      testtemplateformatteradvanced("TemplateFormatter functionality")
+      # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] TestOutputCollectorFlushMethods: comprehensive FlushAll, FlushStdout, FlushStderr testing
+      testoutputcollectorflushmethods("comprehensive FlushAll, FlushStdout, FlushStderr testing")
+      end

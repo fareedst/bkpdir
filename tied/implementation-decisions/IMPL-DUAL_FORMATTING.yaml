@@ -1,0 +1,62 @@
+IMPL-DUAL_FORMATTING:
+  name: Dual Printf/Template Formatting
+  status: Active
+  cross_references:
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      Printf for simple, backward-compatible formatting
+      Templates for rich data extraction and advanced formatting
+      Graceful fallback from template to printf
+      Supports ANSI colors and structured output
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: |-
+      `OutputFormatter`: Printf-style formatting methods
+      `TemplateFormatter`: Advanced template processing
+      Regex extraction for rich data formatting
+      Support for both Go text/template and placeholder syntax
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - IMPL-DUAL_FORMATTING
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-OUTPUT_FORMATTING
+      - REQ-OUTPUT_FORMATTING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`FormatXXX()` and `TemplateXXX()` functions, regex patterns'
+  essence_pseudocode: |-
+    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — `OutputFormatter`: Printf-style formatting methods
+
+    procedure dual_printf_template_formatting():
+      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf for simple, backward-compatible formatting
+      execute()
+      end

@@ -1,0 +1,67 @@
+IMPL-CONFIGURABLE_STRINGS:
+  name: Eliminate Hardcoded Strings and Enhance Template Formatting
+  status: Active
+  description: Comprehensive string externalization system allowing all user-facing strings to be loaded from configuration files rather than hardcoded, with enhanced template formatting using named elements in data structures
+  rationale:
+    why: Hardcoded strings prevent customization and localization; template formatting with named elements improves maintainability
+    problems_solved:
+      - Hardcoded user-facing strings scattered across codebase
+      - Inflexible error message formatting
+      - Difficulty customizing output messages
+    benefits:
+      - All user-facing strings configurable via configuration files
+      - Template-based error formatting with named elements
+      - Full backward compatibility maintained
+      - OutputFormatter methods used instead of hardcoded strings
+  implementation_approach:
+    summary: Add configurable format strings to Config struct with OutputFormatter methods for template-based formatting
+    details:
+      - Added 12 new error message format strings (FormatDiskFullError, FormatPermissionError, etc.)
+      - Added corresponding template versions with named data structure support
+      - Updated HandleArchiveError to use configurable error messages
+      - Maintained full backward compatibility with existing format strings
+      - All error messages now use OutputFormatter methods instead of hardcoded strings
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  code_locations:
+    files:
+      - config.go
+      - formatter.go
+      - errors.go
+    functions:
+      - HandleArchiveError
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - Configurable format strings
+      - template-based error formatting with named elements
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+      - IMPL-DUAL_FORMATTING
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Add configurable format strings to Config struct with OutputFormatter methods for template-based formatting
+
+    procedure eliminate_hardcoded_strings_and_enhance_template_f():
+      # [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Added 12 new error message format strings (FormatDiskFullError, FormatPermissionError, etc.)
+      added_12_new_error()
+      # [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Added corresponding template versions with named data structure support
+      added_corresponding_template_versions()
+      # [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Updated HandleArchiveError to use configurable error messages
+      updated_handlearchiveerror_to_use()
+      # [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Maintained full backward compatibility with existing format strings
+      maintained_full_backward_compatibility()
+      # [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] All error messages now use OutputFormatter methods instead of hardcoded strings
+      all_error_messages_now()
+      end

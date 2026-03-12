@@ -6,9 +6,9 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// [REQ:GIT_INTEGRATION] Git integration for archive naming and metadata
-// [ARCH:GIT_INTEGRATION] Git command-line integration architecture
-// [IMPL:GIT_CLI] Git command-line interface implementation
+// [REQ-GIT_INTEGRATION] Git integration for archive naming and metadata
+// [ARCH-GIT_INTEGRATION] Git command-line integration architecture
+// [IMPL-GIT_CLI] Git command-line interface implementation
 // GIT-INTEGRATION-001: Git integration specification - Git integration and metadata [ACTION:core-functionality]
 // Source: git.go - GIT-INTEGRATION-001
 // Impact: Core functionality requirement for Git integration

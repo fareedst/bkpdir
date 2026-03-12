@@ -1,0 +1,53 @@
+ARCH-ERROR_HANDLING:
+  name: Error Handling Strategy
+  status: Active
+  cross_references: &ref_0
+    - REQ-ERROR_HANDLING
+    - REQ-RELIABILITY
+  rationale:
+    why: |-
+      Consistent error handling across operations
+      Machine-readable status codes for scripting
+      Enhanced debugging with operation context
+      Supports template-based error formatting
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Structured error types with status codes and operation context
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-ERROR_HANDLING
+      - REQ-ERROR_HANDLING
+      - REQ-RELIABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-ERROR_HANDLING.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Structured error types with status codes and operation context
+  cross-references: '[REQ-ERROR_HANDLING], [REQ-RELIABILITY]'
+  error_detection:
+    - '`isDiskFullError()`: Comprehensive disk space error detection'
+    - Enhanced error messages with operation context
+    - Panic recovery mechanisms
+  error_types:
+    - '`ArchiveError`: Structured errors for archive operations'
+    - '`BackupError`: Structured errors for backup operations'
+    - 'Both include: Message, StatusCode, Operation, Path, Err'

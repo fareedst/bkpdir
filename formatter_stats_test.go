@@ -1,6 +1,6 @@
-// [REQ:OUT_002] Enhanced Command Output with File Statistics testing
-// [ARCH:FILE_STATISTICS] File statistics output formatting validation
-// [IMPL:FILE_STATISTICS] FormatCreatedArchiveWithStats and FormatIncrementalCreatedWithStats validation
+// [REQ-OUT_002] Enhanced Command Output with File Statistics testing
+// [ARCH-FILE_STATISTICS] File statistics output formatting validation
+// [IMPL-FILE_STATISTICS] FormatCreatedArchiveWithStats and FormatIncrementalCreatedWithStats validation
 package main
 
 import (
@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestFormatCreatedArchiveWithStats tests format string processing with named replacements for full archives
 func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -71,7 +71,7 @@ func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	}
 }
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestFormatIncrementalCreatedWithStats tests format string processing with named replacements for incremental archives
 func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -126,7 +126,7 @@ func TestFormatIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	}
 }
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestFormatCreatedArchiveWithStatsAllPlaceholders tests all available placeholders
 func TestFormatCreatedArchiveWithStatsAllPlaceholders_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -185,7 +185,7 @@ func TestFormatCreatedArchiveWithStatsAllPlaceholders_REQ_OUT_002(t *testing.T) 
 	}
 }
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestFormatCreatedArchiveWithStatsErrorHandling tests error handling when stat gathering fails
 func TestFormatCreatedArchiveWithStatsErrorHandling_REQ_OUT_002(t *testing.T) {
 	cfg := DefaultConfig()
@@ -207,7 +207,7 @@ func TestFormatCreatedArchiveWithStatsErrorHandling_REQ_OUT_002(t *testing.T) {
 	}
 }
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestPrintCreatedArchiveWithStats tests the print method for full archives
 func TestPrintCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -247,7 +247,7 @@ func TestPrintCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	}
 }
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestPrintIncrementalCreatedWithStats tests the print method for incremental archives
 func TestPrintIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
@@ -287,7 +287,7 @@ func TestPrintIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	}
 }
 
-// [REQ:OUT_002] [ARCH:FILE_STATISTICS] [IMPL:FILE_STATISTICS]
+// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
 // TestBackwardCompatibilityFormatStrings tests that existing format strings still work
 func TestBackwardCompatibilityFormatStrings_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()

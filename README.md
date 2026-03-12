@@ -259,7 +259,7 @@ This project uses a **semantic token system** for AI-optimized development:
 ```go
 // [CRITICAL] ARCH-001: Archive naming convention [ACTION:core-functionality]
 // [HIGH] CFG-003: Template formatting logic [ACTION:format-processing]
-// [MEDIUM] GIT-004: Git submodule support [ACTION:discovery]
+// [MEDIUM] GIT-004: Git submodule support [ACTION-discovery]
 ```
 
 **Key Benefits:**
@@ -272,7 +272,7 @@ This project uses a **semantic token system** for AI-optimized development:
 
 All development work must comply with:
 
-1. **Semantic tokens** - Use `[CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION:context]`
+1. **Semantic tokens** - Use `[CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION-context]`
 2. **Validation** - Pass `make validate-token-enforcement`
 3. **Registry compliance** - Use tokens from `project-tokens.yaml`
 4. **Documentation consistency** - Keep tokens aligned across all files

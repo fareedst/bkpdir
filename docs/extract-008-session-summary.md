@@ -139,7 +139,7 @@ $ make demo
 
 ### Overall Progress: 20% Complete (1/5 subtasks)
 
-## [ACTION:migration] Next Steps
+## [ACTION-migration] Next Steps
 
 ### Immediate Next Steps (Subtask 2)
 1. **Project Scaffolding System**:
@@ -191,7 +191,7 @@ Provided immediate value through a working template that developers can use righ
 - **Documentation Base**: Solid foundation for comprehensive documentation
 - **Migration Example**: Demonstrates successful package integration
 
-## [ACTION:validation] Quality Assurance
+## [ACTION-validation] Quality Assurance
 
 ### Code Quality
 - ✅ All code builds successfully

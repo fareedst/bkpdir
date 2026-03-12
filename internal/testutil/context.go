@@ -1,4 +1,4 @@
-// [IMPL:CONTEXT_OPS] [ARCH:CONTEXT_SUPPORT] [REQ:CONTEXT_SUPPORT]
+// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // Test utilities for context cancellation/propagation — links to STDD tokens for traceability.
 // This file is part of bkpdir
 //

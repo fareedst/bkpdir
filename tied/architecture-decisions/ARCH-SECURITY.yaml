@@ -1,0 +1,51 @@
+ARCH-SECURITY:
+  name: Security Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-RELIABILITY
+    - REQ-RESOURCE_MANAGEMENT
+  rationale:
+    why: |-
+      Prevents security vulnerabilities
+      Protects against malicious input
+      Ensures data integrity
+      Maintains system reliability
+    problems_solved: []
+    benefits: []
+  alternatives_considered: []
+  implementation_approach:
+    summary: Comprehensive security measures for file system and archive operations
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-SECURITY
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-SECURITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Comprehensive security measures for file system and archive operations
+  compression_bombs: ZIP bomb protection during creation
+  cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
+  path_sanitization: Safe archive extraction with validation
+  path_validation: Prevent directory traversal with enhanced validation
+  permission_checking: Verify access rights with structured errors
+  symlink_handling: Safe symbolic link processing
+  temporary_files: Secure temporary file creation with automatic cleanup

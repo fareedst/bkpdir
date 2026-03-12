@@ -1,0 +1,207 @@
+IMPL-CFG_006:
+  name: Configuration Reflection Implementation
+  status: Active
+  cross_references:
+    - ARCH-CFG_006
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CFG_006
+  rationale:
+    why: |-
+      Provides structured data representation
+      Enables type safety
+      Supports serialization and persistence
+      Facilitates testing and validation
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Reflection-based field discovery with caching and lazy evaluation
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CFG_006
+      - ARCH-SYSTEM_COMPONENTS
+    requirements:
+      - REQ-CFG_006
+    tests: []
+    code_annotations:
+      - IMPL-CFG_006
+      - ARCH-CFG_006
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-CFG_006
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CFG_006
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-CFG_006
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_006.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: Archive and backup struct definitions, formatter types
+  archive_structure: |-
+    ```go
+    type Archive struct {
+        Name               string
+        Path               string
+        CreationTime       time.Time
+        IsIncremental      bool
+        GitBranch          string
+        GitHash            string
+        Note               string
+        BaseArchive        string
+    }
+    ```
+  backup_structure: |-
+    ```go
+    type Backup struct {
+        Name         string
+        Path         string
+        CreationTime time.Time
+        SourceFile   string
+        Note         string
+    }
+
+    type BackupInfo struct {
+        Name         string
+        Path         string
+        CreationTime time.Time
+        Size         int64
+    }
+
+    type BackupOptions struct {
+        Context   context.Context
+        Config    *Config
+        Formatter *OutputFormatter
+        FilePath  string
+        Note      string
+        DryRun    bool
+    }
+    ```
+  caching_strategy:
+    - Thread-safe caching with sync.RWMutex
+    - Schema hash-based cache invalidation
+    - Automatic cache refresh on struct changes
+    - Singleton pattern for optimal memory usage
+  configfieldcache_structure: |-
+    ```go
+    // [MEDIUM] CFG-006: Performance optimization - Reflection result caching
+    type configFieldCache struct {
+        mu         sync.RWMutex
+        fields     []configFieldInfo
+        structHash uint64        // Hash of Config struct to detect changes
+        lastUpdate time.Time
+        valid      bool
+    }
+
+    var globalFieldCache = &configFieldCache{}
+    ```
+  configvaluewithmetadata_structure: |-
+    ```go
+    type ConfigValueWithMetadata struct {
+        Field         configFieldInfo
+        Value         interface{}
+        Source        string              // Source type (default, file, environment, inheritance)
+        SourceFile    string              // Source file path (if applicable)
+        InheritanceChain []string         // Complete inheritance chain
+        MergeStrategy string              // Merge strategy used (override, append, etc.)
+        IsOverride    bool                // Whether value was overridden
+    }
+    ```
+  field_categorization:
+    - Automatic categorization based on field name patterns
+    - 'Categories: archive, backup, formatting, verification, status, template, pattern'
+    - Supports custom category assignment
+  field_metadata_structure: |-
+    ```go
+    type configFieldInfo struct {
+        Path     string   // Full field path (e.g., "Git.IncludeInfo")
+        Name     string   // Field name
+        Type     string   // Type string representation
+        Category string   // Field category (archive, backup, formatting, etc.)
+        Value    interface{} // Current field value
+    }
+    ```
+  format_functions: |-
+    ```go
+    // [HIGH] CFG-006: Complete config visibility - Type-aware formatting
+    func formatFieldValue(value interface{}, fieldType reflect.Kind) string {
+        switch fieldType {
+        case reflect.String:
+            return formatStringValue(value)
+        case reflect.Slice:
+            return formatSliceValue(value)
+        case reflect.Bool:
+            return formatBoolValue(value)
+        // ... other types
+        }
+    }
+    ```
+  formatter_structures: |-
+    ```go
+    type OutputFormatter struct {
+        cfg *Config
+    }
+
+    type TemplateFormatter struct {
+        config *Config
+    }
+    ```
+  getallconfigfields()_function: "```go\n// [HIGH] CFG-006: Complete config visibility - Automatic field discovery\nfunc GetAllConfigFields(cfg *Config) []configFieldInfo {\n    // Check cache first\n    if cached := getCachedFields(); cached != nil {\n        return cached\n    }\n    \n    // Perform reflection-based discovery\n    fields := reflectConfigFields(reflect.TypeOf(*cfg), \"\", nil)\n    \n    // Cache results\n    cacheFields(fields)\n    \n    return fields\n}\n```"
+  getallconfigvalueswithsources()_function: "```go\n// [HIGH] CFG-006: Complete config visibility - Enhanced source tracking\nfunc GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    values := make([]ConfigValueWithMetadata, 0, len(fields))\n    \n    for _, field := range fields {\n        value := getFieldValue(cfg, field.Path)\n        source := determineSource(cfg, field.Path)\n        \n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Value:  value,\n            Source: source,\n            // ... additional metadata\n        })\n    }\n    \n    return values\n}\n```"
+  incremental_resolution: "```go\n// [MEDIUM] CFG-006: Performance optimization - Incremental resolution\nfunc GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {\n    // Direct field access without full enumeration\n    field := findFieldByPath(fieldPath)\n    value := getFieldValue(cfg, fieldPath)\n    source := determineSource(cfg, fieldPath)\n    \n    return ConfigValueWithMetadata{\n        Field:  field,\n        Value:  value,\n        Source: source,\n    }, nil\n}\n```"
+  json_format: Structured JSON output for programmatic use
+  lazy_source_evaluation: "```go\n// [MEDIUM] CFG-006: Performance optimization - Lazy source evaluation\nfunc GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    \n    // Pre-filter fields before source evaluation\n    filteredFields := applyFilter(fields, filter)\n    \n    // Only resolve sources for filtered fields\n    values := make([]ConfigValueWithMetadata, 0, len(filteredFields))\n    for _, field := range filteredFields {\n        source := determineSource(cfg, field.Path) // Lazy evaluation\n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Source: source,\n        })\n    }\n    \n    return values\n}\n```"
+  pattern-based_queries: "```go\n// [MEDIUM] CFG-006: Performance optimization - Pattern-based queries\nfunc GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {\n    fields := GetAllConfigFields(cfg)\n    matched := make([]configFieldInfo, 0)\n    \n    for _, field := range fields {\n        if matchPattern(field.Path, pattern) {\n            matched = append(matched, field)\n        }\n    }\n    \n    return matched, nil\n}\n```"
+  recursive_field_traversal:
+    - Handles nested structs (e.g., GitConfig)
+    - Supports embedded fields and anonymous structs
+    - Prevents circular references with visited type tracking
+    - Maximum depth limiting for safety
+    - Type-aware value extraction
+  source_determination:
+    - Integration with CFG-005 inheritance system
+    - Environment variable detection
+    - Default value identification
+    - Inheritance chain tracking
+    - Merge strategy attribution
+  table_format: Tabular display with columns (Field, Value, Source, Category)
+  test_coverage:
+    - '>95% coverage for all CFG-006 functionality'
+    - 'Edge cases: anonymous fields, circular refs, error recovery'
+    - Integration testing with CFG-005
+    - Performance validation with benchmarks
+  test_functions:
+    - '`TestConfigReflection()`: Main functionality tests'
+    - '`TestAdvancedFieldDiscovery()`: Edge case testing'
+    - '`TestSourceAttributionAccuracy()`: Source tracking validation'
+    - '`TestDisplayFormatting()`: Output format testing'
+    - '`TestFilteringFunctionality()`: Filtering validation'
+    - '`TestPerformanceOptimization()`: Performance benchmarks'
+    - '`BenchmarkConfigReflectionOperations()`: Performance benchmarks'
+  tree_format: Hierarchical display showing inheritance relationships
+  zero_value_detection:
+    - Detects zero values for all types
+    - Displays appropriate zero value representation
+    - Handles nil pointers and empty collections
+  essence_pseudocode: |-
+    # [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — Reflection-based field discovery with caching and lazy evaluation
+
+    procedure configuration_reflection_implementation():
+      # [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] Provides structured data representation
+      execute()
+      end

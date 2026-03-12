@@ -1,0 +1,69 @@
+ARCH-FILE_STATISTICS:
+  name: File Statistics Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-OUTPUT_FORMATTING
+    - REQ-USABILITY
+  rationale:
+    why: |-
+      Provides rich file information for output display
+      Enables human-readable size formatting
+      Supports file type detection
+      Enhances user experience with detailed file information
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        No statistics: Rejected due to limited output information
+        External library: Rejected due to dependency concerns
+  implementation_approach:
+    summary: File statistics gathering for enhanced output formatting
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-FILE_STATISTICS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: File statistics gathering for enhanced output formatting
+  cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
+  file_type_detection:
+    - Based on `os.FileMode` flags
+    - Supports all standard Unix file types
+    - Returns descriptive string identifiers
+  human-readable_formatting:
+    - 'Size conversion: bytes → KB → MB → GB → TB'
+    - 'Format: "1.2MB", "455KB", "1.0GB"'
+    - 'Precision: One decimal place for readability'
+  integration:
+    - Used by output formatter for enhanced display
+    - Supports template-based formatting with named placeholders
+    - Integrates with archive and backup output
+  statistics_collected:
+    - File path and name
+    - File size (bytes and human-readable)
+    - Modification time (time.Time and Unix timestamp)
+    - File permissions/mode
+    - File type (regular, directory, symlink, device, pipe, socket, other)

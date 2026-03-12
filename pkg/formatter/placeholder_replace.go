@@ -1,4 +1,4 @@
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Simple placeholder replacement
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Simple placeholder replacement
 // This package provides a simple, testable function for replacing #{key} placeholders
 // Using #{...} instead of %{...} (old syntax) to avoid conflicts with Go's fmt package
 package formatter

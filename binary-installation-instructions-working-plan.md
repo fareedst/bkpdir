@@ -91,7 +91,7 @@ Add instructions for end users to install pre-compiled binaries from the reposit
 - Include troubleshooting section for common installation issues
 - Maintain existing installation methods for users who prefer them
 
-## [ACTION:migration] Recovery Information
+## [ACTION-migration] Recovery Information
 - **Task Started**: 2025-01-03
 - **AI Assistant**: Claude Sonnet 4
 - **Context Documentation Version**: Current as of 2025-01-03

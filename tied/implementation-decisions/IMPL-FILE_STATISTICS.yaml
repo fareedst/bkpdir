@@ -1,0 +1,100 @@
+IMPL-FILE_STATISTICS:
+  name: File Statistics Implementation
+  status: Active
+  cross_references:
+    - ARCH-FILE_STATISTICS
+    - REQ-OUTPUT_FORMATTING
+    - REQ-OUT_002
+  rationale:
+    why: |-
+      Provides rich file information
+      Enhances output display
+      Supports template formatting
+      Improves user experience
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: FileStatInfo structure with human-readable formatting
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-OUT_002
+    tests: []
+    code_annotations:
+      - IMPL-FILE_STATISTICS
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-OUT_002
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-OUT_002
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-FILE_STATISTICS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`file_stats.go`, `FileStatInfo` struct, `GatherFileStatInfo()` function'
+  cross-references: '[ARCH-FILE_STATISTICS], [REQ-OUTPUT_FORMATTING], [REQ-OUT_002]'
+  file_type_detection: |-
+    ```go
+    func getFileType(info os.FileInfo) string {
+        mode := info.Mode()
+        switch {
+        case mode.IsRegular():
+            return "regular"
+        case mode.IsDir():
+            return "directory"
+        case mode&os.ModeSymlink != 0:
+            return "symlink"
+        case mode&os.ModeDevice != 0:
+            return "device"
+        case mode&os.ModeNamedPipe != 0:
+            return "pipe"
+        case mode&os.ModeSocket != 0:
+            return "socket"
+        default:
+            return "other"
+        }
+    }
+    ```
+  filestatinfo_structure: |-
+    ```go
+    type FileStatInfo struct {
+        Path      string      // Full file path
+        Name      string      // File name only
+        Size      int64       // File size in bytes
+        SizeHuman string      // Human-readable size (1.2MB, 455KB, etc.)
+        MTime     time.Time   // Modification time
+        MTimeUnix int64       // Modification time as unix timestamp
+        Mode      os.FileMode // File permissions/mode
+        Type      string      // File type (regular, directory, symlink)
+    }
+    ```
+  gathering_function: "```go\nfunc GatherFileStatInfo(path string) (*FileStatInfo, error) {\n    info, err := os.Stat(path)\n    if err != nil {\n        return nil, fmt.Errorf(\"failed to stat file %s: %w\", path, err)\n    }\n    \n    return &FileStatInfo{\n        Path:      path,\n        Name:      filepath.Base(path),\n        Size:      info.Size(),\n        SizeHuman: formatHumanSize(info.Size()),\n        MTime:     info.ModTime(),\n        MTimeUnix: info.ModTime().Unix(),\n        Mode:      info.Mode(),\n        Type:      getFileType(info),\n    }, nil\n}\n```"
+  human-readable_size_formatting: "```go\nfunc formatHumanSize(size int64) string {\n    const (\n        KB = 1024\n        MB = KB * 1024\n        GB = MB * 1024\n        TB = GB * 1024\n    )\n    \n    switch {\n    case size >= TB:\n        return fmt.Sprintf(\"%.1fTB\", float64(size)/TB)\n    case size >= GB:\n        return fmt.Sprintf(\"%.1fGB\", float64(size)/GB)\n    case size >= MB:\n        return fmt.Sprintf(\"%.1fMB\", float64(size)/MB)\n    case size >= KB:\n        return fmt.Sprintf(\"%.1fKB\", float64(size)/KB)\n    default:\n        return fmt.Sprintf(\"%dB\", size)\n    }\n}\n```"
+  essence_pseudocode: |-
+    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] [REQ-OUT_002] — FileStatInfo structure with human-readable formatting
+
+    procedure file_statistics_implementation():
+      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] [REQ-OUT_002] Provides rich file information
+      execute()
+      end

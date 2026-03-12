@@ -1,6 +1,6 @@
 # Package config
 
-**Tokens:** [REQ:CONFIGURATION] [ARCH:CONFIG_SYSTEM] [IMPL:CONFIG_STRUCT]
+**Tokens:** [REQ-CONFIGURATION] [ARCH-CONFIG_SYSTEM] [IMPL-CONFIG_STRUCT]
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/config.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/config)
 

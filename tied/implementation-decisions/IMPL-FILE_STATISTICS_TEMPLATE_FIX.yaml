@@ -1,0 +1,108 @@
+IMPL-FILE_STATISTICS_TEMPLATE_FIX:
+  name: File Statistics Template Processing Fix
+  status: Active
+  cross_references:
+    - ARCH-FILE_STATISTICS
+    - REQ-OUT_002
+    - REQ-OUTPUT_FORMATTING
+  rationale:
+    why: |-
+      Fixed critical bug where `AIFormatterAdapter` was bypassing template processing
+      Simplified template processing to use direct placeholder replacement (same approach as `formatListArchiveSimple`)
+      More reliable than complex `formatTemplate` function which had issues with Go's `text/template` internal `fmt` usage
+      Ensures consistent behavior between `OutputFormatter` and `AIFormatterAdapter`
+      Final safety check now correctly checks data map first before using defaults
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    requirements:
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    tests: []
+    code_annotations:
+      - IMPL-FILE_STATISTICS_TEMPLATE_FIX
+      - ARCH-FILE_STATISTICS
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: |-
+    `formatter.go` line ~1417-1423: Direct placeholder replacement loop in `FormatCreatedArchiveWithStats`
+    `formatter.go` line ~1427-1478: Final safety check with data map lookup first
+    `formatter.go` line ~1496-1503: Direct placeholder replacement loop in `FormatIncrementalCreatedWithStats`
+    `ai_formatter_adapter.go` line ~977-982: Fixed `FormatCreatedArchiveWithStats` delegation
+    `ai_formatter_adapter.go` line ~984-989: Fixed `FormatIncrementalCreatedWithStats` delegation
+  aiformatteradapter_fix: |-
+    ```go
+    func (fa *AIFormatterAdapter) FormatCreatedArchiveWithStats(path string) string {
+        // Delegate to the OutputFormatter implementation which has the correct template processing
+        outputFormatter := &OutputFormatter{cfg: fa.config}
+        return outputFormatter.FormatCreatedArchiveWithStats(path)
+    }
+    ```
+  code_structure:
+    - '`formatter.go` lines ~1388-1467: `FormatCreatedArchiveWithStats()` - Simplified template processing with direct placeholder replacement'
+    - '`formatter.go` lines ~1468-1547: `FormatIncrementalCreatedWithStats()` - Simplified template processing with direct placeholder replacement'
+    - '`ai_formatter_adapter.go` lines ~977-989: `FormatCreatedArchiveWithStats()` and `FormatIncrementalCreatedWithStats()` - Fixed to delegate to `OutputFormatter`'
+  cross-references: '[ARCH-FILE_STATISTICS], [REQ-OUT_002], [REQ-OUTPUT_FORMATTING], [IMPL-FILE_STATISTICS]'
+  fixed_aiformatteradapter_delegation: Updated `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats` in `AIFormatterAdapter` to correctly delegate to `OutputFormatter` implementation
+  simplified_template_processing: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`
+  template_processing_logic: |-
+    ```go
+    // Simplified approach (same as formatListArchiveSimple)
+    result := templateStr
+    for key, value := range data {
+        placeholder := fmt.Sprintf("#{%s}", key)
+        result = strings.ReplaceAll(result, placeholder, value)
+    }
+
+    // Final safety check: check data map first before using defaults
+    if strings.Contains(result, "#{") {
+        finalReplacements := map[string]string{
+            "#{size_human}": func() string {
+                if sh, ok := data["size_human"]; ok {
+                    return sh
+                }
+                return "unknown"
+            }(),
+            // ... similar for other placeholders
+        }
+        for placeholder, value := range finalReplacements {
+            result = strings.ReplaceAll(result, placeholder, value)
+        }
+    }
+    ```
+  essence_pseudocode: |-
+    # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — - **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`
+
+    procedure file_statistics_template_processing_fix():
+      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] Fixed critical bug where `AIFormatterAdapter` was bypassing template processing
+      execute()
+      end

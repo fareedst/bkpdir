@@ -4,7 +4,7 @@
 
 This document outlines the implementation of critical build system fixes to address syntax errors, linter configuration issues, and unrealistic performance test expectations that were blocking the build process.
 
-## [ACTION:discovery] Problem Analysis
+## [ACTION-discovery] Problem Analysis
 
 ### High Priority Issues
 1. **Bash Script Syntax Errors** in `scripts/validate-icon-enforcement.sh`
@@ -22,7 +22,7 @@ This document outlines the implementation of critical build system fixes to addr
    - Throughput expectations not aligned with system capabilities
    - Status: `RESOLVED` ✅
 
-## [ACTION:maintenance] Implementation Details
+## [ACTION-maintenance] Implementation Details
 
 ### 1. Bash Script Compatibility Fix
 
@@ -92,7 +92,7 @@ revive -config .revive.toml -formatter friendly ./...
 - Linter running successfully
 - Performance tests aligned with realistic expectations
 
-## [ACTION:migration] Maintenance Guidelines
+## [ACTION-migration] Maintenance Guidelines
 
 ### For Script Updates
 1. Always test bash scripts with `bash --posix` for compatibility

@@ -1,6 +1,6 @@
 # Resource Management Package (resources)
 
-**Tokens:** [REQ:RESOURCE_MANAGEMENT] [ARCH:RESOURCE_MANAGEMENT] [IMPL:RESOURCE_MANAGER]
+**Tokens:** [REQ-RESOURCE_MANAGEMENT] [ARCH-RESOURCE_MANAGEMENT] [IMPL-RESOURCE_MANAGER]
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/bkpdir/pkg/resources.svg)](https://pkg.go.dev/github.com/bkpdir/pkg/resources)
 

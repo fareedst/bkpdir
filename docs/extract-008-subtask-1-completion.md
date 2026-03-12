@@ -166,7 +166,7 @@ $ make demo
 - `cmd/cli-template/go.mod` - Go module configuration
 - `cmd/cli-template/go.sum` - Dependency checksums
 
-## [ACTION:migration] Next Steps
+## [ACTION-migration] Next Steps
 
 ### Phase 2: Full Package Integration
 - [ ] Implement actual pkg/config loading

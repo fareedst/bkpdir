@@ -1,0 +1,47 @@
+REQ-IMMUTABLE_BUILD_SYSTEM:
+  name: Build System Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These build system requirements are mandatory behaviors that ensure code quality. Changing them would reduce build quality.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Quality gates are enforced before compilation
+    - criterion: Build steps are ordered correctly (lint → test → build)
+    - criterion: Clean target removes build artifacts
+    - criterion: CI/CD pipeline includes automated quality checks
+    - criterion: '`make build` depends on lint and test passing'
+    - criterion: Non-zero exit codes prevent build
+    - criterion: CI/CD commands are supported
+  validation_criteria:
+    - method: Build system tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-BUILD_DISTRIBUTION
+    implementation:
+      - IMPL-TESTING
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_BUILD_SYSTEM
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_BUILD_SYSTEM.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Build and Distribution [ARCH-BUILD_DISTRIBUTION]
+  description: 'Build system requirements are mandatory and must be preserved:'
+  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]

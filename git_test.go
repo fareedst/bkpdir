@@ -1,17 +1,17 @@
-// [REQ:GIT_INTEGRATION]
+// [REQ-GIT_INTEGRATION]
 // This file is part of bkpdir
 // DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 
-// TEST-GIT-INTEGRATION-001: Git integration test validation - Git integration and metadata testing [ACTION:validation]
+// TEST-GIT-INTEGRATION-001: Git integration test validation - Git integration and metadata testing [ACTION-validation]
 // Source: git.go - GIT-INTEGRATION-001
 // Impact: Validates Git integration functionality
 
-// TEST-SERVICE-GIT-001: Git service test validation - Git service implementation testing [ACTION:validation]
+// TEST-SERVICE-GIT-001: Git service test validation - Git service implementation testing [ACTION-validation]
 // Source: git.go - SERVICE-GIT-001
 // Impact: Validates Git service implementation
-// [REQ:GIT_INTEGRATION] Git integration validation trace
-// [ARCH:GIT_INTEGRATION] Bridges Git architecture decisions to tests
-// [IMPL:GIT_CLI] Exercises the Git CLI implementation
+// [REQ-GIT_INTEGRATION] Git integration validation trace
+// [ARCH-GIT_INTEGRATION] Bridges Git architecture decisions to tests
+// [IMPL-GIT_CLI] Exercises the Git CLI implementation
 package main
 
 import (
@@ -24,7 +24,7 @@ import (
 )
 
 // TestGitIntegration tests the Git integration functionality for GIT-001 feature
-// [REQ:GIT_INTEGRATION] [ARCH:GIT_INTEGRATION] [IMPL:GIT_CLI] Validates repository detection flows
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates repository detection flows
 func TestGitIntegration(t *testing.T) {
 	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// TEST-REF: Feature tracking matrix GIT-001
@@ -116,7 +116,7 @@ func TestGitIntegration(t *testing.T) {
 }
 
 // TestGitNaming tests the Git naming functionality for GIT-002 feature
-// [REQ:GIT_INTEGRATION] [ARCH:GIT_INTEGRATION] [IMPL:GIT_CLI] Validates branch/hash extraction flows
+// [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates branch/hash extraction flows
 func TestGitNaming(t *testing.T) {
 	// GIT-004: See architecture.md - Git Configuration Integration [DECISION:core-functionality]
 	// TEST-REF: Feature tracking matrix GIT-002

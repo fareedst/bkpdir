@@ -1,0 +1,50 @@
+REQ-IMMUTABLE_PERFORMANCE:
+  name: Performance Requirements (Immutable)
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Performance characteristics are fundamental to user experience. Degrading them would reduce usability.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Resource tracking has minimal performance impact
+    - criterion: File comparison checks length before byte comparison
+    - criterion: Large files and many archives are handled efficiently
+    - criterion: Memory footprint is low
+    - criterion: CPU usage limits are enforced
+    - criterion: Disk I/O limits are enforced
+    - criterion: Response time limits are enforced
+    - criterion: Resource cleanup timing is efficient
+    - criterion: Concurrent operation limits are enforced
+    - criterion: Verification speed is efficient
+  validation_criteria:
+    - method: Performance tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-PERFORMANCE
+    implementation:
+      - IMPL-TESTING
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_PERFORMANCE
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_PERFORMANCE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Performance Architecture [ARCH-PERFORMANCE]
+  description: 'Performance characteristics must be preserved:'
+  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]

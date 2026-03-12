@@ -1,0 +1,47 @@
+REQ-IMMUTABLE_DIRECTORY_OPERATIONS:
+  name: Directory Operations Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: These file operation rules are fundamental behaviors that users depend on. Changing them would break existing functionality.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All directory operations use platform-independent paths
+    - criterion: File permissions and modification times are preserved
+    - criterion: All operations are atomic
+    - criterion: Directory structure is maintained in archives
+    - criterion: Special files are handled correctly
+    - criterion: Archive directories are created automatically
+    - criterion: Paths are displayed relative to current directory
+  validation_criteria:
+    - method: Directory operation tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    implementation:
+      - IMPL-FILE_OPERATIONS
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_DIRECTORY_OPERATIONS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § File Operations Architecture [ARCH-FILE_OPERATIONS]
+  description: 'Directory operation rules are fundamental and must not be altered:'
+  implementation: See `implementation-decisions.md` § File Operations Implementation [IMPL-FILE_OPERATIONS]

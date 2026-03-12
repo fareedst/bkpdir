@@ -5,9 +5,9 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 //
-// [REQ:OUTPUT_FORMATTING] Output formatting requirement
-// [ARCH:OUTPUT_FORMATTING] Dual-mode output formatting architecture
-// [IMPL:DUAL_FORMATTING] Formatter interfaces implementation (printf + template)
+// [REQ-OUTPUT_FORMATTING] Output formatting requirement
+// [ARCH-OUTPUT_FORMATTING] Dual-mode output formatting architecture
+// [IMPL-DUAL_FORMATTING] Formatter interfaces implementation (printf + template)
 package formatter
 
 // CFG-003: See specification.md - Configuration Management [DECISION:maintenance]

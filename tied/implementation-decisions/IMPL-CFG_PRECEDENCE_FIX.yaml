@@ -1,0 +1,77 @@
+IMPL-CFG_PRECEDENCE_FIX:
+  name: Configuration File Precedence Fix
+  status: Active
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  rationale:
+    why: |-
+      Bug fix: Configuration files were not respecting the requirement that "earlier files take precedence over later files" when processing sequential config files
+      The `mergeConfigs` and `mergeBasicSettings` functions were unconditionally overriding values without checking if they were already set by earlier files
+      This caused local config files (e.g., `./.bkpdir.yml`) to be overridden by home directory config files (e.g., `~/.bkpdir.yml`), violating the precedence specification
+      Special case: When an earlier file explicitly sets a value to the default (e.g., `include_git_info: false`), we need to detect that it was explicitly set, not just compare against defaults
+      The fix ensures that when processing sequential files (not inheritance chains), values set by earlier files are preserved, even if they equal the default
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: '- Modified `LoadConfig` fallback path to use `fileProcessed` flag instead of checking if cfg equals defaults (which fails when first file sets values to defaults)'
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []
+    code_annotations:
+      - IMPL-CFG_PRECEDENCE_FIX
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-CONFIG_SYSTEM
+      - REQ-CONFIGURATION
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CFG_PRECEDENCE_FIX.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`mergeConfigs`, `mergeBasicSettings`, `applyOverride`, `applyReplace`, `inheritContext`, `fileProcessed`, `initialDefaultCfg`, `dstBeforeMerge`, `rawSrcMap`, `// CFG-001: Earlier files take precedence`'
+  cross-references: '[ARCH-CONFIG_SYSTEM], [REQ-CONFIGURATION], [IMPL-CONFIG_STRUCT]'
+  default_value_handling: 'When first file sets `include_git_info: false` (default), `dstBeforeMerge` for second file will have `false` (from first file), which equals `initialDefaultCfg.IncludeGitInfo` (also `false`), so we correctly detect that no earlier file modified it from initial default'
+  explicit_field_setting: Use `rawSrcMap` to check if a field was explicitly set in the source file (not just present due to defaults)
+  inheritance_chains: '(`inheritContext=true`): Child configs override parent configs (normal inheritance behavior)'
+  key_changes: |-
+    1. `LoadConfig` fallback: Uses `fileProcessed` flag and `initialDefaultCfg` to track initial state
+    2. `applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}, initialDefaultCfg *Config)` - Added `initialDefaultCfg` parameter
+    3. `mergeConfigs(dst, src *Config, inheritContext bool, defaultCfg *Config, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, dstBeforeMerge *Config)` - Added context and state tracking parameters
+    4. `mergeBasicSettings` - Added precedence check: `dstWasNotModified := dstBeforeMerge != nil && initialDefaultCfg != nil && dstBeforeMerge.IncludeGitInfo == initialDefaultCfg.IncludeGitInfo`
+    5. `applyReplace` - Added precedence check for sequential file processing
+    6. All merge functions updated to accept and use new parameters
+  sequential_files: '(`inheritContext=false`): Earlier files take precedence - if `dstBeforeMerge` equals `initialDefaultCfg`, no earlier file modified the field, so allow setting; otherwise preserve earlier file''s value'
+  test_case:
+    - 'Local config: `/tmp/myapp/.bkpdir.yml` with `archive_dir_path: "./archives"` and `include_git_info: false`'
+    - 'Home config: `/Users/fareed/.bkpdir.yml` with `archive_dir_path: "/Users/fareed/.bkpdir"` and `include_git_info: true`'
+    - 'Expected: Local config values (`"./archives"` and `false`) are preserved'
+    - 'Before fix: Home config values (`"/Users/fareed/.bkpdir"` and `true`) were incorrectly used'
+    - 'After fix: Local config values (`"./archives"` and `false`) are correctly preserved'
+  essence_pseudocode: |-
+    # [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — - Modified `LoadConfig` fallback path to use `fileProcessed` flag instead of checking if cfg equals defaults (which fails when first file sets values to defaults)
+
+    procedure configuration_file_precedence_fix():
+      # [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] Bug fix: Configuration files were not respecting the requirement that "earlier files take precedence over later files" when processing sequential config files
+      execute()
+      end

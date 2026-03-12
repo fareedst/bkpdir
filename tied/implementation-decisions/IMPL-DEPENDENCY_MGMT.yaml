@@ -1,0 +1,59 @@
+IMPL-DEPENDENCY_MGMT:
+  name: Dependency Management
+  status: Active
+  description: Design clear dependency hierarchy for extracted packages using Go modules for versioning. Core packages have no internal dependencies; higher-level packages compose core packages.
+  rationale:
+    why: Extracted packages will have interdependencies that need careful management
+    problems_solved:
+      - Circular dependencies between extracted packages
+      - Unclear dependency hierarchy
+      - Difficulty versioning interdependent packages
+    benefits:
+      - Clear dependency hierarchy
+      - Core packages with no internal dependencies
+      - Higher-level packages compose core packages
+      - Clear layering prevents circular dependencies and simplifies usage
+  implementation_approach:
+    summary: Design clear dependency hierarchy with Go modules for versioning
+    details:
+      - Core packages (config, errors) have no internal dependencies
+      - Higher-level packages compose core packages
+      - Use Go modules for versioning extracted packages
+      - Clear layering prevents circular dependencies
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  code_locations:
+    files:
+      - go.mod
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+    code_annotations: []
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - IMPL-BACKWARD_COMPAT
+      - IMPL-PACKAGE_EXTRACTION
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Design clear dependency hierarchy with Go modules for versioning
+
+    procedure dependency_management():
+      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Core packages (config, errors) have no internal dependencies
+      core_packages_config_errors()
+      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Higher-level packages compose core packages
+      higher_level_packages_compose_core()
+      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Use Go modules for versioning extracted packages
+      use_go_modules_for()
+      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Clear layering prevents circular dependencies
+      clear_layering_prevents_circular()
+      end

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// [IMPL:LIST_FORMAT_SAFETY] TestFormatListArchive_IMPL_LIST_FORMAT_SAFETY verifies template-style placeholder formatting works and is referenced by the semantic token
+// [IMPL-LIST_FORMAT_SAFETY] TestFormatListArchive_IMPL_LIST_FORMAT_SAFETY verifies template-style placeholder formatting works and is referenced by the semantic token
 func TestFormatListArchive_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	// create temp file to have a real size
 	f, err := ioutil.TempFile("", "bkpdir-test-*.txt")
@@ -41,7 +41,7 @@ func TestFormatListArchive_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	}
 }
 
-// [IMPL:LIST_FORMAT_SAFETY] TestPrintfStyleListArchive_IMPL_LIST_FORMAT_SAFETY verifies printf-style formats still work and do not trigger EXTRA output
+// [IMPL-LIST_FORMAT_SAFETY] TestPrintfStyleListArchive_IMPL_LIST_FORMAT_SAFETY verifies printf-style formats still work and do not trigger EXTRA output
 func TestPrintfStyleListArchive_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	cfg := DefaultConfig()
 	cfg.FormatListArchive = "%s (created: %s)\n"

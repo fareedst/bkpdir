@@ -1,6 +1,6 @@
 # Package Interdependency Mapping — EXTRACT-008
 
-**Tokens:** [REQ:EXTRACT_008_INTERDEP_MAPPING] [ARCH:EXTRACT_008_INTERDEP] [IMPL:EXTRACT_008_DOC_MIGRATION]
+**Tokens:** [REQ-EXTRACT_008_INTERDEP_MAPPING] [ARCH-EXTRACT_008_INTERDEP] [IMPL-EXTRACT_008_DOC_MIGRATION]
 
 > **[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Clear usage patterns for extracted packages**
 
@@ -44,11 +44,11 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `gopkg.in/yaml.v3`
 **Performance**: 24.3μs per configuration load operation
 
-**Semantic Tokens**: [REQ:CONFIGURATION] [ARCH:CONFIG_SYSTEM] [IMPL:CONFIG_STRUCT]
+**Semantic Tokens**: [REQ-CONFIGURATION] [ARCH-CONFIG_SYSTEM] [IMPL-CONFIG_STRUCT]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Configuration package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Configuration package analysis
 
-### [ACTION:validation] pkg/errors - Error Handling & Classification
+### [ACTION-validation] pkg/errors - Error Handling & Classification
 **Lines**: 918 | **Files**: 3 | **Maturity**: Production Ready
 
 **Purpose**: Structured error handling with context and classification
@@ -66,9 +66,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:ERROR_HANDLING] [ARCH:ERROR_HANDLING] [IMPL:STRUCTURED_ERRORS]
+**Semantic Tokens**: [REQ-ERROR_HANDLING] [ARCH-ERROR_HANDLING] [IMPL-STRUCTURED_ERRORS]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Error handling package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Error handling package analysis
 
 ### 🗂️ pkg/resources - Resource Management & Cleanup
 **Lines**: 486 | **Files**: 2 | **Maturity**: Production Ready
@@ -87,9 +87,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:RESOURCE_MANAGEMENT] [ARCH:RESOURCE_MANAGEMENT] [IMPL:RESOURCE_MANAGER]
+**Semantic Tokens**: [REQ-RESOURCE_MANAGEMENT] [ARCH-RESOURCE_MANAGEMENT] [IMPL-RESOURCE_MANAGER]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Resource management package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Resource management package analysis
 
 ### 🎨 pkg/formatter - Output Formatting System
 **Lines**: 1,056 | **Files**: 5 | **Maturity**: Production Ready
@@ -111,9 +111,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:OUTPUT_FORMATTING] [ARCH:OUTPUT_FORMATTING] [IMPL:DUAL_FORMATTING]
+**Semantic Tokens**: [REQ-OUTPUT_FORMATTING] [ARCH-OUTPUT_FORMATTING] [IMPL-DUAL_FORMATTING]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Output formatting package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Output formatting package analysis
 
 ### 🔀 pkg/git - Git Integration Utilities
 **Lines**: 255 | **Files**: 1 | **Maturity**: Production Ready
@@ -131,9 +131,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None (uses command-line git)
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:GIT_INTEGRATION] [ARCH:GIT_INTEGRATION] [IMPL:GIT_CLI]
+**Semantic Tokens**: [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Git integration package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Git integration package analysis
 
 ### ⚡ pkg/cli - CLI Command Framework
 **Lines**: 722 | **Files**: 6 | **Maturity**: Production Ready
@@ -156,9 +156,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `github.com/spf13/cobra`
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:IMMUTABLE_CLI_COMMANDS] [ARCH:CLI_COMMANDS] [IMPL:CLI_FRAMEWORK]
+**Semantic Tokens**: [REQ-IMMUTABLE_CLI_COMMANDS] [ARCH-CLI_COMMANDS] [IMPL-CLI_FRAMEWORK]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] CLI framework package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] CLI framework package analysis
 
 ### 📁 pkg/fileops - File Operations & Utilities
 **Lines**: 1,173 | **Files**: 6 | **Maturity**: Production Ready
@@ -181,9 +181,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: `github.com/bmatcuk/doublestar/v4`
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:FILE_BACKUP] [ARCH:FILE_OPERATIONS] [IMPL:FILE_OPERATIONS]
+**Semantic Tokens**: [REQ-FILE_BACKUP] [ARCH-FILE_OPERATIONS] [IMPL-FILE_OPERATIONS]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] File operations package analysis
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] File operations package analysis
 
 ### ⚙️ pkg/processing - Data Processing Patterns
 **Lines**: 1,705 | **Files**: 6 | **Maturity**: Production Ready
@@ -206,9 +206,9 @@ This document provides comprehensive guidance for integrating the 8 extracted pa
 **External Dependencies**: None
 **Internal Dependencies**: None
 
-**Semantic Tokens**: [REQ:PERFORMANCE] [ARCH:PROCESSING_PATTERNS] [IMPL:PROCESSING_PATTERNS]
+**Semantic Tokens**: [REQ-PERFORMANCE] [ARCH-PROCESSING_PATTERNS] [IMPL-PROCESSING_PATTERNS]
 
-// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION:discovery] Data processing package analysis 
+// [HIGH] EXTRACT-008: Package interdependency mapping - [ACTION-discovery] Data processing package analysis 
 
 ## 🗺️ Dependency Matrix
 
@@ -289,7 +289,7 @@ tempFile, err := rm.CreateTempFile("prefix", ".tmp")
 // Automatic cleanup on defer
 ```
 
-### [ACTION:migration] Multi-Package Integration Patterns
+### [ACTION-migration] Multi-Package Integration Patterns
 
 #### Configuration + Formatter Pattern
 ```go
@@ -429,7 +429,7 @@ func main() {
 }
 ```
 
-### [ACTION:migration] File Processing Pipeline
+### [ACTION-migration] File Processing Pipeline
 ```go
 // [HIGH] EXTRACT-008: Package interdependency mapping - 💡 File processing pipeline example
 import (
@@ -623,7 +623,7 @@ if err != nil {
 }
 ```
 
-### [ACTION:discovery] Debugging Tips
+### [ACTION-discovery] Debugging Tips
 
 1. **Enable Verbose Logging**: Use formatter for structured output
 2. **Check Resource Usage**: Monitor ResourceManager for leaks
@@ -658,7 +658,7 @@ The 8 extracted packages provide a comprehensive foundation for building robust 
 - `docs/images/package-interdependency-mapping.svg` — Visual diagram illustrating package relationships ✅ Completed
 - `pkg/*/README.md` — Package READMEs exist and were reviewed for public interface documentation (pkg/config, pkg/errors, pkg/resources, pkg/formatter, pkg/git, pkg/cli, pkg/fileops, pkg/processing, pkg/testutil) ✅ Reviewed
 - `docs/examples/` — Example integrations reviewed (basic-cli-app, git-aware-backup); pipeline example validated in narrative ✅ Reviewed
-- `stdd/` tokens — `[REQ:EXTRACT_008_INTERDEP_MAPPING]`, `[ARCH:EXTRACT_008_INTERDEP]`, `[IMPL:EXTRACT_008_DOC_MIGRATION]` present in `stdd/semantic-tokens.md` and cross-referenced ✅ Validated
+- `stdd/` tokens — `[REQ-EXTRACT_008_INTERDEP_MAPPING]`, `[ARCH-EXTRACT_008_INTERDEP]`, `[IMPL-EXTRACT_008_DOC_MIGRATION]` present in `stdd/semantic-tokens.md` and cross-referenced ✅ Validated
 
 ## 🔁 Remaining Actions
 
@@ -666,6 +666,6 @@ The 8 extracted packages provide a comprehensive foundation for building robust 
 - Add automated token cross-reference validation into CI — Pending
 - Final verification run of token validation scripts (`scripts/validate-token-traceability.sh`) after CI check added — Pending
 
-**Migration Note**: Per `[IMPL:EXTRACT_008_DOC_MIGRATION]`, the working-plan artifacts were reviewed and their content consolidated into STDD canonical documents. No supplemental working-plan files remain as active canonical sources.
+**Migration Note**: Per `[IMPL-EXTRACT_008_DOC_MIGRATION]`, the working-plan artifacts were reviewed and their content consolidated into STDD canonical documents. No supplemental working-plan files remain as active canonical sources.
 
 **[HIGH] EXTRACT-008: Package interdependency mapping - 📊 Complete package interdependency mapping with comprehensive usage patterns and integration guidance**

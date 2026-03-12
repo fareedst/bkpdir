@@ -1,11 +1,11 @@
-// [IMPL:DUAL_FORMATTING] [ARCH:OUTPUT_FORMATTING] [REQ:OUTPUT_FORMATTING]
+// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // AI-First Pattern Extractor Implementation
 // Provides structured data extraction for optimal AI assistant comprehension.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// [CRITICAL] FMT-001: AI-first formatter refactoring - [ACTION:discovery]
+// [CRITICAL] FMT-001: AI-first formatter refactoring - [ACTION-discovery]
 package formatter
 
 import (
@@ -14,19 +14,19 @@ import (
 	"strings"
 )
 
-// [CRITICAL] FMT-001: AI-first pattern extractor implementation - [ACTION:discovery]
+// [CRITICAL] FMT-001: AI-first pattern extractor implementation - [ACTION-discovery]
 type AIPatternExtractorImpl struct {
 	config FormatterConfig
 }
 
-// [CRITICAL] FMT-001: AI-first pattern extractor constructor - [ACTION:discovery]
+// [CRITICAL] FMT-001: AI-first pattern extractor constructor - [ACTION-discovery]
 func NewAIPatternExtractor(config FormatterConfig) *AIPatternExtractorImpl {
 	return &AIPatternExtractorImpl{
 		config: config,
 	}
 }
 
-// [CRITICAL] FMT-001: Archive data extraction - [ACTION:discovery]
+// [CRITICAL] FMT-001: Archive data extraction - [ACTION-discovery]
 func (e *AIPatternExtractorImpl) ExtractArchiveData(filename string) (AIArchiveData, error) {
 	pattern, err := e.config.GetPattern(PatternTypeArchiveFilename)
 	if err != nil {
@@ -66,7 +66,7 @@ func (e *AIPatternExtractorImpl) ExtractArchiveData(filename string) (AIArchiveD
 	}, nil
 }
 
-// [CRITICAL] FMT-001: Backup data extraction - [ACTION:discovery]
+// [CRITICAL] FMT-001: Backup data extraction - [ACTION-discovery]
 func (e *AIPatternExtractorImpl) ExtractBackupData(filename string) (AIBackupData, error) {
 	pattern, err := e.config.GetPattern(PatternTypeBackupFilename)
 	if err != nil {
@@ -104,7 +104,7 @@ func (e *AIPatternExtractorImpl) ExtractBackupData(filename string) (AIBackupDat
 	}, nil
 }
 
-// [CRITICAL] FMT-001: Config data extraction - [ACTION:discovery]
+// [CRITICAL] FMT-001: Config data extraction - [ACTION-discovery]
 func (e *AIPatternExtractorImpl) ExtractConfigData(line string) (AIConfigData, error) {
 	pattern, err := e.config.GetPattern(PatternTypeConfigLine)
 	if err != nil {
@@ -138,7 +138,7 @@ func (e *AIPatternExtractorImpl) ExtractConfigData(line string) (AIConfigData, e
 	}, nil
 }
 
-// [CRITICAL] FMT-001: Timestamp data extraction - [ACTION:discovery]
+// [CRITICAL] FMT-001: Timestamp data extraction - [ACTION-discovery]
 func (e *AIPatternExtractorImpl) ExtractTimestampData(timestamp string) (AITimestampData, error) {
 	pattern, err := e.config.GetPattern(PatternTypeTimestamp)
 	if err != nil {
@@ -175,7 +175,7 @@ func (e *AIPatternExtractorImpl) ExtractTimestampData(timestamp string) (AITimes
 	}, nil
 }
 
-// [CRITICAL] FMT-001: Generic pattern extraction - [ACTION:discovery]
+// [CRITICAL] FMT-001: Generic pattern extraction - [ACTION-discovery]
 func (e *AIPatternExtractorImpl) ExtractPattern(pattern, text string) (map[string]string, error) {
 	re, err := regexp.Compile(pattern)
 	if err != nil {
@@ -198,7 +198,7 @@ func (e *AIPatternExtractorImpl) ExtractPattern(pattern, text string) (map[strin
 	return result, nil
 }
 
-// [CRITICAL] FMT-001: AI-friendly context extraction - [ACTION:discovery]
+// [CRITICAL] FMT-001: AI-friendly context extraction - [ACTION-discovery]
 func (e *AIPatternExtractorImpl) ExtractWithContext(ctx ExtractContext) (interface{}, error) {
 	switch ctx.PatternType {
 	case PatternTypeArchiveFilename:

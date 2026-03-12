@@ -408,7 +408,7 @@ func (a *Application) SafeFileOperations(files []string) error {
 }
 ```
 
-## [ACTION:migration] Advanced Integration Patterns
+## [ACTION-migration] Advanced Integration Patterns
 
 ### Concurrent Processing with Error Aggregation
 
@@ -445,7 +445,7 @@ func (a *Application) ProcessConcurrently(ctx context.Context, files []string) e
 }
 ```
 
-## [ACTION:validation] Error Handling Best Practices
+## [ACTION-validation] Error Handling Best Practices
 
 ### Structured Error Context
 
@@ -807,7 +807,7 @@ func (a *Application) ReportMetrics() error {
 }
 ```
 
-## [ACTION:migration] Migration and Compatibility
+## [ACTION-migration] Migration and Compatibility
 
 ### Legacy System Integration
 

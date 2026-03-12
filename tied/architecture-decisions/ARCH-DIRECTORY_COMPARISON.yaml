@@ -1,0 +1,64 @@
+ARCH-DIRECTORY_COMPARISON:
+  name: Directory Comparison Architecture
+  status: Active
+  cross_references: &ref_0
+    - REQ-PERFORMANCE
+  rationale:
+    why: |-
+      Enables efficient directory comparison without full traversal
+      Supports archive-to-directory comparison
+      Provides hash-based content verification
+      Enables incremental archive detection
+    problems_solved: []
+    benefits: []
+  alternatives_considered:
+    - name: See detail file
+      pros: []
+      cons: []
+      rejected_reason: |-
+        Timestamp-only comparison: Rejected due to accuracy concerns
+        Full content comparison: Rejected due to performance impact
+  implementation_approach:
+    summary: Snapshot-based directory comparison system
+    details: []
+  traceability:
+    requirements: *ref_0
+    implementation: []
+    tests: []
+    code_annotations:
+      - ARCH-DIRECTORY_COMPARISON
+      - REQ-PERFORMANCE
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  detail_file: architecture-decisions/ARCH-DIRECTORY_COMPARISON.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  decision: Snapshot-based directory comparison system
+  comparesnapshots: Compare two snapshots for differences
+  createarchivesnapshot: Build snapshot from ZIP archive
+  createdirectorysnapshot: Build snapshot from directory with exclusions
+  cross-references: '[REQ-PERFORMANCE]'
+  directorysnapshot: Map of file paths to FileInfo
+  fileinfo: Path, size, modification time, hash, directory flag
+  hash-based_comparison:
+    - Uses file content hashes for accurate comparison
+    - Handles file renames and moves correctly
+    - Detects content changes even with same modification time
+    - Supports exclusion patterns for filtering
+  isdirectoryidenticaltoarchive: Direct directory-to-archive comparison
+  use_cases:
+    - Incremental archive detection (compare directory to previous archive)
+    - Archive verification (compare archive to source directory)
+    - Directory synchronization (identify differences)

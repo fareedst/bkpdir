@@ -1,0 +1,46 @@
+REQ-IMMUTABLE_GIT_INTEGRATION:
+  name: Git Integration Requirements (Immutable)
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: These Git integration requirements are mandatory behaviors that users depend on. Changing them would break existing workflows.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Git repositories are detected automatically
+    - criterion: Git information is included in archive names when enabled
+    - criterion: Branch and commit hash are extracted correctly
+    - criterion: Dirty working directory state is detected
+    - criterion: Submodules are handled appropriately
+    - criterion: Git configuration is integrated
+  validation_criteria:
+    - method: Git integration tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    implementation:
+      - IMPL-GIT_CLI
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_GIT_INTEGRATION
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_GIT_INTEGRATION.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Git Integration [ARCH-GIT_INTEGRATION]
+  description: 'Git integration requirements are mandatory and must be preserved:'
+  implementation: See `implementation-decisions.md` § Git Command-line Integration [IMPL-GIT_CLI]

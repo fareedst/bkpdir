@@ -127,7 +127,7 @@
 - **Flexibility**: Utilities support various testing scenarios and patterns ✅ **ACHIEVED**
 - **Maintainability**: Clear architecture and well-documented interfaces ✅ **ACHIEVED**
 
-## [ACTION:discovery] Key Achievements
+## [ACTION-discovery] Key Achievements
 
 ### 🏗️ Architecture Excellence
 - **Interface-Based Design**: Clean separation of concerns with 7 core interfaces
@@ -186,7 +186,7 @@
 - `pkg/testutil/README.md` - Package overview and examples
 - `docs/extract-009-completion-summary.md` - This completion summary
 
-## [ACTION:migration] Integration with Extraction Project
+## [ACTION-migration] Integration with Extraction Project
 
 ### ✅ Dependencies Satisfied
 - **EXTRACT-001 through EXTRACT-008**: All completed, providing patterns for extraction
@@ -213,5 +213,5 @@ The `pkg/testutil` package represents a significant achievement in the extractio
 ---
 
 > **✅ Task Status**: EXTRACT-009 COMPLETED  
-> **[ACTION:migration] Next Priority**: EXTRACT-010 (Package Documentation and Examples)  
+> **[ACTION-migration] Next Priority**: EXTRACT-010 (Package Documentation and Examples)  
 > **📊 Extraction Progress**: 9/10 tasks completed (90% complete) 

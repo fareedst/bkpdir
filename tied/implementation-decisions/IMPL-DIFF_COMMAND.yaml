@@ -1,0 +1,97 @@
+IMPL-DIFF_COMMAND:
+  name: Diff Command Implementation
+  status: Active
+  description: Implement diff command with archive state reconstruction and comparison engine. Reconstructs effective state by applying incremental on top of full archive, provides accurate change detection, reuses comparison logic for duplicate prevention consistency.
+  rationale:
+    why: Users need to see what changed since the last archive to decide whether to create a new one
+    problems_solved:
+      - No visibility into changes since last archive
+      - Manual comparison of directory state vs archived state
+      - Inconsistent comparison logic between features
+    benefits:
+      - Accurate change detection by comparing against reconstructed state
+      - Reuses comparison logic for duplicate prevention consistency
+      - Integrates with existing CLI framework and output formatting
+      - Supports context cancellation for long-running operations
+      - User-friendly error messages for edge cases
+  implementation_approach:
+    summary: Archive state reconstruction from full + incremental archives, directory comparison, change reporting, and CLI command integration
+    details:
+      - 'Archive State Reconstruction: Load most recent full archive, apply most recent incremental changes, return reconstructed DirectorySnapshot'
+      - 'Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns'
+      - 'Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case'
+      - 'CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection'
+      - 'Archive Selection Strategy: All selection functions use name-based sorting (ISO 8601 timestamps are alphabetically sortable) instead of file modification times'
+  cross_references:
+    - ARCH-DIFF_COMMAND
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - ARCH-DIRECTORY_COMPARISON
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CONTEXT_SUPPORT
+    - ARCH-CLI_COMMANDS
+  code_locations:
+    files:
+      - comparison.go
+      - archive.go
+      - main.go
+      - formatter.go
+      - config.go
+      - diff_command_test.go
+    functions:
+      - ReconstructArchiveState
+      - CalculateDiff
+      - FindMostRecentArchive
+      - findLatestFullArchive
+      - findLatestIncrementalArchive
+      - diffCmd
+      - FormatDiffResult
+      - PrintDiffResult
+  traceability:
+    architecture:
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-CLI_COMMANDS
+    requirements:
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-CONTEXT_SUPPORT
+    tests:
+      - diff_command_test.go
+    code_annotations:
+      - 'comparison.go line ~68-101: FindMostRecentArchive'
+      - 'comparison.go line ~177-226: findLatestIncrementalArchive'
+      - 'comparison.go line ~231-330: ReconstructArchiveState'
+      - 'comparison.go line ~333-409: CalculateDiff'
+      - 'comparison.go line ~169-174: DiffResult struct'
+      - 'archive.go line ~869-904: findLatestFullArchive'
+      - 'main.go line ~1090-1143: diffCmd'
+      - 'main.go line ~250: knownCommands'
+      - 'formatter.go line ~1752-1771: FormatDiffResult'
+      - 'formatter.go line ~1775-1786: PrintDiffResult'
+  related_decisions:
+    depends_on:
+      - IMPL-DIRECTORY_COMPARISON
+    supersedes: []
+    see_also:
+      - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+  metadata:
+    created: "2026-03-12"
+    author: AI Agent
+    last_updated: "2026-03-12"
+  essence_pseudocode: |-
+    # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] — Archive state reconstruction from full + incremental archives, directory comparison, change reporting, and CLI command integration
+
+    procedure diff_command_implementation():
+      # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] Archive State Reconstruction: Load most recent full archive, apply most recent incremental changes, return reconstructed DirectorySnapshot
+      archive_state_reconstruction("Load most recent full archive, apply most recent incremental")
+      # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns
+      directory_comparison("Create snapshot of current directory, compare against recons")
+      # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case
+      change_reporting("Use configurable format strings, display added/modified/dele")
+      # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection
+      cli_command_integration("diffCmd() in main.go, context cancellation support, added to")
+      # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT] Archive Selection Strategy: All selection functions use name-based sorting (ISO 8601 timestamps are alphabetically sortable) instead of file modification times
+      archive_selection_strategy("All selection functions use name-based sorting (ISO 8601 tim")
+      end

@@ -1,4 +1,4 @@
-// [REQ:CUSTOMIZABLE_FORMAT_STRINGS] Comprehensive tests for simplified list formatting
+// [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Comprehensive tests for simplified list formatting
 package main
 
 import (

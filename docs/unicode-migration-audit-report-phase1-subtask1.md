@@ -1,6 +1,6 @@
 # Unicode Migration Audit Report - Phase 1, Subtask 1.1
 
-> **[CRITICAL] DOC-014: Immutable feature token audit report [ACTION:validation]**
+> **[CRITICAL] DOC-014: Immutable feature token audit report [ACTION-validation]**
 
 **Date**: 2025-07-13  
 **Status**: ✅ **COMPLETED**  
@@ -198,4 +198,4 @@ This audit examined all immutable features defined in `docs/context/immutable.md
 
 ---
 
-**[CRITICAL] DOC-014: Immutable feature token audit completed with 11 missing tokens identified - Ready to proceed to Subtask 1.2 [ACTION:validation]** 
+**[CRITICAL] DOC-014: Immutable feature token audit completed with 11 missing tokens identified - Ready to proceed to Subtask 1.2 [ACTION-validation]** 

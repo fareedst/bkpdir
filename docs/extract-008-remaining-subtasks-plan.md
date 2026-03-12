@@ -11,9 +11,9 @@
 ## 🚀 PHASE 1: CRITICAL VALIDATION COMPLETED
 
 ### ✅ Validation Results
-- [x] **[ACTION:validation] Immutable Requirements Check**: No conflicts - remaining subtasks are additive ✅
+- [x] **[ACTION-validation] Immutable Requirements Check**: No conflicts - remaining subtasks are additive ✅
 - [x] **📋 Feature ID Verification**: EXTRACT-008 exists in feature-tracking.md ✅
-- [x] **[ACTION:discovery] AI Assistant Compliance**: Token requirements and DOC-007/008 reviewed ✅
+- [x] **[ACTION-discovery] AI Assistant Compliance**: Token requirements and DOC-007/008 reviewed ✅
 - [x] **[CRITICAL] AI Assistant Protocol**: Using MODIFICATION Protocol for extending existing feature ✅
 
 ### 📊 Current Progress Assessment
@@ -27,7 +27,7 @@
 
 ## [ACTION:format-processing] Detailed Remaining Subtasks
 
-### 2. [ACTION:maintenance] Develop Project Scaffolding System
+### 2. [ACTION-maintenance] Develop Project Scaffolding System
 **Status**: [x] COMPLETED (2025-01-02)  
 **Priority**: [HIGH] HIGH  
 **Actual Time**: 4 hours  
@@ -105,7 +105,7 @@ generated-project/
 #### [ACTION:core-functionality] Implementation Tokens
 ```go
 // [HIGH] EXTRACT-008: Project scaffolding system - [ACTION:core-functionality] Interactive generator core
-// [HIGH] EXTRACT-008: Component selection interface - [ACTION:discovery] Package discovery and configuration
+// [HIGH] EXTRACT-008: Component selection interface - [ACTION-discovery] Package discovery and configuration
 // [HIGH] EXTRACT-008: Project template generation - [ACTION:format-processing] Template processing and file creation
 ```
 
@@ -223,7 +223,7 @@ Step-by-step guide for migrating existing monolithic CLI applications to use ext
 3. **Framework** (pkg/cli): Command orchestration
 4. **Operations** (pkg/fileops, pkg/processing): Business logic
 
-#### [ACTION:migration] Migration Process Steps
+#### [ACTION-migration] Migration Process Steps
 
 ##### Step 1: Assessment
 - Inventory existing functionality
@@ -260,7 +260,7 @@ Step-by-step guide for migrating existing monolithic CLI applications to use ext
 ```go
 // [HIGH] EXTRACT-008: Migration methodology framework - 📖 Assessment and planning tools
 // [HIGH] EXTRACT-008: Migration strategy implementation - [ACTION:core-functionality] Step-by-step migration process
-// [HIGH] EXTRACT-008: Migration validation system - [ACTION:validation] Quality assurance and rollback
+// [HIGH] EXTRACT-008: Migration validation system - [ACTION-validation] Quality assurance and rollback
 ```
 
 ### 5. 🗺️ Create Package Interdependency Mapping
@@ -347,9 +347,9 @@ graph TB
 
 #### [ACTION:core-functionality] Implementation Tokens
 ```go
-// [HIGH] EXTRACT-008: Package dependency analysis - [ACTION:discovery] Comprehensive dependency mapping
+// [HIGH] EXTRACT-008: Package dependency analysis - [ACTION-discovery] Comprehensive dependency mapping
 // [HIGH] EXTRACT-008: Usage pattern documentation - 📊 Integration pattern analysis  
-// [HIGH] EXTRACT-008: Anti-pattern identification - [ACTION:validation] Integration guidelines and warnings
+// [HIGH] EXTRACT-008: Anti-pattern identification - [ACTION-validation] Integration guidelines and warnings
 ```
 
 ## 🏗️ Implementation Strategy
@@ -414,7 +414,7 @@ graph TB
 - [ ] **Migration Viability**: Existing projects can successfully migrate
 - [ ] **Integration Ease**: Clear patterns for package combination
 
-## [ACTION:migration] Risk Mitigation
+## [ACTION-migration] Risk Mitigation
 
 ### Technical Risks
 - **Complex Dependencies**: Extensive testing of package combinations

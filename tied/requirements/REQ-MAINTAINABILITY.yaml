@@ -1,0 +1,44 @@
+REQ-MAINTAINABILITY:
+  name: Maintainability Requirements
+  category: Functional
+  priority: P1
+  status: Implemented
+  rationale:
+    why: Ensures long-term maintainability and evolution
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: Code follows Go conventions
+    - criterion: Documentation is complete and up-to-date
+    - criterion: Tests are easy to understand and modify
+    - criterion: Configuration system supports new fields automatically
+  validation_criteria:
+    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+    code_annotations:
+      - REQ-MAINTAINABILITY
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-MAINTAINABILITY.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Code Organization Principles [ARCH-CODE_ORGANIZATION]
+  description: Code must follow Go standards. Documentation must be comprehensive. Tests must be maintainable. Configuration system must be extensible.
+  implementation: See `implementation-decisions.md` § Code Style and Conventions [IMPL-CODE_STYLE]

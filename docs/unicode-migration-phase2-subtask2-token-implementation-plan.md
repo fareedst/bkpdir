@@ -3,7 +3,7 @@
 > **[CRITICAL] DOC-014: Token implementation plan and cross-layer strategy [ACTION:core-functionality]**
 
 **Date**: 2025-01-02  
-**Status**: [ACTION:migration] **IN PROGRESS**  
+**Status**: [ACTION-migration] **IN PROGRESS**  
 **Subtask**: 2.2 - Token Implementation Plan  
 **Phase**: 2 - Token Gap Analysis and Remediation  
 
@@ -87,7 +87,7 @@ The implementation follows the established AI-first development principles with 
 ```markdown
 ## [Section Title]
 
-### [TOKEN-ID]: [Description] [ACTION:priority]
+### [TOKEN-ID]: [Description] [ACTION-priority]
 **Source**: [Source file and section]
 **Impact**: [Impact description]
 **Cross-Layer Requirements**: Documentation, Code, Tests
@@ -131,7 +131,7 @@ The implementation follows the established AI-first development principles with 
 #### 2.2 Code Token Format
 
 ```go
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 // Impact: [Impact description]
 func functionName() {
@@ -176,7 +176,7 @@ func functionName() {
 #### 3.2 Test Token Format
 
 ```go
-// [TOKEN-ID]: [Description] [ACTION:priority]
+// [TOKEN-ID]: [Description] [ACTION-priority]
 // Source: [Source file and section]
 // Test: Validates [specific requirement]
 func Test[TokenID]_[Description](t *testing.T) {

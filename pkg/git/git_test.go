@@ -6,18 +6,18 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// TEST-GIT-PKG-001: Git package test validation - Git integration and metadata testing [ACTION:validation]
+// TEST-GIT-PKG-001: Git package test validation - Git integration and metadata testing [ACTION-validation]
 // Source: pkg/git/git.go - Git integration implementation
 // Impact: Core functionality validation for Git package
 
-// TEST-SERVICE-GIT-PKG-001: Git package service test validation - Git service implementation testing [ACTION:validation]
+// TEST-SERVICE-GIT-PKG-001: Git package service test validation - Git service implementation testing [ACTION-validation]
 // Source: pkg/git/git.go - Git service implementation
 // Impact: Git service validation for Git package service implementation
 
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
-// [REQ:GIT_INTEGRATION] Git integration testing
-// [ARCH:GIT_INTEGRATION] Git command-line integration architecture testing
-// [IMPL:GIT_CLI] Git command-line interface implementation testing
+// [REQ-GIT_INTEGRATION] Git integration testing
+// [ARCH-GIT_INTEGRATION] Git command-line integration architecture testing
+// [IMPL-GIT_CLI] Git command-line interface implementation testing
 package git
 
 import (

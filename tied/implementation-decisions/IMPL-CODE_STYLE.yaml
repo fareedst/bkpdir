@@ -1,0 +1,59 @@
+IMPL-CODE_STYLE:
+  name: Code Style and Conventions
+  status: Active
+  cross_references: []
+  rationale:
+    why: See detail file
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: See detail file
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture: []
+    requirements: []
+    tests: []
+    code_annotations:
+      - IMPL-CODE_STYLE
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also: []
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  documentation:
+    - Package-level documentation
+    - Exported function documentation
+    - Inline comments for complex logic
+    - Examples in test files
+  formatting:
+    - Use `go fmt` for code formatting
+    - Use `revive` linter for code quality
+    - Follow Go standard formatting
+  naming:
+    - Use descriptive names
+    - Follow Go naming conventions
+    - 'Exported types/functions: PascalCase'
+    - 'Unexported: camelCase'
+  essence_pseudocode: |-
+    # [IMPL-CODE_STYLE] — See detail file
+
+    procedure code_style_and_conventions():
+      # [IMPL-CODE_STYLE] See detail file
+      execute()
+      end

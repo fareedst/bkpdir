@@ -1,0 +1,50 @@
+REQ-IMMUTABLE_RESOURCE_MANAGEMENT:
+  name: Resource Management Requirements (Immutable)
+  category: Functional
+  priority: P0
+  status: Implemented
+  rationale:
+    why: Resource management requirements are mandatory behaviors that ensure system reliability. Relaxing them would cause resource leaks.
+    problems_solved: []
+    benefits: []
+  satisfaction_criteria:
+    - criterion: All temporary resources are cleaned up automatically
+    - criterion: Resource management is thread-safe
+    - criterion: File operations use temporary files for atomicity
+    - criterion: No resource leaks occur
+    - criterion: Cleanup continues on individual operation failures
+    - criterion: Resource tracking is comprehensive
+    - criterion: Memory management is efficient
+    - criterion: Disk space management is efficient
+    - criterion: Cleanup warnings are proper
+    - criterion: Resource limits are enforced
+  validation_criteria:
+    - method: Resource management tests verify all requirements. Breaking changes require major version bump.
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+    implementation:
+      - IMPL-RESOURCE_MANAGER
+    tests: []
+    code_annotations:
+      - REQ-IMMUTABLE_RESOURCE_MANAGEMENT
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  detail_file: requirements/REQ-IMMUTABLE_RESOURCE_MANAGEMENT.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  architecture: See `architecture-decisions.md` § Resource Management [ARCH-RESOURCE_MANAGEMENT]
+  description: 'Resource management requirements are mandatory and cannot be relaxed:'
+  implementation: See `implementation-decisions.md` § Resource Management with Cleanup [IMPL-RESOURCE_MANAGER]

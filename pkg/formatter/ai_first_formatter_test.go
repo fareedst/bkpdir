@@ -156,7 +156,7 @@ func TestAIFirstFormatterFormatWithContext(t *testing.T) {
 	}
 
 	// Test list archive formatting (Regression test for date formatting)
-	// [TEST:FORMAT_LIST] [REQ:OUTPUT_FORMATTING]
+	// [TEST-FORMAT_LIST] [REQ-OUTPUT_FORMATTING]
 	ctx = FormatContext{
 		FormatType: FormatTypeList,
 		Data: map[string]interface{}{
@@ -178,7 +178,7 @@ func TestAIFirstFormatterFormatWithContext(t *testing.T) {
 	}
 }
 
-// [CRITICAL] FMT-001: Test extract with context - [ACTION:discovery]
+// [CRITICAL] FMT-001: Test extract with context - [ACTION-discovery]
 func TestAIFirstFormatterExtractWithContext(t *testing.T) {
 	config := NewMockFormatterConfig()
 	formatter := NewAIFirstFormatter(config)
@@ -293,7 +293,7 @@ func TestAICoreFormatterOperations(t *testing.T) {
 	}
 }
 
-// [CRITICAL] FMT-001: Test pattern extractor operations - [ACTION:discovery]
+// [CRITICAL] FMT-001: Test pattern extractor operations - [ACTION-discovery]
 func TestAIPatternExtractorOperations(t *testing.T) {
 	config := NewMockFormatterConfig()
 	extractor := NewAIPatternExtractor(config)

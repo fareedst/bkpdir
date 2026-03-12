@@ -1,4 +1,4 @@
-// [IMPL:EXCLUSION_PATTERNS] [ARCH:EXCLUSION_PATTERNS] [REQ:CONFIGURATION]
+// [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
 // Package fileops provides file operations and utilities for CLI applications.
 //
 // This file contains file exclusion functionality with pattern matching support.

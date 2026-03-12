@@ -105,7 +105,7 @@ validate_token_format() {
     # Check for proper token format
     if [[ ! "$line" =~ $TOKEN_PATTERN ]]; then
         log_error "Invalid token format in $file:$line_num"
-        log_error "  Expected: // [PRIORITY] FEATURE-ID: description [ACTION:category]"
+        log_error "  Expected: // [PRIORITY] FEATURE-ID: description [ACTION-category]"
         log_error "  Got: $line"
         ((ERRORS++))
         return 1

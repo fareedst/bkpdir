@@ -3,7 +3,7 @@
 > **[CRITICAL] DOC-014: Token implementation and registry updates [ACTION:core-functionality]**
 
 **Date**: 2025-07-13  
-**Status**: [ACTION:migration] **IN PROGRESS**  
+**Status**: [ACTION-migration] **IN PROGRESS**  
 **Subtask**: 2.3 - Token Implementation  
 **Phase**: 2 - Token Gap Analysis and Remediation  
 
@@ -84,7 +84,7 @@ This document implements the missing tokens identified in Subtask 2.1 using the 
 
 #### ✅ **Completed: Requirements (6 tokens)**
 
-##### 6. QUALITY-001: Code Quality and Linting Requirements [ACTION:validation]
+##### 6. QUALITY-001: Code Quality and Linting Requirements [ACTION-validation]
 **Source**: `docs/context/requirements.md` - Code Quality and Linting Requirements section  
 **Impact**: Development standards requirement  
 **Cross-Layer Requirements**: Documentation, Code, Tests  
@@ -437,7 +437,7 @@ All 29 critical priority tokens have been successfully implemented with:
 ## Recovery Information
 
 ### Current State
-- **Subtask Status**: [ACTION:migration] **IN PROGRESS**
+- **Subtask Status**: [ACTION-migration] **IN PROGRESS**
 - **Last Checkpoint**: All 29 critical priority tokens completed
 - **Next Action**: Begin high priority token implementation
 - **Dependencies**: None for current implementation

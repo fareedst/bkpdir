@@ -1,4 +1,4 @@
-// [REQ:PERFORMANCE]
+// [REQ-PERFORMANCE]
 package performance
 
 import (

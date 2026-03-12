@@ -1,0 +1,87 @@
+IMPL-STRUCTURED_ERRORS:
+  name: Structured Error Handling
+  status: Active
+  cross_references:
+    - ARCH-ERROR_HANDLING
+    - REQ-ERROR_HANDLING
+  rationale:
+    why: |-
+      Consistent error handling across operations
+      Machine-readable status codes for scripting
+      Enhanced debugging with operation context
+      Supports template-based error formatting
+    problems_solved: []
+    benefits: []
+  implementation_approach:
+    summary: Use structured error types with status codes and operation context
+    details: []
+  code_locations:
+    files: []
+    functions: []
+  traceability:
+    architecture:
+      - ARCH-ERROR_HANDLING
+    requirements:
+      - REQ-ERROR_HANDLING
+    tests: []
+    code_annotations:
+      - IMPL-STRUCTURED_ERRORS
+      - ARCH-ERROR_HANDLING
+      - REQ-ERROR_HANDLING
+  related_decisions:
+    depends_on: []
+    supersedes: []
+    see_also:
+      - ARCH-ERROR_HANDLING
+      - REQ-ERROR_HANDLING
+    composed_with: []
+  detail_file: implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  metadata:
+    created:
+      date: "2026-03-12"
+      author: MCP converter
+    last_updated:
+      date: "2026-03-12"
+      author: MCP converter
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      validator: MCP converter
+      result: pass
+  code_markers: '`ArchiveError`, `BackupError` types, `NewXXXError()` functions'
+  error_reporting:
+    - Error logging to stderr
+    - Status code propagation
+    - Operation context in error messages
+    - Template formatting support
+  error_types: |-
+    ```go
+    type ArchiveError struct {
+        Message    string
+        StatusCode int
+        Operation  string
+        Path       string
+        Err        error
+    }
+
+    type BackupError struct {
+        Message    string
+        StatusCode int
+        Operation  string
+        Path       string
+        Err        error
+    }
+    ```
+  error_wrapping: |-
+    ```go
+    if err != nil {
+        return fmt.Errorf("context: %w", err)
+    }
+    ```
+  essence_pseudocode: |-
+    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Use structured error types with status codes and operation context
+
+    procedure structured_error_handling():
+      # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] Consistent error handling across operations
+      execute()
+      end
