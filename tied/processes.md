@@ -17,7 +17,7 @@ Process entries become first-class trace nodes that explain **how** to survey, b
 
 ### Inherited tokens (TIED/LEAP methodology)
 
-All TIED projects inherit a core set of REQ/ARCH/IMPL and PROC tokens via `copy_files.sh` (from `templates/`). These tokens are **mandatory for TIED success** and enforce the methodology; they must not be removed. The inherited set includes REQ-TIED_SETUP, REQ-MODULE_VALIDATION, ARCH-TIED_STRUCTURE, ARCH-MODULE_VALIDATION, IMPL-TIED_FILES, IMPL-MODULE_VALIDATION, and the process tokens defined in this document (e.g. [PROC-LEAP], [PROC-TOKEN_AUDIT], [PROC-TIED_DEV_CYCLE]). See `semantic-tokens.md` § Inherited tokens and AGENTS.md § Client inheritance of LEAP R+A+I.
+All TIED projects inherit a core set of REQ/ARCH/IMPL and PROC tokens via `copy_files.sh` (from `templates/`). These tokens are **mandatory for TIED success** and enforce the methodology; they must not be removed. The inherited set includes REQ-TIED_SETUP, REQ-MODULE_VALIDATION, ARCH-TIED_STRUCTURE, ARCH-MODULE_VALIDATION, IMPL-TIED_FILES, IMPL-MODULE_VALIDATION, and the process tokens defined in this document (e.g. [PROC-LEAP], [PROC-TOKEN_AUDIT], [PROC-TIED_DEV_CYCLE], [PROC-TIED_METHODOLOGY_READONLY]). In the client, methodology YAML lives under `tied/methodology/` and is read-only; project-specific data lives in project YAML under `tied/`. See `semantic-tokens.md` § Inherited tokens and AGENTS.md § Client inheritance of LEAP R+A+I.
 
 ## Process Entry Template
 
@@ -107,7 +107,7 @@ Active. Mandatory on every change to the TIED db or its outputs.
    Work **may start at any layer** of the stack (REQ, ARCH, IMPL, or code/tests). For the work to be **complete**, changes **must be distributed and validated both up and down** the stack as needed (e.g. a change that starts in IMPL may require ARCH or REQ updates (up) and code/tests updates (down); a change that starts in code must propagate back to IMPL → ARCH → REQ (up) and ensure tests are updated (down)). **Code is only valid** when **all tests pass** and **all requirements are met**; validity implies the full stack (REQ, ARCH, IMPL, tests, code) is consistent and traceable via tokens.
 
 3. **YAML/MCP and cognitive load**  
-   REQ, ARCH, and IMPL detail is maintained in **YAML files** (indexes + detail files per token). The TIED MCP optimizes use of this YAML db by presenting R/A/I via **indexes** and **CRUD+ actions**, including **validation of the entire db**. For a complex task: collect all related R/A/I index and detail records; then **only the pseudo-code for the necessary IMPL** needs to be comprehended to develop an ideal solution. Updating the code to match the new IMPL pseudo-code is a **separate task**. The cognitive load of processing a **handful of IMPL** records should be **smaller** than parsing an arbitrary number of source code files to guess at side effects; when that holds, intent and logic live in the R/A/I YAML and IMPL pseudo-code, and code remains the implementation of that record. See `docs/ai-agent-tied-mcp-usage.md` for MCP workflow and rationale.
+   REQ, ARCH, and IMPL detail is maintained in **YAML files** (indexes + detail files per token). The TIED MCP optimizes use of this YAML db by presenting R/A/I via **indexes** and **CRUD+ actions**, including **validation of the entire db**. For a complex task: collect all related R/A/I index and detail records; then **only the pseudo-code for the necessary IMPL** needs to be comprehended to develop an ideal solution. Updating the code to match the new IMPL pseudo-code is a **separate task**. The cognitive load of processing a **handful of IMPL** records should be **smaller** than parsing an arbitrary number of source code files to guess at side effects; when that holds, intent and logic live in the R/A/I YAML and IMPL pseudo-code, and code remains the implementation of that record. See `tied/docs/ai-agent-tied-mcp-usage.md` for MCP workflow and rationale.
 
 ### Artifacts & Metrics
 
@@ -154,6 +154,35 @@ Active
 
 ---
 
+## `[PROC-TIED_METHODOLOGY_READONLY]` TIED-sourced YAML read-only in client
+
+### Purpose
+TIED-sourced YAML in the client is read-only and does not hold client-specific data; methodology can be refreshed from TIED without losing project data. Supports safe evolution of the TIED methodology when process documents and templates are updated.
+
+### Scope
+Client projects using TIED. Applies to index YAMLs and detail YAMLs that originate from TIED `templates/` (inherited LEAP R+A+I and related records).
+
+### Token references
+- `[REQ-TIED_SETUP]` — TIED methodology setup
+- `[ARCH-TIED_STRUCTURE]` — project structure; methodology lives under `tied/methodology/`
+- `[PROC-YAML_DB_OPERATIONS]` — read/write rules for project vs methodology YAML
+
+### Status
+Active
+
+### Rules
+1. **Do not modify** files under `tied/methodology/`. That directory is populated and overwritten by `copy_files.sh` from the TIED repo; it contains only methodology content (index YAMLs and inherited detail files). Client edits there would be lost on the next refresh.
+2. **Add new REQ/ARCH/IMPL and all edits** only in **project** YAML: `tied/requirements.yaml`, `tied/architecture-decisions.yaml`, `tied/implementation-decisions.yaml`, `tied/semantic-tokens.yaml`, and the corresponding `tied/requirements/`, `tied/architecture-decisions/`, `tied/implementation-decisions/` detail files at the root of `tied/`. Project files are never overwritten by `copy_files.sh`.
+3. **Refresh methodology**: Re-run `copy_files.sh` from the TIED repo to update `tied/methodology/`; it overwrites only methodology files. Project YAML is unchanged.
+
+### Artifacts & Metrics
+- **Artifacts** — `tied/methodology/` (read-only in client); project index and detail files under `tied/`.
+- **Success Metrics** — Methodology can be refreshed without losing project data; agents and MCP write only to project YAML.
+
+**Migration**: Existing clients with mixed content in a single `tied/*.yaml` should follow the one-time procedure in `tied/docs/migration-methodology-project-yaml.md` (or `docs/migration-methodology-project-yaml.md` in the TIED repo).
+
+---
+
 ## `[PROC-YAML_DB_OPERATIONS]` YAML Database Operations
 
 ### Purpose
@@ -162,9 +191,21 @@ Provides succinct guidance for reading, writing, querying, and validating the YA
 ### Scope
 Applies to all TIED YAML index files in the `tied/` directory. Implementation decision **detail** YAMLs (e.g. in `implementation-decisions/*.yaml`) may include `essence_pseudocode` and `related_decisions.composed_with` for composition analysis, combined workflow description, and test design; see `implementation-decisions.md` § Optional fields for composition and workflow.
 
+### Methodology vs project split `[PROC-TIED_METHODOLOGY_READONLY]`
+
+When the client uses the methodology/project layout (e.g. after running `copy_files.sh` from a TIED repo that creates `tied/methodology/`):
+
+- **Methodology** (`tied/methodology/`): Index YAMLs and inherited detail files from TIED `templates/`. **Read-only** in the client; written only by `copy_files.sh`. Tooling (MCP, validation) may **read** from here to build a merged view. **Writes go only to project files**, not to methodology.
+- **Project** (`tied/` root): Project index YAMLs (`tied/requirements.yaml`, etc.) and project detail dirs (`tied/requirements/`, `tied/architecture-decisions/`, `tied/implementation-decisions/`) hold **only** client-added tokens. All new records and edits are made here. These files are never overwritten by `copy_files.sh`.
+- **Reading**: MCP and validation may merge methodology + project (methodology keys first, then project keys; project overrides if same token) so the full set of REQ/ARCH/IMPL is visible.
+- **Writing**: Insert, update, and delete only in project index and project detail files. Do not modify `tied/methodology/`.
+
+If `tied/methodology/` is absent (legacy or single-file layout), tooling may treat the single set of files under `tied/` as the only source; see project docs or MCP server behavior for backward compatibility.
+
 ### Token references
 - `[REQ-TIED_SETUP]` — YAML indexes are part of TIED methodology setup
 - `[ARCH-TIED_STRUCTURE]` — YAML indexes are part of project structure
+- `[PROC-TIED_METHODOLOGY_READONLY]` — methodology YAML read-only; project YAML only for writes
 - `[PROC-YAML_EDIT_LOOP]` — controlling loop for editing and validating TIED YAML (validate and pretty-print before use)
 
 ### Status
@@ -174,8 +215,10 @@ Active
 
 #### 1. Appending a New Record
 
+Append only to **project** index files (e.g. `tied/requirements.yaml`), not to files under `tied/methodology/`. See [PROC-TIED_METHODOLOGY_READONLY].
+
 **Manual Append:**
-1. Open the YAML file (e.g., `tied/requirements.yaml`)
+1. Open the **project** YAML file (e.g., `tied/requirements.yaml`)
 2. Scroll to the bottom and find the commented template block
 3. Copy the template block
 4. Paste it at the end with a blank line before it
@@ -317,24 +360,42 @@ with open('tied/requirements.yaml', 'w') as f:
 
 This is the **controlling loop** for creating or editing any TIED YAML (index or detail). No TIED record is considered valid for use until it has passed this loop.
 
+**`lint_yaml`** — Global shell function (or project-provided equivalent) that agents **must** use to validate YAML syntax and canonicalize formatting **in place**. It accepts **one or more** file paths; the implementation must process **each path independently** (typically one underlying `yq -i -P` per file, or equivalent). **Do not** pass multiple YAML paths to a **single raw `yq -i -P` command**: mikefarah `yq` merges multiple file arguments into one stream and corrupts files. Agents use `lint_yaml`, not ad-hoc multi-argument `yq`.
+
 1. **Edit** — Create or modify the YAML file (index or detail) under `tied/` or other TIED-related paths (e.g. `docs/citdp/*.yaml` as defined by the project).
-2. **Validate and pretty-print** — Run `yq -i -P <file>` (or project-equivalent). This validates syntax and canonicalizes formatting in place. On failure, the file is invalid; fix and repeat from step 1.
+2. **Validate and pretty-print** — Run `lint_yaml` on the changed file(s), e.g. `lint_yaml <file>` or `lint_yaml path/a.yaml path/b.yaml`. This validates syntax and canonicalizes formatting in place. On failure, the file is invalid; fix and repeat from step 1.
+
+   **Caution:** If your environment lacks a safe `lint_yaml` wrapper, you must still run validation **one file per underlying pretty-print process**; never pass multiple paths to one raw `yq` invocation.
+
 3. **Use** — Only after step 2 succeeds is the file considered **valid for use** under TIED (MCP, `tied_validate_consistency`, and other tooling may rely on it). YAML that does not validate is **invalid** and **must not be used** until fixed.
 4. **Optional** — For TIED index and detail files, run **tied_validate_consistency** (and any index/detail checks) as a further gate.
 
 **Valid for use** means the file may be read by MCP, scripts, or downstream steps; invalid YAML is not part of the governed TIED set. **Pretty-print** is one step of the TIED YAML creation/editing flow: all TIED records (index and detail) must be created or updated within this governance so they remain valid for use.
 
+##### 3.1.1 Structural correctness (beyond syntax)
+
+`lint_yaml` validates **YAML syntax** and canonicalizes formatting. It does **not** enforce TIED **schema** or **field shapes** (e.g. index-only fields, list vs scalar, top-level token key in detail files). Those issues often surface only when running **`tied_validate_consistency`** or other index/detail merge tooling.
+
+**Authoritative reference:** `detail-files-schema.md` — especially § **Structural rules and common errors (agents)** (index-only fields, top-level key, field shapes, quoting).
+
+**Pre-write checklist for any REQ/ARCH/IMPL detail YAML** (verify before saving or before approving a patch):
+
+1. **Top-level key** — Exactly one root key; it is the token id and matches the filename stem (e.g. `REQ-FOO.yaml` → `REQ-FOO:`).
+2. **No index-only fields in detail files** — Do not put `detail_file` inside a detail YAML; it belongs only on the index record.
+3. **`cross_references` (ARCH/IMPL)** — Always a **list** of token strings (e.g. `- REQ-X`), never a single string or a map.
+4. **Unsafe scalars** — Quote values that contain `: ` (colon-space), `@`, `#`, `!`, or other YAML-special characters; see `detail-files-schema.md` § YAML quoting.
+5. **`essence_pseudocode` (IMPL)** — Use a **block scalar** (`|-`), not an unquoted multi-line flow string.
+
+**MCP vs direct edits:** TIED MCP write tools (`yaml_detail_create`, `yaml_detail_update`, `tied_token_create_with_detail`) emit syntactically safe YAML and reduce quoting mistakes; they do not remove the need to pass **correct record shapes** (lists vs maps, no `detail_file` in detail bodies). Direct file edits bypass that help — apply the checklist manually.
+
 #### 4. Validating YAML Syntax (mandatory before use)
 
-**All** changes to TIED YAML must be validated before the file is considered valid for use. Validate (and canonicalize) with `yq -i -P <file>`. If validation fails, the YAML is **invalid** and **must not be used** until fixed.
+**All** changes to TIED YAML must be validated before the file is considered valid for use. Validate (and canonicalize) with `lint_yaml` per § 3.1 (each path processed independently; see caution there). If validation fails, the YAML is **invalid** and **must not be used** until fixed.
 
-**Validate and pretty-print with yq (recommended):**
+**Validate and pretty-print with `lint_yaml` (recommended):**
 ```bash
-yq -i -P tied/requirements.yaml && echo "✅ Valid YAML" || echo "❌ Invalid YAML"
-yq -i -P tied/architecture-decisions.yaml && echo "✅ Valid YAML" || echo "❌ Invalid YAML"
-yq -i -P tied/implementation-decisions.yaml && echo "✅ Valid YAML" || echo "❌ Invalid YAML"
-yq -i -P tied/semantic-tokens.yaml && echo "✅ Valid YAML" || echo "❌ Invalid YAML"
-# Repeat for any changed detail files under tied/requirements/, tied/architecture-decisions/, tied/implementation-decisions/
+lint_yaml tied/requirements.yaml tied/architecture-decisions.yaml tied/implementation-decisions.yaml tied/semantic-tokens.yaml && echo "✅ Valid YAML" || echo "❌ Invalid YAML"
+# Repeat with any changed detail files under tied/requirements/, tied/architecture-decisions/, tied/implementation-decisions/
 ```
 
 **Validate only (read-only check, no canonicalization):**
@@ -450,14 +511,14 @@ yq '.REQ-TIED_SETUP.metadata.last_validated.result' tied/requirements.yaml
 
 ### Artifacts & Metrics
 - **Artifacts**: YAML index files (requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml); all created or updated per [PROC-YAML_EDIT_LOOP] so they are valid for use.
-- **Success Metrics**: YAML files are valid (validated with `yq -i -P` or equivalent), all records have required fields, cross-references are consistent; invalid YAML is not used until fixed.
+- **Success Metrics**: YAML files are valid (validated with `lint_yaml`), all records have required fields, cross-references are consistent; invalid YAML is not used until fixed.
 
 ---
 
 ## `[PROC-TIED_DEV_CYCLE]` TIED development cycle (session workflow)
 
 ### Purpose
-Run a single development session so that REQ/ARCH/IMPL and pseudo-code stay primary: test-driven development produces testable code and infrastructure; TIED docs are updated to reflect the final code and tests. Supports traceability and `[PROC-TOKEN_AUDIT]` / `[PROC-TOKEN_VALIDATION]`.
+Run a single development session so that REQ/ARCH/IMPL and pseudo-code stay primary: test-driven development produces testable code and infrastructure; TIED docs are updated to reflect the final code and tests. Supports traceability and `[PROC-TOKEN_AUDIT]` / `[PROC-TOKEN_VALIDATION]`. For the unified step-by-step checklist that sequences this process with CITDP, IMPL_CODE_TEST_SYNC, LEAP, and validation, see `tied/docs/agent-req-implementation-checklist.md` (`[PROC-AGENT_REQ_CHECKLIST]`).
 
 ### Scope
 Applies to any feature or change that touches managed code, tests, or TIED documentation (requirements, architecture decisions, implementation decisions). Use per session or per feature slice.
@@ -484,7 +545,7 @@ Active
 
 2. **Author TIED docs (pseudo-code + tokens)** `[PROC-IMPL_PSEUDOCODE_TOKENS]`
    - **This is the most critical aspect of implementation:** IMPL pseudo-code is the source of consistent logic, and every block must carry semantic token comments for traceability.
-   - Update REQ, ARCH, and IMPL (new and existing) as needed.
+   - Update REQ, ARCH, and IMPL (new and existing) as needed. Write only to **project** index and detail files under `tied/`, not to `tied/methodology/` ([PROC-TIED_METHODOLOGY_READONLY]).
    - Resolve all logical and flow issues in IMPL pseudo-code so that it is complete and authoritative before proceeding to “Add and align tests.”
    - In every IMPL, ensure `essence_pseudocode` is complete. Every **block** in `essence_pseudocode` must have a comment that (1) names all REQ, ARCH, and IMPL reflected in that block and (2) states how that block implements those requirements.
    - Use the project block definition: a block is a contiguous logical unit implementing the same set of REQ/ARCH/IMPL; nested blocks implementing a different set get their own token comment.
@@ -492,7 +553,7 @@ Active
 **Code-generation inner loop (per TDD iteration)** — Steps 3–7 are governed by a single inner loop. Every iteration must complete RED → GREEN → (optional REFACTOR) before the iteration is considered done. Code that does not pass lint is incomplete and must not proceed.
 
 - **RED (mandatory entry)** — Write or update a **test** that fails for the behavior being implemented. Run the test suite; confirm the new test fails for the expected reason. No production code is written in this step.
-- **GREEN** — Write the **minimum production code** to make the failing test pass. Run tests and **language-specific lint** for each language in scope: **Rust** → `bun run lint:rust` [PROC-RUST_LINT]; **TypeScript** → `bunx tsc -b` or `bun run lint:ts` [PROC-TS_CHECK]; **Swift** → `swift build && swift test` [PROC-SWIFT_BUILD]; **YAML** → `yq -i -P <changed files>` [PROC-YAML_EDIT_LOOP] (when TIED YAML is created or updated). If tests still fail, iterate on production code only (do not add new tests in GREEN). If lint fails, fix before proceeding.
+- **GREEN** — Write the **minimum production code** to make the failing test pass. Run tests and **language-specific lint** for each language in scope: **Rust** → `bun run lint:rust` [PROC-RUST_LINT]; **TypeScript** → `bunx tsc -b` or `bun run lint:ts` [PROC-TS_CHECK]; **Swift** → `swift build && swift test` [PROC-SWIFT_BUILD]; **YAML** → run `lint_yaml` on each changed YAML file (or pass multiple paths in one `lint_yaml` invocation) [PROC-YAML_EDIT_LOOP] (when TIED YAML is created or updated). If tests still fail, iterate on production code only (do not add new tests in GREEN). If lint fails, fix before proceeding.
 - **REFACTOR** (optional) — Clean up test or production code; re-run tests and lint to confirm no regressions.
 - **NEXT** — Proceed to the next iteration (new failing test) or next step.
 
@@ -533,7 +594,7 @@ Active
 
 9. **Sync TIED to code and tests**
    - Update REQ/ARCH/IMPL so they match the final code and tests. Ensure IMPLs modified this session reflect the implemented code and tests, including block-level comments with semantic tokens.
-   - Sync `semantic-tokens.yaml`, `requirements.yaml`, `architecture-decisions.yaml`, and `implementation-decisions.yaml` (and detail files) so TIED docs remain the single source of truth for intent.
+   - Sync only **project** index and detail files: `tied/semantic-tokens.yaml`, `tied/requirements.yaml`, `tied/architecture-decisions.yaml`, and `tied/implementation-decisions.yaml` (and `tied/requirements/`, `tied/architecture-decisions/`, `tied/implementation-decisions/` detail files). Do not modify `tied/methodology/`; see [PROC-TIED_METHODOLOGY_READONLY]. TIED docs remain the single source of truth for intent.
 
 10. **Update README and CHANGELOG**
    - Update README.md and CHANGELOG.md for user- and release-facing changes made in this session.
@@ -708,7 +769,7 @@ Projects may extend this process (e.g. tagging workflow, release checklist) in t
 Govern how an AI agent analyzes, plans, tests, and prepares implementation work for any requested behavior change. Produce a complete change-analysis record (YAML) and test-and-implementation plan before code changes begin. Supports [REQ-TIED_SETUP] and [REQ-MODULE_VALIDATION] by ensuring pseudo-code (with token comments) is authored before tests, and that unit tests and production code carry the same REQ/ARCH/IMPL token comments linking back to the TIED db.
 
 ### Scope
-Applies to all behavior-changing work on existing projects. When used in a TIED project, integrates with [PROC-IMPL_PSEUDOCODE_TOKENS], [PROC-TIED_DEV_CYCLE], [PROC-LEAP], [PROC-TEST_STRATEGY], [PROC-TOKEN_VALIDATION], [PROC-YAML_DB_OPERATIONS], and [PROC-YAML_EDIT_LOOP]. Procedure document: `docs/CITDP-v1.0.0.md`. Analysis records stored under `docs/citdp/` (or project-defined location) as `CITDP-{change_request_id}.yaml`.
+Applies to all behavior-changing work on existing projects. When used in a TIED project, integrates with [PROC-IMPL_PSEUDOCODE_TOKENS], [PROC-TIED_DEV_CYCLE], [PROC-LEAP], [PROC-TEST_STRATEGY], [PROC-TOKEN_VALIDATION], [PROC-YAML_DB_OPERATIONS], and [PROC-YAML_EDIT_LOOP]. Procedure document: `tied/docs/agent-req-implementation-checklist.md` (`[PROC-AGENT_REQ_CHECKLIST]`). Analysis records stored under `docs/citdp/` (or project-defined location) as `CITDP-{change_request_id}.yaml`; that path is relative to the **client project** workspace root (the repository containing the project `tied/` and implementation), not a separate clone of the TIED methodology repository unless that clone is the active implementation workspace.
 
 ### Token references
 - [PROC-IMPL_PSEUDOCODE_TOKENS], [PROC-TIED_DEV_CYCLE], [PROC-LEAP], [PROC-TEST_STRATEGY], [PROC-TOKEN_VALIDATION], [PROC-YAML_DB_OPERATIONS], [PROC-YAML_EDIT_LOOP]
@@ -726,7 +787,7 @@ Active
 5. **Test determination** — Per [PROC-TEST_STRATEGY]; test matrix with impl_block_reference and tied_token_comments; testability_classification.
 6. **TDD sequence** — Per [PROC-TIED_DEV_CYCLE]: pseudo-code first, then failing unit tests, then unit code via TDD, then failing composition tests (component/integration/contract) for every binding, then composition code via TDD, then E2E for UI-only behavior, then validate and sync TIED stack per [PROC-LEAP] if divergences.
 7. **Completion** — Before returning work to the caller, run applicable **language and data checks**: [PROC-RUST_LINT] for Rust, [PROC-TS_CHECK] for TypeScript, [PROC-SWIFT_BUILD] for Swift, [PROC-YAML_EDIT_LOOP] for YAML (and any other gates defined in `processes.md`). All mandated checks must pass before the implementation is considered complete. Then: [PROC-TOKEN_VALIDATION] / `tied_validate_consistency`; module validation per [REQ-MODULE_VALIDATION]; LEAP feedback (divergences_from_analysis, tied_stack_updates_required, record_status) when applicable.
-8. **Persistence** — Record stored as YAML per [PROC-YAML_DB_OPERATIONS]. Validate and pretty-print per [PROC-YAML_EDIT_LOOP] (e.g. `yq -i -P <file>`); the record is not valid for use until validation passes. JSON export optional.
+8. **Persistence** — Record stored as YAML per [PROC-YAML_DB_OPERATIONS] under the client project's `docs/citdp/` (outside project `tied/` index/detail unless policy merges them). Validate and pretty-print per [PROC-YAML_EDIT_LOOP] (e.g. `lint_yaml <file>`); the record is not valid for use until validation passes. JSON export optional.
 
 ### Artifacts & Metrics
 - **Artifacts**: Change-analysis YAML record (record identity, change definition, impact analysis, risk analysis, acceptance criteria, test strategy with test matrix, TDD sequence, implementation guidance, completion criteria, LEAP feedback).
@@ -734,10 +795,36 @@ Active
 
 ---
 
+## `[PROC-TIED_FIRST_IMPLEMENTATION]` TIED-first implementation (TIED prepared, implementation pending)
+
+### Purpose
+When REQ/ARCH/IMPL have been updated in TIED but tests and code have not, ensure agents implement from the updated TIED stack via strict TDD and three-way alignment without treating existing code as the source of truth. The updated IMPL pseudo-code is the single source of truth; existing tests and code are updated or replaced to match.
+
+### Scope
+Any change where TIED (REQ/ARCH/IMPL) is already authored or updated and the remaining work is to align tests and code with that design.
+
+### Token references
+- [PROC-AGENT_REQ_CHECKLIST] — base checklist; this process is a variant entry point
+- [PROC-IMPL_CODE_TEST_SYNC] — three-way alignment, unit TDD, composition, E2E
+- [PROC-TIED_DEV_CYCLE] — RED/GREEN/REFACTOR, composition then E2E
+- [PROC-LEAP] — propagate from IMPL when code/tests diverge
+- [PROC-IMPL_PSEUDOCODE_TOKENS] — block token comments in pseudo-code
+
+### Procedure document
+`tied/docs/tied-first-implementation-procedure.md`
+
+### Core idea
+Execute the agent checklist from S01. S02–S03 define change and impact from the **updated** TIED (desired = new design; current = prior tests/code). S04–S06 are **verify-only**: confirm REQ/ARCH/IMPL completeness and that every IMPL block has token comments; fix any gaps before proceeding to tests/code. S07–S16 run as in the main checklist: risk, test plan from new IMPL, unit TDD (RED then GREEN then SYNC), composition tests, E2E, validation, sync TIED, README/CHANGELOG, CITDP, commit.
+
+### Status
+Active
+
+---
+
 ## `[PROC-IMPL_CODE_TEST_SYNC]` IMPL-to-Code-and-Tests Linkage
 
 ### Purpose
-Govern how an agent discovers, analyzes, documents, and synchronizes an IMPL of interest with all related IMPLs, managed code, and tests. This process fills the gap between "IMPL pseudo-code exists" and "code and tests carry identical IMPL-derived token comments and logic." It operationalizes the linkage so that `essence_pseudocode`, tests, and source code remain a three-way aligned representation of the same intent — from initial IMPL discovery through unit TDD, composition testing, and E2E behavior.
+Govern how an agent discovers, analyzes, documents, and synchronizes an IMPL of interest with all related IMPLs, managed code, and tests. This process fills the gap between "IMPL pseudo-code exists" and "code and tests carry identical IMPL-derived token comments and logic." It operationalizes the linkage so that `essence_pseudocode`, tests, and source code remain a three-way aligned representation of the same intent — from initial IMPL discovery through unit TDD, composition testing, and E2E behavior. For the unified step-by-step checklist that sequences this process with CITDP, TIED dev cycle, LEAP, and validation, see `tied/docs/agent-req-implementation-checklist.md` (`[PROC-AGENT_REQ_CHECKLIST]`).
 
 ### Scope
 Applies whenever an agent reads, creates, or modifies an IMPL detail file, or modifies managed code or tests that reference IMPL tokens. Integrates with and extends [PROC-TIED_DEV_CYCLE] (steps 2–9), [PROC-IMPL_PSEUDOCODE_TOKENS], [PROC-TEST_STRATEGY], and [PROC-LEAP].
@@ -802,7 +889,7 @@ This checklist is organized into nine phases (A–I). Phases A–C are analytica
 7. **B4. Resolve and update.** For each issue found in B2–B3:
    - Update the affected IMPL's `essence_pseudocode` so contracts are compatible, ordering is explicit, and every block is complete.
    - When resolution changes the scope of an ARCH or REQ, propagate per [PROC-LEAP] (IMPL → ARCH → REQ).
-   - Run `yq -i -P` on every changed detail file per [PROC-YAML_EDIT_LOOP].
+   - Run `lint_yaml` on every changed detail file per [PROC-YAML_EDIT_LOOP].
 
 #### Phase C — Document pseudo-code (block token comments)
 
@@ -860,7 +947,7 @@ This checklist is organized into nine phases (A–I). Phases A–C are analytica
     1. Update IMPL `essence_pseudocode` first (add the missing block, fix the contract, add the new dependency comment).
     2. Update or add the test to match the corrected pseudo-code.
     3. Update the production code to pass the corrected test.
-    4. Run `yq -i -P` on the changed IMPL detail file.
+    4. Run `lint_yaml` on the changed IMPL detail file.
 
     This keeps pseudo-code authoritative at every point during TDD, not just at the end.
 
@@ -926,7 +1013,7 @@ This checklist is organized into nine phases (A–I). Phases A–C are analytica
     - Update `traceability.tests` to list all tests that validate this IMPL.
     - Update `code_locations` (files and functions) to reflect the current code.
     - Update `metadata.last_updated` with date, author, and reason.
-    - Run `yq -i -P` on the detail file per [PROC-YAML_EDIT_LOOP].
+    - Run `lint_yaml` on the detail file per [PROC-YAML_EDIT_LOOP].
 
 ### Process Diagram
 
@@ -977,6 +1064,39 @@ flowchart TD
 ### Artifacts & Metrics
 - **Artifacts**: Updated IMPL detail files with complete `essence_pseudocode` (block token comments, resolved specs, collision notes); tests with IMPL-matching token comments; code with IMPL-matching token comments; IMPL inventory table (Phase A3).
 - **Success Metrics**: Three-way alignment (pseudo-code ↔ tests ↔ code) verified for all IMPLs in scope; all tests pass; lint clean; `tied_validate_consistency` passes; `[PROC-TOKEN_AUDIT]` succeeds; every IMPL `traceability.tests` and `code_locations` reflects the final state.
+
+---
+
+## `[PROC-PSEUDOCODE_VALIDATION]` Application pseudo-code validation
+
+### Purpose
+Ensure IMPL pseudo-code is parseable, well-shaped, consistent with contracts and architecture, and covered by tests before any test or code is written. Supports [PROC-IMPL_PSEUDOCODE_TOKENS] and [PROC-IMPL_CODE_TEST_SYNC] by providing a structured checklist that gates progression to RED tests and code.
+
+### Scope
+All IMPL `essence_pseudocode` blocks in the project. Applied when pseudo-code is the primary application specification and drives unit-test and integration-test definitions.
+
+### Token references
+- [PROC-IMPL_PSEUDOCODE_TOKENS] — block-level token comment rules for pseudo-code
+- [PROC-IMPL_CODE_TEST_SYNC] — phases B–C invoke validation before tests/code
+- [PROC-AGENT_REQ_CHECKLIST] — S06.5a invokes SUB-PSEUDOCODE-VALIDATE before S06.6
+
+### Status
+Active
+
+### Core activities
+1. Load the application pseudo-code validation checklist from `tied/docs/pseudocode-validation-checklist.yaml` (or `docs/pseudocode-validation-checklist.yaml` at repo root).
+2. Run each validation category in the **recommended_validation_order** (parsing → schema → symbol_resolution → contract_validation → dependency_graph → behavioral_coverage → traceability → linting → semantic_simulation → generation_readiness → reporting).
+3. Record findings with **severity** (error, warning, info) and **source location** (block identifier, line/column when available).
+4. Treat **required** checks as **gating**: do not proceed to writing tests or code until minimum gating rules are satisfied or explicitly waived and documented.
+5. If no parser or tool exists, perform a manual pass over the checklist categories and document results.
+
+### Artifacts & Metrics
+- **Artifacts**: Validation report (findings by category, severity, location); optional waiver log for any required check that is waived.
+- **Success Metrics**: All required checks pass (or are waived with justification); minimum gating rules satisfied; diagnostics include source locations where available.
+
+### Procedure and checklist documents
+- `tied/docs/pseudocode-writing-and-validation.md` — how to write and validate; when to run; minimum gating rules.
+- `tied/docs/pseudocode-validation-checklist.yaml` — canonical checklist (categories, required/optional checks, recommended order, minimum_gating_rules, tailoring).
 
 ---
 
@@ -1070,11 +1190,8 @@ The app opens with no documents. Use **File > Open...** (Cmd+O) to select text f
 
 **YAML syntax validation** (per `[PROC-YAML_EDIT_LOOP]`):
 ```bash
-yq -i -P tied/semantic-tokens.yaml
-yq -i -P tied/requirements.yaml
-yq -i -P tied/architecture-decisions.yaml
-yq -i -P tied/implementation-decisions.yaml
-# Repeat for any changed detail files under tied/*/
+lint_yaml tied/semantic-tokens.yaml tied/requirements.yaml tied/architecture-decisions.yaml tied/implementation-decisions.yaml
+# Repeat with any changed detail files under tied/*/
 ```
 
 **TIED consistency check** (via MCP tool):
@@ -1096,10 +1213,7 @@ swift build
 swift test
 
 # 3. YAML validation (for any changed TIED files)
-yq -i -P tied/semantic-tokens.yaml
-yq -i -P tied/requirements.yaml
-yq -i -P tied/architecture-decisions.yaml
-yq -i -P tied/implementation-decisions.yaml
+lint_yaml tied/semantic-tokens.yaml tied/requirements.yaml tied/architecture-decisions.yaml tied/implementation-decisions.yaml
 
 # 4. TIED consistency (via MCP — must report "ok": true)
 # tied_validate_consistency
@@ -1115,4 +1229,113 @@ In the TDD inner loop (steps 3-7 of `[PROC-TIED_DEV_CYCLE]`):
 
 ### Artifacts & Metrics
 - **Artifacts**: Build output (`.build/debug/TextViewerApp`), test results (99 tests), TIED validation report.
-- **Success Metrics**: `swift build` exits 0; `swift test` reports 0 failures; `yq -i -P` exits 0 for all changed YAML; `tied_validate_consistency` reports `"ok": true`.
+- **Success Metrics**: `swift build` exits 0; `swift test` reports 0 failures; `lint_yaml` succeeds for all changed YAML; `tied_validate_consistency` reports `"ok": true`.
+
+---
+
+## `[PROC-TIED_VERIFICATION_GATED]` Verification-gated status (closed-loop)
+
+### Purpose
+When verification-gated mode is used, requirement (and optionally IMPL) status is **derived only from the last test run**; status is not edited by hand. This keeps status trustworthy and audit-friendly and fits compliance and agentic workflows where manual status edits are risky. Aligns with RTMX-style "closed-loop" traceability.
+
+### Scope
+Applies when a project opts into verification-gated mode (policy or config). Requirement index `status` and optionally implementation index `status` are updated only by the verify step after tests run.
+
+### Token references
+- `[REQ-TIED_SETUP]` — traceability and test-linked intent
+- `[PROC-TIED_DEV_CYCLE]` — test run precedes verify
+- `[PROC-TOKEN_VALIDATION]` — consistency after verify
+
+### Status
+Active (optional per project).
+
+### Core Activities
+1. **Policy**: Do not edit `status` in `requirements.yaml` (or implementation index) by hand when verification-gated mode is on. Status reflects test outcomes only.
+2. **Verify step**: After running the test suite, run the project's verify step (e.g. MCP tool `tied_verify` with `--update`, or a script that parses test results and passes covered tokens to the tool). The verify step updates REQ/IMPL status from the set of tokens that have passing tests (e.g. from test names/comments or requirement markers).
+3. **CI**: In CI, run: test suite → verify (update status) → `tied_validate_consistency`. Optionally run a "health" check with defined exit codes (0 = ok, 1 = warnings, 2 = fail).
+4. **Pre-commit**: Optionally run `tied_validate_consistency` (and `lint_yaml` on each staged TIED YAML file, or one `lint_yaml` with multiple paths) in a pre-commit hook to catch invalid or inconsistent TIED data.
+
+### Artifacts & Metrics
+- **Artifacts**: Updated requirement/implementation index status; verify run report.
+- **Success Metrics**: Status is derived only from test results; no manual status edits; `tied_validate_consistency` passes after verify.
+
+---
+
+## `[PROC-TIED_DEPENDENCY_GRAPH]` Dependency graph and backlog views
+
+### Purpose
+Use the requirement (and optionally IMPL) dependency graph to order work: detect cycles, respect dependencies, and support backlog views (critical path, blockers, quick-wins). Resolve circular dependencies before using dependency order for planning.
+
+### Scope
+Applies to `related_requirements.depends_on` in the requirements index and `related_decisions.depends_on` (and `composed_with`) in the implementation index. Process and tooling read these fields; they are not modified by this process.
+
+### Token references
+- `[REQ-TIED_SETUP]` — requirements as primary index
+- `[PROC-YAML_DB_OPERATIONS]` — index read for depends_on
+
+### Status
+Active
+
+### Core Activities
+1. **Cycle detection**: Build a directed graph from `related_requirements.depends_on` (and optionally IMPL `depends_on`). Run cycle detection (e.g. MCP tool `tied_cycles` or equivalent). If cycles exist, report them and resolve before using dependency order. Document in this process: "Resolve circular dependencies before ordering is meaningful."
+2. **Topological order**: List REQs (or IMPLs) in dependency order (roots first, then dependents). Use for implementation order: implement roots first, then dependents.
+3. **Backlog views**: Provide views such as: **blockers** — items whose dependents are not satisfied; **critical** — high priority + dependency chain; **quick-wins** — no dependents or leaf nodes. Use MCP tool `tied_backlog` with a view parameter (e.g. `critical`, `blockers`, `quick-wins`) or a script that reads the requirements index and dependency graph.
+
+### Artifacts & Metrics
+- **Artifacts**: Cycle report (empty when clean); topological order list; backlog view output.
+- **Success Metrics**: No cycles when using dependency order; backlog views available for planning.
+
+---
+
+## `[PROC-TIED_BOOTSTRAP_FROM_TESTS]` Bootstrap TIED from existing tests
+
+### Purpose
+When adopting TIED on an existing codebase that already has tests, discover tests and token-like markers and propose or update the RTM (requirements/IMPL traceability) from test metadata. Reduces manual authoring of the TIED indexes from scratch.
+
+### Scope
+Applies when tests already exist and the project wants to retrofit traceability. After bootstrap, the full agent checklist ([PROC-AGENT_REQ_CHECKLIST]) from S04 onward is used to complete REQ/ARCH/IMPL authoring.
+
+### Token references
+- `[REQ-TIED_SETUP]` — TIED methodology and traceability
+- `[PROC-AGENT_REQ_CHECKLIST]` — full checklist after bootstrap
+- `[PROC-IMPL_CODE_TEST_SYNC]` — test–IMPL alignment
+
+### Status
+Active (optional; use when retrofitting).
+
+### Core Activities
+1. **Analyze**: Scan test files for existing token-like markers or naming patterns (e.g. `[REQ-*]`, `[IMPL-*]` in comments or test names, or project-specific markers such as `@pytest.mark.req("REQ-XX-NNN")`).
+2. **Propose RTM**: From the scan, produce a list of suggested REQ/IMPL tokens and traceability (test → requirement). Optionally use MCP or script support to output "suggested" entries. Agent or human then turns these into real REQ/ARCH/IMPL records via S04–S06 of the agent checklist.
+3. **Complete via checklist**: Run the agent checklist from S04 (Author/Update REQ) onward. Add missing markers and requirement rows as needed. Bootstrap does not replace TIED authoring rules; it seeds the RTM from tests.
+
+### Artifacts & Metrics
+- **Artifacts**: Discovery report (tests, markers, suggested tokens); updated or new REQ/ARCH/IMPL after checklist.
+- **Success Metrics**: TIED indexes populated or updated from test metadata; full traceability completed via checklist.
+
+---
+
+## `[PROC-TIED_PHASED_DELIVERY]` Phased delivery with backlog
+
+### Purpose
+Use phases (or priority as phase proxy) and backlog views to deliver in stages. Align work with milestones; use quick-wins and critical views to focus effort within a phase.
+
+### Scope
+Applies when requirements are assigned to phases (e.g. via optional `phase` or `milestone` field, or by using existing `priority`/`category` to represent phase). Integrates with [PROC-TIED_DEPENDENCY_GRAPH] for ordering within the phase.
+
+### Token references
+- `[REQ-TIED_SETUP]` — requirements index
+- `[PROC-TIED_DEPENDENCY_GRAPH]` — cycle resolution and backlog views
+- `[PROC-TIED_VERIFICATION_GATED]` — verify and status per phase
+
+### Status
+Active (optional per project).
+
+### Core Activities
+1. **Assign phase**: Assign a phase (or use priority: e.g. phase 1 = P1, phase 2 = P2) to each requirement. If the project adds an optional `phase` or `milestone` field to the requirement schema, use it; otherwise document that priority/category represents phase.
+2. **Plan iterations**: Use `tied_backlog` (or equivalent) with phase filter and view (e.g. `--phase N`, `--view quick-wins` or `critical`) to plan iterations. Resolve cycles and respect dependencies within the phase per [PROC-TIED_DEPENDENCY_GRAPH].
+3. **Verify and status**: Run `tied_verify` (or equivalent) and `tied_validate_consistency` after each phase or iteration. Use verbose status output if needed to track phase completion.
+4. **Baselines**: Optionally use diff between phase baselines (e.g. requirement status snapshot) if tooling exists.
+
+### Artifacts & Metrics
+- **Artifacts**: Phase assignment in requirements; backlog view output per phase; verify and consistency reports.
+- **Success Metrics**: Work aligned to phases; backlog views focus effort; phase completion trackable.

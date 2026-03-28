@@ -59,18 +59,3 @@ IMPL-TIED_FILES:
       date: 2026-02-06
       validator: AI Agent
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-TIED_FILES] [ARCH-TIED_STRUCTURE] [REQ-TIED_SETUP] — Bootstrap script that creates tied/ directory, copies template files, and sets up base files
-
-    procedure tied_file_creation():
-      # [IMPL-TIED_FILES] [ARCH-TIED_STRUCTURE] [REQ-TIED_SETUP] Create tied/ directory at project root
-      create_tied_directory_at()
-      # [IMPL-TIED_FILES] [ARCH-TIED_STRUCTURE] [REQ-TIED_SETUP] Copy YAML index files from templates (requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml)
-      copy_yaml_index_files()
-      # [IMPL-TIED_FILES] [ARCH-TIED_STRUCTURE] [REQ-TIED_SETUP] Copy guide files from templates (semantic-tokens.md, processes.md, commit-guidelines.md)
-      copy_guide_files_from()
-      # [IMPL-TIED_FILES] [ARCH-TIED_STRUCTURE] [REQ-TIED_SETUP] Create detail subdirectories (requirements/, architecture-decisions/, implementation-decisions/)
-      create_detail_subdirectories_requirements()
-      # [IMPL-TIED_FILES] [ARCH-TIED_STRUCTURE] [REQ-TIED_SETUP] Copy base files to project root (.cursorrules, AGENTS.md, ai-principles.md)
-      copy_base_files_to()
-      end
