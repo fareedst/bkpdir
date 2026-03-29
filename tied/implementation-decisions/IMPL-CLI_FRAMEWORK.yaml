@@ -2,14 +2,16 @@ IMPL-CLI_FRAMEWORK:
   name: CLI Framework Implementation
   status: Active
   cross_references:
-    - ARCH-CLI_FRAMEWORK
-    - REQ-USABILITY
+  - ARCH-CLI_FRAMEWORK
+  - REQ-USABILITY
   rationale:
-    why: |-
-      Standardizes command construction
+    why: 'Standardizes command construction
+
       Enables testability through interfaces
+
       Provides consistent flag management
-      Supports context-aware execution
+
+      Supports context-aware execution'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -17,316 +19,135 @@ IMPL-CLI_FRAMEWORK:
     details: []
   code_locations:
     files:
-      - pkg/cli/types.go
-      - pkg/cli/builder.go
-      - pkg/cli/context.go
-      - pkg/cli/dryrun.go
-      - pkg/cli/flags.go
-      - pkg/cli/version.go
-      - main.go
+    - pkg/cli/types.go
+    - pkg/cli/builder.go
+    - pkg/cli/context.go
+    - pkg/cli/dryrun.go
+    - pkg/cli/flags.go
+    - pkg/cli/version.go
+    - main.go
     functions:
-      - NewCLIApp (pkg/cli/builder.go) — constructs CLIApp with all managers
-      - NewCommandBuilder (pkg/cli/builder.go) — creates CommandBuilder with FlagManager
-      - NewRootCommandBuilder (pkg/cli/builder.go) — creates RootCommandBuilder with FlagManager and VersionManager
-      - DefaultCommandBuilder.NewCommand (pkg/cli/builder.go) — creates cobra.Command
-      - DefaultCommandBuilder.WithHandler (pkg/cli/builder.go) — sets RunE handler
-      - DefaultCommandBuilder.WithFlags (pkg/cli/builder.go) — adds named flags
-      - DefaultCommandBuilder.WithSubcommands (pkg/cli/builder.go) — attaches child commands
-      - DefaultRootCommandBuilder.NewRootCommand (pkg/cli/builder.go) — creates root command with AppInfo
-      - DefaultRootCommandBuilder.WithGlobalFlags (pkg/cli/builder.go) — adds global flags via FlagManager
-      - DefaultRootCommandBuilder.BuildCommand (pkg/cli/builder.go) — builds command from CommandTemplate
-      - CLIApp.AddCommand (pkg/cli/builder.go) — adds subcommand to root
-      - CLIApp.Execute (pkg/cli/builder.go) — runs root command
-      - CLIApp.ExecuteWithContext (pkg/cli/builder.go) — runs with signal handling
-      - NewContextManager (pkg/cli/context.go) — creates DefaultContextManager
-      - DefaultContextManager.Create (pkg/cli/context.go) — creates cancellable context
-      - DefaultContextManager.WithTimeout (pkg/cli/context.go) — creates timeout context
-      - DefaultContextManager.HandleSignals (pkg/cli/context.go) — sets up SIGINT/SIGTERM handler
-      - WithSignalHandling (pkg/cli/context.go) — creates context with automatic signal handling
-      - NewCancellableOperation (pkg/cli/context.go) — wraps function as CancellableOperation
-      - NewDryRunManager (pkg/cli/dryrun.go) — creates DefaultDryRunManager
-      - DefaultDryRunManager.Execute (pkg/cli/dryrun.go) — executes or simulates operation
-      - DefaultDryRunManager.Log (pkg/cli/dryrun.go) — logs dry-run messages
-      - DryRunWrapper (pkg/cli/dryrun.go) — wraps function as DryRunOperation
-      - NewFlagManager (pkg/cli/flags.go) — creates DefaultFlagManager
-      - DefaultFlagManager.AddGlobalFlags (pkg/cli/flags.go) — adds help and verbose flags
-      - DefaultFlagManager.AddDryRunFlag (pkg/cli/flags.go) — adds --dry-run flag
-      - DefaultFlagManager.AddNoteFlag (pkg/cli/flags.go) — adds --note flag
-      - DefaultFlagManager.AddConfigFlag (pkg/cli/flags.go) — adds --config flag
-      - DefaultFlagManager.AddFlags (pkg/cli/flags.go) — adds FlagSet to command
-      - NewVersionManager (pkg/cli/version.go) — creates DefaultVersionManager
-      - DefaultVersionManager.FormatVersion (pkg/cli/version.go) — formats version string
-      - DefaultVersionManager.CreateVersionCommand (pkg/cli/version.go) — creates version subcommand
-      - DefaultVersionManager.CreateVersionTemplate (pkg/cli/version.go) — creates version template
-      - main (main.go) — sets up root command with persistent flags, registers all subcommands
-      - listCmd (main.go) — creates list subcommand
-      - configCmd (main.go) — creates config subcommand
-      - createCmd (main.go) — creates create subcommand
-      - fullCmd (main.go) — creates full archive subcommand
-      - incCmd (main.go) — creates incremental archive subcommand
-      - diffCmd (main.go) — creates diff subcommand
-      - backupCmd (main.go) — creates backup subcommand
-      - versionCmd (main.go) — creates version subcommand
+    - NewCLIApp (pkg/cli/builder.go) — constructs CLIApp with all managers
+    - NewCommandBuilder (pkg/cli/builder.go) — creates CommandBuilder with FlagManager
+    - NewRootCommandBuilder (pkg/cli/builder.go) — creates RootCommandBuilder with FlagManager and VersionManager
+    - DefaultCommandBuilder.NewCommand (pkg/cli/builder.go) — creates cobra.Command
+    - DefaultCommandBuilder.WithHandler (pkg/cli/builder.go) — sets RunE handler
+    - DefaultCommandBuilder.WithFlags (pkg/cli/builder.go) — adds named flags
+    - DefaultCommandBuilder.WithSubcommands (pkg/cli/builder.go) — attaches child commands
+    - DefaultRootCommandBuilder.NewRootCommand (pkg/cli/builder.go) — creates root command with AppInfo
+    - DefaultRootCommandBuilder.WithGlobalFlags (pkg/cli/builder.go) — adds global flags via FlagManager
+    - DefaultRootCommandBuilder.BuildCommand (pkg/cli/builder.go) — builds command from CommandTemplate
+    - CLIApp.AddCommand (pkg/cli/builder.go) — adds subcommand to root
+    - CLIApp.Execute (pkg/cli/builder.go) — runs root command
+    - CLIApp.ExecuteWithContext (pkg/cli/builder.go) — runs with signal handling
+    - NewContextManager (pkg/cli/context.go) — creates DefaultContextManager
+    - DefaultContextManager.Create (pkg/cli/context.go) — creates cancellable context
+    - DefaultContextManager.WithTimeout (pkg/cli/context.go) — creates timeout context
+    - DefaultContextManager.HandleSignals (pkg/cli/context.go) — sets up SIGINT/SIGTERM handler
+    - WithSignalHandling (pkg/cli/context.go) — creates context with automatic signal handling
+    - NewCancellableOperation (pkg/cli/context.go) — wraps function as CancellableOperation
+    - NewDryRunManager (pkg/cli/dryrun.go) — creates DefaultDryRunManager
+    - DefaultDryRunManager.Execute (pkg/cli/dryrun.go) — executes or simulates operation
+    - DefaultDryRunManager.Log (pkg/cli/dryrun.go) — logs dry-run messages
+    - DryRunWrapper (pkg/cli/dryrun.go) — wraps function as DryRunOperation
+    - NewFlagManager (pkg/cli/flags.go) — creates DefaultFlagManager
+    - DefaultFlagManager.AddGlobalFlags (pkg/cli/flags.go) — adds help and verbose flags
+    - DefaultFlagManager.AddDryRunFlag (pkg/cli/flags.go) — adds --dry-run flag
+    - DefaultFlagManager.AddNoteFlag (pkg/cli/flags.go) — adds --note flag
+    - DefaultFlagManager.AddConfigFlag (pkg/cli/flags.go) — adds --config flag
+    - DefaultFlagManager.AddFlags (pkg/cli/flags.go) — adds FlagSet to command
+    - NewVersionManager (pkg/cli/version.go) — creates DefaultVersionManager
+    - DefaultVersionManager.FormatVersion (pkg/cli/version.go) — formats version string
+    - DefaultVersionManager.CreateVersionCommand (pkg/cli/version.go) — creates version subcommand
+    - DefaultVersionManager.CreateVersionTemplate (pkg/cli/version.go) — creates version template
+    - main (main.go) — sets up root command with persistent flags, registers all subcommands
+    - listCmd (main.go) — creates list subcommand
+    - configCmd (main.go) — creates config subcommand
+    - createCmd (main.go) — creates create subcommand
+    - fullCmd (main.go) — creates full archive subcommand
+    - incCmd (main.go) — creates incremental archive subcommand
+    - diffCmd (main.go) — creates diff subcommand
+    - backupCmd (main.go) — creates backup subcommand
+    - versionCmd (main.go) — creates version subcommand
   traceability:
     architecture:
-      - ARCH-CLI_FRAMEWORK
+    - ARCH-CLI_FRAMEWORK
     requirements:
-      - REQ-USABILITY
+    - REQ-USABILITY
     tests:
-      - TestBuildInfo (pkg/cli/cli_test.go) — validates BuildInfo struct
-      - TestAppInfo (pkg/cli/cli_test.go) — validates AppInfo struct
-      - TestVersionManager (pkg/cli/cli_test.go) — tests version formatting, template, and command creation
-      - TestDryRunManager (pkg/cli/cli_test.go) — tests dry-run simulation and actual execution
-      - TestContextManager (pkg/cli/cli_test.go) — tests context creation and cancellation
-      - TestContextManagerWithTimeout (pkg/cli/cli_test.go) — tests context timeout behavior
-      - TestFlagManager (pkg/cli/cli_test.go) — tests flag registration (dry-run, note)
-      - TestCommandBuilder (pkg/cli/cli_test.go) — tests command creation, handler setting, execution
-      - TestRootCommandBuilder (pkg/cli/cli_test.go) — tests root command creation with AppInfo
-      - TestCLIApp (pkg/cli/cli_test.go) — tests full CLIApp creation and command addition
-      - TestCancellableOperation (pkg/cli/cli_test.go) — tests cancellable operation execution and cancellation
-      - TestWithSignalHandling (pkg/cli/cli_test.go) — tests signal handling context
-      - ExampleCLIApp (pkg/cli/example_test.go) — demonstrates full CLI application setup
-      - ExampleCommandTemplate (pkg/cli/example_test.go) — demonstrates command template usage
-      - ExampleCancellableOperation (pkg/cli/example_test.go) — demonstrates cancellable operations
-      - Example_versionHandling (pkg/cli/example_test.go) — demonstrates version management
-      - TestFullCmdWithNote (main_test.go) — tests full command with note flag
-      - TestIncCmdWithNote (main_test.go) — tests incremental command with note flag
-      - TestCmdArgsValidation (main_test.go) — tests command argument validation
-      - TestListCmd (main_test.go) — tests list command execution
-      - TestMain_ConfigCmd (main_test.go) — tests config command creation
-      - TestMain_CreateCmd (main_test.go) — tests create command creation
-      - TestMain_VersionCmd (main_test.go) — tests version command creation
-      - TestMain_BackupCmd (main_test.go) — tests backup command creation
-      - TestMain_Integration_CommandValidation (main_test.go) — integration test for all command structures
+    - TestBuildInfo (pkg/cli/cli_test.go) — validates BuildInfo struct
+    - TestAppInfo (pkg/cli/cli_test.go) — validates AppInfo struct
+    - TestVersionManager (pkg/cli/cli_test.go) — tests version formatting, template, and command creation
+    - TestDryRunManager (pkg/cli/cli_test.go) — tests dry-run simulation and actual execution
+    - TestContextManager (pkg/cli/cli_test.go) — tests context creation and cancellation
+    - TestContextManagerWithTimeout (pkg/cli/cli_test.go) — tests context timeout behavior
+    - TestFlagManager (pkg/cli/cli_test.go) — tests flag registration (dry-run, note)
+    - TestCommandBuilder (pkg/cli/cli_test.go) — tests command creation, handler setting, execution
+    - TestRootCommandBuilder (pkg/cli/cli_test.go) — tests root command creation with AppInfo
+    - TestCLIApp (pkg/cli/cli_test.go) — tests full CLIApp creation and command addition
+    - TestCancellableOperation (pkg/cli/cli_test.go) — tests cancellable operation execution and cancellation
+    - TestWithSignalHandling (pkg/cli/cli_test.go) — tests signal handling context
+    - ExampleCLIApp (pkg/cli/example_test.go) — demonstrates full CLI application setup
+    - ExampleCommandTemplate (pkg/cli/example_test.go) — demonstrates command template usage
+    - ExampleCancellableOperation (pkg/cli/example_test.go) — demonstrates cancellable operations
+    - Example_versionHandling (pkg/cli/example_test.go) — demonstrates version management
+    - TestFullCmdWithNote (main_test.go) — tests full command with note flag
+    - TestIncCmdWithNote (main_test.go) — tests incremental command with note flag
+    - TestCmdArgsValidation (main_test.go) — tests command argument validation
+    - TestListCmd (main_test.go) — tests list command execution
+    - TestMain_ConfigCmd (main_test.go) — tests config command creation
+    - TestMain_CreateCmd (main_test.go) — tests create command creation
+    - TestMain_VersionCmd (main_test.go) — tests version command creation
+    - TestMain_BackupCmd (main_test.go) — tests backup command creation
+    - TestMain_Integration_CommandValidation (main_test.go) — integration test for all command structures
     code_annotations:
-      - IMPL-CLI_FRAMEWORK
-      - ARCH-CLI_FRAMEWORK
-      - REQ-USABILITY
+    - IMPL-CLI_FRAMEWORK
+    - ARCH-CLI_FRAMEWORK
+    - REQ-USABILITY
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-CLI_FRAMEWORK
-      - REQ-USABILITY
+    - ARCH-CLI_FRAMEWORK
+    - REQ-USABILITY
     composed_with: []
-  detail_file: implementation-decisions/IMPL-CLI_FRAMEWORK.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: AI agent
       result: pass
   code_markers: '`pkg/cli/` package, builder methods, manager interfaces'
   cliapp:
-    - Complete CLI application container
-    - Manages all managers and builders
-    - Provides unified API for application setup
-  commandbuilder: |-
-    ```go
-    type CommandBuilder interface {
-        NewCommand(name, short, long string) *cobra.Command
-        WithHandler(cmd *cobra.Command, handler func(*cobra.Command, []string) error) *cobra.Command
-        WithFlags(cmd *cobra.Command, flags []string) *cobra.Command
-        WithSubcommands(parent *cobra.Command, children ...*cobra.Command) *cobra.Command
-    }
-    ```
-  contextmanager: |-
-    ```go
-    type ContextManager interface {
-        Create(parent context.Context) (context.Context, context.CancelFunc)
-        WithTimeout(parent context.Context, timeout string) (context.Context, context.CancelFunc)
-        HandleSignals(cancel context.CancelFunc)
-    }
-    ```
+  - Complete CLI application container
+  - Manages all managers and builders
+  - Provides unified API for application setup
+  commandbuilder: "```go\ntype CommandBuilder interface {\n    NewCommand(name, short, long string) *cobra.Command\n    WithHandler(cmd *cobra.Command, handler func(*cobra.Command, []string) error) *cobra.Command\n    WithFlags(cmd *cobra.Command, flags []string) *cobra.Command\n    WithSubcommands(parent *cobra.Command, children ...*cobra.Command) *cobra.Command\n}\n```"
+  contextmanager: "```go\ntype ContextManager interface {\n    Create(parent context.Context) (context.Context, context.CancelFunc)\n    WithTimeout(parent context.Context, timeout string) (context.Context, context.CancelFunc)\n    HandleSignals(cancel context.CancelFunc)\n}\n```"
   defaultcommandbuilder:
-    - Wraps Cobra command creation
-    - Provides fluent API for command setup
-    - Integrates with FlagManager
+  - Wraps Cobra command creation
+  - Provides fluent API for command setup
+  - Integrates with FlagManager
   defaultflagmanager:
-    - Standard flag registration methods
-    - FlagSet structure for batch flag addition
-    - Consistent flag naming conventions
-  dryrunmanager: |-
-    ```go
-    type DryRunManager interface {
-        Execute(ctx CommandContext, op DryRunOperation) error
-        Log(ctx CommandContext, message string)
-    }
-    ```
-  flagmanager: |-
-    ```go
-    type FlagManager interface {
-        AddGlobalFlags(cmd *cobra.Command) error
-        AddDryRunFlag(cmd *cobra.Command, target *bool) error
-        AddNoteFlag(cmd *cobra.Command, target *string) error
-        AddConfigFlag(cmd *cobra.Command, target *bool) error
-    }
-    ```
-  essence_pseudocode: |-
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Builder pattern with manager interfaces for CLI construction
-
-    # --- Interface definitions (types.go) ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Define manager interfaces for testability and composition
-    interface CommandBuilder:
-      NewCommand(name, short, long) -> *cobra.Command
-      WithHandler(cmd, handler) -> *cobra.Command
-      WithFlags(cmd, flags[]) -> *cobra.Command
-      WithSubcommands(parent, children...) -> *cobra.Command
-
-    interface RootCommandBuilder:
-      NewRootCommand(info AppInfo) -> *cobra.Command
-      WithVersionTemplate(cmd, template) -> *cobra.Command
-      WithGlobalFlags(cmd, flagMgr) -> *cobra.Command
-      WithExampleUsage(cmd, examples) -> *cobra.Command
-
-    interface FlagManager:
-      AddGlobalFlags(cmd) -> error
-      AddDryRunFlag(cmd, target) -> error
-      AddNoteFlag(cmd, target) -> error
-      AddConfigFlag(cmd, target) -> error
-
-    interface ContextManager:
-      Create(parent) -> (ctx, cancel)
-      WithTimeout(parent, timeout) -> (ctx, cancel)
-      HandleSignals(cancel)
-
-    interface DryRunManager:
-      Execute(ctx CommandContext, op DryRunOperation) -> error
-      Log(ctx CommandContext, message)
-
-    interface VersionManager:
-      FormatVersion(info) -> string
-      CreateVersionCommand(info) -> *cobra.Command
-      CreateVersionTemplate(info) -> string
-
-    # --- Builder implementation (builder.go) ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Command building via fluent builder pattern
-    procedure NewCommandBuilder(flagMgr):
-      # Creates DefaultCommandBuilder wrapping a FlagManager
-      if flagMgr is nil: flagMgr = NewFlagManager()
-      return DefaultCommandBuilder{flagManager: flagMgr}
-
-    procedure DefaultCommandBuilder.NewCommand(name, short, long):
-      # Wraps cobra.Command creation
-      return &cobra.Command{Use: name, Short: short, Long: long}
-
-    procedure DefaultCommandBuilder.WithHandler(cmd, handler):
-      cmd.RunE = handler
-      return cmd
-
-    procedure DefaultCommandBuilder.WithSubcommands(parent, children...):
-      for each child in children: parent.AddCommand(child)
-      return parent
-
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Root command building with version and global flags
-    procedure NewRootCommandBuilder(flagMgr, versionMgr):
-      if flagMgr is nil: flagMgr = NewFlagManager()
-      if versionMgr is nil: versionMgr = NewVersionManager()
-      return DefaultRootCommandBuilder{flagManager: flagMgr, versionManager: versionMgr}
-
-    procedure DefaultRootCommandBuilder.NewRootCommand(info):
-      cmd = &cobra.Command{Use: info.Name, Short: info.Short, Long: info.Long}
-      cmd.Version = versionManager.FormatVersion(info.Build)
-      cmd.SetVersionTemplate(versionManager.CreateVersionTemplate(info.Build))
-      cmd.Run = show help if no subcommand
-      return cmd
-
-    procedure DefaultRootCommandBuilder.BuildCommand(template):
-      cmd = &cobra.Command from template fields (Name, Short, Long, Example)
-      if template.Handler: cmd.RunE = template.Handler
-      if template.PreRun: cmd.PreRunE = template.PreRun
-      if template.PostRun: cmd.PostRunE = template.PostRun
-      flagMgr.AddFlags(cmd, template.FlagSet)
-      for each subcmd in template.Subcommands: cmd.AddCommand(subcmd)
-      return cmd
-
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] CLIApp orchestrates all managers
-    procedure NewCLIApp(info):
-      versionMgr = NewVersionManager()
-      flagMgr = NewFlagManager()
-      rootBuilder = NewRootCommandBuilder(flagMgr, versionMgr)
-      commandBuilder = NewCommandBuilder(flagMgr)
-      contextMgr = NewContextManager()
-      dryRunMgr = NewDryRunManager()
-      rootCmd = rootBuilder.NewRootCommand(info)
-      return CLIApp{all managers + rootCmd}
-
-    procedure CLIApp.Execute():
-      return rootCommand.Execute()
-
-    procedure CLIApp.ExecuteWithContext():
-      ctx, cancel = WithSignalHandling(nil)
-      defer cancel()
-      rootCommand.SetContext(ctx)
-      if err = rootCommand.Execute(): print err, exit(1)
-
-    # --- Flag management (flags.go) ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Consistent flag registration across commands
-    procedure DefaultFlagManager.AddGlobalFlags(cmd):
-      cmd.PersistentFlags: --help, --verbose
-
-    procedure DefaultFlagManager.AddDryRunFlag(cmd, target):
-      cmd.PersistentFlags: --dry-run / -d -> target
-
-    procedure DefaultFlagManager.AddNoteFlag(cmd, target):
-      cmd.Flags: --note / -n -> target
-
-    procedure DefaultFlagManager.AddFlags(cmd, flagSet):
-      conditionally add DryRun, Note, Config, Incremental, List flags from FlagSet
-
-    # --- Context management (context.go) ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-CONTEXT_SUPPORT] Context lifecycle with signal handling
-    procedure DefaultContextManager.Create(parent):
-      if parent is nil: parent = context.Background()
-      return context.WithCancel(parent)
-
-    procedure DefaultContextManager.WithTimeout(parent, timeout):
-      parse duration from timeout string
-      if parse error: return WithCancel (no timeout)
-      return context.WithTimeout(parent, duration)
-
-    procedure DefaultContextManager.HandleSignals(cancel):
-      listen for SIGINT, SIGTERM on goroutine
-      on signal: call cancel()
-
-    procedure WithSignalHandling(parent):
-      ctx, cancel = context.WithCancel(parent)
-      goroutine: select on sigChan or ctx.Done
-      return ctx, cancel
-
-    # --- Dry-run support (dryrun.go) ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Dry-run mode for safe operation preview
-    procedure DefaultDryRunManager.Execute(ctx, op):
-      if ctx.DryRun: log(op.Describe()), return nil
-      else: return op.Execute(ctx)
-
-    procedure DefaultDryRunManager.Log(ctx, message):
-      fprintf(ctx.Output, "[DRY-RUN] %s", message)
-
-    # --- Version management (version.go) ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Version display and formatting
-    procedure DefaultVersionManager.FormatVersion(info):
-      return "{version} (compiled {date}) [{platform}]"
-
-    procedure DefaultVersionManager.CreateVersionCommand(info):
-      return cobra.Command{Use: "version", Run: print FormatVersion(info)}
-
-    procedure DefaultVersionManager.CreateVersionTemplate(info):
-      return "version {version} (compiled {date}) [{platform}]\n"
-
-    # --- main.go command registration ---
-    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] Register all commands on root
-    procedure main():
-      create rootCmd with Use, Short, Long, Version
-      set version template
-      add persistent flags: --dry-run, --config, --list, --limit, --debug
-      rootCmd.AddCommand(createCmd, configCmd, templateCmd)
-      rootCmd.AddCommand(fullCmd, incCmd)
-      rootCmd.AddCommand(listCmd, diffCmd, backupCmd, versionCmd)
-      executeWithAutoDetection(rootCmd)
+  - Standard flag registration methods
+  - FlagSet structure for batch flag addition
+  - Consistent flag naming conventions
+  dryrunmanager: "```go\ntype DryRunManager interface {\n    Execute(ctx CommandContext, op DryRunOperation) error\n    Log(ctx CommandContext, message string)\n}\n```"
+  flagmanager: "```go\ntype FlagManager interface {\n    AddGlobalFlags(cmd *cobra.Command) error\n    AddDryRunFlag(cmd *cobra.Command, target *bool) error\n    AddNoteFlag(cmd *cobra.Command, target *string) error\n    AddConfigFlag(cmd *cobra.Command, target *bool) error\n}\n```"
+  essence_pseudocode: "# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Builder pattern with manager interfaces for CLI construction\n\n# --- Interface definitions (types.go) --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Define manager interfaces for testability and composition\ninterface CommandBuilder:\n  NewCommand(name, short, long) -> *cobra.Command\n  WithHandler(cmd, handler) -> *cobra.Command\n  WithFlags(cmd, flags[]) -> *cobra.Command\n  WithSubcommands(parent, children...) -> *cobra.Command\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: interface RootCommandBuilder:\ninterface RootCommandBuilder:\n  NewRootCommand(info AppInfo) -> *cobra.Command\n  WithVersionTemplate(cmd, template) -> *cobra.Command\n  WithGlobalFlags(cmd, flagMgr) -> *cobra.Command\n  WithExampleUsage(cmd, examples) -> *cobra.Command\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK]\
+    \ [REQ-USABILITY] — Block implements documented behavior for: interface FlagManager:\ninterface FlagManager:\n  AddGlobalFlags(cmd) -> error\n  AddDryRunFlag(cmd, target) -> error\n  AddNoteFlag(cmd, target) -> error\n  AddConfigFlag(cmd, target) -> error\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: interface ContextManager:\ninterface ContextManager:\n  Create(parent) -> (ctx, cancel)\n  WithTimeout(parent, timeout) -> (ctx, cancel)\n  HandleSignals(cancel)\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: interface DryRunManager:\ninterface DryRunManager:\n  Execute(ctx CommandContext, op DryRunOperation) -> error\n  Log(ctx CommandContext, message)\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: interface VersionManager:\ninterface VersionManager:\n  FormatVersion(info) -> string\n  CreateVersionCommand(info)\
+    \ -> *cobra.Command\n  CreateVersionTemplate(info) -> string\n\n# --- Builder implementation (builder.go) --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Command building via fluent builder pattern\nprocedure NewCommandBuilder(flagMgr):\n  # Creates DefaultCommandBuilder wrapping a FlagManager [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n  if flagMgr is nil: flagMgr = NewFlagManager()\n  return DefaultCommandBuilder{flagManager: flagMgr}\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultCommandBuilder.NewCommand(name, short, long):\nprocedure DefaultCommandBuilder.NewCommand(name, short, long):\n  # Wraps cobra.Command creation [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n  return &cobra.Command{Use: name, Short: short, Long: long}\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements\
+    \ documented behavior for: procedure DefaultCommandBuilder.WithHandler(cmd, handler):\nprocedure DefaultCommandBuilder.WithHandler(cmd, handler):\n  cmd.RunE = handler\n  return cmd\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultCommandBuilder.WithSubcommands(parent, children...):\nprocedure DefaultCommandBuilder.WithSubcommands(parent, children...):\n  for each child in children: parent.AddCommand(child)\n  return parent\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Root command building with version and global flags\nprocedure NewRootCommandBuilder(flagMgr, versionMgr):\n  if flagMgr is nil: flagMgr = NewFlagManager()\n  if versionMgr is nil: versionMgr = NewVersionManager()\n  return DefaultRootCommandBuilder{flagManager: flagMgr, versionManager: versionMgr}\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultRootCommandBuilder.NewRootCommand(info):\n\
+    procedure DefaultRootCommandBuilder.NewRootCommand(info):\n  cmd = &cobra.Command{Use: info.Name, Short: info.Short, Long: info.Long}\n  cmd.Version = versionManager.FormatVersion(info.Build)\n  cmd.SetVersionTemplate(versionManager.CreateVersionTemplate(info.Build))\n  cmd.Run = show help if no subcommand\n  return cmd\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultRootCommandBuilder.BuildCommand(template):\nprocedure DefaultRootCommandBuilder.BuildCommand(template):\n  cmd = &cobra.Command from template fields (Name, Short, Long, Example)\n  if template.Handler: cmd.RunE = template.Handler\n  if template.PreRun: cmd.PreRunE = template.PreRun\n  if template.PostRun: cmd.PostRunE = template.PostRun\n  flagMgr.AddFlags(cmd, template.FlagSet)\n  for each subcmd in template.Subcommands: cmd.AddCommand(subcmd)\n  return cmd\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] CLIApp orchestrates all managers\n\
+    procedure NewCLIApp(info):\n  versionMgr = NewVersionManager()\n  flagMgr = NewFlagManager()\n  rootBuilder = NewRootCommandBuilder(flagMgr, versionMgr)\n  commandBuilder = NewCommandBuilder(flagMgr)\n  contextMgr = NewContextManager()\n  dryRunMgr = NewDryRunManager()\n  rootCmd = rootBuilder.NewRootCommand(info)\n  return CLIApp{all managers + rootCmd}\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure CLIApp.Execute():\nprocedure CLIApp.Execute():\n  return rootCommand.Execute()\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure CLIApp.ExecuteWithContext():\nprocedure CLIApp.ExecuteWithContext():\n  ctx, cancel = WithSignalHandling(nil)\n  defer cancel()\n  rootCommand.SetContext(ctx)\n  if err = rootCommand.Execute(): print err, exit(1)\n\n# --- Flag management (flags.go) --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n# [IMPL-CLI_FRAMEWORK]\
+    \ [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Consistent flag registration across commands\nprocedure DefaultFlagManager.AddGlobalFlags(cmd):\n  cmd.PersistentFlags: --help, --verbose\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultFlagManager.AddDryRunFlag(cmd, target):\nprocedure DefaultFlagManager.AddDryRunFlag(cmd, target):\n  cmd.PersistentFlags: --dry-run / -d -> target\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultFlagManager.AddNoteFlag(cmd, target):\nprocedure DefaultFlagManager.AddNoteFlag(cmd, target):\n  cmd.Flags: --note / -n -> target\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultFlagManager.AddFlags(cmd, flagSet):\nprocedure DefaultFlagManager.AddFlags(cmd, flagSet):\n  conditionally add DryRun, Note, Config, Incremental, List flags from FlagSet\n\n\
+    # --- Context management (context.go) --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-CONTEXT_SUPPORT] Context lifecycle with signal handling\nprocedure DefaultContextManager.Create(parent):\n  if parent is nil: parent = context.Background()\n  return context.WithCancel(parent)\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultContextManager.WithTimeout(parent, timeout):\nprocedure DefaultContextManager.WithTimeout(parent, timeout):\n  parse duration from timeout string\n  if parse error: return WithCancel (no timeout)\n  return context.WithTimeout(parent, duration)\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultContextManager.HandleSignals(cancel):\nprocedure DefaultContextManager.HandleSignals(cancel):\n  listen for SIGINT, SIGTERM on goroutine\n  on signal:\
+    \ call cancel()\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure WithSignalHandling(parent):\nprocedure WithSignalHandling(parent):\n  ctx, cancel = context.WithCancel(parent)\n  goroutine: select on sigChan or ctx.Done\n  return ctx, cancel\n\n# --- Dry-run support (dryrun.go) --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Dry-run mode for safe operation preview\nprocedure DefaultDryRunManager.Execute(ctx, op):\n  if ctx.DryRun: log(op.Describe()), return nil\n  else: return op.Execute(ctx)\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultDryRunManager.Log(ctx, message):\nprocedure DefaultDryRunManager.Log(ctx, message):\n  fprintf(ctx.Output, \"[DRY-RUN] %s\", message)\n\n# --- Version management (version.go) --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n\
+    # [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Version display and formatting\nprocedure DefaultVersionManager.FormatVersion(info):\n  return \"{version} (compiled {date}) [{platform}]\"\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultVersionManager.CreateVersionCommand(info):\nprocedure DefaultVersionManager.CreateVersionCommand(info):\n  return cobra.Command{Use: \"version\", Run: print FormatVersion(info)}\n\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] — Block implements documented behavior for: procedure DefaultVersionManager.CreateVersionTemplate(info):\nprocedure DefaultVersionManager.CreateVersionTemplate(info):\n  return \"version {version} (compiled {date}) [{platform}]\\n\"\n\n# --- main.go command registration --- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY]\n# [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] Register all\
+    \ commands on root\nprocedure main():\n  create rootCmd with Use, Short, Long, Version\n  set version template\n  add persistent flags: --dry-run, --config, --list, --limit, --debug\n  rootCmd.AddCommand(createCmd, configCmd, templateCmd)\n  rootCmd.AddCommand(fullCmd, incCmd)\n  rootCmd.AddCommand(listCmd, diffCmd, backupCmd, versionCmd)\n  executeWithAutoDetection(rootCmd)"

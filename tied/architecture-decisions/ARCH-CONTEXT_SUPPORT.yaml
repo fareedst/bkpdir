@@ -32,7 +32,6 @@ ARCH-CONTEXT_SUPPORT:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-CONTEXT_SUPPORT.yaml
   metadata:
     created:
       date: "2026-03-12"

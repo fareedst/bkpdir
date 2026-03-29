@@ -17,73 +17,37 @@ IMPL-CODE_STYLE:
     requirements: []
     tests: []
     code_annotations:
-      - IMPL-CODE_STYLE
+    - IMPL-CODE_STYLE
   related_decisions:
     depends_on: []
     supersedes: []
     see_also: []
     composed_with: []
-  detail_file: implementation-decisions/IMPL-CODE_STYLE.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched stub pseudo-code with convention rules per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   documentation:
-    - Package-level documentation
-    - Exported function documentation
-    - Inline comments for complex logic
-    - Examples in test files
+  - Package-level documentation
+  - Exported function documentation
+  - Inline comments for complex logic
+  - Examples in test files
   formatting:
-    - Use `go fmt` for code formatting
-    - Use `revive` linter for code quality
-    - Follow Go standard formatting
+  - Use `go fmt` for code formatting
+  - Use `revive` linter for code quality
+  - Follow Go standard formatting
   naming:
-    - Use descriptive names
-    - Follow Go naming conventions
-    - 'Exported types/functions: PascalCase'
-    - 'Unexported: camelCase'
-  essence_pseudocode: |-
-    # [IMPL-CODE_STYLE] — Go code style and convention rules applied across the project.
-
-    DATA NAMING_RULES:
-      exported: PascalCase
-      unexported: camelCase
-      acronyms: preserve case (e.g. HTTPServer, xmlParser)
-
-    DATA FORMATTING_RULES:
-      formatter: go fmt
-      linter: revive
-      standard: Go standard formatting
-
-    DATA DOCUMENTATION_RULES:
-      package_level: every package has a doc.go or package-level comment
-      exported_symbols: every exported type, function, and method has a doc comment
-      complex_logic: inline comments for non-obvious logic only
-      examples: test files contain usage examples
-
-    # [IMPL-CODE_STYLE] — How naming conventions are enforced.
-    VALIDATE_NAMING(symbol):
-      IF symbol.exported: ASSERT symbol.name matches PascalCase
-      ELSE: ASSERT symbol.name matches camelCase
-      RETURN pass/fail
-
-    # [IMPL-CODE_STYLE] — How formatting is enforced.
-    VALIDATE_FORMATTING(file):
-      RUN go fmt on file
-      RUN revive on file
-      RETURN lint results
-
-    # [IMPL-CODE_STYLE] — How documentation coverage is enforced.
-    VALIDATE_DOCUMENTATION(package):
-      FOR EACH exported symbol in package:
-        ASSERT doc comment exists
-      ASSERT package-level comment exists
-      RETURN pass/fail
+  - Use descriptive names
+  - Follow Go naming conventions
+  - 'Exported types/functions: PascalCase'
+  - 'Unexported: camelCase'
+  essence_pseudocode: "# [IMPL-CODE_STYLE] — Go code style and convention rules applied across the project. [ARCH-SYSTEM_COMPONENTS] [REQ-MAINTAINABILITY]\n\nDATA NAMING_RULES:\n  exported: PascalCase\n  unexported: camelCase\n  acronyms: preserve case (e.g. HTTPServer, xmlParser)\n\n# [IMPL-CODE_STYLE] [ARCH-SYSTEM_COMPONENTS] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA FORMATTING_RULES:\nDATA FORMATTING_RULES:\n  formatter: go fmt\n  linter: revive\n  standard: Go standard formatting\n\n# [IMPL-CODE_STYLE] [ARCH-SYSTEM_COMPONENTS] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA DOCUMENTATION_RULES:\nDATA DOCUMENTATION_RULES:\n  package_level: every package has a doc.go or package-level comment\n  exported_symbols: every exported type, function, and method has a doc comment\n  complex_logic: inline comments for non-obvious logic only\n  examples: test files contain usage examples\n\n# [IMPL-CODE_STYLE] — How naming conventions are enforced.\
+    \ [ARCH-SYSTEM_COMPONENTS] [REQ-MAINTAINABILITY]\nVALIDATE_NAMING(symbol):\n  IF symbol.exported: ASSERT symbol.name matches PascalCase\n  ELSE: ASSERT symbol.name matches camelCase\n  RETURN pass/fail\n\n# [IMPL-CODE_STYLE] — How formatting is enforced. [ARCH-SYSTEM_COMPONENTS] [REQ-MAINTAINABILITY]\nVALIDATE_FORMATTING(file):\n  RUN go fmt on file\n  RUN revive on file\n  RETURN lint results\n\n# [IMPL-CODE_STYLE] — How documentation coverage is enforced. [ARCH-SYSTEM_COMPONENTS] [REQ-MAINTAINABILITY]\nVALIDATE_DOCUMENTATION(package):\n  FOR EACH exported symbol in package:\n    ASSERT doc comment exists\n  ASSERT package-level comment exists\n  RETURN pass/fail"

@@ -26,7 +26,6 @@ REQ-CONTEXT_SUPPORT:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-CONTEXT_SUPPORT.yaml
   metadata:
     created:
       date: "2026-03-12"

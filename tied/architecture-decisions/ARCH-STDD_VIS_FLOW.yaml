@@ -49,7 +49,6 @@ ARCH-STDD_VIS_FLOW:
     supersedes: []
     see_also:
       - ARCH-TOKEN_SYSTEM
-  detail_file: architecture-decisions/ARCH-STDD_VIS_FLOW.yaml
   metadata:
     created:
       date: "2026-03-12"

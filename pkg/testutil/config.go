@@ -169,7 +169,6 @@ func CreateTestConfigWithDefaults(t *testing.T, dir string, overrides map[string
 		"include_git_info":               false,
 		"backup_dir_path":                "../.bkpdir/files",
 		"use_current_dir_name_for_files": false,
-		"exclude_patterns":               []string{".git/", "vendor/"},
 	}
 
 	// Apply overrides

@@ -32,7 +32,6 @@ REQ-DOC_011:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-DOC_011.yaml
   metadata:
     created:
       date: "2026-03-12"

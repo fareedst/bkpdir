@@ -34,7 +34,6 @@ REQ-GOV_REGISTRY_COMPLETENESS:
         - REQ-GOV_DISCOVERABILITY
       supersedes: []
     description: Governance requirement ensuring all semantic tokens are registered in the token registry
-    detail_file: requirements/REQ-GOV_REGISTRY_COMPLETENESS.yaml
     metadata:
       created:
         date: "2026-03-12"

@@ -29,7 +29,6 @@ REQ-IMMUTABLE_ERROR_HANDLING:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-IMMUTABLE_ERROR_HANDLING.yaml
   metadata:
     created:
       date: "2026-03-12"

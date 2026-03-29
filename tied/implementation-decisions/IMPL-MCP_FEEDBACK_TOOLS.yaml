@@ -2,63 +2,62 @@ IMPL-MCP_FEEDBACK_TOOLS:
   name: MCP Feedback Tools (tied_feedback_add, tied_feedback_export)
   status: Active
   cross_references:
-    - ARCH-FEEDBACK_STORAGE
-    - REQ-FEEDBACK_TO_TIED
+  - ARCH-FEEDBACK_STORAGE
+  - REQ-FEEDBACK_TO_TIED
   rationale:
     why: Implement REQ-FEEDBACK_TO_TIED and ARCH-FEEDBACK_STORAGE via two MCP tools and a testable feedback module
     problems_solved:
-      - No programmatic way to add or export feedback from a TIED project
+    - No programmatic way to add or export feedback from a TIED project
     benefits:
-      - Projects can record and export feedback for the TIED project
-      - Logic in pure/testable module; handlers stay thin
+    - Projects can record and export feedback for the TIED project
+    - Logic in pure/testable module; handlers stay thin
   implementation_approach:
     summary: Feedback module (load/append/export) under mcp-server/src/feedback.ts; two tool handlers in tools/index.ts
     details:
-      - 'getFeedbackPath(basePath?): resolve {base}/feedback.yaml'
-      - 'loadFeedback(basePath?): read YAML or return { entries: [] }; create file if missing on first append'
-      - 'appendEntry(params): validate type/title/description; generate id (e.g. timestamp-based); set created_at; append to entries; write file'
-      - 'exportMarkdown(entries), exportJson(entries): format all entries for report'
-      - 'tied_feedback_add: parse args, call appendEntry, return ok/id/created_at and optional report_snippet (markdown)'
-      - 'tied_feedback_export: load entries, call exportMarkdown or exportJson, return string'
+    - 'getFeedbackPath(basePath?): resolve {base}/feedback.yaml'
+    - 'loadFeedback(basePath?): read YAML or return { entries: [] }; create file if missing on first append'
+    - 'appendEntry(params): validate type/title/description; generate id (e.g. timestamp-based); set created_at; append to entries; write file'
+    - 'exportMarkdown(entries), exportJson(entries): format all entries for report'
+    - 'tied_feedback_add: parse args, call appendEntry, return ok/id/created_at and optional report_snippet (markdown)'
+    - 'tied_feedback_export: load entries, call exportMarkdown or exportJson, return string'
   code_locations:
     files:
-      - path: mcp-server/src/feedback.ts
-        description: Feedback load/append/export logic [REQ-FEEDBACK_TO_TIED] [ARCH-FEEDBACK_STORAGE] [IMPL-MCP_FEEDBACK_TOOLS]
-      - path: mcp-server/src/feedback.test.ts
-        description: Unit tests for feedback module
-      - path: mcp-server/src/tools/index.ts
-        description: Tool handlers tied_feedback_add, tied_feedback_export
+    - path: mcp-server/src/feedback.ts
+      description: Feedback load/append/export logic [REQ-FEEDBACK_TO_TIED] [ARCH-FEEDBACK_STORAGE] [IMPL-MCP_FEEDBACK_TOOLS]
+    - path: mcp-server/src/feedback.test.ts
+      description: Unit tests for feedback module
+    - path: mcp-server/src/tools/index.ts
+      description: Tool handlers tied_feedback_add, tied_feedback_export
     functions:
-      - name: loadFeedback
-        file: mcp-server/src/feedback.ts
-        description: Load feedback.yaml or default structure
-      - name: appendEntry
-        file: mcp-server/src/feedback.ts
-        description: Append one entry with id and created_at
-      - name: exportMarkdown
-        file: mcp-server/src/feedback.ts
-        description: Export entries as markdown for TIED report
-      - name: exportJson
-        file: mcp-server/src/feedback.ts
-        description: Export entries as JSON string
+    - name: loadFeedback
+      file: mcp-server/src/feedback.ts
+      description: Load feedback.yaml or default structure
+    - name: appendEntry
+      file: mcp-server/src/feedback.ts
+      description: Append one entry with id and created_at
+    - name: exportMarkdown
+      file: mcp-server/src/feedback.ts
+      description: Export entries as markdown for TIED report
+    - name: exportJson
+      file: mcp-server/src/feedback.ts
+      description: Export entries as JSON string
   traceability:
     architecture:
-      - ARCH-FEEDBACK_STORAGE
+    - ARCH-FEEDBACK_STORAGE
     requirements:
-      - REQ-FEEDBACK_TO_TIED
+    - REQ-FEEDBACK_TO_TIED
     tests:
-      - feedback.test.ts
+    - feedback.test.ts
     code_annotations:
-      - IMPL-MCP_FEEDBACK_TOOLS
-      - ARCH-FEEDBACK_STORAGE
-      - REQ-FEEDBACK_TO_TIED
+    - IMPL-MCP_FEEDBACK_TOOLS
+    - ARCH-FEEDBACK_STORAGE
+    - REQ-FEEDBACK_TO_TIED
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-FEEDBACK_STORAGE
-      - REQ-FEEDBACK_TO_TIED
-  detail_file: implementation-decisions/IMPL-MCP_FEEDBACK_TOOLS.yaml
+    - ARCH-FEEDBACK_STORAGE
+    - REQ-FEEDBACK_TO_TIED
   metadata:
     created:
       date: 2026-03-03
@@ -71,20 +70,5 @@ IMPL-MCP_FEEDBACK_TOOLS:
       date: 2026-03-03
       validator: AI Agent
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — Feedback module (load/append/export) under mcp-server/src/feedback.ts; two tool handlers in tools/index.ts
-
-    procedure mcp_feedback_tools_tied_feedback_add_tied_feedback():
-      # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] getFeedbackPath(basePath?): resolve {base}/feedback.yaml
-      getfeedbackpathbasepath("resolve {base}/feedback.yaml")
-      # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] loadFeedback(basePath?): read YAML or return { entries: [] }; create file if missing on first append
-      loadfeedbackbasepath("read YAML or return { entries: [] }; create file if missing ")
-      # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] appendEntry(params): validate type/title/description; generate id (e.g. timestamp-based); set created_at; append to entries; write file
-      appendentryparams("validate type/title/description; generate id (e.g. timestamp")
-      # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] exportMarkdown(entries), exportJson(entries): format all entries for report
-      exportmarkdownentries_exportjsonentries("format all entries for report")
-      # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] tied_feedback_add: parse args, call appendEntry, return ok/id/created_at and optional report_snippet (markdown)
-      tied_feedback_add("parse args, call appendEntry, return ok/id/created_at and op")
-      # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] tied_feedback_export: load entries, call exportMarkdown or exportJson, return string
-      tied_feedback_export("load entries, call exportMarkdown or exportJson, return stri")
-      end
+  essence_pseudocode: "# [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — Feedback module (load/append/export) under mcp-server/src/feedback.ts; two tool handlers in tools/index.ts\n\nprocedure mcp_feedback_tools_tied_feedback_add_tied_feedback():\n  # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] getFeedbackPath(basePath?): resolve {base}/feedback.yaml\n  getfeedbackpathbasepath(\"resolve {base}/feedback.yaml\")\n  # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] loadFeedback(basePath?): read YAML or return { entries: [] }; create file if missing on first append\n  loadfeedbackbasepath(\"read YAML or return { entries: [] }; create file if missing \")\n  # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] appendEntry(params): validate type/title/description; generate id (e.g. timestamp-based); set created_at; append to entries; write file\n  appendentryparams(\"validate type/title/description;\
+    \ generate id (e.g. timestamp\")\n  # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] exportMarkdown(entries), exportJson(entries): format all entries for report\n  exportmarkdownentries_exportjsonentries(\"format all entries for report\")\n  # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] tied_feedback_add: parse args, call appendEntry, return ok/id/created_at and optional report_snippet (markdown)\n  tied_feedback_add(\"parse args, call appendEntry, return ok/id/created_at and op\")\n  # [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] tied_feedback_export: load entries, call exportMarkdown or exportJson, return string\n  tied_feedback_export(\"load entries, call exportMarkdown or exportJson, return stri\")\n  end"

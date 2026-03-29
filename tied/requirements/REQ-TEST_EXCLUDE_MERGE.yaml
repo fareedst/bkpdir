@@ -34,7 +34,6 @@ REQ-TEST_EXCLUDE_MERGE:
       - REQ-IMMUTABLE_FILE_EXCLUSION
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-TEST_EXCLUDE_MERGE.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -2,98 +2,61 @@ IMPL-SEMANTIC_CROSS_REF:
   name: Semantic Cross-Referencing Strategy
   status: Active
   cross_references:
-    - ARCH-DOCUMENTATION_ARCHITECTURE
-    - REQ-DOC_001
+  - ARCH-DOCUMENTATION_ARCHITECTURE
+  - REQ-DOC_001
   rationale:
-    why: |-
-      LLMs benefit from rich cross-references to understand relationships
+    why: 'LLMs benefit from rich cross-references to understand relationships
+
       Bi-directional links prevent orphaned references
+
       Standardized format ensures consistency across documents
-      Forward/backward/sibling links provide comprehensive navigation
+
+      Forward/backward/sibling links provide comprehensive navigation'
     problems_solved: []
     benefits: []
   implementation_approach:
-    summary: |-
-      Feature reference blocks with links to all documentation layers
+    summary: 'Feature reference blocks with links to all documentation layers
+
       Automated link validation
+
       Cross-reference consistency checking
-      Semantic token-based linking
+
+      Semantic token-based linking'
     details: []
   code_locations:
     files: []
     functions: []
   traceability:
     architecture:
-      - ARCH-DOCUMENTATION_ARCHITECTURE
+    - ARCH-DOCUMENTATION_ARCHITECTURE
     requirements:
-      - REQ-DOC_001
+    - REQ-DOC_001
     tests: []
     code_annotations:
-      - IMPL-SEMANTIC_CROSS_REF
-      - ARCH-DOCUMENTATION_ARCHITECTURE
-      - REQ-DOC_001
+    - IMPL-SEMANTIC_CROSS_REF
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_001
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-DOCUMENTATION_ARCHITECTURE
-      - REQ-DOC_001
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_001
     composed_with: []
-  detail_file: implementation-decisions/IMPL-SEMANTIC_CROSS_REF.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: LinkingEngine implementation, automated link validation
-  essence_pseudocode: |-
-    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-    # Bi-directional semantic linking across all documentation layers using
-    # feature reference blocks, automated link validation, and consistency checks.
-
-    DATA cross_reference_link:
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Each link connects a source token to a target token with directionality.
-      source_token: string
-      target_token: string
-      direction: enum(forward, backward, sibling)
-      link_type: enum(implements, traces_to, depends_on, see_also)
-
-    PROCEDURE build_feature_reference_blocks():
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Feature reference blocks aggregate all links for a given feature,
-      # providing LLM-friendly navigation across REQ, ARCH, IMPL layers.
-      FOR each feature_token in semantic_token_registry:
-        collect forward_links (this token → dependent tokens)
-        collect backward_links (upstream tokens → this token)
-        collect sibling_links (peer tokens at same layer)
-        emit reference_block with all three link sets
-      END FOR
-
-    PROCEDURE validate_link_integrity():
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Automated validation ensures no broken or orphaned references.
-      FOR each link in all_cross_reference_links:
-        CHECK source_token exists in semantic_token_registry
-        CHECK target_token exists in semantic_token_registry
-        CHECK reciprocal link exists (bi-directional invariant)
-      END FOR
-      REPORT broken links with source file and line context
-
-    PROCEDURE enforce_cross_reference_consistency():
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Consistency checking ensures cross_references in YAML indexes match
-      # the actual token usage in code, tests, and documentation.
-      FOR each decision_file in [requirements, architecture, implementation]:
-        extract declared cross_references from YAML
-        extract actual token mentions from linked code and test files
-        CHECK declared == actual
-        REPORT mismatches for resolution
-      END FOR
+  essence_pseudocode: "# [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n# Bi-directional semantic linking across all documentation layers using [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n# feature reference blocks, automated link validation, and consistency checks. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n\n# [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: DATA cross_reference_link:\nDATA cross_reference_link:\n  # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  # Each link connects a source token to a target token with directionality. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  source_token: string\n  target_token: string\n  direction: enum(forward, backward, sibling)\n  link_type: enum(implements, traces_to, depends_on, see_also)\n\n# [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE]\
+    \ [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE build_feature_reference_blocks():\nPROCEDURE build_feature_reference_blocks():\n  # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  # Feature reference blocks aggregate all links for a given feature, [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  # providing LLM-friendly navigation across REQ, ARCH, IMPL layers. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  FOR each feature_token in semantic_token_registry:\n    collect forward_links (this token → dependent tokens)\n    collect backward_links (upstream tokens → this token)\n    collect sibling_links (peer tokens at same layer)\n    emit reference_block with all three link sets\n  END FOR\n\n# [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE validate_link_integrity():\nPROCEDURE validate_link_integrity():\n\
+    \  # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  # Automated validation ensures no broken or orphaned references. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  FOR each link in all_cross_reference_links:\n    CHECK source_token exists in semantic_token_registry\n    CHECK target_token exists in semantic_token_registry\n    CHECK reciprocal link exists (bi-directional invariant)\n  END FOR\n  REPORT broken links with source file and line context\n\n# [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE enforce_cross_reference_consistency():\nPROCEDURE enforce_cross_reference_consistency():\n  # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  # Consistency checking ensures cross_references in YAML indexes match [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  # the actual token usage in code,\
+    \ tests, and documentation. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]\n  FOR each decision_file in [requirements, architecture, implementation]:\n    extract declared cross_references from YAML\n    extract actual token mentions from linked code and test files\n    CHECK declared == actual\n    REPORT mismatches for resolution\n  END FOR"

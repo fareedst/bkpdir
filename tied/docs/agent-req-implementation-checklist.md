@@ -10,6 +10,16 @@
 
 **Mandatory order**: IMPL pseudo-code (every block token-commented) → RED tests (with token comments) → code (with token comments). No code before RED; no RED before complete IMPL pseudo-code.
 
+## Cross-cutting invariants (YAML `invariants` block)
+
+The executable YAML (`docs/agent-req-implementation-checklist.yaml` / `tied/docs/agent-req-implementation-checklist.yaml`) defines these invariants; agents honor them on every per-request copy:
+
+| ID | Summary |
+|---|---|
+| **EXISTENCE_GATE** | Before `Read`/`Grep` on paths that may not exist, branch: search for the correct location, defer until the step that creates the file, or record an absent reference explicitly—do not treat repeated File not found as ignorable noise. |
+| **TIED_YAML_SINGLE_WRITER** | Project-owned YAML under `tied/` is mutated only via tied-yaml MCP when a tool exists; any IDE write on those paths requires `TIED_YAML_BYPASS: <reason>` in step output. |
+| **SOURCE_PRECEDENCE** | When sources disagree: IMPL detail > REQ/ARCH > tests > README/CHANGELOG/prose. Emit `CONTRADICTION: ...` records; do not silently pick lower-precedence prose. |
+
 ---
 
 ## Entry Points
@@ -49,7 +59,8 @@ When REQ/ARCH/IMPL have already been updated and the remaining work is to align 
 4. Review `tied/architecture-decisions.yaml` and `tied/implementation-decisions.yaml` (YAML indexes).
 5. Review `tied/implementation-decisions.md` (IMPL schema, pseudo-code rules, block token rules per `[PROC-IMPL_PSEUDOCODE_TOKENS]`).
 6. Confirm TIED MCP server availability (if applicable). For **creating, updating, or deleting** project-owned YAML under the TIED base path (indexes, `requirements/` / `architecture-decisions/` / `implementation-decisions/` details, `semantic-tokens.yaml`, `feedback.yaml`, etc.), follow [yaml-update-mcp-runbook.md](yaml-update-mcp-runbook.md): use tied-yaml MCP tools; do not use IDE patch/write on those paths when a tool exists (document a one-line exception only when no tool covers the operation).
-7. Understand priority order: Tests > Code > Basic Functions > Developer Experience > Infrastructure > Security.
+7. Acknowledge invariant **TIED_YAML_SINGLE_WRITER**: all `tied/` mutations route through tied-yaml MCP when a tool exists; any IDE write on those paths requires `TIED_YAML_BYPASS: <reason>` in step output.
+8. Understand priority order: Tests > Code > Basic Functions > Developer Experience > Infrastructure > Security.
 
 **Outcomes**: Agent has read all governing documents. Session context is established.
 
@@ -87,7 +98,7 @@ When REQ/ARCH/IMPL have already been updated and the remaining work is to align 
    - `tied_tokens_affected` — existing REQ/ARCH/IMPL tokens touched by the change.
    - `tied_tokens_new` — tokens to be created.
 4. **IMPL Discovery** (`[PROC-IMPL_CODE_TEST_SYNC]` Phase A):
-   - **A1.** Load each affected IMPL detail file. Record `cross_references`, `related_decisions` (`depends_on`, `composed_with`, `see_also`), and `traceability` fields.
+   - **A1.** (Invariant **EXISTENCE_GATE**.) Load each affected IMPL detail via MCP (`yaml_detail_read` / `yaml_detail_read_many` preferred). Record `cross_references`, `related_decisions` (`depends_on`, `composed_with`, `see_also`), and `traceability` fields. Do not assume detail files exist on disk before creation. Before `Read`/`Grep` on optional or not-yet-created paths, branch per **EXISTENCE_GATE** (search, defer to a later checklist step, or record absent doc).
    - **A2.** Discover related IMPLs via four paths:
      - (a) Follow `composed_with` and `depends_on` links in `related_decisions`.
      - (b) Query shared REQ/ARCH tokens (MCP `get_decisions_for_requirement` or index grep).
@@ -172,6 +183,7 @@ When REQ/ARCH/IMPL have already been updated and the remaining work is to align 
    - **Ordering conflict** — IMPL-A expects to run before IMPL-B, but IMPL-B has no ordering constraint or assumes the reverse.
    - **Incompatible OUTPUT types** — IMPL-A produces `{ result }` but IMPL-B expects `{ result, metadata }` from the same procedure.
    - **Duplicate logic** — the same step appears in two IMPLs with different parameters or behavior.
+4. **Cross-source check** (invariant **SOURCE_PRECEDENCE**): compare IMPL `essence_pseudocode` against README/CHANGELOG, REQ/ARCH narratives, and test names/assertions for scope, counts, and naming mismatches. Precedence: IMPL > REQ/ARCH > tests > prose. For each discrepancy emit `CONTRADICTION: <source_A> says X; <source_B> says Y; resolving per precedence to <winner>; <loser> needs update at step Sxx` (e.g. README drift → S14).
 
 **Branch**: IF two IMPLs have irreconcilable assumptions THEN refactor (split or restructure) one IMPL before proceeding. Do not paper over contradictions.
 
@@ -293,7 +305,7 @@ LOOP FOR each IMPL block classified as unit or integration in S08:
    ```
    Nested blocks follow the same rules: same token set comments only *how*; different token set names that set.
 3. Run tests. IF tests fail THEN iterate on production code only (do not add new tests in GREEN).
-4. Run language-specific lint: Rust → `bun run lint:rust`; TypeScript → `bunx tsc -b` or `bun run lint:ts`; Swift → `swift build && swift test`; YAML → run `lint_yaml` on changed files per [PROC-YAML_EDIT_LOOP] (`processes.md`). IF lint fails THEN fix before proceeding.
+4. Run language-specific lint: Rust → `bun run lint:rust`; TypeScript → `bunx tsc -b` or `bun run lint:ts`; Swift → `swift build && swift test`; YAML → `yq -i -P <changed files>`. IF lint fails THEN fix before proceeding.
 
 **Branch**: IF GREEN reveals the pseudo-code is incomplete, wrong, or requires a new dependency THEN **CALL SUB-LEAP-MICRO**. Do not silently diverge.
 
@@ -391,7 +403,7 @@ END LOOP (repeat S09.RED → S09.GREEN → S09.REFACTOR → S09.SYNC
 
 **Tasks**:
 1. Run the **full test suite** (unit, composition, E2E). All must pass.
-2. Run **lint** for each language in scope: Rust → `bun run lint:rust`; TypeScript → `bunx tsc -b`; Swift → `swift build && swift test`; YAML → run `lint_yaml` on changed files per [PROC-YAML_EDIT_LOOP] (`processes.md`).
+2. Run **lint** for each language in scope: Rust → `bun run lint:rust`; TypeScript → `bunx tsc -b`; Swift → `swift build && swift test`; YAML → `yq -i -P <changed files>`.
 3. Run **`[PROC-TOKEN_VALIDATION]`**: `./scripts/validate_tokens.sh` (stub; see `tied/docs/token-validation.md`) or **`tied_validate_consistency`** (MCP). This project uses MCP for validation; fix any issues before proceeding.
 4. **Final three-way alignment audit**: for every IMPL touched, verify pseudo-code / test / code carry the same token set with logically corresponding descriptions. Document remaining `e2e_only` blocks and confirm each has `e2e_only_reason`.
 5. **Update IMPL detail metadata** for each changed IMPL detail file:
@@ -400,8 +412,9 @@ END LOOP (repeat S09.RED → S09.GREEN → S09.REFACTOR → S09.SYNC
    - `metadata.last_updated` — date, author, reason.
    - **CALL SUB-YAML** on each changed detail file.
 6. **Module validation** per `[REQ-MODULE_VALIDATION]`: confirm each module was validated independently before integration. Document validation results.
+7. **Completion evidence ledger**: populate `tracking.completion_evidence` in the per-request YAML copy for every gate (`full_test_suite`, `lint`, `tied_validate_consistency`, `token_validation`, `three_way_alignment_audit`) with `command` (where applicable), `result` (`pass`/`fail`), and `timestamp` (epoch seconds). A gate with `result: null` blocks marking S12 complete. For `token_validation`, record the actual command or MCP tool used (per `tied/docs/token-validation.md` / project policy).
 
-**Outcomes**: All tests pass; lint clean; token validation passes; three-way alignment verified; IMPL metadata current; module validation documented.
+**Outcomes**: All tests pass; lint clean; token validation passes; three-way alignment verified; IMPL metadata current; module validation documented; `completion_evidence` has no null results.
 
 **Branch**: IF any validation fails THEN fix the issue and re-run from the appropriate earlier step:
 - Test failure → return to S09 (unit) or S10 (composition) or S11 (E2E).
@@ -463,7 +476,7 @@ END LOOP (repeat S09.RED → S09.GREEN → S09.REFACTOR → S09.SYNC
    - **TDD sequence** (from S09-S11): what was implemented and in what order.
    - **Completion criteria**: validation results from S12.
    - **LEAP feedback**: `divergences_from_analysis` (any places where implementation differed from the original analysis), `tied_stack_updates_required` (LEAP propagations triggered), `record_status`.
-2. Store as `docs/citdp/CITDP-{change_request_id}.yaml` relative to the **client project workspace root**—the repository where the implementation and **project** `tied/` tree live (the same repo you commit for this work). Do **not** persist CITDP only under a separate checkout of the TIED methodology repository when the client is another project; optional mirrors or alternate paths are policy-specific and do not replace the canonical client path.
+2. Store as `docs/citdp/CITDP-{change_request_id}.yaml` (or project-defined location).
 3. **CALL SUB-YAML** on the record file.
 
 **Outcomes**: CITDP record stored and validated; analysis available for future reference.
@@ -479,17 +492,18 @@ END LOOP (repeat S09.RED → S09.GREEN → S09.REFACTOR → S09.SYNC
 **Goals**: Create a traceable commit with proper format and token references.
 
 **Tasks**:
-1. Write the commit message per `[PROC-COMMIT_MESSAGES]`:
+1. Verify S12 `tracking.completion_evidence`: every gate has `result: pass` (not null, not fail). IF any gate is null or fail THEN return to S12; do not commit. Set `tracking.pre_commit_gate.s12_completion_evidence_verified: true` on the per-request YAML copy when satisfied.
+2. Write the commit message per `[PROC-COMMIT_MESSAGES]`:
    - **Header**: `<type>(<scope>): <subject>` (keep the full header line to 50 characters or fewer).
    - **Type**: One of `feat`, `fix`, `docs`, `refactor`, `test`, `build`, `ci`, `chore`, `perf`, `style`.
    - **Scope**: Area affected (e.g., `core`, `ui`, `tied`, `tests`). See `tied/processes.md` § `[PROC-COMMIT_MESSAGES]` for the full scope list.
    - **Subject**: Imperative, present tense; no capitalization; no period.
    - **Body**: Motivation and behavior change (imperative tense). Keep lines to 100 characters.
    - **Footer**: `Closes #issue` or `Fixes #issue` if applicable. Reference main REQ/ARCH/IMPL tokens touched.
-2. Stage relevant files. Commit.
-3. Do NOT push unless explicitly asked.
+3. Stage relevant files. Commit.
+4. Do NOT push unless explicitly asked.
 
-**Outcomes**: Commit exists with proper format; TIED tokens referenced in body or footer.
+**Outcomes**: Commit exists with proper format; TIED tokens referenced in body or footer; S12 completion evidence verified.
 
 **EXIT**: Checklist complete. Do not create a stand-alone summary document.
 
@@ -503,14 +517,15 @@ END LOOP (repeat S09.RED → S09.GREEN → S09.REFACTOR → S09.SYNC
 
 **Invoked by**: Any step that creates or modifies TIED YAML (S04, S05, S06, S09.SYNC, S10, S12, S13, S15).
 
-**Goals**: Ensure every TIED YAML file is syntactically valid and canonically formatted before use. **Mutations** to project-owned TIED YAML go through MCP when a tool exists ([yaml-update-mcp-runbook.md](yaml-update-mcp-runbook.md)). Agents use **`lint_yaml`** per [PROC-YAML_EDIT_LOOP] (`processes.md`); it may accept multiple paths but must process each file independently—never raw multi-argument `yq` pretty-print, which merges documents and corrupts files.
+**Goals**: Ensure every TIED YAML file is syntactically valid and canonically formatted before use. **Mutations** to project-owned TIED YAML go through MCP when a tool exists ([yaml-update-mcp-runbook.md](yaml-update-mcp-runbook.md)).
 
 **Tasks**:
-1. **Mutation path**: IF you are creating, updating, or deleting project-owned files under the TIED base path, use tied-yaml MCP tools per [yaml-update-mcp-runbook.md](yaml-update-mcp-runbook.md). Do not bypass with `apply_patch`/`Write` when the same operation is supported by MCP.
-2. Run `lint_yaml` on each changed file, or one `lint_yaml` invocation with multiple paths if your wrapper implements per-file safe passes (required for any **direct-edited** file; MCP-written files may still be normalized this way if your workflow runs it on all touched paths). This validates syntax and canonicalizes formatting in place.
-3. IF validation fails THEN fix the YAML error and repeat step 2. The file is not valid for use until this passes.
-4. Run `tied_validate_consistency` (MCP) for cross-file traceability before marking TIED work complete (and when the calling step requires it).
-5. IF consistency check fails THEN fix the issue in the TIED stack (prefer MCP) and **RETURN** to the calling step to re-validate.
+1. **Self-check** (invariant **TIED_YAML_SINGLE_WRITER**): before any write, ask — Is the target under `tied/` (project-owned, not `methodology/**`)? Is there an MCP tool for this operation? If both yes, the write **must** go through MCP. If IDE `Write`/`apply_patch`/`StrReplace` was used on those paths, record `TIED_YAML_BYPASS: <reason>` in the calling step output.
+2. **Mutation path**: IF you are creating, updating, or deleting project-owned files under the TIED base path, use tied-yaml MCP tools per [yaml-update-mcp-runbook.md](yaml-update-mcp-runbook.md). Do not bypass with `apply_patch`/`Write` when the same operation is supported by MCP.
+3. Run `yq -i -P <file>` on each changed file (required for any **direct-edited** file; MCP-written files may still be normalized this way if your workflow runs it on all touched paths). This validates syntax and canonicalizes formatting in place.
+4. IF validation fails THEN fix the YAML error and repeat step 3. The file is not valid for use until this passes.
+5. Run `tied_validate_consistency` (MCP) for cross-file traceability before marking TIED work complete (and when the calling step requires it).
+6. IF consistency check fails THEN fix the issue in the TIED stack (prefer MCP) and **RETURN** to the calling step to re-validate.
 
 **Outcomes**: YAML file is syntactically valid, canonically formatted, consistent with the TIED graph where validated, and ready for use by MCP, scripts, and downstream steps.
 
@@ -593,7 +608,7 @@ flowchart TD
 
     S10["S10: Composition Testing\nBindings between modules\nFailing test then code"]
     S11["S11: E2E Testing\nUI-only behavior\nPlatform constraint"]
-    S12["S12: Final Validation\nFull suite + lint\nToken validation\nThree-way audit"]
+    S12["S12: Final Validation\nFull suite + lint\nToken validation\nThree-way audit\ncompletion_evidence"]
     S13["S13: Sync TIED\nDocs match code/tests\ntied_validate_consistency"]
     S14["S14: README + CHANGELOG"]
     S15["S15: Persist CITDP Record"]
@@ -626,7 +641,7 @@ flowchart TD
 | **S09** | Unit tests + code (TDD) | RED entry; GREEN minimum; three-way alignment per iteration |
 | **S10** | Composition tests + code | Every binding needs IMPL coverage + composition test |
 | **S11** | E2E tests | E2E-only requires named platform constraint |
-| **S12** | Validation passed | Full suite + lint + token validation + three-way audit |
+| **S12** | Validation passed | Full suite + lint + token validation + three-way audit + `completion_evidence` populated |
 | **S13** | TIED docs synced | `tied_validate_consistency` must pass |
 | **S14** | README + CHANGELOG | User/release-facing changes documented |
 | **S15** | CITDP record | Analysis persisted as validated YAML |

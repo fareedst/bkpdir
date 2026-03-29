@@ -34,7 +34,6 @@ REQ-DOC_003:
         - REQ-DOC_001
       supersedes: []
     description: Documentation traceability requirement ensuring all documentation is traceable to requirements
-    detail_file: requirements/REQ-DOC_003.yaml
     metadata:
       created:
         date: "2026-03-12"

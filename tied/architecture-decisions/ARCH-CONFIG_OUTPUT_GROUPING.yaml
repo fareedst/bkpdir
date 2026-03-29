@@ -28,7 +28,6 @@ ARCH-CONFIG_OUTPUT_GROUPING:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-CONFIG_OUTPUT_GROUPING.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -34,7 +34,6 @@ REQ-DOC_001:
         - REQ-DOC_003
       supersedes: []
     description: Documentation enhancement requirement for comprehensive project documentation with cross-references
-    detail_file: requirements/REQ-DOC_001.yaml
     metadata:
       created:
         date: "2026-03-12"

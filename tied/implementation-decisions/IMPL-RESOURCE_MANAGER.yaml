@@ -2,14 +2,16 @@ IMPL-RESOURCE_MANAGER:
   name: Resource Management with Cleanup
   status: Active
   cross_references:
-    - ARCH-RESOURCE_MANAGEMENT
-    - REQ-RESOURCE_MANAGEMENT
+  - ARCH-RESOURCE_MANAGEMENT
+  - REQ-RESOURCE_MANAGEMENT
   rationale:
-    why: |-
-      Prevents resource leaks on operation failure
+    why: 'Prevents resource leaks on operation failure
+
       Handles panic scenarios gracefully
+
       Thread-safe for concurrent operations
-      Simplifies error handling in operations
+
+      Simplifies error handling in operations'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -17,155 +19,67 @@ IMPL-RESOURCE_MANAGER:
     details: []
   code_locations:
     files:
-      - pkg/resources/interfaces.go
+    - pkg/resources/interfaces.go
     functions:
-      - NewResourceManager
-      - AddResource
-      - AddTempFile
-      - AddTempDir
-      - RemoveResource
-      - Cleanup
-      - CleanupWithPanicRecovery
-      - CleanupIf
-      - CleanupWithContext
-      - GetResourceCount
-      - GetResources
-      - GetResourcesByType
+    - NewResourceManager
+    - AddResource
+    - AddTempFile
+    - AddTempDir
+    - RemoveResource
+    - Cleanup
+    - CleanupWithPanicRecovery
+    - CleanupIf
+    - CleanupWithContext
+    - GetResourceCount
+    - GetResources
+    - GetResourcesByType
   traceability:
     architecture:
-      - ARCH-RESOURCE_MANAGEMENT
+    - ARCH-RESOURCE_MANAGEMENT
     requirements:
-      - REQ-RESOURCE_MANAGEMENT
+    - REQ-RESOURCE_MANAGEMENT
     tests:
-      - pkg/resources/resources_test.go::TestTempFile
-      - pkg/resources/resources_test.go::TestTempDir
-      - pkg/resources/resources_test.go::TestResourceManager
-      - pkg/resources/resources_test.go::TestResourceManager_RemoveResource
-      - pkg/resources/resources_test.go::TestResourceManager_CleanupIf
-      - pkg/resources/resources_test.go::TestResourceManager_CleanupWithPanicRecovery
-      - pkg/resources/resources_test.go::TestResourceManager_CleanupWithContext
-      - pkg/resources/resources_test.go::TestResourceManager_ConcurrentAccess
+    - pkg/resources/resources_test.go::TestTempFile
+    - pkg/resources/resources_test.go::TestTempDir
+    - pkg/resources/resources_test.go::TestResourceManager
+    - pkg/resources/resources_test.go::TestResourceManager_RemoveResource
+    - pkg/resources/resources_test.go::TestResourceManager_CleanupIf
+    - pkg/resources/resources_test.go::TestResourceManager_CleanupWithPanicRecovery
+    - pkg/resources/resources_test.go::TestResourceManager_CleanupWithContext
+    - pkg/resources/resources_test.go::TestResourceManager_ConcurrentAccess
     code_annotations:
-      - IMPL-RESOURCE_MANAGER
-      - ARCH-RESOURCE_MANAGEMENT
-      - REQ-RESOURCE_MANAGEMENT
+    - IMPL-RESOURCE_MANAGER
+    - ARCH-RESOURCE_MANAGEMENT
+    - REQ-RESOURCE_MANAGEMENT
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-RESOURCE_MANAGEMENT
-      - REQ-RESOURCE_MANAGEMENT
+    - ARCH-RESOURCE_MANAGEMENT
+    - REQ-RESOURCE_MANAGEMENT
     composed_with: []
-  detail_file: implementation-decisions/IMPL-RESOURCE_MANAGER.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`ResourceManager` type, `CleanupWithPanicRecovery()` calls'
   methods:
-    - '`NewResourceManager()`: Create new resource manager'
-    - '`AddTempFile(path string)`: Register temporary file for cleanup'
-    - '`AddTempDir(path string)`: Register temporary directory for cleanup'
-    - '`RemoveResource(resource Resource)`: Remove resource from tracking'
-    - '`Cleanup()`: Clean up all registered resources'
-    - '`CleanupWithPanicRecovery()`: Clean up with panic recovery'
-  resourcemanager_structure: |-
-    ```go
-    type ResourceManager struct {
-        tempFiles []*TempFile
-        tempDirs  []*TempDir
-        mutex     sync.RWMutex
-    }
-
-    type TempFile struct {
-        Path string
-    }
-
-    type TempDir struct {
-        Path string
-    }
-    ```
-  essence_pseudocode: |-
-    # [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-    # Thread-safe resource tracking with automatic cleanup and panic recovery.
-
-    DATA Resource (interface):
-      Cleanup() -> error
-      String() -> string
-
-    DATA TempFile implements Resource:
-      Path: string
-      # How TempFile cleans up: os.Remove(Path).
-
-    DATA TempDir implements Resource:
-      Path: string
-      # How TempDir cleans up: os.RemoveAll(Path).
-
-    DATA ResourceManager:
-      resources: []Resource
-      mutex: sync.RWMutex
-
-    # [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-    # How resources are registered for tracking (thread-safe).
-    ADD_RESOURCE(rm, resource):
-      LOCK rm.mutex
-      APPEND resource to rm.resources
-      UNLOCK rm.mutex
-
-    ADD_TEMP_FILE(rm, path):
-      ADD_RESOURCE(rm, TempFile{path})
-
-    ADD_TEMP_DIR(rm, path):
-      ADD_RESOURCE(rm, TempDir{path})
-
-    # How a resource is removed from tracking without cleanup.
-    REMOVE_RESOURCE(rm, resource):
-      LOCK rm.mutex
-      FIND resource by String() match
-      REMOVE from slice
-      UNLOCK rm.mutex
-
-    # [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-    # How all tracked resources are cleaned up (continues on individual failure).
-    CLEANUP(rm):
-      LOCK rm.mutex
-      FOR EACH resource in rm.resources:
-        err = resource.Cleanup()
-        IF err: record lastError (continue)
-      CLEAR rm.resources
-      UNLOCK rm.mutex
-      RETURN lastError
-
-    # How panic recovery wraps cleanup.
-    CLEANUP_WITH_PANIC_RECOVERY(rm):
-      DEFER recover() -> convert panic to error
-      RETURN CLEANUP(rm)
-
-    # [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-    # How predicate-based selective cleanup works.
-    CLEANUP_IF(rm, predicate):
-      LOCK rm.mutex
-      FOR EACH resource:
-        IF predicate(resource): resource.Cleanup()
-        ELSE: keep in remaining
-      rm.resources = remaining
-      UNLOCK rm.mutex
-
-    # [IMPL-RESOURCE_MANAGER] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]
-    # How context-aware cleanup checks cancellation between resources.
-    CLEANUP_WITH_CONTEXT(rm, ctx):
-      IF ctx.Err(): RETURN ctx.Err()
-      LOCK rm.mutex
-      FOR EACH resource:
-        CHECK ctx.Done() -> RETURN ctx.Err() if cancelled
-        resource.Cleanup()
-      CLEAR rm.resources
-      UNLOCK rm.mutex
+  - '`NewResourceManager()`: Create new resource manager'
+  - '`AddTempFile(path string)`: Register temporary file for cleanup'
+  - '`AddTempDir(path string)`: Register temporary directory for cleanup'
+  - '`RemoveResource(resource Resource)`: Remove resource from tracking'
+  - '`Cleanup()`: Clean up all registered resources'
+  - '`CleanupWithPanicRecovery()`: Clean up with panic recovery'
+  resourcemanager_structure: "```go\ntype ResourceManager struct {\n    tempFiles []*TempFile\n    tempDirs  []*TempDir\n    mutex     sync.RWMutex\n}\n\ntype TempFile struct {\n    Path string\n}\n\ntype TempDir struct {\n    Path string\n}\n```"
+  essence_pseudocode: "# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n# Thread-safe resource tracking with automatic cleanup and panic recovery. [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: DATA Resource (interface):\nDATA Resource (interface):\n  Cleanup() -> error\n  String() -> string\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: DATA TempFile implements Resource:\nDATA TempFile implements Resource:\n  Path: string\n  # How TempFile cleans up: os.Remove(Path). [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: DATA TempDir implements Resource:\nDATA TempDir implements Resource:\n\
+    \  Path: string\n  # How TempDir cleans up: os.RemoveAll(Path). [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: DATA ResourceManager:\nDATA ResourceManager:\n  resources: []Resource\n  mutex: sync.RWMutex\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n# How resources are registered for tracking (thread-safe). [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\nADD_RESOURCE(rm, resource):\n  LOCK rm.mutex\n  APPEND resource to rm.resources\n  UNLOCK rm.mutex\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: ADD_TEMP_FILE(rm, path):\nADD_TEMP_FILE(rm, path):\n  ADD_RESOURCE(rm, TempFile{path})\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented\
+    \ behavior for: ADD_TEMP_DIR(rm, path):\nADD_TEMP_DIR(rm, path):\n  ADD_RESOURCE(rm, TempDir{path})\n\n# How a resource is removed from tracking without cleanup. [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\nREMOVE_RESOURCE(rm, resource):\n  LOCK rm.mutex\n  FIND resource by String() match\n  REMOVE from slice\n  UNLOCK rm.mutex\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n# How all tracked resources are cleaned up (continues on individual failure). [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\nCLEANUP(rm):\n  LOCK rm.mutex\n  FOR EACH resource in rm.resources:\n    err = resource.Cleanup()\n    IF err: record lastError (continue)\n  CLEAR rm.resources\n  UNLOCK rm.mutex\n  RETURN lastError\n\n# How panic recovery wraps cleanup. [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\nCLEANUP_WITH_PANIC_RECOVERY(rm):\n  DEFER recover() -> convert panic to error\n\
+    \  RETURN CLEANUP(rm)\n\n# [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\n# How predicate-based selective cleanup works. [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\nCLEANUP_IF(rm, predicate):\n  LOCK rm.mutex\n  FOR EACH resource:\n    IF predicate(resource): resource.Cleanup()\n    ELSE: keep in remaining\n  rm.resources = remaining\n  UNLOCK rm.mutex\n\n# [IMPL-RESOURCE_MANAGER] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]\n# How context-aware cleanup checks cancellation between resources. [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]\nCLEANUP_WITH_CONTEXT(rm, ctx):\n  IF ctx.Err(): RETURN ctx.Err()\n  LOCK rm.mutex\n  FOR EACH resource:\n    CHECK ctx.Done() -> RETURN ctx.Err() if cancelled\n    resource.Cleanup()\n  CLEAR rm.resources\n  UNLOCK rm.mutex"

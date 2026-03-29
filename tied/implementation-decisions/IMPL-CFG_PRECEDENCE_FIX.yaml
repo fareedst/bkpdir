@@ -2,161 +2,100 @@ IMPL-CFG_PRECEDENCE_FIX:
   name: Configuration File Precedence Fix
   status: Active
   cross_references:
-    - ARCH-CONFIG_SYSTEM
-    - REQ-CONFIGURATION
+  - ARCH-CONFIG_SYSTEM
+  - REQ-CONFIGURATION
   rationale:
-    why: |-
-      Bug fix: Configuration files were not respecting the requirement that "earlier files take precedence over later files" when processing sequential config files.
+    why: 'Bug fix: Configuration files were not respecting the requirement that "earlier files take precedence over later files" when processing sequential config files.
+
       The mergeConfigs and mergeBasicSettings functions were unconditionally overriding values without checking if they were already set by earlier files.
+
       This caused local config files (e.g., ./.bkpdir.yml) to be overridden by home directory config files (e.g., ~/.bkpdir.yml), violating the precedence specification.
+
       Special case: When an earlier file explicitly sets a value to the default (e.g., include_git_info: false), we need to detect that it was explicitly set, not just compare against defaults.
-      The fix uses a fileProcessed flag and explicitlySetFields map to track which fields were set by earlier files.
+
+      The fix uses a fileProcessed flag and explicitlySetFields map to track which fields were set by earlier files.'
     problems_solved:
-      - Local config file values overridden by home directory config
-      - Default-valued fields not recognized as explicitly set
-      - Sequential file precedence not enforced
+    - Local config file values overridden by home directory config
+    - Default-valued fields not recognized as explicitly set
+    - Sequential file precedence not enforced
     benefits:
-      - Earlier files correctly take precedence over later files
-      - Explicit default values are preserved from earlier files
-      - fileProcessed flag cleanly separates first-file vs subsequent-file behavior
+    - Earlier files correctly take precedence over later files
+    - Explicit default values are preserved from earlier files
+    - fileProcessed flag cleanly separates first-file vs subsequent-file behavior
   implementation_approach:
     summary: Uses fileProcessed flag and explicitlySetFields map in LoadConfig fallback path to track precedence; first file merges with defaults, subsequent files respect earlier file values.
     details:
-      - LoadConfig fallback path uses fileProcessed flag instead of comparing cfg to defaults
-      - explicitlySetFields map tracks which fields were explicitly set by earlier files
-      - First file processes with inheritContext=true (merges with defaults)
-      - Subsequent files process with inheritContext=false (respects earlier file precedence)
-      - mergeBasicSettings checks explicitlySetFields before overriding scalar values
-      - initialDefaultCfg preserved to detect modifications from initial state
+    - LoadConfig fallback path uses fileProcessed flag instead of comparing cfg to defaults
+    - explicitlySetFields map tracks which fields were explicitly set by earlier files
+    - First file processes with inheritContext=true (merges with defaults)
+    - Subsequent files process with inheritContext=false (respects earlier file precedence)
+    - mergeBasicSettings checks explicitlySetFields before overriding scalar values
+    - initialDefaultCfg preserved to detect modifications from initial state
   code_locations:
     files:
-      - path: config.go
-        description: LoadConfig fallback path (fileProcessed, explicitlySetFields, initialDefaultCfg), mergeConfigs, mergeBasicSettings, mergeFileBackupSettings, mergeGitSettings
-      - path: pkg/config/loader.go
-        description: GenericConfigLoader with generic merge logic (does not implement precedence fix directly)
+    - path: config.go
+      description: LoadConfig fallback path (fileProcessed, explicitlySetFields, initialDefaultCfg), mergeConfigs, mergeBasicSettings, mergeFileBackupSettings, mergeGitSettings
+    - path: pkg/config/loader.go
+      description: GenericConfigLoader with generic merge logic (does not implement precedence fix directly)
     functions:
-      - name: LoadConfig
-        file: config.go
-        line: 434
-        description: Fallback path with fileProcessed flag and explicitlySetFields tracking
-      - name: mergeConfigs
-        file: config.go
-        line: 613
-        description: Top-level merge orchestrator passing explicitlySetFields to sub-merge functions
-      - name: mergeBasicSettings
-        file: config.go
-        line: 627
-        description: Precedence check for basic settings using explicitlySetFields
-      - name: mergeFileBackupSettings
-        file: config.go
-        line: 893
-        description: Precedence check for file backup settings
-      - name: mergeGitSettings
-        file: config.go
-        line: 775
-        description: Precedence check for git settings
+    - name: LoadConfig
+      file: config.go
+      line: 434
+      description: Fallback path with fileProcessed flag and explicitlySetFields tracking
+    - name: mergeConfigs
+      file: config.go
+      line: 613
+      description: Top-level merge orchestrator passing explicitlySetFields to sub-merge functions
+    - name: mergeBasicSettings
+      file: config.go
+      line: 627
+      description: Precedence check for basic settings using explicitlySetFields
+    - name: mergeFileBackupSettings
+      file: config.go
+      line: 893
+      description: Precedence check for file backup settings
+    - name: mergeGitSettings
+      file: config.go
+      line: 775
+      description: Precedence check for git settings
   traceability:
     architecture:
-      - ARCH-CONFIG_SYSTEM
+    - ARCH-CONFIG_SYSTEM
     requirements:
-      - REQ-CONFIGURATION
+    - REQ-CONFIGURATION
     tests:
-      - TestLoadConfigMultipleFiles
-      - TestMultipleFilesSameField
-      - TestExplicitDefaultValue
-      - TestPartialFieldUpdates
-      - TestUnsetFieldsUseDefaults
+    - TestLoadConfigMultipleFiles
+    - TestMultipleFilesSameField
+    - TestExplicitDefaultValue
+    - TestPartialFieldUpdates
+    - TestUnsetFieldsUseDefaults
     code_annotations:
-      - IMPL-CFG_PRECEDENCE_FIX
-      - ARCH-CONFIG_SYSTEM
-      - REQ-CONFIGURATION
+    - IMPL-CFG_PRECEDENCE_FIX
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
   related_decisions:
     depends_on:
-      - IMPL-CONFIG_STRUCT
+    - IMPL-CONFIG_STRUCT
     supersedes: []
     see_also:
-      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
-      - IMPL-CFG_MIXED_MODE_MERGE_FIX
+    - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    - IMPL-CFG_MIXED_MODE_MERGE_FIX
     composed_with:
-      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
-  detail_file: implementation-decisions/IMPL-CFG_PRECEDENCE_FIX.yaml
+    - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: AI agent
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-    # Ensures earlier config files take precedence over later ones in sequential file processing.
-
-    PROCEDURE LoadConfig_fallback(root string) -> (*Config, error):
-      # Uses fileProcessed flag and explicitlySetFields instead of comparing cfg to defaults
-      cfg := DefaultConfig()
-      initialDefaultCfg := DefaultConfig()
-      explicitlySetFields := empty map[string]bool
-      fileProcessed := false
-
-      FOR each configPath in getConfigSearchPaths():
-        expandedPath := expandPath(configPath)
-        IF NOT fileExists(expandedPath) THEN CONTINUE END
-
-        loadResult := loadSingleConfigFile(expandedPath)
-        IF error THEN CONTINUE END
-
-        # First file merges with defaults (inheritContext=true)
-        # Subsequent files respect earlier file precedence (inheritContext=false)
-        inheritContext := NOT fileProcessed
-
-        mergedCfg := applyMergeStrategies(cfg, loadResult.config, inheritContext,
-            loadResult.rawMap, initialDefaultCfg, explicitlySetFields)
-        IF error THEN CONTINUE END
-
-        cfg = mergedCfg
-        fileProcessed = true
-
-        # Track fields explicitly set in this file for later precedence checks
-        FOR key in loadResult.rawMap:
-          baseKey := stripMergePrefix(key)  # Remove !, +, ^, = prefixes
-          explicitlySetFields[baseKey] = true
-        END
-      END
-
-      RETURN cfg, nil
-
-    PROCEDURE mergeBasicSettings(dst, src *Config, inheritContext bool, ..., explicitlySetFields map[string]bool):
-      # Checks explicitlySetFields before overriding values in sequential file processing
-      IF NOT inheritContext THEN
-        # Sequential files: only set if field explicitly in source AND not set by earlier file
-        FOR each scalar field (ArchiveDirPath, IncludeGitInfo, UseCurrentDirName, etc.):
-          IF explicitlySetFields[fieldName] THEN
-            SKIP  # Preserve earlier file's value (even if it equals default)
-          END
-          IF field explicitly set in rawSrcMap THEN
-            dst.field = src.field
-          END
-        END
-      ELSE
-        # Inheritance context: child overrides parent normally
-        FOR each scalar field:
-          IF src.field differs from defaultCfg.field THEN
-            dst.field = src.field
-          END
-        END
-      END
-
-    PROCEDURE mergeConfigs(dst, src *Config, inheritContext bool, ..., explicitlySetFields map[string]bool):
-      # Orchestrates merge by delegating to sub-merge functions with precedence tracking
-      mergeBasicSettings(dst, src, inheritContext, ..., explicitlySetFields)
-      mergeFileBackupSettings(dst, src, inheritContext, ..., explicitlySetFields)
-      mergeStatusCodes(dst, src, inheritContext, ...)
-      mergeFormatStrings(dst, src, inheritContext, ...)
-      mergeTemplates(dst, src, inheritContext, ...)
-      mergePatterns(dst, src, inheritContext, ...)
-      mergeGitSettings(dst, src, inheritContext, ..., explicitlySetFields)
+  essence_pseudocode: "# [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n# Ensures earlier config files take precedence over later ones in sequential file processing. [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n\n# [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE LoadConfig_fallback(root string) -> (*Config, error):\nPROCEDURE LoadConfig_fallback(root string) -> (*Config, error):\n  # Uses fileProcessed flag and explicitlySetFields instead of comparing cfg to defaults [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n  cfg := DefaultConfig()\n  initialDefaultCfg := DefaultConfig()\n  explicitlySetFields := empty map[string]bool\n  fileProcessed := false\n\n  FOR each configPath in getConfigSearchPaths():\n    expandedPath := expandPath(configPath)\n    IF NOT fileExists(expandedPath) THEN CONTINUE END\n\n    loadResult := loadSingleConfigFile(expandedPath)\n\
+    \    IF error THEN CONTINUE END\n\n    # First file merges with defaults (inheritContext=true) [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n    # Subsequent files respect earlier file precedence (inheritContext=false) [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n    inheritContext := NOT fileProcessed\n\n    mergedCfg := applyMergeStrategies(cfg, loadResult.config, inheritContext,\n        loadResult.rawMap, initialDefaultCfg, explicitlySetFields)\n    IF error THEN CONTINUE END\n\n    cfg = mergedCfg\n    fileProcessed = true\n\n    # Track fields explicitly set in this file for later precedence checks [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n    FOR key in loadResult.rawMap:\n      baseKey := stripMergePrefix(key)  # Remove !, +, ^, = prefixes\n      explicitlySetFields[baseKey] = true\n    END\n  END\n\n  RETURN cfg, nil\n\n# [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements\
+    \ documented behavior for: PROCEDURE mergeBasicSettings(dst, src *Config, inheritContext bool, ..., explicitlySetFields map[string]bool):\nPROCEDURE mergeBasicSettings(dst, src *Config, inheritContext bool, ..., explicitlySetFields map[string]bool):\n  # Checks explicitlySetFields before overriding values in sequential file processing [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n  IF NOT inheritContext THEN\n    # Sequential files: only set if field explicitly in source AND not set by earlier file [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n    FOR each scalar field (ArchiveDirPath, IncludeGitInfo, UseCurrentDirName, etc.):\n      IF explicitlySetFields[fieldName] THEN\n        SKIP  # Preserve earlier file's value (even if it equals default)\n      END\n      IF field explicitly set in rawSrcMap THEN\n        dst.field = src.field\n      END\n    END\n  ELSE\n    # Inheritance context: child overrides parent normally [IMPL-CFG_PRECEDENCE_FIX]\
+    \ [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n    FOR each scalar field:\n      IF src.field differs from defaultCfg.field THEN\n        dst.field = src.field\n      END\n    END\n  END\n\n# [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE mergeConfigs(dst, src *Config, inheritContext bool, ..., explicitlySetFields map[string]bool):\nPROCEDURE mergeConfigs(dst, src *Config, inheritContext bool, ..., explicitlySetFields map[string]bool):\n  # Orchestrates merge by delegating to sub-merge functions with precedence tracking [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n  mergeBasicSettings(dst, src, inheritContext, ..., explicitlySetFields)\n  mergeFileBackupSettings(dst, src, inheritContext, ..., explicitlySetFields)\n  mergeStatusCodes(dst, src, inheritContext, ...)\n  mergeFormatStrings(dst, src, inheritContext, ...)\n  mergeTemplates(dst, src, inheritContext, ...)\n  mergePatterns(dst, src, inheritContext,\
+    \ ...)\n  mergeGitSettings(dst, src, inheritContext, ..., explicitlySetFields)"

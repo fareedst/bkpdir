@@ -34,7 +34,6 @@ ARCH-FILE_STATISTICS:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-FILE_STATISTICS.yaml
   metadata:
     created:
       date: "2026-03-12"

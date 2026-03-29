@@ -35,7 +35,6 @@ REQ-STDD_VIS:
       - REQ-MODULE_VALIDATION
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-STDD_VIS.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -2,16 +2,18 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
   name: Empty String Handling Tests
   status: Active
   cross_references:
-    - ARCH-TESTING_STRATEGY
-    - REQ-CONFIGURATION
-    - REQ-CFG_001
-    - REQ-CFG_005
+  - ARCH-TESTING_STRATEGY
+  - REQ-CONFIGURATION
+  - REQ-CFG_001
+  - REQ-CFG_005
   rationale:
-    why: |-
-      Ensures configuration system correctly handles empty strings in merging scenarios
+    why: 'Ensures configuration system correctly handles empty strings in merging scenarios
+
       Validates whether empty strings are treated as zero values or explicit empty values
+
       Critical for understanding precedence behavior when empty strings are explicitly set
-      Part of comprehensive configuration merge test plan
+
+      Part of comprehensive configuration merge test plan'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -19,47 +21,46 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
     details: []
   code_locations:
     files:
-      - config_test.go
+    - config_test.go
     functions:
-      - TestEmptyStringHandling
+    - TestEmptyStringHandling
   traceability:
     architecture:
-      - ARCH-TESTING_STRATEGY
+    - ARCH-TESTING_STRATEGY
     requirements:
-      - REQ-CONFIGURATION
-      - REQ-CFG_001
-      - REQ-CFG_005
+    - REQ-CONFIGURATION
+    - REQ-CFG_001
+    - REQ-CFG_005
     tests:
-      - TestEmptyStringHandling
-      - TestEmptyStringHandling/first_file_empty_string,_second_file_value
-      - TestEmptyStringHandling/first_file_value,_second_file_empty_string
-      - TestEmptyStringHandling/both_files_empty_string
+    - TestEmptyStringHandling
+    - TestEmptyStringHandling/first_file_empty_string,_second_file_value
+    - TestEmptyStringHandling/first_file_value,_second_file_empty_string
+    - TestEmptyStringHandling/both_files_empty_string
     code_annotations:
-      - IMPL-TEST_EMPTY_STRING_HANDLING
-      - ARCH-TESTING_STRATEGY
-      - REQ-CONFIGURATION
-      - REQ-CFG_001
-      - REQ-CFG_005
+    - IMPL-TEST_EMPTY_STRING_HANDLING
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_001
+    - REQ-CFG_005
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-TESTING_STRATEGY
-      - REQ-CONFIGURATION
-      - REQ-CFG_001
-      - REQ-CFG_005
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_001
+    - REQ-CFG_005
     composed_with: []
-  detail_file: implementation-decisions/IMPL-TEST_EMPTY_STRING_HANDLING.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`config_test.go` line ~6643-6750, `TestEmptyStringHandling`, `createTestConfigFileWithData`, `isZeroValue`'
@@ -69,49 +70,11 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
   empty_string_as_zero_value: If treated as zero value, later files can override
   precedence_with_empty_strings: First file's value (even if empty) takes precedence per CFG-001
   test_coverage:
-    - 'Empty string in first file, value in second file: Verifies behavior (zero value vs explicit empty)'
-    - 'Value in first file, empty string in second file: Verifies CFG-001 precedence (first file preserved)'
-    - 'Empty string in both files: Verifies empty string is preserved'
-    - 'Merge behavior validation: Empty strings handled correctly per CFG-001 and CFG-005'
-  test_structure: |-
-    ```go
-    // TestEmptyStringHandling tests empty string handling in configuration merging
-    // [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] Validates empty string treatment
-    func TestEmptyStringHandling(t *testing.T) {
-        // Test: first file empty, second file value
-        // Test: first file value, second file empty
-        // Test: both files empty
-    }
-    ```
+  - 'Empty string in first file, value in second file: Verifies behavior (zero value vs explicit empty)'
+  - 'Value in first file, empty string in second file: Verifies CFG-001 precedence (first file preserved)'
+  - 'Empty string in both files: Verifies empty string is preserved'
+  - 'Merge behavior validation: Empty strings handled correctly per CFG-001 and CFG-005'
+  test_structure: "```go\n// TestEmptyStringHandling tests empty string handling in configuration merging\n// [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] Validates empty string treatment\nfunc TestEmptyStringHandling(t *testing.T) {\n    // Test: first file empty, second file value\n    // Test: first file value, second file empty\n    // Test: both files empty\n}\n```"
   testemptystringhandling: Tests empty string handling in various merge scenarios
-  essence_pseudocode: |-
-    # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] — Tests empty string handling in configuration merge scenarios
-
-    procedure TestEmptyStringHandling():
-      # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] — validates empty string treatment as zero value vs explicit empty during merge
-      save BKPDIR_CONFIG env; defer restore
-      create temp dir
-
-      subtest "first file empty string, second file value":
-        # [REQ-CFG_001] — tests whether empty string in first file is treated as explicit value or zero value
-        create file1.yml with archive_dir_path: "" (empty string)
-        create file2.yml with archive_dir_path: "/new/path"
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        if cfg.ArchiveDirPath == "": empty string treated as explicit (CFG-001 precedence)
-        elif cfg.ArchiveDirPath == "/new/path": empty string treated as zero value
-        else: unexpected — assert error
-
-      subtest "first file value, second file empty string":
-        # [REQ-CFG_001] — verifies first file takes precedence per CFG-001 (earlier files win)
-        create file1-value.yml with archive_dir_path: "/first/path"
-        create file2-empty.yml with archive_dir_path: ""
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ArchiveDirPath == "/first/path" (first file preserved)
-
-      subtest "both files empty string":
-        # [REQ-CFG_001] [REQ-CFG_005] — verifies empty string preserved when both files set it
-        create file1-both-empty.yml with archive_dir_path: ""
-        create file2-both-empty.yml with archive_dir_path: ""
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ArchiveDirPath == "" (empty string preserved)
-      end
+  essence_pseudocode: "# [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] — Tests empty string handling in configuration merge scenarios\n\nprocedure TestEmptyStringHandling():\n  # [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] — validates empty string treatment as zero value vs explicit empty during merge\n  save BKPDIR_CONFIG env; defer restore\n  create temp dir\n\n  subtest \"first file empty string, second file value\":\n    # [REQ-CFG_001] — tests whether empty string in first file is treated as explicit value or zero value [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY]\n    create file1.yml with archive_dir_path: \"\" (empty string)\n    create file2.yml with archive_dir_path: \"/new/path\"\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    if cfg.ArchiveDirPath == \"\": empty string treated as explicit (CFG-001 precedence)\n    elif cfg.ArchiveDirPath == \"/new/path\": empty\
+    \ string treated as zero value\n    else: unexpected — assert error\n\n  subtest \"first file value, second file empty string\":\n    # [REQ-CFG_001] — verifies first file takes precedence per CFG-001 (earlier files win) [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY]\n    create file1-value.yml with archive_dir_path: \"/first/path\"\n    create file2-empty.yml with archive_dir_path: \"\"\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/first/path\" (first file preserved)\n\n  subtest \"both files empty string\":\n    # [REQ-CFG_001] [REQ-CFG_005] — verifies empty string preserved when both files set it [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY]\n    create file1-both-empty.yml with archive_dir_path: \"\"\n    create file2-both-empty.yml with archive_dir_path: \"\"\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ArchiveDirPath == \"\" (empty string preserved)\n  end"

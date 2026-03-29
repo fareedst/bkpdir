@@ -25,7 +25,6 @@ REQ-EXTRACT_008_INTERDEP_MAPPING:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml
   metadata:
     created:
       date: "2026-03-12"

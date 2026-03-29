@@ -26,7 +26,6 @@ REQ-ERROR_HANDLING:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-ERROR_HANDLING.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -2,14 +2,16 @@ IMPL-FILE_OPERATIONS:
   name: File Operations Implementation
   status: Active
   cross_references:
-    - ARCH-FILE_OPERATIONS
-    - REQ-RELIABILITY
+  - ARCH-FILE_OPERATIONS
+  - REQ-RELIABILITY
   rationale:
-    why: |-
-      Prevents data corruption
+    why: 'Prevents data corruption
+
       Enhances security
+
       Supports complex traversal scenarios
-      Enables efficient file comparison
+
+      Enables efficient file comparison'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -17,270 +19,120 @@ IMPL-FILE_OPERATIONS:
     details: []
   code_locations:
     files:
-      - path: pkg/fileops/fileops.go
-        description: Package entry point with version constants
-      - path: pkg/fileops/traversal.go
-        description: Directory traversal with exclusion, depth limits, symlinks, hidden files
-      - path: pkg/fileops/validation.go
-        description: Path validation with security checking (traversal, suspicious patterns)
+    - path: pkg/fileops/fileops.go
+      description: Package entry point with version constants
+    - path: pkg/fileops/traversal.go
+      description: Directory traversal with exclusion, depth limits, symlinks, hidden files
+    - path: pkg/fileops/validation.go
+      description: Path validation with security checking (traversal, suspicious patterns)
     functions:
-      - name: NewTraverser
-        file: pkg/fileops/traversal.go
-        description: Creates a DefaultTraverser with no initial exclusion patterns
-      - name: NewTraverserWithPatterns
-        file: pkg/fileops/traversal.go
-        description: Creates a DefaultTraverser with pre-configured exclusion patterns
-      - name: DefaultTraverser.Walk
-        file: pkg/fileops/traversal.go
-        description: Basic directory walk with default options, delegates to WalkWithOptions
-      - name: DefaultTraverser.WalkWithOptions
-        file: pkg/fileops/traversal.go
-        description: Configurable directory walk — validates root, builds exclusion matcher, delegates to walkRecursive
-      - name: DefaultTraverser.walkRecursive
-        file: pkg/fileops/traversal.go
-        description: Recursive traversal with depth limit, exclusion, hidden-file, and symlink handling
-      - name: DefaultTraverser.ListFiles
-        file: pkg/fileops/traversal.go
-        description: Returns file list via ListFilesWithExclusions with no patterns
-      - name: DefaultTraverser.ListFilesWithExclusions
-        file: pkg/fileops/traversal.go
-        description: Walks directory collecting regular file paths with exclusion patterns
-      - name: Walk
-        file: pkg/fileops/traversal.go
-        description: Package-level convenience — creates ephemeral traverser and walks
-      - name: WalkWithExclusions
-        file: pkg/fileops/traversal.go
-        description: Package-level convenience — creates traverser with exclusion options
-      - name: ListFiles
-        file: pkg/fileops/traversal.go
-        description: Package-level convenience — lists files via default traverser
-      - name: ListFilesWithExclusions
-        file: pkg/fileops/traversal.go
-        description: Package-level convenience — lists files with exclusion patterns
-      - name: NewPathValidator
-        file: pkg/fileops/validation.go
-        description: Creates a PathValidator instance
-      - name: PathValidator.ValidatePath
-        file: pkg/fileops/validation.go
-        description: Validates path is non-empty, secure, and well-formed
-      - name: PathValidator.ValidateExistence
-        file: pkg/fileops/validation.go
-        description: Validates path exists via os.Stat after ValidatePath
-      - name: PathValidator.ValidateReadable
-        file: pkg/fileops/validation.go
-        description: Validates path is readable by attempting os.Open
-      - name: PathValidator.ValidateWritable
-        file: pkg/fileops/validation.go
-        description: Validates writability — directories via temp file, files via O_WRONLY
-      - name: PathValidator.IsSecurePath
-        file: pkg/fileops/validation.go
-        description: Checks for path traversal (..) and suspicious patterns (~, $, null, control chars)
-      - name: ValidatePath
-        file: pkg/fileops/validation.go
-        description: Package-level convenience — validates via default PathValidator
-      - name: ValidateExistence
-        file: pkg/fileops/validation.go
-        description: Package-level convenience — checks existence via default PathValidator
-      - name: ValidateReadable
-        file: pkg/fileops/validation.go
-        description: Package-level convenience — checks readability via default PathValidator
-      - name: ValidateWritable
-        file: pkg/fileops/validation.go
-        description: Package-level convenience — checks writability via default PathValidator
-      - name: IsSecurePath
-        file: pkg/fileops/validation.go
-        description: Package-level convenience — security check via default PathValidator
+    - name: NewTraverser
+      file: pkg/fileops/traversal.go
+      description: Creates a DefaultTraverser with no initial exclusion patterns
+    - name: NewTraverserWithPatterns
+      file: pkg/fileops/traversal.go
+      description: Creates a DefaultTraverser with pre-configured exclusion patterns
+    - name: DefaultTraverser.Walk
+      file: pkg/fileops/traversal.go
+      description: Basic directory walk with default options, delegates to WalkWithOptions
+    - name: DefaultTraverser.WalkWithOptions
+      file: pkg/fileops/traversal.go
+      description: Configurable directory walk — validates root, builds exclusion matcher, delegates to walkRecursive
+    - name: DefaultTraverser.walkRecursive
+      file: pkg/fileops/traversal.go
+      description: Recursive traversal with depth limit, exclusion, hidden-file, and symlink handling
+    - name: DefaultTraverser.ListFiles
+      file: pkg/fileops/traversal.go
+      description: Returns file list via ListFilesWithExclusions with no patterns
+    - name: DefaultTraverser.ListFilesWithExclusions
+      file: pkg/fileops/traversal.go
+      description: Walks directory collecting regular file paths with exclusion patterns
+    - name: Walk
+      file: pkg/fileops/traversal.go
+      description: Package-level convenience — creates ephemeral traverser and walks
+    - name: WalkWithExclusions
+      file: pkg/fileops/traversal.go
+      description: Package-level convenience — creates traverser with exclusion options
+    - name: ListFiles
+      file: pkg/fileops/traversal.go
+      description: Package-level convenience — lists files via default traverser
+    - name: ListFilesWithExclusions
+      file: pkg/fileops/traversal.go
+      description: Package-level convenience — lists files with exclusion patterns
+    - name: NewPathValidator
+      file: pkg/fileops/validation.go
+      description: Creates a PathValidator instance
+    - name: PathValidator.ValidatePath
+      file: pkg/fileops/validation.go
+      description: Validates path is non-empty, secure, and well-formed
+    - name: PathValidator.ValidateExistence
+      file: pkg/fileops/validation.go
+      description: Validates path exists via os.Stat after ValidatePath
+    - name: PathValidator.ValidateReadable
+      file: pkg/fileops/validation.go
+      description: Validates path is readable by attempting os.Open
+    - name: PathValidator.ValidateWritable
+      file: pkg/fileops/validation.go
+      description: Validates writability — directories via temp file, files via O_WRONLY
+    - name: PathValidator.IsSecurePath
+      file: pkg/fileops/validation.go
+      description: Checks for path traversal (..) and suspicious patterns (~, $, null, control chars)
+    - name: ValidatePath
+      file: pkg/fileops/validation.go
+      description: Package-level convenience — validates via default PathValidator
+    - name: ValidateExistence
+      file: pkg/fileops/validation.go
+      description: Package-level convenience — checks existence via default PathValidator
+    - name: ValidateReadable
+      file: pkg/fileops/validation.go
+      description: Package-level convenience — checks readability via default PathValidator
+    - name: ValidateWritable
+      file: pkg/fileops/validation.go
+      description: Package-level convenience — checks writability via default PathValidator
+    - name: IsSecurePath
+      file: pkg/fileops/validation.go
+      description: Package-level convenience — security check via default PathValidator
   traceability:
     architecture:
-      - ARCH-FILE_OPERATIONS
+    - ARCH-FILE_OPERATIONS
     requirements:
-      - REQ-RELIABILITY
+    - REQ-RELIABILITY
     tests: []
-    # No dedicated test files for IMPL-FILE_OPERATIONS. Traversal and validation
-    # logic is exercised indirectly via integration tests in other packages
-    # (e.g., archive, backup, diff commands) but no pkg/fileops/*_test.go exists.
     code_annotations:
-      - IMPL-FILE_OPERATIONS
-      - ARCH-FILE_OPERATIONS
-      - REQ-RELIABILITY
+    - IMPL-FILE_OPERATIONS
+    - ARCH-FILE_OPERATIONS
+    - REQ-RELIABILITY
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-FILE_OPERATIONS
-      - REQ-RELIABILITY
-      - IMPL-EXCLUSION_PATTERNS
-      - IMPL-ATOMIC_OPS
-      - IMPL-DIRECTORY_COMPARISON
+    - ARCH-FILE_OPERATIONS
+    - REQ-RELIABILITY
+    - IMPL-EXCLUSION_PATTERNS
+    - IMPL-ATOMIC_OPS
+    - IMPL-DIRECTORY_COMPARISON
     composed_with:
-      - IMPL-EXCLUSION_PATTERNS
-      - IMPL-ATOMIC_OPS
-  detail_file: implementation-decisions/IMPL-FILE_OPERATIONS.yaml
+    - IMPL-EXCLUSION_PATTERNS
+    - IMPL-ATOMIC_OPS
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Reliable file traversal and path validation for CLI applications.
-    # Traverser walks directories with configurable exclusion, depth, symlink,
-    # and hidden-file options. PathValidator checks existence, permissions,
-    # and security (path traversal, suspicious chars).
-
-    # ── Traversal ──────────────────────────────────────────────────────
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Provides Traverser interface + DefaultTraverser with pattern-based exclusion.
-
-    DATA TraversalOptions:
-      ExcludePatterns  []string
-      FollowSymlinks   bool
-      MaxDepth         int       # -1 means unlimited
-      IgnoreHidden     bool
-      IgnorePermErrors bool
-
-    INTERFACE Traverser:
-      Walk(root, visitor) -> error
-      WalkWithOptions(root, options, visitor) -> error
-      ListFiles(root, recursive) -> ([]string, error)
-      ListFilesWithExclusions(root, excludePatterns, recursive) -> ([]string, error)
-
-    # Creates traverser with optional pre-configured exclusion patterns
-    procedure NEW_TRAVERSER(patterns?) -> Traverser:
-      IF patterns provided:
-        RETURN DefaultTraverser{ matcher = NewPatternMatcher(patterns) }
-      ELSE:
-        RETURN DefaultTraverser{}
-
-    # Basic walk delegates to WalkWithOptions with defaults
-    procedure WALK(root, visitor) -> error:
-      options = TraversalOptions{ FollowSymlinks=false, MaxDepth=-1 }
-      RETURN WALK_WITH_OPTIONS(root, options, visitor)
-
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Validates root, builds exclusion matcher, starts recursive walk.
-    procedure WALK_WITH_OPTIONS(root, options, visitor) -> error:
-      IF ValidatePath(root) fails: RETURN error("invalid root path")
-      IF ValidateExistence(root) fails: RETURN error
-      exclusionMatcher = nil
-      IF options.ExcludePatterns not empty:
-        exclusionMatcher = NewPatternMatcher(options.ExcludePatterns)
-      ELSE IF self.matcher != nil:
-        exclusionMatcher = self.matcher
-      RETURN WALK_RECURSIVE(root, root, depth=0, options, exclusionMatcher, visitor)
-
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Core recursive traversal handling depth, exclusion, hidden, symlinks.
-    procedure WALK_RECURSIVE(root, currentPath, depth, options, matcher, visitor) -> error:
-      IF options.MaxDepth >= 0 AND depth > MaxDepth: RETURN nil
-      info = Lstat(currentPath)
-      IF error AND IgnorePermErrors AND IsPermission: RETURN nil
-      IF error: RETURN visitor(path, nil, error)
-      relPath = Rel(root, currentPath)
-      IF relPath == ".": relPath = ""
-      # Exclusion check
-      IF matcher != nil AND relPath != "" AND matcher.ShouldExclude(relPath):
-        IF info.IsDir: RETURN SkipDir
-        RETURN nil
-      # Hidden file check
-      IF IgnoreHidden AND relPath != "" AND base starts with ".":
-        IF info.IsDir: RETURN SkipDir
-        RETURN nil
-      # Symlink handling
-      IF info is symlink:
-        IF NOT FollowSymlinks: RETURN visitor(path, info, nil)
-        resolve symlink to realPath; get realInfo
-        IF error: handle per IgnorePermErrors
-        info = realInfo
-      # Visit current path
-      err = visitor(currentPath, info, nil)
-      IF err == SkipDir AND isDir: RETURN nil
-      IF err: RETURN err
-      # Recurse into directories
-      IF info.IsDir:
-        entries = ReadDir(currentPath)
-        FOR entry IN entries:
-          err = WALK_RECURSIVE(root, Join(currentPath, entry.Name), depth+1, ...)
-          IF err: RETURN err
-      RETURN nil
-
-    # List files delegates to ListFilesWithExclusions
-    procedure LIST_FILES(root, recursive) -> ([]string, error):
-      RETURN LIST_FILES_WITH_EXCLUSIONS(root, nil, recursive)
-
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Walks and collects regular files; ignores errors in listing mode.
-    procedure LIST_FILES_WITH_EXCLUSIONS(root, excludePatterns, recursive) -> ([]string, error):
-      files = []
-      options = TraversalOptions{ ExcludePatterns, FollowSymlinks=false, IgnorePermErrors=true }
-      IF NOT recursive: options.MaxDepth = 0
-      visitor = func(path, info, err):
-        IF err: RETURN nil  # ignore errors
-        IF NOT info.IsDir: files.append(path)
-        RETURN nil
-      err = WALK_WITH_OPTIONS(root, options, visitor)
-      RETURN files, err
-
-    # ── Path Validation ────────────────────────────────────────────────
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Provides Validator interface + PathValidator for security-aware checks.
-
-    INTERFACE Validator:
-      ValidatePath(path) -> error
-      ValidateExistence(path) -> error
-      ValidateReadable(path) -> error
-      ValidateWritable(path) -> error
-      IsSecurePath(path) -> bool
-
-    procedure VALIDATE_PATH(path) -> error:
-      IF path == "": RETURN error("path cannot be empty")
-      IF NOT IS_SECURE_PATH(path): RETURN error("path contains unsafe elements")
-      Clean(path)  # note: cleaned != original is allowed
-      RETURN nil
-
-    procedure VALIDATE_EXISTENCE(path) -> error:
-      IF VALIDATE_PATH(path) fails: RETURN error
-      info, err = Stat(path)
-      IF IsNotExist: RETURN error("path does not exist")
-      IF err: RETURN error("cannot access path")
-      RETURN nil
-
-    procedure VALIDATE_READABLE(path) -> error:
-      IF VALIDATE_EXISTENCE(path) fails: RETURN error
-      file = Open(path)
-      IF err: RETURN error("path is not readable")
-      file.Close()
-      RETURN nil
-
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Writability check — directory via temp file probe, file via O_WRONLY open.
-    procedure VALIDATE_WRITABLE(path) -> error:
-      IF VALIDATE_PATH(path) fails: RETURN error
-      info, err = Stat(path)
-      IF IsNotExist: RETURN VALIDATE_WRITABLE(parent(path))  # recurse to parent
-      IF err: RETURN error("cannot access path")
-      IF info.IsDir:
-        tempFile = Create(Join(path, ".tmp_write_test"))
-        IF err: RETURN error("directory is not writable")
-        tempFile.Close(); Remove(tempFile)
-      ELSE:
-        file = OpenFile(path, O_WRONLY)
-        IF err: RETURN error("file is not writable")
-        file.Close()
-      RETURN nil
-
-    # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-    # Rejects paths with "..", "~", "$", null bytes, and control characters.
-    procedure IS_SECURE_PATH(path) -> bool:
-      IF Contains(path, ".."): RETURN false
-      suspicious = ["~", "$", "\x00", "\r", "\n"]
-      FOR pattern IN suspicious:
-        IF Contains(path, pattern): RETURN false
-      RETURN true
+  essence_pseudocode: "# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Reliable file traversal and path validation for CLI applications. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Traverser walks directories with configurable exclusion, depth, symlink, [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# and hidden-file options. PathValidator checks existence, permissions, [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# and security (path traversal, suspicious chars). [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n\n# ── Traversal ────────────────────────────────────────────────────── [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Provides Traverser interface + DefaultTraverser with pattern-based exclusion. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS]\
+    \ [REQ-RELIABILITY] — Block implements documented behavior for: DATA TraversalOptions:\nDATA TraversalOptions:\n  ExcludePatterns  []string\n  FollowSymlinks   bool\n  MaxDepth         int       # -1 means unlimited\n  IgnoreHidden     bool\n  IgnorePermErrors bool\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: INTERFACE Traverser:\nINTERFACE Traverser:\n  Walk(root, visitor) -> error\n  WalkWithOptions(root, options, visitor) -> error\n  ListFiles(root, recursive) -> ([]string, error)\n  ListFilesWithExclusions(root, excludePatterns, recursive) -> ([]string, error)\n\n# Creates traverser with optional pre-configured exclusion patterns [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure NEW_TRAVERSER(patterns?) -> Traverser:\nprocedure NEW_TRAVERSER(patterns?) -> Traverser:\n  IF patterns\
+    \ provided:\n    RETURN DefaultTraverser{ matcher = NewPatternMatcher(patterns) }\n  ELSE:\n    RETURN DefaultTraverser{}\n\n# Basic walk delegates to WalkWithOptions with defaults [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure WALK(root, visitor) -> error:\nprocedure WALK(root, visitor) -> error:\n  options = TraversalOptions{ FollowSymlinks=false, MaxDepth=-1 }\n  RETURN WALK_WITH_OPTIONS(root, options, visitor)\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Validates root, builds exclusion matcher, starts recursive walk. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure WALK_WITH_OPTIONS(root, options, visitor) -> error:\nprocedure WALK_WITH_OPTIONS(root, options, visitor) -> error:\n  IF\
+    \ ValidatePath(root) fails: RETURN error(\"invalid root path\")\n  IF ValidateExistence(root) fails: RETURN error\n  exclusionMatcher = nil\n  IF options.ExcludePatterns not empty:\n    exclusionMatcher = NewPatternMatcher(options.ExcludePatterns)\n  ELSE IF self.matcher != nil:\n    exclusionMatcher = self.matcher\n  RETURN WALK_RECURSIVE(root, root, depth=0, options, exclusionMatcher, visitor)\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Core recursive traversal handling depth, exclusion, hidden, symlinks. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure WALK_RECURSIVE(root, currentPath, depth, options, matcher, visitor) -> error:\nprocedure WALK_RECURSIVE(root, currentPath, depth, options, matcher, visitor) -> error:\n  IF options.MaxDepth >= 0 AND depth > MaxDepth: RETURN nil\n  info = Lstat(currentPath)\n  IF error AND\
+    \ IgnorePermErrors AND IsPermission: RETURN nil\n  IF error: RETURN visitor(path, nil, error)\n  relPath = Rel(root, currentPath)\n  IF relPath == \".\": relPath = \"\"\n  # Exclusion check [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n  IF matcher != nil AND relPath != \"\" AND matcher.ShouldExclude(relPath):\n    IF info.IsDir: RETURN SkipDir\n    RETURN nil\n  # Hidden file check [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n  IF IgnoreHidden AND relPath != \"\" AND base starts with \".\":\n    IF info.IsDir: RETURN SkipDir\n    RETURN nil\n  # Symlink handling [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n  IF info is symlink:\n    IF NOT FollowSymlinks: RETURN visitor(path, info, nil)\n    resolve symlink to realPath; get realInfo\n    IF error: handle per IgnorePermErrors\n    info = realInfo\n  # Visit current path [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n  err = visitor(currentPath, info, nil)\n\
+    \  IF err == SkipDir AND isDir: RETURN nil\n  IF err: RETURN err\n  # Recurse into directories [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n  IF info.IsDir:\n    entries = ReadDir(currentPath)\n    FOR entry IN entries:\n      err = WALK_RECURSIVE(root, Join(currentPath, entry.Name), depth+1, ...)\n      IF err: RETURN err\n  RETURN nil\n\n# List files delegates to ListFilesWithExclusions [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure LIST_FILES(root, recursive) -> ([]string, error):\nprocedure LIST_FILES(root, recursive) -> ([]string, error):\n  RETURN LIST_FILES_WITH_EXCLUSIONS(root, nil, recursive)\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Walks and collects regular files; ignores errors in listing mode. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS]\
+    \ [REQ-RELIABILITY] — Block implements documented behavior for: procedure LIST_FILES_WITH_EXCLUSIONS(root, excludePatterns, recursive) -> ([]string, error):\nprocedure LIST_FILES_WITH_EXCLUSIONS(root, excludePatterns, recursive) -> ([]string, error):\n  files = []\n  options = TraversalOptions{ ExcludePatterns, FollowSymlinks=false, IgnorePermErrors=true }\n  IF NOT recursive: options.MaxDepth = 0\n  visitor = func(path, info, err):\n    IF err: RETURN nil  # ignore errors\n    IF NOT info.IsDir: files.append(path)\n    RETURN nil\n  err = WALK_WITH_OPTIONS(root, options, visitor)\n  RETURN files, err\n\n# ── Path Validation ──────────────────────────────────────────────── [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Provides Validator interface + PathValidator for security-aware checks. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS]\
+    \ [REQ-RELIABILITY] — Block implements documented behavior for: INTERFACE Validator:\nINTERFACE Validator:\n  ValidatePath(path) -> error\n  ValidateExistence(path) -> error\n  ValidateReadable(path) -> error\n  ValidateWritable(path) -> error\n  IsSecurePath(path) -> bool\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure VALIDATE_PATH(path) -> error:\nprocedure VALIDATE_PATH(path) -> error:\n  IF path == \"\": RETURN error(\"path cannot be empty\")\n  IF NOT IS_SECURE_PATH(path): RETURN error(\"path contains unsafe elements\")\n  Clean(path)  # note: cleaned != original is allowed\n  RETURN nil\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure VALIDATE_EXISTENCE(path) -> error:\nprocedure VALIDATE_EXISTENCE(path) -> error:\n  IF VALIDATE_PATH(path) fails: RETURN error\n  info, err = Stat(path)\n  IF IsNotExist: RETURN error(\"path does not\
+    \ exist\")\n  IF err: RETURN error(\"cannot access path\")\n  RETURN nil\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure VALIDATE_READABLE(path) -> error:\nprocedure VALIDATE_READABLE(path) -> error:\n  IF VALIDATE_EXISTENCE(path) fails: RETURN error\n  file = Open(path)\n  IF err: RETURN error(\"path is not readable\")\n  file.Close()\n  RETURN nil\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Writability check — directory via temp file probe, file via O_WRONLY open. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure VALIDATE_WRITABLE(path) -> error:\nprocedure VALIDATE_WRITABLE(path) -> error:\n  IF VALIDATE_PATH(path) fails: RETURN error\n  info, err = Stat(path)\n  IF IsNotExist: RETURN VALIDATE_WRITABLE(parent(path))  # recurse to parent\n  IF err:\
+    \ RETURN error(\"cannot access path\")\n  IF info.IsDir:\n    tempFile = Create(Join(path, \".tmp_write_test\"))\n    IF err: RETURN error(\"directory is not writable\")\n    tempFile.Close(); Remove(tempFile)\n  ELSE:\n    file = OpenFile(path, O_WRONLY)\n    IF err: RETURN error(\"file is not writable\")\n    file.Close()\n  RETURN nil\n\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# Rejects paths with \"..\", \"~\", \"$\", null bytes, and control characters. [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]\n# [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — Block implements documented behavior for: procedure IS_SECURE_PATH(path) -> bool:\nprocedure IS_SECURE_PATH(path) -> bool:\n  IF Contains(path, \"..\"): RETURN false\n  suspicious = [\"~\", \"$\", \"\\x00\", \"\\r\", \"\\n\"]\n  FOR pattern IN suspicious:\n    IF Contains(path, pattern): RETURN false\n  RETURN true"

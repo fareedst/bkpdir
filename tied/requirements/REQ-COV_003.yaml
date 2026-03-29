@@ -27,7 +27,6 @@ REQ-COV_003:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-COV_003.yaml
   metadata:
     created:
       date: "2026-03-12"

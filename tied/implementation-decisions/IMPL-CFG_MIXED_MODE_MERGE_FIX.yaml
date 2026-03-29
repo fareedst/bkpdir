@@ -2,128 +2,84 @@ IMPL-CFG_MIXED_MODE_MERGE_FIX:
   name: Mixed-Mode Merge Strategy Fix
   status: Active
   cross_references:
+  - ARCH-CFG_005
+  - ARCH-CFG_001
+  - REQ-CFG_005
+  - REQ-CONFIGURATION
+  rationale:
+    why: 'Bug fix: exclude_patterns and other MergeBehaviorAccumulate fields were not consistently merging with defaults per CFG-005 requirement.
+
+      The logic was incorrectly keeping "override" strategy for first file in sequential processing, causing defaults to be replaced instead of merged.
+
+      Test expectations were misaligned with CFG-005 requirement - updated to reflect correct merge behavior.
+
+      Ensures consistent behavior: accumulate fields always merge (unless explicit replace prefix), regardless of context.'
+    problems_solved:
+    - Accumulate fields lost default values when first file provided new values
+    - '"override" strategy was not changed to "merge" for accumulate fields in all contexts'
+    - Test expectations did not match CFG-005 merge requirement
+    benefits:
+    - exclude_patterns correctly merges with defaults in all contexts
+    - Consistent accumulate behavior regardless of inheritance vs sequential
+    - Explicit ! prefix still allows full replacement when needed
+  implementation_approach:
+    summary: Simplified merge strategy logic in applyMergeStrategies to always change "override" to "merge" for MergeBehaviorAccumulate fields (unless explicit prefix).
+    details:
+    - In applyMergeStrategies(), after processing keys, iterate operations
+    - For MergeBehaviorAccumulate fields with "override" strategy and no explicit prefix, change to "merge"
+    - This applies in ALL contexts (inheritance chains AND sequential file processing)
+    - Explicit prefixes (!, +, ^, =) keep their strategy as-is
+    - MergeBehaviorPrecedence fields are unaffected (keep strategy as-is)
+  code_locations:
+    files:
+    - path: config.go
+      description: applyMergeStrategies() function containing the accumulate field strategy override logic
+    functions:
+    - name: applyMergeStrategies
+      file: config.go
+      line: 1909
+      description: Contains the MergeBehaviorAccumulate override logic
+  traceability:
+    architecture:
+    - ARCH-CFG_005
+    - ARCH-CFG_001
+    requirements:
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+    tests:
+    - TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE
+    - TestLoadConfigMultipleFiles
+    - TestMergeStrategiesInSequentialFiles
+    - TestEmptyArrayHandling
+    - TestMixedFieldBehaviors
+    code_annotations:
+    - IMPL-CFG_MIXED_MODE_MERGE_FIX
     - ARCH-CFG_005
     - ARCH-CFG_001
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  rationale:
-    why: |-
-      Bug fix: exclude_patterns and other MergeBehaviorAccumulate fields were not consistently merging with defaults per CFG-005 requirement.
-      The logic was incorrectly keeping "override" strategy for first file in sequential processing, causing defaults to be replaced instead of merged.
-      Test expectations were misaligned with CFG-005 requirement - updated to reflect correct merge behavior.
-      Ensures consistent behavior: accumulate fields always merge (unless explicit replace prefix), regardless of context.
-    problems_solved:
-      - Accumulate fields lost default values when first file provided new values
-      - '"override" strategy was not changed to "merge" for accumulate fields in all contexts'
-      - Test expectations did not match CFG-005 merge requirement
-    benefits:
-      - exclude_patterns correctly merges with defaults in all contexts
-      - Consistent accumulate behavior regardless of inheritance vs sequential
-      - Explicit ! prefix still allows full replacement when needed
-  implementation_approach:
-    summary: Simplified merge strategy logic in applyMergeStrategies to always change "override" to "merge" for MergeBehaviorAccumulate fields (unless explicit prefix).
-    details:
-      - In applyMergeStrategies(), after processing keys, iterate operations
-      - For MergeBehaviorAccumulate fields with "override" strategy and no explicit prefix, change to "merge"
-      - This applies in ALL contexts (inheritance chains AND sequential file processing)
-      - Explicit prefixes (!, +, ^, =) keep their strategy as-is
-      - MergeBehaviorPrecedence fields are unaffected (keep strategy as-is)
-  code_locations:
-    files:
-      - path: config.go
-        description: applyMergeStrategies() function containing the accumulate field strategy override logic
-    functions:
-      - name: applyMergeStrategies
-        file: config.go
-        line: 1909
-        description: Contains the MergeBehaviorAccumulate override logic
-  traceability:
-    architecture:
-      - ARCH-CFG_005
-      - ARCH-CFG_001
-    requirements:
-      - REQ-CFG_005
-      - REQ-CONFIGURATION
-    tests:
-      - TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE
-      - TestLoadConfigMultipleFiles
-      - TestMergeStrategiesInSequentialFiles
-      - TestEmptyArrayHandling
-      - TestMixedFieldBehaviors
-    code_annotations:
-      - IMPL-CFG_MIXED_MODE_MERGE_FIX
-      - ARCH-CFG_005
-      - ARCH-CFG_001
-      - REQ-CFG_005
-      - REQ-CONFIGURATION
   related_decisions:
     depends_on:
-      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
     supersedes: []
     see_also:
-      - IMPL-CFG_PRECEDENCE_FIX
-      - IMPL-EXCLUDE_MERGE_FIX
+    - IMPL-CFG_PRECEDENCE_FIX
+    - IMPL-EXCLUDE_MERGE_FIX
     composed_with:
-      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
-  detail_file: implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX.yaml
+    - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: AI agent
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
-    # Ensures MergeBehaviorAccumulate fields always merge (unless explicit prefix), regardless of context.
-
-    PROCEDURE applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap, initialDefaultCfg, explicitlySetFields) -> (*Config, error):
-      processor := newMergeStrategyProcessor()
-      srcMap := rawSrcMap OR configToMap(src)
-      processed := processor.processKeys(srcMap)
-
-      # Build explicit prefix map from rawSrcMap
-      hasExplicitPrefix := map[string]bool{}
-      FOR origKey in rawSrcMap:
-        cleanKey := stripQuotes(origKey)
-        IF cleanKey starts with '!' OR '+' OR '^' OR '=' THEN
-          hasExplicitPrefix[cleanKey[1:]] = true
-        END
-      END
-
-      # [IMPL-CFG_MIXED_MODE_MERGE_FIX] — Apply field-specific merge behavior
-      FOR each key, operation in processed.operations:
-        behavior := getFieldMergeBehavior(key)
-        hasExplicitPrefixForField := hasExplicitPrefix[key]
-
-        IF behavior == MergeBehaviorAccumulate THEN
-          # CFG-005: Array fields default to merge in ALL contexts
-          IF operation.strategy == "override" AND NOT hasExplicitPrefixForField THEN
-            # Change default "override" to "merge" for accumulate fields
-            # This ensures exclude_patterns merges with defaults instead of replacing
-            operation.strategy = "merge"
-          END
-          # For "replace" (!), "merge" (+), "prepend" (^), "default" (=): keep as-is
-        ELSE
-          # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] MergeBehaviorPrecedence: keep strategy as-is (CFG-001)
-        END
-      END
-
-      # Apply processed operations to result config
-      result := copy of dst
-      FOR each key, operation in processed.operations:
-        dstValue := getConfigFieldValue(result, key)
-        originalDstValue := getConfigFieldValue(dst, key)
-        applyMergeOperation(result, key, operation, dstValue, originalDstValue,
-            inheritContext, defaultCfg, explicitlySetFields)
-      END
-
-      # Merge remaining fields not in processed operations via mergeConfigs
-      mergeConfigs(result, src, inheritContext, defaultCfg, rawSrcMap,
-          initialDefaultCfg, dst, explicitlySetFields)
-      RETURN result, nil
+  essence_pseudocode: "# [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]\n# Ensures MergeBehaviorAccumulate fields always merge (unless explicit prefix), regardless of context. [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n\n# [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: PROCEDURE applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap, initialDefaultCfg, explicitlySetFields)\nPROCEDURE applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap, initialDefaultCfg, explicitlySetFields) -> (*Config, error):\n  processor := newMergeStrategyProcessor()\n  srcMap := rawSrcMap OR configToMap(src)\n  processed := processor.processKeys(srcMap)\n\n  # Build explicit prefix map from rawSrcMap [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n  hasExplicitPrefix := map[string]bool{}\n  FOR origKey in rawSrcMap:\n    cleanKey := stripQuotes(origKey)\n\
+    \    IF cleanKey starts with '!' OR '+' OR '^' OR '=' THEN\n      hasExplicitPrefix[cleanKey[1:]] = true\n    END\n  END\n\n  # [IMPL-CFG_MIXED_MODE_MERGE_FIX] — Apply field-specific merge behavior [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]\n  FOR each key, operation in processed.operations:\n    behavior := getFieldMergeBehavior(key)\n    hasExplicitPrefixForField := hasExplicitPrefix[key]\n\n    IF behavior == MergeBehaviorAccumulate THEN\n      # CFG-005: Array fields default to merge in ALL contexts [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n      IF operation.strategy == \"override\" AND NOT hasExplicitPrefixForField THEN\n        # Change default \"override\" to \"merge\" for accumulate fields [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n        # This ensures exclude_patterns merges with defaults instead of replacing [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n        operation.strategy = \"merge\"\n  \
+    \    END\n      # For \"replace\" (!), \"merge\" (+), \"prepend\" (^), \"default\" (=): keep as-is [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n    ELSE\n      # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] MergeBehaviorPrecedence: keep strategy as-is (CFG-001) [ARCH-CFG_005] [REQ-CFG_005]\n    END\n  END\n\n  # Apply processed operations to result config [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n  result := copy of dst\n  FOR each key, operation in processed.operations:\n    dstValue := getConfigFieldValue(result, key)\n    originalDstValue := getConfigFieldValue(dst, key)\n    applyMergeOperation(result, key, operation, dstValue, originalDstValue,\n        inheritContext, defaultCfg, explicitlySetFields)\n  END\n\n  # Merge remaining fields not in processed operations via mergeConfigs [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]\n  mergeConfigs(result, src, inheritContext, defaultCfg, rawSrcMap,\n      initialDefaultCfg, dst, explicitlySetFields)\n\
+    \  RETURN result, nil"

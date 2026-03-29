@@ -16,7 +16,6 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
-
 // GenericConfigLoader provides schema-agnostic configuration loading and merging.
 // This replaces the backup-specific LoadConfig function with a generalized implementation.
 type GenericConfigLoader struct {
@@ -436,7 +435,6 @@ func (g *GenericConfigLoader) setFieldFromString(field reflect.Value, value stri
 
 	return nil
 }
-
 
 // GenericConfigMerger provides standalone configuration merging functionality.
 // This is a separate component that can be used independently of the loader.

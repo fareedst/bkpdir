@@ -32,7 +32,6 @@ ARCH-OUTPUT_FORMATTING:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   metadata:
     created:
       date: "2026-03-12"

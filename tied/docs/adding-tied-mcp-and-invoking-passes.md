@@ -51,6 +51,7 @@ Example:
 {
   "mcpServers": {
     "tied-yaml": {
+      "type": "stdio",
       "command": "node",
       "args": ["/path/to/tied/mcp-server/dist/index.js"],
       "env": {

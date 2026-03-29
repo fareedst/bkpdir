@@ -1,208 +1,144 @@
 IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
   name: User-Customizable Format Strings Implementation
   status: Active
-  description: |-
-    Format string validation and #{} placeholder syntax for user-customizable output.
-    Migrated all placeholders from %{...} to #{...} to avoid conflicts with Go's fmt package.
+  description: 'Format string validation and #{} placeholder syntax for user-customizable output.
+
+    Migrated all placeholders from %{...} to #{...} to avoid conflicts with Go''s fmt package.
+
     FormatListArchive and FormatListBackup support template-style (#{name}) placeholders;
-    validation runs at config load time with non-fatal warnings.
+
+    validation runs at config load time with non-fatal warnings.'
   cross_references:
+  - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+  - ARCH-CONFIG_SYSTEM
+  - ARCH-OUTPUT_FORMATTING
+  - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+  rationale:
+    why: 'Go''s fmt package interprets %{...} as the start of a format verb, causing %!(EXTRA ...) errors.
+
+      Migrating to #{...} eliminates this conflict while keeping placeholders distinct from printf verbs.
+
+      Validation at load time prevents user mistakes without blocking configuration loading.'
+    problems_solved:
+    - fmt.Sprintf misinterpreting %{...} placeholders as format verbs
+    - Users receiving %!(EXTRA ...) in output when using template placeholders
+    - No feedback when users specify invalid placeholders
+    benefits:
+    - Single placeholder syntax (#{...}) throughout the codebase eliminates ambiguity
+    - Load-time validation warns about unexpected placeholders
+    - Simple string replacement (strings.ReplaceAll) keeps implementation maintainable
+  implementation_approach:
+    summary: 'Implement format string validation and comprehensive documentation for user customization.
+
+      FormatListArchive and FormatListBackup support template-style (#{name}) placeholders.
+
+      All placeholder syntax migrated from %{...} to #{...}.'
+    details:
+    - All placeholder syntax changed from %{key} to
+    - ValidateFormatString validates individual fields against expected placeholder lists
+    - getExpectedPlaceholders defines allowed placeholders per format field
+    - extractPlaceholders uses regex to find both printf (%s) and template (#{...}) placeholders
+    - validateAllFormatStrings iterates all config fields and collects warnings
+    - Validation integrated into LoadConfig and LoadConfigWithInheritance (non-fatal stderr warnings)
+  code_locations:
+    files:
+    - path: config.go
+      description: ValidateFormatString, getExpectedPlaceholders, extractPlaceholders, validateAllFormatStrings — validation pipeline
+    - path: config.go
+      description: DefaultConfig — default format strings using
+    - path: formatter.go
+      description: formatTemplate, FormatWithPlaceholders —
+    - path: formatter.go
+      description: FormatListArchive, FormatListBackup — template-placeholder detection and routing
+    - path: pkg/formatter/ai_core_formatter.go
+      description: FormatWithPlaceholders —
+    - path: pkg/formatter/placeholder_replace.go
+      description: ReplacePlaceholders — simple
+    - path: pkg/formatter/template.go
+      description: Template processing with
+    - path: formatter_adapter_simple.go
+      description: formatListArchiveSimple — simplified list formatting with
+    functions:
+    - name: ValidateFormatString
+      file: config.go
+      description: Validates one format field against its expected placeholders; returns warnings
+    - name: getExpectedPlaceholders
+      file: config.go
+      description: Returns the set of allowed placeholders (printf + template) per field name
+    - name: extractPlaceholders
+      file: config.go
+      description: Regex extraction of %s/%d and
+    - name: validateAllFormatStrings
+      file: config.go
+      description: Iterates all Config format fields and collects validation warnings
+    - name: OutputFormatter.formatTemplate
+      file: formatter.go
+      description: Replaces
+    - name: TemplateFormatter.FormatWithPlaceholders
+      file: formatter.go
+      description: Same
+  traceability:
+    architecture:
     - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
     - ARCH-CONFIG_SYSTEM
     - ARCH-OUTPUT_FORMATTING
-    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
-  rationale:
-    why: |-
-      Go's fmt package interprets %{...} as the start of a format verb, causing %!(EXTRA ...) errors.
-      Migrating to #{...} eliminates this conflict while keeping placeholders distinct from printf verbs.
-      Validation at load time prevents user mistakes without blocking configuration loading.
-    problems_solved:
-      - fmt.Sprintf misinterpreting %{...} placeholders as format verbs
-      - Users receiving %!(EXTRA ...) in output when using template placeholders
-      - No feedback when users specify invalid placeholders
-    benefits:
-      - Single placeholder syntax (#{...}) throughout the codebase eliminates ambiguity
-      - Load-time validation warns about unexpected placeholders
-      - Simple string replacement (strings.ReplaceAll) keeps implementation maintainable
-  implementation_approach:
-    summary: |-
-      Implement format string validation and comprehensive documentation for user customization.
-      FormatListArchive and FormatListBackup support template-style (#{name}) placeholders.
-      All placeholder syntax migrated from %{...} to #{...}.
-    details:
-      - All placeholder syntax changed from %{key} to #{key} across code, tests, and docs
-      - ValidateFormatString validates individual fields against expected placeholder lists
-      - getExpectedPlaceholders defines allowed placeholders per format field
-      - extractPlaceholders uses regex to find both printf (%s) and template (#{...}) placeholders
-      - validateAllFormatStrings iterates all config fields and collects warnings
-      - Validation integrated into LoadConfig and LoadConfigWithInheritance (non-fatal stderr warnings)
-  code_locations:
-    files:
-      - path: config.go
-        description: ValidateFormatString, getExpectedPlaceholders, extractPlaceholders, validateAllFormatStrings — validation pipeline
-      - path: config.go
-        description: DefaultConfig — default format strings using #{...} syntax
-      - path: formatter.go
-        description: formatTemplate, FormatWithPlaceholders — #{...} placeholder replacement with fallback defaults
-      - path: formatter.go
-        description: FormatListArchive, FormatListBackup — template-placeholder detection and routing
-      - path: pkg/formatter/ai_core_formatter.go
-        description: FormatWithPlaceholders — #{...} replacement in AI formatter path
-      - path: pkg/formatter/placeholder_replace.go
-        description: ReplacePlaceholders — simple #{...} string replacement
-      - path: pkg/formatter/template.go
-        description: Template processing with #{...} placeholder generation
-      - path: formatter_adapter_simple.go
-        description: formatListArchiveSimple — simplified list formatting with #{...} placeholders
-    functions:
-      - name: ValidateFormatString
-        file: config.go
-        description: Validates one format field against its expected placeholders; returns warnings
-      - name: getExpectedPlaceholders
-        file: config.go
-        description: Returns the set of allowed placeholders (printf + template) per field name
-      - name: extractPlaceholders
-        file: config.go
-        description: Regex extraction of %s/%d and #{...} placeholders from a format string
-      - name: validateAllFormatStrings
-        file: config.go
-        description: Iterates all Config format fields and collects validation warnings
-      - name: OutputFormatter.formatTemplate
-        file: formatter.go
-        description: Replaces #{...} from data map, fills missing known placeholders with defaults, handles mixed printf+template
-      - name: TemplateFormatter.FormatWithPlaceholders
-        file: formatter.go
-        description: Same #{...} replacement logic in the TemplateFormatter struct
-  traceability:
-    architecture:
-      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
-      - ARCH-CONFIG_SYSTEM
-      - ARCH-OUTPUT_FORMATTING
     requirements:
-      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
     tests:
-      - name: TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS
-        file: config_test.go
-        description: Validates correct and unexpected placeholder detection across format fields
-      - name: TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS
-        file: config_test.go
-        description: Verifies custom format strings load correctly from YAML configuration
-      - name: TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS
-        file: config_test.go
-        description: Ensures default #{...} format strings work when not specified in config
-      - name: TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS
-        file: config_test.go
-        description: Confirms validation warnings are printed to stderr during config load
-      - name: TestTemplateFormatter/FormatListArchive_MixedPlaceholders
-        file: formatter_test.go
-        description: Tests mixed printf + template placeholder format strings
-      - name: TestTemplateFormatter/ListOutputWithSizeHuman
-        file: formatter_test.go
-        description: Tests #{size_human} replacement with real file stats
-      - name: TestTemplateFormatter/FormatListArchiveWithExtraction_TemplatePlaceholders
-        file: formatter_test.go
-        description: Tests extraction-based formatting with template placeholders
-      - name: TestTemplateFormatter/CustomTemplateHandling
-        file: formatter_test.go
-        description: Tests #{...} placeholder replacement and missing-placeholder behavior
+    - name: TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      file: config_test.go
+      description: Validates correct and unexpected placeholder detection across format fields
+    - name: TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      file: config_test.go
+      description: Verifies custom format strings load correctly from YAML configuration
+    - name: TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      file: config_test.go
+      description: Ensures default
+    - name: TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      file: config_test.go
+      description: Confirms validation warnings are printed to stderr during config load
+    - name: TestTemplateFormatter/FormatListArchive_MixedPlaceholders
+      file: formatter_test.go
+      description: Tests mixed printf + template placeholder format strings
+    - name: TestTemplateFormatter/ListOutputWithSizeHuman
+      file: formatter_test.go
+      description: Tests
+    - name: TestTemplateFormatter/FormatListArchiveWithExtraction_TemplatePlaceholders
+      file: formatter_test.go
+      description: Tests extraction-based formatting with template placeholders
+    - name: TestTemplateFormatter/CustomTemplateHandling
+      file: formatter_test.go
+      description: Tests
     code_annotations:
-      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
-      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
   related_decisions:
     depends_on:
-      - IMPL-LIST_FORMAT_SAFETY
+    - IMPL-LIST_FORMAT_SAFETY
     supersedes: []
     see_also:
-      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
-      - ARCH-CONFIG_SYSTEM
-      - ARCH-OUTPUT_FORMATTING
-      - IMPL-DUAL_FORMATTING
-      - IMPL-CONFIG_STRUCT
+    - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-OUTPUT_FORMATTING
+    - IMPL-DUAL_FORMATTING
+    - IMPL-CONFIG_STRUCT
     composed_with: []
-  detail_file: implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]
-    # — Format string validation and #{} placeholder replacement for user-customizable output
-
-    # --- Validation pipeline (config.go) ---
-
-    procedure ValidateFormatString(fieldName, formatString) -> []string:  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — validate one field
-      expected = getExpectedPlaceholders(fieldName)
-      if expected is empty:
-        return nil                                       # no rules for this field
-      found = extractPlaceholders(formatString)
-      warnings = []
-      for ph in found:
-        if ph not in expected:
-          append warnings <- "Field 'fieldName': unexpected placeholder 'ph'. Expected one of: [expected]"
-      return warnings
-
-    procedure getExpectedPlaceholders(fieldName) -> []string:             # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — define allowed placeholders per field
-      # Printf-style fields: {"%s"} or {"%s", "%v"}
-      # Template-style list fields: {"#{path}", "#{size_human}", "#{size}", "#{creation_time}", "#{mtime}", ...}
-      return lookup from placeholderMap[fieldName]
-
-    procedure extractPlaceholders(formatString) -> []string:              # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — regex extraction of both placeholder styles
-      printfMatches = regex `%[sdvfbtxX]` findAll in formatString
-      templateMatches = regex `#\{[^}]+\}` findAll in formatString
-      return printfMatches + templateMatches
-
-    procedure validateAllFormatStrings(cfg *Config) -> []string:          # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] — iterate all config fields
-      warnings = []
-      for each (fieldName, fieldValue) in cfg format fields:
-        append warnings <- ValidateFormatString(fieldName, fieldValue)
-      return warnings
-
-    # --- Placeholder replacement (formatter.go) ---
-
-    procedure formatTemplate(templateStr, data map[string]string) -> string:  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] — core #{...} replacement
-      result = templateStr
-
-      # Pass 1: replace all #{key} from data map
-      for key, value in data:
-        result = replaceAll(result, "#{key}", value)
-
-      # Pass 2: fill missing known placeholders with safe defaults
-      knownDefaults = {"#{size_human}": "unknown", "#{size}": "0", "#{mtime}": data["creation_time"] or "unknown"}
-      for placeholder, default in knownDefaults:
-        if result contains placeholder:
-          result = replaceAll(result, placeholder, default)
-
-      # Pass 3: handle printf verbs (%s) if still present — for mixed format strings
-      if result contains "%s":
-        replace first %s with data["path"] or data["name"]           # [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — mixed format support
-        if result still contains "%s":
-          replace next %s with data["creation_time"]
-
-      # Pass 4: final safety — replace any remaining #{...} with data values or "unknown"
-      if result contains "#{":
-        for each known placeholder name:
-          replace with data value or safe default
-
-      # Pass 5: Go template execution — only when {{.}} patterns present and no #{...} remains
-      if result contains "{{" and "}}" and not "#{":                  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — prevent fmt misinterpretation
-        parse and execute as Go text/template with data
-        on error: return result as-is
-
-      return result
-
-    # --- Integration with config load ---
-
-    procedure LoadConfig():                                               # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] — validation integrated into load
-      cfg = load YAML and merge
-      warnings = validateAllFormatStrings(cfg)
-      for w in warnings:
-        print w to stderr                                                # non-fatal: user is warned but loading continues
-      return cfg
+  essence_pseudocode: "# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n# — Format string validation and #{} placeholder replacement for user-customizable output [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n\n# --- Validation pipeline (config.go) --- [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n\n# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — Block implements documented behavior for: procedure ValidateFormatString(fieldName, formatString) -> []string:  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_\nprocedure ValidateFormatString(fieldName, formatString) -> []string:  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — validate one field\n  expected = getExpectedPlaceholders(fieldName)\n\
+    \  if expected is empty:\n    return nil                                       # no rules for this field\n  found = extractPlaceholders(formatString)\n  warnings = []\n  for ph in found:\n    if ph not in expected:\n      append warnings <- \"Field 'fieldName': unexpected placeholder 'ph'. Expected one of: [expected]\"\n  return warnings\n\n# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — Block implements documented behavior for: procedure getExpectedPlaceholders(fieldName) -> []string:             # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZ\nprocedure getExpectedPlaceholders(fieldName) -> []string:             # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — define allowed placeholders per field\n  # Printf-style fields: {\"%s\"} or {\"%s\", \"%v\"} [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  # Template-style list fields: {\"#{path}\"\
+    , \"#{size_human}\", \"#{size}\", \"#{creation_time}\", \"#{mtime}\", ...} [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  return lookup from placeholderMap[fieldName]\n\n# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — Block implements documented behavior for: procedure extractPlaceholders(formatString) -> []string:              # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — regex extra\nprocedure extractPlaceholders(formatString) -> []string:              # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — regex extraction of both placeholder styles\n  printfMatches = regex `%[sdvfbtxX]` findAll in formatString\n  templateMatches = regex `#\\{[^}]+\\}` findAll in formatString\n  return printfMatches + templateMatches\n\n# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — Block implements documented behavior for: procedure validateAllFormatStrings(cfg\
+    \ *Config) -> []string:          # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_\nprocedure validateAllFormatStrings(cfg *Config) -> []string:          # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] — iterate all config fields\n  warnings = []\n  for each (fieldName, fieldValue) in cfg format fields:\n    append warnings <- ValidateFormatString(fieldName, fieldValue)\n  return warnings\n\n# --- Placeholder replacement (formatter.go) --- [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n\n# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — Block implements documented behavior for: procedure formatTemplate(templateStr, data map[string]string) -> string:  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUT\nprocedure formatTemplate(templateStr, data map[string]string) -> string:  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] — core #{...} replacement\n\
+    \  result = templateStr\n\n  # Pass 1: replace all #{key} from data map [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  for key, value in data:\n    result = replaceAll(result, \"#{key}\", value)\n\n  # Pass 2: fill missing known placeholders with safe defaults [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  knownDefaults = {\"#{size_human}\": \"unknown\", \"#{size}\": \"0\", \"#{mtime}\": data[\"creation_time\"] or \"unknown\"}\n  for placeholder, default in knownDefaults:\n    if result contains placeholder:\n      result = replaceAll(result, placeholder, default)\n\n  # Pass 3: handle printf verbs (%s) if still present — for mixed format strings [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  if result contains \"%s\":\n    replace first %s with data[\"path\"] or data[\"name\"]           # [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\
+    \ — mixed format support\n    if result still contains \"%s\":\n      replace next %s with data[\"creation_time\"]\n\n  # Pass 4: final safety — replace any remaining #{...} with data values or \"unknown\" [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  if result contains \"#{\":\n    for each known placeholder name:\n      replace with data value or safe default\n\n  # Pass 5: Go template execution — only when {{.}} patterns present and no #{...} remains [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n  if result contains \"{{\" and \"}}\" and not \"#{\":                  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — prevent fmt misinterpretation\n    parse and execute as Go text/template with data\n    on error: return result as-is\n\n  return result\n\n# --- Integration with config load --- [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]\n\
+    \n# [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — Block implements documented behavior for: procedure LoadConfig():                                               # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_\nprocedure LoadConfig():                                               # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CONFIG_SYSTEM] — validation integrated into load\n  cfg = load YAML and merge\n  warnings = validateAllFormatStrings(cfg)\n  for w in warnings:\n    print w to stderr                                                # non-fatal: user is warned but loading continues\n  return cfg"

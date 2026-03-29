@@ -26,7 +26,6 @@ REQ-IMMUTABLE_FEATURE_PRESERVATION:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-IMMUTABLE_FEATURE_PRESERVATION.yaml
   metadata:
     created:
       date: "2026-03-12"

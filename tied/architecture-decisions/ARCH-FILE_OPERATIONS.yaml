@@ -35,7 +35,6 @@ ARCH-FILE_OPERATIONS:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-FILE_OPERATIONS.yaml
   metadata:
     created:
       date: "2026-03-12"

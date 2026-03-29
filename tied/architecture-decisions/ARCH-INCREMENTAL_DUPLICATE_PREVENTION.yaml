@@ -48,7 +48,6 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   metadata:
     created:
       date: "2026-03-12"

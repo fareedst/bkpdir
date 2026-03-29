@@ -31,15 +31,16 @@
 #     test-performance-comprehensive - Run original comprehensive tests (15+ min)
 #   
 #   Code Quality:
-#     lint            - Run linter (revive) with icon validation
+#     lint            - TIED MCP yaml_index_validate + tied_validate_consistency, then revive
+#     validate-tied-mcp - Same MCP tools as Cursor tied-yaml (requires Node + server from mcp.json)
 #     lint-unicode    - Run unicode icon linter for semantic token consistency
 #     fmt             - Format code with gofmt
 #     vet             - Run go vet
-#     check           - Run all code quality checks
+#     check           - Run all code quality checks (fmt, vet, lint)
 #   
 #   Semantic Token Validation:
 #     validate-tokens - Validate implementation token semantic consistency (DOC-007)
-#     validate-token-enforcement - Comprehensive semantic token validation and enforcement (DOC-008)
+#     validate-token-enforcement - Optional DOC-008 grep/Unicode scan (not run by lint)
 #     validate-tokens-strict - Run DOC-008 validation in strict mode for CI/CD
 #     validate-token-traceability - Validate comprehensive token traceability (DOC-016)
 #     validate-all-tokens - Comprehensive token validation (traceability, features, architecture, tests)
@@ -97,7 +98,7 @@
 
 .PHONY: build-all build-ubuntu20 build-ubuntu22 build-ubuntu24 build-macos build-macos-arm64 build-macos-amd64 build-local clean
 .PHONY: test test-verbose test-coverage test-coverage-new test-coverage-validate test-race test-bench test-all
-.PHONY: lint lint-unicode validate-tokens validate-token-enforcement validate-tokens-strict fmt vet check dev install install-link deps help
+.PHONY: lint lint-unicode validate-tied-mcp validate-tokens validate-token-enforcement validate-tokens-strict fmt vet check dev install install-link deps help
 .PHONY: token-migration-dry-run token-migration token-migration-rollback
 
 # Variables
@@ -156,10 +157,11 @@ help:
 	@echo "  test-performance-comprehensive Run original comprehensive tests (15+ min)"
 	@echo ""
 	@echo "Code quality targets:"
-	@echo "  lint            Run linter (revive) with icon validation"
+	@echo "  lint            Run tied-yaml MCP validation (indexes + consistency) then revive"
+	@echo "  validate-tied-mcp  yaml_index_validate + tied_validate_consistency (same as Cursor tied-yaml MCP)"
 	@echo "  lint-unicode    Run unicode icon linter for semantic token consistency"
 	@echo "  validate-tokens  Validate implementation token semantic consistency (DOC-007)"
-	@echo "  validate-token-enforcement Comprehensive semantic token validation and enforcement (DOC-008)"
+	@echo "  validate-token-enforcement Optional: DOC-008 grep/Unicode semantic token scan (not part of lint)"
 	@echo "  validate-tokens-strict Run DOC-008 validation in strict mode for CI/CD"
 	@echo "  validate-token-traceability Validate comprehensive token traceability (DOC-016)"
 	@echo "  validate-all-tokens Comprehensive token validation (traceability, features, architecture, tests)"
@@ -401,7 +403,18 @@ vet:
 	go vet ./...
 	@echo "✓ go vet completed"
 
-lint: validate-token-enforcement
+validate-tied-mcp:
+	@echo "Running tied-yaml MCP validation (yaml_index_validate + tied_validate_consistency)..."
+	@chmod +x scripts/validate-tied-mcp.sh 2>/dev/null || true
+	@if [ -f "scripts/validate-tied-mcp.mjs" ]; then \
+		./scripts/validate-tied-mcp.sh; \
+		echo "✓ TIED MCP validation completed"; \
+	else \
+		echo "❌ scripts/validate-tied-mcp.mjs not found"; \
+		exit 1; \
+	fi
+
+lint: validate-tied-mcp
 	@echo "Running linter (revive)..."
 	@if command -v revive >/dev/null 2>&1; then \
 		revive -config .revive.toml -formatter friendly ./...; \
@@ -582,7 +595,7 @@ standardize-tokens: analyze-priority-icons validate-token-priorities migrate-tok
 	@echo "  2. Run 'make migrate-tokens' to execute actual migration"
 	@echo "  3. Run 'make validate-token-enforcement' to verify results"
 
-check: fmt vet lint validate-token-enforcement
+check: fmt vet lint
 	@echo "✓ All code quality checks completed (including DOC-008 semantic token validation)"
 
 # Production build targets

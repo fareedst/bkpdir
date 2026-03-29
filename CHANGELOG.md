@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-03-29
+
+### Changed (behavior)
+
+- **Default `exclude_patterns`**: Built-in default is now an **empty** list. `.git/`, `vendor/`, and other paths are no longer excluded automatically; add them under `exclude_patterns` in `.bkpdir.yml` (or use `bkpdir template`) when you want those directories skipped.
+
+### Fixed
+- **Directory exclusion patterns** (`[IMPL-EXCLUSION_PATTERNS]`): single-segment trailing-slash patterns (e.g. `node_modules/`) match that directory name at any depth.
+- **Config merge** (`[IMPL-CFG_PRECEDENCE_FIX]` / CFG-005): the first loaded config file’s unprefixed `exclude_patterns` replaces built-in defaults instead of merging into them.
+- **Config load**: stderr warnings and a YAML glob/alias parsing hint when a config file fails to load.
+
+### Changed
+- **Makefile**: added `validate-tied-mcp`; `lint` runs MCP validation before `revive`; `check` is fmt + vet + lint only; `validate-token-enforcement` (DOC-008) remains optional.
+- **TIED**: removed invalid nested `detail_file` from REQ/ARCH detail YAML; widespread IMPL decision YAML normalization and pseudocode alignment; `tied/semantic-tokens.yaml` and agent implementation checklist docs updated.
+- **`project-tokens.yaml`** and **`semantic-token-validation-report.md`**: registry and report refreshed.
+
+### Removed
+- Tracked prebuilt platform binaries under `bin/` (macOS amd64/arm64, Ubuntu 20.04/22.04/24.04).
+
 ## [2.0.0] - 2026-03-12
 
 ### Changed

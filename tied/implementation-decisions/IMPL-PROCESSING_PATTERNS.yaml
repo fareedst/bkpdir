@@ -2,13 +2,14 @@ IMPL-PROCESSING_PATTERNS:
   name: Processing Patterns Implementation
   status: Active
   cross_references:
-    - ARCH-PROCESSING_PATTERNS
-    - REQ-PERFORMANCE
+  - ARCH-PROCESSING_PATTERNS
+  - REQ-PERFORMANCE
   rationale:
-    why: |-
-      Enables reusable processing patterns
+    why: 'Enables reusable processing patterns
+
       Supports high-performance concurrent operations
-      Standardizes naming conventions
+
+      Standardizes naming conventions'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -16,238 +17,102 @@ IMPL-PROCESSING_PATTERNS:
     details: []
   code_locations:
     files:
-      - pkg/processing/pipeline.go
-      - pkg/processing/naming.go
-      - pkg/processing/concurrent.go
-      - pkg/processing/processor.go
-      - pkg/processing/doc.go
-      - pkg/processing/processor_test.go
+    - pkg/processing/pipeline.go
+    - pkg/processing/naming.go
+    - pkg/processing/concurrent.go
+    - pkg/processing/processor.go
+    - pkg/processing/doc.go
+    - pkg/processing/processor_test.go
     functions:
-      - NewPipeline
-      - Pipeline.AddStage
-      - Pipeline.Execute
-      - Pipeline.GetProgress
-      - Pipeline.GetStages
-      - Pipeline.SetStopOnError
-      - Pipeline.SetProgressCallback
-      - Pipeline.initializeExecution
-      - Pipeline.executeStageWithRetries
-      - Pipeline.updateCurrentStage
-      - Pipeline.updateProgress
-      - Pipeline.handleSkippedStage
-      - Pipeline.handleCancellation
-      - Pipeline.finalizeExecution
-      - NewBaseStage
-      - BaseStage.GetName
-      - BaseStage.GetDescription
-      - BaseStage.CanSkip
-      - BaseStage.GetEstimatedDuration
-      - NewConcurrentProcessor
-      - ConcurrentProcessor.Process
-      - ConcurrentProcessor.SetWorkerCount
-      - ConcurrentProcessor.SetBatchSize
-      - ConcurrentProcessor.GetStatus
-      - Worker.run
-      - Worker.processTask
-      - ProcessItems
-      - ProcessItemsWithOptions
-      - NewNamingProvider
-      - NamingProvider.GenerateName
-      - NamingProvider.ParseName
-      - NamingProvider.ValidateName
-      - NamingProvider.GetSupportedFormats
-      - NamingProvider.GenerateArchiveName
-      - NamingProvider.GenerateBackupName
-      - NamingProvider.FormatTimestamp
-      - NamingProvider.CreateTimestamp
-      - NewProcessingError
-      - DefaultProcessingOptions
+    - NewPipeline
+    - Pipeline.AddStage
+    - Pipeline.Execute
+    - Pipeline.GetProgress
+    - Pipeline.GetStages
+    - Pipeline.SetStopOnError
+    - Pipeline.SetProgressCallback
+    - Pipeline.initializeExecution
+    - Pipeline.executeStageWithRetries
+    - Pipeline.updateCurrentStage
+    - Pipeline.updateProgress
+    - Pipeline.handleSkippedStage
+    - Pipeline.handleCancellation
+    - Pipeline.finalizeExecution
+    - NewBaseStage
+    - BaseStage.GetName
+    - BaseStage.GetDescription
+    - BaseStage.CanSkip
+    - BaseStage.GetEstimatedDuration
+    - NewConcurrentProcessor
+    - ConcurrentProcessor.Process
+    - ConcurrentProcessor.SetWorkerCount
+    - ConcurrentProcessor.SetBatchSize
+    - ConcurrentProcessor.GetStatus
+    - Worker.run
+    - Worker.processTask
+    - ProcessItems
+    - ProcessItemsWithOptions
+    - NewNamingProvider
+    - NamingProvider.GenerateName
+    - NamingProvider.ParseName
+    - NamingProvider.ValidateName
+    - NamingProvider.GetSupportedFormats
+    - NamingProvider.GenerateArchiveName
+    - NamingProvider.GenerateBackupName
+    - NamingProvider.FormatTimestamp
+    - NamingProvider.CreateTimestamp
+    - NewProcessingError
+    - DefaultProcessingOptions
   traceability:
     architecture:
-      - ARCH-PROCESSING_PATTERNS
+    - ARCH-PROCESSING_PATTERNS
     requirements:
-      - REQ-PERFORMANCE
+    - REQ-PERFORMANCE
     tests:
-      - TestNamingProvider
-      - TestPipeline
-      - TestConcurrentProcessor
-      - TestContextCancellation
-      - TestUtilityFunctions
-      - BenchmarkNamingProvider
-      - BenchmarkConcurrentProcessing
+    - TestNamingProvider
+    - TestPipeline
+    - TestConcurrentProcessor
+    - TestContextCancellation
+    - TestUtilityFunctions
+    - BenchmarkNamingProvider
+    - BenchmarkConcurrentProcessing
     code_annotations:
-      - IMPL-PROCESSING_PATTERNS
-      - ARCH-PROCESSING_PATTERNS
-      - REQ-PERFORMANCE
+    - IMPL-PROCESSING_PATTERNS
+    - ARCH-PROCESSING_PATTERNS
+    - REQ-PERFORMANCE
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-PROCESSING_PATTERNS
-      - REQ-PERFORMANCE
+    - ARCH-PROCESSING_PATTERNS
+    - REQ-PERFORMANCE
     composed_with: []
-  detail_file: implementation-decisions/IMPL-PROCESSING_PATTERNS.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`pkg/processing/` package, pipeline stages, worker pools'
-  concurrentprocessor: |-
-    ```go
-    type ConcurrentProcessor struct {
-        workers    int
-        queue      chan WorkItem
-        results    chan Result
-        ctx        context.Context
-        cancel     context.CancelFunc
-        wg         sync.WaitGroup
-        processed  int64
-        failed     int64
-    }
-
-    func NewConcurrentProcessor(workers int) *ConcurrentProcessor
-    func (cp *ConcurrentProcessor) Submit(item WorkItem) error
-    func (cp *ConcurrentProcessor) Process(ctx context.Context) error
-    func (cp *ConcurrentProcessor) GetStats() Stats
-    ```
+  concurrentprocessor: "```go\ntype ConcurrentProcessor struct {\n    workers    int\n    queue      chan WorkItem\n    results    chan Result\n    ctx        context.Context\n    cancel     context.CancelFunc\n    wg         sync.WaitGroup\n    processed  int64\n    failed     int64\n}\n\nfunc NewConcurrentProcessor(workers int) *ConcurrentProcessor\nfunc (cp *ConcurrentProcessor) Submit(item WorkItem) error\nfunc (cp *ConcurrentProcessor) Process(ctx context.Context) error\nfunc (cp *ConcurrentProcessor) GetStats() Stats\n```"
   naming_patterns:
-    - 'ISO 8601 timestamp: `2006-01-02T150405`'
-    - 'Git integration: `{branch}-{hash}-{dirty}`'
-    - 'Archive pattern: `{prefix}-{timestamp}-{note}.zip`'
-    - 'Backup pattern: `{name}-{timestamp}-{note}.bak`'
-  namingprovider: |-
-    ```go
-    type NamingProviderInterface interface {
-        GenerateName(pattern string, metadata map[string]string) (string, error)
-        ParseName(name string, pattern string) (map[string]string, error)
-    }
-    ```
-  pipeline_interface: |-
-    ```go
-    type PipelineInterface interface {
-        AddStage(stage Stage) PipelineInterface
-        Execute(ctx context.Context, input interface{}) (interface{}, error)
-        GetProgress() Progress
-    }
-    ```
-  stage_interface: |-
-    ```go
-    type Stage interface {
-        Process(ctx context.Context, input interface{}) (interface{}, error)
-        Name() string
-    }
-    ```
-  essence_pseudocode: |-
-    # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Pipeline-based processing with concurrent worker pools and naming conventions
-
-    procedure pipeline_execute(ctx, input):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Executes pipeline stages sequentially with context cancellation, retries, and progress tracking
-      start = time.Now()
-      initialize_execution(start)
-      pipeline_result = new PipelineResult(stage_results, skipped_stages)
-      for each stage in stages:
-        if ctx.Done(): return handle_cancellation(result, ctx.Err())
-        update_current_stage(stage.name, index)
-        if stage.CanSkip(input):
-          handle_skipped_stage(stage, result)
-          continue
-        stage_result = execute_stage_with_retries(ctx, stage, input, output)
-        pipeline_result.stage_results[stage.name] = stage_result
-        if not stage_result.success and stop_on_error: break
-        atomic_increment(completed_stages)
-        update_progress()
-      finalize_execution(pipeline_result, elapsed)
-      return pipeline_result
-      end
-
-    procedure execute_stage_with_retries(ctx, stage, input, output):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Executes a stage with configurable retry count and delay between attempts
-      stage_result = new StageResult(name, started_at)
-      for attempt = 0 to max_retries:
-        if ctx.Done(): return cancelled result
-        err = stage.Execute(ctx, input, output)
-        if err == nil: success; break
-        last_err = err
-        if attempt < max_retries: wait(retry_delay) or cancel
-      if last_err != nil: stage_result.error = last_err
-      return stage_result
-      end
-
-    procedure concurrent_process(ctx, items):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Worker pool pattern: initializes workers, submits tasks via channels, collects results
-      start = time.Now()
-      initialize_processing(ctx, len(items), start)
-      start_workers()
-      defer stop_workers()
-      result_collector = start_result_collector()
-      go submit_tasks(items)
-      wait_for_submission_done()
-      close(task_queue)
-      results = wait_for_completion(result_collector)
-      return create_final_result(results, elapsed)
-      end
-
-    procedure worker_run():
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Worker main loop: reads tasks from channel, processes each, sends results
-      loop:
-        select:
-          case ctx.Done: return
-          case task from task_queue:
-            if queue closed: return
-            result = process_task(task)
-            send result to result_queue
-      end
-
-    procedure process_task(task):
-      # [IMPL-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Processes single item: checks cancellation, calls processFunc, records duration and result
-      check context cancellation
-      output, err = processor.processFunc(task.context, task.item)
-      result = TaskResult(item, worker_id, duration, success/error)
-      return result
-      end
-
-    procedure naming_generate_name(template):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] Generates name from template: prefix + timestamp + git info + incremental marker + note
-      if template is nil: error
-      timestamp = template.Timestamp.Format(format)
-      parts = []
-      if template.Prefix != "": parts.append(prefix)
-      parts.append(timestamp)
-      if has_git_info:
-        git_info = branch + "-" + hash
-        if show_dirty and not clean: git_info += "-dirty"
-        parts.append(git_info)
-      if is_incremental: parts.append("inc", base_name)
-      if has_note: parts.append(note)
-      return join(parts, "-")
-      end
-
-    procedure naming_parse_name(name, pattern):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] Parses filename against regex pattern extracting components (prefix, timestamp, git info, note)
-      regex = patterns[pattern]
-      if not exists: error("unsupported pattern")
-      matches = regex.FindStringSubmatch(name)
-      if no matches: error("name does not match pattern")
-      extract named groups into NameComponents
-      return components
-      end
-
-    procedure new_pipeline(name):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] Creates pipeline with defaults: stop_on_error=true, max_retries=3, retry_delay=1s
-      return Pipeline(name, stages=[], stop_on_error=true, max_stage_retries=3, retry_delay=1s)
-      end
-
-    procedure new_concurrent_processor(processFunc):
-      # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Creates processor with NumCPU workers, batch_size=100, buffered channels
-      worker_count = runtime.NumCPU()
-      return ConcurrentProcessor(worker_count, batch_size=100, processFunc,
-        task_queue=chan(worker_count*2), result_queue=chan(worker_count*2))
-      end
+  - 'ISO 8601 timestamp: `2006-01-02T150405`'
+  - 'Git integration: `{branch}-{hash}-{dirty}`'
+  - 'Archive pattern: `{prefix}-{timestamp}-{note}.zip`'
+  - 'Backup pattern: `{name}-{timestamp}-{note}.bak`'
+  namingprovider: "```go\ntype NamingProviderInterface interface {\n    GenerateName(pattern string, metadata map[string]string) (string, error)\n    ParseName(name string, pattern string) (map[string]string, error)\n}\n```"
+  pipeline_interface: "```go\ntype PipelineInterface interface {\n    AddStage(stage Stage) PipelineInterface\n    Execute(ctx context.Context, input interface{}) (interface{}, error)\n    GetProgress() Progress\n}\n```"
+  stage_interface: "```go\ntype Stage interface {\n    Process(ctx context.Context, input interface{}) (interface{}, error)\n    Name() string\n}\n```"
+  essence_pseudocode: "# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Pipeline-based processing with concurrent worker pools and naming conventions\n\nprocedure pipeline_execute(ctx, input):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Executes pipeline stages sequentially with context cancellation, retries, and progress tracking\n  start = time.Now()\n  initialize_execution(start)\n  pipeline_result = new PipelineResult(stage_results, skipped_stages)\n  for each stage in stages:\n    if ctx.Done(): return handle_cancellation(result, ctx.Err())\n    update_current_stage(stage.name, index)\n    if stage.CanSkip(input):\n      handle_skipped_stage(stage, result)\n      continue\n    stage_result = execute_stage_with_retries(ctx, stage, input, output)\n    pipeline_result.stage_results[stage.name] = stage_result\n    if not stage_result.success and stop_on_error: break\n    atomic_increment(completed_stages)\n    update_progress()\n\
+    \  finalize_execution(pipeline_result, elapsed)\n  return pipeline_result\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure execute_stage_with_retries(ctx, stage, input, output):\nprocedure execute_stage_with_retries(ctx, stage, input, output):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Executes a stage with configurable retry count and delay between attempts\n  stage_result = new StageResult(name, started_at)\n  for attempt = 0 to max_retries:\n    if ctx.Done(): return cancelled result\n    err = stage.Execute(ctx, input, output)\n    if err == nil: success; break\n    last_err = err\n    if attempt < max_retries: wait(retry_delay) or cancel\n  if last_err != nil: stage_result.error = last_err\n  return stage_result\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure concurrent_process(ctx,\
+    \ items):\nprocedure concurrent_process(ctx, items):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Worker pool pattern: initializes workers, submits tasks via channels, collects results\n  start = time.Now()\n  initialize_processing(ctx, len(items), start)\n  start_workers()\n  defer stop_workers()\n  result_collector = start_result_collector()\n  go submit_tasks(items)\n  wait_for_submission_done()\n  close(task_queue)\n  results = wait_for_completion(result_collector)\n  return create_final_result(results, elapsed)\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure worker_run():\nprocedure worker_run():\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Worker main loop: reads tasks from channel, processes each, sends results\n  loop:\n    select:\n      case ctx.Done: return\n      case task from task_queue:\n        if queue closed: return\n\
+    \        result = process_task(task)\n        send result to result_queue\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure process_task(task):\nprocedure process_task(task):\n  # [IMPL-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Processes single item: checks cancellation, calls processFunc, records duration and result [ARCH-PROCESSING_PATTERNS]\n  check context cancellation\n  output, err = processor.processFunc(task.context, task.item)\n  result = TaskResult(item, worker_id, duration, success/error)\n  return result\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure naming_generate_name(template):\nprocedure naming_generate_name(template):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] Generates name from template: prefix + timestamp + git info + incremental marker + note [REQ-PERFORMANCE]\n  if template\
+    \ is nil: error\n  timestamp = template.Timestamp.Format(format)\n  parts = []\n  if template.Prefix != \"\": parts.append(prefix)\n  parts.append(timestamp)\n  if has_git_info:\n    git_info = branch + \"-\" + hash\n    if show_dirty and not clean: git_info += \"-dirty\"\n    parts.append(git_info)\n  if is_incremental: parts.append(\"inc\", base_name)\n  if has_note: parts.append(note)\n  return join(parts, \"-\")\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure naming_parse_name(name, pattern):\nprocedure naming_parse_name(name, pattern):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] Parses filename against regex pattern extracting components (prefix, timestamp, git info, note) [REQ-PERFORMANCE]\n  regex = patterns[pattern]\n  if not exists: error(\"unsupported pattern\")\n  matches = regex.FindStringSubmatch(name)\n  if no matches: error(\"name does not match pattern\")\n  extract\
+    \ named groups into NameComponents\n  return components\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure new_pipeline(name):\nprocedure new_pipeline(name):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] Creates pipeline with defaults: stop_on_error=true, max_retries=3, retry_delay=1s [REQ-PERFORMANCE]\n  return Pipeline(name, stages=[], stop_on_error=true, max_stage_retries=3, retry_delay=1s)\n  end\n\n# [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure new_concurrent_processor(processFunc):\nprocedure new_concurrent_processor(processFunc):\n  # [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Creates processor with NumCPU workers, batch_size=100, buffered channels\n  worker_count = runtime.NumCPU()\n  return ConcurrentProcessor(worker_count, batch_size=100, processFunc,\n    task_queue=chan(worker_count*2),\
+    \ result_queue=chan(worker_count*2))\n  end"

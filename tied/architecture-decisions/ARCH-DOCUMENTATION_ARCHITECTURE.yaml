@@ -49,7 +49,6 @@ ARCH-DOCUMENTATION_ARCHITECTURE:
       see_also:
         - ARCH-AI_DOCUMENTATION
     description: Architecture decision for documentation system including semantic cross-referencing and traceability
-    detail_file: architecture-decisions/ARCH-DOCUMENTATION_ARCHITECTURE.yaml
     metadata:
       created:
         date: "2026-03-12"

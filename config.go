@@ -50,7 +50,6 @@ import (
 // TEST-REF: TestDefaultConfig
 // DECISION-REF: DEC-002
 
-
 // [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // Config holds all configuration settings for the BkpDir application.
 // It includes settings for archive creation, file backup, status codes,
@@ -74,11 +73,9 @@ type Config struct {
 	// Git configuration for repository detection and information extraction
 	Git *GitConfig `yaml:"git,omitempty"`
 
-
 	// File backup settings
 	BackupDirPath             string `yaml:"backup_dir_path"`
 	UseCurrentDirNameForFiles bool   `yaml:"use_current_dir_name_for_files"`
-
 
 	// Status codes for directory operations
 	StatusCreatedArchive                        int `yaml:"status_created_archive"`
@@ -97,7 +94,6 @@ type Config struct {
 	StatusFileNotFound                    int `yaml:"status_file_not_found"`
 	StatusInvalidFileType                 int `yaml:"status_invalid_file_type"`
 
-
 	// Printf-style format strings for directory operations
 	FormatCreatedArchive   string `yaml:"format_created_archive"`
 	FormatIdenticalArchive string `yaml:"format_identical_archive"`
@@ -112,7 +108,6 @@ type Config struct {
 	FormatListBackup      string `yaml:"format_list_backup"`
 	FormatDryRunBackup    string `yaml:"format_dry_run_backup"`
 
-
 	// Template-based format strings for directory operations
 	TemplateCreatedArchive   string `yaml:"template_created_archive"`
 	TemplateIdenticalArchive string `yaml:"template_identical_archive"`
@@ -126,7 +121,6 @@ type Config struct {
 	TemplateIdenticalBackup string `yaml:"template_identical_backup"`
 	TemplateListBackup      string `yaml:"template_list_backup"`
 	TemplateDryRunBackup    string `yaml:"template_dry_run_backup"`
-
 
 	// Regex patterns
 	PatternArchiveFilename string `yaml:"pattern_archive_filename"`
@@ -176,7 +170,6 @@ type Config struct {
 	FormatFailedCreateDir     string `yaml:"format_failed_create_dir"`
 	FormatFailedAccessDir     string `yaml:"format_failed_access_dir"`
 	FormatFailedAccessFile    string `yaml:"format_failed_access_file"`
-
 
 	// Template-based extended format strings
 	TemplateNoArchivesFound      string `yaml:"template_no_archives_found"`
@@ -255,7 +248,7 @@ func DefaultConfig() *Config {
 		// Basic settings
 		ArchiveDirPath:     "../.bkpdir",
 		UseCurrentDirName:  true,
-		ExcludePatterns:    []string{".git/", "vendor/"},
+		ExcludePatterns:    nil,
 		IncludeGitInfo:     false,
 		ShowGitDirtyStatus: true,
 		SkipBrokenSymlinks: false,
@@ -498,7 +491,7 @@ func LoadConfig(root string) (*Config, error) {
 	} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 	fileProcessed := false // Track if we've processed any file yet
 	for i, configPath := range searchPaths {
-	
+
 		expandedPath := expandPath(configPath)
 		if debug {
 			fmt.Printf("DEBUG: configPath = %s, expandedPath = %s\n", configPath, expandedPath)
@@ -531,6 +524,11 @@ func LoadConfig(root string) (*Config, error) {
 				if debug {
 					fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Failed to load file[%d] %s: %v\n", i, expandedPath, err)
 				} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
+				fmt.Fprintf(os.Stderr, "Warning: could not load config file %s: %v\n", expandedPath, err)
+				low := strings.ToLower(err.Error())
+				if strings.Contains(low, "alias") || strings.Contains(low, "anchor") || strings.Contains(low, "did not find expected") {
+					fmt.Fprintf(os.Stderr, "Hint: YAML treats '*' and some characters as special; quote glob lines, e.g. \"*.tsbuildinfo\"\n")
+				}
 				continue // Skip files with errors
 			}
 			tempCfg := loadResult.config
@@ -551,14 +549,17 @@ func LoadConfig(root string) (*Config, error) {
 				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - Current cfg exclude_patterns before merge: %v\n", cfg.ExcludePatterns)
 			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
-		// [IMPL-CFG_PRECEDENCE_FIX] First file merges with defaults (inheritContext=true),
-		// subsequent files respect earlier file precedence (inheritContext=false)
-		inheritContext := !fileProcessed
+			// [IMPL-CFG_PRECEDENCE_FIX] First file merges with defaults (inheritContext=true),
+			// subsequent files respect earlier file precedence (inheritContext=false)
+			inheritContext := !fileProcessed
 			if debug {
 				fmt.Printf("DIAGNOSTIC: LoadConfig fallback - File[%d] fileProcessed=%v, inheritContext=%v\n", i, fileProcessed, inheritContext)
 			} // SEMANTIC-TOKEN: DIAGNOSTIC-OUTPUT
 
-			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields)
+			// [IMPL-CFG_PRECEDENCE_FIX] [REQ-CONFIGURATION] First config file in discovery order replaces
+			// built-in default exclude_patterns when the key has no merge prefix; later files still merge (CFG-001).
+			excludeUnprefixedReplacesBuiltinDefaults := !fileProcessed && inheritContext
+			mergedCfg, err := applyMergeStrategies(cfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields, excludeUnprefixedReplacesBuiltinDefaults)
 			if err != nil {
 				if debug {
 					fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err)
@@ -1690,7 +1691,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 				if debug {
 					fmt.Printf("DEBUG: Processing sequential file: %s, inheritContext=%v, explicitlySetFields before: %v\n", expandedPath, inheritContext, explicitlySetFields)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
-				mergedCfg, err2 := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields)
+				mergedCfg, err2 := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields, false)
 				if err2 != nil {
 					if debug {
 						fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", expandedPath, err2)
@@ -1755,7 +1756,7 @@ func LoadConfigWithInheritance(root string) (*Config, error) {
 					fmt.Printf("DEBUG: Processing inheritance chain file: %s, inheritContext=%v, isInheritanceChain=%v, isFirstFile=%v, explicitlySetFields: %v\n", filePath, inheritContext, isInheritanceChain, isFirstFile, explicitlySetFields)
 				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
 
-				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields)
+				mergedCfg, err := applyMergeStrategies(finalCfg, tempCfg, inheritContext, loadResult.rawMap, initialDefaultCfg, explicitlySetFields, false)
 				if err != nil {
 					if debug {
 						fmt.Printf("DEBUG: Failed to merge config from %s: %v\n", filePath, err)
@@ -1839,7 +1840,7 @@ func loadConfigRecursive(configPath string, pathResolver pathResolver, chainBuil
 		// Apply merge strategies and merge into main config
 		// Within inheritance chain, array fields default to merge
 		// For inheritance chains, initialDefaultCfg is not needed (inheritContext=true), but pass nil for consistency
-		mergedCfg, err := applyMergeStrategies(cfg, tempCfg, true, loadResult.rawMap, nil, nil)
+		mergedCfg, err := applyMergeStrategies(cfg, tempCfg, true, loadResult.rawMap, nil, nil, false)
 		if err != nil {
 			return nil, fmt.Errorf("failed to merge config from %s: %w", filePath, err)
 		}
@@ -1897,6 +1898,12 @@ func loadSingleConfigFile(configPath string) (*configFileLoadResult, error) {
 		return nil, fmt.Errorf("failed to unmarshal processed config: %w", err)
 	}
 
+	// [IMPL-CFG_PRECEDENCE_FIX] [REQ-CONFIGURATION] Omitted keys must not inherit DefaultConfig() into src:
+	// otherwise later files "merge" built-in exclude_patterns even when the YAML did not set the field.
+	if _, ok := cleanMap["exclude_patterns"]; !ok {
+		cfg.ExcludePatterns = nil
+	}
+
 	return &configFileLoadResult{config: cfg, rawMap: rawMap}, nil
 }
 
@@ -1906,7 +1913,9 @@ func loadSingleConfigFile(configPath string) (*configFileLoadResult, error) {
 // rawSrcMap is the original map with merge strategy prefixes preserved (can be nil if not available)
 // initialDefaultCfg is the initial default config before any files were processed (used to detect if dst was modified)
 // explicitlySetFields tracks which fields were explicitly set by earlier files (used for precedence checking)
-func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, explicitlySetFields map[string]bool) (*Config, error) {
+// excludeUnprefixedReplacesBuiltinDefaults: when true (LoadConfig first file only), unprefixed exclude_patterns
+// replaces built-in defaults instead of merging with them; inheritance and other callers pass false.
+func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[string]interface{}, initialDefaultCfg *Config, explicitlySetFields map[string]bool, excludeUnprefixedReplacesBuiltinDefaults bool) (*Config, error) {
 	processor := newMergeStrategyProcessor()
 
 	// Use rawSrcMap if available (preserves merge strategy prefixes), otherwise convert Config to map
@@ -1985,26 +1994,30 @@ func applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap map[s
 			// CFG-001: For sequential files (inheritContext=false), earlier files take precedence
 			// If strategy is already "replace", "merge", "prepend", or "default", keep it
 			if operation.strategy == "override" && !hasExplicitPrefixForField {
-				// Default override (no prefix) → change to merge per CFG-005 requirement
-				// CFG-005: Array fields default to merge in ALL contexts (inheritance chains AND sequential file processing)
-				// For MergeBehaviorAccumulate fields, always merge (accumulate) unless explicit ! prefix is used
-				// The only exception is when explicit ! prefix is used, which is handled by hasExplicitPrefixForField check above
-				operation.strategy = "merge"
-				if debug {
-					context := "default merge behavior (CFG-005)"
-					if inheritContext {
-						if initialDefaultCfg == nil {
-							context = "inheritance chain"
-						} else if explicitlySetFields == nil {
-							context = "single file (merge with defaults)"
+				// Default override (no prefix) → merge per CFG-005 except exclude_patterns on LoadConfig first file
+				if key == "exclude_patterns" && excludeUnprefixedReplacesBuiltinDefaults {
+					operation.strategy = "replace"
+					if debug {
+						fmt.Printf("DEBUG: applyMergeStrategies - exclude_patterns uses replace (project config overrides built-in defaults)\n")
+					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				} else {
+					operation.strategy = "merge"
+					if debug {
+						context := "default merge behavior (CFG-005)"
+						if inheritContext {
+							if initialDefaultCfg == nil {
+								context = "inheritance chain"
+							} else if explicitlySetFields == nil {
+								context = "single file (merge with defaults)"
+							} else {
+								context = "first file merging with defaults"
+							}
 						} else {
-							context = "first file merging with defaults"
+							context = "subsequent file (accumulate behavior)"
 						}
-					} else {
-						context = "subsequent file (accumulate behavior)"
-					}
-					fmt.Printf("DEBUG: applyMergeStrategies - %s changed to merge strategy (CFG-005: %s)\n", key, context)
-				} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+						fmt.Printf("DEBUG: applyMergeStrategies - %s changed to merge strategy (CFG-005: %s)\n", key, context)
+					} // SEMANTIC-TOKEN: DEBUG-OUTPUT
+				}
 			}
 			// For "replace" (!), "merge" (+), "prepend" (^), "default" (=), keep as-is
 		} else {
@@ -3964,7 +3977,7 @@ func trackInheritanceChain(fieldPath string, cfg *Config, root string) ([]string
 		// Apply merge strategies and merge into current config
 		// Within inheritance chain, array fields default to merge
 		// For inheritance chains, initialDefaultCfg is not needed (inheritContext=true), but pass nil for consistency
-		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg, true, loadResult.rawMap, nil, nil)
+		mergedCfg, err := applyMergeStrategies(currentCfg, tempCfg, true, loadResult.rawMap, nil, nil, false)
 		if err != nil {
 			continue // Skip problematic merges
 		}

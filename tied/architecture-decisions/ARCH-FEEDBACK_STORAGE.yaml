@@ -47,7 +47,6 @@ ARCH-FEEDBACK_STORAGE:
     informs:
       - IMPL-MCP_FEEDBACK_TOOLS
     see_also: []
-  detail_file: architecture-decisions/ARCH-FEEDBACK_STORAGE.yaml
   metadata:
     created:
       date: 2026-03-03

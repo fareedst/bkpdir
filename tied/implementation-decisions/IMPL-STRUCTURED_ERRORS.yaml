@@ -2,14 +2,16 @@ IMPL-STRUCTURED_ERRORS:
   name: Structured Error Handling
   status: Active
   cross_references:
-    - ARCH-ERROR_HANDLING
-    - REQ-ERROR_HANDLING
+  - ARCH-ERROR_HANDLING
+  - REQ-ERROR_HANDLING
   rationale:
-    why: |-
-      Consistent error handling across operations
+    why: 'Consistent error handling across operations
+
       Machine-readable status codes for scripting
+
       Enhanced debugging with operation context
-      Supports template-based error formatting
+
+      Supports template-based error formatting'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -17,269 +19,138 @@ IMPL-STRUCTURED_ERRORS:
     details: []
   code_locations:
     files:
-      - errors.go
-      - pkg/errors/interfaces.go
-      - pkg/errors/classification.go
-      - pkg/errors/handlers.go
+    - errors.go
+    - pkg/errors/interfaces.go
+    - pkg/errors/classification.go
+    - pkg/errors/handlers.go
     functions:
-      - NewArchiveError
-      - NewArchiveErrorWithCause
-      - NewArchiveErrorWithContext
-      - NewBackupError
-      - NewBackupErrorWithCause
-      - NewBackupErrorWithContext
-      - IsDiskFullError
-      - IsPermissionError
-      - IsDirectoryNotFoundError
-      - HandleError
-      - HandleArchiveError
-      - HandleBackupError
-      - HandleArchiveErrorWithInterface
-      - HandleBackupErrorWithInterface
-      - NewResourceManager
-      - ResourceManager.AddResource
-      - ResourceManager.Cleanup
-      - ResourceManager.CleanupWithPanicRecovery
-      - NewContextualOperation
-      - ContextualOperation.IsCancelled
-      - ContextualOperation.CheckCancellation
-      - AtomicWriteFile
-      - AtomicWriteFileWithContext
-      - SafeMkdirAll
-      - SafeMkdirAllWithContext
-      - ValidateDirectoryPath
-      - ValidateFilePath
-      - WithResourceManager
-      - CheckContextAndCleanup
-      - pkg/errors.NewApplicationError
-      - pkg/errors.NewApplicationErrorWithCause
-      - pkg/errors.NewApplicationErrorWithContext
-      - pkg/errors.IsDiskFullError
-      - pkg/errors.IsPermissionError
-      - pkg/errors.IsDirectoryNotFoundError
-      - pkg/errors.IsFileNotFoundError
-      - pkg/errors.IsNetworkError
-      - pkg/errors.DefaultErrorClassifier.ClassifyError
-      - pkg/errors.DefaultErrorClassifier.IsRecoverable
-      - pkg/errors.DefaultErrorClassifier.GetSeverity
-      - pkg/errors.HandleError
-      - pkg/errors.HandleApplicationError
-      - pkg/errors.HandleErrorWithContext
-      - pkg/errors.HandleErrorWithRecovery
-      - pkg/errors.ValidateDirectoryPath
-      - pkg/errors.ValidateFilePath
+    - NewArchiveError
+    - NewArchiveErrorWithCause
+    - NewArchiveErrorWithContext
+    - NewBackupError
+    - NewBackupErrorWithCause
+    - NewBackupErrorWithContext
+    - IsDiskFullError
+    - IsPermissionError
+    - IsDirectoryNotFoundError
+    - HandleError
+    - HandleArchiveError
+    - HandleBackupError
+    - HandleArchiveErrorWithInterface
+    - HandleBackupErrorWithInterface
+    - NewResourceManager
+    - ResourceManager.AddResource
+    - ResourceManager.Cleanup
+    - ResourceManager.CleanupWithPanicRecovery
+    - NewContextualOperation
+    - ContextualOperation.IsCancelled
+    - ContextualOperation.CheckCancellation
+    - AtomicWriteFile
+    - AtomicWriteFileWithContext
+    - SafeMkdirAll
+    - SafeMkdirAllWithContext
+    - ValidateDirectoryPath
+    - ValidateFilePath
+    - WithResourceManager
+    - CheckContextAndCleanup
+    - pkg/errors.NewApplicationError
+    - pkg/errors.NewApplicationErrorWithCause
+    - pkg/errors.NewApplicationErrorWithContext
+    - pkg/errors.IsDiskFullError
+    - pkg/errors.IsPermissionError
+    - pkg/errors.IsDirectoryNotFoundError
+    - pkg/errors.IsFileNotFoundError
+    - pkg/errors.IsNetworkError
+    - pkg/errors.DefaultErrorClassifier.ClassifyError
+    - pkg/errors.DefaultErrorClassifier.IsRecoverable
+    - pkg/errors.DefaultErrorClassifier.GetSeverity
+    - pkg/errors.HandleError
+    - pkg/errors.HandleApplicationError
+    - pkg/errors.HandleErrorWithContext
+    - pkg/errors.HandleErrorWithRecovery
+    - pkg/errors.ValidateDirectoryPath
+    - pkg/errors.ValidateFilePath
   traceability:
     architecture:
-      - ARCH-ERROR_HANDLING
+    - ARCH-ERROR_HANDLING
     requirements:
-      - REQ-ERROR_HANDLING
+    - REQ-ERROR_HANDLING
     tests:
-      - TestArchiveError_Error
-      - TestArchiveError_Unwrap
-      - TestNewArchiveErrorWithCause
-      - TestNewArchiveErrorWithContext
-      - TestIsDiskFullError
-      - TestIsDiskFullErrorInternal
-      - TestIsPermissionError
-      - TestIsDirectoryNotFoundError
-      - TestTempFile_Cleanup
-      - TestTempDir_Cleanup
-      - TestTempDir_String
-      - TestResourceManager_AddTempDir
-      - TestResourceManager_CleanupErrorHandling
-      - TestResourceManager_CleanupWithPanicRecovery
-      - TestResourceManager_CleanupWithPanicRecovery_PanicScenario
-      - TestResourceManager_ConcurrentAccess
-      - TestNewContextualOperation
-      - TestContextualOperation_Context
-      - TestContextualOperation_ResourceManager
-      - TestContextualOperation_IsCancelled
-      - TestContextualOperation_CheckCancellation
-      - TestContextualOperation_Cleanup
-      - TestContextualOperation_WithTimeout
-      - TestHandleArchiveError
-      - TestAtomicWriteFile
-      - TestAtomicWriteFile_RenameFailure
-      - TestValidateFilePath
-      - TestValidateFilePath_PermissionScenarios
-      - TestSafeMkdirAll_ComprehensiveScenarios
-      - TestSafeMkdirAll_DiskFullScenario
-      - TestValidateDirectoryPath_ComprehensiveScenarios
-      - TestErrorClassification_EdgeCases
-      - pkg/errors.TestApplicationError
-      - pkg/errors.TestErrorClassification
-      - pkg/errors.TestDefaultErrorClassifier
-      - pkg/errors.TestErrorContext
-      - pkg/errors.TestPathValidation
-      - pkg/errors.TestHandleError
+    - TestArchiveError_Error
+    - TestArchiveError_Unwrap
+    - TestNewArchiveErrorWithCause
+    - TestNewArchiveErrorWithContext
+    - TestIsDiskFullError
+    - TestIsDiskFullErrorInternal
+    - TestIsPermissionError
+    - TestIsDirectoryNotFoundError
+    - TestTempFile_Cleanup
+    - TestTempDir_Cleanup
+    - TestTempDir_String
+    - TestResourceManager_AddTempDir
+    - TestResourceManager_CleanupErrorHandling
+    - TestResourceManager_CleanupWithPanicRecovery
+    - TestResourceManager_CleanupWithPanicRecovery_PanicScenario
+    - TestResourceManager_ConcurrentAccess
+    - TestNewContextualOperation
+    - TestContextualOperation_Context
+    - TestContextualOperation_ResourceManager
+    - TestContextualOperation_IsCancelled
+    - TestContextualOperation_CheckCancellation
+    - TestContextualOperation_Cleanup
+    - TestContextualOperation_WithTimeout
+    - TestHandleArchiveError
+    - TestAtomicWriteFile
+    - TestAtomicWriteFile_RenameFailure
+    - TestValidateFilePath
+    - TestValidateFilePath_PermissionScenarios
+    - TestSafeMkdirAll_ComprehensiveScenarios
+    - TestSafeMkdirAll_DiskFullScenario
+    - TestValidateDirectoryPath_ComprehensiveScenarios
+    - TestErrorClassification_EdgeCases
+    - pkg/errors.TestApplicationError
+    - pkg/errors.TestErrorClassification
+    - pkg/errors.TestDefaultErrorClassifier
+    - pkg/errors.TestErrorContext
+    - pkg/errors.TestPathValidation
+    - pkg/errors.TestHandleError
     code_annotations:
-      - IMPL-STRUCTURED_ERRORS
-      - ARCH-ERROR_HANDLING
-      - REQ-ERROR_HANDLING
+    - IMPL-STRUCTURED_ERRORS
+    - ARCH-ERROR_HANDLING
+    - REQ-ERROR_HANDLING
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-ERROR_HANDLING
-      - REQ-ERROR_HANDLING
+    - ARCH-ERROR_HANDLING
+    - REQ-ERROR_HANDLING
     composed_with: []
-  detail_file: implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`ArchiveError`, `BackupError` types, `NewXXXError()` functions'
   error_reporting:
-    - Error logging to stderr
-    - Status code propagation
-    - Operation context in error messages
-    - Template formatting support
-  error_types: |-
-    ```go
-    type ArchiveError struct {
-        Message    string
-        StatusCode int
-        Operation  string
-        Path       string
-        Err        error
-    }
-
-    type BackupError struct {
-        Message    string
-        StatusCode int
-        Operation  string
-        Path       string
-        Err        error
-    }
-    ```
-  error_wrapping: |-
-    ```go
-    if err != nil {
-        return fmt.Errorf("context: %w", err)
-    }
-    ```
-  essence_pseudocode: |-
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Structured error types with status codes, classification, and resource management
-
-    ## Error type definitions (errors.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — domain error types with status codes and operation context
-
-    TYPE ArchiveError { Message, StatusCode, Operation, Path, Err }
-    TYPE BackupError  { Message, StatusCode, Operation, Path, Err }
-      # [IMPL-STRUCTURED_ERRORS] — both implement ErrorInterface
-      procedure Error() -> string:
-        IF Err != nil THEN RETURN fmt("%s: %v", Message, Err)
-        ELSE RETURN Message
-      procedure Unwrap() -> error: RETURN Err
-      procedure GetStatusCode/GetOperation/GetPath/GetMessage -> respective fields
-
-    ## Error constructors
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — factory functions with increasing context levels
-
-    procedure NewArchiveError(message, statusCode) -> *ArchiveError
-    procedure NewArchiveErrorWithCause(message, statusCode, err) -> *ArchiveError
-    procedure NewArchiveErrorWithContext(message, statusCode, operation, path, err) -> *ArchiveError
-    # (analogous NewBackupError, NewBackupErrorWithCause, NewBackupErrorWithContext)
-
-    ## Error classification (errors.go + pkg/errors/classification.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — string pattern matching with syscall fallback
-
-    procedure IsDiskFullError(err) -> bool:
-      # [IMPL-STRUCTURED_ERRORS] — match disk-space-related strings plus syscall.ENOSPC/EDQUOT/EFBIG
-      IF err == nil THEN RETURN false
-      lowered = ToLower(err.Error())
-      RETURN matchesAny(lowered, diskFullPatterns) OR isPathError(err, ENOSPC|EDQUOT|EFBIG)
-
-    procedure IsPermissionError(err) -> bool:
-      # [IMPL-STRUCTURED_ERRORS] — match permission-related strings plus syscall.EACCES/EPERM
-      IF err == nil THEN RETURN false
-      lowered = ToLower(err.Error())
-      RETURN matchesAny(lowered, permissionPatterns) OR isPathError(err, EACCES|EPERM)
-
-    procedure IsDirectoryNotFoundError(err) -> bool:
-      # [IMPL-STRUCTURED_ERRORS] — match not-found strings plus syscall.ENOENT
-      IF err == nil THEN RETURN false
-      lowered = ToLower(err.Error())
-      RETURN matchesAny(lowered, notFoundPatterns) OR isPathError(err, ENOENT)
-
-    ## Error handling dispatch (errors.go + pkg/errors/handlers.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — centralized dispatch returning status codes
-
-    procedure HandleError(err, cfg ErrorConfig, formatter ErrorFormatter) -> int:
-      IF err == nil THEN RETURN 0
-      IF IsDiskFullError(err) THEN formatter.PrintDiskFullError; RETURN cfg["disk_full"]
-      IF IsPermissionError(err) THEN formatter.PrintPermissionError; RETURN cfg["permission_denied"]
-      IF IsDirectoryNotFoundError(err) THEN formatter.PrintDirectoryNotFound; RETURN cfg["directory_not_found"]
-      IF err is *ArchiveError THEN RETURN err.GetStatusCode()
-      IF err is *BackupError THEN RETURN err.GetStatusCode()
-      formatter.PrintError(err); RETURN cfg["general_error"]
-
-    ## Resource management (errors.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — thread-safe resource tracking with cleanup
-
-    TYPE ResourceManager { resources []Resource, mutex sync.RWMutex }
-      procedure AddResource(r): lock; append(resources, r); unlock
-      procedure AddTempFile(path): AddResource(&TempFile{path})
-      procedure AddTempDir(path): AddResource(&TempDir{path})
-      procedure RemoveResource(r): lock; find by String(); splice out; unlock
-      procedure Cleanup() -> error:
-        lock; FOR EACH resource: collect Cleanup() errors; clear list; unlock
-      procedure CleanupWithPanicRecovery() -> error:
-        defer recover(); RETURN Cleanup()
-
-    ## Contextual operations (errors.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — context-aware operation wrapper
-
-    TYPE ContextualOperation { ctx context.Context, rm *ResourceManager }
-      procedure IsCancelled() -> bool: select on ctx.Done()
-      procedure CheckCancellation() -> error: return ctx.Err() if cancelled
-      procedure Cleanup() -> error: RETURN rm.Cleanup()
-
-    ## Atomic file operations (errors.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — temp-file-then-rename pattern
-
-    procedure AtomicWriteFile(path, data, rm) -> error:
-      MkdirAll(dir(path))
-      tmpFile = CreateTemp(dir, prefix); rm.AddTempFile(tmpPath)
-      Write(data); Close(); Rename(tmpPath, path)
-
-    ## Path validation (errors.go + pkg/errors/handlers.go)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — validate paths exist and are accessible
-
-    procedure ValidateDirectoryPath(path, cfg) -> error:
-      IF empty THEN error; Stat(path): check exists, isDir, writable
-    procedure ValidateFilePath(path, cfg) -> error:
-      IF empty THEN error; Stat(path): check exists, isFile, readable
-
-    ## Generalized errors package (pkg/errors/)
-    # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — reusable error infrastructure
-
-    TYPE ApplicationError { Message, StatusCode, Operation, Path, Err }
-      # [IMPL-STRUCTURED_ERRORS] — generalized from ArchiveError/BackupError for reuse
-
-    TYPE DefaultErrorClassifier:
-      # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — categorizes errors by type
-      procedure ClassifyError(err) -> ErrorCategory:
-        IsDiskFullError->DiskSpace, IsPermissionError->Permission, IsNotFound->Filesystem, IsNetwork->Network
-      procedure IsRecoverable(err) -> bool:
-        DiskSpace/Network -> true; Permission/Filesystem/Config/Validation -> false
-      procedure GetSeverity(err) -> ErrorSeverity:
-        DiskSpace/Config -> Critical; Permission/Filesystem/Network -> Error; Validation -> Warning
-
-    TYPE ConfigurableErrorClassifier { patterns, fallback ErrorClassifier }:
-      # [IMPL-STRUCTURED_ERRORS] — custom patterns with fallback
-      procedure ClassifyError: check custom patterns first, then fallback
-
-    TYPE ErrorRecoveryManager { strategies, classifier }:
-      # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — strategy-based error recovery
-      procedure TryRecover(err, ctx):
-        IF !classifier.IsRecoverable(err) THEN RETURN err
-        FOR EACH strategy: IF CanRecover THEN Recover
+  - Error logging to stderr
+  - Status code propagation
+  - Operation context in error messages
+  - Template formatting support
+  error_types: "```go\ntype ArchiveError struct {\n    Message    string\n    StatusCode int\n    Operation  string\n    Path       string\n    Err        error\n}\n\ntype BackupError struct {\n    Message    string\n    StatusCode int\n    Operation  string\n    Path       string\n    Err        error\n}\n```"
+  error_wrapping: "```go\nif err != nil {\n    return fmt.Errorf(\"context: %w\", err)\n}\n```"
+  essence_pseudocode: "# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Structured error types with status codes, classification, and resource management\n\n## Error type definitions (errors.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — domain error types with status codes and operation context [REQ-ERROR_HANDLING]\n\nTYPE ArchiveError { Message, StatusCode, Operation, Path, Err }\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: TYPE BackupError  { Message, StatusCode, Operation, Path, Err }\nTYPE BackupError  { Message, StatusCode, Operation, Path, Err }\n  # [IMPL-STRUCTURED_ERRORS] — both implement ErrorInterface [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n  procedure Error() -> string:\n    IF Err != nil THEN RETURN fmt(\"%s: %v\", Message, Err)\n    ELSE RETURN Message\n  procedure Unwrap() -> error: RETURN Err\n  procedure\
+    \ GetStatusCode/GetOperation/GetPath/GetMessage -> respective fields\n\n## Error constructors [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — factory functions with increasing context levels [REQ-ERROR_HANDLING]\n\nprocedure NewArchiveError(message, statusCode) -> *ArchiveError\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: procedure NewArchiveErrorWithCause(message, statusCode, err) -> *ArchiveError\nprocedure NewArchiveErrorWithCause(message, statusCode, err) -> *ArchiveError\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: procedure NewArchiveErrorWithContext(message, statusCode, operation, path, err) -> *ArchiveError\nprocedure NewArchiveErrorWithContext(message, statusCode, operation, path, err) -> *ArchiveError\n# (analogous NewBackupError, NewBackupErrorWithCause, NewBackupErrorWithContext)\
+    \ [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n\n## Error classification (errors.go + pkg/errors/classification.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — string pattern matching with syscall fallback\n\nprocedure IsDiskFullError(err) -> bool:\n  # [IMPL-STRUCTURED_ERRORS] — match disk-space-related strings plus syscall.ENOSPC/EDQUOT/EFBIG [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n  IF err == nil THEN RETURN false\n  lowered = ToLower(err.Error())\n  RETURN matchesAny(lowered, diskFullPatterns) OR isPathError(err, ENOSPC|EDQUOT|EFBIG)\n\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: procedure IsPermissionError(err) -> bool:\nprocedure IsPermissionError(err) -> bool:\n  # [IMPL-STRUCTURED_ERRORS] — match permission-related strings plus syscall.EACCES/EPERM [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n\
+    \  IF err == nil THEN RETURN false\n  lowered = ToLower(err.Error())\n  RETURN matchesAny(lowered, permissionPatterns) OR isPathError(err, EACCES|EPERM)\n\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: procedure IsDirectoryNotFoundError(err) -> bool:\nprocedure IsDirectoryNotFoundError(err) -> bool:\n  # [IMPL-STRUCTURED_ERRORS] — match not-found strings plus syscall.ENOENT [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n  IF err == nil THEN RETURN false\n  lowered = ToLower(err.Error())\n  RETURN matchesAny(lowered, notFoundPatterns) OR isPathError(err, ENOENT)\n\n## Error handling dispatch (errors.go + pkg/errors/handlers.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — centralized dispatch returning status codes\n\nprocedure HandleError(err, cfg ErrorConfig, formatter ErrorFormatter) -> int:\n  IF err == nil THEN RETURN 0\n\
+    \  IF IsDiskFullError(err) THEN formatter.PrintDiskFullError; RETURN cfg[\"disk_full\"]\n  IF IsPermissionError(err) THEN formatter.PrintPermissionError; RETURN cfg[\"permission_denied\"]\n  IF IsDirectoryNotFoundError(err) THEN formatter.PrintDirectoryNotFound; RETURN cfg[\"directory_not_found\"]\n  IF err is *ArchiveError THEN RETURN err.GetStatusCode()\n  IF err is *BackupError THEN RETURN err.GetStatusCode()\n  formatter.PrintError(err); RETURN cfg[\"general_error\"]\n\n## Resource management (errors.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — thread-safe resource tracking with cleanup\n\nTYPE ResourceManager { resources []Resource, mutex sync.RWMutex }\n  procedure AddResource(r): lock; append(resources, r); unlock\n  procedure AddTempFile(path): AddResource(&TempFile{path})\n  procedure AddTempDir(path): AddResource(&TempDir{path})\n  procedure RemoveResource(r): lock; find by String();\
+    \ splice out; unlock\n  procedure Cleanup() -> error:\n    lock; FOR EACH resource: collect Cleanup() errors; clear list; unlock\n  procedure CleanupWithPanicRecovery() -> error:\n    defer recover(); RETURN Cleanup()\n\n## Contextual operations (errors.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — context-aware operation wrapper [REQ-ERROR_HANDLING]\n\nTYPE ContextualOperation { ctx context.Context, rm *ResourceManager }\n  procedure IsCancelled() -> bool: select on ctx.Done()\n  procedure CheckCancellation() -> error: return ctx.Err() if cancelled\n  procedure Cleanup() -> error: RETURN rm.Cleanup()\n\n## Atomic file operations (errors.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — temp-file-then-rename pattern [REQ-ERROR_HANDLING]\n\nprocedure AtomicWriteFile(path, data, rm) -> error:\n  MkdirAll(dir(path))\n  tmpFile = CreateTemp(dir,\
+    \ prefix); rm.AddTempFile(tmpPath)\n  Write(data); Close(); Rename(tmpPath, path)\n\n## Path validation (errors.go + pkg/errors/handlers.go) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — validate paths exist and are accessible\n\nprocedure ValidateDirectoryPath(path, cfg) -> error:\n  IF empty THEN error; Stat(path): check exists, isDir, writable\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: procedure ValidateFilePath(path, cfg) -> error:\nprocedure ValidateFilePath(path, cfg) -> error:\n  IF empty THEN error; Stat(path): check exists, isFile, readable\n\n## Generalized errors package (pkg/errors/) [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — reusable error infrastructure\n\nTYPE ApplicationError { Message, StatusCode, Operation,\
+    \ Path, Err }\n  # [IMPL-STRUCTURED_ERRORS] — generalized from ArchiveError/BackupError for reuse [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n\nTYPE DefaultErrorClassifier:\n  # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — categorizes errors by type [REQ-ERROR_HANDLING]\n  procedure ClassifyError(err) -> ErrorCategory:\n    IsDiskFullError->DiskSpace, IsPermissionError->Permission, IsNotFound->Filesystem, IsNetwork->Network\n  procedure IsRecoverable(err) -> bool:\n    DiskSpace/Network -> true; Permission/Filesystem/Config/Validation -> false\n  procedure GetSeverity(err) -> ErrorSeverity:\n    DiskSpace/Config -> Critical; Permission/Filesystem/Network -> Error; Validation -> Warning\n\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: TYPE ConfigurableErrorClassifier { patterns, fallback ErrorClassifier }:\nTYPE ConfigurableErrorClassifier { patterns, fallback ErrorClassifier }:\n  # [IMPL-STRUCTURED_ERRORS] — custom\
+    \ patterns with fallback [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]\n  procedure ClassifyError: check custom patterns first, then fallback\n\n# [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — Block implements documented behavior for: TYPE ErrorRecoveryManager { strategies, classifier }:\nTYPE ErrorRecoveryManager { strategies, classifier }:\n  # [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] — strategy-based error recovery [REQ-ERROR_HANDLING]\n  procedure TryRecover(err, ctx):\n    IF !classifier.IsRecoverable(err) THEN RETURN err\n    FOR EACH strategy: IF CanRecover THEN Recover"

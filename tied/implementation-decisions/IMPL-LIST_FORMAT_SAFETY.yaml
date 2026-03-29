@@ -3,157 +3,101 @@ IMPL-LIST_FORMAT_SAFETY:
   status: Active
   description: Guard list-command formatting so fmt.Sprintf is only called when the format string actually contains printf verbs, preventing EXTRA-arg errors and template-placeholder misinterpretation.
   cross_references:
-    - ARCH-OUTPUT_FORMATTING
-    - REQ-OUT_002
+  - ARCH-OUTPUT_FORMATTING
+  - REQ-OUT_002
   rationale:
-    why: |-
-      Prevent `fmt` from interpreting template placeholders or appending EXTRA args when format strings contain no printf verbs (this produced `%!(EXTRA ...)` in user output).
-      Ensure AI formatter and core formatter consistently handle template placeholders (`#{...}`) and printf formats.
+    why: 'Prevent `fmt` from interpreting template placeholders or appending EXTRA args when format strings contain no printf verbs (this produced `%!(EXTRA ...)` in user output).
+
+      Ensure AI formatter and core formatter consistently handle template placeholders (`#{...}`) and printf formats.'
     problems_solved:
-      - 'fmt.Sprintf misinterpreting #{...} placeholders as format verbs producing %!(EXTRA ...) output'
-      - Inconsistent handling of template vs printf format strings in list commands
+    - 'fmt.Sprintf misinterpreting #{...} placeholders as format verbs producing %!(EXTRA ...) output'
+    - Inconsistent handling of template vs printf format strings in list commands
     benefits:
-      - Clean list output regardless of placeholder style
-      - Safe fallback when format string has no printf verbs
-      - Consistent behavior across all formatting paths
+    - Clean list output regardless of placeholder style
+    - Safe fallback when format string has no printf verbs
+    - Consistent behavior across all formatting paths
   implementation_approach:
     summary: Added guarded printf usage in FormatListArchive, FormatListBackup, and FormatListArchiveWithExtraction to call fmt.Sprintf only when the format string contains printf verbs (%). Otherwise, return the template-format string as-is or perform placeholder replacement.
     details:
-      - FormatListArchive checks for #{} first and routes to template path; falls back to fmt.Sprintf only when % is present
-      - FormatListBackup mirrors the same guard logic as FormatListArchive
-      - FormatListArchiveWithExtraction applies priority-based format selection with #{} guard
-      - AICoreFormatter.FormatWithContext list branch delegates to ReplacePlaceholders when template placeholders are detected
-      - formatListArchiveSimple always gathers file stats and selects format string by priority
+    - FormatListArchive checks for
+    - FormatListBackup mirrors the same guard logic as FormatListArchive
+    - FormatListArchiveWithExtraction applies priority-based format selection with
+    - AICoreFormatter.FormatWithContext list branch delegates to ReplacePlaceholders when template placeholders are detected
+    - formatListArchiveSimple always gathers file stats and selects format string by priority
   code_locations:
     files:
-      - path: formatter.go
-        description: FormatListArchive and FormatListBackup with guarded printf and template-placeholder routing
-      - path: formatter.go
-        description: FormatListArchiveWithExtraction with priority-based format selection
-      - path: pkg/formatter/ai_core_formatter.go
-        description: FormatWithContext list handling with IMPL-LIST_FORMAT_SAFETY guard
-      - path: formatter_adapter_simple.go
-        description: formatListArchiveSimple with priority format selection and ReplacePlaceholders
+    - path: formatter.go
+      description: FormatListArchive and FormatListBackup with guarded printf and template-placeholder routing
+    - path: formatter.go
+      description: FormatListArchiveWithExtraction with priority-based format selection
+    - path: pkg/formatter/ai_core_formatter.go
+      description: FormatWithContext list handling with IMPL-LIST_FORMAT_SAFETY guard
+    - path: formatter_adapter_simple.go
+      description: formatListArchiveSimple with priority format selection and ReplacePlaceholders
     functions:
-      - name: OutputFormatter.FormatListArchive
-        file: formatter.go
-        description: Guards fmt.Sprintf behind strings.Contains(formatStr, "%"); routes #{} to formatTemplate
-      - name: OutputFormatter.FormatListBackup
-        file: formatter.go
-        description: Same guard pattern as FormatListArchive for backup list formatting
-      - name: OutputFormatter.FormatListArchiveWithExtraction
-        file: formatter.go
-        description: Priority-based format selection — #{} template > printf > TemplateListArchive > fallback
-      - name: AICoreFormatter.FormatWithContext
-        file: pkg/formatter/ai_core_formatter.go
-        description: FormatTypeList branch guards list formatting with placeholder detection
-      - name: formatListArchiveSimple
-        file: formatter_adapter_simple.go
-        description: Simplified list formatting that always gathers stats and uses ReplacePlaceholders
+    - name: OutputFormatter.FormatListArchive
+      file: formatter.go
+      description: Guards fmt.Sprintf behind strings.Contains(formatStr, "%"); routes
+    - name: OutputFormatter.FormatListBackup
+      file: formatter.go
+      description: Same guard pattern as FormatListArchive for backup list formatting
+    - name: OutputFormatter.FormatListArchiveWithExtraction
+      file: formatter.go
+      description: Priority-based format selection —
+    - name: AICoreFormatter.FormatWithContext
+      file: pkg/formatter/ai_core_formatter.go
+      description: FormatTypeList branch guards list formatting with placeholder detection
+    - name: formatListArchiveSimple
+      file: formatter_adapter_simple.go
+      description: Simplified list formatting that always gathers stats and uses ReplacePlaceholders
   traceability:
     architecture:
-      - ARCH-OUTPUT_FORMATTING
+    - ARCH-OUTPUT_FORMATTING
     requirements:
-      - REQ-OUT_002
+    - REQ-OUT_002
     tests:
-      - name: TestFormatListArchive_IMPL_LIST_FORMAT_SAFETY
-        file: formatter_list_safety_test.go
-        description: Verifies template-style placeholder (#{}) formatting works and size_human is replaced
-      - name: TestPrintfStyleListArchive_IMPL_LIST_FORMAT_SAFETY
-        file: formatter_list_safety_test.go
-        description: Verifies printf-style formats still work and do not trigger EXTRA output
-      - name: TestFormatListArchiveSimple_Comprehensive
-        file: formatter_adapter_test.go
-        description: Table-driven tests for all format selection scenarios (template, printf, fallback)
-      - name: TestFormatListArchiveSimple_FileStats
-        file: formatter_adapter_test.go
-        description: Validates file statistics gathering and inclusion in template output
-      - name: TestFormatListArchiveSimple_MissingFile
-        file: formatter_adapter_test.go
-        description: Validates graceful degradation with "unknown" when file does not exist
+    - name: TestFormatListArchive_IMPL_LIST_FORMAT_SAFETY
+      file: formatter_list_safety_test.go
+      description: Verifies template-style placeholder (#{}) formatting works and size_human is replaced
+    - name: TestPrintfStyleListArchive_IMPL_LIST_FORMAT_SAFETY
+      file: formatter_list_safety_test.go
+      description: Verifies printf-style formats still work and do not trigger EXTRA output
+    - name: TestFormatListArchiveSimple_Comprehensive
+      file: formatter_adapter_test.go
+      description: Table-driven tests for all format selection scenarios (template, printf, fallback)
+    - name: TestFormatListArchiveSimple_FileStats
+      file: formatter_adapter_test.go
+      description: Validates file statistics gathering and inclusion in template output
+    - name: TestFormatListArchiveSimple_MissingFile
+      file: formatter_adapter_test.go
+      description: Validates graceful degradation with "unknown" when file does not exist
     code_annotations:
-      - IMPL-LIST_FORMAT_SAFETY
-      - ARCH-OUTPUT_FORMATTING
-      - REQ-OUT_002
+    - IMPL-LIST_FORMAT_SAFETY
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUT_002
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-OUTPUT_FORMATTING
-      - REQ-OUT_002
-      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
-      - IMPL-DUAL_FORMATTING
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUT_002
+    - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+    - IMPL-DUAL_FORMATTING
     composed_with: []
-  detail_file: implementation-decisions/IMPL-LIST_FORMAT_SAFETY.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
-  essence_pseudocode: |-
-    # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — Guard list formatting against fmt misinterpretation of template placeholders
-
-    procedure FormatListArchive(path, creationTime) -> string:  # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — safe list-archive formatting
-      formatStr = cfg.FormatListArchive
-
-      # [IMPL-LIST_FORMAT_SAFETY] — detect template placeholders first
-      if formatStr contains "#{":
-        data = build_data_map(path, creationTime)
-        statInfo, err = GatherFileStatInfo(path)
-        if err == nil:
-          merge statInfo fields into data                       # [REQ-OUT_002] — include file stats when available
-        else:
-          fill data with safe defaults ("unknown", "0")
-        return formatTemplate(formatStr, data)                  # template path — no fmt.Sprintf
-
-      # [IMPL-LIST_FORMAT_SAFETY] — only call fmt.Sprintf when printf verbs are present
-      if formatStr contains "%":
-        return fmt.Sprintf(formatStr, path, creationTime)
-
-      # [IMPL-LIST_FORMAT_SAFETY] — no verbs at all: return as-is to avoid EXTRA args
-      return formatStr
-
-    procedure FormatListBackup(path, creationTime) -> string:   # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] — same guard for backup list
-      # mirrors FormatListArchive logic with cfg.FormatListBackup
-      formatStr = cfg.FormatListBackup
-      if formatStr contains "#{":
-        data = build_data_map(path, creationTime)
-        gather stats or fill defaults
-        return formatTemplate(formatStr, data)
-      if formatStr contains "%":
-        return fmt.Sprintf(formatStr, path, creationTime)
-      return formatStr
-
-    procedure FormatListArchiveWithExtraction(archivePath, creationTime) -> string: # [IMPL-LIST_FORMAT_SAFETY] — priority-based format selection
-      data = extractArchiveFilenameData(archivePath)
-      data["path"] = archivePath
-      data["creation_time"] = creationTime
-      gather file stats into data (with safe defaults on error)
-
-      formatStr = cfg.FormatListArchive
-      # Priority 1: FormatListArchive with template placeholders
-      if formatStr != "" and formatStr contains "#{":
-        return formatTemplate(formatStr, data)
-      # Priority 2: FormatListArchive with printf verbs
-      if formatStr != "" and formatStr contains "%":
-        return fmt.Sprintf(formatStr, archivePath, creationTime)
-      # Priority 3: FormatListArchive plain text
-      if formatStr != "":
-        return formatStr
-      # Priority 4: TemplateListArchive fallback
-      if cfg.TemplateListArchive != "":
-        return FormatListArchiveTemplate(data)
-      # Priority 5: ultimate fallback
-      return FormatListArchive(archivePath, creationTime)
-
-    procedure formatListArchiveSimple(cfg, formatter, archivePath, creationTime) -> string: # [IMPL-LIST_FORMAT_SAFETY] — simplified path always gathering stats
-      data = gather file stats for archivePath
-      select formatStr by priority: FormatListArchive(#{) > TemplateListArchive > default
-      return ReplacePlaceholders(formatStr, data)
+  essence_pseudocode: "# [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — Guard list formatting against fmt misinterpretation of template placeholders\n\nprocedure FormatListArchive(path, creationTime) -> string:  # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — safe list-archive formatting\n  formatStr = cfg.FormatListArchive\n\n  # [IMPL-LIST_FORMAT_SAFETY] — detect template placeholders first [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  if formatStr contains \"#{\":\n    data = build_data_map(path, creationTime)\n    statInfo, err = GatherFileStatInfo(path)\n    if err == nil:\n      merge statInfo fields into data                       # [REQ-OUT_002] — include file stats when available\n    else:\n      fill data with safe defaults (\"unknown\", \"0\")\n    return formatTemplate(formatStr, data)                  # template path — no fmt.Sprintf\n\n  # [IMPL-LIST_FORMAT_SAFETY] — only call fmt.Sprintf when printf verbs are present [ARCH-OUTPUT_FORMATTING]\
+    \ [REQ-OUT_002]\n  if formatStr contains \"%\":\n    return fmt.Sprintf(formatStr, path, creationTime)\n\n  # [IMPL-LIST_FORMAT_SAFETY] — no verbs at all: return as-is to avoid EXTRA args [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  return formatStr\n\n# [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — Block implements documented behavior for: procedure FormatListBackup(path, creationTime) -> string:   # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] — same \nprocedure FormatListBackup(path, creationTime) -> string:   # [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] — same guard for backup list\n  # mirrors FormatListArchive logic with cfg.FormatListBackup [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  formatStr = cfg.FormatListBackup\n  if formatStr contains \"#{\":\n    data = build_data_map(path, creationTime)\n    gather stats or fill defaults\n    return formatTemplate(formatStr, data)\n  if formatStr contains \"%\":\n    return fmt.Sprintf(formatStr,\
+    \ path, creationTime)\n  return formatStr\n\n# [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — Block implements documented behavior for: procedure FormatListArchiveWithExtraction(archivePath, creationTime) -> string: # [IMPL-LIST_FORMAT_SAFETY] — priority-b\nprocedure FormatListArchiveWithExtraction(archivePath, creationTime) -> string: # [IMPL-LIST_FORMAT_SAFETY] — priority-based format selection\n  data = extractArchiveFilenameData(archivePath)\n  data[\"path\"] = archivePath\n  data[\"creation_time\"] = creationTime\n  gather file stats into data (with safe defaults on error)\n\n  formatStr = cfg.FormatListArchive\n  # Priority 1: FormatListArchive with template placeholders [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  if formatStr != \"\" and formatStr contains \"#{\":\n    return formatTemplate(formatStr, data)\n  # Priority 2: FormatListArchive with printf verbs [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  if formatStr\
+    \ != \"\" and formatStr contains \"%\":\n    return fmt.Sprintf(formatStr, archivePath, creationTime)\n  # Priority 3: FormatListArchive plain text [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  if formatStr != \"\":\n    return formatStr\n  # Priority 4: TemplateListArchive fallback [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  if cfg.TemplateListArchive != \"\":\n    return FormatListArchiveTemplate(data)\n  # Priority 5: ultimate fallback [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002]\n  return FormatListArchive(archivePath, creationTime)\n\n# [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — Block implements documented behavior for: procedure formatListArchiveSimple(cfg, formatter, archivePath, creationTime) -> string: # [IMPL-LIST_FORMAT_SAFETY] — si\nprocedure formatListArchiveSimple(cfg, formatter, archivePath, creationTime) -> string: # [IMPL-LIST_FORMAT_SAFETY] — simplified path always gathering stats\n\
+    \  data = gather file stats for archivePath\n  select formatStr by priority: FormatListArchive(#{) > TemplateListArchive > default\n  return ReplacePlaceholders(formatStr, data)"

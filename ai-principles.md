@@ -87,6 +87,11 @@ This acknowledgment confirms that the AI agent has:
     - TIED-sourced YAML (methodology) in the client is **read-only** and does not hold client-specific data. It lives under `tied/methodology/` and is refreshed by re-running `copy_files.sh` from the TIED repo.
     - Project-specific tokens and details live **only** in **project** YAML: `tied/requirements.yaml`, `tied/architecture-decisions.yaml`, `tied/implementation-decisions.yaml`, `tied/semantic-tokens.yaml`, and the corresponding detail dirs at the root of `tied/`. Agents and MCP must only add or edit REQ/ARCH/IMPL in project YAML; do not modify `tied/methodology/`.
 
+13. **Source Precedence and Contradiction Detection** (checklist invariant `SOURCE_PRECEDENCE`)
+    - When two sources disagree on scope, behavior, counts, naming, or structure, resolve using this precedence: **(1) IMPL detail files** (most specific; authoritative for implementation) **> (2) REQ/ARCH** (governing intent and design) **> (3) tests** (validated behavior) **> (4) README, CHANGELOG, demo prose** (human summary; may lag).
+    - When a contradiction is detected, emit a **contradiction record** in step output: `CONTRADICTION: <source_A> says X; <source_B> says Y; resolving per precedence to <winner>; <loser> needs update at step Sxx` (e.g. README drift → update at README/CHANGELOG step).
+    - Do **not** silently adopt the lower-precedence source; align prose or tests to the winning layer via LEAP when needed.
+
 **Bugs vs requirements (operational rule):** Requirements describe desired behavior (WHAT and WHY). Bugs describe implementation failures. Do NOT document bugs as requirements; document bugs in architecture/implementation decisions with cross-reference to the requirement that should be satisfied. If a bug reveals missing behavior specification, add a requirement first, then fix.
 
 ---

@@ -55,7 +55,6 @@ REQ-MODULE_VALIDATION:
       - REQ-TIED_SETUP
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-MODULE_VALIDATION.yaml
   metadata:
     created:
       date: 2025-01-27

@@ -34,7 +34,6 @@ ARCH-CICD_PIPELINE:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-CICD_PIPELINE.yaml
   metadata:
     created:
       date: "2026-03-12"

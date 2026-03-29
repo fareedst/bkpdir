@@ -14,7 +14,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -34,7 +36,7 @@ const (
 )
 
 var (
-	defaultExcludePatterns = []string{".git/", "vendor/"}
+	defaultExcludePatterns = []string{}
 	testExcludePatterns    = []string{"node_modules/", "*.log"}
 )
 
@@ -135,6 +137,82 @@ func TestLoadConfig(t *testing.T) {
 	})
 }
 
+// [REQ-CONFIGURATION] Unquoted globs like *.tsbuildinfo are invalid YAML; LoadConfig must warn on stderr (not fail silently).
+func TestLoadConfig_invalidYAML_unquoted_glob_warns_stderr(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+	dir := t.TempDir()
+	p := filepath.Join(dir, ".bkpdir.yml")
+	content := "exclude_patterns:\n  - node_modules/\n  - *.tsbuildinfo\n"
+	if err := os.WriteFile(p, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+	// Single path only so ~/.bkpdir.yml on the machine does not merge after the failed parse.
+	os.Setenv("BKPDIR_CONFIG", p)
+
+	oldStderr := os.Stderr
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	os.Stderr = w
+
+	cfg, lerr := LoadConfig(dir)
+
+	_ = w.Close()
+	os.Stderr = oldStderr
+
+	var buf bytes.Buffer
+	_, _ = io.Copy(&buf, r)
+	_ = r.Close()
+
+	if lerr != nil {
+		t.Fatalf("LoadConfig: %v", lerr)
+	}
+	s := buf.String()
+	if !strings.Contains(s, "Warning: could not load config file") {
+		t.Fatalf("expected stderr warning, got: %q", s)
+	}
+	if !strings.Contains(s, "Hint:") {
+		t.Fatalf("expected YAML hint on stderr, got: %q", s)
+	}
+	assertStringSliceEqual(t, "defaults when local YAML invalid", cfg.ExcludePatterns, []string{})
+}
+
+// [REQ-CONFIGURATION] [IMPL-CFG_PRECEDENCE_FIX] First loaded config file's exclude_patterns replace built-in defaults.
+func TestLoadConfig_local_exclude_patterns_replace_builtin_REQ_CONFIGURATION(t *testing.T) {
+	origEnv := os.Getenv("BKPDIR_CONFIG")
+	defer func() {
+		if origEnv == "" {
+			os.Unsetenv("BKPDIR_CONFIG")
+		} else {
+			os.Setenv("BKPDIR_CONFIG", origEnv)
+		}
+	}()
+	dir := t.TempDir()
+	p := filepath.Join(dir, ".bkpdir.yml")
+	createTestConfigFileWithData(t, p, map[string]interface{}{
+		"exclude_patterns": []string{"vendor/"},
+	})
+	os.Setenv("BKPDIR_CONFIG", p)
+	cfg, err := LoadConfig(dir)
+	if err != nil {
+		t.Fatalf("LoadConfig: %v", err)
+	}
+	assertStringSliceEqual(t, "exclude_patterns from local file only", cfg.ExcludePatterns, []string{"vendor/"})
+	for _, pat := range cfg.ExcludePatterns {
+		if pat == ".git/" {
+			t.Fatalf("built-in .git/ must not apply when local file sets exclude_patterns: %v", cfg.ExcludePatterns)
+		}
+	}
+}
+
 // [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates earlier file precedence in sequential loading.
 func TestLoadConfigMultipleFiles(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
@@ -224,11 +302,9 @@ func TestLoadConfigMultipleFiles(t *testing.T) {
 
 		// First file (local) takes precedence - its values should be preserved
 		assertStringEqual(t, "ArchiveDirPath from local file", cfg.ArchiveDirPath, "/local/archive")
-		// exclude_patterns from local file should be merged with defaults (CFG-005: array fields default to merge)
-		// Note: Even with ! prefix in home file, earlier file precedence applies for sequential files
-		// CFG-005 requires that exclude_patterns merges with defaults, so we expect [.git/ vendor/ local1 local2]
-		expectedExcludePatterns := []string{".git/", "vendor/", "local1", "local2"}
-		assertStringSliceEqual(t, "ExcludePatterns from local file (merged with defaults per CFG-005)", cfg.ExcludePatterns, expectedExcludePatterns)
+		// First discovery file replaces built-in exclude_patterns; home merge appends without restoring defaults
+		expectedExcludePatterns := []string{"local1", "local2"}
+		assertStringSliceEqual(t, "ExcludePatterns from local file (replaces built-in defaults)", cfg.ExcludePatterns, expectedExcludePatterns)
 		// include_git_info: local file doesn't set it (default false), home file sets it to true
 		// Since local file didn't explicitly set it, home file can override the default
 		assertBoolEqual(t, "IncludeGitInfo from home file (local file didn't set it)", cfg.IncludeGitInfo, true)
@@ -4152,12 +4228,12 @@ func TestMixedSequentialAndInheritance(t *testing.T) {
 	assertBoolEqual(t, "skip_broken_symlinks from sequential file", cfg.SkipBrokenSymlinks, true)
 
 	// exclude_patterns is an accumulate field - should merge from:
-	// 1. Defaults: [".git/", "vendor/"]
+	// 1. Defaults: [] (empty)
 	// 2. Sequential file: ["sequential-1", "sequential-2"]
 	// 3. Base file (from inheritance chain): ["base-1", "base-2"]
 	// 4. Inherited file: ["inherited-1"]
 	// Expected order: defaults first, then sequential, then base, then inherited
-	expectedPatterns := []string{".git/", "vendor/", "sequential-1", "sequential-2", "base-1", "base-2", "inherited-1"}
+	expectedPatterns := []string{"sequential-1", "sequential-2", "base-1", "base-2", "inherited-1"}
 	assertStringSliceEqual(t, "exclude_patterns merged from sequential and inheritance chain", cfg.ExcludePatterns, expectedPatterns)
 }
 
@@ -4175,7 +4251,7 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		}
 	}()
 
-	t.Run("exclude patterns merged from defaults and local config", func(t *testing.T) {
+	t.Run("exclude patterns from first config file replace built-ins; direct merge helper still accumulates", func(t *testing.T) {
 		dir := t.TempDir()
 
 		// Create local config file with additional exclude patterns
@@ -4223,14 +4299,14 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		// We'll use t.Logf for diagnostics instead since debug is not accessible here
 
 		initialDefaultCfg := DefaultConfig()
-		mergedCfg, err := applyMergeStrategies(defaultCfg, loadResult.config, true, loadResult.rawMap, initialDefaultCfg, nil)
+		mergedCfg, err := applyMergeStrategies(defaultCfg, loadResult.config, true, loadResult.rawMap, initialDefaultCfg, nil, false)
 		if err != nil {
 			t.Fatalf("applyMergeStrategies error: %v", err)
 		}
 		t.Logf("DIAGNOSTIC: Merged config exclude_patterns: %v", mergedCfg.ExcludePatterns)
 
-		// Verify the direct merge worked
-		expectedDirectMerge := []string{".git/", "vendor/", "demo/batches/", "*.log"}
+		// Verify the direct merge worked (inheritContext=true merges with empty defaults)
+		expectedDirectMerge := []string{"demo/batches/", "*.log"}
 		if !equalStringSlices(mergedCfg.ExcludePatterns, expectedDirectMerge) {
 			t.Errorf("DIAGNOSTIC: Direct applyMergeStrategies failed. Expected %v, got %v", expectedDirectMerge, mergedCfg.ExcludePatterns)
 		}
@@ -4262,10 +4338,10 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		t.Logf("DIAGNOSTIC: Loaded config exclude_patterns: %v (len=%d)", cfg.ExcludePatterns, len(cfg.ExcludePatterns))
 		t.Logf("DIAGNOSTIC: Default exclude_patterns: %v (len=%d)", DefaultConfig().ExcludePatterns, len(DefaultConfig().ExcludePatterns))
 
-		// Verify merged exclude patterns contain both defaults and local patterns
-		expectedPatterns := []string{".git/", "vendor/", "demo/batches/", "*.log"}
+		// LoadConfig: first file replaces built-in defaults for exclude_patterns
+		expectedPatterns := []string{"demo/batches/", "*.log"}
 		if !equalStringSlices(cfg.ExcludePatterns, expectedPatterns) {
-			t.Errorf("Exclude patterns not merged correctly. Expected %v (len=%d), got %v (len=%d)",
+			t.Errorf("Exclude patterns not loaded correctly. Expected %v (len=%d), got %v (len=%d)",
 				expectedPatterns, len(expectedPatterns), cfg.ExcludePatterns, len(cfg.ExcludePatterns))
 
 			// Detailed comparison
@@ -4335,8 +4411,8 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 				t.Fatalf("LoadConfig error: %v", err)
 			}
 
-			// Should contain all unique patterns
-			expectedUnique := []string{".git/", "vendor/", "demo/batches/", "*.log", "new_pattern"}
+			// First file replaces built-ins; second file merges in its patterns
+			expectedUnique := []string{"demo/batches/", "*.log", ".git/", "new_pattern"}
 			// Count occurrences
 			patternCounts := make(map[string]int)
 			for _, p := range cfg2.ExcludePatterns {
@@ -4366,7 +4442,7 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 		})
 	})
 
-	t.Run("order preserved: defaults first, then local additions", func(t *testing.T) {
+	t.Run("order preserved: local list replaces built-in defaults", func(t *testing.T) {
 		dir := t.TempDir()
 
 		localConfigPath := filepath.Join(dir, ".bkpdir.yml")
@@ -4381,30 +4457,7 @@ func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Verify defaults come first
-		if len(cfg.ExcludePatterns) < 2 {
-			t.Fatalf("Expected at least 2 patterns, got %d", len(cfg.ExcludePatterns))
-		}
-
-		// First two should be defaults
-		if cfg.ExcludePatterns[0] != ".git/" || cfg.ExcludePatterns[1] != "vendor/" {
-			t.Errorf("Expected defaults first, got: %v", cfg.ExcludePatterns)
-		}
-
-		// Local patterns should come after
-		foundLocal1 := false
-		foundLocal2 := false
-		for i := 2; i < len(cfg.ExcludePatterns); i++ {
-			if cfg.ExcludePatterns[i] == "local1" {
-				foundLocal1 = true
-			}
-			if cfg.ExcludePatterns[i] == "local2" {
-				foundLocal2 = true
-			}
-		}
-		if !foundLocal1 || !foundLocal2 {
-			t.Errorf("Local patterns not found after defaults. Got: %v", cfg.ExcludePatterns)
-		}
+		assertStringSliceEqual(t, "Local exclude_patterns replace defaults", cfg.ExcludePatterns, []string{"local1", "local2"})
 	})
 }
 
@@ -4448,8 +4501,8 @@ func TestMergeStrategiesInSequentialFiles(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Should merge: defaults + file1 + file2 (CFG-005)
-		expected := []string{".git/", "vendor/", "file1-1", "file1-2", "file2-1", "file2-2"}
+		// file1 replaces built-ins; + file2 merges
+		expected := []string{"file1-1", "file1-2", "file2-1", "file2-2"}
 		assertStringSliceEqual(t, "Merged exclude_patterns with + strategy", cfg.ExcludePatterns, expected)
 	})
 
@@ -4481,9 +4534,8 @@ func TestMergeStrategiesInSequentialFiles(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Should prepend: file2 (prepended to existing) + defaults + file1
-		// Prepend strategy puts new values BEFORE existing values
-		expected := []string{"file2-1", "file2-2", ".git/", "vendor/", "file1-1", "file1-2"}
+		// file1 replaces built-ins; ^ prepends file2 before file1 list
+		expected := []string{"file2-1", "file2-2", "file1-1", "file1-2"}
 		assertStringSliceEqual(t, "Prepend exclude_patterns with ^ strategy", cfg.ExcludePatterns, expected)
 	})
 
@@ -4511,7 +4563,7 @@ func TestMergeStrategiesInSequentialFiles(t *testing.T) {
 		}
 
 		// Should preserve first file's patterns (earlier file precedence, CFG-001)
-		expected := []string{".git/", "vendor/", "file1-1", "file1-2"}
+		expected := []string{"file1-1", "file1-2"}
 		assertStringSliceEqual(t, "Replace strategy respects earlier file precedence", cfg.ExcludePatterns, expected)
 	})
 
@@ -4578,8 +4630,8 @@ func TestEmptyArrayHandling(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Should merge: defaults + file2 (empty array doesn't prevent merge)
-		expected := []string{".git/", "vendor/", "file2-1", "file2-2"}
+		// First file replaces built-ins with []; second merges file2
+		expected := []string{"file2-1", "file2-2"}
 		assertStringSliceEqual(t, "Empty array allows merge", cfg.ExcludePatterns, expected)
 	})
 
@@ -4606,8 +4658,7 @@ func TestEmptyArrayHandling(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Should preserve first file's patterns (empty doesn't clear)
-		expected := []string{".git/", "vendor/", "file1-1", "file1-2"}
+		expected := []string{"file1-1", "file1-2"}
 		assertStringSliceEqual(t, "Empty array doesn't clear existing patterns", cfg.ExcludePatterns, expected)
 	})
 }
@@ -4651,8 +4702,7 @@ func TestMixedFieldBehaviors(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// exclude_patterns should merge (CFG-005 accumulate behavior)
-		expectedPatterns := []string{".git/", "vendor/", "file1-pattern", "file2-pattern"}
+		expectedPatterns := []string{"file1-pattern", "file2-pattern"}
 		assertStringSliceEqual(t, "Accumulate field merges", cfg.ExcludePatterns, expectedPatterns)
 
 		// archive_dir_path should preserve first file (CFG-001 precedence)
@@ -4705,8 +4755,8 @@ func TestMergeStrategiesInInheritanceChains(t *testing.T) {
 			t.Fatalf("LoadConfigWithInheritance error: %v", err)
 		}
 
-		// Should merge: defaults + parent + child
-		expected := []string{".git/", "vendor/", "parent-1", "parent-2", "child-1", "child-2"}
+		// Should merge: empty defaults + parent + child
+		expected := []string{"parent-1", "parent-2", "child-1", "child-2"}
 		assertStringSliceEqual(t, "Merge strategy in inheritance chain", cfg.ExcludePatterns, expected)
 	})
 
@@ -5205,8 +5255,7 @@ func TestMultipleFilesSameField(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// All should merge (accumulate behavior per CFG-005)
-		expected := []string{".git/", "vendor/", "file1-1", "file1-2", "file2-1", "file2-2", "file3-1", "file3-2"}
+		expected := []string{"file1-1", "file1-2", "file2-1", "file2-2", "file3-1", "file3-2"}
 		assertStringSliceEqual(t, "All files merge for accumulate field", cfg.ExcludePatterns, expected)
 	})
 
@@ -5283,7 +5332,7 @@ func TestPartialFieldUpdates(t *testing.T) {
 
 		// File 1's fields should be preserved
 		assertStringEqual(t, "File1 archive_dir_path preserved", cfg.ArchiveDirPath, "/file1/archive")
-		expectedPatterns := []string{".git/", "vendor/", "file1-pattern"}
+		expectedPatterns := []string{"file1-pattern"}
 		assertStringSliceEqual(t, "File1 exclude_patterns preserved", cfg.ExcludePatterns, expectedPatterns)
 
 		// File 2's field should be added (but earlier file precedence means it won't override if file1 set it)
@@ -5344,7 +5393,7 @@ func TestAllStrategiesWithAccumulateFields(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		expected := []string{".git/", "vendor/", "file1-1", "file2-1"}
+		expected := []string{"file1-1", "file2-1"}
 		assertStringSliceEqual(t, "Merge strategy appends", cfg.ExcludePatterns, expected)
 	})
 
@@ -5372,7 +5421,7 @@ func TestAllStrategiesWithAccumulateFields(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		expected := []string{"file2-1", ".git/", "vendor/", "file1-1"}
+		expected := []string{"file2-1", "file1-1"}
 		assertStringSliceEqual(t, "Prepend strategy prepends", cfg.ExcludePatterns, expected)
 	})
 
@@ -5397,8 +5446,7 @@ func TestAllStrategiesWithAccumulateFields(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Earlier file precedence (CFG-001) - first file's patterns preserved
-		expected := []string{".git/", "vendor/", "file1-1"}
+		expected := []string{"file1-1"}
 		assertStringSliceEqual(t, "Replace strategy respects earlier file precedence", cfg.ExcludePatterns, expected)
 	})
 
@@ -5425,22 +5473,8 @@ func TestAllStrategiesWithAccumulateFields(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Default strategy should apply if field wasn't set (uses default value)
-		// Since file1 didn't set it, it uses default. = strategy should apply.
-		// But wait - defaults already set it to "../.bkpdir", so = may not apply.
-		// Let's test actual behavior.
-		// Expected: either default value or file2's value
-		hasDefaults := false
-		for _, p := range cfg.ExcludePatterns {
-			if p == ".git/" || p == "vendor/" {
-				hasDefaults = true
-				break
-			}
-		}
-		if !hasDefaults {
-			t.Error("Default patterns should be present")
-		}
-		// Log the result for debugging
+		// Default strategy applies when field wasn't set; default exclude_patterns is empty, so = sets file2 only
+		assertStringSliceEqual(t, "exclude_patterns with = strategy", cfg.ExcludePatterns, []string{"file2-1"})
 		t.Logf("exclude_patterns with = strategy: %v", cfg.ExcludePatterns)
 	})
 
@@ -5465,8 +5499,7 @@ func TestAllStrategiesWithAccumulateFields(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// No prefix means default merge (CFG-005 accumulate behavior)
-		expected := []string{".git/", "vendor/", "file1-1", "file2-1"}
+		expected := []string{"file1-1", "file2-1"}
 		assertStringSliceEqual(t, "No prefix merges by default", cfg.ExcludePatterns, expected)
 	})
 }
@@ -5733,8 +5766,8 @@ func TestMultipleInheritanceSources_REQ_CFG_005(t *testing.T) {
 	// IncludeGitInfo from first parent should be preserved (child doesn't override it)
 	assertBoolEqual(t, "IncludeGitInfo from first parent", cfg.IncludeGitInfo, true)
 
-	// Accumulate fields should merge from defaults + both parents + child
-	expectedPatterns := []string{".git/", "vendor/", "parent1-1", "parent1-2", "parent2-1", "parent2-2", "child-1"}
+	// Accumulate fields should merge from empty defaults + both parents + child
+	expectedPatterns := []string{"parent1-1", "parent1-2", "parent2-1", "parent2-2", "child-1"}
 	assertStringSliceEqual(t, "ExcludePatterns merged from all sources (with defaults)", cfg.ExcludePatterns, expectedPatterns)
 
 	// Fields only in second parent should be preserved
@@ -5804,8 +5837,8 @@ func TestRelativePathInheritance_REQ_CFG_005(t *testing.T) {
 	// The child sets archive_dir_path: "/child/archives" which should override base
 	assertStringEqual(t, "ArchiveDirPath from child (overrides base in inheritance)", cfg.ArchiveDirPath, "/child/archives")
 
-	// Accumulate fields should merge from all sources: defaults + base + sibling + child
-	expectedPatterns := []string{".git/", "vendor/", "base-1", "base-2", "sibling-1", "child-1"}
+	// Accumulate fields should merge from all sources: empty defaults + base + sibling + child
+	expectedPatterns := []string{"base-1", "base-2", "sibling-1", "child-1"}
 	assertStringSliceEqual(t, "ExcludePatterns merged from all sources (with defaults)", cfg.ExcludePatterns, expectedPatterns)
 
 	// Fields from sibling should be preserved
@@ -5867,10 +5900,10 @@ archive_dir_path: "/child/archives"
 	// First parent takes precedence for precedence fields, but child overrides
 	assertStringEqual(t, "ArchiveDirPath from child (overrides base)", cfg.ArchiveDirPath, "/child/archives")
 
-	// Accumulate fields should merge: defaults + home base + child
-	// Expected: defaults (.git/, vendor/) + home base (home-1, home-2) + child (child-1) = 5 total
-	// But if home directory expansion in inherit paths isn't working, we'll only get defaults + child = 3
-	expectedPatterns := []string{".git/", "vendor/", "home-1", "home-2", "child-1"}
+	// Accumulate fields should merge: empty defaults + home base + child
+	// Expected: home base (home-1, home-2) + child (child-1) = 3 total when expansion works
+	// If home directory expansion in inherit paths isn't working, we'll only get child = 1
+	expectedPatterns := []string{"home-1", "home-2", "child-1"}
 
 	// Check if home patterns are present (they should be if inheritance worked)
 	hasHome1 := false
@@ -5888,7 +5921,7 @@ archive_dir_path: "/child/archives"
 		}
 	}
 
-	// At minimum, should have defaults + child
+	// At minimum, should have child pattern
 	if !hasChild1 {
 		t.Errorf("Child pattern 'child-1' not found in %v", cfg.ExcludePatterns)
 	}
@@ -5900,9 +5933,9 @@ archive_dir_path: "/child/archives"
 		t.Errorf("This indicates home directory expansion in inherit paths is not working correctly")
 		t.Errorf("Got patterns: %v (expected: %v)", cfg.ExcludePatterns, expectedPatterns)
 		t.Errorf("The child file inherits from '~/.bkpdir-base.yml' which should expand to %s/.bkpdir-base.yml", homeDir)
-		// At least verify we have defaults + child as a fallback check
-		if len(cfg.ExcludePatterns) < 3 {
-			t.Errorf("Expected at least 3 patterns (defaults + child), got %d: %v", len(cfg.ExcludePatterns), cfg.ExcludePatterns)
+		// At least verify we have child as a fallback check
+		if len(cfg.ExcludePatterns) < 1 {
+			t.Errorf("Expected at least 1 pattern (child), got %d: %v", len(cfg.ExcludePatterns), cfg.ExcludePatterns)
 		}
 	} else {
 		// All patterns should be present if home directory expansion works
@@ -5953,8 +5986,8 @@ func TestMissingInheritanceFile_REQ_CFG_005(t *testing.T) {
 			t.Fatal("Config should not be nil when no error")
 		}
 		assertStringEqual(t, "ArchiveDirPath from child", cfg.ArchiveDirPath, "/child/archives")
-		// Child file merges with defaults per CFG-005
-		expectedPatterns := []string{".git/", "vendor/", "child-1"}
+		// Child file merges with empty defaults per CFG-005
+		expectedPatterns := []string{"child-1"}
 		assertStringSliceEqual(t, "ExcludePatterns from child (merged with defaults)", cfg.ExcludePatterns, expectedPatterns)
 	}
 }
@@ -6003,10 +6036,9 @@ func TestInvalidYAMLHandling_REQ_CFG_005(t *testing.T) {
 		t.Fatal("Config should not be nil - first file should load")
 	}
 
-	// Should have values from first file (merged with defaults per CFG-005)
 	assertStringEqual(t, "ArchiveDirPath from first file", cfg.ArchiveDirPath, "/file1/archives")
-	expectedPatterns := []string{".git/", "vendor/", "file1-1", "file1-2"}
-	assertStringSliceEqual(t, "ExcludePatterns from first file (merged with defaults)", cfg.ExcludePatterns, expectedPatterns)
+	expectedPatterns := []string{"file1-1", "file1-2"}
+	assertStringSliceEqual(t, "ExcludePatterns from first file", cfg.ExcludePatterns, expectedPatterns)
 }
 
 // TestDeepInheritanceChain_REQ_CFG_005 tests very long inheritance chain
@@ -6077,10 +6109,10 @@ archive_dir_path: "/level%d/archives"
 	assertStringEqual(t, "ArchiveDirPath from last level", cfg.ArchiveDirPath, "/level11/archives")
 
 	// Accumulate fields should merge from all levels
-	// Expected: defaults (.git/, vendor/) + 12 levels (level0-1 through level11-1) = 14 total
-	expectedCount := 14 // 2 defaults + 12 levels
+	// Expected: 12 levels (level0-1 through level11-1) only — default exclude_patterns is empty
+	expectedCount := 12
 	if len(cfg.ExcludePatterns) < expectedCount {
-		t.Errorf("Expected at least %d patterns merged (defaults + 12 levels), got %d: %v", expectedCount, len(cfg.ExcludePatterns), cfg.ExcludePatterns)
+		t.Errorf("Expected at least %d patterns merged (12 levels), got %d: %v", expectedCount, len(cfg.ExcludePatterns), cfg.ExcludePatterns)
 		// Print what we got for debugging
 		t.Logf("Actual patterns: %v", cfg.ExcludePatterns)
 	}
@@ -6142,8 +6174,8 @@ func TestTypeMismatchHandling_REQ_CFG_005(t *testing.T) {
 		t.Logf("LoadConfig returned error (may be expected): %v", err)
 		if cfg != nil {
 			// If config is still returned, should use first file's value (merged with defaults)
-			expectedPatterns := []string{".git/", "vendor/", "pattern1", "pattern2"}
-			assertStringSliceEqual(t, "ExcludePatterns from first file (merged with defaults)", cfg.ExcludePatterns, expectedPatterns)
+			expectedPatterns := []string{"pattern1", "pattern2"}
+			assertStringSliceEqual(t, "ExcludePatterns from first file", cfg.ExcludePatterns, expectedPatterns)
 		}
 	} else {
 		// If no error, should handle gracefully - either use first file or convert
@@ -6152,9 +6184,8 @@ func TestTypeMismatchHandling_REQ_CFG_005(t *testing.T) {
 		}
 		// Type mismatch should result in first file's value being used (precedence)
 		// or string being converted/ignored
-		// First file merges with defaults, so should have at least defaults + pattern1, pattern2
-		if len(cfg.ExcludePatterns) < 4 {
-			t.Errorf("ExcludePatterns should have defaults + first file values, got %d patterns: %v", len(cfg.ExcludePatterns), cfg.ExcludePatterns)
+		if len(cfg.ExcludePatterns) < 2 {
+			t.Errorf("ExcludePatterns should have first file values, got %d patterns: %v", len(cfg.ExcludePatterns), cfg.ExcludePatterns)
 		}
 	}
 }
@@ -6198,9 +6229,8 @@ func TestNullValueHandling_REQ_CFG_005(t *testing.T) {
 	}
 
 	// Null values should be treated as not set, so first file's values should be preserved
-	// First file merges with defaults per CFG-005, so result includes defaults + file1 values
-	expectedPatterns := []string{".git/", "vendor/", "file1-1", "file1-2"}
-	assertStringSliceEqual(t, "ExcludePatterns from first file (null treated as not set, merged with defaults)", cfg.ExcludePatterns, expectedPatterns)
+	expectedPatterns := []string{"file1-1", "file1-2"}
+	assertStringSliceEqual(t, "ExcludePatterns from first file (null treated as not set)", cfg.ExcludePatterns, expectedPatterns)
 	assertStringEqual(t, "ArchiveDirPath from first file (null treated as not set)", cfg.ArchiveDirPath, "/file1/archives")
 }
 
@@ -6295,10 +6325,7 @@ func TestUnicodeHandling(t *testing.T) {
 		t.Errorf("Expected archive_dir_path to preserve Unicode characters, got %q, want %q", cfg.ArchiveDirPath, expectedArchivePath)
 	}
 
-	// Verify Unicode characters are preserved in exclude_patterns
 	expectedPatterns := []string{
-		".git/",   // Default pattern (merged per CFG-005)
-		"vendor/", // Default pattern (merged per CFG-005)
 		"*.文件",
 		"测试/*",
 		"unicode-文件.log",
@@ -6362,8 +6389,7 @@ func TestSpecialCharactersInPaths(t *testing.T) {
 			t.Errorf("Expected archive_dir_path to be /test/archive, got %q", cfg.ArchiveDirPath)
 		}
 
-		// Verify exclude_patterns loaded correctly (merged with defaults per CFG-005)
-		expectedPatterns := []string{".git/", "vendor/", "*.tmp"}
+		expectedPatterns := []string{"*.tmp"}
 		assertStringSliceEqual(t, "ExcludePatterns with spaces in path", cfg.ExcludePatterns, expectedPatterns)
 	})
 
@@ -6393,8 +6419,7 @@ func TestSpecialCharactersInPaths(t *testing.T) {
 			t.Errorf("Expected archive_dir_path to be /test/archive, got %q", cfg.ArchiveDirPath)
 		}
 
-		// Verify exclude_patterns loaded correctly (merged with defaults per CFG-005)
-		expectedPatterns := []string{".git/", "vendor/", "*.log"}
+		expectedPatterns := []string{"*.log"}
 		assertStringSliceEqual(t, "ExcludePatterns with special characters in path", cfg.ExcludePatterns, expectedPatterns)
 	})
 
@@ -6424,8 +6449,7 @@ func TestSpecialCharactersInPaths(t *testing.T) {
 			t.Errorf("Expected archive_dir_path to be /test/archive, got %q", cfg.ArchiveDirPath)
 		}
 
-		// Verify exclude_patterns loaded correctly (merged with defaults per CFG-005)
-		expectedPatterns := []string{".git/", "vendor/", "*.tmp", "*.log"}
+		expectedPatterns := []string{"*.tmp", "*.log"}
 		assertStringSliceEqual(t, "ExcludePatterns with spaces and special characters in path", cfg.ExcludePatterns, expectedPatterns)
 	})
 }
@@ -6644,10 +6668,7 @@ func TestPrependStrategyOrdering(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Prepend strategy should put new values (second file) before existing values (first file + defaults)
-		// First file merges with defaults: [".git/", "vendor/", "first1", "first2"]
-		// Second file prepends: ["second1", "second2"] + [".git/", "vendor/", "first1", "first2"]
-		expected := []string{"second1", "second2", ".git/", "vendor/", "first1", "first2"}
+		expected := []string{"second1", "second2", "first1", "first2"}
 		assertStringSliceEqual(t, "Prepend strategy ordering in sequential files", cfg.ExcludePatterns, expected)
 	})
 
@@ -6669,9 +6690,8 @@ func TestPrependStrategyOrdering(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Prepend strategy should put new values before defaults
-		// Expected: ["prepend1", "prepend2", ".git/", "vendor/"]
-		expected := []string{"prepend1", "prepend2", ".git/", "vendor/"}
+		// Prepend strategy with empty defaults: only prepended values
+		expected := []string{"prepend1", "prepend2"}
 		assertStringSliceEqual(t, "Prepend strategy with defaults", cfg.ExcludePatterns, expected)
 	})
 
@@ -6711,14 +6731,7 @@ func TestPrependStrategyOrdering(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Multiple prepend operations: each prepend prepends to the current state
-		// Base merges with defaults: [".git/", "vendor/", "base1", "base2"]
-		// First prepend: ["prepend1-1", "prepend1-2"] + [".git/", "vendor/", "base1", "base2"]
-		//   Result: ["prepend1-1", "prepend1-2", ".git/", "vendor/", "base1", "base2"]
-		// Second prepend: ["prepend2-1", "prepend2-2"] + ["prepend1-1", "prepend1-2", ".git/", "vendor/", "base1", "base2"]
-		//   Result: ["prepend2-1", "prepend2-2", "prepend1-1", "prepend1-2", ".git/", "vendor/", "base1", "base2"]
-		// Each prepend operation prepends to the accumulated result, so later prepends come first
-		expected := []string{"prepend2-1", "prepend2-2", "prepend1-1", "prepend1-2", ".git/", "vendor/", "base1", "base2"}
+		expected := []string{"prepend2-1", "prepend2-2", "prepend1-1", "prepend1-2", "base1", "base2"}
 		assertStringSliceEqual(t, "Multiple prepend operations maintain order", cfg.ExcludePatterns, expected)
 	})
 }
@@ -6848,13 +6861,9 @@ func TestDefaultStrategyEdgeCases(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Default strategy behavior with array fields:
-		// When first file has empty array, it merges with defaults first (CFG-005)
-		// So by the time second file's default strategy is evaluated, destination is [".git/", "vendor/"] (not zero)
-		// Therefore, default strategy does NOT apply, and defaults are preserved
-		// Expected: [".git/", "vendor/"] (defaults, because default strategy doesn't apply when destination is non-zero)
-		expected := []string{".git/", "vendor/"}
-		assertStringSliceEqual(t, "Default strategy NOT applied when array field merges with defaults first", cfg.ExcludePatterns, expected)
+		// First file replaces built-ins with []; second file uses = when dst is still "empty" slice
+		expected := []string{"custom1", "custom2"}
+		assertStringSliceEqual(t, "Default strategy with array field after empty first file", cfg.ExcludePatterns, expected)
 	})
 
 	t.Run("default strategy with array field - non-zero", func(t *testing.T) {
@@ -6882,10 +6891,7 @@ func TestDefaultStrategyEdgeCases(t *testing.T) {
 			t.Fatalf("LoadConfig error: %v", err)
 		}
 
-		// Default strategy should NOT apply when destination is non-zero
-		// First file merges with defaults: [".git/", "vendor/", "existing1", "existing2"]
-		// Default strategy ignored (destination is non-zero), so first file's value preserved
-		expected := []string{".git/", "vendor/", "existing1", "existing2"}
+		expected := []string{"existing1", "existing2"}
 		assertStringSliceEqual(t, "Default strategy NOT applied when array field is non-zero", cfg.ExcludePatterns, expected)
 	})
 

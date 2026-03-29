@@ -36,7 +36,6 @@ ARCH-EXTRACT_008_INTERDEP:
     supersedes: []
     see_also:
       - ARCH-CODE_ORGANIZATION
-  detail_file: architecture-decisions/ARCH-EXTRACT_008_INTERDEP.yaml
   metadata:
     created:
       date: "2026-03-12"

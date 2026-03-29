@@ -2,167 +2,98 @@ IMPL-TEST_COVERAGE:
   name: Comprehensive formatter.go Test Coverage
   status: Active
   cross_references:
-    - ARCH-TESTING_STRATEGY
-    - REQ-CODE_QUALITY
+  - ARCH-TESTING_STRATEGY
+  - REQ-CODE_QUALITY
   rationale:
     why: Improve code coverage and ensure reliability of OutputCollector, template methods, and error formatting functionality in formatter.go
     problems_solved:
-      - Multiple functions at 0% test coverage in formatter.go
-      - Unreliable OutputCollector, template methods, and error formatting
-      - Insufficient confidence in formatter.go functionality
+    - Multiple functions at 0% test coverage in formatter.go
+    - Unreliable OutputCollector, template methods, and error formatting
+    - Insufficient confidence in formatter.go functionality
     benefits:
-      - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
-      - 116 functions at 100% coverage
-      - 36 functions with partial coverage (75%+ typical)
+    - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
+    - 116 functions at 100% coverage
+    - 36 functions with partial coverage (75%+ typical)
   implementation_approach:
     summary: Added comprehensive test suites for previously untested functions including OutputCollector, template methods, error formatting, and print methods
     details:
-      - 'TestOutputCollector: tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear'
-      - 'TestDelayedOutputMode: OutputFormatter with collector integration'
-      - 'TestTemplateFormattingMethods: all template functions with 0% coverage'
-      - 'TestErrorFormattingMethods: error formatting functions'
-      - 'TestPrintMethods: Print methods in delayed mode'
-      - 'TestTemplateFormatterAdvanced: TemplateFormatter functionality'
-      - 'TestOutputCollectorFlushMethods: comprehensive FlushAll, FlushStdout, FlushStderr testing'
+    - 'TestOutputCollector: tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear'
+    - 'TestDelayedOutputMode: OutputFormatter with collector integration'
+    - 'TestTemplateFormattingMethods: all template functions with 0% coverage'
+    - 'TestErrorFormattingMethods: error formatting functions'
+    - 'TestPrintMethods: Print methods in delayed mode'
+    - 'TestTemplateFormatterAdvanced: TemplateFormatter functionality'
+    - 'TestOutputCollectorFlushMethods: comprehensive FlushAll, FlushStdout, FlushStderr testing'
   code_locations:
     files:
-      - formatter_test.go
-      - formatter_stats_test.go
-      - pkg/formatter/formatter_test.go
+    - formatter_test.go
+    - formatter_stats_test.go
+    - pkg/formatter/formatter_test.go
     functions:
-      - TestTemplateFormatter
-      - TestOutputCollector
-      - TestDelayedOutputMode
-      - TestDefaultOutputFormatter
-      - TestTemplateDelegation
-      - TestErrorTemplateFormatting
-      - TestPatternExtractor
-      - TestPatternExtractionEdgeCases
-      - TestInterfaceCompliance
-      - TestFormatCreatedArchiveWithStats_REQ_OUT_002
-      - TestFormatIncrementalCreatedWithStats_REQ_OUT_002
-      - TestPrintCreatedArchiveWithStats_REQ_OUT_002
-      - TestPrintIncrementalCreatedWithStats_REQ_OUT_002
-      - TestBackwardCompatibilityFormatStrings_REQ_OUT_002
+    - TestTemplateFormatter
+    - TestOutputCollector
+    - TestDelayedOutputMode
+    - TestDefaultOutputFormatter
+    - TestTemplateDelegation
+    - TestErrorTemplateFormatting
+    - TestPatternExtractor
+    - TestPatternExtractionEdgeCases
+    - TestInterfaceCompliance
+    - TestFormatCreatedArchiveWithStats_REQ_OUT_002
+    - TestFormatIncrementalCreatedWithStats_REQ_OUT_002
+    - TestPrintCreatedArchiveWithStats_REQ_OUT_002
+    - TestPrintIncrementalCreatedWithStats_REQ_OUT_002
+    - TestBackwardCompatibilityFormatStrings_REQ_OUT_002
   traceability:
     architecture:
-      - ARCH-TESTING_STRATEGY
+    - ARCH-TESTING_STRATEGY
     requirements:
-      - REQ-CODE_QUALITY
-      - REQ-OUTPUT_FORMATTING
+    - REQ-CODE_QUALITY
+    - REQ-OUTPUT_FORMATTING
     tests:
-      - TestOutputCollector
-      - TestDelayedOutputMode
-      - TestDefaultOutputFormatter
-      - TestTemplateDelegation
-      - TestErrorTemplateFormatting
-      - TestPatternExtractor
-      - TestPatternExtractionEdgeCases
-      - TestInterfaceCompliance
-      - TestTemplateFormatter
-      - TestTemplateFormatter/ExtractionWithFormatting
-      - TestTemplateFormatter/CustomTemplateHandling
-      - TestTemplateFormatter/ListOutputWithSizeHuman
-      - TestTemplateFormatter/FormatListArchive_MixedPlaceholders
-      - TestTemplateFormatter/FormatListArchiveWithExtraction_TemplatePlaceholders
-      - TestFormatCreatedArchiveWithStats_REQ_OUT_002
-      - TestFormatIncrementalCreatedWithStats_REQ_OUT_002
-      - TestFormatCreatedArchiveWithStatsAllPlaceholders_REQ_OUT_002
-      - TestFormatCreatedArchiveWithStatsErrorHandling_REQ_OUT_002
-      - TestPrintCreatedArchiveWithStats_REQ_OUT_002
-      - TestPrintIncrementalCreatedWithStats_REQ_OUT_002
-      - TestBackwardCompatibilityFormatStrings_REQ_OUT_002
+    - TestOutputCollector
+    - TestDelayedOutputMode
+    - TestDefaultOutputFormatter
+    - TestTemplateDelegation
+    - TestErrorTemplateFormatting
+    - TestPatternExtractor
+    - TestPatternExtractionEdgeCases
+    - TestInterfaceCompliance
+    - TestTemplateFormatter
+    - TestTemplateFormatter/ExtractionWithFormatting
+    - TestTemplateFormatter/CustomTemplateHandling
+    - TestTemplateFormatter/ListOutputWithSizeHuman
+    - TestTemplateFormatter/FormatListArchive_MixedPlaceholders
+    - TestTemplateFormatter/FormatListArchiveWithExtraction_TemplatePlaceholders
+    - TestFormatCreatedArchiveWithStats_REQ_OUT_002
+    - TestFormatIncrementalCreatedWithStats_REQ_OUT_002
+    - TestFormatCreatedArchiveWithStatsAllPlaceholders_REQ_OUT_002
+    - TestFormatCreatedArchiveWithStatsErrorHandling_REQ_OUT_002
+    - TestPrintCreatedArchiveWithStats_REQ_OUT_002
+    - TestPrintIncrementalCreatedWithStats_REQ_OUT_002
+    - TestBackwardCompatibilityFormatStrings_REQ_OUT_002
     code_annotations:
-      - 'pkg/formatter/formatter_test.go: TestOutputCollector — validates NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear'
-      - 'pkg/formatter/formatter_test.go: TestDelayedOutputMode — validates OutputFormatter collector integration, delayed printing'
-      - 'pkg/formatter/formatter_test.go: TestDefaultOutputFormatter — validates format string customization and error formatting'
-      - 'pkg/formatter/formatter_test.go: TestErrorTemplateFormatting — validates error template output for various error types'
-      - 'formatter_test.go: TestTemplateFormatter — validates template placeholder replacement, extraction, mixed format strings'
-      - 'formatter_stats_test.go: Test*_REQ_OUT_002 — validates file statistics template formatting and print methods'
+    - 'pkg/formatter/formatter_test.go: TestOutputCollector — validates NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear'
+    - 'pkg/formatter/formatter_test.go: TestDelayedOutputMode — validates OutputFormatter collector integration, delayed printing'
+    - 'pkg/formatter/formatter_test.go: TestDefaultOutputFormatter — validates format string customization and error formatting'
+    - 'pkg/formatter/formatter_test.go: TestErrorTemplateFormatting — validates error template output for various error types'
+    - 'formatter_test.go: TestTemplateFormatter — validates template placeholder replacement, extraction, mixed format strings'
+    - 'formatter_stats_test.go: Test*_REQ_OUT_002 — validates file statistics template formatting and print methods'
   related_decisions:
     depends_on:
-      - IMPL-TESTING
+    - IMPL-TESTING
     supersedes: []
     see_also:
-      - IMPL-TESTING_COMPLEXITY
+    - IMPL-TESTING_COMPLEXITY
   metadata:
-    created: "2026-03-12"
+    created: '2026-03-12'
     author: AI Agent
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
-  essence_pseudocode: |-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING]
-    # — Comprehensive test coverage for formatter.go: OutputCollector, template methods, error formatting, print methods, file statistics
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — OutputCollector lifecycle tests
-    TEST TestOutputCollector:
-      collector = NewOutputCollector()
-      ASSERT collector.GetMessages() is empty
-      collector.AddStdout("test stdout", "info")
-      collector.AddStderr("test stderr", "error")
-      ASSERT GetMessages() has 2 messages with correct content/destination
-      collector.Clear()
-      ASSERT GetMessages() is empty
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Delayed output mode with collector integration
-    TEST TestDelayedOutputMode:
-      collector = NewOutputCollector()
-      formatter = NewDefaultOutputFormatterWithCollector(configProvider, collector)
-      ASSERT formatter.IsDelayedMode() is true
-      ASSERT formatter.GetCollector() == collector
-      formatter.PrintCreatedArchive("/test/archive.zip")
-      formatter.PrintError("test error")
-      ASSERT collector has 2 messages: 1 stdout, 1 stderr
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-OUTPUT_FORMATTING] — Template formatting with placeholder replacement
-    TEST TestTemplateFormatter:
-      # SubTest: ExtractionWithFormatting — archive path extraction and formatting
-      result = fa.FormatListArchiveWithExtraction(archivePath, creationTime)
-      ASSERT result contains archive filename
-      # SubTest: CustomTemplateHandling — #{placeholder} replacement
-      result = fa.FormatWithPlaceholders("Archive: #{path} on #{branch}", data)
-      ASSERT result equals expected with replaced placeholders
-      ASSERT missing placeholders remain as-is
-      # SubTest: ListOutputWithSizeHuman — #{size_human} placeholder in list output
-      result = fa.FormatListArchiveWithExtraction(testFile, creationTime)
-      ASSERT result does NOT contain literal "#{size_human}"
-      ASSERT result contains actual human-readable file size
-      # SubTest: FormatListArchive_MixedPlaceholders — mixed %s and #{...} format strings
-      result = fa.FormatListArchive(testFile, creationTime)
-      ASSERT no unprocessed #{...} patterns remain
-      ASSERT result contains file path and size
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Default output formatter with custom format strings
-    TEST TestDefaultOutputFormatter:
-      result = formatter.FormatCreatedArchive("/test/archive.zip")
-      ASSERT result contains path and "Created archive"
-      SET custom format string
-      ASSERT custom format is applied
-      errorResult = formatter.FormatDiskFullError(testErr)
-      ASSERT contains original error and "Disk full"
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Error template formatting
-    TEST TestErrorTemplateFormatting:
-      FOR EACH error type (permission denied, disk full, config error):
-        result = formatter.Format*Error(err)
-        ASSERT result contains original error message
-        ASSERT result contains error type label
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — File statistics template formatting
-    TEST TestFormatCreatedArchiveWithStats_REQ_OUT_002:
-      CREATE test archive file with known content
-      result = formatter.FormatCreatedArchiveWithStats(testArchive)
-      ASSERT result contains file path
-      ASSERT result contains file size information
-    TEST TestPrintCreatedArchiveWithStats_REQ_OUT_002:
-      CAPTURE stdout
-      formatter.PrintCreatedArchiveWithStats(testArchive)
-      ASSERT captured output contains expected information
-
-    # [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Interface compliance
-    TEST TestInterfaceCompliance:
-      ASSERT DefaultOutputFormatter implements OutputFormatterInterface
-      ASSERT DefaultTemplateFormatter implements TemplateFormatterInterface
-      ASSERT DefaultPatternExtractor implements PatternExtractorInterface
+  essence_pseudocode: "# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING]\n# — Comprehensive test coverage for formatter.go: OutputCollector, template methods, error formatting, print methods, file statistics [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — OutputCollector lifecycle tests\nTEST TestOutputCollector:\n  collector = NewOutputCollector()\n  ASSERT collector.GetMessages() is empty\n  collector.AddStdout(\"test stdout\", \"info\")\n  collector.AddStderr(\"test stderr\", \"error\")\n  ASSERT GetMessages() has 2 messages with correct content/destination\n  collector.Clear()\n  ASSERT GetMessages() is empty\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Delayed output mode with collector integration\nTEST TestDelayedOutputMode:\n  collector = NewOutputCollector()\n  formatter = NewDefaultOutputFormatterWithCollector(configProvider, collector)\n\
+    \  ASSERT formatter.IsDelayedMode() is true\n  ASSERT formatter.GetCollector() == collector\n  formatter.PrintCreatedArchive(\"/test/archive.zip\")\n  formatter.PrintError(\"test error\")\n  ASSERT collector has 2 messages: 1 stdout, 1 stderr\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-OUTPUT_FORMATTING] — Template formatting with placeholder replacement\nTEST TestTemplateFormatter:\n  # SubTest: ExtractionWithFormatting — archive path extraction and formatting [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]\n  result = fa.FormatListArchiveWithExtraction(archivePath, creationTime)\n  ASSERT result contains archive filename\n  # SubTest: CustomTemplateHandling — #{placeholder} replacement [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]\n  result = fa.FormatWithPlaceholders(\"Archive: #{path} on #{branch}\", data)\n  ASSERT result equals expected with replaced placeholders\n  ASSERT missing placeholders remain as-is\n  # SubTest: ListOutputWithSizeHuman\
+    \ — #{size_human} placeholder in list output [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]\n  result = fa.FormatListArchiveWithExtraction(testFile, creationTime)\n  ASSERT result does NOT contain literal \"#{size_human}\"\n  ASSERT result contains actual human-readable file size\n  # SubTest: FormatListArchive_MixedPlaceholders — mixed %s and #{...} format strings [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]\n  result = fa.FormatListArchive(testFile, creationTime)\n  ASSERT no unprocessed #{...} patterns remain\n  ASSERT result contains file path and size\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Default output formatter with custom format strings\nTEST TestDefaultOutputFormatter:\n  result = formatter.FormatCreatedArchive(\"/test/archive.zip\")\n  ASSERT result contains path and \"Created archive\"\n  SET custom format string\n  ASSERT custom format is applied\n  errorResult = formatter.FormatDiskFullError(testErr)\n\
+    \  ASSERT contains original error and \"Disk full\"\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Error template formatting\nTEST TestErrorTemplateFormatting:\n  FOR EACH error type (permission denied, disk full, config error):\n    result = formatter.Format*Error(err)\n    ASSERT result contains original error message\n    ASSERT result contains error type label\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — File statistics template formatting\nTEST TestFormatCreatedArchiveWithStats_REQ_OUT_002:\n  CREATE test archive file with known content\n  result = formatter.FormatCreatedArchiveWithStats(testArchive)\n  ASSERT result contains file path\n  ASSERT result contains file size information\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Block implements documented behavior for: TEST TestPrintCreatedArchiveWithStats_REQ_OUT_002:\nTEST TestPrintCreatedArchiveWithStats_REQ_OUT_002:\n  CAPTURE stdout\n  formatter.PrintCreatedArchiveWithStats(testArchive)\n\
+    \  ASSERT captured output contains expected information\n\n# [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — Interface compliance\nTEST TestInterfaceCompliance:\n  ASSERT DefaultOutputFormatter implements OutputFormatterInterface\n  ASSERT DefaultTemplateFormatter implements TemplateFormatterInterface\n  ASSERT DefaultPatternExtractor implements PatternExtractorInterface"

@@ -34,7 +34,6 @@ REQ-GOV_DISCOVERABILITY:
         - REQ-GOV_REGISTRY_COMPLETENESS
       supersedes: []
     description: Governance requirement ensuring semantic tokens are discoverable through the registry and tooling
-    detail_file: requirements/REQ-GOV_DISCOVERABILITY.yaml
     metadata:
       created:
         date: "2026-03-12"

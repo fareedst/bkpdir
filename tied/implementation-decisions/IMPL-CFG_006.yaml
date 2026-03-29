@@ -2,15 +2,17 @@ IMPL-CFG_006:
   name: Configuration Reflection Implementation
   status: Active
   cross_references:
-    - ARCH-CFG_006
-    - ARCH-SYSTEM_COMPONENTS
-    - REQ-CFG_006
+  - ARCH-CFG_006
+  - ARCH-SYSTEM_COMPONENTS
+  - REQ-CFG_006
   rationale:
-    why: |-
-      Provides structured data representation
+    why: 'Provides structured data representation
+
       Enables type safety
+
       Supports serialization and persistence
-      Facilitates testing and validation
+
+      Facilitates testing and validation'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -18,194 +20,101 @@ IMPL-CFG_006:
     details: []
   code_locations:
     files:
-      - path: config.go
+    - path: config.go
     functions:
-      - GetAllConfigFields
-      - GetAllConfigValuesWithSources
-      - GetConfigValuesWithSourcesFiltered
-      - GetConfigFieldByPattern
-      - GetConfigFieldValue
-      - HasConfigField
-      - reflectConfigFields
-      - updateFieldValues
-      - getFieldValueByPath
-      - formatFieldValue
-      - getZeroValueForKind
-      - getConfigStructHash
-      - writeTypeToHash
-      - determineFieldCategory
-      - trackInheritanceChain
-      - determineMergeStrategyForField
-      - detectMergeStrategyFromField
-      - validateConfigField
-      - GenerateConfigDocumentation
-      - GenerateMarkdownDocumentation
-      - GenerateJSONSchema
-      - ValidateConfiguration
+    - GetAllConfigFields
+    - GetAllConfigValuesWithSources
+    - GetConfigValuesWithSourcesFiltered
+    - GetConfigFieldByPattern
+    - GetConfigFieldValue
+    - HasConfigField
+    - reflectConfigFields
+    - updateFieldValues
+    - getFieldValueByPath
+    - formatFieldValue
+    - getZeroValueForKind
+    - getConfigStructHash
+    - writeTypeToHash
+    - determineFieldCategory
+    - trackInheritanceChain
+    - determineMergeStrategyForField
+    - detectMergeStrategyFromField
+    - validateConfigField
+    - GenerateConfigDocumentation
+    - GenerateMarkdownDocumentation
+    - GenerateJSONSchema
+    - ValidateConfiguration
   traceability:
     architecture:
-      - ARCH-CFG_006
-      - ARCH-SYSTEM_COMPONENTS
+    - ARCH-CFG_006
+    - ARCH-SYSTEM_COMPONENTS
     requirements:
-      - REQ-CFG_006
+    - REQ-CFG_006
     tests:
-      - TestConfigReflection
-      - TestConfigReflectionPerformance
-      - TestConfigReflectionIntegration
-      - TestAdvancedFieldDiscovery
-      - TestFieldDiscoveryErrorHandling
-      - TestSourceAttributionAccuracy
-      - TestSourceConflictDetection
-      - TestDisplayFormatting
-      - TestFormattingEdgeCases
-      - TestCategoryDebug
-      - TestFilteringFunctionality
-      - TestAdvancedFilteringEdgeCases
-      - TestPerformanceOptimization
-      - TestConfigReflectionStressTest
-      - TestInheritanceChainTracking
-      - TestMergeStrategyTracking
-      - TestConfigurationValidation
-      - TestDocumentationGeneration
-      - TestEnhancedMetadata
-      - TestCFG006Integration
-      - BenchmarkConfigReflectionOperations
+    - TestConfigReflection
+    - TestConfigReflectionPerformance
+    - TestConfigReflectionIntegration
+    - TestAdvancedFieldDiscovery
+    - TestFieldDiscoveryErrorHandling
+    - TestSourceAttributionAccuracy
+    - TestSourceConflictDetection
+    - TestDisplayFormatting
+    - TestFormattingEdgeCases
+    - TestCategoryDebug
+    - TestFilteringFunctionality
+    - TestAdvancedFilteringEdgeCases
+    - TestPerformanceOptimization
+    - TestConfigReflectionStressTest
+    - TestInheritanceChainTracking
+    - TestMergeStrategyTracking
+    - TestConfigurationValidation
+    - TestDocumentationGeneration
+    - TestEnhancedMetadata
+    - TestCFG006Integration
+    - BenchmarkConfigReflectionOperations
     code_annotations:
-      - IMPL-CFG_006
-      - ARCH-CFG_006
-      - ARCH-SYSTEM_COMPONENTS
-      - REQ-CFG_006
-      - IMPL-CONFIG_STRUCT
+    - IMPL-CFG_006
+    - ARCH-CFG_006
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CFG_006
+    - IMPL-CONFIG_STRUCT
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-CFG_006
-      - ARCH-SYSTEM_COMPONENTS
-      - REQ-CFG_006
+    - ARCH-CFG_006
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CFG_006
     composed_with: []
-  detail_file: implementation-decisions/IMPL-CFG_006.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: Archive and backup struct definitions, formatter types
-  archive_structure: |-
-    ```go
-    type Archive struct {
-        Name               string
-        Path               string
-        CreationTime       time.Time
-        IsIncremental      bool
-        GitBranch          string
-        GitHash            string
-        Note               string
-        BaseArchive        string
-    }
-    ```
-  backup_structure: |-
-    ```go
-    type Backup struct {
-        Name         string
-        Path         string
-        CreationTime time.Time
-        SourceFile   string
-        Note         string
-    }
-
-    type BackupInfo struct {
-        Name         string
-        Path         string
-        CreationTime time.Time
-        Size         int64
-    }
-
-    type BackupOptions struct {
-        Context   context.Context
-        Config    *Config
-        Formatter *OutputFormatter
-        FilePath  string
-        Note      string
-        DryRun    bool
-    }
-    ```
+  archive_structure: "```go\ntype Archive struct {\n    Name               string\n    Path               string\n    CreationTime       time.Time\n    IsIncremental      bool\n    GitBranch          string\n    GitHash            string\n    Note               string\n    BaseArchive        string\n}\n```"
+  backup_structure: "```go\ntype Backup struct {\n    Name         string\n    Path         string\n    CreationTime time.Time\n    SourceFile   string\n    Note         string\n}\n\ntype BackupInfo struct {\n    Name         string\n    Path         string\n    CreationTime time.Time\n    Size         int64\n}\n\ntype BackupOptions struct {\n    Context   context.Context\n    Config    *Config\n    Formatter *OutputFormatter\n    FilePath  string\n    Note      string\n    DryRun    bool\n}\n```"
   caching_strategy:
-    - Thread-safe caching with sync.RWMutex
-    - Schema hash-based cache invalidation
-    - Automatic cache refresh on struct changes
-    - Singleton pattern for optimal memory usage
-  configfieldcache_structure: |-
-    ```go
-    // [IMPL-CFG_006] Performance optimization - Reflection result caching
-    type configFieldCache struct {
-        mu         sync.RWMutex
-        fields     []configFieldInfo
-        structHash uint64        // Hash of Config struct to detect changes
-        lastUpdate time.Time
-        valid      bool
-    }
-
-    var globalFieldCache = &configFieldCache{}
-    ```
-  configvaluewithmetadata_structure: |-
-    ```go
-    type ConfigValueWithMetadata struct {
-        Field         configFieldInfo
-        Value         interface{}
-        Source        string              // Source type (default, file, environment, inheritance)
-        SourceFile    string              // Source file path (if applicable)
-        InheritanceChain []string         // Complete inheritance chain
-        MergeStrategy string              // Merge strategy used (override, append, etc.)
-        IsOverride    bool                // Whether value was overridden
-    }
-    ```
+  - Thread-safe caching with sync.RWMutex
+  - Schema hash-based cache invalidation
+  - Automatic cache refresh on struct changes
+  - Singleton pattern for optimal memory usage
+  configfieldcache_structure: "```go\n// [IMPL-CFG_006] Performance optimization - Reflection result caching\ntype configFieldCache struct {\n    mu         sync.RWMutex\n    fields     []configFieldInfo\n    structHash uint64        // Hash of Config struct to detect changes\n    lastUpdate time.Time\n    valid      bool\n}\n\nvar globalFieldCache = &configFieldCache{}\n```"
+  configvaluewithmetadata_structure: "```go\ntype ConfigValueWithMetadata struct {\n    Field         configFieldInfo\n    Value         interface{}\n    Source        string              // Source type (default, file, environment, inheritance)\n    SourceFile    string              // Source file path (if applicable)\n    InheritanceChain []string         // Complete inheritance chain\n    MergeStrategy string              // Merge strategy used (override, append, etc.)\n    IsOverride    bool                // Whether value was overridden\n}\n```"
   field_categorization:
-    - Automatic categorization based on field name patterns
-    - 'Categories: archive, backup, formatting, verification, status, template, pattern'
-    - Supports custom category assignment
-  field_metadata_structure: |-
-    ```go
-    type configFieldInfo struct {
-        Path     string   // Full field path (e.g., "Git.IncludeInfo")
-        Name     string   // Field name
-        Type     string   // Type string representation
-        Category string   // Field category (archive, backup, formatting, etc.)
-        Value    interface{} // Current field value
-    }
-    ```
-  format_functions: |-
-    ```go
-    // [IMPL-CFG_006] [ARCH-CFG_006] Type-aware formatting
-    func formatFieldValue(value interface{}, fieldType reflect.Kind) string {
-        switch fieldType {
-        case reflect.String:
-            return formatStringValue(value)
-        case reflect.Slice:
-            return formatSliceValue(value)
-        case reflect.Bool:
-            return formatBoolValue(value)
-        // ... other types
-        }
-    }
-    ```
-  formatter_structures: |-
-    ```go
-    type OutputFormatter struct {
-        cfg *Config
-    }
-
-    type TemplateFormatter struct {
-        config *Config
-    }
-    ```
+  - Automatic categorization based on field name patterns
+  - 'Categories: archive, backup, formatting, verification, status, template, pattern'
+  - Supports custom category assignment
+  field_metadata_structure: "```go\ntype configFieldInfo struct {\n    Path     string   // Full field path (e.g., \"Git.IncludeInfo\")\n    Name     string   // Field name\n    Type     string   // Type string representation\n    Category string   // Field category (archive, backup, formatting, etc.)\n    Value    interface{} // Current field value\n}\n```"
+  format_functions: "```go\n// [IMPL-CFG_006] [ARCH-CFG_006] Type-aware formatting\nfunc formatFieldValue(value interface{}, fieldType reflect.Kind) string {\n    switch fieldType {\n    case reflect.String:\n        return formatStringValue(value)\n    case reflect.Slice:\n        return formatSliceValue(value)\n    case reflect.Bool:\n        return formatBoolValue(value)\n    // ... other types\n    }\n}\n```"
+  formatter_structures: "```go\ntype OutputFormatter struct {\n    cfg *Config\n}\n\ntype TemplateFormatter struct {\n    config *Config\n}\n```"
   getallconfigfields()_function: "```go\n// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Automatic field discovery\nfunc GetAllConfigFields(cfg *Config) []configFieldInfo {\n    // Check cache first\n    if cached := getCachedFields(); cached != nil {\n        return cached\n    }\n    \n    // Perform reflection-based discovery\n    fields := reflectConfigFields(reflect.TypeOf(*cfg), \"\", nil)\n    \n    // Cache results\n    cacheFields(fields)\n    \n    return fields\n}\n```"
   getallconfigvalueswithsources()_function: "```go\n// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Enhanced source tracking\nfunc GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    values := make([]ConfigValueWithMetadata, 0, len(fields))\n    \n    for _, field := range fields {\n        value := getFieldValue(cfg, field.Path)\n        source := determineSource(cfg, field.Path)\n        \n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Value:  value,\n            Source: source,\n            // ... additional metadata\n        })\n    }\n    \n    return values\n}\n```"
   incremental_resolution: "```go\n// [IMPL-CFG_006] Performance optimization - Incremental resolution\nfunc GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {\n    // Direct field access without full enumeration\n    field := findFieldByPath(fieldPath)\n    value := getFieldValue(cfg, fieldPath)\n    source := determineSource(cfg, fieldPath)\n    \n    return ConfigValueWithMetadata{\n        Field:  field,\n        Value:  value,\n        Source: source,\n    }, nil\n}\n```"
@@ -213,126 +122,39 @@ IMPL-CFG_006:
   lazy_source_evaluation: "```go\n// [IMPL-CFG_006] Performance optimization - Lazy source evaluation\nfunc GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    \n    // Pre-filter fields before source evaluation\n    filteredFields := applyFilter(fields, filter)\n    \n    // Only resolve sources for filtered fields\n    values := make([]ConfigValueWithMetadata, 0, len(filteredFields))\n    for _, field := range filteredFields {\n        source := determineSource(cfg, field.Path) // Lazy evaluation\n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Source: source,\n        })\n    }\n    \n    return values\n}\n```"
   pattern-based_queries: "```go\n// [IMPL-CFG_006] Performance optimization - Pattern-based queries\nfunc GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {\n    fields := GetAllConfigFields(cfg)\n    matched := make([]configFieldInfo, 0)\n    \n    for _, field := range fields {\n        if matchPattern(field.Path, pattern) {\n            matched = append(matched, field)\n        }\n    }\n    \n    return matched, nil\n}\n```"
   recursive_field_traversal:
-    - Handles nested structs (e.g., GitConfig)
-    - Supports embedded fields and anonymous structs
-    - Prevents circular references with visited type tracking
-    - Maximum depth limiting for safety
-    - Type-aware value extraction
+  - Handles nested structs (e.g., GitConfig)
+  - Supports embedded fields and anonymous structs
+  - Prevents circular references with visited type tracking
+  - Maximum depth limiting for safety
+  - Type-aware value extraction
   source_determination:
-    - Integration with CFG-005 inheritance system
-    - Environment variable detection
-    - Default value identification
-    - Inheritance chain tracking
-    - Merge strategy attribution
+  - Integration with CFG-005 inheritance system
+  - Environment variable detection
+  - Default value identification
+  - Inheritance chain tracking
+  - Merge strategy attribution
   table_format: Tabular display with columns (Field, Value, Source, Category)
   test_coverage:
-    - '>95% coverage for all CFG-006 functionality'
-    - 'Edge cases: anonymous fields, circular refs, error recovery'
-    - Integration testing with CFG-005
-    - Performance validation with benchmarks
+  - '>95% coverage for all CFG-006 functionality'
+  - 'Edge cases: anonymous fields, circular refs, error recovery'
+  - Integration testing with CFG-005
+  - Performance validation with benchmarks
   test_functions:
-    - '`TestConfigReflection()`: Main functionality tests'
-    - '`TestAdvancedFieldDiscovery()`: Edge case testing'
-    - '`TestSourceAttributionAccuracy()`: Source tracking validation'
-    - '`TestDisplayFormatting()`: Output format testing'
-    - '`TestFilteringFunctionality()`: Filtering validation'
-    - '`TestConfigReflectionPerformance()`: Performance benchmarks'
-    - '`TestConfigReflectionStressTest()`: Stress tests'
+  - '`TestConfigReflection()`: Main functionality tests'
+  - '`TestAdvancedFieldDiscovery()`: Edge case testing'
+  - '`TestSourceAttributionAccuracy()`: Source tracking validation'
+  - '`TestDisplayFormatting()`: Output format testing'
+  - '`TestFilteringFunctionality()`: Filtering validation'
+  - '`TestConfigReflectionPerformance()`: Performance benchmarks'
+  - '`TestConfigReflectionStressTest()`: Stress tests'
   tree_format: Hierarchical display showing inheritance relationships
   zero_value_detection:
-    - Detects zero values for all types
-    - Displays appropriate zero value representation
-    - Handles nil pointers and empty collections
-  essence_pseudocode: |-
-    # [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — Reflection-based field discovery with caching and lazy evaluation for complete config visibility
-
-    procedure GetAllConfigFields(cfg):
-      # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Check thread-safe cache before expensive reflection
-      cachedFields = globalFieldCache.getCachedFields()
-      if cachedFields != nil:
-        # Cache hit: update cached metadata with current config values via updateFieldValues
-        return updateFieldValues(cachedFields, cfg)
-
-      # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Cache miss — perform reflection-based discovery
-      configType = reflect.TypeOf(*cfg)
-      configValue = reflect.ValueOf(*cfg)
-      fields = reflectConfigFields(configType, configValue, prefix="", category="")
-
-      # Sort fields by name for consistent output
-      sort fields by Name ascending
-
-      # [IMPL-CFG_006] [ARCH-SYSTEM_COMPONENTS] Cache field metadata (without values) for future calls
-      fieldMetadata = copy fields stripping Value (set to nil)
-      for each field in fieldMetadata:
-        field.Importance = getFieldImportance(field.YAMLName, field.Category)
-      globalFieldCache.setCachedFields(fieldMetadata)
-
-      return fields
-
-    procedure reflectConfigFields(structType, structValue, prefix, category):
-      # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Recursive field discovery handling nested structs, pointers, slices
-      fields = []
-      for i = 0 to structType.NumField():
-        field = structType.Field(i)
-        if not field.IsExported(): continue
-
-        # Build dot-separated path for nested access
-        fieldPath = prefix + "." + field.Name (or just field.Name if prefix empty)
-
-        # Extract YAML tag name, fallback to lowercase field name
-        yamlName = parseYAMLTag(field)
-
-        # Determine category from field name patterns
-        fieldCategory = determineFieldCategory(field.Name, category)
-
-        # [IMPL-CFG_006] [ARCH-CFG_006] Handle nested struct types recursively
-        isStruct = field.Type is struct or pointer-to-struct
-        if isStruct and not yaml.Node:
-          nestedType, nestedValue = dereference pointer if needed (create zero value for nil)
-          nestedFields = reflectConfigFields(nestedType, nestedValue, fieldPath, fieldCategory)
-          append nestedFields to fields
-        else:
-          # [IMPL-CFG_006] [ARCH-CFG_006] Leaf field — extract type info with pointer handling
-          actualType, actualKind, actualValue = resolve pointer types
-          create configFieldInfo{Name, YAMLName, Type, Kind, Value, IsPointer, IsSlice, IsStruct, Category, Path}
-          append to fields
-
-      return fields
-
-    procedure updateFieldValues(cachedFields, cfg):
-      # [IMPL-CFG_006] [ARCH-SYSTEM_COMPONENTS] Update cached metadata with current values without re-reflecting
-      result = copy cachedFields
-      configValue = reflect.ValueOf(*cfg)
-      for each field in result:
-        value = getFieldValueByPath(configValue, field.Path)
-        if err: value = getZeroValueForKind(field.Kind)
-        field.Value = value
-      return result
-
-    procedure getFieldValueByPath(structValue, path):
-      # [IMPL-CFG_006] [ARCH-CFG_006] Dot-separated path traversal with pointer dereferencing
-      parts = split path by "."
-      currentValue = structValue
-      for each part in parts:
-        if currentValue is Ptr: dereference (error if nil)
-        if currentValue is not Struct: error
-        currentValue = currentValue.FieldByName(part)
-      return currentValue.Interface()
-
-    procedure formatFieldValue(value, kind):
-      # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Type-aware formatting for display
-      if value is nil: return "<nil>"
-      switch kind:
-        Bool: return boolToString
-        Int types: return sprintf("%d")
-        String: return as-is
-        Slice: if []string join with ", " in brackets; else sprintf
-        Ptr: dereference and recurse
-        default: sprintf("%v")
-
-    procedure ConfigFieldCache (thread-safe caching):
-      # [IMPL-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] Thread-safe cache with schema hash invalidation
-      struct { mu sync.RWMutex, fields []configFieldInfo, structHash uint64, lastUpdate time.Time, valid bool }
-      getCachedFields(): RLock, check valid + structHash matches current schema, return fields or nil
-      setCachedFields(fields): Lock, set fields + structHash + lastUpdate + valid=true
-      getConfigStructHash(): compute FNV-64a hash of Config struct type recursively
+  - Detects zero values for all types
+  - Displays appropriate zero value representation
+  - Handles nil pointers and empty collections
+  essence_pseudocode: "# [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — Reflection-based field discovery with caching and lazy evaluation for complete config visibility\n\nprocedure GetAllConfigFields(cfg):\n  # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Check thread-safe cache before expensive reflection\n  cachedFields = globalFieldCache.getCachedFields()\n  if cachedFields != nil:\n    # Cache hit: update cached metadata with current config values via updateFieldValues [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]\n    return updateFieldValues(cachedFields, cfg)\n\n  # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Cache miss — perform reflection-based discovery\n  configType = reflect.TypeOf(*cfg)\n  configValue = reflect.ValueOf(*cfg)\n  fields = reflectConfigFields(configType, configValue, prefix=\"\", category=\"\")\n\n  # Sort fields by name for consistent output [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]\n  sort fields by Name ascending\n\n  # [IMPL-CFG_006]\
+    \ [ARCH-SYSTEM_COMPONENTS] Cache field metadata (without values) for future calls [REQ-CFG_006]\n  fieldMetadata = copy fields stripping Value (set to nil)\n  for each field in fieldMetadata:\n    field.Importance = getFieldImportance(field.YAMLName, field.Category)\n  globalFieldCache.setCachedFields(fieldMetadata)\n\n  return fields\n\n# [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — Block implements documented behavior for: procedure reflectConfigFields(structType, structValue, prefix, category):\nprocedure reflectConfigFields(structType, structValue, prefix, category):\n  # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Recursive field discovery handling nested structs, pointers, slices\n  fields = []\n  for i = 0 to structType.NumField():\n    field = structType.Field(i)\n    if not field.IsExported(): continue\n\n    # Build dot-separated path for nested access [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]\n    fieldPath = prefix + \".\" + field.Name (or just field.Name if prefix empty)\n\
+    \n    # Extract YAML tag name, fallback to lowercase field name [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]\n    yamlName = parseYAMLTag(field)\n\n    # Determine category from field name patterns [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]\n    fieldCategory = determineFieldCategory(field.Name, category)\n\n    # [IMPL-CFG_006] [ARCH-CFG_006] Handle nested struct types recursively [REQ-CFG_006]\n    isStruct = field.Type is struct or pointer-to-struct\n    if isStruct and not yaml.Node:\n      nestedType, nestedValue = dereference pointer if needed (create zero value for nil)\n      nestedFields = reflectConfigFields(nestedType, nestedValue, fieldPath, fieldCategory)\n      append nestedFields to fields\n    else:\n      # [IMPL-CFG_006] [ARCH-CFG_006] Leaf field — extract type info with pointer handling [REQ-CFG_006]\n      actualType, actualKind, actualValue = resolve pointer types\n      create configFieldInfo{Name, YAMLName, Type, Kind, Value, IsPointer, IsSlice, IsStruct, Category,\
+    \ Path}\n      append to fields\n\n  return fields\n\n# [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — Block implements documented behavior for: procedure updateFieldValues(cachedFields, cfg):\nprocedure updateFieldValues(cachedFields, cfg):\n  # [IMPL-CFG_006] [ARCH-SYSTEM_COMPONENTS] Update cached metadata with current values without re-reflecting [REQ-CFG_006]\n  result = copy cachedFields\n  configValue = reflect.ValueOf(*cfg)\n  for each field in result:\n    value = getFieldValueByPath(configValue, field.Path)\n    if err: value = getZeroValueForKind(field.Kind)\n    field.Value = value\n  return result\n\n# [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — Block implements documented behavior for: procedure getFieldValueByPath(structValue, path):\nprocedure getFieldValueByPath(structValue, path):\n  # [IMPL-CFG_006] [ARCH-CFG_006] Dot-separated path traversal with pointer dereferencing [REQ-CFG_006]\n  parts = split path by \".\"\n  currentValue = structValue\n  for each part in parts:\n\
+    \    if currentValue is Ptr: dereference (error if nil)\n    if currentValue is not Struct: error\n    currentValue = currentValue.FieldByName(part)\n  return currentValue.Interface()\n\n# [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — Block implements documented behavior for: procedure formatFieldValue(value, kind):\nprocedure formatFieldValue(value, kind):\n  # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] Type-aware formatting for display\n  if value is nil: return \"<nil>\"\n  switch kind:\n    Bool: return boolToString\n    Int types: return sprintf(\"%d\")\n    String: return as-is\n    Slice: if []string join with \", \" in brackets; else sprintf\n    Ptr: dereference and recurse\n    default: sprintf(\"%v\")\n\n# [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — Block implements documented behavior for: procedure ConfigFieldCache (thread-safe caching):\nprocedure ConfigFieldCache (thread-safe caching):\n  # [IMPL-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] Thread-safe cache with\
+    \ schema hash invalidation\n  struct { mu sync.RWMutex, fields []configFieldInfo, structHash uint64, lastUpdate time.Time, valid bool }\n  getCachedFields(): RLock, check valid + structHash matches current schema, return fields or nil\n  setCachedFields(fields): Lock, set fields + structHash + lastUpdate + valid=true\n  getConfigStructHash(): compute FNV-64a hash of Config struct type recursively"

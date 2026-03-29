@@ -26,7 +26,6 @@ REQ-PERFORMANCE:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-PERFORMANCE.yaml
   metadata:
     created:
       date: "2026-03-12"

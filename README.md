@@ -2,6 +2,18 @@
 
 A powerful command-line tool for creating and managing directory archives with intelligent incremental backups, git integration, and flexible configuration.
 
+## Unreleased changes (summary)
+
+Work on the current branch includes:
+
+- **Default `exclude_patterns`**: The built-in default is an **empty** list (nothing excluded until you configure it). Add `.git/`, `vendor/`, `node_modules/`, etc. in YAML if you want those skipped.
+- **Config merge**: In the first config file loaded, an unprefixed `exclude_patterns` list **replaces** that empty default so project rules take effect without merge-prefix noise.
+- **Config errors**: Failed config file reads print a **stderr warning** and a short **YAML hint** (e.g. quoting globs such as `*.tsbuildinfo` when the parser reports alias/anchor issues).
+- **Exclusions**: Trailing-slash patterns with a **single** path segment (e.g. `node_modules/`) match that directory name **at any depth** in the tree.
+- **Lint / check**: `make lint` runs **TIED MCP validation** (`validate-tied-mcp`) before `revive`; `make check` runs fmt, vet, and lint only—run `make validate-token-enforcement` separately for the optional DOC-008 scan. See [Development](#development).
+- **TIED**: REQ/ARCH detail YAML no longer embed invalid `detail_file`; IMPL decision files normalized and pseudocode aligned; `tied/semantic-tokens.yaml`, `project-tokens.yaml`, and the semantic token validation report refreshed; agent checklist docs updated.
+- **Repository**: Prebuilt platform binaries were **removed** from `bin/` (build locally or via CI).
+
 ## 📹 Visual Demonstrations
 
 **Explore short demos that show bkpdir’s help, everyday usage, and configuration workflows.** Each GIF links to the matching section in this README so you can jump straight into details.
@@ -325,6 +337,8 @@ bkpdir/
 
 > **💡 Tip**: Start with `bkpdir template` to see all available configuration options and their default values. This is the recommended first step when customizing bkpdir locally.
 
+**`exclude_patterns` default:** With no config file, the default is an empty list—archives include every path unless you set exclusions. Examples below show typical patterns (`.git/`, `node_modules/`, …) that you should add explicitly when you want them skipped.
+
 ### Basic Configuration
 
 ```yaml
@@ -386,9 +400,10 @@ make test-coverage        # Run with coverage
 make test-performance     # Run performance tests
 
 # Quality
-make check                # All quality checks
-make lint                 # Lint code
-make validate-token-enforcement  # Validate semantic tokens
+make check                # All quality checks (fmt, vet, lint)
+make lint                 # TIED YAML via tied-yaml MCP (indexes + consistency), then revive
+make validate-tied-mcp    # Only MCP validation (requires Node; path from TIED_YAML_MCP_JS or .cursor/mcp.json)
+make validate-token-enforcement  # Optional DOC-008 grep/Unicode semantic token scan
 
 # Production
 make build-all           # Build for all platforms
@@ -397,7 +412,9 @@ make build-all           # Build for all platforms
 ### Validation
 
 ```bash
-# Semantic token validation
+# TIED indexes + REQ/ARCH/IMPL consistency (same tools as Cursor tied-yaml MCP)
+make validate-tied-mcp
+# Optional: DOC-008 repo-wide semantic token / Unicode scan
 make validate-token-enforcement
 
 # Strict validation (CI/CD)
@@ -406,6 +423,8 @@ make validate-tokens-strict
 # Development validation
 make validate-tokens
 ```
+
+`make lint` runs `validate-tied-mcp` first. Set `TIED_YAML_MCP_JS` to your built `mcp-server/dist/index.js` if it is not already in `.cursor/mcp.json` under `tied-yaml` → `args`. `TIED_BASE_PATH` defaults to `./tied` relative to the repo root.
 
 ## Token Registry
 

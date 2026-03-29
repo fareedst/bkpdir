@@ -37,7 +37,6 @@ REQ-CFG_001:
         - REQ-CONFIGURATION
       supersedes: []
     description: Base configuration management requirement for YAML-based configuration loading, merging, and validation
-    detail_file: requirements/REQ-CFG_001.yaml
     metadata:
       created:
         date: "2026-03-12"

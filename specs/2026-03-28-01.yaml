@@ -1,0 +1,18 @@
+- order: 1
+  feature_name: config must reading local project file to override home dir and defaults
+  goal: local configuration file has priority over defaults
+  rules: []
+  examples:
+    - given: >-
+        Default config has value `exclude_patterns = [.git/, vendor/]` .
+      when: >-
+        Local file has value `exclude_patterns = [vendor/]` .
+      then: >-
+        `.git/` must not be excluded.
+    - given: >-
+        Excluding `node_modules\`.
+      when: Named dir exists in multiple places at multiple depths.
+      then: >-
+        all dirs `node_modules` must be excluded everywhere in the tree.
+  boundary_conditions: []
+  out_of_scope: ""

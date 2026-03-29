@@ -1,0 +1,100 @@
+# Agent preload contract — bkpdir (Go CLI, TIED client)
+#
+# Filled for this repository: TIED indexes and detail dirs live under tied/ (not repo root).
+# For the generic empty template, see STDD docs/agent-preload-contract-template.yaml.
+# For the TIED source repository layout (no tied/), see agent-preload-contract-tied-repo.yaml.
+#
+# Quick agent commands: make test; make check (vet, revive, fmt); make validate-tokens;
+# MCP tied_validate_consistency. TIED YAML: single-writer via MCP per AGENTS.md —
+# tied/docs/yaml-update-mcp-runbook.md. Set workspace.cwd to this clone's absolute path
+# when treating preload as session-authoritative (or leave empty and rely on IDE workspace root).
+#
+# If a field is present and true, the agent should treat it as authoritative
+# and avoid redundant tool calls unless a later result contradicts it.
+agent_preload:
+  workspace:
+    cwd: "" # set to clone absolute path, e.g. /Users/.../bkpdir; must match session workspace_roots[0] when set
+    project_summary: >-
+      bkpdir — intelligent directory-archiving CLI with incremental backups and git integration;
+      Go implementation; TIED methodology client (tied/ indexes and project detail YAML).
+    top_level_entries:
+      - AGENTS.md
+      - ai-principles.md
+      - go.mod
+      - main.go
+      - Makefile
+      - cmd/
+      - pkg/
+      - internal/
+      - tied/
+      - docs/
+      - scripts/
+      - test/
+    vcs_present: true
+  session_bootstrap_docs:
+    agents_md_path: ./AGENTS.md
+    ai_principles_path: ./ai-principles.md
+    semantic_tokens_index: ./tied/semantic-tokens.yaml
+    semantic_tokens_guide: ./tied/semantic-tokens.md
+    architecture_decisions_index: ./tied/architecture-decisions.yaml
+    implementation_decisions_index: ./tied/implementation-decisions.yaml
+    implementation_decisions_guide: ./tied/implementation-decisions.md
+    processes_path: ./tied/processes.md
+    agent_req_checklist_path: ./tied/docs/agent-req-implementation-checklist.md
+    pseudocode_validation_guide: ./tied/docs/pseudocode-writing-and-validation.md
+    detail_files_schema: ./tied/detail-files-schema.md
+    requirements_index: ./tied/requirements.yaml
+  methodology_vs_project:
+    methodology_readonly: true # tied/methodology/** not edited in client
+    project_tokens_only_writable: true
+  implementation_contract:
+    language: Go
+    language_version: "1.21"
+    test_framework: go test # stdlib testing; no testify in go.mod
+    test_cohabit_code: true
+    invalid_input: "errors as return values; no exceptions"
+    target_source_paths:
+      - .
+      - cmd/
+      - pkg/
+      - internal/
+      - test/
+      - cmd/token-suggester/
+    citdp_artifact_paths:
+      - tied/docs/agent-req-implementation-checklist.yaml
+  tied_mcp:
+    base_path_resolved: false # if true, skip tied_config_get_base_path unless cwd changed
+    yaml_detail_batch_done: false # if true, skip yaml_detail_read_many for same keys
+  # Paths below are relative to TIED_BASE_PATH unless noted. Match MCP env TIED_BASE_PATH.
+  tied_paths:
+    TIED_BASE_PATH: tied # repo-root tied/; align MCP TIED_BASE_PATH to this directory
+    project_yaml_writable_globs:
+      - "*.yaml" # index + feedback at base: requirements, architecture-decisions, implementation-decisions, semantic-tokens, feedback
+      - requirements/*.yaml
+      - architecture-decisions/*.yaml
+      - implementation-decisions/*.yaml
+    methodology_readonly_glob: methodology/** # never agent-write; refreshed by copy_files.sh
+    mcp_tied_yaml_verified_this_session: false # set true after a successful MCP read/write this session
+  discovery_already_done:
+    ruby_files_present: false
+    ruby_test_files_present: false
+    gemfile_present: false
+    go_files_present: true
+    semantic_tokens_present: true
+    grep_patterns_satisfied:
+      token_scan_in_sources: false # REQ|ARCH|IMPL across sources
+      repo_layout_scan: false # **/* or equivalent
+  active_user_intent:
+    primary_query_summary: ""
+    checklist_token: "" # e.g. PROC-AGENT_REQ_CHECKLIST
+    checklist_step_id: "" # e.g. S01
+# Instruction block for prompts (optional; paste near agent_preload in user rules)
+preload_instructions: |
+  Treat agent_preload as authoritative context. If a value is present, do not spend
+  tool calls rediscovering it unless a later tool result or user message contradicts it.
+  Prefer preload facts over filesystem discovery. Do not search for MCP schema, server
+  metadata, project layout, or target file existence unless needed to resolve a
+  contradiction. When tied_paths.TIED_BASE_PATH is tied, align MCP TIED_BASE_PATH with
+  the repository's tied/ directory; never treat tied/methodology/** as writable; project
+  YAML is writable only under tied/ per project_yaml_writable_globs. Keep preload narrow
+  and accurate; wrong preload costs more than one discovery call.

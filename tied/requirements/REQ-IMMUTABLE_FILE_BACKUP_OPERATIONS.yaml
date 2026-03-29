@@ -29,7 +29,6 @@ REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -2,187 +2,119 @@ IMPL-DUAL_FORMATTING:
   name: Dual Printf/Template Formatting
   status: Active
   cross_references:
-    - ARCH-OUTPUT_FORMATTING
-    - REQ-OUTPUT_FORMATTING
+  - ARCH-OUTPUT_FORMATTING
+  - REQ-OUTPUT_FORMATTING
   rationale:
-    why: |-
-      Printf for simple, backward-compatible formatting
+    why: 'Printf for simple, backward-compatible formatting
+
       Templates for rich data extraction and advanced formatting
+
       Graceful fallback from template to printf
-      Supports ANSI colors and structured output
+
+      Supports ANSI colors and structured output'
     problems_solved: []
     benefits: []
   implementation_approach:
-    summary: |-
-      `OutputFormatter`: Printf-style formatting methods
+    summary: '`OutputFormatter`: Printf-style formatting methods
+
       `TemplateFormatter`: Advanced template processing
+
       Regex extraction for rich data formatting
-      Support for both Go text/template and placeholder syntax
+
+      Support for both Go text/template and placeholder syntax'
     details: []
   code_locations:
     files:
-      - formatter.go
-      - pkg/formatter/formatter.go
-      - pkg/formatter/interfaces.go
-      - pkg/formatter/template.go
-      - pkg/formatter/patterns.go
-      - pkg/formatter/collector.go
-      - pkg/formatter/placeholder_replace.go
+    - formatter.go
+    - pkg/formatter/formatter.go
+    - pkg/formatter/interfaces.go
+    - pkg/formatter/template.go
+    - pkg/formatter/patterns.go
+    - pkg/formatter/collector.go
+    - pkg/formatter/placeholder_replace.go
     functions:
-      - OutputFormatter.FormatCreatedArchive (formatter.go)
-      - OutputFormatter.FormatIdenticalArchive (formatter.go)
-      - OutputFormatter.FormatListArchive (formatter.go)
-      - OutputFormatter.FormatConfigValue (formatter.go)
-      - OutputFormatter.FormatDryRunArchive (formatter.go)
-      - OutputFormatter.FormatError (formatter.go)
-      - OutputFormatter.formatTemplate (formatter.go)
-      - OutputFormatter.PrintCreatedArchive (formatter.go)
-      - OutputFormatter.PrintIdenticalArchive (formatter.go)
-      - OutputFormatter.PrintListArchive (formatter.go)
-      - OutputFormatter.PrintError (formatter.go)
-      - OutputFormatter.FormatCreatedBackup (formatter.go)
-      - OutputFormatter.FormatIdenticalBackup (formatter.go)
-      - OutputFormatter.FormatListBackup (formatter.go)
-      - DefaultOutputFormatter.FormatCreatedArchive (pkg/formatter/formatter.go)
-      - DefaultOutputFormatter.FormatIdenticalArchive (pkg/formatter/formatter.go)
-      - DefaultOutputFormatter.FormatListArchive (pkg/formatter/formatter.go)
-      - DefaultOutputFormatter.FormatConfigValue (pkg/formatter/formatter.go)
-      - DefaultOutputFormatter.FormatError (pkg/formatter/formatter.go)
-      - DefaultOutputFormatter.PrintCreatedArchive (pkg/formatter/formatter.go)
-      - DefaultTemplateFormatter.FormatWithTemplate (pkg/formatter/template.go)
-      - DefaultTemplateFormatter.FormatWithPlaceholders (pkg/formatter/template.go)
-      - DefaultTemplateFormatter.TemplateCreatedArchive (pkg/formatter/template.go)
-      - DefaultPatternExtractor.ExtractPatternData (pkg/formatter/patterns.go)
-      - DefaultPatternExtractor.ExtractArchiveFilenameData (pkg/formatter/patterns.go)
-      - ReplacePlaceholders (pkg/formatter/placeholder_replace.go)
-      - OutputCollector.AddStdout (pkg/formatter/collector.go)
-      - OutputCollector.FlushAll (pkg/formatter/collector.go)
+    - OutputFormatter.FormatCreatedArchive (formatter.go)
+    - OutputFormatter.FormatIdenticalArchive (formatter.go)
+    - OutputFormatter.FormatListArchive (formatter.go)
+    - OutputFormatter.FormatConfigValue (formatter.go)
+    - OutputFormatter.FormatDryRunArchive (formatter.go)
+    - OutputFormatter.FormatError (formatter.go)
+    - OutputFormatter.formatTemplate (formatter.go)
+    - OutputFormatter.PrintCreatedArchive (formatter.go)
+    - OutputFormatter.PrintIdenticalArchive (formatter.go)
+    - OutputFormatter.PrintListArchive (formatter.go)
+    - OutputFormatter.PrintError (formatter.go)
+    - OutputFormatter.FormatCreatedBackup (formatter.go)
+    - OutputFormatter.FormatIdenticalBackup (formatter.go)
+    - OutputFormatter.FormatListBackup (formatter.go)
+    - DefaultOutputFormatter.FormatCreatedArchive (pkg/formatter/formatter.go)
+    - DefaultOutputFormatter.FormatIdenticalArchive (pkg/formatter/formatter.go)
+    - DefaultOutputFormatter.FormatListArchive (pkg/formatter/formatter.go)
+    - DefaultOutputFormatter.FormatConfigValue (pkg/formatter/formatter.go)
+    - DefaultOutputFormatter.FormatError (pkg/formatter/formatter.go)
+    - DefaultOutputFormatter.PrintCreatedArchive (pkg/formatter/formatter.go)
+    - DefaultTemplateFormatter.FormatWithTemplate (pkg/formatter/template.go)
+    - DefaultTemplateFormatter.FormatWithPlaceholders (pkg/formatter/template.go)
+    - DefaultTemplateFormatter.TemplateCreatedArchive (pkg/formatter/template.go)
+    - DefaultPatternExtractor.ExtractPatternData (pkg/formatter/patterns.go)
+    - DefaultPatternExtractor.ExtractArchiveFilenameData (pkg/formatter/patterns.go)
+    - ReplacePlaceholders (pkg/formatter/placeholder_replace.go)
+    - OutputCollector.AddStdout (pkg/formatter/collector.go)
+    - OutputCollector.FlushAll (pkg/formatter/collector.go)
   traceability:
     architecture:
-      - ARCH-OUTPUT_FORMATTING
+    - ARCH-OUTPUT_FORMATTING
     requirements:
-      - REQ-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
     tests:
-      - formatter_test.go::TestTemplateFormatter
-      - pkg/formatter/formatter_test.go::TestOutputCollector
-      - pkg/formatter/formatter_test.go::TestPatternExtractor
-      - pkg/formatter/formatter_test.go::TestTemplateFormatter
-      - pkg/formatter/formatter_test.go::TestDefaultOutputFormatter
-      - pkg/formatter/formatter_test.go::TestDelayedOutputMode
-      - pkg/formatter/formatter_test.go::TestTemplateDelegation
-      - pkg/formatter/formatter_test.go::TestErrorTemplateFormatting
-      - pkg/formatter/formatter_test.go::TestPatternExtractionEdgeCases
-      - pkg/formatter/formatter_test.go::TestInterfaceCompliance
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_Simple
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_Multiple
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_ExactBugScenario
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_AllKnown
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_UnknownPlaceholder
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_NoPlaceholders
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_EmptyData
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_SpecialChars
-      - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_MultipleOccurrences
+    - formatter_test.go::TestTemplateFormatter
+    - pkg/formatter/formatter_test.go::TestOutputCollector
+    - pkg/formatter/formatter_test.go::TestPatternExtractor
+    - pkg/formatter/formatter_test.go::TestTemplateFormatter
+    - pkg/formatter/formatter_test.go::TestDefaultOutputFormatter
+    - pkg/formatter/formatter_test.go::TestDelayedOutputMode
+    - pkg/formatter/formatter_test.go::TestTemplateDelegation
+    - pkg/formatter/formatter_test.go::TestErrorTemplateFormatting
+    - pkg/formatter/formatter_test.go::TestPatternExtractionEdgeCases
+    - pkg/formatter/formatter_test.go::TestInterfaceCompliance
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_Simple
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_Multiple
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_ExactBugScenario
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_AllKnown
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_UnknownPlaceholder
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_NoPlaceholders
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_EmptyData
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_SpecialChars
+    - pkg/formatter/placeholder_replace_test.go::TestReplacePlaceholders_MultipleOccurrences
     code_annotations:
-      - IMPL-DUAL_FORMATTING
-      - ARCH-OUTPUT_FORMATTING
-      - REQ-OUTPUT_FORMATTING
+    - IMPL-DUAL_FORMATTING
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-OUTPUT_FORMATTING
-      - REQ-OUTPUT_FORMATTING
-      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
-      - IMPL-LIST_FORMAT_SAFETY
-      - IMPL-DELAYED_OUTPUT
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-OUTPUT_FORMATTING
+    - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+    - IMPL-LIST_FORMAT_SAFETY
+    - IMPL-DELAYED_OUTPUT
     composed_with: []
-  detail_file: implementation-decisions/IMPL-DUAL_FORMATTING.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`FormatXXX()` and `TemplateXXX()` functions, regex patterns'
-  essence_pseudocode: |-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
-    # Dual-mode output formatting: printf-style for backward-compat, template-style for rich data
-
-    procedure format_with_printf(formatType, args...):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf formatting path
-      formatStr = config.GetFormatString(formatType)
-      if formatStr == "":
-        formatStr = defaultFormats[formatType]
-      return sprintf(formatStr, args...)
-
-    procedure format_with_template(templateStr, data map):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Template placeholder replacement
-      result = templateStr
-
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace #{key} placeholders from data map
-      for each (key, value) in data:
-        placeholder = "#{" + key + "}"
-        result = replaceAll(result, placeholder, value)
-
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Fill known missing placeholders with defaults
-      knownDefaults = {"#{size_human}": "unknown", "#{size}": "0", "#{mtime}": "unknown"}
-      for each (placeholder, default) in knownDefaults:
-        if result contains placeholder:
-          result = replaceAll(result, placeholder, default)
-
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle mixed printf+template strings
-      if result contains "%s":
-        replace first %s with data["path"] or data["name"]
-        replace second %s with data["creation_time"] if present
-
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Go text/template fallback
-      if result contains "{{" and not "#{":
-        parse and execute as Go text/template with data
-        on error: return result as-is (graceful fallback)
-
-      return result
-
-    procedure format_list_archive(path, creationTime):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Dual-mode list formatting
-      formatStr = config.GetFormatString("list_archive")
-      if formatStr contains "#{":
-        # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Template path with file stats
-        data = {"path": path, "creation_time": creationTime}
-        statInfo = GatherFileStatInfo(path)
-        if statInfo != nil:
-          merge statInfo fields into data
-        else:
-          fill data with safe defaults
-        return format_with_template(formatStr, data)
-      else:
-        # [IMPL-DUAL_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf fallback for backward compatibility
-        return sprintf(formatStr, path, creationTime)
-
-    procedure print_formatted(formatType, message):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [IMPL-DELAYED_OUTPUT] Output routing
-      if collector != nil:
-        collector.AddStdout(message, formatType)
-      else:
-        print(message)
-
-    procedure extract_pattern_data(pattern, text):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Regex-based data extraction for template processing
-      re = compile(pattern)
-      matches = re.FindStringSubmatch(text)
-      result = empty map
-      for each named group in matches:
-        result[name] = match_value
-      return result
-
-    procedure replace_placeholders(formatStr, data):
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Simple #{key} replacement
-      result = formatStr
-      for each (key, value) in data:
-        result = replaceAll(result, "#{" + key + "}", value)
-      return result
+  essence_pseudocode: "# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]\n# Dual-mode output formatting: printf-style for backward-compat, template-style for rich data [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]\n\n# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure format_with_printf(formatType, args...):\nprocedure format_with_printf(formatType, args...):\n  # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf formatting path\n  formatStr = config.GetFormatString(formatType)\n  if formatStr == \"\":\n    formatStr = defaultFormats[formatType]\n  return sprintf(formatStr, args...)\n\n# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure format_with_template(templateStr, data map):\nprocedure format_with_template(templateStr, data map):\n  # [IMPL-DUAL_FORMATTING]\
+    \ [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Template placeholder replacement\n  result = templateStr\n\n  # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace #{key} placeholders from data map [ARCH-OUTPUT_FORMATTING]\n  for each (key, value) in data:\n    placeholder = \"#{\" + key + \"}\"\n    result = replaceAll(result, placeholder, value)\n\n  # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Fill known missing placeholders with defaults [ARCH-OUTPUT_FORMATTING]\n  knownDefaults = {\"#{size_human}\": \"unknown\", \"#{size}\": \"0\", \"#{mtime}\": \"unknown\"}\n  for each (placeholder, default) in knownDefaults:\n    if result contains placeholder:\n      result = replaceAll(result, placeholder, default)\n\n  # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle mixed printf+template strings [ARCH-OUTPUT_FORMATTING]\n  if result contains \"%s\":\n    replace first %s with data[\"path\"] or data[\"name\"]\n    replace second %s with data[\"\
+    creation_time\"] if present\n\n  # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Go text/template fallback [REQ-OUTPUT_FORMATTING]\n  if result contains \"{{\" and not \"#{\":\n    parse and execute as Go text/template with data\n    on error: return result as-is (graceful fallback)\n\n  return result\n\n# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure format_list_archive(path, creationTime):\nprocedure format_list_archive(path, creationTime):\n  # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Dual-mode list formatting\n  formatStr = config.GetFormatString(\"list_archive\")\n  if formatStr contains \"#{\":\n    # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Template path with file stats [ARCH-OUTPUT_FORMATTING]\n    data = {\"path\": path, \"creation_time\": creationTime}\n    statInfo = GatherFileStatInfo(path)\n    if statInfo != nil:\n      merge statInfo fields into\
+    \ data\n    else:\n      fill data with safe defaults\n    return format_with_template(formatStr, data)\n  else:\n    # [IMPL-DUAL_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf fallback for backward compatibility [ARCH-OUTPUT_FORMATTING]\n    return sprintf(formatStr, path, creationTime)\n\n# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure print_formatted(formatType, message):\nprocedure print_formatted(formatType, message):\n  # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [IMPL-DELAYED_OUTPUT] Output routing [REQ-OUTPUT_FORMATTING]\n  if collector != nil:\n    collector.AddStdout(message, formatType)\n  else:\n    print(message)\n\n# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure extract_pattern_data(pattern, text):\nprocedure extract_pattern_data(pattern, text):\n  # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Regex-based\
+    \ data extraction for template processing [REQ-OUTPUT_FORMATTING]\n  re = compile(pattern)\n  matches = re.FindStringSubmatch(text)\n  result = empty map\n  for each named group in matches:\n    result[name] = match_value\n  return result\n\n# [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure replace_placeholders(formatStr, data):\nprocedure replace_placeholders(formatStr, data):\n  # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Simple #{key} replacement [ARCH-OUTPUT_FORMATTING]\n  result = formatStr\n  for each (key, value) in data:\n    result = replaceAll(result, \"#{\" + key + \"}\", value)\n  return result"

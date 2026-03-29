@@ -2,14 +2,16 @@ IMPL-PACKAGE_EXTRACTION:
   name: Package Extraction Implementation
   status: Active
   cross_references:
-    - ARCH-PACKAGE_EXTRACTION
-    - REQ-MAINTAINABILITY
+  - ARCH-PACKAGE_EXTRACTION
+  - REQ-MAINTAINABILITY
   rationale:
-    why: |-
-      Enables clean component boundaries
+    why: 'Enables clean component boundaries
+
       Prevents circular dependencies
+
       Maintains backward compatibility
-      Supports gradual migration
+
+      Supports gradual migration'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -20,113 +22,57 @@ IMPL-PACKAGE_EXTRACTION:
     functions: []
   traceability:
     architecture:
-      - ARCH-PACKAGE_EXTRACTION
+    - ARCH-PACKAGE_EXTRACTION
     requirements:
-      - REQ-MAINTAINABILITY
+    - REQ-MAINTAINABILITY
     tests: []
     code_annotations:
-      - IMPL-PACKAGE_EXTRACTION
-      - ARCH-PACKAGE_EXTRACTION
-      - REQ-MAINTAINABILITY
+    - IMPL-PACKAGE_EXTRACTION
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-PACKAGE_EXTRACTION
-      - REQ-MAINTAINABILITY
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
     composed_with: []
-  detail_file: implementation-decisions/IMPL-PACKAGE_EXTRACTION.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`EXTRACT-*` tokens, interface definitions, wrapper functions'
   after_extraction:
-    - Components expose clean interfaces
-    - No internal package dependencies
-    - External dependencies only (standard library, third-party)
+  - Components expose clean interfaces
+  - No internal package dependencies
+  - External dependencies only (standard library, third-party)
   before_extraction:
-    - Define interfaces for all component dependencies
-    - 'Example: `ConfigProvider`, `ConfigMerger` for config package'
-    - 'Example: `ArchiveConfigInterface`, `ArchiveFormatterInterface` for archive operations'
-  legacy_type_aliases: |-
-    ```go
+  - Define interfaces for all component dependencies
+  - 'Example: `ConfigProvider`, `ConfigMerger` for config package'
+  - 'Example: `ArchiveConfigInterface`, `ArchiveFormatterInterface` for archive operations'
+  legacy_type_aliases: '```go
+
     type FileInfo = fileops.FileInfo
+
     type DirectorySnapshot = fileops.DirectorySnapshot
+
     type PatternMatcher = fileops.PatternMatcher
-    ```
+
+    ```'
   phase_1: Foundation Components (No Dependencies)
   phase_2: Interface-Dependent Components
   phase_3: Framework Layer
   phase_4: Pattern Layer
-  wrapper_functions: |-
-    ```go
-    func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-        return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
-    }
-    ```
-  essence_pseudocode: |-
-    # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
-    # Package extraction strategy: 4-phase interface-driven extraction with
-    # type aliases, wrapper functions, and legacy compatibility layer.
-
-    DATA extraction_phases:
-      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
-      # Four phases ordered by dependency depth.
-      phase_1_foundation:
-        description: "Foundation Components (No Dependencies)"
-        packages: [pkg/config, pkg/errors]
-        deps: [Go stdlib only]
-      phase_2_interface_dependent:
-        description: "Interface-Dependent Components"
-        packages: [pkg/formatter, pkg/git, pkg/fileops]
-        deps: [phase_1_foundation]
-      phase_3_framework:
-        description: "Framework Layer"
-        packages: [pkg/cli]
-        deps: [phase_1_foundation, phase_2_interface_dependent]
-      phase_4_patterns:
-        description: "Pattern Layer"
-        packages: [pkg/processing, pkg/resources]
-        deps: [phase_1_foundation, phase_2_interface_dependent]
-
-    PROCEDURE extract_phase(phase):
-      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
-      # Each phase follows the same extraction procedure.
-      FOR each package in phase.packages:
-        define interfaces for all component dependencies (before extraction)
-        move code to pkg/<package>/ preserving internal structure
-        create legacy type aliases in root: type T = pkg.T
-        create wrapper functions in root: func F(...) = pkg.F(...)
-        update internal imports to use new package paths
-        VALIDATE go build ./... succeeds
-        VALIDATE all tests pass (unit + integration)
-      END FOR
-
-    PROCEDURE maintain_legacy_compatibility():
-      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
-      # Legacy layer ensures existing consumers see no breaking changes.
-      provide type aliases: type FileInfo = fileops.FileInfo
-      provide type aliases: type DirectorySnapshot = fileops.DirectorySnapshot
-      provide wrapper functions that delegate to extracted packages
-      add deprecation comments pointing to new package locations
-      VALIDATE original CLI entry points produce identical behavior
-
-    VALIDATE post_extraction_invariants():
-      # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
-      # After extraction, each package must be independently viable.
-      FOR each extracted package:
-        CHECK package compiles independently (go build ./pkg/<name>/...)
-        CHECK package tests pass independently (go test ./pkg/<name>/...)
-        CHECK package has no imports from root-level source files
-        CHECK package exposes clean interfaces at its boundary
-        CHECK no circular dependencies exist in import graph
-      END FOR
+  wrapper_functions: "```go\nfunc CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {\n    return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)\n}\n```"
+  essence_pseudocode: "# [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n# Package extraction strategy: 4-phase interface-driven extraction with [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n# type aliases, wrapper functions, and legacy compatibility layer. [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n\n# [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA extraction_phases:\nDATA extraction_phases:\n  # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  # Four phases ordered by dependency depth. [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  phase_1_foundation:\n    description: \"Foundation Components (No Dependencies)\"\n    packages: [pkg/config, pkg/errors]\n    deps: [Go stdlib only]\n  phase_2_interface_dependent:\n    description: \"Interface-Dependent Components\"\n   \
+    \ packages: [pkg/formatter, pkg/git, pkg/fileops]\n    deps: [phase_1_foundation]\n  phase_3_framework:\n    description: \"Framework Layer\"\n    packages: [pkg/cli]\n    deps: [phase_1_foundation, phase_2_interface_dependent]\n  phase_4_patterns:\n    description: \"Pattern Layer\"\n    packages: [pkg/processing, pkg/resources]\n    deps: [phase_1_foundation, phase_2_interface_dependent]\n\n# [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE extract_phase(phase):\nPROCEDURE extract_phase(phase):\n  # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  # Each phase follows the same extraction procedure. [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  FOR each package in phase.packages:\n    define interfaces for all component dependencies (before extraction)\n    move code to pkg/<package>/ preserving internal structure\n    create legacy type aliases in\
+    \ root: type T = pkg.T\n    create wrapper functions in root: func F(...) = pkg.F(...)\n    update internal imports to use new package paths\n    VALIDATE go build ./... succeeds\n    VALIDATE all tests pass (unit + integration)\n  END FOR\n\n# [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE maintain_legacy_compatibility():\nPROCEDURE maintain_legacy_compatibility():\n  # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  # Legacy layer ensures existing consumers see no breaking changes. [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  provide type aliases: type FileInfo = fileops.FileInfo\n  provide type aliases: type DirectorySnapshot = fileops.DirectorySnapshot\n  provide wrapper functions that delegate to extracted packages\n  add deprecation comments pointing to new package locations\n  VALIDATE original CLI entry points produce identical behavior\n\
+    \n# [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE post_extraction_invariants():\nVALIDATE post_extraction_invariants():\n  # [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  # After extraction, each package must be independently viable. [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]\n  FOR each extracted package:\n    CHECK package compiles independently (go build ./pkg/<name>/...)\n    CHECK package tests pass independently (go test ./pkg/<name>/...)\n    CHECK package has no imports from root-level source files\n    CHECK package exposes clean interfaces at its boundary\n    CHECK no circular dependencies exist in import graph\n  END FOR"

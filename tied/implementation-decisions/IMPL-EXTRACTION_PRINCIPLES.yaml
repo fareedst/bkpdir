@@ -2,8 +2,8 @@ IMPL-EXTRACTION_PRINCIPLES:
   name: Extraction Principles and Design Decisions
   status: Active
   cross_references:
-    - ARCH-CODE_ORGANIZATION
-    - REQ-MAINTAINABILITY
+  - ARCH-CODE_ORGANIZATION
+  - REQ-MAINTAINABILITY
   rationale:
     why: Prevents circular dependencies and ensures stable foundation
     problems_solved: []
@@ -16,79 +16,37 @@ IMPL-EXTRACTION_PRINCIPLES:
     functions: []
   traceability:
     architecture:
-      - ARCH-CODE_ORGANIZATION
+    - ARCH-CODE_ORGANIZATION
     requirements:
-      - REQ-MAINTAINABILITY
+    - REQ-MAINTAINABILITY
     tests: []
     code_annotations:
-      - IMPL-EXTRACTION_PRINCIPLES
-      - ARCH-CODE_ORGANIZATION
-      - REQ-MAINTAINABILITY
+    - IMPL-EXTRACTION_PRINCIPLES
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-CODE_ORGANIZATION
-      - REQ-MAINTAINABILITY
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
     composed_with: []
-  detail_file: implementation-decisions/IMPL-EXTRACTION_PRINCIPLES.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   decision: Extract in dependency order - core utilities first, then higher-level components
   design_note: Each layer builds on previous layers without circular references
   implementation: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
-  essence_pseudocode: |-
-    # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Package extraction follows strict dependency-order layering to prevent
-    # circular dependencies and ensure each layer builds on a stable foundation.
-
-    DATA extraction_layers:
-      # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Ordered layers define the extraction sequence; each layer depends only
-      # on layers above it (lower number = extracted first).
-      layer_1_infrastructure:
-        packages: [config, errors]
-        dependencies: none (only Go stdlib)
-        rationale: "Foundation types and error handling needed by all other layers"
-      layer_2_utilities:
-        packages: [formatter, git, fileops]
-        dependencies: [layer_1_infrastructure]
-        rationale: "Stateless utilities that consume config/errors but not each other"
-      layer_3_framework:
-        packages: [cli]
-        dependencies: [layer_1_infrastructure, layer_2_utilities]
-        rationale: "CLI framework wires utilities together; depends on both lower layers"
-      layer_4_patterns:
-        packages: [processing, resources]
-        dependencies: [layer_1_infrastructure, layer_2_utilities]
-        rationale: "Reusable processing patterns composed from utilities"
-
-    PROCEDURE plan_extraction_order():
-      # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Extract packages in dependency order so each extracted package can be
-      # independently compiled and tested.
-      FOR layer in extraction_layers (ascending order):
-        FOR package in layer.packages:
-          VALIDATE package has no dependencies outside its declared layer deps
-          VALIDATE package exposes interfaces, not concrete types, at boundaries
-          schedule package for extraction
-        END FOR
-      END FOR
-
-    VALIDATE no_circular_dependencies():
-      # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Circular dependency prevention is the primary design constraint.
-      build import_graph from all packages
-      CHECK no cycles exist in import_graph
-      CHECK each package only imports from its declared dependency layers
-      REPORT violations with import chain details
+  essence_pseudocode: "# [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# Package extraction follows strict dependency-order layering to prevent [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# circular dependencies and ensure each layer builds on a stable foundation. [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n\n# [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA extraction_layers:\nDATA extraction_layers:\n  # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Ordered layers define the extraction sequence; each layer depends only [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # on layers above it (lower number = extracted first). [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  layer_1_infrastructure:\n    packages: [config, errors]\n\
+    \    dependencies: none (only Go stdlib)\n    rationale: \"Foundation types and error handling needed by all other layers\"\n  layer_2_utilities:\n    packages: [formatter, git, fileops]\n    dependencies: [layer_1_infrastructure]\n    rationale: \"Stateless utilities that consume config/errors but not each other\"\n  layer_3_framework:\n    packages: [cli]\n    dependencies: [layer_1_infrastructure, layer_2_utilities]\n    rationale: \"CLI framework wires utilities together; depends on both lower layers\"\n  layer_4_patterns:\n    packages: [processing, resources]\n    dependencies: [layer_1_infrastructure, layer_2_utilities]\n    rationale: \"Reusable processing patterns composed from utilities\"\n\n# [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE plan_extraction_order():\nPROCEDURE plan_extraction_order():\n  # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Extract\
+    \ packages in dependency order so each extracted package can be [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # independently compiled and tested. [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  FOR layer in extraction_layers (ascending order):\n    FOR package in layer.packages:\n      VALIDATE package has no dependencies outside its declared layer deps\n      VALIDATE package exposes interfaces, not concrete types, at boundaries\n      schedule package for extraction\n    END FOR\n  END FOR\n\n# [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE no_circular_dependencies():\nVALIDATE no_circular_dependencies():\n  # [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Circular dependency prevention is the primary design constraint. [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  build\
+    \ import_graph from all packages\n  CHECK no cycles exist in import_graph\n  CHECK each package only imports from its declared dependency layers\n  REPORT violations with import chain details"

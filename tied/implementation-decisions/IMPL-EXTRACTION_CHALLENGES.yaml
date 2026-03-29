@@ -2,11 +2,11 @@ IMPL-EXTRACTION_CHALLENGES:
   name: Extraction Challenges and Solutions
   status: Active
   cross_references:
-    - ARCH-CODE_ORGANIZATION
-    - ARCH-CONFIG_SYSTEM
-    - ARCH-TESTING_STRATEGY
-    - REQ-MAINTAINABILITY
-    - REQ-CONFIGURATION
+  - ARCH-CODE_ORGANIZATION
+  - ARCH-CONFIG_SYSTEM
+  - ARCH-TESTING_STRATEGY
+  - REQ-MAINTAINABILITY
+  - REQ-CONFIGURATION
   rationale:
     why: See detail file
     problems_solved: []
@@ -19,97 +19,48 @@ IMPL-EXTRACTION_CHALLENGES:
     functions: []
   traceability:
     architecture:
-      - ARCH-CODE_ORGANIZATION
-      - ARCH-CONFIG_SYSTEM
-      - ARCH-TESTING_STRATEGY
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-TESTING_STRATEGY
     requirements:
-      - REQ-MAINTAINABILITY
-      - REQ-CONFIGURATION
+    - REQ-MAINTAINABILITY
+    - REQ-CONFIGURATION
     tests: []
     code_annotations:
-      - IMPL-EXTRACTION_CHALLENGES
-      - ARCH-CODE_ORGANIZATION
-      - ARCH-CONFIG_SYSTEM
-      - ARCH-TESTING_STRATEGY
-      - REQ-MAINTAINABILITY
-      - REQ-CONFIGURATION
+    - IMPL-EXTRACTION_CHALLENGES
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-TESTING_STRATEGY
+    - REQ-MAINTAINABILITY
+    - REQ-CONFIGURATION
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-CODE_ORGANIZATION
-      - ARCH-CONFIG_SYSTEM
-      - ARCH-TESTING_STRATEGY
-      - REQ-MAINTAINABILITY
-      - REQ-CONFIGURATION
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-TESTING_STRATEGY
+    - REQ-MAINTAINABILITY
+    - REQ-CONFIGURATION
     composed_with: []
-  detail_file: implementation-decisions/IMPL-EXTRACTION_CHALLENGES.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   approach: Extract test utilities first, then create focused tests for each package
   challenge: Extracted components need comprehensive testing without duplicating existing tests
   design_note: Comprehensive testing ensures extracted components are production-ready
   solution: Create package-specific tests while ensuring original integration tests still pass
-  essence_pseudocode: |-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM]
-    # [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION]
-    # Strategies for handling challenges that arise during package extraction:
-    # test migration, config coupling, and integration test preservation.
-
-    DATA challenge_registry:
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY]
-      # [REQ-MAINTAINABILITY]
-      # Known extraction challenges with their resolution strategies.
-      test_duplication:
-        problem: "Extracted packages need tests without duplicating root-level tests"
-        solution: "Create package-specific unit tests; keep root integration tests"
-      config_coupling:
-        problem: "Config struct used across all packages creates tight coupling"
-        solution: "Define per-package config interfaces; adapter pattern at boundaries"
-      integration_breakage:
-        problem: "Moving code to packages may break existing integration tests"
-        solution: "Maintain wrapper functions and type aliases during transition"
-
-    PROCEDURE extract_test_utilities():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
-      # Extract shared test helpers first so package-specific tests can use them.
-      identify shared test helpers (builders, fixtures, assertions)
-      move helpers to testutil package or package-internal test helpers
-      update import paths in all consuming test files
-      VALIDATE all existing tests still pass after helper extraction
-
-    PROCEDURE create_package_specific_tests():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
-      # Each extracted package gets focused unit tests covering its interface contract.
-      FOR each extracted_package:
-        write unit tests for public API surface
-        write edge-case tests for error paths
-        mock dependencies using interfaces (not concrete types)
-        VALIDATE package tests pass in isolation (no root-level imports)
-      END FOR
-
-    PROCEDURE resolve_config_coupling():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      # Config coupling is the hardest extraction challenge; resolved via interfaces.
-      define ConfigProvider interface per package (minimal method set)
-      implement adapter in root package that wraps full Config struct
-      extracted package depends only on its ConfigProvider interface
-      VALIDATE no extracted package imports root config directly
-
-    VALIDATE integration_test_preservation():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
-      # Original integration tests must continue to pass throughout extraction.
-      run full integration test suite after each package extraction
-      CHECK no test failures introduced by extraction
-      CHECK test coverage does not decrease
-      REPORT any tests that need updating due to import path changes
+  essence_pseudocode: "# [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION]\n# [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION] [IMPL-EXTRACTION_CHALLENGES]\n# Strategies for handling challenges that arise during package extraction: [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# test migration, config coupling, and integration test preservation. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n\n# [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA challenge_registry:\nDATA challenge_registry:\n  # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION]\n  # [REQ-MAINTAINABILITY] [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION]\n  # Known extraction challenges with their resolution strategies. [IMPL-EXTRACTION_CHALLENGES]\
+    \ [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  test_duplication:\n    problem: \"Extracted packages need tests without duplicating root-level tests\"\n    solution: \"Create package-specific unit tests; keep root integration tests\"\n  config_coupling:\n    problem: \"Config struct used across all packages creates tight coupling\"\n    solution: \"Define per-package config interfaces; adapter pattern at boundaries\"\n  integration_breakage:\n    problem: \"Moving code to packages may break existing integration tests\"\n    solution: \"Maintain wrapper functions and type aliases during transition\"\n\n# [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE extract_test_utilities():\nPROCEDURE extract_test_utilities():\n  # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]\n  # Extract shared test helpers first so package-specific tests can use them. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION]\
+    \ [REQ-MAINTAINABILITY]\n  identify shared test helpers (builders, fixtures, assertions)\n  move helpers to testutil package or package-internal test helpers\n  update import paths in all consuming test files\n  VALIDATE all existing tests still pass after helper extraction\n\n# [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE create_package_specific_tests():\nPROCEDURE create_package_specific_tests():\n  # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]\n  # Each extracted package gets focused unit tests covering its interface contract. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  FOR each extracted_package:\n    write unit tests for public API surface\n    write edge-case tests for error paths\n    mock dependencies using interfaces (not concrete types)\n    VALIDATE package tests pass in isolation (no root-level imports)\n  END FOR\n\n# [IMPL-EXTRACTION_CHALLENGES]\
+    \ [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE resolve_config_coupling():\nPROCEDURE resolve_config_coupling():\n  # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]\n  # Config coupling is the hardest extraction challenge; resolved via interfaces. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  define ConfigProvider interface per package (minimal method set)\n  implement adapter in root package that wraps full Config struct\n  extracted package depends only on its ConfigProvider interface\n  VALIDATE no extracted package imports root config directly\n\n# [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE integration_test_preservation():\nVALIDATE integration_test_preservation():\n  # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]\n  # Original integration tests must continue\
+    \ to pass throughout extraction. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  run full integration test suite after each package extraction\n  CHECK no test failures introduced by extraction\n  CHECK test coverage does not decrease\n  REPORT any tests that need updating due to import path changes"

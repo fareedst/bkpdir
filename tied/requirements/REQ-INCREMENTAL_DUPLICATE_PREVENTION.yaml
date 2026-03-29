@@ -41,7 +41,6 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
       - REQ-CONTEXT_SUPPORT
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -46,7 +46,6 @@ ARCH-CFG_001:
       see_also:
         - ARCH-CONFIG_SYSTEM
     description: Architecture decision for base configuration system design including YAML loading and merge strategies
-    detail_file: architecture-decisions/ARCH-CFG_001.yaml
     metadata:
       created:
         date: "2026-03-12"

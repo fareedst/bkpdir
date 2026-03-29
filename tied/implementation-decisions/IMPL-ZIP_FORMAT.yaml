@@ -2,198 +2,93 @@ IMPL-ZIP_FORMAT:
   name: ZIP Archive Format Implementation
   status: Active
   cross_references:
-    - ARCH-ARCHIVE_FORMAT
+  - ARCH-ARCHIVE_FORMAT
   rationale:
-    why: |-
-      Cross-platform compatibility
+    why: 'Cross-platform compatibility
+
       Built-in compression
+
       Wide tool support
-      Standard library support in Go
+
+      Standard library support in Go'
     problems_solved: []
     benefits: []
   implementation_approach:
-    summary: |-
-      Uses Go's `archive/zip` package
+    summary: 'Uses Go''s `archive/zip` package
+
       Atomic file operations with temporary files
+
       Compression level configurable
-      Supports incremental archives
+
+      Supports incremental archives'
     details: []
   code_locations:
     files:
-      - archive.go
-      - archive_test.go
+    - archive.go
+    - archive_test.go
     functions:
-      - CreateArchiveWithContext
-      - CreateFullArchiveWithContext
-      - CreateFullArchive
-      - CreateFullArchiveWithCleanup
-      - CreateIncrementalArchive
-      - CreateIncrementalArchiveWithContext
-      - createIncrementalArchive
-      - createAndVerifyArchive
-      - createAndVerifyIncrementalArchive
-      - createZipArchiveWithContext
-      - createZipArchiveWithContextAndConfig
-      - addFilesToZip
-      - addFilesToZipWithConfig
-      - addFileToZip
-      - addFileToZipWithConfig
-      - GenerateArchiveName
-      - GenerateArchiveNameWithInterface
-      - generateFullArchiveNameFromConfig
-      - generateIncrementalArchiveName
-      - GenerateFullArchiveName
-      - collectFilesToArchive
-      - collectFilesToArchiveWithInterface
-      - ListArchives
-      - createArchiveFromEntry
-      - checkContextCancellation
+    - CreateArchiveWithContext
+    - CreateFullArchiveWithContext
+    - CreateFullArchive
+    - CreateFullArchiveWithCleanup
+    - CreateIncrementalArchive
+    - CreateIncrementalArchiveWithContext
+    - createIncrementalArchive
+    - createAndVerifyArchive
+    - createAndVerifyIncrementalArchive
+    - createZipArchiveWithContext
+    - createZipArchiveWithContextAndConfig
+    - addFilesToZip
+    - addFilesToZipWithConfig
+    - addFileToZip
+    - addFileToZipWithConfig
+    - GenerateArchiveName
+    - GenerateArchiveNameWithInterface
+    - generateFullArchiveNameFromConfig
+    - generateIncrementalArchiveName
+    - GenerateFullArchiveName
+    - collectFilesToArchive
+    - collectFilesToArchiveWithInterface
+    - ListArchives
+    - createArchiveFromEntry
+    - checkContextCancellation
   traceability:
     architecture:
-      - ARCH-ARCHIVE_FORMAT
+    - ARCH-ARCHIVE_FORMAT
     requirements:
-      - REQ-FILE_BACKUP
+    - REQ-FILE_BACKUP
     tests:
-      - TestGenerateArchiveName
-      - TestCreateFullArchive
-      - TestCreateIncremental
-      - TestIncrementalArchiveDirectoryStructure
-      - TestSkipBrokenSymlinks
+    - TestGenerateArchiveName
+    - TestCreateFullArchive
+    - TestCreateIncremental
+    - TestIncrementalArchiveDirectoryStructure
+    - TestSkipBrokenSymlinks
     code_annotations:
-      - IMPL-ZIP_FORMAT
-      - ARCH-ARCHIVE_FORMAT
+    - IMPL-ZIP_FORMAT
+    - ARCH-ARCHIVE_FORMAT
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-ARCHIVE_FORMAT
+    - ARCH-ARCHIVE_FORMAT
     composed_with: []
-  detail_file: implementation-decisions/IMPL-ZIP_FORMAT.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`archive/zip` imports, `*.zip` file extensions'
-  essence_pseudocode: |-
-    # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — ZIP archive creation using Go's archive/zip with atomic writes and context support
-
-    procedure create_full_archive(ctx, config, note, dryRun):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] Orchestrates full archive creation: validate dir, collect files, generate name, write zip atomically
-      cwd = get_working_directory()
-      validate_directory(cwd, config)
-      check_context_cancellation(ctx)
-      resource_manager = new_resource_manager()
-      defer resource_manager.cleanup_with_panic_recovery()
-      archive_dir = prepare_archive_directory(config, cwd, dryRun)
-      files = collect_files_to_archive(ctx, cwd, config.exclude_patterns)
-      archive_name = generate_full_archive_name(config, cwd, note)
-      archive_path = join(archive_dir, archive_name)
-      if dryRun:
-        print_dry_run_info(files, archive_path)
-        return
-      create_and_verify_archive(ctx, cwd, archive_path, files, config, resource_manager)
-      end
-
-    procedure create_and_verify_archive(ctx, cwd, path, files, config, rm):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Atomic zip write: create temp file, write zip content, rename to final path
-      temp_file = path + ".tmp"
-      rm.add_temp_file(temp_file)
-      create_zip_archive(ctx, cwd, temp_file, files, config)
-      rename(temp_file, path)
-      rm.remove_resource(temp_file)
-      print_created_archive_with_stats(path)
-      end
-
-    procedure create_zip_archive(ctx, sourceDir, archivePath, files, config):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Creates ZIP file using Go's archive/zip with Deflate compression method
-      check_context_cancellation(ctx)
-      file = os.Create(archivePath)
-      defer file.Close()
-      zip_writer = zip.NewWriter(file)
-      defer zip_writer.Close()
-      for each rel in files:
-        check_context_cancellation(ctx)
-        add_file_to_zip(sourceDir, rel, zip_writer, config)
-      end
-
-    procedure add_file_to_zip(sourceDir, rel, zipWriter, config):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Adds single file with Deflate compression; handles symlinks and broken symlink skipping
-      abs = join(sourceDir, rel)
-      info = os.Lstat(abs)
-      header = zip.FileInfoHeader(info)
-      header.Name = rel
-      header.Method = zip.Deflate
-      writer = zipWriter.CreateHeader(header)
-      if info.is_symlink():
-        link_target = os.Readlink(abs)
-        if is_broken_symlink(link_target, abs):
-          if config.skip_broken_symlinks: return
-          else: error("broken symlink: " + abs)
-        writer.Write(link_target)
-      else:
-        copy_file_content(abs, writer)
-      end
-
-    procedure generate_archive_name(config):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Routes to incremental or full name generation based on config
-      if config.is_incremental and config.base_name != "":
-        return generate_incremental_archive_name(config)
-      return generate_full_archive_name(config)
-      end
-
-    procedure generate_full_archive_name(config):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Builds: {prefix}-{timestamp}[={branch}={hash}[-dirty]][={note}].zip
-      name = prefix + "-" + timestamp  (or just timestamp if no prefix)
-      if config.is_git and has_git_info:
-        name += "=" + branch + "=" + hash
-        if not clean and show_dirty_status: name += "-dirty"
-      if config.note != "": name += "=" + note
-      return name + ".zip"
-      end
-
-    procedure generate_incremental_archive_name(config):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Builds: {base}_update={timestamp}[={branch}={hash}[-dirty]][={note}].zip
-      base = strip_suffix(config.base_name, ".zip")
-      name = base + "_update=" + config.timestamp
-      if config.is_git and has_git_info:
-        name += "=" + branch + "=" + hash
-        if not clean and show_dirty_status: name += "-dirty"
-      if config.note != "": name += "=" + note
-      return name + ".zip"
-      end
-
-    procedure collect_files_to_archive(ctx, cwd, excludePatterns):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] Walks directory tree collecting non-excluded files with context cancellation
-      files = []
-      filepath.Walk(cwd, func(path, info, err):
-        check_context_cancellation(ctx)
-        rel = filepath.Rel(cwd, path)
-        if rel == ".": return nil
-        if should_exclude(rel, excludePatterns):
-          if info.IsDir(): return filepath.SkipDir
-          return nil
-        if info.IsDir(): return nil
-        files.append(rel)
-      )
-      return files
-      end
-
-    procedure list_archives(archiveDir):
-      # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Lists all .zip files in directory with metadata (name, path, time, incremental flag)
-      os.MkdirAll(archiveDir, 0755)
-      entries = os.ReadDir(archiveDir)
-      archives = []
-      for each entry in entries:
-        if entry.IsDir() or not has_suffix(entry.Name(), ".zip"): continue
-        archive = create_archive_from_entry(archiveDir, entry)
-        archives.append(archive)
-      return archives
-      end
+  essence_pseudocode: "# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — ZIP archive creation using Go's archive/zip with atomic writes and context support\n\nprocedure create_full_archive(ctx, config, note, dryRun):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] Orchestrates full archive creation: validate dir, collect files, generate name, write zip atomically\n  cwd = get_working_directory()\n  validate_directory(cwd, config)\n  check_context_cancellation(ctx)\n  resource_manager = new_resource_manager()\n  defer resource_manager.cleanup_with_panic_recovery()\n  archive_dir = prepare_archive_directory(config, cwd, dryRun)\n  files = collect_files_to_archive(ctx, cwd, config.exclude_patterns)\n  archive_name = generate_full_archive_name(config, cwd, note)\n  archive_path = join(archive_dir, archive_name)\n  if dryRun:\n    print_dry_run_info(files, archive_path)\n    return\n  create_and_verify_archive(ctx, cwd, archive_path, files, config, resource_manager)\n\
+    \  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure create_and_verify_archive(ctx, cwd, path, files, config, rm):\nprocedure create_and_verify_archive(ctx, cwd, path, files, config, rm):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Atomic zip write: create temp file, write zip content, rename to final path [REQ-FILE_BACKUP]\n  temp_file = path + \".tmp\"\n  rm.add_temp_file(temp_file)\n  create_zip_archive(ctx, cwd, temp_file, files, config)\n  rename(temp_file, path)\n  rm.remove_resource(temp_file)\n  print_created_archive_with_stats(path)\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure create_zip_archive(ctx, sourceDir, archivePath, files, config):\nprocedure create_zip_archive(ctx, sourceDir, archivePath, files, config):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Creates ZIP file using Go's archive/zip with Deflate compression method\
+    \ [REQ-FILE_BACKUP]\n  check_context_cancellation(ctx)\n  file = os.Create(archivePath)\n  defer file.Close()\n  zip_writer = zip.NewWriter(file)\n  defer zip_writer.Close()\n  for each rel in files:\n    check_context_cancellation(ctx)\n    add_file_to_zip(sourceDir, rel, zip_writer, config)\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure add_file_to_zip(sourceDir, rel, zipWriter, config):\nprocedure add_file_to_zip(sourceDir, rel, zipWriter, config):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Adds single file with Deflate compression; handles symlinks and broken symlink skipping [REQ-FILE_BACKUP]\n  abs = join(sourceDir, rel)\n  info = os.Lstat(abs)\n  header = zip.FileInfoHeader(info)\n  header.Name = rel\n  header.Method = zip.Deflate\n  writer = zipWriter.CreateHeader(header)\n  if info.is_symlink():\n    link_target = os.Readlink(abs)\n    if is_broken_symlink(link_target, abs):\n      if config.skip_broken_symlinks:\
+    \ return\n      else: error(\"broken symlink: \" + abs)\n    writer.Write(link_target)\n  else:\n    copy_file_content(abs, writer)\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure generate_archive_name(config):\nprocedure generate_archive_name(config):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Routes to incremental or full name generation based on config [REQ-FILE_BACKUP]\n  if config.is_incremental and config.base_name != \"\":\n    return generate_incremental_archive_name(config)\n  return generate_full_archive_name(config)\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure generate_full_archive_name(config):\nprocedure generate_full_archive_name(config):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Builds: {prefix}-{timestamp}[={branch}={hash}[-dirty]][={note}].zip [REQ-FILE_BACKUP]\n  name = prefix + \"-\" + timestamp  (or just timestamp\
+    \ if no prefix)\n  if config.is_git and has_git_info:\n    name += \"=\" + branch + \"=\" + hash\n    if not clean and show_dirty_status: name += \"-dirty\"\n  if config.note != \"\": name += \"=\" + note\n  return name + \".zip\"\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure generate_incremental_archive_name(config):\nprocedure generate_incremental_archive_name(config):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Builds: {base}_update={timestamp}[={branch}={hash}[-dirty]][={note}].zip [REQ-FILE_BACKUP]\n  base = strip_suffix(config.base_name, \".zip\")\n  name = base + \"_update=\" + config.timestamp\n  if config.is_git and has_git_info:\n    name += \"=\" + branch + \"=\" + hash\n    if not clean and show_dirty_status: name += \"-dirty\"\n  if config.note != \"\": name += \"=\" + note\n  return name + \".zip\"\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented\
+    \ behavior for: procedure collect_files_to_archive(ctx, cwd, excludePatterns):\nprocedure collect_files_to_archive(ctx, cwd, excludePatterns):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] Walks directory tree collecting non-excluded files with context cancellation\n  files = []\n  filepath.Walk(cwd, func(path, info, err):\n    check_context_cancellation(ctx)\n    rel = filepath.Rel(cwd, path)\n    if rel == \".\": return nil\n    if should_exclude(rel, excludePatterns):\n      if info.IsDir(): return filepath.SkipDir\n      return nil\n    if info.IsDir(): return nil\n    files.append(rel)\n  )\n  return files\n  end\n\n# [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — Block implements documented behavior for: procedure list_archives(archiveDir):\nprocedure list_archives(archiveDir):\n  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] Lists all .zip files in directory with metadata (name, path, time, incremental flag) [REQ-FILE_BACKUP]\n  os.MkdirAll(archiveDir,\
+    \ 0755)\n  entries = os.ReadDir(archiveDir)\n  archives = []\n  for each entry in entries:\n    if entry.IsDir() or not has_suffix(entry.Name(), \".zip\"): continue\n    archive = create_archive_from_entry(archiveDir, entry)\n    archives.append(archive)\n  return archives\n  end"

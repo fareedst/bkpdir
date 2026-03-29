@@ -5,95 +5,49 @@ IMPL-DEPENDENCY_MGMT:
   rationale:
     why: Extracted packages will have interdependencies that need careful management
     problems_solved:
-      - Circular dependencies between extracted packages
-      - Unclear dependency hierarchy
-      - Difficulty versioning interdependent packages
+    - Circular dependencies between extracted packages
+    - Unclear dependency hierarchy
+    - Difficulty versioning interdependent packages
     benefits:
-      - Clear dependency hierarchy
-      - Core packages with no internal dependencies
-      - Higher-level packages compose core packages
-      - Clear layering prevents circular dependencies and simplifies usage
+    - Clear dependency hierarchy
+    - Core packages with no internal dependencies
+    - Higher-level packages compose core packages
+    - Clear layering prevents circular dependencies and simplifies usage
   implementation_approach:
     summary: Design clear dependency hierarchy with Go modules for versioning
     details:
-      - Core packages (config, errors) have no internal dependencies
-      - Higher-level packages compose core packages
-      - Use Go modules for versioning extracted packages
-      - Clear layering prevents circular dependencies
+    - Core packages (config, errors) have no internal dependencies
+    - Higher-level packages compose core packages
+    - Use Go modules for versioning extracted packages
+    - Clear layering prevents circular dependencies
   cross_references:
-    - ARCH-CODE_ORGANIZATION
-    - REQ-MAINTAINABILITY
+  - ARCH-CODE_ORGANIZATION
+  - REQ-MAINTAINABILITY
   code_locations:
     files:
-      - go.mod
+    - go.mod
     functions: []
   traceability:
     architecture:
-      - ARCH-CODE_ORGANIZATION
+    - ARCH-CODE_ORGANIZATION
     requirements:
-      - REQ-MAINTAINABILITY
+    - REQ-MAINTAINABILITY
     tests: []
     code_annotations: []
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - IMPL-BACKWARD_COMPAT
-      - IMPL-PACKAGE_EXTRACTION
+    - IMPL-BACKWARD_COMPAT
+    - IMPL-PACKAGE_EXTRACTION
   metadata:
-    created: "2026-03-12"
+    created: '2026-03-12'
     author: AI Agent
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
-  essence_pseudocode: |-
-    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Dependency management: clear hierarchy with core packages having zero internal
-    # deps, higher-level packages composing core, and Go modules for versioning.
-
-    DATA dependency_hierarchy:
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Defines allowed dependency directions between package layers.
-      core_packages:
-        members: [pkg/config, pkg/errors]
-        allowed_deps: [Go stdlib only]
-        constraint: "No internal package imports"
-      utility_packages:
-        members: [pkg/formatter, pkg/git, pkg/fileops]
-        allowed_deps: [core_packages, Go stdlib]
-        constraint: "May import core; must not import each other"
-      framework_packages:
-        members: [pkg/cli]
-        allowed_deps: [core_packages, utility_packages, Go stdlib]
-        constraint: "Wires utilities; no circular refs"
-      pattern_packages:
-        members: [pkg/processing, pkg/resources]
-        allowed_deps: [core_packages, utility_packages, Go stdlib]
-        constraint: "Reusable patterns built on utilities"
-
-    PROCEDURE enforce_dependency_rules():
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Each package may only import from its declared dependency set.
-      FOR each package in all_packages:
-        extract actual imports from source files
-        determine package's layer from dependency_hierarchy
-        CHECK all imports are within allowed_deps for that layer
-        REPORT violations with import path and layer context
-      END FOR
-
-    PROCEDURE version_with_go_modules():
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Go modules provide versioning for extracted packages.
-      each extracted package has its own go.mod (or is a sub-package)
-      version packages independently using semantic versioning
-      pin dependency versions in go.mod to prevent drift
-      use go mod tidy to validate dependency graph consistency
-
-    VALIDATE no_circular_dependencies():
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Circular dependency prevention is enforced at build time.
-      run go vet ./... to check for import cycles
-      build import DAG from all packages
-      CHECK DAG has no cycles
-      CHECK DAG respects layer ordering from dependency_hierarchy
+  essence_pseudocode: "# [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# Dependency management: clear hierarchy with core packages having zero internal [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# deps, higher-level packages composing core, and Go modules for versioning. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n\n# [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA dependency_hierarchy:\nDATA dependency_hierarchy:\n  # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Defines allowed dependency directions between package layers. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  core_packages:\n    members: [pkg/config, pkg/errors]\n    allowed_deps: [Go stdlib only]\n    constraint: \"No internal package imports\"\n  utility_packages:\n    members: [pkg/formatter, pkg/git, pkg/fileops]\n    allowed_deps:\
+    \ [core_packages, Go stdlib]\n    constraint: \"May import core; must not import each other\"\n  framework_packages:\n    members: [pkg/cli]\n    allowed_deps: [core_packages, utility_packages, Go stdlib]\n    constraint: \"Wires utilities; no circular refs\"\n  pattern_packages:\n    members: [pkg/processing, pkg/resources]\n    allowed_deps: [core_packages, utility_packages, Go stdlib]\n    constraint: \"Reusable patterns built on utilities\"\n\n# [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE enforce_dependency_rules():\nPROCEDURE enforce_dependency_rules():\n  # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Each package may only import from its declared dependency set. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  FOR each package in all_packages:\n    extract actual imports from source files\n    determine package's layer from dependency_hierarchy\n\
+    \    CHECK all imports are within allowed_deps for that layer\n    REPORT violations with import path and layer context\n  END FOR\n\n# [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE version_with_go_modules():\nPROCEDURE version_with_go_modules():\n  # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Go modules provide versioning for extracted packages. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  each extracted package has its own go.mod (or is a sub-package)\n  version packages independently using semantic versioning\n  pin dependency versions in go.mod to prevent drift\n  use go mod tidy to validate dependency graph consistency\n\n# [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE no_circular_dependencies():\nVALIDATE no_circular_dependencies():\n  # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION]\
+    \ [REQ-MAINTAINABILITY]\n  # Circular dependency prevention is enforced at build time. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  run go vet ./... to check for import cycles\n  build import DAG from all packages\n  CHECK DAG has no cycles\n  CHECK DAG respects layer ordering from dependency_hierarchy"

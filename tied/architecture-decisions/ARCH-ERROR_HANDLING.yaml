@@ -28,7 +28,6 @@ ARCH-ERROR_HANDLING:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-ERROR_HANDLING.yaml
   metadata:
     created:
       date: "2026-03-12"

@@ -4140,6 +4140,7 @@ IMPL-DATA_MODELS:
   cross_references:
     - ARCH-SYSTEM_COMPONENTS
     - REQ-CODE_QUALITY
+    - REQ-FILE_BACKUP
   detail_file: implementation-decisions/IMPL-DATA_MODELS.yaml
 IMPL-DELAYED_OUTPUT:
   name: Delayed Output Management

@@ -2,103 +2,63 @@ IMPL-INTERFACE_FIRST:
   name: Interface-First Extraction Approach
   status: Active
   cross_references:
-    - ARCH-CODE_ORGANIZATION
-    - REQ-MAINTAINABILITY
+  - ARCH-CODE_ORGANIZATION
+  - REQ-MAINTAINABILITY
   rationale:
-    why: |-
-      Prevents tight coupling between extracted packages
+    why: 'Prevents tight coupling between extracted packages
+
       Enables independent testing and development of components
+
       Provides clear contracts for component interaction
-      Facilitates future evolution of implementations
+
+      Facilitates future evolution of implementations'
     problems_solved: []
     benefits: []
   implementation_approach:
-    summary: |-
-      Define interfaces before concrete implementations
+    summary: 'Define interfaces before concrete implementations
+
       Use Go interfaces for abstraction
+
       Independent package testing
-      Versioned interface evolution
+
+      Versioned interface evolution'
     details: []
   code_locations:
     files: []
     functions: []
   traceability:
     architecture:
-      - ARCH-CODE_ORGANIZATION
+    - ARCH-CODE_ORGANIZATION
     requirements:
-      - REQ-MAINTAINABILITY
+    - REQ-MAINTAINABILITY
     tests: []
     code_annotations:
-      - IMPL-INTERFACE_FIRST
-      - ARCH-CODE_ORGANIZATION
-      - REQ-MAINTAINABILITY
+    - IMPL-INTERFACE_FIRST
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-CODE_ORGANIZATION
-      - REQ-MAINTAINABILITY
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
     composed_with: []
-  detail_file: implementation-decisions/IMPL-INTERFACE_FIRST.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: 'Interface definitions with `// REFACTOR-001: Interface standardization`'
-  essence_pseudocode: |-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Interface-first design: define Go interfaces before concrete implementations,
-    # enabling independent testing, loose coupling, and versioned evolution.
-
-    DATA interface_design_principles:
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Guiding rules for interface design in extracted packages.
-      minimal_surface: "Interfaces expose only what consumers need (ISP)"
-      consumer_defined: "Interfaces live in the consuming package, not the provider"
-      no_concrete_exports: "Packages export interfaces; concrete types are internal"
-      testability: "Every interface must be mockable for unit testing"
-
-    PROCEDURE design_package_interfaces():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interfaces are designed before any implementation code is extracted.
-      FOR each package targeted for extraction:
-        analyze consumer call sites to determine required methods
-        define minimal interface (only methods consumers actually call)
-        place interface definition in consuming package (Go convention)
-        document interface contract with godoc comments
-      END FOR
-
-    PROCEDURE implement_against_interfaces():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Concrete implementations satisfy interfaces; consumers never import them.
-      FOR each defined interface:
-        create concrete implementation in provider package
-        verify implementation satisfies interface (compile-time check)
-        wire concrete type to interface at composition root (main/cmd)
-      END FOR
-
-    PROCEDURE enable_independent_testing():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interface-first design enables package-level testing with mocks.
-      FOR each extracted package:
-        generate mock implementations of consumed interfaces
-        write unit tests using mocks (no real dependencies)
-        VALIDATE package compiles and tests pass without other packages
-      END FOR
-
-    PROCEDURE version_interface_evolution():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interfaces evolve via versioning, not modification, to preserve compatibility.
-      WHEN interface change is needed:
-        IF additive (new methods): extend with embedding or new interface
-        IF breaking (changed signatures): create v2 interface
-        maintain adapter between old and new versions during transition
-      END WHEN
+  essence_pseudocode: "# [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# Interface-first design: define Go interfaces before concrete implementations, [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n# enabling independent testing, loose coupling, and versioned evolution. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n\n# [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA interface_design_principles:\nDATA interface_design_principles:\n  # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Guiding rules for interface design in extracted packages. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  minimal_surface: \"Interfaces expose only what consumers need (ISP)\"\n  consumer_defined: \"Interfaces live in the consuming package, not the provider\"\n  no_concrete_exports: \"Packages export interfaces; concrete\
+    \ types are internal\"\n  testability: \"Every interface must be mockable for unit testing\"\n\n# [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE design_package_interfaces():\nPROCEDURE design_package_interfaces():\n  # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Interfaces are designed before any implementation code is extracted. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  FOR each package targeted for extraction:\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Derive required methods from real consumer call sites\n    analyze consumer call sites to determine required methods\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Keep interface surface minimal (interface segregation)\n    define minimal interface (only methods consumers actually call)\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION]\
+    \ [REQ-MAINTAINABILITY] Place interface next to consumer per Go conventions\n    place interface definition in consuming package (Go convention)\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Document contracts for maintainers\n    document interface contract with godoc comments\n  END FOR\n\n# [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE implement_against_interfaces():\nPROCEDURE implement_against_interfaces():\n  # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Concrete implementations satisfy interfaces; consumers never import them. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  FOR each defined interface:\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Provider package holds concrete types\n    create concrete implementation in provider package\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION]\
+    \ [REQ-MAINTAINABILITY] Compile-time satisfaction check\n    verify implementation satisfies interface (compile-time check)\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Dependency injection at root only\n    wire concrete type to interface at composition root (main/cmd)\n  END FOR\n\n# [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE enable_independent_testing():\nPROCEDURE enable_independent_testing():\n  # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Interface-first design enables package-level testing with mocks. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  FOR each extracted package:\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Replace downstream deps with fakes in tests\n    generate mock implementations of consumed interfaces\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\
+    \ Isolate unit tests from integration IO\n    write unit tests using mocks (no real dependencies)\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Gate package health before integration\n    VALIDATE package compiles and tests pass without other packages\n  END FOR\n\n# [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE version_interface_evolution():\nPROCEDURE version_interface_evolution():\n  # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  # Interfaces evolve via versioning, not modification, to preserve compatibility. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]\n  WHEN interface change is needed:\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prefer additive changes for backward compatibility\n    IF additive (new methods): extend with embedding or new interface\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION]\
+    \ [REQ-MAINTAINABILITY] Breaking changes get new type names\n    IF breaking (changed signatures): create v2 interface\n    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Bridge old and new APIs during migration\n    maintain adapter between old and new versions during transition\n  END WHEN"

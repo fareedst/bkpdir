@@ -26,7 +26,6 @@ REQ-IMMUTABLE_CONFIGURATION_DEFAULTS:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml
   metadata:
     created:
       date: "2026-03-12"

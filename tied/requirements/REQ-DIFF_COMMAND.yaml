@@ -43,7 +43,6 @@ REQ-DIFF_COMMAND:
       - REQ-CONTEXT_SUPPORT
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-DIFF_COMMAND.yaml
   metadata:
     created:
       date: "2026-03-12"

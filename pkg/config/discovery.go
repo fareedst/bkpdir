@@ -14,7 +14,6 @@ import (
 	"strings"
 )
 
-
 // DiscoveryConfig holds configuration for path discovery behavior.
 // This allows applications to customize discovery without hardcoded paths.
 type DiscoveryConfig struct {
@@ -30,7 +29,6 @@ type DiscoveryConfig struct {
 	// HomeConfigPath is the home directory config path template (uses ~ expansion)
 	HomeConfigPath string
 }
-
 
 // PathDiscovery provides generalized configuration file discovery.
 // This replaces the hardcoded backup-specific search logic.
@@ -139,7 +137,6 @@ func (p *PathDiscovery) GetEnvVarName() string {
 func (p *PathDiscovery) GetDefaultPaths() []string {
 	return p.config.DefaultSearchPaths
 }
-
 
 // DefaultEnvironmentProvider provides the default implementation of EnvironmentProvider.
 // This implementation uses the standard os package for environment variable access.

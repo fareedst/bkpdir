@@ -2,15 +2,17 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   name: Default Strategy Edge Cases Tests
   status: Active
   cross_references:
-    - ARCH-TESTING_STRATEGY
-    - REQ-CONFIGURATION
-    - REQ-CFG_005
+  - ARCH-TESTING_STRATEGY
+  - REQ-CONFIGURATION
+  - REQ-CFG_005
   rationale:
-    why: |-
-      Ensures default strategy only applies when destination is zero value
+    why: 'Ensures default strategy only applies when destination is zero value
+
       Validates that default strategy does NOT apply when destination is non-zero or equals default
+
       Critical for understanding default strategy semantics
-      Part of comprehensive configuration merge test plan
+
+      Part of comprehensive configuration merge test plan'
     problems_solved: []
     benefits: []
   implementation_approach:
@@ -18,48 +20,47 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
     details: []
   code_locations:
     files:
-      - config_test.go
+    - config_test.go
     functions:
-      - TestDefaultStrategyEdgeCases
+    - TestDefaultStrategyEdgeCases
   traceability:
     architecture:
-      - ARCH-TESTING_STRATEGY
+    - ARCH-TESTING_STRATEGY
     requirements:
-      - REQ-CONFIGURATION
-      - REQ-CFG_005
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
     tests:
-      - TestDefaultStrategyEdgeCases
-      - TestDefaultStrategyEdgeCases/default_strategy_when_field_is_zero_value
-      - TestDefaultStrategyEdgeCases/default_strategy_when_field_is_non-zero
-      - TestDefaultStrategyEdgeCases/default_strategy_when_field_equals_default
-      - TestDefaultStrategyEdgeCases/default_strategy_with_array_field_-_zero_value
-      - TestDefaultStrategyEdgeCases/default_strategy_with_array_field_-_non-zero
-      - TestDefaultStrategyEdgeCases/default_strategy_with_bool_field_-_zero_value
-      - TestDefaultStrategyEdgeCases/default_strategy_with_bool_field_-_non-zero
+    - TestDefaultStrategyEdgeCases
+    - TestDefaultStrategyEdgeCases/default_strategy_when_field_is_zero_value
+    - TestDefaultStrategyEdgeCases/default_strategy_when_field_is_non-zero
+    - TestDefaultStrategyEdgeCases/default_strategy_when_field_equals_default
+    - TestDefaultStrategyEdgeCases/default_strategy_with_array_field_-_zero_value
+    - TestDefaultStrategyEdgeCases/default_strategy_with_array_field_-_non-zero
+    - TestDefaultStrategyEdgeCases/default_strategy_with_bool_field_-_zero_value
+    - TestDefaultStrategyEdgeCases/default_strategy_with_bool_field_-_non-zero
     code_annotations:
-      - IMPL-TEST_DEFAULT_STRATEGY_EDGES
-      - ARCH-TESTING_STRATEGY
-      - REQ-CONFIGURATION
-      - REQ-CFG_005
+    - IMPL-TEST_DEFAULT_STRATEGY_EDGES
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-TESTING_STRATEGY
-      - REQ-CONFIGURATION
-      - REQ-CFG_005
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-CFG_005
     composed_with: []
-  detail_file: implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`config_test.go` line ~6937-7155, `TestDefaultStrategyEdgeCases`, `createTestConfigFileWithData`, `applyDefault`, `isZeroValue`, `DefaultValueStrategy`'
@@ -69,82 +70,19 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   equals_default_but_not_zero: Even if value equals default (e.g., `"../.bkpdir"`), if it's not zero value, default strategy does NOT apply
   non-zero_values: Any non-zero value prevents default strategy from applying
   test_coverage:
-    - 'String field zero value: `=archive_dir_path: "/custom/path"` when destination is `""` → applies'
-    - 'String field non-zero: `=archive_dir_path: "/custom/path"` when destination is `"/existing/path"` → does NOT apply'
-    - 'String field equals default: `=archive_dir_path: "/custom/path"` when destination is `"../.bkpdir"` → does NOT apply (not zero, even if equals default)'
-    - 'Array field zero value: `=exclude_patterns: ["custom1"]` when destination is `[]` → **Important**: Empty array in first file merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is `[".git/", "vendor/"]` (non-zero), and default strategy does NOT apply. Result: defaults preserved, not custom values.'
-    - 'Array field non-zero: `=exclude_patterns: ["custom1"]` when destination is `["existing1"]` → does NOT apply'
-    - 'Bool field zero value: `=include_git_info: true` when destination is `false` → applies'
-    - 'Bool field non-zero: `=include_git_info: false` when destination is `true` → does NOT apply'
-  test_structure: |-
-    ```go
-    // TestDefaultStrategyEdgeCases tests default strategy edge cases
-    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates default strategy only applies when destination is zero value
-    func TestDefaultStrategyEdgeCases(t *testing.T) {
-        // Test: default strategy when field is zero value
-        // Test: default strategy when field is non-zero
-        // Test: default strategy when field equals default
-        // Test: default strategy with array field (zero and non-zero)
-        // Test: default strategy with bool field (zero and non-zero)
-    }
-    ```
+  - 'String field zero value: `=archive_dir_path: "/custom/path"` when destination is `""` → applies'
+  - 'String field non-zero: `=archive_dir_path: "/custom/path"` when destination is `"/existing/path"` → does NOT apply'
+  - 'String field equals default: `=archive_dir_path: "/custom/path"` when destination is `"../.bkpdir"` → does NOT apply (not zero, even if equals default)'
+  - 'Array field zero value: `=exclude_patterns: ["custom1"]` when destination is `[]` → **Important**: Empty array in first file merges with defaults first (CFG-005), so by the time default strategy is evaluated, destination is `[".git/", "vendor/"]` (non-zero), and default strategy does NOT apply. Result: defaults preserved, not custom values.'
+  - 'Array field non-zero: `=exclude_patterns: ["custom1"]` when destination is `["existing1"]` → does NOT apply'
+  - 'Bool field zero value: `=include_git_info: true` when destination is `false` → applies'
+  - 'Bool field non-zero: `=include_git_info: false` when destination is `true` → does NOT apply'
+  test_structure: "```go\n// TestDefaultStrategyEdgeCases tests default strategy edge cases\n// [REQ-CONFIGURATION] [REQ-CFG_005] Validates default strategy only applies when destination is zero value\nfunc TestDefaultStrategyEdgeCases(t *testing.T) {\n    // Test: default strategy when field is zero value\n    // Test: default strategy when field is non-zero\n    // Test: default strategy when field equals default\n    // Test: default strategy with array field (zero and non-zero)\n    // Test: default strategy with bool field (zero and non-zero)\n}\n```"
   testdefaultstrategyedgecases: Tests default strategy in various edge case scenarios
   zero_value_check: Default strategy uses `isZeroValue()` to check if destination is zero value
   zero_value_types: Empty string `""`, empty slice `[]`, `false` for bool, `0` for int, `nil`
-  essence_pseudocode: |-
-    # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — Tests default strategy (= prefix) edge cases: only applies when destination is zero value
-
-    procedure TestDefaultStrategyEdgeCases():
-      # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — validates default strategy semantics with isZeroValue check
-      save BKPDIR_CONFIG env; defer restore
-      create temp dir
-
-      subtest "default strategy when field is zero value":
-        # [REQ-CFG_005] — verifies =archive_dir_path applies when destination is "" (zero value)
-        create file1-zero.yml with archive_dir_path: "" (zero value)
-        create file2-default.yml with "=archive_dir_path": "/custom/path"
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ArchiveDirPath == "/custom/path" (default strategy applied)
-
-      subtest "default strategy when field is non-zero":
-        # [REQ-CFG_005] — verifies =archive_dir_path does NOT apply when destination has a value
-        create file1-nonzero.yml with archive_dir_path: "/existing/path"
-        create file2-default-nonzero.yml with "=archive_dir_path": "/custom/path"
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ArchiveDirPath == "/existing/path" (first file preserved, default ignored)
-
-      subtest "default strategy when field equals default":
-        # [REQ-CFG_005] — verifies =archive_dir_path does NOT apply even when value equals default (not zero value)
-        create file1-equals-default.yml with archive_dir_path: "../.bkpdir"
-        create file2-default-equals.yml with "=archive_dir_path": "/custom/path"
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ArchiveDirPath == "../.bkpdir" (equals default but not zero → default strategy ignored)
-
-      subtest "default strategy with array field - zero value":
-        # [REQ-CFG_005] — verifies empty array merges with defaults first (CFG-005), making destination non-zero before default strategy evaluation
-        create file1-array-zero.yml with exclude_patterns: [] (empty)
-        create file2-array-default.yml with "=exclude_patterns": ["custom1", "custom2"]
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ExcludePatterns == [".git/", "vendor/"] (defaults merged first → non-zero → default strategy NOT applied)
-
-      subtest "default strategy with array field - non-zero":
-        # [REQ-CFG_005] — verifies default strategy does NOT apply when array has values
-        create file1-array-nonzero.yml with exclude_patterns: ["existing1", "existing2"]
-        create file2-array-default-nonzero.yml with "=exclude_patterns": ["custom1", "custom2"]
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ExcludePatterns == [".git/", "vendor/", "existing1", "existing2"] (default strategy ignored)
-
-      subtest "default strategy with bool field - zero value":
-        # [REQ-CFG_005] — verifies =include_git_info applies when destination is false (zero value for bool)
-        create file1-bool-zero.yml with include_git_info: false
-        create file2-bool-default.yml with "=include_git_info": true
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.IncludeGitInfo == true (default strategy applied)
-
-      subtest "default strategy with bool field - non-zero":
-        # [REQ-CFG_005] — verifies =include_git_info does NOT apply when destination is true (non-zero for bool)
-        create file1-bool-nonzero.yml with include_git_info: true
-        create file2-bool-default-nonzero.yml with "=include_git_info": false
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.IncludeGitInfo == true (first file preserved, default strategy ignored)
-      end
+  essence_pseudocode: "# [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — Tests default strategy (= prefix) edge cases: only applies when destination is zero value\n\nprocedure TestDefaultStrategyEdgeCases():\n  # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — validates default strategy semantics with isZeroValue check\n  save BKPDIR_CONFIG env; defer restore\n  create temp dir\n\n  subtest \"default strategy when field is zero value\":\n    # [REQ-CFG_005] — verifies =archive_dir_path applies when destination is \"\" (zero value) [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-zero.yml with archive_dir_path: \"\" (zero value)\n    create file2-default.yml with \"=archive_dir_path\": \"/custom/path\"\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/custom/path\" (default strategy applied)\n\n  subtest \"default strategy when\
+    \ field is non-zero\":\n    # [REQ-CFG_005] — verifies =archive_dir_path does NOT apply when destination has a value [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-nonzero.yml with archive_dir_path: \"/existing/path\"\n    create file2-default-nonzero.yml with \"=archive_dir_path\": \"/custom/path\"\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/existing/path\" (first file preserved, default ignored)\n\n  subtest \"default strategy when field equals default\":\n    # [REQ-CFG_005] — verifies =archive_dir_path does NOT apply even when value equals default (not zero value) [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-equals-default.yml with archive_dir_path: \"../.bkpdir\"\n    create file2-default-equals.yml with \"=archive_dir_path\": \"/custom/path\"\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ArchiveDirPath == \"../.bkpdir\" (equals default but not zero\
+    \ → default strategy ignored)\n\n  subtest \"default strategy with array field - zero value\":\n    # [REQ-CFG_005] — verifies empty array merges with defaults first (CFG-005), making destination non-zero before default strategy evaluation [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-array-zero.yml with exclude_patterns: [] (empty)\n    create file2-array-default.yml with \"=exclude_patterns\": [\"custom1\", \"custom2\"]\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\"] (defaults merged first → non-zero → default strategy NOT applied)\n\n  subtest \"default strategy with array field - non-zero\":\n    # [REQ-CFG_005] — verifies default strategy does NOT apply when array has values [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-array-nonzero.yml with exclude_patterns: [\"existing1\", \"existing2\"]\n    create file2-array-default-nonzero.yml with \"=exclude_patterns\"\
+    : [\"custom1\", \"custom2\"]\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"existing1\", \"existing2\"] (default strategy ignored)\n\n  subtest \"default strategy with bool field - zero value\":\n    # [REQ-CFG_005] — verifies =include_git_info applies when destination is false (zero value for bool) [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-bool-zero.yml with include_git_info: false\n    create file2-bool-default.yml with \"=include_git_info\": true\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.IncludeGitInfo == true (default strategy applied)\n\n  subtest \"default strategy with bool field - non-zero\":\n    # [REQ-CFG_005] — verifies =include_git_info does NOT apply when destination is true (non-zero for bool) [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY]\n    create file1-bool-nonzero.yml with include_git_info: true\n    create file2-bool-default-nonzero.yml\
+    \ with \"=include_git_info\": false\n    set BKPDIR_CONFIG = file1:file2, call LoadConfig\n    assert cfg.IncludeGitInfo == true (first file preserved, default strategy ignored)\n  end"

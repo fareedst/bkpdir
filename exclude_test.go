@@ -37,6 +37,28 @@ func TestShouldExcludeFile_REQ_CONFIGURATION(t *testing.T) {
 }
 
 // [REQ-CONFIGURATION] [ARCH-EXCLUSION_PATTERNS] [IMPL-EXCLUSION_PATTERNS]
+// TestSingleSegmentDirPatternAnyDepth verifies names like node_modules/ match at any tree depth (no **/ required).
+func TestSingleSegmentDirPatternAnyDepth_REQ_CONFIGURATION(t *testing.T) {
+	patterns := []string{"node_modules/"}
+	cases := []struct {
+		relPath  string
+		excluded bool
+		name     string
+	}{
+		{"node_modules/lib/foo.js", true, "root node_modules"},
+		{"packages/a/node_modules/pkg/x.js", true, "nested node_modules"},
+		{"deep/nested/node_modules", true, "node_modules directory path"},
+		{"src/not_node_modules/file.go", false, "path segment must match exactly"},
+		{"node_modules_extra/file.go", false, "prefix of segment must not match"},
+	}
+	for _, tc := range cases {
+		if got := ShouldExcludeFile(tc.relPath, patterns); got != tc.excluded {
+			t.Errorf("%s: ShouldExcludeFile(%q) = %v, want %v", tc.name, tc.relPath, got, tc.excluded)
+		}
+	}
+}
+
+// [REQ-CONFIGURATION] [ARCH-EXCLUSION_PATTERNS] [IMPL-EXCLUSION_PATTERNS]
 // TestDirectoryExclusionPattern validates directory exclusion patterns ending with /
 func TestDirectoryExclusionPattern_REQ_CONFIGURATION(t *testing.T) {
 	patterns := []string{"demo/batches/", "*.log"}

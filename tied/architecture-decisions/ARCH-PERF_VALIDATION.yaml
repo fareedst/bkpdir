@@ -28,7 +28,6 @@ ARCH-PERF_VALIDATION:
     depends_on: *ref_0
     informs: []
     see_also: []
-  detail_file: architecture-decisions/ARCH-PERF_VALIDATION.yaml
   metadata:
     created:
       date: "2026-03-12"

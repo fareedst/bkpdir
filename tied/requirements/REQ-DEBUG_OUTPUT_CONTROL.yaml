@@ -40,7 +40,6 @@ REQ-DEBUG_OUTPUT_CONTROL:
       - REQ-CODE_QUALITY
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-DEBUG_OUTPUT_CONTROL.yaml
   metadata:
     created:
       date: "2026-03-12"

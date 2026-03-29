@@ -2,127 +2,78 @@ IMPL-CONTEXT_OPS:
   name: Context-Aware Operations
   status: Active
   cross_references:
-    - ARCH-CONTEXT_SUPPORT
-    - REQ-CONTEXT_SUPPORT
+  - ARCH-CONTEXT_SUPPORT
+  - REQ-CONTEXT_SUPPORT
   rationale:
-    why: |-
-      Enables operation timeouts
+    why: 'Enables operation timeouts
+
       Supports graceful cancellation
+
       Better user experience for long operations
-      Standard Go pattern for cancellable operations
+
+      Standard Go pattern for cancellable operations'
     problems_solved: []
     benefits: []
   implementation_approach:
-    summary: |-
-      All long-running operations accept `context.Context`
+    summary: 'All long-running operations accept `context.Context`
+
       Periodic cancellation checks during operations
+
       Context-aware file operations
-      Timeout support via `context.WithTimeout()`
+
+      Timeout support via `context.WithTimeout()`'
     details: []
   code_locations:
     files:
-      - pkg/resources/context.go
+    - pkg/resources/context.go
     functions:
-      - NewContextualOperation
-      - IsCancelled
-      - CheckCancellation
-      - WithResourceManager
-      - CheckContextAndCleanup
-      - WithOperationID
-      - GetOperationIDFromContext
-      - GetResourceManagerFromContext
-      - ContextualOperationWithTimeout
+    - NewContextualOperation
+    - IsCancelled
+    - CheckCancellation
+    - WithResourceManager
+    - CheckContextAndCleanup
+    - WithOperationID
+    - GetOperationIDFromContext
+    - GetResourceManagerFromContext
+    - ContextualOperationWithTimeout
   traceability:
     architecture:
-      - ARCH-CONTEXT_SUPPORT
+    - ARCH-CONTEXT_SUPPORT
     requirements:
-      - REQ-CONTEXT_SUPPORT
+    - REQ-CONTEXT_SUPPORT
     tests:
-      - pkg/resources/resources_test.go::TestContextualOperation
-      - pkg/resources/resources_test.go::TestContextUtilities
-      - pkg/resources/resources_test.go::TestResourceManagement_Integration
+    - pkg/resources/resources_test.go::TestContextualOperation
+    - pkg/resources/resources_test.go::TestContextUtilities
+    - pkg/resources/resources_test.go::TestResourceManagement_Integration
     code_annotations:
-      - IMPL-CONTEXT_OPS
-      - ARCH-CONTEXT_SUPPORT
-      - REQ-CONTEXT_SUPPORT
+    - IMPL-CONTEXT_OPS
+    - ARCH-CONTEXT_SUPPORT
+    - REQ-CONTEXT_SUPPORT
   related_decisions:
     depends_on: []
     supersedes: []
     see_also:
-      - ARCH-CONTEXT_SUPPORT
-      - REQ-CONTEXT_SUPPORT
+    - ARCH-CONTEXT_SUPPORT
+    - REQ-CONTEXT_SUPPORT
     composed_with: []
-  detail_file: implementation-decisions/IMPL-CONTEXT_OPS.yaml
   metadata:
     created:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: MCP converter
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       validator: MCP converter
       result: pass
   code_markers: '`context.Context` parameters, `checkContextCancellation()` calls'
   functions:
-    - '`CreateArchiveWithContext(ctx context.Context, ...)`'
-    - '`CreateFileBackupWithContext(ctx context.Context, ...)`'
-    - '`CopyFileWithContext(ctx context.Context, src, dst string)`'
-    - '`CompareFilesWithContext(ctx context.Context, file1, file2 string)`'
-  essence_pseudocode: |-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # Context-aware operation framework: wraps context.Context with ResourceManager
-    # for cancellable, timeout-supporting operations with automatic cleanup.
-
-    DATA ContextKey:
-      ResourceManagerKey: "resourceManager"
-      OperationIDKey: "operationID"
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # How ContextualOperation bundles a context with a ResourceManager.
-    CONTEXTUAL_OPERATION(ctx):
-      co.ctx = ctx
-      co.rm = NEW ResourceManager
-      RETURN co
-
-    # How cancellation is detected via the context Done channel.
-    IS_CANCELLED(co):
-      SELECT on co.ctx.Done channel:
-        IF signaled: RETURN true
-        DEFAULT: RETURN false
-
-    # How cancellation error is surfaced.
-    CHECK_CANCELLATION(co):
-      RETURN co.ctx.Err()
-
-    # How cleanup delegates to the embedded ResourceManager.
-    CLEANUP(co):
-      RETURN co.rm.Cleanup()
-
-    CLEANUP_WITH_PANIC_RECOVERY(co):
-      RETURN co.rm.CleanupWithPanicRecovery()
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # How a ResourceManager is embedded into a context for downstream retrieval.
-    WITH_RESOURCE_MANAGER(ctx):
-      rm = NEW ResourceManager
-      newCtx = context.WithValue(ctx, ResourceManagerKey, rm)
-      RETURN newCtx, rm
-
-    # How context cancellation triggers cleanup of tracked resources.
-    CHECK_CONTEXT_AND_CLEANUP(ctx, rm):
-      IF ctx.Err() != nil:
-        cleanupErr = rm.CleanupWithPanicRecovery()
-        IF cleanupErr != nil: RETURN CombineErrors(ctx.Err(), cleanupErr)
-        RETURN ctx.Err()
-      RETURN nil
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # How operation IDs are stored in and retrieved from context.
-    WITH_OPERATION_ID(ctx, operationID):
-      RETURN context.WithValue(ctx, OperationIDKey, operationID)
-
-    GET_OPERATION_ID(ctx):
-      RETURN ctx.Value(OperationIDKey) as string
+  - '`CreateArchiveWithContext(ctx context.Context, ...)`'
+  - '`CreateFileBackupWithContext(ctx context.Context, ...)`'
+  - '`CopyFileWithContext(ctx context.Context, src, dst string)`'
+  - '`CompareFilesWithContext(ctx context.Context, file1, file2 string)`'
+  essence_pseudocode: "# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n# Context-aware operation framework: wraps context.Context with ResourceManager [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n# for cancellable, timeout-supporting operations with automatic cleanup. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — Block implements documented behavior for: DATA ContextKey:\nDATA ContextKey:\n  ResourceManagerKey: \"resourceManager\"\n  OperationIDKey: \"operationID\"\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n# How ContextualOperation bundles a context with a ResourceManager. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\nCONTEXTUAL_OPERATION(ctx):\n  co.ctx = ctx\n  co.rm = NEW ResourceManager\n  RETURN co\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Poll ctx.Done for cooperative cancellation in\
+    \ long-running archive/backup paths.\nIS_CANCELLED(co):\n  # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Non-blocking select on Done\n  SELECT on co.ctx.Done channel:\n    IF signaled: RETURN true\n    DEFAULT: RETURN false\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Surface cancellation reason to callers.\nCHECK_CANCELLATION(co):\n  RETURN co.ctx.Err()\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Release temp files/dirs tracked by ResourceManager on success path.\nCLEANUP(co):\n  RETURN co.rm.Cleanup()\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Ensure cleanup runs even when panic unwinds (pairs with IMPL-RESOURCE_MANAGER).\nCLEANUP_WITH_PANIC_RECOVERY(co):\n  RETURN co.rm.CleanupWithPanicRecovery()\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n# How a ResourceManager is embedded into a context for downstream retrieval. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n\
+    WITH_RESOURCE_MANAGER(ctx):\n  rm = NEW ResourceManager\n  newCtx = context.WithValue(ctx, ResourceManagerKey, rm)\n  RETURN newCtx, rm\n\n# How context cancellation triggers cleanup of tracked resources. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\nCHECK_CONTEXT_AND_CLEANUP(ctx, rm):\n  IF ctx.Err() != nil:\n    cleanupErr = rm.CleanupWithPanicRecovery()\n    IF cleanupErr != nil: RETURN CombineErrors(ctx.Err(), cleanupErr)\n    RETURN ctx.Err()\n  RETURN nil\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\n# How operation IDs are stored in and retrieved from context. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]\nWITH_OPERATION_ID(ctx, operationID):\n  RETURN context.WithValue(ctx, OperationIDKey, operationID)\n\n# [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — Block implements documented behavior for: GET_OPERATION_ID(ctx):\nGET_OPERATION_ID(ctx):\n  RETURN ctx.Value(OperationIDKey) as string"

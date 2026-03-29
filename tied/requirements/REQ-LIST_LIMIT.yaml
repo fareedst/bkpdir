@@ -33,7 +33,6 @@ REQ-LIST_LIMIT:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-LIST_LIMIT.yaml
   metadata:
     created:
       date: "2026-03-12"

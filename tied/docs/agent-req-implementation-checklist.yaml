@@ -32,18 +32,17 @@ description: |
   Primary procedural template for every new requirement or change to the tested system. Unifies CITDP, TIED dev cycle, IMPL_CODE_TEST_SYNC, LEAP, YAML edit loop, and related processes. Mandatory order: IMPL pseudo-code (token-commented) -> RED tests -> code.
 source_document: docs/agent-req-implementation-checklist.md
 process_token: '[PROC-AGENT_REQ_CHECKLIST]'
-version: 1.0.1
-last_updated: "2026-03-21"
-# Absolute paths below use this workspace root. For a per-request copy in another project, replace
-# every occurrence of /Users/fareed/Documents/dev/chatgpt/stdd with that project's absolute root
-# (including CITDP_RECORDS). WORKSPACE_ROOT and CITDP_RECORDS must be the client project—the repo
+version: 1.0.2
+last_updated: "2026-03-28"
+# Paths in this file are relative to the repository root (bkpdir clone) unless you set WORKSPACE_ROOT
+# in a per-request copy. WORKSPACE_ROOT and CITDP_RECORDS must refer to the client project—the repo
 # whose project tied/ you edit—not a separate TIED methodology repo unless that is the workspace.
 workspace_paths:
-  WORKSPACE_ROOT: /Users/fareed/Documents/dev/chatgpt/stdd
-  TIED_BASE: /Users/fareed/Documents/dev/chatgpt/stdd/tied
-  TIED_DOCS: /Users/fareed/Documents/dev/chatgpt/stdd/tied/docs
-  REPO_DOCS: /Users/fareed/Documents/dev/chatgpt/stdd/docs
-  CITDP_RECORDS: /Users/fareed/Documents/dev/chatgpt/stdd/docs/citdp
+  WORKSPACE_ROOT: ""
+  TIED_BASE: tied
+  TIED_DOCS: tied/docs
+  REPO_DOCS: docs
+  CITDP_RECORDS: docs/citdp
 processes_unified:
   - '[PROC-CITDP]'
   - '[PROC-TIED_DEV_CYCLE]'
@@ -200,6 +199,30 @@ loop_back_clearance:
     clear_ids:
       - S11
       - S12
+# Cross-cutting rules referenced from steps; agents must honor these for every request copy.
+invariants:
+  - id: EXISTENCE_GATE
+    summary: Branch before Read/Grep when a path may not exist.
+    rule: |
+      Before Read or Grep on a path that may not exist (TIED detail files, referenced docs, CITDP records,
+      integration test paths): (a) if the file should already exist, search for the correct location first;
+      (b) if it will be created later in this checklist, skip the read and note the step dependency;
+      (c) if a referenced document is absent, record the gap explicitly in step output instead of treating
+      File not found as ignorable noise.
+  - id: TIED_YAML_SINGLE_WRITER
+    summary: Project-owned YAML under tied/ is mutated only via tied-yaml MCP when a tool exists.
+    rule: |
+      For any create/update/delete of project-owned YAML under tied/ (indexes, requirements|architecture-decisions|implementation-decisions
+      detail dirs, semantic-tokens.yaml, feedback.yaml, excluding methodology/**), confirm an MCP tool was used.
+      If IDE Write, apply_patch, or StrReplace was used on those paths, a one-line exception MUST appear in the
+      step output: TIED_YAML_BYPASS: <reason naming the missing MCP operation or documented gap>.
+  - id: SOURCE_PRECEDENCE
+    summary: Resolve disagreements across artifacts using a fixed order; never silently pick lower-precedence prose.
+    rule: |
+      When two sources disagree on scope, behavior, counts, or structure, precedence is: (1) IMPL detail files,
+      (2) REQ/ARCH, (3) tests, (4) README/CHANGELOG/demo prose. Emit CONTRADICTION: <A> says X; <B> says Y;
+      resolving per precedence to <winner>; <loser> needs update at step Sxx. Do not silently adopt the
+      lower-precedence source.
 steps:
   # id S01 time
   - id: S01
@@ -207,19 +230,20 @@ steps:
     goals: Confirm access to all governing TIED documents; understand current project state and priorities.
     tasks:
       - Preface the response with "Observing AI principles!".
-      - 'Read completely: /Users/fareed/Documents/dev/chatgpt/stdd/ai-principles.md'
-      - 'Review token registry: /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.yaml and guide: /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.md'
-      - 'Review YAML indexes: /Users/fareed/Documents/dev/chatgpt/stdd/tied/architecture-decisions.yaml and /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions.yaml'
-      - 'Review IMPL schema and pseudo-code rules: /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions.md ([PROC-IMPL_PSEUDOCODE_TOKENS]).'
-      - Confirm tied-yaml MCP server availability; call MCP tied_config_get_base_path and align env TIED_BASE_PATH with /Users/fareed/Documents/dev/chatgpt/stdd/tied (or the active project equivalent when using a copied checklist).
-      - For every create/update/delete under project TIED YAML (/Users/fareed/Documents/dev/chatgpt/stdd/tied/*.yaml and /Users/fareed/Documents/dev/chatgpt/stdd/tied/requirements|architecture-decisions|implementation-decisions/*.yaml, excluding methodology/**), use tied-yaml MCP tools per /Users/fareed/Documents/dev/chatgpt/stdd/docs/yaml-update-mcp-runbook.md (also at /Users/fareed/Documents/dev/chatgpt/stdd/tied/docs/yaml-update-mcp-runbook.md after copy_files). Do not use IDE apply_patch/Write on those paths when an MCP tool exists; on MCP error, follow the runbook failure playbook (retry/fix args; do not silently fall back to direct file edit).
+      - 'Read completely: ai-principles.md'
+      - 'Review token registry: tied/semantic-tokens.yaml and guide: tied/semantic-tokens.md'
+      - 'Review YAML indexes: tied/architecture-decisions.yaml and tied/implementation-decisions.yaml'
+      - 'Review IMPL schema and pseudo-code rules: tied/implementation-decisions.md ([PROC-IMPL_PSEUDOCODE_TOKENS]).'
+      - Confirm tied-yaml MCP server availability; call MCP tied_config_get_base_path and align env TIED_BASE_PATH with tied (or the active project equivalent when using a copied checklist).
+      - For every create/update/delete under project TIED YAML (tied/*.yaml and tied/requirements|architecture-decisions|implementation-decisions/*.yaml, excluding methodology/**), use tied-yaml MCP tools per tied/docs/yaml-update-mcp-runbook.md. Do not use IDE apply_patch/Write on those paths when an MCP tool exists; on MCP error, follow the runbook failure playbook (retry/fix args; do not silently fall back to direct file edit).
+      - 'Acknowledge invariant TIED_YAML_SINGLE_WRITER: all tied/ mutations route through tied-yaml MCP when a tool exists; any IDE write on those paths requires TIED_YAML_BYPASS: <reason> in step output.'
       - 'Understand priority order: Tests > Code > Basic Functions > Developer Experience > Infrastructure > Security.'
     outcomes: Agent has read all governing documents. Session context is established.
     references:
-      - /Users/fareed/Documents/dev/chatgpt/stdd/AGENTS.md § 1-2
-      - /Users/fareed/Documents/dev/chatgpt/stdd/ai-principles.md § Mandatory Acknowledgment, § Checklist for AI Agents
-      - /Users/fareed/Documents/dev/chatgpt/stdd/docs/yaml-update-mcp-runbook.md
-      - /Users/fareed/Documents/dev/chatgpt/stdd/docs/ai-agent-tied-mcp-usage.md
+      - AGENTS.md § 1-2
+      - ai-principles.md § Mandatory Acknowledgment, § Checklist for AI Agents
+      - tied/docs/yaml-update-mcp-runbook.md
+      - tied/docs/ai-agent-tied-mcp-usage.md
     flow:
       next: S02
       branches: []
@@ -265,7 +289,7 @@ steps:
       - Identify affected modules and functions with their tied tokens.
       - Identify module boundaries the change touches or crosses.
       - 'Build tied_context: tied_tokens_affected, tied_tokens_new.'
-      - 'IMPL Discovery A1: Load each affected IMPL detail via MCP yaml_detail_read or yaml_detail_read_many (preferred batch read); record cross_references, related_decisions (depends_on, composed_with, see_also), traceability. Resolve paths under /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions/ only after confirming tokens via MCP or index—do not assume files exist on disk before creation (Read failures are expected until S06.6).'
+      - 'IMPL Discovery A1 (invariant EXISTENCE_GATE): Load each affected IMPL detail via MCP yaml_detail_read or yaml_detail_read_many (preferred batch read); record cross_references, related_decisions (depends_on, composed_with, see_also), traceability. Resolve paths under tied/implementation-decisions/ only after confirming tokens via MCP or index—do not assume files exist on disk before creation (Read failures are expected until S06.6). Before Read/Grep on optional or not-yet-created paths, branch per EXISTENCE_GATE (search, defer to later step, or record absent doc).'
       - 'IMPL Discovery A2: Discover related IMPLs via (a) composed_with/depends_on, (b) shared REQ/ARCH tokens, (c) code_locations overlap, (d) [IMPL-*] in source/tests.'
       - 'IMPL Discovery A3: Build IMPL inventory table (IMPL token, Pseudo-code loaded, Code files, Test files, Testability).'
       - Stop expanding when no new IMPLs share code paths, REQ/ARCH tokens, or composed_with links with the current set.
@@ -292,10 +316,10 @@ steps:
     title: Author/Update REQ
     goals: Create or update the requirement record so the change has a formal [REQ-*] token with full traceability fields.
     tasks:
-      - Create or update the requirements index row via MCP (yaml_index_insert / yaml_index_update) or tied_token_create_with_detail on /Users/fareed/Documents/dev/chatgpt/stdd/tied/requirements.yaml — do not apply_patch the index file directly unless no MCP tool covers the operation (document one-line exception).
-      - Create or update REQ detail via MCP yaml_detail_create / yaml_detail_update (prefer yaml_detail_read then small updates) at /Users/fareed/Documents/dev/chatgpt/stdd/tied/requirements/REQ-{TOKEN}.yaml per /Users/fareed/Documents/dev/chatgpt/stdd/tied/detail-files-schema.md § REQ (or /Users/fareed/Documents/dev/chatgpt/stdd/detail-files-schema.md at template root).
-      - Register the REQ token in /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.yaml via MCP yaml_index_insert / yaml_index_update on index semantic-tokens.
-      - CALL SUB-YAML for each changed YAML file under /Users/fareed/Documents/dev/chatgpt/stdd/tied/ (after MCP writes; for direct-edit exceptions only, run lint_yaml on that absolute path inside SUB-YAML—never raw multi-argument `yq` pretty-print on multiple paths in one process; see processes.md [PROC-YAML_EDIT_LOOP]).
+      - Create or update the requirements index row via MCP (yaml_index_insert / yaml_index_update) or tied_token_create_with_detail on tied/requirements.yaml — do not apply_patch the index file directly unless no MCP tool covers the operation (document one-line exception).
+      - Create or update REQ detail via MCP yaml_detail_create / yaml_detail_update (prefer yaml_detail_read then small updates) at tied/requirements/REQ-{TOKEN}.yaml per tied/detail-files-schema.md § REQ (or detail-files-schema.md at template root).
+      - Register the REQ token in tied/semantic-tokens.yaml via MCP yaml_index_insert / yaml_index_update on index semantic-tokens.
+      - CALL SUB-YAML for each changed YAML file under tied/ (after MCP writes; for direct-edit exceptions only, run lint_yaml on that absolute path inside SUB-YAML—never raw multi-argument `yq` pretty-print on multiple paths in one process; see processes.md [PROC-YAML_EDIT_LOOP]).
     outcomes: REQ record exists in both the index and the detail file; token is registered in semantic-tokens.yaml; all YAML validated.
     references:
       - tied/processes.md § [PROC-YAML_DB_OPERATIONS] § Appending a New Record
@@ -322,10 +346,10 @@ steps:
     goals: Create or update architecture decision(s) that fulfill the REQ, with cross-references.
     tasks:
       - Identify architectural decisions needed (or update existing ones).
-      - Create or update /Users/fareed/Documents/dev/chatgpt/stdd/tied/architecture-decisions.yaml via MCP yaml_index_insert / yaml_index_update; never write to /Users/fareed/Documents/dev/chatgpt/stdd/tied/methodology/**.
-      - Create or update ARCH detail at /Users/fareed/Documents/dev/chatgpt/stdd/tied/architecture-decisions/ARCH-{TOKEN}.yaml via MCP yaml_detail_create / yaml_detail_update per detail-files-schema § ARCH.
-      - Register each new ARCH token in /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.yaml via MCP.
-      - CALL SUB-YAML for each changed YAML file under /Users/fareed/Documents/dev/chatgpt/stdd/tied/ (direct-edit exception only with one-line logged gap per /Users/fareed/Documents/dev/chatgpt/stdd/docs/yaml-update-mcp-runbook.md).
+      - Create or update tied/architecture-decisions.yaml via MCP yaml_index_insert / yaml_index_update; never write to tied/methodology/**.
+      - Create or update ARCH detail at tied/architecture-decisions/ARCH-{TOKEN}.yaml via MCP yaml_detail_create / yaml_detail_update per detail-files-schema § ARCH.
+      - Register each new ARCH token in tied/semantic-tokens.yaml via MCP.
+      - CALL SUB-YAML for each changed YAML file under tied/ (direct-edit exception only with one-line logged gap per tied/docs/yaml-update-mcp-runbook.md).
     outcomes: ARCH records exist with REQ cross-references; tokens registered; YAML validated.
     references:
       - tied/processes.md § [PROC-YAML_DB_OPERATIONS]
@@ -397,6 +421,7 @@ steps:
     goals: Compare across IMPLs for conflicts.
     tasks:
       - 'Compare across IMPLs: shared DATA conflict; ordering conflict; incompatible OUTPUT types; duplicate logic with different parameters or behavior.'
+      - 'Cross-source check (invariant SOURCE_PRECEDENCE): compare IMPL essence_pseudocode against README/CHANGELOG, REQ/ARCH narratives, and test names/assertions for scope, counts, and naming mismatches. Apply precedence IMPL > REQ/ARCH > tests > prose. For each discrepancy emit CONTRADICTION: <source_A> says X; <source_B> says Y; resolving per precedence to <winner>; <loser> needs update at step Sxx (e.g. S14 for README).'
     outcomes: Contradictions identified.
     references: []
     flow:
@@ -467,7 +492,7 @@ steps:
     title: Run Pseudo-Code Validation
     goals: Ensure IMPL pseudo-code satisfies validation checklist before persisting or writing tests/code.
     tasks:
-      - CALL SUB-PSEUDOCODE-VALIDATE. Run validation per [PROC-PSEUDOCODE_VALIDATION] using /Users/fareed/Documents/dev/chatgpt/stdd/tied/docs/pseudocode-validation-checklist.yaml or /Users/fareed/Documents/dev/chatgpt/stdd/docs/pseudocode-validation-checklist.yaml.
+      - CALL SUB-PSEUDOCODE-VALIDATE. Run validation per [PROC-PSEUDOCODE_VALIDATION] using tied/docs/pseudocode-validation-checklist.yaml or docs/pseudocode-validation-checklist.yaml.
       - Run validation passes in recommended order; record findings with severity and source location.
       - Do not proceed to S06.6 until minimum gating rules are satisfied (or explicitly waived and documented).
       - 'If no parser/tool: perform manual pass over checklist categories and document results.'
@@ -492,10 +517,10 @@ steps:
     title: Persist IMPL Records
     goals: Write IMPL index and detail files; register tokens; validate YAML.
     tasks:
-      - Create or update /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions.yaml index entries via MCP (yaml_index_* or tied_token_create_with_detail); do not patch that file directly when MCP covers the change.
-      - Create or update IMPL detail at /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions/IMPL-{TOKEN}.yaml via MCP yaml_detail_*; include complete essence_pseudocode per /Users/fareed/Documents/dev/chatgpt/stdd/tied/detail-files-schema.md § IMPL.
-      - Register each new IMPL token in /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.yaml via MCP.
-      - CALL SUB-YAML for each changed YAML file under /Users/fareed/Documents/dev/chatgpt/stdd/tied/.
+      - Create or update tied/implementation-decisions.yaml index entries via MCP (yaml_index_* or tied_token_create_with_detail); do not patch that file directly when MCP covers the change.
+      - Create or update IMPL detail at tied/implementation-decisions/IMPL-{TOKEN}.yaml via MCP yaml_detail_*; include complete essence_pseudocode per tied/detail-files-schema.md § IMPL.
+      - Register each new IMPL token in tied/semantic-tokens.yaml via MCP.
+      - CALL SUB-YAML for each changed YAML file under tied/.
     outcomes: All IMPL pseudo-code complete, authoritative, token-commented; no contradictions or gaps; all YAML validated.
     references:
       - tied/implementation-decisions.md § Mandatory essence_pseudocode, § Preferred vocabulary
@@ -635,7 +660,7 @@ steps:
     tasks:
       - For every block in this iteration, verify the three artifacts carry the same token set (pseudo-code block, test block, code block). IF any artifact names or omits a token differently, alignment is broken.
       - 'IF any diverge THEN update pseudo-code first, then test, then code (LEAP order: IMPL -> test -> code).'
-      - 'Run [PROC-TOKEN_AUDIT]: every token named in any of the three must exist in /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.yaml. IF missing THEN register via MCP yaml_index_* on index semantic-tokens and CALL SUB-YAML.'
+      - 'Run [PROC-TOKEN_AUDIT]: every token named in any of the three must exist in tied/semantic-tokens.yaml. IF missing THEN register via MCP yaml_index_* on index semantic-tokens and CALL SUB-YAML.'
     outcomes: Three-way alignment verified for the iteration. All tokens registered.
     references: []
     flow:
@@ -656,7 +681,7 @@ steps:
     goals: Test bindings between validated modules without invoking the UI. Every binding must have IMPL coverage and a composition test.
     tasks:
       - 'Identify bindings: event listeners, IPC channels, entry-point delegation, function wiring, platform hooks.'
-      - 'For each binding: locate IMPL that describes composition. IF none and binding belongs to existing IMPL THEN extend IMPL pseudo-code (persist via MCP yaml_detail_* under /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions/), GOTO S06.5, CALL SUB-YAML, return here. IF none and distinct design THEN create new IMPL, GOTO S06 (from S06.1), return here.'
+      - 'For each binding: locate IMPL that describes composition. IF none and binding belongs to existing IMPL THEN extend IMPL pseudo-code (persist via MCP yaml_detail_* under tied/implementation-decisions/), GOTO S06.5, CALL SUB-YAML, return here. IF none and distinct design THEN create new IMPL, GOTO S06 (from S06.1), return here.'
       - Write failing composition test for each binding (before composition code); carries IMPL token comments; verifies trigger -> unit called -> arguments -> effect; does not invoke UI.
       - Write composition code to pass the test. No composition code without preceding failing test.
       - Apply three-way alignment (same rules as S09.SYNC). Run tests + lint; fix any failures.
@@ -715,10 +740,11 @@ steps:
     tasks:
       - Run full test suite (unit, composition, E2E). All must pass.
       - Run lint for each language in scope.
-      - 'Run [PROC-TOKEN_VALIDATION]: tied_validate_consistency (MCP); fix any issues via MCP on /Users/fareed/Documents/dev/chatgpt/stdd/tied/ when possible.'
+      - 'Run [PROC-TOKEN_VALIDATION]: tied_validate_consistency (MCP); fix any issues via MCP on tied/ when possible.'
       - 'Final three-way alignment audit: for every IMPL touched, verify pseudo-code/test/code same token set; document e2e_only blocks and e2e_only_reason.'
-      - Update IMPL detail metadata (traceability.tests, code_locations, metadata.last_updated) via MCP yaml_detail_update on /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions/IMPL-{TOKEN}.yaml; CALL SUB-YAML on each changed absolute path.
+      - Update IMPL detail metadata (traceability.tests, code_locations, metadata.last_updated) via MCP yaml_detail_update on tied/implementation-decisions/IMPL-{TOKEN}.yaml; CALL SUB-YAML on each changed absolute path.
       - 'Module validation per [REQ-MODULE_VALIDATION]: confirm each module validated independently; document results.'
+      - 'Populate tracking.completion_evidence for every gate below with command (where applicable), result pass|fail, and timestamp (seconds since epoch). A gate with result null blocks marking S12 complete. token_validation must record the actual command or MCP tool used (e.g. tied_validate_consistency, validate_tokens.sh, or project policy from tied/docs/token-validation.md).'
     outcomes: All tests pass; lint clean; token validation passes; three-way alignment verified; IMPL metadata current; module validation documented.
     references:
       - tied/processes.md § [PROC-IMPL_CODE_TEST_SYNC] Phase I
@@ -742,17 +768,38 @@ steps:
         - SUB-YAML
     tracking:
       status: pending
-      consideration_before_proceeding: Full suite and lint pass; token validation ok; three-way audit done; IMPL metadata updated; module validation documented.
+      consideration_before_proceeding: Full suite and lint pass; token validation ok; three-way audit done; IMPL metadata updated; module validation documented; completion_evidence has no null results.
       retry_count: 0
       returned_from: []
       state_history: []
+      completion_evidence:
+        - gate: full_test_suite
+          command: null
+          result: null
+          timestamp: null
+        - gate: lint
+          command: null
+          result: null
+          timestamp: null
+        - gate: tied_validate_consistency
+          command: null
+          result: null
+          timestamp: null
+        - gate: token_validation
+          command: null
+          result: null
+          timestamp: null
+        - gate: three_way_alignment_audit
+          command: null
+          result: null
+          timestamp: null
   # id S13 time
   - id: S13
     title: Sync TIED to Code and Tests
     goals: Ensure TIED documentation matches the final implementation. TIED docs remain single source of truth for intent.
     tasks:
-      - Update REQ/ARCH/IMPL index and detail files under /Users/fareed/Documents/dev/chatgpt/stdd/tied/ via tied-yaml MCP so final code/tests match TIED; IMPLs reflect implemented code and block-level token comments.
-      - Sync /Users/fareed/Documents/dev/chatgpt/stdd/tied/semantic-tokens.yaml, requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml and detail dirs; no documentation drift; do not patch those YAML paths with IDE tools when MCP covers the mutation.
+      - Update REQ/ARCH/IMPL index and detail files under tied/ via tied-yaml MCP so final code/tests match TIED; IMPLs reflect implemented code and block-level token comments.
+      - Sync tied/semantic-tokens.yaml, requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml and detail dirs; no documentation drift; do not patch those YAML paths with IDE tools when MCP covers the mutation.
       - CALL SUB-YAML on every changed TIED YAML file.
       - Run tied_validate_consistency (MCP) — must report ok true.
     outcomes: TIED docs consistent with implementation; tied_validate_consistency passes.
@@ -826,6 +873,7 @@ steps:
     title: Commit
     goals: Create a traceable commit with proper format and token references.
     tasks:
+      - 'Verify S12 tracking.completion_evidence: every gate has result pass (not null, not fail). IF any gate is null or fail THEN return to S12; do not commit.'
       - 'Write commit message per [PROC-COMMIT_MESSAGES]: header <type>(<scope>): <subject> (≤50 chars); type feat|fix|docs|refactor|test|build|ci|chore|perf|style; scope area affected; subject imperative present tense; body motivation/behavior; footer Closes/Fixes #issue and REQ/ARCH/IMPL tokens touched.'
       - Stage relevant files. Commit.
       - Do NOT push unless explicitly asked.
@@ -838,10 +886,12 @@ steps:
       calls: []
     tracking:
       status: pending
-      consideration_before_proceeding: Commit created; format per PROC-COMMIT_MESSAGES; tokens in body/footer.
+      consideration_before_proceeding: S12 completion_evidence verified complete; commit created; format per PROC-COMMIT_MESSAGES; tokens in body/footer.
       retry_count: 0
       returned_from: []
       state_history: []
+      pre_commit_gate:
+        s12_completion_evidence_verified: null
 sub_procedures:
   # id SUB-YAML time
   - id: SUB-YAML
@@ -858,8 +908,9 @@ sub_procedures:
       - SUB-LEAP-MICRO
     goals: Ensure every TIED YAML file is syntactically valid, MCP-safe where applicable, and consistent before use. Use lint_yaml per [PROC-YAML_EDIT_LOOP] (processes.md); it accepts one or more paths and must process each file independently. Never use raw multi-argument `yq` pretty-print on multiple paths in one process.
     tasks:
-      - 'Mutation path: for create/update/delete under /Users/fareed/Documents/dev/chatgpt/stdd/tied/ on project-owned YAML (indexes, requirements/*.yaml, architecture-decisions/*.yaml, implementation-decisions/*.yaml, semantic-tokens.yaml, feedback.yaml), use tied-yaml MCP tools per /Users/fareed/Documents/dev/chatgpt/stdd/docs/yaml-update-mcp-runbook.md. Do not use apply_patch/Write on those absolute paths when an MCP tool exists.'
-      - Never mutate /Users/fareed/Documents/dev/chatgpt/stdd/tied/methodology/** (read-only). If MCP rejects a write as methodology-owned, fix the target token/path—do not bypass with direct file edit.
+      - 'Self-check (invariant TIED_YAML_SINGLE_WRITER): Before any write, ask — Is the target under tied/ (project-owned, not methodology/**)? Is there an MCP tool for this operation? If both yes, the write MUST go through MCP. If IDE Write/apply_patch/StrReplace was used on those paths, record TIED_YAML_BYPASS: <reason> in the calling step output.'
+      - 'Mutation path: for create/update/delete under tied/ on project-owned YAML (indexes, requirements/*.yaml, architecture-decisions/*.yaml, implementation-decisions/*.yaml, semantic-tokens.yaml, feedback.yaml), use tied-yaml MCP tools per tied/docs/yaml-update-mcp-runbook.md. Do not use apply_patch/Write on those absolute paths when an MCP tool exists.'
+      - Never mutate tied/methodology/** (read-only). If MCP rejects a write as methodology-owned, fix the target token/path—do not bypass with direct file edit.
       - 'IF MCP returns an error: interpret (payload, TIED_BASE_PATH, methodology vs project) and retry; do not silently fall back to IDE file tools on the same paths.'
       - 'Direct-edit exception only when no MCP tool covers the operation: document one-line gap, edit minimal file, then run lint_yaml <absolute-path> until it passes (or one lint_yaml with multiple paths if your wrapper implements per-file safe passes per processes.md).'
       - Run lint_yaml on each changed file that was direct-edited or when your workflow requires canonical formatting on disk—never raw multi-argument `yq` with multiple file arguments in one process. If validation fails, fix and repeat; file is invalid until lint_yaml succeeds.
@@ -867,11 +918,11 @@ sub_procedures:
       - IF consistency check fails THEN fix the TIED stack via MCP (prefer yaml_detail_update / yaml_index_update) and RETURN to the calling step to re-validate.
     outcomes: YAML valid and consistent; mutations used MCP where required; no silent bypass of tied-yaml.
     references:
-      - /Users/fareed/Documents/dev/chatgpt/stdd/docs/yaml-update-mcp-runbook.md
-      - /Users/fareed/Documents/dev/chatgpt/stdd/docs/ai-agent-tied-mcp-usage.md
-      - /Users/fareed/Documents/dev/chatgpt/stdd/mcp-server/README.md
-      - /Users/fareed/Documents/dev/chatgpt/stdd/tied/processes.md § [PROC-YAML_EDIT_LOOP]
-      - /Users/fareed/Documents/dev/chatgpt/stdd/tied/docs/methodology-diagrams.md Diagram 6
+      - tied/docs/yaml-update-mcp-runbook.md
+      - tied/docs/ai-agent-tied-mcp-usage.md
+      - mcp-server/README.md (TIED source repo)
+      - tied/processes.md § [PROC-YAML_EDIT_LOOP]
+      - tied/docs/methodology-diagrams.md Diagram 6
     flow:
       return_to: caller
     tracking:
@@ -910,8 +961,8 @@ sub_procedures:
     goals: Keep pseudo-code authoritative at every point during TDD. Prevent silent divergence.
     tasks:
       - STOP writing production code immediately.
-      - Update IMPL essence_pseudocode via MCP yaml_detail_read then yaml_detail_update on /Users/fareed/Documents/dev/chatgpt/stdd/tied/implementation-decisions/IMPL-{TOKEN}.yaml (no direct patch of that path when MCP works).
-      - CALL SUB-YAML on the changed detail file (absolute path under /Users/fareed/Documents/dev/chatgpt/stdd/tied/).
+      - Update IMPL essence_pseudocode via MCP yaml_detail_read then yaml_detail_update on tied/implementation-decisions/IMPL-{TOKEN}.yaml (no direct patch of that path when MCP works).
+      - CALL SUB-YAML on the changed detail file (absolute path under tied/).
       - Update or add the test to match the corrected pseudo-code. Carry the same token comments.
       - Update the production code to pass the corrected test. Carry the same token comments.
       - Verify three-way alignment for the affected block (per S09.SYNC rules).
@@ -958,7 +1009,7 @@ references:
     provides: Agent operating guide; session bootstrap; mandatory acknowledgment
   - document: tied/docs/ai-agent-tied-mcp-usage.md
     provides: MCP workflow and rationale for TIED data access
-  - document: /Users/fareed/Documents/dev/chatgpt/stdd/docs/yaml-update-mcp-runbook.md
+  - document: tied/docs/yaml-update-mcp-runbook.md
     provides: MCP-first YAML mutations, tool cheat sheet, failure playbook, SUB-YAML alignment
   - document: tied/docs/token-validation.md
     provides: 'Project policy: token validation via MCP only; no local script'

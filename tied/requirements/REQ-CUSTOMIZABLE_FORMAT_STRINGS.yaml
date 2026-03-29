@@ -48,7 +48,6 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
       - REQ-USABILITY
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   metadata:
     created:
       date: "2026-03-12"

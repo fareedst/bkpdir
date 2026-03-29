@@ -43,7 +43,6 @@ REQ-TIED_SETUP:
     depends_on: []
     related_to: []
     supersedes: []
-  detail_file: requirements/REQ-TIED_SETUP.yaml
   metadata:
     created:
       date: 2025-11-08

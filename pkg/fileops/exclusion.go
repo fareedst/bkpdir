@@ -91,15 +91,30 @@ func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 		return false
 	}
 
-	// For non-** patterns, strict check: path must have / after patternBase or end with /
-	// This ensures "demo/batches/" matches but "demo/batches" (file) does not
+	// Single segment (e.g. node_modules/, vendor/): match that directory name at any depth in the tree
+	if !strings.Contains(patternBase, "/") {
+		return pathHasDirSegment(path, patternBase)
+	}
+
+	// Multi-segment non-** patterns: path must be under that directory prefix
 	if !strings.HasPrefix(path, patternBase+"/") && path != patternBase+"/" {
 		return false
 	}
-
-	// If we get here, path starts with patternBase+"/" or equals patternBase+"/"
-	// Both cases indicate a directory match
 	return true
+}
+
+// pathHasDirSegment reports whether path contains a path segment exactly equal to seg (e.g. node_modules).
+// [IMPL-EXCLUSION_PATTERNS] Used for trailing-slash patterns that name a single directory component.
+func pathHasDirSegment(path, seg string) bool {
+	if seg == "" {
+		return false
+	}
+	for _, p := range strings.Split(path, "/") {
+		if p == seg {
+			return true
+		}
+	}
+	return false
 }
 
 // matchesGlobPattern handles patterns containing *

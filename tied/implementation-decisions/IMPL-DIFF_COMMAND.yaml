@@ -5,190 +5,98 @@ IMPL-DIFF_COMMAND:
   rationale:
     why: Users need to see what changed since the last archive to decide whether to create a new one
     problems_solved:
-      - No visibility into changes since last archive
-      - Manual comparison of directory state vs archived state
-      - Inconsistent comparison logic between features
+    - No visibility into changes since last archive
+    - Manual comparison of directory state vs archived state
+    - Inconsistent comparison logic between features
     benefits:
-      - Accurate change detection by comparing against reconstructed state
-      - Reuses comparison logic for duplicate prevention consistency
-      - Integrates with existing CLI framework and output formatting
-      - Supports context cancellation for long-running operations
-      - User-friendly error messages for edge cases
+    - Accurate change detection by comparing against reconstructed state
+    - Reuses comparison logic for duplicate prevention consistency
+    - Integrates with existing CLI framework and output formatting
+    - Supports context cancellation for long-running operations
+    - User-friendly error messages for edge cases
   implementation_approach:
     summary: Archive state reconstruction from full + incremental archives, directory comparison, change reporting, and CLI command integration
     details:
-      - 'Archive State Reconstruction: Load most recent full archive, apply most recent incremental changes, return reconstructed DirectorySnapshot'
-      - 'Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns'
-      - 'Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case'
-      - 'CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection'
-      - 'Archive Selection Strategy: All selection functions use name-based sorting (ISO 8601 timestamps are alphabetically sortable) instead of file modification times'
+    - 'Archive State Reconstruction: Load most recent full archive, apply most recent incremental changes, return reconstructed DirectorySnapshot'
+    - 'Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns'
+    - 'Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case'
+    - 'CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection'
+    - 'Archive Selection Strategy: All selection functions use name-based sorting (ISO 8601 timestamps are alphabetically sortable) instead of file modification times'
   cross_references:
-    - ARCH-DIFF_COMMAND
-    - REQ-DIFF_COMMAND
-    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
-    - ARCH-DIRECTORY_COMPARISON
-    - REQ-OUTPUT_FORMATTING
-    - REQ-CONTEXT_SUPPORT
-    - ARCH-CLI_COMMANDS
+  - ARCH-DIFF_COMMAND
+  - REQ-DIFF_COMMAND
+  - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+  - ARCH-DIRECTORY_COMPARISON
+  - REQ-OUTPUT_FORMATTING
+  - REQ-CONTEXT_SUPPORT
+  - ARCH-CLI_COMMANDS
   code_locations:
     files:
-      - comparison.go
-      - archive.go
-      - main.go
-      - formatter.go
-      - config.go
+    - comparison.go
+    - archive.go
+    - main.go
+    - formatter.go
+    - config.go
     functions:
-      - FindMostRecentArchive
-      - findLatestFullArchive
-      - findLatestIncrementalArchive
-      - ReconstructArchiveState
-      - CalculateDiff
-      - diffCmd
-      - FormatDiffResult
-      - PrintDiffResult
+    - FindMostRecentArchive
+    - findLatestFullArchive
+    - findLatestIncrementalArchive
+    - ReconstructArchiveState
+    - CalculateDiff
+    - diffCmd
+    - FormatDiffResult
+    - PrintDiffResult
   traceability:
     architecture:
-      - ARCH-DIFF_COMMAND
-      - ARCH-DIRECTORY_COMPARISON
-      - ARCH-CLI_COMMANDS
+    - ARCH-DIFF_COMMAND
+    - ARCH-DIRECTORY_COMPARISON
+    - ARCH-CLI_COMMANDS
     requirements:
-      - REQ-DIFF_COMMAND
-      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
-      - REQ-OUTPUT_FORMATTING
-      - REQ-CONTEXT_SUPPORT
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-OUTPUT_FORMATTING
+    - REQ-CONTEXT_SUPPORT
     tests:
-      - TestReconstructArchiveStateFullOnly_REQ_DIFF_COMMAND
-      - TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND
-      - TestReconstructArchiveStateFullAndIncremental_REQ_DIFF_COMMAND
-      - TestCalculateDiffAddedFiles_REQ_DIFF_COMMAND
-      - TestCalculateDiffModifiedFiles_REQ_DIFF_COMMAND
-      - TestCalculateDiffDeletedFiles_REQ_DIFF_COMMAND
-      - TestCalculateDiffNoChanges_REQ_DIFF_COMMAND
-      - TestFormatDiffResult_REQ_DIFF_COMMAND
-      - TestPrintDiffResult_REQ_DIFF_COMMAND
-      - TestDiffCommandNoArchives_REQ_DIFF_COMMAND
-      - TestDiffCommandIntegration_REQ_DIFF_COMMAND
-      - TestDiffCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
-      - TestIncDiffIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+    - TestReconstructArchiveStateFullOnly_REQ_DIFF_COMMAND
+    - TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND
+    - TestReconstructArchiveStateFullAndIncremental_REQ_DIFF_COMMAND
+    - TestCalculateDiffAddedFiles_REQ_DIFF_COMMAND
+    - TestCalculateDiffModifiedFiles_REQ_DIFF_COMMAND
+    - TestCalculateDiffDeletedFiles_REQ_DIFF_COMMAND
+    - TestCalculateDiffNoChanges_REQ_DIFF_COMMAND
+    - TestFormatDiffResult_REQ_DIFF_COMMAND
+    - TestPrintDiffResult_REQ_DIFF_COMMAND
+    - TestDiffCommandNoArchives_REQ_DIFF_COMMAND
+    - TestDiffCommandIntegration_REQ_DIFF_COMMAND
+    - TestDiffCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+    - TestIncDiffIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
     code_annotations:
-      - 'comparison.go: FindMostRecentArchive — filters full archives from ListArchives, sorts by name, returns latest'
-      - 'comparison.go: findLatestIncrementalArchive — filters incremental archives by base name prefix, sorts by name, returns latest'
-      - 'comparison.go: ReconstructArchiveState — loads full archive snapshot, merges incremental on top'
-      - 'comparison.go: CalculateDiff — snapshots current dir, compares against reconstructed state by hash/size'
-      - 'comparison.go: DiffResult struct — holds Added, Modified, Deleted string slices'
-      - 'archive.go: findLatestFullArchive — filters full archives, sorts by name, returns latest with error on empty'
-      - 'main.go: diffCmd — cobra command with context cancellation, archive state reconstruction, diff calculation, result printing'
-      - 'formatter.go: FormatDiffResult — formats DiffResult with configurable format strings'
-      - 'formatter.go: PrintDiffResult — prints formatted diff result to stdout or collector'
+    - 'comparison.go: FindMostRecentArchive — filters full archives from ListArchives, sorts by name, returns latest'
+    - 'comparison.go: findLatestIncrementalArchive — filters incremental archives by base name prefix, sorts by name, returns latest'
+    - 'comparison.go: ReconstructArchiveState — loads full archive snapshot, merges incremental on top'
+    - 'comparison.go: CalculateDiff — snapshots current dir, compares against reconstructed state by hash/size'
+    - 'comparison.go: DiffResult struct — holds Added, Modified, Deleted string slices'
+    - 'archive.go: findLatestFullArchive — filters full archives, sorts by name, returns latest with error on empty'
+    - 'main.go: diffCmd — cobra command with context cancellation, archive state reconstruction, diff calculation, result printing'
+    - 'formatter.go: FormatDiffResult — formats DiffResult with configurable format strings'
+    - 'formatter.go: PrintDiffResult — prints formatted diff result to stdout or collector'
   related_decisions:
     depends_on:
-      - IMPL-DIRECTORY_COMPARISON
+    - IMPL-DIRECTORY_COMPARISON
     supersedes: []
     see_also:
-      - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
   metadata:
-    created: "2026-03-12"
+    created: '2026-03-12'
     author: AI Agent
     last_updated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       author: AI agent
       reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
-  essence_pseudocode: |-
-    # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT]
-    # — Diff command: reconstruct archive state from full+incremental archives, compare against current directory, report changes via CLI
-
-    DATA DiffResult { Added []string, Modified []string, Deleted []string }
-
-    # — Archive selection uses name-based sorting (ISO 8601 timestamps are alphabetically sortable)
-    PROCEDURE FindMostRecentArchive(archiveDir) -> (path, error):
-      archives = ListArchives(archiveDir)
-      IF archives is empty THEN RETURN ("", nil)
-      fullArchives = FILTER archives WHERE NOT IsIncremental
-      IF fullArchives is empty THEN RETURN ("", nil)
-      SORT fullArchives BY Name ascending
-      RETURN fullArchives[last].Path
-
-    PROCEDURE findLatestFullArchive(archiveDir) -> (*Archive, error):
-      archives = ListArchives(archiveDir)
-      IF archives is empty THEN RETURN error("No archives found")
-      fullArchives = FILTER archives WHERE NOT IsIncremental
-      IF fullArchives is empty THEN RETURN error("No full archive found")
-      SORT fullArchives BY Name ascending
-      RETURN &fullArchives[last]
-
-    PROCEDURE findLatestIncrementalArchive(archiveDir, baseFullArchive) -> (*Archive, error):
-      # Identifies incrementals by prefix: BASENAME_update=...
-      archives = ListArchives(archiveDir)
-      baseName = TrimSuffix(baseFullArchive.Name, ".zip")
-      expectedPrefix = baseName + "_update="
-      matchingIncrementals = FILTER archives WHERE IsIncremental AND HasPrefix(Name, expectedPrefix)
-      IF matchingIncrementals is empty THEN RETURN nil
-      SORT matchingIncrementals BY Name ascending
-      RETURN &matchingIncrementals[last]
-
-    # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Reconstructs effective state by merging incremental on top of full archive
-    PROCEDURE ReconstructArchiveState(archiveDir) -> (*DirectorySnapshot, error):
-      latestFull = findLatestFullArchive(archiveDir)
-      ON error RETURN wrap("failed to find full archive")
-      fullSnapshot = CreateArchiveSnapshot(latestFull.Path)
-      ON error RETURN wrap("failed to load full archive snapshot")
-      latestIncremental = findLatestIncrementalArchive(archiveDir, latestFull)
-      ON error RETURN wrap("failed to find incremental archive")
-      IF latestIncremental is nil THEN RETURN fullSnapshot
-      incrementalSnapshot = CreateArchiveSnapshot(latestIncremental.Path)
-      ON error RETURN wrap("failed to load incremental archive snapshot")
-      # Merge: incremental files override full archive files by RelativePath
-      fullMap = MAP fullSnapshot.Files BY RelativePath
-      FOR EACH file IN incrementalSnapshot.Files:
-        fullMap[file.RelativePath] = file
-      reconstructedFiles = VALUES(fullMap) SORTED BY RelativePath
-      RETURN &DirectorySnapshot{Files: reconstructedFiles}
-
-    # [IMPL-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — Compares current directory against reconstructed state
-    PROCEDURE CalculateDiff(cwd, reconstructedState, excludePatterns) -> (*DiffResult, error):
-      currentSnapshot = CreateDirectorySnapshot(cwd, excludePatterns)
-      ON error RETURN wrap("failed to create directory snapshot")
-      # Filter out directories (archives only contain files)
-      currentMap = MAP currentSnapshot.Files WHERE NOT IsDir BY RelativePath
-      reconstructedMap = MAP reconstructedState.Files WHERE NOT IsDir BY RelativePath
-      added = []
-      modified = []
-      FOR path, currentFile IN currentMap:
-        IF path NOT IN reconstructedMap THEN APPEND path TO added
-        ELSE IF currentFile.Size != reconstructedMap[path].Size OR currentFile.Hash != reconstructedMap[path].Hash THEN APPEND path TO modified
-      deleted = []
-      FOR path IN reconstructedMap:
-        IF path NOT IN currentMap THEN APPEND path TO deleted
-      SORT added, modified, deleted
-      RETURN &DiffResult{Added: added, Modified: modified, Deleted: deleted}
-
-    # [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-CONTEXT_SUPPORT] — CLI command handler
-    PROCEDURE diffCmd() -> *cobra.Command:
-      cmd = cobra.Command{ Use: "diff" }
-      cmd.Run = FUNC(cmd, args):
-        ctx = cmd.Context() OR context.Background()
-        cwd = os.Getwd()
-        cfg = LoadConfig(cwd)
-        formatter = NewOutputFormatter(cfg)
-        archiveDir = prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)
-        reconstructedState = ReconstructArchiveState(archiveDir)
-        IF error contains "No archives found" THEN formatter.PrintNoArchivesFound(archiveDir); EXIT 0
-        ON other error THEN HandleArchiveError; EXIT
-        CHECK ctx cancellation
-        diff = CalculateDiff(cwd, reconstructedState, excludePatterns)
-        ON error THEN HandleArchiveError; EXIT
-        formatter.PrintDiffResult(diff)
-      RETURN cmd
-
-    # [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] — Format and print diff results
-    PROCEDURE FormatDiffResult(diff) -> string:
-      IF diff has no changes THEN RETURN cfg.FormatDiffNoChanges
-      result = cfg.FormatDiffChanges header
-      FOR EACH file IN diff.Added: APPEND Sprintf(cfg.FormatDiffAdded, file)
-      FOR EACH file IN diff.Modified: APPEND Sprintf(cfg.FormatDiffModified, file)
-      FOR EACH file IN diff.Deleted: APPEND Sprintf(cfg.FormatDiffDeleted, file)
-      RETURN result
-
-    PROCEDURE PrintDiffResult(diff):
-      message = FormatDiffResult(diff)
-      IF collector THEN collector.AddStdout(message) ELSE fmt.Print(message)
+  essence_pseudocode: "# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] [REQ-CONTEXT_SUPPORT]\n# — Diff command: reconstruct archive state from full+incremental archives, compare against current directory, report changes via CLI [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Block implements documented behavior for: DATA DiffResult { Added []string, Modified []string, Deleted []string }\nDATA DiffResult { Added []string, Modified []string, Deleted []string }\n\n# — Archive selection uses name-based sorting (ISO 8601 timestamps are alphabetically sortable) [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Block implements documented behavior for: PROCEDURE FindMostRecentArchive(archiveDir) -> (path, error):\nPROCEDURE FindMostRecentArchive(archiveDir)\
+    \ -> (path, error):\n  archives = ListArchives(archiveDir)\n  IF archives is empty THEN RETURN (\"\", nil)\n  fullArchives = FILTER archives WHERE NOT IsIncremental\n  IF fullArchives is empty THEN RETURN (\"\", nil)\n  SORT fullArchives BY Name ascending\n  RETURN fullArchives[last].Path\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Block implements documented behavior for: PROCEDURE findLatestFullArchive(archiveDir) -> (*Archive, error):\nPROCEDURE findLatestFullArchive(archiveDir) -> (*Archive, error):\n  archives = ListArchives(archiveDir)\n  IF archives is empty THEN RETURN error(\"No archives found\")\n  fullArchives = FILTER archives WHERE NOT IsIncremental\n  IF fullArchives is empty THEN RETURN error(\"No full archive found\")\n  SORT fullArchives BY Name ascending\n  RETURN &fullArchives[last]\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Block implements documented behavior for: PROCEDURE findLatestIncrementalArchive(archiveDir, baseFullArchive)\
+    \ -> (*Archive, error):\nPROCEDURE findLatestIncrementalArchive(archiveDir, baseFullArchive) -> (*Archive, error):\n  # Identifies incrementals by prefix: BASENAME_update=... [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]\n  archives = ListArchives(archiveDir)\n  baseName = TrimSuffix(baseFullArchive.Name, \".zip\")\n  expectedPrefix = baseName + \"_update=\"\n  matchingIncrementals = FILTER archives WHERE IsIncremental AND HasPrefix(Name, expectedPrefix)\n  IF matchingIncrementals is empty THEN RETURN nil\n  SORT matchingIncrementals BY Name ascending\n  RETURN &matchingIncrementals[last]\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Reconstructs effective state by merging incremental on top of full archive\nPROCEDURE ReconstructArchiveState(archiveDir) -> (*DirectorySnapshot, error):\n  latestFull = findLatestFullArchive(archiveDir)\n  ON error RETURN wrap(\"failed to find full archive\")\n  fullSnapshot = CreateArchiveSnapshot(latestFull.Path)\n  ON\
+    \ error RETURN wrap(\"failed to load full archive snapshot\")\n  latestIncremental = findLatestIncrementalArchive(archiveDir, latestFull)\n  ON error RETURN wrap(\"failed to find incremental archive\")\n  IF latestIncremental is nil THEN RETURN fullSnapshot\n  incrementalSnapshot = CreateArchiveSnapshot(latestIncremental.Path)\n  ON error RETURN wrap(\"failed to load incremental archive snapshot\")\n  # Merge: incremental files override full archive files by RelativePath [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]\n  fullMap = MAP fullSnapshot.Files BY RelativePath\n  FOR EACH file IN incrementalSnapshot.Files:\n    fullMap[file.RelativePath] = file\n  reconstructedFiles = VALUES(fullMap) SORTED BY RelativePath\n  RETURN &DirectorySnapshot{Files: reconstructedFiles}\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — Compares current directory against reconstructed state\nPROCEDURE CalculateDiff(cwd, reconstructedState, excludePatterns) -> (*DiffResult,\
+    \ error):\n  currentSnapshot = CreateDirectorySnapshot(cwd, excludePatterns)\n  ON error RETURN wrap(\"failed to create directory snapshot\")\n  # Filter out directories (archives only contain files) [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]\n  currentMap = MAP currentSnapshot.Files WHERE NOT IsDir BY RelativePath\n  reconstructedMap = MAP reconstructedState.Files WHERE NOT IsDir BY RelativePath\n  added = []\n  modified = []\n  FOR path, currentFile IN currentMap:\n    IF path NOT IN reconstructedMap THEN APPEND path TO added\n    ELSE IF currentFile.Size != reconstructedMap[path].Size OR currentFile.Hash != reconstructedMap[path].Hash THEN APPEND path TO modified\n  deleted = []\n  FOR path IN reconstructedMap:\n    IF path NOT IN currentMap THEN APPEND path TO deleted\n  SORT added, modified, deleted\n  RETURN &DiffResult{Added: added, Modified: modified, Deleted: deleted}\n\n# [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [REQ-DIFF_COMMAND] [REQ-CONTEXT_SUPPORT] — CLI\
+    \ command handler\nPROCEDURE diffCmd() -> *cobra.Command:\n  cmd = cobra.Command{ Use: \"diff\" }\n  cmd.Run = FUNC(cmd, args):\n    ctx = cmd.Context() OR context.Background()\n    cwd = os.Getwd()\n    cfg = LoadConfig(cwd)\n    formatter = NewOutputFormatter(cfg)\n    archiveDir = prepareArchiveDirectoryWithInterface(archiveConfig, cwd, dryRun)\n    reconstructedState = ReconstructArchiveState(archiveDir)\n    IF error contains \"No archives found\" THEN formatter.PrintNoArchivesFound(archiveDir); EXIT 0\n    ON other error THEN HandleArchiveError; EXIT\n    CHECK ctx cancellation\n    diff = CalculateDiff(cwd, reconstructedState, excludePatterns)\n    ON error THEN HandleArchiveError; EXIT\n    formatter.PrintDiffResult(diff)\n  RETURN cmd\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] — Format and print diff results\nPROCEDURE FormatDiffResult(diff) -> string:\n  IF diff has no changes THEN RETURN cfg.FormatDiffNoChanges\n  result = cfg.FormatDiffChanges header\n\
+    \  FOR EACH file IN diff.Added: APPEND Sprintf(cfg.FormatDiffAdded, file)\n  FOR EACH file IN diff.Modified: APPEND Sprintf(cfg.FormatDiffModified, file)\n  FOR EACH file IN diff.Deleted: APPEND Sprintf(cfg.FormatDiffDeleted, file)\n  RETURN result\n\n# [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] — Block implements documented behavior for: PROCEDURE PrintDiffResult(diff):\nPROCEDURE PrintDiffResult(diff):\n  message = FormatDiffResult(diff)\n  IF collector THEN collector.AddStdout(message) ELSE fmt.Print(message)"
