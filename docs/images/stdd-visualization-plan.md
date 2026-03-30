@@ -12,11 +12,11 @@
 - **Upgrade Plan**:
   1. Use `stdd-timeline.json` to drive frame generation (presentation software or scripted renderer).
   2. Export MP4/GIF/animated SVG; save as `docs/images/stdd-timeline.mp4` (or similar).
-  3. Update docs to embed both the static SVG (fallback) and the animated asset; rerun validation log entry.
+  3. Update docs to embed both the static SVG (fallback) and the animated asset; rerun validation log entry in `docs/data/stdd-validation-log.md`.
 
 ## Token Statistics Visual (docs/images/stdd-token-stats.svg)
 - **Definition**: Bar-chart SVG sourced from `docs/data/stdd-token-stats.json`; shows counts for `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`, `[TEST:*]` tokens as of 2025-12-31.
-- **Upgrade Plan**: Refresh the JSON counts whenever `stdd/semantic-tokens.md` changes significantly, then regenerate the SVG to keep visuals current.
+- **Upgrade Plan**: Refresh the JSON counts whenever `tied/semantic-tokens.yaml` / `tied/semantic-tokens.md` changes significantly, then regenerate the SVG to keep visuals current.
 
 ## Configuration Token Visuals
 - **Config Hierarchy Map (SVG)**:

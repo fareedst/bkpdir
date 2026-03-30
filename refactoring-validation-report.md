@@ -1,5 +1,7 @@
 # [MEDIUM] Refactoring Impact Validation Report (REFACTOR-006)
 
+> **Note (2026-03-29)**: Long-form refactoring markdown under `docs/` was removed; the authoritative record is **`tied/implementation-decisions/`** (e.g. `IMPL-REFACTOR_PREP.yaml`, `IMPL-LARGE_FILE_DECOMP.yaml`, `IMPL-CONFIG_SCHEMA_FLEX.yaml`, `IMPL-INTERFACE_FIRST.yaml`). `refactoring_validation_test.go` was updated to read those files.
+
 **Status**: ✅ COMPLETED  
 **Date**: 2025-01-02  
 **Validation Scope**: All REFACTOR-001 through REFACTOR-005 tasks  

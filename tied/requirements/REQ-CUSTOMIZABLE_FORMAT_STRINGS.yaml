@@ -60,10 +60,10 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § User-Customizable Format Strings [ARCH-CUSTOMIZABLE_FORMAT_STRINGS]
+  architecture: tied/architecture-decisions/ARCH-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   breaking_change: Users with old `%{...}` format strings must update to `#{...}` syntax
   description: All output format strings must be customizable by users through configuration files. Users should be able to override any format string in their `.bkpdir.yml` to customize the application's output interface. Format string validation must warn users of invalid placeholders. Comprehensive documentation and examples must be provided.
   immutable_requirements_(major_version_change_required): These requirements define core behaviors that MUST NOT be changed without a major version bump. These are fundamental specifications that users and other systems depend on.
-  implementation: See `implementation-decisions.md` § User-Customizable Format Strings Implementation [IMPL-CUSTOMIZABLE_FORMAT_STRINGS]
+  implementation: tied/implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   migration_complete: All code, tests, and documentation updated to use `#{...}` syntax exclusively
   placeholder_syntax_migration: All placeholders migrated from `%{...}` to `#{...}` syntax to avoid conflicts with Go's `fmt` package

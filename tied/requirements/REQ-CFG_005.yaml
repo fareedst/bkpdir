@@ -17,7 +17,7 @@ REQ-CFG_005:
     - criterion: "Duplicate values in arrays are deduplicated during merge"
     - criterion: "Order is preserved: defaults/parent values first, then child additions"
   validation_criteria:
-    - method: "See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach"
+    - method: "tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml"
   traceability:
     architecture:
       - "ARCH-CFG_005"
@@ -42,6 +42,6 @@ REQ-CFG_005:
       date: "2026-03-12"
       validator: "MCP converter"
       result: "pass"
-  architecture: "See `architecture-decisions.md` § Layered Configuration Inheritance [ARCH-CFG_005]"
+  architecture: "tied/architecture-decisions/ARCH-CFG_005.yaml"
   description: "Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported. Array configuration fields (such as `exclude_patterns`) default to merge (accumulate) strategy to combine values from defaults, parent configs, and children; default `exclude_patterns` is empty until set in config."
-  implementation: "See `implementation-decisions.md` § Configuration Structure [IMPL-CONFIG_STRUCT]"
+  implementation: "tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml"

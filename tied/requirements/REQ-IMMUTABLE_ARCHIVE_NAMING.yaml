@@ -37,6 +37,6 @@ REQ-IMMUTABLE_ARCHIVE_NAMING:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Archive Format [ARCH-ARCHIVE_FORMAT]
+  architecture: tied/architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
   description: 'Archive naming convention is fixed and must not be modified. Format: `{prefix}-{timestamp}-{git_info}-{note}.zip`'
-  implementation: See `implementation-decisions.md` § ZIP Archive Format Implementation [IMPL-ZIP_FORMAT]
+  implementation: tied/implementation-decisions/IMPL-ZIP_FORMAT.yaml

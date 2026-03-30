@@ -11,10 +11,9 @@ Overview: Lightweight, plan-driven governance change lifecycle to move from poli
 - Deployment/Migration: Record migration actions and status in the governance pages and tasks.
 
 ## Artifacts
-- Cross-links to REQ tokens in `docs/governance/cross-links.md`.
-- Architecture decisions in `stdd/architecture-decisions.md`.
-- Implementation decisions in `stdd/implementation-decisions.md`.
-- Token registry updates in `stdd/semantic-tokens.md`.
+- Cross-links: canonical in each TIED detail file’s `traceability`; see [`cross-links.md`](cross-links.md) for how to query.
+- Architecture / implementation: [`tied/architecture-decisions.yaml`](../../tied/architecture-decisions.yaml), [`tied/implementation-decisions.yaml`](../../tied/implementation-decisions.yaml) and detail dirs under `tied/`.
+- Token registry: [`tied/semantic-tokens.yaml`](../../tied/semantic-tokens.yaml), [`tied/semantic-tokens.md`](../../tied/semantic-tokens.md).
 
 ## Cadence
 - Quarterly governance reviews; escalate any high-risk changes earlier as needed.

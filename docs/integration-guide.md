@@ -2,6 +2,10 @@
 
 > **[HIGH] EXTRACT-008: Integration documentation system - [ACTION:format-processing] Comprehensive usage guides**
 
+## Normative traceability (TIED)
+
+Package boundaries and extraction rationale: [ARCH-PACKAGE_EXTRACTION](../tied/architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml), [ARCH-SYSTEM_COMPONENTS](../tied/architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml). Interdependency map (table + SVG): [package-interdependency-mapping.md](package-interdependency-mapping.md). Requirement: [REQ-EXTRACT_008_INTERDEP_MAPPING](../tied/requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml).
+
 ## 🎯 Overview
 
 This guide demonstrates how to integrate and use the extracted BkpDir packages in your CLI applications. The packages are designed to work independently or together, providing a flexible foundation for building backup and file management tools.

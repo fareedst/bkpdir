@@ -38,6 +38,6 @@ REQ-IMMUTABLE_FEATURE_PRESERVATION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Code Organization Principles [ARCH-CODE_ORGANIZATION]
+  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
   description: 'Feature preservation rules must be followed:'
-  implementation: See `implementation-decisions.md` § Code Style and Conventions [IMPL-CODE_STYLE]
+  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml

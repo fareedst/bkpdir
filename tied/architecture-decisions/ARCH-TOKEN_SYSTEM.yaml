@@ -63,15 +63,15 @@ ARCH-TOKEN_SYSTEM:
   cross-references: '[REQ-DOC_016], [REQ-GOV_REGISTRY_COMPLETENESS], [ARCH-TOKEN_SYSTEM], [IMPL-TOKEN_SYSTEM]'
   decommission_layer: After each batch migrates, replace the YAML entry with a pointer to the markdown registry until the YAML file can be removed entirely.
   inventory_layer: Parse `project-tokens.yaml` into structured batches (actions, features, semantic token metadata) and normalize identifiers to STDD-compliant names.
-  registry_layer: Extend `stdd/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
+  registry_layer: Extend `tied/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
   token_format_standards:
     - 'Format: `[TYPE:IDENTIFIER]` with UPPER_SNAKE_CASE identifiers'
     - 'Cross-references: Implementation tokens must reference `[ARCH-*]` and `[REQ-*]` tokens'
     - 'Consistency: Same token must be used consistently across all layers'
   token_registry: Central registry in `semantic-tokens.md` with cross-references to all documentation layers
   token_types:
-    - '`[REQ-*]` - Requirements tokens in `requirements.md`'
-    - '`[ARCH-*]` - Architecture decision tokens in `architecture-decisions.md`'
+    - '`[REQ-*]` - Requirements tokens in `tied/requirements/` detail YAML'
+    - '`[ARCH-*]` - Architecture decision tokens in `tied/architecture-decisions/` detail YAML'
     - '`[IMPL-*]` - Implementation tokens in code comments'
     - '`[TEST:*]` - Test specification tokens (referenced via `[REQ-*]` in test names)'
   validation_requirements:

@@ -44,7 +44,7 @@ REQ-DOC_013:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § AI-First Documentation Architecture [ARCH-AI_DOCUMENTATION]
+  architecture: tied/architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
   description: All documentation must be written primarily for AI assistant comprehension. Code comments and implementation tokens must follow standardized AI-readable formats. Documentation structure must be optimized for AI parsing and navigation. Cross-references must be machine-readable and AI-traversable. Maintenance workflows must be executable by AI assistants without human intervention.
   future_enhancements_(out_of_scope): |-
     The following features are documented but marked as future enhancements:
@@ -54,4 +54,4 @@ REQ-DOC_013:
     - Advanced coverage controls (COV-003 planned but not started)
 
     These may be considered for future iterations but are not required for the initial implementation.
-  implementation: See `implementation-decisions.md` § Code Style and Conventions [IMPL-CODE_STYLE]
+  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml

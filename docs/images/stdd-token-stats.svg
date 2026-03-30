@@ -10,7 +10,7 @@
   </style>
 
   <text class="title" x="50%" y="40" text-anchor="middle">Semantic Token Coverage</text>
-  <text class="subtitle" x="50%" y="65" text-anchor="middle">Counts from `stdd/semantic-tokens.md` (2025-12-31)</text>
+  <text class="subtitle" x="50%" y="65" text-anchor="middle">Counts from `tied/semantic-tokens.yaml` (2025-12-31)</text>
 
   <!-- Axes -->
   <line x1="80" y1="90" x2="80" y2="340" stroke="#999" stroke-width="1"/>

@@ -44,6 +44,6 @@ REQ-DOC_011:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § AI-First Documentation Architecture [ARCH-AI_DOCUMENTATION]
+  architecture: tied/architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
   description: AI workflow validation hooks must integrate seamlessly with existing validation framework. Pre-submission validation must prevent non-compliant changes from being submitted. Validation feedback must be optimized for AI assistant comprehension and remediation. Integration must provide zero-friction validation without disrupting AI workflows. All validation processes must support automated execution by AI assistants.
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml

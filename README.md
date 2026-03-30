@@ -11,8 +11,16 @@ Work on the current branch includes:
 - **Config errors**: Failed config file reads print a **stderr warning** and a short **YAML hint** (e.g. quoting globs such as `*.tsbuildinfo` when the parser reports alias/anchor issues).
 - **Exclusions**: Trailing-slash patterns with a **single** path segment (e.g. `node_modules/`) match that directory name **at any depth** in the tree.
 - **Lint / check**: `make lint` runs **TIED MCP validation** (`validate-tied-mcp`) before `revive`; `make check` runs fmt, vet, and lint only—run `make validate-token-enforcement` separately for the optional DOC-008 scan. See [Development](#development).
-- **TIED**: REQ/ARCH detail YAML no longer embed invalid `detail_file`; IMPL decision files normalized and pseudocode aligned; `tied/semantic-tokens.yaml`, `project-tokens.yaml`, and the semantic token validation report refreshed; agent checklist docs updated.
+- **TIED**: REQ/ARCH detail YAML no longer embed invalid `detail_file`; IMPL decision files normalized and pseudocode aligned; canonical registry in `tied/semantic-tokens.yaml`; `project-tokens.yaml` is a short pointer only; agent checklist docs updated.
 - **Repository**: Prebuilt platform binaries were **removed** from `bin/` (build locally or via CI).
+
+### Documentation, TIED paths, and token validation
+
+- **Docs pruned**: Many non-essential `docs/` files (session write-ups, migration logs, duplicate analyses, old working plans) were **removed** on purpose. Normative requirements and decisions live under **`tied/`**; use **git history** or [docs/archive/README.md](docs/archive/README.md) if you need retired narratives.
+- **Registry**: **`project-tokens.yaml`** is only a **pointer** to `tied/semantic-tokens.yaml` and the TIED indexes. Do not treat it as a token matrix; extend **`tied/semantic-tokens.yaml`** and detail YAML instead (`[REQ-DOC_016]`).
+- **Requirements index**: [`tied/requirements.yaml`](tied/requirements.yaml) and REQ detail files cite concrete **`tied/architecture-decisions/ARCH-*.yaml`** and **`tied/implementation-decisions/IMPL-*.yaml`** paths instead of monolithic `architecture-decisions.md` / `implementation-decisions.md` section references.
+- **Tooling alignment**: Refactoring validation tests and coverage differential were updated for removed doc paths (including optional `docs/coverage-baseline.md`).
+- **Validation script**: [`scripts/validate-semantic-tokens.sh`](scripts/validate-semantic-tokens.sh) regenerates [`semantic-token-validation-report.md`](semantic-token-validation-report.md) with TIED / canonical-registry wording. The script may still exit **non-zero** when per-file checks fail (e.g. remaining Unicode icons), but it **writes the report** before exiting.
 
 ## 📹 Visual Demonstrations
 
@@ -278,7 +286,7 @@ This project uses a **semantic token system** for AI-optimized development:
 - **Perfect searchability**: `grep "\[CRITICAL\]" *.go` works everywhere
 - **AI-native**: Semantic parsing vs visual interpretation
 - **Cross-platform**: No Unicode or font dependencies
-- **Maintainable**: Single source of truth in `project-tokens.yaml`
+- **Maintainable**: Single source of truth in `tied/semantic-tokens.yaml` (see `project-tokens.yaml` for legacy pointer metadata)
 
 ### Development Requirements
 
@@ -286,7 +294,7 @@ All development work must comply with:
 
 1. **Semantic tokens** - Use `[CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION-context]`
 2. **Validation** - Pass `make validate-token-enforcement`
-3. **Registry compliance** - Use tokens from `project-tokens.yaml`
+3. **Registry compliance** - Use tokens registered in `tied/semantic-tokens.yaml`
 4. **Documentation consistency** - Keep tokens aligned across all files
 5. **Milestone tracking** - Document completion of major milestones during development
 
@@ -312,7 +320,8 @@ bkpdir/
 │   └── testutil/              # Testing utilities
 ├── scripts/                   # Build and validation scripts
 ├── docs/                      # Documentation
-└── project-tokens.yaml        # Semantic token registry
+├── tied/                      # TIED: REQ/ARCH/IMPL YAML (canonical token registry)
+└── project-tokens.yaml        # Legacy pointer to tied/ (do not extend with token matrices)
 ```
 
 ## Features
@@ -430,7 +439,7 @@ make validate-tokens
 
 The project uses a central registry for semantic tokens:
 
-**File:** `project-tokens.yaml`
+**Canonical registry:** `tied/semantic-tokens.yaml` (indexes + detail under `tied/`). **`project-tokens.yaml`** is a short pointer only.
 
 ### Valid Priorities
 - `CRITICAL` - Blocking operations, core system integrity
@@ -462,7 +471,7 @@ The project is migrating from Unicode icons to semantic tokens:
 // [CRITICAL] ARCH-001: Archive naming convention [ACTION:core-functionality]
 ```
 
-**Status:** ~2715 legacy icons identified, ~30% migrated. See [Unicode Migration Status](docs/unicode-migration-current-status.md) for current progress.
+**Status:** Migration progress is reflected in the codebase and TIED/token tooling. Ad-hoc phase write-ups were removed from [docs/archive/](docs/archive/); use git history if needed (not normative).
 
 ## Contributing
 
@@ -484,7 +493,7 @@ The project is migrating from Unicode icons to semantic tokens:
 ### AI Assistant Guidelines
 
 - **Token system first** - Always use semantic tokens
-- **Registry compliance** - Check `project-tokens.yaml` for valid tokens
+- **Registry compliance** - Check `tied/semantic-tokens.yaml` for valid tokens
 - **Validation integration** - Run validation after changes
 - **Consistency maintenance** - Keep tokens aligned across all files
 
@@ -495,11 +504,8 @@ MIT License - see LICENSE file for details.
 ## Links
 
 - [Documentation](docs/)
-- [Semantic Token Requirements](docs/semantic-token-system-requirements.md)
-- [AI-First Development Guide](docs/context/AI-First-Development-Procedure-Complete-Guide.md)
+- [Semantic token system (pointer)](docs/semantic-token-system-requirements.md) — canonical registry in `tied/semantic-tokens.yaml`
+- [AI / developer context](docs/context/README.md)
 - [Package Reference](docs/package-reference.md)
 - [Migration Guide](docs/migration-guide.md)
-- [Unicode Migration Status](docs/unicode-migration-current-status.md)
-- [Migration Next Steps](docs/unicode-migration-next-steps.md)
-- [Traceability-Enhanced Migration Plan](docs/unicode-migration-traceability-plan.md)
-- [STDD Comparison Analysis](docs/stdd-comparison-analysis.md) - Architecture vs Implementation token flow analysis 
+- [Docs archive folder](docs/archive/README.md) (placeholder; use git history for old session notes)

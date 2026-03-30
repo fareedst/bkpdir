@@ -13,7 +13,7 @@ REQ-ERROR_HANDLING:
     - criterion: Error messages include operation context
     - criterion: Error formatting supports operation context
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-ERROR_HANDLING
@@ -38,6 +38,6 @@ REQ-ERROR_HANDLING:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Error Handling Strategy [ARCH-ERROR_HANDLING]
+  architecture: tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   description: Use structured errors with status codes and operation context. Enhanced disk space error detection. Operation context support for better debugging.
-  implementation: See `implementation-decisions.md` § Structured Error Handling [IMPL-STRUCTURED_ERRORS]
+  implementation: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml

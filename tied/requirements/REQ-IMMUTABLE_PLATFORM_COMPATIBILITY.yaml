@@ -42,6 +42,6 @@ REQ-IMMUTABLE_PLATFORM_COMPATIBILITY:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Language and Runtime [ARCH-LANGUAGE_SELECTION]
+  architecture: tied/architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
   description: 'Platform support must never be reduced or modified:'
-  implementation: See `implementation-decisions.md` § File Operations Implementation [IMPL-FILE_OPERATIONS]
+  implementation: tied/implementation-decisions/IMPL-FILE_OPERATIONS.yaml

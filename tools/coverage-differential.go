@@ -225,11 +225,13 @@ func loadBaselineCoverage() (BaselineCoverage, error) {
 		}
 	}
 
-	// Fall back to parsing baseline documentation
+	// Fall back to parsing baseline documentation (optional; file may be absent)
 	baselinePath := "docs/coverage-baseline.md"
 	data, err := os.ReadFile(baselinePath)
 	if err != nil {
-		return baseline, fmt.Errorf("failed to read baseline file: %v", err)
+		baseline.Timestamp = time.Now()
+		baseline.Files = make(map[string]FileCoverage)
+		return baseline, nil
 	}
 
 	// Parse baseline coverage from markdown

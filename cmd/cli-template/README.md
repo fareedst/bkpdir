@@ -265,4 +265,4 @@ This template is part of the bkpdir project and follows the same licensing terms
 
 ---
 
-**Note**: This is a working template that demonstrates the extracted packages. Full integration with all package features is ongoing. See the [project roadmap](../../docs/extract-008-cli-template-plan.md) for detailed implementation plans. 
+**Note**: This is a working template that demonstrates the extracted packages. Full integration with all package features is ongoing. Integration guidance: [docs/integration-guide.md](../../docs/integration-guide.md); traceability: `tied/` REQ/ARCH/IMPL YAML. 

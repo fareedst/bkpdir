@@ -23,7 +23,7 @@ REQ-CFG_006:
     - method: '*Edge Case Testing**: Anonymous embedded fields, unexported field exclusion, interface{} handling, circular reference prevention, malformed struct handling, depth limitation, error recovery'
     - method: '*Integration Testing**: CFG-005 inheritance integration, source tracking accuracy, display formatting validation, filtering functionality'
     - method: '*Performance Validation**: Reflection result caching (60%+ improvement), lazy source evaluation, incremental resolution, memory allocation efficiency, concurrent access safety'
-    - method: See `architecture-decisions.md` § Configuration Reflection Architecture [ARCH-CFG_006] and `implementation-decisions.md` § Configuration Reflection Implementation [IMPL-CFG_006] for detailed testing approach
+    - method: tied/architecture-decisions/ARCH-CFG_006.yaml; tied/implementation-decisions/IMPL-CFG_006.yaml
   traceability:
     architecture:
       - ARCH-CFG_006
@@ -48,6 +48,6 @@ REQ-CFG_006:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Configuration Reflection Architecture [ARCH-CFG_006]
+  architecture: tied/architecture-decisions/ARCH-CFG_006.yaml
   description: Configuration command displays ALL configuration parameters automatically through reflection-based field discovery. Field discovery handles nested structures, embedded fields, collections, and complex types. Source tracking shows complete inheritance chain with merge strategy attribution. Multiple output formats (table, tree, JSON) supported with comprehensive filtering options.
-  implementation: See `implementation-decisions.md` § Configuration Reflection Implementation [IMPL-CFG_006]
+  implementation: tied/implementation-decisions/IMPL-CFG_006.yaml

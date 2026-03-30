@@ -2,10 +2,10 @@
   "schemaVersion": "0.1",
   "generatedAt": "2025-12-31T00:00:00Z",
   "sourceDocs": [
-    "stdd/semantic-tokens.md",
-    "stdd/requirements.md",
-    "stdd/architecture-decisions.md",
-    "stdd/implementation-decisions.md"
+    "tied/semantic-tokens.md",
+    "tied/requirements.md",
+    "tied/architecture-decisions.md",
+    "tied/implementation-decisions.md"
   ],
   "validation": {
     "nodesCount": 10,
@@ -34,7 +34,7 @@
     "status": "sampled_with_full_registry_counts_and_validation_pass",
     "notes": [
       "Snapshot is intentionally sampled (CFG_005 and LIST_LIMIT chains).",
-      "Counts match the sampled graph; full registry counts captured from stdd/semantic-tokens.md (REQ/ARCH/IMPL/TEST).",
+      "Counts match the sampled graph; full registry counts captured from tied/semantic-tokens.md (REQ/ARCH/IMPL/TEST).",
       "Validation: both sample chains include tokens at every hop after registering TEST tokens."
     ]
   },
@@ -45,7 +45,7 @@
       "type": "REQ",
       "title": "Layered Configuration Inheritance",
       "status": "complete",
-      "source": "stdd/requirements.md#reqcfg_005",
+      "source": "tied/requirements.md#reqcfg_005",
       "styling": { "lane": "REQ", "colorHint": "blue", "weight": 1.0 }
     },
     {
@@ -54,7 +54,7 @@
       "type": "ARCH",
       "title": "Layered Configuration Inheritance Architecture",
       "status": "complete",
-      "source": "stdd/architecture-decisions.md#5-layered-configuration-inheritance-archcfg_005-reqcfg_005",
+      "source": "tied/architecture-decisions.md#5-layered-configuration-inheritance-archcfg_005-reqcfg_005",
       "styling": { "lane": "ARCH", "colorHint": "indigo", "weight": 1.0 }
     },
     {
@@ -63,7 +63,7 @@
       "type": "IMPL",
       "title": "Array Field Default Merge Strategy Implementation",
       "status": "complete",
-      "source": "stdd/implementation-decisions.md#array-field-default-merge-strategy-implementation-implexclude_merge_fix",
+      "source": "tied/implementation-decisions.md#array-field-default-merge-strategy-implementation-implexclude_merge_fix",
       "styling": { "lane": "IMPL", "colorHint": "purple", "weight": 1.0 },
       "examples": [
         { "path": "config.go", "symbol": "applyMergeStrategies" }
@@ -94,7 +94,7 @@
       "type": "REQ",
       "title": "List Command Output Limit",
       "status": "complete",
-      "source": "stdd/requirements.md#reqlist_limit",
+      "source": "tied/requirements.md#reqlist_limit",
       "styling": { "lane": "REQ", "colorHint": "blue", "weight": 1.0 }
     },
     {
@@ -103,7 +103,7 @@
       "type": "ARCH",
       "title": "List Command Limit Architecture",
       "status": "complete",
-      "source": "stdd/architecture-decisions.md#28-list-command-limit-architecture-archlist_limit-reqlist_limit",
+      "source": "tied/architecture-decisions.md#28-list-command-limit-architecture-archlist_limit-reqlist_limit",
       "styling": { "lane": "ARCH", "colorHint": "indigo", "weight": 1.0 }
     },
     {
@@ -112,7 +112,7 @@
       "type": "IMPL",
       "title": "List Command Limit Implementation",
       "status": "complete",
-      "source": "stdd/implementation-decisions.md#list-command-output-limit-impllist_limit",
+      "source": "tied/implementation-decisions.md#list-command-output-limit-impllist_limit",
       "styling": { "lane": "IMPL", "colorHint": "purple", "weight": 1.0 },
       "examples": [
         { "path": "list.go", "symbol": "ListArchivesWithLimit" }

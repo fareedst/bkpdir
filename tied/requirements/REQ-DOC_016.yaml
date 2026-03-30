@@ -17,7 +17,7 @@ REQ-DOC_016:
     - method: Token consistency validation across all layers
     - method: AI assistant navigation accuracy testing
     - method: Automated validation integration testing
-    - method: See `architecture-decisions.md` § Token System Architecture and `implementation-decisions.md` § Token System Implementation for detailed approach
+    - method: tied/architecture-decisions/ARCH-TOKEN_SYSTEM.yaml; tied/implementation-decisions/IMPL-TOKEN_SYSTEM.yaml
   traceability:
     architecture: []
     implementation: []
@@ -40,6 +40,6 @@ REQ-DOC_016:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Token System Architecture
+  architecture: tied/architecture-decisions/ARCH-TOKEN_SYSTEM.yaml
   description: Establish comprehensive token-based traceability for features, architecture decisions, and implementation consistency as a core AI-first principle. Every feature, architecture decision, and implementation must be traced through documentation, source code, tests, and validation layers.
-  implementation: See `implementation-decisions.md` § Token System Implementation
+  implementation: tied/implementation-decisions/IMPL-TOKEN_SYSTEM.yaml

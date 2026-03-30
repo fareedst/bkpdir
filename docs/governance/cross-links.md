@@ -1,12 +1,12 @@
-# REQ to ARCH/IMPL Cross-Link Mapping (Governance Tokens)
+# REQ → ARCH / IMPL cross-links
 
-- REQ:GOVERNANCE_DOCUMENTATION → ARCH:REPO_GOV; ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
-- REQ:GOV_POLICY_MIGRATION → IMPL:POLICY_MIGRATION; IMPL:AUDIT_CHAIN
-- REQ:GOV_CHANGE_CONTROL → ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
-- REQ:GOV_AUDIT → IMPL:AUDIT_CHAIN
-- REQ:GOV_REGISTRY_COMPLETENESS → ARCH:REPO_GOV
-- REQ:GOV_DISCOVERABILITY → (docs/index.md) and docs/governance/index.md
-- REQ:GOV_NAMING_CONVENTIONS → ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
-- REQ:GOV_CROSS_LINKING → ARCH:REPO_GOV; ARCH:CHANGE_CONTROL; IMPL:POLICY_MIGRATION
-- REQ:GOV_MIGRATION_STATUS → IMPL:POLICY_MIGRATION; IMPL:AUDIT_CHAIN
-- REQ:REGISTRY_COMPLETION_VERIFICATION → ARCH:REPO_GOV; IMPL:AUDIT_CHAIN
+**Do not maintain a duplicate mapping table here.** Traceability is canonical in TIED:
+
+- Each **requirement** detail file under [`tied/requirements/`](../../tied/requirements/) includes `traceability.architecture`, `traceability.implementation`, and related fields.
+- Architecture and implementation detail files under [`tied/architecture-decisions/`](../../tied/architecture-decisions/) and [`tied/implementation-decisions/`](../../tied/implementation-decisions/) list related REQ/ARCH/IMPL tokens in `cross_references` / narrative as applicable.
+
+**How to explore**
+
+- Read the YAML indexes: [`tied/requirements.yaml`](../../tied/requirements.yaml), [`tied/architecture-decisions.yaml`](../../tied/architecture-decisions.yaml), [`tied/implementation-decisions.yaml`](../../tied/implementation-decisions.yaml).
+- With **TIED MCP**, use tools such as `get_decisions_for_requirement` / `get_requirements_for_decision` (see [`tied/docs/ai-agent-tied-mcp-usage.md`](../../tied/docs/ai-agent-tied-mcp-usage.md)).
+- Run **`tied_validate_consistency`** after edits to TIED YAML.

@@ -11,7 +11,7 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
       - Lack of centralized token validation
       - Need for canonical token registry
     benefits:
-      - All legacy tokens migrated to stdd/semantic-tokens.md
+      - All legacy tokens migrated to tied/semantic-tokens.md
       - 100% source/test/overall coverage validated
       - project-tokens.yaml replaced with pointer stub to canonical registry
   implementation_approach:
@@ -25,7 +25,7 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
       - Replaced project-tokens.yaml with pointer stub
   code_locations:
     files:
-      - stdd/semantic-tokens.md
+      - tied/semantic-tokens.md
       - docs/validation-reports/token-coverage-analysis.md
       - scripts/token_inventory.py
       - scripts/render_token_tables.py
@@ -41,7 +41,7 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
     tests: []
     code_annotations:
       - project-tokens.yaml migration scripts
-      - stdd/semantic-tokens.md tables annotated with [REQ:DOC_016]
+      - tied/semantic-tokens.md tables annotated with [REQ:DOC_016]
   related_decisions:
     depends_on:
       - IMPL-TOKEN_SYSTEM

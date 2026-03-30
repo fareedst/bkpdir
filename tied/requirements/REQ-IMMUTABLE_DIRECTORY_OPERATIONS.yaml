@@ -41,6 +41,6 @@ REQ-IMMUTABLE_DIRECTORY_OPERATIONS:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § File Operations Architecture [ARCH-FILE_OPERATIONS]
+  architecture: tied/architecture-decisions/ARCH-FILE_OPERATIONS.yaml
   description: 'Directory operation rules are fundamental and must not be altered:'
-  implementation: See `implementation-decisions.md` § File Operations Implementation [IMPL-FILE_OPERATIONS]
+  implementation: tied/implementation-decisions/IMPL-FILE_OPERATIONS.yaml

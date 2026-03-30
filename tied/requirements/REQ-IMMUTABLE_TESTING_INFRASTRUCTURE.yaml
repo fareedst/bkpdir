@@ -38,6 +38,6 @@ REQ-IMMUTABLE_TESTING_INFRASTRUCTURE:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Testing Strategy [ARCH-TESTING_STRATEGY]
+  architecture: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml
   description: 'Testing infrastructure requirements are immutable:'
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml

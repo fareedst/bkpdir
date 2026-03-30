@@ -38,6 +38,6 @@ REQ-IMMUTABLE_CLI_COMMANDS:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § CLI Commands Architecture [ARCH-CLI_COMMANDS]
+  architecture: tied/architecture-decisions/ARCH-CLI_COMMANDS.yaml
   description: 'CLI command structure must be preserved:'
-  implementation: See `implementation-decisions.md` § CLI Framework Implementation [IMPL-CLI_FRAMEWORK]
+  implementation: tied/implementation-decisions/IMPL-CLI_FRAMEWORK.yaml

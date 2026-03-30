@@ -2001,7 +2001,7 @@ ARCH-TOKEN_SYSTEM:
   cross-references: '[REQ-DOC_016], [REQ-GOV_REGISTRY_COMPLETENESS], [ARCH-TOKEN_SYSTEM], [IMPL-TOKEN_SYSTEM]'
   decommission_layer: After each batch migrates, replace the YAML entry with a pointer to the markdown registry until the YAML file can be removed entirely.
   inventory_layer: Parse `project-tokens.yaml` into structured batches (actions, features, semantic token metadata) and normalize identifiers to STDD-compliant names.
-  registry_layer: Extend `stdd/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
+  registry_layer: Extend `tied/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
   token_format_standards:
     - 'Format: `[TYPE:IDENTIFIER]` with UPPER_SNAKE_CASE identifiers'
     - 'Cross-references: Implementation tokens must reference `[ARCH-*]` and `[REQ-*]` tokens'
@@ -2449,7 +2449,7 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   rationale:
     why: |-
       Stakeholders need a concise, token-centric narrative of how STDD preserves intent across layers.
-      A data-driven pipeline (sourced from existing `stdd/*.md` plus representative code/test anchors) keeps token prominence accurate as the registry evolves.
+      A data-driven pipeline (sourced from existing `tied/*.md` plus representative code/test anchors) keeps token prominence accurate as the registry evolves.
       Complementary artifacts (layered flow + timeline/animation) address both static comprehension and process storytelling while keeping tokens in the spotlight.
     problems_solved: []
     benefits: []
@@ -2507,7 +2507,7 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
     - A canonical `docs/package-interdependency-mapping.md` is required and serves as the authoritative mapping for EXTRACT-008.
     - Where coupling is unavoidable, introduce small interfaces to break cycles and record these interface contracts in the mapping document and in `implementation-decisions.md`.
   cross-references: '[REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
-  data_extraction_module: 'Parse `stdd/semantic-tokens.md`, `requirements.md`, `architecture-decisions.md`, `implementation-decisions.md`, and sampled code/test anchors to build a token graph (nodes: REQ/ARCH/IMPL/TEST/CODE; edges: traceability links) with token metadata (type, status, sample refs) for visual prominence.'
+  data_extraction_module: 'Parse `tied/semantic-tokens.md`, `requirements.md`, `architecture-decisions.md`, `implementation-decisions.md`, and sampled code/test anchors to build a token graph (nodes: REQ/ARCH/IMPL/TEST/CODE; edges: traceability links) with token metadata (type, status, sample refs) for visual prominence.'
   integration_&_storage: Export assets to `docs/images/` (SVG/PNG/GIF/MP4 as needed) and embed into STDD docs with captions and token callouts; include a data snapshot (JSON/CSV) to keep visuals reproducible and token-accurate.
   integration_points: |-
     1. **Incremental Archive Creation**: Modify `createIncrementalArchive` to use diff analysis

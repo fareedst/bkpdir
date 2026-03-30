@@ -13,7 +13,7 @@ REQ-GIT_INTEGRATION:
     - criterion: Status detection works for clean/dirty state
     - criterion: Archive names include Git info when enabled
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-GIT_INTEGRATION
@@ -38,6 +38,6 @@ REQ-GIT_INTEGRATION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Git Integration [ARCH-GIT_INTEGRATION]
+  architecture: tied/architecture-decisions/ARCH-GIT_INTEGRATION.yaml
   description: Automatic Git repository detection. Git branch and commit hash extraction. Git status detection for clean/dirty state. Integration with archive naming.
-  implementation: See `implementation-decisions.md` § Git Command-line Integration [IMPL-GIT_CLI]
+  implementation: tied/implementation-decisions/IMPL-GIT_CLI.yaml

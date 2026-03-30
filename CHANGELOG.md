@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- **Documentation**: Removed non-essential `docs/` markdown (session summaries, unicode migration logs, extraction working plans, duplicate system comparisons, and similar). Slimmed `docs/index.md`, `docs/governance/*`, and `docs/context/README.md`; updated `docs/user/specification.md`, `docs/integration-guide.md`, `docs/package-interdependency-mapping.md`, and `docs/semantic-token-system-requirements.md`.
+- **TIED paths**: `tied/requirements.yaml` and `tied/requirements/REQ-*.yaml` now reference concrete `tied/architecture-decisions/ARCH-*.yaml` and `tied/implementation-decisions/IMPL-*.yaml` instead of monolithic markdown section cites. `tied/semantic-tokens.md` and selected ARCH/IMPL YAML updated (`stdd/` → `tied/` where applicable).
+- **`project-tokens.yaml`**: Replaced the legacy embedded registry with a **short pointer** to `tied/semantic-tokens.yaml` and TIED indexes.
+- **Token validation**: Regenerated `semantic-token-validation-report.md`; `scripts/validate-semantic-tokens.sh` report template documents TIED canonical registry and may exit non-zero while still writing the report.
+- **`refactoring-validation-report.md`**: Clarified that long-form refactoring markdown was removed; TIED IMPL YAML is authoritative.
+- **`docs/data/*`**: Minor updates to token trace samples/stats JSON and related SVG metadata.
+
+### Removed
+
+- Bulk deletion of ad-hoc and duplicate documentation under `docs/` (see git history for file list). `bin/` prebuilt binaries remain documented under [1.7.2] below.
+
+### Fixed
+
+- **`refactoring_validation_test.go`**: Required-doc expectations now target TIED IMPL YAML paths after long-form refactoring markdown removal.
+- **`tools/coverage-differential.go`**: Treat missing `docs/coverage-baseline.md` as an empty baseline instead of failing.
+
 ## [1.7.2] - 2026-03-29
 
 ### Changed (behavior)
@@ -18,7 +36,6 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - **Makefile**: added `validate-tied-mcp`; `lint` runs MCP validation before `revive`; `check` is fmt + vet + lint only; `validate-token-enforcement` (DOC-008) remains optional.
 - **TIED**: removed invalid nested `detail_file` from REQ/ARCH detail YAML; widespread IMPL decision YAML normalization and pseudocode alignment; `tied/semantic-tokens.yaml` and agent implementation checklist docs updated.
-- **`project-tokens.yaml`** and **`semantic-token-validation-report.md`**: registry and report refreshed.
 
 ### Removed
 - Tracked prebuilt platform binaries under `bin/` (macOS amd64/arm64, Ubuntu 20.04/22.04/24.04).

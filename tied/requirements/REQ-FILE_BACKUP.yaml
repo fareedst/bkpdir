@@ -13,7 +13,7 @@ REQ-FILE_BACKUP:
     - criterion: Backup listing sorted by creation time
     - criterion: Atomic operations prevent corruption
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-RESOURCE_MANAGEMENT
@@ -39,6 +39,6 @@ REQ-FILE_BACKUP:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Resource Management [ARCH-RESOURCE_MANAGEMENT]
+  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
   description: Create backups of single files with comparison. Detect identical backups. List backups for specific files. File operations use atomic operations and context support.
-  implementation: See `implementation-decisions.md` § Atomic File Operations [IMPL-ATOMIC_OPS], § Context-Aware Operations [IMPL-CONTEXT_OPS]
+  implementation: tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml; tied/implementation-decisions/IMPL-CONTEXT_OPS.yaml

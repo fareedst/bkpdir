@@ -13,7 +13,7 @@ REQ-PERFORMANCE:
     - criterion: Reflection caching reduces overhead
     - criterion: Lazy evaluation improves performance
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-LANGUAGE_SELECTION
@@ -38,6 +38,6 @@ REQ-PERFORMANCE:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Language and Runtime [ARCH-LANGUAGE_SELECTION]
+  architecture: tied/architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
   description: Operations must complete within reasonable time limits. Configuration loading must be responsive. Reflection results cached for performance. Lazy source evaluation for displayed fields only.
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml

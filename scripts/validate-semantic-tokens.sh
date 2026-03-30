@@ -33,7 +33,7 @@ ACTION_TOKENS=(
     "\[ACTION:migration\]"
 )
 
-# [REQ-DOC_015] STDD semantic tokens (REQ/ARCH/IMPL)
+# [REQ-DOC_015] TIED traceability token patterns (REQ/ARCH/IMPL) in code and docs
 STDD_TOKENS=(
     "\[REQ[:\-][A-Z0-9_]+\]"
     "\[ARCH[:\-][A-Z0-9_]+\]"
@@ -108,7 +108,7 @@ validate_file() {
         echo -e "${GREEN}✅ Found ${action_count} semantic action tokens in ${file}${NC}"
     fi
     
-    # [REQ-DOC_015] Check for STDD semantic tokens (REQ/ARCH/IMPL)
+    # [REQ-DOC_015] Check for REQ/ARCH/IMPL token patterns (TIED traceability)
     local stdd_count=0
     for token_pattern in "${STDD_TOKENS[@]}"; do
         local count=$(grep -oE "${token_pattern}" "${file}" 2>/dev/null | wc -l || echo "0")
@@ -116,13 +116,13 @@ validate_file() {
     done
     
     if [ "$stdd_count" -gt 0 ]; then
-        echo -e "${GREEN}✅ Found ${stdd_count} STDD semantic tokens (REQ/ARCH/IMPL) in ${file}${NC}"
+        echo -e "${GREEN}✅ Found ${stdd_count} TIED traceability tokens (REQ/ARCH/IMPL) in ${file}${NC}"
     fi
     
-    # [REQ-DOC_015] Check for proper STDD token format
+    # [REQ-DOC_015] Check for proper REQ/ARCH/IMPL token format
     local malformed_stdd_tokens=$(grep -oE "\[(REQ|ARCH|IMPL)[:\-][^]]+\]" "${file}" 2>/dev/null | grep -vE "\[(REQ|ARCH|IMPL)[:\-][A-Z0-9_]+\]" | wc -l || echo "0")
     if [ "$malformed_stdd_tokens" -gt 0 ]; then
-        echo -e "${RED}❌ Found ${malformed_stdd_tokens} malformed STDD tokens in ${file}${NC}"
+        echo -e "${RED}❌ Found ${malformed_stdd_tokens} malformed REQ/ARCH/IMPL tokens in ${file}${NC}"
         validation_errors=$((validation_errors + 1))
     fi
     
@@ -150,13 +150,13 @@ generate_validation_report() {
     for file in $(find "${PROJECT_ROOT}" -name "*.go" -o -name "*.md" -o -name "*.yaml" -o -name "*.yml" | grep -v "node_modules" | grep -v ".git" | grep -v "backup-"); do
         total_files=$((total_files + 1))
         
-        # Count semantic tokens (including STDD tokens)
+        # Count semantic tokens (including REQ/ARCH/IMPL pattern matches)
         local semantic_count=0
         for token in "${PRIORITY_TOKENS[@]}" "${ACTION_TOKENS[@]}"; do
             local count=$(count_occurrences "${token}" "${file}")
             semantic_count=$((semantic_count + count))
         done
-        # [REQ-DOC_015] Count STDD tokens
+        # [REQ-DOC_015] Count REQ/ARCH/IMPL pattern matches
         for token_pattern in "${STDD_TOKENS[@]}"; do
             local count=$(grep -oE "${token_pattern}" "${file}" 2>/dev/null | wc -l || echo "0")
             semantic_count=$((semantic_count + count))
@@ -188,6 +188,8 @@ generate_validation_report() {
 **Project**: BkpDir
 **Validation Script**: validate-semantic-tokens.sh
 
+**Canonical registry**: \`tied/semantic-tokens.yaml\` (indexes and detail YAML under \`tied/\`). **\`project-tokens.yaml\`** is a short pointer only, not a token matrix.
+
 ## Validation Summary
 
 ### Statistics
@@ -209,7 +211,7 @@ $(for token in "${ACTION_TOKENS[@]}"; do
     echo "- \`${token}\`"
 done)
 
-#### STDD Semantic Tokens [REQ-DOC_015]
+#### TIED traceability tokens (REQ/ARCH/IMPL) [REQ-DOC_015]
 $(for token_pattern in "${STDD_TOKENS[@]}"; do
     echo "- \`${token_pattern}\` (REQ/ARCH/IMPL tokens)"
 done)

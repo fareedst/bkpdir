@@ -26,7 +26,7 @@ REQ-DIFF_COMMAND:
     - method: Tests verify exclude patterns are respected
     - method: Tests verify output formatting with configurable format strings
     - method: Tests verify context cancellation support
-    - method: See `architecture-decisions.md` § Diff Command Architecture [ARCH-DIFF_COMMAND] and `implementation-decisions.md` § Diff Command Implementation [IMPL-DIFF_COMMAND] for detailed testing approach
+    - method: tied/architecture-decisions/ARCH-DIFF_COMMAND.yaml; tied/implementation-decisions/IMPL-DIFF_COMMAND.yaml
   traceability:
     architecture:
       - ARCH-DIFF_COMMAND
@@ -55,7 +55,7 @@ REQ-DIFF_COMMAND:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Diff Command Architecture [ARCH-DIFF_COMMAND]
+  architecture: tied/architecture-decisions/ARCH-DIFF_COMMAND.yaml
   cross-references: '[REQ-INCREMENTAL_DUPLICATE_PREVENTION] (Incremental Archive Duplicate Prevention), [REQ-OUTPUT_FORMATTING] (Output Formatting), [REQ-CONFIGURATION] (Configuration Management), [REQ-CONTEXT_SUPPORT] (Context Support)'
   description: Implement a CLI `diff` command that reports if there are any changes between the current directory files and the union of the most recent incremental archive on top of the most recent full archive. The command must reconstruct the effective state by applying incremental changes to the full archive, then compare that reconstructed state against the current directory. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
-  implementation: See `implementation-decisions.md` § Diff Command Implementation [IMPL-DIFF_COMMAND]
+  implementation: tied/implementation-decisions/IMPL-DIFF_COMMAND.yaml

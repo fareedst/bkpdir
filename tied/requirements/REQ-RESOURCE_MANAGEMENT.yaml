@@ -13,7 +13,7 @@ REQ-RESOURCE_MANAGEMENT:
     - criterion: Panic recovery prevents resource leaks
     - criterion: Thread-safe resource tracking
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-RESOURCE_MANAGEMENT
@@ -39,6 +39,6 @@ REQ-RESOURCE_MANAGEMENT:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Resource Management [ARCH-RESOURCE_MANAGEMENT]
+  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
   description: All temporary resources must be cleaned up. Archive and backup operations must be atomic. Operations must recover from panics. Resource management must be thread-safe.
-  implementation: See `implementation-decisions.md` § Resource Management with Cleanup [IMPL-RESOURCE_MANAGER], § Atomic File Operations [IMPL-ATOMIC_OPS]
+  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml; tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml

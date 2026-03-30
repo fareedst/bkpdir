@@ -128,7 +128,7 @@ IMPL-TOKEN_COVERAGE_AUDIT:
   backup_module_(`backup_go`,_`backup_test_go`): Annotated `[REQ-FILE_BACKUP]`, `[ARCH-RESOURCE_MANAGEMENT]`, `[IMPL-ATOMIC_OPS]`, additional `[REQ-LIST_LIMIT]` tokens for list helpers so the requirement coverage remains visible.
   comparison_module_(`comparison_go`,_`comparison_test_go`): Snapshot utilities reference `[ARCH-DIRECTORY_COMPARISON]`, `[ARCH-DIFF_COMMAND]`, `[IMPL-DIRECTORY_COMPARISON]`, `[IMPL-DIFF_COMMAND]`, `[REQ-DIFF_COMMAND]` for diffing features.
   documentation:
-  - Capture this audit in `stdd/semantic-tokens.md` by registering `[IMPL-TOKEN_COVERAGE_AUDIT]` with the contexts above.
+  - Capture this audit in `tied/semantic-tokens.md` by registering `[IMPL-TOKEN_COVERAGE_AUDIT]` with the contexts above.
   - Point future audits to this decision to reuse the pattern and ensure coverage plans explicitly mention `REQ:DOC_016` and `ARCH:TOKEN_SYSTEM`.
   errors_module_(`errors_go`,_`errors_test_go`): Structured errors are marked with `[REQ-ERROR_HANDLING]`, `[ARCH-ERROR_HANDLING]`, `[IMPL-STRUCTURED_ERRORS]`; tests mirror these tags.
   exclusion_module_(`exclude_go`,_`exclude_test_go`): Pattern helpers keep `[REQ-CONFIGURATION]`, `[ARCH-EXCLUSION_PATTERNS]`, `[ARCH-PACKAGE_EXTRACTION]`, `[IMPL-EXCLUSION_PATTERNS]` references across adapters and wrappers.

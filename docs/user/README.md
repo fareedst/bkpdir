@@ -8,8 +8,8 @@ This folder contains user-facing documentation for the BkpDir application.
 
 ## Related Documentation
 
-- **Developer Documentation**: See `../context/README.md` for developer and AI assistant documentation
-- **STDD Documentation**: See root-level files (`requirements.md`, `architecture-decisions.md`, `implementation-decisions.md`) for development methodology
+- **Developer / AI context**: [docs/context/README.md](../context/README.md)
+- **TIED (REQ/ARCH/IMPL)**: [tied/](../../tied/) — indexes and `tied/requirements/`, `tied/architecture-decisions/`, `tied/implementation-decisions/`
 
 ---
 

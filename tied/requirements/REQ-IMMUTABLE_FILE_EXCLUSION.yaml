@@ -40,6 +40,6 @@ REQ-IMMUTABLE_FILE_EXCLUSION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Exclusion Patterns Architecture [ARCH-EXCLUSION_PATTERNS]
+  architecture: tied/architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
   description: 'File exclusion requirements are mandatory and must be preserved:'
-  implementation: See `implementation-decisions.md` § Exclusion Patterns Implementation [IMPL-EXCLUSION_PATTERNS]
+  implementation: tied/implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml

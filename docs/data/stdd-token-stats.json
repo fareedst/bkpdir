@@ -13,7 +13,7 @@
     "edgesInSamples": 8
   },
   "notes": [
-    "Counts derived from stdd/semantic-tokens.md on 2025-12-31.",
+    "Counts derived from tied/semantic-tokens.yaml on 2025-12-31.",
     "TEST tokens intentionally low because most tests reference REQ tokens directly; `[TEST:EXCLUDE_MERGE]` and `[TEST:LIST_LIMIT]` recently added."
   ]
 }

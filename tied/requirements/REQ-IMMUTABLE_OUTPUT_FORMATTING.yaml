@@ -43,6 +43,6 @@ REQ-IMMUTABLE_OUTPUT_FORMATTING:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Output Formatting [ARCH-OUTPUT_FORMATTING]
+  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   description: 'Output formatting requirements are mandatory and must be preserved:'
-  implementation: See `implementation-decisions.md` § Dual Printf/Template Formatting [IMPL-DUAL_FORMATTING]
+  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml

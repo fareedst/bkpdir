@@ -38,6 +38,6 @@ REQ-IMMUTABLE_CONFIGURATION_DEFAULTS:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Configuration System [ARCH-CONFIG_SYSTEM]
+  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
   description: 'Configuration defaults must never be changed without explicit user override:'
-  implementation: See `implementation-decisions.md` § Configuration Structure [IMPL-CONFIG_STRUCT]
+  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml

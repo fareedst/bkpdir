@@ -44,6 +44,6 @@ REQ-IMMUTABLE_PERFORMANCE:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Performance Architecture [ARCH-PERFORMANCE]
+  architecture: tied/architecture-decisions/ARCH-PERFORMANCE.yaml
   description: 'Performance characteristics must be preserved:'
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml

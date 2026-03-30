@@ -1,75 +1,32 @@
 # AI Assistant Context Documentation Index
 
-> **⚠️ UPDATED**: This project follows **Semantic Token-Driven Development (STDD)** methodology. This index provides navigation to STDD documents and historical context files.
+This project uses **TIED** (traceability via `tied/` YAML + semantic tokens). Normative requirements, architecture, and implementation live in **TIED detail files**, not in duplicate prose here.
 
-## Current Development Process
+## Canonical sources
 
-This project follows **Semantic Token-Driven Development (STDD)**. Please refer to:
+1. **[AGENTS.md](../../AGENTS.md)** — Agent operating guide (methodology, MCP-first TIED edits, checklists).
+2. **[ai-principles.md](../../ai-principles.md)** — AI-first principles and validation expectations.
+3. **[tied/requirements.yaml](../../tied/requirements.yaml)** — REQ index; per-token detail under [tied/requirements/](../../tied/requirements/).
+4. **[tied/architecture-decisions.yaml](../../tied/architecture-decisions.yaml)** — ARCH index; detail under [tied/architecture-decisions/](../../tied/architecture-decisions/).
+5. **[tied/implementation-decisions.yaml](../../tied/implementation-decisions.yaml)** — IMPL index; detail under [tied/implementation-decisions/](../../tied/implementation-decisions/) (includes `essence_pseudocode`).
+6. **[tied/semantic-tokens.yaml](../../tied/semantic-tokens.yaml)** and **[tied/semantic-tokens.md](../../tied/semantic-tokens.md)** — Token registry and guide.
+7. **Human-readable digests** (summaries of the above): [tied/requirements.md](../../tied/requirements.md), [tied/architecture-decisions.md](../../tied/architecture-decisions.md), [tied/implementation-decisions.md](../../tied/implementation-decisions.md).
 
-1. **`.cursorrules`** - Complete STDD methodology and rules (auto-loaded by Cursor IDE)
-2. **`ai-principles.md`** - Complete AI-First Principles and process guide
-3. **STDD Documents** - See below for primary STDD documentation
+Optional task tracking: [tied/tasks.md](../../tied/tasks.md) (optional per TIED 2.2.0).
 
-## STDD Documents (Primary References)
+## MCP (optional)
 
-### Core STDD Documents
+For reading/writing TIED YAML with validation, see [tied/docs/ai-agent-tied-mcp-usage.md](../../tied/docs/ai-agent-tied-mcp-usage.md). Use **`tied_validate_consistency`** after substantive TIED changes.
 
-1. **`stdd/ai-principles.md`** - Complete STDD methodology and process guide
-2. **`stdd/requirements.md`** - All functional and non-functional requirements with `[REQ:*]` tokens
-3. **`stdd/architecture-decisions.md`** - Architecture decisions with `[ARCH:*]` tokens
-4. **`stdd/implementation-decisions.md`** - Implementation decisions with `[IMPL:*]` tokens
-5. **`stdd/tasks.md`** - Active tasks and feature tracking
-6. **`stdd/semantic-tokens.md`** - Central registry of all semantic tokens
+## User-facing docs
 
-### User-Facing Documentation
+- **[../user/specification.md](../user/specification.md)** — Features and usage narrative (normative rules link to `tied/requirements/`).
 
-- **`../user/specification.md`** - User-facing features and behaviors (moved to `docs/user/`)
-- **`testing.md`** - Test coverage requirements and validation standards (migrated to implementation-decisions.md)
+## Development flow (summary)
 
-### Historical Context Files
+Before code changes: read `AGENTS.md` and `ai-principles.md`; locate related `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]` in `tied/`; extend pseudo-code and decisions before tests/code per [tied/docs/agent-req-implementation-checklist.md](../../tied/docs/agent-req-implementation-checklist.md).
 
-All historical context files have been merged into STDD (`ai-principles.md`) and removed. The STDD methodology now includes:
-
-- Complete cross-referencing guidance with feature documentation format
-- Change impact tracking with pre/post validation checklists
-- Behavioral contracts and dependency mapping
-- Code standards and documentation templates
-- All validation and traceability guidance
-
-## STDD Development Process
-
-### Phase 1: Requirements → Pseudo-Code (NO CODE YET)
-
-**MANDATORY**: Before any code changes:
-
-1. Read `stdd/ai-principles.md` - Understand the complete STDD process
-2. Check `stdd/semantic-tokens.md` - Review existing tokens
-3. Review `stdd/requirements.md` - Check existing requirements
-4. Review `stdd/architecture-decisions.md` - Check existing architecture decisions
-5. Review `stdd/implementation-decisions.md` - Check existing implementation decisions
-6. Expand requirements into pseudo-code and decisions
-7. Document architecture decisions IMMEDIATELY in `stdd/architecture-decisions.md` with `[ARCH:*]` tokens
-8. Document implementation decisions IMMEDIATELY in `stdd/implementation-decisions.md` with `[IMPL:*]` tokens
-9. Update `stdd/semantic-tokens.md` with new tokens
-10. Create tasks in `stdd/tasks.md` with priorities BEFORE implementation
-
-### Phase 2: Tasks → Implementation
-
-1. Work on highest priority tasks first (P0 > P1 > P2 > P3)
-2. Update documentation AS YOU WORK
-3. Mark tasks complete when all criteria met
-
-## Documentation Update Requirements
-
-For ANY code changes, you MUST:
-
-1. **Reference Requirements**: Link code changes to `[REQ:*]` tokens in `stdd/requirements.md`
-2. **Reference Architecture**: Link code changes to `[ARCH:*]` tokens in `stdd/architecture-decisions.md`
-3. **Reference Implementation**: Link code changes to `[IMPL:*]` tokens in `stdd/implementation-decisions.md`
-4. **Update Task Tracking**: Update `stdd/tasks.md` with task status
-5. **Update Semantic Tokens**: Update `stdd/semantic-tokens.md` if creating new tokens
-
-### Code Comment Format
+### Code comment pattern
 
 ```go
 // [REQ-FILE_BACKUP] Create backup of single file with comparison
@@ -79,65 +36,14 @@ func CreateFileBackup(cfg *Config, filePath string, note string, dryRun bool) er
 }
 ```
 
-### Test Name Format
-
-```go
-func TestCreateFileBackup_REQ_FILE_BACKUP(t *testing.T) {
-    // ...
-}
-```
-
-## Token Search Quick Commands
+### Quick validation
 
 ```bash
-# Search for semantic tokens
-grep -r "\[REQ:" . --include="*.go"   # Requirements tokens
-grep -r "\[ARCH:" . --include="*.go"   # Architecture tokens
-grep -r "\[IMPL:" . --include="*.go"  # Implementation tokens
-
-# Find tokens in documentation
-grep -r "\[REQ:" *.md                  # Requirements in docs
-grep -r "\[ARCH:" *.md                 # Architecture in docs
-grep -r "\[IMPL:" *.md                 # Implementation in docs
-
-# Validate all changes
 make test && make lint
 ```
 
-## AI Assistant Validation Checklist
-
-Before submitting any code changes, verify:
-
-- [ ] Read `stdd/ai-principles.md` and understand STDD process
-- [ ] Check `stdd/semantic-tokens.md` for existing tokens
-- [ ] Review `stdd/requirements.md` for related requirements
-- [ ] Review `stdd/architecture-decisions.md` for related architecture
-- [ ] Review `stdd/implementation-decisions.md` for related implementation
-- [ ] Added semantic token references (`[REQ:*]`, `[ARCH:*]`, `[IMPL:*]`) to code
-- [ ] Updated `stdd/tasks.md` with task status
-- [ ] Updated `stdd/semantic-tokens.md` if creating new tokens
-- [ ] All tests pass (`make test`)
-- [ ] All lint checks pass (`make lint`)
-
-## Critical Reminders
-
-1. **STDD Process**: Follow the 3-phase STDD development process (Requirements → Tasks → Implementation)
-2. **Documentation First**: Document requirements, architecture, and implementation decisions BEFORE coding
-3. **Semantic Tokens**: Use `[REQ:*]`, `[ARCH:*]`, `[IMPL:*]` tokens for all cross-references
-4. **Task Planning**: Create tasks in `tasks.md` with priorities BEFORE implementation
-5. **Validation**: Run tests and linting before marking tasks complete
-
-## Quick Reference
-
-If you're unsure about anything:
-
-1. **Read `stdd/ai-principles.md`** - Complete STDD methodology guide
-2. **Check `stdd/semantic-tokens.md`** - Token registry
-3. **Review `stdd/tasks.md`** - Active tasks
-4. **Review STDD documents** - Requirements, architecture, implementation decisions
-5. **Validate Changes**: Run `make test && make lint`
+Use `./scripts/validate_tokens.sh` or project Makefile targets for token enforcement when documented in the root README.
 
 ---
 
-**Last Updated**: 2025-01-13  
-**Status**: Updated to reflect STDD methodology migration 
+**Last Updated**: 2026-03-29

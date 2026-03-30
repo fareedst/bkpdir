@@ -19,7 +19,7 @@ REQ-OUT_002:
     - method: Format string processing tests with named replacement validation
     - method: Command output behavior tests for inc and full commands
     - method: Backward compatibility tests ensuring existing format strings work unchanged
-    - method: See `architecture-decisions.md` § File Statistics Architecture [ARCH-FILE_STATISTICS] and `implementation-decisions.md` § File Statistics Implementation [IMPL-FILE_STATISTICS] for detailed testing approach
+    - method: tied/architecture-decisions/ARCH-FILE_STATISTICS.yaml; tied/implementation-decisions/IMPL-FILE_STATISTICS.yaml
   traceability:
     architecture:
       - ARCH-FILE_STATISTICS
@@ -44,6 +44,6 @@ REQ-OUT_002:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § File Statistics Architecture [ARCH-FILE_STATISTICS]
+  architecture: tied/architecture-decisions/ARCH-FILE_STATISTICS.yaml
   description: Enhance backup commands to output formatted file information with stat-like details. All commands must output to stdout a single line about any files generated or existing to satisfy a backup request, using format strings with named replacements for stat information.
-  implementation: See `implementation-decisions.md` § File Statistics Implementation [IMPL-FILE_STATISTICS]
+  implementation: tied/implementation-decisions/IMPL-FILE_STATISTICS.yaml

@@ -41,6 +41,6 @@ REQ-IMMUTABLE_BUILD_SYSTEM:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Build and Distribution [ARCH-BUILD_DISTRIBUTION]
+  architecture: tied/architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
   description: 'Build system requirements are mandatory and must be preserved:'
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml

@@ -150,9 +150,9 @@ IMPL-LIST_LIMIT:
   error_handling: Improved handling of "no archives found" case - displays user-friendly message using `PrintNoArchivesFound()` instead of generic error
   implementation: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
   implementation_status: ✅ Complete
-  implementation_steps: '1. Record the requirement token `[REQ-EXTRACT_008_INTERDEP_MAPPING]` in `stdd/requirements.md` (done).
+  implementation_steps: '1. Record the requirement token `[REQ-EXTRACT_008_INTERDEP_MAPPING]` in `tied/requirements.md` (done).
 
-    2. Record the architecture decision `[ARCH-EXTRACT_008_INTERDEP]` in `stdd/architecture-decisions.md` (done).
+    2. Record the architecture decision `[ARCH-EXTRACT_008_INTERDEP]` in `tied/architecture-decisions.md` (done).
 
     3. Record this implementation decision `[IMPL-EXTRACT_008_DOC_MIGRATION]` here to document the migration approach and rationale.
 
@@ -166,7 +166,7 @@ IMPL-LIST_LIMIT:
   testing: 'Comprehensive test coverage including:'
   user_feedback: Display appropriate message using format strings
   validation:
-  - Confirm tokens appear in `stdd/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
+  - Confirm tokens appear in `tied/semantic-tokens.md` and trace to entries in requirements, architecture, and implementation documents.
   - Confirm `docs/package-interdependency-mapping.md` exists and links back to these tokens.
   essence_pseudocode: "# [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-USABILITY] — Limit list command output to newest N items\n\n# --- Flag registration (main.go) --- [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]\n# [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-CLI_COMMANDS] [REQ-LIST_LIMIT] [REQ-USABILITY] Register --limit as persistent flag\nprocedure register_limit_flag():\n  var listLimit int\n  rootCmd.PersistentFlags.IntVarP(&listLimit, \"limit\", \"n\", 10, \"Limit the number of items to display (0 = show all)\")\n  # Persistent so it applies to both `list` subcommand and `--list` flag on root [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]\n\n# --- List archives (main.go: handleListCommand + ListArchivesEnhanced) --- [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]\n# [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] Limit archive listing output\nprocedure handleListCommand():\n  cwd = os.Getwd()\n  cfg = LoadConfig(cwd)\n  formatter\
     \ = NewOutputFormatter(cfg)\n  ListArchivesEnhanced(cfg, formatter, listLimit)\n\n# [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — Block implements documented behavior for: procedure ListArchivesEnhanced(cfg, formatter, limit):\nprocedure ListArchivesEnhanced(cfg, formatter, limit):\n  # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Accept limit and apply after sorting\n  cwd = os.Getwd()\n  archiveDir = resolve archive directory from cfg\n  archives = ListArchives(archiveDir)\n  if archives is empty: print \"no archives found\", return\n\n  # [IMPL-LIST_LIMIT] [REQ-LIST_LIMIT] Sort most recent first [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON]\n  sort archives by CreationTime descending\n\n  # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Apply limit (0 = show all)\n  if limit > 0 and len(archives) > limit:\n    archives = archives[:limit]\n\n  # [IMPL-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] Format and print each archive [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND]\

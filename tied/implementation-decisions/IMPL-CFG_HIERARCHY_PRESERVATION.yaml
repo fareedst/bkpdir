@@ -73,7 +73,7 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
   asset_locations: '`docs/images/stdd-trace-flow.svg` (or .png) and `docs/images/stdd-trace-timeline.gif/mp4`; link from STDD docs with captions describing token chains.'
   cross-references: '[ARCH-STDD_VIS_FLOW], [REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
   implementation_approach_(planning,_no_code_yet):
-  - 'Input sources: `stdd/semantic-tokens.md`, `stdd/requirements.md`, `stdd/architecture-decisions.md`, `stdd/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
+  - 'Input sources: `tied/semantic-tokens.md`, `tied/requirements.md`, `tied/architecture-decisions.md`, `tied/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
   - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references found in docs and inline token comments; capture token metadata (type, status, sample refs) to drive token prominence in visuals.
   - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
   - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'

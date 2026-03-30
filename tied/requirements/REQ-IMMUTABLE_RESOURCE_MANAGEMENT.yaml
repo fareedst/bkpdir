@@ -44,6 +44,6 @@ REQ-IMMUTABLE_RESOURCE_MANAGEMENT:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Resource Management [ARCH-RESOURCE_MANAGEMENT]
+  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
   description: 'Resource management requirements are mandatory and cannot be relaxed:'
-  implementation: See `implementation-decisions.md` § Resource Management with Cleanup [IMPL-RESOURCE_MANAGER]
+  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml

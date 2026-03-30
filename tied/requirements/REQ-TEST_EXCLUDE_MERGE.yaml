@@ -46,7 +46,7 @@ REQ-TEST_EXCLUDE_MERGE:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Configuration Testing Architecture [ARCH-TEST_EXCLUDE_MERGE]
+  architecture: tied/architecture-decisions/ARCH-TEST_EXCLUDE_MERGE.yaml
   cross-references: '[REQ-CONFIGURATION] (Configuration Management), [REQ-CFG_006] (Configuration Reflection and Visibility), [REQ-IMMUTABLE_FILE_EXCLUSION] (File Exclusion Requirements)'
   description: Test scenario that verifies `exclude_patterns` are correctly merged from multiple configuration files and that the `config` command accurately displays the source of merged exclude patterns. Test must validate that patterns from multiple config files (e.g., default config and local `.bkpdir.yml`) are properly accumulated and that source tracking shows all contributing sources.
-  implementation: See `implementation-decisions.md` § Exclude Patterns Merge Testing [IMPL-TEST_EXCLUDE_MERGE]
+  implementation: tied/implementation-decisions/IMPL-TEST_EXCLUDE_MERGE.yaml

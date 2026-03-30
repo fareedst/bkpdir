@@ -3,81 +3,49 @@
 ## 🎯 Overview
 BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories and backups of individual files. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives and file backups, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
 
-> **[ACTION-validation] Important**: This document describes the user-facing features and behaviors. For immutable specifications that cannot be changed without a major version bump, see [Immutable Specifications](immutable.md).
+> **Important**: This document is a **user-oriented** guide (examples, keys, CLI behavior). **Normative** requirements, architecture, and implementation—including behaviors that must not change without explicit versioning—live in **TIED** under [`tied/requirements/`](../../tied/requirements/), [`tied/architecture-decisions/`](../../tied/architecture-decisions/), and [`tied/implementation-decisions/`](../../tied/implementation-decisions/). Immutable-style constraints are captured in `REQ-IMMUTABLE_*` requirement files in `tied/requirements/`.
+
+## Normative traceability (do not duplicate in prose)
+
+| Topic | TIED (authoritative) |
+|--------|----------------------|
+| Configuration discovery, merge, precedence | [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml), [REQ-CFG_005](../../tied/requirements/REQ-CFG_005.yaml), [REQ-CFG_006](../../tied/requirements/REQ-CFG_006.yaml) |
+| Output / format strings | [REQ-OUTPUT_FORMATTING](../../tied/requirements/REQ-OUTPUT_FORMATTING.yaml), [REQ-CUSTOMIZABLE_FORMAT_STRINGS](../../tied/requirements/REQ-CUSTOMIZABLE_FORMAT_STRINGS.yaml) |
+| Errors, resources, Git, CLI | [REQ-ERROR_HANDLING](../../tied/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-GIT_INTEGRATION](../../tied/requirements/REQ-GIT_INTEGRATION.yaml), [REQ-IMMUTABLE_CLI_COMMANDS](../../tied/requirements/REQ-IMMUTABLE_CLI_COMMANDS.yaml) |
+| Token registry and agent rules | [tied/semantic-tokens.yaml](../../tied/semantic-tokens.yaml), [AGENTS.md](../../AGENTS.md), [tied/ai-assistant-compliance.md](../../tied/ai-assistant-compliance.md) |
 
 ## 🤖 AI Assistant Navigation Guide
 
-### 🚨 CRITICAL PRIORITY [AI Must Read First]
-- **[ACTION-validation] [Immutable Specifications](immutable.md)** - Core behaviors that cannot change
-- **📋 [Feature Tracking](feature-tracking.md)** - Master feature registry with tokens
-- **[ACTION-discovery] [AI Assistant Compliance](ai-assistant-compliance.md)** - Mandatory token requirements
+### Critical
+- **Immutables / constraints**: [`tied/requirements/`](../../tied/requirements/) — files `REQ-IMMUTABLE_*.yaml`
+- **Token registry**: [tied/semantic-tokens.md](../../tied/semantic-tokens.md)
+- **Agent compliance**: [tied/ai-assistant-compliance.md](../../tied/ai-assistant-compliance.md)
 
-### 🎯 HIGH PRIORITY [AI Core References]
-- **🏗️ [Architecture](architecture.md)** - System design and technical implementation
-- **[ACTION:format-processing] [Requirements](requirements.md)** - Implementation details and constraints
-- **🧪 [Testing](testing.md)** - Test coverage requirements and validation
+### High
+- **Architecture digest**: [tied/architecture-decisions.md](../../tied/architecture-decisions.md) (detail YAML in `tied/architecture-decisions/`)
+- **Requirements digest**: [tied/requirements.md](../../tied/requirements.md) (detail YAML in `tied/requirements/`)
+- **Implementation / testing linkage**: [tied/implementation-decisions.md](../../tied/implementation-decisions.md)
 
-### 📊 MEDIUM PRIORITY [AI Conditional References]
-- **⚙️ Configuration System** - See sections below for user-facing config
-- **🔌 API Integration** - See Git Integration and Output Management sections
-- **🚀 Performance Specifications** - See Quality Assurance section
-
-### [ACTION:format-processing] LOW PRIORITY [AI Reference Only]
-- **📚 Documentation Standards** - Reference for formatting only
-- **[ACTION:core-functionality] Implementation Examples** - Code examples for understanding
+### Medium / low
+- Configuration and Git: sections below in this spec (cross-check TIED table above)
+- **[README.md](../../README.md)** for install, `make` targets, and current defaults
 
 ## 📋 Documentation Navigation
 
-### 👥 For Users
-- Start with this [Specification](specification.md) document
-- Refer to [Immutable Specifications](immutable.md) for core behaviors that cannot change
+### Users
+- This [specification](specification.md) plus [README.md](../../README.md)
 
-### 👩‍💻 For Developers
-- Begin with [Architecture](architecture.md) for system design
-- Follow [Requirements](requirements.md) for implementation details
-- Use [Testing](testing.md) for test coverage requirements
+### Developers / contributors
+- [AGENTS.md](../../AGENTS.md), [ai-principles.md](../../ai-principles.md), and TIED YAML under `tied/`
+- Change **requirements and decisions** in TIED first per methodology; keep this spec aligned for UX, not as a second source of truth
 
-### 🤝 For Contributors
-- Review [Immutable Specifications](immutable.md) first to understand constraints
-- Follow [Testing](testing.md) requirements for all changes
-- Ensure all code passes linting requirements before submission
+## ✅ Quality assurance (pointer)
 
-### [ACTION:core-functionality] Document Maintenance
-- Keep [Specification](specification.md) and [Immutable Specifications](immutable.md) in sync
-- Update [Requirements](requirements.md) with new features
-- Maintain test coverage as per [Testing](testing.md)
-- All changes must preserve existing functionality per [Immutable Specifications](immutable.md)
-
-## ✅ Quality Assurance and Code Standards
-
-### [ACTION:core-functionality] Linting Requirements
-- All Go code must pass `revive` linter checks before commit
-- Linting configuration is maintained in `.revive.toml`
-- Run linting with `make lint` command
-- Code must follow Go best practices and naming conventions
-- All errors must be properly handled (no unhandled return values)
-
-### 🚨 Error Handling Standards
-- All archive and backup operations return structured errors with status codes
-- Enhanced disk space detection for various storage conditions
-- Panic recovery mechanisms prevent application crashes
-- Context support for operation cancellation and timeouts
-- Comprehensive error logging without exposing sensitive information
-
-### [ACTION-validation] Resource Management
-- Automatic cleanup of temporary files and directories
-- Thread-safe resource tracking for concurrent operations
-- Atomic file operations to prevent data corruption
-- No resource leaks in any error scenario
-- Comprehensive cleanup testing and verification
+Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMMUTABLE_CODE_QUALITY](../../tied/requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml), [REQ-ERROR_HANDLING](../../tied/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml)). Use **`make lint`**, **`make test`**, and targets in [README.md](../../README.md).
 
 ## Configuration Discovery
 
-### CONFIG-DISCOVERY-001: Configuration Discovery Specification [ACTION-discovery]
-**Source**: docs/context/specification.md - Configuration Discovery section
-**Impact**: Core functionality requirement for configuration discovery
-**Cross-Layer Requirements**: Documentation, Code, Tests
-**Implementation Priority**: CRITICAL
+**Normative**: [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml). The bullets below summarize user-visible behavior.
 
 - Configuration files are discovered using a configurable search path
 - The search path is controlled by the `BKPDIR_CONFIG` environment variable
@@ -94,14 +62,10 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Configuration File
 
-### CONFIG-FILE-001: Configuration File Specification [ACTION:core-functionality]
-**Source**: docs/context/specification.md - Configuration File section
-**Impact**: Core functionality requirement for configuration file handling
-**Cross-Layer Requirements**: Documentation, Code, Tests
-**Implementation Priority**: CRITICAL
+**Normative**: [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml), defaults in [REQ-IMMUTABLE_CONFIGURATION_DEFAULTS](../../tied/requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml) (see also [README.md](../../README.md) for current default behavior).
 
 - Configuration is stored in YAML files with names specified by the configuration discovery system
-- If no configuration files are found, default values are used (see [Immutable Specifications](immutable.md#configuration-defaults))
+- If no configuration files are found, default values apply per TIED immutables and code
 - Configuration files use the `.yml` extension by convention
 
 ### Configuration Options
@@ -119,7 +83,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 3. **Exclude Patterns**
    - List of glob patterns to exclude from archiving
-   - Default: `[".git/", "vendor/"]`
+   - Default: empty unless configured (see [README.md](../../README.md))
    - YAML key: `exclude_patterns`
    - Uses doublestar glob pattern matching
    - Example: `["*.tmp", "node_modules/", ".DS_Store"]`
@@ -150,7 +114,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 7. **Status Code Configuration**
    - Configures exit status codes returned for different application conditions
-   - Status codes have specific defaults if not specified (see [Immutable Specifications](immutable.md#configuration-defaults))
+   - Status codes have specific defaults if not specified (see [REQ-IMMUTABLE_CONFIGURATION_DEFAULTS](../../tied/requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml))
    - YAML keys for directory operation status codes:
      - `status_created_archive`: Exit code when a new archive is successfully created (default: 0)
      - `status_failed_to_create_archive_directory`: Exit code when archive directory creation fails (default: 31)
@@ -192,7 +156,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
    - Format strings support text highlighting and structure formatting
    - Templates support both Go text/template syntax ({{.name}}) and placeholder syntax (#{name})
    - All user-facing text is extracted from code into configuration data
-   - Format strings have specific defaults if not specified (see [Immutable Specifications](immutable.md#configuration-defaults))
+   - Format strings have specific defaults if not specified (see [REQ-IMMUTABLE_OUTPUT_FORMATTING](../../tied/requirements/REQ-IMMUTABLE_OUTPUT_FORMATTING.yaml) and related immutables)
    - YAML keys for printf-style format strings for directory operations:
      - `format_created_archive`: Format for successful archive creation messages (default: "Created archive: %s\n")
      - `format_identical_archive`: Format for identical directory messages (default: "Directory is identical to existing archive: %s\n")
@@ -288,7 +252,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
      pattern_timestamp: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
      ```
 
-9. **[CRITICAL] Layered Configuration Inheritance** (CFG-005)
+9. **Layered configuration inheritance** ([REQ-CFG_005](../../tied/requirements/REQ-CFG_005.yaml))
    - Configuration files can inherit from other configuration files using explicit declarations
    - Supports flexible merge strategies for different data types (arrays, objects, primitives)
    - Prevents circular inheritance through automatic dependency tracking
@@ -486,11 +450,9 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Global Options
 
-### CLI-GLOBAL-001: Global Options Specification [ACTION:core-functionality]
-**Source**: docs/context/specification.md - Global Options section
-**Impact**: Core functionality requirement for global CLI options
-**Cross-Layer Requirements**: Documentation, Code, Tests
-**Implementation Priority**: CRITICAL
+### Global options (dry-run)
+
+**Normative**: [REQ-IMMUTABLE_GLOBAL_OPTIONS](../../tied/requirements/REQ-IMMUTABLE_GLOBAL_OPTIONS.yaml), [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml).
 
 - **Dry-Run Mode**: When enabled with `--dry-run` flag:
   - For directory operations: Shows the archive filename that would be created using `format_dry_run_archive` or `template_dry_run_archive` configuration
@@ -507,11 +469,9 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Archive Features
 
-### ARCHIVE-FEATURES-001: Archive Features Specification [ACTION:core-functionality]
-**Source**: docs/context/specification.md - Archive Features section
-**Impact**: Core functionality requirement for archive features
-**Cross-Layer Requirements**: Documentation, Code, Tests
-**Implementation Priority**: CRITICAL
+### Archive features
+
+**Normative**: [REQ-FILE_BACKUP](../../tied/requirements/REQ-FILE_BACKUP.yaml), [REQ-GIT_INTEGRATION](../../tied/requirements/REQ-GIT_INTEGRATION.yaml), [REQ-INCREMENTAL_DUPLICATE_PREVENTION](../../tied/requirements/REQ-INCREMENTAL_DUPLICATE_PREVENTION.yaml), exclusion behavior in [REQ-IMMUTABLE_FILE_EXCLUSION](../../tied/requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml).
 
 ### Git Integration
 - Automatically detects Git repositories using `git rev-parse --is-inside-work-tree`
@@ -524,7 +484,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ### File Exclusion
 - Supports glob patterns for excluding files and directories
-- Default exclusions: `.git/`, `vendor/`
+- **Default**: built-in default list is empty unless configured; see [README.md](../../README.md) and [REQ-IMMUTABLE_FILE_EXCLUSION](../../tied/requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml)
 - Uses doublestar glob matching for advanced patterns
 - Configurable via `exclude_patterns` setting
 - Patterns are applied recursively to directory tree
@@ -540,17 +500,7 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Error Handling and Recovery
 
-### ERROR-HANDLING-001: Error Handling and Recovery Specification [ACTION-validation]
-**Source**: docs/context/specification.md - Error Handling and Recovery section
-**Impact**: Core functionality requirement for error handling
-**Cross-Layer Requirements**: Documentation, Code, Tests
-**Implementation Priority**: CRITICAL
-
-### RESOURCE-MGMT-001: Resource Management Specification [ACTION:core-functionality]
-**Source**: docs/context/specification.md - Error Handling and Recovery section
-**Impact**: Core functionality requirement for resource management
-**Cross-Layer Requirements**: Documentation, Code, Tests
-**Implementation Priority**: CRITICAL
+**Normative**: [REQ-ERROR_HANDLING](../../tied/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-IMMUTABLE_ERROR_HANDLING](../../tied/requirements/REQ-IMMUTABLE_ERROR_HANDLING.yaml).
 
 ### Structured Error Reporting
 - All operations return structured errors with specific status codes
@@ -585,6 +535,8 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Resource Management
 
+**Normative**: [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-IMMUTABLE_RESOURCE_MANAGEMENT](../../tied/requirements/REQ-IMMUTABLE_RESOURCE_MANAGEMENT.yaml).
+
 ### Automatic Cleanup
 - All temporary files and directories are automatically cleaned up
 - Cleanup occurs on success, failure, and cancellation
@@ -605,32 +557,15 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 
 ## Build and Development Requirements
 
-### Code Quality Standards
-- All code must pass `revive` linter before commit
-- Comprehensive test coverage required for all features
-- All errors must be properly handled
-- Documentation required for all public functions
-- Backward compatibility must be maintained
-
-### Build System
-- `make lint`: Run code linting
-- `make test`: Run all tests with verbose output
-- `make build`: Build application (depends on lint and test passing)
-- `make clean`: Remove build artifacts
-
-### Testing Requirements
-- Unit tests for all core functions
-- Integration tests for complete workflows
-- Resource cleanup verification in all test scenarios
-- Context cancellation and timeout testing
-- Performance benchmarks for critical operations
-- Stress testing for concurrent operations
+**Normative**: [REQ-IMMUTABLE_BUILD_SYSTEM](../../tied/requirements/REQ-IMMUTABLE_BUILD_SYSTEM.yaml), [REQ-IMMUTABLE_CODE_QUALITY](../../tied/requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml), [REQ-MODULE_VALIDATION](../../tied/requirements/REQ-MODULE_VALIDATION.yaml). Commands: [README.md](../../README.md) and Makefile.
 
 ## Testing Infrastructure
 
+**Normative**: [REQ-IMMUTABLE_TESTING_INFRASTRUCTURE](../../tied/requirements/REQ-IMMUTABLE_TESTING_INFRASTRUCTURE.yaml).
+
 ### Archive Corruption Testing Framework (TEST-INFRA-001-A) ✅ COMPLETED
 
-The application includes comprehensive testing infrastructure for systematic archive corruption testing to validate verification logic under various failure scenarios.
+The application includes testing utilities for systematic archive corruption scenarios (see implementation and tests in-repo; requirements in TIED as above).
 
 #### Controlled ZIP Corruption Utilities
 - **Systematic Corruption**: Provides 8 distinct corruption types targeting different ZIP format structures
@@ -734,124 +669,23 @@ if !contains(detected, CorruptionCRC) {
 This testing infrastructure provides the foundation for comprehensive verification testing, enabling systematic validation of archive verification logic against real-world corruption scenarios that would otherwise be difficult to reproduce reliably.
 
 ## Implementation Details
-For detailed implementation requirements and constraints, see:
-- [Immutable Specifications](immutable.md) for core behaviors that cannot be changed
-- [Architecture](architecture.md) for system design and implementation details
-- [Requirements](requirements.md) for technical requirements and test coverage
-- [Testing](testing.md) for comprehensive testing requirements
+For implementation requirements and constraints, use **TIED**: [tied/requirements.md](../../tied/requirements.md), [tied/architecture-decisions.md](../../tied/architecture-decisions.md), [tied/implementation-decisions.md](../../tied/implementation-decisions.md), and detail YAML under `tied/`.
 
-## Platform Compatibility
-- Works on macOS and Linux systems
-- Uses platform-independent path handling
-- Preserves file permissions and ownership where applicable
-- Handles file system differences between platforms
-- Thread-safe operations for concurrent access
-- Efficient resource management across platforms
+## Platform compatibility
 
-## Performance Characteristics
-- Minimal overhead for resource tracking
-- Efficient directory comparison with early termination
-- Optimized cleanup operations
-- Low memory footprint for large directories
-- Fast atomic archive operations
-- Scalable for large directories and many archives
-- Streaming ZIP creation for memory efficiency
+**Normative**: [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY](../../tied/requirements/REQ-IMMUTABLE_PLATFORM_COMPATIBILITY.yaml). This tool targets macOS and Linux; paths and permissions behavior follow TIED and implementation.
 
-## [LOW] CI/CD Pipeline Optimization for AI Development
+## Performance
 
-### CICD-001: AI-First Development Optimization
-**Priority**: [LOW] LOW  
-**Status**: [ACTION:format-processing] Not Started
+**Normative**: [REQ-PERFORMANCE](../../tied/requirements/REQ-PERFORMANCE.yaml), [REQ-IMMUTABLE_PERFORMANCE](../../tied/requirements/REQ-IMMUTABLE_PERFORMANCE.yaml).
 
-The CI/CD pipeline shall be optimized for AI-first development workflows where:
+## CI/CD, documentation-process, and validation (TIED)
 
-- **AI Assistant Priority**: All tasks are marked with low priority as CI/CD operations are background processes
-- **No Human Developers**: The development team consists entirely of AI assistants
-- **Documentation-First**: All documentation and code maintained primarily for AI comprehension and workflow optimization
-- **Automated Quality Gates**: AI assistants rely on automated validation rather than human review
-- **Token-Based Tracking**: All CI/CD processes integrate with the implementation token system for traceability
+Older DOC/CICD narrative in this spec duplicated requirements that belong in TIED. Use the detail files instead:
 
-**Key Characteristics**:
-- Low-priority task execution to prevent blocking AI assistant workflows
-- Comprehensive automation to eliminate human intervention requirements
-- AI-optimized output formatting and error reporting
-- Integration with DOC-007/DOC-008 icon validation systems
-- Streamlined feedback loops for AI assistant iteration cycles
+- [REQ-DOC_011](../../tied/requirements/REQ-DOC_011.yaml), [REQ-DOC_013](../../tied/requirements/REQ-DOC_013.yaml), [REQ-DOC_015](../../tied/requirements/REQ-DOC_015.yaml), [REQ-DOC_016](../../tied/requirements/REQ-DOC_016.yaml)
+- Pipeline / build: [ARCH-CICD_PIPELINE](../../tied/architecture-decisions/ARCH-CICD_PIPELINE.yaml), [README.md](../../README.md) CI section
 
-**User-Facing Behavior**:
-- CI/CD status updates use standardized icon system for AI comprehension
-- All pipeline outputs formatted for AI assistant consumption
-- Automated compliance checking against AI assistant protocols
-- Self-healing pipeline configurations that adapt to AI workflow patterns
+## Multi-file configuration search path and inheritance
 
-## [LOW] AI-First Documentation and Code Maintenance
-
-### DOC-011: Token Validation Integration for AI Assistants
-**Priority**: [HIGH] HIGH  
-**Status**: [ACTION-migration] In Progress
-
-The token validation integration system shall provide seamless validation workflow integration for AI assistants where:
-
-- **AI Workflow Validation Hooks**: Seamless integration of DOC-008 validation in AI assistant workflows
-- **Pre-submission Validation**: Automatic validation before AI assistants submit changes
-- **Intelligent Error Reporting**: Context-aware validation feedback optimized for AI assistant comprehension
-- **Validation Bypass Mechanisms**: Safe overrides for exceptional cases with proper documentation
-- **Compliance Monitoring**: Comprehensive tracking of AI assistant adherence to validation requirements
-
-**Key Characteristics**:
-- Zero-friction validation integration that does not disrupt AI assistant workflows
-- Pre-submission validation APIs that prevent non-compliant changes from being submitted
-- Error reporting and feedback systems designed specifically for AI assistant consumption
-- Safe bypass mechanisms for edge cases while maintaining audit trails
-- Comprehensive compliance tracking and monitoring for AI assistant behavior
-
-**User-Facing Behavior**:
-- AI assistants receive immediate validation feedback during code changes
-- Validation errors presented in AI-optimized format with clear remediation steps
-- Pre-submission hooks prevent submission of non-compliant changes
-- Bypass mechanisms require explicit documentation and approval workflow
-- Compliance dashboards provide visibility into AI assistant validation adherence
-- All validation processes integrate with existing DOC-008 comprehensive validation system
-
-**Implementation Requirements**:
-- Integration with existing DOC-008 validation framework
-- API endpoints for pre-submission validation checks
-- AI-optimized error message formatting and context
-- Bypass workflow with audit trail requirements
-- Compliance monitoring and reporting infrastructure
-- Dependencies on DOC-008 (Validation system) and DOC-009 (Clean baseline)
-
-### DOC-013: AI-First Documentation and Code Maintenance Strategy
-**Priority**: [LOW] LOW  
-**Status**: [ACTION:format-processing] Not Started
-
-The documentation and code maintenance approach shall be optimized for AI-first development where:
-
-- **No Human Developers**: The development team consists entirely of AI assistants
-- **AI-Centric Documentation**: All documentation written primarily for AI comprehension and navigation
-- **AI-Optimized Code Comments**: Implementation tokens and comments designed for AI assistant understanding
-- **Machine-Readable Documentation**: Documentation structured for optimal AI parsing and comprehension
-- **AI Workflow Integration**: Documentation and code maintenance processes integrated with AI assistant workflows
-
-**Key Characteristics**:
-- Documentation written in AI-friendly formats with clear structure and consistent patterns
-- Implementation tokens following standardized iconography for AI navigation (DOC-007/DOC-008)
-- Cross-references and links optimized for AI assistant traversal
-- Code comments designed for AI comprehension rather than human readers
-- Documentation maintenance workflows designed for AI assistant execution
-
-**User-Facing Behavior**:
-- Documentation uses standardized icon system and priority markers for AI navigation
-- All code comments follow implementation token standards for AI traceability
-- Documentation cross-references designed for AI assistant link following
-- Maintenance processes executable by AI assistants without human intervention
-- Code and documentation optimized for AI assistant comprehension and modification 
-
-## [CFG-007] Multi-File Inheritance Chain Processing
-
-- The configuration system MUST process all configuration files in the search path, not just the first found.
-- For each file in the search path, if it exists, it is loaded and its inheritance chain is resolved and merged.
-- Merging is performed in search path order: earlier files take precedence over later files.
-- The final configuration is the result of merging all inheritance chains, with merge strategies applied as specified in CFG-005.
-- This requirement applies to both the default loader and LoadConfigWithInheritance.
-- Semantic token: CFG-007 
+**Normative**: Processing order, inheritance, and merge behavior are defined under [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml) and [REQ-CFG_005](../../tied/requirements/REQ-CFG_005.yaml) (all files in the search path are considered; earlier files take precedence over later files; inheritance chains merged per those requirements).

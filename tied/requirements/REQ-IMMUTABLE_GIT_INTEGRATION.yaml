@@ -40,6 +40,6 @@ REQ-IMMUTABLE_GIT_INTEGRATION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Git Integration [ARCH-GIT_INTEGRATION]
+  architecture: tied/architecture-decisions/ARCH-GIT_INTEGRATION.yaml
   description: 'Git integration requirements are mandatory and must be preserved:'
-  implementation: See `implementation-decisions.md` § Git Command-line Integration [IMPL-GIT_CLI]
+  implementation: tied/implementation-decisions/IMPL-GIT_CLI.yaml

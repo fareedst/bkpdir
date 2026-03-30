@@ -37,6 +37,6 @@ REQ-IMMUTABLE_FILE_BACKUP_NAMING:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § File Operations Architecture [ARCH-FILE_OPERATIONS]
+  architecture: tied/architecture-decisions/ARCH-FILE_OPERATIONS.yaml
   description: 'File backup naming convention is fixed and must not be modified. Format: `{filename}-{timestamp}[={note}]`'
-  implementation: See `implementation-decisions.md` § Atomic File Operations [IMPL-ATOMIC_OPS]
+  implementation: tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml

@@ -13,7 +13,7 @@ REQ-CONFIGURATION:
     - criterion: 'Precedence: command line > environment > files > defaults'
     - criterion: Source tracking shows value origins
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-CONFIG_SYSTEM
@@ -38,6 +38,6 @@ REQ-CONFIGURATION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Configuration System [ARCH-CONFIG_SYSTEM]
+  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
   description: Configuration stored in files with configurable discovery. Environment variable support. Default search path with precedence rules. Configuration merging with source tracking.
-  implementation: See `implementation-decisions.md` § Configuration Structure [IMPL-CONFIG_STRUCT]
+  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml

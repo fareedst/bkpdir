@@ -1,12 +1,12 @@
 chain_id,step_order,node_id,token,type,title,source
-cfg_005_chain,1,req_cfg_005,REQ:CFG_005,REQ,Layered Configuration Inheritance,stdd/requirements.md#reqcfg_005
-cfg_005_chain,2,arch_cfg_005,ARCH:CFG_005,ARCH,Layered Configuration Inheritance Architecture,stdd/architecture-decisions.md#5-layered-configuration-inheritance-archcfg_005-reqcfg_005
-cfg_005_chain,3,impl_exclude_merge_fix,IMPL:EXCLUDE_MERGE_FIX,IMPL,Array Field Default Merge Strategy Implementation,stdd/implementation-decisions.md#array-field-default-merge-strategy-implementation-implexclude_merge_fix
+cfg_005_chain,1,req_cfg_005,REQ:CFG_005,REQ,Layered Configuration Inheritance,tied/requirements.md#reqcfg_005
+cfg_005_chain,2,arch_cfg_005,ARCH:CFG_005,ARCH,Layered Configuration Inheritance Architecture,tied/architecture-decisions.md#5-layered-configuration-inheritance-archcfg_005-reqcfg_005
+cfg_005_chain,3,impl_exclude_merge_fix,IMPL:EXCLUDE_MERGE_FIX,IMPL,Array Field Default Merge Strategy Implementation,tied/implementation-decisions.md#array-field-default-merge-strategy-implementation-implexclude_merge_fix
 cfg_005_chain,4,test_exclude_merge,TEST:EXCLUDE_MERGE,TEST,Exclude Patterns Merge Tests,config_integration_test.go::TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE
 cfg_005_chain,5,code_cfg_merge,IMPL:EXCLUDE_MERGE_FIX,CODE,Config Merge Logic,config.go::applyMergeStrategies
-list_limit_chain,1,req_list_limit,REQ:LIST_LIMIT,REQ,List Command Output Limit,stdd/requirements.md#reqlist_limit
-list_limit_chain,2,arch_list_limit,ARCH:LIST_LIMIT,ARCH,List Command Limit Architecture,stdd/architecture-decisions.md#28-list-command-limit-architecture-archlist_limit-reqlist_limit
-list_limit_chain,3,impl_list_limit,IMPL:LIST_LIMIT,IMPL,List Command Limit Implementation,stdd/implementation-decisions.md#list-command-output-limit-impllist_limit
+list_limit_chain,1,req_list_limit,REQ:LIST_LIMIT,REQ,List Command Output Limit,tied/requirements.md#reqlist_limit
+list_limit_chain,2,arch_list_limit,ARCH:LIST_LIMIT,ARCH,List Command Limit Architecture,tied/architecture-decisions.md#28-list-command-limit-architecture-archlist_limit-reqlist_limit
+list_limit_chain,3,impl_list_limit,IMPL:LIST_LIMIT,IMPL,List Command Limit Implementation,tied/implementation-decisions.md#list-command-output-limit-impllist_limit
 list_limit_chain,4,test_list_limit,TEST:LIST_LIMIT,TEST,List Limit Tests,list_limit_test.go::TestListLimitDefault
 list_limit_chain,5,code_list_limit,IMPL:LIST_LIMIT,CODE,List Command Implementation,list.go::applyLimit
 

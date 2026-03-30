@@ -206,17 +206,17 @@ func testImplementationTokens(t *testing.T) {
 func testDocumentationSynchronization(t *testing.T) {
 	// Validate that key documentation files exist and contain expected content
 	requiredDocs := map[string][]string{
-		"docs/extraction-dependencies.md": {
-			"REFACTOR-001", "Dependency Analysis", "extraction boundaries",
+		"tied/implementation-decisions/IMPL-REFACTOR_PREP.yaml": {
+			"IMPL-REFACTOR_PREP", "Dependency analysis", "extraction",
 		},
-		"docs/formatter-decomposition.md": {
-			"REFACTOR-002", "Component boundaries", "formatter decomposition",
+		"tied/implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml": {
+			"IMPL-LARGE_FILE_DECOMP", "decomposition", "component",
 		},
-		"docs/config-schema-abstraction.md": {
-			"REFACTOR-003", "Configuration abstraction", "schema separation",
+		"tied/implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX.yaml": {
+			"IMPL-CONFIG_SCHEMA_FLEX", "ConfigLoader", "schema",
 		},
-		"docs/context/structure-optimization-analysis.md": {
-			"REFACTOR-005", "Structure optimization", "extraction preparation",
+		"tied/implementation-decisions/IMPL-INTERFACE_FIRST.yaml": {
+			"IMPL-INTERFACE_FIRST", "Interface", "extraction",
 		},
 	}
 
@@ -263,11 +263,11 @@ func testRefactorExtractionReadiness(t *testing.T) {
 	// Validate extraction readiness criteria
 	readinessCriteria := map[string]func() bool{
 		"Dependency analysis complete": func() bool {
-			_, err := os.Stat("docs/extraction-dependencies.md")
+			_, err := os.Stat("tied/implementation-decisions/IMPL-REFACTOR_PREP.yaml")
 			return err == nil
 		},
 		"Formatter decomposition complete": func() bool {
-			_, err := os.Stat("docs/formatter-decomposition.md")
+			_, err := os.Stat("tied/implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml")
 			return err == nil
 		},
 		"Config abstraction ready": func() bool {
@@ -276,8 +276,8 @@ func testRefactorExtractionReadiness(t *testing.T) {
 			err := cmd.Run()
 			return err == nil
 		},
-		"Structure optimization complete": func() bool {
-			_, err := os.Stat("docs/context/structure-optimization-analysis.md")
+		"Interface-first extraction documented": func() bool {
+			_, err := os.Stat("tied/implementation-decisions/IMPL-INTERFACE_FIRST.yaml")
 			return err == nil
 		},
 	}

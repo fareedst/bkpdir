@@ -17,7 +17,7 @@ REQ-DOC_015:
     - method: Validation integration with DOC-008 system
     - method: Semantic token validation for consistency
     - method: AI assistant comprehension testing
-    - method: See `architecture-decisions.md` § Documentation Architecture and `implementation-decisions.md` § Documentation Implementation for detailed approach
+    - method: tied/architecture-decisions/ARCH-AI_DOCUMENTATION.yaml; tied/implementation-decisions/IMPL-DOC_ENHANCEMENT.yaml
   traceability:
     architecture: []
     implementation: []
@@ -40,6 +40,6 @@ REQ-DOC_015:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Documentation Architecture
+  architecture: tied/architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
   description: Replace all unicode icons with AI-first semantic tokens to improve AI assistant comprehension, enable automated validation, and create searchable documentation structure. Maintains backward compatibility with existing priority system ([CRITICAL][HIGH][MEDIUM][LOW]) while replacing decorative unicode icons with machine-readable semantic tokens.
-  implementation: See `implementation-decisions.md` § Documentation Implementation
+  implementation: tied/implementation-decisions/IMPL-DOC_ENHANCEMENT.yaml

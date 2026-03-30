@@ -44,6 +44,6 @@ REQ-CICD_001:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § CI/CD Pipeline Architecture [ARCH-CICD_PIPELINE]
+  architecture: tied/architecture-decisions/ARCH-CICD_PIPELINE.yaml
   description: CI/CD pipeline must be optimized for AI-first development workflows. All CI/CD tasks must be configured with low priority scheduling. Pipeline configurations must assume zero human developer intervention. All documentation and code must be maintained for AI assistant comprehension. CI/CD outputs must use standardized icon system. Pipeline must integrate with implementation token validation system.
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml

@@ -21,7 +21,7 @@ REQ-DEBUG_OUTPUT_CONTROL:
     - method: Debug mode verification (all diagnostic output appears)
     - method: Test execution verification (diagnostic output enabled automatically)
     - method: All tests pass with diagnostic output enabled
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-CONFIG_SYSTEM
@@ -52,6 +52,6 @@ REQ-DEBUG_OUTPUT_CONTROL:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Configuration System [ARCH-CONFIG_SYSTEM], § Testing Strategy [ARCH-TESTING_STRATEGY]
+  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml; tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml
   description: Debug and diagnostic output must be controlled by a global debug flag and disabled by default in normal execution. Diagnostic output provides detailed information about configuration loading, merging, and inheritance processing. Debug output must be automatically enabled during test execution to aid in debugging test failures. Debug statements that identify architecture or implementation decisions must be preserved in code as they serve as inline documentation of key decision points.
-  implementation: See `implementation-decisions.md` § Configuration Structure [IMPL-CONFIG_STRUCT]
+  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml

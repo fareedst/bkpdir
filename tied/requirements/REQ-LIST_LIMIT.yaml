@@ -20,7 +20,7 @@ REQ-LIST_LIMIT:
     - method: Unit tests verify `--all` or `--limit 0` shows all files
     - method: Integration tests verify both `list` and `--list` commands respect the limit
     - method: Backward compatibility tests ensure existing behavior preserved when limit not specified
-    - method: See `architecture-decisions.md` § List Command Limit Architecture [ARCH-LIST_LIMIT] and `implementation-decisions.md` § List Command Limit Implementation [IMPL-LIST_LIMIT] for detailed testing approach
+    - method: tied/architecture-decisions/ARCH-LIST_LIMIT.yaml; tied/implementation-decisions/IMPL-LIST_LIMIT.yaml
   traceability:
     architecture:
       - ARCH-LIST_LIMIT
@@ -45,6 +45,6 @@ REQ-LIST_LIMIT:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § List Command Limit Architecture [ARCH-LIST_LIMIT]
+  architecture: tied/architecture-decisions/ARCH-LIST_LIMIT.yaml
   description: The `list` command must limit the display to the newest N files by default (N=10). Users must be able to control the length of the list via a command-line option. The list command displays all matching files sorted by creation time (most recent first), but only shows the first N entries by default.
-  implementation: See `implementation-decisions.md` § List Command Limit Implementation [IMPL-LIST_LIMIT]
+  implementation: tied/implementation-decisions/IMPL-LIST_LIMIT.yaml

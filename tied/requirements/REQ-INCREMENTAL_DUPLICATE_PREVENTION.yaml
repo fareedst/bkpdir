@@ -24,7 +24,7 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
     - method: Tests verify handling of edge cases (no incremental, no full, no archives)
     - method: Tests verify exclude patterns are respected
     - method: Tests verify consistency with diff command behavior
-    - method: See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] and `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] for detailed testing approach
+    - method: tied/architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml; tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   traceability:
     architecture:
       - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
@@ -53,7 +53,7 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Incremental Archive Duplicate Prevention Architecture [ARCH-INCREMENTAL_DUPLICATE_PREVENTION]
+  architecture: tied/architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   cross-references: '[REQ-DIFF_COMMAND] (Diff Command), [REQ-OUTPUT_FORMATTING] (Output Formatting), [REQ-CONFIGURATION] (Configuration Management), [REQ-CONTEXT_SUPPORT] (Context Support)'
   description: Prevent creation of duplicate incremental archives when there are no observable changes compared to the most recent incremental archive. The system must compare the current directory state against the union of the most recent incremental archive applied on top of the most recent full archive, rather than comparing only against the full archive. If no changes are detected, the incremental archive creation must be skipped with an appropriate message. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
-  implementation: See `implementation-decisions.md` § Incremental Archive Duplicate Prevention Implementation [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
+  implementation: tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml

@@ -41,6 +41,6 @@ REQ-IMMUTABLE_ERROR_HANDLING:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Error Handling Strategy [ARCH-ERROR_HANDLING]
+  architecture: tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   description: 'Error handling requirements are mandatory and must be preserved:'
-  implementation: See `implementation-decisions.md` § Structured Error Handling [IMPL-STRUCTURED_ERRORS]
+  implementation: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml

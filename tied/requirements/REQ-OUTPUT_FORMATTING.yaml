@@ -13,7 +13,7 @@ REQ-OUTPUT_FORMATTING:
     - criterion: Multiple formatting approaches available
     - criterion: Named placeholders supported
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-OUTPUT_FORMATTING
@@ -38,6 +38,6 @@ REQ-OUTPUT_FORMATTING:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Output Formatting [ARCH-OUTPUT_FORMATTING]
+  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   description: Centralized formatting for all application output. Template-based formatting with data extraction. Support for multiple formatting syntaxes.
-  implementation: See `implementation-decisions.md` § Dual Printf/Template Formatting [IMPL-DUAL_FORMATTING]
+  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml

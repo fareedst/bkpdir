@@ -13,7 +13,7 @@ REQ-MAINTAINABILITY:
     - criterion: Tests are easy to understand and modify
     - criterion: Configuration system supports new fields automatically
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-CODE_ORGANIZATION
@@ -38,6 +38,6 @@ REQ-MAINTAINABILITY:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Code Organization Principles [ARCH-CODE_ORGANIZATION]
+  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
   description: Code must follow Go standards. Documentation must be comprehensive. Tests must be maintainable. Configuration system must be extensible.
-  implementation: See `implementation-decisions.md` § Code Style and Conventions [IMPL-CODE_STYLE]
+  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml

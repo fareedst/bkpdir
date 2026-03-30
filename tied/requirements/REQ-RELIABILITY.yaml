@@ -13,7 +13,7 @@ REQ-RELIABILITY:
     - criterion: Panic recovery prevents leaks
     - criterion: Thread-safety verified
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-RESOURCE_MANAGEMENT
@@ -40,6 +40,6 @@ REQ-RELIABILITY:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Resource Management [ARCH-RESOURCE_MANAGEMENT], § Error Handling Strategy [ARCH-ERROR_HANDLING]
+  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml; tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   description: System must handle errors gracefully. Resource cleanup must be error-resilient. Panic recovery prevents resource leaks. Thread-safe operations for concurrent access.
-  implementation: See `implementation-decisions.md` § Resource Management with Cleanup [IMPL-RESOURCE_MANAGER], § Structured Error Handling [IMPL-STRUCTURED_ERRORS]
+  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml; tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml

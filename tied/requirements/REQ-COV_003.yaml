@@ -14,7 +14,7 @@ REQ-COV_003:
     - criterion: Integration with development workflow complete
     - criterion: Coverage visualization tools available
   validation_criteria:
-    - method: See `architecture-decisions.md` § Testing Strategy and `implementation-decisions.md` § Testing Implementation for testing approach
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
   traceability:
     architecture:
       - ARCH-TESTING_STRATEGY
@@ -39,6 +39,6 @@ REQ-COV_003:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  architecture: See `architecture-decisions.md` § Testing Strategy [ARCH-TESTING_STRATEGY]
+  architecture: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml
   description: Implement function-level coverage exclusion and coverage comment directives for granular control over coverage metrics. Support `//coverage:ignore` style annotations for specific code blocks.
-  implementation: See `implementation-decisions.md` § Testing Implementation [IMPL-TESTING]
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
