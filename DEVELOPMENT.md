@@ -156,9 +156,8 @@ The Makefile includes several build-time variables:
 
 - `compileDate`: Set to current UTC timestamp
 - `platform`: Set to target OS and architecture
-- `version`: Application version (currently 1.5.0)
 
-These are injected using Go's `-ldflags` during compilation.
+Application version is the `appVersion` constant in `main.go` (currently 1.7.2). `compileDate` and `platform` are injected using Go's `-ldflags` during compilation.
 
 ## Directory Structure
 
