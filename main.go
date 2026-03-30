@@ -232,90 +232,9 @@ It supports full and incremental directory backups, individual file backups, cus
 and Git-aware archive naming.`
 
 // [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// executeWithAutoDetection handles Cobra command resolution issues by implementing
-// custom argument parsing that allows auto-detection to work alongside existing commands
-func executeWithAutoDetection(rootCmd *cobra.Command) error {
-	args := os.Args[1:] // Skip program name
-
-	// If no arguments, execute normally (will show help)
-	if len(args) == 0 {
-		return rootCmd.Execute()
-	}
-
-	// Check if first argument is a known command
-	firstArg := args[0]
-
-	// List of known commands that should be handled by Cobra normally
-	knownCommands := []string{
-		"create", "config", "template", "full", "inc", "list", "backup", "version", "diff",
-		"help", "--help", "-h", "--version", "-v",
-	}
-
-	// Check for global flags that should be handled normally
-	globalFlags := []string{
-		"--config", "--dry-run", "-d", "--list",
-	}
-
-	// If first argument is a known command or global flag, execute normally
-	for _, cmd := range knownCommands {
-		if firstArg == cmd {
-			return rootCmd.Execute()
-		}
-	}
-
-	for _, flag := range globalFlags {
-		if firstArg == flag {
-			return rootCmd.Execute()
-		}
-	}
-
-	// Check if first argument starts with a flag (-)
-	if strings.HasPrefix(firstArg, "-") {
-		return rootCmd.Execute()
-	}
-
-	// At this point, we assume it's a path for auto-detection
-	// Let handleAutoDetectedCommand handle path validation and provide appropriate errors
-	// We need to manually handle the global flags that might be present
-	var filteredArgs []string
-	var dryRunFlag bool
-	var noteFlag string
-
-	// Parse arguments to extract global flags
-	i := 0
-	for i < len(args) {
-		arg := args[i]
-		if arg == "--dry-run" || arg == "-d" {
-			dryRunFlag = true
-		} else if arg == "--note" || arg == "-n" {
-			if i+1 < len(args) {
-				noteFlag = args[i+1]
-				i++ // Skip the next argument as it's the note value
-			}
-		} else if strings.HasPrefix(arg, "--note=") {
-			noteFlag = strings.TrimPrefix(arg, "--note=")
-		} else if strings.HasPrefix(arg, "-n=") {
-			noteFlag = strings.TrimPrefix(arg, "-n=")
-		} else {
-			filteredArgs = append(filteredArgs, arg)
-		}
-		i++
-	}
-
-	// Set global variables for the handlers to use
-	dryRun = dryRunFlag
-	if noteFlag != "" {
-		note = noteFlag
-	}
-
-	// Execute auto-detection with filtered arguments
-	handleAutoDetectedCommand(filteredArgs)
-	return nil
-}
-
-func main() {
-	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
-	// DECISION-REF: DEC-002
+// newRootCommand returns the production Cobra tree (flags, subcommands, root Run).
+// Used by main and by composition tests so wiring cannot drift from createTestRootCmd.
+func newRootCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
 		Short:   "Directory archiving and file backup CLI for macOS and Linux",
@@ -372,12 +291,10 @@ func main() {
 		},
 	}
 
-	// Set the version template to show version in help output
 	versionTemplate := fmt.Sprintf("bkpdir version %s (compiled %s) [%s]\n",
 		Version, compileDate, platform)
 	rootCmd.SetVersionTemplate(versionTemplate)
 
-	// Global flags
 	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false,
 		"Show what would be done without creating archives")
 	rootCmd.PersistentFlags().BoolVar(&showConfig, "config", false,
@@ -388,23 +305,109 @@ func main() {
 	rootCmd.PersistentFlags().IntVarP(&listLimit, "limit", "n", 10, "Limit the number of items to display (0 = show all)")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug output (AI-first semantic token: DEBUG-OUTPUT)")
 
-	// Add commands - new specification-compliant commands first
 	rootCmd.AddCommand(createCmd())
 	rootCmd.AddCommand(configCmd())
 	rootCmd.AddCommand(templateCmd())
-
-	// Add backward compatibility commands
 	rootCmd.AddCommand(fullCmd())
 	rootCmd.AddCommand(incCmd())
-
-	// Add other commands
 	rootCmd.AddCommand(listCmd())
 	rootCmd.AddCommand(diffCmd())
 	rootCmd.AddCommand(backupCmd())
 	rootCmd.AddCommand(versionCmd())
 
+	return rootCmd
+}
+
+// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
+// executeWithAutoDetection handles Cobra command resolution issues by implementing
+// custom argument parsing that allows auto-detection to work alongside existing commands.
+// args must be argv without the program name (same slice as os.Args[1:] from main).
+func executeWithAutoDetection(rootCmd *cobra.Command, args []string) error {
+	// If no arguments, execute normally (will show help)
+	if len(args) == 0 {
+		rootCmd.SetArgs(args)
+		return rootCmd.Execute()
+	}
+
+	// Check if first argument is a known command
+	firstArg := args[0]
+
+	// List of known commands that should be handled by Cobra normally
+	knownCommands := []string{
+		"create", "config", "template", "full", "inc", "list", "backup", "version", "diff",
+		"help", "--help", "-h", "--version", "-v",
+	}
+
+	// Check for global flags that should be handled normally
+	globalFlags := []string{
+		"--config", "--dry-run", "-d", "--list",
+	}
+
+	// If first argument is a known command or global flag, execute normally
+	for _, cmd := range knownCommands {
+		if firstArg == cmd {
+			rootCmd.SetArgs(args)
+			return rootCmd.Execute()
+		}
+	}
+
+	for _, flag := range globalFlags {
+		if firstArg == flag {
+			rootCmd.SetArgs(args)
+			return rootCmd.Execute()
+		}
+	}
+
+	// Check if first argument starts with a flag (-)
+	if strings.HasPrefix(firstArg, "-") {
+		rootCmd.SetArgs(args)
+		return rootCmd.Execute()
+	}
+
+	// At this point, we assume it's a path for auto-detection
+	// Let handleAutoDetectedCommand handle path validation and provide appropriate errors
+	// We need to manually handle the global flags that might be present
+	var filteredArgs []string
+	var dryRunFlag bool
+	var noteFlag string
+
+	// Parse arguments to extract global flags
+	i := 0
+	for i < len(args) {
+		arg := args[i]
+		if arg == "--dry-run" || arg == "-d" {
+			dryRunFlag = true
+		} else if arg == "--note" || arg == "-n" {
+			if i+1 < len(args) {
+				noteFlag = args[i+1]
+				i++ // Skip the next argument as it's the note value
+			}
+		} else if strings.HasPrefix(arg, "--note=") {
+			noteFlag = strings.TrimPrefix(arg, "--note=")
+		} else if strings.HasPrefix(arg, "-n=") {
+			noteFlag = strings.TrimPrefix(arg, "-n=")
+		} else {
+			filteredArgs = append(filteredArgs, arg)
+		}
+		i++
+	}
+
+	// Set global variables for the handlers to use
+	dryRun = dryRunFlag
+	if noteFlag != "" {
+		note = noteFlag
+	}
+
+	// Execute auto-detection with filtered arguments
+	handleAutoDetectedCommand(filteredArgs)
+	return nil
+}
+
+func main() {
+	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
+	// DECISION-REF: DEC-002
 	// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
-	if err := executeWithAutoDetection(rootCmd); err != nil {
+	if err := executeWithAutoDetection(newRootCommand(), os.Args[1:]); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}

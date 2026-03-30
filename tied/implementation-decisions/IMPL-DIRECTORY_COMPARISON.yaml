@@ -23,6 +23,8 @@ IMPL-DIRECTORY_COMPARISON:
     files:
     - comparison.go
     - pkg/fileops/comparison.go
+    - pkg/fileops/comparison_test.go
+    - pkg/fileops/exclusion_test.go
     functions:
     - CreateDirectorySnapshot
     - CreateArchiveSnapshot
@@ -62,6 +64,13 @@ IMPL-DIRECTORY_COMPARISON:
     - TestCompareFiles
     - TestCreateDirectorySnapshot
     - TestCompareSnapshots
+    - TestCreateDirectorySnapshot_NoExclusions_REQ_DIFF_COMMAND
+    - TestCreateDirectorySnapshot_WithExclusions_REQ_DIFF_COMMAND
+    - TestCompareSnapshots_IdenticalAndDifferent_REQ_DIFF_COMMAND
+    - TestCreateArchiveSnapshot_AndCompareToDir_REQ_DIFF_COMMAND
+    - TestIsDirectoryIdenticalToArchive_ExtraFileInDir_REQ_DIFF_COMMAND
+    - TestShouldExcludeFile_GlobAndExact_REQ_CONFIGURATION
+    - TestPatternMatcher_ShouldExclude_REQ_CONFIGURATION
     code_annotations:
     - IMPL-DIRECTORY_COMPARISON
     - ARCH-DIRECTORY_COMPARISON

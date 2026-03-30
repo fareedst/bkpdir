@@ -242,6 +242,8 @@ install: build-local
 test:
 	@echo "Running tests..."
 	go test ./...
+	@echo "Running pkg/fileops module tests..."
+	@cd pkg/fileops && go test ./...
 	@echo "Running smoke performance tests..."
 	@$(MAKE) test-performance-smoke
 	@echo "✓ All tests passed"

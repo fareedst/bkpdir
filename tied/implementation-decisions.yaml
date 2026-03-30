@@ -1076,7 +1076,7 @@ IMPL-AUTO_DETECTION:
       date: "2026-03-12"
       validator: MCP converter
       result: pass
-  code_markers: '`main.go` path detection functions, `executeWithAutoDetection()`, `handleAutoDetectedCommand()`'
+  code_markers: '`main.go` `newRootCommand()`, path detection functions, `executeWithAutoDetection(root, args)`, `handleAutoDetectedCommand()`'
   detection_functions: |-
     ```go
     func isFile(path string) bool {
@@ -1109,7 +1109,7 @@ IMPL-AUTO_DETECTION:
         return nil
     }
     ```
-  integration_with_cobra: "```go\nfunc executeWithAutoDetection(rootCmd *cobra.Command) error {\n    args := os.Args[1:]\n    \n    // Check for known commands/flags\n    // If not known, trigger auto-detection\n    // Otherwise execute normally\n}\n```"
+  integration_with_cobra: "```go\nfunc executeWithAutoDetection(rootCmd *cobra.Command, args []string) error {\n    // args is argv without program name; main passes os.Args[1:]\n    // Before rootCmd.Execute(), call rootCmd.SetArgs(args)\n    // If first arg is not a known command/flag, parse globals and handleAutoDetectedCommand\n}\n```"
   known_commands_bypass:
     - 'Explicit commands: `create`, `config`, `list`, `verify`, `backup`, `version`'
     - 'Global flags: `--config`, `--dry-run`, `--list`'

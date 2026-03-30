@@ -89,7 +89,6 @@ func TestIncCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T
 
 	// Execute inc command via CLI
 	rootCmd := createTestRootCmd()
-	rootCmd.AddCommand(diffCmd()) // Add diff command for completeness
 	var stdout, stderr bytes.Buffer
 	rootCmd.SetOut(&stdout)
 	rootCmd.SetErr(&stderr)
@@ -351,7 +350,6 @@ func TestDiffCommandCLI_REQ_DIFF_COMMAND(t *testing.T) {
 
 	// Test 1: Diff with no changes (should show no changes)
 	rootCmd := createTestRootCmd()
-	rootCmd.AddCommand(diffCmd())
 	var stdout bytes.Buffer
 	rootCmd.SetOut(&stdout)
 	rootCmd.SetArgs([]string{"diff"})
@@ -481,7 +479,6 @@ func TestDiffCommandWithIncremental_REQ_DIFF_COMMAND(t *testing.T) {
 
 	// Run diff command (should compare against full + incremental)
 	rootCmd := createTestRootCmd()
-	rootCmd.AddCommand(diffCmd())
 	var stdout bytes.Buffer
 	rootCmd.SetOut(&stdout)
 	rootCmd.SetArgs([]string{"diff"})
@@ -613,7 +610,6 @@ func TestDiffCommandExcludePatterns_REQ_DIFF_COMMAND(t *testing.T) {
 
 	// Run diff command
 	rootCmd := createTestRootCmd()
-	rootCmd.AddCommand(diffCmd())
 	var stdout bytes.Buffer
 	rootCmd.SetOut(&stdout)
 	rootCmd.SetArgs([]string{"diff"})

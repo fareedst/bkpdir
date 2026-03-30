@@ -4,8 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **Composition and module tests**: `main_cli_composition_test.go` exercises `newRootCommand()` plus `executeWithAutoDetection` (subcommand list, known-command vs path routing, root `--config` / `--list` + `--limit`, `diff` with archives). `pkg/fileops/comparison_test.go` and `pkg/fileops/exclusion_test.go` cover snapshot/compare/exclusion helpers used from `comparison.go`.
+- **TIED**: `tied/docs/composition-coverage.md` maps CLI and fileops bindings to tests.
+
 ### Changed
 
+- **CLI entry (`main.go`)**: Extract `newRootCommand()` for the full production Cobra tree; `main` calls `executeWithAutoDetection(newRootCommand(), os.Args[1:])`. On paths that delegate to Cobra, `rootCmd.SetArgs(args)` runs before `Execute()` so argv handling matches explicit invocation.
+- **Tests**: `createTestRootCmd()` now returns `newRootCommand()`; removed redundant `AddCommand(diffCmd())` from `inc_diff_integration_test.go`.
+- **Makefile**: `make test` runs `go test ./...` and then `cd pkg/fileops && go test ./...`.
+- **TIED**: Updated `IMPL-AUTO_DETECTION`, `IMPL-CLI_FRAMEWORK`, `IMPL-DIRECTORY_COMPARISON`, and `tied/implementation-decisions.yaml` for the new entry shape and fileops test traceability.
 - **Documentation**: Removed non-essential `docs/` markdown (session summaries, unicode migration logs, extraction working plans, duplicate system comparisons, and similar). Slimmed `docs/index.md`, `docs/governance/*`, and `docs/context/README.md`; updated `docs/user/specification.md`, `docs/integration-guide.md`, `docs/package-interdependency-mapping.md`, and `docs/semantic-token-system-requirements.md`.
 - **TIED paths**: `tied/requirements.yaml` and `tied/requirements/REQ-*.yaml` now reference concrete `tied/architecture-decisions/ARCH-*.yaml` and `tied/implementation-decisions/IMPL-*.yaml` instead of monolithic markdown section cites. `tied/semantic-tokens.md` and selected ARCH/IMPL YAML updated (`stdd/` → `tied/` where applicable).
 - **`project-tokens.yaml`**: Replaced the legacy embedded registry with a **short pointer** to `tied/semantic-tokens.yaml` and TIED indexes.

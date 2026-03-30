@@ -13,6 +13,7 @@ Work on the current branch includes:
 - **Lint / check**: `make lint` runs **TIED MCP validation** (`validate-tied-mcp`) before `revive`; `make check` runs fmt, vet, and lint only—run `make validate-token-enforcement` separately for the optional DOC-008 scan. See [Development](#development).
 - **TIED**: REQ/ARCH detail YAML no longer embed invalid `detail_file`; IMPL decision files normalized and pseudocode aligned; canonical registry in `tied/semantic-tokens.yaml`; `project-tokens.yaml` is a short pointer only; agent checklist docs updated.
 - **Repository**: Prebuilt platform binaries were **removed** from `bin/` (build locally or via CI).
+- **CLI (tests and wiring)**: No change to the commands or flags you use day to day. Internally, the same production Cobra tree (including `diff`, `template`, and root flags) is built once via `newRootCommand()` and tests use that tree, so integration tests stay aligned with the real binary.
 
 ### Documentation, TIED paths, and token validation
 

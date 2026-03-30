@@ -205,23 +205,9 @@ func runIncCommandTests(t *testing.T, archiveDir string) {
 	}
 }
 
+// createTestRootCmd returns the same Cobra tree as production (see newRootCommand in main.go).
 func createTestRootCmd() *cobra.Command {
-	rootCmd := &cobra.Command{
-		Use:   "bkpdir",
-		Short: "Directory archiving CLI for macOS and Linux",
-	}
-	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, dryRunFlagDesc)
-
-	// Add all commands to ensure backward compatibility tests work
-	rootCmd.AddCommand(createCmd())
-	rootCmd.AddCommand(configCmd())
-	rootCmd.AddCommand(fullCmd())
-	rootCmd.AddCommand(incCmd())
-	rootCmd.AddCommand(listCmd())
-	rootCmd.AddCommand(backupCmd())
-	rootCmd.AddCommand(versionCmd())
-
-	return rootCmd
+	return newRootCommand()
 }
 
 func TestCmdArgsValidation(t *testing.T) {
