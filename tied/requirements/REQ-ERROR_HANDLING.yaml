@@ -1,43 +1,43 @@
 REQ-ERROR_HANDLING:
-  name: Enhanced Error Handling Requirements
+  architecture: tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   category: Functional
+  description: Use structured errors with status codes and operation context. Enhanced disk space error detection. Operation context support for better debugging.
+  implementation: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Enhanced Error Handling Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Consistent error handling with machine-readable status codes and enhanced debugging
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: All operations return structured errors with status codes
-    - criterion: Disk space errors detected reliably
-    - criterion: Error messages include operation context
-    - criterion: Error formatting supports operation context
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-ERROR_HANDLING
-    implementation:
-      - IMPL-STRUCTURED_ERRORS
-    tests: []
-    code_annotations:
-      - REQ-ERROR_HANDLING
+    problems_solved: []
+    why: Consistent error handling with machine-readable status codes and enhanced debugging
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
-  description: Use structured errors with status codes and operation context. Enhanced disk space error detection. Operation context support for better debugging.
-  implementation: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  satisfaction_criteria:
+    - criterion: All operations return structured errors with status codes
+    - criterion: Disk space errors detected reliably
+    - criterion: Error formatting supports operation context
+    - criterion: Error messages include operation context
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-ERROR_HANDLING
+    code_annotations:
+      - REQ-ERROR_HANDLING
+    implementation:
+      - IMPL-STRUCTURED_ERRORS
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

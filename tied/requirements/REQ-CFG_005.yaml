@@ -1,47 +1,47 @@
 REQ-CFG_005:
-  name: "Layered Configuration Inheritance Requirements"
-  category: "Functional"
-  priority: "P0"
-  status: "Implemented"
+  architecture: tied/architecture-decisions/ARCH-CFG_005.yaml
+  category: Functional
+  description: Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported. Array configuration fields (such as `exclude_patterns`) default to merge (accumulate) strategy to combine values from defaults, parent configs, and children; default `exclude_patterns` is empty until set in config.
+  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: AI agent
+      date: "2026-03-29"
+      reason: 'Rationale and description: empty default exclude_patterns'
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Layered Configuration Inheritance Requirements
+  priority: P0
   rationale:
-    why: "Enables hierarchical configuration management for complex project structures. Array fields default to merge (accumulate) so values from parent configs combine with child additions when no explicit replace prefix is used. Built-in `exclude_patterns` default is an empty list; users add patterns in YAML when they want paths skipped."
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: "Configuration files can inherit from other files"
-    - criterion: "Circular dependencies detected and prevented"
-    - criterion: "Inheritance chains processed in correct order"
-    - criterion: "Merge strategies (override, append, prepend, replace, default) work correctly"
-    - criterion: "Array fields default to merge (accumulate) strategy when no prefix is specified"
-    - criterion: "Array field values from defaults and parent configs are preserved when child configs add values"
-    - criterion: "Duplicate values in arrays are deduplicated during merge"
-    - criterion: "Order is preserved: defaults/parent values first, then child additions"
-  validation_criteria:
-    - method: "tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml"
-  traceability:
-    architecture:
-      - "ARCH-CFG_005"
-    implementation:
-      - "IMPL-CONFIG_STRUCT"
-    tests: []
-    code_annotations:
-      - "REQ-CFG_005"
+    problems_solved: []
+    why: Enables hierarchical configuration management for complex project structures. Array fields default to merge (accumulate) so values from parent configs combine with child additions when no explicit replace prefix is used. Built-in `exclude_patterns` default is an empty list; users add patterns in YAML when they want paths skipped.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: "MCP converter"
-    last_updated:
-      date: "2026-03-29"
-      author: "AI agent"
-      reason: "Rationale and description: empty default exclude_patterns"
-    last_validated:
-      date: "2026-03-12"
-      validator: "MCP converter"
-      result: "pass"
-  architecture: "tied/architecture-decisions/ARCH-CFG_005.yaml"
-  description: "Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported. Array configuration fields (such as `exclude_patterns`) default to merge (accumulate) strategy to combine values from defaults, parent configs, and children; default `exclude_patterns` is empty until set in config."
-  implementation: "tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml"
+  satisfaction_criteria:
+    - criterion: Array field values from defaults and parent configs are preserved when child configs add values
+    - criterion: Array fields default to merge (accumulate) strategy when no prefix is specified
+    - criterion: Circular dependencies detected and prevented
+    - criterion: Configuration files can inherit from other files
+    - criterion: Duplicate values in arrays are deduplicated during merge
+    - criterion: Inheritance chains processed in correct order
+    - criterion: Merge strategies (override, append, prepend, replace, default) work correctly
+    - criterion: 'Order is preserved: defaults/parent values first, then child additions'
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CFG_005
+    code_annotations:
+      - REQ-CFG_005
+    implementation:
+      - IMPL-CONFIG_STRUCT
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

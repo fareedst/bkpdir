@@ -1,43 +1,43 @@
 REQ-TEMPLATE_FORMATTING:
-  name: Template Formatting Requirements
+  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   category: Functional
+  description: Advanced template processing with named placeholders and data extraction. Support for multiple template syntaxes. Template methods for all operations.
+  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Template Formatting Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Rich template formatting with data extraction capabilities
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Template processing supports multiple syntaxes
-    - criterion: Data extraction provides named groups
-    - criterion: Template methods available for all operations
-    - criterion: Graceful degradation on template errors
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-OUTPUT_FORMATTING
-    implementation:
-      - IMPL-DUAL_FORMATTING
-    tests: []
-    code_annotations:
-      - REQ-TEMPLATE_FORMATTING
+    problems_solved: []
+    why: Rich template formatting with data extraction capabilities
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
-  description: Advanced template processing with named placeholders and data extraction. Support for multiple template syntaxes. Template methods for all operations.
-  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  satisfaction_criteria:
+    - criterion: Data extraction provides named groups
+    - criterion: Graceful degradation on template errors
+    - criterion: Template methods available for all operations
+    - criterion: Template processing supports multiple syntaxes
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    code_annotations:
+      - REQ-TEMPLATE_FORMATTING
+    implementation:
+      - IMPL-DUAL_FORMATTING
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

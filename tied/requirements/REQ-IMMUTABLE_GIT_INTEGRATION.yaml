@@ -1,45 +1,45 @@
 REQ-IMMUTABLE_GIT_INTEGRATION:
-  name: Git Integration Requirements (Immutable)
+  architecture: tied/architecture-decisions/ARCH-GIT_INTEGRATION.yaml
   category: Functional
+  description: 'Git integration requirements are mandatory and must be preserved:'
+  implementation: tied/implementation-decisions/IMPL-GIT_CLI.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Git Integration Requirements (Immutable)
   priority: P1
-  status: Implemented
   rationale:
-    why: These Git integration requirements are mandatory behaviors that users depend on. Changing them would break existing workflows.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Git repositories are detected automatically
-    - criterion: Git information is included in archive names when enabled
-    - criterion: Branch and commit hash are extracted correctly
-    - criterion: Dirty working directory state is detected
-    - criterion: Submodules are handled appropriately
-    - criterion: Git configuration is integrated
-  validation_criteria:
-    - method: Git integration tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-GIT_INTEGRATION
-    implementation:
-      - IMPL-GIT_CLI
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_GIT_INTEGRATION
+    problems_solved: []
+    why: These Git integration requirements are mandatory behaviors that users depend on. Changing them would break existing workflows.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-GIT_INTEGRATION.yaml
-  description: 'Git integration requirements are mandatory and must be preserved:'
-  implementation: tied/implementation-decisions/IMPL-GIT_CLI.yaml
+  satisfaction_criteria:
+    - criterion: Branch and commit hash are extracted correctly
+    - criterion: Dirty working directory state is detected
+    - criterion: Git configuration is integrated
+    - criterion: Git information is included in archive names when enabled
+    - criterion: Git repositories are detected automatically
+    - criterion: Submodules are handled appropriately
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    code_annotations:
+      - REQ-IMMUTABLE_GIT_INTEGRATION
+    implementation:
+      - IMPL-GIT_CLI
+    tests: []
+  validation_criteria:
+    - method: Git integration tests verify all requirements. Breaking changes require major version bump.

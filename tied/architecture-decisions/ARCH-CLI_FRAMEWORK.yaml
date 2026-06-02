@@ -1,56 +1,18 @@
 ARCH-CLI_FRAMEWORK:
-  name: CLI Framework Architecture
-  status: Active
-  cross_references: &ref_0
-    - REQ-USABILITY
-    - REQ-MAINTAINABILITY
-  rationale:
-    why: |-
-      Provides reusable CLI building blocks
-      Standardizes command construction patterns
-      Supports rapid CLI application development
-      Enables consistent user experience across applications
-      Integrates with popular Cobra framework
-    problems_solved: []
-    benefits: []
   alternatives_considered:
     - name: See detail file
-      pros: []
       cons: []
+      pros: []
       rejected_reason: |-
         Custom CLI framework: Rejected due to maintenance overhead
         Direct Cobra usage: Rejected due to code duplication across projects
-  implementation_approach:
-    summary: Extracted CLI framework with builder patterns and Cobra integration
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-CLI_FRAMEWORK
-      - REQ-USABILITY
-      - REQ-MAINTAINABILITY
-  related_decisions:
-    depends_on: *ref_0
-    informs: []
-    see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Extracted CLI framework with builder patterns and Cobra integration
   command_builder: Builder pattern for constructing Cobra commands
   context_manager: Context propagation for cancellation and timeouts
   cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
+  cross_references: &ref_0
+    - REQ-MAINTAINABILITY
+    - REQ-USABILITY
+  decision: Extracted CLI framework with builder patterns and Cobra integration
   design_patterns:
     - Builder pattern for command construction
     - Interface-based design for testability
@@ -58,8 +20,46 @@ ARCH-CLI_FRAMEWORK:
     - Template pattern for command structure
   dry-run_manager: Built-in dry-run operation support
   flag_manager: Standardized flag registration and binding
+  implementation_approach:
+    details: []
+    summary: Extracted CLI framework with builder patterns and Cobra integration
   integration:
     - Built on Cobra CLI framework
-    - Supports standard Cobra features (flags, subcommands, help)
     - Extends Cobra with additional patterns and utilities
+    - Supports standard Cobra features (flags, subcommands, help)
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: CLI Framework Architecture
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Provides reusable CLI building blocks
+      Standardizes command construction patterns
+      Supports rapid CLI application development
+      Enables consistent user experience across applications
+      Integrates with popular Cobra framework
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-CLI_FRAMEWORK
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []
   version_manager: Version display and build information handling

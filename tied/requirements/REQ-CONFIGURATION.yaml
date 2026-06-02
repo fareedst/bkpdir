@@ -1,43 +1,43 @@
 REQ-CONFIGURATION:
-  name: Configuration Management Requirements
+  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
   category: Functional
+  description: Configuration stored in files with configurable discovery. Environment variable support. Default search path with precedence rules. Configuration merging with source tracking.
+  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Configuration Management Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Flexible configuration system with multiple sources and precedence
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Configuration loaded from multiple sources
-    - criterion: Environment variable support for search paths
-    - criterion: 'Precedence: command line > environment > files > defaults'
-    - criterion: Source tracking shows value origins
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-CONFIG_SYSTEM
-    implementation:
-      - IMPL-CONFIG_STRUCT
-    tests: []
-    code_annotations:
-      - REQ-CONFIGURATION
+    problems_solved: []
+    why: Flexible configuration system with multiple sources and precedence
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
-  description: Configuration stored in files with configurable discovery. Environment variable support. Default search path with precedence rules. Configuration merging with source tracking.
-  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml
+  satisfaction_criteria:
+    - criterion: 'Precedence: command line > environment > files > defaults'
+    - criterion: Configuration loaded from multiple sources
+    - criterion: Environment variable support for search paths
+    - criterion: Source tracking shows value origins
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    code_annotations:
+      - REQ-CONFIGURATION
+    implementation:
+      - IMPL-CONFIG_STRUCT
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

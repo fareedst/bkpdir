@@ -1,45 +1,45 @@
 REQ-IMMUTABLE_FILE_EXCLUSION:
-  name: File Exclusion Requirements (Immutable)
+  architecture: tied/architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
   category: Functional
+  description: 'File exclusion requirements are mandatory and must be preserved:'
+  implementation: tied/implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: File Exclusion Requirements (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: These exclusion requirements are mandatory behaviors that users depend on. Changing them would break existing configurations.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Doublestar glob patterns are supported
-    - criterion: Exclusion patterns are configurable
-    - criterion: Default system file exclusions are applied
-    - criterion: Pattern matching is case-sensitive
-    - criterion: Directories can be excluded
-    - criterion: Pattern precedence rules are followed
-  validation_criteria:
-    - method: File exclusion tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-EXCLUSION_PATTERNS
-    implementation:
-      - IMPL-EXCLUSION_PATTERNS
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_FILE_EXCLUSION
+    problems_solved: []
+    why: These exclusion requirements are mandatory behaviors that users depend on. Changing them would break existing configurations.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
-  description: 'File exclusion requirements are mandatory and must be preserved:'
-  implementation: tied/implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+  satisfaction_criteria:
+    - criterion: Default system file exclusions are applied
+    - criterion: Directories can be excluded
+    - criterion: Doublestar glob patterns are supported
+    - criterion: Exclusion patterns are configurable
+    - criterion: Pattern matching is case-sensitive
+    - criterion: Pattern precedence rules are followed
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-EXCLUSION_PATTERNS
+    code_annotations:
+      - REQ-IMMUTABLE_FILE_EXCLUSION
+    implementation:
+      - IMPL-EXCLUSION_PATTERNS
+    tests: []
+  validation_criteria:
+    - method: File exclusion tests verify all requirements. Breaking changes require major version bump.

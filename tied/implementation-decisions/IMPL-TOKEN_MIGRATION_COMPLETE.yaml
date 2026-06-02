@@ -1,58 +1,16 @@
 IMPL-TOKEN_MIGRATION_COMPLETE:
-  name: Token Migration Complete
-  status: Active
+  code_locations:
+    files:
+      - docs/validation-reports/token-coverage-analysis.md
+      - scripts/render_token_tables.py
+      - scripts/token-coverage-analysis.sh
+      - scripts/token_inventory.py
+      - scripts/validate-token-traceability.sh
+      - tied/semantic-tokens.md
+    functions: []
   cross_references:
     - ARCH-TOKEN_SYSTEM
     - REQ-CODE_QUALITY
-  rationale:
-    why: Marks the completion of legacy token migration to STDD canonical registry, ensuring all tokens are validated and audited
-    problems_solved:
-      - Legacy tokens scattered across project-tokens.yaml
-      - Lack of centralized token validation
-      - Need for canonical token registry
-    benefits:
-      - All legacy tokens migrated to tied/semantic-tokens.md
-      - 100% source/test/overall coverage validated
-      - project-tokens.yaml replaced with pointer stub to canonical registry
-  implementation_approach:
-    summary: Migration of all legacy tokens to canonical STDD registry with validation via coverage analysis and traceability scripts
-    details:
-      - Extracted and archived migration artifacts in docs/governance
-      - Ran token_inventory.py to generate token JSON
-      - Ran render_token_tables.py to generate semantic-tokens.md tables
-      - Validated via validate-token-traceability.sh
-      - Validated via token-coverage-analysis.sh (100% coverage)
-      - Replaced project-tokens.yaml with pointer stub
-  code_locations:
-    files:
-      - tied/semantic-tokens.md
-      - docs/validation-reports/token-coverage-analysis.md
-      - scripts/token_inventory.py
-      - scripts/render_token_tables.py
-      - scripts/validate-token-traceability.sh
-      - scripts/token-coverage-analysis.sh
-    functions: []
-  traceability:
-    architecture:
-      - ARCH-TOKEN_SYSTEM
-    requirements:
-      - REQ-CODE_QUALITY
-      - REQ-DOC_016
-    tests: []
-    code_annotations:
-      - project-tokens.yaml migration scripts
-      - tied/semantic-tokens.md tables annotated with [REQ:DOC_016]
-  related_decisions:
-    depends_on:
-      - IMPL-TOKEN_SYSTEM
-      - IMPL-TOKEN_COVERAGE_AUDIT
-    supersedes: []
-    see_also:
-      - IMPL-SEMANTIC_CROSS_REF
-  metadata:
-    created: "2026-03-12"
-    author: AI Agent
-    last_updated: "2026-03-12"
   essence_pseudocode: |-
     # [IMPL-TOKEN_MIGRATION_COMPLETE] [ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] — Migration of all legacy tokens to canonical STDD registry with validation via coverage analysis and traceability scripts
 
@@ -70,3 +28,45 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
       # [IMPL-TOKEN_MIGRATION_COMPLETE] [ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] Replaced project-tokens.yaml with pointer stub
       replaced_project_tokens_yaml_with_pointer()
       end
+  implementation_approach:
+    details:
+      - Extracted and archived migration artifacts in docs/governance
+      - Ran render_token_tables.py to generate semantic-tokens.md tables
+      - Ran token_inventory.py to generate token JSON
+      - Replaced project-tokens.yaml with pointer stub
+      - Validated via token-coverage-analysis.sh (100% coverage)
+      - Validated via validate-token-traceability.sh
+    summary: Migration of all legacy tokens to canonical STDD registry with validation via coverage analysis and traceability scripts
+  metadata:
+    author: AI Agent
+    created: "2026-03-12"
+    last_updated: "2026-03-12"
+  name: Token Migration Complete
+  rationale:
+    benefits:
+      - 100% source/test/overall coverage validated
+      - All legacy tokens migrated to tied/semantic-tokens.md
+      - project-tokens.yaml replaced with pointer stub to canonical registry
+    problems_solved:
+      - Lack of centralized token validation
+      - Legacy tokens scattered across project-tokens.yaml
+      - Need for canonical token registry
+    why: Marks the completion of legacy token migration to STDD canonical registry, ensuring all tokens are validated and audited
+  related_decisions:
+    depends_on:
+      - IMPL-TOKEN_COVERAGE_AUDIT
+      - IMPL-TOKEN_SYSTEM
+    see_also:
+      - IMPL-SEMANTIC_CROSS_REF
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-TOKEN_SYSTEM
+    code_annotations:
+      - project-tokens.yaml migration scripts
+      - tied/semantic-tokens.md tables annotated with [REQ:DOC_016]
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-DOC_016
+    tests: []

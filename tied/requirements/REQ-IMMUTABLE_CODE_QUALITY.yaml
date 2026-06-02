@@ -1,46 +1,46 @@
 REQ-IMMUTABLE_CODE_QUALITY:
-  name: Code Quality Standards (Immutable)
+  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
   category: Functional
+  description: 'Code quality standards are immutable and must be maintained:'
+  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Code Quality Standards (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: These quality standards are immutable behaviors that ensure code quality. Changing them would reduce code quality.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: All code passes `revive` linter checks
-    - criterion: All errors are properly handled
-    - criterion: All code has comprehensive test coverage
-    - criterion: All public functions are documented
-    - criterion: New features maintain backward compatibility
-    - criterion: Code organization is consistent
-    - criterion: Naming conventions are standard
-  validation_criteria:
-    - method: Code quality tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-CODE_ORGANIZATION
-    implementation:
-      - IMPL-CODE_STYLE
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_CODE_QUALITY
+    problems_solved: []
+    why: These quality standards are immutable behaviors that ensure code quality. Changing them would reduce code quality.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
-  description: 'Code quality standards are immutable and must be maintained:'
-  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml
+  satisfaction_criteria:
+    - criterion: All code has comprehensive test coverage
+    - criterion: All code passes `revive` linter checks
+    - criterion: All errors are properly handled
+    - criterion: All public functions are documented
+    - criterion: Code organization is consistent
+    - criterion: Naming conventions are standard
+    - criterion: New features maintain backward compatibility
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations:
+      - REQ-IMMUTABLE_CODE_QUALITY
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+  validation_criteria:
+    - method: Code quality tests verify all requirements. Breaking changes require major version bump.

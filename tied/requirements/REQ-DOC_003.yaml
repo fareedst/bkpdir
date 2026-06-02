@@ -1,48 +1,48 @@
 REQ-DOC_003:
   REQ-DOC_003:
-    name: Documentation Traceability
     category: Functional
+    description: Documentation traceability requirement ensuring all documentation is traceable to requirements
+    metadata:
+      created:
+        author: AI Agent
+        date: "2026-03-12"
+      last_updated:
+        author: AI Agent
+        date: "2026-03-12"
+        reason: Initial creation of missing token
+      last_validated:
+        date: "2026-03-12"
+        result: pass
+        validator: AI Agent
+    name: Documentation Traceability
     priority: P1
-    status: Implemented
     rationale:
-      why: Ensures all documentation artifacts are traceable back to requirements, enabling impact analysis and completeness verification.
-      problems_solved:
-        - Documentation disconnected from requirements
-        - Inability to verify documentation completeness against requirements
-        - Difficulty tracking documentation impact when requirements change
       benefits:
-        - Full traceability from documentation to requirements
         - Automated completeness verification
         - Clear impact analysis when requirements change
-    satisfaction_criteria:
-      - criterion: All documentation sections reference their source requirements
-      - criterion: Traceability links are bidirectional between docs and requirements
-      - criterion: Missing traceability links are detectable through validation
-    validation_criteria:
-      - method: Traceability validation confirms all documentation links to requirements
-    traceability:
-      architecture:
-        - ARCH-DOCUMENTATION_ARCHITECTURE
-      implementation:
-        - IMPL-TRACEABILITY
-      tests: []
-      code_annotations:
-        - REQ-DOC_003
+        - Full traceability from documentation to requirements
+      problems_solved:
+        - Difficulty tracking documentation impact when requirements change
+        - Documentation disconnected from requirements
+        - Inability to verify documentation completeness against requirements
+      why: Ensures all documentation artifacts are traceable back to requirements, enabling impact analysis and completeness verification.
     related_requirements:
       depends_on: []
       related_to:
         - REQ-DOC_001
       supersedes: []
-    description: Documentation traceability requirement ensuring all documentation is traceable to requirements
-    metadata:
-      created:
-        date: "2026-03-12"
-        author: AI Agent
-      last_updated:
-        date: "2026-03-12"
-        author: AI Agent
-        reason: Initial creation of missing token
-      last_validated:
-        date: "2026-03-12"
-        validator: AI Agent
-        result: pass
+    satisfaction_criteria:
+      - criterion: All documentation sections reference their source requirements
+      - criterion: Missing traceability links are detectable through validation
+      - criterion: Traceability links are bidirectional between docs and requirements
+    status: Implemented
+    traceability:
+      architecture:
+        - ARCH-DOCUMENTATION_ARCHITECTURE
+      code_annotations:
+        - REQ-DOC_003
+      implementation:
+        - IMPL-TRACEABILITY
+      tests: []
+    validation_criteria:
+      - method: Traceability validation confirms all documentation links to requirements

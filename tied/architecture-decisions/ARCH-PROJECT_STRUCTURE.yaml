@@ -1,45 +1,9 @@
 ARCH-PROJECT_STRUCTURE:
-  name: Project Structure
-  status: Active
+  alternatives_considered: []
+  cross-references: '[REQ-MAINTAINABILITY]'
   cross_references: &ref_0
     - REQ-MAINTAINABILITY
-  rationale:
-    why: |-
-      Clear separation of concerns
-      Standard Go project layout
-      Testable components
-      Supports future package extraction
-    problems_solved: []
-    benefits: []
-  alternatives_considered: []
-  implementation_approach:
-    summary: Flat structure with internal packages
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-PROJECT_STRUCTURE
-      - REQ-MAINTAINABILITY
-  related_decisions:
-    depends_on: *ref_0
-    informs: []
-    see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
   decision: Flat structure with internal packages
-  cross-references: '[REQ-MAINTAINABILITY]'
   decision_flat_structure_with_internal_packages: |-
     ```
     bkpdir/
@@ -58,3 +22,39 @@ ARCH-PROJECT_STRUCTURE:
     ├── pkg/                # Extracted packages (future)
     └── docs/               # Documentation
     ```
+  implementation_approach:
+    details: []
+    summary: Flat structure with internal packages
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Project Structure
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Clear separation of concerns
+      Standard Go project layout
+      Testable components
+      Supports future package extraction
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-PROJECT_STRUCTURE
+      - REQ-MAINTAINABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []

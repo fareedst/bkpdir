@@ -1,76 +1,127 @@
 IMPL-FILE_STATISTICS:
-  name: File Statistics Implementation
-  status: Active
-  cross_references:
-  - ARCH-FILE_STATISTICS
-  - REQ-OUTPUT_FORMATTING
-  - REQ-OUT_002
-  rationale:
-    why: 'Provides rich file information
-
-      Enhances output display
-
-      Supports template formatting
-
-      Improves user experience'
-    problems_solved: []
-    benefits: []
-  implementation_approach:
-    summary: FileStatInfo structure with human-readable formatting
-    details: []
   code_locations:
     files:
-    - file_stats.go
-    - pkg/formatter/filestats.go
+      - file_stats.go
+      - pkg/formatter/filestats.go
     functions:
-    - GatherFileStatInfo (file_stats.go)
-    - formatHumanSize (file_stats.go)
-    - getFileType (file_stats.go)
-    - FileStatInfo struct (file_stats.go)
-    - GatherFileStatInfo (pkg/formatter/filestats.go)
-    - formatHumanSize (pkg/formatter/filestats.go)
-    - getFileType (pkg/formatter/filestats.go)
-    - FileStatInfo struct (pkg/formatter/filestats.go)
-  traceability:
-    architecture:
-    - ARCH-FILE_STATISTICS
-    requirements:
-    - REQ-OUTPUT_FORMATTING
-    - REQ-OUT_002
-    tests:
-    - file_stats_test.go::TestGatherFileStatInfo_REQ_OUTPUT_FORMATTING
-    - file_stats_test.go::TestGatherFileStatInfoDirectory_REQ_OUTPUT_FORMATTING
-    - file_stats_test.go::TestGatherFileStatInfoNonexistent_REQ_OUTPUT_FORMATTING
-    - file_stats_test.go::TestFormatHumanSize_REQ_OUTPUT_FORMATTING
-    - file_stats_test.go::TestGetFileType_REQ_OUTPUT_FORMATTING
-    code_annotations:
-    - IMPL-FILE_STATISTICS
-    - ARCH-FILE_STATISTICS
-    - REQ-OUTPUT_FORMATTING
-    - REQ-OUT_002
-  related_decisions:
-    depends_on: []
-    supersedes: []
-    see_also:
-    - ARCH-FILE_STATISTICS
-    - REQ-OUTPUT_FORMATTING
-    - REQ-OUT_002
-    - IMPL-FILE_STATISTICS_TEMPLATE_FIX
-    composed_with: []
-  metadata:
-    created:
-      date: '2026-03-12'
-      author: MCP converter
-    last_updated:
-      date: '2026-03-12'
-      author: AI agent
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
-    last_validated:
-      date: '2026-03-12'
-      validator: MCP converter
-      result: pass
+      - FileStatInfo struct (file_stats.go)
+      - FileStatInfo struct (pkg/formatter/filestats.go)
+      - formatHumanSize (file_stats.go)
+      - formatHumanSize (pkg/formatter/filestats.go)
+      - GatherFileStatInfo (file_stats.go)
+      - GatherFileStatInfo (pkg/formatter/filestats.go)
+      - getFileType (file_stats.go)
+      - getFileType (pkg/formatter/filestats.go)
   code_markers: '`file_stats.go`, `FileStatInfo` struct, `GatherFileStatInfo()` function'
   cross-references: '[ARCH-FILE_STATISTICS], [REQ-OUTPUT_FORMATTING], [REQ-OUT_002]'
-  essence_pseudocode: "# [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] [REQ-OUT_002]\n# File statistics gathering and human-readable formatting for enhanced output [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]\n\n# [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: struct FileStatInfo:\nstruct FileStatInfo:\n  # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] Data model for file statistics\n  Path      string      # Full file path\n  Name      string      # File name only (base name)\n  Size      int64       # File size in bytes\n  SizeHuman string      # Human-readable size (e.g., \"1.2MB\", \"455KB\")\n  MTime     time.Time   # Modification time\n  MTimeUnix int64       # Modification time as unix timestamp\n  Mode      os.FileMode # File permissions/mode\n  Type      string      # File type (\"regular\", \"directory\", \"symlink\", etc.)\n\n# [IMPL-FILE_STATISTICS]\
-    \ [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure GatherFileStatInfo(path):\nprocedure GatherFileStatInfo(path):\n  # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Gather file statistics via os.Stat\n  info, err = os.Stat(path)\n  if err != nil:\n    return nil, error(\"failed to stat file: \" + path)\n\n  # [IMPL-FILE_STATISTICS] [REQ-OUT_002] Build FileStatInfo with all fields populated [ARCH-FILE_STATISTICS]\n  return FileStatInfo{\n    Path:      path,\n    Name:      filepath.Base(path),\n    Size:      info.Size(),\n    SizeHuman: formatHumanSize(info.Size()),\n    MTime:     info.ModTime(),\n    MTimeUnix: info.ModTime().Unix(),\n    Mode:      info.Mode(),\n    Type:      getFileType(info),\n  }\n\n# [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure formatHumanSize(size):\nprocedure formatHumanSize(size):\n  # [IMPL-FILE_STATISTICS]\
-    \ [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Convert bytes to human-readable string\n  KB = 1024; MB = 1024*KB; GB = 1024*MB; TB = 1024*GB\n  if size >= TB: return sprintf(\"%.1fTB\", size/TB)\n  if size >= GB: return sprintf(\"%.1fGB\", size/GB)\n  if size >= MB: return sprintf(\"%.1fMB\", size/MB)\n  if size >= KB: return sprintf(\"%.1fKB\", size/KB)\n  return sprintf(\"%dB\", size)\n\n# [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure getFileType(info):\nprocedure getFileType(info):\n  # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Classify file by mode bits\n  mode = info.Mode()\n  if mode.IsRegular(): return \"regular\"\n  if mode.IsDir():     return \"directory\"\n  if mode & ModeSymlink:   return \"symlink\"\n  if mode & ModeDevice:    return \"device\"\n  if mode & ModeNamedPipe: return \"pipe\"\n  if mode & ModeSocket:    return \"socket\"\n  return \"other\""
+  cross_references:
+    - ARCH-FILE_STATISTICS
+    - REQ-OUT_002
+    - REQ-OUTPUT_FORMATTING
+  essence_pseudocode: |-
+    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] [REQ-OUT_002]
+    # File statistics gathering and human-readable formatting for enhanced output [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
+
+    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: struct FileStatInfo:
+    struct FileStatInfo:
+      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] Data model for file statistics
+      Path      string      # Full file path
+      Name      string      # File name only (base name)
+      Size      int64       # File size in bytes
+      SizeHuman string      # Human-readable size (e.g., "1.2MB", "455KB")
+      MTime     time.Time   # Modification time
+      MTimeUnix int64       # Modification time as unix timestamp
+      Mode      os.FileMode # File permissions/mode
+      Type      string      # File type ("regular", "directory", "symlink", etc.)
+
+    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure GatherFileStatInfo(path):
+    procedure GatherFileStatInfo(path):
+      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Gather file statistics via os.Stat
+      info, err = os.Stat(path)
+      if err != nil:
+        return nil, error("failed to stat file: " + path)
+
+      # [IMPL-FILE_STATISTICS] [REQ-OUT_002] Build FileStatInfo with all fields populated [ARCH-FILE_STATISTICS]
+      return FileStatInfo{
+        Path:      path,
+        Name:      filepath.Base(path),
+        Size:      info.Size(),
+        SizeHuman: formatHumanSize(info.Size()),
+        MTime:     info.ModTime(),
+        MTimeUnix: info.ModTime().Unix(),
+        Mode:      info.Mode(),
+        Type:      getFileType(info),
+      }
+
+    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure formatHumanSize(size):
+    procedure formatHumanSize(size):
+      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Convert bytes to human-readable string
+      KB = 1024; MB = 1024*KB; GB = 1024*MB; TB = 1024*GB
+      if size >= TB: return sprintf("%.1fTB", size/TB)
+      if size >= GB: return sprintf("%.1fGB", size/GB)
+      if size >= MB: return sprintf("%.1fMB", size/MB)
+      if size >= KB: return sprintf("%.1fKB", size/KB)
+      return sprintf("%dB", size)
+
+    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure getFileType(info):
+    procedure getFileType(info):
+      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Classify file by mode bits
+      mode = info.Mode()
+      if mode.IsRegular(): return "regular"
+      if mode.IsDir():     return "directory"
+      if mode & ModeSymlink:   return "symlink"
+      if mode & ModeDevice:    return "device"
+      if mode & ModeNamedPipe: return "pipe"
+      if mode & ModeSocket:    return "socket"
+      return "other"
+  implementation_approach:
+    details: []
+    summary: FileStatInfo structure with human-readable formatting
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: AI agent
+      date: "2026-03-12"
+      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: File Statistics Implementation
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Provides rich file information
+      Enhances output display
+      Supports template formatting
+      Improves user experience
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-FILE_STATISTICS
+      - IMPL-FILE_STATISTICS_TEMPLATE_FIX
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    code_annotations:
+      - ARCH-FILE_STATISTICS
+      - IMPL-FILE_STATISTICS
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    tests:
+      - file_stats_test.go::TestFormatHumanSize_REQ_OUTPUT_FORMATTING
+      - file_stats_test.go::TestGatherFileStatInfo_REQ_OUTPUT_FORMATTING
+      - file_stats_test.go::TestGatherFileStatInfoDirectory_REQ_OUTPUT_FORMATTING
+      - file_stats_test.go::TestGatherFileStatInfoNonexistent_REQ_OUTPUT_FORMATTING
+      - file_stats_test.go::TestGetFileType_REQ_OUTPUT_FORMATTING

@@ -1,46 +1,10 @@
 IMPL-ZERO_BREAKING:
-  name: Zero-Breaking-Change Extraction
-  status: Active
-  cross_references:
-    - ARCH-CODE_ORGANIZATION
-    - REQ-MAINTAINABILITY
-  rationale:
-    why: Maintains confidence in extraction process and preserves existing functionality
-    problems_solved:
-      - Risk of breaking existing application during extraction
-      - Loss of confidence in extraction process
-      - Regression in existing functionality
-    benefits:
-      - Existing tests continue to pass without modification
-      - User-facing behavior unchanged
-      - Confidence in extraction correctness
-  implementation_approach:
-    summary: Comprehensive test coverage and behavioral verification ensure extraction does not change existing application behavior
-    details:
-      - Existing tests must continue to pass without modification
-      - Comprehensive test coverage before and after extraction
-      - Behavioral verification at each extraction step
   code_locations:
     files: []
     functions: []
-  traceability:
-    architecture:
-      - ARCH-CODE_ORGANIZATION
-    requirements:
-      - REQ-MAINTAINABILITY
-    tests: []
-    code_annotations: []
-  related_decisions:
-    depends_on:
-      - IMPL-EXTRACTION_PRINCIPLES
-    supersedes: []
-    see_also:
-      - IMPL-INTERFACE_DRIVEN
-      - IMPL-LAYERED_EXTRACTION
-  metadata:
-    created: "2026-03-12"
-    author: AI Agent
-    last_updated: "2026-03-12"
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
   essence_pseudocode: |-
     # [IMPL-ZERO_BREAKING] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Comprehensive test coverage and behavioral verification ensure extraction does not change existing application behavior
 
@@ -52,3 +16,39 @@ IMPL-ZERO_BREAKING:
       # [IMPL-ZERO_BREAKING] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Behavioral verification at each extraction step
       behavioral_verification_at_each()
       end
+  implementation_approach:
+    details:
+      - Behavioral verification at each extraction step
+      - Comprehensive test coverage before and after extraction
+      - Existing tests must continue to pass without modification
+    summary: Comprehensive test coverage and behavioral verification ensure extraction does not change existing application behavior
+  metadata:
+    author: AI Agent
+    created: "2026-03-12"
+    last_updated: "2026-03-12"
+  name: Zero-Breaking-Change Extraction
+  rationale:
+    benefits:
+      - Confidence in extraction correctness
+      - Existing tests continue to pass without modification
+      - User-facing behavior unchanged
+    problems_solved:
+      - Loss of confidence in extraction process
+      - Regression in existing functionality
+      - Risk of breaking existing application during extraction
+    why: Maintains confidence in extraction process and preserves existing functionality
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_PRINCIPLES
+    see_also:
+      - IMPL-INTERFACE_DRIVEN
+      - IMPL-LAYERED_EXTRACTION
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations: []
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []

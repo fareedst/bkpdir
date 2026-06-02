@@ -1,43 +1,43 @@
 REQ-CONTEXT_SUPPORT:
-  name: Context Support Requirements
+  architecture: tied/architecture-decisions/ARCH-CONTEXT_SUPPORT.yaml
   category: Functional
+  description: All long-running operations must support cancellation and timeouts. Operations must check for cancellation at multiple points. File operations support context cancellation.
+  implementation: tied/implementation-decisions/IMPL-CONTEXT_OPS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Context Support Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Enables operation timeouts and graceful cancellation for better user experience
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: All operations accept context parameter
-    - criterion: Operations check for cancellation periodically
-    - criterion: Timeout support available
-    - criterion: File operations support context cancellation
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-CONTEXT_SUPPORT
-    implementation:
-      - IMPL-CONTEXT_OPS
-    tests: []
-    code_annotations:
-      - REQ-CONTEXT_SUPPORT
+    problems_solved: []
+    why: Enables operation timeouts and graceful cancellation for better user experience
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-CONTEXT_SUPPORT.yaml
-  description: All long-running operations must support cancellation and timeouts. Operations must check for cancellation at multiple points. File operations support context cancellation.
-  implementation: tied/implementation-decisions/IMPL-CONTEXT_OPS.yaml
+  satisfaction_criteria:
+    - criterion: All operations accept context parameter
+    - criterion: File operations support context cancellation
+    - criterion: Operations check for cancellation periodically
+    - criterion: Timeout support available
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CONTEXT_SUPPORT
+    code_annotations:
+      - REQ-CONTEXT_SUPPORT
+    implementation:
+      - IMPL-CONTEXT_OPS
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

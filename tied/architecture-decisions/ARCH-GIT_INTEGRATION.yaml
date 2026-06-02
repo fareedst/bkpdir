@@ -1,51 +1,51 @@
 ARCH-GIT_INTEGRATION:
-  name: Git Integration
-  status: Active
+  alternatives_considered: []
+  cross-references: '[REQ-GIT_INTEGRATION]'
   cross_references: &ref_0
     - REQ-GIT_INTEGRATION
-  rationale:
-    why: |-
-      Simplicity over Git library dependencies
-      Relies on user's Git installation
-      Consistent with user's Git configuration
-      Lightweight implementation
-    problems_solved: []
-    benefits: []
-  alternatives_considered: []
+  decision: Git command-line interface for repository information
+  implementation:
+    - Branch and hash extraction via `git rev-parse`
+    - Repository detection via `git rev-parse --is-inside-work-tree`
+    - Status detection via `git status --porcelain`
+    - Uses `exec.Command("git", ...)` for Git operations
   implementation_approach:
+    details: []
     summary: |-
       - Uses `exec.Command("git", ...)` for Git operations
       - Repository detection via `git rev-parse --is-inside-work-tree`
       - Branch and hash extraction via `git rev-parse`
       - Status detection via `git status --porcelain`
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-GIT_INTEGRATION
-      - REQ-GIT_INTEGRATION
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Git Integration
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Simplicity over Git library dependencies
+      Relies on user's Git installation
+      Consistent with user's Git configuration
+      Lightweight implementation
   related_decisions:
     depends_on: *ref_0
     informs: []
     see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Git command-line interface for repository information
-  cross-references: '[REQ-GIT_INTEGRATION]'
-  implementation:
-    - Uses `exec.Command("git", ...)` for Git operations
-    - Repository detection via `git rev-parse --is-inside-work-tree`
-    - Branch and hash extraction via `git rev-parse`
-    - Status detection via `git status --porcelain`
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+    implementation: []
+    requirements: *ref_0
+    tests: []

@@ -1,46 +1,47 @@
 ARCH-DOCUMENTATION_ARCHITECTURE:
   ARCH-DOCUMENTATION_ARCHITECTURE:
-    name: Documentation System Architecture
-    status: Active
+    alternatives_considered:
+      - name: Ad-hoc documentation
+        cons:
+          - Documentation drift
+          - No traceability
+        pros:
+          - Low initial effort
+        rejected_reason: Does not meet traceability and consistency requirements
     cross_references:
-      - REQ-DOC_001
-      - REQ-DOC_003
       - IMPL-DOC_ENHANCEMENT
       - IMPL-SEMANTIC_CROSS_REF
       - IMPL-TRACEABILITY
+      - REQ-DOC_001
+      - REQ-DOC_003
+    decision: Implement a documentation system with semantic token cross-referencing and bidirectional traceability between requirements, architecture, and implementation documentation
+    description: Architecture decision for documentation system including semantic cross-referencing and traceability
+    implementation_approach:
+      details: []
+      summary: Documentation system using semantic tokens for cross-referencing with automated traceability validation
+    metadata:
+      created:
+        author: AI Agent
+        date: "2026-03-12"
+      last_updated:
+        author: AI Agent
+        date: "2026-03-12"
+        reason: Initial creation of missing token
+      last_validated:
+        date: "2026-03-12"
+        result: pass
+        validator: AI Agent
+    name: Documentation System Architecture
     rationale:
-      why: A structured documentation architecture with semantic cross-referencing ensures documentation remains traceable, discoverable, and consistent with implementation.
-      problems_solved:
-        - Fragmented documentation without consistent structure
-        - Lack of semantic linking between documentation artifacts
-        - Documentation traceability gaps
       benefits:
         - Consistent documentation structure across the project
-        - Semantic cross-references enable automated traceability
         - Documentation stays aligned with implementation through token linking
-    decision: Implement a documentation system with semantic token cross-referencing and bidirectional traceability between requirements, architecture, and implementation documentation
-    implementation_approach:
-      summary: Documentation system using semantic tokens for cross-referencing with automated traceability validation
-      details: []
-    alternatives_considered:
-      - name: Ad-hoc documentation
-        pros:
-          - Low initial effort
-        cons:
-          - No traceability
-          - Documentation drift
-        rejected_reason: Does not meet traceability and consistency requirements
-    traceability:
-      requirements:
-        - REQ-DOC_001
-        - REQ-DOC_003
-      implementation:
-        - IMPL-DOC_ENHANCEMENT
-        - IMPL-SEMANTIC_CROSS_REF
-        - IMPL-TRACEABILITY
-      tests: []
-      code_annotations:
-        - ARCH-DOCUMENTATION_ARCHITECTURE
+        - Semantic cross-references enable automated traceability
+      problems_solved:
+        - Documentation traceability gaps
+        - Fragmented documentation without consistent structure
+        - Lack of semantic linking between documentation artifacts
+      why: A structured documentation architecture with semantic cross-referencing ensures documentation remains traceable, discoverable, and consistent with implementation.
     related_decisions:
       depends_on:
         - REQ-DOC_001
@@ -48,16 +49,15 @@ ARCH-DOCUMENTATION_ARCHITECTURE:
       informs: []
       see_also:
         - ARCH-AI_DOCUMENTATION
-    description: Architecture decision for documentation system including semantic cross-referencing and traceability
-    metadata:
-      created:
-        date: "2026-03-12"
-        author: AI Agent
-      last_updated:
-        date: "2026-03-12"
-        author: AI Agent
-        reason: Initial creation of missing token
-      last_validated:
-        date: "2026-03-12"
-        validator: AI Agent
-        result: pass
+    status: Active
+    traceability:
+      code_annotations:
+        - ARCH-DOCUMENTATION_ARCHITECTURE
+      implementation:
+        - IMPL-DOC_ENHANCEMENT
+        - IMPL-SEMANTIC_CROSS_REF
+        - IMPL-TRACEABILITY
+      requirements:
+        - REQ-DOC_001
+        - REQ-DOC_003
+      tests: []

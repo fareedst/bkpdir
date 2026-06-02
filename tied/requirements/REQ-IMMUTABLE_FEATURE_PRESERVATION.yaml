@@ -1,43 +1,43 @@
 REQ-IMMUTABLE_FEATURE_PRESERVATION:
-  name: Feature Preservation Rules (Immutable)
+  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
   category: Functional
+  description: 'Feature preservation rules must be followed:'
+  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Feature Preservation Rules (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: Feature preservation rules ensure backward compatibility and system reliability. Violating them would break existing functionality.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: New features don't interfere with existing functionality
-    - criterion: Modifications preserve existing interfaces and behaviors
-    - criterion: Testing requirements are met
-    - criterion: Quality assurance standards are maintained
-  validation_criteria:
-    - method: Feature preservation tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-CODE_ORGANIZATION
-    implementation:
-      - IMPL-CODE_STYLE
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_FEATURE_PRESERVATION
+    problems_solved: []
+    why: Feature preservation rules ensure backward compatibility and system reliability. Violating them would break existing functionality.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
-  description: 'Feature preservation rules must be followed:'
-  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml
+  satisfaction_criteria:
+    - criterion: Modifications preserve existing interfaces and behaviors
+    - criterion: New features don't interfere with existing functionality
+    - criterion: Quality assurance standards are maintained
+    - criterion: Testing requirements are met
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations:
+      - REQ-IMMUTABLE_FEATURE_PRESERVATION
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+  validation_criteria:
+    - method: Feature preservation tests verify all requirements. Breaking changes require major version bump.

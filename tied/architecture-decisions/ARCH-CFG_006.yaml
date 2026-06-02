@@ -1,47 +1,5 @@
 ARCH-CFG_006:
-  name: Configuration Reflection Architecture
-  status: Active
-  cross_references: &ref_0
-    - REQ-CFG_006
-    - REQ-PERFORMANCE
-  rationale:
-    why: |-
-      Zero maintenance: New configuration fields automatically appear without manual updates
-      Complete visibility: Shows inheritance chains, merge strategies, and source attribution
-      Debugging support: Clear source attribution enables troubleshooting configuration issues
-      Performance optimized: Fast inspection suitable for development workflow
-      Backward compatible: Existing configuration command functionality preserved and enhanced
-    problems_solved: []
-    benefits: []
   alternatives_considered: []
-  implementation_approach:
-    summary: Reflection-based automatic field discovery with hierarchical source attribution
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-CFG_006
-      - REQ-CFG_006
-      - REQ-PERFORMANCE
-  related_decisions:
-    depends_on: *ref_0
-    informs: []
-    see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Reflection-based automatic field discovery with hierarchical source attribution
   architecture_components: |-
     1. **Automatic Field Discovery System**
        - Go reflection-based enumeration of all Config struct fields
@@ -83,12 +41,54 @@ ARCH-CFG_006:
   code_generation: Rejected due to complexity, build-time dependencies, and reduced flexibility
   configuration_system: Builds on existing Config struct and loading mechanisms
   cross-references: '[REQ-CFG_006], [ARCH-CONFIG_SYSTEM], [ARCH-CFG_005], [REQ-PERFORMANCE]'
+  cross_references: &ref_0
+    - REQ-CFG_006
+    - REQ-PERFORMANCE
+  decision: Reflection-based automatic field discovery with hierarchical source attribution
   external_configuration_registry: Rejected due to dependency concerns and synchronization issues
+  implementation_approach:
+    details: []
+    summary: Reflection-based automatic field discovery with hierarchical source attribution
   manual_maintenance: Rejected due to maintenance overhead and risk of missing new fields
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Configuration Reflection Architecture
   performance_characteristics:
-    - 'Field discovery: <50ms for cache miss, <10ms for cache hit'
     - 'Config command: <100ms end-to-end response time'
-    - 'Single field access: <10ms with incremental resolution'
+    - 'Field discovery: <50ms for cache miss, <10ms for cache hit'
     - 'Memory overhead: <5% increase for caching infrastructure'
     - 'Reflection caching: 60%+ performance improvement over uncached reflection'
+    - 'Single field access: <10ms with incremental resolution'
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Zero maintenance: New configuration fields automatically appear without manual updates
+      Complete visibility: Shows inheritance chains, merge strategies, and source attribution
+      Debugging support: Clear source attribution enables troubleshooting configuration issues
+      Performance optimized: Fast inspection suitable for development workflow
+      Backward compatible: Existing configuration command functionality preserved and enhanced
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  status: Active
   testing_infrastructure: Comprehensive test coverage with performance benchmarks
+  traceability:
+    code_annotations:
+      - ARCH-CFG_006
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
+    implementation: []
+    requirements: *ref_0
+    tests: []

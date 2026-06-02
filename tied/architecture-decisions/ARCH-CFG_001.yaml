@@ -1,42 +1,45 @@
 ARCH-CFG_001:
   ARCH-CFG_001:
-    name: Basic Configuration Architecture
-    status: Active
-    cross_references:
-      - REQ-CFG_001
-      - REQ-CONFIGURATION
-      - IMPL-CONFIG_STRUCT
-    rationale:
-      why: Establishes the foundational architecture for configuration management including YAML loading, parsing, and merge strategy selection.
-      problems_solved:
-        - Need for a consistent configuration loading architecture
-        - Need for extensible merge strategy framework
-        - Need for configuration validation pipeline
-      benefits:
-        - Clean separation of configuration loading and merging concerns
-        - Extensible merge strategy pattern
-        - Consistent configuration access across the application
-    decision: Use YAML-based configuration with a structured merge strategy system that supports override, append, prepend, and replace operations
-    implementation_approach:
-      summary: YAML configuration loading with pluggable merge strategies and validation pipeline
-      details: []
     alternatives_considered:
       - name: JSON configuration
-        pros:
-          - Widely supported
         cons:
           - Less human-readable than YAML
           - No comment support
+        pros:
+          - Widely supported
         rejected_reason: YAML provides better readability and comment support for configuration files
-    traceability:
-      requirements:
-        - REQ-CFG_001
-        - REQ-CONFIGURATION
-      implementation:
-        - IMPL-CONFIG_STRUCT
-      tests: []
-      code_annotations:
-        - ARCH-CFG_001
+    cross_references:
+      - IMPL-CONFIG_STRUCT
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    decision: Use YAML-based configuration with a structured merge strategy system that supports override, append, prepend, and replace operations
+    description: Architecture decision for base configuration system design including YAML loading and merge strategies
+    implementation_approach:
+      details: []
+      summary: YAML configuration loading with pluggable merge strategies and validation pipeline
+    metadata:
+      created:
+        author: AI Agent
+        date: "2026-03-12"
+      last_updated:
+        author: AI Agent
+        date: "2026-03-12"
+        reason: Initial creation of missing token
+      last_validated:
+        date: "2026-03-12"
+        result: pass
+        validator: AI Agent
+    name: Basic Configuration Architecture
+    rationale:
+      benefits:
+        - Clean separation of configuration loading and merging concerns
+        - Consistent configuration access across the application
+        - Extensible merge strategy pattern
+      problems_solved:
+        - Need for a consistent configuration loading architecture
+        - Need for configuration validation pipeline
+        - Need for extensible merge strategy framework
+      why: Establishes the foundational architecture for configuration management including YAML loading, parsing, and merge strategy selection.
     related_decisions:
       depends_on:
         - REQ-CFG_001
@@ -45,16 +48,13 @@ ARCH-CFG_001:
         - ARCH-CFG_006
       see_also:
         - ARCH-CONFIG_SYSTEM
-    description: Architecture decision for base configuration system design including YAML loading and merge strategies
-    metadata:
-      created:
-        date: "2026-03-12"
-        author: AI Agent
-      last_updated:
-        date: "2026-03-12"
-        author: AI Agent
-        reason: Initial creation of missing token
-      last_validated:
-        date: "2026-03-12"
-        validator: AI Agent
-        result: pass
+    status: Active
+    traceability:
+      code_annotations:
+        - ARCH-CFG_001
+      implementation:
+        - IMPL-CONFIG_STRUCT
+      requirements:
+        - REQ-CFG_001
+        - REQ-CONFIGURATION
+      tests: []

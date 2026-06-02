@@ -1,66 +1,66 @@
 ARCH-FILE_OPERATIONS:
-  name: File Operations Architecture
-  status: Active
+  alternatives_considered:
+    - name: See detail file
+      cons: []
+      pros: []
+      rejected_reason: |-
+        Direct standard library usage: Rejected due to lack of atomic operations and security checks
+        Third-party file libraries: Rejected due to dependency concerns
+  atomic_operations: Safe file writing with rollback capabilities
+  cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
   cross_references: &ref_0
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
+  decision: Extracted file operations package with atomic operations and security focus
+  directory_traversal: Configurable walking with exclusion patterns
+  file_comparison: Hash-based content verification and snapshot comparison
+  implementation_approach:
+    details: []
+    summary: Extracted file operations package with atomic operations and security focus
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: File Operations Architecture
+  path_validation: Security and existence checking with comprehensive validation
+  pattern_exclusion: Doublestar glob pattern matching for file filtering
+  performance_characteristics:
+    - 'Atomic operations: ~2x slower than direct writes (acceptable trade-off for safety)'
+    - 'Directory traversal: ~1000 files/ms on modern SSDs'
+    - 'Hash calculation: ~100MB/s for SHA-256'
+    - 'Path validation: ~50μs per path'
   rationale:
+    benefits: []
+    problems_solved: []
     why: |-
       Provides safe, reliable file operations
       Prevents data corruption through atomic operations
       Enhances security with path validation
       Supports complex directory traversal scenarios
       Enables file comparison and snapshot capabilities
-    problems_solved: []
-    benefits: []
-  alternatives_considered:
-    - name: See detail file
-      pros: []
-      cons: []
-      rejected_reason: |-
-        Direct standard library usage: Rejected due to lack of atomic operations and security checks
-        Third-party file libraries: Rejected due to dependency concerns
-  implementation_approach:
-    summary: Extracted file operations package with atomic operations and security focus
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-FILE_OPERATIONS
-      - REQ-RELIABILITY
-      - REQ-RESOURCE_MANAGEMENT
   related_decisions:
     depends_on: *ref_0
     informs: []
     see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Extracted file operations package with atomic operations and security focus
-  atomic_operations: Safe file writing with rollback capabilities
-  cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
-  directory_traversal: Configurable walking with exclusion patterns
-  file_comparison: Hash-based content verification and snapshot comparison
-  path_validation: Security and existence checking with comprehensive validation
-  pattern_exclusion: Doublestar glob pattern matching for file filtering
-  performance_characteristics:
-    - 'Atomic operations: ~2x slower than direct writes (acceptable trade-off for safety)'
-    - 'Path validation: ~50μs per path'
-    - 'Directory traversal: ~1000 files/ms on modern SSDs'
-    - 'Hash calculation: ~100MB/s for SHA-256'
   security_focus:
+    - Input sanitization
     - Path traversal attack prevention
     - Permission validation
     - Secure path checking
-    - Input sanitization
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-FILE_OPERATIONS
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
+    implementation: []
+    requirements: *ref_0
+    tests: []

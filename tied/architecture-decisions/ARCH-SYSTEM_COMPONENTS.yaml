@@ -1,10 +1,29 @@
 ARCH-SYSTEM_COMPONENTS:
-  name: System Components Architecture
-  status: Active
+  alternatives_considered: []
+  cross-references: '[REQ-MAINTAINABILITY], [REQ-USABILITY]'
   cross_references: &ref_0
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
+  decision: Layered architecture with clear component boundaries
+  implementation_approach:
+    details: []
+    summary: Layered architecture with clear component boundaries
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: System Components Architecture
   rationale:
+    benefits: []
+    problems_solved: []
     why: |-
       Clear separation of concerns across layers
       CLI layer handles user interaction and command routing
@@ -12,38 +31,11 @@ ARCH-SYSTEM_COMPONENTS:
       Core services provide business logic and orchestration
       Storage layer handles all file system and archive operations
       Enables testability and maintainability
-    problems_solved: []
-    benefits: []
-  alternatives_considered: []
-  implementation_approach:
-    summary: Layered architecture with clear component boundaries
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-SYSTEM_COMPONENTS
-      - REQ-MAINTAINABILITY
-      - REQ-USABILITY
   related_decisions:
     depends_on: *ref_0
     informs: []
     see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Layered architecture with clear component boundaries
-  cross-references: '[REQ-MAINTAINABILITY], [REQ-USABILITY]'
+  status: Active
   system_components_diagram: |-
     ```
     ┌─────────────────────────────────────────────────────────────┐
@@ -79,3 +71,11 @@ ARCH-SYSTEM_COMPONENTS:
     │  Directory Trees    │  Atomic Ops      │  Resource Cleanup  │
     └─────────────────────────────────────────────────────────────┘
     ```
+  traceability:
+    code_annotations:
+      - ARCH-SYSTEM_COMPONENTS
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []

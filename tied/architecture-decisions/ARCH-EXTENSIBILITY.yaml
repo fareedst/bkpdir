@@ -1,51 +1,14 @@
 ARCH-EXTENSIBILITY:
-  name: Extensibility Architecture
-  status: Active
-  cross_references: &ref_0
-    - REQ-MAINTAINABILITY
-  rationale:
-    why: |-
-      Enables future feature extensions
-      Supports custom formatters and processors
-      Maintains backward compatibility
-      Provides flexible integration points
-    problems_solved: []
-    benefits: []
   alternatives_considered:
     - name: See detail file
-      pros: []
       cons: []
+      pros: []
       rejected_reason: |-
         No extensibility: Rejected due to limited flexibility
         Full plugin system: Deferred due to complexity
-  implementation_approach:
-    summary: Plugin-based extensibility with hook system
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-EXTENSIBILITY
-      - REQ-MAINTAINABILITY
-  related_decisions:
-    depends_on: *ref_0
-    informs: []
-    see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Plugin-based extensibility with hook system
   cross-references: '[REQ-MAINTAINABILITY]'
+  cross_references: &ref_0
+    - REQ-MAINTAINABILITY
   custom_formatters: |-
     ```go
     type OutputFormatter interface {
@@ -58,6 +21,23 @@ ARCH-EXTENSIBILITY:
         FormatWithPlaceholders(format string, data map[string]string) string
     }
     ```
+  decision: Plugin-based extensibility with hook system
+  implementation_approach:
+    details: []
+    summary: Plugin-based extensibility with hook system
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Extensibility Architecture
   plugin_interface: |-
     ```go
     type ArchivePlugin interface {
@@ -76,3 +56,23 @@ ARCH-EXTENSIBILITY:
   post-backup: After file backup creation
   pre-archive: Before archive creation with context
   pre-backup: Before file backup creation
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Enables future feature extensions
+      Supports custom formatters and processors
+      Maintains backward compatibility
+      Provides flexible integration points
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-EXTENSIBILITY
+      - REQ-MAINTAINABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []

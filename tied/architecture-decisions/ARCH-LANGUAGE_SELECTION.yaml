@@ -1,52 +1,52 @@
 ARCH-LANGUAGE_SELECTION:
-  name: Language and Runtime
-  status: Active
+  alternatives_considered:
+    - name: See detail file
+      cons: []
+      pros: []
+      rejected_reason: |-
+        Python: Rejected due to runtime dependencies and slower performance
+        Rust: Rejected due to complexity and longer development time
+        C/C++: Rejected due to manual memory management complexity
+  cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
   cross_references: &ref_0
-    - REQ-PERFORMANCE
     - REQ-MAINTAINABILITY
+    - REQ-PERFORMANCE
+  decision: Go (Golang)
+  implementation_approach:
+    details: []
+    summary: Go (Golang)
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Language and Runtime
   rationale:
+    benefits: []
+    problems_solved: []
     why: |-
       Excellent standard library support for file operations, ZIP archives, and CLI tools
       Strong concurrency support with goroutines and channels
       Cross-platform compilation to single binaries
       Excellent tooling (go fmt, go test, go vet)
       Fast compilation and execution
-    problems_solved: []
-    benefits: []
-  alternatives_considered:
-    - name: See detail file
-      pros: []
-      cons: []
-      rejected_reason: |-
-        Python: Rejected due to runtime dependencies and slower performance
-        Rust: Rejected due to complexity and longer development time
-        C/C++: Rejected due to manual memory management complexity
-  implementation_approach:
-    summary: Go (Golang)
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-LANGUAGE_SELECTION
-      - REQ-PERFORMANCE
-      - REQ-MAINTAINABILITY
   related_decisions:
     depends_on: *ref_0
     informs: []
     see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Go (Golang)
-  cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-LANGUAGE_SELECTION
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
+    implementation: []
+    requirements: *ref_0
+    tests: []

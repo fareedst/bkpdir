@@ -1,49 +1,49 @@
 REQ-IMMUTABLE_PERFORMANCE:
-  name: Performance Requirements (Immutable)
+  architecture: tied/architecture-decisions/ARCH-PERFORMANCE.yaml
   category: Functional
+  description: 'Performance characteristics must be preserved:'
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Performance Requirements (Immutable)
   priority: P1
-  status: Implemented
   rationale:
-    why: Performance characteristics are fundamental to user experience. Degrading them would reduce usability.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Resource tracking has minimal performance impact
-    - criterion: File comparison checks length before byte comparison
-    - criterion: Large files and many archives are handled efficiently
-    - criterion: Memory footprint is low
-    - criterion: CPU usage limits are enforced
-    - criterion: Disk I/O limits are enforced
-    - criterion: Response time limits are enforced
-    - criterion: Resource cleanup timing is efficient
-    - criterion: Concurrent operation limits are enforced
-    - criterion: Verification speed is efficient
-  validation_criteria:
-    - method: Performance tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-PERFORMANCE
-    implementation:
-      - IMPL-TESTING
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_PERFORMANCE
+    problems_solved: []
+    why: Performance characteristics are fundamental to user experience. Degrading them would reduce usability.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-PERFORMANCE.yaml
-  description: 'Performance characteristics must be preserved:'
-  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  satisfaction_criteria:
+    - criterion: Concurrent operation limits are enforced
+    - criterion: CPU usage limits are enforced
+    - criterion: Disk I/O limits are enforced
+    - criterion: File comparison checks length before byte comparison
+    - criterion: Large files and many archives are handled efficiently
+    - criterion: Memory footprint is low
+    - criterion: Resource cleanup timing is efficient
+    - criterion: Resource tracking has minimal performance impact
+    - criterion: Response time limits are enforced
+    - criterion: Verification speed is efficient
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-PERFORMANCE
+    code_annotations:
+      - REQ-IMMUTABLE_PERFORMANCE
+    implementation:
+      - IMPL-TESTING
+    tests: []
+  validation_criteria:
+    - method: Performance tests verify all requirements. Breaking changes require major version bump.

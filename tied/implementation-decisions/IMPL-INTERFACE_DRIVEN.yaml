@@ -1,46 +1,80 @@
 IMPL-INTERFACE_DRIVEN:
-  name: Interface-Driven Design
-  status: Active
-  cross_references:
-  - ARCH-CODE_ORGANIZATION
-  - REQ-MAINTAINABILITY
-  rationale:
-    why: Enables flexibility, testing, and future evolution of implementations
-    problems_solved:
-    - Tight coupling between extracted packages
-    - Difficulty testing components in isolation
-    - Lack of flexibility for future implementation changes
-    benefits:
-    - Clean separation of concerns
-    - Easier unit testing with mocks
-    - Future-proof component evolution
-  implementation_approach:
-    summary: Define contracts before extracting concrete implementations
-    details:
-    - Create clear interfaces for all extracted components
-    - Define contracts before extracting concrete implementations
-    - Prevents tight coupling between extracted packages
   code_locations:
     files: []
     functions: []
-  traceability:
-    architecture:
+  cross_references:
     - ARCH-CODE_ORGANIZATION
-    requirements:
     - REQ-MAINTAINABILITY
-    tests: []
-    code_annotations: []
+  essence_pseudocode: |-
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Contracts-first design for extracted packages (pkg/config, pkg/fileops, pkg/git, pkg/formatter).
+
+    INPUT: package boundaries from ARCH-CODE_ORGANIZATION
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: OUTPUT: Go interfaces consumed by main and tests; concrete types stay internal or behind adapters
+    OUTPUT: Go interfaces consumed by main and tests; concrete types stay internal or behind adapters
+
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE discover_consumer_surface(providerPkg, consumerRoots):
+    PROCEDURE discover_consumer_surface(providerPkg, consumerRoots):
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Map call sites in main/pkg/tests to minimal method sets for testability
+      FOR EACH reference FROM consumerRoots TO providerPkg:
+        record method name and argument shapes
+      END FOR
+      RETURN deduplicated method list
+
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE define_interface_in_consumer(name, methods):
+    PROCEDURE define_interface_in_consumer(name, methods):
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Declare Go interface in consumer package per Go idiom
+      emit type name interface { methods... }
+      document each method with godoc linking [REQ-MAINTAINABILITY]
+
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE implement_and_register(rootWire):
+    PROCEDURE implement_and_register(rootWire):
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Concrete structs satisfy interfaces; wiring only at composition root
+      FOR EACH interface I required by rootWire:
+        instantiate concrete type T from provider package
+        assert T satisfies I at compile time
+        inject T into handlers (CLI, tests)
+      END FOR
+
+    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE verify_with_mocks():
+    PROCEDURE verify_with_mocks():
+      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Unit tests use fakes for each interface boundary
+      FOR EACH package under pkg/ with external deps:
+        substitute mock implementations in _test.go
+        run go test without live filesystem/git where possible
+      END FOR
+  implementation_approach:
+    details:
+      - Create clear interfaces for all extracted components
+      - Define contracts before extracting concrete implementations
+      - Prevents tight coupling between extracted packages
+    summary: Define contracts before extracting concrete implementations
+  metadata:
+    author: AI Agent
+    created: "2026-03-12"
+    last_updated: "2026-03-12"
+  name: Interface-Driven Design
+  rationale:
+    benefits:
+      - Clean separation of concerns
+      - Easier unit testing with mocks
+      - Future-proof component evolution
+    problems_solved:
+      - Difficulty testing components in isolation
+      - Lack of flexibility for future implementation changes
+      - Tight coupling between extracted packages
+    why: Enables flexibility, testing, and future evolution of implementations
   related_decisions:
     depends_on:
-    - IMPL-EXTRACTION_PRINCIPLES
-    supersedes: []
+      - IMPL-EXTRACTION_PRINCIPLES
     see_also:
-    - IMPL-ZERO_BREAKING
-    - IMPL-LAYERED_EXTRACTION
-  metadata:
-    created: '2026-03-12'
-    author: AI Agent
-    last_updated: '2026-03-12'
-  essence_pseudocode: "# [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Contracts-first design for extracted packages (pkg/config, pkg/fileops, pkg/git, pkg/formatter).\n\nINPUT: package boundaries from ARCH-CODE_ORGANIZATION\n# [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: OUTPUT: Go interfaces consumed by main and tests; concrete types stay internal or behind adapters\nOUTPUT: Go interfaces consumed by main and tests; concrete types stay internal or behind adapters\n\n# [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE discover_consumer_surface(providerPkg, consumerRoots):\nPROCEDURE discover_consumer_surface(providerPkg, consumerRoots):\n  # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Map call sites in main/pkg/tests to minimal method sets for testability\n  FOR EACH reference FROM consumerRoots\
-    \ TO providerPkg:\n    record method name and argument shapes\n  END FOR\n  RETURN deduplicated method list\n\n# [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE define_interface_in_consumer(name, methods):\nPROCEDURE define_interface_in_consumer(name, methods):\n  # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Declare Go interface in consumer package per Go idiom\n  emit type name interface { methods... }\n  document each method with godoc linking [REQ-MAINTAINABILITY]\n\n# [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE implement_and_register(rootWire):\nPROCEDURE implement_and_register(rootWire):\n  # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Concrete structs satisfy interfaces; wiring only at composition root\n  FOR EACH interface I required by rootWire:\n    instantiate concrete\
-    \ type T from provider package\n    assert T satisfies I at compile time\n    inject T into handlers (CLI, tests)\n  END FOR\n\n# [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE verify_with_mocks():\nPROCEDURE verify_with_mocks():\n  # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Unit tests use fakes for each interface boundary\n  FOR EACH package under pkg/ with external deps:\n    substitute mock implementations in _test.go\n    run go test without live filesystem/git where possible\n  END FOR"
+      - IMPL-LAYERED_EXTRACTION
+      - IMPL-ZERO_BREAKING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations: []
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []

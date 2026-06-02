@@ -1,47 +1,47 @@
 REQ-IMMUTABLE_PLATFORM_COMPATIBILITY:
-  name: Platform Compatibility Requirements (Immutable)
+  architecture: tied/architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
   category: Functional
+  description: 'Platform support must never be reduced or modified:'
+  implementation: tied/implementation-decisions/IMPL-FILE_OPERATIONS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Platform Compatibility Requirements (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: Platform compatibility is fundamental to user experience. Reducing support would break existing users.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: macOS and Linux are supported
-    - criterion: Platform-specific differences are handled
-    - criterion: File permissions are preserved
-    - criterion: Operations are thread-safe
-    - criterion: Resource management is efficient
-    - criterion: Character encodings are handled
-    - criterion: Line endings are handled
-    - criterion: Path separators are handled
-  validation_criteria:
-    - method: Platform compatibility tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-LANGUAGE_SELECTION
-    implementation:
-      - IMPL-FILE_OPERATIONS
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_PLATFORM_COMPATIBILITY
+    problems_solved: []
+    why: Platform compatibility is fundamental to user experience. Reducing support would break existing users.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
-  description: 'Platform support must never be reduced or modified:'
-  implementation: tied/implementation-decisions/IMPL-FILE_OPERATIONS.yaml
+  satisfaction_criteria:
+    - criterion: Character encodings are handled
+    - criterion: File permissions are preserved
+    - criterion: Line endings are handled
+    - criterion: macOS and Linux are supported
+    - criterion: Operations are thread-safe
+    - criterion: Path separators are handled
+    - criterion: Platform-specific differences are handled
+    - criterion: Resource management is efficient
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-LANGUAGE_SELECTION
+    code_annotations:
+      - REQ-IMMUTABLE_PLATFORM_COMPATIBILITY
+    implementation:
+      - IMPL-FILE_OPERATIONS
+    tests: []
+  validation_criteria:
+    - method: Platform compatibility tests verify all requirements. Breaking changes require major version bump.

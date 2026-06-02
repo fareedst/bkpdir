@@ -1,46 +1,46 @@
 REQ-IMMUTABLE_BUILD_SYSTEM:
-  name: Build System Requirements (Immutable)
+  architecture: tied/architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
   category: Functional
+  description: 'Build system requirements are mandatory and must be preserved:'
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Build System Requirements (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: These build system requirements are mandatory behaviors that ensure code quality. Changing them would reduce build quality.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Quality gates are enforced before compilation
-    - criterion: Build steps are ordered correctly (lint → test → build)
-    - criterion: Clean target removes build artifacts
-    - criterion: CI/CD pipeline includes automated quality checks
-    - criterion: '`make build` depends on lint and test passing'
-    - criterion: Non-zero exit codes prevent build
-    - criterion: CI/CD commands are supported
-  validation_criteria:
-    - method: Build system tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-BUILD_DISTRIBUTION
-    implementation:
-      - IMPL-TESTING
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_BUILD_SYSTEM
+    problems_solved: []
+    why: These build system requirements are mandatory behaviors that ensure code quality. Changing them would reduce build quality.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
-  description: 'Build system requirements are mandatory and must be preserved:'
-  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  satisfaction_criteria:
+    - criterion: '`make build` depends on lint and test passing'
+    - criterion: Build steps are ordered correctly (lint → test → build)
+    - criterion: CI/CD commands are supported
+    - criterion: CI/CD pipeline includes automated quality checks
+    - criterion: Clean target removes build artifacts
+    - criterion: Non-zero exit codes prevent build
+    - criterion: Quality gates are enforced before compilation
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-BUILD_DISTRIBUTION
+    code_annotations:
+      - REQ-IMMUTABLE_BUILD_SYSTEM
+    implementation:
+      - IMPL-TESTING
+    tests: []
+  validation_criteria:
+    - method: Build system tests verify all requirements. Breaking changes require major version bump.

@@ -1,50 +1,13 @@
 IMPL-STDD_VIS_ASSETS:
-  name: STDD Visualization Asset Plan
-  status: Active
-  cross_references:
-    - ARCH-STDD_VIS_FLOW
-    - REQ-STDD_VIS
-    - REQ-MODULE_VALIDATION
-  rationale:
-    why: Combines static clarity (layered flow) with process storytelling (timeline/animation) to communicate STDD traceability
-    problems_solved:
-      - Need for visual representation of STDD token traceability
-      - Communicating complex token chains to stakeholders
-      - Anchoring visualization artifacts to real tokens and code/test references
-    benefits:
-      - Static clarity via layered flow diagram
-      - Process storytelling via timeline/animation
-      - Artifacts anchored to real tokens and references
-  implementation_approach:
-    summary: Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
-    details:
-      - 'Layered Flow Diagram: swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST/CODE; tokens visually dominant'
-      - 'Timeline/Animation: stepwise frames showing requirement through architecture, implementation, tests, and code; token badges visible per step'
-      - 'Asset locations: docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-timeline.gif/mp4'
-      - 'Validation: visual review checklist centered on token prominence, color map alignment, edge correctness'
-      - 'Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot'
   code_locations:
     files:
       - docs/images/stdd-trace-flow.svg
       - docs/images/stdd-trace-timeline.gif
     functions: []
-  traceability:
-    architecture:
-      - ARCH-STDD_VIS_FLOW
-    requirements:
-      - REQ-STDD_VIS
-      - REQ-MODULE_VALIDATION
-    tests: []
-    code_annotations: []
-  related_decisions:
-    depends_on:
-      - IMPL-STDD_VIS_DATA_PIPELINE
-    supersedes: []
-    see_also: []
-  metadata:
-    created: "2026-03-12"
-    author: AI Agent
-    last_updated: "2026-03-12"
+  cross_references:
+    - ARCH-STDD_VIS_FLOW
+    - REQ-MODULE_VALIDATION
+    - REQ-STDD_VIS
   essence_pseudocode: |-
     # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
 
@@ -60,3 +23,40 @@ IMPL-STDD_VIS_ASSETS:
       # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot
       module_boundaries("Visualization (static) and AnimationTimeline (dynamic) consu")
       end
+  implementation_approach:
+    details:
+      - 'Asset locations: docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-timeline.gif/mp4'
+      - 'Layered Flow Diagram: swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST/CODE; tokens visually dominant'
+      - 'Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot'
+      - 'Timeline/Animation: stepwise frames showing requirement through architecture, implementation, tests, and code; token badges visible per step'
+      - 'Validation: visual review checklist centered on token prominence, color map alignment, edge correctness'
+    summary: Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
+  metadata:
+    author: AI Agent
+    created: "2026-03-12"
+    last_updated: "2026-03-12"
+  name: STDD Visualization Asset Plan
+  rationale:
+    benefits:
+      - Artifacts anchored to real tokens and references
+      - Process storytelling via timeline/animation
+      - Static clarity via layered flow diagram
+    problems_solved:
+      - Anchoring visualization artifacts to real tokens and code/test references
+      - Communicating complex token chains to stakeholders
+      - Need for visual representation of STDD token traceability
+    why: Combines static clarity (layered flow) with process storytelling (timeline/animation) to communicate STDD traceability
+  related_decisions:
+    depends_on:
+      - IMPL-STDD_VIS_DATA_PIPELINE
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-STDD_VIS_FLOW
+    code_annotations: []
+    requirements:
+      - REQ-MODULE_VALIDATION
+      - REQ-STDD_VIS
+    tests: []

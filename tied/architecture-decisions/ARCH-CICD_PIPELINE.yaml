@@ -1,57 +1,57 @@
 ARCH-CICD_PIPELINE:
-  name: CI/CD Pipeline Architecture
-  status: Active
-  cross_references: &ref_0
-    - REQ-CODE_QUALITY
-    - REQ-MAINTAINABILITY
-  rationale:
-    why: |-
-      Supports AI-first development workflow
-      Automated quality validation
-      Non-blocking execution for AI assistants
-      Comprehensive validation reporting
-    problems_solved: []
-    benefits: []
+  ai-optimized_reporting: Structured output, icon integration, token attribution
+  ai_protocol_validation_engine: Token validation, documentation sync, protocol compliance
   alternatives_considered:
     - name: See detail file
-      pros: []
       cons: []
+      pros: []
       rejected_reason: |-
         Traditional CI/CD: Rejected due to lack of AI-first optimization
         Manual validation: Rejected due to overhead
+  cross-references: '[REQ-CODE_QUALITY], [REQ-MAINTAINABILITY]'
+  cross_references: &ref_0
+    - REQ-CODE_QUALITY
+    - REQ-MAINTAINABILITY
+  decision: AI-optimized CI/CD pipeline with automated quality gates
   implementation_approach:
-    summary: AI-optimized CI/CD pipeline with automated quality gates
     details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-CICD_PIPELINE
-      - REQ-CODE_QUALITY
-      - REQ-MAINTAINABILITY
-  related_decisions:
-    depends_on: *ref_0
-    informs: []
-    see_also: []
+    summary: AI-optimized CI/CD pipeline with automated quality gates
   metadata:
     created:
-      date: "2026-03-12"
       author: MCP converter
+      date: "2026-03-12"
     last_updated:
-      date: "2026-03-12"
       author: MCP converter
+      date: "2026-03-12"
       reason: Converted from monolithic
     last_validated:
       date: "2026-03-12"
-      validator: MCP converter
       result: pass
-  decision: AI-optimized CI/CD pipeline with automated quality gates
-  ai-optimized_reporting: Structured output, icon integration, token attribution
-  ai_protocol_validation_engine: Token validation, documentation sync, protocol compliance
-  cross-references: '[REQ-CODE_QUALITY], [REQ-MAINTAINABILITY]'
+      validator: MCP converter
+  name: CI/CD Pipeline Architecture
   phase_1: AI Protocol Validation
   phase_2: Automated Quality Gates
   phase_3: AI-Optimized Reporting
   pipeline_orchestration: Low-priority task scheduling, background processing
   quality_gate_automation: Zero-human gates, configurable thresholds, failure recovery
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Supports AI-first development workflow
+      Automated quality validation
+      Non-blocking execution for AI assistants
+      Comprehensive validation reporting
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-CICD_PIPELINE
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []

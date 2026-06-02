@@ -1,43 +1,43 @@
 REQ-IMMUTABLE_CONFIGURATION_DEFAULTS:
-  name: Configuration Defaults (Immutable)
+  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
   category: Functional
+  description: 'Configuration defaults must never be changed without explicit user override:'
+  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Configuration Defaults (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: Configuration defaults are fundamental behaviors that users depend on. Changing them would break existing configurations.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: All defaults are as specified
-    - criterion: Defaults can be overridden by user configuration
-    - criterion: Configuration discovery works as specified
-    - criterion: Precedence rules are followed
-  validation_criteria:
-    - method: Configuration tests verify all defaults. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-CONFIG_SYSTEM
-    implementation:
-      - IMPL-CONFIG_STRUCT
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_CONFIGURATION_DEFAULTS
+    problems_solved: []
+    why: Configuration defaults are fundamental behaviors that users depend on. Changing them would break existing configurations.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
-  description: 'Configuration defaults must never be changed without explicit user override:'
-  implementation: tied/implementation-decisions/IMPL-CONFIG_STRUCT.yaml
+  satisfaction_criteria:
+    - criterion: All defaults are as specified
+    - criterion: Configuration discovery works as specified
+    - criterion: Defaults can be overridden by user configuration
+    - criterion: Precedence rules are followed
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    code_annotations:
+      - REQ-IMMUTABLE_CONFIGURATION_DEFAULTS
+    implementation:
+      - IMPL-CONFIG_STRUCT
+    tests: []
+  validation_criteria:
+    - method: Configuration tests verify all defaults. Breaking changes require major version bump.

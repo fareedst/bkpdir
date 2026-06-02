@@ -1,43 +1,43 @@
 REQ-PERFORMANCE:
-  name: Performance Requirements
+  architecture: tied/architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
   category: Functional
+  description: Operations must complete within reasonable time limits. Configuration loading must be responsive. Reflection results cached for performance. Lazy source evaluation for displayed fields only.
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Performance Requirements
   priority: P1
-  status: Implemented
   rationale:
-    why: Ensures system responsiveness and good user experience
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Archive creation completes within acceptable time
-    - criterion: Configuration loading remains responsive
-    - criterion: Reflection caching reduces overhead
-    - criterion: Lazy evaluation improves performance
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-LANGUAGE_SELECTION
-    implementation:
-      - IMPL-TESTING
-    tests: []
-    code_annotations:
-      - REQ-PERFORMANCE
+    problems_solved: []
+    why: Ensures system responsiveness and good user experience
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
-  description: Operations must complete within reasonable time limits. Configuration loading must be responsive. Reflection results cached for performance. Lazy source evaluation for displayed fields only.
-  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  satisfaction_criteria:
+    - criterion: Archive creation completes within acceptable time
+    - criterion: Configuration loading remains responsive
+    - criterion: Lazy evaluation improves performance
+    - criterion: Reflection caching reduces overhead
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-LANGUAGE_SELECTION
+    code_annotations:
+      - REQ-PERFORMANCE
+    implementation:
+      - IMPL-TESTING
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

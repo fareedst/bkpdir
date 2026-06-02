@@ -1,48 +1,48 @@
 ARCH-CODE_ORGANIZATION:
-  name: Code Organization Principles
-  status: Active
+  alternatives_considered: []
+  cross-references: '[REQ-MAINTAINABILITY]'
   cross_references: &ref_0
     - REQ-MAINTAINABILITY
+  decision: Clear responsibilities with interfaces for testability
+  implementation_approach:
+    details: []
+    summary: Clear responsibilities with interfaces for testability
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Code Organization Principles
+  principles:
+    - Avoid global state where possible
+    - Each module has a single, clear responsibility
+    - Functions are small and focused
+    - Interfaces where appropriate for testability
+    - Resource management centralized
   rationale:
+    benefits: []
+    problems_solved: []
     why: |-
       Testable components
       Clear responsibilities
       Easy to extend
       Maintainable codebase
-    problems_solved: []
-    benefits: []
-  alternatives_considered: []
-  implementation_approach:
-    summary: Clear responsibilities with interfaces for testability
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-CODE_ORGANIZATION
-      - REQ-MAINTAINABILITY
   related_decisions:
     depends_on: *ref_0
     informs: []
     see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Clear responsibilities with interfaces for testability
-  cross-references: '[REQ-MAINTAINABILITY]'
-  principles:
-    - Each module has a single, clear responsibility
-    - Functions are small and focused
-    - Interfaces where appropriate for testability
-    - Avoid global state where possible
-    - Resource management centralized
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []

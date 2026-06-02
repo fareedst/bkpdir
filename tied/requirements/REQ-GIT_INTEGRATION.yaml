@@ -1,43 +1,43 @@
 REQ-GIT_INTEGRATION:
-  name: Git Integration Requirements
+  architecture: tied/architecture-decisions/ARCH-GIT_INTEGRATION.yaml
   category: Functional
+  description: Automatic Git repository detection. Git branch and commit hash extraction. Git status detection for clean/dirty state. Integration with archive naming.
+  implementation: tied/implementation-decisions/IMPL-GIT_CLI.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Git Integration Requirements
   priority: P1
-  status: Implemented
   rationale:
-    why: Provides version control information in archives
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Git repository detected automatically
-    - criterion: Branch and hash extracted correctly
-    - criterion: Status detection works for clean/dirty state
-    - criterion: Archive names include Git info when enabled
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-GIT_INTEGRATION
-    implementation:
-      - IMPL-GIT_CLI
-    tests: []
-    code_annotations:
-      - REQ-GIT_INTEGRATION
+    problems_solved: []
+    why: Provides version control information in archives
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-GIT_INTEGRATION.yaml
-  description: Automatic Git repository detection. Git branch and commit hash extraction. Git status detection for clean/dirty state. Integration with archive naming.
-  implementation: tied/implementation-decisions/IMPL-GIT_CLI.yaml
+  satisfaction_criteria:
+    - criterion: Archive names include Git info when enabled
+    - criterion: Branch and hash extracted correctly
+    - criterion: Git repository detected automatically
+    - criterion: Status detection works for clean/dirty state
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-GIT_INTEGRATION
+    code_annotations:
+      - REQ-GIT_INTEGRATION
+    implementation:
+      - IMPL-GIT_CLI
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

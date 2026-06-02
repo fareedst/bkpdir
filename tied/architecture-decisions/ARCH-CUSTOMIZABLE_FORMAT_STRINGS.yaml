@@ -1,52 +1,5 @@
 ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
-  name: User-Customizable Format Strings
-  status: Active
-  cross_references: &ref_0
-    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
-    - REQ-CONFIGURATION
-    - REQ-OUTPUT_FORMATTING
-    - REQ-USABILITY
-  rationale:
-    why: |-
-      Users have different preferences for output formatting (emoji, colors, verbosity, language)
-      Internationalization may require different message formats
-      Integration with other tools may require specific output formats
-      Existing infrastructure (YAML tags, config loading) already supports customization
-      Validation prevents common mistakes and improves user experience
-      Enhances usability without requiring source code modifications
-    problems_solved: []
-    benefits: []
   alternatives_considered: []
-  implementation_approach:
-    summary: Enable user customization of all output format strings through configuration files with validation
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
-      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
-      - REQ-CONFIGURATION
-      - REQ-OUTPUT_FORMATTING
-      - REQ-USABILITY
-  related_decisions:
-    depends_on: *ref_0
-    informs: []
-    see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: Enable user customization of all output format strings through configuration files with validation
   architecture_components: |-
     1. **Configuration Integration**:
        - Leverage existing `LoadConfig()` and `mergeFormatStrings()` infrastructure
@@ -89,21 +42,68 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
        - Includes emoji and internationalization examples
   backward_compatibility:
     - All format strings have defaults in `DefaultConfig()`
-    - Users who don't specify format strings get default behavior
     - Existing configurations continue to work unchanged
     - No breaking changes to configuration schema
+    - Users who don't specify format strings get default behavior
   cross-references: '[REQ-CUSTOMIZABLE_FORMAT_STRINGS], [REQ-CONFIGURATION], [REQ-OUTPUT_FORMATTING], [REQ-USABILITY], [ARCH-CONFIG_SYSTEM], [ARCH-OUTPUT_FORMATTING]'
+  cross_references: &ref_0
+    - REQ-CONFIGURATION
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-OUTPUT_FORMATTING
+    - REQ-USABILITY
+  decision: Enable user customization of all output format strings through configuration files with validation
   directory_operations: '(6 strings): `format_created_archive`, `format_identical_archive`, `format_list_archive`, `format_config_value`, `format_dry_run_archive`, `format_error`'
   extended_messages: '(~20 strings): Incremental, error messages'
   file_operations: '(4 strings): `format_created_backup`, `format_identical_backup`, `format_list_backup`, `format_dry_run_backup`'
   hardcoded_strings_only: Rejected - limits user customization and internationalization
+  implementation_approach:
+    details: []
+    summary: Enable user customization of all output format strings through configuration files with validation
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: User-Customizable Format Strings
   no_validation: Rejected - users can easily make mistakes without guidance
   plugin_system_for_formatters: Rejected - over-engineering for this use case
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Users have different preferences for output formatting (emoji, colors, verbosity, language)
+      Internationalization may require different message formats
+      Integration with other tools may require specific output formats
+      Existing infrastructure (YAML tags, config loading) already supports customization
+      Validation prevents common mistakes and improves user experience
+      Enhances usability without requiring source code modifications
+  related_decisions:
+    depends_on: *ref_0
+    informs: []
+    see_also: []
   separate_format_string_files: Rejected - adds complexity, YAML config sufficient
+  status: Active
   template-based: '(~30 strings): Template versions of all format strings'
+  traceability:
+    code_annotations:
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []
   validation_strategy:
+    - Allow users to disable validation if needed
     - Define expected placeholders for each format string field
-    - Validate on configuration load (non-fatal warnings)
     - Provide clear error messages with expected placeholder list
     - Support both strict validation (error) and lenient validation (warning)
-    - Allow users to disable validation if needed
+    - Validate on configuration load (non-fatal warnings)

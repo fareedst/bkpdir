@@ -1,68 +1,68 @@
 ARCH-FILE_STATISTICS:
-  name: File Statistics Architecture
-  status: Active
+  alternatives_considered:
+    - name: See detail file
+      cons: []
+      pros: []
+      rejected_reason: |-
+        No statistics: Rejected due to limited output information
+        External library: Rejected due to dependency concerns
+  cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
   cross_references: &ref_0
     - REQ-OUTPUT_FORMATTING
     - REQ-USABILITY
+  decision: File statistics gathering for enhanced output formatting
+  file_type_detection:
+    - Based on `os.FileMode` flags
+    - Returns descriptive string identifiers
+    - Supports all standard Unix file types
+  human-readable_formatting:
+    - 'Format: "1.2MB", "455KB", "1.0GB"'
+    - 'Precision: One decimal place for readability'
+    - 'Size conversion: bytes → KB → MB → GB → TB'
+  implementation_approach:
+    details: []
+    summary: File statistics gathering for enhanced output formatting
+  integration:
+    - Integrates with archive and backup output
+    - Supports template-based formatting with named placeholders
+    - Used by output formatter for enhanced display
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: File Statistics Architecture
   rationale:
+    benefits: []
+    problems_solved: []
     why: |-
       Provides rich file information for output display
       Enables human-readable size formatting
       Supports file type detection
       Enhances user experience with detailed file information
-    problems_solved: []
-    benefits: []
-  alternatives_considered:
-    - name: See detail file
-      pros: []
-      cons: []
-      rejected_reason: |-
-        No statistics: Rejected due to limited output information
-        External library: Rejected due to dependency concerns
-  implementation_approach:
-    summary: File statistics gathering for enhanced output formatting
-    details: []
-  traceability:
-    requirements: *ref_0
-    implementation: []
-    tests: []
-    code_annotations:
-      - ARCH-FILE_STATISTICS
-      - REQ-OUTPUT_FORMATTING
-      - REQ-USABILITY
   related_decisions:
     depends_on: *ref_0
     informs: []
     see_also: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  decision: File statistics gathering for enhanced output formatting
-  cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
-  file_type_detection:
-    - Based on `os.FileMode` flags
-    - Supports all standard Unix file types
-    - Returns descriptive string identifiers
-  human-readable_formatting:
-    - 'Size conversion: bytes → KB → MB → GB → TB'
-    - 'Format: "1.2MB", "455KB", "1.0GB"'
-    - 'Precision: One decimal place for readability'
-  integration:
-    - Used by output formatter for enhanced display
-    - Supports template-based formatting with named placeholders
-    - Integrates with archive and backup output
   statistics_collected:
     - File path and name
-    - File size (bytes and human-readable)
-    - Modification time (time.Time and Unix timestamp)
     - File permissions/mode
+    - File size (bytes and human-readable)
     - File type (regular, directory, symlink, device, pipe, socket, other)
+    - Modification time (time.Time and Unix timestamp)
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-FILE_STATISTICS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
+    implementation: []
+    requirements: *ref_0
+    tests: []

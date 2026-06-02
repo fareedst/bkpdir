@@ -1,44 +1,44 @@
 REQ-COV_003:
-  name: Selective Coverage Reporting Requirements
+  architecture: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml
   category: Functional
+  description: Implement function-level coverage exclusion and coverage comment directives for granular control over coverage metrics. Support `//coverage:ignore` style annotations for specific code blocks.
+  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Selective Coverage Reporting Requirements
   priority: P2
-  status: Planned
   rationale:
-    why: Provides fine-grained control over coverage reporting while maintaining comprehensive testing
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Function-level exclusion works correctly
-    - criterion: Comment directives supported with `//coverage:ignore` style
-    - criterion: Coverage exception documentation maintained
-    - criterion: Integration with development workflow complete
-    - criterion: Coverage visualization tools available
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-TESTING_STRATEGY
-    implementation:
-      - IMPL-TESTING
-    tests: []
-    code_annotations:
-      - REQ-COV_003
+    problems_solved: []
+    why: Provides fine-grained control over coverage reporting while maintaining comprehensive testing
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml
-  description: Implement function-level coverage exclusion and coverage comment directives for granular control over coverage metrics. Support `//coverage:ignore` style annotations for specific code blocks.
-  implementation: tied/implementation-decisions/IMPL-TESTING.yaml
+  satisfaction_criteria:
+    - criterion: Comment directives supported with `//coverage:ignore` style
+    - criterion: Coverage exception documentation maintained
+    - criterion: Coverage visualization tools available
+    - criterion: Function-level exclusion works correctly
+    - criterion: Integration with development workflow complete
+  status: Planned
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    code_annotations:
+      - REQ-COV_003
+    implementation:
+      - IMPL-TESTING
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

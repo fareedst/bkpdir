@@ -1,46 +1,46 @@
 REQ-IMMUTABLE_ERROR_HANDLING:
-  name: Error Handling Requirements (Immutable)
+  architecture: tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   category: Functional
+  description: 'Error handling requirements are mandatory and must be preserved:'
+  implementation: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Error Handling Requirements (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: These error handling requirements are mandatory behaviors that users and scripts depend on. Changing them would break error handling workflows.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: All operations return structured errors with status codes
-    - criterion: No temporary resources remain after operations
-    - criterion: Panics are recovered without leaving temporary resources
-    - criterion: Long-running operations support context cancellation
-    - criterion: Disk space and permission errors are detected
-    - criterion: Error messages are consistently formatted
-    - criterion: Errors are comprehensively logged
-  validation_criteria:
-    - method: Error handling tests verify all requirements. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-ERROR_HANDLING
-    implementation:
-      - IMPL-STRUCTURED_ERRORS
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_ERROR_HANDLING
+    problems_solved: []
+    why: These error handling requirements are mandatory behaviors that users and scripts depend on. Changing them would break error handling workflows.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
-  description: 'Error handling requirements are mandatory and must be preserved:'
-  implementation: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  satisfaction_criteria:
+    - criterion: All operations return structured errors with status codes
+    - criterion: Disk space and permission errors are detected
+    - criterion: Error messages are consistently formatted
+    - criterion: Errors are comprehensively logged
+    - criterion: Long-running operations support context cancellation
+    - criterion: No temporary resources remain after operations
+    - criterion: Panics are recovered without leaving temporary resources
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-ERROR_HANDLING
+    code_annotations:
+      - REQ-IMMUTABLE_ERROR_HANDLING
+    implementation:
+      - IMPL-STRUCTURED_ERRORS
+    tests: []
+  validation_criteria:
+    - method: Error handling tests verify all requirements. Breaking changes require major version bump.

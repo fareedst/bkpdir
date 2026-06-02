@@ -1,48 +1,48 @@
 REQ-GOV_REGISTRY_COMPLETENESS:
   REQ-GOV_REGISTRY_COMPLETENESS:
-    name: Token Registry Completeness
     category: Functional
+    description: Governance requirement ensuring all semantic tokens are registered in the token registry
+    metadata:
+      created:
+        author: AI Agent
+        date: "2026-03-12"
+      last_updated:
+        author: AI Agent
+        date: "2026-03-12"
+        reason: Initial creation of missing token
+      last_validated:
+        date: "2026-03-12"
+        result: pass
+        validator: AI Agent
+    name: Token Registry Completeness
     priority: P1
-    status: Implemented
     rationale:
-      why: All semantic tokens must be registered in the token registry to ensure complete traceability and prevent orphaned or undocumented tokens.
-      problems_solved:
-        - Tokens referenced in code/docs but not registered in the registry
-        - Incomplete traceability chains due to unregistered tokens
-        - Difficulty auditing token usage without a complete registry
       benefits:
-        - Complete token registry enables comprehensive traceability
         - Automated validation can detect unregistered tokens
+        - Complete token registry enables comprehensive traceability
         - Full audit trail of all semantic tokens in the project
-    satisfaction_criteria:
-      - criterion: All tokens referenced in code, tests, and documentation are registered in semantic-tokens.yaml
-      - criterion: Validation tooling detects and reports unregistered tokens
-      - criterion: Token registration is enforced as part of the development workflow
-    validation_criteria:
-      - method: Token validation scripts verify all referenced tokens exist in the registry
-    traceability:
-      architecture:
-        - ARCH-TOKEN_SYSTEM
-      implementation:
-        - IMPL-TOKEN_SYSTEM
-      tests: []
-      code_annotations:
-        - REQ-GOV_REGISTRY_COMPLETENESS
+      problems_solved:
+        - Difficulty auditing token usage without a complete registry
+        - Incomplete traceability chains due to unregistered tokens
+        - Tokens referenced in code/docs but not registered in the registry
+      why: All semantic tokens must be registered in the token registry to ensure complete traceability and prevent orphaned or undocumented tokens.
     related_requirements:
       depends_on: []
       related_to:
         - REQ-GOV_DISCOVERABILITY
       supersedes: []
-    description: Governance requirement ensuring all semantic tokens are registered in the token registry
-    metadata:
-      created:
-        date: "2026-03-12"
-        author: AI Agent
-      last_updated:
-        date: "2026-03-12"
-        author: AI Agent
-        reason: Initial creation of missing token
-      last_validated:
-        date: "2026-03-12"
-        validator: AI Agent
-        result: pass
+    satisfaction_criteria:
+      - criterion: All tokens referenced in code, tests, and documentation are registered in semantic-tokens.yaml
+      - criterion: Token registration is enforced as part of the development workflow
+      - criterion: Validation tooling detects and reports unregistered tokens
+    status: Implemented
+    traceability:
+      architecture:
+        - ARCH-TOKEN_SYSTEM
+      code_annotations:
+        - REQ-GOV_REGISTRY_COMPLETENESS
+      implementation:
+        - IMPL-TOKEN_SYSTEM
+      tests: []
+    validation_criteria:
+      - method: Token validation scripts verify all referenced tokens exist in the registry

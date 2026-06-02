@@ -1,43 +1,44 @@
 REQ-OUTPUT_FORMATTING:
-  name: Output Formatting Requirements
+  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   category: Functional
+  description: Centralized formatting for all application output. Template-based formatting with data extraction. Support for multiple formatting syntaxes.
+  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Output Formatting Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Consistent output formatting with rich template support
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: All output uses configurable format strings
-    - criterion: Template formatting supports data extraction
-    - criterion: Multiple formatting approaches available
-    - criterion: Named placeholders supported
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-OUTPUT_FORMATTING
-    implementation:
-      - IMPL-DUAL_FORMATTING
-    tests: []
-    code_annotations:
-      - REQ-OUTPUT_FORMATTING
+    problems_solved: []
+    why: Consistent output formatting with rich template support
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
-  description: Centralized formatting for all application output. Template-based formatting with data extraction. Support for multiple formatting syntaxes.
-  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  satisfaction_criteria:
+    - criterion: All output uses configurable format strings
+    - criterion: Multiple formatting approaches available
+    - criterion: Named placeholders supported
+    - criterion: Output formatting vocabulary is canonical in tied/vocab/bkpdir-output-formatting.md
+    - criterion: Template formatting supports data extraction
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    code_annotations:
+      - REQ-OUTPUT_FORMATTING
+    implementation:
+      - IMPL-DUAL_FORMATTING
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

@@ -1,44 +1,44 @@
 REQ-RESOURCE_MANAGEMENT:
-  name: Resource Management Requirements
+  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
   category: Functional
+  description: All temporary resources must be cleaned up. Archive and backup operations must be atomic. Operations must recover from panics. Resource management must be thread-safe.
+  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml; tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Resource Management Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Prevents resource leaks and ensures system reliability
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: No temporary resources remain after operations
-    - criterion: Archive and backup creation uses atomic operations
-    - criterion: Panic recovery prevents resource leaks
-    - criterion: Thread-safe resource tracking
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-RESOURCE_MANAGEMENT
-    implementation:
-      - IMPL-RESOURCE_MANAGER
-      - IMPL-ATOMIC_OPS
-    tests: []
-    code_annotations:
-      - REQ-RESOURCE_MANAGEMENT
+    problems_solved: []
+    why: Prevents resource leaks and ensures system reliability
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
-  description: All temporary resources must be cleaned up. Archive and backup operations must be atomic. Operations must recover from panics. Resource management must be thread-safe.
-  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml; tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml
+  satisfaction_criteria:
+    - criterion: Archive and backup creation uses atomic operations
+    - criterion: No temporary resources remain after operations
+    - criterion: Panic recovery prevents resource leaks
+    - criterion: Thread-safe resource tracking
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+    code_annotations:
+      - REQ-RESOURCE_MANAGEMENT
+    implementation:
+      - IMPL-ATOMIC_OPS
+      - IMPL-RESOURCE_MANAGER
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

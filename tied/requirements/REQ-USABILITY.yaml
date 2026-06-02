@@ -1,43 +1,43 @@
 REQ-USABILITY:
-  name: Usability Requirements
+  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   category: Functional
+  description: CLI interface must be intuitive. Error messages must be clear. Configuration must be discoverable. Output must be readable.
+  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Usability Requirements
   priority: P1
-  status: Implemented
   rationale:
-    why: Ensures good user experience
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: CLI commands are intuitive
-    - criterion: Error messages are clear and actionable
-    - criterion: Configuration options are discoverable
-    - criterion: Output formatting is readable
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-OUTPUT_FORMATTING
-    implementation:
-      - IMPL-DUAL_FORMATTING
-    tests: []
-    code_annotations:
-      - REQ-USABILITY
+    problems_solved: []
+    why: Ensures good user experience
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
-  description: CLI interface must be intuitive. Error messages must be clear. Configuration must be discoverable. Output must be readable.
-  implementation: tied/implementation-decisions/IMPL-DUAL_FORMATTING.yaml
+  satisfaction_criteria:
+    - criterion: CLI commands are intuitive
+    - criterion: Configuration options are discoverable
+    - criterion: Error messages are clear and actionable
+    - criterion: Output formatting is readable
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-OUTPUT_FORMATTING
+    code_annotations:
+      - REQ-USABILITY
+    implementation:
+      - IMPL-DUAL_FORMATTING
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

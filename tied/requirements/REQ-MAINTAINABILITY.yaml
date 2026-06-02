@@ -1,43 +1,43 @@
 REQ-MAINTAINABILITY:
-  name: Maintainability Requirements
+  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
   category: Functional
+  description: Code must follow Go standards. Documentation must be comprehensive. Tests must be maintainable. Configuration system must be extensible.
+  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Maintainability Requirements
   priority: P1
-  status: Implemented
   rationale:
-    why: Ensures long-term maintainability and evolution
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Code follows Go conventions
-    - criterion: Documentation is complete and up-to-date
-    - criterion: Tests are easy to understand and modify
-    - criterion: Configuration system supports new fields automatically
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-CODE_ORGANIZATION
-    implementation:
-      - IMPL-CODE_STYLE
-    tests: []
-    code_annotations:
-      - REQ-MAINTAINABILITY
+    problems_solved: []
+    why: Ensures long-term maintainability and evolution
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
-  description: Code must follow Go standards. Documentation must be comprehensive. Tests must be maintainable. Configuration system must be extensible.
-  implementation: tied/implementation-decisions/IMPL-CODE_STYLE.yaml
+  satisfaction_criteria:
+    - criterion: Code follows Go conventions
+    - criterion: Configuration system supports new fields automatically
+    - criterion: Documentation is complete and up-to-date
+    - criterion: Tests are easy to understand and modify
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations:
+      - REQ-MAINTAINABILITY
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

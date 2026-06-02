@@ -1,45 +1,45 @@
 REQ-RELIABILITY:
-  name: Reliability Requirements
+  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml; tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   category: Functional
+  description: System must handle errors gracefully. Resource cleanup must be error-resilient. Panic recovery prevents resource leaks. Thread-safe operations for concurrent access.
+  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml; tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: Reliability Requirements
   priority: P0
-  status: Implemented
   rationale:
-    why: Ensures system stability and prevents data loss
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: Errors handled without crashing
-    - criterion: Resource cleanup continues on failures
-    - criterion: Panic recovery prevents leaks
-    - criterion: Thread-safety verified
-  validation_criteria:
-    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml
-  traceability:
-    architecture:
-      - ARCH-RESOURCE_MANAGEMENT
-      - ARCH-ERROR_HANDLING
-    implementation:
-      - IMPL-RESOURCE_MANAGER
-      - IMPL-STRUCTURED_ERRORS
-    tests: []
-    code_annotations:
-      - REQ-RELIABILITY
+    problems_solved: []
+    why: Ensures system stability and prevents data loss
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml; tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
-  description: System must handle errors gracefully. Resource cleanup must be error-resilient. Panic recovery prevents resource leaks. Thread-safe operations for concurrent access.
-  implementation: tied/implementation-decisions/IMPL-RESOURCE_MANAGER.yaml; tied/implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
+  satisfaction_criteria:
+    - criterion: Errors handled without crashing
+    - criterion: Panic recovery prevents leaks
+    - criterion: Resource cleanup continues on failures
+    - criterion: Thread-safety verified
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-ERROR_HANDLING
+      - ARCH-RESOURCE_MANAGEMENT
+    code_annotations:
+      - REQ-RELIABILITY
+    implementation:
+      - IMPL-RESOURCE_MANAGER
+      - IMPL-STRUCTURED_ERRORS
+    tests: []
+  validation_criteria:
+    - method: tied/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied/implementation-decisions/IMPL-TESTING.yaml

@@ -1,42 +1,42 @@
 REQ-IMMUTABLE_FILE_BACKUP_NAMING:
-  name: File Backup Naming Convention (Immutable)
+  architecture: tied/architecture-decisions/ARCH-FILE_OPERATIONS.yaml
   category: Functional
+  description: 'File backup naming convention is fixed and must not be modified. Format: `{filename}-{timestamp}[={note}]`'
+  implementation: tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: "2026-03-12"
+    last_updated:
+      author: MCP converter
+      date: "2026-03-12"
+      reason: Converted from monolithic
+    last_validated:
+      date: "2026-03-12"
+      result: pass
+      validator: MCP converter
+  name: File Backup Naming Convention (Immutable)
   priority: P0
-  status: Implemented
   rationale:
-    why: Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations.
-    problems_solved: []
     benefits: []
-  satisfaction_criteria:
-    - criterion: File backup names follow the exact format specified
-    - criterion: Timestamp format is YYYY-MM-DD-HH-MM
-    - criterion: Optional notes are appended with equals sign
-  validation_criteria:
-    - method: File backup naming tests verify format compliance. Breaking changes require major version bump.
-  traceability:
-    architecture:
-      - ARCH-FILE_OPERATIONS
-    implementation:
-      - IMPL-ATOMIC_OPS
-    tests: []
-    code_annotations:
-      - REQ-IMMUTABLE_FILE_BACKUP_NAMING
+    problems_solved: []
+    why: Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations.
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  metadata:
-    created:
-      date: "2026-03-12"
-      author: MCP converter
-    last_updated:
-      date: "2026-03-12"
-      author: MCP converter
-      reason: Converted from monolithic
-    last_validated:
-      date: "2026-03-12"
-      validator: MCP converter
-      result: pass
-  architecture: tied/architecture-decisions/ARCH-FILE_OPERATIONS.yaml
-  description: 'File backup naming convention is fixed and must not be modified. Format: `{filename}-{timestamp}[={note}]`'
-  implementation: tied/implementation-decisions/IMPL-ATOMIC_OPS.yaml
+  satisfaction_criteria:
+    - criterion: File backup names follow the exact format specified
+    - criterion: Optional notes are appended with equals sign
+    - criterion: Timestamp format is YYYY-MM-DD-HH-MM
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    code_annotations:
+      - REQ-IMMUTABLE_FILE_BACKUP_NAMING
+    implementation:
+      - IMPL-ATOMIC_OPS
+    tests: []
+  validation_criteria:
+    - method: File backup naming tests verify format compliance. Breaking changes require major version bump.

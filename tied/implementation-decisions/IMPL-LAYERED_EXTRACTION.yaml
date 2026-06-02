@@ -1,49 +1,10 @@
 IMPL-LAYERED_EXTRACTION:
-  name: Layered Extraction Approach
-  status: Active
-  cross_references:
-    - ARCH-CODE_ORGANIZATION
-    - REQ-MAINTAINABILITY
-  rationale:
-    why: Prevents circular dependencies and ensures stable foundation for extracted components
-    problems_solved:
-      - Circular dependency risk during extraction
-      - Unstable foundation when extracting higher-level components first
-      - Unclear extraction ordering
-    benefits:
-      - No circular references between layers
-      - Each layer builds on stable previous layers
-      - Clear dependency hierarchy
-  implementation_approach:
-    summary: 'Extract in dependency order: Infrastructure → Utilities → Framework → Patterns'
-    details:
-      - Infrastructure layer first (config, errors)
-      - Utilities layer second (formatter, git)
-      - Framework layer third (cli)
-      - Patterns layer last (processing)
-      - Each layer builds on previous layers without circular references
   code_locations:
     files: []
     functions: []
-  traceability:
-    architecture:
-      - ARCH-CODE_ORGANIZATION
-    requirements:
-      - REQ-MAINTAINABILITY
-    tests: []
-    code_annotations: []
-  related_decisions:
-    depends_on:
-      - IMPL-EXTRACTION_PRINCIPLES
-    supersedes: []
-    see_also:
-      - IMPL-INTERFACE_DRIVEN
-      - IMPL-ZERO_BREAKING
-      - IMPL-LARGE_FILE_CHALLENGE
-  metadata:
-    created: "2026-03-12"
-    author: AI Agent
-    last_updated: "2026-03-12"
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
   essence_pseudocode: |-
     # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Extract in dependency order: Infrastructure → Utilities → Framework → Patterns
 
@@ -59,3 +20,42 @@ IMPL-LAYERED_EXTRACTION:
       # [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Each layer builds on previous layers without circular references
       each_layer_builds_on()
       end
+  implementation_approach:
+    details:
+      - Each layer builds on previous layers without circular references
+      - Framework layer third (cli)
+      - Infrastructure layer first (config, errors)
+      - Patterns layer last (processing)
+      - Utilities layer second (formatter, git)
+    summary: 'Extract in dependency order: Infrastructure → Utilities → Framework → Patterns'
+  metadata:
+    author: AI Agent
+    created: "2026-03-12"
+    last_updated: "2026-03-12"
+  name: Layered Extraction Approach
+  rationale:
+    benefits:
+      - Clear dependency hierarchy
+      - Each layer builds on stable previous layers
+      - No circular references between layers
+    problems_solved:
+      - Circular dependency risk during extraction
+      - Unclear extraction ordering
+      - Unstable foundation when extracting higher-level components first
+    why: Prevents circular dependencies and ensures stable foundation for extracted components
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_PRINCIPLES
+    see_also:
+      - IMPL-INTERFACE_DRIVEN
+      - IMPL-LARGE_FILE_CHALLENGE
+      - IMPL-ZERO_BREAKING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations: []
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
