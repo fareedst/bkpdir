@@ -24,18 +24,19 @@ IMPL-CONTEXT_OPS:
   implementation_approach:
     details: []
     summary: |-
-      All long-running operations accept `context.Context`
-      Periodic cancellation checks during operations
-      Context-aware file operations
-      Timeout support via `context.WithTimeout()`
+      Bundle context.Context with ResourceManager for cancellable operations, expose non-blocking cancellation checks, embed managers in context values, and clean up tracked resources when contexts end.
+      INPUT: parent context, operation ID, timeout (optional)
+      OUTPUT: ContextualOperation, derived contexts, cleanup errors
+      DATA: ResourceManagerKey, OperationIDKey, ContextualOperation struct
+      Canonical behavior: tied/implementation-decisions/IMPL-CONTEXT_OPS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

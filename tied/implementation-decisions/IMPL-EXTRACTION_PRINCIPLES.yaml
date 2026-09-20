@@ -10,15 +10,20 @@ IMPL-EXTRACTION_PRINCIPLES:
   implementation: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
   implementation_approach:
     details: []
-    summary: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+    summary: |-
+      Plan module extraction in strict dependency order so each layer validates and tests independently before the next layer moves.
+      INPUT: module dependency graph, extraction_layers ordered list
+      OUTPUT: extraction schedule with validated layer boundaries
+      DATA: layer deps, interface boundaries per module
+      Canonical behavior: tied/implementation-decisions/IMPL-EXTRACTION_PRINCIPLES-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -66,15 +66,20 @@ IMPL-CONFIG_STRUCT:
       - GetAllConfigFields() uses reflectConfigFields() for recursive struct walking with caching
       - pkg/config/ provides extracted generic interfaces (ConfigLoader, ConfigMerger, ConfigValidator, etc.)
       - reflectConfigFields() extracts YAML tag names, types, categories, and values
-    summary: Config struct with YAML tags defines all fields; reflection-based GetAllConfigFields discovers fields recursively; pkg/config provides extracted generic interfaces.
+    summary: |-
+      Central configuration model: YAML-serializable Config aggregate, default factory, and legacy display adapters. Reflection field discovery and flat display are owned by [IMPL-CFG_006] and [IMPL-CONFIG_DISPLAY_FLATTENING].
+      INPUT: Config instance, optional filesystem root for source detection
+      OUTPUT: ConfigValue slices for simple and enhanced display
+      DATA: ConfigValue, configFieldInfo (shared type with CFG_006)
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_STRUCT-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: 'Manual deep sync: pilot-quality three-way block leads'
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

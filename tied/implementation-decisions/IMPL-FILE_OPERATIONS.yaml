@@ -79,15 +79,20 @@ IMPL-FILE_OPERATIONS:
     - REQ-RELIABILITY
   implementation_approach:
     details: []
-    summary: Atomic operations with comprehensive validation and pattern-based exclusion
+    summary: |-
+      pkg/fileops provides secure path validation and directory traversal with exclusions, depth limits, symlink policy, and file listing helpers.
+      INPUT: root path, TraversalOptions, exclude patterns
+      OUTPUT: visitor callbacks, file path lists, validation errors
+      DATA: DefaultTraverser, PathValidator, PatternMatcher
+      Canonical behavior: tied/implementation-decisions/IMPL-FILE_OPERATIONS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -129,11 +129,20 @@ def count_boilerplate_go(token: str) -> int:
     return n
 
 
+def _sidecar_leads_for_alignment(token: str) -> set[str]:
+    """Sidecar block leads used for three-way Go sync (excludes INFRA policy blocks)."""
+    sc = set(sidecar_leads(token))
+    if token == "IMPL-TOKEN_COVERAGE_AUDIT":
+        # HYGIENE_POLICY is COVER-001 waived (INFRA-policy-sidecar-block); proof is hygiene scripts/tests.
+        sc = {lead for lead in sc if "audit_package_level_leads.py" not in lead}
+    return sc
+
+
 def classify_token(row: dict) -> tuple[str, list[str]]:
     token = row["token"]
     tier = row.get("tier", "")
     go_refs = row.get("go_refs", 0)
-    sc = set(sidecar_leads(token))
+    sc = _sidecar_leads_for_alignment(token)
     gc = set(go_block_leads(token))
     tc = set(test_block_leads(token))
     issues: list[str] = []

@@ -13,14 +13,19 @@ IMPL-LARGE_FILE_CHALLENGE:
       - Extract printf formatter as separate package
       - Extract template engine as separate package
       - Maintain interface compatibility throughout extraction
-    summary: Break formatter.go into multiple focused packages while maintaining interface compatibility
+    summary: |-
+      Decomposes oversized formatter.go into focused packages (templates, printf, output collector, ANSI) while preserving public interfaces used by the CLI.
+      INPUT: monolithic formatter.go responsibilities
+      OUTPUT: extracted packages with unchanged adapter surfaces
+      DATA: interface contracts, test coverage for extracted units
+      Canonical behavior: tied/implementation-decisions/IMPL-LARGE_FILE_CHALLENGE-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Large File Decomposition Challenge
   rationale:
     benefits:

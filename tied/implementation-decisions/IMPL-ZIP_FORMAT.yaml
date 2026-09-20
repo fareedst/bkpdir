@@ -35,18 +35,19 @@ IMPL-ZIP_FORMAT:
   implementation_approach:
     details: []
     summary: |-
-      Uses Go's `archive/zip` package
-      Atomic file operations with temporary files
-      Compression level configurable
-      Supports incremental archives
+      Creates and lists ZIP archives with atomic temp-file writes, deflate compression, exclusion-aware file collection, and git-aware naming.
+      INPUT: context, Config, note, dryRun flag, archive directory paths
+      OUTPUT: zip file on disk, Archive metadata list
+      DATA: file paths relative to cwd, ArchiveConfig adapters, ResourceManager temp files
+      Canonical behavior: tied/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

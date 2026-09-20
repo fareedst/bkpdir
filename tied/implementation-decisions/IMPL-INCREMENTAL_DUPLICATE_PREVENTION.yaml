@@ -28,14 +28,19 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
       - Use diff result to determine if changes exist
       - Use findLatestFullArchive() with name-based sorting
       - Use ReconstructArchiveState() to get effective state from full + most recent incremental
-    summary: Leverage CalculateDiff() and ReconstructArchiveState() from diff command to detect changes before creating incremental archives
+    summary: |-
+      Skip creating incremental archives when reconstructed archive state shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
+      INPUT: IncrementalArchiveConfig, archiveDir, cwd, exclude patterns
+      OUTPUT: nil when skipped, archive path when changes exist
+      DATA: reconstructedState, DirectoryDiff, FormatIncrementalSkippedNoChanges
+      Canonical behavior: tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Incremental Archive Duplicate Prevention
   rationale:
     benefits:

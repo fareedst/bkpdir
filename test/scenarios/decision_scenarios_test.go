@@ -1,6 +1,7 @@
 // [REQ-MAINTAINABILITY]
 // DOC-014: See ai-decision-framework.md - 4-Tier Decision Hierarchy [DECISION:maintenance]
 package scenarios
+
 import (
 	"context"
 	"os"

@@ -2,6 +2,7 @@
 // [ARCH-RESOURCE_MANAGEMENT] Resource manager architecture
 // [IMPL-RESOURCE_MANAGER] Resource manager implementation
 package resources
+
 import (
 	"fmt"
 )

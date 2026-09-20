@@ -8,6 +8,7 @@
 
 // Tests for the pkg/errors package — error types, classification, and handling.
 package errors
+
 import (
 	"context"
 	"errors"

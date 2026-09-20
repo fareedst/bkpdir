@@ -10,6 +10,7 @@
 // Source: main.go - CLI-GLOBAL-001
 // Impact: Validates global CLI options functionality
 package main
+
 import (
 	"bytes"
 	"fmt"

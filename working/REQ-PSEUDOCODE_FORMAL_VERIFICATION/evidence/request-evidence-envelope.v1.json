@@ -1,14 +1,14 @@
 {
   "schema_version": "request-evidence-envelope.v1",
   "envelope_meta": {
-    "generated_at": "2026-09-20T16:33:53.389Z",
+    "generated_at": "2026-09-20T18:45:06.803Z",
     "generator": "request_evidence_envelope_build",
     "revision": 1
   },
   "identity": {
     "request_token": "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
     "project_id": "af8451e933f573ec",
-    "depth_tier": "integrated",
+    "depth_tier": "minimal",
     "gate_policy": "advisory",
     "methodology_snapshot_id": "3.0.0"
   },
@@ -180,7 +180,7 @@
       "kind": "citdp_record",
       "schema_version": null,
       "path": "tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION.yaml",
-      "content_hash": "sha256:1826e084aa39cf39adcbc8f5a2662492ac6981202526efc2375adb75cee71b9f",
+      "content_hash": "sha256:a757f599eac1e5a18c31b702e4ba37f00ce0b9b5905cead52256ebf38e4c106e",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -199,10 +199,21 @@
       ]
     },
     {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/not-applicable-receipt.v1.json",
+      "content_hash": "sha256:1011adb7960cb45d52cd1eb7272df1a4857bcc204124d0b23e26a1aad0420b50",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
       "kind": "request_evidence_envelope",
       "schema_version": "request-evidence-envelope.v1",
       "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/request-evidence-envelope.v1.json",
-      "content_hash": "sha256:6046d30fd61f5c28bded99f15439561e53ff979ce45e6e989c25596a29006711",
+      "content_hash": "sha256:4723b59167d5227553d9d4a24584d8676bb71d7910302da22518acf494cf685f",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -225,6 +236,17 @@
       "schema_version": null,
       "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/change-definition-evidence.md",
       "content_hash": "sha256:40a399c35a56f19403bbda827c3e2771d000dfb9153c311cdff4a20c1928c36c",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/d15-banner-audit.json",
+      "content_hash": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
       "phase": null,
       "status": "present",
       "proof_boundaries": [

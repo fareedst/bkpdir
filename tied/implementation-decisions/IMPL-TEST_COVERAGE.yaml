@@ -31,14 +31,19 @@ IMPL-TEST_COVERAGE:
       - 'TestPrintMethods: Print methods in delayed mode'
       - 'TestTemplateFormatterAdvanced: TemplateFormatter functionality'
       - 'TestTemplateFormattingMethods: all template functions with 0% coverage'
-    summary: Added comprehensive test suites for previously untested functions including OutputCollector, template methods, error formatting, and print methods
+    summary: |-
+      Comprehensive formatter test coverage for OutputCollector, template/printf formatting, error templates, file statistics output, and interface compliance.
+      INPUT: formatter config, test archives, template strings, collector instances
+      OUTPUT: formatted strings, captured stdout/stderr messages
+      DATA: DefaultOutputFormatter, OutputCollector, TemplateFormatter test fixtures
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_COVERAGE-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Comprehensive formatter.go Test Coverage
   rationale:
     benefits:

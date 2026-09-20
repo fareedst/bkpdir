@@ -22,7 +22,6 @@ import (
 	"syscall"
 )
 
-
 // ErrorConfig abstracts configuration dependencies for error handling
 type ErrorConfig interface {
 	GetStatusCodes() map[string]int
@@ -287,7 +286,6 @@ func IsDirectoryNotFoundError(err error) bool {
 		}()
 }
 
-
 // Resource represents a resource that needs cleanup
 type Resource interface {
 	Cleanup() error
@@ -388,7 +386,6 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	}()
 	return rm.Cleanup()
 }
-
 
 // ContextualOperation provides context and resource management for operations.
 type ContextualOperation struct {
@@ -515,7 +512,6 @@ func HandleArchiveError(err error, cfg *Config, formatter formatter.OutputFormat
 func HandleBackupError(err error, cfg *Config, formatter *OutputFormatter) int {
 	return HandleError(err, cfg, formatter)
 }
-
 
 // AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {

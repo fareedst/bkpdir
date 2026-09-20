@@ -24,10 +24,11 @@ IMPL-ATOMIC_OPS:
   implementation_approach:
     details: []
     summary: |-
-      Create temporary files with `.tmp` extension
-      Write content to temporary file
-      Atomic rename to final location
-      Register temporary files with ResourceManager
+      Atomic file I/O via write-to-temporary-file then rename on the same filesystem, with rollback on failure and convenience helpers for copy and full-file writes.
+      INPUT: targetPath, src, dst, data, permissions
+      OUTPUT: committed file at target or ERROR
+      DATA: AtomicWriter state (targetPath, tempPath, temp handle, committed, closed flags)
+      Canonical behavior: tied/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md
   integration_test_structure: |-
     ```go
     func TestIntegrationScenario(t *testing.T) {
@@ -47,8 +48,8 @@ IMPL-ATOMIC_OPS:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -2,6 +2,7 @@
 // [ARCH-CLI_FRAMEWORK] CLI framework architecture
 // [IMPL-CLI_FRAMEWORK] CLI framework implementation
 package cli
+
 import (
 	"context"
 	"fmt"

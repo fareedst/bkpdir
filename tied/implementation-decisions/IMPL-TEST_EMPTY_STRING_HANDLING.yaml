@@ -16,15 +16,20 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
   empty_string_as_zero_value: If treated as zero value, later files can override
   implementation_approach:
     details: []
-    summary: '- **TestEmptyStringHandling**: Tests empty string handling in various merge scenarios'
+    summary: |-
+      Verifies empty-string configuration values merge correctly across sequential files without blocking later overrides.
+      INPUT: sequential YAML files with archive_dir_path "" or values
+      OUTPUT: merged Config from LoadConfig
+      DATA: BKPDIR_CONFIG file list, precedence fields
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_EMPTY_STRING_HANDLING-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

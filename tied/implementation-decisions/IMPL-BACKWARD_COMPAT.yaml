@@ -11,14 +11,19 @@ IMPL-BACKWARD_COMPAT:
       - Extract components as separate Go modules
       - Original application continues to work while providing reusable components
       - Use interfaces to isolate extracted code from existing application
-    summary: Use Go modules and interfaces to isolate extracted code
+    summary: |-
+      Preserve the existing backup application API while extracting components into separate packages using aliases, wrappers, and interface boundaries.
+      INPUT: extracted package symbols, root package consumers
+      OUTPUT: unchanged compile-time API at root; isolated extracted modules
+      DATA: type aliases, wrapper functions, boundary interfaces
+      Canonical behavior: tied/implementation-decisions/IMPL-BACKWARD_COMPAT-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Maintain Backward Compatibility
   rationale:
     benefits:

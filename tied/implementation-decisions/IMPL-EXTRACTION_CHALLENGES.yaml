@@ -13,15 +13,20 @@ IMPL-EXTRACTION_CHALLENGES:
   design_note: Comprehensive testing ensures extracted components are production-ready
   implementation_approach:
     details: []
-    summary: See detail file
+    summary: |-
+      Address the hardest extraction problems: shared test utilities, per-package test isolation, and config coupling via minimal interfaces.
+      INPUT: shared test helpers, extracted packages, config structs
+      OUTPUT: testutil package, package-scoped tests, ConfigProvider adapters
+      DATA: fixtures, mocks, interface method sets
+      Canonical behavior: tied/implementation-decisions/IMPL-EXTRACTION_CHALLENGES-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

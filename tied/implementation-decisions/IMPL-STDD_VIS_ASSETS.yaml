@@ -15,14 +15,19 @@ IMPL-STDD_VIS_ASSETS:
       - 'Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot'
       - 'Timeline/Animation: stepwise frames showing requirement through architecture, implementation, tests, and code; token badges visible per step'
       - 'Validation: visual review checklist centered on token prominence, color map alignment, edge correctness'
-    summary: Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
+    summary: |-
+      Produce layered flow diagram and timeline animation artifacts from STDD trace data with token-centric visual design.
+      INPUT: normalized STDD graph snapshot
+      OUTPUT: docs/images/stdd-trace-flow.svg, docs/images/stdd-trace-timeline.gif or mp4
+      DATA: lane layout REQ/ARCH/IMPL/TEST/CODE, token badges, color map
+      Canonical behavior: tied/implementation-decisions/IMPL-STDD_VIS_ASSETS-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: STDD Visualization Asset Plan
   rationale:
     benefits:

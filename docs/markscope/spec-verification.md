@@ -41,14 +41,14 @@ The **strongest enforced bar** today is **Layer B (L0) + Layer C tracking** on a
 | Traceability (L0) | No `COVER-001` on formal blocks | `matrix --check-coverage` |
 | Block leads (L0) | No `TRACE-002` (Tier A/B Go sync; Tier C waived) | `check-leads` |
 | Conformance (L3) | `specparse`, `specmodel`, `specconformance` tests pass | `go test` |
-| Oracle (L3) | **48/48** runtime IMPLs in [`oracle-registry.yaml`](../../tied/spec/oracle-registry.yaml) | `spec-corpus-status` |
+| Oracle (L3) | **50/50** runtime IMPLs in [`oracle-registry.yaml`](../../tied/spec/oracle-registry.yaml) | `spec-corpus-status` |
 | Logic audit (L1–L3) | **73/73** `logic_verified` + **73/73** `req_audit_pass` (manual gate) | improvement queue |
 | CRIT-001 scoped (L4) | **73/73** `crit001_pass` (scope registry + `--req-criteria-scoped`) | improvement queue + runbook |
 | Three-way sync | Sidecar `// -` leads match Go for Tier A/B (`run_impl_logic_audit.py`) | logic audit script |
 | Tracking | **73/73** `formal_spec: true` | improvement queue |
 | Layer A (release) | `tied_validate_consistency` with pseudocode | `validate-tied-mcp` |
 
-**Current logic-level distribution (73/73):** L3 **54**, L2 **7**, L1 **12** (Tier C doc/process + selected Tier B tokens).
+**Current logic-level distribution (73/73):** run `python3 scripts/rebaseline_logic_tracking.py --dry-run` after queue edits; last rebaseline aligns `logic_level` with oracle registry + automated audit (L3 = verified oracle or Tier A runtime; L2 = Tier B without oracle; L1 = Tier C doc/process).
 
 **One-click status** — prints PASS/FAIL per row and `CORPUS STATUS: ALL GREEN` when every Layer B check passes:
 
@@ -82,14 +82,14 @@ Any non-zero exit or `FAIL` line means the corpus is not all-green — fix befor
 
 ## Logic verification levels (L0–L3 + projected L4)
 
-Validation strength increases by level. **L0 and corpus-wide logic audit are complete (73/73).** L3 oracle coverage is complete for the **48** runtime domains in the oracle registry.
+Validation strength increases by level. **L0 and corpus-wide logic audit are complete (73/73).** L3 oracle coverage is complete for the **50** runtime domains in the oracle registry.
 
 | Level | Meaning | Enforced by | Status (73 IMPLs) |
 |-------|---------|-------------|-------------------|
 | **L0** | `formal_spec`: SPEC-ID, STEP/PROCEDURE, block leads parse; matrix + check-leads | `specctl`, CI gate | **73/73 done** |
 | **L1** | Meaningful `How:` leads; REQ tokens resolve; sidecar structure (Summary + blocks); Tier C target | `run_impl_logic_audit.py` | **12 at L1** (Tier C) |
 | **L2** | Tests assert STEP behavior (not comment refs only); test-spec sidecars match tests | conformance + manual review | **7 at L2** |
-| **L3** | `internal/specmodel` oracle + `test/specconformance` vs `pkg/*` | oracle registry + `go test` | **54 at L3**; **48/48** oracle domains |
+| **L3** | `internal/specmodel` oracle + `test/specconformance` vs `pkg/*` | oracle registry + `go test` | **56 at L3**; **50/50** oracle domains |
 | **L4** *(projected)* | Mutation score threshold; automated REQ criteria ↔ STEP mapping; PRE/POST interpreter | mutation pilot, future tooling | pilot on `pkg/fileops` only |
 
 ### REQ audit (required for `req_audit_pass: true`)
@@ -110,7 +110,7 @@ Reset tracking: `python3 scripts/reset_impl_logic_audit_queue.py`
 
 | Goal | Command | When |
 |------|---------|------|
-| **Corpus health snapshot (fast)** | @code-as-button(corpus-status) | L0 + oracle 48/48 + logic 73/73 + req_audit 73/73 |
+| **Corpus health snapshot (fast)** | @code-as-button(corpus-status) | L0 + oracle 50/50 + logic 73/73 + req_audit 73/73 |
 | **Per-token logic audit** | `python3 scripts/run_impl_logic_audit.py --token IMPL-TOKEN` | Before marking `req_audit_pass` |
 | **Mark logic audit complete** | `python3 scripts/mark_impl_logic_audit_complete.py IMPL-TOKEN` | After audit + specctl gates |
 | **Seed oracle counts only** | @code-as-button(seed-logic-tracking) | After oracle registry edits (not REQ audit) |
@@ -130,6 +130,12 @@ Reset tracking: `python3 scripts/reset_impl_logic_audit_queue.py`
 ---
 
 ## Recommended workflows
+
+### Agent quick path (sidecar edit)
+
+1. Edit `tied/implementation-decisions/IMPL-*-pseudocode.md` (behavior + `## Summary contract`).
+2. `python3 scripts/sync_tied_yaml_projections.py --check` (or `--apply` before commit).
+3. `SKIP_TIED_MCP=1 scripts/run-spec-verification.sh` (Layer B corpus gate; optional `RUN_LAYER_C=1` for Tier A contract analyze).
 
 ### Daily / PR check (simplest)
 
@@ -245,6 +251,7 @@ go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pse
 |----------|--------|
 | `SKIP_TIED_MCP=1` | `run-spec-verification.sh` does not call `validate-tied-mcp.sh` |
 | `MUTATION_SCORE_THRESHOLD=80` | Mutation pilot pass threshold (default `70`) |
+| `RUN_LAYER_C=1` | `run-spec-verification.sh` runs Tier A `pseudocode_analyze` gate (`scripts/run_layer_c_gate.sh`) |
 | `RUN_L4_PILOT=1` | `spec-corpus-status.sh` runs L4 pilot section (mutation + optional REQ strict) |
 | `RUN_L4_REQ_STRICT=1` | With `RUN_L4_PILOT=1`, run `--req-criteria-scoped` CRIT-001 audit |
 | `MUTATION_WAVE=0`–`4` / `all` | Wave filter for `run-mutation-pilot.sh` (see `tied/spec/mutation-wave-registry.yaml`) |
@@ -255,7 +262,7 @@ go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pse
 
 ## Projected strongest bar (L4 roadmap)
 
-**Not globally CI-gating.** Pilot commands below; release bar remains Layer A + L0 + 73/73 + 48/48 + `go test ./...`.
+**Not globally CI-gating.** Pilot commands below; release bar remains Layer A + L0 + 73/73 + 50/50 + `go test ./...`.
 
 | Capability | Pilot enforcement | Current state |
 |------------|-------------------|---------------|
@@ -347,12 +354,17 @@ Checks indexes, detail YAML, and **token comments** in `essence_pseudocode` — 
 | Resource | Path | Role |
 |----------|------|------|
 | Sidecar source | `tied/implementation-decisions/IMPL-{TOKEN}-pseudocode.md` | Authoritative pseudocode body |
-| Formal IMPL list | `tied/spec/formal-spec-registry.yaml` | **73** tokens under `formal_spec:` |
-| Coverage waivers | `tied/spec/coverage-waivers.yaml` | `INFRA-*` blocks exempt from coverage; `lead_check_skip` exempt from check-leads |
+| Formal IMPL list | `tied/spec/formal-spec-registry.yaml` | **73** tokens under `formal_spec:` (quoted or unquoted YAML list entries) |
+| Registry parser | `scripts/lib/formal_spec_registry.sh` + `scripts/formal_spec_registry.py` | Shared token list for status/verification; **fail closed** if parse count is 0 |
+| YAML projection | `scripts/sync_tied_yaml_projections.py` | `--check` / `--apply` syncs index (+ detail) `implementation_approach.summary` from sidecar `## Summary contract` |
+| Coverage waivers | `tied/spec/coverage-waivers.yaml` | `INFRA-*` blocks exempt from coverage; `lead_check_skip` exempt from check-leads; `HYGIENE_POLICY` on `IMPL-TOKEN_COVERAGE_AUDIT` is `INFRA-policy-sidecar-block` |
 | Status script | `scripts/spec-corpus-status.sh` | One-screen all-green dashboard (exit 0 = pass) |
 | Gate script | `scripts/run-spec-verification.sh` | Full Layer B pipeline + status summary |
-| Oracle registry | `tied/spec/oracle-registry.yaml` | **48** L3 domains (`status: verified`) |
+| Oracle registry | `tied/spec/oracle-registry.yaml` | **50** L3 domains (`status: verified`) |
 | Logic audit | `scripts/run_impl_logic_audit.py` | Per-token / batch structural + lead sync audit |
+| Logic rebaseline | `scripts/rebaseline_logic_tracking.py` | Sync queue + checklist from audit (no `--mark-complete`) |
+| Tier A contracts | `scripts/enrich_tier_a_procedure_contracts.py` | Insert `Contract:` stanzas (INPUT/OUTPUT/PRE/POST/EFFECTS) under `PROCEDURE` blocks |
+| Layer C gate | `scripts/run_layer_c_gate.sh` | `pseudocode_analyze` with `gate_mode: true` on five Tier A sidecars; reports under `working/.../pseudocode-analysis/` |
 | Logic complete | `scripts/mark_impl_logic_audit_complete.py` | Sets `req_audit_pass` after gates (manual sign-off); `--logic-level L4` sets `mutation_verified` |
 | Mutation tracking | `scripts/seed_mutation_tracking.py` | Adds `mutation_verified` / `mutation_score` fields (not proof) |
 | Mutation waves | `scripts/run-mutation-waves.sh` | Sequential L4 wave rollout |

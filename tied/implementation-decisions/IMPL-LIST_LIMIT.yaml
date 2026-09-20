@@ -60,7 +60,12 @@ IMPL-LIST_LIMIT:
   implementation: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
   implementation_approach:
     details: []
-    summary: '- Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`'
+    summary: |-
+      Limits archive and file-backup listing output to the N most recent items after sorting, with 0 meaning show all.
+      INPUT: listLimit flag value, cfg, formatter, optional file path
+      OUTPUT: printed list lines truncated to limit
+      DATA: archives or backups slice, sort order (most recent first)
+      Canonical behavior: tied/implementation-decisions/IMPL-LIST_LIMIT-pseudocode.md
   implementation_status: ✅ Complete
   implementation_steps: |-
     1. Record the requirement token `[REQ-EXTRACT_008_INTERDEP_MAPPING]` in `tied/requirements.md` (done).
@@ -74,8 +79,8 @@ IMPL-LIST_LIMIT:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

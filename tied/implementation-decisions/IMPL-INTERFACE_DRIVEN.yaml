@@ -10,14 +10,19 @@ IMPL-INTERFACE_DRIVEN:
       - Create clear interfaces for all extracted components
       - Define contracts before extracting concrete implementations
       - Prevents tight coupling between extracted packages
-    summary: Define contracts before extracting concrete implementations
+    summary: |-
+      Define minimal consumer-side interfaces from real call sites, implement concretely in provider packages, and verify boundaries with mocks.
+      INPUT: provider package, consumer roots (main, pkg, tests)
+      OUTPUT: interface definitions, wiring at composition root, mock-backed unit tests
+      DATA: method names, argument shapes, fake implementations
+      Canonical behavior: tied/implementation-decisions/IMPL-INTERFACE_DRIVEN-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Interface-Driven Design
   rationale:
     benefits:

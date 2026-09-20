@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-20",
+  "wave": 4,
+  "threshold_percent": 70,
+  "tool": "go-mutesting (avito-tech)",
+  "command": "MUTATION_WAVE=4 scripts/run-mutation-pilot.sh",
+  "packages": [
+    {
+      "package": "pkg/config",
+      "score_percent": 21.5633,
+      "pass": false,
+      "notes": "Below threshold; discovery.go and inheritance mutations largely undetected by tests."
+    },
+    {
+      "package": "pkg/formatter",
+      "score_percent": 100.0,
+      "pass": true
+    }
+  ],
+  "overall_pass": false,
+  "registry_action": "No change to tied/spec/mutation-wave-registry.yaml wave 4 (still pending; pkg/config not verified).",
+  "follow_up": "Optional scoped test/oracle work for pkg/config discovery and inheritance before re-pilot."
+}

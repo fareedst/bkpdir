@@ -56,6 +56,10 @@ This document centralizes every instruction AI coding assistants must follow whi
   - Record architecture decisions (`tied/docs/architecture-decisions.md`) with `[ARCH-*]` tokens cross-referencing requirements.
   - Record implementation decisions (`tied/docs/implementation-decisions.md`) with `[IMPL-*]` tokens cross-referencing `[ARCH-*]` and `[REQ-*]` tokens.
   - Never defer documentation; update as you think, design, and implement.
+- **Sidecar-canonical behavior and YAML projection** `[REQ-PSEUDOCODE_FORMAL_VERIFICATION]` `[ARCH-SPEC_DSL_AND_ORACLE]`
+  - IMPL **behavior** lives in the sidecar `tied/implementation-decisions/IMPL-*-pseudocode.md` only. Edit pseudo-code and `## Summary contract` there (direct edit or `impl_detail_set_essence_pseudocode` / `tied-cli`); do **not** hand-edit `implementation_approach.summary` prose in IMPL detail or index YAML.
+  - After sidecar or summary-contract changes, sync the lean YAML projection: `python3 scripts/sync_tied_yaml_projections.py --apply` (or `--check` in CI/pre-commit). Methodology-owned tokens in `INDEX_ONLY_IMPL_TOKENS` (`IMPL-MCP_FEEDBACK_TOOLS`, `IMPL-MODULE_VALIDATION`, `IMPL-TIED_FILES`) get **index** projection only—do not edit bodies under `tied/methodology/` ([PROC-TIED_METHODOLOGY_READONLY]).
+  - Agent workflow detail: `tied/docs/impl-deep-sync-agent-guide.md` § Sidecar-canonical YAML projection; corpus gates: `docs/markscope/spec-verification.md`.
 - **LEAP: Logic Elevation And Propagation** (see `tied/docs/processes.md` § LEAP / [PROC-LEAP])
   - When code or tests written during TDD/E2E differ from IMPL, update the stack in **reverse order**: **IMPL → ARCH → REQ** in the same work item so tokens stay consistent and testable.
   - Work may start at any layer (REQ, ARCH, IMPL, or code/tests); for work to be **complete**, apply changes **up and down** the stack as needed. Code is valid only when **all tests pass** and **all requirements are met**.

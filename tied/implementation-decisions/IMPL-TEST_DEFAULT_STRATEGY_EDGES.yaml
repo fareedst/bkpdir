@@ -15,15 +15,20 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   equals_default_but_not_zero: Even if value equals default (e.g., `"../.bkpdir"`), if it's not zero value, default strategy does NOT apply
   implementation_approach:
     details: []
-    summary: '- **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios'
+    summary: |-
+      Tests that =default merge strategy applies only when the destination field is the zero value (empty string, empty slice, false bool), not when the field equals the built-in default.
+      INPUT: paired YAML config files via BKPDIR_CONFIG
+      OUTPUT: LoadConfig results and assertions on ArchiveDirPath, ExcludePatterns, IncludeGitInfo
+      DATA: =prefixed keys, default merge behavior for accumulate fields
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

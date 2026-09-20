@@ -11,14 +11,19 @@ IMPL-TESTING_COMPLEXITY:
       - Create package-specific tests for each extracted component
       - Ensure original integration tests continue to pass unmodified
       - Extract test utilities as foundation for package-specific tests
-    summary: Extract test utilities first, then create focused tests for each package while ensuring original integration tests still pass
+    summary: |-
+      Testing strategy for large refactors: extract shared test utilities, add package-scoped tests, and keep legacy integration tests passing.
+      INPUT: monolithic test helpers and package boundaries
+      OUTPUT: pkg/*_test.go coverage plus unchanged root integration suite
+      DATA: testutil fixtures, interface mocks
+      Canonical behavior: tied/implementation-decisions/IMPL-TESTING_COMPLEXITY-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Testing Complexity Challenge
   rationale:
     benefits:

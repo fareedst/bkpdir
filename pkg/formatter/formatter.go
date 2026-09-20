@@ -55,7 +55,6 @@ func (f *DefaultOutputFormatter) SetCollector(collector *OutputCollector) {
 	f.collector = collector
 }
 
-
 // FormatCreatedArchive formats a created archive message using printf-style formatting
 func (f *DefaultOutputFormatter) FormatCreatedArchive(path string) string {
 	formatStr := f.configProvider.GetFormatString("created_archive")
@@ -240,7 +239,6 @@ func (f *DefaultOutputFormatter) FormatDryRunBackup(path string) string {
 	return fmt.Sprintf(formatStr, path)
 }
 
-
 // PrintCreatedArchive prints a created archive message
 func (f *DefaultOutputFormatter) PrintCreatedArchive(path string) {
 	message := f.FormatCreatedArchive(path)
@@ -382,7 +380,6 @@ func (f *DefaultOutputFormatter) TemplateError(data map[string]string) string {
 	return f.templateFormatter.TemplateError(data)
 }
 
-
 // ExtractArchiveFilenameData delegates to the pattern extractor
 func (f *DefaultOutputFormatter) ExtractArchiveFilenameData(filename string) map[string]string {
 	return f.patternExtractor.ExtractArchiveFilenameData(filename)
@@ -398,7 +395,6 @@ func (f *DefaultOutputFormatter) ExtractBackupFilenameData(filename string) map[
 func (f *DefaultOutputFormatter) ExtractPatternData(pattern, text string) map[string]string {
 	return f.patternExtractor.ExtractPatternData(pattern, text)
 }
-
 
 // FormatDiskFullError formats a disk full error message
 func (f *DefaultOutputFormatter) FormatDiskFullError(err error) string {
@@ -453,7 +449,6 @@ func (f *DefaultOutputFormatter) FormatInvalidFile(err error) string {
 	}
 	return fmt.Sprintf(formatStr, err.Error())
 }
-
 
 // TemplateDiskFullError formats a disk full error using template
 func (f *DefaultOutputFormatter) TemplateDiskFullError(err error) string {

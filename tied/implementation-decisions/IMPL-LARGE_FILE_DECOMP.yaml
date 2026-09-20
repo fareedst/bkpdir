@@ -29,10 +29,11 @@ IMPL-LARGE_FILE_DECOMP:
         Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
         Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
     summary: |-
-      Identify logical component boundaries
-      Extract components into separate files/packages
-      Maintain interface compatibility
-      Comprehensive testing after decomposition
+      Decompose oversized source files into logical components with stable interfaces, then verify behavior with comprehensive tests after each split.
+      INPUT: large source file, component boundaries, existing test suite
+      OUTPUT: smaller files or packages, preserved public API, improved test coverage
+      DATA: interface contracts, decomposition map, coverage metrics
+      Canonical behavior: tied/implementation-decisions/IMPL-LARGE_FILE_DECOMP-pseudocode.md
   implementation_details:
     - Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
     - Added TestDelayedOutputMode testing OutputFormatter with collector integration
@@ -49,8 +50,8 @@ IMPL-LARGE_FILE_DECOMP:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

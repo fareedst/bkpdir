@@ -6,6 +6,7 @@ import (
 
 	"bkpdir/internal/specmodel"
 )
+
 // - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: table-driven test asserts determineMergeStrategyForField paths map to expected strategies.
 // - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: embed semantic tokens inline and replicate critical REQ/ARCH/IMPL context so each document layer stays self-contained with registry links.
 // - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: verify tokens in code and tests exist in the registry with bidirectional links and no orphans.
@@ -50,6 +51,7 @@ func TestConfigSidecarsFormal(t *testing.T) {
 		"IMPL-CFG_MIXED_MODE_MERGE_FIX",
 		"IMPL-CFG_QUOTED_KEY_PREFIX",
 		"IMPL-EXCLUDE_MERGE_FIX",
+		"IMPL-TEST_CFG_005_P1",
 		"IMPL-TEST_DEFAULT_STRATEGY_EDGES",
 		"IMPL-TEST_EMPTY_STRING_HANDLING",
 		"IMPL-TEST_EXCLUDE_MERGE",

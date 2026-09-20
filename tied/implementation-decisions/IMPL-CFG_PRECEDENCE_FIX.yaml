@@ -37,15 +37,20 @@ IMPL-CFG_PRECEDENCE_FIX:
       - LoadConfig fallback path uses fileProcessed flag instead of comparing cfg to defaults
       - mergeBasicSettings checks explicitlySetFields before overriding scalar values
       - Subsequent files process with inheritContext=false (respects earlier file precedence)
-    summary: Uses fileProcessed flag and explicitlySetFields map in LoadConfig fallback path to track precedence; first file merges with defaults, subsequent files respect earlier file values.
+    summary: |-
+      Fix sequential config file loading so earlier discovery-order files keep explicitly set values even when equal to defaults, using explicitlySetFields instead of comparing only to DefaultConfig.
+      INPUT: ordered config file paths, raw YAML per file
+      OUTPUT: merged Config respecting first-wins precedence
+      DATA: explicitlySetFields map, fileProcessed flag, inheritContext boolean
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_PRECEDENCE_FIX-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

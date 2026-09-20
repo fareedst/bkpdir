@@ -14,14 +14,19 @@ IMPL-EXTRACT_008_DOC_MIGRATION:
       - Record IMPL-EXTRACT_008_DOC_MIGRATION in implementation-decisions.md
       - Record REQ-EXTRACT_008_INTERDEP_MAPPING in requirements.md
       - Remove supplemental preservation files and decommission working-plan-extract-008.md
-    summary: Migrate working-plan content into STDD requirements, architecture, and implementation documents then decommission working-plan
+    summary: |-
+      Migrates EXTRACT-008 working-plan content into canonical STDD REQ/ARCH/IMPL and deliverable docs, then removes supplemental preservation files.
+      INPUT: working-plan-extract-008 content, template doc locations
+      OUTPUT: registry entries, docs/package-interdependency-mapping.md, decommissioned working plan
+      DATA: REQ-EXTRACT_008_INTERDEP_MAPPING, ARCH-EXTRACT_008_INTERDEP tokens
+      Canonical behavior: tied/implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: EXTRACT-008 Documentation Migration and Preservation
   rationale:
     benefits:

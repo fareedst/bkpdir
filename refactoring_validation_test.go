@@ -1,5 +1,6 @@
 // [REQ-MAINTAINABILITY]
 package main
+
 import (
 	"os"
 	"os/exec"

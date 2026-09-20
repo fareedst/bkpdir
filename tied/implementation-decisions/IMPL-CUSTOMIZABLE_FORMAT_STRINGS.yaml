@@ -55,17 +55,19 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
       - ValidateFormatString validates individual fields against expected placeholder lists
       - Validation integrated into LoadConfig and LoadConfigWithInheritance (non-fatal stderr warnings)
     summary: |-
-      Implement format string validation and comprehensive documentation for user customization.
-      FormatListArchive and FormatListBackup support template-style (#{name}) placeholders.
-      All placeholder syntax migrated from %{...} to #{...}.
+      Validate configurable format and template strings against per-field placeholder rules, warn on unexpected placeholders during config load, and render #{key} and mixed printf templates with safe defaults. Brief example configuration file demonstrates common customization patterns; documentation is complete, accurate, and tested.
+      INPUT: fieldName, formatString, cfg format fields, data map
+      OUTPUT: warning strings, rendered message text
+      DATA: placeholderMap, regex extractors, known default placeholders
+      Canonical behavior: tied/implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

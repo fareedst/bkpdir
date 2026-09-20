@@ -19,14 +19,19 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
       - Replaced project-tokens.yaml with pointer stub
       - Validated via token-coverage-analysis.sh (100% coverage)
       - Validated via validate-token-traceability.sh
-    summary: Migration of all legacy tokens to canonical STDD registry with validation via coverage analysis and traceability scripts
+    summary: |-
+      Complete migration of legacy tokens to canonical STDD registry with inventory scripts and traceability validation.
+      INPUT: legacy token artifacts, project token stubs
+      OUTPUT: updated semantic-tokens.md tables, archived governance docs, validation reports
+      DATA: token_inventory.json, render_token_tables output, validate-token-traceability results
+      Canonical behavior: tied/implementation-decisions/IMPL-TOKEN_MIGRATION_COMPLETE-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Token Migration Complete
   rationale:
     benefits:

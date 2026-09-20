@@ -56,6 +56,12 @@ STEP T001: RETURN Config with preset defaults and nested git config
 - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: return new Config populated with preset defaults for all fields including nested git config.
 
 PROCEDURE DEFAULTCONFIG():
+Contract:
+PRE: true
+POST: true
+INPUT: context for DEFAULTCONFIG
+OUTPUT: result of DEFAULTCONFIG
+EFFECTS: State.Config, pure
   RETURN Config with default archive/backup paths, status codes, format strings, templates, patterns
   INITIALIZE Git from DEFAULTGITCONFIG
 
@@ -67,6 +73,12 @@ STEP T001: BUILD ConfigValue list for key fields with Source config
 - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: expose subset of key fields as ConfigValue rows for simple --config display.
 
 PROCEDURE GETCONFIGVALUES(cfg):
+Contract:
+PRE: true
+POST: true
+INPUT: cfg
+OUTPUT: result of GETCONFIGVALUES
+EFFECTS: State.Config, pure
   RETURN list of ConfigValue for archive_dir_path, use_current_dir_name, include_git_info, backup paths
   MARK each Source as config
 
@@ -78,6 +90,12 @@ STEP T001: DELEGATE to GetAllConfigValuesWithSources and convert to legacy forma
 - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] [REQ-CFG_006] — How: delegate to reflection-based GetAllConfigValuesWithSources and convert to legacy ConfigValue format sorted by name.
 
 PROCEDURE GETCONFIGVALUESWITHSOURCES(cfg, root):
+Contract:
+PRE: true
+POST: true
+INPUT: cfg, root
+OUTPUT: result of GETCONFIGVALUESWITHSOURCES
+EFFECTS: State.Config, pure
   enhanced = GETALLCONFIGVALUESWITHSOURCES(cfg, root)  # see IMPL-CONFIG_DISPLAY_FLATTENING
   FOR EACH enhanced: append ConfigValue from enhanced.ConfigValue
   RETURN legacyValues sorted by name
@@ -87,5 +105,11 @@ PROCEDURE GETCONFIGVALUESWITHSOURCES(cfg, root):
 - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: verify DefaultConfig preset values for archive path, flags, and exclude patterns.
 
 PROCEDURE EMBEDDED_MINITEST_DEFAULT_CONFIG():
+Contract:
+PRE: true
+POST: true
+INPUT: context for EMBEDDED_MINITEST_DEFAULT_CONFIG
+OUTPUT: result of EMBEDDED_MINITEST_DEFAULT_CONFIG
+EFFECTS: State.Config, pure
   cfg = DefaultConfig()
   ASSERT archive_dir_path, use_current_dir_name, exclude_patterns match expected defaults

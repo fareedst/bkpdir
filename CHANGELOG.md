@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **TIED Canon (`[REQ-PSEUDOCODE_FORMAL_VERIFICATION]`)**: Sidecar-canonical YAML projection (`scripts/sync_tied_yaml_projections.py`), formal spec registry parser (`scripts/formal_spec_registry.py`, `scripts/lib/formal_spec_registry.sh`), logic rebaseline (`scripts/rebaseline_logic_tracking.py`), Tier A Layer C contracts (`scripts/enrich_tier_a_procedure_contracts.py`, `scripts/run_layer_c_gate.sh`), fail-closed corpus gates in `run-spec-verification.sh` / `spec-corpus-status.sh`. CITDP `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-TIED-CANON.yaml`; working slice `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/` (tracker, gates, mutation wave 4 + CRIT-001 strict evidence, minimal inquiry waiver).
 - **Lead hygiene (`[REQ-PSEUDOCODE_FORMAL_VERIFICATION]`)**: `scripts/lead_hygiene.py`, `audit_package_level_leads.py`, `strip_package_level_leads.py`, `strip_redundant_impl_banners.py` (D15), and `test_lead_hygiene.py` to detect and remove package-level `// - [IMPL-*]` blocks in `*_test.go`; audit wired into `run-spec-verification.sh`. Bulk `add-test-leads --all` disabled in `impl_pseudocode_remediation.py`.
 - **Scan-root check-leads (`[IMPL-SPEC_CTL]`)**: `LeadScanDirPaths` scans `pkg/`, `internal/`, `cmd/`, and `test/`; `internal/speccheck/leads_test.go`; CITDP `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-SCAN-ROOT.yaml`; integrated close-out under `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/`.
 - **Close-out evidence**: `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/` tracker, CITDP, adversarial-inquiry phases, slim envelope + archived hygiene discovery (`evidence/archive-lead-hygiene-20260919/`), and handoff docs.
@@ -14,6 +15,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- **Agent canon**: `AGENTS.md`, `tied/docs/impl-deep-sync-agent-guide.md` (§ Sidecar-canonical YAML projection), `tied/docs/client-development-index.md`, `docs/markscope/spec-verification.md` (agent quick path). `[ARCH-SPEC_DSL_AND_ORACLE]` sidecar-canonical policy; 73/73 IMPL `implementation_approach.summary` projections synced from sidecar `## Summary contract`.
+- **Logic tracking**: Honest L3/L2/L1 distribution and oracle 50/50; improvement-queue and oracle-registry updates; HYGIENE_POLICY waiver for lead placement on `IMPL-TOKEN_COVERAGE_AUDIT`.
 - **Test traceability**: Restored func-scoped IMPL leads across root/pkg/internal/test `*_test.go`; production backfill in `comparison.go` and `pkg/testutil/doc.go`. Classifier alignment excludes `scripts/testdata` from Go lead scans.
 - **Corpus bookkeeping**: Restored improvement-queue tracking (`req_audit_pass`, `deep_sync_complete`, `formal_spec`) via logic-audit mark pass; `mark_impl_logic_audit_complete.py` sets queue `deep_sync_complete`.
 - **CITDP**: `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION.yaml` and scan-root record; evidence archive paths documented in working CITDP copies.

@@ -12,14 +12,19 @@ IMPL-LAYERED_EXTRACTION:
       - Infrastructure layer first (config, errors)
       - Patterns layer last (processing)
       - Utilities layer second (formatter, git)
-    summary: 'Extract in dependency order: Infrastructure → Utilities → Framework → Patterns'
+    summary: |-
+      Extract packages in dependency order: infrastructure first, then utilities, framework, and patterns last, with no circular references between layers.
+      INPUT: packages to extract, layer assignment per package
+      OUTPUT: four stable layers with acyclic dependencies
+      DATA: layer order, package dependency graph
+      Canonical behavior: tied/implementation-decisions/IMPL-LAYERED_EXTRACTION-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Layered Extraction Approach
   rationale:
     benefits:

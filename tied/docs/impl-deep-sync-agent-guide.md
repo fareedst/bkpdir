@@ -122,6 +122,19 @@ Normalize `code_locations.files` / `functions` in IMPL YAML via **tied-yaml MCP*
 
 **Template:** [`../../templates/impl-essence-pseudocode-template.md`](../../templates/impl-essence-pseudocode-template.md)
 
+### Sidecar-canonical YAML projection
+
+Sidecar markdown is **canonical**; IMPL detail and index `implementation_approach.summary` fields are **lean projections** of the sidecar `## Summary contract` section ([ARCH-SPEC_DSL_AND_ORACLE] `[REQ-PSEUDOCODE_FORMAL_VERIFICATION]`).
+
+| Step | Action |
+| --- | --- |
+| 1 | Author or repair behavior in the sidecar (Phase C above)—especially `## Summary contract`. |
+| 2 | Run literal three-way sync (Phase D–F): sidecar leads ↔ `// -` comments in Go. |
+| 3 | Project summary into YAML: `python3 scripts/sync_tied_yaml_projections.py --apply` from repo root (use `--check` before commit or in CI). |
+| 4 | Update other IMPL metadata (`code_locations`, `traceability`, cross-refs) via tied-yaml MCP as in Phase G—**not** by pasting summary prose into YAML by hand. |
+
+**Methodology read-only:** Tokens in `INDEX_ONLY_IMPL_TOKENS` inside `scripts/sync_tied_yaml_projections.py` (`IMPL-MCP_FEEDBACK_TOOLS`, `IMPL-MODULE_VALIDATION`, `IMPL-TIED_FILES`) sync **project index** summaries only; inherited detail under `tied/methodology/` is not edited in client repos ([PROC-TIED_METHODOLOGY_READONLY]).
+
 **Lead format (must match in Go):**
 
 ```markdown

@@ -1,11 +1,13 @@
 // [REQ-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [IMPL-DIRECTORY_COMPARISON]
 package fileops
+
 import (
 	"archive/zip"
 	"os"
 	"path/filepath"
 	"testing"
 )
+
 // - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — How: store pattern slice on PatternMatcher for iterative ShouldExclude checks.
 // - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — How: normalize path to slashes, return true on first pattern match via matchesPattern dispatch.
 // - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — How: route trailing-/ to directory rules, glob * to doublestar, else exact path equality.

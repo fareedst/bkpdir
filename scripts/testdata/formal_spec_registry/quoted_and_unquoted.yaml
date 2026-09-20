@@ -1,0 +1,6 @@
+formal_spec:
+  - IMPL-ALPHA
+  - "IMPL-BETA"
+  - IMPL-GAMMA
+  # not a token line
+  - "IMPL-DELTA"

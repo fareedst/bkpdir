@@ -180,7 +180,12 @@ IMPL-CFG_006:
     ```
   implementation_approach:
     details: []
-    summary: Reflection-based field discovery with caching and lazy evaluation
+    summary: |-
+      Reflection-based configuration field discovery with thread-safe schema cache, value formatting, and merge-strategy inference. Flat YAML-tag reflection and display grouping are owned by [IMPL-CONFIG_DISPLAY_FLATTENING] (reflectConfigFields, determineFieldCategory). Backward compatibility: existing GetConfigValuesWithSources callers unchanged. Source tracking shows inheritance chain origins per field.
+      INPUT: Config instance, field paths, reflect types
+      OUTPUT: configFieldInfo slices, display strings, merge strategy names
+      DATA: globalFieldCache, configFieldInfo, ConfigValueWithMetadata
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_006-pseudocode.md
   incremental_resolution: |-
     ```go
     // [IMPL-CFG_006] Performance optimization - Incremental resolution
@@ -226,8 +231,8 @@ IMPL-CFG_006:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

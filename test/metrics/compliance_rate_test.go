@@ -1,5 +1,6 @@
 // [REQ-CODE_QUALITY]
 package metrics
+
 import (
 	"context"
 	"encoding/json"

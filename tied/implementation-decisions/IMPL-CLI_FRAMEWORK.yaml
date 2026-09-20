@@ -138,15 +138,20 @@ IMPL-CLI_FRAMEWORK:
     ```
   implementation_approach:
     details: []
-    summary: Builder pattern with manager interfaces for CLI construction
+    summary: |-
+      Builder-pattern CLI framework: command and root builders, flag/context/dry-run/version managers, and a CLIApp container that wires managers and runs the root command with optional signal-aware context.
+      INPUT: AppInfo, command templates, CommandContext, DryRunOperation
+      OUTPUT: configured root command, exit status, dry-run log lines
+      DATA: FlagManager, VersionManager, ContextManager, DryRunManager, BuildInfo
+      Canonical behavior: tied/implementation-decisions/IMPL-CLI_FRAMEWORK-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: 'Manual deep sync: pilot-quality three-way block leads'
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

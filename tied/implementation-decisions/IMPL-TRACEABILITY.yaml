@@ -9,18 +9,19 @@ IMPL-TRACEABILITY:
   implementation_approach:
     details: []
     summary: |-
-      Feature fingerprint generation and validation
-      Behavioral contract definition and enforcement
-      Dependency graph construction and analysis
-      Automated change impact assessment
+      Traceability utilities: stable feature fingerprints, behavioral contracts, and semantic-token dependency graphs for change-impact analysis.
+      INPUT: tracked features, code interfaces, semantic_token_registry cross_references
+      OUTPUT: fingerprint store, contract definitions, dependency graph with cycle report
+      DATA: signature hashes, REQ links, forward/backward token edges
+      Canonical behavior: tied/implementation-decisions/IMPL-TRACEABILITY-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

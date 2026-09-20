@@ -4407,7 +4407,6 @@ func GetDefaultValidationRules() []ConfigValidationRule {
 	}
 }
 
-//
 // ValidateFormatString validates a format string against expected placeholders.
 //
 // This function checks if all placeholders in the format string match the expected
@@ -4439,7 +4438,6 @@ func ValidateFormatString(fieldName, formatString string) []string {
 	return warnings
 }
 
-//
 // This function defines the validation rules for each format string field. It returns
 // a slice of expected placeholder strings (e.g., ["%s"], ["#{path}", "#{size_human}"]).
 //
@@ -4539,7 +4537,6 @@ func getExpectedPlaceholders(fieldName string) []string {
 	return placeholderMap[fieldName]
 }
 
-//
 // This function extracts both printf-style and template-style placeholders from
 // a format string. It uses regex patterns to find:
 //   - Printf-style: %s, %d, %v, %f, %b, %t, %x, %X
@@ -4564,7 +4561,6 @@ func extractPlaceholders(formatString string) []string {
 	return placeholders
 }
 
-//
 // This function iterates over all format string fields in the Config struct and
 // validates each one using ValidateFormatString(). It collects all warnings and
 // returns them as a single slice.

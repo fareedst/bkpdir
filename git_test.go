@@ -5,6 +5,7 @@
 // Validates repository detection, branch/hash extraction, status detection,
 // and submodule operations via the backward-compatible adapter API.
 package main
+
 import (
 	"io/ioutil"
 	"os"

@@ -18,15 +18,20 @@ IMPL-SPEC_CTL:
       - cmd/specctl/main.go dispatches subcommands
       - internal/speccheck implements matrix and block-lead literal copy audit
       - internal/specparse implements parser and Layer B diagnostic codes
-    summary: Project-local spec control tool; not a TIED MCP replacement for Layer A
+    summary: |-
+      CLI and libraries that parse formal IMPL pseudocode, emit Layer B diagnostics, build traceability matrices, and orchestrate conformance checks.
+      INPUT: sidecar paths, repo root, formal_spec registry
+      OUTPUT: exit code 0 or diagnostic report
+      DATA: parsed AST per file, symbol table, coverage maps
+      Canonical behavior: tied/implementation-decisions/IMPL-SPEC_CTL-pseudocode.md
   metadata:
     created:
       author: AI Agent
       date: '2026-06-02'
     last_updated:
       author: AI Agent
-      date: '2026-06-02'
-      reason: Initial IMPL-SPEC_CTL
+      date: '2026-09-20'
+      reason: probe
   name: Spec Control CLI (specctl)
   rationale:
     benefits:

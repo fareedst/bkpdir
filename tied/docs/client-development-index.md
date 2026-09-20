@@ -64,6 +64,7 @@ Quality assurance references: [quality-assurance-commands.md](quality-assurance-
 | New staged feature | **tied-feature-onboarding.md** → `tied init` | `.cursor/skills/tied-yaml/scripts/tied.sh feature new`; use the feature-orchestration MCP tools for lifecycle work |
 | Tests/code diverged from IMPL | **Pseudo-code** § LEAP micro-cycle | **Processes** § `[PROC-LEAP]`; checklist `sub-leap-micro-cycle` |
 | Repair without full new REQ | **Checklist** + **Pseudo-code** Track B or C | Same LEAP order |
+| Formal IMPL corpus / sidecar-canonical sync | [spec-verification.md](../../docs/markscope/spec-verification.md) + [impl-deep-sync-agent-guide.md](impl-deep-sync-agent-guide.md) § Sidecar-canonical YAML projection | Working slice `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/`; scripts `sync_tied_yaml_projections.py`, `run-spec-verification.sh` |
 
 ---
 

@@ -1,5 +1,6 @@
 // [REQ-CODE_QUALITY]
 package testutil
+
 import (
 	"fmt"
 	"os"

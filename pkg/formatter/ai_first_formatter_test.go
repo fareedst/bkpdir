@@ -7,6 +7,7 @@
 
 // [CRITICAL] FMT-001: AI-first formatter refactoring - [ACTION:core-functionality]
 package formatter
+
 import (
 	"errors"
 	"testing"

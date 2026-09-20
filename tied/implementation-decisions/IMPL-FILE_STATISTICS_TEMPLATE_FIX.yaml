@@ -27,15 +27,20 @@ IMPL-FILE_STATISTICS_TEMPLATE_FIX:
     - REQ-OUTPUT_FORMATTING
   implementation_approach:
     details: []
-    summary: '- **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`'
+    summary: |-
+      Enhance created and incremental archive messages by gathering FileStatInfo and substituting #{path}, #{size_human}, #{mtime}, and related placeholders in detailed template format strings with safe fallbacks.
+      INPUT: archive file path, cfg template strings
+      OUTPUT: formatted message with stats or fallback to basic printf format
+      DATA: TemplateCreatedArchiveDetailed, GatherFileStatInfo map
+      Canonical behavior: tied/implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

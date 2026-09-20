@@ -14,7 +14,12 @@ IMPL-TEST_UNICODE_HANDLING:
     - REQ-CONFIGURATION
   implementation_approach:
     details: []
-    summary: '- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values'
+    summary: |-
+      Ensures Unicode and special characters survive YAML load, merge with defaults, and config paths containing spaces or non-ASCII directory names.
+      INPUT: UTF-8 config values and filesystem paths
+      OUTPUT: LoadConfig results preserving characters
+      DATA: archive_dir_path, exclude_patterns, temp directories
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_UNICODE_HANDLING-pseudocode.md
   merge_behavior: Unicode patterns merge with defaults per CFG-005 (array fields default to merge)
   metadata:
     created:
@@ -22,8 +27,8 @@ IMPL-TEST_UNICODE_HANDLING:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

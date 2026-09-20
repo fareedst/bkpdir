@@ -1,1243 +1,1462 @@
 description: Per-token remediation tracking after waves 1-5 checklist validation.
 tokens:
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 13
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 61
     req_audit_pass: true
     status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CONTEXT_OPS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-BACKWARD_COMPAT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 20
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 62
     req_audit_pass: true
     status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-EXCLUDE_MERGE_FIX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-CFG_HIERARCHY_PRESERVATION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 21
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 63
     req_audit_pass: true
     status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-EXCLUSION_PATTERNS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-CODE_STYLE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 22
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 64
     req_audit_pass: true
     status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-FILE_OPERATIONS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-EXTRACTION_CHALLENGES
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 25
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 65
     req_audit_pass: true
     status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-GIT_CLI
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-EXTRACTION_PRINCIPLES
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 4
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 66
     req_audit_pass: true
     status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CFG_INHERITANCE_PATH_RESOLUTION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-INTERFACE_DRIVEN
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L1
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 67
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-INTERFACE_FIRST
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L1
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 68
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-LARGE_FILE_DECOMP
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L1
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 69
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-LAYERED_EXTRACTION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L1
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 70
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-REFACTOR_PREP
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L1
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 71
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-SEMANTIC_CROSS_REF
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L1 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L1
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
+    oracle_status: n/a
+    priority: P2
+    process_order: 72
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L1
+    tier: C_doc_process
+    token: IMPL-ZERO_BREAKING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L2 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L2
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
     priority: P1
-    process_order: 43
+    process_order: 46
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L2
     tier: B_implemented
-    token: IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    token: IMPL-CONFIG_DISPLAY_FLATTENING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L2 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L2
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
     priority: P1
-    process_order: 44
+    process_order: 47
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L2
     tier: B_implemented
-    token: IMPL-CFG_MIXED_MODE_MERGE_FIX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    token: IMPL-DEPENDENCY_MGMT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L2 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L2
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
     priority: P1
-    process_order: 45
+    process_order: 49
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L2
     tier: B_implemented
-    token: IMPL-CFG_QUOTED_KEY_PREFIX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    token: IMPL-EXTRACT_008_DOC_MIGRATION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L2 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
-    logic_level: L3
+    logic_level: L2
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
     priority: P1
-    process_order: 48
+    process_order: 50
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L2
     tier: B_implemented
-    token: IMPL-DOC_ENHANCEMENT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    token: IMPL-LARGE_FILE_CHALLENGE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L2 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L2
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
+    priority: P1
+    process_order: 56
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L2
+    tier: B_implemented
+    token: IMPL-TIED_FILES
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 5
+    oracle_status: n/a
+    priority: P0
+    process_order: 30
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L3
     tier: A_core_runtime
-    token: IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    token: IMPL-MCP_FEEDBACK_TOOLS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=False)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 0
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
+    priority: P0
+    process_order: 31
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-MODULE_VALIDATION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
+    priority: P0
+    process_order: 35
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-STDD_VIS_ASSETS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
+    priority: P0
+    process_order: 36
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-STDD_VIS_DATA_PIPELINE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
+    priority: P0
+    process_order: 41
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-TOKEN_MIGRATION_COMPLETE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=False)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: n/a
+    priority: P0
+    process_order: 9
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CONFIGURABLE_STRINGS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 59
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_test_impl
+    token: IMPL-TESTING_COMPLEXITY
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 60
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_test_impl
+    token: IMPL-TEST_CFG_005_P1
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 39
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-TEST_COVERAGE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 51
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-TEST_DEFAULT_STRATEGY_EDGES
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 52
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-TEST_EMPTY_STRING_HANDLING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 53
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-TEST_EXCLUDE_MERGE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 54
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-TEST_PREPEND_ORDERING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 55
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-TEST_UNICODE_HANDLING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 1
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
     priority: P1
     process_order: 58
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L3
     tier: B_implemented
     token: IMPL-TRACEABILITY
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 11
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 6
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 7
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CFG_PRECEDENCE_FIX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P1
-    process_order: 73
-    req_audit_pass: true
-    status: logic_verified
-    tier: meta_tooling
-    token: IMPL-SPEC_CTL
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 1
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-ATOMIC_OPS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 10
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CONFIG_OUTPUT_GROUPING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 11
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CONFIG_SCHEMA_FLEX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 12
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CONFIG_STRUCT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 14
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CUSTOMIZABLE_FORMAT_STRINGS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 15
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-DATA_MODELS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 16
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-DELAYED_OUTPUT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 17
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-DIFF_COMMAND
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 18
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-DIRECTORY_COMPARISON
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 19
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-DUAL_FORMATTING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 2
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-AUTO_DETECTION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 23
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-FILE_STATISTICS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 24
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-FILE_STATISTICS_TEMPLATE_FIX
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 26
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-GIT_DIRTY_CONFIG
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 27
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-INCREMENTAL_DUPLICATE_PREVENTION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 28
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-LIST_FORMAT_SAFETY
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 29
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-LIST_LIMIT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 3
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-CFG_006
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 30
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-MCP_FEEDBACK_TOOLS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 31
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-MODULE_VALIDATION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 32
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-PACKAGE_EXTRACTION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 33
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-PROCESSING_PATTERNS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 34
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-RESOURCE_MANAGER
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 35
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-STDD_VIS_ASSETS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 36
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-STDD_VIS_DATA_PIPELINE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 37
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-STRUCTURED_ERRORS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 38
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-TESTING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 39
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-TEST_COVERAGE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 40
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-TOKEN_COVERAGE_AUDIT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 41
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-TOKEN_MIGRATION_COMPLETE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 42
-    req_audit_pass: true
-    status: logic_verified
-    tier: A_core_runtime
-    token: IMPL-ZIP_FORMAT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 46
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-CONFIG_DISPLAY_FLATTENING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 47
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-DEPENDENCY_MGMT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 49
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-EXTRACT_008_DOC_MIGRATION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 50
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-LARGE_FILE_CHALLENGE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 51
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TEST_DEFAULT_STRATEGY_EDGES
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 52
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TEST_EMPTY_STRING_HANDLING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 53
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TEST_EXCLUDE_MERGE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 54
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TEST_PREPEND_ORDERING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 55
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TEST_UNICODE_HANDLING
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 56
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TIED_FILES
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 57
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_implemented
-    token: IMPL-TOKEN_SYSTEM
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 59
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_test_impl
-    token: IMPL-TESTING_COMPLEXITY
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 60
-    req_audit_pass: true
-    status: logic_verified
-    tier: B_test_impl
-    token: IMPL-TEST_CFG_005_P1
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
-    crit001_orphans_remaining: 0
-    crit001_pass: true
-    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
-    deep_sync_complete: true
-    formal_spec: true
-    issues: []
-    logic_level: L3
-    mutation_score: null
-    mutation_verified: false
-    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
+    oracle_status: verified
+    priority: P0
     process_order: 8
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L3
     tier: A_core_runtime
     token: IMPL-CLI_FRAMEWORK
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 14
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
     notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
-    priority: P3
-    process_order: 9
+    oracle_status: verified
+    priority: P0
+    process_order: 19
     req_audit_pass: true
     status: logic_verified
+    target_logic_level: L3
     tier: A_core_runtime
-    token: IMPL-CONFIGURABLE_STRINGS
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    token: IMPL-DUAL_FORMATTING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 18
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 61
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 38
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-BACKWARD_COMPAT
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-TESTING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 62
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 20
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-CFG_HIERARCHY_PRESERVATION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-EXCLUDE_MERGE_FIX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 63
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 26
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-CODE_STYLE
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-GIT_DIRTY_CONFIG
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 64
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 42
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-EXTRACTION_CHALLENGES
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-ZIP_FORMAT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 65
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 7
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-EXTRACTION_PRINCIPLES
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CFG_PRECEDENCE_FIX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 66
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 43
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-INTERFACE_DRIVEN
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 67
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 44
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-INTERFACE_FIRST
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-CFG_MIXED_MODE_MERGE_FIX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 68
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 45
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-LARGE_FILE_DECOMP
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-CFG_QUOTED_KEY_PREFIX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 69
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 48
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-LAYERED_EXTRACTION
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-DOC_ENHANCEMENT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 2
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 70
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P1
+    process_order: 57
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-REFACTOR_PREP
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: B_implemented
+    token: IMPL-TOKEN_SYSTEM
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 3
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 71
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 11
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-SEMANTIC_CROSS_REF
-  - audit_notes: Logic audit complete 2026-09-19; REQ criteria mapped to STEP/PROCEDURE
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CONFIG_SCHEMA_FLEX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
     crit001_orphans_remaining: 0
     crit001_pass: true
     crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
     deep_sync_complete: true
     formal_spec: true
+    go_refs: 3
     issues: []
     logic_level: L3
     mutation_score: null
     mutation_verified: false
-    notes: 'Manual logic audit: Tier C sidecar + REQ traceability'
-    priority: P3
-    process_order: 72
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 2
     req_audit_pass: true
     status: logic_verified
-    tier: C_doc_process
-    token: IMPL-ZERO_BREAKING
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-AUTO_DETECTION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 3
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 22
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-FILE_OPERATIONS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 3
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 32
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-PACKAGE_EXTRACTION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 3
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 4
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CFG_INHERITANCE_PATH_RESOLUTION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 3
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 5
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 3
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 6
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 3
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P2
+    process_order: 73
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: meta_tooling
+    token: IMPL-SPEC_CTL
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 10
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CONFIG_OUTPUT_GROUPING
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 14
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 15
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-DATA_MODELS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 16
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-DELAYED_OUTPUT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 18
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-DIRECTORY_COMPARISON
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 21
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-EXCLUSION_PATTERNS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 23
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-FILE_STATISTICS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 24
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-FILE_STATISTICS_TEMPLATE_FIX
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 25
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-GIT_CLI
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 3
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CFG_006
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 4
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 34
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-RESOURCE_MANAGER
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 5
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 13
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CONTEXT_OPS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 5
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 28
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-LIST_FORMAT_SAFETY
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 5
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 29
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-LIST_LIMIT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 6
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 1
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-ATOMIC_OPS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 6
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 27
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 8
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 17
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-DIFF_COMMAND
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 8
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 40
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-TOKEN_COVERAGE_AUDIT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 9
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 12
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-CONFIG_STRUCT
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 9
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 33
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-PROCESSING_PATTERNS
+  - audit_notes: 'Re-baseline 2026-09-20: automated gates pass; logic_level=L3 (oracle=True)'
+    crit001_orphans_remaining: 0
+    crit001_pass: true
+    crit001_scope_notes: CRIT-001 scoped audit complete 2026-09-19
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 9
+    issues: []
+    logic_level: L3
+    mutation_score: null
+    mutation_verified: false
+    notes: 'Manual logic audit: three-way sync + REQ audit (L3)'
+    oracle_status: verified
+    priority: P0
+    process_order: 37
+    req_audit_pass: true
+    status: logic_verified
+    target_logic_level: L3
+    tier: A_core_runtime
+    token: IMPL-STRUCTURED_ERRORS

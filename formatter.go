@@ -146,7 +146,7 @@ func (oc *OutputCollector) Clear() {
 // OutputFormatter provides methods for formatting and printing output for BkpDir operations.
 // It supports both printf-style and template-based formatting, with optional delayed output.
 type OutputFormatter struct {
-	cfg *Config
+	cfg       *Config
 	collector *OutputCollector
 }
 

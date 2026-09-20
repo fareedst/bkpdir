@@ -16,7 +16,12 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
     - REQ-STDD_VIS
   implementation_approach:
     details: []
-    summary: '- **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
+    summary: |-
+      Preserve configuration field values across sequential and inheritance merge paths so earlier explicit settings are not overwritten by later files or defaults.
+      INPUT: dst config, src config, inherit_context, field name
+      OUTPUT: merged config with correct precedence per merge mode
+      DATA: explicitly_set_tracker, default values, inheritContext flag
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION-pseudocode.md
   implementation_approach_(planning,_no_code_yet):
     - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
     - 'Input sources: `tied/semantic-tokens.md`, `tied/requirements.md`, `tied/architecture-decisions.md`, `tied/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
@@ -34,8 +39,8 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

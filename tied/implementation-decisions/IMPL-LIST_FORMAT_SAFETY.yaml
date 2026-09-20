@@ -36,15 +36,20 @@ IMPL-LIST_FORMAT_SAFETY:
       - formatListArchiveSimple always gathers file stats and selects format string by priority
       - FormatListArchiveWithExtraction applies priority-based format selection with
       - FormatListBackup mirrors the same guard logic as FormatListArchive
-    summary: Added guarded printf usage in FormatListArchive, FormatListBackup, and FormatListArchiveWithExtraction to call fmt.Sprintf only when the format string contains printf verbs (%). Otherwise, return the template-format string as-is or perform placeholder replacement.
+    summary: |-
+      Guards list-command formatting so printf-style formatting runs only when the format string contains printf verbs, preventing EXTRA-arg errors and misinterpreting template placeholders.
+      INPUT: path, creationTime, archivePath, cfg format strings
+      OUTPUT: formatted list line string
+      DATA: formatStr, data map with path, creation_time, file statistics
+      Canonical behavior: tied/implementation-decisions/IMPL-LIST_FORMAT_SAFETY-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Restore sidecar after empty write
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

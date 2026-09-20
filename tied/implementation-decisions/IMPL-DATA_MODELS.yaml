@@ -39,14 +39,19 @@ IMPL-DATA_MODELS:
       - ConfigToArchiveConfigAdapter adapts Config to ArchiveConfigInterface
       - ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
       - IncrementalArchiveConfig struct with Config, Note, DryRun, Context fields
-    summary: Define comprehensive Go structs for archive, backup, and backup options data with interface adapters for dependency abstraction
+    summary: |-
+      Type-safe archive and backup domain models with configuration and formatter interfaces plus adapters that decouple operations from concrete Config and OutputFormatter types.
+      INPUT: Config, OutputFormatter, operation parameters
+      OUTPUT: structured value objects and interface contracts for archive/backup pipelines
+      DATA: Archive, ArchiveConfig, Backup, BackupInfo, adapter structs
+      Canonical behavior: tied/implementation-decisions/IMPL-DATA_MODELS-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Data Models
   rationale:
     benefits:

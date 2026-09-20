@@ -21,14 +21,19 @@ IMPL-CONFIG_DISPLAY_FLATTENING:
       - Internal struct has Git *GitConfig with nested fields
       - Reflection system (reflectConfigFields) recursively processes nested structs using YAML tag names
       - 'YAML files support both top-level keys (include_git_info, include_branch) and nested format (git: { include_info: true })'
-    summary: Reflection-based discovery using YAML tag names for flat display of potentially nested config fields
+    summary: |-
+      Presents configuration keys in flat YAML-tag form in `bkpdir config` output even when values live in nested structs, using reflection metadata (YAMLName) and legacy top-level Git field compatibility during merge.
+      INPUT: Config struct, optional config root path for source attribution
+      OUTPUT: sorted configFieldInfo list and ConfigValueWithMetadata rows for display
+      DATA: yaml tags, field cache, legacy include_git_info / show_git_dirty_status keys
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Configuration Display Flattening
   rationale:
     benefits:

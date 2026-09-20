@@ -12,15 +12,20 @@ IMPL-TEST_CFG_005_P1:
   date: '2025-12-11'
   implementation_approach:
     details: []
-    summary: '- **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)'
+    summary: |-
+      Priority-1 configuration inheritance and merge edge-case tests beyond P0 coverage: multi-parent inherit, paths, errors, deep chains, type mismatches, nulls, and whitespace strings.
+      INPUT: YAML fixture trees under temp dirs, BKPDIR_CONFIG / LoadConfigWithInheritance
+      OUTPUT: assertions on merged Config fields and expected errors
+      DATA: inherit directives, merge prefixes, defaults
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_CFG_005_P1-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

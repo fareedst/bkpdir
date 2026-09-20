@@ -1,0 +1,1009 @@
+{
+  "ok": true,
+  "gate_mode_applied": true,
+  "schema_version": "pseudocode-analysis-report.v1",
+  "grammar_version": "pseudocode-grammar.v1",
+  "analyzer_version": "1.0.0",
+  "proof_boundary": "Deterministic static analysis of essence_pseudocode within declared grammar and budgets; not runtime execution, not test execution, not complete behavioral verification.",
+  "token": "IMPL-CONFIG_STRUCT",
+  "input_identity": {
+    "algorithm": "sha256",
+    "hash": "4674b102ceaa72a7647dbad4e6b22b5bd21b4eda5dd95b5d302b51880fe2c585",
+    "byte_length": 4454
+  },
+  "budgets_applied": {
+    "requested": {},
+    "effective": {
+      "max_parse_nodes": 5000,
+      "max_procedures": 256,
+      "max_cfg_blocks_per_procedure": 512,
+      "max_call_graph_edges": 2048,
+      "max_fixed_point_iterations": 32,
+      "max_path_conditions": 64,
+      "max_report_diagnostics": 500,
+      "max_source_bytes": 512000,
+      "max_cfg_join_iterations": 32
+    }
+  },
+  "truncated": false,
+  "diagnostics_truncated": false,
+  "sections": {
+    "parse": {
+      "procedure_count": 5,
+      "parse_node_count": 40,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CFG_006",
+        "IMPL-CONFIG_DISPLAY_FLATTENING",
+        "IMPL-CONFIG_STRUCT",
+        "REQ-CFG_006",
+        "REQ-CONFIGURATION"
+      ],
+      "unsupported_syntax_count": 21
+    },
+    "symbols": {
+      "procedures": [
+        "CONFIG",
+        "DEFAULTCONFIG",
+        "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+        "GETCONFIGVALUES",
+        "GETCONFIGVALUESWITHSOURCES"
+      ],
+      "symbols": [
+        {
+          "name": "ASSERT",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "EMBEDDED_MINITEST_DEFAULT_CONFIG"
+        },
+        {
+          "name": "CONFIG",
+          "kind": "procedure",
+          "declared_line": 18
+        },
+        {
+          "name": "DATA",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "CONFIG"
+        },
+        {
+          "name": "DEFAULTCONFIG",
+          "kind": "procedure",
+          "declared_line": 58
+        },
+        {
+          "name": "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+          "kind": "procedure",
+          "declared_line": 107
+        },
+        {
+          "name": "FOR",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "GETCONFIGVALUESWITHSOURCES"
+        },
+        {
+          "name": "GETCONFIGVALUES",
+          "kind": "procedure",
+          "declared_line": 75
+        },
+        {
+          "name": "GETCONFIGVALUESWITHSOURCES",
+          "kind": "procedure",
+          "declared_line": 92
+        },
+        {
+          "name": "HOLDS",
+          "kind": "local",
+          "declared_line": 2,
+          "procedure": "CONFIG"
+        },
+        {
+          "name": "INITIALIZE",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "DEFAULTCONFIG"
+        },
+        {
+          "name": "MARK",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "GETCONFIGVALUES"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 11,
+          "procedure": "CONFIG"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "DEFAULTCONFIG"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "GETCONFIGVALUES"
+        }
+      ],
+      "defined_calls": [],
+      "unresolved_calls": []
+    },
+    "cfg": {
+      "procedures": [
+        {
+          "procedure": "CONFIG",
+          "nodes": [
+            {
+              "id": "CONFIG::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 2,
+              "span": {
+                "line": 2,
+                "column": 3,
+                "end_line": 2,
+                "end_column": 74
+              }
+            },
+            {
+              "id": "CONFIG::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 3,
+              "span": {
+                "line": 3,
+                "column": 3,
+                "end_line": 3,
+                "end_column": 54
+              }
+            },
+            {
+              "id": "CONFIG::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 4,
+              "span": {
+                "line": 4,
+                "column": 3,
+                "end_line": 4,
+                "end_column": 68
+              }
+            },
+            {
+              "id": "CONFIG::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 5,
+              "span": {
+                "line": 5,
+                "column": 3,
+                "end_line": 5,
+                "end_column": 68
+              }
+            },
+            {
+              "id": "CONFIG::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 6,
+              "span": {
+                "line": 6,
+                "column": 3,
+                "end_line": 6,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "CONFIG::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 1,
+                "end_line": 11,
+                "end_column": 68
+              }
+            },
+            {
+              "id": "CONFIG::n7",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 17
+              }
+            },
+            {
+              "id": "CONFIG::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 18
+            },
+            {
+              "id": "CONFIG::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 18
+            },
+            {
+              "id": "CONFIG::n8",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 23,
+              "span": {
+                "line": 23,
+                "column": 1,
+                "end_line": 23,
+                "end_column": 58
+              }
+            },
+            {
+              "id": "CONFIG::n9",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 27,
+              "span": {
+                "line": 27,
+                "column": 1,
+                "end_line": 27,
+                "end_column": 21
+              }
+            },
+            {
+              "id": "CONFIG::n10",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 37,
+              "span": {
+                "line": 37,
+                "column": 1,
+                "end_line": 37,
+                "end_column": 67
+              }
+            }
+          ],
+          "edges": [
+            {
+              "from": "CONFIG::entry",
+              "to": "CONFIG::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n1",
+              "to": "CONFIG::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n10",
+              "to": "CONFIG::exit",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n2",
+              "to": "CONFIG::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n3",
+              "to": "CONFIG::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n4",
+              "to": "CONFIG::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n5",
+              "to": "CONFIG::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n6",
+              "to": "CONFIG::n7",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n7",
+              "to": "CONFIG::n8",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n8",
+              "to": "CONFIG::n9",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG::n9",
+              "to": "CONFIG::n10",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "CONFIG::entry",
+            "CONFIG::exit",
+            "CONFIG::n1",
+            "CONFIG::n10",
+            "CONFIG::n2",
+            "CONFIG::n3",
+            "CONFIG::n4",
+            "CONFIG::n5",
+            "CONFIG::n6",
+            "CONFIG::n7",
+            "CONFIG::n8",
+            "CONFIG::n9"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "DEFAULTCONFIG",
+          "nodes": [
+            {
+              "id": "DEFAULTCONFIG::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 100
+              }
+            },
+            {
+              "id": "DEFAULTCONFIG::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 38
+              }
+            },
+            {
+              "id": "DEFAULTCONFIG::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 67
+              }
+            },
+            {
+              "id": "DEFAULTCONFIG::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 58
+            },
+            {
+              "id": "DEFAULTCONFIG::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 58
+            }
+          ],
+          "edges": [
+            {
+              "from": "DEFAULTCONFIG::entry",
+              "to": "DEFAULTCONFIG::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "DEFAULTCONFIG::n1",
+              "to": "DEFAULTCONFIG::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "DEFAULTCONFIG::n2",
+              "to": "DEFAULTCONFIG::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "DEFAULTCONFIG::n3",
+              "to": "DEFAULTCONFIG::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "DEFAULTCONFIG::entry",
+            "DEFAULTCONFIG::exit",
+            "DEFAULTCONFIG::n1",
+            "DEFAULTCONFIG::n2",
+            "DEFAULTCONFIG::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GETCONFIGVALUES",
+          "nodes": [
+            {
+              "id": "GETCONFIGVALUES::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 103
+              }
+            },
+            {
+              "id": "GETCONFIGVALUES::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 28
+              }
+            },
+            {
+              "id": "GETCONFIGVALUES::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 81
+              }
+            },
+            {
+              "id": "GETCONFIGVALUES::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 75
+            },
+            {
+              "id": "GETCONFIGVALUES::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 75
+            }
+          ],
+          "edges": [
+            {
+              "from": "GETCONFIGVALUES::entry",
+              "to": "GETCONFIGVALUES::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GETCONFIGVALUES::n1",
+              "to": "GETCONFIGVALUES::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GETCONFIGVALUES::n2",
+              "to": "GETCONFIGVALUES::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GETCONFIGVALUES::n3",
+              "to": "GETCONFIGVALUES::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GETCONFIGVALUES::entry",
+            "GETCONFIGVALUES::exit",
+            "GETCONFIGVALUES::n1",
+            "GETCONFIGVALUES::n2",
+            "GETCONFIGVALUES::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GETCONFIGVALUESWITHSOURCES",
+          "nodes": [
+            {
+              "id": "GETCONFIGVALUESWITHSOURCES::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 65
+              }
+            },
+            {
+              "id": "GETCONFIGVALUESWITHSOURCES::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "GETCONFIGVALUESWITHSOURCES::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 92
+            },
+            {
+              "id": "GETCONFIGVALUESWITHSOURCES::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 92
+            }
+          ],
+          "edges": [
+            {
+              "from": "GETCONFIGVALUESWITHSOURCES::entry",
+              "to": "GETCONFIGVALUESWITHSOURCES::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GETCONFIGVALUESWITHSOURCES::n1",
+              "to": "GETCONFIGVALUESWITHSOURCES::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GETCONFIGVALUESWITHSOURCES::n2",
+              "to": "GETCONFIGVALUESWITHSOURCES::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GETCONFIGVALUESWITHSOURCES::entry",
+            "GETCONFIGVALUESWITHSOURCES::exit",
+            "GETCONFIGVALUESWITHSOURCES::n1",
+            "GETCONFIGVALUESWITHSOURCES::n2"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+          "nodes": [
+            {
+              "id": "EMBEDDED_MINITEST_DEFAULT_CONFIG::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 89
+              }
+            },
+            {
+              "id": "EMBEDDED_MINITEST_DEFAULT_CONFIG::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 107
+            },
+            {
+              "id": "EMBEDDED_MINITEST_DEFAULT_CONFIG::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 107
+            }
+          ],
+          "edges": [
+            {
+              "from": "EMBEDDED_MINITEST_DEFAULT_CONFIG::entry",
+              "to": "EMBEDDED_MINITEST_DEFAULT_CONFIG::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "EMBEDDED_MINITEST_DEFAULT_CONFIG::n1",
+              "to": "EMBEDDED_MINITEST_DEFAULT_CONFIG::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "EMBEDDED_MINITEST_DEFAULT_CONFIG::entry",
+            "EMBEDDED_MINITEST_DEFAULT_CONFIG::exit",
+            "EMBEDDED_MINITEST_DEFAULT_CONFIG::n1"
+          ],
+          "truncated": false
+        }
+      ]
+    },
+    "call_graph": {
+      "edges": [],
+      "unresolved": [],
+      "truncated": false
+    },
+    "abstract": {
+      "facts": [
+        {
+          "variable": "DATA",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "DATA",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 27
+        },
+        {
+          "variable": "HOLDS",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 2
+        },
+        {
+          "variable": "HOLDS",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 3
+        },
+        {
+          "variable": "HOLDS",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 4
+        },
+        {
+          "variable": "HOLDS",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 5
+        },
+        {
+          "variable": "HOLDS",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 6
+        },
+        {
+          "variable": "STEP",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "STEP",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 23
+        },
+        {
+          "variable": "STEP",
+          "procedure": "CONFIG",
+          "fact": "defined",
+          "line": 37
+        },
+        {
+          "variable": "INITIALIZE",
+          "procedure": "DEFAULTCONFIG",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "DEFAULTCONFIG",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "ASSERT",
+          "procedure": "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "MARK",
+          "procedure": "GETCONFIGVALUES",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GETCONFIGVALUES",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "FOR",
+          "procedure": "GETCONFIGVALUESWITHSOURCES",
+          "fact": "defined",
+          "line": 9
+        }
+      ],
+      "path_conditions": [],
+      "effect_gaps": [],
+      "termination_unknown": []
+    },
+    "obligations": {
+      "decision_tables": [],
+      "path_obligations": []
+    },
+    "traceability": {
+      "block_edges": [
+        {
+          "block": "CONFIG",
+          "tokens": [
+            "ARCH-CONFIG_SYSTEM",
+            "IMPL-CONFIG_STRUCT",
+            "REQ-CONFIGURATION"
+          ],
+          "line": 18
+        },
+        {
+          "block": "DEFAULTCONFIG",
+          "tokens": [
+            "ARCH-CONFIG_SYSTEM",
+            "IMPL-CONFIG_STRUCT",
+            "REQ-CONFIGURATION"
+          ],
+          "line": 58
+        },
+        {
+          "block": "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+          "tokens": [],
+          "line": 107
+        },
+        {
+          "block": "GETCONFIGVALUES",
+          "tokens": [
+            "ARCH-CONFIG_SYSTEM",
+            "IMPL-CONFIG_STRUCT",
+            "REQ-CFG_006",
+            "REQ-CONFIGURATION"
+          ],
+          "line": 75
+        },
+        {
+          "block": "GETCONFIGVALUESWITHSOURCES",
+          "tokens": [
+            "ARCH-CONFIG_SYSTEM",
+            "IMPL-CONFIG_STRUCT",
+            "REQ-CONFIGURATION"
+          ],
+          "line": 92
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "MISSING_CONTRACT_FIELD",
+      "message": "Block EMBEDDED_MINITEST_DEFAULT_CONFIG does not reference target token IMPL-CONFIG_STRUCT",
+      "line": 107,
+      "block": "EMBEDDED_MINITEST_DEFAULT_CONFIG"
+    }
+  ],
+  "unsupported_syntax": [
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: enhanced = GETALLCONFIGVALUESWITHSOURCES(cfg, root)  # see IMPL-CONFIG_DISPLAY_FLATTENING",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 91
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: cfg = DefaultConfig()",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 23
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_STRUCT::CONFIGVALUE",
+      "span": {
+        "line": 10,
+        "column": 1,
+        "end_line": 10,
+        "end_column": 40
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: represent one displayed configuration entry with name, string value, and source label.",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 157
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_STRUCT::GETCONFIGVALUES",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_STRUCT::GETCONFIGVALUESWITHSOURCES",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 55
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: verify DefaultConfig preset values for archive path, flags, and exclude patterns.",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 152
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: expose subset of key fields as ConfigValue rows for simple --config display.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 147
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] [REQ-CFG_006] — How: delegate to reflection-based GetAllConfigValuesWithSources and convert to legacy ConfigValue format sorted by name.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 200
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Name string",
+      "span": {
+        "line": 16,
+        "column": 3,
+        "end_line": 16,
+        "end_column": 13
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Value string",
+      "span": {
+        "line": 17,
+        "column": 3,
+        "end_line": 17,
+        "end_column": 14
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Source string",
+      "span": {
+        "line": 18,
+        "column": 3,
+        "end_line": 18,
+        "end_column": 15
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_STRUCT::CONFIGFIELDINFO",
+      "span": {
+        "line": 22,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: capture reflection metadata for one config field including YAML name, type, path, category, and importance.",
+      "span": {
+        "line": 25,
+        "column": 1,
+        "end_line": 25,
+        "end_column": 178
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Name, YAMLName, Type, Path, Category string",
+      "span": {
+        "line": 28,
+        "column": 3,
+        "end_line": 28,
+        "end_column": 45
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Kind type descriptor",
+      "span": {
+        "line": 29,
+        "column": 3,
+        "end_line": 29,
+        "end_column": 22
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Value current value",
+      "span": {
+        "line": 30,
+        "column": 3,
+        "end_line": 30,
+        "end_column": 21
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: IsPointer, IsSlice, IsStruct bool",
+      "span": {
+        "line": 31,
+        "column": 3,
+        "end_line": 31,
+        "end_column": 35
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Importance int",
+      "span": {
+        "line": 32,
+        "column": 3,
+        "end_line": 32,
+        "end_column": 16
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_STRUCT::DEFAULTCONFIG",
+      "span": {
+        "line": 36,
+        "column": 1,
+        "end_line": 36,
+        "end_column": 42
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: return new Config populated with preset defaults for all fields including nested git config.",
+      "span": {
+        "line": 39,
+        "column": 1,
+        "end_line": 39,
+        "end_column": 163
+      }
+    }
+  ],
+  "unknowns": []
+}

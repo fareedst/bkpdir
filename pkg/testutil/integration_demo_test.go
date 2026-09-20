@@ -1,5 +1,6 @@
 // [REQ-MAINTAINABILITY]
 package testutil_test
+
 import (
 	"testing"
 

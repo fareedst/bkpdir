@@ -49,15 +49,20 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
       - FieldMergeBehavior type (int enum) with MergeBehaviorAccumulate and MergeBehaviorPrecedence
       - fieldMergeBehaviors map registers per-field behavior (exclude_patterns=Accumulate, scalars=Precedence)
       - getFieldMergeBehavior() returns registered behavior, defaults to MergeBehaviorPrecedence
-    summary: FieldMergeBehavior type with Accumulate and Precedence constants; fieldMergeBehaviors registry map specifies behavior per field; getFieldMergeBehavior() lookups drive merge and replace logic.
+    summary: |-
+      Per-field registry choosing accumulate versus precedence merge behavior, used when applying replace and other strategies during multi-file config load.
+      INPUT: field name, dst value, explicitlySetFields map
+      OUTPUT: FieldMergeBehavior enum, merged Config fields
+      DATA: fieldMergeBehaviors map, MergeBehaviorAccumulate, MergeBehaviorPrecedence
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MERGE_BEHAVIOR_REGISTRY-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

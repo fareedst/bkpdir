@@ -13,7 +13,12 @@ IMPL-TEST_PREPEND_ORDERING:
     - REQ-CONFIGURATION
   implementation_approach:
     details: []
-    summary: '- **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios'
+    summary: |-
+      Tests ^prepend merge strategy ordering for exclude_patterns in inheritance and sequential file chains.
+      INPUT: parent/child YAML with ^exclude_patterns and multi-file BKPDIR_CONFIG
+      OUTPUT: ordered ExcludePatterns after LoadConfig / LoadConfigWithInheritance
+      DATA: prepend before destination slice semantics
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_PREPEND_ORDERING-pseudocode.md
   inheritance_chains: Child prepended values come before parent values
   metadata:
     created:
@@ -21,8 +26,8 @@ IMPL-TEST_PREPEND_ORDERING:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -6,6 +6,7 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 package formatter
+
 import (
 	"errors"
 	"strings"

@@ -44,18 +44,19 @@ IMPL-DUAL_FORMATTING:
   implementation_approach:
     details: []
     summary: |-
-      `OutputFormatter`: Printf-style formatting methods
-      `TemplateFormatter`: Advanced template processing
-      Regex extraction for rich data formatting
-      Support for both Go text/template and placeholder syntax
+      OutputFormatter supports printf cfg strings and template #{key} strings with guarded selection, shared formatTemplate helper, and interface contracts for format providers and destinations.
+      INPUT: format string, path, creation time, data map
+      OUTPUT: rendered message string
+      DATA: FormatProvider, TemplateFormatter, OutputCollector routing
+      Canonical behavior: tied/implementation-decisions/IMPL-DUAL_FORMATTING-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

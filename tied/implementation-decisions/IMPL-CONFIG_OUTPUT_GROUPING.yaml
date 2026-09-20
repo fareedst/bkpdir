@@ -20,15 +20,20 @@ IMPL-CONFIG_OUTPUT_GROUPING:
     - REQ-CONFIG_OUTPUT_GROUPING
   implementation_approach:
     details: []
-    summary: Metadata extension with importance levels and category priorities for grouped config display
+    summary: |-
+      Rank configuration fields by importance and category priority so grouped config display lists critical paths first within each category section.
+      INPUT: field name, category, ConfigValueWithMetadata list, showSources flag
+      OUTPUT: grouped stdout sections sorted by category priority then field importance
+      DATA: Importance* constants, CategoryPriority map, categories map
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

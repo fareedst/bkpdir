@@ -1,5 +1,6 @@
 // [REQ-CONFIGURATION]
 package main
+
 import (
 	"bytes"
 	"os"

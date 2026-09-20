@@ -1,1 +1,22 @@
-ok  	bkpdir/internal/speccheck	0.224s
+========================================
+Formal DSL corpus status
+========================================
+  sidecar/registry       PASS  73 sidecars == 73 formal_spec registry entries
+  specctl validate       PASS  0 errors, 0 warnings (all 73 sidecars)
+  matrix coverage        PASS  COVER-001 clear (waivers applied)
+  check-leads            PASS  73 registry sidecars (27 lead_check_skip)
+  conformance tests      PASS  specparse + specmodel + specconformance
+  oracle coverage        PASS  50/50 verified (L3)
+  deep sync tracking     PASS  73/73 deep_sync_complete
+  logic verified         PASS  73/73 logic_verified
+  req audit pass         PASS  73/73 req_audit_pass (manual)
+  crit001 pass           PASS  73/73 crit001_pass (scoped)
+  improvement queue      PASS  73/73 formal_spec + req_audit_pass
+----------------------------------------
+L4 projected (opt-in)
+----------------------------------------
+  L4 pilots              SKIP  set RUN_L4_PILOT=1 to run L4 pilots
+----------------------------------------
+CORPUS STATUS: ALL GREEN
+  Profile: formal_spec on all 73 IMPL sidecars
+  Gate:    SKIP_TIED_MCP=1 scripts/run-spec-verification.sh

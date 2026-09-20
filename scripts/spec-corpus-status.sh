@@ -4,10 +4,17 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+# shellcheck source=scripts/lib/formal_spec_registry.sh
+source "$ROOT/scripts/lib/formal_spec_registry.sh"
+FORMAL_SPEC_REGISTRY_ROOT="$ROOT"
 
 fail=0
 SIDECARS=$(find tied/implementation-decisions -maxdepth 1 -name 'IMPL-*-pseudocode.md' 2>/dev/null | wc -l | tr -d ' ')
-REGISTRY=$(grep -cE '^\s+- "IMPL-' tied/spec/formal-spec-registry.yaml || true)
+REGISTRY="$(formal_spec_registry_count)"
+if [[ "$REGISTRY" -eq 0 ]]; then
+  echo "DIAGNOSTIC: formal-spec-registry parse returned 0 tokens"
+  exit 1
+fi
 LEAD_SKIP=$(grep -A999 '^lead_check_skip:' tied/spec/coverage-waivers.yaml 2>/dev/null | grep -cE '^\s+- IMPL-' || true)
 
 queue_complete=""
@@ -63,10 +70,10 @@ fi
 
 FORMAL_SIDECARS=()
 while IFS= read -r token; do
-  [[ -z "$token" || "$token" =~ ^# ]] && continue
+  [[ -z "$token" ]] && continue
   path="tied/implementation-decisions/${token}-pseudocode.md"
   [[ -f "$path" ]] && FORMAL_SIDECARS+=("$path")
-done < <(grep -E '^\s+- "IMPL-' tied/spec/formal-spec-registry.yaml | sed 's/.*"\(IMPL-[^"]*\)".*/\1/')
+done < <(formal_spec_registry_tokens)
 
 if ((${#FORMAL_SIDECARS[@]} > 0)); then
   if go run ./cmd/specctl check-leads "${FORMAL_SIDECARS[@]}" >/dev/null 2>&1; then
@@ -93,7 +100,7 @@ import yaml
 from pathlib import Path
 p = Path("tied/spec/oracle-registry.yaml")
 if not p.exists():
-    print("0/48")
+    print("0/50")
 else:
     r = yaml.safe_load(p.read_text())
     n = sum(1 for o in r.get("oracles", []) if o.get("status") == "verified")
@@ -144,10 +151,10 @@ fi
 if [[ -n "$ORACLE_STATS" ]]; then
   ORACLE_N="${ORACLE_STATS%%/*}"
   ORACLE_T="${ORACLE_STATS##*/}"
-  if [[ "$ORACLE_N" == "$ORACLE_T" && "$ORACLE_T" == "48" ]]; then
+  if [[ "$ORACLE_N" == "$ORACLE_T" && "$ORACLE_T" == "50" ]]; then
     check "oracle coverage" 1 "${ORACLE_STATS} verified (L3)"
   else
-    check "oracle coverage" 0 "${ORACLE_STATS} verified (expect 48/48)"
+    check "oracle coverage" 0 "${ORACLE_STATS} verified (expect 50/50)"
   fi
 fi
 

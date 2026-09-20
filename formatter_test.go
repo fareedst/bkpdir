@@ -4,6 +4,7 @@
 // [IMPL-DUAL_FORMATTING] Targets printf/template formatter implementation
 
 package main
+
 import (
 	"bkpdir/pkg/formatter"
 	"os"

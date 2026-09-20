@@ -39,15 +39,20 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
   fixed_resolvepath_directory_handling: 'Updated `resolvePath` to:'
   implementation_approach:
     details: []
-    summary: '- **Fixed buildChainRecursive basePath**: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls'
+    summary: |-
+      Resolve inherited config file paths relative to parent directories, expand home and environment variables, detect cycles, and build ordered inheritance chains.
+      INPUT: configPath, basePath, inherit metadata
+      OUTPUT: resolved absolute paths, inheritance chain file list
+      DATA: inheritanceChain, pathResolver, visited map
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -9,18 +9,19 @@ IMPL-SEMANTIC_CROSS_REF:
   implementation_approach:
     details: []
     summary: |-
-      Feature reference blocks with links to all documentation layers
-      Automated link validation
-      Cross-reference consistency checking
-      Semantic token-based linking
+      Link requirements, architecture, implementation, tests, and code through semantic tokens with validated bi-directional references for LLM-friendly navigation.
+      INPUT: semantic token registry, decision YAML indexes, code and doc mentions
+      OUTPUT: feature reference blocks, link integrity report, consistency report
+      DATA: forward_links, backward_links, sibling_links, cross_reference fields
+      Canonical behavior: tied/implementation-decisions/IMPL-SEMANTIC_CROSS_REF-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

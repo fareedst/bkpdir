@@ -1,4 +1,4 @@
-oracle_targets: 48
+oracle_targets: 50
 oracles:
   - conformance_test: test/specconformance/archive_conformance_test.go
     impl: IMPL-DATA_MODELS
@@ -97,6 +97,12 @@ oracles:
   - conformance_test: test/specconformance/config_conformance_test.go
     impl: IMPL-EXCLUDE_MERGE_FIX
     pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-TEST_CFG_005_P1
+    pkg_paths:
+      - pkg/config
     specmodel_file: internal/specmodel/config.go
     status: verified
   - conformance_test: test/specconformance/config_conformance_test.go
@@ -262,6 +268,12 @@ oracles:
     status: verified
   - conformance_test: test/specconformance/testutil_conformance_test.go
     impl: IMPL-TESTING
+    pkg_paths:
+      - pkg/testutil
+    specmodel_file: internal/specmodel/testutil.go
+    status: verified
+  - conformance_test: test/specconformance/testutil_conformance_test.go
+    impl: IMPL-TESTING_COMPLEXITY
     pkg_paths:
       - pkg/testutil
     specmodel_file: internal/specmodel/testutil.go

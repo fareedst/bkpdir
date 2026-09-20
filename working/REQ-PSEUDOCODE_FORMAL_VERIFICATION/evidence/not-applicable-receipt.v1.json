@@ -1,0 +1,14 @@
+{
+  "schema_version": "not-applicable-receipt.v1",
+  "request_token": "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+  "artifact_kind": "adversarial_inquiry",
+  "depth_tier": "minimal",
+  "phases": [
+    "close_out",
+    "pre_implementation",
+    "verification"
+  ],
+  "reason": "TIED Canon slice at minimal depth_tier; see working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/evidence/minimal-inquiry-waiver.md",
+  "generated_at": "2026-09-20T18:45:00.000Z",
+  "source": "tied-canon-close-out"
+}

@@ -1,6 +1,7 @@
 // [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Comprehensive tests for placeholder replacement
 // Tests use #{...} syntax to avoid fmt package conflicts
 package formatter
+
 import (
 	"fmt"
 	"strings"

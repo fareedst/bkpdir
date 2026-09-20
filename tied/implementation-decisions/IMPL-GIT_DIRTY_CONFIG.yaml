@@ -23,15 +23,20 @@ IMPL-GIT_DIRTY_CONFIG:
       - Default to true for backward compatibility
       - Modified archive naming functions to check the option before adding -dirty suffix
       - Updated Git status detection to respect configuration
-    summary: Add show_git_dirty_status boolean option to Config struct with proper merging and conditional dirty suffix logic
+    summary: |-
+      Gate `-dirty` suffix in archive filenames on ShowGitDirtyStatus config, propagate the setting through ArchiveConfig and config merge helpers.
+      INPUT: ArchiveConfig git cleanliness, cfg.ShowGitDirtyStatus
+      OUTPUT: archive basename with optional -dirty segment
+      DATA: GitBranch, GitHash, GitIsClean, legacy and nested Git.ShowDirtyStatus
+      Canonical behavior: tied/implementation-decisions/IMPL-GIT_DIRTY_CONFIG-pseudocode.md
   metadata:
     created:
       author: AI Agent
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Configurable Git Dirty Status
   rationale:
     benefits:

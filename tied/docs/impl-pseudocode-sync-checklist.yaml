@@ -4,55 +4,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 59
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-TESTING_COMPLEXITY-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 1
-      blocks_total: 1
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_test_impl
-    token: IMPL-TESTING_COMPLEXITY
-  - code_files: 0
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 60
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-TEST_CFG_005_P1-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 9
-      blocks_total: 9
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_test_impl
-    token: IMPL-TEST_CFG_005_P1
-  - code_files: 0
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 61
@@ -76,7 +28,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 62
@@ -100,7 +52,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 63
@@ -124,7 +76,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 64
@@ -148,7 +100,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 65
@@ -172,7 +124,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 66
@@ -196,7 +148,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 67
@@ -220,7 +172,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 68
@@ -244,7 +196,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 69
@@ -268,7 +220,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 70
@@ -292,7 +244,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 71
@@ -316,7 +268,7 @@ impl_tokens:
     deep_sync_complete: true
     formal_spec: true
     go_refs: 0
-    logic_level: L3
+    logic_level: L1
     notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
     oracle_status: n/a
     process_order: 72
@@ -336,6 +288,174 @@ impl_tokens:
     target_logic_level: L1
     tier: C_doc_process
     token: IMPL-ZERO_BREAKING
+  - code_files: 1
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L2
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 46
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 4
+      blocks_total: 4
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L2
+    tier: B_implemented
+    token: IMPL-CONFIG_DISPLAY_FLATTENING
+  - code_files: 1
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L2
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 47
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-DEPENDENCY_MGMT-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 2
+      blocks_total: 2
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L2
+    tier: B_implemented
+    token: IMPL-DEPENDENCY_MGMT
+  - code_files: 1
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L2
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 49
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 1
+      blocks_total: 1
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L2
+    tier: B_implemented
+    token: IMPL-EXTRACT_008_DOC_MIGRATION
+  - code_files: 1
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L2
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 50
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-LARGE_FILE_CHALLENGE-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 1
+      blocks_total: 1
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L2
+    tier: B_implemented
+    token: IMPL-LARGE_FILE_CHALLENGE
+  - code_files: 1
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L2
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 56
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-TIED_FILES-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 1
+      blocks_total: 1
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L2
+    tier: B_implemented
+    token: IMPL-TIED_FILES
+  - code_files: 0
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L3
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 59
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-TESTING_COMPLEXITY-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 1
+      blocks_total: 1
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L3
+    tier: B_test_impl
+    token: IMPL-TESTING_COMPLEXITY
+  - code_files: 0
+    deep_sync_complete: true
+    formal_spec: true
+    go_refs: 0
+    logic_level: L3
+    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
+    oracle_status: n/a
+    process_order: 60
+    req_audit_pass: true
+    sidecar_path: implementation-decisions/IMPL-TEST_CFG_005_P1-pseudocode.md
+    status: logic_verified
+    steps:
+      blocks_synced: 9
+      blocks_total: 9
+      discovery: true
+      layer_a_validated: true
+      layer_b_validated: true
+      metadata_updated: true
+      req_audit_pass: true
+      sidecar_created: true
+      tests_green: true
+    target_logic_level: L3
+    tier: B_test_impl
+    token: IMPL-TEST_CFG_005_P1
   - code_files: 0
     deep_sync_complete: true
     formal_spec: true
@@ -456,126 +576,6 @@ impl_tokens:
     target_logic_level: L3
     tier: A_core_runtime
     token: IMPL-TOKEN_COVERAGE_AUDIT
-  - code_files: 1
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 46
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 4
-      blocks_total: 4
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_implemented
-    token: IMPL-CONFIG_DISPLAY_FLATTENING
-  - code_files: 1
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 47
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-DEPENDENCY_MGMT-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 2
-      blocks_total: 2
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_implemented
-    token: IMPL-DEPENDENCY_MGMT
-  - code_files: 1
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 49
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 1
-      blocks_total: 1
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_implemented
-    token: IMPL-EXTRACT_008_DOC_MIGRATION
-  - code_files: 1
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 50
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-LARGE_FILE_CHALLENGE-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 1
-      blocks_total: 1
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_implemented
-    token: IMPL-LARGE_FILE_CHALLENGE
-  - code_files: 1
-    deep_sync_complete: true
-    formal_spec: true
-    go_refs: 0
-    logic_level: L3
-    notes: Formal SPEC-ID/STEP; specctl validate + matrix coverage
-    oracle_status: n/a
-    process_order: 56
-    req_audit_pass: true
-    sidecar_path: implementation-decisions/IMPL-TIED_FILES-pseudocode.md
-    status: logic_verified
-    steps:
-      blocks_synced: 1
-      blocks_total: 1
-      discovery: true
-      layer_a_validated: true
-      layer_b_validated: true
-      metadata_updated: true
-      req_audit_pass: true
-      sidecar_created: true
-      tests_green: true
-    target_logic_level: L2
-    tier: B_implemented
-    token: IMPL-TIED_FILES
   - code_files: 1
     deep_sync_complete: true
     formal_spec: true

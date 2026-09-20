@@ -112,19 +112,19 @@ IMPL-GIT_CLI:
   implementation_approach:
     details: []
     summary: |-
-      Uses `exec.Command("git", ...)` for Git operations
-      Repository detection: `git rev-parse --is-inside-work-tree`
-      Branch extraction: `git rev-parse --abbrev-ref HEAD`
-      Hash extraction: `git rev-parse --short HEAD`
-      Status detection: `git status --porcelain`
+      pkg/git executes git subprocess commands with configurable working directory, detects repositories, extracts branch/hash/clean status, and aggregates Info for archive naming and legacy root wrappers.
+      INPUT: Config, working directory, git subcommand args
+      OUTPUT: trimmed command output, Info struct, errors as GitError
+      DATA: Command path legacy fallbacks, SubmoduleInfo list
+      Canonical behavior: tied/implementation-decisions/IMPL-GIT_CLI-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

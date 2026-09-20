@@ -31,14 +31,19 @@ IMPL-DIFF_COMMAND:
       - 'Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case'
       - 'CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection'
       - 'Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns'
-    summary: Archive state reconstruction from full + incremental archives, directory comparison, change reporting, and CLI command integration
+    summary: |-
+      CLI diff command reconstructs effective archive state from latest full plus incremental zip snapshots, compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
+      INPUT: archiveDir, cwd, exclude patterns, context
+      OUTPUT: DiffResult, stdout diff text
+      DATA: DirectorySnapshot maps by RelativePath, name-sorted Archive list
+      Canonical behavior: tied/implementation-decisions/IMPL-DIFF_COMMAND-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Diff Command Implementation
   rationale:
     benefits:

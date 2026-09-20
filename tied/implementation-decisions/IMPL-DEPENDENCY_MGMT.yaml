@@ -13,14 +13,19 @@ IMPL-DEPENDENCY_MGMT:
       - Core packages (config, errors) have no internal dependencies
       - Higher-level packages compose core packages
       - Use Go modules for versioning extracted packages
-    summary: Design clear dependency hierarchy with Go modules for versioning
+    summary: |-
+      Keeps extracted packages within declared layer import boundaries and uses Go modules for versioned package graphs.
+      INPUT: package source trees, dependency hierarchy manifest
+      OUTPUT: violation reports and tidy go.mod graphs
+      DATA: allowed_deps per layer, go.mod pins
+      Canonical behavior: tied/implementation-decisions/IMPL-DEPENDENCY_MGMT-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Dependency Management
   rationale:
     benefits:

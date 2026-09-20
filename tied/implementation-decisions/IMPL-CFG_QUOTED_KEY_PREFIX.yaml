@@ -42,9 +42,11 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
     details:
       - '#### 1. Quote Handling in `extractStrategy`'
     summary: |-
-      - First pass: Identify all keys with explicit prefixes and map them to their base keys
-      - Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
-      - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+      Parses YAML config maps so quoted merge-prefix keys (e.g. "+exclude_patterns") normalize to the correct strategy and base field name without duplicate unprefixed keys winning.
+      INPUT: config map[string]interface{} from unmarshaled YAML
+      OUTPUT: processedConfig with one mergeOperation per clean field key
+      DATA: explicitPrefixKeys map, extractStrategy prefix table
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX-pseudocode.md
   implementation_details: '#### 1. Quote Handling in `extractStrategy`'
   metadata:
     created:
@@ -52,8 +54,8 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

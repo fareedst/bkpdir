@@ -20,15 +20,20 @@ IMPL-FILE_STATISTICS:
     - REQ-OUTPUT_FORMATTING
   implementation_approach:
     details: []
-    summary: FileStatInfo structure with human-readable formatting
+    summary: |-
+      Gather os.Stat metadata into FileStatInfo with human-readable size and file-type classification for list and template output formatting. Backward compatibility maintained with existing format strings; inc and full commands behave consistently.
+      INPUT: file path
+      OUTPUT: FileStatInfo or error
+      DATA: size thresholds KB/MB/GB/TB, os.FileMode bits
+      Canonical behavior: tied/implementation-decisions/IMPL-FILE_STATISTICS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

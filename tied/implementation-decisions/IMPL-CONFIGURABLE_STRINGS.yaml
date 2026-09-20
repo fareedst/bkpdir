@@ -17,14 +17,19 @@ IMPL-CONFIGURABLE_STRINGS:
       - All error messages now use OutputFormatter methods instead of hardcoded strings
       - Maintained full backward compatibility with existing format strings
       - Updated HandleArchiveError to use configurable error messages
-    summary: Add configurable format strings to Config struct with OutputFormatter methods for template-based formatting
+    summary: |-
+      Externalize user-facing error and status format strings on Config with YAML defaults, expose them via GetErrorFormatStrings, format through OutputFormatter methods, and route archive failures through HandleArchiveError instead of hardcoded text.
+      INPUT: err, cfg format fields, formatter interface
+      OUTPUT: printed message and process exit status
+      DATA: Format*Error strings, Template*Error strings, status code map
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIGURABLE_STRINGS-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Eliminate Hardcoded Strings and Enhance Template Formatting
   rationale:
     benefits:

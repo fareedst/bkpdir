@@ -23,6 +23,7 @@
 // [ARCH-SYSTEM_COMPONENTS] Archive data model validation
 // [IMPL-DATA_MODELS] Archive struct, ArchiveConfig struct, and adapter validation
 package main
+
 import (
 	"archive/zip"
 	"bytes"

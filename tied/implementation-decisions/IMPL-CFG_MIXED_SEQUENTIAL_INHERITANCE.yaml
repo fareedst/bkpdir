@@ -40,7 +40,12 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
     - When processing inheritance chain files, check `explicitlySetFields` to preserve sequential file values for precedence fields
   implementation_approach:
     details: []
-    summary: '- **Field Tracking Strategy**:'
+    summary: |-
+      Load configs from search paths mixing single-file sequential discovery with multi-file inheritance chains, tracking explicitlySetFields so sequential files win over later files but inheritance children can override parents.
+      INPUT: search paths, inherit chains, raw YAML maps
+      OUTPUT: merged Config, explicitlySetFields map
+      DATA: inheritContext flag, chain.files length
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE-pseudocode.md
   inheritance_chains_processed_after_sequential_files:
     - Accumulate fields from sequential files and inheritance chain merge correctly
     - Precedence fields from sequential files are preserved (checked via `explicitlySetFields`)
@@ -54,8 +59,8 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -6,6 +6,7 @@ import (
 
 	"bkpdir/internal/specmodel"
 )
+
 // - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify NewCommand sets use/short and WithHandler invokes RunE.
 // - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: embed semantic tokens inline and replicate critical REQ/ARCH/IMPL context so each document layer stays self-contained with registry links.
 // - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: verify tokens in code and tests exist in the registry with bidirectional links and no orphans.
@@ -16,6 +17,7 @@ func TestCLI_DryRunOracle(t *testing.T) {
 		t.Fatal("dry run should skip writes")
 	}
 }
+
 // - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify NewRootCommand sets name, short, and non-empty version from AppInfo.
 // - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify NewCLIApp preserves AppInfo and AddCommand registers subcommand on root.
 // - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify dry-run skips Execute and logs [DRY-RUN] prefix; non-dry-run runs operation.

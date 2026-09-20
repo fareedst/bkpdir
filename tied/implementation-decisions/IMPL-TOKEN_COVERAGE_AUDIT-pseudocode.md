@@ -37,3 +37,5 @@ SPEC-ID: IMPL-TOKEN_COVERAGE_AUDIT::HYGIENE_POLICY
 STEP T001: Enforce module-scoped literal block leads; forbid repo-wide test paste
 
 - [IMPL-TOKEN_COVERAGE_AUDIT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-PSEUDOCODE_FORMAL_VERIFICATION] — How: place `// - {exact sidecar lead}` immediately before the implementing `func` or covering `Test*`/`Benchmark*` only; never paste full sidecar lead lists after `package` in `*_test.go`; disable bulk `add-test-leads --all`; run `audit_package_level_leads.py --fail-on-suspect` and D15 `strip_redundant_impl_banners.py` to drop paraphrased `// [IMPL-*]` banners when literal block leads for the same IMPL token exist in the same file.
+
+NOTE: COVER-001 matrix coverage for this policy block is waived as `INFRA-policy-sidecar-block` in `tied/spec/coverage-waivers.yaml` (proof: hygiene scripts/tests in `scripts/audit_package_level_leads.py`, `scripts/strip_redundant_impl_banners.py`, and `scripts/test_lead_hygiene.py` — not duplicate Go `// -` leads on script entrypoints).

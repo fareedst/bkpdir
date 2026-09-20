@@ -26,14 +26,19 @@ IMPL-TESTING:
       - 'Test utilities (testutil/): CreateTestDirectory, CreateTestFile, CreateTestGitRepo, CreateTestArchive, CreateTestBackup, AssertNoTempFiles, AssertArchiveContents, MockFileSystem, CaptureOutput, SetupTestConfig, CleanupTestResources, and more'
       - 'Testing frameworks: archive corruption, disk space simulation, permission testing, context cancellation, error injection'
       - 'Unit tests: table-driven pattern with struct slices for test cases'
-    summary: Table-driven unit tests, integration test structure, comprehensive test utilities in testutil/ package, and quality gates
+    summary: |-
+      Defines testing strategy: table-driven unit tests, shared testutil helpers, internal scenario utilities, and quality gates for bkpdir.
+      INPUT: test cases, temp paths, fixtures, scenario configs
+      OUTPUT: assertions, temp artifacts, integration scenario results
+      DATA: pkg/testutil helpers, internal/testutil frameworks, make test targets
+      Canonical behavior: tied/implementation-decisions/IMPL-TESTING-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Testing Implementation Strategy
   rationale:
     benefits:

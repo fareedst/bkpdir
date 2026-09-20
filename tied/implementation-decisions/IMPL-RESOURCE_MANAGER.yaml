@@ -21,15 +21,20 @@ IMPL-RESOURCE_MANAGER:
     - REQ-RESOURCE_MANAGEMENT
   implementation_approach:
     details: []
-    summary: Implement ResourceManager for automatic cleanup with panic recovery
+    summary: |-
+      Thread-safe tracking of temporary files and directories with automatic cleanup, panic recovery, and context-aware cancellation. Archive and backup creation uses atomic operations via coordinated temp-file lifecycle.
+      INPUT: Resource instances, temp paths, optional context
+      OUTPUT: cleanup errors, updated resource list
+      DATA: ResourceManager slice guarded by mutex, TempFile and TempDir implementations
+      Canonical behavior: tied/implementation-decisions/IMPL-RESOURCE_MANAGER-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -8,6 +8,7 @@
 // Licensed under the MIT License
 
 package config
+
 import (
 	"os"
 	"path/filepath"

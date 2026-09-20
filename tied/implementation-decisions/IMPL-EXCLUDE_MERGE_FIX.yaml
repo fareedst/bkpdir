@@ -38,7 +38,12 @@ IMPL-EXCLUDE_MERGE_FIX:
   implementation_approach:
     details:
       - '`config_test.go`'
-    summary: Implement array field default merge strategy to satisfy CFG-005 requirement
+    summary: |-
+      Fix exclude_patterns inheritance so unprefixed YAML values merge and deduplicate across config files instead of replacing prior patterns, with typed slice conversion from YAML.
+      INPUT: dst/src Config, rawSrcMap with strategy prefixes
+      OUTPUT: merged Config.ExcludePatterns
+      DATA: hasExplicitPrefix map, MergeBehaviorAccumulate, merge operations
+      Canonical behavior: tied/implementation-decisions/IMPL-EXCLUDE_MERGE_FIX-pseudocode.md
   implementation_changes: '#### 1. Merge Strategy Detection Fix (`extractStrategy`)'
   location: config_test.go
   metadata:
@@ -47,8 +52,8 @@ IMPL-EXCLUDE_MERGE_FIX:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

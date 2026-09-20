@@ -14,7 +14,6 @@ import (
 	"time"
 )
 
-
 // BenchmarkGetAllConfigFields benchmarks field discovery performance.
 // Target: <50ms for cache miss, <10ms for cache hit.
 func BenchmarkGetAllConfigFields(b *testing.B) {

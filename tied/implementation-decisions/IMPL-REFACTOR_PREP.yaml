@@ -9,18 +9,19 @@ IMPL-REFACTOR_PREP:
   implementation_approach:
     details: []
     summary: |-
-      Interface-first design before extraction
-      Large file decomposition for better boundaries
-      Dependency analysis and cleanup
-      Comprehensive testing before extraction
+      Prepare the codebase for extraction by defining interfaces first, splitting large files, and eliminating circular dependencies before packages move.
+      INPUT: components targeted for extraction, dependency graph, large source files
+      OUTPUT: interface boundaries, decomposed files, acyclic dependency layers
+      DATA: REFACTOR preparation markers, interface definitions, dependency clusters
+      Canonical behavior: tied/implementation-decisions/IMPL-REFACTOR_PREP-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

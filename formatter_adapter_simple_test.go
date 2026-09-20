@@ -1,6 +1,7 @@
 // [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Comprehensive unit tests for simplified list formatting
 // These tests validate each step of the formatting process to catch bugs early
 package main
+
 import (
 	"bkpdir/pkg/formatter"
 	"fmt"

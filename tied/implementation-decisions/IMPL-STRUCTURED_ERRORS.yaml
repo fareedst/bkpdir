@@ -87,15 +87,20 @@ IMPL-STRUCTURED_ERRORS:
     ```
   implementation_approach:
     details: []
-    summary: Use structured error types with status codes and operation context
+    summary: |-
+      Structured domain errors with status codes, operation and path context, unwrap support, constructors at increasing detail levels, and classifiers that map low-level failures to disk, permission, and not-found conditions.
+      INPUT: message, statusCode, operation, path, underlying err
+      OUTPUT: ErrorInterface values, boolean classification, exit status from handlers
+      DATA: ArchiveError, BackupError, error pattern lists, ErrorCategory
+      Canonical behavior: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: 'Manual deep sync: pilot-quality three-way block leads'
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -448,6 +448,14 @@
     "action": "keep"
   },
   {
+    "path": "internal/speccheck/leads_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
     "path": "internal/speccheck/matrix.go",
     "package_level_lead_count": 0,
     "suspect": false,

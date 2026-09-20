@@ -37,15 +37,20 @@ IMPL-TOKEN_COVERAGE_AUDIT:
   git_module_(`git_go`,_`git_test_go`): Maintains `[REQ-GIT_INTEGRATION]`, `[ARCH-GIT_INTEGRATION]`, `[IMPL-GIT_CLI]`, and tests now restate them for repository detection and naming flows.
   implementation_approach:
     details: []
-    summary: '- **Archive module (`archive.go`, `archive_test.go`)**: Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).'
+    summary: |-
+      Audit modules for expected REQ/ARCH/IMPL token annotations and remediate gaps across the codebase.
+      INPUT: module file lists, expected token sets per module
+      OUTPUT: coverage report, added annotations in source and tests
+      DATA: scanned token comments, gap records, cross-module aggregates
+      Canonical behavior: tied/implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -12,6 +12,7 @@
 // Source: config.go - SERVICE-ARCH-001
 // Impact: Validates configuration service implementation
 package main
+
 import (
 	"bytes"
 	"fmt"

@@ -11,10 +11,11 @@ IMPL-ATOMIC_OPS:
   implementation_approach:
     details: []
     summary: |-
-      Create temporary files with `.tmp` extension
-      Write content to temporary file
-      Atomic rename to final location
-      Register temporary files with ResourceManager
+      Atomic file I/O via write-to-temporary-file then rename on the same filesystem, with rollback on failure and convenience helpers for copy and full-file writes.
+      INPUT: targetPath, src, dst, data, permissions
+      OUTPUT: committed file at target or ERROR
+      DATA: AtomicWriter state (targetPath, tempPath, temp handle, committed, closed flags)
+      Canonical behavior: tied/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md
   integration_test_structure: |-
     ```go
     func TestIntegrationScenario(t *testing.T) {
@@ -34,8 +35,8 @@ IMPL-ATOMIC_OPS:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -181,7 +182,12 @@ IMPL-AUTO_DETECTION:
     ```
   implementation_approach:
     details: []
-    summary: Path type detection with command routing logic
+    summary: |-
+      When the user passes a filesystem path as the first argument (not a known subcommand or global flag), classify the path and route to file backup or directory archive without requiring explicit subcommands.
+      INPUT: argv without program name, root CLI command tree
+      OUTPUT: executed backup/archive or standard Cobra dispatch
+      DATA: path, dry-run flag, note text, known command and flag lists
+      Canonical behavior: tied/implementation-decisions/IMPL-AUTO_DETECTION-pseudocode.md
   integration_with_cobra: |-
     ```go
     func executeWithAutoDetection(rootCmd *cobra.Command, args []string) error {
@@ -200,8 +206,8 @@ IMPL-AUTO_DETECTION:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -257,6 +263,17 @@ IMPL-BACKWARD_COMPAT:
     - REQ-MAINTAINABILITY
   description: Extract components without breaking existing backup application using Go modules and interfaces to isolate extracted code
   detail_file: implementation-decisions/IMPL-BACKWARD_COMPAT.yaml
+  implementation_approach:
+    summary: |-
+      Preserve the existing backup application API while extracting components into separate packages using aliases, wrappers, and interface boundaries.
+      INPUT: extracted package symbols, root package consumers
+      OUTPUT: unchanged compile-time API at root; isolated extracted modules
+      DATA: type aliases, wrapper functions, boundary interfaces
+      Canonical behavior: tied/implementation-decisions/IMPL-BACKWARD_COMPAT-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Maintain Backward Compatibility
   status: Active
 IMPL-CFG_006:
@@ -419,7 +436,12 @@ IMPL-CFG_006:
     ```
   implementation_approach:
     details: []
-    summary: Reflection-based field discovery with caching and lazy evaluation
+    summary: |-
+      Reflection-based configuration field discovery with thread-safe schema cache, value formatting, and merge-strategy inference. Flat YAML-tag reflection and display grouping are owned by [IMPL-CONFIG_DISPLAY_FLATTENING] (reflectConfigFields, determineFieldCategory). Backward compatibility: existing GetConfigValuesWithSources callers unchanged. Source tracking shows inheritance chain origins per field.
+      INPUT: Config instance, field paths, reflect types
+      OUTPUT: configFieldInfo slices, display strings, merge strategy names
+      DATA: globalFieldCache, configFieldInfo, ConfigValueWithMetadata
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_006-pseudocode.md
   incremental_resolution: |-
     ```go
     // [MEDIUM] CFG-006: Performance optimization - Incremental resolution
@@ -465,8 +487,8 @@ IMPL-CFG_006:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -567,7 +589,12 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
   detail_file: implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION.yaml
   implementation_approach:
     details: []
-    summary: '- **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
+    summary: |-
+      Preserve configuration field values across sequential and inheritance merge paths so earlier explicit settings are not overwritten by later files or defaults.
+      INPUT: dst config, src config, inherit_context, field name
+      OUTPUT: merged config with correct precedence per merge mode
+      DATA: explicitly_set_tracker, default values, inheritContext flag
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION-pseudocode.md
   implementation_approach_(planning,_no_code_yet):
     - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
     - 'Input sources: `tied/semantic-tokens.md`, `tied/requirements.md`, `tied/architecture-decisions.md`, `tied/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
@@ -585,8 +612,8 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -665,15 +692,20 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
   fixed_resolvepath_directory_handling: 'Updated `resolvePath` to:'
   implementation_approach:
     details: []
-    summary: '- **Fixed buildChainRecursive basePath**: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls'
+    summary: |-
+      Resolve inherited config file paths relative to parent directories, expand home and environment variables, detect cycles, and build ordered inheritance chains.
+      INPUT: configPath, basePath, inherit metadata
+      OUTPUT: resolved absolute paths, inheritance chain file list
+      DATA: inheritanceChain, pathResolver, visited map
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -736,7 +768,12 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
     *Note: Even with `!` prefix, `exclude_patterns` is still marked as accumulate, but explicit prefix overrides default merge strategy.
   implementation_approach:
     details: []
-    summary: '- Created `FieldMergeBehavior` type with two behaviors: `MergeBehaviorAccumulate` and `MergeBehaviorPrecedence`'
+    summary: |-
+      Per-field registry choosing accumulate versus precedence merge behavior, used when applying replace and other strategies during multi-file config load.
+      INPUT: field name, dst value, explicitlySetFields map
+      OUTPUT: FieldMergeBehavior enum, merged Config fields
+      DATA: fieldMergeBehaviors map, MergeBehaviorAccumulate, MergeBehaviorPrecedence
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MERGE_BEHAVIOR_REGISTRY-pseudocode.md
   key_changes: |-
     1. `FieldMergeBehavior` type and constants (`MergeBehaviorAccumulate`, `MergeBehaviorPrecedence`)
     2. `fieldMergeBehaviors` registry map with field-specific behaviors
@@ -752,8 +789,8 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -836,7 +873,12 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
   detail_file: implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX.yaml
   implementation_approach:
     details: []
-    summary: '- Updated `applyMerge()` and `applyPrepend()` function signatures to accept `inheritContext`, `defaultCfg`, and `explicitlySetFields` parameters'
+    summary: |-
+      Ensures merge and prepend strategies respect CFG-001 earlier-file precedence for scalar fields registered as MergeBehaviorPrecedence when processing sequential config files (non-inheritance context).
+      INPUT: result config, field key, operation value, dstValue, inheritContext, defaultCfg, explicitlySetFields
+      OUTPUT: updated result config field or preserved dstValue
+      DATA: mergeOperation strategy, fieldMergeBehaviors registry, default vs dst comparison
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX-pseudocode.md
   key_changes: '#### 1. Updated `applyMerge()` Function Signature'
   metadata:
     created:
@@ -844,8 +886,8 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -908,7 +950,12 @@ IMPL-CFG_MIXED_MODE_MERGE_FIX:
   explicit_`!`_prefix: Replaces, but still respects earlier file precedence if field was set by earlier file (CFG-001)
   implementation_approach:
     details: []
-    summary: '- Simplified merge strategy logic in `applyMergeStrategies` to always change "override" to "merge" for `MergeBehaviorAccumulate` fields (unless explicit prefix)'
+    summary: |-
+      Applies per-field merge behavior when combining config sources: accumulate fields default to merge unless an explicit YAML prefix (!, +, ^, =) is present, with special handling for exclude_patterns and inheritance vs sequential context.
+      INPUT: dst and src Config, inheritContext, rawSrcMap, initialDefaultCfg, explicitlySetFields, excludeUnprefixedReplacesBuiltinDefaults
+      OUTPUT: merged Config or error
+      DATA: processed merge operations map, fieldMergeBehaviors, hasExplicitPrefix map
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX-pseudocode.md
   key_changes: '#### 1. Simplified Merge Strategy Logic (`applyMergeStrategies`)'
   metadata:
     created:
@@ -916,8 +963,8 @@ IMPL-CFG_MIXED_MODE_MERGE_FIX:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -993,7 +1040,12 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
     - When processing inheritance chain files, check `explicitlySetFields` to preserve sequential file values for precedence fields
   implementation_approach:
     details: []
-    summary: '- **Field Tracking Strategy**:'
+    summary: |-
+      Load configs from search paths mixing single-file sequential discovery with multi-file inheritance chains, tracking explicitlySetFields so sequential files win over later files but inheritance children can override parents.
+      INPUT: search paths, inherit chains, raw YAML maps
+      OUTPUT: merged Config, explicitlySetFields map
+      DATA: inheritContext flag, chain.files length
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE-pseudocode.md
   inheritance_chains_processed_after_sequential_files:
     - Accumulate fields from sequential files and inheritance chain merge correctly
     - Precedence fields from sequential files are preserved (checked via `explicitlySetFields`)
@@ -1007,8 +1059,8 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1072,7 +1124,12 @@ IMPL-CFG_PRECEDENCE_FIX:
   explicit_field_setting: Use `rawSrcMap` to check if a field was explicitly set in the source file (not just present due to defaults)
   implementation_approach:
     details: []
-    summary: '- Modified `LoadConfig` fallback path to use `fileProcessed` flag instead of checking if cfg equals defaults (which fails when first file sets values to defaults)'
+    summary: |-
+      Fix sequential config file loading so earlier discovery-order files keep explicitly set values even when equal to defaults, using explicitlySetFields instead of comparing only to DefaultConfig.
+      INPUT: ordered config file paths, raw YAML per file
+      OUTPUT: merged Config respecting first-wins precedence
+      DATA: explicitlySetFields map, fileProcessed flag, inheritContext boolean
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_PRECEDENCE_FIX-pseudocode.md
   inheritance_chains: '(`inheritContext=true`): Child configs override parent configs (normal inheritance behavior)'
   key_changes: |-
     1. `LoadConfig` fallback: Uses `fileProcessed` flag and `initialDefaultCfg` to track initial state
@@ -1087,8 +1144,8 @@ IMPL-CFG_PRECEDENCE_FIX:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1165,9 +1222,11 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
     details:
       - '#### 1. Quote Handling in `extractStrategy`'
     summary: |-
-      - First pass: Identify all keys with explicit prefixes and map them to their base keys
-      - Second pass: When processing keys, skip duplicate keys without prefixes if an explicit prefix key exists for the same base key
-      - This ensures that `"+exclude_patterns"` takes precedence over `"exclude_patterns"` if both exist
+      Parses YAML config maps so quoted merge-prefix keys (e.g. "+exclude_patterns") normalize to the correct strategy and base field name without duplicate unprefixed keys winning.
+      INPUT: config map[string]interface{} from unmarshaled YAML
+      OUTPUT: processedConfig with one mergeOperation per clean field key
+      DATA: explicitPrefixKeys map, extractStrategy prefix table
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX-pseudocode.md
   implementation_details: '#### 1. Quote Handling in `extractStrategy`'
   metadata:
     created:
@@ -1175,8 +1234,8 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1290,15 +1349,20 @@ IMPL-CLI_FRAMEWORK:
     ```
   implementation_approach:
     details: []
-    summary: Builder pattern with manager interfaces for CLI construction
+    summary: |-
+      Builder-pattern CLI framework: command and root builders, flag/context/dry-run/version managers, and a CLIApp container that wires managers and runs the root command with optional signal-aware context.
+      INPUT: AppInfo, command templates, CommandContext, DryRunOperation
+      OUTPUT: configured root command, exit status, dry-run log lines
+      DATA: FlagManager, VersionManager, ContextManager, DryRunManager, BuildInfo
+      Canonical behavior: tied/implementation-decisions/IMPL-CLI_FRAMEWORK-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1347,15 +1411,20 @@ IMPL-CODE_STYLE:
     - Use `revive` linter for code quality
   implementation_approach:
     details: []
-    summary: See detail file
+    summary: |-
+      Enforce project naming, formatting, and documentation conventions so public APIs stay consistent and lint-clean across the project.
+      INPUT: source files, public symbols
+      OUTPUT: pass/fail validation results
+      DATA: naming rules, formatting rules, documentation rules
+      Canonical behavior: tied/implementation-decisions/IMPL-CODE_STYLE-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1388,6 +1457,17 @@ IMPL-CONFIG_DISPLAY_FLATTENING:
     - REQ-CFG_006
   description: Configuration keys displayed as top-level keys in bkpdir config output even when nested in internal struct, using reflection-based YAML tag discovery
   detail_file: implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING.yaml
+  implementation_approach:
+    summary: |-
+      Presents configuration keys in flat YAML-tag form in `bkpdir config` output even when values live in nested structs, using reflection metadata (YAMLName) and legacy top-level Git field compatibility during merge.
+      INPUT: Config struct, optional config root path for source attribution
+      OUTPUT: sorted configFieldInfo list and ConfigValueWithMetadata rows for display
+      DATA: yaml tags, field cache, legacy include_git_info / show_git_dirty_status keys
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Configuration Display Flattening
   status: Active
 IMPL-CONFIG_OUTPUT_GROUPING:
@@ -1402,15 +1482,20 @@ IMPL-CONFIG_OUTPUT_GROUPING:
   detail_file: implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING.yaml
   implementation_approach:
     details: []
-    summary: '1.  **Metadata Extension**:'
+    summary: |-
+      Rank configuration fields by importance and category priority so grouped config display lists critical paths first within each category section.
+      INPUT: field name, category, ConfigValueWithMetadata list, showSources flag
+      OUTPUT: grouped stdout sections sorted by category priority then field importance
+      DATA: Importance* constants, CategoryPriority map, categories map
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1447,6 +1532,17 @@ IMPL-CONFIG_SCHEMA_FLEX:
     - REQ-CONFIGURATION
   description: Extract configuration loading/merging logic with pluggable schema validation using ConfigLoader interface for different struct types
   detail_file: implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX.yaml
+  implementation_approach:
+    summary: |-
+      Schema-agnostic configuration loading in pkg/config clones defaults, merges discovered YAML files, applies environment overrides, validates, and adapts results back to the legacy Config type.
+      INPUT: root path, defaultConfig interface{}
+      OUTPUT: merged configuration value or map of ConfigValue with sources
+      DATA: GenericConfigLoader, search paths, env provider, validator
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Configuration Schema Flexibility
   status: Active
 IMPL-CONFIG_STRUCT:
@@ -1564,7 +1660,12 @@ IMPL-CONFIG_STRUCT:
       - The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
       - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
       - 'YAML files can use either:'
-    summary: Configuration keys are displayed as top-level keys in `bkpdir config` output, even when they are nested in the internal struct.
+    summary: |-
+      Central configuration model: YAML-serializable Config aggregate, default factory, and legacy display adapters. Reflection field discovery and flat display are owned by [IMPL-CFG_006] and [IMPL-CONFIG_DISPLAY_FLATTENING].
+      INPUT: Config instance, optional filesystem root for source detection
+      OUTPUT: ConfigValue slices for simple and enhanced display
+      DATA: ConfigValue, configFieldInfo (shared type with CFG_006)
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_STRUCT-pseudocode.md
   implementation_details:
     - Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
     - Internal struct has `Git *GitConfig` with nested fields
@@ -1579,8 +1680,8 @@ IMPL-CONFIG_STRUCT:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1624,6 +1725,17 @@ IMPL-CONFIGURABLE_STRINGS:
     - REQ-CONFIGURATION
   description: Comprehensive string externalization system allowing all user-facing strings to be loaded from configuration files with enhanced template formatting using named elements
   detail_file: implementation-decisions/IMPL-CONFIGURABLE_STRINGS.yaml
+  implementation_approach:
+    summary: |-
+      Externalize user-facing error and status format strings on Config with YAML defaults, expose them via GetErrorFormatStrings, format through OutputFormatter methods, and route archive failures through HandleArchiveError instead of hardcoded text.
+      INPUT: err, cfg format fields, formatter interface
+      OUTPUT: printed message and process exit status
+      DATA: Format*Error strings, Template*Error strings, status code map
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIGURABLE_STRINGS-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Eliminate Hardcoded Strings and Enhance Template Formatting
   status: Active
 IMPL-CONTEXT_OPS:
@@ -1643,18 +1755,19 @@ IMPL-CONTEXT_OPS:
   implementation_approach:
     details: []
     summary: |-
-      All long-running operations accept `context.Context`
-      Periodic cancellation checks during operations
-      Context-aware file operations
-      Timeout support via `context.WithTimeout()`
+      Bundle context.Context with ResourceManager for cancellable operations, expose non-blocking cancellation checks, embed managers in context values, and clean up tracked resources when contexts end.
+      INPUT: parent context, operation ID, timeout (optional)
+      OUTPUT: ContextualOperation, derived contexts, cleanup errors
+      DATA: ResourceManagerKey, OperationIDKey, ContextualOperation struct
+      Canonical behavior: tied/implementation-decisions/IMPL-CONTEXT_OPS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1745,7 +1858,12 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
       - All format string processing code - `pkg/formatter/ai_core_formatter.go`, `pkg/formatter/placeholder_replace.go`, `pkg/formatter/template.go`, `ai_formatter_adapter.go`, `formatter_adapter_simple.go`, `config.go`, and all test files
       - All test assertions updated to check for `#{}` instead of `%{}`
       - All validation logic updated to recognize `#{}` placeholders
-    summary: Implement format string validation and comprehensive documentation for user customization. FormatListArchive and FormatListBackup support both printf-style and template-style placeholders.
+    summary: |-
+      Validate configurable format and template strings against per-field placeholder rules, warn on unexpected placeholders during config load, and render #{key} and mixed printf templates with safe defaults. Brief example configuration file demonstrates common customization patterns; documentation is complete, accurate, and tested.
+      INPUT: fieldName, formatString, cfg format fields, data map
+      OUTPUT: warning strings, rendered message text
+      DATA: placeholderMap, regex extractors, known default placeholders
+      Canonical behavior: tied/implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS-pseudocode.md
   implementation_components: '#### 1. Format String Validation'
   implementation_details:
     - All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
@@ -1774,8 +1892,8 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -1860,6 +1978,17 @@ IMPL-DATA_MODELS:
     - REQ-FILE_BACKUP
   description: Comprehensive data structures for archive and backup operations providing structured data representation, type safety, serialization support, and testing facilitation
   detail_file: implementation-decisions/IMPL-DATA_MODELS.yaml
+  implementation_approach:
+    summary: |-
+      Type-safe archive and backup domain models with configuration and formatter interfaces plus adapters that decouple operations from concrete Config and OutputFormatter types.
+      INPUT: Config, OutputFormatter, operation parameters
+      OUTPUT: structured value objects and interface contracts for archive/backup pipelines
+      DATA: Archive, ArchiveConfig, Backup, BackupInfo, adapter structs
+      Canonical behavior: tied/implementation-decisions/IMPL-DATA_MODELS-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Data Models
   status: Active
 IMPL-DELAYED_OUTPUT:
@@ -1868,6 +1997,17 @@ IMPL-DELAYED_OUTPUT:
     - REQ-OUTPUT_FORMATTING
   description: Delayed output functionality returning output messages to calling functions instead of direct stdout/stderr printing for better control over output display
   detail_file: implementation-decisions/IMPL-DELAYED_OUTPUT.yaml
+  implementation_approach:
+    summary: |-
+      Buffer stdout and stderr messages in OutputCollector until Flush* or Clear, and route OutputFormatter Print methods through the collector when delayed mode is enabled.
+      INPUT: message content, destination, message type
+      OUTPUT: deferred writes to os.Stdout/Stderr
+      DATA: OutputMessage slice, OutputFormatter.collector pointer
+      Canonical behavior: tied/implementation-decisions/IMPL-DELAYED_OUTPUT-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Delayed Output Management
   status: Active
 IMPL-DEPENDENCY_MGMT:
@@ -1876,6 +2016,17 @@ IMPL-DEPENDENCY_MGMT:
     - REQ-MAINTAINABILITY
   description: Clear dependency hierarchy using Go modules for versioning with core packages having no internal dependencies and higher-level packages composing core packages
   detail_file: implementation-decisions/IMPL-DEPENDENCY_MGMT.yaml
+  implementation_approach:
+    summary: |-
+      Keeps extracted packages within declared layer import boundaries and uses Go modules for versioned package graphs.
+      INPUT: package source trees, dependency hierarchy manifest
+      OUTPUT: violation reports and tidy go.mod graphs
+      DATA: allowed_deps per layer, go.mod pins
+      Canonical behavior: tied/implementation-decisions/IMPL-DEPENDENCY_MGMT-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Dependency Management
   status: Active
 IMPL-DIFF_COMMAND:
@@ -1884,6 +2035,17 @@ IMPL-DIFF_COMMAND:
     - REQ-DIFF_COMMAND
   description: Diff command with archive state reconstruction, directory comparison engine, change reporting, and CLI integration with context cancellation support
   detail_file: implementation-decisions/IMPL-DIFF_COMMAND.yaml
+  implementation_approach:
+    summary: |-
+      CLI diff command reconstructs effective archive state from latest full plus incremental zip snapshots, compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
+      INPUT: archiveDir, cwd, exclude patterns, context
+      OUTPUT: DiffResult, stdout diff text
+      DATA: DirectorySnapshot maps by RelativePath, name-sorted Archive list
+      Canonical behavior: tied/implementation-decisions/IMPL-DIFF_COMMAND-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Diff Command Implementation
   status: Active
 IMPL-DIRECTORY_COMPARISON:
@@ -1987,15 +2149,20 @@ IMPL-DIRECTORY_COMPARISON:
     ```
   implementation_approach:
     details: []
-    summary: Snapshot-based comparison with hash-based content verification
+    summary: |-
+      Snapshot-based directory and zip archive comparison via pkg/fileops wrappers, plus helpers to find the latest full archive and detect directory-archive identity.
+      INPUT: root path, archive zip path, exclude patterns
+      OUTPUT: DirectorySnapshot, boolean identical, most recent archive path
+      DATA: FileInfo RelativePath, Size, Hash
+      Canonical behavior: tied/implementation-decisions/IMPL-DIRECTORY_COMPARISON-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2036,18 +2203,19 @@ IMPL-DOC_ENHANCEMENT:
   implementation_approach:
     details: []
     summary: |-
-      Semantic token system for cross-referencing
-      Automated validation and consistency checking
-      Behavioral contracts for feature stability
-      Dependency mapping for change impact analysis
+      Documentation enhancement process: self-contained cross-linked docs, consistency validation, behavioral contracts, and change-impact analysis tied to semantic tokens.
+      INPUT: documentation set, semantic token registry, proposed token changes
+      OUTPUT: updated docs, validation reports, impact summaries
+      DATA: REQ/ARCH/IMPL cross-references, behavioral contracts
+      Canonical behavior: tied/implementation-decisions/IMPL-DOC_ENHANCEMENT-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2091,18 +2259,19 @@ IMPL-DUAL_FORMATTING:
   implementation_approach:
     details: []
     summary: |-
-      `OutputFormatter`: Printf-style formatting methods
-      `TemplateFormatter`: Advanced template processing
-      Regex extraction for rich data formatting
-      Support for both Go text/template and placeholder syntax
+      OutputFormatter supports printf cfg strings and template #{key} strings with guarded selection, shared formatTemplate helper, and interface contracts for format providers and destinations.
+      INPUT: format string, path, creation time, data map
+      OUTPUT: rendered message string
+      DATA: FormatProvider, TemplateFormatter, OutputCollector routing
+      Canonical behavior: tied/implementation-decisions/IMPL-DUAL_FORMATTING-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2134,6 +2303,26 @@ IMPL-DUAL_FORMATTING:
     requirements:
       - REQ-OUTPUT_FORMATTING
     tests: []
+IMPL-EVIDENCE_CHAIN_PROFILE:
+  cross_references:
+    - ARCH-EVIDENCE_CHAIN_PROFILE
+    - IMPL-QUALITY_EVIDENCE_MANIFEST
+    - IMPL-TIED_FIDELITY_RESEARCH
+    - REQ-EVIDENCE_CHAIN_PROFILE
+  detail_file: implementation-decisions/IMPL-EVIDENCE_CHAIN_PROFILE.yaml
+  implementation_approach:
+    details:
+      - Do not call runFirstSlice or runFidelityResearchPilot
+      - Extend opt-in usage metrics with hashed project_id and profile_depth
+      - Reuse resolveProjectManifest, runStructuralAnalysis, auditImplFidelity, analyzeBindingEvidence, and analyzeSpecificationState
+    summary: Implement generateEvidenceChainProfile with injectable real adapters, normalizeEvidenceChainProfile, MCP tool evidence_chain_profile_generate, and a manual profile contract.
+  name: Evidence chain profile orchestrator
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-EVIDENCE_CHAIN_PROFILE
+    requirements:
+      - REQ-EVIDENCE_CHAIN_PROFILE
 IMPL-EXCLUDE_MERGE_FIX:
   change: Removed `inheritContext` condition that was preventing array fields from defaulting to merge in sequential file processing. Array fields now default to merge in all contexts (inheritance chains and sequential files), per CFG-005 requirement. Explicit prefixes (`!`, `+`, `^`, `=`) are still respected.
   changes:
@@ -2163,7 +2352,12 @@ IMPL-EXCLUDE_MERGE_FIX:
   implementation_approach:
     details:
       - '`config_test.go`'
-    summary: Implement array field default merge strategy to satisfy CFG-005 requirement
+    summary: |-
+      Fix exclude_patterns inheritance so unprefixed YAML values merge and deduplicate across config files instead of replacing prior patterns, with typed slice conversion from YAML.
+      INPUT: dst/src Config, rawSrcMap with strategy prefixes
+      OUTPUT: merged Config.ExcludePatterns
+      DATA: hasExplicitPrefix map, MergeBehaviorAccumulate, merge operations
+      Canonical behavior: tied/implementation-decisions/IMPL-EXCLUDE_MERGE_FIX-pseudocode.md
   implementation_changes: '#### 1. Merge Strategy Detection Fix (`extractStrategy`)'
   location: config_test.go
   metadata:
@@ -2172,8 +2366,8 @@ IMPL-EXCLUDE_MERGE_FIX:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2253,15 +2447,20 @@ IMPL-EXCLUSION_PATTERNS:
   glob_patterns: '`*.tmp`, `*.log`, `build/`'
   implementation_approach:
     details: []
-    summary: Doublestar glob pattern matching with compiled matcher
+    summary: |-
+      Match paths against configured exclusion patterns using directory suffix, glob, and exact rules with normalized forward-slash paths.
+      INPUT: path string, pattern list
+      OUTPUT: boolean excluded
+      DATA: PatternMatcher.patterns, doublestar globs
+      Canonical behavior: tied/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2331,6 +2530,17 @@ IMPL-EXTRACT_008_DOC_MIGRATION:
     - REQ-EXTRACT_008_INTERDEP_MAPPING
   description: Preserve working-plan content by migrating it into STDD/TIED core documents and decommissioning the working-plan artifact
   detail_file: implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION.yaml
+  implementation_approach:
+    summary: |-
+      Migrates EXTRACT-008 working-plan content into canonical STDD REQ/ARCH/IMPL and deliverable docs, then removes supplemental preservation files.
+      INPUT: working-plan-extract-008 content, template doc locations
+      OUTPUT: registry entries, docs/package-interdependency-mapping.md, decommissioned working plan
+      DATA: REQ-EXTRACT_008_INTERDEP_MAPPING, ARCH-EXTRACT_008_INTERDEP tokens
+      Canonical behavior: tied/implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: EXTRACT-008 Documentation Migration and Preservation
   status: Active
 IMPL-EXTRACTION_CHALLENGES:
@@ -2349,15 +2559,20 @@ IMPL-EXTRACTION_CHALLENGES:
   detail_file: implementation-decisions/IMPL-EXTRACTION_CHALLENGES.yaml
   implementation_approach:
     details: []
-    summary: See detail file
+    summary: |-
+      Address the hardest extraction problems: shared test utilities, per-package test isolation, and config coupling via minimal interfaces.
+      INPUT: shared test helpers, extracted packages, config structs
+      OUTPUT: testutil package, package-scoped tests, ConfigProvider adapters
+      DATA: fixtures, mocks, interface method sets
+      Canonical behavior: tied/implementation-decisions/IMPL-EXTRACTION_CHALLENGES-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2408,15 +2623,20 @@ IMPL-EXTRACTION_PRINCIPLES:
   implementation: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
   implementation_approach:
     details: []
-    summary: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+    summary: |-
+      Plan module extraction in strict dependency order so each layer validates and tests independently before the next layer moves.
+      INPUT: module dependency graph, extraction_layers ordered list
+      OUTPUT: extraction schedule with validated layer boundaries
+      DATA: layer deps, interface boundaries per module
+      Canonical behavior: tied/implementation-decisions/IMPL-EXTRACTION_PRINCIPLES-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2471,15 +2691,20 @@ IMPL-FILE_OPERATIONS:
   detail_file: implementation-decisions/IMPL-FILE_OPERATIONS.yaml
   implementation_approach:
     details: []
-    summary: Atomic operations with comprehensive validation and pattern-based exclusion
+    summary: |-
+      pkg/fileops provides secure path validation and directory traversal with exclusions, depth limits, symlink policy, and file listing helpers.
+      INPUT: root path, TraversalOptions, exclude patterns
+      OUTPUT: visitor callbacks, file path lists, validation errors
+      DATA: DefaultTraverser, PathValidator, PatternMatcher
+      Canonical behavior: tied/implementation-decisions/IMPL-FILE_OPERATIONS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2644,15 +2869,20 @@ IMPL-FILE_STATISTICS:
     ```
   implementation_approach:
     details: []
-    summary: FileStatInfo structure with human-readable formatting
+    summary: |-
+      Gather os.Stat metadata into FileStatInfo with human-readable size and file-type classification for list and template output formatting. Backward compatibility maintained with existing format strings; inc and full commands behave consistently.
+      INPUT: file path
+      OUTPUT: FileStatInfo or error
+      DATA: size thresholds KB/MB/GB/TB, os.FileMode bits
+      Canonical behavior: tied/implementation-decisions/IMPL-FILE_STATISTICS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2718,15 +2948,20 @@ IMPL-FILE_STATISTICS_TEMPLATE_FIX:
   fixed_aiformatteradapter_delegation: Updated `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats` in `AIFormatterAdapter` to correctly delegate to `OutputFormatter` implementation
   implementation_approach:
     details: []
-    summary: '- **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`'
+    summary: |-
+      Enhance created and incremental archive messages by gathering FileStatInfo and substituting #{path}, #{size_human}, #{mtime}, and related placeholders in detailed template format strings with safe fallbacks.
+      INPUT: archive file path, cfg template strings
+      OUTPUT: formatted message with stats or fallback to basic printf format
+      DATA: TemplateCreatedArchiveDetailed, GatherFileStatInfo map
+      Canonical behavior: tied/implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2800,19 +3035,19 @@ IMPL-GIT_CLI:
   implementation_approach:
     details: []
     summary: |-
-      Uses `exec.Command("git", ...)` for Git operations
-      Repository detection: `git rev-parse --is-inside-work-tree`
-      Branch extraction: `git rev-parse --abbrev-ref HEAD`
-      Hash extraction: `git rev-parse --short HEAD`
-      Status detection: `git status --porcelain`
+      pkg/git executes git subprocess commands with configurable working directory, detects repositories, extracts branch/hash/clean status, and aggregates Info for archive naming and legacy root wrappers.
+      INPUT: Config, working directory, git subcommand args
+      OUTPUT: trimmed command output, Info struct, errors as GitError
+      DATA: Command path legacy fallbacks, SubmoduleInfo list
+      Canonical behavior: tied/implementation-decisions/IMPL-GIT_CLI-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2850,6 +3085,17 @@ IMPL-GIT_DIRTY_CONFIG:
     - REQ-GIT_INTEGRATION
   description: Make Git dirty status indicator (-dirty suffix) configurable through the configuration system with show_git_dirty_status boolean option
   detail_file: implementation-decisions/IMPL-GIT_DIRTY_CONFIG.yaml
+  implementation_approach:
+    summary: |-
+      Gate `-dirty` suffix in archive filenames on ShowGitDirtyStatus config, propagate the setting through ArchiveConfig and config merge helpers.
+      INPUT: ArchiveConfig git cleanliness, cfg.ShowGitDirtyStatus
+      OUTPUT: archive basename with optional -dirty segment
+      DATA: GitBranch, GitHash, GitIsClean, legacy and nested Git.ShowDirtyStatus
+      Canonical behavior: tied/implementation-decisions/IMPL-GIT_DIRTY_CONFIG-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Configurable Git Dirty Status
   status: Active
 IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
@@ -2858,6 +3104,17 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
     - REQ-INCREMENTAL_DUPLICATE_PREVENTION
   description: Reuse diff command analysis to prevent duplicate incremental archives by comparing current state against reconstructed archive state
   detail_file: implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
+  implementation_approach:
+    summary: |-
+      Skip creating incremental archives when reconstructed archive state shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
+      INPUT: IncrementalArchiveConfig, archiveDir, cwd, exclude patterns
+      OUTPUT: nil when skipped, archive path when changes exist
+      DATA: reconstructedState, DirectoryDiff, FormatIncrementalSkippedNoChanges
+      Canonical behavior: tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Incremental Archive Duplicate Prevention
   status: Active
 IMPL-INTERFACE_DRIVEN:
@@ -2866,6 +3123,17 @@ IMPL-INTERFACE_DRIVEN:
     - REQ-MAINTAINABILITY
   description: Create clear interfaces for all extracted components to enable flexibility, testing, and future evolution
   detail_file: implementation-decisions/IMPL-INTERFACE_DRIVEN.yaml
+  implementation_approach:
+    summary: |-
+      Define minimal consumer-side interfaces from real call sites, implement concretely in provider packages, and verify boundaries with mocks.
+      INPUT: provider package, consumer roots (main, pkg, tests)
+      OUTPUT: interface definitions, wiring at composition root, mock-backed unit tests
+      DATA: method names, argument shapes, fake implementations
+      Canonical behavior: tied/implementation-decisions/IMPL-INTERFACE_DRIVEN-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Interface-Driven Design
   status: Active
 IMPL-INTERFACE_FIRST:
@@ -2880,18 +3148,19 @@ IMPL-INTERFACE_FIRST:
   implementation_approach:
     details: []
     summary: |-
-      Define interfaces before concrete implementations
-      Use Go interfaces for abstraction
-      Independent package testing
-      Versioned interface evolution
+      Define package interfaces before concrete extraction so consumers depend on contracts, implementations stay swappable, and tests use mocks.
+      INPUT: consumer call sites, target packages for extraction
+      OUTPUT: minimal interfaces, concrete implementations, versioned evolution path
+      DATA: interface method sets, API documentation contracts, mock types
+      Canonical behavior: tied/implementation-decisions/IMPL-INTERFACE_FIRST-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -2929,6 +3198,17 @@ IMPL-LARGE_FILE_CHALLENGE:
     - REQ-MAINTAINABILITY
   description: Challenge and solution for decomposing formatter.go (1675 lines) into multiple focused packages while maintaining interface compatibility
   detail_file: implementation-decisions/IMPL-LARGE_FILE_CHALLENGE.yaml
+  implementation_approach:
+    summary: |-
+      Decomposes oversized formatter.go into focused packages (templates, printf, output collector, ANSI) while preserving public interfaces used by the CLI.
+      INPUT: monolithic formatter.go responsibilities
+      OUTPUT: extracted packages with unchanged adapter surfaces
+      DATA: interface contracts, test coverage for extracted units
+      Canonical behavior: tied/implementation-decisions/IMPL-LARGE_FILE_CHALLENGE-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Large File Decomposition Challenge
   status: Active
 IMPL-LARGE_FILE_DECOMP:
@@ -2972,10 +3252,11 @@ IMPL-LARGE_FILE_DECOMP:
       - Added TestTemplateFormattingMethods for all template functions with 0% coverage
       - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
     summary: |-
-      Identify logical component boundaries
-      Extract components into separate files/packages
-      Maintain interface compatibility
-      Comprehensive testing after decomposition
+      Decompose oversized source files into logical components with stable interfaces, then verify behavior with comprehensive tests after each split.
+      INPUT: large source file, component boundaries, existing test suite
+      OUTPUT: smaller files or packages, preserved public API, improved test coverage
+      DATA: interface contracts, decomposition map, coverage metrics
+      Canonical behavior: tied/implementation-decisions/IMPL-LARGE_FILE_DECOMP-pseudocode.md
   implementation_details:
     - Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
     - Added TestDelayedOutputMode testing OutputFormatter with collector integration
@@ -2992,8 +3273,8 @@ IMPL-LARGE_FILE_DECOMP:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3053,6 +3334,17 @@ IMPL-LAYERED_EXTRACTION:
     - REQ-MAINTAINABILITY
   description: Extract in dependency order - core utilities first, then higher-level components to prevent circular dependencies
   detail_file: implementation-decisions/IMPL-LAYERED_EXTRACTION.yaml
+  implementation_approach:
+    summary: |-
+      Extract packages in dependency order: infrastructure first, then utilities, framework, and patterns last, with no circular references between layers.
+      INPUT: packages to extract, layer assignment per package
+      OUTPUT: four stable layers with acyclic dependencies
+      DATA: layer order, package dependency graph
+      Canonical behavior: tied/implementation-decisions/IMPL-LAYERED_EXTRACTION-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Layered Extraction Approach
   status: Active
 IMPL-LIST_FORMAT_SAFETY:
@@ -3067,15 +3359,20 @@ IMPL-LIST_FORMAT_SAFETY:
   detail_file: implementation-decisions/IMPL-LIST_FORMAT_SAFETY.yaml
   implementation_approach:
     details: []
-    summary: '- Added guarded printf usage in `FormatListArchive` and `FormatListBackup` to call `fmt.Sprintf` only when the format string contains printf verbs (`%`). Otherwise, return the template-format string as-is or perform placeholder replacement.'
+    summary: |-
+      Guards list-command formatting so printf-style formatting runs only when the format string contains printf verbs, preventing EXTRA-arg errors and misinterpreting template placeholders.
+      INPUT: path, creationTime, archivePath, cfg format strings
+      OUTPUT: formatted list line string
+      DATA: formatStr, data map with path, creation_time, file statistics
+      Canonical behavior: tied/implementation-decisions/IMPL-LIST_FORMAT_SAFETY-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3158,7 +3455,12 @@ IMPL-LIST_LIMIT:
   implementation: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
   implementation_approach:
     details: []
-    summary: '- Add `--limit` flag (short: `-n`) to `listCmd()` in `main.go`'
+    summary: |-
+      Limits archive and file-backup listing output to the N most recent items after sorting, with 0 meaning show all.
+      INPUT: listLimit flag value, cfg, formatter, optional file path
+      OUTPUT: printed list lines truncated to limit
+      DATA: archives or backups slice, sort order (most recent first)
+      Canonical behavior: tied/implementation-decisions/IMPL-LIST_LIMIT-pseudocode.md
   implementation_status: ✅ Complete
   implementation_steps: |-
     1. Record the requirement token `[REQ-EXTRACT_008_INTERDEP_MAPPING]` in `tied/requirements.md` (done).
@@ -3172,8 +3474,8 @@ IMPL-LIST_LIMIT:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3250,13 +3552,21 @@ IMPL-MCP_FEEDBACK_TOOLS:
     - REQ-FEEDBACK_TO_TIED
   description: Two MCP tools (tied_feedback_add, tied_feedback_export) and feedback module for load/append/export
   detail_file: implementation-decisions/IMPL-MCP_FEEDBACK_TOOLS.yaml
+  implementation_approach:
+    summary: |-
+      MCP feedback tools load, append, and export client feedback entries to tied/feedback.yaml for upstream TIED reporting.
+      INPUT: basePath, entry type/title/description, export format
+      OUTPUT: feedback.yaml updates, markdown or JSON export strings
+      DATA: FeedbackFile with entries array, generated id and created_at timestamps
+      Canonical behavior: tied/implementation-decisions/IMPL-MCP_FEEDBACK_TOOLS-pseudocode.md
   metadata:
     created:
       author: AI Agent
       date: '2026-03-03'
     last_updated:
       author: AI Agent
-      date: '2026-03-03'
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: MCP Feedback Tools
   status: Active
 IMPL-MODULE_VALIDATION:
@@ -3265,13 +3575,21 @@ IMPL-MODULE_VALIDATION:
     - REQ-MODULE_VALIDATION
   description: Module validation implementation
   detail_file: implementation-decisions/IMPL-MODULE_VALIDATION.yaml
+  implementation_approach:
+    summary: |-
+      Five-phase module validation: identify boundaries, develop independently, validate with mocks, document results, integrate only after validation passes.
+      INPUT: module spec, interfaces, dependency contracts
+      OUTPUT: validated module, documented limitations, integration tests
+      DATA: module boundary docs, unit test suites, validation reports
+      Canonical behavior: tied/implementation-decisions/IMPL-MODULE_VALIDATION-pseudocode.md
   metadata:
     created:
       author: AI Agent
       date: '2025-12-18'
     last_updated:
       author: AI Agent
-      date: '2026-02-06'
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Module Validation Implementation
   status: Active
 IMPL-PACKAGE_EXTRACTION:
@@ -3293,7 +3611,12 @@ IMPL-PACKAGE_EXTRACTION:
   detail_file: implementation-decisions/IMPL-PACKAGE_EXTRACTION.yaml
   implementation_approach:
     details: []
-    summary: Interface-driven extraction with layered dependency order
+    summary: |-
+      Phased extraction of root packages into pkg/ with legacy type aliases and wrapper functions preserving CLI compatibility.
+      INPUT: phase package list, source root files
+      OUTPUT: pkg/<package>/ modules, root aliases and wrappers
+      DATA: interface definitions, import path updates, deprecation comments
+      Canonical behavior: tied/implementation-decisions/IMPL-PACKAGE_EXTRACTION-pseudocode.md
   legacy_type_aliases: |-
     ```go
     type FileInfo = fileops.FileInfo
@@ -3306,8 +3629,8 @@ IMPL-PACKAGE_EXTRACTION:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3378,15 +3701,20 @@ IMPL-PROCESSING_PATTERNS:
   detail_file: implementation-decisions/IMPL-PROCESSING_PATTERNS.yaml
   implementation_approach:
     details: []
-    summary: Pipeline-based processing with concurrent execution support
+    summary: |-
+      Provides pipeline stage execution with retries and concurrent worker-pool processing plus archive/backup naming helpers.
+      INPUT: ProcessingInput, ProcessingItem slices, NamingTemplate, filename strings
+      OUTPUT: ProcessingResult, ConcurrentResult, generated or parsed names
+      DATA: Pipeline stages, worker channels, retry counters, regex name patterns
+      Canonical behavior: tied/implementation-decisions/IMPL-PROCESSING_PATTERNS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3444,6 +3772,192 @@ IMPL-PROCESSING_PATTERNS:
     requirements:
       - REQ-PERFORMANCE
     tests: []
+IMPL-QUALITY_ASSURANCE_PILOT_WEBHOOK:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_ASSURANCE_PILOT_WEBHOOK.yaml
+  name: Authenticated webhook inbox pilot
+  related_decisions:
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_ASSURANCE_PILOT_WEBHOOK
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - pilot/webhook-inbox/test/webhook-inbox.test.mjs
+IMPL-QUALITY_BINDING_INVENTORY:
+  cross_references:
+    - ARCH-MODULE_VALIDATION
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - REQ-MODULE_VALIDATION
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_BINDING_INVENTORY.yaml
+  name: Quality binding inventory validator
+  related_decisions:
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-MODULE_VALIDATION
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_BINDING_INVENTORY
+    requirements:
+      - REQ-MODULE_VALIDATION
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/analysis/binding-inventory.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
+IMPL-QUALITY_EVIDENCE_COLLECTION:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER
+    - IMPL-QUALITY_EVIDENCE_MANIFEST
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_EVIDENCE_COLLECTION.yaml
+  name: Command-to-manifest evidence collector
+  related_decisions:
+    depends_on:
+      - IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER
+      - IMPL-QUALITY_EVIDENCE_MANIFEST
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_EVIDENCE_COLLECTION
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/quality-command-runner.test.ts
+      - mcp-server/src/quality-evidence-collection.test.ts
+      - mcp-server/src/quality-evidence.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
+IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - IMPL-QUALITY_EVIDENCE_COLLECTION
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER.yaml
+  name: Quality evidence command runner
+  related_decisions:
+    composed_with:
+      - IMPL-QUALITY_EVIDENCE_COLLECTION
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/quality-command-runner.test.ts
+      - mcp-server/src/quality-evidence-collection.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
+IMPL-QUALITY_EVIDENCE_MANIFEST:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - IMPL-QUALITY_EVIDENCE_COLLECTION
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_EVIDENCE_MANIFEST.yaml
+  name: Verification evidence manifest generation
+  related_decisions:
+    depends_on:
+      - IMPL-QUALITY_EVIDENCE_COLLECTION
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_EVIDENCE_MANIFEST
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/quality-evidence-collection.test.ts
+      - mcp-server/src/quality-evidence.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
+IMPL-QUALITY_PSEUDOCODE_VALIDATOR:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - PROC-PSEUDOCODE_VALIDATION
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_PSEUDOCODE_VALIDATOR.yaml
+  name: Layer B pseudo-code validator
+  related_decisions:
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_PSEUDOCODE_VALIDATOR
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/analysis/pseudocode-validator.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
+IMPL-QUALITY_SECURITY_PROFILE_VALIDATION:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_SECURITY_PROFILE_VALIDATION.yaml
+  name: External-input security profile validation
+  related_decisions:
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_SECURITY_PROFILE_VALIDATION
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/quality-security.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
+IMPL-QUALITY_TEST_ADEQUACY:
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - PROC-TEST_ADEQUACY
+    - REQ-QUALITY_ASSURANCE_EVIDENCE
+  detail_file: implementation-decisions/IMPL-QUALITY_TEST_ADEQUACY.yaml
+  name: Risk-triggered test adequacy validator
+  related_decisions:
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    code_annotations:
+      - IMPL-QUALITY_TEST_ADEQUACY
+    requirements:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    tests:
+      - mcp-server/src/quality-adequacy.test.ts
+      - mcp-server/src/tools/quality-validation-mcp.test.ts
 IMPL-REFACTOR_PREP:
   code_locations:
     files: []
@@ -3456,18 +3970,19 @@ IMPL-REFACTOR_PREP:
   implementation_approach:
     details: []
     summary: |-
-      Interface-first design before extraction
-      Large file decomposition for better boundaries
-      Dependency analysis and cleanup
-      Comprehensive testing before extraction
+      Prepare the codebase for extraction by defining interfaces first, splitting large files, and eliminating circular dependencies before packages move.
+      INPUT: components targeted for extraction, dependency graph, large source files
+      OUTPUT: interface boundaries, decomposed files, acyclic dependency layers
+      DATA: REFACTOR preparation markers, interface definitions, dependency clusters
+      Canonical behavior: tied/implementation-decisions/IMPL-REFACTOR_PREP-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3510,15 +4025,20 @@ IMPL-RESOURCE_MANAGER:
   detail_file: implementation-decisions/IMPL-RESOURCE_MANAGER.yaml
   implementation_approach:
     details: []
-    summary: Implement ResourceManager for automatic cleanup with panic recovery
+    summary: |-
+      Thread-safe tracking of temporary files and directories with automatic cleanup, panic recovery, and context-aware cancellation. Archive and backup creation uses atomic operations via coordinated temp-file lifecycle.
+      INPUT: Resource instances, temp paths, optional context
+      OUTPUT: cleanup errors, updated resource list
+      DATA: ResourceManager slice guarded by mutex, TempFile and TempDir implementations
+      Canonical behavior: tied/implementation-decisions/IMPL-RESOURCE_MANAGER-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3585,18 +4105,19 @@ IMPL-SEMANTIC_CROSS_REF:
   implementation_approach:
     details: []
     summary: |-
-      Feature reference blocks with links to all documentation layers
-      Automated link validation
-      Cross-reference consistency checking
-      Semantic token-based linking
+      Link requirements, architecture, implementation, tests, and code through semantic tokens with validated bi-directional references for LLM-friendly navigation.
+      INPUT: semantic token registry, decision YAML indexes, code and doc mentions
+      OUTPUT: feature reference blocks, link integrity report, consistency report
+      DATA: forward_links, backward_links, sibling_links, cross_reference fields
+      Canonical behavior: tied/implementation-decisions/IMPL-SEMANTIC_CROSS_REF-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3634,6 +4155,17 @@ IMPL-SPEC_CTL:
     - REQ-PSEUDOCODE_FORMAL_VERIFICATION
   description: cmd/specctl CLI — validate, matrix, check-leads for formal IMPL pseudocode
   detail_file: implementation-decisions/IMPL-SPEC_CTL.yaml
+  implementation_approach:
+    summary: |-
+      CLI and libraries that parse formal IMPL pseudocode, emit Layer B diagnostics, build traceability matrices, and orchestrate conformance checks.
+      INPUT: sidecar paths, repo root, formal_spec registry
+      OUTPUT: exit code 0 or diagnostic report
+      DATA: parsed AST per file, symbol table, coverage maps
+      Canonical behavior: tied/implementation-decisions/IMPL-SPEC_CTL-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Spec Control CLI (specctl)
   status: Active
 IMPL-STDD_VIS_ASSETS:
@@ -3643,6 +4175,17 @@ IMPL-STDD_VIS_ASSETS:
     - REQ-STDD_VIS
   description: Produce two complementary artifacts (layered flow diagram + timeline/animation) sourced from the data pipeline, with embedded token callouts and legends
   detail_file: implementation-decisions/IMPL-STDD_VIS_ASSETS.yaml
+  implementation_approach:
+    summary: |-
+      Produce layered flow diagram and timeline animation artifacts from STDD trace data with token-centric visual design.
+      INPUT: normalized STDD graph snapshot
+      OUTPUT: docs/images/stdd-trace-flow.svg, docs/images/stdd-trace-timeline.gif or mp4
+      DATA: lane layout REQ/ARCH/IMPL/TEST/CODE, token badges, color map
+      Canonical behavior: tied/implementation-decisions/IMPL-STDD_VIS_ASSETS-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: STDD Visualization Asset Plan
   status: Active
 IMPL-STDD_VIS_DATA_PIPELINE:
@@ -3652,6 +4195,17 @@ IMPL-STDD_VIS_DATA_PIPELINE:
     - REQ-STDD_VIS
   description: Build a repeatable data pipeline that derives a token graph from STDD documents and representative code/tests to feed visualization artifacts
   detail_file: implementation-decisions/IMPL-STDD_VIS_DATA_PIPELINE.yaml
+  implementation_approach:
+    summary: |-
+      Extract and normalize STDD documents into a graph JSON and sample CSV consumed by visualization modules without re-parsing.
+      INPUT: semantic-tokens.md, requirements/architecture/implementation docs, code/test anchors
+      OUTPUT: docs/data/stdd-trace.json, docs/data/stdd-samples.csv
+      DATA: normalized nodes by REQ/ARCH/IMPL/TEST/CODE, cross-reference edges, token metadata
+      Canonical behavior: tied/implementation-decisions/IMPL-STDD_VIS_DATA_PIPELINE-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: STDD Visualization Data Pipeline
   status: Active
 IMPL-STRUCTURED_ERRORS:
@@ -3694,15 +4248,20 @@ IMPL-STRUCTURED_ERRORS:
     ```
   implementation_approach:
     details: []
-    summary: Use structured error types with status codes and operation context
+    summary: |-
+      Structured domain errors with status codes, operation and path context, unwrap support, constructors at increasing detail levels, and classifiers that map low-level failures to disk, permission, and not-found conditions.
+      INPUT: message, statusCode, operation, path, underlying err
+      OUTPUT: ErrorInterface values, boolean classification, exit status from handlers
+      DATA: ArchiveError, BackupError, error pattern lists, ErrorCategory
+      Canonical behavior: tied/implementation-decisions/IMPL-STRUCTURED_ERRORS-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3749,15 +4308,20 @@ IMPL-TEST_CFG_005_P1:
   detail_file: implementation-decisions/IMPL-TEST_CFG_005_P1.yaml
   implementation_approach:
     details: []
-    summary: '- **TestMultipleInheritanceSources_REQ_CFG_005**: Tests child inheriting from multiple parent files (parent1.yml, parent2.yml)'
+    summary: |-
+      Priority-1 configuration inheritance and merge edge-case tests beyond P0 coverage: multi-parent inherit, paths, errors, deep chains, type mismatches, nulls, and whitespace strings.
+      INPUT: YAML fixture trees under temp dirs, BKPDIR_CONFIG / LoadConfigWithInheritance
+      OUTPUT: assertions on merged Config fields and expected errors
+      DATA: inherit directives, merge prefixes, defaults
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_CFG_005_P1-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3816,6 +4380,17 @@ IMPL-TEST_COVERAGE:
     - REQ-CODE_QUALITY
   description: Comprehensive test coverage for all 0% coverage functions in formatter.go including OutputCollector, template methods, and error formatting
   detail_file: implementation-decisions/IMPL-TEST_COVERAGE.yaml
+  implementation_approach:
+    summary: |-
+      Comprehensive formatter test coverage for OutputCollector, template/printf formatting, error templates, file statistics output, and interface compliance.
+      INPUT: formatter config, test archives, template strings, collector instances
+      OUTPUT: formatted strings, captured stdout/stderr messages
+      DATA: DefaultOutputFormatter, OutputCollector, TemplateFormatter test fixtures
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_COVERAGE-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Comprehensive formatter.go Test Coverage
   status: Active
 IMPL-TEST_DEFAULT_STRATEGY_EDGES:
@@ -3834,15 +4409,20 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   equals_default_but_not_zero: Even if value equals default (e.g., `"../.bkpdir"`), if it's not zero value, default strategy does NOT apply
   implementation_approach:
     details: []
-    summary: '- **TestDefaultStrategyEdgeCases**: Tests default strategy in various edge case scenarios'
+    summary: |-
+      Tests that =default merge strategy applies only when the destination field is the zero value (empty string, empty slice, false bool), not when the field equals the built-in default.
+      INPUT: paired YAML config files via BKPDIR_CONFIG
+      OUTPUT: LoadConfig results and assertions on ArchiveDirPath, ExcludePatterns, IncludeGitInfo
+      DATA: =prefixed keys, default merge behavior for accumulate fields
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3918,15 +4498,20 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
   empty_string_as_zero_value: If treated as zero value, later files can override
   implementation_approach:
     details: []
-    summary: '- **TestEmptyStringHandling**: Tests empty string handling in various merge scenarios'
+    summary: |-
+      Verifies empty-string configuration values merge correctly across sequential files without blocking later overrides.
+      INPUT: sequential YAML files with archive_dir_path "" or values
+      OUTPUT: merged Config from LoadConfig
+      DATA: BKPDIR_CONFIG file list, precedence fields
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_EMPTY_STRING_HANDLING-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -3995,15 +4580,20 @@ IMPL-TEST_EXCLUDE_MERGE:
   detail_file: implementation-decisions/IMPL-TEST_EXCLUDE_MERGE.yaml
   implementation_approach:
     details: []
-    summary: Comprehensive test scenario for exclude patterns merging and source tracking
+    summary: |-
+      Integration tests for exclude_patterns merging across sequential loading, inheritance chains, and config command source attribution.
+      INPUT: multi-file BKPDIR_CONFIG layouts and inherit directives
+      OUTPUT: merged ExcludePatterns and config display metadata
+      DATA: built-in defaults, merge vs override strategies
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_EXCLUDE_MERGE-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -4076,7 +4666,12 @@ IMPL-TEST_PREPEND_ORDERING:
   detail_file: implementation-decisions/IMPL-TEST_PREPEND_ORDERING.yaml
   implementation_approach:
     details: []
-    summary: '- **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios'
+    summary: |-
+      Tests ^prepend merge strategy ordering for exclude_patterns in inheritance and sequential file chains.
+      INPUT: parent/child YAML with ^exclude_patterns and multi-file BKPDIR_CONFIG
+      OUTPUT: ordered ExcludePatterns after LoadConfig / LoadConfigWithInheritance
+      DATA: prepend before destination slice semantics
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_PREPEND_ORDERING-pseudocode.md
   inheritance_chains: Child prepended values come before parent values
   metadata:
     created:
@@ -4084,8 +4679,8 @@ IMPL-TEST_PREPEND_ORDERING:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -4158,7 +4753,12 @@ IMPL-TEST_UNICODE_HANDLING:
   detail_file: implementation-decisions/IMPL-TEST_UNICODE_HANDLING.yaml
   implementation_approach:
     details: []
-    summary: '- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values'
+    summary: |-
+      Ensures Unicode and special characters survive YAML load, merge with defaults, and config paths containing spaces or non-ASCII directory names.
+      INPUT: UTF-8 config values and filesystem paths
+      OUTPUT: LoadConfig results preserving characters
+      DATA: archive_dir_path, exclude_patterns, temp directories
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_UNICODE_HANDLING-pseudocode.md
   merge_behavior: Unicode patterns merge with defaults per CFG-005 (array fields default to merge)
   metadata:
     created:
@@ -4166,8 +4766,8 @@ IMPL-TEST_UNICODE_HANDLING:
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -4242,6 +4842,17 @@ IMPL-TESTING:
     - REQ-RELIABILITY
   description: Comprehensive testing strategy including unit, integration, performance, and stress tests with table-driven test patterns and rich test utilities
   detail_file: implementation-decisions/IMPL-TESTING.yaml
+  implementation_approach:
+    summary: |-
+      Defines testing strategy: table-driven unit tests, shared testutil helpers, internal scenario utilities, and quality gates for bkpdir.
+      INPUT: test cases, temp paths, fixtures, scenario configs
+      OUTPUT: assertions, temp artifacts, integration scenario results
+      DATA: pkg/testutil helpers, internal/testutil frameworks, make test targets
+      Canonical behavior: tied/implementation-decisions/IMPL-TESTING-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Testing Implementation Strategy
   status: Active
 IMPL-TESTING_COMPLEXITY:
@@ -4250,21 +4861,116 @@ IMPL-TESTING_COMPLEXITY:
     - REQ-RELIABILITY
   description: Challenge and solution for comprehensive testing of extracted components without duplicating existing tests
   detail_file: implementation-decisions/IMPL-TESTING_COMPLEXITY.yaml
+  implementation_approach:
+    summary: |-
+      Testing strategy for large refactors: extract shared test utilities, add package-scoped tests, and keep legacy integration tests passing.
+      INPUT: monolithic test helpers and package boundaries
+      OUTPUT: pkg/*_test.go coverage plus unchanged root integration suite
+      DATA: testutil fixtures, interface mocks
+      Canonical behavior: tied/implementation-decisions/IMPL-TESTING_COMPLEXITY-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Testing Complexity Challenge
   status: Active
+IMPL-TIED_ADVERSARIAL_INQUIRY:
+  cross_references:
+    - ARCH-TIED_ADVERSARIAL_INQUIRY
+    - REQ-TIED_ADVERSARIAL_INQUIRY
+  description: Implement deterministic read-only obligation mapping, bidirectional fidelity verdicts, adapter boundaries, finding/gate projections, and bounded assurance eligibility.
+  detail_file: implementation-decisions/IMPL-TIED_ADVERSARIAL_INQUIRY.yaml
+  metadata:
+    last_updated:
+      reason: Methodology seed for bounded adversarial inquiry and fidelity evidence
+  name: Obligation graph, fidelity engine, and assurance gate
+  related_decisions:
+    depends_on:
+      - IMPL-MODULE_VALIDATION
+      - IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER
+      - IMPL-QUALITY_EVIDENCE_MANIFEST
+      - IMPL-QUALITY_TEST_ADEQUACY
+      - IMPL-TIED_FIDELITY_RESEARCH
+    see_also:
+      - IMPL-QUALITY_BINDING_INVENTORY
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-TIED_ADVERSARIAL_INQUIRY
+    requirements:
+      - REQ-TIED_ADVERSARIAL_INQUIRY
+IMPL-TIED_ADVERSARIAL_INQUIRY_CHECKLIST:
+  cross_references:
+    - ARCH-TIED_ADVERSARIAL_INQUIRY
+    - PROC-AGENT_REQ_CHECKLIST
+    - REQ-TIED_ADVERSARIAL_INQUIRY
+  description: Extend real checklist slugs and compose the registered inquiry tool with bounded working artifact persistence and scoped human-approved strict status.
+  detail_file: implementation-decisions/IMPL-TIED_ADVERSARIAL_INQUIRY_CHECKLIST.yaml
+  metadata:
+    last_updated:
+      reason: Methodology seed for checklist inquiry integration and bounded artifacts
+  name: Adversarial inquiry checklist integration and evidence artifacts
+  related_decisions:
+    depends_on:
+      - IMPL-QUALITY_EVIDENCE_COMMAND_RUNNER
+      - IMPL-QUALITY_EVIDENCE_MANIFEST
+      - IMPL-TIED_ADVERSARIAL_INQUIRY
+      - IMPL-TIED_FIDELITY_RESEARCH
+    see_also:
+      - IMPL-QUALITY_TEST_ADEQUACY
+      - PROC-LEAP
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-TIED_ADVERSARIAL_INQUIRY
+    requirements:
+      - REQ-TIED_ADVERSARIAL_INQUIRY
+IMPL-TIED_FIDELITY_RESEARCH:
+  cross_references:
+    - ARCH-TIED_FIDELITY_RESEARCH
+    - REQ-TIED_FIDELITY_RESEARCH
+  detail_file: implementation-decisions/IMPL-TIED_FIDELITY_RESEARCH.yaml
+  metadata:
+    last_updated:
+      reason: 'Methodology seed for read-only fidelity research; procedure: tied/docs/tied-fidelity-research.md'
+  name: Fidelity Research First Vertical Slice
+  related_decisions:
+    depends_on:
+      - IMPL-MODULE_VALIDATION
+      - IMPL-TIED_FILES
+    see_also:
+      - IMPL-QUALITY_BINDING_INVENTORY
+      - IMPL-QUALITY_PSEUDOCODE_VALIDATOR
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-TIED_FIDELITY_RESEARCH
+    requirements:
+      - REQ-TIED_FIDELITY_RESEARCH
 IMPL-TIED_FILES:
   cross_references:
     - ARCH-TIED_STRUCTURE
     - REQ-TIED_SETUP
   description: TIED file creation implementation
   detail_file: implementation-decisions/IMPL-TIED_FILES.yaml
+  implementation_approach:
+    summary: |-
+      Bootstrap script copy_files.sh installs tied/ methodology layout, project indexes, detail directories, and root agent loader files for new client repositories.
+      INPUT: target project path, TIED template tree
+      OUTPUT: tied/ directory with indexes and guides, root AGENTS.md and .cursorrules
+      DATA: templates/ sources, methodology vs project YAML split
+      Canonical behavior: tied/implementation-decisions/IMPL-TIED_FILES-pseudocode.md
   metadata:
     created:
       author: AI Agent
       date: '2025-12-18'
     last_updated:
       author: AI Agent
-      date: '2026-02-06'
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: TIED File Creation
   status: Active
 IMPL-TOKEN_COVERAGE_AUDIT:
@@ -4307,15 +5013,20 @@ IMPL-TOKEN_COVERAGE_AUDIT:
   git_module_(`git_go`,_`git_test_go`): Maintains `[REQ-GIT_INTEGRATION]`, `[ARCH-GIT_INTEGRATION]`, `[IMPL-GIT_CLI]`, and tests now restate them for repository detection and naming flows.
   implementation_approach:
     details: []
-    summary: '- **Archive module (`archive.go`, `archive_test.go`)**: Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).'
+    summary: |-
+      Audit modules for expected REQ/ARCH/IMPL token annotations and remediate gaps across the codebase.
+      INPUT: module file lists, expected token sets per module
+      OUTPUT: coverage report, added annotations in source and tests
+      DATA: scanned token comments, gap records, cross-module aggregates
+      Canonical behavior: tied/implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -4409,6 +5120,17 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
     - REQ-CODE_QUALITY
   description: Status marker indicating all legacy tokens have been migrated into STDD semantic-tokens.md and validated via coverage and traceability scripts
   detail_file: implementation-decisions/IMPL-TOKEN_MIGRATION_COMPLETE.yaml
+  implementation_approach:
+    summary: |-
+      Complete migration of legacy tokens to canonical STDD registry with inventory scripts and traceability validation.
+      INPUT: legacy token artifacts, project token stubs
+      OUTPUT: updated semantic-tokens.md tables, archived governance docs, validation reports
+      DATA: token_inventory.json, render_token_tables output, validate-token-traceability results
+      Canonical behavior: tied/implementation-decisions/IMPL-TOKEN_MIGRATION_COMPLETE-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Token Migration Complete
   status: Active
 IMPL-TOKEN_SYSTEM:
@@ -4429,28 +5151,19 @@ IMPL-TOKEN_SYSTEM:
   implementation_approach:
     details: []
     summary: |-
-      1. **Structured Extraction**
-         - Use `.venv/bin/python` helpers (PyYAML) to parse `project-tokens.yaml` and emit normalized JSON for each group (`actions`, `features`, `semantic_tokens`).
-         - Capture metadata (description, status, source paths, subtasks) for downstream documentation.
-      2. **Cross-Link Synthesis**
-         - For each legacy token, resolve canonical `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and test references using prefix heuristics (e.g., `DIR-001 → [REQ-IMMUTABLE_DIRECTORY_OPERATIONS]`).
-         - Flag gaps by opening subtasks in `tied/tasks.md` whenever a requirement/decision/test link is missing.
-      3. **Registry Authoring**
-         - Generate Markdown tables per token category with columns: Description, Linked Requirement(s), Linked Architecture, Linked Implementation, Linked Tests/Code, Source Document, Status.
-         - Embed migration status badges so governance tooling can verify coverage.
-      4. **YAML Decommissioning**
-         - After each category is represented in markdown, replace the YAML entries with a pointer stub until the file can be removed in a final cleanup change. `project-tokens.yaml` now contains a canonical pointer to `tied/semantic-tokens.md`.
-      5. **Validation Hooks**
-         - Run `scripts/validate-token-traceability.sh`, `scripts/token-coverage-analysis.sh`, and targeted `rg "\[TOKEN\]"` sweeps to prove each migrated token exists in requirements, architecture decisions, implementation notes, code, and tests.
-         - Record validation results inside the migration tables for auditability.
+      Governance tooling to extract legacy project tokens, synthesize cross-links to STDD REQ/ARCH/IMPL, author registry tables, and decommission legacy YAML in favor of tied/semantic-tokens.yaml.
+      INPUT: project-tokens.yaml, source trees, semantic token registry
+      OUTPUT: normalized JSON artifacts, semantic-tokens.md tables, pointer stubs
+      DATA: token groups (actions, features, semantic_tokens), migration status
+      Canonical behavior: tied/implementation-decisions/IMPL-TOKEN_SYSTEM-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -4542,18 +5255,19 @@ IMPL-TRACEABILITY:
   implementation_approach:
     details: []
     summary: |-
-      Feature fingerprint generation and validation
-      Behavioral contract definition and enforcement
-      Dependency graph construction and analysis
-      Automated change impact assessment
+      Traceability utilities: stable feature fingerprints, behavioral contracts, and semantic-token dependency graphs for change-impact analysis.
+      INPUT: tracked features, code interfaces, semantic_token_registry cross_references
+      OUTPUT: fingerprint store, contract definitions, dependency graph with cycle report
+      DATA: signature hashes, REQ links, forward/backward token edges
+      Canonical behavior: tied/implementation-decisions/IMPL-TRACEABILITY-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -4591,6 +5305,17 @@ IMPL-ZERO_BREAKING:
     - REQ-MAINTAINABILITY
   description: Extraction must not change existing application behavior; maintains confidence in extraction process
   detail_file: implementation-decisions/IMPL-ZERO_BREAKING.yaml
+  implementation_approach:
+    summary: |-
+      Ensure extraction steps preserve existing application behavior by keeping tests green, maintaining coverage, and verifying behavior at each step.
+      INPUT: extraction step, existing test suite, behavioral baselines
+      OUTPUT: unchanged user-facing behavior after each extraction increment
+      DATA: test results, coverage reports, verification checkpoints
+      Canonical behavior: tied/implementation-decisions/IMPL-ZERO_BREAKING-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Zero-Breaking-Change Extraction
   status: Active
 IMPL-ZIP_FORMAT:
@@ -4604,18 +5329,19 @@ IMPL-ZIP_FORMAT:
   implementation_approach:
     details: []
     summary: |-
-      Uses Go's `archive/zip` package
-      Atomic file operations with temporary files
-      Compression level configurable
-      Supports incremental archives
+      Creates and lists ZIP archives with atomic temp-file writes, deflate compression, exclusion-aware file collection, and git-aware naming.
+      INPUT: context, Config, note, dryRun flag, archive directory paths
+      OUTPUT: zip file on disk, Archive metadata list
+      DATA: file paths relative to cwd, ArchiveConfig adapters, ResourceManager temp files
+      Canonical behavior: tied/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      date: '2026-09-20'
+      reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
     last_validated:
       date: '2026-03-12'
       result: pass

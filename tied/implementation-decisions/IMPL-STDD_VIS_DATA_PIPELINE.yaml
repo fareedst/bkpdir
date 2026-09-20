@@ -16,14 +16,19 @@ IMPL-STDD_VIS_DATA_PIPELINE:
       - 'Module boundary: DataExtraction outputs normalized graph once; downstream modules consume without re-parsing'
       - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references
       - 'Validation hooks: schema check, count consistency vs token registry, spot-check two sample chains'
-    summary: Input STDD documents, normalize token nodes by type, emit cross-reference edges, export graph JSON and sample CSV
+    summary: |-
+      Extract and normalize STDD documents into a graph JSON and sample CSV consumed by visualization modules without re-parsing.
+      INPUT: semantic-tokens.md, requirements/architecture/implementation docs, code/test anchors
+      OUTPUT: docs/data/stdd-trace.json, docs/data/stdd-samples.csv
+      DATA: normalized nodes by REQ/ARCH/IMPL/TEST/CODE, cross-reference edges, token metadata
+      Canonical behavior: tied/implementation-decisions/IMPL-STDD_VIS_DATA_PIPELINE-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: STDD Visualization Data Pipeline
   rationale:
     benefits:

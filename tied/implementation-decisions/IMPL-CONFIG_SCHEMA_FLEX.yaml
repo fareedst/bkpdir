@@ -38,15 +38,20 @@ IMPL-CONFIG_SCHEMA_FLEX:
       - Create ConfigLoader interface for pluggable schema support
       - Extract configuration loading/merging logic from backup-specific code
       - Preserve powerful discovery and merging while enabling different schemas
-    summary: Create ConfigLoader interface that can handle different struct types with pluggable schema validation
+    summary: |-
+      Schema-agnostic configuration loading in pkg/config clones defaults, merges discovered YAML files, applies environment overrides, validates, and adapts results back to the legacy Config type.
+      INPUT: root path, defaultConfig interface{}
+      OUTPUT: merged configuration value or map of ConfigValue with sources
+      DATA: GenericConfigLoader, search paths, env provider, validator
+      Canonical behavior: tied/implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX-pseudocode.md
   metadata:
     created:
       author: AI Agent
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Configuration Schema Flexibility
   rationale:
     benefits:

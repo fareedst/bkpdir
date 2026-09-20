@@ -2,6 +2,7 @@
 // [ARCH-FILE_STATISTICS] File statistics architecture validation
 // [IMPL-FILE_STATISTICS] FileStatInfo structure and formatting validation
 package main
+
 import (
 	"os"
 	"path/filepath"

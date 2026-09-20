@@ -9,18 +9,19 @@ IMPL-INTERFACE_FIRST:
   implementation_approach:
     details: []
     summary: |-
-      Define interfaces before concrete implementations
-      Use Go interfaces for abstraction
-      Independent package testing
-      Versioned interface evolution
+      Define package interfaces before concrete extraction so consumers depend on contracts, implementations stay swappable, and tests use mocks.
+      INPUT: consumer call sites, target packages for extraction
+      OUTPUT: minimal interfaces, concrete implementations, versioned evolution path
+      DATA: interface method sets, API documentation contracts, mock types
+      Canonical behavior: tied/implementation-decisions/IMPL-INTERFACE_FIRST-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

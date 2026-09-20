@@ -9,6 +9,7 @@
 // [REQ-ERROR_HANDLING] Enhanced error handling testing
 // [ARCH-ERROR_HANDLING] Structured error handling strategy testing
 package main
+
 import (
 	"context"
 	"errors"

@@ -16,7 +16,12 @@ IMPL-PACKAGE_EXTRACTION:
     - REQ-MAINTAINABILITY
   implementation_approach:
     details: []
-    summary: Interface-driven extraction with layered dependency order
+    summary: |-
+      Phased extraction of root packages into pkg/ with legacy type aliases and wrapper functions preserving CLI compatibility.
+      INPUT: phase package list, source root files
+      OUTPUT: pkg/<package>/ modules, root aliases and wrappers
+      DATA: interface definitions, import path updates, deprecation comments
+      Canonical behavior: tied/implementation-decisions/IMPL-PACKAGE_EXTRACTION-pseudocode.md
   legacy_type_aliases: |-
     ```go
     type FileInfo = fileops.FileInfo
@@ -29,8 +34,8 @@ IMPL-PACKAGE_EXTRACTION:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

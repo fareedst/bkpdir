@@ -13,15 +13,20 @@ IMPL-TEST_EXCLUDE_MERGE:
     - REQ-TEST_EXCLUDE_MERGE
   implementation_approach:
     details: []
-    summary: Comprehensive test scenario for exclude patterns merging and source tracking
+    summary: |-
+      Integration tests for exclude_patterns merging across sequential loading, inheritance chains, and config command source attribution.
+      INPUT: multi-file BKPDIR_CONFIG layouts and inherit directives
+      OUTPUT: merged ExcludePatterns and config display metadata
+      DATA: built-in defaults, merge vs override strategies
+      Canonical behavior: tied/implementation-decisions/IMPL-TEST_EXCLUDE_MERGE-pseudocode.md
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

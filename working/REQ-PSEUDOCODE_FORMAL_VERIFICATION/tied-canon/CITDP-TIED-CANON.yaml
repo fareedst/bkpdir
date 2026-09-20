@@ -1,0 +1,127 @@
+record_identity:
+  change_request_id: REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  title: "TIED Pseudocode Canon: Gate Realignment and Single Truth Architecture"
+  recorded_at: "2026-09-20"
+change_definition:
+  current_behavior: |
+    Waves 0–4 complete for this slice: registry parser and fail-closed gates; sidecar-canonical ARCH
+    policy and sync_tied_yaml_projections.py (73/73); rebaseline_logic_tracking (L3 56 / L2 5 / L1 12;
+    oracle 50/50); Tier A Contract stanzas and run_layer_c_gate.sh (RUN_LAYER_C=1 opt-in). Phase 4A:
+    AGENTS.md, impl-deep-sync-agent-guide § Sidecar-canonical YAML projection, spec-verification agent
+    quick path, client-development-index scenario row. Phase 4B: mutation wave 4 pilot recorded
+    (pkg/formatter 100%, pkg/config 21.56% — wave registry unchanged). Phase 4C: strict CRIT-001 baseline
+    archived (26/73 informational). Close-out: verification and close_out gates allowed; envelope zero
+    blocking gaps (2026-09-20).
+  desired_behavior: |
+    (Achieved) Slice close-out with gates allowed and CITDP persisted under tied/citdp/.
+  non_goals:
+    - Modifying runtime Go application logic for backup or archive
+    - Mutating read-only methodology files under tied/methodology/
+  success_criteria:
+    - scripts/spec-corpus-status.sh reports CORPUS STATUS: ALL GREEN with 0 errors
+    - SKIP_TIED_MCP=1 scripts/run-spec-verification.sh exits 0
+    - Matrix coverage passes with 0 COVER-001 errors
+    - python3 scripts/sync_tied_yaml_projections.py --check exits 0
+    - scripts/run_layer_c_gate.sh passes for five Tier A sidecars
+    - Phase 4 agent docs published; mutation wave 4 evidence or documented INFRA waiver
+    - close_out checklist gate allowed with request evidence envelope validated
+  unchanged_behavior: |
+    Runtime Go application behavior (backup, restore, diff, git, config) unchanged.
+impact_analysis:
+  modules_or_boundaries:
+    - scripts/ (spec-corpus-status.sh, run-spec-verification.sh)
+    - tied/spec/ (formal-spec-registry.yaml, coverage-waivers.yaml)
+    - tied/implementation-decisions/ (73 sidecars, 73 YAML detail files)
+    - tied/implementation-decisions.yaml
+    - tied/docs/ (impl-pseudocode-improvement-queue.yaml, impl-pseudocode-sync-checklist.yaml)
+    - docs/markscope/spec-verification.md
+    - AGENTS.md
+    - tied/docs/impl-deep-sync-agent-guide.md
+    - tied/spec/mutation-wave-registry.yaml
+  tied_tokens_affected:
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - IMPL-SPEC_CTL
+    - IMPL-TOKEN_COVERAGE_AUDIT
+    - IMPL-TIED_FILES
+    - IMPL-TRACEABILITY
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: minimal
+    prior_depth_tier: minimal
+    gate_policy: advisory
+    research_profile: read-only
+    assurance_profile: baseline-functional
+    rationale: |
+      Tooling, CI gate scripts, documentation, and TIED YAML metadata/projection alignment.
+      No runtime behavior, auth, network, persistence, or external input changes.
+    eligibility_triggers_matched: []
+    integrated_waiver: null
+    counterexamples:
+      - "Registry regex change could fail if tokens have unconventional characters"
+      - "Pruning YAML summaries could cause downstream MCP validators expecting non-empty summaries to warn"
+    falsification_questions:
+      - "Does specctl check-leads actually verify block placement across all 73 sidecars when registry parsing is fixed?"
+      - "Does tied_validate_consistency require implementation_approach.summary to contain full step details?"
+    disconfirming_observations:
+      - "Current status script reports PASS for check-leads when 0 files were evaluated due to grep mismatch"
+    evidence_references:
+      - working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/evidence/minimal-inquiry-waiver.md
+  residual_risk:
+    summary: "Future additions to formal-spec-registry.yaml must conform to canonical syntax"
+    owner: implementer
+    expiry: "2026-12-31"
+  quality_profiles:
+    - baseline-functional
+test_strategy:
+  waves:
+    - wave: 0
+      focus: formal_spec_registry parser helper; fail-closed scripts; HYGIENE_POLICY waiver
+      tdd: RED parser fixture tests before editing spec-corpus-status.sh and run-spec-verification.sh
+    - wave: 1
+      focus: sync_tied_yaml_projections.py --check then pilot --apply on 3 IMPLs then batch 70
+      tdd: not_applicable for bulk YAML; gated by tied_validate_consistency after each batch
+    - wave: 2
+      focus: run_impl_logic_audit.py without mark-complete; optional test strengthening for 7 L2-target tokens
+    - wave: 3
+      focus: Tier A SHAPE contracts; run_layer_c_gate.sh; RUN_LAYER_C=1 in run-spec-verification.sh
+      status: complete
+    - wave: 4
+      focus: AGENTS.md + impl-deep-sync-agent-guide sidecar-canonical section; MUTATION_WAVE=4 pilot; optional strict CRIT-001 report
+      tdd: not_applicable for docs; mutation pilot is opt-in with evidence JSON
+      status: complete
+    - wave: 5
+      focus: verification + close_out gates; persist CITDP; run-close-out-gates.mjs envelope sync
+  unit:
+    - python3 scripts/test_lead_hygiene.py
+    - go test ./internal/speccheck/... -count=1
+  regression:
+    - scripts/spec-corpus-status.sh
+    - SKIP_TIED_MCP=1 scripts/run-spec-verification.sh
+    - go test ./internal/specparse/... ./internal/specmodel/... ./test/specconformance/... -count=1
+    - go test ./... -count=1
+  tied_validation:
+    - scripts/validate-tied-mcp.sh
+    - MCP tied_validate_consistency
+evidence:
+  proof_boundaries:
+    - traceability_structure
+    - executable_behavior
+  commands:
+    - scripts/spec-corpus-status.sh
+    - SKIP_TIED_MCP=1 scripts/run-spec-verification.sh
+    - scripts/validate-tied-mcp.sh
+completion_criteria:
+  activation:
+    phase: close_out
+    run_id: tied-canon-20260920-close
+  inquiry_run_ids:
+    pre_implementation: tied-canon-20260920-pre
+    verification: tied-canon-20260920-ver
+    close_out: tied-canon-20260920-close
+leap_feedback:
+  record_status: applied
+  divergences_from_analysis: |
+    Phase 2 L2 target set differed from original seven test-IMPL list (documented in plan).
+    Mutation wave 4 partial: pkg/config below threshold; registry wave 4 left pending.
+  tied_stack_updates_required: []

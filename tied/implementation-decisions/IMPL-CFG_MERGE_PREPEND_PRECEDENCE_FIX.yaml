@@ -48,7 +48,12 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
     - REQ-CONFIGURATION
   implementation_approach:
     details: []
-    summary: '- Updated `applyMerge()` and `applyPrepend()` function signatures to accept `inheritContext`, `defaultCfg`, and `explicitlySetFields` parameters'
+    summary: |-
+      Ensures merge and prepend strategies respect CFG-001 earlier-file precedence for scalar fields registered as MergeBehaviorPrecedence when processing sequential config files (non-inheritance context).
+      INPUT: result config, field key, operation value, dstValue, inheritContext, defaultCfg, explicitlySetFields
+      OUTPUT: updated result config field or preserved dstValue
+      DATA: mergeOperation strategy, fieldMergeBehaviors registry, default vs dst comparison
+      Canonical behavior: tied/implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX-pseudocode.md
   key_changes: '#### 1. Updated `applyMerge()` Function Signature'
   metadata:
     created:
@@ -56,8 +61,8 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

@@ -5,8 +5,10 @@ ARCH-SPEC_DSL_AND_ORACLE:
   decision: Parse IMPL formal DSL into an AST; interpret bounded domains via internal/specmodel reference oracle; compare implementation and tests through specctl and specconformance packages
   implementation_approach:
     details:
+      - Detail and index YAML `implementation_approach.summary` fields are lean, synchronized projections of each sidecar `## Summary contract` section (see `scripts/sync_tied_yaml_projections.py`).
       - internal/specmodel provides deterministic oracle for pilot domains (e.g. AtomicWriter state machine)
       - internal/specparse parses sidecar Markdown blocks
+      - Sidecar markdown (`IMPL-*-pseudocode.md`) is the sole authoritative source for implementation behavior, control flow, steps, and contracts.
       - specctl matrix links SPEC-ID and STEP to Go tests and symbols
       - test/specconformance runs property/state tests against oracle and pkg/*
     summary: DSL parser plus reference model boundary separate from production I/O where full formalization is impractical

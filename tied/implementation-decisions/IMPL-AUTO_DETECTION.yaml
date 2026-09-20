@@ -26,7 +26,12 @@ IMPL-AUTO_DETECTION:
       - isFile(path) and isDirectory(path) use os.Stat to classify path type
       - newRootCommand() builds the production Cobra tree (flags, subcommands, root Run); main and tests use the same wiring
       - validatePath(path) checks existence and accessibility with specific error messages
-    summary: Intercept CLI args before Cobra dispatches; if first arg is not a known command or flag, treat it as a path and auto-detect file vs directory
+    summary: |-
+      When the user passes a filesystem path as the first argument (not a known subcommand or global flag), classify the path and route to file backup or directory archive without requiring explicit subcommands.
+      INPUT: argv without program name, root CLI command tree
+      OUTPUT: executed backup/archive or standard Cobra dispatch
+      DATA: path, dry-run flag, note text, known command and flag lists
+      Canonical behavior: tied/implementation-decisions/IMPL-AUTO_DETECTION-pseudocode.md
   known_commands_bypass:
     - 'Explicit commands: create, config, template, full, inc, list, backup, version, diff, help'
     - 'Global flags: --config, --dry-run, -d, --list'
@@ -37,8 +42,8 @@ IMPL-AUTO_DETECTION:
       date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
     last_validated:
       date: '2026-03-12'
       result: pass

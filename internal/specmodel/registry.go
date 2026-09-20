@@ -10,11 +10,11 @@ import (
 
 // OracleEntry describes one IMPL reference oracle.
 type OracleEntry struct {
-	Impl             string   `yaml:"impl"`
-	SpecmodelFile    string   `yaml:"specmodel_file"`
-	ConformanceTest  string   `yaml:"conformance_test"`
-	PkgPaths         []string `yaml:"pkg_paths"`
-	Status           string   `yaml:"status"`
+	Impl            string   `yaml:"impl"`
+	SpecmodelFile   string   `yaml:"specmodel_file"`
+	ConformanceTest string   `yaml:"conformance_test"`
+	PkgPaths        []string `yaml:"pkg_paths"`
+	Status          string   `yaml:"status"`
 }
 
 // OracleRegistry is tied/spec/oracle-registry.yaml.

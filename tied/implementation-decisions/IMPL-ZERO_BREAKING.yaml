@@ -10,14 +10,19 @@ IMPL-ZERO_BREAKING:
       - Behavioral verification at each extraction step
       - Comprehensive test coverage before and after extraction
       - Existing tests must continue to pass without modification
-    summary: Comprehensive test coverage and behavioral verification ensure extraction does not change existing application behavior
+    summary: |-
+      Ensure extraction steps preserve existing application behavior by keeping tests green, maintaining coverage, and verifying behavior at each step.
+      INPUT: extraction step, existing test suite, behavioral baselines
+      OUTPUT: unchanged user-facing behavior after each extraction increment
+      DATA: test results, coverage reports, verification checkpoints
+      Canonical behavior: tied/implementation-decisions/IMPL-ZERO_BREAKING-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Zero-Breaking-Change Extraction
   rationale:
     benefits:

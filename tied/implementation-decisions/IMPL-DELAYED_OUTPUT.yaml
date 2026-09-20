@@ -62,14 +62,19 @@ IMPL-DELAYED_OUTPUT:
       - Enhanced OutputFormatter with optional collector field and delayed mode support
       - Maintained full backward compatibility - existing code works unchanged
       - Updated all Print methods to check for collector and route messages accordingly
-    summary: Add OutputCollector with OutputMessage structs and enhance OutputFormatter with optional delayed mode
+    summary: |-
+      Buffer stdout and stderr messages in OutputCollector until Flush* or Clear, and route OutputFormatter Print methods through the collector when delayed mode is enabled.
+      INPUT: message content, destination, message type
+      OUTPUT: deferred writes to os.Stdout/Stderr
+      DATA: OutputMessage slice, OutputFormatter.collector pointer
+      Canonical behavior: tied/implementation-decisions/IMPL-DELAYED_OUTPUT-pseudocode.md
   metadata:
     author: AI Agent
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-06-02'
-      reason: Track C bulk sidecar migration from inline essence
+      date: '2026-09-20'
+      reason: probe
   name: Delayed Output Management
   rationale:
     benefits:

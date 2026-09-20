@@ -168,6 +168,9 @@ waivers:
   - block: GENERATE_TOKEN_INVENTORY
     impl: IMPL-TOKEN_MIGRATION_COMPLETE
     reason: INFRA-doc-only-sidecar-block
+  - block: HYGIENE_POLICY (lead placement)
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    reason: INFRA-policy-sidecar-block
   - block: IDENTIFY_COMPONENT_BOUNDARIES
     impl: IMPL-LARGE_FILE_DECOMP
     reason: INFRA-doc-only-sidecar-block
