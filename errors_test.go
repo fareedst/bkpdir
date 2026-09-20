@@ -8,9 +8,7 @@
 
 // [REQ-ERROR_HANDLING] Enhanced error handling testing
 // [ARCH-ERROR_HANDLING] Structured error handling strategy testing
-// [IMPL-STRUCTURED_ERRORS] Structured error types testing
 package main
-
 import (
 	"context"
 	"errors"
@@ -24,7 +22,7 @@ import (
 	"time"
 )
 
-// Test ArchiveError.Error() method - 0% coverage
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: verify ArchiveError.Error with and without underlying cause.
 func TestArchiveError_Error(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -153,6 +151,7 @@ func TestNewArchiveErrorWithContext(t *testing.T) {
 }
 
 // Test IsDiskFullError function - 0% coverage
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: verify IsDiskFullError matches message patterns and syscall path errors.
 func TestIsDiskFullError(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -276,6 +275,7 @@ func TestIsDiskFullErrorInternal(t *testing.T) {
 }
 
 // Test IsPermissionError function - 0% coverage
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: verify IsPermissionError matches permission strings and EACCES/EPERM.
 func TestIsPermissionError(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -643,7 +643,7 @@ func TestContextualOperation_Cleanup(t *testing.T) {
 	}
 }
 
-// Test HandleArchiveError function - 0% coverage
+// - [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: classify errno-style errors, print via formatter Format* methods using cfg strings, and return matching cfg status codes.
 func TestHandleArchiveError(t *testing.T) {
 	cfg := DefaultConfig()
 	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
@@ -696,8 +696,7 @@ func TestHandleArchiveError(t *testing.T) {
 	}
 }
 
-// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-// TestAtomicWriteFile validates atomic file writing with temp-file-then-rename pattern
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: check cancellation before each stage, write temp path, rename to final, untrack temp on success.
 func TestAtomicWriteFile(t *testing.T) {
 	tempDir := t.TempDir()
 	targetFile := filepath.Join(tempDir, "target.txt")
@@ -934,8 +933,7 @@ func (tpr *TestPanicResource) String() string {
 	return fmt.Sprintf("panic resource: %s", tpr.path)
 }
 
-// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-// TestAtomicWriteFile_RenameFailure validates error handling when atomic rename fails
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: check cancellation before each stage, write temp path, rename to final, untrack temp on success.
 func TestAtomicWriteFile_RenameFailure(t *testing.T) {
 	rm := NewResourceManager()
 	defer rm.CleanupWithPanicRecovery()

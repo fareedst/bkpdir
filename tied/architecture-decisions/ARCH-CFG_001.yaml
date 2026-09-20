@@ -1,10 +1,10 @@
 ARCH-CFG_001:
   ARCH-CFG_001:
     alternatives_considered:
-      - name: JSON configuration
-        cons:
+      - cons:
           - Less human-readable than YAML
           - No comment support
+        name: JSON configuration
         pros:
           - Widely supported
         rejected_reason: YAML provides better readability and comment support for configuration files
@@ -20,13 +20,13 @@ ARCH-CFG_001:
     metadata:
       created:
         author: AI Agent
-        date: "2026-03-12"
+        date: '2026-03-12'
       last_updated:
         author: AI Agent
-        date: "2026-03-12"
+        date: '2026-03-12'
         reason: Initial creation of missing token
       last_validated:
-        date: "2026-03-12"
+        date: '2026-03-12'
         result: pass
         validator: AI Agent
     name: Basic Configuration Architecture

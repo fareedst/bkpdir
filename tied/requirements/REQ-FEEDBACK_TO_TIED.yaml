@@ -3,13 +3,13 @@ REQ-FEEDBACK_TO_TIED:
   metadata:
     created:
       author: AI Agent
-      date: 2026-03-03
+      date: {}
     last_updated:
       author: AI Agent
-      date: 2026-03-03
+      date: {}
       reason: Initial creation
     last_validated:
-      date: 2026-03-03
+      date: {}
       result: pass
       validator: AI Agent
   name: Feedback to TIED (Feature Requests, Bug Reports, Methodology)
@@ -29,10 +29,10 @@ REQ-FEEDBACK_TO_TIED:
       - REQ-TIED_SETUP
     supersedes: []
   satisfaction_criteria:
-    - criterion: MCP tools allow adding feedback entries (type, title, description, optional context)
-      metric: tied_feedback_add creates/updates tied/feedback.yaml
     - criterion: Feedback can be exported for reporting to TIED
       metric: tied_feedback_export returns markdown or JSON of all entries
+    - criterion: MCP tools allow adding feedback entries (type, title, description, optional context)
+      metric: tied_feedback_add creates/updates tied/feedback.yaml
   status: Planned
   traceability:
     architecture:
@@ -46,7 +46,7 @@ REQ-FEEDBACK_TO_TIED:
     tests:
       - feedback.test.ts
   validation_criteria:
-    - method: Unit tests
-      coverage: Feedback module load/append/export and tool handlers
-    - method: Manual or E2E
-      coverage: MCP client can call tools and get valid output
+    - coverage: MCP client can call tools and get valid output
+      method: Manual or E2E
+    - coverage: Feedback module load/append/export and tool handlers
+      method: Unit tests

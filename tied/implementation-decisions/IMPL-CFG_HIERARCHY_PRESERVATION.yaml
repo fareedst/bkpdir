@@ -14,52 +14,6 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
     - REQ-LIST_LIMIT
     - REQ-MODULE_VALIDATION
     - REQ-STDD_VIS
-  essence_pseudocode: |-
-    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-STDD_VIS] [REQ-CFG_005] [REQ-LIST_LIMIT] [REQ-MODULE_VALIDATION] — Preserve config field values from earlier sequential files; earlier-file precedence for non-inheritance merges
-
-    DATA config_merge_context:
-      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CFG_001] — Inputs for hierarchy-aware config merge
-      inherit_context: boolean        # true = parent-child inheritance, false = sequential file merge
-      dst_config: Config              # accumulated destination config
-      src_config: Config              # new config file being merged
-      explicitly_set_tracker: map[field -> source_file]  # which file explicitly set each field
-
-    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE merge_basic_settings_with_preservation(dst, src, inherit_context):
-    PROCEDURE merge_basic_settings_with_preservation(dst, src, inherit_context):
-      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CFG_001] [REQ-CFG_005] — For sequential files, earlier files take precedence over later files
-      for each field in basic_settings:
-        if inherit_context:
-          # [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Inheritance chains: child configs override parent (behavior unchanged) [IMPL-CFG_HIERARCHY_PRESERVATION]
-          if src.field is explicitly set:
-            dst.field = src.field
-        else:
-          # [IMPL-CFG_HIERARCHY_PRESERVATION] [REQ-CFG_001] — Sequential: override only if source is explicit AND no earlier file set this field [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW]
-          if src.field is explicitly_set:
-            if NOT dst_differs_from_default(dst.field) AND NOT explicitly_set_by_earlier(field):
-              dst.field = src.field
-              record field in explicitly_set_tracker
-
-    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE apply_override_with_preservation(dst, src, field):
-    PROCEDURE apply_override_with_preservation(dst, src, field):
-      # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CFG_001] — Simplified field-level preservation logic
-      if field was explicitly set by an earlier config file:
-        preserve dst.field              # earlier file takes precedence
-      elif dst.field differs from compiled default:
-        preserve dst.field              # non-default value kept
-      else:
-        dst.field = src.field           # apply new value
-
-    # [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: VALIDATE hierarchy_preservation:
-    VALIDATE hierarchy_preservation:
-      # [IMPL-CFG_HIERARCHY_PRESERVATION] [REQ-CFG_001] [REQ-MODULE_VALIDATION] — Verify precedence behavior with concrete scenarios [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW]
-      CHECK home config sets archive_dir_path to user-specific path
-      CHECK local config omits archive_dir_path (not set)
-      CHECK merged result preserves home config value, not compiled default
-      CHECK inheritance chains still allow child to override parent
-      # [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] — Visualization artifacts remain anchored to real tokens [IMPL-CFG_HIERARCHY_PRESERVATION]
-      CHECK layered-flow and timeline assets reference correct token chains
-      # [REQ-LIST_LIMIT] — List limit settings follow same precedence rules [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM]
-      CHECK list_limit from earlier file preserved when later file omits it
   implementation_approach:
     details: []
     summary: '- **Updated `mergeBasicSettings`** (lines 682-689 in `config.go`): For sequential files (`inheritContext=false`), only override a field if:'
@@ -67,8 +21,8 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
     - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
     - 'Input sources: `tied/semantic-tokens.md`, `tied/requirements.md`, `tied/architecture-decisions.md`, `tied/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
     - 'Module boundary: `DataExtraction` outputs normalized graph once; downstream modules consume it without re-parsing docs, preserving token-centric styling data.'
-    - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'
     - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references found in docs and inline token comments; capture token metadata (type, status, sample refs) to drive token prominence in visuals.
+    - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'
   inheritance_chains: '(`inheritContext=true`): Behavior unchanged - child configs override parent configs'
   key_changes: |-
     1. `mergeBasicSettings` - Updated sequential file logic to check `dstDiffersFromDefault` in addition to `explicitlySetByEarlier`
@@ -77,13 +31,13 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Hierarchy Preservation Fix

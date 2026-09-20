@@ -1,0 +1,79 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "scan-root-manifest-20260920",
+  "commit": "98f09d9e4a3d8da62794c9f29e6cebd083d3b189",
+  "environment": {
+    "date": "2026-09-20",
+    "os": "darwin"
+  },
+  "command_results": [
+    {
+      "id": "speccheck-unit",
+      "command": [
+        "go",
+        "test",
+        "./internal/speccheck/...",
+        "-count=1"
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "duration_ms": 581,
+      "artifacts": [
+        "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/evidence/manifest-run/speccheck-unit.stdout.txt",
+        "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/evidence/manifest-run/speccheck-unit.stderr.txt"
+      ]
+    },
+    {
+      "id": "specctl-check-leads",
+      "command": [
+        "bash",
+        "-lc",
+        "go run ./cmd/specctl check-leads tied/implementation-decisions/*-pseudocode.md"
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "duration_ms": 958,
+      "artifacts": [
+        "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/evidence/manifest-run/specctl-check-leads.stdout.txt",
+        "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/evidence/manifest-run/specctl-check-leads.stderr.txt"
+      ]
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "lead-scan-dirs",
+      "attribute": "LeadScanDirPaths",
+      "applicability": "applicable",
+      "rationale": "Widen check-leads scan roots to pkg internal cmd test",
+      "evidence_method": "go_test",
+      "command_or_test": "go test ./internal/speccheck/... -count=1",
+      "result": "passed"
+    },
+    {
+      "id": "layer-b-leads",
+      "attribute": "specctl_check_leads",
+      "applicability": "applicable",
+      "rationale": "Formal sidecar block-lead TRACE-002 regression",
+      "evidence_method": "go_run",
+      "command_or_test": "cmd/specctl check-leads",
+      "result": "passed"
+    }
+  ],
+  "covered_tokens": [
+    "ARCH-SPEC_DSL_AND_ORACLE",
+    "IMPL-SPEC_CTL",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION"
+  ],
+  "proof_boundaries": [
+    "scan_root_check_leads_slice_only"
+  ],
+  "human_decisions": {
+    "stored_separately": true,
+    "references": [
+      "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/CITDP-SCAN-ROOT.yaml",
+      "tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-SCAN-ROOT.yaml"
+    ]
+  }
+}

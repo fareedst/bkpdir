@@ -11,7 +11,6 @@
 // IMPLEMENTATION-NOTES: Comprehensive test coverage for corruption utilities
 
 package testutil
-
 import (
 	"archive/zip"
 	"bytes"

@@ -1,0 +1,1578 @@
+[
+  {
+    "path": "adapter_formatters_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "ai_formatter_adapter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "archive.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "archive_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "backup.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "backup_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/ai-validation/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/cli-template/cmd/config.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/cli-template/cmd/create.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/cli-template/cmd/process.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/cli-template/cmd/root.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/cli-template/cmd/version.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/cli-template/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/realtime-validator/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/scaffolding/internal/generator/generator.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/scaffolding/internal/templates/manager.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/scaffolding/internal/ui/config.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/scaffolding/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/specctl/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/token-suggester/analyzer.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/token-suggester/analyzer_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/token-suggester/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "cmd/token-suggester/types.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "comparison.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "comparison_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_adapter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_bench_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_grouping_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_impl.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_integration_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "config_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "diff_command_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "docs/examples/basic-cli-app/example-code/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "docs/examples/git-aware-backup/example-code/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "docs/examples/pipeline-example/example-code/main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "errors.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "errors_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "exclude.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "exclude_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "file_stats.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "file_stats_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_adapter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_adapter_simple.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_adapter_simple_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_adapter_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_list_safety_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_stats_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "formatter_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "git.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "git_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "inc_diff_integration_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "incremental_duplicate_prevention_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/speccheck/leads.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/speccheck/matrix.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/archive.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/atomic.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/atomic_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/autodetect.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/cli.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/config.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/contract/eval.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/contract/eval_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/contract_eval.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/errors.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/extraction.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/fileops.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/formatter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/git.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/meta.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/processing.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/registry.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/resources.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/sidecar.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/specctl.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specmodel/testutil.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specparse/ast.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specparse/parser.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specparse/parser_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/specparse/validate.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/context.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/context_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/corruption.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/corruption_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/diskspace.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/diskspace_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/errorinjection.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/errorinjection_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/permissions.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/permissions_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/scenario_helpers.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/scenarios.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/testutil/scenarios_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/ai_error_formatter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/ai_validation.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/compliance_monitor.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/doc008_validator.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/realtime_validator.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/realtime_validator_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "internal/validation/semantic_token_validator.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "main.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "main_cli_composition_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "main_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/builder.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/cli_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/context.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/dryrun.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/example_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/flags.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/types.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/cli/version.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/config_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/discovery.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/inheritance.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/loader.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/merge_strategies.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/config/utils.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/errors/classification.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/errors/errors_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/errors/handlers.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/errors/interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/atomic.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/comparison.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/comparison_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/exclusion.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/exclusion_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/fileops.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/traversal.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/fileops/validation.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/ai_core_formatter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/ai_first_formatter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/ai_first_formatter_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/ai_first_interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/ai_output_manager.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/ai_pattern_extractor.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/collector.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/filestats.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/formatter.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/formatter_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/patterns.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/placeholder_replace.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/placeholder_replace_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/formatter/template.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/git/git.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/git/git_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/processing/concurrent.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/processing/doc.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/processing/naming.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/processing/pipeline.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/processing/processor.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/processing/processor_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/resources/context.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/resources/examples_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/resources/interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/resources/resources_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/assertions.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/cli.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/config.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/doc.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/filesystem.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/fixtures.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/integration_demo_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/interfaces.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/provider.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/scenarios.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "pkg/testutil/testutil_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "refactoring_validation_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": true,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/metrics/compliance_rate_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/metrics/decision_metrics_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/metrics/goal_alignment_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/metrics/metrics.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/performance/performance_test_integration.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/performance/validation_performance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/scenarios/decision_scenarios_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/archive_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/atomic_pbt_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/autodetect_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/cli_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/config_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/errors_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/extraction_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/fileops_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/formatter_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/git_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/helpers_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/meta_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/processing_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/registry_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/resources_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/specctl_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "test/specconformance/testutil_conformance_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "tools/coverage-differential.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  },
+  {
+    "path": "tools/coverage_differential_test.go",
+    "package_level_lead_count": 0,
+    "suspect": false,
+    "in_check_leads_pool": false,
+    "legitimate_prefix_count": 0,
+    "action": "keep"
+  }
+]

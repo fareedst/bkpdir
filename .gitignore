@@ -63,3 +63,10 @@ docs/cli-app-spec.zip
 .cursor/mcp.json
 docs/publicize.md
 scripts/lint.sh
+prompts
+*.tmp
+.cursor/plans
+docs/.markscope-preview-cache
+docs/markscope/.markscope-preview-cache
+report.json
+scripts/__pycache__

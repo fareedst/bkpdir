@@ -37,6 +37,7 @@ This acknowledgment confirms that the AI agent has:
 2. **IMPL Pseudo-Code Token Comments (Most Critical)** `[PROC-IMPL_PSEUDOCODE_TOKENS]`
    - IMPL `essence_pseudocode` is the **most critical artifact** for implementation traceability. Without token comments in pseudo-code, traceability from REQ→ARCH→IMPL breaks and tests/code cannot be reliably aligned to requirements.
    - **Every block** in `essence_pseudocode` MUST have a comment that (1) names all REQ, ARCH, and IMPL reflected in that block and (2) states how that block implements those requirements. Top-level: one comment naming IMPL, ARCH, and REQ plus a one-line summary; sub-blocks (same set → comment only the "how"; different set → comment listing that set and how the sub-block implements it).
+   - **Contract precision** (language-agnostic): new and changed Active procedure blocks declare **PRE**, **POST**, and **EFFECTS** (plus **FAILURE_MODES** / **DATA_TRANSITION** / **TERMINATION** when applicable). See `tied/docs/implementation-decisions.md` § Preferred vocabulary; Layer B SHAPE-003..006. Untouched legacy Active blocks may use N/A `pre-contract-grammar` until next edit.
 
 3. **Documentation-First Development**
    - Requirements MUST be expanded into pseudo-code and architectural decisions before implementation.
@@ -58,8 +59,9 @@ This acknowledgment confirms that the AI agent has:
    - Validation failures MUST be documented and resolved before proceeding.
 
 7. **Priority-Based Implementation**
-   - **Most Important**: Tests, Code, Basic Functions
-   - **Least Important**: Environment Orchestration, Enhanced Security, Automated Deployment
+   - **Execution order**: IMPL pseudo-code and validation, RED tests, GREEN code, composition evidence, justified E2E, then verification and synchronization.
+   - **Quality priority**: For applicable risks, safety/correctness/data integrity/security/privacy, then reliability/recovery, performance/scalability/cost, usability/accessibility, and maintainability.
+   - Risk priority does not make every quality area applicable to every change, and it does not permit skipping the mandatory TDD sequence.
 
 8. **Extensive Debug Output During Development**
    - Use extensive diagnostic output (logging functions, debug flags) liberally during initial implementation and debugging
@@ -86,6 +88,31 @@ This acknowledgment confirms that the AI agent has:
 12. **TIED-Sourced YAML Read-Only in Client** `[PROC-TIED_METHODOLOGY_READONLY]`
     - TIED-sourced YAML (methodology) in the client is **read-only** and does not hold client-specific data. It lives under `tied/methodology/` and is refreshed by re-running `copy_files.sh` from the TIED repo.
     - Project-specific tokens and details live **only** in **project** YAML: `tied/requirements.yaml`, `tied/architecture-decisions.yaml`, `tied/implementation-decisions.yaml`, `tied/semantic-tokens.yaml`, and the corresponding detail dirs at the root of `tied/`. Agents and MCP must only add or edit REQ/ARCH/IMPL in project YAML; do not modify `tied/methodology/`.
+
+13. **Domain Vocabulary Discipline — Peer Agent-Control Layer** `[PROC-VOCABULARY_INDEX]`
+    - Vocabulary is equally important to pseudo-code, semantic-token, YAML, and test precision. It is the primary guide for how the agent interprets and discusses developer intent, not a passive glossary consulted after implementation.
+    - **Three mandatory touchpoints** (via `sub-vocabulary-sync` in `[PROC-AGENT_REQ_CHECKLIST]`):
+      - **Prompt intake (RESOLVE):** reword sponsor/user wording that names concepts before it drives REQ/ARCH/IMPL work (`translate-sponsor-intent`, `change-definition`).
+      - **Pre-read (PRELOAD):** read client `tied/vocab/routing.md`, dispatch to `tied/methodology/vocab/routing.md`, match task keywords across both ownership layers, and load only matched glossaries before reading TIED YAML, docs, source, or tests (`session-bootstrap`, `impact-discovery`).
+      - **Pre-commit (VALIDATE):** audit names in docs, `semantic-tokens.yaml`, TIED records, tests, and code vs the index before commit (`traceable-commit`).
+    - **Inline during work:** **RESOLVE** before naming; **RECORD** when concepts appear or artifacts change — update client glossary rows in `tied/vocab/*.md` and methodology glossary rows in the TIED source tree, keeping naming bridges, UPPER_SNAKE block-name tables, and alphabetical indexes synchronized.
+    - Edit vocab files **directly** (plain Markdown, like IMPL pseudo-code sidecars); do **not** route through MCP or `lint_yaml`.
+    - This is **distinct** from the IMPL grammar "preferred vocabulary" (INPUT/OUTPUT/DATA/PRE/POST/EFFECTS keywords in `implementation-decisions.md`).
+    - Standards: `tied/docs/vocabulary-index-analysis-and-standards.md`; client routing handoff: `tied/vocab/routing.md`; methodology routing: `tied/methodology/vocab/routing.md`; full indexes (on-demand): the matching `domain-references.md` in each layer; full process: `tied/docs/processes.md` § `[PROC-VOCABULARY_INDEX]`.
+
+14. **Sponsor default-proceed (planned development)**
+    - For the **majority of planned work** (refine, plan-new-feature, build-plan slices bounded by an approved plan/CITDP), **proceed on documented defaults** without sponsor Q&A when the decision is **reversible or inexpensive to unwind** and consistent with existing REQ/ARCH/IMPL and prior sponsor artifacts.
+    - **Reconsideration:** Plans, acceptance records, trackers, gate receipts, tests, and implementation commits are the audit trail; they are **sufficient to reverse direction and reimplement** (amend acceptance, withdraw a batch, LEAP, re-run gates) without re-deriving intent from memory.
+    - **Ask the sponsor only** when the default would be **permanent or costly to explore after the fact**—with plain-language description, recommended default, and links to plan sections, TIED tokens, and evidence paths.
+    - **Fleet Track B batches:** concrete proceed/stop boundaries live in [`docs/pseudocode-constraint-v2-fleet-program.md`](../../docs/pseudocode-constraint-v2-fleet-program.md) § Sponsor default-proceed policy; vocabulary term **sponsor default-proceed policy** in `tied/vocab/pseudocode-and-citdp.md`.
+
+15. **Adversarial Inquiry Activation** `[REQ-TIED_ADVERSARIAL_INQUIRY]`
+    - When this requirement applies, or a behavior-changing CITDP uses `depth_tier: minimal` or higher, PRELOAD `tied/vocab/fidelity-research.md` and `tied/vocab/quality-assurance.md`.
+    - At `risk-assessment`, record `depth_tier` independently from research profile, assurance profile, and gate policy.
+    - At `integrated` depth, CALL `sub-adversarial-inquiry-pass` at structural, pre-RED, and verification phases; invoke `tied_adversarial_inquiry_run` with explicit request scope and advisory policy when MCP is available.
+    - Persist the four bounded artifacts only under `working/{REQ-TOKEN}/adversarial-inquiry/`: `obligation-report.json`, `finding-ledger.jsonl`, `gate-result.json`, and `evidence-provenance.json`.
+    - Observed findings remain review-gated and do not trigger LEAP; only confirmed findings route to existing owners.
+    - Inherited checklist `execution_evidence`, checklist text, token presence, and TIED consistency are not feature activation evidence. Integrated activation requires the matching inquiry metric and all four artifacts.
 
 **Bugs vs requirements (operational rule):** Requirements describe desired behavior (WHAT and WHY). Bugs describe implementation failures. Do NOT document bugs as requirements; document bugs in architecture/implementation decisions with cross-reference to the requirement that should be satisfied. If a bug reveals missing behavior specification, add a requirement first, then fix.
 
@@ -151,7 +178,7 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 4. **IMMEDIATELY** identify logical modules; document boundaries, interfaces, validation criteria
 5. Address all implementation issues in IMPL `essence_pseudocode` **before** writing tests or code
 6. In every IMPL, ensure every **block** in `essence_pseudocode` has a comment naming REQ/ARCH/IMPL and how the block implements them ([PROC-IMPL_PSEUDOCODE_TOKENS])
-7. Validate pseudo-code with the application pseudo-code validation checklist before writing tests or code; see `tied/docs/pseudocode-writing-and-validation.md` ([PROC-PSEUDOCODE_VALIDATION]). For portable format and sidecar **template** text, use `docs/pseudocode-format-and-practices.md` and `templates/impl-essence-pseudocode-template.md` (strong **sidecar** preference as IMPLs grow)
+7. Validate pseudo-code with the application pseudo-code validation checklist before writing tests or code; see `tied/docs/pseudocode-writing-and-validation.md` ([PROC-PSEUDOCODE_VALIDATION]). For portable format and sidecar **template** text, use `tied/docs/pseudocode-format-and-practices.md` and `templates/impl-essence-pseudocode-template.md` (strong **sidecar** preference as IMPLs grow)
 8. **IMMEDIATELY** update `semantic-tokens.yaml` with any new tokens
 
 ### Phase 2: Planning Implementation (MANDATORY - Plan BEFORE Implementation)
@@ -188,7 +215,9 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 - **P2 (Nice-to-Have)**: UI/UX improvements, documentation enhancements, convenience features, non-critical optimizations
 - **P3 (Future)**: Deferred features, experimental ideas, future enhancements, infrastructure improvements
 
-**Priority order**: Tests > Code > Basic Functions > Developer Experience > Infrastructure > Security
+**Execution order**: IMPL pseudo-code and validation > RED tests > GREEN code > composition evidence > justified E2E > verification and synchronization.
+
+**Quality priority**: Applicable safety/correctness/data integrity/security/privacy > reliability/recovery > performance/scalability/cost > usability/accessibility > maintainability.
 
 ---
 
@@ -208,6 +237,7 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 - [ ] **MANDATORY**: Review `architecture-decisions.yaml` and `implementation-decisions.yaml` for existing decisions
 - [ ] **MANDATORY**: Plan work (via implementation decisions or in-session) BEFORE writing any code
 - [ ] **MANDATORY** ([PROC-IMPL_PSEUDOCODE_TOKENS]): When authoring IMPL, ensure every block in `essence_pseudocode` has a comment naming REQ/ARCH/IMPL and how the block implements them
+- [ ] **Domain vocabulary** ([PROC-VOCABULARY_INDEX]): **PRELOAD** — read `tied/vocab/routing.md`; match task keywords to routing table; open only matched glossaries; build a term map before reading TIED YAML or source (Touchpoint 2)
 
 **DURING WORK:**
 
@@ -221,6 +251,7 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 - [ ] **MANDATORY**: Update `semantic-tokens.yaml` when creating new tokens
 - [ ] **MANDATORY**: When editing TIED YAML, validate with `lint_yaml` per [PROC-YAML_EDIT_LOOP]; YAML that does not validate is invalid for use
 - [ ] **MANDATORY**: Perform `[PROC-TOKEN_AUDIT]`; run `./scripts/validate_tokens.sh` and/or `tied_validate_consistency` via the TIED MCP or **`tied-cli.sh`**
+- [ ] **Domain vocabulary** ([PROC-VOCABULARY_INDEX]): RESOLVE before naming (Touchpoint 1 when interpreting prompts); RECORD when introducing or renaming concepts in tests, code, design, or UI docs
 
 **AFTER COMPLETING WORK:**
 
@@ -230,6 +261,7 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 - [ ] **MANDATORY**: Tests reference semantic tokens; all documentation current and accurate
 - [ ] **MANDATORY**: Post-change validation checklist completed; behavioral contracts and dependencies documented where relevant
 - [ ] **MANDATORY**: Do not create a stand-alone summary document for the session (e.g. no SESSION_SUMMARY.md)
+- [ ] **Domain vocabulary** ([PROC-VOCABULARY_INDEX]): Reconcile `tied/vocab/*.md` with final REQ/ARCH/IMPL, tests, code, and UI docs (RECORD); **VALIDATE** before commit (Touchpoint 3)
 
 ---
 
@@ -239,7 +271,9 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 - `tied/docs/architecture-decisions.md`, `tied/architecture-decisions.yaml`, `tied/architecture-decisions/`
 - `tied/docs/implementation-decisions.md`, `tied/implementation-decisions.yaml`, `tied/implementation-decisions/`
 - `tied/semantic-tokens.yaml`, `tied/docs/semantic-tokens.md`
-- `tied/docs/processes.md` — LEAP, PROC-TIED_DEV_CYCLE, PROC-TOKEN_AUDIT, PROC-TOKEN_VALIDATION, PROC-COMMIT_MESSAGES
+- `tied/docs/processes.md` — LEAP, PROC-TIED_DEV_CYCLE, PROC-TOKEN_AUDIT, PROC-TOKEN_VALIDATION, PROC-COMMIT_MESSAGES, `[PROC-VOCABULARY_INDEX]`
+- `tied/docs/vocabulary-index-analysis-and-standards.md` — Meta-standard for domain glossary structure and TIED integration
+- `tied/vocab/routing.md`, `tied/vocab/domain-references.md`, `tied/vocab/*.md` — Primary routing index (bootstrap), full catalog (on-demand), and glossaries (RESOLVE/PRELOAD/RECORD/VALIDATE via `sub-vocabulary-sync`)
 - `tied/docs/source-file-impl-traceability.md` — Scoping IMPLs to specific files, TIED artifact checklist, dual pseudocode in sidecar and block comments (this repository)
 - `tied/docs/pseudocode-writing-and-validation.md` (#block-lead-and-literal-copy-in-tests-and-code) — Block lead only (default) vs full block in tests/code; pairs with the source-file guide
 - `tied/docs/detail-files-schema.md` — Schema for REQ/ARCH/IMPL detail YAML files
@@ -266,5 +300,5 @@ See `tied/docs/processes.md` § LEAP for the canonical process definition.
 - **Implementation Phase**: Update documentation as decisions are refined
 - **Completion Phase**: Verify all documentation is current and complete
 
-**Last Updated**: 2026-04-26
-**TIED Methodology Version**: 2.2.0
+**Last Updated**: 2026-06-02
+**TIED Methodology Version**: 3.0.0

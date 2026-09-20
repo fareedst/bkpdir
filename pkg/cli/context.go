@@ -1,4 +1,3 @@
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_COMMANDS] [REQ-IMMUTABLE_CLI_COMMANDS]
 package cli
 
 import (
@@ -13,11 +12,12 @@ import (
 type DefaultContextManager struct{}
 
 // NewContextManager creates a new context manager
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
 func NewContextManager() ContextManager {
 	return &DefaultContextManager{}
 }
 
-// Create creates a new context with cancellation
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: return cancellable child context defaulting parent to background.
 func (cm *DefaultContextManager) Create(parent context.Context) (context.Context, context.CancelFunc) {
 	if parent == nil {
 		parent = context.Background()
@@ -25,7 +25,7 @@ func (cm *DefaultContextManager) Create(parent context.Context) (context.Context
 	return context.WithCancel(parent)
 }
 
-// WithTimeout creates a context with timeout
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: parse duration string; on parse failure return cancel-only context without timeout.
 func (cm *DefaultContextManager) WithTimeout(parent context.Context, timeout string) (context.Context, context.CancelFunc) {
 	if parent == nil {
 		parent = context.Background()
@@ -40,7 +40,7 @@ func (cm *DefaultContextManager) WithTimeout(parent context.Context, timeout str
 	return context.WithTimeout(parent, duration)
 }
 
-// HandleSignals sets up signal handling for graceful shutdown
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: listen for interrupt/terminate and invoke cancel when signal received.
 func (cm *DefaultContextManager) HandleSignals(cancel context.CancelFunc) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
@@ -59,7 +59,7 @@ type SimpleCancellableOperation struct {
 	cancelled bool
 }
 
-// NewCancellableOperation creates a simple cancellable operation
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: wrap function as operation that returns canceled when Cancel was called.
 func NewCancellableOperation(op func(ctx context.Context) error) CancellableOperation {
 	return &SimpleCancellableOperation{
 		operation: op,
@@ -86,7 +86,7 @@ func (op *SimpleCancellableOperation) Cancel() error {
 	return nil
 }
 
-// WithSignalHandling creates a context with automatic signal handling
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create cancelable context that cancels on INT/TERM or parent done.
 func WithSignalHandling(parent context.Context) (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithCancel(parent)
 

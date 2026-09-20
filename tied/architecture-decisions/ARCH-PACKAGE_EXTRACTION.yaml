@@ -1,7 +1,7 @@
 ARCH-PACKAGE_EXTRACTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Big-bang extraction: Rejected due to high risk of breaking changes
@@ -12,7 +12,7 @@ ARCH-PACKAGE_EXTRACTION:
     - Wrapper functions preserve existing API
   circular_dependency_prevention: Extract components with no internal dependencies first
   cross-references: '[REQ-MAINTAINABILITY], [REQ-CODE_QUALITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CODE_QUALITY
     - REQ-MAINTAINABILITY
   decision: Layered extraction approach with zero-breaking-change principle
@@ -33,13 +33,13 @@ ARCH-PACKAGE_EXTRACTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Package Extraction Architecture
@@ -53,7 +53,9 @@ ARCH-PACKAGE_EXTRACTION:
       Creates reusable components for CLI application development
       Follows interface-driven design for flexibility
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -64,6 +66,8 @@ ARCH-PACKAGE_EXTRACTION:
       - REQ-CODE_QUALITY
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     tests: []
   zero-breaking-change: Maintain backward compatibility through wrapper functions

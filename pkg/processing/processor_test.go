@@ -1,7 +1,6 @@
 // [REQ-PERFORMANCE]
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
-
 import (
 	"context"
 	"fmt"
@@ -9,7 +8,13 @@ import (
 	"time"
 )
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] TestNamingProvider validates naming provider generation and parsing
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: assemble archive or backup name from prefix, timestamp, git info, incremental marker, and note.
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: retry each stage up to max_retries with delay between failures until success or cancellation.
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: worker loop reads tasks from queue until closed or context cancelled, dispatching each to processTask.
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: check cancellation then invoke processFunc and record TaskResult with duration and error state.
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: match filename against registered regex and return NameComponents or unsupported-pattern error.
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: construct Pipeline with stop_on_error, max_retries=3, and retry_delay=1s defaults.
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: construct ConcurrentProcessor with NumCPU workers and buffered task/result channels.
 func TestNamingProvider(t *testing.T) {
 	np := NewNamingProvider()
 
@@ -57,7 +62,7 @@ func TestNamingProvider(t *testing.T) {
 	}
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] TestPipeline validates pipeline execution with stages
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: execute pipeline stages sequentially with context cancellation, retries, and progress tracking.
 func TestPipeline(t *testing.T) {
 	pipeline := NewPipeline("test-pipeline")
 
@@ -99,7 +104,7 @@ func TestPipeline(t *testing.T) {
 	}
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] TestConcurrentProcessor validates concurrent worker pool processing
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: initialize worker pool, submit items via task channel, collect results from result channel.
 func TestConcurrentProcessor(t *testing.T) {
 	// Create test processor function
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {
@@ -147,7 +152,6 @@ func TestConcurrentProcessor(t *testing.T) {
 	}
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] TestContextCancellation validates context cancellation behavior
 func TestContextCancellation(t *testing.T) {
 	// Create a slow processor function that always checks for cancellation
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {
@@ -217,7 +221,6 @@ func TestContextCancellation(t *testing.T) {
 		err, result.FailedItems, result.SuccessfulItems, result.TotalItems, len(items))
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] TestUtilityFunctions validates convenience processing functions
 func TestUtilityFunctions(t *testing.T) {
 	// Test ProcessItems convenience function
 	processFunc := func(ctx context.Context, item *ProcessingItem) (interface{}, error) {

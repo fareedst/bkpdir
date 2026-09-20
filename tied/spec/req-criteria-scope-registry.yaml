@@ -1,0 +1,913 @@
+description: Scoped REQ satisfaction criteria for formal_spec sidecars (L4 CRIT-001 pilot).
+scopes:
+  - applicable_crit_ids:
+      - CRIT-REQ-RESOURCE_MANAGEMENT-001
+      - CRIT-REQ-RESOURCE_MANAGEMENT-002
+      - CRIT-REQ-RESOURCE_MANAGEMENT-003
+      - CRIT-REQ-RESOURCE_MANAGEMENT-004
+      - CRIT-REQ-RESOURCE_MANAGEMENT-V001
+    impl: IMPL-ATOMIC_OPS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-RESOURCE_MANAGEMENT
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-AUTO_DETECTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-USABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-BACKWARD_COMPAT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-CFG_006-001
+      - CRIT-REQ-CFG_006-002
+      - CRIT-REQ-CFG_006-003
+      - CRIT-REQ-CFG_006-004
+      - CRIT-REQ-CFG_006-005
+      - CRIT-REQ-CFG_006-006
+      - CRIT-REQ-CFG_006-007
+      - CRIT-REQ-CFG_006-008
+      - CRIT-REQ-CFG_006-009
+      - CRIT-REQ-CFG_006-V001
+      - CRIT-REQ-CFG_006-V002
+      - CRIT-REQ-CFG_006-V003
+      - CRIT-REQ-CFG_006-V004
+      - CRIT-REQ-CFG_006-V005
+      - CRIT-REQ-CFG_006-V006
+    impl: IMPL-CFG_006
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_006
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-LIST_LIMIT
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MODULE_VALIDATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-STDD_VIS
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_INHERITANCE_PATH_RESOLUTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_INHERITANCE_PATH_RESOLUTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MIXED_MODE_MERGE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MIXED_MODE_MERGE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_PRECEDENCE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_QUOTED_KEY_PREFIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CFG_QUOTED_KEY_PREFIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-IMMUTABLE_CLI_COMMANDS-001
+      - CRIT-REQ-IMMUTABLE_CLI_COMMANDS-002
+      - CRIT-REQ-IMMUTABLE_CLI_COMMANDS-003
+      - CRIT-REQ-IMMUTABLE_CLI_COMMANDS-004
+      - CRIT-REQ-IMMUTABLE_CLI_COMMANDS-005
+      - CRIT-REQ-IMMUTABLE_CLI_COMMANDS-V001
+    impl: IMPL-CLI_FRAMEWORK
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-IMMUTABLE_CLI_COMMANDS
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CLI_FRAMEWORK
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-USABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-CODE_QUALITY-001
+      - CRIT-REQ-CODE_QUALITY-002
+      - CRIT-REQ-CODE_QUALITY-003
+      - CRIT-REQ-CODE_QUALITY-004
+      - CRIT-REQ-CODE_QUALITY-V001
+    impl: IMPL-CODE_STYLE
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CODE_QUALITY
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CONFIG_DISPLAY_FLATTENING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_006
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-CONFIG_OUTPUT_GROUPING-001
+      - CRIT-REQ-CONFIG_OUTPUT_GROUPING-V001
+    impl: IMPL-CONFIG_OUTPUT_GROUPING
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CONFIG_OUTPUT_GROUPING
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CONFIG_SCHEMA_FLEX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-CONFIGURATION-001
+      - CRIT-REQ-CONFIGURATION-002
+      - CRIT-REQ-CONFIGURATION-003
+      - CRIT-REQ-CONFIGURATION-004
+      - CRIT-REQ-CONFIGURATION-V001
+    impl: IMPL-CONFIG_STRUCT
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CONFIGURATION
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-CONFIG_STRUCT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_006
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-CONFIGURABLE_STRINGS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-CONTEXT_SUPPORT-001
+      - CRIT-REQ-CONTEXT_SUPPORT-002
+      - CRIT-REQ-CONTEXT_SUPPORT-003
+      - CRIT-REQ-CONTEXT_SUPPORT-004
+      - CRIT-REQ-CONTEXT_SUPPORT-V001
+    impl: IMPL-CONTEXT_OPS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CONTEXT_SUPPORT
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-001
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-002
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-003
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-004
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-005
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-006
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-007
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-008
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-009
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-010
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-011
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-012
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-013
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-014
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-015
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V001
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V002
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V003
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V004
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V005
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V006
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V007
+      - CRIT-REQ-CUSTOMIZABLE_FORMAT_STRINGS-V008
+    impl: IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-DATA_MODELS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CODE_QUALITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DATA_MODELS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-FILE_BACKUP
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DELAYED_OUTPUT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DEPENDENCY_MGMT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-DIFF_COMMAND-001
+      - CRIT-REQ-DIFF_COMMAND-002
+      - CRIT-REQ-DIFF_COMMAND-003
+      - CRIT-REQ-DIFF_COMMAND-004
+      - CRIT-REQ-DIFF_COMMAND-005
+      - CRIT-REQ-DIFF_COMMAND-006
+      - CRIT-REQ-DIFF_COMMAND-007
+      - CRIT-REQ-DIFF_COMMAND-008
+      - CRIT-REQ-DIFF_COMMAND-009
+      - CRIT-REQ-DIFF_COMMAND-010
+      - CRIT-REQ-DIFF_COMMAND-V001
+      - CRIT-REQ-DIFF_COMMAND-V002
+      - CRIT-REQ-DIFF_COMMAND-V003
+      - CRIT-REQ-DIFF_COMMAND-V004
+      - CRIT-REQ-DIFF_COMMAND-V005
+      - CRIT-REQ-DIFF_COMMAND-V006
+      - CRIT-REQ-DIFF_COMMAND-V007
+      - CRIT-REQ-DIFF_COMMAND-V008
+    impl: IMPL-DIFF_COMMAND
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-DIFF_COMMAND
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-DIFF_COMMAND
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONTEXT_SUPPORT
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DIFF_COMMAND
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DIFF_COMMAND
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DIRECTORY_COMPARISON
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-DIFF_COMMAND
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DIRECTORY_COMPARISON
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-FILE_BACKUP
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DIRECTORY_COMPARISON
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-PERFORMANCE
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-DOC_ENHANCEMENT
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-DOC_001
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-OUTPUT_FORMATTING-001
+      - CRIT-REQ-OUTPUT_FORMATTING-002
+      - CRIT-REQ-OUTPUT_FORMATTING-003
+      - CRIT-REQ-OUTPUT_FORMATTING-004
+      - CRIT-REQ-OUTPUT_FORMATTING-005
+      - CRIT-REQ-OUTPUT_FORMATTING-V001
+    impl: IMPL-DUAL_FORMATTING
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-OUTPUT_FORMATTING
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-EXCLUDE_MERGE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-EXCLUDE_MERGE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-EXCLUDE_MERGE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-TEST_EXCLUDE_MERGE
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-EXCLUSION_PATTERNS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-001
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-002
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-003
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-004
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-V001
+    impl: IMPL-EXTRACT_008_DOC_MIGRATION
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-EXTRACT_008_INTERDEP_MAPPING
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-EXTRACTION_CHALLENGES
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-EXTRACTION_CHALLENGES
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-EXTRACTION_PRINCIPLES
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-FILE_OPERATIONS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-RELIABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-OUT_002-001
+      - CRIT-REQ-OUT_002-002
+      - CRIT-REQ-OUT_002-003
+      - CRIT-REQ-OUT_002-004
+      - CRIT-REQ-OUT_002-005
+      - CRIT-REQ-OUT_002-006
+      - CRIT-REQ-OUT_002-V001
+      - CRIT-REQ-OUT_002-V002
+      - CRIT-REQ-OUT_002-V003
+      - CRIT-REQ-OUT_002-V004
+      - CRIT-REQ-OUT_002-V005
+    impl: IMPL-FILE_STATISTICS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-OUT_002
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-FILE_STATISTICS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-FILE_STATISTICS_TEMPLATE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUT_002
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-FILE_STATISTICS_TEMPLATE_FIX
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-GIT_INTEGRATION-001
+      - CRIT-REQ-GIT_INTEGRATION-002
+      - CRIT-REQ-GIT_INTEGRATION-003
+      - CRIT-REQ-GIT_INTEGRATION-004
+      - CRIT-REQ-GIT_INTEGRATION-V001
+    impl: IMPL-GIT_CLI
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-GIT_INTEGRATION
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-GIT_DIRTY_CONFIG
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-GIT_INTEGRATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-001
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-002
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-003
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-004
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-005
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-006
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-007
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-008
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V001
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V002
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V003
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V004
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V005
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V006
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V007
+      - CRIT-REQ-INCREMENTAL_DUPLICATE_PREVENTION-V008
+    impl: IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-DIFF_COMMAND
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-INTERFACE_DRIVEN
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-INTERFACE_FIRST
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LARGE_FILE_CHALLENGE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LARGE_FILE_DECOMP
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LARGE_FILE_DECOMP
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-GIT_INTEGRATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LARGE_FILE_DECOMP
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LARGE_FILE_DECOMP
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LAYERED_EXTRACTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LIST_FORMAT_SAFETY
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUT_002
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-001
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-002
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-003
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-004
+      - CRIT-REQ-EXTRACT_008_INTERDEP_MAPPING-V001
+    impl: IMPL-LIST_LIMIT
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-EXTRACT_008_INTERDEP_MAPPING
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-LIST_LIMIT-001
+      - CRIT-REQ-LIST_LIMIT-002
+      - CRIT-REQ-LIST_LIMIT-003
+      - CRIT-REQ-LIST_LIMIT-004
+      - CRIT-REQ-LIST_LIMIT-005
+      - CRIT-REQ-LIST_LIMIT-006
+      - CRIT-REQ-LIST_LIMIT-V001
+      - CRIT-REQ-LIST_LIMIT-V002
+      - CRIT-REQ-LIST_LIMIT-V003
+      - CRIT-REQ-LIST_LIMIT-V004
+      - CRIT-REQ-LIST_LIMIT-V005
+      - CRIT-REQ-LIST_LIMIT-V006
+    impl: IMPL-LIST_LIMIT
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-LIST_LIMIT
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-LIST_LIMIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONTEXT_SUPPORT
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LIST_LIMIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-DIFF_COMMAND
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LIST_LIMIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LIST_LIMIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-LIST_LIMIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-USABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-FEEDBACK_TO_TIED-001
+      - CRIT-REQ-FEEDBACK_TO_TIED-002
+      - CRIT-REQ-FEEDBACK_TO_TIED-V001
+      - CRIT-REQ-FEEDBACK_TO_TIED-V002
+    impl: IMPL-MCP_FEEDBACK_TOOLS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-FEEDBACK_TO_TIED
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-MODULE_VALIDATION-001
+      - CRIT-REQ-MODULE_VALIDATION-002
+      - CRIT-REQ-MODULE_VALIDATION-003
+      - CRIT-REQ-MODULE_VALIDATION-004
+      - CRIT-REQ-MODULE_VALIDATION-005
+      - CRIT-REQ-MODULE_VALIDATION-006
+      - CRIT-REQ-MODULE_VALIDATION-007
+      - CRIT-REQ-MODULE_VALIDATION-008
+      - CRIT-REQ-MODULE_VALIDATION-009
+      - CRIT-REQ-MODULE_VALIDATION-010
+      - CRIT-REQ-MODULE_VALIDATION-V001
+      - CRIT-REQ-MODULE_VALIDATION-V002
+      - CRIT-REQ-MODULE_VALIDATION-V003
+      - CRIT-REQ-MODULE_VALIDATION-V004
+      - CRIT-REQ-MODULE_VALIDATION-V005
+      - CRIT-REQ-MODULE_VALIDATION-V006
+    impl: IMPL-MODULE_VALIDATION
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-MODULE_VALIDATION
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-PACKAGE_EXTRACTION
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-PROCESSING_PATTERNS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-PERFORMANCE
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-REFACTOR_PREP
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-RESOURCE_MANAGEMENT-001
+      - CRIT-REQ-RESOURCE_MANAGEMENT-002
+      - CRIT-REQ-RESOURCE_MANAGEMENT-003
+      - CRIT-REQ-RESOURCE_MANAGEMENT-004
+      - CRIT-REQ-RESOURCE_MANAGEMENT-V001
+    impl: IMPL-RESOURCE_MANAGER
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-RESOURCE_MANAGEMENT
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-RESOURCE_MANAGER
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONTEXT_SUPPORT
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-SEMANTIC_CROSS_REF
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-DOC_001
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-001
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-002
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-003
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-004
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-005
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-V001
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-V002
+      - CRIT-REQ-PSEUDOCODE_FORMAL_VERIFICATION-V003
+    impl: IMPL-SPEC_CTL
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-STDD_VIS-001
+      - CRIT-REQ-STDD_VIS-002
+      - CRIT-REQ-STDD_VIS-003
+      - CRIT-REQ-STDD_VIS-004
+      - CRIT-REQ-STDD_VIS-005
+      - CRIT-REQ-STDD_VIS-V001
+      - CRIT-REQ-STDD_VIS-V002
+      - CRIT-REQ-STDD_VIS-V003
+      - CRIT-REQ-STDD_VIS-V004
+    impl: IMPL-STDD_VIS_ASSETS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-STDD_VIS
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-STDD_VIS_ASSETS
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MODULE_VALIDATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-STDD_VIS-001
+      - CRIT-REQ-STDD_VIS-002
+      - CRIT-REQ-STDD_VIS-003
+      - CRIT-REQ-STDD_VIS-004
+      - CRIT-REQ-STDD_VIS-005
+      - CRIT-REQ-STDD_VIS-V001
+      - CRIT-REQ-STDD_VIS-V002
+      - CRIT-REQ-STDD_VIS-V003
+      - CRIT-REQ-STDD_VIS-V004
+    impl: IMPL-STDD_VIS_DATA_PIPELINE
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-STDD_VIS
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-STDD_VIS_DATA_PIPELINE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MODULE_VALIDATION
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-ERROR_HANDLING-001
+      - CRIT-REQ-ERROR_HANDLING-002
+      - CRIT-REQ-ERROR_HANDLING-003
+      - CRIT-REQ-ERROR_HANDLING-004
+      - CRIT-REQ-ERROR_HANDLING-V001
+    impl: IMPL-STRUCTURED_ERRORS
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-ERROR_HANDLING
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_CFG_005_P1
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_CFG_005_P1
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_CFG_005_P1
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_COVERAGE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CODE_QUALITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_COVERAGE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_DEFAULT_STRATEGY_EDGES
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_DEFAULT_STRATEGY_EDGES
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_EMPTY_STRING_HANDLING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_EMPTY_STRING_HANDLING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_EMPTY_STRING_HANDLING
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids:
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-001
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-002
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-003
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-004
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-005
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-006
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-V001
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-V002
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-V003
+      - CRIT-REQ-TEST_EXCLUDE_MERGE-V004
+    impl: IMPL-TEST_EXCLUDE_MERGE
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-TEST_EXCLUDE_MERGE
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_EXCLUDE_MERGE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_006
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_EXCLUDE_MERGE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_PREPEND_ORDERING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_PREPEND_ORDERING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_PREPEND_ORDERING
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_UNICODE_HANDLING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CFG_005
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_UNICODE_HANDLING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TEST_UNICODE_HANDLING
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-CFG_001
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TESTING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-RELIABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TESTING_COMPLEXITY
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-RELIABILITY
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-TIED_SETUP-001
+      - CRIT-REQ-TIED_SETUP-002
+      - CRIT-REQ-TIED_SETUP-003
+      - CRIT-REQ-TIED_SETUP-004
+      - CRIT-REQ-TIED_SETUP-V001
+      - CRIT-REQ-TIED_SETUP-V002
+      - CRIT-REQ-TIED_SETUP-V003
+    impl: IMPL-TIED_FILES
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-TIED_SETUP
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CONFIGURATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-DIFF_COMMAND
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-DOC_016
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-ERROR_HANDLING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-FILE_BACKUP
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-GIT_INTEGRATION
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-LIST_LIMIT
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-OUTPUT_FORMATTING
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_MIGRATION_COMPLETE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-CODE_QUALITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_MIGRATION_COMPLETE
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-DOC_016
+    role: auxiliary
+  - applicable_crit_ids:
+      - CRIT-REQ-DOC_016-001
+      - CRIT-REQ-DOC_016-002
+      - CRIT-REQ-DOC_016-003
+      - CRIT-REQ-DOC_016-004
+      - CRIT-REQ-DOC_016-005
+      - CRIT-REQ-DOC_016-V001
+      - CRIT-REQ-DOC_016-V002
+      - CRIT-REQ-DOC_016-V003
+      - CRIT-REQ-DOC_016-V004
+    impl: IMPL-TOKEN_SYSTEM
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-DOC_016
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_SYSTEM
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-FILE_BACKUP
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_SYSTEM
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_SYSTEM
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-RESOURCE_MANAGEMENT
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-TOKEN_SYSTEM
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-GOV_REGISTRY_COMPLETENESS
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-TRACEABILITY
+    rationale: Primary owner per REQ traceability.implementation
+    req: REQ-DOC_003
+    role: primary
+  - applicable_crit_ids: []
+    impl: IMPL-ZERO_BREAKING
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-MAINTAINABILITY
+    role: auxiliary
+  - applicable_crit_ids: []
+    impl: IMPL-ZIP_FORMAT
+    rationale: Auxiliary cross-ref; traceability-only unless crit ids listed
+    req: REQ-FILE_BACKUP
+    role: auxiliary

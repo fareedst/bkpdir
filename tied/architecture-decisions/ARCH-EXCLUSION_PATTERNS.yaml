@@ -1,7 +1,7 @@
 ARCH-EXCLUSION_PATTERNS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Regex patterns: Rejected due to complexity and performance
@@ -13,7 +13,7 @@ ARCH-EXCLUSION_PATTERNS:
     - 'Temporary files: `*.tmp`, `*.temp`, `*.swp`'
     - 'Version control: `.git/`, `.svn/`, `.hg/`'
   cross-references: '[REQ-CONFIGURATION], [REQ-PERFORMANCE]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-PERFORMANCE
   decision: Pattern-based file exclusion system with glob support
@@ -29,13 +29,13 @@ ARCH-EXCLUSION_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_patterns: Supports arrays of exclusion patterns
@@ -55,7 +55,9 @@ ARCH-EXCLUSION_PATTERNS:
       Provides consistent exclusion behavior across operations
       Integrates with configuration system
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -65,5 +67,7 @@ ARCH-EXCLUSION_PATTERNS:
       - REQ-CONFIGURATION
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
     tests: []

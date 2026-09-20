@@ -1,19 +1,38 @@
-# CITDP analysis record template
-#
-# Copy to tied/citdp/CITDP-{change_request_id}.yaml at the client project root,
-# replace placeholders, then lint per persist-citdp-record in docs/agent-req-implementation-checklist.yaml.
-# Policy: tied/docs/citdp-policy.md
 change_definition:
-  current_behavior: ~
-  desired_behavior: ~
+  current_behavior: '~'
+  desired_behavior: '~'
   non_goals: []
   success_criteria: []
-  unchanged_behavior: ~
+  unchanged_behavior: '~'
 completion_criteria:
-  verification_gate_notes: ~
+  activation:
+    artifact_hashes: {}
+    phase: verification
+    project_id: '~'
+    request_token: REQ-REPLACE_ME
+    run_id: '~'
+    scope: []
+    scope_hash: '~'
+  checklist_gate:
+    dispositions:
+      - completed
+      - not_applicable
+      - pending
+      - waived
+    fail_closed: true
+    phases:
+      - close_out
+      - pre_implementation
+      - verification
+  verification_gate_notes: '~'
+evidence:
+  commands: []
+  manifest_reference: '~'
+  profile_reference: '~'
+  proof_boundaries: []
 impact_analysis:
-  impl_inventory_notes: ~
-  modules_or_boundaries: ~
+  impl_inventory_notes: '~'
+  modules_or_boundaries: '~'
   tied_tokens_affected: []
   tied_tokens_new: []
 leap_feedback:
@@ -23,11 +42,46 @@ leap_feedback:
 record_identity:
   change_request_id: REQ-REPLACE_ME
   recorded_at: YYYY-MM-DD
-  title: ~
+  title: '~'
 risk_analysis:
+  abuse_cases: []
+  adversarial_inquiry:
+    assurance_profile: baseline-functional
+    close_out_inquiry_waiver: null
+    depth_change_waiver: null
+    depth_tier: minimal
+    eligibility_triggers_matched: []
+    gate_policy: advisory
+    integrated_waiver: null
+    prior_depth_tier: null
+    rationale: '~'
+    research_profile: integrated-agent
+    strict_eligibility_prerequisites: []
+  quality_evidence_matrix:
+    - applicability: applicable
+      attribute: baseline-functional
+      command_or_test: '~'
+      evidence_method: '~'
+      limitation: '~'
+      owner: '~'
+      rationale: '~'
+      result: '~'
+      risk: '~'
+      threshold: '~'
+      waiver:
+        expiry: '~'
+        owner: '~'
+        reason: '~'
+        required: 'false'
+  quality_profiles: []
+  residual_risk:
+    expiry: '~'
+    owner: '~'
+    summary: '~'
   risks: []
+  scenarios: []
 tdd_sequence:
-  summary: ~
+  summary: '~'
 test_strategy:
-  matrix_notes: ~
-  summary: ~
+  matrix_notes: '~'
+  summary: '~'

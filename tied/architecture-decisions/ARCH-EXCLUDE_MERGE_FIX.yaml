@@ -1,31 +1,35 @@
 ARCH-EXCLUDE_MERGE_FIX:
   alternatives_considered: []
   cross-references: '[REQ-CFG_005], [REQ-CONFIGURATION], [ARCH-CFG_005], [ARCH-CFG_006]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CFG_005
     - REQ-CONFIGURATION
   decision: Array fields default to "merge" strategy to satisfy CFG-005 requirement
   deduplication: Merge operations deduplicate values to prevent duplicates
   implementation_approach:
     details: []
-    integration_points: &ref_1
+    integration_points:
       - Ensures backward compatibility with existing config files
       - Implements CFG-005 merge strategy system requirement
       - Integrates with CFG-006 source tracking
       - Preserves CFG-002 merge behavior specification
     summary: Array fields default to "merge" strategy to satisfy CFG-005 requirement
-  integration_points: *ref_1
+  integration_points:
+    - Ensures backward compatibility with existing config files
+    - Implements CFG-005 merge strategy system requirement
+    - Integrates with CFG-006 source tracking
+    - Preserves CFG-002 merge behavior specification
   merge_strategy_detection: '`extractStrategy` function detects array field keys (like `exclude_patterns`) and defaults to "merge" strategy instead of "override" in all contexts (inheritance chains and sequential file processing)'
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-29"
+      date: '2026-03-29'
       reason: 'ARCH text: empty default exclude_patterns'
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   metadata_field_filtering: Metadata fields used for inheritance processing (like `inherit`) are filtered out before merge operations
@@ -36,7 +40,9 @@ ARCH-EXCLUDE_MERGE_FIX:
     problems_solved: []
     why: Implements CFG-005 requirement that array fields default to merge (accumulate) strategy in all contexts. Ensures merge semantics combine lists from defaults, parents, and children as intended; built-in exclude_patterns default is empty. Fixes implementation bug where array fields were using override instead of merge by default. Provides graceful handling of unknown config fields to prevent merge failures. Handles YAML type conversions robustly.
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
     informs: []
     see_also: []
   state_management: '`applyMergeStrategies` uses current state (`resultMap`) instead of original state (`dstMap`) for merge operations to ensure proper accumulation'
@@ -47,7 +53,9 @@ ARCH-EXCLUDE_MERGE_FIX:
       - REQ-CFG_005
       - REQ-CONFIGURATION
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
     tests: []
   unknown_field_handling: Unknown config fields (like `inherit`) are gracefully skipped instead of aborting merge operations
   yaml_type_conversion: Robust handling of `[]interface{}` types from YAML unmarshaling, converting to `[]string` as needed

@@ -1,7 +1,7 @@
 ARCH-PERF_VALIDATION:
   alternatives_considered: []
   cross-references: '[REQ-PERFORMANCE], [REQ-CODE_QUALITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CODE_QUALITY
     - REQ-PERFORMANCE
   decision: Performance-optimized validation system with caching and fast mode
@@ -20,13 +20,13 @@ ARCH-PERF_VALIDATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Validation Performance Optimization Architecture
@@ -40,7 +40,9 @@ ARCH-PERF_VALIDATION:
       Reduces resource utilization
       Enables CI/CD integration
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CODE_QUALITY
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -51,5 +53,7 @@ ARCH-PERF_VALIDATION:
       - REQ-CODE_QUALITY
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-PERFORMANCE
     tests: []

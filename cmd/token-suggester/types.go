@@ -1,4 +1,4 @@
-// [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016]
+// - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] — How: resolve canonical REQ/ARCH/IMPL references for each legacy token and flag gaps when links are missing.
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 

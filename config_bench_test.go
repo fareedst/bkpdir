@@ -1,4 +1,4 @@
-// [REQ-PERFORMANCE]
+// [REQ-CFG_006] [REQ-PERFORMANCE]
 // This file is part of bkpdir
 //
 // Package main provides performance benchmarks for configuration reflection and visibility.
@@ -14,7 +14,6 @@ import (
 	"time"
 )
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 
 // BenchmarkGetAllConfigFields benchmarks field discovery performance.
 // Target: <50ms for cache miss, <10ms for cache hit.
@@ -232,6 +231,7 @@ func BenchmarkStructHashComputation(b *testing.B) {
 
 // TestPerformanceTargets validates that performance targets are met.
 // This is a regular test that measures performance and fails if targets aren't met.
+// - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: table-driven test asserts determineMergeStrategyForField paths map to expected strategies.
 func TestPerformanceTargets(t *testing.T) {
 	cfg := DefaultConfig()
 

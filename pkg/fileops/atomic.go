@@ -1,4 +1,3 @@
-// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Package fileops provides file operations and utilities for CLI applications.
 //
 // This file contains atomic file operation patterns for safe file writing.
@@ -12,7 +11,6 @@ import (
 )
 
 // AtomicWriter provides atomic file writing capabilities
-// [IMPL-ATOMIC_OPS] AtomicWriter — temp-file lifecycle for a single atomic write target
 type AtomicWriter struct {
 	targetPath  string
 	tempPath    string
@@ -22,7 +20,6 @@ type AtomicWriter struct {
 }
 
 // AtomicOp defines the interface for atomic file operations
-// [IMPL-ATOMIC_OPS] AtomicOp — contract for atomic write/commit/rollback
 type AtomicOp interface {
 	Write(data []byte) (int, error)
 	WriteString(s string) (int, error)
@@ -31,8 +28,7 @@ type AtomicOp interface {
 	Close() error
 }
 
-// NewAtomicWriter creates a new atomic writer for the target path
-// [IMPL-ATOMIC_OPS] NewAtomicWriter — creates temp file in same dir for same-filesystem rename
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: validate target path, ensure parent directory exists, create temp file beside target for same-filesystem rename.
 func NewAtomicWriter(targetPath string) (*AtomicWriter, error) {
 	// Validate the target path
 	if err := ValidatePath(targetPath); err != nil {
@@ -62,8 +58,7 @@ func NewAtomicWriter(targetPath string) (*AtomicWriter, error) {
 	}, nil
 }
 
-// Write writes data to the temporary file
-// [IMPL-ATOMIC_OPS] AtomicWriter.Write — writes bytes to temp file, guards closed state
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: reject writes when writer is closed or temp handle missing; otherwise write bytes to temp file.
 func (aw *AtomicWriter) Write(data []byte) (int, error) {
 	if aw.isClosed {
 		return 0, fmt.Errorf("writer is closed")
@@ -75,14 +70,12 @@ func (aw *AtomicWriter) Write(data []byte) (int, error) {
 	return aw.tempFile.Write(data)
 }
 
-// WriteString writes a string to the temporary file
-// [IMPL-ATOMIC_OPS] AtomicWriter.WriteString — converts string to bytes and delegates
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: convert text to bytes and delegate to ATOMICWRITER_WRITE.
 func (aw *AtomicWriter) WriteString(s string) (int, error) {
 	return aw.Write([]byte(s))
 }
 
-// Commit atomically moves the temporary file to the target location
-// [IMPL-ATOMIC_OPS] AtomicWriter.Commit — closes temp file then renames to target
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: close temp handle then ATOMIC_RENAME temp to target; cleanup temp on failure; mark committed and closed.
 func (aw *AtomicWriter) Commit() error {
 	if aw.isCommitted {
 		return fmt.Errorf("already committed")
@@ -111,8 +104,7 @@ func (aw *AtomicWriter) Commit() error {
 	return nil
 }
 
-// Rollback removes the temporary file without committing
-// [IMPL-ATOMIC_OPS] AtomicWriter.Rollback — removes temp file, prevents committed rollback
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: forbid rollback after commit; remove temp file via CLEANUP.
 func (aw *AtomicWriter) Rollback() error {
 	if aw.isCommitted {
 		return fmt.Errorf("cannot rollback after commit")
@@ -121,8 +113,7 @@ func (aw *AtomicWriter) Rollback() error {
 	return aw.cleanup()
 }
 
-// Close closes the writer and cleans up if not committed
-// [IMPL-ATOMIC_OPS] AtomicWriter.Close — idempotent close, rolls back if not committed
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: idempotent close; roll back when not committed.
 func (aw *AtomicWriter) Close() error {
 	if aw.isClosed {
 		return nil
@@ -136,8 +127,7 @@ func (aw *AtomicWriter) Close() error {
 	return nil
 }
 
-// cleanup removes the temporary file
-// [IMPL-ATOMIC_OPS] AtomicWriter.cleanup — closes handle and removes temp from disk
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: close open handle and remove temp path from disk ignoring not-exist.
 func (aw *AtomicWriter) cleanup() error {
 	var err error
 
@@ -156,8 +146,7 @@ func (aw *AtomicWriter) cleanup() error {
 	return err
 }
 
-// AtomicCopy copies a file atomically from source to destination
-// [IMPL-ATOMIC_OPS] AtomicCopy — streams src to AtomicWriter, sets perms, commits
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: validate readable source and destination, stream to AtomicWriter, match permissions, commit.
 func AtomicCopy(src, dst string) error {
 	// Validate paths
 	if err := ValidateReadable(src); err != nil {
@@ -206,8 +195,7 @@ func AtomicCopy(src, dst string) error {
 	return nil
 }
 
-// AtomicWriteFile writes data to a file atomically
-// [IMPL-ATOMIC_OPS] AtomicWriteFile — writes byte slice atomically with given permissions
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: write byte slice through AtomicWriter, set permissions on temp, commit.
 func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
 	writer, err := NewAtomicWriter(filename)
 	if err != nil {
@@ -227,8 +215,7 @@ func AtomicWriteFile(filename string, data []byte, perm os.FileMode) error {
 	return writer.Commit()
 }
 
-// AtomicWriteString writes a string to a file atomically
-// [IMPL-ATOMIC_OPS] AtomicWriteString — converts string and delegates to AtomicWriteFile
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: delegate text payload to ATOMICWRITEFILE.
 func AtomicWriteString(filename, data string, perm os.FileMode) error {
 	return AtomicWriteFile(filename, []byte(data), perm)
 }

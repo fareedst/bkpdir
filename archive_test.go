@@ -21,10 +21,8 @@
 // Archive creation and management testing
 // [ARCH-ARCHIVE_FORMAT] [ARCH-PROCESSING_PATTERNS] Archive format and processing patterns validation
 // [ARCH-SYSTEM_COMPONENTS] Archive data model validation
-// [IMPL-ZIP_FORMAT] [IMPL-PROCESSING_PATTERNS] ZIP format and processing implementation validation
 // [IMPL-DATA_MODELS] Archive struct, ArchiveConfig struct, and adapter validation
 package main
-
 import (
 	"archive/zip"
 	"bytes"
@@ -35,8 +33,7 @@ import (
 	"testing"
 )
 
-// [IMPL-GIT_DIRTY_CONFIG] [IMPL-ZIP_FORMAT] [ARCH-GIT_INTEGRATION] [ARCH-ARCHIVE_FORMAT] [REQ-GIT_INTEGRATION]
-// TestGenerateArchiveName validates archive naming including conditional dirty suffix.
+// - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: route to incremental or full archive name builder based on config flags.
 func TestGenerateArchiveName(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -160,7 +157,7 @@ func TestGenerateArchiveName(t *testing.T) {
 	}
 }
 
-// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] TestCreateFullArchive validates full archive creation
+// - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: validate cwd, collect files, generate full archive name, and delegate atomic zip write unless dry-run.
 func TestCreateFullArchive(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -251,7 +248,6 @@ func TestCreateFullArchive(t *testing.T) {
 	})
 }
 
-// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] TestCreateIncremental validates incremental archive creation
 func TestCreateIncremental(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -357,7 +353,6 @@ func TestCreateIncremental(t *testing.T) {
 	})
 }
 
-// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] TestIncrementalArchiveDirectoryStructure validates archive directory structure
 func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 	tempDir := t.TempDir()
 
@@ -515,7 +510,6 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 	})
 }
 
-// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] TestSkipBrokenSymlinks validates broken symlink handling in zip archives
 func TestSkipBrokenSymlinks(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir, err := os.MkdirTemp("", "bkpdir_symlink_test")

@@ -71,8 +71,7 @@ var (
 	debug      bool // SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Global debug flag
 )
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// isFile detects if a path is a regular file
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return true only when mode is a regular file.
 func isFile(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -81,8 +80,7 @@ func isFile(path string) bool {
 	return info.Mode().IsRegular()
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// isDirectory detects if a path is a directory
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return true only when entry is a directory.
 func isDirectory(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -91,8 +89,7 @@ func isDirectory(path string) bool {
 	return info.IsDir()
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// validatePath validates that a path exists and is accessible
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return specific errors for not-exist, permission denied, or other access failures.
 func validatePath(path string) error {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -107,8 +104,7 @@ func validatePath(path string) error {
 	return nil
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// handleAutoDetectedCommand routes commands based on path type detection
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: require path arg, validate accessibility, route file to file backup handler else directory archive else unsupported type exit.
 func handleAutoDetectedCommand(args []string) {
 	if len(args) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: no path provided\n")
@@ -138,8 +134,7 @@ func handleAutoDetectedCommand(args []string) {
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// handleAutoDetectedFileBackup handles file backup when auto-detected
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: load config from cwd, build formatter, resolve note from global flag or second arg, invoke enhanced file backup with dry-run.
 func handleAutoDetectedFileBackup(args []string) {
 	ctx := context.Background()
 	cwd, err := os.Getwd()
@@ -178,8 +173,7 @@ func handleAutoDetectedFileBackup(args []string) {
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// handleAutoDetectedDirectoryArchive handles directory archive when auto-detected
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: chdir to target directory, load config from dot, resolve note, run full archive with context and restore cwd on exit.
 func handleAutoDetectedDirectoryArchive(args []string) {
 	ctx := context.Background()
 
@@ -231,9 +225,7 @@ BkpDir is a command-line tool for archiving directories and backing up individua
 It supports full and incremental directory backups, individual file backups, customizable exclusion patterns, 
 and Git-aware archive naming.`
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// newRootCommand returns the production Cobra tree (flags, subcommands, root Run).
-// Used by main and by composition tests so wiring cannot drift from createTestRootCmd.
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: build production root with persistent flags and subcommands; root Run dispatches config/list flags or auto-detect when positional args present.
 func newRootCommand() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "bkpdir",
@@ -301,7 +293,8 @@ func newRootCommand() *cobra.Command {
 		"Display configuration values and exit (backward compatibility)")
 	rootCmd.PersistentFlags().StringVar(&listFile, "list", "",
 		"List backups for a specific file")
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Add --limit as persistent flag (works with both list command and --list flag)
+	// SPEC-ID: IMPL-LIST_LIMIT::REGISTER_LIMIT_FLAG
+	// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — How: register --limit/-n persistent flag with default 10 so list subcommand and --list share one limit variable.
 	rootCmd.PersistentFlags().IntVarP(&listLimit, "limit", "n", 10, "Limit the number of items to display (0 = show all)")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug output (AI-first semantic token: DEBUG-OUTPUT)")
 
@@ -318,10 +311,7 @@ func newRootCommand() *cobra.Command {
 	return rootCmd
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-// executeWithAutoDetection handles Cobra command resolution issues by implementing
-// custom argument parsing that allows auto-detection to work alongside existing commands.
-// args must be argv without the program name (same slice as os.Args[1:] from main).
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: bypass Cobra when first token is not known command/flag; parse global dry-run and note from argv; else SetArgs and Execute.
 func executeWithAutoDetection(rootCmd *cobra.Command, args []string) error {
 	// If no arguments, execute normally (will show help)
 	if len(args) == 0 {
@@ -634,8 +624,7 @@ func displayConfigFlat(values []ConfigValueWithMetadata, showSources bool) {
 	}
 }
 
-// [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING]
-// displayConfigGrouped shows configuration grouped by category and ranked by importance.
+// - [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] — How: bucket values by category, sort categories by CategoryPriority, sort fields by importance then name, print sources header and section headers.
 func displayConfigGrouped(values []ConfigValueWithMetadata, showSources bool) {
 	// Group by category
 	categories := make(map[string][]ConfigValueWithMetadata)
@@ -778,6 +767,7 @@ func handleTemplateCommand(cmd *cobra.Command, args []string) {
 	fmt.Printf("[NOTE] Edit the file to customize your configuration options\n")
 }
 
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — How: load config and formatter then pass listLimit to ListArchivesEnhanced for list subcommand.
 func handleListCommand() {
 	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
@@ -785,7 +775,6 @@ func handleListCommand() {
 	// Specification: Shows each archive with path and creation time using configurable format
 	// Specification: Shows verification status if available: [VERIFIED], [FAILED], or [UNVERIFIED]
 	// Specification: Archives are sorted by creation time (most recent first)
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Limit display to newest N files (default 10)
 
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -802,7 +791,6 @@ func handleListCommand() {
 	// [CRITICAL] FMT-001: Use AI-first formatter adapter - [ACTION:core-functionality]
 	formatter := NewOutputFormatter(cfg)
 
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Pass limit to ListArchivesEnhanced
 	if err := ListArchivesEnhanced(cfg, formatter, listLimit); err != nil {
 		exitCode := HandleArchiveError(err, cfg, formatter)
 		os.Exit(exitCode)
@@ -1072,7 +1060,6 @@ If the directory is identical to the most recent archive, no new archive is crea
 func listCmd() *cobra.Command {
 	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] --limit flag inherited from persistent flags
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List archives",
@@ -1083,7 +1070,7 @@ func listCmd() *cobra.Command {
 	return cmd
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
+// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [REQ-CONTEXT_SUPPORT] [REQ-DIFF_COMMAND] — How: load config, reconstruct state, handle no-archive gracefully, CalculateDiff, PrintDiffResult with context cancellation checks.
 func diffCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "diff",
@@ -1124,7 +1111,6 @@ If no incremental archive exists, compares against the full archive only.`,
 				os.Exit(exitCode)
 			}
 
-			// [IMPL-DIFF_COMMAND] [REQ-DIFF_COMMAND] Reconstruct archive state
 			// Handle case where no archives exist
 			reconstructedState, err := ReconstructArchiveState(archiveDir)
 			if err != nil {
@@ -1146,7 +1132,6 @@ If no incremental archive exists, compares against the full archive only.`,
 			default:
 			}
 
-			// [IMPL-DIFF_COMMAND] [REQ-DIFF_COMMAND] Calculate diff
 			diff, err := CalculateDiff(cwd, reconstructedState, cfg.ExcludePatterns)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error calculating diff: %v\n", err)
@@ -1161,7 +1146,6 @@ If no incremental archive exists, compares against the full archive only.`,
 			default:
 			}
 
-			// [IMPL-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] Print diff result
 			formatter.PrintDiffResult(diff)
 		},
 	}
@@ -1206,12 +1190,10 @@ func CreateIncrementalArchiveEnhanced(opts ArchiveOptions) error {
 	return CreateIncrementalArchive(opts.Config, opts.Note, opts.DryRun)
 }
 
-// ListArchivesEnhanced displays all archives in the archive directory with enhanced formatting
-// and error handling.
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] — How: sort archives most-recent-first then truncate to limit when limit > 0 before formatted output.
 func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, limit int) error {
 	// ARCH-002: See architecture.md - Archive Validation [DECISION:maintenance]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Accept limit parameter and apply after sorting
 	cwd, err := os.Getwd()
 	if err != nil {
 		return NewArchiveErrorWithCause("Failed to get current directory", cfg.StatusDirectoryNotFound, err)
@@ -1242,7 +1224,6 @@ func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterf
 		return archives[i].CreationTime.After(archives[j].CreationTime)
 	})
 
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Apply limit after sorting (limit > 0 means limit, 0 means show all)
 	if limit > 0 && len(archives) > limit {
 		archives = archives[:limit]
 	}
@@ -1268,10 +1249,10 @@ func ListArchivesEnhanced(cfg *Config, formatter formatter.OutputFormatterInterf
 	return nil
 }
 
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — How: resolve file path from --list or args and pass listLimit to ListFileBackupsEnhanced.
 func handleListFileBackupsCommand(args []string) {
 	// FILE-002: See specification.md - File Backup Listing [DECISION:format-processing]
 	// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Support limit for file backup listing
 	var filePath string
 	if listFile != "" {
 		filePath = listFile
@@ -1296,7 +1277,6 @@ func handleListFileBackupsCommand(args []string) {
 
 	formatter := NewOutputFormatter(cfg)
 
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Pass limit to ListFileBackupsEnhanced
 	if err := ListFileBackupsEnhanced(cfg, formatter, filePath, listLimit); err != nil {
 		exitCode := HandleArchiveError(err, cfg, formatter)
 		os.Exit(exitCode)
@@ -1509,8 +1489,8 @@ func (h *CommandHandler) HandleIncrementalArchive(args []string, note string, dr
 	return CreateIncrementalArchiveWithContext(h.config.Context, h.config.Config, note, dryRun)
 }
 
-// HandleListArchives handles archive listing command
-// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Apply limit to archive listing
+// SPEC-ID: IMPL-LIST_LIMIT::COMMAND_HANDLER_LIST
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — How: apply hardcoded default limit of 10 for CommandHandler archive and file-backup listing paths.
 func (h *CommandHandler) HandleListArchives(args []string) error {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -1543,7 +1523,6 @@ func (h *CommandHandler) HandleListArchives(args []string) error {
 		return archives[i].CreationTime.After(archives[j].CreationTime)
 	})
 
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Use default limit of 10 for CommandHandler
 	limit := 10
 	if limit > 0 && len(archives) > limit {
 		archives = archives[:limit]
@@ -1592,7 +1571,6 @@ func (h *CommandHandler) HandleListFileBackups(args []string, filePath string) e
 		return fmt.Errorf("file path required for listing backups")
 	}
 
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Use default limit of 10 for CommandHandler
 	return ListFileBackupsEnhanced(h.config.Config, h.config.Formatter, targetFile, 10)
 }
 

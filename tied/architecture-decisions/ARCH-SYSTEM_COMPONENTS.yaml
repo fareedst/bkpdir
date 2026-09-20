@@ -1,7 +1,7 @@
 ARCH-SYSTEM_COMPONENTS:
   alternatives_considered: []
   cross-references: '[REQ-MAINTAINABILITY], [REQ-USABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
   decision: Layered architecture with clear component boundaries
@@ -11,13 +11,13 @@ ARCH-SYSTEM_COMPONENTS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: System Components Architecture
@@ -32,7 +32,9 @@ ARCH-SYSTEM_COMPONENTS:
       Storage layer handles all file system and archive operations
       Enables testability and maintainability
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -77,5 +79,7 @@ ARCH-SYSTEM_COMPONENTS:
       - REQ-MAINTAINABILITY
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     tests: []

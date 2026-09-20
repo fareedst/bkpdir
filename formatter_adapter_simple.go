@@ -10,11 +10,8 @@ import (
 	"strings"
 )
 
-// formatListArchiveSimple is a simplified implementation that:
-// 1. Always gathers file statistics (needed for template placeholders)
-// 2. Uses FormatListArchive if it contains template placeholders, otherwise TemplateListArchive
-// 3. Uses the simple ReplacePlaceholders function from pkg/formatter
-// 4. Returns formatted string ready for output
+// formatListArchiveSimple is a simplified implementation for list command formatting.
+// - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: simplified adapter path always gathers stats and selects format by priority.
 func formatListArchiveSimple(cfg *Config, formatterInstance *FormatterAdapter, archivePath, creationTime string) string {
 	// DEBUG: Log entry point
 	if debug {

@@ -1,4 +1,3 @@
-// [IMPL-TOKEN_SYSTEM] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016]
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 package main
 
@@ -36,6 +35,7 @@ type BatchProcessor struct {
 }
 
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
+// - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] — How: parse legacy token YAML groups and emit normalized JSON with descriptions, status, and source paths per category.
 func NewTokenAnalyzer() *TokenAnalyzer {
 	config := DefaultAnalysisConfig()
 	analyzer := &TokenAnalyzer{

@@ -1,0 +1,83 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "lead-hygiene-20260919",
+  "commit": "98f09d9e4a3d8da62794c9f29e6cebd083d3b189",
+  "environment": {
+    "date": "2026-09-19",
+    "os": "darwin"
+  },
+  "command_results": [
+    {
+      "id": "audit-package-leads",
+      "command": "python3 scripts/audit_package_level_leads.py --fail-on-suspect",
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": [
+        "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/verification-regression-20260919.log"
+      ]
+    },
+    {
+      "id": "go-test-all",
+      "command": "go test ./... -count=1",
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "run-spec-verification",
+      "command": "SKIP_TIED_MCP=1 scripts/run-spec-verification.sh",
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "specctl-check-leads",
+      "command": "go run ./cmd/specctl check-leads tied/implementation-decisions/*-pseudocode.md",
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "test-lead-hygiene",
+      "command": "python3 scripts/test_lead_hygiene.py -q",
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "layer-b-leads",
+      "attribute": "specctl_check_leads",
+      "applicability": "applicable",
+      "rationale": "Production lead placement TRACE-002",
+      "evidence_method": "go_run",
+      "command_or_test": "cmd/specctl check-leads",
+      "result": "passed"
+    },
+    {
+      "id": "lead-hygiene-audit",
+      "attribute": "package_level_lead_audit",
+      "applicability": "applicable",
+      "rationale": "Bulk package-level lead defect repair",
+      "evidence_method": "automated_script",
+      "command_or_test": "scripts/audit_package_level_leads.py --fail-on-suspect",
+      "result": "passed"
+    }
+  ],
+  "covered_tokens": [
+    "IMPL-SPEC_CTL",
+    "REQ-DOC_016",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION"
+  ],
+  "proof_boundaries": [
+    "lead_hygiene_only_not_corpus_bookkeeping"
+  ],
+  "human_decisions": {
+    "stored_separately": true,
+    "references": [
+      "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/CITDP-LEAD-HYGIENE.yaml"
+    ]
+  }
+}

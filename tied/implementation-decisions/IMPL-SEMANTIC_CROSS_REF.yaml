@@ -6,54 +6,6 @@ IMPL-SEMANTIC_CROSS_REF:
   cross_references:
     - ARCH-DOCUMENTATION_ARCHITECTURE
     - REQ-DOC_001
-  essence_pseudocode: |-
-    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-    # Bi-directional semantic linking across all documentation layers using [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-    # feature reference blocks, automated link validation, and consistency checks. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-
-    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: DATA cross_reference_link:
-    DATA cross_reference_link:
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Each link connects a source token to a target token with directionality. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      source_token: string
-      target_token: string
-      direction: enum(forward, backward, sibling)
-      link_type: enum(implements, traces_to, depends_on, see_also)
-
-    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE build_feature_reference_blocks():
-    PROCEDURE build_feature_reference_blocks():
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Feature reference blocks aggregate all links for a given feature, [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # providing LLM-friendly navigation across REQ, ARCH, IMPL layers. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      FOR each feature_token in semantic_token_registry:
-        collect forward_links (this token → dependent tokens)
-        collect backward_links (upstream tokens → this token)
-        collect sibling_links (peer tokens at same layer)
-        emit reference_block with all three link sets
-      END FOR
-
-    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE validate_link_integrity():
-    PROCEDURE validate_link_integrity():
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Automated validation ensures no broken or orphaned references. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      FOR each link in all_cross_reference_links:
-        CHECK source_token exists in semantic_token_registry
-        CHECK target_token exists in semantic_token_registry
-        CHECK reciprocal link exists (bi-directional invariant)
-      END FOR
-      REPORT broken links with source file and line context
-
-    # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE enforce_cross_reference_consistency():
-    PROCEDURE enforce_cross_reference_consistency():
-      # [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Consistency checking ensures cross_references in YAML indexes match [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # the actual token usage in code, tests, and documentation. [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      FOR each decision_file in [requirements, architecture, implementation]:
-        extract declared cross_references from YAML
-        extract actual token mentions from linked code and test files
-        CHECK declared == actual
-        REPORT mismatches for resolution
-      END FOR
   implementation_approach:
     details: []
     summary: |-
@@ -64,13 +16,13 @@ IMPL-SEMANTIC_CROSS_REF:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Semantic Cross-Referencing Strategy

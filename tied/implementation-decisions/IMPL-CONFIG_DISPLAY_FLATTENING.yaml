@@ -14,82 +14,21 @@ IMPL-CONFIG_DISPLAY_FLATTENING:
     - IMPL-CFG_006
     - REQ-CFG_006
   description: Configuration keys are displayed as top-level keys in bkpdir config output, even when they are nested in the internal struct. The reflection-based configuration discovery system uses YAML tag names for display.
-  essence_pseudocode: |-
-    # [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-    # — Reflection-based field discovery uses YAML tag names so nested struct fields display as flat top-level config keys [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-
-    # [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006] — Core reflection discovery with cache
-    PROCEDURE GetAllConfigFields(cfg *Config) -> []configFieldInfo:
-      IF cachedFields = globalFieldCache.getCachedFields() is not nil:
-        RETURN updateFieldValues(cachedFields, cfg)
-      configType = reflect.TypeOf(*cfg)
-      configValue = reflect.ValueOf(*cfg)
-      fields = reflectConfigFields(configType, configValue, prefix="", category="")
-      SORT fields BY Name
-      # Cache field metadata (without values) for performance [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-      globalFieldCache.setCachedFields(fields with nil Values)
-      RETURN fields
-
-    # [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006] — Recursive field discovery; YAML tag names produce flat display
-    PROCEDURE reflectConfigFields(structType, structValue, prefix, category) -> []configFieldInfo:
-      FOR EACH exported field IN structType:
-        fieldPath = prefix + "." + field.Name (or just field.Name if no prefix)
-        yamlName = field.Tag.Get("yaml") split on "," take first part
-        IF yamlName is empty THEN yamlName = lowercase(field.Name)
-        fieldCategory = determineFieldCategory(field.Name, category)
-        isStruct = field is struct or pointer-to-struct
-
-        IF isStruct AND field is not yaml.Node:
-          # Recursively process nested struct — fields appear with their own YAML tag names (flattened) [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-          IF pointer AND not nil: nestedType = Elem(), nestedValue = Elem()
-          ELSE IF pointer AND nil: nestedType = Elem(), nestedValue = zero
-          ELSE: nestedType = fieldType, nestedValue = fieldValue
-          nestedFields = reflectConfigFields(nestedType, nestedValue, fieldPath, fieldCategory)
-          APPEND nestedFields TO fields
-        ELSE:
-          # Leaf field: use YAMLName for display (enables flat view of nested struct fields) [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-          fieldInfo = configFieldInfo{
-            Name: field.Name, YAMLName: yamlName,
-            Type: actualType, Kind: actualKind, Value: actualValue,
-            IsPointer, IsSlice, IsStruct, Category: fieldCategory, Path: fieldPath
-          }
-          APPEND fieldInfo TO fields
-      RETURN fields
-
-    # [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006] — Backward compatibility for Git settings
-    PROCEDURE mergeGitSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, ...):
-      # Initialize dst.Git if nil [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-      IF dst.Git is nil THEN dst.Git = DefaultGitConfig()
-      # Handle legacy top-level fields (include_git_info, show_git_dirty_status) first [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-      # Legacy fields take precedence over nested Git struct for backward compatibility [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-      IF inheritContext:
-        FOR EACH legacy field (include_git_info, show_git_dirty_status):
-          IF NOT explicitlySetByEarlier AND explicitlySetInSrc:
-            SET dst.Git.<field> = src.<legacyField>
-            KEEP legacy field in sync
-      ELSE:
-        # Sequential files: respect earlier-file precedence [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-        FOR EACH legacy field:
-          IF NOT explicitlySetByEarlier AND explicitlySetInSrc AND src != default:
-            SET dst.Git.<field> = src.<legacyField>
-            KEEP legacy field in sync
-      # Merge remaining Git struct fields (IncludeInfo/ShowDirtyStatus skipped; handled above) [IMPL-CONFIG_DISPLAY_FLATTENING] [ARCH-CFG_006] [REQ-CFG_006]
-      IF src.Git is not nil THEN mergeGitConfigStruct(dst.Git, src.Git, defaultGit)
   implementation_approach:
     details:
-      - 'YAML files support both top-level keys (include_git_info, include_branch) and nested format (git: { include_info: true })'
       - bkpdir config command uses field.YAMLName for display resulting in top-level keys
       - Configuration merging (mergeGitSettings) maintains backward compatibility with both formats
       - Internal struct has Git *GitConfig with nested fields
       - Reflection system (reflectConfigFields) recursively processes nested structs using YAML tag names
+      - 'YAML files support both top-level keys (include_git_info, include_branch) and nested format (git: { include_info: true })'
     summary: Reflection-based discovery using YAML tag names for flat display of potentially nested config fields
   metadata:
     author: AI Agent
-    created: "2026-03-12"
+    created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Configuration Display Flattening
   rationale:
     benefits:

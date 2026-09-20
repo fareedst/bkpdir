@@ -1,13 +1,13 @@
 ARCH-FILE_STATISTICS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         No statistics: Rejected due to limited output information
         External library: Rejected due to dependency concerns
   cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-OUTPUT_FORMATTING
     - REQ-USABILITY
   decision: File statistics gathering for enhanced output formatting
@@ -29,13 +29,13 @@ ARCH-FILE_STATISTICS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Statistics Architecture
@@ -48,7 +48,9 @@ ARCH-FILE_STATISTICS:
       Supports file type detection
       Enhances user experience with detailed file information
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   statistics_collected:
@@ -64,5 +66,7 @@ ARCH-FILE_STATISTICS:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []

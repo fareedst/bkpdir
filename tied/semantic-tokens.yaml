@@ -1,25 +1,3 @@
-# Semantic Tokens Index (YAML Database)
-#
-# This YAML file serves as the central registry for all semantic tokens in the project.
-# Each top-level key is a semantic token (e.g., REQ-TIED_SETUP, ARCH-TIED_STRUCTURE, IMPL-MODULE_VALIDATION).
-#
-# To append a new token:
-# 1. Copy the template block at the bottom of this file (TOKEN-IDENTIFIER)
-# 2. Paste it at the end with a blank line before it
-# 3. Replace TOKEN-IDENTIFIER with your new token
-# 4. Fill in all fields
-# 5. Update the detail_file path if a detail file exists
-#
-# Field descriptions:
-#   type: REQ | ARCH | IMPL | TEST | PROC
-#   name: Short descriptive name of the token
-#   category: Sub-category (e.g., "Core Functional", "Non-Functional" for REQ; free-form for others; optional)
-#   status: Active | Deprecated | Template | Planned
-#   description: One-line description of what this token represents
-#   cross_references: List of related tokens (traceability chain)
-#   source_index: Path to the YAML index that holds the full record (e.g., requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, processes.md)
-#   detail_file: Path to the detailed .yaml file (if one exists)
-#   metadata: Structured metadata with registered and last_updated dates
 ARCH-AI_DOCUMENTATION:
   category: Architecture
   cross_references:
@@ -27,8 +5,8 @@ ARCH-AI_DOCUMENTATION:
   description: AI-optimized documentation with semantic tokens and validation framework
   detail_file: architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: AI-First Documentation Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -40,8 +18,8 @@ ARCH-ARCHIVE_FORMAT:
   description: ZIP format for all archive operations
   detail_file: architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Archive Format
   source_index: architecture-decisions.yaml
   status: Active
@@ -53,8 +31,8 @@ ARCH-AUTO_DETECTION:
   description: Automatic command detection based on path type (CLI-015)
   detail_file: architecture-decisions/ARCH-AUTO_DETECTION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Auto-Detection Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -66,8 +44,8 @@ ARCH-BUILD_DISTRIBUTION:
   description: Single binary distribution with cross-platform compilation
   detail_file: architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Build and Distribution
   source_index: architecture-decisions.yaml
   status: Active
@@ -81,8 +59,8 @@ ARCH-CFG_001:
   description: Architecture decision for base configuration system design including YAML loading and merge strategies
   detail_file: architecture-decisions/ARCH-CFG_001.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Basic Configuration Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -95,8 +73,8 @@ ARCH-CFG_005:
   description: Configuration files support explicit inheritance with merge strategies
   detail_file: architecture-decisions/ARCH-CFG_005.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Layered Configuration Inheritance
   source_index: architecture-decisions.yaml
   status: Active
@@ -109,8 +87,8 @@ ARCH-CFG_006:
   description: Reflection-based automatic field discovery with hierarchical source attribution
   detail_file: architecture-decisions/ARCH-CFG_006.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Configuration Reflection Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -123,8 +101,8 @@ ARCH-CICD_PIPELINE:
   description: AI-optimized CI/CD pipeline with automated quality gates
   detail_file: architecture-decisions/ARCH-CICD_PIPELINE.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: CI/CD Pipeline Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -137,8 +115,8 @@ ARCH-CLI_COMMANDS:
   description: Intuitive command structure with backward compatibility
   detail_file: architecture-decisions/ARCH-CLI_COMMANDS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: CLI Commands Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -151,8 +129,8 @@ ARCH-CLI_FRAMEWORK:
   description: Extracted CLI framework with builder patterns and Cobra integration
   detail_file: architecture-decisions/ARCH-CLI_FRAMEWORK.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: CLI Framework Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -164,8 +142,8 @@ ARCH-CODE_ORGANIZATION:
   description: Clear responsibilities with interfaces for testability
   detail_file: architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Code Organization Principles
   source_index: architecture-decisions.yaml
   status: Active
@@ -178,8 +156,8 @@ ARCH-CONFIG_OUTPUT_GROUPING:
   description: Group configuration output by category and rank by importance
   detail_file: architecture-decisions/ARCH-CONFIG_OUTPUT_GROUPING.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Configuration Output Grouping
   source_index: architecture-decisions.yaml
   status: Active
@@ -192,8 +170,8 @@ ARCH-CONFIG_SYSTEM:
   description: YAML configuration files with environment variable support
   detail_file: architecture-decisions/ARCH-CONFIG_SYSTEM.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Configuration System
   source_index: architecture-decisions.yaml
   status: Active
@@ -206,8 +184,8 @@ ARCH-CONTEXT_SUPPORT:
   description: Support context cancellation for long-running operations
   detail_file: architecture-decisions/ARCH-CONTEXT_SUPPORT.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Context-Aware Operations
   source_index: architecture-decisions.yaml
   status: Active
@@ -222,8 +200,8 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
   description: Enable user customization of all output format strings through configuration files with validation
   detail_file: architecture-decisions/ARCH-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: User-Customizable Format Strings
   source_index: architecture-decisions.yaml
   status: Active
@@ -236,8 +214,8 @@ ARCH-DEPLOYMENT:
   description: Single binary distribution with embedded configuration
   detail_file: architecture-decisions/ARCH-DEPLOYMENT.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Deployment Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -252,8 +230,8 @@ ARCH-DIFF_COMMAND:
   description: Implement diff command that reconstructs archive union state before comparison
   detail_file: architecture-decisions/ARCH-DIFF_COMMAND.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Diff Command Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -265,8 +243,8 @@ ARCH-DIRECTORY_COMPARISON:
   description: Snapshot-based directory comparison system
   detail_file: architecture-decisions/ARCH-DIRECTORY_COMPARISON.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Directory Comparison Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -282,8 +260,8 @@ ARCH-DOCUMENTATION_ARCHITECTURE:
   description: Architecture decision for documentation system including semantic cross-referencing and traceability
   detail_file: architecture-decisions/ARCH-DOCUMENTATION_ARCHITECTURE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Documentation System Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -296,8 +274,8 @@ ARCH-ERROR_HANDLING:
   description: Structured error types with status codes and operation context
   detail_file: architecture-decisions/ARCH-ERROR_HANDLING.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Error Handling Strategy
   source_index: architecture-decisions.yaml
   status: Active
@@ -310,8 +288,8 @@ ARCH-EXCLUDE_MERGE_FIX:
   description: Array fields default to "merge" strategy to satisfy CFG-005 requirement
   detail_file: architecture-decisions/ARCH-EXCLUDE_MERGE_FIX.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Array Field Default Merge Strategy Implementation
   source_index: architecture-decisions.yaml
   status: Active
@@ -324,8 +302,8 @@ ARCH-EXCLUSION_PATTERNS:
   description: Pattern-based file exclusion system with glob support
   detail_file: architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Exclusion Patterns Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -337,8 +315,8 @@ ARCH-EXTENSIBILITY:
   description: Plugin-based extensibility with hook system
   detail_file: architecture-decisions/ARCH-EXTENSIBILITY.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Extensibility Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -352,8 +330,8 @@ ARCH-EXTRACT_008_INTERDEP:
   description: Package Interdependency Mapping for EXTRACT-008
   detail_file: architecture-decisions/ARCH-EXTRACT_008_INTERDEP.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Package Interdependency Mapping for EXTRACT-008
   source_index: architecture-decisions.yaml
   status: Active
@@ -365,8 +343,8 @@ ARCH-FEEDBACK_STORAGE:
   description: Feedback stored in single file tied/feedback.yaml; MCP tools read/write via base path resolution
   detail_file: architecture-decisions/ARCH-FEEDBACK_STORAGE.yaml
   metadata:
-    last_updated: 2026-03-03
-    registered: 2026-03-03
+    last_updated: {}
+    registered: {}
   name: Feedback Storage for TIED Reporting
   source_index: architecture-decisions.yaml
   status: Active
@@ -379,8 +357,8 @@ ARCH-FILE_OPERATIONS:
   description: Extracted file operations package with atomic operations and security focus
   detail_file: architecture-decisions/ARCH-FILE_OPERATIONS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: File Operations Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -393,8 +371,8 @@ ARCH-FILE_STATISTICS:
   description: File statistics gathering for enhanced output formatting
   detail_file: architecture-decisions/ARCH-FILE_STATISTICS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: File Statistics Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -406,8 +384,8 @@ ARCH-GIT_INTEGRATION:
   description: Git command-line interface for repository information
   detail_file: architecture-decisions/ARCH-GIT_INTEGRATION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Git Integration
   source_index: architecture-decisions.yaml
   status: Active
@@ -425,8 +403,8 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   description: Use diff command analysis to prevent duplicate incremental archives
   detail_file: architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Incremental Archive Duplicate Prevention Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -439,8 +417,8 @@ ARCH-LANGUAGE_SELECTION:
   description: Go (Golang)
   detail_file: architecture-decisions/ARCH-LANGUAGE_SELECTION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Language and Runtime
   source_index: architecture-decisions.yaml
   status: Active
@@ -453,8 +431,8 @@ ARCH-LIST_LIMIT:
   description: Command-line flag to limit list output with default of 10 entries
   detail_file: architecture-decisions/ARCH-LIST_LIMIT.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: List Command Limit Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -466,8 +444,8 @@ ARCH-MODULE_VALIDATION:
   description: Module validation strategy decision
   detail_file: architecture-decisions/ARCH-MODULE_VALIDATION.yaml
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-12-18
+    last_updated: {}
+    registered: {}
   name: Module Validation Strategy
   source_index: architecture-decisions.yaml
   status: Active
@@ -480,8 +458,8 @@ ARCH-OUTPUT_FORMATTING:
   description: Dual-mode formatting (printf-style and template-based)
   detail_file: architecture-decisions/ARCH-OUTPUT_FORMATTING.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Output Formatting
   source_index: architecture-decisions.yaml
   status: Active
@@ -494,8 +472,8 @@ ARCH-PACKAGE_EXTRACTION:
   description: Layered extraction approach with zero-breaking-change principle
   detail_file: architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Package Extraction Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -508,8 +486,8 @@ ARCH-PERF_VALIDATION:
   description: Performance-optimized validation system with caching and fast mode
   detail_file: architecture-decisions/ARCH-PERF_VALIDATION.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Validation Performance Optimization Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -522,8 +500,8 @@ ARCH-PERFORMANCE:
   description: Optimized performance with streaming, caching, and concurrent processing
   detail_file: architecture-decisions/ARCH-PERFORMANCE.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Performance Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -536,8 +514,8 @@ ARCH-PROCESSING_PATTERNS:
   description: Extracted data processing patterns with pipeline and concurrent processing support
   detail_file: architecture-decisions/ARCH-PROCESSING_PATTERNS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Processing Patterns Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -549,8 +527,8 @@ ARCH-PROJECT_STRUCTURE:
   description: Flat structure with internal packages
   detail_file: architecture-decisions/ARCH-PROJECT_STRUCTURE.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Project Structure
   source_index: architecture-decisions.yaml
   status: Active
@@ -563,8 +541,8 @@ ARCH-RESOURCE_MANAGEMENT:
   description: ResourceManager for automatic cleanup with panic recovery
   detail_file: architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Resource Management
   source_index: architecture-decisions.yaml
   status: Active
@@ -577,9 +555,22 @@ ARCH-SECURITY:
   description: Comprehensive security measures for file system and archive operations
   detail_file: architecture-decisions/ARCH-SECURITY.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Security Architecture
+  source_index: architecture-decisions.yaml
+  status: Active
+  type: ARCH
+ARCH-SPEC_DSL_AND_ORACLE:
+  cross_references:
+    - IMPL-SPEC_CTL
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  description: DSL parser and reference oracle architecture for formal pseudocode
+  detail_file: architecture-decisions/ARCH-SPEC_DSL_AND_ORACLE.yaml
+  metadata:
+    last_updated: {}
+    registered: {}
+  name: Spec DSL Parser and Reference Oracle
   source_index: architecture-decisions.yaml
   status: Active
   type: ARCH
@@ -591,8 +582,8 @@ ARCH-STDD_VIS_FLOW:
   description: STDD Visualization Flow Architecture
   detail_file: architecture-decisions/ARCH-STDD_VIS_FLOW.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: STDD Visualization Flow Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -605,8 +596,8 @@ ARCH-SYSTEM_COMPONENTS:
   description: Layered architecture with clear component boundaries
   detail_file: architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: System Components Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -621,8 +612,8 @@ ARCH-TEST_EXCLUDE_MERGE:
   description: Test-driven validation of exclude patterns merging and source tracking
   detail_file: architecture-decisions/ARCH-TEST_EXCLUDE_MERGE.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Configuration Testing Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -635,8 +626,8 @@ ARCH-TESTING_STRATEGY:
   description: Comprehensive testing with unit, integration, and infrastructure tests
   detail_file: architecture-decisions/ARCH-TESTING_STRATEGY.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Testing Strategy
   source_index: architecture-decisions.yaml
   status: Active
@@ -648,8 +639,8 @@ ARCH-TIED_STRUCTURE:
   description: TIED project structure decision
   detail_file: architecture-decisions/ARCH-TIED_STRUCTURE.yaml
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-12-18
+    last_updated: {}
+    registered: {}
   name: TIED Project Structure
   source_index: architecture-decisions.yaml
   status: Active
@@ -664,8 +655,8 @@ ARCH-TOKEN_SYSTEM:
   description: Comprehensive semantic token system for feature traceability across all layers
   detail_file: architecture-decisions/ARCH-TOKEN_SYSTEM.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-28"
+    last_updated: '2026-03-28'
+    registered: '2026-03-28'
   name: Token System Architecture
   source_index: architecture-decisions.yaml
   status: Active
@@ -678,8 +669,8 @@ IMPL-ATOMIC_OPS:
   description: Atomic File Operations
   detail_file: implementation-decisions/IMPL-ATOMIC_OPS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Atomic File Operations
   source_index: implementation-decisions.yaml
   status: Active
@@ -691,8 +682,8 @@ IMPL-AUTO_DETECTION:
   description: Auto-Detection Implementation
   detail_file: implementation-decisions/IMPL-AUTO_DETECTION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Auto-Detection Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -704,8 +695,8 @@ IMPL-BACKWARD_COMPAT:
   description: Extract components without breaking existing backup application using Go modules and interfaces to isolate extracted code
   detail_file: implementation-decisions/IMPL-BACKWARD_COMPAT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Maintain Backward Compatibility
   source_index: implementation-decisions.yaml
   status: Active
@@ -718,8 +709,8 @@ IMPL-CFG_006:
   description: Configuration Reflection Implementation
   detail_file: implementation-decisions/IMPL-CFG_006.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Reflection Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -737,8 +728,8 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
   description: Configuration Hierarchy Preservation Fix
   detail_file: implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Hierarchy Preservation Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -751,8 +742,8 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
   description: Inheritance Path Resolution Fix
   detail_file: implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Inheritance Path Resolution Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -766,8 +757,8 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
   description: Field-Level Merge Behavior Registry
   detail_file: implementation-decisions/IMPL-CFG_MERGE_BEHAVIOR_REGISTRY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Field-Level Merge Behavior Registry
   source_index: implementation-decisions.yaml
   status: Active
@@ -781,8 +772,8 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
   description: Merge and Prepend Strategy Precedence Fix
   detail_file: implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Merge and Prepend Strategy Precedence Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -796,8 +787,8 @@ IMPL-CFG_MIXED_MODE_MERGE_FIX:
   description: Mixed-Mode Merge Strategy Fix
   detail_file: implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Mixed-Mode Merge Strategy Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -811,8 +802,8 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
   description: Mixed Sequential and Inheritance File Processing
   detail_file: implementation-decisions/IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Mixed Sequential and Inheritance File Processing
   source_index: implementation-decisions.yaml
   status: Active
@@ -824,8 +815,8 @@ IMPL-CFG_PRECEDENCE_FIX:
   description: Configuration File Precedence Fix
   detail_file: implementation-decisions/IMPL-CFG_PRECEDENCE_FIX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration File Precedence Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -838,8 +829,8 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
   description: Quoted YAML Key Prefix Support
   detail_file: implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Quoted YAML Key Prefix Support
   source_index: implementation-decisions.yaml
   status: Active
@@ -851,8 +842,8 @@ IMPL-CLI_FRAMEWORK:
   description: CLI Framework Implementation
   detail_file: implementation-decisions/IMPL-CLI_FRAMEWORK.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: CLI Framework Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -862,8 +853,8 @@ IMPL-CODE_STYLE:
   description: Code Style and Conventions
   detail_file: implementation-decisions/IMPL-CODE_STYLE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Code Style and Conventions
   source_index: implementation-decisions.yaml
   status: Active
@@ -875,8 +866,8 @@ IMPL-CONFIG_DISPLAY_FLATTENING:
   description: Configuration keys displayed as top-level keys in bkpdir config output even when nested in internal struct, using reflection-based YAML tag discovery
   detail_file: implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Display Flattening
   source_index: implementation-decisions.yaml
   status: Active
@@ -888,8 +879,8 @@ IMPL-CONFIG_OUTPUT_GROUPING:
   description: Configuration Output Grouping Implementation
   detail_file: implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Output Grouping Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -901,8 +892,8 @@ IMPL-CONFIG_SCHEMA_FLEX:
   description: Extract configuration loading/merging logic with pluggable schema validation using ConfigLoader interface for different struct types
   detail_file: implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Schema Flexibility
   source_index: implementation-decisions.yaml
   status: Active
@@ -916,8 +907,8 @@ IMPL-CONFIG_STRUCT:
   description: Configuration Structure
   detail_file: implementation-decisions/IMPL-CONFIG_STRUCT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Structure
   source_index: implementation-decisions.yaml
   status: Active
@@ -929,8 +920,8 @@ IMPL-CONFIGURABLE_STRINGS:
   description: Comprehensive string externalization system allowing all user-facing strings to be loaded from configuration files with enhanced template formatting using named elements
   detail_file: implementation-decisions/IMPL-CONFIGURABLE_STRINGS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Eliminate Hardcoded Strings and Enhance Template Formatting
   source_index: implementation-decisions.yaml
   status: Active
@@ -942,8 +933,8 @@ IMPL-CONTEXT_OPS:
   description: Context-Aware Operations
   detail_file: implementation-decisions/IMPL-CONTEXT_OPS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Context-Aware Operations
   source_index: implementation-decisions.yaml
   status: Active
@@ -957,8 +948,8 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
   description: User-Customizable Format Strings Implementation
   detail_file: implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: User-Customizable Format Strings Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -971,8 +962,8 @@ IMPL-DATA_MODELS:
   description: Comprehensive data structures for archive and backup operations providing structured data representation, type safety, serialization support, and testing facilitation
   detail_file: implementation-decisions/IMPL-DATA_MODELS.yaml
   metadata:
-    last_updated: "2026-03-28"
-    registered: "2026-03-12"
+    last_updated: '2026-03-28'
+    registered: '2026-03-12'
   name: Data Models
   source_index: implementation-decisions.yaml
   status: Active
@@ -984,8 +975,8 @@ IMPL-DELAYED_OUTPUT:
   description: Delayed output functionality returning output messages to calling functions instead of direct stdout/stderr printing for better control over output display
   detail_file: implementation-decisions/IMPL-DELAYED_OUTPUT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Delayed Output Management
   source_index: implementation-decisions.yaml
   status: Active
@@ -997,8 +988,8 @@ IMPL-DEPENDENCY_MGMT:
   description: Clear dependency hierarchy using Go modules for versioning with core packages having no internal dependencies and higher-level packages composing core packages
   detail_file: implementation-decisions/IMPL-DEPENDENCY_MGMT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Dependency Management
   source_index: implementation-decisions.yaml
   status: Active
@@ -1010,8 +1001,8 @@ IMPL-DIFF_COMMAND:
   description: Diff command with archive state reconstruction, directory comparison engine, change reporting, and CLI integration with context cancellation support
   detail_file: implementation-decisions/IMPL-DIFF_COMMAND.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Diff Command Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1022,8 +1013,8 @@ IMPL-DIRECTORY_COMPARISON:
   description: Directory Comparison Implementation
   detail_file: implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Directory Comparison Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1035,8 +1026,8 @@ IMPL-DOC_ENHANCEMENT:
   description: Documentation Enhancement Framework
   detail_file: implementation-decisions/IMPL-DOC_ENHANCEMENT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Documentation Enhancement Framework
   source_index: implementation-decisions.yaml
   status: Active
@@ -1048,8 +1039,8 @@ IMPL-DUAL_FORMATTING:
   description: Dual Printf/Template Formatting
   detail_file: implementation-decisions/IMPL-DUAL_FORMATTING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Dual Printf/Template Formatting
   source_index: implementation-decisions.yaml
   status: Active
@@ -1063,8 +1054,8 @@ IMPL-EXCLUDE_MERGE_FIX:
   description: Array Field Default Merge Strategy Implementation
   detail_file: implementation-decisions/IMPL-EXCLUDE_MERGE_FIX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Array Field Default Merge Strategy Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1076,8 +1067,8 @@ IMPL-EXCLUSION_PATTERNS:
   description: Exclusion Patterns Implementation
   detail_file: implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Exclusion Patterns Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1089,8 +1080,8 @@ IMPL-EXTRACT_008_DOC_MIGRATION:
   description: Preserve working-plan content by migrating it into STDD/TIED core documents and decommissioning the working-plan artifact
   detail_file: implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: EXTRACT-008 Documentation Migration and Preservation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1105,8 +1096,8 @@ IMPL-EXTRACTION_CHALLENGES:
   description: Extraction Challenges and Solutions
   detail_file: implementation-decisions/IMPL-EXTRACTION_CHALLENGES.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Extraction Challenges and Solutions
   source_index: implementation-decisions.yaml
   status: Active
@@ -1118,8 +1109,8 @@ IMPL-EXTRACTION_PRINCIPLES:
   description: Extraction Principles and Design Decisions
   detail_file: implementation-decisions/IMPL-EXTRACTION_PRINCIPLES.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Extraction Principles and Design Decisions
   source_index: implementation-decisions.yaml
   status: Active
@@ -1131,8 +1122,8 @@ IMPL-FILE_OPERATIONS:
   description: File Operations Implementation
   detail_file: implementation-decisions/IMPL-FILE_OPERATIONS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Operations Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1145,8 +1136,8 @@ IMPL-FILE_STATISTICS:
   description: File Statistics Implementation
   detail_file: implementation-decisions/IMPL-FILE_STATISTICS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Statistics Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1159,8 +1150,8 @@ IMPL-FILE_STATISTICS_TEMPLATE_FIX:
   description: File Statistics Template Processing Fix
   detail_file: implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Statistics Template Processing Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -1172,8 +1163,8 @@ IMPL-GIT_CLI:
   description: Git Command-line Integration
   detail_file: implementation-decisions/IMPL-GIT_CLI.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Git Command-line Integration
   source_index: implementation-decisions.yaml
   status: Active
@@ -1185,8 +1176,8 @@ IMPL-GIT_DIRTY_CONFIG:
   description: Make Git dirty status indicator (-dirty suffix) configurable through the configuration system with show_git_dirty_status boolean option
   detail_file: implementation-decisions/IMPL-GIT_DIRTY_CONFIG.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configurable Git Dirty Status
   source_index: implementation-decisions.yaml
   status: Active
@@ -1198,8 +1189,8 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
   description: Reuse diff command analysis to prevent duplicate incremental archives by comparing current state against reconstructed archive state
   detail_file: implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Incremental Archive Duplicate Prevention
   source_index: implementation-decisions.yaml
   status: Active
@@ -1211,8 +1202,8 @@ IMPL-INTERFACE_DRIVEN:
   description: Create clear interfaces for all extracted components to enable flexibility, testing, and future evolution
   detail_file: implementation-decisions/IMPL-INTERFACE_DRIVEN.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Interface-Driven Design
   source_index: implementation-decisions.yaml
   status: Active
@@ -1224,8 +1215,8 @@ IMPL-INTERFACE_FIRST:
   description: Interface-First Extraction Approach
   detail_file: implementation-decisions/IMPL-INTERFACE_FIRST.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Interface-First Extraction Approach
   source_index: implementation-decisions.yaml
   status: Active
@@ -1237,8 +1228,8 @@ IMPL-LARGE_FILE_CHALLENGE:
   description: Challenge and solution for decomposing formatter.go (1675 lines) into multiple focused packages while maintaining interface compatibility
   detail_file: implementation-decisions/IMPL-LARGE_FILE_CHALLENGE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Large File Decomposition Challenge
   source_index: implementation-decisions.yaml
   status: Active
@@ -1257,8 +1248,8 @@ IMPL-LARGE_FILE_DECOMP:
   description: Test all 0% coverage functions in formatter.go to improve code coverage and ensure reliability of OutputCollector, template methods, and error formatting functionality.
   detail_file: implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Large File Decomposition Strategy
   source_index: implementation-decisions.yaml
   status: Active
@@ -1270,8 +1261,8 @@ IMPL-LAYERED_EXTRACTION:
   description: Extract in dependency order - core utilities first, then higher-level components to prevent circular dependencies
   detail_file: implementation-decisions/IMPL-LAYERED_EXTRACTION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Layered Extraction Approach
   source_index: implementation-decisions.yaml
   status: Active
@@ -1283,8 +1274,8 @@ IMPL-LIST_FORMAT_SAFETY:
   description: List Command Format Safety Fix
   detail_file: implementation-decisions/IMPL-LIST_FORMAT_SAFETY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: List Command Format Safety Fix
   source_index: implementation-decisions.yaml
   status: Active
@@ -1307,8 +1298,8 @@ IMPL-LIST_LIMIT:
   description: List Command Limit Implementation
   detail_file: implementation-decisions/IMPL-LIST_LIMIT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: List Command Limit Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1320,8 +1311,8 @@ IMPL-MCP_FEEDBACK_TOOLS:
   description: Two MCP tools (tied_feedback_add, tied_feedback_export) and feedback module for load/append/export
   detail_file: implementation-decisions/IMPL-MCP_FEEDBACK_TOOLS.yaml
   metadata:
-    last_updated: 2026-03-03
-    registered: 2026-03-03
+    last_updated: {}
+    registered: {}
   name: MCP Feedback Tools
   source_index: implementation-decisions.yaml
   status: Active
@@ -1333,8 +1324,8 @@ IMPL-MODULE_VALIDATION:
   description: Module validation implementation
   detail_file: implementation-decisions/IMPL-MODULE_VALIDATION.yaml
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-12-18
+    last_updated: {}
+    registered: {}
   name: Module Validation Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1346,8 +1337,8 @@ IMPL-PACKAGE_EXTRACTION:
   description: Package Extraction Implementation
   detail_file: implementation-decisions/IMPL-PACKAGE_EXTRACTION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Package Extraction Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1359,8 +1350,8 @@ IMPL-PROCESSING_PATTERNS:
   description: Processing Patterns Implementation
   detail_file: implementation-decisions/IMPL-PROCESSING_PATTERNS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Processing Patterns Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1372,8 +1363,8 @@ IMPL-REFACTOR_PREP:
   description: Pre-Extraction Refactoring Strategy
   detail_file: implementation-decisions/IMPL-REFACTOR_PREP.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Pre-Extraction Refactoring Strategy
   source_index: implementation-decisions.yaml
   status: Active
@@ -1385,8 +1376,8 @@ IMPL-RESOURCE_MANAGER:
   description: Resource Management with Cleanup
   detail_file: implementation-decisions/IMPL-RESOURCE_MANAGER.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Resource Management with Cleanup
   source_index: implementation-decisions.yaml
   status: Active
@@ -1398,9 +1389,22 @@ IMPL-SEMANTIC_CROSS_REF:
   description: Semantic Cross-Referencing Strategy
   detail_file: implementation-decisions/IMPL-SEMANTIC_CROSS_REF.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Semantic Cross-Referencing Strategy
+  source_index: implementation-decisions.yaml
+  status: Active
+  type: IMPL
+IMPL-SPEC_CTL:
+  cross_references:
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  description: specctl CLI and internal/specparse, speccheck libraries
+  detail_file: implementation-decisions/IMPL-SPEC_CTL.yaml
+  metadata:
+    last_updated: {}
+    registered: {}
+  name: Spec Control CLI
   source_index: implementation-decisions.yaml
   status: Active
   type: IMPL
@@ -1412,8 +1416,8 @@ IMPL-STDD_VIS_ASSETS:
   description: Produce two complementary artifacts (layered flow diagram + timeline/animation) sourced from the data pipeline, with embedded token callouts and legends
   detail_file: implementation-decisions/IMPL-STDD_VIS_ASSETS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: STDD Visualization Asset Plan
   source_index: implementation-decisions.yaml
   status: Active
@@ -1426,8 +1430,8 @@ IMPL-STDD_VIS_DATA_PIPELINE:
   description: Build a repeatable data pipeline that derives a token graph from STDD documents and representative code/tests to feed visualization artifacts
   detail_file: implementation-decisions/IMPL-STDD_VIS_DATA_PIPELINE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: STDD Visualization Data Pipeline
   source_index: implementation-decisions.yaml
   status: Active
@@ -1439,8 +1443,8 @@ IMPL-STRUCTURED_ERRORS:
   description: Structured Error Handling
   detail_file: implementation-decisions/IMPL-STRUCTURED_ERRORS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Structured Error Handling
   source_index: implementation-decisions.yaml
   status: Active
@@ -1454,8 +1458,8 @@ IMPL-TEST_CFG_005_P1:
   description: Priority 1 Configuration Merge Tests Implementation
   detail_file: implementation-decisions/IMPL-TEST_CFG_005_P1.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Priority 1 Configuration Merge Tests Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1467,8 +1471,8 @@ IMPL-TEST_COVERAGE:
   description: Comprehensive test coverage for all 0% coverage functions in formatter.go including OutputCollector, template methods, and error formatting
   detail_file: implementation-decisions/IMPL-TEST_COVERAGE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Comprehensive formatter.go Test Coverage
   source_index: implementation-decisions.yaml
   status: Active
@@ -1481,8 +1485,8 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   description: Default Strategy Edge Cases Tests
   detail_file: implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Default Strategy Edge Cases Tests
   source_index: implementation-decisions.yaml
   status: Active
@@ -1496,8 +1500,8 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
   description: Empty String Handling Tests
   detail_file: implementation-decisions/IMPL-TEST_EMPTY_STRING_HANDLING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Empty String Handling Tests
   source_index: implementation-decisions.yaml
   status: Active
@@ -1511,8 +1515,8 @@ IMPL-TEST_EXCLUDE_MERGE:
   description: Exclude Patterns Merge Testing
   detail_file: implementation-decisions/IMPL-TEST_EXCLUDE_MERGE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Exclude Patterns Merge Testing
   source_index: implementation-decisions.yaml
   status: Active
@@ -1526,8 +1530,8 @@ IMPL-TEST_PREPEND_ORDERING:
   description: Prepend Strategy Ordering Tests
   detail_file: implementation-decisions/IMPL-TEST_PREPEND_ORDERING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Prepend Strategy Ordering Tests
   source_index: implementation-decisions.yaml
   status: Active
@@ -1541,8 +1545,8 @@ IMPL-TEST_UNICODE_HANDLING:
   description: Unicode and Special Character Handling Tests
   detail_file: implementation-decisions/IMPL-TEST_UNICODE_HANDLING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Unicode and Special Character Handling Tests
   source_index: implementation-decisions.yaml
   status: Active
@@ -1554,8 +1558,8 @@ IMPL-TESTING:
   description: Comprehensive testing strategy including unit, integration, performance, and stress tests with table-driven test patterns and rich test utilities
   detail_file: implementation-decisions/IMPL-TESTING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Testing Implementation Strategy
   source_index: implementation-decisions.yaml
   status: Active
@@ -1567,8 +1571,8 @@ IMPL-TESTING_COMPLEXITY:
   description: Challenge and solution for comprehensive testing of extracted components without duplicating existing tests
   detail_file: implementation-decisions/IMPL-TESTING_COMPLEXITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Testing Complexity Challenge
   source_index: implementation-decisions.yaml
   status: Active
@@ -1580,8 +1584,8 @@ IMPL-TIED_FILES:
   description: TIED file creation implementation
   detail_file: implementation-decisions/IMPL-TIED_FILES.yaml
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-12-18
+    last_updated: {}
+    registered: {}
   name: TIED File Creation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1612,8 +1616,8 @@ IMPL-TOKEN_COVERAGE_AUDIT:
   description: Semantic Token Coverage Audit
   detail_file: implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Semantic Token Coverage Audit
   source_index: implementation-decisions.yaml
   status: Active
@@ -1625,8 +1629,8 @@ IMPL-TOKEN_MIGRATION_COMPLETE:
   description: Status marker indicating all legacy tokens have been migrated into STDD semantic-tokens.md and validated via coverage and traceability scripts
   detail_file: implementation-decisions/IMPL-TOKEN_MIGRATION_COMPLETE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Token Migration Complete
   source_index: implementation-decisions.yaml
   status: Active
@@ -1643,8 +1647,8 @@ IMPL-TOKEN_SYSTEM:
   description: Token System Implementation
   detail_file: implementation-decisions/IMPL-TOKEN_SYSTEM.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Token System Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1656,8 +1660,8 @@ IMPL-TRACEABILITY:
   description: Enhanced Traceability Design
   detail_file: implementation-decisions/IMPL-TRACEABILITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Enhanced Traceability Design
   source_index: implementation-decisions.yaml
   status: Active
@@ -1669,8 +1673,8 @@ IMPL-ZERO_BREAKING:
   description: Extraction must not change existing application behavior; maintains confidence in extraction process
   detail_file: implementation-decisions/IMPL-ZERO_BREAKING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Zero-Breaking-Change Extraction
   source_index: implementation-decisions.yaml
   status: Active
@@ -1681,8 +1685,8 @@ IMPL-ZIP_FORMAT:
   description: ZIP Archive Format Implementation
   detail_file: implementation-decisions/IMPL-ZIP_FORMAT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: ZIP Archive Format Implementation
   source_index: implementation-decisions.yaml
   status: Active
@@ -1693,8 +1697,8 @@ PROC-BUILD_PIPELINE_VALIDATION:
   description: Build/deploy validation tied to REQ-MODULE_VALIDATION
   detail_file: null
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-11-08
+    last_updated: {}
+    registered: {}
   name: Build Pipeline Validation Process
   source_index: processes.md
   status: Active
@@ -1705,8 +1709,8 @@ PROC-COMMIT_MESSAGES:
   description: Consistent commit message format (type/scope/subject, body, footer); optional TIED token references for traceability
   detail_file: null
   metadata:
-    last_updated: 2026-03-03
-    registered: 2026-03-03
+    last_updated: {}
+    registered: {}
   name: Commit message format and guidelines
   source_index: processes.md
   status: Active
@@ -1717,8 +1721,8 @@ PROC-IMPL_PSEUDOCODE_TOKENS:
   description: Every block in IMPL essence_pseudocode must have a comment naming REQ/ARCH/IMPL and how the block implements them; primary mechanism for implementation traceability
   detail_file: null
   metadata:
-    last_updated: 2026-03-05
-    registered: 2026-03-05
+    last_updated: {}
+    registered: {}
   name: IMPL pseudo-code semantic token comments (most critical)
   source_index: processes.md
   status: Active
@@ -1730,8 +1734,8 @@ PROC-PROJECT_SURVEY_AND_SETUP:
   description: Survey and readiness process supporting REQ-TIED_SETUP and ARCH-TIED_STRUCTURE
   detail_file: null
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-11-08
+    last_updated: {}
+    registered: {}
   name: Project Survey and Setup Process
   source_index: processes.md
   status: Active
@@ -1742,8 +1746,8 @@ PROC-RELEASE:
   description: Version numbering (major/minor/patch/build) for releases
   detail_file: null
   metadata:
-    last_updated: 2026-03-03
-    registered: 2026-03-03
+    last_updated: {}
+    registered: {}
   name: Release and version numbering
   source_index: processes.md
   status: Active
@@ -1758,8 +1762,8 @@ PROC-SWIFT_BUILD:
   description: Go build and test gate for bkpdir (`go test`, `go vet`, coverage); aligns PROC-TIED_DEV_CYCLE inner loop with this repository
   detail_file: null
   metadata:
-    last_updated: "2026-03-11"
-    registered: "2026-03-11"
+    last_updated: '2026-03-11'
+    registered: '2026-03-11'
   name: Go Build and Test Gate (legacy token id; Swift template residue)
   source_index: processes.md
   status: Active
@@ -1771,8 +1775,8 @@ PROC-TEST_STRATEGY:
   description: Minimize code not covered by tests; unit/integration cover IMPL/ARCH/REQ logic; E2E reserved for critical journeys
   detail_file: null
   metadata:
-    last_updated: 2026-03-01
-    registered: 2026-03-01
+    last_updated: {}
+    registered: {}
   name: Test Strategy and Coverage (minimize untested code)
   source_index: processes.md
   status: Active
@@ -1788,8 +1792,8 @@ PROC-TIED_DEV_CYCLE:
   description: 'Session workflow: plan from TIED, author pseudo-code and tokens, add/align tests, implement (TDD), minimal glue, validate, sync TIED to code'
   detail_file: null
   metadata:
-    last_updated: 2026-03-05
-    registered: 2026-03-01
+    last_updated: {}
+    registered: {}
   name: TIED Development Cycle (session workflow)
   source_index: processes.md
   status: Active
@@ -1799,8 +1803,8 @@ PROC-TOKEN_AUDIT:
   description: Mandatory checklist ensuring every requirement → architecture → implementation → code/test path is annotated and documented
   detail_file: null
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-11-08
+    last_updated: {}
+    registered: {}
   name: Token Audit Process
   source_index: processes.md
   status: Active
@@ -1810,8 +1814,8 @@ PROC-TOKEN_VALIDATION:
   description: Automated validation workflow that proves all referenced tokens exist in the registry
   detail_file: null
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-11-08
+    last_updated: {}
+    registered: {}
   name: Token Validation Process
   source_index: processes.md
   status: Active
@@ -1823,8 +1827,8 @@ PROC-YAML_DB_OPERATIONS:
   description: YAML database operations for reading, writing, querying, and validating YAML index files
   detail_file: null
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-11-08
+    last_updated: {}
+    registered: {}
   name: YAML Database Operations Process
   source_index: processes.md
   status: Active
@@ -1838,8 +1842,8 @@ REQ-CFG_001:
   description: Base configuration management requirement for YAML-based configuration loading, merging, and validation
   detail_file: requirements/REQ-CFG_001.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Basic Configuration Management
   source_index: requirements.yaml
   status: Active
@@ -1850,8 +1854,8 @@ REQ-CFG_005:
   description: Configuration files support explicit inheritance declarations using `inherit` field. Inheritance system prevents circular dependencies. Configuration loading processes inheritance chains in correct dependency order. Multiple merge strategies supported. Array configuration fields (such as `exclude_patterns`) default to merge (accumulate) strategy to preserve values from defaults and parent configs when child configs add values.
   detail_file: requirements/REQ-CFG_005.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Layered Configuration Inheritance Requirements
   source_index: requirements.yaml
   status: Active
@@ -1862,8 +1866,8 @@ REQ-CFG_006:
   description: Configuration command displays ALL configuration parameters automatically through reflection-based field discovery. Field discovery handles nested structures, embedded fields, collections, and complex types. Source tracking shows complete inheritance chain with merge strategy attribution. Multiple output formats (table, tree, JSON) supported with comprehensive filtering options.
   detail_file: requirements/REQ-CFG_006.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Complete Configuration Reflection and Visibility Requirements
   source_index: requirements.yaml
   status: Active
@@ -1874,8 +1878,8 @@ REQ-CICD_001:
   description: CI/CD pipeline must be optimized for AI-first development workflows. All CI/CD tasks must be configured with low priority scheduling. Pipeline configurations must assume zero human developer intervention. All documentation and code must be maintained for AI assistant comprehension. CI/CD outputs must use standardized icon system. Pipeline must integrate with implementation token validation system.
   detail_file: requirements/REQ-CICD_001.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: AI-First Development Optimization Requirements
   source_index: requirements.yaml
   status: Planned
@@ -1886,8 +1890,8 @@ REQ-CODE_QUALITY:
   description: All code must pass automated quality checks (linting and testing) before successful build. All errors must be properly handled with no unhandled errors allowed.
   detail_file: requirements/REQ-CODE_QUALITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Code Quality and Linting Requirements
   source_index: requirements.yaml
   status: Active
@@ -1900,8 +1904,8 @@ REQ-CONFIG_OUTPUT_GROUPING:
   description: Configuration output grouping for organized display of configuration values
   detail_file: requirements/REQ-CONFIG_OUTPUT_GROUPING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Output Grouping
   source_index: requirements.yaml
   status: Active
@@ -1912,8 +1916,8 @@ REQ-CONFIGURATION:
   description: Configuration stored in files with configurable discovery. Environment variable support. Default search path with precedence rules. Configuration merging with source tracking.
   detail_file: requirements/REQ-CONFIGURATION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Management Requirements
   source_index: requirements.yaml
   status: Active
@@ -1924,8 +1928,8 @@ REQ-CONTEXT_SUPPORT:
   description: All long-running operations must support cancellation and timeouts. Operations must check for cancellation at multiple points. File operations support context cancellation.
   detail_file: requirements/REQ-CONTEXT_SUPPORT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Context Support Requirements
   source_index: requirements.yaml
   status: Active
@@ -1936,8 +1940,8 @@ REQ-COV_003:
   description: Implement function-level coverage exclusion and coverage comment directives for granular control over coverage metrics. Support `//coverage:ignore` style annotations for specific code blocks.
   detail_file: requirements/REQ-COV_003.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Selective Coverage Reporting Requirements
   source_index: requirements.yaml
   status: Planned
@@ -1948,8 +1952,8 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
   description: All output format strings must be customizable by users through configuration files. Users should be able to override any format string in their `.bkpdir.yml` to customize the application's output interface. Format string validation must warn users of invalid placeholders. Comprehensive documentation and examples must be provided.
   detail_file: requirements/REQ-CUSTOMIZABLE_FORMAT_STRINGS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: User-Customizable Format Strings Requirements
   source_index: requirements.yaml
   status: Active
@@ -1960,8 +1964,8 @@ REQ-DEBUG_OUTPUT_CONTROL:
   description: Debug and diagnostic output must be controlled by a global debug flag and disabled by default in normal execution. Diagnostic output provides detailed information about configuration loading, merging, and inheritance processing. Debug output must be automatically enabled during test execution to aid in debugging test failures. Debug statements that identify architecture or implementation decisions must be preserved in code as they serve as inline documentation of key decision points.
   detail_file: requirements/REQ-DEBUG_OUTPUT_CONTROL.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Debug and Diagnostic Output Control Requirements
   source_index: requirements.yaml
   status: Active
@@ -1972,8 +1976,8 @@ REQ-DIFF_COMMAND:
   description: Implement a CLI `diff` command that reports if there are any changes between the current directory files and the union of the most recent incremental archive on top of the most recent full archive. The command must reconstruct the effective state by applying incremental changes to the full archive, then compare that reconstructed state against the current directory. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
   detail_file: requirements/REQ-DIFF_COMMAND.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Diff Command Requirements
   source_index: requirements.yaml
   status: Active
@@ -1986,8 +1990,8 @@ REQ-DOC_001:
   description: Documentation enhancement requirement for comprehensive project documentation with cross-references
   detail_file: requirements/REQ-DOC_001.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Documentation Enhancement
   source_index: requirements.yaml
   status: Active
@@ -2000,8 +2004,8 @@ REQ-DOC_003:
   description: Documentation traceability requirement ensuring all documentation is traceable to requirements
   detail_file: requirements/REQ-DOC_003.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Documentation Traceability
   source_index: requirements.yaml
   status: Active
@@ -2012,8 +2016,8 @@ REQ-DOC_011:
   description: AI workflow validation hooks must integrate seamlessly with existing validation framework. Pre-submission validation must prevent non-compliant changes from being submitted. Validation feedback must be optimized for AI assistant comprehension and remediation. Integration must provide zero-friction validation without disrupting AI workflows. All validation processes must support automated execution by AI assistants.
   detail_file: requirements/REQ-DOC_011.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Token Validation Integration for AI Assistants Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2024,8 +2028,8 @@ REQ-DOC_013:
   description: All documentation must be written primarily for AI assistant comprehension. Code comments and implementation tokens must follow standardized AI-readable formats. Documentation structure must be optimized for AI parsing and navigation. Cross-references must be machine-readable and AI-traversable. Maintenance workflows must be executable by AI assistants without human intervention.
   detail_file: requirements/REQ-DOC_013.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: AI-First Documentation and Code Maintenance Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2036,8 +2040,8 @@ REQ-DOC_015:
   description: Replace all unicode icons with AI-first semantic tokens to improve AI assistant comprehension, enable automated validation, and create searchable documentation structure. Maintains backward compatibility with existing priority system ([CRITICAL][HIGH][MEDIUM][LOW]) while replacing decorative unicode icons with machine-readable semantic tokens.
   detail_file: requirements/REQ-DOC_015.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Unicode to Semantic Token Mapping Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2048,8 +2052,8 @@ REQ-DOC_016:
   description: Establish comprehensive token-based traceability for features, architecture decisions, and implementation consistency as a core AI-first principle. Every feature, architecture decision, and implementation must be traced through documentation, source code, tests, and validation layers.
   detail_file: requirements/REQ-DOC_016.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: AI-First Comprehensive Token System Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2060,8 +2064,8 @@ REQ-ERROR_HANDLING:
   description: Use structured errors with status codes and operation context. Enhanced disk space error detection. Operation context support for better debugging.
   detail_file: requirements/REQ-ERROR_HANDLING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Enhanced Error Handling Requirements
   source_index: requirements.yaml
   status: Active
@@ -2076,8 +2080,8 @@ REQ-EXTRACT_008_INTERDEP_MAPPING:
     - Performance impact notes and recommended integration strategies
   detail_file: requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Package Interdependency Mapping for EXTRACT-008
   source_index: requirements.yaml
   status: Planned
@@ -2090,8 +2094,8 @@ REQ-FEEDBACK_TO_TIED:
   description: Projects and users can submit feature requests, bug reports, and methodology improvement suggestions; store under TIED tree and export for reporting to TIED project
   detail_file: requirements/REQ-FEEDBACK_TO_TIED.yaml
   metadata:
-    last_updated: 2026-03-03
-    registered: 2026-03-03
+    last_updated: {}
+    registered: {}
   name: Feedback to TIED (Feature Requests, Bug Reports, Methodology)
   source_index: requirements.yaml
   status: Active
@@ -2102,8 +2106,8 @@ REQ-FILE_BACKUP:
   description: Create backups of single files with comparison. Detect identical backups. List backups for specific files. File operations use atomic operations and context support.
   detail_file: requirements/REQ-FILE_BACKUP.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Backup Requirements
   source_index: requirements.yaml
   status: Active
@@ -2114,8 +2118,8 @@ REQ-GIT_INTEGRATION:
   description: Automatic Git repository detection. Git branch and commit hash extraction. Git status detection for clean/dirty state. Integration with archive naming.
   detail_file: requirements/REQ-GIT_INTEGRATION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Git Integration Requirements
   source_index: requirements.yaml
   status: Active
@@ -2128,8 +2132,8 @@ REQ-GOV_DISCOVERABILITY:
   description: Governance requirement ensuring semantic tokens are discoverable through the registry and tooling
   detail_file: requirements/REQ-GOV_DISCOVERABILITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Token Discoverability
   source_index: requirements.yaml
   status: Active
@@ -2142,8 +2146,8 @@ REQ-GOV_REGISTRY_COMPLETENESS:
   description: Governance requirement ensuring all semantic tokens are registered in the token registry
   detail_file: requirements/REQ-GOV_REGISTRY_COMPLETENESS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Token Registry Completeness
   source_index: requirements.yaml
   status: Active
@@ -2154,8 +2158,8 @@ REQ-IMMUTABLE_ARCHIVE_NAMING:
   description: 'Archive naming convention is fixed and must not be modified. Format: `{prefix}-{timestamp}-{git_info}-{note}.zip`'
   detail_file: requirements/REQ-IMMUTABLE_ARCHIVE_NAMING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Archive Naming Convention (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2166,8 +2170,8 @@ REQ-IMMUTABLE_BUILD_SYSTEM:
   description: 'Build system requirements are mandatory and must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_BUILD_SYSTEM.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Build System Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2178,8 +2182,8 @@ REQ-IMMUTABLE_CLI_COMMANDS:
   description: 'CLI command structure must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_CLI_COMMANDS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: CLI Commands Structure (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2190,8 +2194,8 @@ REQ-IMMUTABLE_CODE_QUALITY:
   description: 'Code quality standards are immutable and must be maintained:'
   detail_file: requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Code Quality Standards (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2202,8 +2206,8 @@ REQ-IMMUTABLE_CONFIGURATION_DEFAULTS:
   description: 'Configuration defaults must never be changed without explicit user override:'
   detail_file: requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Configuration Defaults (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2214,8 +2218,8 @@ REQ-IMMUTABLE_DIRECTORY_OPERATIONS:
   description: 'Directory operation rules are fundamental and must not be altered:'
   detail_file: requirements/REQ-IMMUTABLE_DIRECTORY_OPERATIONS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Directory Operations Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2226,8 +2230,8 @@ REQ-IMMUTABLE_ERROR_HANDLING:
   description: 'Error handling requirements are mandatory and must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_ERROR_HANDLING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Error Handling Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2238,8 +2242,8 @@ REQ-IMMUTABLE_FEATURE_PRESERVATION:
   description: 'Feature preservation rules must be followed:'
   detail_file: requirements/REQ-IMMUTABLE_FEATURE_PRESERVATION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Feature Preservation Rules (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2250,8 +2254,8 @@ REQ-IMMUTABLE_FILE_BACKUP_NAMING:
   description: 'File backup naming convention is fixed and must not be modified. Format: `{filename}-{timestamp}[={note}]`'
   detail_file: requirements/REQ-IMMUTABLE_FILE_BACKUP_NAMING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Backup Naming Convention (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2262,8 +2266,8 @@ REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS:
   description: 'File backup operation rules are fundamental and must not be altered:'
   detail_file: requirements/REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Backup Operations Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2274,8 +2278,8 @@ REQ-IMMUTABLE_FILE_EXCLUSION:
   description: 'File exclusion requirements are mandatory and must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: File Exclusion Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2286,8 +2290,8 @@ REQ-IMMUTABLE_GIT_INTEGRATION:
   description: 'Git integration requirements are mandatory and must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_GIT_INTEGRATION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Git Integration Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2298,8 +2302,8 @@ REQ-IMMUTABLE_GLOBAL_OPTIONS:
   description: 'Global options must be maintained:'
   detail_file: requirements/REQ-IMMUTABLE_GLOBAL_OPTIONS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Global Options (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2310,8 +2314,8 @@ REQ-IMMUTABLE_OUTPUT_FORMATTING:
   description: 'Output formatting requirements are mandatory and must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_OUTPUT_FORMATTING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Output Formatting Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2322,8 +2326,8 @@ REQ-IMMUTABLE_PERFORMANCE:
   description: 'Performance characteristics must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_PERFORMANCE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Performance Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2334,8 +2338,8 @@ REQ-IMMUTABLE_PLATFORM_COMPATIBILITY:
   description: 'Platform support must never be reduced or modified:'
   detail_file: requirements/REQ-IMMUTABLE_PLATFORM_COMPATIBILITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Platform Compatibility Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2346,8 +2350,8 @@ REQ-IMMUTABLE_RESOURCE_MANAGEMENT:
   description: 'Resource management requirements are mandatory and cannot be relaxed:'
   detail_file: requirements/REQ-IMMUTABLE_RESOURCE_MANAGEMENT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Resource Management Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2358,8 +2362,8 @@ REQ-IMMUTABLE_TEMPLATE_FORMATTING:
   description: 'Template formatting requirements are mandatory and must be preserved:'
   detail_file: requirements/REQ-IMMUTABLE_TEMPLATE_FORMATTING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Template Formatting Requirements (Immutable)
   source_index: requirements.yaml
   status: Active
@@ -2370,8 +2374,8 @@ REQ-IMMUTABLE_TESTING_INFRASTRUCTURE:
   description: 'Testing infrastructure requirements are immutable:'
   detail_file: requirements/REQ-IMMUTABLE_TESTING_INFRASTRUCTURE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Testing Infrastructure Immutable Requirements
   source_index: requirements.yaml
   status: Active
@@ -2382,8 +2386,8 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
   description: Prevent creation of duplicate incremental archives when there are no observable changes compared to the most recent incremental archive. The system must compare the current directory state against the union of the most recent incremental archive applied on top of the most recent full archive, rather than comparing only against the full archive. If no changes are detected, the incremental archive creation must be skipped with an appropriate message. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
   detail_file: requirements/REQ-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Incremental Archive Duplicate Prevention Requirements
   source_index: requirements.yaml
   status: Active
@@ -2394,8 +2398,8 @@ REQ-LINT_001:
   description: Ensure all code passes linting checks and maintains code quality standards. All code must pass automated quality checks before successful build.
   detail_file: requirements/REQ-LINT_001.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Code Linting Compliance Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2406,8 +2410,8 @@ REQ-LIST_LIMIT:
   description: The `list` command must limit the display to the newest N files by default (N=10). Users must be able to control the length of the list via a command-line option. The list command displays all matching files sorted by creation time (most recent first), but only shows the first N entries by default.
   detail_file: requirements/REQ-LIST_LIMIT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: List Command Output Limit Requirements
   source_index: requirements.yaml
   status: Active
@@ -2418,8 +2422,8 @@ REQ-MAINTAINABILITY:
   description: Code must follow Go standards. Documentation must be comprehensive. Tests must be maintainable. Configuration system must be extensible.
   detail_file: requirements/REQ-MAINTAINABILITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Maintainability Requirements
   source_index: requirements.yaml
   status: Active
@@ -2432,8 +2436,8 @@ REQ-MODULE_VALIDATION:
   description: Independent module validation before integration requirement
   detail_file: requirements/REQ-MODULE_VALIDATION.yaml
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-01-27
+    last_updated: {}
+    registered: {}
   name: Independent Module Validation Before Integration
   source_index: requirements.yaml
   status: Active
@@ -2444,8 +2448,8 @@ REQ-OUT_002:
   description: Enhance backup commands to output formatted file information with stat-like details. All commands must output to stdout a single line about any files generated or existing to satisfy a backup request, using format strings with named replacements for stat information.
   detail_file: requirements/REQ-OUT_002.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Enhanced Command Output with File Statistics Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2456,8 +2460,8 @@ REQ-OUTPUT_FORMATTING:
   description: Centralized formatting for all application output. Template-based formatting with data extraction. Support for multiple formatting syntaxes.
   detail_file: requirements/REQ-OUTPUT_FORMATTING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Output Formatting Requirements
   source_index: requirements.yaml
   status: Active
@@ -2468,9 +2472,22 @@ REQ-PERFORMANCE:
   description: Operations must complete within reasonable time limits. Configuration loading must be responsive. Reflection results cached for performance. Lazy source evaluation for displayed fields only.
   detail_file: requirements/REQ-PERFORMANCE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Performance Requirements
+  source_index: requirements.yaml
+  status: Active
+  type: REQ
+REQ-PSEUDOCODE_FORMAL_VERIFICATION:
+  cross_references:
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - IMPL-SPEC_CTL
+  description: Formal pseudocode verification with specctl, reference model, property conformance, and mutation gates
+  detail_file: requirements/REQ-PSEUDOCODE_FORMAL_VERIFICATION.yaml
+  metadata:
+    last_updated: {}
+    registered: {}
+  name: Formal IMPL Pseudocode Verification
   source_index: requirements.yaml
   status: Active
   type: REQ
@@ -2480,8 +2497,8 @@ REQ-RELIABILITY:
   description: System must handle errors gracefully. Resource cleanup must be error-resilient. Panic recovery prevents resource leaks. Thread-safe operations for concurrent access.
   detail_file: requirements/REQ-RELIABILITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Reliability Requirements
   source_index: requirements.yaml
   status: Active
@@ -2492,8 +2509,8 @@ REQ-RESOURCE_MANAGEMENT:
   description: All temporary resources must be cleaned up. Archive and backup operations must be atomic. Operations must recover from panics. Resource management must be thread-safe.
   detail_file: requirements/REQ-RESOURCE_MANAGEMENT.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Resource Management Requirements
   source_index: requirements.yaml
   status: Active
@@ -2504,8 +2521,8 @@ REQ-STDD_VIS:
   description: Create token-first visuals where semantic tokens are the central characters, showing how `[REQ-*]` → `[ARCH-*]` → `[IMPL-*]` → tests/code chains preserve intent. The visuals must foreground tokens (color, size, labels), with everything else supporting their story.
   detail_file: requirements/REQ-STDD_VIS.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: STDD Visualization and Storytelling Requirements
   source_index: requirements.yaml
   status: Planned
@@ -2516,8 +2533,8 @@ REQ-TEMPLATE_FORMATTING:
   description: Advanced template processing with named placeholders and data extraction. Support for multiple template syntaxes. Template methods for all operations.
   detail_file: requirements/REQ-TEMPLATE_FORMATTING.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Template Formatting Requirements
   source_index: requirements.yaml
   status: Active
@@ -2528,8 +2545,8 @@ REQ-TEST_EXCLUDE_MERGE:
   description: Test scenario that verifies `exclude_patterns` are correctly merged from multiple configuration files and that the `config` command accurately displays the source of merged exclude patterns. Test must validate that patterns from multiple config files (e.g., default config and local `.bkpdir.yml`) are properly accumulated and that source tracking shows all contributing sources.
   detail_file: requirements/REQ-TEST_EXCLUDE_MERGE.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Exclude Patterns Merge Testing Requirements
   source_index: requirements.yaml
   status: Active
@@ -2542,8 +2559,8 @@ REQ-TIED_SETUP:
   description: TIED methodology setup requirement
   detail_file: requirements/REQ-TIED_SETUP.yaml
   metadata:
-    last_updated: 2026-02-08
-    registered: 2025-11-08
+    last_updated: {}
+    registered: {}
   name: TIED Methodology Setup
   source_index: requirements.yaml
   status: Active
@@ -2554,8 +2571,8 @@ REQ-USABILITY:
   description: CLI interface must be intuitive. Error messages must be clear. Configuration must be discoverable. Output must be readable.
   detail_file: requirements/REQ-USABILITY.yaml
   metadata:
-    last_updated: "2026-03-12"
-    registered: "2026-03-12"
+    last_updated: '2026-03-12'
+    registered: '2026-03-12'
   name: Usability Requirements
   source_index: requirements.yaml
   status: Active

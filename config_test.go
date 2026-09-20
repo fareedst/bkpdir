@@ -12,7 +12,6 @@
 // Source: config.go - SERVICE-ARCH-001
 // Impact: Validates configuration service implementation
 package main
-
 import (
 	"bytes"
 	"fmt"
@@ -53,7 +52,7 @@ func TestMain(m *testing.M) {
 	os.Exit(exitCode)
 }
 
-// [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — validates DefaultConfig preset values.
+// - [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: verify DefaultConfig preset values for archive path, flags, and exclude patterns.
 func TestDefaultConfig(t *testing.T) {
 	cfg := DefaultConfig()
 
@@ -1519,7 +1518,6 @@ include_git_info: false
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // TestConfigReflection validates the automatic field discovery and enhanced source tracking system.
 func TestConfigReflection(t *testing.T) {
 	t.Run("GetAllConfigFields discovers all fields automatically", func(t *testing.T) {
@@ -1784,7 +1782,6 @@ func TestConfigReflection(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestConfigReflectionPerformance(t *testing.T) {
 	cfg := DefaultConfig()
 
@@ -1804,7 +1801,6 @@ func TestConfigReflectionPerformance(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestConfigReflectionIntegration(t *testing.T) {
 	// Save original BKPDIR_CONFIG
 	originalBKPDIRConfig := os.Getenv("BKPDIR_CONFIG")
@@ -1891,7 +1887,6 @@ status_created_archive: 100
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // TestAdvancedFieldDiscovery validates edge cases in automatic field discovery that extend beyond basic reflection.
 
 func TestAdvancedFieldDiscovery(t *testing.T) {
@@ -2089,7 +2084,6 @@ func TestAdvancedFieldDiscovery(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // TestFieldDiscoveryErrorHandling validates graceful handling of problematic struct scenarios.
 
 func TestFieldDiscoveryErrorHandling(t *testing.T) {
@@ -2299,7 +2293,6 @@ func TestFieldDiscoveryErrorHandling(t *testing.T) {
 	})
 }
 
-// [IMPL-CONFIG_STRUCT] [ARCH-CFG_006] [REQ-CFG_006] — validates source attribution accuracy.
 func TestSourceAttributionAccuracy(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -2468,7 +2461,6 @@ func TestSourceAttributionAccuracy(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestSourceConflictDetection(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -2540,7 +2532,6 @@ func TestSourceConflictDetection(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestDisplayFormatting(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -2801,7 +2792,6 @@ func TestDisplayFormatting(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestFormattingEdgeCases(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -2927,7 +2917,6 @@ func TestFormattingEdgeCases(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestCategoryDebug(t *testing.T) {
 	dir := t.TempDir()
 
@@ -2966,7 +2955,6 @@ func TestCategoryDebug(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestFilteringFunctionality(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -3253,7 +3241,6 @@ func TestFilteringFunctionality(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestAdvancedFilteringEdgeCases(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -3383,7 +3370,6 @@ func TestAdvancedFilteringEdgeCases(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestPerformanceOptimization(t *testing.T) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -3554,7 +3540,6 @@ func TestPerformanceOptimization(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func BenchmarkConfigReflectionOperations(b *testing.B) {
 	// TEST-FIX-001: Set BKPDIR_CONFIG to avoid personal config interference
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -3604,7 +3589,6 @@ func BenchmarkConfigReflectionOperations(b *testing.B) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 func TestConfigReflectionStressTest(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping stress test in short mode")
@@ -3894,7 +3878,6 @@ func TestGitConfigIntegration(t *testing.T) {
 	})
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // TestInheritanceChainTracking tests the inheritance chain tracking functionality.
 func TestInheritanceChainTracking(t *testing.T) {
 	cfg := DefaultConfig()
@@ -3918,8 +3901,7 @@ func TestInheritanceChainTracking(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
-// TestMergeStrategyTracking tests the merge strategy detection functionality.
+// - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: table-driven test asserts determineMergeStrategyForField paths map to expected strategies.
 func TestMergeStrategyTracking(t *testing.T) {
 	// Test different field types and their expected merge strategies
 	testCases := []struct {
@@ -3941,7 +3923,6 @@ func TestMergeStrategyTracking(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // TestConfigurationValidation tests the configuration validation functionality.
 func TestConfigurationValidation(t *testing.T) {
 	cfg := DefaultConfig()
@@ -3993,7 +3974,6 @@ func TestConfigurationValidation(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // TestDocumentationGeneration tests the documentation generation functionality.
 func TestDocumentationGeneration(t *testing.T) {
 	cfg := DefaultConfig()
@@ -4031,7 +4011,6 @@ func TestDocumentationGeneration(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006]
 // TestEnhancedMetadata tests the enhanced metadata functionality.
 func TestEnhancedMetadata(t *testing.T) {
 	cfg := DefaultConfig()
@@ -4059,7 +4038,6 @@ func TestEnhancedMetadata(t *testing.T) {
 	}
 }
 
-// [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 // TestCFG006Integration tests the complete CFG-006 functionality integration.
 func TestCFG006Integration(t *testing.T) {
 	cfg := DefaultConfig()
@@ -4237,9 +4215,9 @@ func TestMixedSequentialAndInheritance(t *testing.T) {
 	assertStringSliceEqual(t, "exclude_patterns merged from sequential and inheritance chain", cfg.ExcludePatterns, expectedPatterns)
 }
 
-// [IMPL-CFG_MIXED_MODE_MERGE_FIX] [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006]
 // TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE verifies that exclude_patterns are correctly merged
 // from multiple configuration files and that the config command shows correct source attribution
+// - [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006] — How: verify exclude_patterns merge order across sequential files and inheritance with expected deduplicated slice and config source labels.
 func TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5713,7 +5691,7 @@ func TestOverrideDefaultsWithPrefix(t *testing.T) {
 // These tests cover important edge cases for configuration merging and inheritance
 
 // TestMultipleInheritanceSources_REQ_CFG_005 tests child inheriting from multiple parent files
-// [REQ-CFG_005] Child inherits from both parent1.yml and parent2.yml
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: child inheriting parent1 and parent2 merges accumulate exclude_patterns from both parents plus child + prefix while child overrides precedence archive_dir_path.
 func TestMultipleInheritanceSources_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5774,8 +5752,9 @@ func TestMultipleInheritanceSources_REQ_CFG_005(t *testing.T) {
 	assertBoolEqual(t, "SkipBrokenSymlinks from second parent", cfg.SkipBrokenSymlinks, true)
 }
 
-// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 // TestRelativePathInheritance_REQ_CFG_005 tests relative path resolution in inheritance
+// SPEC-ID: IMPL-TEST_CFG_005_P1::TESTRELATIVEPATHINHERITANCE
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: inherit directives using ../base.yml and ./sibling.yml resolve relative to the child config file directory.
 func TestRelativePathInheritance_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5845,9 +5824,9 @@ func TestRelativePathInheritance_REQ_CFG_005(t *testing.T) {
 	assertBoolEqual(t, "IncludeGitInfo from sibling", cfg.IncludeGitInfo, true)
 }
 
-// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 // TestHomeDirectoryExpansion_REQ_CFG_005 tests home directory expansion in inheritance.
-// Verifies ~ paths expand to user home directory in inherit declarations.
+// SPEC-ID: IMPL-TEST_CFG_005_P1::TESTHOMEDIRECTORYEXPANSION
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: tilde in inherit path expands to user home directory and loads the referenced parent config.
 func TestHomeDirectoryExpansion_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5944,7 +5923,7 @@ archive_dir_path: "/child/archives"
 }
 
 // TestMissingInheritanceFile_REQ_CFG_005 tests error handling when inheritance file is missing
-// [REQ-CFG_005] Config file has inherit: ["nonexistent.yml"] should error or skip gracefully
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: missing inherit target returns a clear error without partial silent merge.
 func TestMissingInheritanceFile_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -5993,7 +5972,7 @@ func TestMissingInheritanceFile_REQ_CFG_005(t *testing.T) {
 }
 
 // TestInvalidYAMLHandling_REQ_CFG_005 tests invalid YAML in one file
-// [REQ-CFG_005] First file valid, second file invalid YAML should skip invalid file with error logged
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: malformed YAML in the inheritance chain surfaces parse error and does not produce a merged config.
 func TestInvalidYAMLHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6047,6 +6026,7 @@ func TestInvalidYAMLHandling_REQ_CFG_005(t *testing.T) {
 // The inheritance chain should process all 12 levels and merge their patterns,
 // but currently only the last level's patterns are being included.
 // This is a known issue in the implementation, not a test problem.
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: twelve-level inherit chain still loads and applies child overrides at the leaf.
 func TestDeepInheritanceChain_REQ_CFG_005(t *testing.T) {
 	t.Skip("Skipping due to known bug in deep inheritance chain processing - only last level is processed")
 	// Save original environment
@@ -6136,7 +6116,7 @@ archive_dir_path: "/level%d/archives"
 }
 
 // TestTypeMismatchHandling_REQ_CFG_005 tests type mismatches
-// [REQ-CFG_005] First file: array, second file: string (same field) should error or handle gracefully
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: parent array with child scalar (or incompatible types) errors or rejects merge per CFG-005 rules.
 func TestTypeMismatchHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6191,7 +6171,7 @@ func TestTypeMismatchHandling_REQ_CFG_005(t *testing.T) {
 }
 
 // TestNullValueHandling_REQ_CFG_005 tests nil/null value handling
-// [REQ-CFG_005] Config file: exclude_patterns: null should be treated as not set
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: explicit null YAML values merge without panics and preserve intended field nil semantics.
 func TestNullValueHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6235,7 +6215,7 @@ func TestNullValueHandling_REQ_CFG_005(t *testing.T) {
 }
 
 // TestWhitespaceStringHandling_REQ_CFG_005 tests whitespace-only string handling
-// [REQ-CFG_005] archive_dir_path: "   " (whitespace only) should be treated as empty or as-is
+// - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: whitespace-only and padded string config values load and merge without unintended trimming unless specified.
 func TestWhitespaceStringHandling_REQ_CFG_005(t *testing.T) {
 	// Save original environment
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6285,8 +6265,8 @@ func TestWhitespaceStringHandling_REQ_CFG_005(t *testing.T) {
 	}
 }
 
-// [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005]
 // TestUnicodeHandling tests Unicode and special characters in configuration values
+// - [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: load config with Unicode archive paths and exclude_patterns and assert values round-trip unchanged after merge with defaults.
 func TestUnicodeHandling(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6348,8 +6328,8 @@ func TestUnicodeHandling(t *testing.T) {
 	}
 }
 
-// [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001]
 // TestSpecialCharactersInPaths tests special characters in config file paths
+// - [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: load config from directories whose paths contain spaces or Unicode without corrupting merged field values.
 func TestSpecialCharactersInPaths(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6454,8 +6434,8 @@ func TestSpecialCharactersInPaths(t *testing.T) {
 	})
 }
 
-// [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005]
 // TestEmptyStringHandling tests empty string handling in configuration merging
+// - [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] — How: verify empty-string archive_dir_path merges with later files and later non-empty values override per CFG-001 precedence.
 func TestEmptyStringHandling(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6564,8 +6544,8 @@ func TestEmptyStringHandling(t *testing.T) {
 	})
 }
 
-// [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001]
 // TestPrependStrategyOrdering tests prepend strategy ordering in configuration merging
+// - [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — How: verify ^prepend places source exclude_patterns before destination patterns in inheritance and sequential chains preserving order.
 func TestPrependStrategyOrdering(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")
@@ -6736,8 +6716,8 @@ func TestPrependStrategyOrdering(t *testing.T) {
 	})
 }
 
-// [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005]
 // TestDefaultStrategyEdgeCases tests default strategy edge cases
+// - [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — How: assert =default strategy applies only when destination field is zero value for strings, arrays, and bools across sequential files.
 func TestDefaultStrategyEdgeCases(t *testing.T) {
 	// Save original environment and set to non-existent path to avoid personal config
 	origEnv := os.Getenv("BKPDIR_CONFIG")

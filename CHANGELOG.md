@@ -6,11 +6,18 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Lead hygiene (`[REQ-PSEUDOCODE_FORMAL_VERIFICATION]`)**: `scripts/lead_hygiene.py`, `audit_package_level_leads.py`, `strip_package_level_leads.py`, `strip_redundant_impl_banners.py` (D15), and `test_lead_hygiene.py` to detect and remove package-level `// - [IMPL-*]` blocks in `*_test.go`; audit wired into `run-spec-verification.sh`. Bulk `add-test-leads --all` disabled in `impl_pseudocode_remediation.py`.
+- **Scan-root check-leads (`[IMPL-SPEC_CTL]`)**: `LeadScanDirPaths` scans `pkg/`, `internal/`, `cmd/`, and `test/`; `internal/speccheck/leads_test.go`; CITDP `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-SCAN-ROOT.yaml`; integrated close-out under `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/`.
+- **Close-out evidence**: `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/` tracker, CITDP, adversarial-inquiry phases, slim envelope + archived hygiene discovery (`evidence/archive-lead-hygiene-20260919/`), and handoff docs.
 - **Composition and module tests**: `main_cli_composition_test.go` exercises `newRootCommand()` plus `executeWithAutoDetection` (subcommand list, known-command vs path routing, root `--config` / `--list` + `--limit`, `diff` with archives). `pkg/fileops/comparison_test.go` and `pkg/fileops/exclusion_test.go` cover snapshot/compare/exclusion helpers used from `comparison.go`.
 - **TIED**: `tied/docs/composition-coverage.md` maps CLI and fileops bindings to tests.
 
 ### Changed
 
+- **Test traceability**: Restored func-scoped IMPL leads across root/pkg/internal/test `*_test.go`; production backfill in `comparison.go` and `pkg/testutil/doc.go`. Classifier alignment excludes `scripts/testdata` from Go lead scans.
+- **Corpus bookkeeping**: Restored improvement-queue tracking (`req_audit_pass`, `deep_sync_complete`, `formal_spec`) via logic-audit mark pass; `mark_impl_logic_audit_complete.py` sets queue `deep_sync_complete`.
+- **CITDP**: `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION.yaml` and scan-root record; evidence archive paths documented in working CITDP copies.
+- **specctl / speccheck**: Widen `check-leads` scan roots; `docs/markscope/spec-verification.md` updated.
 - **CLI entry (`main.go`)**: Extract `newRootCommand()` for the full production Cobra tree; `main` calls `executeWithAutoDetection(newRootCommand(), os.Args[1:])`. On paths that delegate to Cobra, `rootCmd.SetArgs(args)` runs before `Execute()` so argv handling matches explicit invocation.
 - **Tests**: `createTestRootCmd()` now returns `newRootCommand()`; removed redundant `AddCommand(diffCmd())` from `inc_diff_integration_test.go`.
 - **Makefile**: `make test` runs `go test ./...` and then `cd pkg/fileops && go test ./...`.

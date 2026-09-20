@@ -8,13 +8,13 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   migration_complete: All code, tests, and documentation updated to use `#{...}` syntax exclusively
@@ -40,8 +40,8 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
     - criterion: '*REQUIRED**: The default list output format MUST include file size information using `#{size_human}` placeholder (e.g., `#{path} (size: #{size_human})`)'
     - criterion: '*REQUIRED**: The substring `(size: #{size_human})` MUST be supported and display as `(size: 1 byte)` or similar human-readable size format (e.g., `(size: 1.2MB)`, `(size: 455KB)`)'
     - criterion: '*REQUIRED**: Users MUST be able to use placeholders like `#{size_human}`, `#{path}`, `#{creation_time}`, and other named attributes in the list output format'
-    - criterion: 'All placeholders MUST use the named format: `#{path}`, `#{size_human}`, `#{creation_time}`, etc.'
     - criterion: All format strings can be overridden in `.bkpdir.yml`
+    - criterion: 'All placeholders MUST use the named format: `#{path}`, `#{size_human}`, `#{creation_time}`, etc.'
     - criterion: Backward compatibility maintained (defaults work when not specified)
     - criterion: Brief example configuration file demonstrates common customizations
     - criterion: Comprehensive reference documentation lists all available format strings with their placeholders

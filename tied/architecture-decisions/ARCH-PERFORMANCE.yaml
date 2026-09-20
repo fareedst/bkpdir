@@ -4,7 +4,7 @@ ARCH-PERFORMANCE:
   buffered_i/o: Efficient file operations with context cancellation
   compression_tuning: Optimal compression settings with performance monitoring
   cross-references: '[REQ-PERFORMANCE], [REQ-RELIABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-PERFORMANCE
     - REQ-RELIABILITY
   decision: Optimized performance with streaming, caching, and concurrent processing
@@ -20,13 +20,13 @@ ARCH-PERFORMANCE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Performance Architecture
@@ -40,7 +40,9 @@ ARCH-PERFORMANCE:
       Minimizes resource usage
       Supports scalable operations
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   resource_cleanup: Automatic resource management with panic recovery
@@ -52,5 +54,7 @@ ARCH-PERFORMANCE:
       - REQ-PERFORMANCE
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
     tests: []

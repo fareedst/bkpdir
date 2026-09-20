@@ -1,4 +1,3 @@
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // Error classification utilities for detecting and categorizing different types of errors.
 // This file contains the error detection functions extracted from the original
 // errors.go file, generalized for reuse across CLI applications.
@@ -12,9 +11,7 @@ import (
 	"strings"
 )
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
-// IsDiskFullError checks if an error indicates disk space exhaustion
-// Extracted from original errors.go with comprehensive disk space error detection
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match disk-space substrings in error text OR path error with OS no-space/quota/large-file codes.
 func IsDiskFullError(err error) bool {
 	if err == nil {
 		return false
@@ -44,9 +41,7 @@ func IsDiskFullError(err error) bool {
 	return false
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
-// IsPermissionError checks if an error indicates permission or access issues
-// Extracted from original errors.go with enhanced permission error detection
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match permission-denied substrings OR path error with EACCES/EPERM.
 func IsPermissionError(err error) bool {
 	if err == nil {
 		return false
@@ -76,7 +71,6 @@ func IsPermissionError(err error) bool {
 	return false
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsDirectoryNotFoundError checks if an error indicates a directory doesn't exist
 // Extracted from original errors.go with enhanced path existence detection
 func IsDirectoryNotFoundError(err error) bool {
@@ -107,7 +101,6 @@ func IsDirectoryNotFoundError(err error) bool {
 	return false
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsFileNotFoundError checks if an error indicates a file doesn't exist
 func IsFileNotFoundError(err error) bool {
 	if err == nil {
@@ -136,7 +129,6 @@ func IsFileNotFoundError(err error) bool {
 	return false
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsNetworkError checks if an error indicates network connectivity issues
 func IsNetworkError(err error) bool {
 	if err == nil {
@@ -166,7 +158,6 @@ func IsNetworkError(err error) bool {
 	return false
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // DefaultErrorClassifier provides a default implementation of ErrorClassifier
 type DefaultErrorClassifier struct{}
 
@@ -175,8 +166,7 @@ func NewDefaultErrorClassifier() *DefaultErrorClassifier {
 	return &DefaultErrorClassifier{}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
-// ClassifyError categorizes an error into one of the predefined categories
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: map error to ErrorCategory via disk, permission, filesystem, network detectors.
 func (c *DefaultErrorClassifier) ClassifyError(err error) ErrorCategory {
 	if err == nil {
 		return ErrorCategoryUnknown
@@ -196,7 +186,6 @@ func (c *DefaultErrorClassifier) ClassifyError(err error) ErrorCategory {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsRecoverable determines if an error can potentially be recovered from
 func (c *DefaultErrorClassifier) IsRecoverable(err error) bool {
 	if err == nil {
@@ -229,7 +218,6 @@ func (c *DefaultErrorClassifier) IsRecoverable(err error) bool {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // GetSeverity determines the severity level of an error
 func (c *DefaultErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	if err == nil {
@@ -262,7 +250,6 @@ func (c *DefaultErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ErrorPattern represents a configurable error detection pattern
 type ErrorPattern struct {
 	Name        string   // Name of the error pattern
@@ -272,7 +259,6 @@ type ErrorPattern struct {
 	Recoverable bool
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ConfigurableErrorClassifier allows customizing error classification patterns
 type ConfigurableErrorClassifier struct {
 	patterns []ErrorPattern
@@ -290,7 +276,6 @@ func NewConfigurableErrorClassifier(patterns []ErrorPattern, fallback ErrorClass
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // ClassifyError classifies errors using configured patterns, falling back to default
 func (c *ConfigurableErrorClassifier) ClassifyError(err error) ErrorCategory {
 	if err == nil {
@@ -312,7 +297,6 @@ func (c *ConfigurableErrorClassifier) ClassifyError(err error) ErrorCategory {
 	return c.fallback.ClassifyError(err)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // IsRecoverable determines recoverability using configured patterns
 func (c *ConfigurableErrorClassifier) IsRecoverable(err error) bool {
 	if err == nil {
@@ -334,7 +318,6 @@ func (c *ConfigurableErrorClassifier) IsRecoverable(err error) bool {
 	return c.fallback.IsRecoverable(err)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // GetSeverity determines severity using configured patterns
 func (c *ConfigurableErrorClassifier) GetSeverity(err error) ErrorSeverity {
 	if err == nil {

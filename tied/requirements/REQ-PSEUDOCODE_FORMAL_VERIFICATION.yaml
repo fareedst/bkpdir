@@ -1,0 +1,57 @@
+REQ-PSEUDOCODE_FORMAL_VERIFICATION:
+  category: Functional
+  metadata:
+    created:
+      author: AI Agent
+      date: '2026-06-02'
+    last_updated:
+      author: AI Agent
+      date: '2026-09-19'
+      reason: Add criterion_id for adversarial inquiry Mode B loader
+  name: Formal IMPL Pseudocode Verification
+  priority: P0
+  rationale:
+    benefits:
+      - CI gates on spec coverage and test strength
+      - Machine-verifiable conformance between spec, tests, and implementation
+    problems_solved:
+      - Informal pseudocode cannot be validated against code automatically
+      - Layer B checklist items were manual-only
+    why: Enable executable specification, traceability matrices, property/model conformance, and mutation gates per project policy
+  related_requirements:
+    depends_on:
+      - REQ-MODULE_VALIDATION
+      - REQ-TIED_SETUP
+    related_to:
+      - REQ-RESOURCE_MANAGEMENT
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: IMPL sidecars may declare SPEC-ID, STEP, BRANCH, PRE, POST, INV per tied/docs/pseudocode-dsl-grammar.md
+      criterion_id: PFV-001
+    - criterion: Mutation score meets documented threshold on pilot packages
+      criterion_id: PFV-002
+    - criterion: Property or model conformance tests exist for pilot formal_spec packages
+      criterion_id: PFV-003
+    - criterion: specctl matrix --check-coverage ensures every STEP has test or INFRA waiver
+      criterion_id: PFV-004
+    - criterion: specctl validate runs in CI and fails on PARSE/SHAPE/RESOLVE errors for formal_spec IMPLs
+      criterion_id: PFV-005
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-SPEC_DSL_AND_ORACLE
+    code_annotations:
+      - IMPL-SPEC_CTL
+      - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    implementation:
+      - IMPL-SPEC_CTL
+    tests:
+      - TestAtomicWriterConformance_REQ_PSEUDOCODE_FORMAL_VERIFICATION
+      - TestSpecctlValidate_REQ_PSEUDOCODE_FORMAL_VERIFICATION
+  validation_criteria:
+    - coverage: cmd/specctl and test/specconformance pass in CI (L3 release bar)
+      method: Automated testing
+    - coverage: scripts/run-spec-verification.sh exits 0 (Layer A+B+C; L4 not globally gated)
+      method: CI script
+    - coverage: scripts/run-mutation-pilot.sh meets MUTATION_SCORE_THRESHOLD on pilot packages; --req-criteria-strict and contract tests available but default off
+      method: L4 pilot (opt-in)

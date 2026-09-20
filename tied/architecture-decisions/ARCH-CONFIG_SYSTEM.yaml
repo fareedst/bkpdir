@@ -1,7 +1,7 @@
 ARCH-CONFIG_SYSTEM:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         JSON: Rejected due to lack of comments
@@ -17,12 +17,12 @@ ARCH-CONFIG_SYSTEM:
        - **Precedence Rule**: Earlier files in the search path take precedence over later files. When processing sequential config files (not inheritance chains), values set by earlier files are preserved and cannot be overridden by later files, even if those values equal the defaults. The implementation tracks the initial default state and compares the destination state before merge to detect if earlier files modified values.
     4. Default values (lowest priority)
   configuration_key_structure:
-    - 'Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.'
     - All configuration keys are displayed as top-level keys in `bkpdir config` output
+    - 'Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.'
     - Internal struct may have nested fields (e.g., `Git *GitConfig`), but the reflection-based display system flattens them using YAML tag names
     - YAML files use top-level keys for all configuration options (see [IMPL-CONFIG_DISPLAY_FLATTENING])
   cross-references: '[REQ-CONFIGURATION], [REQ-USABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-USABILITY
   decision: YAML configuration files with environment variable support
@@ -32,13 +32,13 @@ ARCH-CONFIG_SYSTEM:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration System
@@ -52,7 +52,9 @@ ARCH-CONFIG_SYSTEM:
       Industry standard for configuration
       Environment variable support for flexibility
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -62,5 +64,7 @@ ARCH-CONFIG_SYSTEM:
       - REQ-CONFIGURATION
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-USABILITY
     tests: []

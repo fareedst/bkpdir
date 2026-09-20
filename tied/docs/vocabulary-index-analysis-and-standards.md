@@ -2,11 +2,11 @@
 
 Analysis of the canonical domain vocabulary indices — what they contain, recommended authoring standards, and how their TIED integration differs from a traditional software glossary.
 
-**Client bootstrap:** Bootstrapped TIED client projects use `tied/vocab/<topic>.md` (no `-vocabulary` filename suffix) with an index at `tied/vocab/domain-references.md`. Section 1 below uses Markscope `docs/*-vocabulary.md` as an **illustrative example corpus**; §2–§3 apply to all TIED clients; §4 documents the STDD/TIED repository layout.
+**Client bootstrap:** Bootstrapped TIED client projects use `tied/methodology/vocab/<topic>.md` for TIED-owned glossaries and `tied/vocab/<topic>.md` for client-owned glossaries. The client handoff at `tied/vocab/routing.md` dispatches PRELOAD to both routing layers; `tied/vocab/domain-references.md` catalogs client terms and links to the methodology catalog. Section 1 below uses Markscope `docs/*-vocabulary.md` as an **illustrative example corpus**; §2–§3 apply to all TIED clients; §4 documents the STDD/TIED repository layout.
 
-**Index of the example corpus:** [`markscope-domain-references.md`](markscope-domain-references.md). **Replication prompt:** [`tied-domain-vocabulary-research-prompt.md`](tied-domain-vocabulary-research-prompt.md).
+**Index of the example corpus:** [`markscope-domain-references.md`](markscope-domain-references.md). **Replication prompt:** [`tied-domain-vocabulary-research-prompt.md`](tied-domain-vocabulary-research-prompt.md). **Outreach (Vocab ↔ TIED ↔ CITDP ↔ LEAP):** [`vocabulary-layer-tied-leap-citdp.md`](vocabulary-layer-tied-leap-citdp.md).
 
-**Scope:** This is a meta-document *about* the glossaries; it is not itself a domain glossary and is not the source of canonical terms. For canonical terms in this repo, use `tied/vocab/*.md`; in Markscope-style repos, use the individual `docs/*-vocabulary.md` files.
+**Scope:** This is a meta-document *about* the glossaries; it is not itself a domain glossary and is not the source of canonical terms. For TIED methodology terms in this repo, use `tied/vocab/*.md` in the source repository and `tied/methodology/vocab/*.md` in clients; for client terms, use `tied/vocab/*.md`.
 
 ---
 
@@ -14,10 +14,11 @@ Analysis of the canonical domain vocabulary indices — what they contain, recom
 
 ### 1a. The corpus (three layers)
 
-The vocabulary system is three layers, not just the nine glossaries:
+The vocabulary system is layered, not just the glossaries:
 
-- **One index page** — [`markscope-domain-references.md`](markscope-domain-references.md). A single-page directory with a `Priority | Document | Scope` table (one row per glossary), plus separate sections for "Authoring guides (not glossaries)," "Behavior inventories (not glossaries)," and cross-topic notes (e.g. the `--emit-full-script` feature that spans five glossaries).
-- **Nine canonical glossaries** (`docs/*-vocabulary.md`):
+- **Two routing handoffs** — `tied/vocab/routing.md` is the client entry point and `tied/methodology/vocab/routing.md` is the refreshable TIED methodology route. The client entry point dispatches by ownership; agents PRELOAD only matched files.
+- **Two full index pages** — `tied/vocab/domain-references.md` catalogs client glossaries and links to `tied/methodology/vocab/domain-references.md`, which contains the TIED methodology catalog. Read full catalogs on-demand for cross-cutting concerns—not at every session start when a routing index exists.
+- **Nine canonical glossaries** (`docs/*-vocabulary.md` in the example corpus):
 
   | Glossary | Index priority | Scope |
   |----------|----------------|-------|
@@ -64,20 +65,40 @@ What makes these "indices" rather than prose docs:
 - **Vocabulary, not algorithm** — they record *terms and relationships*; step-by-step logic stays in `tied/implementation-decisions/*-pseudocode.md`.
 - **Bidirectional TIED linkage** — glossaries cite REQ/ARCH/IMPL tokens, and REQ acceptance criteria cite the glossary path *plus* the pseudo-code block name together.
 
+### Epistemic roles (understanding vs intent vs resync)
+
+Vocabulary is not “TIED lite.” It answers a different question than REQ/ARCH/IMPL, and LEAP answers a third:
+
+In TIED 3.0.0, vocabulary is also an **agent-control layer**: it governs how the agent understands and names the request before the traceability stack is authored, and remains a blocking precision check throughout the work.
+
+| Layer | Role | When it applies |
+|---|---|---|
+| **Vocabulary** (`tied/vocab/`) | Shared *understanding* — preferred terms, demoted synonyms, naming bridges, cross-topic relations between sponsor language and system structure | Before and during design; continuously when names surface |
+| **TIED** (REQ → ARCH → IMPL → tests → code) | Frozen *intent* — testable obligation and operational how, token-linked | Once distinctions are nameable and behavior must be proven |
+| **CITDP** | Change *analysis* using the same words | Before or beside new/changed REQ authoring |
+| **LEAP** | Stack *resync* — IMPL first, then ARCH/REQ (and glossaries when concepts rename) | **Only after** REQs (and usually ARCH/IMPL) exist and tests/code diverge from documented intent |
+
+LEAP does not establish requirements; it elevates truths discovered in implementation back through an existing stack. Outreach framing: [`vocabulary-layer-tied-leap-citdp.md`](vocabulary-layer-tied-leap-citdp.md).
+
 ```mermaid
-flowchart LR
+flowchart TB
   Index["domain-references index"]
-  Vocab["domain vocabulary files"]
-  REQ["REQ acceptance criteria"]
-  IMPL["IMPL essence_pseudocode (UPPER_SNAKE blocks)"]
-  Tests["tests"]
-  Code["production code"]
+  Vocab["Vocabulary — understanding"]
+  CITDP["CITDP — change analysis"]
+  REQ["REQ — intent"]
+  ARCH["ARCH"]
+  IMPL["IMPL essence_pseudocode"]
+  Tests["tests + code"]
+  LEAP["LEAP — resync after REQ exists"]
+
   Index --> Vocab
+  Vocab --> CITDP
   Vocab --> REQ
-  Vocab --> IMPL
-  IMPL --> Tests
-  IMPL --> Code
-  REQ --> Tests
+  CITDP --> REQ
+  REQ --> ARCH --> IMPL --> Tests
+  Tests -->|"disagreement"| LEAP
+  LEAP -->|"IMPL → ARCH → REQ"| IMPL
+  LEAP -.->|"concept rename"| Vocab
 ```
 
 ---
@@ -90,6 +111,7 @@ These consolidate what the corpus does well and tighten observed inconsistencies
 
 - **Mandatory section order**: Title `(canonical)` → Scope (with explicit exclusions) → Traceability → See also → body → Alphabetical index. Make this a template/checklist.
 - **One index page is required** and must list *every* glossary with a scope line; segregate non-glossaries (authoring guides, behavior inventories) into clearly labeled sections.
+- **Routing index when the full index is large:** add `routing.md` with a keyword→glossary table; PRELOAD reads the routing file first and opens only matched glossaries. Keep the full index for cross-topic notes and authoring.
 - **Add a "Pseudo-code block names" section to every glossary.** The replication prompt *requires* this (Phase 2), but the lower-priority glossaries (`shell-evaluation`, `macos-distribution`, `diagnostics`, `mermaid-layout`) lacked it while the priority-1/2 glossaries reference blocks inline. Standardize a `Preferred term | UPPER_SNAKE block | Owning IMPL` table, with `(proposed)` for gaps. This is the single most valuable structural fix.
 - **Split/merge rule**: split at ~15+ named concepts or distinct audiences; merge when two areas share one dispatch/order story. Promote this note into each file.
 
@@ -114,6 +136,20 @@ These consolidate what the corpus does well and tighten observed inconsistencies
 - **Acceptance checklist per file** (the prompt's Phase 4) adopted as a PR gate.
 - **A glossary must be cited by at least one REQ criterion**, closing the loop so terms are not orphaned.
 - **Run `tied_validate_consistency`** after wiring glossary references into REQ/ARCH/IMPL.
+
+### Agent touchpoints (operational)
+
+Agents use domain vocabulary indices at **three mandatory lifecycle gates** via `sub-vocabulary-sync` in [`agent-req-implementation-checklist.yaml`](agent-req-implementation-checklist.yaml) (`[PROC-AGENT_REQ_CHECKLIST]`):
+
+| Touchpoint | Mode | When | Checklist steps |
+|---|---|---|---|
+| Prompt intake | **RESOLVE** (+ RECORD for new concepts) | Sponsor or user text names concepts before formal TIED work | `translate-sponsor-intent`, `change-definition` |
+| Pre-read | **PRELOAD** | Before reading TIED indexes, detail files, source, or tests | `session-bootstrap`, `impact-discovery` |
+| Pre-commit | **VALIDATE** | Before staging and `git commit` | `traceable-commit` |
+
+**Inline during work:** RESOLVE before naming; RECORD after artifact edits. **Immature client:** when `tied/vocab/` is absent, note deferral in the per-request checklist copy; VALIDATE must not fake pass.
+
+Process token: [`processes.md`](processes.md) § `[PROC-VOCABULARY_INDEX]`. Agent guides: [`AGENTS.md`](../../AGENTS.md), [`ai-principles.md`](ai-principles.md).
 
 ---
 
@@ -145,15 +181,21 @@ In short: a traditional glossary *describes* the system for humans; these vocabu
 
 ## 4. STDD / TIED repository convention
 
-This **TIED methodology repository** (stdd) uses a project-local vocabulary tree distinct from the Markscope `docs/*-vocabulary.md` layout described in §1:
+This **TIED methodology repository** (stdd) owns the canonical vocabulary source tree; clients receive it under `tied/methodology/vocab/`, distinct from client-owned `tied/vocab/` and the Markscope `docs/*-vocabulary.md` layout described in §1:
 
 | Element | Location in this repo |
 |---------|------------------------|
-| Index page | [`../vocab/domain-references.md`](../vocab/domain-references.md) |
-| Canonical glossaries | `tied/vocab/<topic>.md` (plain Markdown; **no** `-vocabulary` suffix) |
+| Source routing index | [`../vocab/routing.md`](../vocab/routing.md) |
+| Client routing handoff | `tied/vocab/routing.md` → `tied/methodology/vocab/routing.md` |
+| Source full index page | [`../vocab/domain-references.md`](../vocab/domain-references.md) |
+| Client full index page | `tied/vocab/domain-references.md` → `tied/methodology/vocab/domain-references.md` |
+| Canonical methodology glossaries | `tied/methodology/vocab/<topic>.md` in clients; plain Markdown; **no** `-vocabulary` suffix |
+| Client glossaries | `tied/vocab/<topic>.md` (client-owned) |
 | Meta-standard (this doc) | [`vocabulary-index-analysis-and-standards.md`](vocabulary-index-analysis-and-standards.md) |
-| Checklist pointer | `VOCAB_INDEX: ./tied/vocab` in [`agent-req-implementation-checklist.yaml`](agent-req-implementation-checklist.yaml) |
+| Replication prompt | [`tied-domain-vocabulary-research-prompt.md`](tied-domain-vocabulary-research-prompt.md) |
+| Outreach article | [`vocabulary-layer-tied-leap-citdp.md`](vocabulary-layer-tied-leap-citdp.md) |
+| Checklist pointer | `VOCAB_INDEX: ./tied/vocab/routing.md` in [`agent-req-implementation-checklist.yaml`](agent-req-implementation-checklist.yaml) |
 | Process token | `[PROC-VOCABULARY_INDEX]` in [`processes.md`](processes.md) |
-| Bootstrap | `copy_files.sh` seeds `tied/vocab/` and `tied/docs/` into client projects when absent |
+| Bootstrap | `copy_files.sh` refreshes `tied/methodology/vocab/` and creates missing client routing/catalog handoffs |
 
-**Replication:** Other TIED client repos may follow [`tied-domain-vocabulary-research-prompt.md`](tied-domain-vocabulary-research-prompt.md) with `docs/*-vocabulary.md` instead; the structural standards in §2 apply to both layouts. When authoring in **this** repo, use `tied/vocab/` only.
+**Replication:** Other TIED client repos may follow [`tied-domain-vocabulary-research-prompt.md`](tied-domain-vocabulary-research-prompt.md) with `docs/*-vocabulary.md` instead; the structural standards in §2 apply to both layouts. When authoring TIED methodology terms in **this** repo, use source `tied/vocab/`; when authoring client terms, use the client project's `tied/vocab/`. Epistemic roles are summarized in §1d; outreach framing: [`vocabulary-layer-tied-leap-citdp.md`](vocabulary-layer-tied-leap-citdp.md).

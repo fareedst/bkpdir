@@ -6,59 +6,6 @@ IMPL-BACKWARD_COMPAT:
     - ARCH-CODE_ORGANIZATION
     - REQ-MAINTAINABILITY
   description: Extract components without breaking existing backup application using Go modules and interfaces to isolate extracted code
-  essence_pseudocode: |-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Backward compatibility during extraction: type aliases, wrapper functions, [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # interface isolation, and gradual migration so the original app never breaks. [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA compatibility_mechanisms:
-    DATA compatibility_mechanisms:
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Tools available to maintain backward compatibility during extraction. [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      type_aliases: "type FileInfo = fileops.FileInfo (re-export extracted types)"
-      wrapper_functions: "func CreateSnapshot(...) wraps fileops.CreateSnapshot(...)"
-      interface_adapters: "root-level adapters bridge old API to new package interfaces"
-      deprecation_markers: "// Deprecated: use pkg/fileops.X instead"
-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE provide_type_aliases():
-    PROCEDURE provide_type_aliases():
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Type aliases in root package re-export types from extracted packages [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # so existing consumers see no change. [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each type moved to an extracted package:
-        create type alias in original location: type T = pkg.T
-        add deprecation comment pointing to new location
-        VALIDATE all existing consumers compile without changes
-      END FOR
-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE provide_wrapper_functions():
-    PROCEDURE provide_wrapper_functions():
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Wrapper functions in root package delegate to extracted packages. [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each function moved to an extracted package:
-        create wrapper in original location that calls pkg.Function(...)
-        preserve original function signature exactly
-        add deprecation comment pointing to new location
-      END FOR
-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE isolate_via_interfaces():
-    PROCEDURE isolate_via_interfaces():
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interface isolation ensures extracted packages have no back-dependencies. [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each extracted package:
-        CHECK package imports only Go stdlib + declared dependencies
-        CHECK package does not import root-level code
-        CHECK all communication with root is via interfaces
-      END FOR
-
-    # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE backward_compatibility():
-    VALIDATE backward_compatibility():
-      # [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # The original application must build and pass all tests at every step. [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      run full test suite (unit + integration) after each extraction step
-      CHECK no public API signatures have changed in root package
-      CHECK existing CLI commands produce identical output
-      CHECK go build ./... succeeds with no import errors
   implementation_approach:
     details:
       - Extract components as separate Go modules
@@ -67,11 +14,11 @@ IMPL-BACKWARD_COMPAT:
     summary: Use Go modules and interfaces to isolate extracted code
   metadata:
     author: AI Agent
-    created: "2026-03-12"
+    created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Maintain Backward Compatibility
   rationale:
     benefits:

@@ -11,8 +11,6 @@ import (
 	"strings"
 )
 
-// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-
 // PathValidator provides path validation and security checking functionality
 type PathValidator struct{}
 
@@ -26,24 +24,22 @@ type Validator interface {
 }
 
 // NewPathValidator creates a new PathValidator instance
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: construct DefaultTraverser with no preloaded exclusion patterns.
 func NewPathValidator() Validator {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	return &PathValidator{}
 }
 
 // ValidatePath performs comprehensive path validation including security checks
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: reject empty paths, run IsSecurePath, clean path without failing on normalization drift.
 func (pv *PathValidator) ValidatePath(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if path == "" {
 		return fmt.Errorf("path cannot be empty")
 	}
 
-	// Security validation
 	if !pv.IsSecurePath(path) {
 		return fmt.Errorf("path contains unsafe elements: %s", path)
 	}
 
-	// Clean and resolve the path
 	cleanPath := filepath.Clean(path)
 	if cleanPath != path {
 		// Allow this but could be flagged for security review
@@ -53,8 +49,8 @@ func (pv *PathValidator) ValidatePath(path string) error {
 }
 
 // ValidateExistence checks if a path exists
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidatePath then Stat path; return not-exist or access errors.
 func (pv *PathValidator) ValidateExistence(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if err := pv.ValidatePath(path); err != nil {
 		return err
 	}
@@ -70,13 +66,12 @@ func (pv *PathValidator) ValidateExistence(path string) error {
 }
 
 // ValidateReadable checks if a path is readable
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidateExistence then Open path for read; close on success.
 func (pv *PathValidator) ValidateReadable(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if err := pv.ValidateExistence(path); err != nil {
 		return err
 	}
 
-	// Try to open the file/directory for reading
 	file, err := os.Open(path)
 	if err != nil {
 		return fmt.Errorf("path is not readable: %s (%v)", path, err)
@@ -87,26 +82,22 @@ func (pv *PathValidator) ValidateReadable(path string) error {
 }
 
 // ValidateWritable checks if a path is writable
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidatePath then test write via temp file in directory or OpenFile WRONLY for files; recurse to parent when path missing.
 func (pv *PathValidator) ValidateWritable(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	if err := pv.ValidatePath(path); err != nil {
 		return err
 	}
 
-	// Check if path exists
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			// Check if parent directory is writable
 			parentDir := filepath.Dir(path)
 			return pv.ValidateWritable(parentDir)
 		}
 		return fmt.Errorf("cannot access path %s: %v", path, err)
 	}
 
-	// Check permissions
 	if info.IsDir() {
-		// For directories, try to create a temporary file
 		tempFile := filepath.Join(path, ".tmp_write_test")
 		file, err := os.Create(tempFile)
 		if err != nil {
@@ -115,7 +106,6 @@ func (pv *PathValidator) ValidateWritable(path string) error {
 		file.Close()
 		os.Remove(tempFile)
 	} else {
-		// For files, try to open in write mode
 		file, err := os.OpenFile(path, os.O_WRONLY, 0)
 		if err != nil {
 			return fmt.Errorf("file is not writable: %s (%v)", path, err)
@@ -127,27 +117,23 @@ func (pv *PathValidator) ValidateWritable(path string) error {
 }
 
 // IsSecurePath checks if a path is secure (no path traversal, etc.)
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: reject .. traversal, null bytes, newlines, and shell-expansion characters in path strings.
 func (pv *PathValidator) IsSecurePath(path string) bool {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
-
-	// Check for path traversal attempts
 	if strings.Contains(path, "..") {
 		return false
 	}
 
-	// Check for absolute path attempts that might escape boundaries
 	if filepath.IsAbs(path) {
 		// Absolute paths are allowed but should be flagged for review
 		// in security-sensitive contexts
 	}
 
-	// Check for suspicious patterns
 	suspicious := []string{
-		"~",    // Home directory references
-		"$",    // Environment variable references
-		"\x00", // Null bytes
-		"\r",   // Carriage returns
-		"\n",   // Line feeds
+		"~",
+		"$",
+		"\x00",
+		"\r",
+		"\n",
 	}
 
 	for _, pattern := range suspicious {
@@ -159,39 +145,36 @@ func (pv *PathValidator) IsSecurePath(path string) bool {
 	return true
 }
 
-// Convenience functions for common validation tasks
-
 // ValidatePath validates a path using the default validator
 func ValidatePath(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidatePath(path)
 }
 
 // ValidateExistence validates path existence using the default validator
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidatePath then Stat path; return not-exist or access errors.
 func ValidateExistence(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidateExistence(path)
 }
 
 // ValidateReadable validates path readability using the default validator
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidateExistence then Open path for read; close on success.
 func ValidateReadable(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidateReadable(path)
 }
 
 // ValidateWritable validates path writability using the default validator
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidatePath then test write via temp file in directory or OpenFile WRONLY for files; recurse to parent when path missing.
 func ValidateWritable(path string) error {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.ValidateWritable(path)
 }
 
 // IsSecurePath checks path security using the default validator
+// - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: reject .. traversal, null bytes, newlines, and shell-expansion characters in path strings.
 func IsSecurePath(path string) bool {
-	// [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 	validator := NewPathValidator()
 	return validator.IsSecurePath(path)
 }

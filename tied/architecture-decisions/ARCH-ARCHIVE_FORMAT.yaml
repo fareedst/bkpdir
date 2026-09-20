@@ -1,14 +1,14 @@
 ARCH-ARCHIVE_FORMAT:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         tar.gz: Rejected due to less universal support
         tar.bz2: Rejected due to slower compression
         Custom format: Rejected due to compatibility concerns
   cross-references: '[REQ-RELIABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-RELIABILITY
   decision: ZIP format for all archive operations
   implementation:
@@ -24,13 +24,13 @@ ARCH-ARCHIVE_FORMAT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Archive Format
@@ -44,7 +44,8 @@ ARCH-ARCHIVE_FORMAT:
       Standard library support in Go (`archive/zip`)
       Supports incremental archives
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   status: Active
@@ -53,5 +54,6 @@ ARCH-ARCHIVE_FORMAT:
       - ARCH-ARCHIVE_FORMAT
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-RELIABILITY
     tests: []

@@ -1,14 +1,14 @@
 ARCH-FEEDBACK_STORAGE:
   alternatives_considered:
-    - name: New YAML index (e.g. feedback.yaml as index)
-      cons:
+    - cons:
         - Feedback is not a traceability index; different schema (entries array)
+      name: New YAML index (e.g. feedback.yaml as index)
       pros:
         - Consistent with requirements.yaml pattern
       rejected_reason: Keep feedback as a separate artifact; schema is list of entries, not token-keyed records
-    - name: Store in requirements or implementation index
-      cons:
+    - cons:
         - Pollutes REQ/IMPL with non-traceability data
+      name: Store in requirements or implementation index
       pros:
         - No new file
       rejected_reason: Feedback is not a requirement or implementation decision
@@ -23,13 +23,13 @@ ARCH-FEEDBACK_STORAGE:
   metadata:
     created:
       author: AI Agent
-      date: 2026-03-03
+      date: {}
     last_updated:
       author: AI Agent
-      date: 2026-03-03
+      date: {}
       reason: Initial creation
     last_validated:
-      date: 2026-03-03
+      date: {}
       result: pass
       validator: AI Agent
   name: Feedback Storage for TIED Reporting

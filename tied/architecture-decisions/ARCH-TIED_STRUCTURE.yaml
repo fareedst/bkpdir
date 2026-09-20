@@ -1,38 +1,38 @@
 ARCH-TIED_STRUCTURE:
   alternatives_considered:
-    - name: Root-level files
-      cons:
-        - Clutters the root directory
-        - No clear organization
-      pros:
-        - Immediately visible in repository root
-      rejected_reason: Creates too much clutter at project root
-    - name: .github or .docs folder
-      cons:
+    - cons:
         - .github is typically for GitHub workflows
         - Too generic for methodology-specific files
+      name: .github or .docs folder
       pros:
         - Common convention for documentation
       rejected_reason: tied/ is more specific to the methodology
+    - cons:
+        - Clutters the root directory
+        - No clear organization
+      name: Root-level files
+      pros:
+        - Immediately visible in repository root
+      rejected_reason: Creates too much clutter at project root
   cross_references:
     - REQ-TIED_SETUP
   implementation_approach:
     details:
       - 'Add guide files: semantic-tokens.md, processes.md'
       - 'Create detail subdirectories: requirements/, architecture-decisions/, implementation-decisions/'
-      - 'Populate with YAML index files: requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml'
       - Create tied/ directory at project root
+      - 'Populate with YAML index files: requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml'
     summary: Create dedicated tied/ directory with YAML indexes and detail subdirectories
   metadata:
     created:
       author: AI Agent
-      date: 2025-12-18
+      date: {}
     last_updated:
       author: AI Agent
-      date: 2026-02-06
+      date: {}
       reason: Restructured to v1.5.0 schema with machine-parseable fields
     last_validated:
-      date: 2026-02-06
+      date: {}
       result: pass
       validator: AI Agent
   name: TIED Project Structure

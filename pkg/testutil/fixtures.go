@@ -1,5 +1,5 @@
-// [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// SPEC-ID: IMPL-TESTING::TESTUTIL_FIXTURES
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: build reusable git repos, archives, backups, and config fixtures for integration tests.
 package testutil
 
 import (

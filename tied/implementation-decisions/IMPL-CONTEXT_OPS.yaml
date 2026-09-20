@@ -16,65 +16,6 @@ IMPL-CONTEXT_OPS:
   cross_references:
     - ARCH-CONTEXT_SUPPORT
     - REQ-CONTEXT_SUPPORT
-  essence_pseudocode: |-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # Context-aware operation framework: wraps context.Context with ResourceManager [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # for cancellable, timeout-supporting operations with automatic cleanup. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — Block implements documented behavior for: DATA ContextKey:
-    DATA ContextKey:
-      ResourceManagerKey: "resourceManager"
-      OperationIDKey: "operationID"
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # How ContextualOperation bundles a context with a ResourceManager. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    CONTEXTUAL_OPERATION(ctx):
-      co.ctx = ctx
-      co.rm = NEW ResourceManager
-      RETURN co
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Poll ctx.Done for cooperative cancellation in long-running archive/backup paths.
-    IS_CANCELLED(co):
-      # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Non-blocking select on Done
-      SELECT on co.ctx.Done channel:
-        IF signaled: RETURN true
-        DEFAULT: RETURN false
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Surface cancellation reason to callers.
-    CHECK_CANCELLATION(co):
-      RETURN co.ctx.Err()
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Release temp files/dirs tracked by ResourceManager on success path.
-    CLEANUP(co):
-      RETURN co.rm.Cleanup()
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] Ensure cleanup runs even when panic unwinds (pairs with IMPL-RESOURCE_MANAGER).
-    CLEANUP_WITH_PANIC_RECOVERY(co):
-      RETURN co.rm.CleanupWithPanicRecovery()
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # How a ResourceManager is embedded into a context for downstream retrieval. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    WITH_RESOURCE_MANAGER(ctx):
-      rm = NEW ResourceManager
-      newCtx = context.WithValue(ctx, ResourceManagerKey, rm)
-      RETURN newCtx, rm
-
-    # How context cancellation triggers cleanup of tracked resources. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    CHECK_CONTEXT_AND_CLEANUP(ctx, rm):
-      IF ctx.Err() != nil:
-        cleanupErr = rm.CleanupWithPanicRecovery()
-        IF cleanupErr != nil: RETURN CombineErrors(ctx.Err(), cleanupErr)
-        RETURN ctx.Err()
-      RETURN nil
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    # How operation IDs are stored in and retrieved from context. [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-    WITH_OPERATION_ID(ctx, operationID):
-      RETURN context.WithValue(ctx, OperationIDKey, operationID)
-
-    # [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — Block implements documented behavior for: GET_OPERATION_ID(ctx):
-    GET_OPERATION_ID(ctx):
-      RETURN ctx.Value(OperationIDKey) as string
   functions:
     - '`CompareFilesWithContext(ctx context.Context, file1, file2 string)`'
     - '`CopyFileWithContext(ctx context.Context, src, dst string)`'
@@ -90,13 +31,13 @@ IMPL-CONTEXT_OPS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Context-Aware Operations

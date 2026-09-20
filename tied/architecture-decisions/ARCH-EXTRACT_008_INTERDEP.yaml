@@ -6,18 +6,18 @@ ARCH-EXTRACT_008_INTERDEP:
   decision: Adopt a documented package interdependency mapping for EXTRACT-008 that specifies dependency direction, public interfaces, and common usage patterns
   implementation_approach:
     details:
-      - 'Layer packages: foundation, utilities, framework, patterns'
       - Create canonical docs/package-interdependency-mapping.md
       - Introduce small interfaces to break cycles
+      - 'Layer packages: foundation, utilities, framework, patterns'
       - Record interface contracts in mapping document and implementation-decisions
     summary: Layered dependency mapping with canonical docs/package-interdependency-mapping.md
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
   name: Package Interdependency Mapping for EXTRACT-008
   rationale:
     benefits:

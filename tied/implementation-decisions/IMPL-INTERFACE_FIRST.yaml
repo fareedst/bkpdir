@@ -6,73 +6,6 @@ IMPL-INTERFACE_FIRST:
   cross_references:
     - ARCH-CODE_ORGANIZATION
     - REQ-MAINTAINABILITY
-  essence_pseudocode: |-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Interface-first design: define Go interfaces before concrete implementations, [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # enabling independent testing, loose coupling, and versioned evolution. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA interface_design_principles:
-    DATA interface_design_principles:
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Guiding rules for interface design in extracted packages. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      minimal_surface: "Interfaces expose only what consumers need (ISP)"
-      consumer_defined: "Interfaces live in the consuming package, not the provider"
-      no_concrete_exports: "Packages export interfaces; concrete types are internal"
-      testability: "Every interface must be mockable for unit testing"
-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE design_package_interfaces():
-    PROCEDURE design_package_interfaces():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interfaces are designed before any implementation code is extracted. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each package targeted for extraction:
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Derive required methods from real consumer call sites
-        analyze consumer call sites to determine required methods
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Keep interface surface minimal (interface segregation)
-        define minimal interface (only methods consumers actually call)
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Place interface next to consumer per Go conventions
-        place interface definition in consuming package (Go convention)
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Document contracts for maintainers
-        document interface contract with godoc comments
-      END FOR
-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE implement_against_interfaces():
-    PROCEDURE implement_against_interfaces():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Concrete implementations satisfy interfaces; consumers never import them. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each defined interface:
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Provider package holds concrete types
-        create concrete implementation in provider package
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Compile-time satisfaction check
-        verify implementation satisfies interface (compile-time check)
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Dependency injection at root only
-        wire concrete type to interface at composition root (main/cmd)
-      END FOR
-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE enable_independent_testing():
-    PROCEDURE enable_independent_testing():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interface-first design enables package-level testing with mocks. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each extracted package:
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Replace downstream deps with fakes in tests
-        generate mock implementations of consumed interfaces
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Isolate unit tests from integration IO
-        write unit tests using mocks (no real dependencies)
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Gate package health before integration
-        VALIDATE package compiles and tests pass without other packages
-      END FOR
-
-    # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE version_interface_evolution():
-    PROCEDURE version_interface_evolution():
-      # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interfaces evolve via versioning, not modification, to preserve compatibility. [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      WHEN interface change is needed:
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Prefer additive changes for backward compatibility
-        IF additive (new methods): extend with embedding or new interface
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Breaking changes get new type names
-        IF breaking (changed signatures): create v2 interface
-        # [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Bridge old and new APIs during migration
-        maintain adapter between old and new versions during transition
-      END WHEN
   implementation_approach:
     details: []
     summary: |-
@@ -83,13 +16,13 @@ IMPL-INTERFACE_FIRST:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Interface-First Extraction Approach

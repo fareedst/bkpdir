@@ -18,75 +18,19 @@ IMPL-FILE_STATISTICS:
     - ARCH-FILE_STATISTICS
     - REQ-OUT_002
     - REQ-OUTPUT_FORMATTING
-  essence_pseudocode: |-
-    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] [REQ-OUT_002]
-    # File statistics gathering and human-readable formatting for enhanced output [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
-
-    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: struct FileStatInfo:
-    struct FileStatInfo:
-      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] Data model for file statistics
-      Path      string      # Full file path
-      Name      string      # File name only (base name)
-      Size      int64       # File size in bytes
-      SizeHuman string      # Human-readable size (e.g., "1.2MB", "455KB")
-      MTime     time.Time   # Modification time
-      MTimeUnix int64       # Modification time as unix timestamp
-      Mode      os.FileMode # File permissions/mode
-      Type      string      # File type ("regular", "directory", "symlink", etc.)
-
-    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure GatherFileStatInfo(path):
-    procedure GatherFileStatInfo(path):
-      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Gather file statistics via os.Stat
-      info, err = os.Stat(path)
-      if err != nil:
-        return nil, error("failed to stat file: " + path)
-
-      # [IMPL-FILE_STATISTICS] [REQ-OUT_002] Build FileStatInfo with all fields populated [ARCH-FILE_STATISTICS]
-      return FileStatInfo{
-        Path:      path,
-        Name:      filepath.Base(path),
-        Size:      info.Size(),
-        SizeHuman: formatHumanSize(info.Size()),
-        MTime:     info.ModTime(),
-        MTimeUnix: info.ModTime().Unix(),
-        Mode:      info.Mode(),
-        Type:      getFileType(info),
-      }
-
-    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure formatHumanSize(size):
-    procedure formatHumanSize(size):
-      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Convert bytes to human-readable string
-      KB = 1024; MB = 1024*KB; GB = 1024*MB; TB = 1024*GB
-      if size >= TB: return sprintf("%.1fTB", size/TB)
-      if size >= GB: return sprintf("%.1fGB", size/GB)
-      if size >= MB: return sprintf("%.1fMB", size/MB)
-      if size >= KB: return sprintf("%.1fKB", size/KB)
-      return sprintf("%dB", size)
-
-    # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure getFileType(info):
-    procedure getFileType(info):
-      # [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING] Classify file by mode bits
-      mode = info.Mode()
-      if mode.IsRegular(): return "regular"
-      if mode.IsDir():     return "directory"
-      if mode & ModeSymlink:   return "symlink"
-      if mode & ModeDevice:    return "device"
-      if mode & ModeNamedPipe: return "pipe"
-      if mode & ModeSocket:    return "socket"
-      return "other"
   implementation_approach:
     details: []
     summary: FileStatInfo structure with human-readable formatting
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Statistics Implementation

@@ -12,7 +12,6 @@ IMPL-TEST_UNICODE_HANDLING:
     - REQ-CFG_001
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  essence_pseudocode: "# [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — Tests Unicode characters and special characters in configuration values and file paths\n\nprocedure TestUnicodeHandling():\n  # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — validates Unicode character preservation in config values\n  save BKPDIR_CONFIG env; defer restore\n  create temp dir\n  create .bkpdir.yml with:\n    archive_dir_path: \"/path/with/émojis/\U0001F680/and/特殊字符\"\n    exclude_patterns: [\"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]\n  set BKPDIR_CONFIG = configPath\n  call LoadConfig(dir)\n\n  # [REQ-CFG_005] — Unicode values merged with defaults per CFG-005 [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY]\n  assert cfg.ArchiveDirPath == \"/path/with/émojis/\U0001F680/and/特殊字符\"\n  assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]\n  for each Unicode pattern, assert it is found in cfg.ExcludePatterns\n  end\n\n# [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure TestSpecialCharactersInPaths():\nprocedure TestSpecialCharactersInPaths():\n  # [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] — validates config file loading with special characters in file paths\n  save BKPDIR_CONFIG env; defer restore\n  create temp dir\n\n  subtest \"config file path with spaces\":\n    # [REQ-CFG_001] — verifies LoadConfig works with spaces in directory path [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY]\n    create dir \"path with spaces\", write .bkpdir.yml with archive_dir_path and exclude_patterns\n    set BKPDIR_CONFIG, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/test/archive\"\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.tmp\"] (merged per CFG-005)\n\n  subtest \"config file path with special characters\":\n    # [REQ-CFG_001] — verifies LoadConfig works with Unicode in directory path [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY]\n    create dir \"path-with-特殊\", write .bkpdir.yml\n    set BKPDIR_CONFIG, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/test/archive\"\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.log\"]\n\n  subtest \"config file path with both spaces and special characters\":\n    # [REQ-CFG_001] — verifies LoadConfig works with both spaces and Unicode in directory path [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY]\n    create dir \"path with 特殊 chars\", write .bkpdir.yml\n    set BKPDIR_CONFIG, call LoadConfig\n    assert cfg.ArchiveDirPath == \"/test/archive\"\n    assert cfg.ExcludePatterns == [\".git/\", \"vendor/\", \"*.tmp\", \"*.log\"]\n  end"
   implementation_approach:
     details: []
     summary: '- **TestUnicodeHandling**: Tests Unicode characters (émojis, 特殊字符) in configuration values'
@@ -20,13 +19,13 @@ IMPL-TEST_UNICODE_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Unicode and Special Character Handling Tests
@@ -54,8 +53,8 @@ IMPL-TEST_UNICODE_HANDLING:
     - 'Config file paths with spaces: `path with spaces/.bkpdir.yml`'
     - 'Config file paths with Unicode: `path-with-特殊/.bkpdir.yml`'
     - 'Merge behavior validation: Unicode patterns merge correctly with defaults per CFG-005'
-    - "Unicode characters in `archive_dir_path`: `/path/with/émojis/\U0001F680/and/特殊字符`"
-    - "Unicode patterns in `exclude_patterns`: `[\"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]`"
+    - 'Unicode characters in `archive_dir_path`: `/path/with/émojis/🚀/and/特殊字符`'
+    - 'Unicode patterns in `exclude_patterns`: `["*.文件", "测试/*", "unicode-文件.log", "émoji-🚀.tmp"]`'
   test_structure: |-
     ```go
     // TestUnicodeHandling tests Unicode and special characters in configuration values

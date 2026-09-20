@@ -6,10 +6,8 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 // Tests for the pkg/errors package — error types, classification, and handling.
 package errors
-
 import (
 	"context"
 	"errors"
@@ -18,7 +16,6 @@ import (
 	"testing"
 )
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func TestApplicationError(t *testing.T) {
 	// Test basic error creation
 	err := NewApplicationError("test error", 42)
@@ -52,7 +49,6 @@ func TestApplicationError(t *testing.T) {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func TestErrorClassification(t *testing.T) {
 	// Test disk full error detection
 	diskFullErrors := []error{
@@ -99,7 +95,6 @@ func TestErrorClassification(t *testing.T) {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func TestDefaultErrorClassifier(t *testing.T) {
 	classifier := NewDefaultErrorClassifier()
 
@@ -134,7 +129,6 @@ func TestDefaultErrorClassifier(t *testing.T) {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func TestErrorContext(t *testing.T) {
 	ctx := context.Background()
 	errorCtx := NewErrorContext("test_operation", "/test/path", ctx)
@@ -157,7 +151,6 @@ func TestErrorContext(t *testing.T) {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func TestPathValidation(t *testing.T) {
 	// Mock configuration for testing
 	mockConfig := &mockErrorConfig{}
@@ -185,7 +178,7 @@ func TestPathValidation(t *testing.T) {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: verify HandleError returns configured status codes for classified errors.
 func TestHandleError(t *testing.T) {
 	mockConfig := &mockErrorConfig{}
 	mockFormatter := &mockErrorFormatter{}
@@ -213,7 +206,6 @@ func TestHandleError(t *testing.T) {
 
 // Mock implementations for testing
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 type mockErrorConfig struct{}
 
 func (m *mockErrorConfig) GetStatusCodes() map[string]int {
@@ -240,7 +232,6 @@ func (m *mockErrorConfig) GetFilePermissions() os.FileMode {
 	return 0644
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 type mockErrorFormatter struct {
 	lastMessage string
 }

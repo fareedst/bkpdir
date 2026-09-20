@@ -1,0 +1,65 @@
+---
+name: plan-close-out
+description: Staged LEAP close-out: process stack sync, CHANGELOG, and proposed commit message without committing. Use when the caller names plan-close-out, closes out staged TIED work, or prepares a commit from staged changes. Do not use for ammend-commit, leap-diff-promote, or planning new features.
+disable-model-invocation: true
+---
+
+# plan-close-out
+
+Explicit invocation only (`@plan-close-out` or `prompt-type: plan-close-out`).
+
+This skill is the workflow source of truth for client prompt-type invocation.
+`copy_files.sh` installs it under `.cursor/skills/plan-close-out/`. Task wrappers under
+`.cursor/agents/` remain TIED-source development artifacts only.
+[REQ-PROMPT_TYPE_GLOBAL_SKILLS] [ARCH-PROMPT_TYPE_GLOBAL_SKILLS]
+[IMPL-PROMPT_TYPE_GLOBAL_SKILLS]
+
+
+## Inputs
+
+- **Optional prompt envelope:** `prompt-type: plan-close-out`, `git-condition:`
+- **Git context:** caller-pasted [git_preamble_close_out](../prompt-shared/git-context-templates.md)
+- **Invocation remainder:** optional issue text after the skill or agent name.
+
+## TIED applicability
+
+Git-context + TIED — [tied-boundary.md](../prompt-shared/tied-boundary.md).
+
+## Procedure
+
+1. Apply caller-supplied git preamble (close-out variant)
+2. **Process** — [tied-close-out-process.md](../prompt-shared/tied-close-out-process.md) (standard prologue)
+3. Apply optional invocation remainder
+
+Before writing CHANGELOG or making completion claims, select/confirm the
+recorded `profile_depth` and gate policy, then call
+`tied_checklist_gate_validate` with `phase: close_out`, the final Tracker and
+CITDP, and identity-bound activation evidence when `depth_tier` is
+`integrated` or `strict_candidate` (prefer `tied_checklist_activation_collect`
+when phase artifact dirs exist). **Unified close-out:** also validate
+`request-evidence-envelope.v1.json` with `fail_on_error_gaps: true` (or run
+`tools/bootstrap/templates/run-close-out-gates.mjs --envelope-blocking --sync-dispositions --reconcile`).
+Completion requires gate `allowed: true` **and** zero blocking envelope error
+gaps (advisory/warn gaps remain visible). At integrated depth,
+`fail_on_error_gaps: true` also blocks process-adherence warn gaps (Wave 6).
+**Do not claim complete** without the three completion signals table in handoff.
+If either check fails, label the work **incomplete** in the parent handoff — do
+not claim completion. Missing, malformed, stale, or unjustified process evidence
+is a hard stop. Return the three completion signals per
+[completion-signals-handoff.md](../prompt-shared/completion-signals-handoff.md).
+
+## Gates
+
+LEAP close-out complete only after the `close_out` gate allows progression;
+**do not commit.**
+
+## Outputs
+
+Updated IMPL/ARCH/REQ as needed; gitignore hygiene handoff bullet per
+[gitignore-close-out-hygiene.md](../prompt-shared/gitignore-close-out-hygiene.md)
+(patterns proposed/applied unstaged or explicit N/A); CHANGELOG entry; proposed
+commit message.
+
+## Forbidden
+
+`git add`, `git commit`, `pbpaste`/`pbcopy`, automatic git inspection.

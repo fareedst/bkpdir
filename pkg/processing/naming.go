@@ -1,4 +1,3 @@
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROJECT_STRUCTURE] [REQ-MAINTAINABILITY]
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
@@ -60,7 +59,6 @@ type NamingProvider struct {
 	patterns map[string]*regexp.Regexp
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] NewNamingProvider creates a new naming provider with default timestamp formats
 func NewNamingProvider() *NamingProvider {
 	provider := &NamingProvider{
 		ArchiveTimestampFormat: "2006-01-02T150405", // ISO 8601 format from archive.go
@@ -93,7 +91,7 @@ func (np *NamingProvider) initializePatterns() {
 	)
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] GenerateName creates a name from template components (prefix, timestamp, git info, note)
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: assemble archive or backup name from prefix, timestamp, git info, incremental marker, and note.
 func (np *NamingProvider) GenerateName(template *NamingTemplate) (string, error) {
 	if template == nil {
 		return "", NewProcessingError("INVALID_TEMPLATE", "GenerateName", "template cannot be nil")
@@ -182,7 +180,7 @@ func (np *NamingProvider) GenerateBackupName(sourcePath, timestamp, note string)
 	return name
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] ParseName extracts components from a filename using regex pattern matching
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: match filename against registered regex and return NameComponents or unsupported-pattern error.
 func (np *NamingProvider) ParseName(name string, pattern string) (*NameComponents, error) {
 	regex, exists := np.patterns[pattern]
 	if !exists {

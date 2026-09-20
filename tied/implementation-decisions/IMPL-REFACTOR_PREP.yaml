@@ -6,56 +6,6 @@ IMPL-REFACTOR_PREP:
   cross_references:
     - ARCH-CODE_ORGANIZATION
     - REQ-MAINTAINABILITY
-  essence_pseudocode: |-
-    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Pre-extraction preparation: interface definition, large file decomposition, [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # dependency analysis, and comprehensive testing before any code moves. [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-
-    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE define_interfaces_before_extraction():
-    PROCEDURE define_interfaces_before_extraction():
-      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Interfaces must exist before extraction so packages depend on abstractions. [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each component targeted for extraction:
-        identify all inbound dependencies (what calls this component)
-        identify all outbound dependencies (what this component calls)
-        define interface for each dependency boundary
-        replace direct struct usage with interface usage at call sites
-      END FOR
-      VALIDATE no concrete type crosses a package boundary
-
-    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE decompose_large_files():
-    PROCEDURE decompose_large_files():
-      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Large files with mixed concerns must be split before extraction to [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # establish clear boundaries. [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each source_file exceeding complexity threshold:
-        identify distinct responsibilities within the file
-        split into focused files (one responsibility per file)
-        preserve package-level API (no external behavior change)
-        update internal imports within the package
-      END FOR
-
-    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE analyze_and_cleanup_dependencies():
-    PROCEDURE analyze_and_cleanup_dependencies():
-      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Dependency analysis reveals hidden coupling that would create circular [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # imports after extraction. [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      build import_graph of current codebase
-      identify clusters of mutual imports (potential circular deps)
-      FOR each circular dependency cluster:
-        introduce interface to break the cycle
-        OR restructure to move shared code to a lower layer
-      END FOR
-
-    # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE pre_extraction_readiness():
-    VALIDATE pre_extraction_readiness():
-      # [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Comprehensive testing before extraction ensures a stable baseline. [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      CHECK all existing tests pass (unit, integration)
-      CHECK test coverage meets minimum threshold for extraction targets
-      CHECK no circular dependency clusters remain
-      CHECK all cross-package boundaries use interfaces
-      CHECK each extraction target has clearly defined public API
   implementation_approach:
     details: []
     summary: |-
@@ -66,13 +16,13 @@ IMPL-REFACTOR_PREP:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Pre-Extraction Refactoring Strategy

@@ -17,25 +17,6 @@ IMPL-TESTING:
   cross_references:
     - ARCH-TESTING_STRATEGY
     - REQ-RELIABILITY
-  essence_pseudocode: |-
-    # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — Table-driven unit tests, integration test structure, comprehensive test utilities in testutil/ package, and quality gates
-
-    procedure testing_implementation_strategy():
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Unit tests: table-driven pattern with struct slices for test cases
-      unit_tests("table-driven pattern with struct slices for test cases")
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Integration tests: Setup/Execute/Verify pattern
-      integration_tests("Setup/Execute/Verify pattern")
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Test utilities (testutil/): CreateTestDirectory, CreateTestFile, CreateTestGitRepo, CreateTestArchive, CreateTestBackup, AssertNoTempFiles, AssertArchiveContents, MockFileSystem, CaptureOutput, SetupTestConfig, CleanupTestResources, and more
-      test_utilities_testutil("CreateTestDirectory, CreateTestFile, CreateTestGitRepo, Crea")
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Testing frameworks: archive corruption, disk space simulation, permission testing, context cancellation, error injection
-      testing_frameworks("archive corruption, disk space simulation, permission testin")
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Test categories: unit, integration, performance, stress
-      test_categories("unit, integration, performance, stress")
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Test execution: make test, go test -cover, build tags for integration/performance/stress, race detection
-      test_execution("make test, go test -cover, build tags for integration/perfor")
-      # [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] Quality gates: 90% min coverage (100% critical), no benchmark regression, no memory leaks, no race conditions, 100% cleanup verification
-      quality_gates("90% min coverage (100% critical), no benchmark regression, n")
-      end
   implementation_approach:
     details:
       - 'Integration tests: Setup/Execute/Verify pattern'
@@ -48,8 +29,11 @@ IMPL-TESTING:
     summary: Table-driven unit tests, integration test structure, comprehensive test utilities in testutil/ package, and quality gates
   metadata:
     author: AI Agent
-    created: "2026-03-12"
-    last_updated: "2026-03-12"
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Testing Implementation Strategy
   rationale:
     benefits:

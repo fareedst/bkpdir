@@ -4,7 +4,6 @@
 // [IMPL-DUAL_FORMATTING] Targets printf/template formatter implementation
 
 package main
-
 import (
 	"bkpdir/pkg/formatter"
 	"os"
@@ -13,7 +12,7 @@ import (
 	"testing"
 )
 
-// TestTemplateFormatter tests the template formatting functionality
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: express unit tests as struct slices with name/input/want fields and t.Run subtests per case.
 func TestTemplateFormatter(t *testing.T) {
 	cfg := DefaultConfig()
 	fa := NewFormatterAdapter(cfg)

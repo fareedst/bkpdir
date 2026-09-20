@@ -48,9 +48,8 @@ func NewDefaultConfigLoader() *GenericConfigLoader {
 	)
 }
 
-// LoadConfig loads configuration from multiple sources with the specified default.
-// This generalizes the original LoadConfig function to work with any configuration type.
-
+// SPEC-ID: IMPL-CONFIG_SCHEMA_FLEX::GENERIC_CONFIG_LOAD
+// - [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: clone defaultConfig, merge each existing search-path YAML file, apply environment overrides, then validate schema.
 func (g *GenericConfigLoader) LoadConfig(root string, defaultConfig interface{}) (interface{}, error) {
 	// Start with default configuration (clone to avoid modifying original)
 	config := g.cloneConfig(defaultConfig)

@@ -1,4 +1,3 @@
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // Context-aware operations for resource management and cancellation support.
 // Provides ContextualOperation (context + ResourceManager bundle), cancellation
 // checking, context key management, and context-aware cleanup.
@@ -12,15 +11,13 @@ import (
 	"os"
 )
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // CONTEXTUAL_OPERATION: bundles a context.Context with a ResourceManager.
 type ContextualOperation struct {
 	ctx context.Context
 	rm  *ResourceManager
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// CONTEXTUAL_OPERATION: creates a new ContextualOperation with embedded ResourceManager.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: wrap ctx with a freshly allocated ResourceManager for scoped cleanup during the operation.
 func NewContextualOperation(ctx context.Context) *ContextualOperation {
 	return &ContextualOperation{
 		ctx: ctx,
@@ -28,18 +25,15 @@ func NewContextualOperation(ctx context.Context) *ContextualOperation {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] — returns the wrapped context.
 func (co *ContextualOperation) Context() context.Context {
 	return co.ctx
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-RESOURCE_MANAGER] — returns the embedded ResourceManager.
 func (co *ContextualOperation) ResourceManager() *ResourceManager {
 	return co.rm
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// IS_CANCELLED: checks context Done channel for cancellation signal.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: non-blocking select on ctx.Done(); return true when cancellation signaled.
 func (co *ContextualOperation) IsCancelled() bool {
 	select {
 	case <-co.ctx.Done():
@@ -49,31 +43,25 @@ func (co *ContextualOperation) IsCancelled() bool {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// CHECK_CANCELLATION: surfaces cancellation error from context.
 func (co *ContextualOperation) CheckCancellation() error {
 	return co.ctx.Err()
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-RESOURCE_MANAGER] — CLEANUP: delegates to ResourceManager.
 func (co *ContextualOperation) Cleanup() error {
 	return co.rm.Cleanup()
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-RESOURCE_MANAGER] — CLEANUP_WITH_PANIC_RECOVERY: delegates with panic safety.
 func (co *ContextualOperation) CleanupWithPanicRecovery() error {
 	return co.rm.CleanupWithPanicRecovery()
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// WITH_RESOURCE_MANAGER: embeds a ResourceManager into a context for downstream retrieval.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: store a new ResourceManager in context under ResourceManagerKey for downstream retrieval.
 func WithResourceManager(ctx context.Context) (context.Context, *ResourceManager) {
 	rm := NewResourceManager()
 	return context.WithValue(ctx, ResourceManagerKey, rm), rm
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// CHECK_CONTEXT_AND_CLEANUP: checks cancellation, triggers cleanup on cancel.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: when ctx.Err() is set, run CleanupWithPanicRecovery and combine cleanup failure with context error.
 func CheckContextAndCleanup(ctx context.Context, rm *ResourceManager) error {
 	if err := ctx.Err(); err != nil {
 		// Context is cancelled, perform cleanup
@@ -86,7 +74,6 @@ func CheckContextAndCleanup(ctx context.Context, rm *ResourceManager) error {
 	return nil
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-STRUCTURED_ERRORS] — CombineErrors: merges multiple errors into one.
 func CombineErrors(errors ...error) error {
 	var validErrors []error
 	for _, err := range errors {
@@ -119,18 +106,15 @@ func CombineErrors(errors ...error) error {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-STRUCTURED_ERRORS] — CombinedError: multi-error container.
 type CombinedError struct {
 	Message string
 	Errors  []error
 }
 
-// [IMPL-CONTEXT_OPS] — Error returns the combined error message.
 func (ce *CombinedError) Error() string {
 	return ce.Message
 }
 
-// [IMPL-CONTEXT_OPS] — Unwrap returns the first error for error chain compatibility.
 func (ce *CombinedError) Unwrap() error {
 	if len(ce.Errors) > 0 {
 		return ce.Errors[0]
@@ -138,19 +122,17 @@ func (ce *CombinedError) Unwrap() error {
 	return nil
 }
 
-// [IMPL-CONTEXT_OPS] — GetAllErrors returns all constituent errors.
 func (ce *CombinedError) GetAllErrors() []error {
 	return ce.Errors
 }
 
-// [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-// AtomicWriteFile writes data to a file atomically using a temporary file.
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: delegate to context-aware atomic write with background context.
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: write byte slice through AtomicWriter, set permissions on temp, commit.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 	return AtomicWriteFileWithContext(context.Background(), path, data, rm)
 }
 
-// [IMPL-ATOMIC_OPS] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]
-// AtomicWriteFileWithContext: atomic file write with cancellation checks at each stage.
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: check cancellation before each stage, write temp path, rename to final, untrack temp on success.
 func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, rm *ResourceManager) error {
 	// Check for cancellation before starting
 	if err := ctx.Err(); err != nil {
@@ -183,7 +165,6 @@ func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, r
 	return nil
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // ContextualOperationWithTimeout: creates a ContextualOperation with a timeout.
 func ContextualOperationWithTimeout(ctx context.Context, timeout int64) (*ContextualOperation, context.CancelFunc) {
 	// For now, we create without timeout - in a real implementation this would use context.WithTimeout
@@ -191,7 +172,6 @@ func ContextualOperationWithTimeout(ctx context.Context, timeout int64) (*Contex
 	return NewContextualOperation(ctx), func() {}
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // ContextKey: typed key for context value storage.
 type ContextKey string
 
@@ -202,21 +182,19 @@ const (
 	OperationIDKey ContextKey = "operationID"
 )
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // GET_RESOURCE_MANAGER: retrieves a ResourceManager from context.
 func GetResourceManagerFromContext(ctx context.Context) (*ResourceManager, bool) {
 	rm, ok := ctx.Value(ResourceManagerKey).(*ResourceManager)
 	return rm, ok
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// WITH_OPERATION_ID: stores an operation ID in the context.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: attach operationID to context under OperationIDKey for tracing nested work.
 func WithOperationID(ctx context.Context, operationID string) context.Context {
 	return context.WithValue(ctx, OperationIDKey, operationID)
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
-// GET_OPERATION_ID: retrieves an operation ID from context.
+// SPEC-ID: IMPL-CONTEXT_OPS::GET_OPERATION_ID
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: read OperationIDKey from context and report whether a string ID was stored.
 func GetOperationIDFromContext(ctx context.Context) (string, bool) {
 	id, ok := ctx.Value(OperationIDKey).(string)
 	return id, ok

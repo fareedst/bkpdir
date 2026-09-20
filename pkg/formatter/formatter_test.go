@@ -6,7 +6,6 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 package formatter
-
 import (
 	"errors"
 	"strings"
@@ -56,7 +55,7 @@ func (mcp *MockConfigProvider) GetDetailedTemplateString(templateType string) st
 	return mcp.templateStrings[templateType+"_detailed"]
 }
 
-// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify AddStdout/AddStderr/Clear/GetMessages track delayed output by destination.
 func TestOutputCollector(t *testing.T) {
 	collector := NewOutputCollector()
 
@@ -121,7 +120,7 @@ func TestPatternExtractor(t *testing.T) {
 	}
 }
 
-// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-CUSTOMIZABLE_FORMAT_STRINGS]
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING] — How: validate #{placeholder} replacement, list extraction, and mixed %s/#{...} format strings.
 func TestTemplateFormatter(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultTemplateFormatter(configProvider)
@@ -162,7 +161,7 @@ func TestTemplateFormatter(t *testing.T) {
 	}
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify default format strings and error template methods include path and error type labels.
 func TestDefaultOutputFormatter(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -194,7 +193,7 @@ func TestDefaultOutputFormatter(t *testing.T) {
 	}
 }
 
-// [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify formatter with collector buffers PrintCreatedArchive and PrintError until flush.
 func TestDelayedOutputMode(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	collector := NewOutputCollector()
@@ -256,7 +255,7 @@ func TestTemplateDelegation(t *testing.T) {
 	}
 }
 
-// [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify default format strings and error template methods include path and error type labels.
 func TestErrorTemplateFormatting(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 	formatter := NewDefaultOutputFormatter(configProvider)
@@ -307,7 +306,7 @@ func TestPatternExtractionEdgeCases(t *testing.T) {
 	}
 }
 
-// [IMPL-DELAYED_OUTPUT] [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: assert DefaultOutputFormatter, DefaultTemplateFormatter, and DefaultPatternExtractor satisfy their interfaces.
 func TestInterfaceCompliance(t *testing.T) {
 	configProvider := NewMockConfigProvider()
 

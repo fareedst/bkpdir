@@ -15,117 +15,35 @@ IMPL-EXCLUSION_PATTERNS:
       - main.NewPatternMatcher
       - main.ShouldExcludeFile
   code_markers: '`pkg/fileops/exclusion.go`, `PatternMatcher` struct, doublestar imports'
-  convenience_functions: "```go\nfunc ShouldExcludeFile(path string, exclusions []string) bool {\n    if len(exclusions) == 0 {\n        return false\n    }\n    \n    matcher := NewPatternMatcher(exclusions)\n    return matcher.Match(path)\n}\n\nfunc FilterPaths(paths []string, exclusions []string) []string {\n    matcher := NewPatternMatcher(exclusions)\n    var filtered []string\n    \n    for _, path := range paths {\n        if !matcher.Match(path) {\n            filtered = append(filtered, path)\n        }\n    }\n    \n    return filtered\n}\n```"
+  convenience_functions: |-
+    ```go
+    func ShouldExcludeFile(path string, exclusions []string) bool {
+        if len(exclusions) == 0 {
+            return false
+        }
+        
+        matcher := NewPatternMatcher(exclusions)
+        return matcher.Match(path)
+    }
+
+    func FilterPaths(paths []string, exclusions []string) []string {
+        matcher := NewPatternMatcher(exclusions)
+        var filtered []string
+        
+        for _, path := range paths {
+            if !matcher.Match(path) {
+                filtered = append(filtered, path)
+            }
+        }
+        
+        return filtered
+    }
+    ```
   cross_references:
     - ARCH-EXCLUSION_PATTERNS
     - REQ-CONFIGURATION
   directory_patterns: '`.git/`, `node_modules/`'
   doublestar: '`**` for recursive matching'
-  essence_pseudocode: |-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-    # File exclusion via doublestar glob pattern matching with three pattern categories: [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-    # directory patterns (trailing /), glob patterns (* or **), and exact matches. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: TYPE PatternMatcher:
-    TYPE PatternMatcher:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      # Holds a list of exclusion pattern strings; matching is dispatch-based. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      FIELDS: patterns []string
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: INTERFACE Excluder:
-    INTERFACE Excluder:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      # Contract for anything that can decide whether a path is excluded. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      ShouldExclude(path) -> bool
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure NewPatternMatcher(patterns) -> *PatternMatcher:
-    procedure NewPatternMatcher(patterns) -> *PatternMatcher:
-      # [IMPL-EXCLUSION_PATTERNS] — Constructs a PatternMatcher from a pattern slice. [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      INPUT: patterns []string
-      OUTPUT: *PatternMatcher
-      return PatternMatcher{patterns: patterns}
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure PatternMatcher.ShouldExclude(path) -> bool:
-    procedure PatternMatcher.ShouldExclude(path) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      # Normalizes path to forward slashes, iterates patterns, returns true on first match. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      INPUT: path string
-      OUTPUT: bool
-      normalizedPath = filepath.ToSlash(path)
-      for each pattern in pm.patterns:
-        if matchesPattern(normalizedPath, pattern) -> return true
-      return false
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure PatternMatcher.matchesPattern(path, pattern) -> bool:
-    procedure PatternMatcher.matchesPattern(path, pattern) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] — Dispatch: directory pattern, glob pattern, or exact match. [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      normalizedPattern = filepath.ToSlash(pattern)
-      if pattern ends with "/" -> matchesDirectoryPattern(path, normalizedPattern)
-      if pattern contains "*"  -> matchesGlobPattern(path, normalizedPattern)
-      otherwise                -> exact string comparison
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure PatternMatcher.matchesDirectoryPattern(path, pattern) -> bool:
-    procedure PatternMatcher.matchesDirectoryPattern(path, pattern) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      # Handles trailing-/ patterns; supports **/ prefix for recursive directory matching. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      patternBase = pattern without trailing "/"
-      if pattern starts with "**/" :
-        # [IMPL-EXCLUSION_PATTERNS] — recursive directory match anywhere in the path [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-        dirName = patternBase without "**/" prefix
-        dirPattern = dirName + "/"
-        if path contains dirPattern at some index:
-          check remaining content after dirPattern; match if non-empty or path ends with "/"
-        return false
-      else:
-        # [IMPL-EXCLUSION_PATTERNS] — non-recursive: path must start with patternBase+"/" [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-        return path starts with patternBase+"/" OR path == patternBase+"/"
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure PatternMatcher.matchesGlobPattern(path, pattern) -> bool:
-    procedure PatternMatcher.matchesGlobPattern(path, pattern) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      # Delegates ** patterns to doublestar library; single-* patterns dispatched by depth. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      if pattern contains "**":
-        return doublestar.Match(pattern, path)
-      split path and pattern into parts by "/"
-      if pattern has 1 part -> matchesRootLevelPattern
-      else                  -> matchesDirectoryLevelPattern
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure PatternMatcher.matchesRootLevelPattern(path, pattern) -> bool:
-    procedure PatternMatcher.matchesRootLevelPattern(path, pattern) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] — root-level glob: tries pattern as-is and with **/ prefix. [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      patternsToTry = [pattern]
-      if pattern does not start with "**/" -> also try "**/"+pattern
-      for each p in patternsToTry:
-        if doublestar.Match(p, path) -> return true
-      return false
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure PatternMatcher.matchesDirectoryLevelPattern(path, pattern, pathParts, patternParts) -> bool:
-    procedure PatternMatcher.matchesDirectoryLevelPattern(path, pattern, pathParts, patternParts) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] — multi-segment glob: matches only if part counts are equal. [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      if len(pathParts) == len(patternParts):
-        return doublestar.Match(pattern, path)
-      return false
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure ShouldExcludeFile(path, patterns) -> bool:
-    procedure ShouldExcludeFile(path, patterns) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      # Convenience function: creates a matcher and checks a single path. [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-      INPUT: path string, patterns []string
-      OUTPUT: bool
-      matcher = NewPatternMatcher(patterns)
-      return matcher.ShouldExclude(path)
-
-    # --- Legacy backward-compatibility wrappers (exclude.go, root package) --- [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure main.NewPatternMatcher(patterns) -> *PatternMatcher:
-    procedure main.NewPatternMatcher(patterns) -> *PatternMatcher:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-PACKAGE_EXTRACTION] — delegates to fileops.NewPatternMatcher [REQ-CONFIGURATION]
-      return fileops.NewPatternMatcher(patterns)
-
-    # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION] — Block implements documented behavior for: procedure main.ShouldExcludeFile(path, patterns) -> bool:
-    procedure main.ShouldExcludeFile(path, patterns) -> bool:
-      # [IMPL-EXCLUSION_PATTERNS] [ARCH-PACKAGE_EXTRACTION] — delegates to fileops.ShouldExcludeFile [REQ-CONFIGURATION]
-      return fileops.ShouldExcludeFile(path, patterns)
   glob_patterns: '`*.tmp`, `*.log`, `build/`'
   implementation_approach:
     details: []
@@ -133,18 +51,48 @@ IMPL-EXCLUSION_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_patterns: Array of patterns for complex exclusions
   name: Exclusion Patterns Implementation
-  patternmatcher_implementation: "```go\ntype PatternMatcher struct {\n    patterns []string\n    compiled []glob.Glob\n}\n\nfunc NewPatternMatcher(patterns []string) *PatternMatcher {\n    pm := &PatternMatcher{\n        patterns: patterns,\n        compiled: make([]glob.Glob, 0, len(patterns)),\n    }\n    \n    for _, pattern := range patterns {\n        if g, err := glob.Compile(pattern); err == nil {\n            pm.compiled = append(pm.compiled, g)\n        }\n    }\n    \n    return pm\n}\n\nfunc (pm *PatternMatcher) Match(path string) bool {\n    for _, g := range pm.compiled {\n        if g.Match(path) {\n            return true\n        }\n    }\n    return false\n}\n```"
+  patternmatcher_implementation: |-
+    ```go
+    type PatternMatcher struct {
+        patterns []string
+        compiled []glob.Glob
+    }
+
+    func NewPatternMatcher(patterns []string) *PatternMatcher {
+        pm := &PatternMatcher{
+            patterns: patterns,
+            compiled: make([]glob.Glob, 0, len(patterns)),
+        }
+        
+        for _, pattern := range patterns {
+            if g, err := glob.Compile(pattern); err == nil {
+                pm.compiled = append(pm.compiled, g)
+            }
+        }
+        
+        return pm
+    }
+
+    func (pm *PatternMatcher) Match(path string) bool {
+        for _, g := range pm.compiled {
+            if g.Match(path) {
+                return true
+            }
+        }
+        return false
+    }
+    ```
   rationale:
     benefits: []
     problems_solved: []

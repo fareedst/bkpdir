@@ -1,7 +1,7 @@
 ARCH-PROJECT_STRUCTURE:
   alternatives_considered: []
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
   decision: Flat structure with internal packages
   decision_flat_structure_with_internal_packages: |-
@@ -28,13 +28,13 @@ ARCH-PROJECT_STRUCTURE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Project Structure
@@ -47,7 +47,8 @@ ARCH-PROJECT_STRUCTURE:
       Testable components
       Supports future package extraction
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -56,5 +57,6 @@ ARCH-PROJECT_STRUCTURE:
       - ARCH-PROJECT_STRUCTURE
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []

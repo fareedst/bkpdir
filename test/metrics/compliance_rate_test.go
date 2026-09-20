@@ -1,6 +1,5 @@
 // [REQ-CODE_QUALITY]
 package metrics
-
 import (
 	"context"
 	"encoding/json"
@@ -65,6 +64,13 @@ type ComplianceAnalysisResult struct {
 // TestDOC014ComplianceRateAccuracy - main test for compliance rate accuracy
 // NOTE: This test suite is deprecated - project has migrated to STDD methodology
 // The DOC-014 decision framework is no longer applicable after STDD migration
+// - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: hash interface signatures plus documented behavioral contracts to assign stable feature fingerprints linked to semantic tokens.
+// - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: document behavioral contracts in TIED YAML and link each contract to requirement tokens.
+// - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: build semantic-token dependency graph from registry cross-references for change-impact analysis.
+// - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: embed semantic tokens inline and replicate critical REQ/ARCH/IMPL context so each document layer stays self-contained with registry links.
+// - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: verify tokens in code and tests exist in the registry with bidirectional links and no orphans.
+// - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: document input/output and invariants per feature and bind each contract to requirement tokens.
+// - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: traverse dependency graph from registry cross-refs to list impacted docs, code, and tests for a proposed token change.
 func TestDOC014ComplianceRateAccuracy(t *testing.T) {
 	t.Skip("DOC-014 compliance rate tests deprecated - project migrated to STDD methodology")
 

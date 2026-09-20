@@ -8,7 +8,6 @@
 
 // [REQ-ERROR_HANDLING] Enhanced error handling with structured error types
 // [ARCH-ERROR_HANDLING] Structured error handling strategy
-// [IMPL-STRUCTURED_ERRORS] Structured error types with status codes and operation context
 package main
 
 import (
@@ -23,7 +22,6 @@ import (
 	"syscall"
 )
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // ErrorConfig abstracts configuration dependencies for error handling
 type ErrorConfig interface {
@@ -66,6 +64,7 @@ type ErrorInterface interface {
 	Unwrap() error
 }
 
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: format Message alone or Message WITH underlying Err when present.
 // ArchiveError represents a structured error with status code
 type ArchiveError struct {
 	Message    string
@@ -76,18 +75,17 @@ type ArchiveError struct {
 }
 
 func (e *ArchiveError) Error() string {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
 	return e.Message
 }
 
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: return wrapped Err for errors.Is/As chains.
 func (e *ArchiveError) Unwrap() error {
 	return e.Err
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *ArchiveError) GetStatusCode() int {
 	return e.StatusCode
 }
@@ -104,8 +102,8 @@ func (e *ArchiveError) GetMessage() string {
 	return e.Message
 }
 
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: mirror ArchiveError Error formatting for backup operations.
 // BackupError represents a structured error with status code for backup operations
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 type BackupError struct {
 	Message    string
 	StatusCode int
@@ -115,7 +113,6 @@ type BackupError struct {
 }
 
 func (e *BackupError) Error() string {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if e.Err != nil {
 		return fmt.Sprintf("%s: %v", e.Message, e.Err)
 	}
@@ -126,7 +123,6 @@ func (e *BackupError) Unwrap() error {
 	return e.Err
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (e *BackupError) GetStatusCode() int {
 	return e.StatusCode
 }
@@ -143,7 +139,7 @@ func (e *BackupError) GetMessage() string {
 	return e.Message
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct ArchiveError with message and status code only.
 func NewArchiveError(message string, statusCode int) *ArchiveError {
 	return &ArchiveError{
 		Message:    message,
@@ -151,7 +147,7 @@ func NewArchiveError(message string, statusCode int) *ArchiveError {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct ArchiveError with message, status code, and underlying Err.
 func NewArchiveErrorWithCause(message string, statusCode int, err error) *ArchiveError {
 	return &ArchiveError{
 		Message:    message,
@@ -160,7 +156,7 @@ func NewArchiveErrorWithCause(message string, statusCode int, err error) *Archiv
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct ArchiveError with message, status, operation, path, and optional Err.
 func NewArchiveErrorWithContext(
 	message string,
 	statusCode int,
@@ -176,7 +172,7 @@ func NewArchiveErrorWithContext(
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct BackupError with message and status code only.
 func NewBackupError(message string, statusCode int) *BackupError {
 	return &BackupError{
 		Message:    message,
@@ -184,7 +180,7 @@ func NewBackupError(message string, statusCode int) *BackupError {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct BackupError with message, status code, and underlying Err.
 func NewBackupErrorWithCause(message string, statusCode int, err error) *BackupError {
 	return &BackupError{
 		Message:    message,
@@ -193,7 +189,7 @@ func NewBackupErrorWithCause(message string, statusCode int, err error) *BackupE
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct BackupError with message, status, operation, path, and optional Err.
 func NewBackupErrorWithContext(
 	message string,
 	statusCode int,
@@ -209,12 +205,11 @@ func NewBackupErrorWithContext(
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match disk-space substrings in error text OR path error with OS no-space/quota/large-file codes.
 func IsDiskFullError(err error) bool {
 	if err == nil {
 		return false
 	}
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	errStr := strings.ToLower(err.Error())
 	return strings.Contains(errStr, "no space left on device") ||
 		strings.Contains(errStr, "disk full") ||
@@ -247,7 +242,7 @@ func IsDiskFullError(err error) bool {
 		}()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match permission-denied substrings OR path error with EACCES/EPERM.
 func IsPermissionError(err error) bool {
 	if err == nil {
 		return false
@@ -272,7 +267,7 @@ func IsPermissionError(err error) bool {
 		}()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match directory-not-found substrings OR path error with ENOENT.
 func IsDirectoryNotFoundError(err error) bool {
 	if err == nil {
 		return false
@@ -292,7 +287,6 @@ func IsDirectoryNotFoundError(err error) bool {
 		}()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // Resource represents a resource that needs cleanup
 type Resource interface {
@@ -307,7 +301,6 @@ type TempFile struct {
 
 // Cleanup removes the temporary file from the filesystem.
 func (tf *TempFile) Cleanup() error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return os.Remove(tf.Path)
 }
 
@@ -322,7 +315,6 @@ type TempDir struct {
 
 // Cleanup removes the temporary directory and its contents from the filesystem.
 func (td *TempDir) Cleanup() error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return os.RemoveAll(td.Path)
 }
 
@@ -330,7 +322,6 @@ func (td *TempDir) String() string {
 	return fmt.Sprintf("temp dir: %s", td.Path)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 type ResourceManager struct {
 	resources []Resource
 	mutex     sync.RWMutex
@@ -338,30 +329,25 @@ type ResourceManager struct {
 
 // NewResourceManager creates a new ResourceManager for tracking resources.
 func NewResourceManager() *ResourceManager {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return &ResourceManager{
 		resources: make([]Resource, 0),
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) AddResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
 	rm.resources = append(rm.resources, resource)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) AddTempFile(path string) {
 	rm.AddResource(&TempFile{Path: path})
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) AddTempDir(path string) {
 	rm.AddResource(&TempDir{Path: path})
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) RemoveResource(resource Resource) {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -373,7 +359,6 @@ func (rm *ResourceManager) RemoveResource(resource Resource) {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) Cleanup() error {
 	rm.mutex.Lock()
 	defer rm.mutex.Unlock()
@@ -395,7 +380,6 @@ func (rm *ResourceManager) Cleanup() error {
 	return nil
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -405,7 +389,6 @@ func (rm *ResourceManager) CleanupWithPanicRecovery() (err error) {
 	return rm.Cleanup()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // ContextualOperation provides context and resource management for operations.
 type ContextualOperation struct {
@@ -413,30 +396,22 @@ type ContextualOperation struct {
 	rm  *ResourceManager
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func NewContextualOperation(ctx context.Context) *ContextualOperation {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return &ContextualOperation{
 		ctx: ctx,
 		rm:  NewResourceManager(),
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) Context() context.Context {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return co.ctx
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) ResourceManager() *ResourceManager {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return co.rm
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) IsCancelled() bool {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	select {
 	case <-co.ctx.Done():
 		return true
@@ -445,9 +420,7 @@ func (co *ContextualOperation) IsCancelled() bool {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) CheckCancellation() error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	select {
 	case <-co.ctx.Done():
 		return co.ctx.Err()
@@ -456,15 +429,11 @@ func (co *ContextualOperation) CheckCancellation() error {
 	}
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func (co *ContextualOperation) Cleanup() error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return co.rm.Cleanup()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if err == nil {
 		return 0
 	}
@@ -499,17 +468,15 @@ func HandleError(err error, cfg ErrorConfig, formatter ErrorFormatter) int {
 	return cfg.GetStatusCodes()["general_error"]
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleArchiveErrorWithInterface(err *ArchiveError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	return err.GetStatusCode()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleBackupErrorWithInterface(err *BackupError, cfg ErrorConfig, formatter ErrorFormatter) int {
 	return err.GetStatusCode()
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
+// - [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: classify errno-style errors, print via formatter Format* methods using cfg strings, and return matching cfg status codes.
 func HandleArchiveError(err error, cfg *Config, formatter formatter.OutputFormatterInterface) int {
 	if err == nil {
 		return 0
@@ -545,16 +512,13 @@ func HandleArchiveError(err error, cfg *Config, formatter formatter.OutputFormat
 	return 1
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func HandleBackupError(err error, cfg *Config, formatter *OutputFormatter) int {
 	return HandleError(err, cfg, formatter)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 
 // AtomicWriteFile writes data to a file atomically using a temporary file.
 func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	dir := filepath.Dir(path)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return NewArchiveErrorWithContext("Failed to write temporary file", 1, "atomic_write", path, err)
@@ -584,7 +548,6 @@ func AtomicWriteFile(path string, data []byte, rm *ResourceManager) error {
 	return nil
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, rm *ResourceManager) error {
 	// Check for cancellation before starting
 	select {
@@ -629,9 +592,7 @@ func AtomicWriteFileWithContext(ctx context.Context, path string, data []byte, r
 	return nil
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if err := os.MkdirAll(path, perm); err != nil {
 		if IsPermissionError(err) {
 			return fmt.Errorf("permission denied creating directory %s: %w", path, err)
@@ -644,9 +605,7 @@ func SafeMkdirAllWithInterface(path string, perm os.FileMode, cfg ErrorConfig) e
 	return nil
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm os.FileMode, cfg ErrorConfig) error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	select {
 	case <-ctx.Done():
 		return ctx.Err()
@@ -656,18 +615,15 @@ func SafeMkdirAllWithContextAndInterface(ctx context.Context, path string, perm 
 	return SafeMkdirAllWithInterface(path, perm, cfg)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAll(path string, perm os.FileMode, cfg *Config) error {
 	return SafeMkdirAllWithInterface(path, perm, cfg)
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func SafeMkdirAllWithContext(ctx context.Context, path string, perm os.FileMode, cfg *Config) error {
 	return SafeMkdirAllWithContextAndInterface(ctx, path, perm, cfg)
 }
 
 func ValidateDirectoryPath(path string, cfg *Config) error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if path == "" {
 		return fmt.Errorf("directory path cannot be empty")
 	}
@@ -695,7 +651,6 @@ func ValidateDirectoryPath(path string, cfg *Config) error {
 }
 
 func ValidateFilePath(path string, cfg *Config) error {
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	if path == "" {
 		return fmt.Errorf("file path cannot be empty")
 	}
@@ -722,14 +677,11 @@ func ValidateFilePath(path string, cfg *Config) error {
 	return nil
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func WithResourceManager(ctx context.Context) (context.Context, *ResourceManager) {
 	rm := NewResourceManager()
-	// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 	return context.WithValue(ctx, "resource_manager", rm), rm
 }
 
-// [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING]
 func CheckContextAndCleanup(ctx context.Context, rm *ResourceManager) error {
 	select {
 	case <-ctx.Done():

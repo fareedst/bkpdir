@@ -3,8 +3,8 @@ ARCH-AI_DOCUMENTATION:
   ai-optimized_error_processing: AI-readable error messages, remediation guidance, structured error responses
   ai_validation_framework: Integration with validation systems, pre-submission hooks, real-time validation
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Traditional documentation: Rejected due to lack of AI optimization
@@ -13,7 +13,7 @@ ARCH-AI_DOCUMENTATION:
   content_structure_optimizer: AI-friendly formatting and hierarchy management
   cross-reference_validator: Automated link validation and bidirectional reference checking
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_30
+  cross_references:
     - REQ-MAINTAINABILITY
   decision: AI-optimized documentation with semantic tokens and validation framework
   detail_file: architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
@@ -24,13 +24,13 @@ ARCH-AI_DOCUMENTATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: AI-First Documentation Architecture
@@ -43,7 +43,8 @@ ARCH-AI_DOCUMENTATION:
       Maintains consistency across documentation
       Supports AI-first development workflow
   related_decisions:
-    depends_on: *ref_30
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -53,19 +54,20 @@ ARCH-AI_DOCUMENTATION:
       - ARCH-AI_DOCUMENTATION
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_30
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []
 ARCH-ARCHIVE_FORMAT:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         tar.gz: Rejected due to less universal support
         tar.bz2: Rejected due to slower compression
         Custom format: Rejected due to compatibility concerns
   cross-references: '[REQ-RELIABILITY]'
-  cross_references: &ref_3
+  cross_references:
     - REQ-RELIABILITY
   decision: ZIP format for all archive operations
   detail_file: architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
@@ -82,13 +84,13 @@ ARCH-ARCHIVE_FORMAT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Archive Format
@@ -102,7 +104,8 @@ ARCH-ARCHIVE_FORMAT:
       Standard library support in Go (`archive/zip`)
       Supports incremental archives
   related_decisions:
-    depends_on: *ref_3
+    depends_on:
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   status: Active
@@ -111,12 +114,13 @@ ARCH-ARCHIVE_FORMAT:
       - ARCH-ARCHIVE_FORMAT
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_3
+    requirements:
+      - REQ-RELIABILITY
     tests: []
 ARCH-AUTO_DETECTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Separate auto-detect command: Rejected due to reduced usability
@@ -131,15 +135,15 @@ ARCH-AUTO_DETECTION:
     - Known commands bypass auto-detection (create, config, list, verify, backup, etc.)
     - Positional arguments trigger auto-detection when not a known command
   cross-references: '[REQ-USABILITY]'
-  cross_references: &ref_18
+  cross_references:
     - REQ-USABILITY
   decision: Automatic command detection based on path type (CLI-015)
   detail_file: architecture-decisions/ARCH-AUTO_DETECTION.yaml
   detection_logic:
     - 'Directory detection: Routes to directory archive operation'
     - 'File detection: Routes to file backup operation'
-    - 'Unsupported types: Clear error messages with guidance'
     - Path type detection via `os.Stat()` and file mode checking
+    - 'Unsupported types: Clear error messages with guidance'
   implementation:
     - '`executeWithAutoDetection()`: Integrates with Cobra command execution'
     - '`handleAutoDetectedCommand()`: Routes to appropriate handler'
@@ -157,13 +161,13 @@ ARCH-AUTO_DETECTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Auto-Detection Architecture
@@ -176,7 +180,8 @@ ARCH-AUTO_DETECTION:
       Maintains backward compatibility with explicit commands
       Supports both file and directory operations seamlessly
   related_decisions:
-    depends_on: *ref_18
+    depends_on:
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -185,7 +190,8 @@ ARCH-AUTO_DETECTION:
       - ARCH-AUTO_DETECTION
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_18
+    requirements:
+      - REQ-USABILITY
     tests: []
 ARCH-BUILD_DISTRIBUTION:
   alternatives_considered: []
@@ -194,13 +200,13 @@ ARCH-BUILD_DISTRIBUTION:
     - Single binary per platform
     - Ubuntu (20.04, 22.04, 24.04)
   cross-references: '[REQ-USABILITY]'
-  cross_references: &ref_12
+  cross_references:
     - REQ-USABILITY
   decision: Single binary distribution with cross-platform compilation
   detail_file: architecture-decisions/ARCH-BUILD_DISTRIBUTION.yaml
   implementation:
-    - 'Quality gates: linting and testing before build'
     - Makefile with build targets
+    - 'Quality gates: linting and testing before build'
     - Version information injected via `-ldflags`
   implementation_approach:
     details: []
@@ -211,13 +217,13 @@ ARCH-BUILD_DISTRIBUTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Build and Distribution
@@ -230,7 +236,8 @@ ARCH-BUILD_DISTRIBUTION:
       Fast execution
       Simple installation
   related_decisions:
-    depends_on: *ref_12
+    depends_on:
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -239,7 +246,8 @@ ARCH-BUILD_DISTRIBUTION:
       - ARCH-BUILD_DISTRIBUTION
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_12
+    requirements:
+      - REQ-USABILITY
     tests: []
 ARCH-CFG_001:
   cross_references:
@@ -251,10 +259,10 @@ ARCH-CFG_001:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Basic Configuration Architecture
   status: Active
@@ -266,7 +274,7 @@ ARCH-CFG_005:
     - Explicit prefixes (`!`, `+`, `^`, `=`) override the default merge behavior
     - This applies to both inheritance chains and sequential file processing
   cross-references: '[REQ-CFG_005], [REQ-PERFORMANCE]'
-  cross_references: &ref_5
+  cross_references:
     - REQ-CFG_005
     - REQ-PERFORMANCE
   decision: Configuration files support explicit inheritance with merge strategies
@@ -297,13 +305,13 @@ ARCH-CFG_005:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Layered Configuration Inheritance
@@ -316,7 +324,9 @@ ARCH-CFG_005:
       Flexible merge strategies for different use cases
       Maintains backward compatibility
   related_decisions:
-    depends_on: *ref_5
+    depends_on:
+      - REQ-CFG_005
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -326,7 +336,9 @@ ARCH-CFG_005:
       - REQ-CFG_005
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_5
+    requirements:
+      - REQ-CFG_005
+      - REQ-PERFORMANCE
     tests: []
 ARCH-CFG_006:
   alternatives_considered: []
@@ -371,7 +383,7 @@ ARCH-CFG_006:
   code_generation: Rejected due to complexity, build-time dependencies, and reduced flexibility
   configuration_system: Builds on existing Config struct and loading mechanisms
   cross-references: '[REQ-CFG_006], [ARCH-CONFIG_SYSTEM], [ARCH-CFG_005], [REQ-PERFORMANCE]'
-  cross_references: &ref_22
+  cross_references:
     - REQ-CFG_006
     - REQ-PERFORMANCE
   decision: Reflection-based automatic field discovery with hierarchical source attribution
@@ -384,13 +396,13 @@ ARCH-CFG_006:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Reflection Architecture
@@ -410,7 +422,9 @@ ARCH-CFG_006:
       Performance optimized: Fast inspection suitable for development workflow
       Backward compatible: Existing configuration command functionality preserved and enhanced
   related_decisions:
-    depends_on: *ref_22
+    depends_on:
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -421,20 +435,22 @@ ARCH-CFG_006:
       - REQ-CFG_006
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_22
+    requirements:
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
     tests: []
 ARCH-CICD_PIPELINE:
   ai-optimized_reporting: Structured output, icon integration, token attribution
   ai_protocol_validation_engine: Token validation, documentation sync, protocol compliance
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Traditional CI/CD: Rejected due to lack of AI-first optimization
         Manual validation: Rejected due to overhead
   cross-references: '[REQ-CODE_QUALITY], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_29
+  cross_references:
     - REQ-CODE_QUALITY
     - REQ-MAINTAINABILITY
   decision: AI-optimized CI/CD pipeline with automated quality gates
@@ -445,13 +461,13 @@ ARCH-CICD_PIPELINE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CI/CD Pipeline Architecture
@@ -469,7 +485,9 @@ ARCH-CICD_PIPELINE:
       Non-blocking execution for AI assistants
       Comprehensive validation reporting
   related_decisions:
-    depends_on: *ref_29
+    depends_on:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -479,7 +497,9 @@ ARCH-CICD_PIPELINE:
       - REQ-CODE_QUALITY
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_29
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     tests: []
 ARCH-CLI_COMMANDS:
   alternatives_considered: []
@@ -498,7 +518,7 @@ ARCH-CLI_COMMANDS:
     ```
   context_support: All long-running operations support context cancellation
   cross-references: '[REQ-USABILITY], [REQ-OUTPUT_FORMATTING]'
-  cross_references: &ref_28
+  cross_references:
     - REQ-OUTPUT_FORMATTING
     - REQ-USABILITY
   decision: Intuitive command structure with backward compatibility
@@ -513,13 +533,13 @@ ARCH-CLI_COMMANDS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CLI Commands Architecture
@@ -533,7 +553,9 @@ ARCH-CLI_COMMANDS:
       Supports both directory and file operations
       Clear command hierarchy
   related_decisions:
-    depends_on: *ref_28
+    depends_on:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -543,12 +565,14 @@ ARCH-CLI_COMMANDS:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_28
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []
 ARCH-CLI_FRAMEWORK:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Custom CLI framework: Rejected due to maintenance overhead
@@ -556,7 +580,7 @@ ARCH-CLI_FRAMEWORK:
   command_builder: Builder pattern for constructing Cobra commands
   context_manager: Context propagation for cancellation and timeouts
   cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_15
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
   decision: Extracted CLI framework with builder patterns and Cobra integration
@@ -578,13 +602,13 @@ ARCH-CLI_FRAMEWORK:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CLI Framework Architecture
@@ -598,7 +622,9 @@ ARCH-CLI_FRAMEWORK:
       Enables consistent user experience across applications
       Integrates with popular Cobra framework
   related_decisions:
-    depends_on: *ref_15
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -608,13 +634,15 @@ ARCH-CLI_FRAMEWORK:
       - REQ-MAINTAINABILITY
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_15
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     tests: []
   version_manager: Version display and build information handling
 ARCH-CODE_ORGANIZATION:
   alternatives_considered: []
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_13
+  cross_references:
     - REQ-MAINTAINABILITY
   decision: Clear responsibilities with interfaces for testability
   detail_file: architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
@@ -624,13 +652,13 @@ ARCH-CODE_ORGANIZATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Code Organization Principles
@@ -649,7 +677,8 @@ ARCH-CODE_ORGANIZATION:
       Easy to extend
       Maintainable codebase
   related_decisions:
-    depends_on: *ref_13
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -658,13 +687,14 @@ ARCH-CODE_ORGANIZATION:
       - ARCH-CODE_ORGANIZATION
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_13
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []
 ARCH-CONFIG_OUTPUT_GROUPING:
   alternatives_considered: []
   categories: Defined logical groups (Basic, Archive, Backup, Git, Output, Advanced)
   cross-references: '[REQ-CONFIG_OUTPUT_GROUPING], [REQ-USABILITY]'
-  cross_references: &ref_37
+  cross_references:
     - REQ-CONFIG_OUTPUT_GROUPING
     - REQ-USABILITY
   decision: Group configuration output by category and rank by importance
@@ -678,13 +708,13 @@ ARCH-CONFIG_OUTPUT_GROUPING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Output Grouping
@@ -697,7 +727,9 @@ ARCH-CONFIG_OUTPUT_GROUPING:
       Maintains backward compatibility via flags
       Aligns with standard CLI best practices
   related_decisions:
-    depends_on: *ref_37
+    depends_on:
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
     informs: []
     see_also: []
   sorting: Category Priority -> Importance -> Name
@@ -708,12 +740,14 @@ ARCH-CONFIG_OUTPUT_GROUPING:
       - REQ-CONFIG_OUTPUT_GROUPING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_37
+    requirements:
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
     tests: []
 ARCH-CONFIG_SYSTEM:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         JSON: Rejected due to lack of comments
@@ -729,12 +763,12 @@ ARCH-CONFIG_SYSTEM:
        - **Precedence Rule**: Earlier files in the search path take precedence over later files. When processing sequential config files (not inheritance chains), values set by earlier files are preserved and cannot be overridden by later files, even if those values equal the defaults. The implementation tracks the initial default state and compares the destination state before merge to detect if earlier files modified values.
     4. Default values (lowest priority)
   configuration_key_structure:
-    - 'Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.'
     - All configuration keys are displayed as top-level keys in `bkpdir config` output
+    - 'Git configuration keys appear as top-level: `include_git_info`, `include_branch`, `show_git_dirty_status`, etc.'
     - Internal struct may have nested fields (e.g., `Git *GitConfig`), but the reflection-based display system flattens them using YAML tag names
     - YAML files use top-level keys for all configuration options (see [IMPL-CONFIG_DISPLAY_FLATTENING])
   cross-references: '[REQ-CONFIGURATION], [REQ-USABILITY]'
-  cross_references: &ref_4
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-USABILITY
   decision: YAML configuration files with environment variable support
@@ -745,13 +779,13 @@ ARCH-CONFIG_SYSTEM:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration System
@@ -765,7 +799,9 @@ ARCH-CONFIG_SYSTEM:
       Industry standard for configuration
       Environment variable support for flexibility
   related_decisions:
-    depends_on: *ref_4
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -775,12 +811,14 @@ ARCH-CONFIG_SYSTEM:
       - REQ-CONFIGURATION
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_4
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-USABILITY
     tests: []
 ARCH-CONTEXT_SUPPORT:
   alternatives_considered: []
   cross-references: '[REQ-CONTEXT_SUPPORT], [REQ-USABILITY]'
-  cross_references: &ref_8
+  cross_references:
     - REQ-CONTEXT_SUPPORT
     - REQ-USABILITY
   decision: Support context cancellation for long-running operations
@@ -800,13 +838,13 @@ ARCH-CONTEXT_SUPPORT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Context-Aware Operations
@@ -819,7 +857,9 @@ ARCH-CONTEXT_SUPPORT:
       Better user experience for long operations
       Standard Go pattern for cancellable operations
   related_decisions:
-    depends_on: *ref_8
+    depends_on:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -829,7 +869,9 @@ ARCH-CONTEXT_SUPPORT:
       - REQ-CONTEXT_SUPPORT
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_8
+    requirements:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
     tests: []
 ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
   alternatives_considered: []
@@ -879,7 +921,7 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
     - No breaking changes to configuration schema
     - Users who don't specify format strings get default behavior
   cross-references: '[REQ-CUSTOMIZABLE_FORMAT_STRINGS], [REQ-CONFIGURATION], [REQ-OUTPUT_FORMATTING], [REQ-USABILITY], [ARCH-CONFIG_SYSTEM], [ARCH-OUTPUT_FORMATTING]'
-  cross_references: &ref_38
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-CUSTOMIZABLE_FORMAT_STRINGS
     - REQ-OUTPUT_FORMATTING
@@ -896,13 +938,13 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: User-Customizable Format Strings
@@ -919,7 +961,11 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
       Validation prevents common mistakes and improves user experience
       Enhances usability without requiring source code modifications
   related_decisions:
-    depends_on: *ref_38
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   separate_format_string_files: Rejected - adds complexity, YAML config sufficient
@@ -933,7 +979,11 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_38
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []
   validation_strategy:
     - Allow users to disable validation if needed
@@ -946,7 +996,7 @@ ARCH-DEPLOYMENT:
   configuration_validation: Schema-based validation with error reporting
   cross-platform: Linux, macOS, Windows support
   cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_25
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
   decision: Single binary distribution with embedded configuration
@@ -959,13 +1009,13 @@ ARCH-DEPLOYMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   migration_support: Configuration version upgrades
@@ -979,7 +1029,9 @@ ARCH-DEPLOYMENT:
       Fast execution
       Simple installation
   related_decisions:
-    depends_on: *ref_25
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     informs: []
     see_also: []
   single_binary: Self-contained executable with embedded defaults
@@ -991,7 +1043,9 @@ ARCH-DEPLOYMENT:
       - REQ-MAINTAINABILITY
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_25
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     tests: []
   version_embedding: Build-time version info with Git integration
 ARCH-DIFF_COMMAND:
@@ -1003,7 +1057,7 @@ ARCH-DIFF_COMMAND:
   compare_only_against_most_recent_incremental: Rejected - incremental archives are deltas, not complete states
   comparison_engine: Compare reconstructed archive state against current directory state
   cross-references: '[REQ-DIFF_COMMAND], [REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-OUTPUT_FORMATTING], [REQ-CONFIGURATION], [ARCH-DIRECTORY_COMPARISON], [ARCH-CLI_COMMANDS]'
-  cross_references: &ref_39
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-DIFF_COMMAND
     - REQ-INCREMENTAL_DUPLICATE_PREVENTION
@@ -1035,13 +1089,13 @@ ARCH-DIFF_COMMAND:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Diff Command Architecture
@@ -1055,7 +1109,11 @@ ARCH-DIFF_COMMAND:
       Reusing diff logic for duplicate prevention ensures consistency
       Enables users to preview what would be included in next incremental backup
   related_decisions:
-    depends_on: *ref_39
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
     informs: []
     see_also: []
   separate_diff_logic_from_duplicate_prevention: Rejected - code duplication, inconsistency risk
@@ -1068,13 +1126,17 @@ ARCH-DIFF_COMMAND:
       - REQ-INCREMENTAL_DUPLICATE_PREVENTION
       - REQ-OUTPUT_FORMATTING
     implementation: []
-    requirements: *ref_39
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
     tests: []
   use_file_modification_times_for_archive_selection: Rejected - less reliable than name-based sorting, archive names include timestamps that are alphabetically sortable, simpler implementation without file system stat calls
 ARCH-DIRECTORY_COMPARISON:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Timestamp-only comparison: Rejected due to accuracy concerns
@@ -1083,7 +1145,7 @@ ARCH-DIRECTORY_COMPARISON:
   createarchivesnapshot: Build snapshot from ZIP archive
   createdirectorysnapshot: Build snapshot from directory with exclusions
   cross-references: '[REQ-PERFORMANCE]'
-  cross_references: &ref_20
+  cross_references:
     - REQ-PERFORMANCE
   decision: Snapshot-based directory comparison system
   detail_file: architecture-decisions/ARCH-DIRECTORY_COMPARISON.yaml
@@ -1101,13 +1163,13 @@ ARCH-DIRECTORY_COMPARISON:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Directory Comparison Architecture
@@ -1120,7 +1182,8 @@ ARCH-DIRECTORY_COMPARISON:
       Provides hash-based content verification
       Enables incremental archive detection
   related_decisions:
-    depends_on: *ref_20
+    depends_on:
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -1129,7 +1192,8 @@ ARCH-DIRECTORY_COMPARISON:
       - ARCH-DIRECTORY_COMPARISON
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_20
+    requirements:
+      - REQ-PERFORMANCE
     tests: []
   use_cases:
     - Archive verification (compare archive to source directory)
@@ -1147,17 +1211,17 @@ ARCH-DOCUMENTATION_ARCHITECTURE:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Documentation System Architecture
   status: Active
 ARCH-ERROR_HANDLING:
   alternatives_considered: []
   cross-references: '[REQ-ERROR_HANDLING], [REQ-RELIABILITY]'
-  cross_references: &ref_6
+  cross_references:
     - REQ-ERROR_HANDLING
     - REQ-RELIABILITY
   decision: Structured error types with status codes and operation context
@@ -1176,13 +1240,13 @@ ARCH-ERROR_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Error Handling Strategy
@@ -1195,7 +1259,9 @@ ARCH-ERROR_HANDLING:
       Enhanced debugging with operation context
       Supports template-based error formatting
   related_decisions:
-    depends_on: *ref_6
+    depends_on:
+      - REQ-ERROR_HANDLING
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   status: Active
@@ -1205,12 +1271,14 @@ ARCH-ERROR_HANDLING:
       - REQ-ERROR_HANDLING
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_6
+    requirements:
+      - REQ-ERROR_HANDLING
+      - REQ-RELIABILITY
     tests: []
 ARCH-EXCLUDE_MERGE_FIX:
   alternatives_considered: []
   cross-references: '[REQ-CFG_005], [REQ-CONFIGURATION], [ARCH-CFG_005], [ARCH-CFG_006]'
-  cross_references: &ref_35
+  cross_references:
     - REQ-CFG_005
     - REQ-CONFIGURATION
   decision: Array fields default to "merge" strategy to satisfy CFG-005 requirement
@@ -1218,24 +1286,28 @@ ARCH-EXCLUDE_MERGE_FIX:
   detail_file: architecture-decisions/ARCH-EXCLUDE_MERGE_FIX.yaml
   implementation_approach:
     details: []
-    integration_points: &ref_36
+    integration_points:
       - Ensures backward compatibility with existing config files
       - Implements CFG-005 merge strategy system requirement
       - Integrates with CFG-006 source tracking
       - Preserves CFG-002 merge behavior specification
     summary: Array fields default to "merge" strategy to satisfy CFG-005 requirement
-  integration_points: *ref_36
+  integration_points:
+    - Ensures backward compatibility with existing config files
+    - Implements CFG-005 merge strategy system requirement
+    - Integrates with CFG-006 source tracking
+    - Preserves CFG-002 merge behavior specification
   merge_strategy_detection: '`extractStrategy` function detects array field keys (like `exclude_patterns`) and defaults to "merge" strategy instead of "override" in all contexts (inheritance chains and sequential file processing)'
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   metadata_field_filtering: Metadata fields used for inheritance processing (like `inherit`) are filtered out before merge operations
@@ -1251,7 +1323,9 @@ ARCH-EXCLUDE_MERGE_FIX:
       Provides graceful handling of unknown config fields to prevent merge failures
       Handles YAML type conversions robustly
   related_decisions:
-    depends_on: *ref_35
+    depends_on:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
     informs: []
     see_also: []
   state_management: '`applyMergeStrategies` uses current state (`resultMap`) instead of original state (`dstMap`) for merge operations to ensure proper accumulation'
@@ -1262,14 +1336,16 @@ ARCH-EXCLUDE_MERGE_FIX:
       - REQ-CFG_005
       - REQ-CONFIGURATION
     implementation: []
-    requirements: *ref_35
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
     tests: []
   unknown_field_handling: Unknown config fields (like `inherit`) are gracefully skipped instead of aborting merge operations
   yaml_type_conversion: Robust handling of `[]interface{}` types from YAML unmarshaling, converting to `[]string` as needed
 ARCH-EXCLUSION_PATTERNS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Regex patterns: Rejected due to complexity and performance
@@ -1281,7 +1357,7 @@ ARCH-EXCLUSION_PATTERNS:
     - 'Temporary files: `*.tmp`, `*.temp`, `*.swp`'
     - 'Version control: `.git/`, `.svn/`, `.hg/`'
   cross-references: '[REQ-CONFIGURATION], [REQ-PERFORMANCE]'
-  cross_references: &ref_21
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-PERFORMANCE
   decision: Pattern-based file exclusion system with glob support
@@ -1298,13 +1374,13 @@ ARCH-EXCLUSION_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_patterns: Supports arrays of exclusion patterns
@@ -1324,7 +1400,9 @@ ARCH-EXCLUSION_PATTERNS:
       Provides consistent exclusion behavior across operations
       Integrates with configuration system
   related_decisions:
-    depends_on: *ref_21
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -1334,18 +1412,20 @@ ARCH-EXCLUSION_PATTERNS:
       - REQ-CONFIGURATION
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_21
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
     tests: []
 ARCH-EXTENSIBILITY:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         No extensibility: Rejected due to limited flexibility
         Full plugin system: Deferred due to complexity
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_24
+  cross_references:
     - REQ-MAINTAINABILITY
   custom_formatters: |-
     ```go
@@ -1367,13 +1447,13 @@ ARCH-EXTENSIBILITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Extensibility Architecture
@@ -1404,7 +1484,8 @@ ARCH-EXTENSIBILITY:
       Maintains backward compatibility
       Provides flexible integration points
   related_decisions:
-    depends_on: *ref_24
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -1413,7 +1494,8 @@ ARCH-EXTENSIBILITY:
       - ARCH-EXTENSIBILITY
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_24
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []
 ARCH-EXTRACT_008_INTERDEP:
   cross_references:
@@ -1425,10 +1507,10 @@ ARCH-EXTRACT_008_INTERDEP:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
   name: Package Interdependency Mapping for EXTRACT-008
   status: Active
 ARCH-FEEDBACK_STORAGE:
@@ -1440,23 +1522,23 @@ ARCH-FEEDBACK_STORAGE:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-03"
+      date: '2026-03-03'
     last_updated:
       author: AI Agent
-      date: "2026-03-03"
+      date: '2026-03-03'
   name: Feedback Storage for TIED Reporting
   status: Active
 ARCH-FILE_OPERATIONS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Direct standard library usage: Rejected due to lack of atomic operations and security checks
         Third-party file libraries: Rejected due to dependency concerns
   atomic_operations: Safe file writing with rollback capabilities
   cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
-  cross_references: &ref_16
+  cross_references:
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
   decision: Extracted file operations package with atomic operations and security focus
@@ -1469,13 +1551,13 @@ ARCH-FILE_OPERATIONS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Operations Architecture
@@ -1496,7 +1578,9 @@ ARCH-FILE_OPERATIONS:
       Supports complex directory traversal scenarios
       Enables file comparison and snapshot capabilities
   related_decisions:
-    depends_on: *ref_16
+    depends_on:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     informs: []
     see_also: []
   security_focus:
@@ -1511,18 +1595,20 @@ ARCH-FILE_OPERATIONS:
       - REQ-RELIABILITY
       - REQ-RESOURCE_MANAGEMENT
     implementation: []
-    requirements: *ref_16
+    requirements:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     tests: []
 ARCH-FILE_STATISTICS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         No statistics: Rejected due to limited output information
         External library: Rejected due to dependency concerns
   cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
-  cross_references: &ref_19
+  cross_references:
     - REQ-OUTPUT_FORMATTING
     - REQ-USABILITY
   decision: File statistics gathering for enhanced output formatting
@@ -1545,13 +1631,13 @@ ARCH-FILE_STATISTICS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Statistics Architecture
@@ -1564,7 +1650,9 @@ ARCH-FILE_STATISTICS:
       Supports file type detection
       Enhances user experience with detailed file information
   related_decisions:
-    depends_on: *ref_19
+    depends_on:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   statistics_collected:
@@ -1580,12 +1668,14 @@ ARCH-FILE_STATISTICS:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_19
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []
 ARCH-GIT_INTEGRATION:
   alternatives_considered: []
   cross-references: '[REQ-GIT_INTEGRATION]'
-  cross_references: &ref_10
+  cross_references:
     - REQ-GIT_INTEGRATION
   decision: Git command-line interface for repository information
   detail_file: architecture-decisions/ARCH-GIT_INTEGRATION.yaml
@@ -1604,13 +1694,13 @@ ARCH-GIT_INTEGRATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Git Integration
@@ -1623,7 +1713,8 @@ ARCH-GIT_INTEGRATION:
       Consistent with user's Git configuration
       Lightweight implementation
   related_decisions:
-    depends_on: *ref_10
+    depends_on:
+      - REQ-GIT_INTEGRATION
     informs: []
     see_also: []
   status: Active
@@ -1632,12 +1723,13 @@ ARCH-GIT_INTEGRATION:
       - ARCH-GIT_INTEGRATION
       - REQ-GIT_INTEGRATION
     implementation: []
-    requirements: *ref_10
+    requirements:
+      - REQ-GIT_INTEGRATION
     tests: []
 ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Manual, non-data-driven sketches: rejected (drift risk, no repeatability).
@@ -1650,7 +1742,7 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
     - A canonical `docs/package-interdependency-mapping.md` is required and serves as the authoritative mapping for EXTRACT-008.
     - Where coupling is unavoidable, introduce small interfaces to break cycles and record these interface contracts in the mapping document and in `implementation-decisions.md`.
   cross-references: '[REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
-  cross_references: &ref_40
+  cross_references:
     - REQ-DIFF_COMMAND
     - REQ-EXTRACT_008_INTERDEP_MAPPING
     - REQ-INCREMENTAL_DUPLICATE_PREVENTION
@@ -1678,13 +1770,13 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   module_boundaries_(for_[req-module_validation],_token_emphasis):
@@ -1701,7 +1793,14 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
       A data-driven pipeline (sourced from existing `tied/*.md` plus representative code/test anchors) keeps token prominence accurate as the registry evolves.
       Complementary artifacts (layered flow + timeline/animation) address both static comprehension and process storytelling while keeping tokens in the spotlight.
   related_decisions:
-    depends_on: *ref_40
+    depends_on:
+      - REQ-DIFF_COMMAND
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-MAINTAINABILITY
+      - REQ-MODULE_VALIDATION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-STDD_VIS
     informs: []
     see_also: []
   reuse_diff_logic: Leverage diff command comparison engine for duplicate detection
@@ -1720,21 +1819,28 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
       - REQ-OUTPUT_FORMATTING
       - REQ-STDD_VIS
     implementation: []
-    requirements: *ref_40
+    requirements:
+      - REQ-DIFF_COMMAND
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-MAINTAINABILITY
+      - REQ-MODULE_VALIDATION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-STDD_VIS
     tests: []
   user_feedback: Display appropriate message when archive creation is skipped
   visualization_module: Generate a layered flow (e.g., swimlane/graph or Sankey-style) where tokens are the dominant nodes (color/weight/labels), edges clarify trace paths, and legends explain token roles.
 ARCH-LANGUAGE_SELECTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Python: Rejected due to runtime dependencies and slower performance
         Rust: Rejected due to complexity and longer development time
         C/C++: Rejected due to manual memory management complexity
   cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-PERFORMANCE
   decision: Go (Golang)
@@ -1745,13 +1851,13 @@ ARCH-LANGUAGE_SELECTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Language and Runtime
@@ -1765,7 +1871,9 @@ ARCH-LANGUAGE_SELECTION:
       Excellent tooling (go fmt, go test, go vet)
       Fast compilation and execution
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -1775,13 +1883,15 @@ ARCH-LANGUAGE_SELECTION:
       - REQ-MAINTAINABILITY
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     tests: []
 ARCH-LIST_LIMIT:
   alternatives_considered: []
   configuration-based_limit: Rejected - command-line flag is more flexible and immediate
   cross-references: '[REQ-LIST_LIMIT], [REQ-USABILITY], [ARCH-CLI_COMMANDS]'
-  cross_references: &ref_27
+  cross_references:
     - REQ-LIST_LIMIT
     - REQ-USABILITY
   decision: Command-line flag to limit list output with default of 10 entries
@@ -1799,13 +1909,13 @@ ARCH-LIST_LIMIT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: List Command Limit Architecture
@@ -1820,7 +1930,9 @@ ARCH-LIST_LIMIT:
       Maintains backward compatibility with existing workflows
       Improves usability for common use cases
   related_decisions:
-    depends_on: *ref_27
+    depends_on:
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -1830,7 +1942,9 @@ ARCH-LIST_LIMIT:
       - REQ-LIST_LIMIT
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_27
+    requirements:
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
     tests: []
 ARCH-MODULE_VALIDATION:
   cross_references:
@@ -1841,16 +1955,16 @@ ARCH-MODULE_VALIDATION:
   metadata:
     created:
       author: AI Agent
-      date: "2025-12-18"
+      date: '2025-12-18'
     last_updated:
       author: AI Agent
-      date: "2026-02-06"
+      date: '2026-02-06'
   name: Module Validation Strategy
   status: Active
 ARCH-OUTPUT_FORMATTING:
   alternatives_considered: []
   cross-references: '[REQ-OUTPUT_FORMATTING], [REQ-USABILITY]'
-  cross_references: &ref_9
+  cross_references:
     - REQ-OUTPUT_FORMATTING
     - REQ-USABILITY
   decision: Dual-mode formatting (printf-style and template-based)
@@ -1870,13 +1984,13 @@ ARCH-OUTPUT_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Output Formatting
@@ -1889,7 +2003,9 @@ ARCH-OUTPUT_FORMATTING:
       Graceful fallback from template to printf
       Supports ANSI colors and structured output
   related_decisions:
-    depends_on: *ref_9
+    depends_on:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -1899,12 +2015,14 @@ ARCH-OUTPUT_FORMATTING:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_9
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []
 ARCH-PACKAGE_EXTRACTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Big-bang extraction: Rejected due to high risk of breaking changes
@@ -1915,7 +2033,7 @@ ARCH-PACKAGE_EXTRACTION:
     - Wrapper functions preserve existing API
   circular_dependency_prevention: Extract components with no internal dependencies first
   cross-references: '[REQ-MAINTAINABILITY], [REQ-CODE_QUALITY]'
-  cross_references: &ref_14
+  cross_references:
     - REQ-CODE_QUALITY
     - REQ-MAINTAINABILITY
   decision: Layered extraction approach with zero-breaking-change principle
@@ -1937,13 +2055,13 @@ ARCH-PACKAGE_EXTRACTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Package Extraction Architecture
@@ -1957,7 +2075,9 @@ ARCH-PACKAGE_EXTRACTION:
       Creates reusable components for CLI application development
       Follows interface-driven design for flexibility
   related_decisions:
-    depends_on: *ref_14
+    depends_on:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -1968,13 +2088,15 @@ ARCH-PACKAGE_EXTRACTION:
       - REQ-CODE_QUALITY
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_14
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     tests: []
   zero-breaking-change: Maintain backward compatibility through wrapper functions
 ARCH-PERF_VALIDATION:
   alternatives_considered: []
   cross-references: '[REQ-PERFORMANCE], [REQ-CODE_QUALITY]'
-  cross_references: &ref_32
+  cross_references:
     - REQ-CODE_QUALITY
     - REQ-PERFORMANCE
   decision: Performance-optimized validation system with caching and fast mode
@@ -1994,13 +2116,13 @@ ARCH-PERF_VALIDATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Validation Performance Optimization Architecture
@@ -2014,7 +2136,9 @@ ARCH-PERF_VALIDATION:
       Reduces resource utilization
       Enables CI/CD integration
   related_decisions:
-    depends_on: *ref_32
+    depends_on:
+      - REQ-CODE_QUALITY
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -2025,7 +2149,9 @@ ARCH-PERF_VALIDATION:
       - REQ-CODE_QUALITY
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_32
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-PERFORMANCE
     tests: []
 ARCH-PERFORMANCE:
   alternatives_considered: []
@@ -2033,7 +2159,7 @@ ARCH-PERFORMANCE:
   buffered_i/o: Efficient file operations with context cancellation
   compression_tuning: Optimal compression settings with performance monitoring
   cross-references: '[REQ-PERFORMANCE], [REQ-RELIABILITY]'
-  cross_references: &ref_26
+  cross_references:
     - REQ-PERFORMANCE
     - REQ-RELIABILITY
   decision: Optimized performance with streaming, caching, and concurrent processing
@@ -2050,13 +2176,13 @@ ARCH-PERFORMANCE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Performance Architecture
@@ -2070,7 +2196,9 @@ ARCH-PERFORMANCE:
       Minimizes resource usage
       Supports scalable operations
   related_decisions:
-    depends_on: *ref_26
+    depends_on:
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   resource_cleanup: Automatic resource management with panic recovery
@@ -2082,12 +2210,14 @@ ARCH-PERFORMANCE:
       - REQ-PERFORMANCE
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_26
+    requirements:
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
     tests: []
 ARCH-PROCESSING_PATTERNS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Inline processing logic: Rejected due to code duplication
@@ -2098,7 +2228,7 @@ ARCH-PROCESSING_PATTERNS:
     - Resource cleanup on completion
     - Worker pool management
   cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_17
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-PERFORMANCE
   decision: Extracted data processing patterns with pipeline and concurrent processing support
@@ -2109,13 +2239,13 @@ ARCH-PROCESSING_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Processing Patterns Architecture
@@ -2139,7 +2269,9 @@ ARCH-PROCESSING_PATTERNS:
       Supports concurrent processing for performance
       Standardizes naming conventions
   related_decisions:
-    depends_on: *ref_17
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -2149,12 +2281,14 @@ ARCH-PROCESSING_PATTERNS:
       - REQ-MAINTAINABILITY
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_17
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     tests: []
 ARCH-PROJECT_STRUCTURE:
   alternatives_considered: []
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_1
+  cross_references:
     - REQ-MAINTAINABILITY
   decision: Flat structure with internal packages
   decision_flat_structure_with_internal_packages: |-
@@ -2182,13 +2316,13 @@ ARCH-PROJECT_STRUCTURE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Project Structure
@@ -2201,7 +2335,8 @@ ARCH-PROJECT_STRUCTURE:
       Testable components
       Supports future package extraction
   related_decisions:
-    depends_on: *ref_1
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -2210,20 +2345,21 @@ ARCH-PROJECT_STRUCTURE:
       - ARCH-PROJECT_STRUCTURE
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_1
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []
 ARCH-RESOURCE_MANAGEMENT:
   alternatives_considered: []
   cross-references: '[REQ-RESOURCE_MANAGEMENT], [REQ-RELIABILITY]'
-  cross_references: &ref_7
+  cross_references:
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
   decision: ResourceManager for automatic cleanup with panic recovery
   detail_file: architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
   implementation:
     - '`ResourceManager` struct with mutex protection'
-    - 'Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`'
     - Error-resilient cleanup operations
+    - 'Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`'
     - Thread-safe resource tracking
   implementation_approach:
     details: []
@@ -2235,13 +2371,13 @@ ARCH-RESOURCE_MANAGEMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Resource Management
@@ -2254,7 +2390,9 @@ ARCH-RESOURCE_MANAGEMENT:
       Thread-safe for concurrent operations
       Simplifies error handling in operations
   related_decisions:
-    depends_on: *ref_7
+    depends_on:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     informs: []
     see_also: []
   status: Active
@@ -2264,13 +2402,15 @@ ARCH-RESOURCE_MANAGEMENT:
       - REQ-RELIABILITY
       - REQ-RESOURCE_MANAGEMENT
     implementation: []
-    requirements: *ref_7
+    requirements:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     tests: []
 ARCH-SECURITY:
   alternatives_considered: []
   compression_bombs: ZIP bomb protection during creation
   cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
-  cross_references: &ref_23
+  cross_references:
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
   decision: Comprehensive security measures for file system and archive operations
@@ -2281,13 +2421,13 @@ ARCH-SECURITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Security Architecture
@@ -2303,7 +2443,9 @@ ARCH-SECURITY:
       Ensures data integrity
       Maintains system reliability
   related_decisions:
-    depends_on: *ref_23
+    depends_on:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     informs: []
     see_also: []
   status: Active
@@ -2315,8 +2457,31 @@ ARCH-SECURITY:
       - REQ-RELIABILITY
       - REQ-RESOURCE_MANAGEMENT
     implementation: []
-    requirements: *ref_23
+    requirements:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     tests: []
+ARCH-SPEC_DSL_AND_ORACLE:
+  cross_references:
+    - IMPL-SPEC_CTL
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  decision: Parse formal IMPL DSL; reference oracle in internal/specmodel; specctl matrix and conformance tests
+  detail_file: architecture-decisions/ARCH-SPEC_DSL_AND_ORACLE.yaml
+  metadata:
+    created:
+      author: AI Agent
+      date: '2026-06-02'
+    last_updated:
+      author: AI Agent
+      date: '2026-06-02'
+      reason: Formal spec architecture
+  name: Spec DSL Parser and Reference Oracle
+  status: Active
+  traceability:
+    implementation:
+      - IMPL-SPEC_CTL
+    requirements:
+      - REQ-PSEUDOCODE_FORMAL_VERIFICATION
 ARCH-STDD_VIS_FLOW:
   cross_references:
     - REQ-MODULE_VALIDATION
@@ -2326,16 +2491,16 @@ ARCH-STDD_VIS_FLOW:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
   name: STDD Visualization Flow Architecture
   status: Active
 ARCH-SYSTEM_COMPONENTS:
   alternatives_considered: []
   cross-references: '[REQ-MAINTAINABILITY], [REQ-USABILITY]'
-  cross_references: &ref_2
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
   decision: Layered architecture with clear component boundaries
@@ -2346,13 +2511,13 @@ ARCH-SYSTEM_COMPONENTS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: System Components Architecture
@@ -2367,7 +2532,9 @@ ARCH-SYSTEM_COMPONENTS:
       Storage layer handles all file system and archive operations
       Enables testability and maintainability
   related_decisions:
-    depends_on: *ref_2
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -2412,7 +2579,9 @@ ARCH-SYSTEM_COMPONENTS:
       - REQ-MAINTAINABILITY
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_2
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     tests: []
 ARCH-TEST_EXCLUDE_MERGE:
   alternatives_considered: []
@@ -2420,7 +2589,7 @@ ARCH-TEST_EXCLUDE_MERGE:
   cons: Slightly more complex display logic.
   context: The current configuration output is a flat, sorted list. As the number of configuration options grows (100+), this becomes difficult to navigate. Users need a way to see related options together and see the most important options first.
   cross-references: '[REQ-TEST_EXCLUDE_MERGE], [REQ-CONFIGURATION], [REQ-CFG_006], [ARCH-CFG_006]'
-  cross_references: &ref_33
+  cross_references:
     - REQ-CFG_006
     - REQ-CONFIG_OUTPUT_GROUPING
     - REQ-CONFIGURATION
@@ -2430,23 +2599,26 @@ ARCH-TEST_EXCLUDE_MERGE:
   edge_case_coverage: Empty arrays, duplicates, order preservation
   implementation_approach:
     details: []
-    integration_points: &ref_34
+    integration_points:
       - Leverages CFG-006 source tracking system
       - Uses existing config loading infrastructure
       - Validates CFG-005 merge strategy behavior
     summary: Test-driven validation of exclude patterns merging and source tracking
-  integration_points: *ref_34
+  integration_points:
+    - Leverages CFG-006 source tracking system
+    - Uses existing config loading infrastructure
+    - Validates CFG-005 merge strategy behavior
   merge_validation: Verify patterns from all sources are accumulated, not replaced
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Testing Architecture
@@ -2460,7 +2632,11 @@ ARCH-TEST_EXCLUDE_MERGE:
       Provides regression protection for merge behavior changes
       Enables debugging of configuration issues through test scenarios
   related_decisions:
-    depends_on: *ref_33
+    depends_on:
+      - REQ-CFG_006
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
     informs: []
     see_also: []
   source_tracking_validation: Verify config command shows correct source attribution
@@ -2478,12 +2654,16 @@ ARCH-TEST_EXCLUDE_MERGE:
       - REQ-CONFIGURATION
       - REQ-TEST_EXCLUDE_MERGE
     implementation: []
-    requirements: *ref_33
+    requirements:
+      - REQ-CFG_006
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
     tests: []
 ARCH-TESTING_STRATEGY:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Keep helpers in `internal/testutil/` only (rejected: not importable by `pkg/*` packages).
@@ -2493,7 +2673,7 @@ ARCH-TESTING_STRATEGY:
     - Migration adapters/wrappers should be provided to enable incremental migration without breaking existing tests.
     - Specialized, heavy-weight testing infrastructure remains in `internal/testutil/` for integration/system tests.
   cross-references: '[REQ-EXTRACT-009], [IMPL-EXTRACT-009_TESTUTIL]'
-  cross_references: &ref_11
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-RELIABILITY
   decision: Comprehensive testing with unit, integration, and infrastructure tests
@@ -2504,13 +2684,13 @@ ARCH-TESTING_STRATEGY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Testing Strategy
@@ -2523,7 +2703,9 @@ ARCH-TESTING_STRATEGY:
       Provide a stable, well-documented API for test fixtures and helpers so multiple packages can migrate without duplication.
       Preserve specialized tools in `internal/testutil/` for heavy integration tests while offering lightweight helpers for unit tests in `pkg/testutil`.
   related_decisions:
-    depends_on: *ref_11
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   status: Active
@@ -2538,7 +2720,9 @@ ARCH-TESTING_STRATEGY:
       - REQ-MAINTAINABILITY
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_11
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-RELIABILITY
     tests: []
 ARCH-TIED_STRUCTURE:
   cross_references:
@@ -2549,17 +2733,17 @@ ARCH-TIED_STRUCTURE:
   metadata:
     created:
       author: AI Agent
-      date: "2025-12-18"
+      date: '2025-12-18'
     last_updated:
       author: AI Agent
-      date: "2026-02-06"
+      date: '2026-02-06'
   name: TIED Project Structure
   status: Active
 ARCH-TOKEN_SYSTEM:
   ai_assistant_integration: Token-based navigation and feature discovery
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Feature IDs without tokens: Rejected due to lack of traceability
@@ -2573,7 +2757,7 @@ ARCH-TOKEN_SYSTEM:
   cross-layer_traceability: Requirements → Architecture → Implementation → Tests → Code
   cross-link_layer: For each legacy token, map to an explicit `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and referenced tests/files; open tasks whenever a mapping gap is detected.
   cross-references: '[REQ-DOC_016], [REQ-GOV_REGISTRY_COMPLETENESS], [ARCH-TOKEN_SYSTEM], [IMPL-TOKEN_SYSTEM]'
-  cross_references: &ref_31
+  cross_references:
     - REQ-DOC_016
     - REQ-GOV_DISCOVERABILITY
     - REQ-GOV_REGISTRY_COMPLETENESS
@@ -2588,13 +2772,13 @@ ARCH-TOKEN_SYSTEM:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Token System Architecture
@@ -2608,7 +2792,11 @@ ARCH-TOKEN_SYSTEM:
       Enables validation scripts to reason over one canonical markdown source.
   registry_layer: Extend `tied/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
   related_decisions:
-    depends_on: *ref_31
+    depends_on:
+      - REQ-DOC_016
+      - REQ-GOV_DISCOVERABILITY
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -2630,7 +2818,11 @@ ARCH-TOKEN_SYSTEM:
       - REQ-GOV_REGISTRY_COMPLETENESS
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_31
+    requirements:
+      - REQ-DOC_016
+      - REQ-GOV_DISCOVERABILITY
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-MAINTAINABILITY
     tests: []
   validation_requirements:
     - Cross-layer token consistency validation

@@ -1,6 +1,5 @@
 // [REQ-MAINTAINABILITY]
 package testutil_test
-
 import (
 	"testing"
 
@@ -10,6 +9,11 @@ import (
 
 // TestIntegrationDemo demonstrates how the testutil package would be used
 // to improve existing test patterns in the bkpdir codebase.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: express unit tests as struct slices with name/input/want fields and t.Run subtests per case.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: provide CreateTempDir and CreateTempFile with t.Cleanup registration for isolated filesystem tests.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: build reusable git repos, archives, backups, and config fixtures for integration tests.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: centralize AssertNoTempFiles, AssertArchiveContents, and output capture helpers for tests.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths.
 func TestIntegrationDemo(t *testing.T) {
 	// This test shows how existing tests could be refactored to use testutil
 

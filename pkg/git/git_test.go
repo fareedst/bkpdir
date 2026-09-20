@@ -9,7 +9,6 @@
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 package git
-
 import (
 	"fmt"
 	"io/ioutil"
@@ -22,6 +21,17 @@ import (
 
 // TestGitIntegration tests repository detection and info extraction
 // [REQ-GIT_INTEGRATION] [ARCH-GIT_INTEGRATION] [IMPL-GIT_CLI] Validates core repo operations
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: return Config with Enabled, Command git, WorkingDirectory, and submodule/status defaults.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: resolve Command/GitCommand/git binary, run in WorkingDirectory, return trimmed stdout or GitError.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: git rev-parse --is-inside-work-tree equals true without error.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: rev-parse --abbrev-ref HEAD when inside a repository.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: rev-parse --short HEAD when inside a repository.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: git status --porcelain empty means clean working tree.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: populate Info with IsRepo, Branch, Hash, and IsClean from branch/hash/status helpers.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: extend GetInfo with optional clean check and submodule listing when configured.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: rev-parse --show-superproject-working-tree non-empty means submodule checkout.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: parse git submodule status lines into SubmoduleInfo records with path and URL.
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: delegate to pkg/git IsGitRepository wrapper around rev-parse --is-inside-work-tree.
 func TestGitIntegration(t *testing.T) {
 
 	// Create temporary directory for testing

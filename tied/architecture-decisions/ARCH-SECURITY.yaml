@@ -2,7 +2,7 @@ ARCH-SECURITY:
   alternatives_considered: []
   compression_bombs: ZIP bomb protection during creation
   cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
   decision: Comprehensive security measures for file system and archive operations
@@ -12,13 +12,13 @@ ARCH-SECURITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Security Architecture
@@ -34,7 +34,9 @@ ARCH-SECURITY:
       Ensures data integrity
       Maintains system reliability
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     informs: []
     see_also: []
   status: Active
@@ -46,5 +48,7 @@ ARCH-SECURITY:
       - REQ-RELIABILITY
       - REQ-RESOURCE_MANAGEMENT
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     tests: []

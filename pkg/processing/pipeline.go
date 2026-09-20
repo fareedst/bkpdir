@@ -1,4 +1,3 @@
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE]
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
@@ -84,7 +83,7 @@ type Pipeline struct {
 	processedItems  int64
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] NewPipeline creates a new processing pipeline with default configuration
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: construct Pipeline with stop_on_error, max_retries=3, and retry_delay=1s defaults.
 func NewPipeline(name string) *Pipeline {
 	return &Pipeline{
 		name:            name,
@@ -130,7 +129,7 @@ func (p *Pipeline) SetProgressCallback(callback func(*PipelineProgress)) {
 	p.progressCallback = callback
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Execute runs the pipeline stages sequentially with context support and retry logic
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: execute pipeline stages sequentially with context cancellation, retries, and progress tracking.
 func (p *Pipeline) Execute(ctx context.Context, input *ProcessingInput) (*ProcessingResult, error) {
 	start := time.Now()
 
@@ -218,7 +217,7 @@ func (p *Pipeline) initializeExecution(startTime time.Time) {
 	}
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] executeStageWithRetries executes a stage with configurable retry logic
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: retry each stage up to max_retries with delay between failures until success or cancellation.
 func (p *Pipeline) executeStageWithRetries(ctx context.Context, stage PipelineStage, input *ProcessingInput, output *ProcessingResult) *StageResult {
 	stageResult := &StageResult{
 		Name:      stage.GetName(),

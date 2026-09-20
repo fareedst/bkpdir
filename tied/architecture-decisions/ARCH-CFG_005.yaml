@@ -6,7 +6,7 @@ ARCH-CFG_005:
     - Explicit prefixes (`!`, `+`, `^`, `=`) override the default merge behavior
     - This applies to both inheritance chains and sequential file processing
   cross-references: '[REQ-CFG_005], [REQ-PERFORMANCE]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CFG_005
     - REQ-PERFORMANCE
   decision: Configuration files support explicit inheritance with merge strategies
@@ -36,13 +36,13 @@ ARCH-CFG_005:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Layered Configuration Inheritance
@@ -55,7 +55,9 @@ ARCH-CFG_005:
       Flexible merge strategies for different use cases
       Maintains backward compatibility
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CFG_005
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -65,5 +67,7 @@ ARCH-CFG_005:
       - REQ-CFG_005
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CFG_005
+      - REQ-PERFORMANCE
     tests: []

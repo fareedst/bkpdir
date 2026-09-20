@@ -1,5 +1,5 @@
-// [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]
-// This file is part of bkpdir
+// SPEC-ID: IMPL-TESTING::INTERNAL_SCENARIO_HELPERS
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths.
 //
 // Package testutil provides testing infrastructure for complex scenarios,
 // specifically integration testing orchestration for combining multiple

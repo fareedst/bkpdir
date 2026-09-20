@@ -7,13 +7,13 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Incremental Archive Duplicate Prevention Requirements
@@ -31,12 +31,12 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)'
     - criterion: Appropriate message displayed when archive creation is skipped due to no changes
     - criterion: Archive selection uses name-based sorting (archive names include alphabetically sortable timestamps)
     - criterion: Behavior is consistent with diff command output
     - criterion: Comparison logic reuses diff command analysis for consistency
     - criterion: Comparison respects exclude patterns from configuration
+    - criterion: 'Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)'
     - criterion: If no changes detected compared to reconstructed state, skip archive creation
     - criterion: Incremental archive creation compares against the union of most recent incremental + most recent full archive
   status: Implemented

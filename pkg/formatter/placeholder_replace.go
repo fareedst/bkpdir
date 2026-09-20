@@ -1,4 +1,3 @@
-// [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Simple placeholder replacement
 // Provides a simple, testable function for replacing #{key} placeholders.
 package formatter
 
@@ -11,6 +10,8 @@ import (
 // Returns the string with all placeholders replaced
 // Unknown placeholders are left as-is
 // Uses #{...} syntax to avoid fmt package conflicts
+// SPEC-ID: IMPL-DUAL_FORMATTING::SIMPLE_PLACEHOLDER_REPLACE
+// - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: replace every #{key} in formatStr with data map values; leave unknown placeholders unchanged.
 func ReplacePlaceholders(formatStr string, data map[string]string) string {
 	result := formatStr
 

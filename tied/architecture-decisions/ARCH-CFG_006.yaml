@@ -41,7 +41,7 @@ ARCH-CFG_006:
   code_generation: Rejected due to complexity, build-time dependencies, and reduced flexibility
   configuration_system: Builds on existing Config struct and loading mechanisms
   cross-references: '[REQ-CFG_006], [ARCH-CONFIG_SYSTEM], [ARCH-CFG_005], [REQ-PERFORMANCE]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CFG_006
     - REQ-PERFORMANCE
   decision: Reflection-based automatic field discovery with hierarchical source attribution
@@ -53,13 +53,13 @@ ARCH-CFG_006:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Reflection Architecture
@@ -79,7 +79,9 @@ ARCH-CFG_006:
       Performance optimized: Fast inspection suitable for development workflow
       Backward compatible: Existing configuration command functionality preserved and enhanced
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -90,5 +92,7 @@ ARCH-CFG_006:
       - REQ-CFG_006
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CFG_006
+      - REQ-PERFORMANCE
     tests: []

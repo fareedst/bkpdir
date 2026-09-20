@@ -1,4 +1,3 @@
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
 // Pattern extraction and regex-based data extraction for the formatter package.
 // Provides functionality to extract structured data from filenames and text
 // using named regex groups for template processing.
@@ -13,13 +12,11 @@ import (
 	"strings"
 )
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // DefaultPatternExtractor provides default pattern extraction functionality
 type DefaultPatternExtractor struct {
 	configProvider ConfigProvider
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewDefaultPatternExtractor creates a new DefaultPatternExtractor
 func NewDefaultPatternExtractor(configProvider ConfigProvider) *DefaultPatternExtractor {
 	return &DefaultPatternExtractor{
@@ -27,7 +24,6 @@ func NewDefaultPatternExtractor(configProvider ConfigProvider) *DefaultPatternEx
 	}
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractArchiveFilenameData extracts data from archive filenames using configured patterns
 func (pe *DefaultPatternExtractor) ExtractArchiveFilenameData(filename string) map[string]string {
 	pattern := pe.configProvider.GetPattern("archive_filename")
@@ -38,7 +34,6 @@ func (pe *DefaultPatternExtractor) ExtractArchiveFilenameData(filename string) m
 	return pe.ExtractPatternData(pattern, filename)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractBackupFilenameData extracts data from backup filenames using configured patterns
 func (pe *DefaultPatternExtractor) ExtractBackupFilenameData(filename string) map[string]string {
 	pattern := pe.configProvider.GetPattern("backup_filename")
@@ -49,8 +44,8 @@ func (pe *DefaultPatternExtractor) ExtractBackupFilenameData(filename string) ma
 	return pe.ExtractPatternData(pattern, filename)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractPatternData extracts named groups from text using a regex pattern
+// - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: compile configured regex and return map of named capture groups from input text.
 func (pe *DefaultPatternExtractor) ExtractPatternData(pattern, text string) map[string]string {
 	re, err := regexp.Compile(pattern)
 	if err != nil {
@@ -72,7 +67,6 @@ func (pe *DefaultPatternExtractor) ExtractPatternData(pattern, text string) map[
 	return result
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractConfigLineData extracts data from configuration lines
 func (pe *DefaultPatternExtractor) ExtractConfigLineData(line string) map[string]string {
 	pattern := pe.configProvider.GetPattern("config_line")
@@ -83,7 +77,6 @@ func (pe *DefaultPatternExtractor) ExtractConfigLineData(line string) map[string
 	return pe.ExtractPatternData(pattern, strings.TrimSpace(line))
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractTimestampData extracts timestamp components
 func (pe *DefaultPatternExtractor) ExtractTimestampData(timestamp string) map[string]string {
 	pattern := pe.configProvider.GetPattern("timestamp")
@@ -94,37 +87,31 @@ func (pe *DefaultPatternExtractor) ExtractTimestampData(timestamp string) map[st
 	return pe.ExtractPatternData(pattern, timestamp)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // GetFilenameFromPath extracts filename from a full path
 func GetFilenameFromPath(path string) string {
 	return filepath.Base(path)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // SimplePatternExtractor provides pattern extraction without configuration dependency
 type SimplePatternExtractor struct{}
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewSimplePatternExtractor creates a SimplePatternExtractor
 func NewSimplePatternExtractor() *SimplePatternExtractor {
 	return &SimplePatternExtractor{}
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractArchiveFilenameData extracts data using default archive pattern
 func (spe *SimplePatternExtractor) ExtractArchiveFilenameData(filename string) map[string]string {
 	pattern := `^(?P<name>.*?)_(?P<timestamp>\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(?P<suffix>\..*)?$`
 	return spe.ExtractPatternData(pattern, filename)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractBackupFilenameData extracts data using default backup pattern
 func (spe *SimplePatternExtractor) ExtractBackupFilenameData(filename string) map[string]string {
 	pattern := `^(?P<name>.*?)_(?P<timestamp>\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})(?P<suffix>\..*)?$`
 	return spe.ExtractPatternData(pattern, filename)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // ExtractPatternData extracts named groups from text using a regex pattern
 func (spe *SimplePatternExtractor) ExtractPatternData(pattern, text string) map[string]string {
 	re, err := regexp.Compile(pattern)

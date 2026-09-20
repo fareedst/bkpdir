@@ -1,4 +1,3 @@
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_COMMANDS] [REQ-IMMUTABLE_CLI_COMMANDS]
 package cli
 
 import (
@@ -11,16 +10,17 @@ import (
 type DefaultVersionManager struct{}
 
 // NewVersionManager creates a new version manager
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
 func NewVersionManager() VersionManager {
 	return &DefaultVersionManager{}
 }
 
-// FormatVersion formats version information for display
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: format version, build date, and platform into display string.
 func (vm *DefaultVersionManager) FormatVersion(info BuildInfo) string {
 	return fmt.Sprintf("%s (compiled %s) [%s]", info.Version, info.Date, info.Platform)
 }
 
-// CreateVersionCommand creates a version subcommand
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create version subcommand that prints FormatVersion on run.
 func (vm *DefaultVersionManager) CreateVersionCommand(info BuildInfo) *cobra.Command {
 	return &cobra.Command{
 		Use:   "version",

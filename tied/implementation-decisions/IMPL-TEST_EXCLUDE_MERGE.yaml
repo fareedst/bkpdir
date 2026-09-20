@@ -11,58 +11,19 @@ IMPL-TEST_EXCLUDE_MERGE:
     - REQ-CFG_006
     - REQ-CONFIGURATION
     - REQ-TEST_EXCLUDE_MERGE
-  essence_pseudocode: |-
-    # [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006] — Comprehensive test scenario for exclude patterns merging and source tracking
-
-    procedure TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE():
-      # [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] — validates exclude_patterns merge from multiple config files and source attribution
-      save BKPDIR_CONFIG env; defer restore
-
-      subtest "exclude patterns merged from defaults and local config":
-        # [REQ-CONFIGURATION] [REQ-CFG_006] — verifies defaults + local config merge and config command source attribution [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE]
-        create temp dir
-        create local .bkpdir.yml with exclude_patterns: ["demo/batches/", "*.log"]
-        verify file was written correctly (diagnostic)
-
-        # Direct merge validation (bypassing full LoadConfig) [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE]
-        call loadSingleConfigFile(localConfigPath) → loadResult
-        log loadResult.config.ExcludePatterns and rawMap keys (diagnostic)
-        call applyMergeStrategies(DefaultConfig(), loadResult.config, true, loadResult.rawMap, initialDefault, nil)
-        assert merged patterns == ["demo/batches/", "*.log"]  # empty DefaultConfig exclude_patterns; inheritContext merge
-
-        # Full LoadConfig validation [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE]
-        set BKPDIR_CONFIG = localConfigPath
-        call LoadConfig(dir)
-        assert cfg.ExcludePatterns == ["demo/batches/", "*.log"]  # first sequential file replaces empty default
-
-        # Source attribution validation [REQ-CFG_006] [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE]
-        call GetAllConfigValuesWithSources(cfg, dir)
-        find exclude_patterns entry
-        assert source != "default"
-        assert source contains ".bkpdir.yml"
-        assert inheritanceChain is non-empty
-
-      subtest "duplicate patterns are deduplicated":
-        # [REQ-TEST_EXCLUDE_MERGE] — verifies duplicate patterns across multiple config files are deduplicated [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE]
-        create duplicate.yml with exclude_patterns: [".git/", "demo/batches/", "new_pattern"]
-        set BKPDIR_CONFIG = localConfigPath:duplicateConfigPath
-        call LoadConfig(dir)
-        count pattern occurrences; assert each count == 1 (no duplicates)
-        assert all expected unique patterns present: ["demo/batches/", "*.log", ".git/", "new_pattern"]  # no built-in vendor/
-      end
   implementation_approach:
     details: []
     summary: Comprehensive test scenario for exclude patterns merging and source tracking
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-29"
-      reason: Pseudocode aligned with empty default exclude_patterns and LoadConfig replace semantics
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Exclude Patterns Merge Testing

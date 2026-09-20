@@ -12,7 +12,6 @@
 // IMPLEMENTATION-NOTES: Comprehensive testing of context cancellation utilities with deterministic scenarios
 
 package testutil
-
 import (
 	"context"
 	"errors"

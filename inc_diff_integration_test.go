@@ -2,7 +2,6 @@
 // [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-DIFF_COMMAND] End-to-end command execution validation
 // [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] CLI command integration testing
 package main
-
 import (
 	"bytes"
 	"fmt"

@@ -1,15 +1,15 @@
 ARCH-STDD_VIS_FLOW:
   alternatives_considered:
-    - name: Manual non-data-driven sketches
-      cons:
+    - cons:
         - Drift risk
         - No repeatability
+      name: Manual non-data-driven sketches
       pros:
         - Quick to create
       rejected_reason: Drift risk and no repeatability
-    - name: Single static diagram only
-      cons:
+    - cons:
         - Does not convey lifecycle or time dimension
+      name: Single static diagram only
       pros:
         - Simple
       rejected_reason: Does not convey lifecycle/time dimension
@@ -27,10 +27,10 @@ ARCH-STDD_VIS_FLOW:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
   name: STDD Visualization Flow Architecture
   rationale:
     benefits:

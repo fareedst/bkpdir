@@ -2,14 +2,14 @@ ARCH-CICD_PIPELINE:
   ai-optimized_reporting: Structured output, icon integration, token attribution
   ai_protocol_validation_engine: Token validation, documentation sync, protocol compliance
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Traditional CI/CD: Rejected due to lack of AI-first optimization
         Manual validation: Rejected due to overhead
   cross-references: '[REQ-CODE_QUALITY], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CODE_QUALITY
     - REQ-MAINTAINABILITY
   decision: AI-optimized CI/CD pipeline with automated quality gates
@@ -19,13 +19,13 @@ ARCH-CICD_PIPELINE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CI/CD Pipeline Architecture
@@ -43,7 +43,9 @@ ARCH-CICD_PIPELINE:
       Non-blocking execution for AI assistants
       Comprehensive validation reporting
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -53,5 +55,7 @@ ARCH-CICD_PIPELINE:
       - REQ-CODE_QUALITY
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-MAINTAINABILITY
     tests: []

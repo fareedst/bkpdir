@@ -1,14 +1,14 @@
 ARCH-RESOURCE_MANAGEMENT:
   alternatives_considered: []
   cross-references: '[REQ-RESOURCE_MANAGEMENT], [REQ-RELIABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
   decision: ResourceManager for automatic cleanup with panic recovery
   implementation:
     - '`ResourceManager` struct with mutex protection'
-    - 'Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`'
     - Error-resilient cleanup operations
+    - 'Methods: `AddTempFile()`, `AddTempDir()`, `RemoveResource()`, `CleanupWithPanicRecovery()`'
     - Thread-safe resource tracking
   implementation_approach:
     details: []
@@ -20,13 +20,13 @@ ARCH-RESOURCE_MANAGEMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Resource Management
@@ -39,7 +39,9 @@ ARCH-RESOURCE_MANAGEMENT:
       Thread-safe for concurrent operations
       Simplifies error handling in operations
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     informs: []
     see_also: []
   status: Active
@@ -49,5 +51,7 @@ ARCH-RESOURCE_MANAGEMENT:
       - REQ-RELIABILITY
       - REQ-RESOURCE_MANAGEMENT
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     tests: []

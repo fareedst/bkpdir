@@ -4,7 +4,7 @@ ARCH-TEST_EXCLUDE_MERGE:
   cons: Slightly more complex display logic.
   context: The current configuration output is a flat, sorted list. As the number of configuration options grows (100+), this becomes difficult to navigate. Users need a way to see related options together and see the most important options first.
   cross-references: '[REQ-TEST_EXCLUDE_MERGE], [REQ-CONFIGURATION], [REQ-CFG_006], [ARCH-CFG_006]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CFG_006
     - REQ-CONFIG_OUTPUT_GROUPING
     - REQ-CONFIGURATION
@@ -13,23 +13,26 @@ ARCH-TEST_EXCLUDE_MERGE:
   edge_case_coverage: Empty arrays, duplicates, order preservation
   implementation_approach:
     details: []
-    integration_points: &ref_1
+    integration_points:
       - Leverages CFG-006 source tracking system
       - Uses existing config loading infrastructure
       - Validates CFG-005 merge strategy behavior
     summary: Test-driven validation of exclude patterns merging and source tracking
-  integration_points: *ref_1
+  integration_points:
+    - Leverages CFG-006 source tracking system
+    - Uses existing config loading infrastructure
+    - Validates CFG-005 merge strategy behavior
   merge_validation: Verify patterns from all sources are accumulated, not replaced
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Testing Architecture
@@ -43,7 +46,11 @@ ARCH-TEST_EXCLUDE_MERGE:
       Provides regression protection for merge behavior changes
       Enables debugging of configuration issues through test scenarios
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CFG_006
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
     informs: []
     see_also: []
   source_tracking_validation: Verify config command shows correct source attribution
@@ -61,5 +68,9 @@ ARCH-TEST_EXCLUDE_MERGE:
       - REQ-CONFIGURATION
       - REQ-TEST_EXCLUDE_MERGE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CFG_006
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIGURATION
+      - REQ-TEST_EXCLUDE_MERGE
     tests: []

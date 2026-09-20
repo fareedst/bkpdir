@@ -22,7 +22,27 @@ IMPL-DIRECTORY_COMPARISON:
       - IsDirectoryIdenticalToArchive
       - NewComparer
   code_markers: '`pkg/fileops/comparison.go`, snapshot structures, comparison functions'
-  comparison_algorithm: "```go\nfunc CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {\n    if len(snap1.Files) != len(snap2.Files) {\n        return false\n    }\n    \n    for path, info1 := range snap1.Files {\n        info2, exists := snap2.Files[path]\n        if !exists {\n            return false\n        }\n        \n        if info1.Hash != info2.Hash || info1.Size != info2.Size {\n            return false\n        }\n    }\n    \n    return true\n}\n```"
+  comparison_algorithm: |-
+    ```go
+    func CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {
+        if len(snap1.Files) != len(snap2.Files) {
+            return false
+        }
+        
+        for path, info1 := range snap1.Files {
+            info2, exists := snap2.Files[path]
+            if !exists {
+                return false
+            }
+            
+            if info1.Hash != info2.Hash || info1.Size != info2.Size {
+                return false
+            }
+        }
+        
+        return true
+    }
+    ```
   cross_references:
     - ARCH-DIRECTORY_COMPARISON
     - REQ-DIFF_COMMAND
@@ -43,120 +63,74 @@ IMPL-DIRECTORY_COMPARISON:
         IsDir    bool
     }
     ```
-  essence_pseudocode: |-
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — Snapshot-based comparison with hash-based content verification [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    ## Data types (pkg/fileops/comparison.go) [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE]
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — core comparison data structures [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    TYPE FileInfo { RelativePath string, Size int64, ModTime time.Time, IsDir bool, Hash string }
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE] — Block implements documented behavior for: TYPE DirectorySnapshot { Files []FileInfo }
-    TYPE DirectorySnapshot { Files []FileInfo }
-
-    ## Snapshot creation [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE]
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — walk tree, compute SHA-256 hashes [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    procedure CreateDirectorySnapshot(rootPath, excludePatterns) -> (*DirectorySnapshot, error):
-      INPUT: rootPath string, excludePatterns []string
-      OUTPUT: snapshot with sorted FileInfo entries for all non-excluded files/dirs
-      Walk(rootPath):
-        FOR EACH path, info:
-          relPath = Rel(rootPath, path)
-          IF relPath == "." THEN skip
-          IF ShouldExcludeFile(relPath, excludePatterns) THEN SkipDir or skip
-          fileInfo = { RelativePath, Size, ModTime, IsDir }
-          IF !IsDir THEN fileInfo.Hash = calculateFileHash(path)
-          append(files, fileInfo)
-      Sort files by RelativePath
-      RETURN &DirectorySnapshot{files}
-
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure CreateArchiveSnapshot(archivePath) -> (*DirectorySnapshot, error):
-    procedure CreateArchiveSnapshot(archivePath) -> (*DirectorySnapshot, error):
-      INPUT: archivePath string (ZIP file path)
-      OUTPUT: snapshot with sorted FileInfo entries for archive contents
-      reader = zip.OpenReader(archivePath)
-      FOR EACH file in reader:
-        IF name ends with "/" THEN skip  # directories are implicit
-        fileInfo = { RelativePath: file.Name, Size: file.UncompressedSize64, ModTime: file.Modified }
-        fileInfo.Hash = calculateArchiveFileHash(file)
-        append(files, fileInfo)
-      Sort files by RelativePath
-      RETURN &DirectorySnapshot{files}
-
-    ## Hash calculation [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE]
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — SHA-256 content hashing [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    procedure calculateFileHash(filePath) -> (string, error):
-      file = Open(filePath); hash = sha256.New(); io.Copy(hash, file)
-      RETURN hex(hash.Sum(nil))
-
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure calculateArchiveFileHash(zipFile) -> (string, error):
-    procedure calculateArchiveFileHash(zipFile) -> (string, error):
-      reader = zipFile.Open(); hash = sha256.New(); io.Copy(hash, reader)
-      RETURN hex(hash.Sum(nil))
-
-    ## Snapshot comparison [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE]
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — sorted element-wise comparison [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    procedure CompareSnapshots(snapshot1, snapshot2) -> bool:
-      IF len(snapshot1.Files) != len(snapshot2.Files) THEN RETURN false
-      FOR i, file1 in snapshot1.Files:
-        file2 = snapshot2.Files[i]
-        IF file1.RelativePath != file2.RelativePath THEN RETURN false
-        IF file1.Size != file2.Size OR file1.IsDir != file2.IsDir THEN RETURN false
-        IF !file1.IsDir AND file1.Hash != file2.Hash THEN RETURN false
-      RETURN true
-
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure IsDirectoryIdenticalToArchive(dirPath, archivePath, excludePatterns) -> (bool, error):
-    procedure IsDirectoryIdenticalToArchive(dirPath, archivePath, excludePatterns) -> (bool, error):
-      dirSnapshot = CreateDirectorySnapshot(dirPath, excludePatterns)
-      archiveSnapshot = CreateArchiveSnapshot(archivePath)
-      RETURN CompareSnapshots(dirSnapshot, archiveSnapshot)
-
-    ## Archive discovery (comparison.go adapter) [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE]
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — find most recent archives [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    procedure FindMostRecentArchive(archiveDir) -> (string, error):
-      archives = ListArchives(archiveDir)
-      Filter: keep only non-incremental (full) archives
-      Sort by name ascending (timestamps in names are alphabetically sortable)
-      RETURN last archive path (most recent)
-
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure CheckForIdenticalArchive(dirPath, archiveDir, excludePatterns) -> (bool, string, error):
-    procedure CheckForIdenticalArchive(dirPath, archiveDir, excludePatterns) -> (bool, string, error):
-      mostRecent = FindMostRecentArchive(archiveDir)
-      IF mostRecent == "" THEN RETURN false, "", nil
-      identical = IsDirectoryIdenticalToArchive(dirPath, mostRecent, excludePatterns)
-      RETURN identical, mostRecent, nil
-
-    ## Summary generation (comparison.go adapter) [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE]
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] — textual summary of directory/archive contents [REQ-PERFORMANCE] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP]
-
-    procedure GetDirectoryTreeSummary(dirPath, excludePatterns) -> (string, error):
-      snapshot = CreateDirectorySnapshot(dirPath, excludePatterns)
-      FOR EACH file: format as [DIR] or [FILE] with size
-      RETURN formatted summary
-
-    # [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-PERFORMANCE] — Block implements documented behavior for: procedure GetArchiveTreeSummary(archivePath) -> (string, error):
-    procedure GetArchiveTreeSummary(archivePath) -> (string, error):
-      snapshot = CreateArchiveSnapshot(archivePath)
-      FOR EACH file: format as [FILE] with size
-      RETURN formatted summary
-  from_archive: "```go\nfunc CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {\n    reader, err := zip.OpenReader(archivePath)\n    if err != nil {\n        return nil, err\n    }\n    defer reader.Close()\n    \n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  archivePath,\n    }\n    \n    for _, file := range reader.File {\n        hash := calculateArchiveFileHash(file)\n        snapshot.Files[file.Name] = FileInfo{\n            Path:    file.Name,\n            Size:    int64(file.UncompressedSize64),\n            ModTime: file.ModTime(),\n            Hash:    hash,\n            IsDir:   file.FileInfo().IsDir(),\n        }\n    }\n    \n    return snapshot, nil\n}\n```"
-  from_directory: "```go\nfunc CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {\n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  root,\n    }\n    \n    err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {\n        if err != nil {\n            return err\n        }\n        \n        hash := calculateFileHash(path)\n        snapshot.Files[path] = FileInfo{\n            Path:    path,\n            Size:    info.Size(),\n            ModTime: info.ModTime(),\n            Hash:    hash,\n            IsDir:   info.IsDir(),\n        }\n        return nil\n    })\n    \n    return snapshot, err\n}\n```"
+  from_archive: |-
+    ```go
+    func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
+        reader, err := zip.OpenReader(archivePath)
+        if err != nil {
+            return nil, err
+        }
+        defer reader.Close()
+        
+        snapshot := &DirectorySnapshot{
+            Files: make(map[string]FileInfo),
+            Root:  archivePath,
+        }
+        
+        for _, file := range reader.File {
+            hash := calculateArchiveFileHash(file)
+            snapshot.Files[file.Name] = FileInfo{
+                Path:    file.Name,
+                Size:    int64(file.UncompressedSize64),
+                ModTime: file.ModTime(),
+                Hash:    hash,
+                IsDir:   file.FileInfo().IsDir(),
+            }
+        }
+        
+        return snapshot, nil
+    }
+    ```
+  from_directory: |-
+    ```go
+    func CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {
+        snapshot := &DirectorySnapshot{
+            Files: make(map[string]FileInfo),
+            Root:  root,
+        }
+        
+        err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {
+            if err != nil {
+                return err
+            }
+            
+            hash := calculateFileHash(path)
+            snapshot.Files[path] = FileInfo{
+                Path:    path,
+                Size:    info.Size(),
+                ModTime: info.ModTime(),
+                Hash:    hash,
+                IsDir:   info.IsDir(),
+            }
+            return nil
+        })
+        
+        return snapshot, err
+    }
+    ```
   implementation_approach:
     details: []
     summary: Snapshot-based comparison with hash-based content verification
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Directory Comparison Implementation

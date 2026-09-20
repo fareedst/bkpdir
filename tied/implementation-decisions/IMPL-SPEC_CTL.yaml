@@ -1,0 +1,52 @@
+IMPL-SPEC_CTL:
+  code_locations:
+    files:
+      - description: CI orchestration
+        path: scripts/run-spec-verification.sh
+      - description: CLI entry
+        path: cmd/specctl/main.go
+      - description: Matrix and check-leads
+        path: internal/speccheck/
+      - description: Parser and validate
+        path: internal/specparse/
+  cross_references:
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  decision: Provide cmd/specctl CLI with validate, matrix, and check-leads subcommands; wire into scripts/run-spec-verification.sh after tied_validate_consistency
+  implementation_approach:
+    details:
+      - cmd/specctl/main.go dispatches subcommands
+      - internal/speccheck implements matrix and block-lead literal copy audit
+      - internal/specparse implements parser and Layer B diagnostic codes
+    summary: Project-local spec control tool; not a TIED MCP replacement for Layer A
+  metadata:
+    created:
+      author: AI Agent
+      date: '2026-06-02'
+    last_updated:
+      author: AI Agent
+      date: '2026-06-02'
+      reason: Initial IMPL-SPEC_CTL
+  name: Spec Control CLI (specctl)
+  rationale:
+    benefits:
+      - Automates pseudocode-validation-checklist.yaml categories
+    problems_solved:
+      - Manual Layer B walks do not scale
+    why: Executable gate for formal pseudocode verification
+  related_decisions:
+    depends_on:
+      - ARCH-SPEC_DSL_AND_ORACLE
+    informs: []
+    see_also:
+      - IMPL-ATOMIC_OPS
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-SPEC_DSL_AND_ORACLE
+    code_annotations:
+      - IMPL-SPEC_CTL
+    requirements:
+      - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    tests:
+      - TestSpecctlValidate_REQ_PSEUDOCODE_FORMAL_VERIFICATION

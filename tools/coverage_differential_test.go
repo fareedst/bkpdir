@@ -1,7 +1,6 @@
 // [REQ-COV_003]
 // COV-002: See specification.md - Coverage Differential Reporting [DECISION:core-functionality]
 package main
-
 import (
 	"encoding/json"
 	"os"

@@ -5,13 +5,13 @@ REQ-STDD_VIS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: STDD Visualization and Storytelling Requirements
@@ -27,8 +27,8 @@ REQ-STDD_VIS:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'At least two complementary token-first visuals: (1) layered flow/graph emphasizing tokens as primary nodes; (2) timeline/animation highlighting token handoffs over time.'
     - criterion: Assets live under `docs/` (e.g., `docs/images/`) and are referenced from STDD docs; include backward links to source docs per token.
+    - criterion: 'At least two complementary token-first visuals: (1) layered flow/graph emphasizing tokens as primary nodes; (2) timeline/animation highlighting token handoffs over time.'
     - criterion: Each visual annotates at least two real token chains (e.g., `[REQ-CFG_005] → [ARCH-CFG_005] → [IMPL-EXCLUDE_MERGE_FIX] → tests/code refs`) with token-forward callouts and a legend that explains token roles.
     - criterion: Module boundaries captured per [REQ-MODULE_VALIDATION] (data extraction, visualization rendering, animation/timeline, integration) with validation notes before integration.
     - criterion: Tokens visually dominate (color/weight/position); edges and captions reinforce token traceability.

@@ -682,7 +682,7 @@ func (fa *AIFormatterAdapter) PrintIncrementalSkippedNoChanges() {
 	fa.aiFormatter.PrintWithContext(ctx)
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
+// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] [REQ-DIFF_COMMAND] — How: use cfg FormatDiff* strings for no-changes header and per-category file lines.
 func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
 	if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
 		return fa.config.FormatDiffNoChanges
@@ -704,7 +704,7 @@ func (fa *AIFormatterAdapter) FormatDiffResult(diff *DiffResult) string {
 	return result.String()
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
+// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] [REQ-DIFF_COMMAND] — How: format diff then route through delayed collector or stdout.
 func (fa *AIFormatterAdapter) PrintDiffResult(diff *DiffResult) {
 	ctx := formatter.PrintContext{
 		Message:     fa.FormatDiffResult(diff),
@@ -755,6 +755,7 @@ func NewOutputFormatter(cfg *Config) *AIFormatterAdapter {
 	return NewAIFormatterAdapter(cfg)
 }
 
+// - [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: construct AIFormatterAdapter with cfg and pre-wired OutputCollector for delayed CLI output.
 func NewOutputFormatterWithCollector(cfg *Config, collector *formatter.OutputCollector) *AIFormatterAdapter {
 	return NewAIFormatterAdapterWithCollector(cfg, collector)
 }

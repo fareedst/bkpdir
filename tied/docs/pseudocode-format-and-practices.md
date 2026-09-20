@@ -27,8 +27,8 @@ isProject: false
 
 - It is the **authoritative and primary source of implementation logic**. Resolve logical and **flow** issues in pseudo-code **before** writing tests or production code; tests and code are derived from it and must stay aligned.
 - **No code chunks are allowed** in `essence_pseudocode`: do not include language-specific source snippets, compilable fragments, or pasted production/test code blocks.
-- It supports **collision detection**: when IMPLs are composed or share code paths, compare blocks to see overlapping steps, shared **DATA**, ordering, and conflicting assumptions.
-- **Algol-style** readability: explicit control flow (IF/ELSE, loops, ON/WHEN), explicit **INPUT** / **OUTPUT** / **DATA** (and **CONTROL** when relevant), procedure names often in **UPPER_SNAKE**.
+- It supports **collision detection**: when IMPLs are composed or share code paths, compare blocks to see overlapping steps, shared **DATA**, **EFFECTS** rows, ordering, and conflicting assumptions.
+- **Algol-style** readability: explicit control flow (IF/ELSE, loops, ON/WHEN), explicit contracts (**INPUT** / **OUTPUT** / **DATA**, **PRE** / **POST** / **EFFECTS**, and **CONTROL** when relevant), procedure names often in **UPPER_SNAKE**.
 - **One action per step** (or one small coherent block). Avoid long lines that mix many actions; that weakens review and differencing.
 - **Traceability to tests:** key branches and procedures should map to test names or structure (e.g. one procedure or branch to one test section), so drift is detectable. Optionally mark test level at a block (e.g. `unit-testable: …`, `E2E-only: …` with a short reason) when policy requires.
 
@@ -47,6 +47,7 @@ TIED uses bracket tokens in plain text. **Every block** in `essence_pseudocode` 
 
 ## 3a. Block lead comments in source and tests (literal copy)
 
+- **Procedure block-lead placement (mandatory for new/changed procedures):** For every `procedure` / `function` / `block` heading, the semantic block-lead comment (`# [IMPL-*] [ARCH-*] [REQ-*] …`) **must appear inside the procedure body**—immediately after the heading and before the first `Contract:` row (or before the first body step when no contract is declared). Do **not** place block-leads on lines above the procedure heading or in the gap between procedures; external-only and inter-procedure placement breaks literal-copy alignment even when Layer B validation tolerates the pattern. Audit with `node scripts/normalize-sidecar-block-leads.mjs --check`.
 - **IMPL grammar** in `essence_pseudocode` is defined by the TIED vocabulary in §2 and §4—not by any product programming language.
 - For **each** logical block, the **block lead** line(s) that satisfy `[PROC-IMPL_PSEUDOCODE_TOKENS]` (REQ/ARCH/IMPL naming + *how* / one-line summary per block rules) **must be copied literally** into:
   - the test locus for that block, and
@@ -64,19 +65,45 @@ Use these keywords consistently so different IMPLs and tooling stay comparable.
 
 | Category | Keywords / forms |
 |----------|------------------|
-| Contract | **INPUT**, **OUTPUT**, **DATA**, **CONTROL** (use CONTROL for flags, environment, or policy not pure data) |
+| Contract (I/O) | **INPUT**, **OUTPUT**, **DATA**, **CONTROL** (CONTROL = flags, environment, or ordering — not the effect row) |
+| Contract (precision) | **PRE**, **POST**, **EFFECTS** (`pure` or named: `IO`, `Http`, `State`, `Async`, `DB`, `Exn`, `Random`, `Diverge`, …), **FAILURE_MODES**, **DATA_TRANSITION**, **TERMINATION** (`total` \| `may_diverge`) |
 | Events / conditions | **ON**, **WHEN** |
-| Effects | **SEND**, **BROADCAST**, **RETURN** |
+| Step-level effects | **SEND**, **BROADCAST**, **RETURN** (distinct from contract **EFFECTS**) |
 | Branches | **IF**, **ELSE** |
 | Procedures | **UPPER_SNAKE** (e.g. `NORMALIZE_INPUT`); **camelCase** is acceptable when mirroring real API names |
 | Loops | `FOR item IN collection`, or `FOR each (k, v) IN map` |
-| Errors | **ON error** / **ON failure**; **RETURN error**; **EXIT failure**; **CATCH e RETURN …** — pick **one** style per IMPL and stick to it |
-| Async | **AWAIT**; name **Promise** in OUTPUT when the result is async; **SEND** for message-style async |
+| Errors | **ON error** / **ON failure**; **RETURN error**; **EXIT failure**; **CATCH e RETURN …** — pick **one** style per IMPL; names must match **FAILURE_MODES** when that set is required |
+| Async | **AWAIT**; name **Promise** in OUTPUT when async; include `Async` in **EFFECTS** when the block awaits; **SEND** for message-style async; optional v1 rows below when async is in scope |
+| Async contract rows (optional v1) | **ASYNC_BOUNDARY:**, **TIMEOUT:**, **CANCELLATION:**, **SEQUENCING:**, **MESSAGE_CONTRACT:**, **RETRY:**, **IDEMPOTENCY:** — see §4a |
 | Shapes (optional) | **(list)**, **(map)**, `{ key, key? }` — stay language-agnostic |
 
-**Sequence:** Use numbered steps `1.`, `2.`, … for fixed order; indent under a procedure or **ON** / **WHEN** for the body. Start substantive blocks with a **Contract** line and/or **INPUT:** / **OUTPUT:** / **DATA:** / **CONTROL:** so two IMPLs can be compared by contract.
+**Requiredness (Active, non-stub procedure blocks — new or changed):** Always **PRE**, **POST**, **EFFECTS** (with **INPUT**/**OUTPUT**). Add **FAILURE_MODES** when errors are possible; **DATA_TRANSITION** when DATA is mutated or EFFECTS includes `State`; **TERMINATION** when recursion/`WHILE`/open wait (else prefer `total`). **CONTROL** remains optional. Untouched legacy Active blocks may use Layer B N/A `pre-contract-grammar` until next edit. Full table: [implementation-decisions.md](implementation-decisions.md) § Preferred vocabulary.
 
-**Placeholders:** For IMPLs still in draft/Template state, a stub is acceptable: a line `Template: placeholder for …` plus minimal INPUT/OUTPUT (e.g. “(to be defined)”). For **Active** status, the pseudo-code should be **complete** (no Template stub line).
+### 4a. Optional async contract rows (grammar v1)
+
+When a block has `Async` in **EFFECTS**, an **AWAIT**, **Promise** OUTPUT, **SEND**, or an open wait, authors **should** add applicable optional rows. Documents without these rows remain valid (legacy compatibility). Untouched legacy blocks may use N/A rationale **`pre-async-contract`** until next edit.
+
+| Row | When to use | Valid example | Insufficient (negative) example |
+|-----|-------------|---------------|--------------------------------|
+| `ASYNC_BOUNDARY:` | Declare boundary kind | `ASYNC_BOUNDARY: await` | `Async` in EFFECTS with no boundary row and no rationale |
+| `TIMEOUT:` | Wall-clock or logical deadline | `TIMEOUT: 30s → TIMEOUT_EXCEEDED` | `TIMEOUT: soon` without FAILURE_MODE |
+| `CANCELLATION:` | Caller/controller may stop work | `CANCELLATION: caller → CANCELLED; POST: discard partial` | Names caller but no POST outcome |
+| `SEQUENCING:` | Local order across yields | `SEQUENCING: parse_lines before wait_process` | Multiple AWAITs on shared DATA with no order |
+| `MESSAGE_CONTRACT:` | SEND/event/stream delivery | `MESSAGE_CONTRACT: at-least-once; dedupe by line_id` | SEND with no delivery category |
+| `RETRY:` | Retries on named failures | `RETRY: 2; timeout only; exponential backoff` | RETRY without idempotency when DATA mutates |
+| `IDEMPOTENCY:` | Safe duplicate execution/delivery | `IDEMPOTENCY: request_id; POST: one transition` | At-least-once delivery without dedup key |
+
+**CONTROL: ordering** is the primary v1 vehicle when `SEQUENCING:` is omitted (e.g. `CONTROL: ordering spawn before wait`).
+
+**Proof boundary:** Rows document assumptions for comprehension and structural validation only — not race/deadlock/liveness proof.
+
+**Future checklist (W2):** Phase B will catalog rows per async block; T0 documents mapping only — checklist execution is unchanged.
+
+**Fixtures:** `working/REQ-TIED_ASYNC_METHODOLOGY/fixtures/async-contract/` (positive/negative per class); tests: `mcp-server/src/tools/tied-async-contract-fixtures.test.ts`.
+
+**Sequence:** Use numbered steps `1.`, `2.`, … for fixed order; indent under a procedure or **ON** / **WHEN** for the body. Start substantive blocks with a **Contract** that includes the precision fields above so two IMPLs can be compared by contract.
+
+**Placeholders:** For IMPLs still in draft/Template state, a stub is acceptable: a line `Template: placeholder for …` plus minimal INPUT/OUTPUT (e.g. “(to be defined)”). Precision keywords are not required on Template stubs. For **Active** status, the pseudo-code should be **complete** (no Template stub line; full contract on new/changed blocks).
 
 ---
 
@@ -96,11 +123,17 @@ The **single** maintained copy of the hand-authored template body is the file **
 
 ---
 
-## 6. Two validation layers
+## 6. Three validation layers
 
 **Layer A — TIED (mandatory for changed essence):** Run **`tied_validate_consistency`** with default options so **`include_pseudocode`** runs. This checks the **merged** `essence_pseudocode` (sidecar + YAML) against indexes, token references, and TIED’s pseudo-code rules. Do this after any edit to the sidecar or after setting essence via API/CLI.
 
-**Layer B — Application (optional depth, project-scaled):** A checklist covering parsing, schema/shape, contracts, dependency/coverage, traceability to tests, and optional lint/simulation. If the project has **no** custom grammar parser, treat each **H2 section** (or the project’s defined “block”) as one unit for **manual** Layer B review. A minimal Layer B should still require: **TIED-POE-001** (do not use Layer B alone; Layer A must pass for the same text).
+**Layer B — Application checklist:** Parsing, schema/shape, contracts, dependency/coverage, traceability to tests via `pseudocode_validate` and [pseudocode-validation-checklist.yaml](pseudocode-validation-checklist.yaml). Minimal Layer B still requires **TIED-POE-001** (Layer A must pass for the same text).
+
+**Layer C — Static analysis gate (mandatory for changed Active IMPLs):** `pseudocode_analyze` with **`gate_mode: true`** after Layers A and B at `gate-pseudocode-validation`. See [pseudocode-static-analysis-checklist.yaml](pseudocode-static-analysis-checklist.yaml).
+
+### 6a. Grammar reference
+
+Author-facing grammar v1: [pseudocode-grammar.v1.md](pseudocode-grammar.v1.md). Use `procedure NAME:` headings — not list-item `PROCEDURE:`.
 
 ```mermaid
 flowchart LR
@@ -108,9 +141,12 @@ flowchart LR
   merge[merged_essence_pseudocode]
   A[tied_validate_consistency]
   B[Layer_B_checklist]
+  C[pseudocode_analyze_gate_mode]
   sidecar --> merge
   merge --> A
   merge --> B
+  sidecar --> C
+  B --> C
 ```
 
 **Recommended order for a full application pass (when you run Layer B as a process):** tied data → parsing → schema → symbol resolution → contract validation → dependency graph → behavioral coverage → traceability → optional lint / semantic simulation / generation readiness → reporting. **Tailor** which categories are gating (e.g. pre-code vs after tests) per project policy.

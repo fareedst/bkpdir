@@ -3,8 +3,8 @@ ARCH-AI_DOCUMENTATION:
   ai-optimized_error_processing: AI-readable error messages, remediation guidance, structured error responses
   ai_validation_framework: Integration with validation systems, pre-submission hooks, real-time validation
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Traditional documentation: Rejected due to lack of AI optimization
@@ -13,7 +13,7 @@ ARCH-AI_DOCUMENTATION:
   content_structure_optimizer: AI-friendly formatting and hierarchy management
   cross-reference_validator: Automated link validation and bidirectional reference checking
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
   decision: AI-optimized documentation with semantic tokens and validation framework
   implementation_approach:
@@ -23,13 +23,13 @@ ARCH-AI_DOCUMENTATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: AI-First Documentation Architecture
@@ -42,7 +42,8 @@ ARCH-AI_DOCUMENTATION:
       Maintains consistency across documentation
       Supports AI-first development workflow
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -52,5 +53,6 @@ ARCH-AI_DOCUMENTATION:
       - ARCH-AI_DOCUMENTATION
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []

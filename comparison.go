@@ -6,7 +6,6 @@
 // Directory comparison for incremental archive detection
 // [ARCH-DIRECTORY_COMPARISON] Snapshot-based directory comparison system
 // [ARCH-PACKAGE_EXTRACTION] Uses extracted fileops package for comparison
-// [IMPL-DIRECTORY_COMPARISON] Snapshot structures and comparison algorithms
 
 package main
 
@@ -19,7 +18,9 @@ import (
 	"bkpdir/pkg/fileops"
 )
 
-// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
+
+// - [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — How: for each package in a phase move code to pkg/, define interfaces first, update imports, and require go build plus all tests green.
+// - [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — How: expose type aliases and delegating wrappers at root with deprecation comments pointing to new pkg paths.
 
 // Legacy type aliases for backward compatibility
 type (
@@ -29,38 +30,28 @@ type (
 
 // Legacy function wrappers for backward compatibility
 
-// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
-// CreateDirectorySnapshot creates a snapshot of the given directory using the extracted package
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: delegate to fileops.CreateDirectorySnapshot with exclusion patterns applied during walk.
 func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
 }
 
-// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
-// CreateArchiveSnapshot creates a snapshot from a ZIP archive using the extracted package
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: delegate to fileops.CreateArchiveSnapshot to enumerate zip member files with metadata.
 func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.CreateArchiveSnapshot(archivePath)
 }
 
-// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
-// CompareSnapshots compares two directory snapshots using the extracted package
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: delegate equality check of two DirectorySnapshot values to fileops.CompareSnapshots.
 func CompareSnapshots(snapshot1, snapshot2 *DirectorySnapshot) bool {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.CompareSnapshots(snapshot1, snapshot2)
 }
 
-// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
-// IsDirectoryIdenticalToArchive checks if a directory is identical to an archive using the extracted package
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: build dir and archive snapshots with exclusions and compare for full structural equality.
 func IsDirectoryIdenticalToArchive(dirPath, archivePath string, excludePatterns []string) (bool, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	return fileops.IsDirectoryIdenticalToArchive(dirPath, archivePath, excludePatterns)
 }
 
-// FindMostRecentArchive finds the most recent archive in the archive directory
-// [IMPL-DIFF_COMMAND] Sorts by name since timestamps in archive names are alphabetically sortable
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: list archives, keep full archives only, sort by name, return path of last entry.
 func FindMostRecentArchive(archiveDir string) (string, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
 		return "", err
@@ -93,10 +84,8 @@ func FindMostRecentArchive(archiveDir string) (string, error) {
 	return mostRecent.Path, nil
 }
 
-// CheckForIdenticalArchive checks if the directory is identical to the most recent archive
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: FindMostRecentArchive then IsDirectoryIdenticalToArchive against cwd.
 func CheckForIdenticalArchive(dirPath, archiveDir string, excludePatterns []string) (bool, string, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
-	// Find most recent archive
 	mostRecentArchive, err := FindMostRecentArchive(archiveDir)
 	if err != nil {
 		return false, "", err
@@ -116,9 +105,8 @@ func CheckForIdenticalArchive(dirPath, archiveDir string, excludePatterns []stri
 	return identical, mostRecentArchive, nil
 }
 
-// GetDirectoryTreeSummary returns a summary of directory structure and content
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: build human-readable directory listing from CreateDirectorySnapshot for diagnostics.
 func GetDirectoryTreeSummary(dirPath string, excludePatterns []string) (string, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	snapshot, err := CreateDirectorySnapshot(dirPath, excludePatterns)
 	if err != nil {
 		return "", err
@@ -136,9 +124,8 @@ func GetDirectoryTreeSummary(dirPath string, excludePatterns []string) (string, 
 	return summary, nil
 }
 
-// GetArchiveTreeSummary returns a summary of archive structure and content
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: build human-readable file listing from CreateArchiveSnapshot for diagnostics and tests.
 func GetArchiveTreeSummary(archivePath string) (string, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	snapshot, err := CreateArchiveSnapshot(archivePath)
 	if err != nil {
 		return "", err
@@ -152,7 +139,6 @@ func GetArchiveTreeSummary(archivePath string) (string, error) {
 	return summary, nil
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
 // DiffResult holds the results of a diff comparison
 type DiffResult struct {
 	Added    []string
@@ -160,10 +146,7 @@ type DiffResult struct {
 	Deleted  []string
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
-// findLatestIncrementalArchive finds the most recent incremental archive that is based on the given full archive
-// Incremental archives are named as: BASENAME_update=... where BASENAME is the base full archive name
-// [IMPL-DIFF_COMMAND] Sorts by name since timestamps in archive names are alphabetically sortable
+// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: select incrementals whose name prefix matches base full archive _update= pattern; return latest by name.
 func findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (*Archive, error) {
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
@@ -218,9 +201,7 @@ func findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (
 	return &latestIncremental, nil
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
-// ReconstructArchiveState reconstructs the effective state by applying the most recent incremental
-// archive on top of the most recent full archive
+// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: load full zip snapshot, overlay incremental zip files by RelativePath, return merged DirectorySnapshot.
 func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 	// Find most recent full archive
 	latestFullArchive, err := findLatestFullArchive(archiveDir)
@@ -309,8 +290,7 @@ func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 	return &DirectorySnapshot{Files: reconstructedFiles}, nil
 }
 
-// [IMPL-DIFF_COMMAND] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND]
-// CalculateDiff calculates the differences between the current directory and the reconstructed archive state
+// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: snapshot cwd, compare file maps by path/size/hash; classify added, modified, deleted (files only).
 func CalculateDiff(cwd string, reconstructedState *DirectorySnapshot, excludePatterns []string) (*DiffResult, error) {
 	if debug {
 		fmt.Fprintf(os.Stderr, "DEBUG: CalculateDiff - Reconstructed state has %d files\n", len(reconstructedState.Files))
@@ -328,7 +308,6 @@ func CalculateDiff(cwd string, reconstructedState *DirectorySnapshot, excludePat
 	// Filter out directories from current snapshot since archives only contain files
 	currentMap := make(map[string]FileInfo)
 	for _, file := range currentSnapshot.Files {
-		// [IMPL-DIFF_COMMAND] [REQ-DIFF_COMMAND] Only compare files, not directories
 		// Archives only contain files (directories are implicit), so we should only
 		// compare files to avoid false positives for directories
 		if !file.IsDir {

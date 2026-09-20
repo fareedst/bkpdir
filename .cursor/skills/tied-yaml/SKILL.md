@@ -1,11 +1,6 @@
 ---
 name: tied-yaml
-description: >-
-  Read and write TIED REQ/ARCH/IMPL YAML records via the tied-yaml CLI.
-  Use when working with requirements.yaml, architecture-decisions.yaml,
-  implementation-decisions.yaml, semantic-tokens.yaml, detail files under
-  tied/, or any task involving REQ-*, ARCH-*, IMPL-* tokens, traceability,
-  or TIED validation. This is the exclusive interface for TIED YAML mutations.
+description: Read and write TIED REQ/ARCH/IMPL YAML records via the tied-yaml CLI. Use when working with requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml, detail files under tied/, or any task involving REQ-*, ARCH-*, IMPL-* tokens, traceability, or TIED validation. This is the exclusive interface for TIED YAML mutations.
 ---
 # TIED YAML Skill
 
@@ -21,7 +16,7 @@ All reads and writes to REQ, ARCH, and IMPL **YAML** records (indexes, `IMPL-*.y
 ### Cursor MCP vs `tied-cli.sh`
 
 - **Registering `tied-yaml` in Cursor** (`.cursor/mcp.json` / **Settings → MCP**) is for **in-editor** tool calls. It is **optional** for shell use.
-- **`tied-cli.sh`** talks to the **same** server over **stdio** (`node …/dist/index.js`). An empty MCP server list in the IDE does **not** mean `tied-cli.sh` cannot run — it means only that the editor has not loaded that MCP entry (common in CI, sandboxes, or before `agent enable tied-yaml`).
+- **`tied-cli.sh`** talks to the **same** server over **stdio** (`node …/dist/index.js`). An empty MCP server list in the IDE does **not** mean `tied-cli.sh` cannot run — it means only that the editor has not loaded that MCP entry (common in CI, sandboxes, or before `agent mcp enable tied-yaml`).
 - **Default MCP binary**: After **`copy_files.sh`**, `tied-cli.sh` bakes **`TIED_REPO_ROOT`** (and thus default **`TIED_MCP_BIN`**) to the TIED repository that ran bootstrap (`…/mcp-server/dist/index.js`). Client projects usually **do not** vendor `mcp-server/` at the project root; rely on the baked path or set **`TIED_MCP_BIN`** / **`TIED_REPO_ROOT`** to override.
 - **Shell alone is not enough:** `tied-cli.sh` in `.cursor/skills/tied-yaml/scripts/` plus Node; setting only **`TIED_MCP_BIN`** in the environment without the script does not provide the JSON-RPC client.
 
@@ -36,6 +31,34 @@ TIED_MCP_BIN=/absolute/path/to/tied-repository/mcp-server/dist/index.js \
 - **`TIED_BASE_PATH`** — absolute path to the project’s **`tied/`** directory (defaults to `<client_repo_root>/tied` when unset).
 - **`TIED_REPO_ROOT`** — TIED methodology repository used for **`mcp-server`** (baked by **`copy_files.sh`**; override if the TIED clone moved).
 - **`TIED_MCP_BIN`** — absolute path to **`mcp-server/dist/index.js`** (defaults to `$TIED_REPO_ROOT/mcp-server/dist/index.js`).
+- **`TIED_MCP_COLLECT_METRICS`** — set to `1` or `true` to append local usage metrics JSONL (default **off**). Works for **`tied-cli.sh`** and IDE MCP when the server inherits the same env.
+- **`TIED_MCP_METRICS_PATH`** — optional override; default `~/.cursor/logs/tied-mcp-metrics.jsonl`.
+- Analyze with **`scripts/analyze_tied_mcp_metrics.rb`** in the TIED repo (see `docs/conversation-analysis-tools.md`). Traceability: [REQ-MCP_USAGE_METRICS], [IMPL-MCP_USAGE_METRICS].
+
+### Repository YAML scalar style
+
+Put `scalar_style: unwrapped` or `scalar_style: wrapped` in `.tied-yaml.yaml` at the client project root (the parent of `TIED_BASE_PATH`). Resolution precedence is:
+
+1. repository `.tied-yaml.yaml`;
+2. global `TIED_YAML_STYLE`;
+3. `$XDG_CONFIG_HOME/tied/yaml-format.yaml`;
+4. `unwrapped` default.
+
+Repository configuration is authoritative. `wrapped` means double-quoted string scalars only; booleans, numbers, and null remain typed YAML scalars. Invalid explicit configuration fails rather than falling back. `yaml_tool.sh`, `tied-cli.sh`, and MCP writers use the same resolved policy; `tied_yaml_format` and successful writes expose `scalar_style` and `style_source` in `yaml_format`. Use `scripts/yaml_tool.sh --check <file>` for a read-only canonical-style gate.
+
+### Optional client_formatter hook
+
+Repository `.tied-yaml.yaml` may declare an optional presentation hook:
+
+```yaml
+scalar_style: unwrapped          # optional when file exists; defaults unwrapped if client_formatter present
+client_formatter:
+  command: "scripts/my_formatter.rb"
+  args: ["--in-place"]           # optional string list
+  version: "team-formatter-1.0"  # optional evidence string
+```
+
+When `client_formatter` is absent, record `styling_status: not_configured` and keep baseline canonical formatting. When present, run the hook explicitly via MCP `tied_client_yaml_styling_apply` or checklist `sub-client-yaml-styling` after baseline canonical bytes exist. MCP writers do **not** auto-invoke the hook. The hook runs with `shell: false` from the client project root on one guarded project-owned `./tied/` path; `tied/methodology/**` is rejected. Acceptance requires post-hook YAML parse, `scripts/yaml_semantic_compare.rb` equivalence against the pre-hook snapshot, and a byte-identical second pass.
 
 ### Do not substitute Python for TIED validation
 
@@ -127,7 +150,7 @@ Index names: `requirements`, `architecture`, `implementation`, `semantic-tokens`
 | Append bullets to `implementation_approach.details` | `yaml_detail_append_implementation_approach_details` | `token`, `details_lines` (array of strings)—appends without dropping existing lines |
 | Delete detail file | `yaml_detail_delete` | `token`; `sync_index` (default true) |
 | Create token + index + detail | `tied_token_create_with_detail` | `token`, `index_record`, `detail_record` (JSON strings) |
-| Rename a token everywhere | `tied_token_rename` | `old_token`, `new_token`; optional `dry_run` |
+| Rename a token everywhere | `tied_token_rename` | `old_token`, `new_token`; optional `dry_run`, `include_markdown`, `extra_globs`, `extra_extensions` |
 
 The `record`, `updates`, `index_record`, and `detail_record` parameters accept a **JSON string**. Escape inner quotes appropriately.
 
@@ -159,6 +182,13 @@ Re-read after critical writes; on older server builds, merge client-side per `do
 | Backlog views | `tied_backlog` | `view`: `order`, `quick-wins`, `blockers`, or `critical` |
 | Scoped analysis | `tied_scoped_analysis_run` | `mode`: `walk_summary`, `token_scan`, `gap_report`, `impact_preview`, `traceability_gap_report` |
 | Git diff impact | `tied_plumb_diff_impact_preview` | optional `selection`: `staged`, `unstaged`, or `both` |
+| Evidence chain profile | `evidence_chain_profile_generate` | `profile_depth` (`integrated` \| `human_research`); optional `project_root`, `tied_base_path`, `scope`, `change_context`, `output_path`. Read-only. See `tied/docs/evidence-chain-profile.md`. |
+
+```bash
+TIED_BASE_PATH=/absolute/client/tied \
+  .cursor/skills/tied-yaml/scripts/tied-cli.sh \
+  evidence_chain_profile_generate @profile-args.json > working/evidence-chain/profile.json
+```
 
 ### Status from test results
 

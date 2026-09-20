@@ -11,44 +11,6 @@ IMPL-TEST_PREPEND_ORDERING:
     - REQ-CFG_001
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  essence_pseudocode: |-
-    # [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — Tests prepend strategy (^ prefix) ordering in inheritance chains and sequential files
-
-    procedure TestPrependStrategyOrdering():
-      # [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] — validates prepend strategy ordering semantics
-      save BKPDIR_CONFIG env; defer restore
-      create temp dir
-
-      subtest "prepend in inheritance chain - parent then child":
-        # [REQ-CFG_005] — verifies child ^exclude_patterns values come before parent values [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY]
-        create parent.yml with exclude_patterns: ["parent1", "parent2"]
-        create child.yml with inherit: ["parent.yml"] and "^exclude_patterns": ["child1", "child2"]
-        set BKPDIR_CONFIG = childPath, call LoadConfig
-        find child1 and child2 indices in cfg.ExcludePatterns
-        assert child1 at index 0, child2 at index 1 (prepend ordering: child first)
-        assert at least 2 patterns present
-
-      subtest "prepend in sequential files - first file then second file":
-        # [REQ-CFG_005] [REQ-CFG_001] — verifies prepend in sequential file processing puts new values before existing [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY]
-        create file1-sequential.yml with exclude_patterns: ["first1", "first2"]
-        create file2-sequential.yml with "^exclude_patterns": ["second1", "second2"]
-        set BKPDIR_CONFIG = file1:file2, call LoadConfig
-        assert cfg.ExcludePatterns == ["second1", "second2", ".git/", "vendor/", "first1", "first2"]
-
-      subtest "prepend with defaults - prepended values before defaults":
-        # [REQ-CFG_005] — verifies prepend values come before default patterns when no parent config [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY]
-        create prepend-defaults.yml with "^exclude_patterns": ["prepend1", "prepend2"]
-        set BKPDIR_CONFIG, call LoadConfig
-        assert cfg.ExcludePatterns == ["prepend1", "prepend2", ".git/", "vendor/"]
-
-      subtest "multiple prepend operations maintain order":
-        # [REQ-CFG_005] [REQ-CFG_001] — verifies multiple prepend operations stack correctly (later prepends first) [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY]
-        create base-multi.yml with exclude_patterns: ["base1", "base2"]
-        create prepend1-multi.yml with "^exclude_patterns": ["prepend1-1", "prepend1-2"]
-        create prepend2-multi.yml with "^exclude_patterns": ["prepend2-1", "prepend2-2"]
-        set BKPDIR_CONFIG = base:prepend1:prepend2, call LoadConfig
-        assert cfg.ExcludePatterns == ["prepend2-1", "prepend2-2", "prepend1-1", "prepend1-2", ".git/", "vendor/", "base1", "base2"]
-      end
   implementation_approach:
     details: []
     summary: '- **TestPrependStrategyOrdering**: Tests prepend strategy ordering in various scenarios'
@@ -56,13 +18,13 @@ IMPL-TEST_PREPEND_ORDERING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_prepends: CFG-001 precedence ensures earlier file prepends are preserved

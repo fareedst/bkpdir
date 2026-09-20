@@ -1,0 +1,72 @@
+record_identity:
+  change_request_id: REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  title: "check-leads scan roots (internal/, cmd/, test/) — integrated close-out"
+  recorded_at: "2026-09-20"
+change_definition:
+  current_behavior: specctl check-leads collects Go comments only from pkg/ plus repo-root top-level *.go; IMPL CHECK_LEADS_COMMAND documents pkg/ and test paths.
+  desired_behavior: CheckLeads scans pkg/, internal/, cmd/, and test/ (when present) plus top-level *.go so test-only block leads satisfy TRACE-002 without production duplicates.
+  non_goals:
+    - Changing validate/matrix semantics
+    - Scanning scripts/ or tools/ in this change
+  success_criteria:
+    - Unit test proves internal-only lead match passes with default scan dirs
+    - go run ./cmd/specctl check-leads on 73 formal sidecars remains exit 0
+  unchanged_behavior: Runtime backup/archive/config behavior unchanged.
+impact_analysis:
+  modules_or_boundaries:
+    - internal/speccheck
+    - cmd/specctl
+    - docs/markscope/spec-verification.md
+  tied_tokens_affected:
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - IMPL-SPEC_CTL
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: integrated
+    prior_depth_tier: minimal
+    gate_policy: advisory
+    research_profile: integrated-agent
+    assurance_profile: baseline-functional
+    rationale: Sponsor requested integrated-grade close-out for scan-root CITDP; strict close-out eligibility applies.
+    eligibility_triggers_matched:
+      - strict_close_out
+    integrated_waiver: null
+    counterexamples:
+      - "Lead only in tools/ → still TRACE-002 (tools/ not scanned by design)"
+      - "Lead only in internal/ before expansion → false TRACE-002 with pkg-only scan"
+    falsification_questions:
+      - "If check-leads passes, must every lead appear in pkg/? No — root or internal/cmd/test may satisfy."
+    disconfirming_observations:
+      - "Wider scan cannot hide missing sidecar leads; it only adds comment sources"
+    evidence_references:
+      - working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/evidence/check-leads-regression.log
+  residual_risk:
+    summary: Latent TRACE-002 if leads placed only under unscanned roots (e.g. tools/)
+    owner: implementer
+    expiry: "2026-12-31"
+  quality_profiles:
+    - baseline-functional
+test_strategy:
+  unit: internal/speccheck/leads_test.go temp repo fixtures
+  regression: specctl check-leads all formal sidecars; go test ./...
+  docs: spec-verification.md scan root list
+evidence:
+  proof_boundaries:
+    - traceability_structure
+    - executable_behavior
+  commands:
+    - go test ./internal/speccheck/... -count=1
+    - go run ./cmd/specctl check-leads tied/implementation-decisions/*-pseudocode.md
+completion_criteria:
+  activation:
+    run_id: scan-root-20260920-close
+    phase: close_out
+  inquiry_run_ids:
+    pre_implementation: scan-root-20260920-pre
+    verification: scan-root-20260920-ver
+    close_out: scan-root-20260920-close
+leap_feedback:
+  record_status: applied
+  divergences_from_analysis: none
+  tied_stack_updates_required: []

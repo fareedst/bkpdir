@@ -31,13 +31,13 @@ IMPL-ATOMIC_OPS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Atomic File Operations
@@ -107,7 +107,31 @@ IMPL-ATOMIC_OPS:
     requirements:
       - REQ-RESOURCE_MANAGEMENT
     tests: []
-  unit_test_structure: "```go\nfunc TestExampleFeature(t *testing.T) {\n    tests := []struct {\n        name     string\n        input    InputType\n        expected OutputType\n    }{\n        {\n            name:     \"test case 1\",\n            input:    inputValue,\n            expected: expectedValue,\n        },\n    }\n    \n    for _, tt := range tests {\n        t.Run(tt.name, func(t *testing.T) {\n            result := functionUnderTest(tt.input)\n            if result != tt.expected {\n                t.Errorf(\"expected %v, got %v\", tt.expected, result)\n            }\n        })\n    }\n}\n```"
+  unit_test_structure: |-
+    ```go
+    func TestExampleFeature(t *testing.T) {
+        tests := []struct {
+            name     string
+            input    InputType
+            expected OutputType
+        }{
+            {
+                name:     "test case 1",
+                input:    inputValue,
+                expected: expectedValue,
+            },
+        }
+        
+        for _, tt := range tests {
+            t.Run(tt.name, func(t *testing.T) {
+                result := functionUnderTest(tt.input)
+                if result != tt.expected {
+                    t.Errorf("expected %v, got %v", tt.expected, result)
+                }
+            })
+        }
+    }
+    ```
   validation: |-
     - Add unit tests exercising assertion helpers, temp dir lifecycle, archive creation, and command execution patterns.
     - Migrate a small set of tests (e.g., `pkg/config`, `pkg/formatter`, `pkg/fileops`) to demonstrate usage and validate no regressions.
@@ -173,13 +197,13 @@ IMPL-AUTO_DETECTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Auto-Detection Implementation
@@ -198,7 +222,24 @@ IMPL-AUTO_DETECTION:
       - ARCH-AUTO_DETECTION
       - REQ-USABILITY
     supersedes: []
-  routing_logic: "```go\nfunc handleAutoDetectedCommand(args []string) {\n    path := args[0]\n    \n    if err := validatePath(path); err != nil {\n        // Handle error\n    }\n    \n    if isFile(path) {\n        handleAutoDetectedFileBackup(args)\n    } else if isDirectory(path) {\n        handleAutoDetectedDirectoryArchive(args)\n    } else {\n        // Handle unsupported types\n    }\n}\n```"
+  routing_logic: |-
+    ```go
+    func handleAutoDetectedCommand(args []string) {
+        path := args[0]
+        
+        if err := validatePath(path); err != nil {
+            // Handle error
+        }
+        
+        if isFile(path) {
+            handleAutoDetectedFileBackup(args)
+        } else if isDirectory(path) {
+            handleAutoDetectedDirectoryArchive(args)
+        } else {
+            // Handle unsupported types
+        }
+    }
+    ```
   status: Active
   traceability:
     architecture:
@@ -298,8 +339,8 @@ IMPL-CFG_006:
     - REQ-CFG_006
   detail_file: implementation-decisions/IMPL-CFG_006.yaml
   field_categorization:
-    - 'Categories: archive, backup, formatting, verification, status, template, pattern'
     - Automatic categorization based on field name patterns
+    - 'Categories: archive, backup, formatting, verification, status, template, pattern'
     - Supports custom category assignment
   field_metadata_structure: |-
     ```go
@@ -336,28 +377,117 @@ IMPL-CFG_006:
         config *Config
     }
     ```
-  getallconfigfields()_function: "```go\n// [HIGH] CFG-006: Complete config visibility - Automatic field discovery\nfunc GetAllConfigFields(cfg *Config) []configFieldInfo {\n    // Check cache first\n    if cached := getCachedFields(); cached != nil {\n        return cached\n    }\n    \n    // Perform reflection-based discovery\n    fields := reflectConfigFields(reflect.TypeOf(*cfg), \"\", nil)\n    \n    // Cache results\n    cacheFields(fields)\n    \n    return fields\n}\n```"
-  getallconfigvalueswithsources()_function: "```go\n// [HIGH] CFG-006: Complete config visibility - Enhanced source tracking\nfunc GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    values := make([]ConfigValueWithMetadata, 0, len(fields))\n    \n    for _, field := range fields {\n        value := getFieldValue(cfg, field.Path)\n        source := determineSource(cfg, field.Path)\n        \n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Value:  value,\n            Source: source,\n            // ... additional metadata\n        })\n    }\n    \n    return values\n}\n```"
+  getallconfigfields()_function: |-
+    ```go
+    // [HIGH] CFG-006: Complete config visibility - Automatic field discovery
+    func GetAllConfigFields(cfg *Config) []configFieldInfo {
+        // Check cache first
+        if cached := getCachedFields(); cached != nil {
+            return cached
+        }
+        
+        // Perform reflection-based discovery
+        fields := reflectConfigFields(reflect.TypeOf(*cfg), "", nil)
+        
+        // Cache results
+        cacheFields(fields)
+        
+        return fields
+    }
+    ```
+  getallconfigvalueswithsources()_function: |-
+    ```go
+    // [HIGH] CFG-006: Complete config visibility - Enhanced source tracking
+    func GetAllConfigValuesWithSources(cfg *Config, root string) []ConfigValueWithMetadata {
+        fields := GetAllConfigFields(cfg)
+        values := make([]ConfigValueWithMetadata, 0, len(fields))
+        
+        for _, field := range fields {
+            value := getFieldValue(cfg, field.Path)
+            source := determineSource(cfg, field.Path)
+            
+            values = append(values, ConfigValueWithMetadata{
+                Field:  field,
+                Value:  value,
+                Source: source,
+                // ... additional metadata
+            })
+        }
+        
+        return values
+    }
+    ```
   implementation_approach:
     details: []
     summary: Reflection-based field discovery with caching and lazy evaluation
-  incremental_resolution: "```go\n// [MEDIUM] CFG-006: Performance optimization - Incremental resolution\nfunc GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {\n    // Direct field access without full enumeration\n    field := findFieldByPath(fieldPath)\n    value := getFieldValue(cfg, fieldPath)\n    source := determineSource(cfg, fieldPath)\n    \n    return ConfigValueWithMetadata{\n        Field:  field,\n        Value:  value,\n        Source: source,\n    }, nil\n}\n```"
+  incremental_resolution: |-
+    ```go
+    // [MEDIUM] CFG-006: Performance optimization - Incremental resolution
+    func GetConfigFieldValue(cfg *Config, fieldPath string) (ConfigValueWithMetadata, error) {
+        // Direct field access without full enumeration
+        field := findFieldByPath(fieldPath)
+        value := getFieldValue(cfg, fieldPath)
+        source := determineSource(cfg, fieldPath)
+        
+        return ConfigValueWithMetadata{
+            Field:  field,
+            Value:  value,
+            Source: source,
+        }, nil
+    }
+    ```
   json_format: Structured JSON output for programmatic use
-  lazy_source_evaluation: "```go\n// [MEDIUM] CFG-006: Performance optimization - Lazy source evaluation\nfunc GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {\n    fields := GetAllConfigFields(cfg)\n    \n    // Pre-filter fields before source evaluation\n    filteredFields := applyFilter(fields, filter)\n    \n    // Only resolve sources for filtered fields\n    values := make([]ConfigValueWithMetadata, 0, len(filteredFields))\n    for _, field := range filteredFields {\n        source := determineSource(cfg, field.Path) // Lazy evaluation\n        values = append(values, ConfigValueWithMetadata{\n            Field:  field,\n            Source: source,\n        })\n    }\n    \n    return values\n}\n```"
+  lazy_source_evaluation: |-
+    ```go
+    // [MEDIUM] CFG-006: Performance optimization - Lazy source evaluation
+    func GetConfigValuesWithSourcesFiltered(cfg *Config, root string, filter *ConfigFilter) []ConfigValueWithMetadata {
+        fields := GetAllConfigFields(cfg)
+        
+        // Pre-filter fields before source evaluation
+        filteredFields := applyFilter(fields, filter)
+        
+        // Only resolve sources for filtered fields
+        values := make([]ConfigValueWithMetadata, 0, len(filteredFields))
+        for _, field := range filteredFields {
+            source := determineSource(cfg, field.Path) // Lazy evaluation
+            values = append(values, ConfigValueWithMetadata{
+                Field:  field,
+                Source: source,
+            })
+        }
+        
+        return values
+    }
+    ```
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Reflection Implementation
-  pattern-based_queries: "```go\n// [MEDIUM] CFG-006: Performance optimization - Pattern-based queries\nfunc GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {\n    fields := GetAllConfigFields(cfg)\n    matched := make([]configFieldInfo, 0)\n    \n    for _, field := range fields {\n        if matchPattern(field.Path, pattern) {\n            matched = append(matched, field)\n        }\n    }\n    \n    return matched, nil\n}\n```"
+  pattern-based_queries: |-
+    ```go
+    // [MEDIUM] CFG-006: Performance optimization - Pattern-based queries
+    func GetConfigFieldByPattern(cfg *Config, pattern string) ([]configFieldInfo, error) {
+        fields := GetAllConfigFields(cfg)
+        matched := make([]configFieldInfo, 0)
+        
+        for _, field := range fields {
+            if matchPattern(field.Path, pattern) {
+                matched = append(matched, field)
+            }
+        }
+        
+        return matched, nil
+    }
+    ```
   rationale:
     benefits: []
     problems_solved: []
@@ -442,8 +572,8 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
     - 'Export artifacts: `docs/data/stdd-trace.json` (graph) and `docs/data/stdd-samples.csv` (sample chains) with token-first styling hints (e.g., color map by token type, prominence weights).'
     - 'Input sources: `tied/semantic-tokens.md`, `tied/requirements.md`, `tied/architecture-decisions.md`, `tied/implementation-decisions.md`, and sampled code/test anchors (grep for `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`).'
     - 'Module boundary: `DataExtraction` outputs normalized graph once; downstream modules consume it without re-parsing docs, preserving token-centric styling data.'
-    - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'
     - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references found in docs and inline token comments; capture token metadata (type, status, sample refs) to drive token prominence in visuals.
+    - 'Validation hooks: schema check for nodes/edges, count consistency vs token registry, and spot-check two sample chains (e.g., `[REQ-CFG_005]` and `[REQ-LIST_LIMIT]`), confirming tokens appear at every hop.'
   inheritance_chains: '(`inheritContext=true`): Behavior unchanged - child configs override parent configs'
   key_changes: |-
     1. `mergeBasicSettings` - Updated sequential file logic to check `dstDiffersFromDefault` in addition to `explicitlySetByEarlier`
@@ -452,13 +582,13 @@ IMPL-CFG_HIERARCHY_PRESERVATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Hierarchy Preservation Fix
@@ -529,7 +659,7 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
     - ARCH-CFG_005
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  date: "2025-12-11"
+  date: '2025-12-11'
   detail_file: implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION.yaml
   fixed_buildchainrecursive_basepath: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls
   fixed_resolvepath_directory_handling: 'Updated `resolvePath` to:'
@@ -539,13 +669,13 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Inheritance Path Resolution Fix
@@ -619,13 +749,13 @@ IMPL-CFG_MERGE_BEHAVIOR_REGISTRY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Field-Level Merge Behavior Registry
@@ -711,13 +841,13 @@ IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Merge and Prepend Strategy Precedence Fix
@@ -783,13 +913,13 @@ IMPL-CFG_MIXED_MODE_MERGE_FIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_files,_first_file: Merges with defaults → `[.git/ vendor/ first_file_patterns]` (CFG-005)
@@ -874,13 +1004,13 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Mixed Sequential and Inheritance File Processing
@@ -954,13 +1084,13 @@ IMPL-CFG_PRECEDENCE_FIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration File Precedence Fix
@@ -1024,7 +1154,7 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
     - ARCH-CFG_005
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  date: "2025-12-11"
+  date: '2025-12-11'
   detail_file: implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX.yaml
   duplicate_keys: Keys with explicit prefixes take precedence over plain keys
   implementation:
@@ -1042,13 +1172,13 @@ IMPL-CFG_QUOTED_KEY_PREFIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Quoted YAML Key Prefix Support
@@ -1164,13 +1294,13 @@ IMPL-CLI_FRAMEWORK:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CLI Framework Implementation
@@ -1221,20 +1351,20 @@ IMPL-CODE_STYLE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Code Style and Conventions
   naming:
     - 'Exported types/functions: PascalCase'
-    - 'Unexported: camelCase'
     - Follow Go naming conventions
+    - 'Unexported: camelCase'
     - Use descriptive names
   rationale:
     benefits: []
@@ -1276,13 +1406,13 @@ IMPL-CONFIG_OUTPUT_GROUPING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Output Grouping Implementation
@@ -1324,7 +1454,66 @@ IMPL-CONFIG_STRUCT:
     files: []
     functions: []
   code_markers: '`GetAllConfigFields`, `reflectConfigFields`, `field.YAMLName`, `config.go` line 3424'
-  config_type: "```go\ntype Config struct {\n    // Directory archiving settings\n    ArchiveDirPath    string   `yaml:\"archive_dir_path\"`\n    UseCurrentDirName bool     `yaml:\"use_current_dir_name\"`\n    ExcludePatterns   []string `yaml:\"exclude_patterns\"`\n    IncludeGitInfo    bool     `yaml:\"include_git_info\"`      // Legacy - use Git.IncludeInfo\n    ShowGitDirtyStatus bool    `yaml:\"show_git_dirty_status\"` // Legacy - use Git.ShowDirtyStatus\n    \n    // GIT-005: Git configuration for repository detection and information extraction\n    Git *GitConfig `yaml:\"git,omitempty\"`\n    \n    // File backup settings\n    BackupDirPath             string `yaml:\"backup_dir_path\"`\n    UseCurrentDirNameForFiles bool   `yaml:\"use_current_dir_name_for_files\"`\n    \n    \n    // Status codes for directory operations\n    StatusCreatedArchive                        int `yaml:\"status_created_archive\"`\n    StatusFailedToCreateArchiveDirectory        int `yaml:\"status_failed_to_create_archive_directory\"`\n    StatusDirectoryIsIdenticalToExistingArchive int `yaml:\"status_directory_is_identical_to_existing_archive\"`\n    StatusDirectoryNotFound                     int `yaml:\"status_directory_not_found\"`\n    StatusInvalidDirectoryType                  int `yaml:\"status_invalid_directory_type\"`\n    StatusPermissionDenied                      int `yaml:\"status_permission_denied\"`\n    StatusDiskFull                              int `yaml:\"status_disk_full\"`\n    StatusConfigError                           int `yaml:\"status_config_error\"`\n    \n    // Status codes for file operations\n    StatusCreatedBackup                   int `yaml:\"status_created_backup\"`\n    StatusFailedToCreateBackupDirectory   int `yaml:\"status_failed_to_create_backup_directory\"`\n    StatusFileIsIdenticalToExistingBackup int `yaml:\"status_file_is_identical_to_existing_backup\"`\n    StatusFileNotFound                    int `yaml:\"status_file_not_found\"`\n    StatusInvalidFileType                 int `yaml:\"status_invalid_file_type\"`\n    \n    // Printf-style format strings\n    FormatCreatedArchive   string `yaml:\"format_created_archive\"`\n    FormatIdenticalArchive string `yaml:\"format_identical_archive\"`\n    FormatListArchive      string `yaml:\"format_list_archive\"`\n    FormatCreatedBackup    string `yaml:\"format_created_backup\"`\n    FormatIdenticalBackup  string `yaml:\"format_identical_backup\"`\n    FormatListBackup       string `yaml:\"format_list_backup\"`\n    FormatError            string `yaml:\"format_error\"`\n    \n    // Template-based format strings\n    TemplateCreatedArchive   string `yaml:\"template_created_archive\"`\n    TemplateIdenticalArchive string `yaml:\"template_identical_archive\"`\n    TemplateListArchive      string `yaml:\"template_list_archive\"`\n    TemplateCreatedBackup    string `yaml:\"template_created_backup\"`\n    TemplateIdenticalBackup  string `yaml:\"template_identical_backup\"`\n    TemplateListBackup       string `yaml:\"template_list_backup\"`\n    TemplateError            string `yaml:\"template_error\"`\n    \n    // Regex patterns for data extraction\n    PatternArchiveFilename string `yaml:\"pattern_archive_filename\"`\n    PatternBackupFilename  string `yaml:\"pattern_backup_filename\"`\n    PatternConfigLine      string `yaml:\"pattern_config_line\"`\n    PatternTimestamp       string `yaml:\"pattern_timestamp\"`\n}\n```"
+  config_type: |-
+    ```go
+    type Config struct {
+        // Directory archiving settings
+        ArchiveDirPath    string   `yaml:"archive_dir_path"`
+        UseCurrentDirName bool     `yaml:"use_current_dir_name"`
+        ExcludePatterns   []string `yaml:"exclude_patterns"`
+        IncludeGitInfo    bool     `yaml:"include_git_info"`      // Legacy - use Git.IncludeInfo
+        ShowGitDirtyStatus bool    `yaml:"show_git_dirty_status"` // Legacy - use Git.ShowDirtyStatus
+        
+        // GIT-005: Git configuration for repository detection and information extraction
+        Git *GitConfig `yaml:"git,omitempty"`
+        
+        // File backup settings
+        BackupDirPath             string `yaml:"backup_dir_path"`
+        UseCurrentDirNameForFiles bool   `yaml:"use_current_dir_name_for_files"`
+        
+        
+        // Status codes for directory operations
+        StatusCreatedArchive                        int `yaml:"status_created_archive"`
+        StatusFailedToCreateArchiveDirectory        int `yaml:"status_failed_to_create_archive_directory"`
+        StatusDirectoryIsIdenticalToExistingArchive int `yaml:"status_directory_is_identical_to_existing_archive"`
+        StatusDirectoryNotFound                     int `yaml:"status_directory_not_found"`
+        StatusInvalidDirectoryType                  int `yaml:"status_invalid_directory_type"`
+        StatusPermissionDenied                      int `yaml:"status_permission_denied"`
+        StatusDiskFull                              int `yaml:"status_disk_full"`
+        StatusConfigError                           int `yaml:"status_config_error"`
+        
+        // Status codes for file operations
+        StatusCreatedBackup                   int `yaml:"status_created_backup"`
+        StatusFailedToCreateBackupDirectory   int `yaml:"status_failed_to_create_backup_directory"`
+        StatusFileIsIdenticalToExistingBackup int `yaml:"status_file_is_identical_to_existing_backup"`
+        StatusFileNotFound                    int `yaml:"status_file_not_found"`
+        StatusInvalidFileType                 int `yaml:"status_invalid_file_type"`
+        
+        // Printf-style format strings
+        FormatCreatedArchive   string `yaml:"format_created_archive"`
+        FormatIdenticalArchive string `yaml:"format_identical_archive"`
+        FormatListArchive      string `yaml:"format_list_archive"`
+        FormatCreatedBackup    string `yaml:"format_created_backup"`
+        FormatIdenticalBackup  string `yaml:"format_identical_backup"`
+        FormatListBackup       string `yaml:"format_list_backup"`
+        FormatError            string `yaml:"format_error"`
+        
+        // Template-based format strings
+        TemplateCreatedArchive   string `yaml:"template_created_archive"`
+        TemplateIdenticalArchive string `yaml:"template_identical_archive"`
+        TemplateListArchive      string `yaml:"template_list_archive"`
+        TemplateCreatedBackup    string `yaml:"template_created_backup"`
+        TemplateIdenticalBackup  string `yaml:"template_identical_backup"`
+        TemplateListBackup       string `yaml:"template_list_backup"`
+        TemplateError            string `yaml:"template_error"`
+        
+        // Regex patterns for data extraction
+        PatternArchiveFilename string `yaml:"pattern_archive_filename"`
+        PatternBackupFilename  string `yaml:"pattern_backup_filename"`
+        PatternConfigLine      string `yaml:"pattern_config_line"`
+        PatternTimestamp       string `yaml:"pattern_timestamp"`
+    }
+    ```
   configuration_file_format: |-
     ```yaml
     # Top-level keys (actual format used in practice)
@@ -1360,13 +1549,8 @@ IMPL-CONFIG_STRUCT:
   detail_file: implementation-decisions/IMPL-CONFIG_STRUCT.yaml
   implementation_approach:
     details:
-      - 'Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)'
-      - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
-      - 'YAML files can use either:'
       - Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
       - Internal struct has `Git *GitConfig` with nested fields
-      - Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
-      - The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
       - |-
         Internal struct has `Git *GitConfig` with nested fields
         Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)
@@ -1375,25 +1559,30 @@ IMPL-CONFIG_STRUCT:
         The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
         Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
         Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
+      - 'Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)'
+      - Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
+      - The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
+      - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
+      - 'YAML files can use either:'
     summary: Configuration keys are displayed as top-level keys in `bkpdir config` output, even when they are nested in the internal struct.
   implementation_details:
-    - 'Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)'
-    - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
-    - 'YAML files can use either:'
     - Configuration merging (`mergeGitSettings`) maintains backward compatibility with both formats
     - Internal struct has `Git *GitConfig` with nested fields
+    - 'Nested format: `git: { include_info: true, include_branch: true }` (also supported but flattened in display)'
     - Reflection system (`reflectConfigFields`) recursively processes nested structs and uses YAML tag names from each field
     - The `bkpdir config` command uses `field.YAMLName` for display, which results in top-level keys
+    - 'Top-level keys: `include_git_info`, `include_branch`, `show_git_dirty_status` (legacy and current format)'
+    - 'YAML files can use either:'
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Structure
@@ -1461,13 +1650,13 @@ IMPL-CONTEXT_OPS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Context-Aware Operations
@@ -1542,12 +1731,7 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
   impact: Eliminates fmt package misinterpretation errors, simplifies code, improves maintainability
   implementation_approach:
     details:
-      - 'All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)'
       - All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
-      - All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
-      - All documentation examples updated to use `#{}` syntax
-      - All test assertions updated to check for `#{}` instead of `%{}`
-      - All validation logic updated to recognize `#{}` placeholders
       - |-
         All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
         All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
@@ -1555,13 +1739,18 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
         All validation logic updated to recognize `#{}` placeholders
         All test assertions updated to check for `#{}` instead of `%{}`
         All documentation examples updated to use `#{}` syntax
+      - All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
+      - 'All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)'
+      - All documentation examples updated to use `#{}` syntax
       - All format string processing code - `pkg/formatter/ai_core_formatter.go`, `pkg/formatter/placeholder_replace.go`, `pkg/formatter/template.go`, `ai_formatter_adapter.go`, `formatter_adapter_simple.go`, `config.go`, and all test files
+      - All test assertions updated to check for `#{}` instead of `%{}`
+      - All validation logic updated to recognize `#{}` placeholders
     summary: Implement format string validation and comprehensive documentation for user customization. FormatListArchive and FormatListBackup support both printf-style and template-style placeholders.
   implementation_components: '#### 1. Format String Validation'
   implementation_details:
-    - 'All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)'
     - All `fmt.Sprintf("%{%s}", key)` changed to `fmt.Sprintf("#{%s}", key)`
     - All `strings.Contains(formatStr, "%{")` changed to `strings.Contains(formatStr, "#{")`
+    - 'All default format strings updated (e.g., `"#{path} (size: #{size_human})\n"`)'
     - All documentation examples updated to use `#{}` syntax
     - All test assertions updated to check for `#{}` instead of `%{}`
     - All validation logic updated to recognize `#{}` placeholders
@@ -1582,13 +1771,13 @@ IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   migration_complete: All placeholder syntax migrated from `%{...}` to `#{...}` to avoid conflicts with Go's `fmt` package
@@ -1702,7 +1891,27 @@ IMPL-DIRECTORY_COMPARISON:
     files: []
     functions: []
   code_markers: '`pkg/fileops/comparison.go`, snapshot structures, comparison functions'
-  comparison_algorithm: "```go\nfunc CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {\n    if len(snap1.Files) != len(snap2.Files) {\n        return false\n    }\n    \n    for path, info1 := range snap1.Files {\n        info2, exists := snap2.Files[path]\n        if !exists {\n            return false\n        }\n        \n        if info1.Hash != info2.Hash || info1.Size != info2.Size {\n            return false\n        }\n    }\n    \n    return true\n}\n```"
+  comparison_algorithm: |-
+    ```go
+    func CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {
+        if len(snap1.Files) != len(snap2.Files) {
+            return false
+        }
+        
+        for path, info1 := range snap1.Files {
+            info2, exists := snap2.Files[path]
+            if !exists {
+                return false
+            }
+            
+            if info1.Hash != info2.Hash || info1.Size != info2.Size {
+                return false
+            }
+        }
+        
+        return true
+    }
+    ```
   cross_references:
     - ARCH-DIRECTORY_COMPARISON
   detail_file: implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml
@@ -1721,21 +1930,74 @@ IMPL-DIRECTORY_COMPARISON:
         IsDir    bool
     }
     ```
-  from_archive: "```go\nfunc CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {\n    reader, err := zip.OpenReader(archivePath)\n    if err != nil {\n        return nil, err\n    }\n    defer reader.Close()\n    \n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  archivePath,\n    }\n    \n    for _, file := range reader.File {\n        hash := calculateArchiveFileHash(file)\n        snapshot.Files[file.Name] = FileInfo{\n            Path:    file.Name,\n            Size:    int64(file.UncompressedSize64),\n            ModTime: file.ModTime(),\n            Hash:    hash,\n            IsDir:   file.FileInfo().IsDir(),\n        }\n    }\n    \n    return snapshot, nil\n}\n```"
-  from_directory: "```go\nfunc CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {\n    snapshot := &DirectorySnapshot{\n        Files: make(map[string]FileInfo),\n        Root:  root,\n    }\n    \n    err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {\n        if err != nil {\n            return err\n        }\n        \n        hash := calculateFileHash(path)\n        snapshot.Files[path] = FileInfo{\n            Path:    path,\n            Size:    info.Size(),\n            ModTime: info.ModTime(),\n            Hash:    hash,\n            IsDir:   info.IsDir(),\n        }\n        return nil\n    })\n    \n    return snapshot, err\n}\n```"
+  from_archive: |-
+    ```go
+    func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
+        reader, err := zip.OpenReader(archivePath)
+        if err != nil {
+            return nil, err
+        }
+        defer reader.Close()
+        
+        snapshot := &DirectorySnapshot{
+            Files: make(map[string]FileInfo),
+            Root:  archivePath,
+        }
+        
+        for _, file := range reader.File {
+            hash := calculateArchiveFileHash(file)
+            snapshot.Files[file.Name] = FileInfo{
+                Path:    file.Name,
+                Size:    int64(file.UncompressedSize64),
+                ModTime: file.ModTime(),
+                Hash:    hash,
+                IsDir:   file.FileInfo().IsDir(),
+            }
+        }
+        
+        return snapshot, nil
+    }
+    ```
+  from_directory: |-
+    ```go
+    func CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {
+        snapshot := &DirectorySnapshot{
+            Files: make(map[string]FileInfo),
+            Root:  root,
+        }
+        
+        err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {
+            if err != nil {
+                return err
+            }
+            
+            hash := calculateFileHash(path)
+            snapshot.Files[path] = FileInfo{
+                Path:    path,
+                Size:    info.Size(),
+                ModTime: info.ModTime(),
+                Hash:    hash,
+                IsDir:   info.IsDir(),
+            }
+            return nil
+        })
+        
+        return snapshot, err
+    }
+    ```
   implementation_approach:
     details: []
     summary: Snapshot-based comparison with hash-based content verification
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Directory Comparison Implementation
@@ -1781,13 +2043,13 @@ IMPL-DOC_ENHANCEMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Documentation Enhancement Framework
@@ -1836,13 +2098,13 @@ IMPL-DUAL_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Dual Printf/Template Formatting
@@ -1907,13 +2169,13 @@ IMPL-EXCLUDE_MERGE_FIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Array Field Default Merge Strategy Implementation
@@ -1958,7 +2220,30 @@ IMPL-EXCLUSION_PATTERNS:
     files: []
     functions: []
   code_markers: '`pkg/fileops/exclusion.go`, `PatternMatcher` struct, doublestar imports'
-  convenience_functions: "```go\nfunc ShouldExcludeFile(path string, exclusions []string) bool {\n    if len(exclusions) == 0 {\n        return false\n    }\n    \n    matcher := NewPatternMatcher(exclusions)\n    return matcher.Match(path)\n}\n\nfunc FilterPaths(paths []string, exclusions []string) []string {\n    matcher := NewPatternMatcher(exclusions)\n    var filtered []string\n    \n    for _, path := range paths {\n        if !matcher.Match(path) {\n            filtered = append(filtered, path)\n        }\n    }\n    \n    return filtered\n}\n```"
+  convenience_functions: |-
+    ```go
+    func ShouldExcludeFile(path string, exclusions []string) bool {
+        if len(exclusions) == 0 {
+            return false
+        }
+        
+        matcher := NewPatternMatcher(exclusions)
+        return matcher.Match(path)
+    }
+
+    func FilterPaths(paths []string, exclusions []string) []string {
+        matcher := NewPatternMatcher(exclusions)
+        var filtered []string
+        
+        for _, path := range paths {
+            if !matcher.Match(path) {
+                filtered = append(filtered, path)
+            }
+        }
+        
+        return filtered
+    }
+    ```
   cross_references:
     - ARCH-EXCLUSION_PATTERNS
     - REQ-CONFIGURATION
@@ -1972,18 +2257,48 @@ IMPL-EXCLUSION_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_patterns: Array of patterns for complex exclusions
   name: Exclusion Patterns Implementation
-  patternmatcher_implementation: "```go\ntype PatternMatcher struct {\n    patterns []string\n    compiled []glob.Glob\n}\n\nfunc NewPatternMatcher(patterns []string) *PatternMatcher {\n    pm := &PatternMatcher{\n        patterns: patterns,\n        compiled: make([]glob.Glob, 0, len(patterns)),\n    }\n    \n    for _, pattern := range patterns {\n        if g, err := glob.Compile(pattern); err == nil {\n            pm.compiled = append(pm.compiled, g)\n        }\n    }\n    \n    return pm\n}\n\nfunc (pm *PatternMatcher) Match(path string) bool {\n    for _, g := range pm.compiled {\n        if g.Match(path) {\n            return true\n        }\n    }\n    return false\n}\n```"
+  patternmatcher_implementation: |-
+    ```go
+    type PatternMatcher struct {
+        patterns []string
+        compiled []glob.Glob
+    }
+
+    func NewPatternMatcher(patterns []string) *PatternMatcher {
+        pm := &PatternMatcher{
+            patterns: patterns,
+            compiled: make([]glob.Glob, 0, len(patterns)),
+        }
+        
+        for _, pattern := range patterns {
+            if g, err := glob.Compile(pattern); err == nil {
+                pm.compiled = append(pm.compiled, g)
+            }
+        }
+        
+        return pm
+    }
+
+    func (pm *PatternMatcher) Match(path string) bool {
+        for _, g := range pm.compiled {
+            if g.Match(path) {
+                return true
+            }
+        }
+        return false
+    }
+    ```
   rationale:
     benefits: []
     problems_solved: []
@@ -2038,13 +2353,13 @@ IMPL-EXTRACTION_CHALLENGES:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Extraction Challenges and Solutions
@@ -2097,13 +2412,13 @@ IMPL-EXTRACTION_PRINCIPLES:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Extraction Principles and Design Decisions
@@ -2160,13 +2475,13 @@ IMPL-FILE_OPERATIONS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Operations Implementation
@@ -2283,21 +2598,63 @@ IMPL-FILE_STATISTICS:
         Type      string      // File type (regular, directory, symlink)
     }
     ```
-  gathering_function: "```go\nfunc GatherFileStatInfo(path string) (*FileStatInfo, error) {\n    info, err := os.Stat(path)\n    if err != nil {\n        return nil, fmt.Errorf(\"failed to stat file %s: %w\", path, err)\n    }\n    \n    return &FileStatInfo{\n        Path:      path,\n        Name:      filepath.Base(path),\n        Size:      info.Size(),\n        SizeHuman: formatHumanSize(info.Size()),\n        MTime:     info.ModTime(),\n        MTimeUnix: info.ModTime().Unix(),\n        Mode:      info.Mode(),\n        Type:      getFileType(info),\n    }, nil\n}\n```"
-  human-readable_size_formatting: "```go\nfunc formatHumanSize(size int64) string {\n    const (\n        KB = 1024\n        MB = KB * 1024\n        GB = MB * 1024\n        TB = GB * 1024\n    )\n    \n    switch {\n    case size >= TB:\n        return fmt.Sprintf(\"%.1fTB\", float64(size)/TB)\n    case size >= GB:\n        return fmt.Sprintf(\"%.1fGB\", float64(size)/GB)\n    case size >= MB:\n        return fmt.Sprintf(\"%.1fMB\", float64(size)/MB)\n    case size >= KB:\n        return fmt.Sprintf(\"%.1fKB\", float64(size)/KB)\n    default:\n        return fmt.Sprintf(\"%dB\", size)\n    }\n}\n```"
+  gathering_function: |-
+    ```go
+    func GatherFileStatInfo(path string) (*FileStatInfo, error) {
+        info, err := os.Stat(path)
+        if err != nil {
+            return nil, fmt.Errorf("failed to stat file %s: %w", path, err)
+        }
+        
+        return &FileStatInfo{
+            Path:      path,
+            Name:      filepath.Base(path),
+            Size:      info.Size(),
+            SizeHuman: formatHumanSize(info.Size()),
+            MTime:     info.ModTime(),
+            MTimeUnix: info.ModTime().Unix(),
+            Mode:      info.Mode(),
+            Type:      getFileType(info),
+        }, nil
+    }
+    ```
+  human-readable_size_formatting: |-
+    ```go
+    func formatHumanSize(size int64) string {
+        const (
+            KB = 1024
+            MB = KB * 1024
+            GB = MB * 1024
+            TB = GB * 1024
+        )
+        
+        switch {
+        case size >= TB:
+            return fmt.Sprintf("%.1fTB", float64(size)/TB)
+        case size >= GB:
+            return fmt.Sprintf("%.1fGB", float64(size)/GB)
+        case size >= MB:
+            return fmt.Sprintf("%.1fMB", float64(size)/MB)
+        case size >= KB:
+            return fmt.Sprintf("%.1fKB", float64(size)/KB)
+        default:
+            return fmt.Sprintf("%dB", size)
+        }
+    }
+    ```
   implementation_approach:
     details: []
     summary: FileStatInfo structure with human-readable formatting
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Statistics Implementation
@@ -2365,13 +2722,13 @@ IMPL-FILE_STATISTICS_TEMPLATE_FIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Statistics Template Processing Fix
@@ -2451,13 +2808,13 @@ IMPL-GIT_CLI:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Git Command-line Integration
@@ -2530,13 +2887,13 @@ IMPL-INTERFACE_FIRST:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Interface-First Extraction Approach
@@ -2599,11 +2956,6 @@ IMPL-LARGE_FILE_DECOMP:
       - Added TestDelayedOutputMode testing OutputFormatter with collector integration
       - Added TestErrorFormattingMethods for error formatting functions
       - Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
-      - Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
-      - Added TestPrintMethods testing Print methods in delayed mode
-      - Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
-      - Added TestTemplateFormattingMethods for all template functions with 0% coverage
-      - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
       - |-
         Added TestOutputCollector with tests for NewOutputCollector, AddStdout, AddStderr, GetMessages, Clear
         Added TestDelayedOutputMode testing OutputFormatter with collector integration
@@ -2614,6 +2966,11 @@ IMPL-LARGE_FILE_DECOMP:
         Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
         Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
         Achieved 116 functions at 100% coverage, 36 functions with partial coverage (75%+ typical)
+      - Added TestOutputCollectorFlushMethods for comprehensive testing of FlushAll, FlushStdout, FlushStderr
+      - Added TestPrintMethods testing Print methods in delayed mode
+      - Added TestTemplateFormatterAdvanced for TemplateFormatter functionality
+      - Added TestTemplateFormattingMethods for all template functions with 0% coverage
+      - Eliminated ALL 0% coverage functions in formatter.go (152 total functions tracked)
     summary: |-
       Identify logical component boundaries
       Extract components into separate files/packages
@@ -2632,13 +2989,13 @@ IMPL-LARGE_FILE_DECOMP:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Large File Decomposition Strategy
@@ -2714,13 +3071,13 @@ IMPL-LIST_FORMAT_SAFETY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: List Command Format Safety Fix
@@ -2812,13 +3169,13 @@ IMPL-LIST_LIMIT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: List Command Limit Implementation
@@ -2896,10 +3253,10 @@ IMPL-MCP_FEEDBACK_TOOLS:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-03"
+      date: '2026-03-03'
     last_updated:
       author: AI Agent
-      date: "2026-03-03"
+      date: '2026-03-03'
   name: MCP Feedback Tools
   status: Active
 IMPL-MODULE_VALIDATION:
@@ -2911,10 +3268,10 @@ IMPL-MODULE_VALIDATION:
   metadata:
     created:
       author: AI Agent
-      date: "2025-12-18"
+      date: '2025-12-18'
     last_updated:
       author: AI Agent
-      date: "2026-02-06"
+      date: '2026-02-06'
   name: Module Validation Implementation
   status: Active
 IMPL-PACKAGE_EXTRACTION:
@@ -2923,9 +3280,9 @@ IMPL-PACKAGE_EXTRACTION:
     - External dependencies only (standard library, third-party)
     - No internal package dependencies
   before_extraction:
+    - Define interfaces for all component dependencies
     - 'Example: `ArchiveConfigInterface`, `ArchiveFormatterInterface` for archive operations'
     - 'Example: `ConfigProvider`, `ConfigMerger` for config package'
-    - Define interfaces for all component dependencies
   code_locations:
     files: []
     functions: []
@@ -2946,13 +3303,13 @@ IMPL-PACKAGE_EXTRACTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Package Extraction Implementation
@@ -3025,13 +3382,13 @@ IMPL-PROCESSING_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Processing Patterns Implementation
@@ -3106,13 +3463,13 @@ IMPL-REFACTOR_PREP:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Pre-Extraction Refactoring Strategy
@@ -3157,13 +3514,13 @@ IMPL-RESOURCE_MANAGER:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   methods:
@@ -3235,13 +3592,13 @@ IMPL-SEMANTIC_CROSS_REF:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Semantic Cross-Referencing Strategy
@@ -3271,6 +3628,14 @@ IMPL-SEMANTIC_CROSS_REF:
     requirements:
       - REQ-DOC_001
     tests: []
+IMPL-SPEC_CTL:
+  cross_references:
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  description: cmd/specctl CLI — validate, matrix, check-leads for formal IMPL pseudocode
+  detail_file: implementation-decisions/IMPL-SPEC_CTL.yaml
+  name: Spec Control CLI (specctl)
+  status: Active
 IMPL-STDD_VIS_ASSETS:
   cross_references:
     - ARCH-STDD_VIS_FLOW
@@ -3333,13 +3698,13 @@ IMPL-STRUCTURED_ERRORS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Structured Error Handling
@@ -3380,7 +3745,7 @@ IMPL-TEST_CFG_005_P1:
     - REQ-CFG_001
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  date: "2025-12-11"
+  date: '2025-12-11'
   detail_file: implementation-decisions/IMPL-TEST_CFG_005_P1.yaml
   implementation_approach:
     details: []
@@ -3388,13 +3753,13 @@ IMPL-TEST_CFG_005_P1:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Priority 1 Configuration Merge Tests Implementation
@@ -3418,9 +3783,9 @@ IMPL-TEST_CFG_005_P1:
     supersedes: []
   status: Active
   test_expectations:
+    - All tests account for default merging behavior (defaults included in accumulate fields)
     - 'Inheritance chains: child overrides parent for precedence fields'
     - 'Sequential files: first file merges with defaults, subsequent files respect precedence'
-    - All tests account for default merging behavior (defaults included in accumulate fields)
     - Tests use semantic token references `[REQ-CFG_005]` in test names and comments
   testdeepinheritancechain_req_cfg_005: Tests very long inheritance chain (12 files)
   testhomedirectoryexpansion_req_cfg_005: Tests home directory expansion in inherit paths (~/.bkpdir-base.yml)
@@ -3473,13 +3838,13 @@ IMPL-TEST_DEFAULT_STRATEGY_EDGES:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Default Strategy Edge Cases Tests
@@ -3557,13 +3922,13 @@ IMPL-TEST_EMPTY_STRING_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Empty String Handling Tests
@@ -3634,13 +3999,13 @@ IMPL-TEST_EXCLUDE_MERGE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Exclude Patterns Merge Testing
@@ -3716,13 +4081,13 @@ IMPL-TEST_PREPEND_ORDERING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   multiple_prepends: CFG-001 precedence ensures earlier file prepends are preserved
@@ -3798,13 +4163,13 @@ IMPL-TEST_UNICODE_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Unicode and Special Character Handling Tests
@@ -3828,12 +4193,12 @@ IMPL-TEST_UNICODE_HANDLING:
   special_chars_in_paths: Config files load correctly regardless of path characters
   status: Active
   test_coverage:
-    - "Unicode characters in `archive_dir_path`: `/path/with/émojis/\U0001F680/and/特殊字符`"
-    - "Unicode patterns in `exclude_patterns`: `[\"*.文件\", \"测试/*\", \"unicode-文件.log\", \"émoji-\U0001F680.tmp\"]`"
     - 'Config file paths with both: `path with 特殊 chars/.bkpdir.yml`'
     - 'Config file paths with spaces: `path with spaces/.bkpdir.yml`'
     - 'Config file paths with Unicode: `path-with-特殊/.bkpdir.yml`'
     - 'Merge behavior validation: Unicode patterns merge correctly with defaults per CFG-005'
+    - 'Unicode characters in `archive_dir_path`: `/path/with/émojis/🚀/and/特殊字符`'
+    - 'Unicode patterns in `exclude_patterns`: `["*.文件", "测试/*", "unicode-文件.log", "émoji-🚀.tmp"]`'
   test_structure: |-
     ```go
     // TestUnicodeHandling tests Unicode and special characters in configuration values
@@ -3896,10 +4261,10 @@ IMPL-TIED_FILES:
   metadata:
     created:
       author: AI Agent
-      date: "2025-12-18"
+      date: '2025-12-18'
     last_updated:
       author: AI Agent
-      date: "2026-02-06"
+      date: '2026-02-06'
   name: TIED File Creation
   status: Active
 IMPL-TOKEN_COVERAGE_AUDIT:
@@ -3946,13 +4311,13 @@ IMPL-TOKEN_COVERAGE_AUDIT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Semantic Token Coverage Audit
@@ -4081,20 +4446,20 @@ IMPL-TOKEN_SYSTEM:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   migration_outcome:
     - '`project-tokens.yaml` replaced with a pointer stub to the canonical STDD registry.'
+    - All legacy tokens were migrated into `tied/semantic-tokens.md` and validated via `scripts/token-coverage-analysis.sh` and `scripts/validate-token-traceability.sh`.
     - 'Created implementation marker: `[IMPL-TOKEN_MIGRATION_COMPLETE]` to indicate the migration is finished and audited.'
     - 'Validation report: `docs/validation-reports/token-coverage-analysis.md` (100% source/test/overall coverage).'
-    - All legacy tokens were migrated into `tied/semantic-tokens.md` and validated via `scripts/token-coverage-analysis.sh` and `scripts/validate-token-traceability.sh`.
   name: Token System Implementation
   pseudo-code: |-
     ```bash
@@ -4184,13 +4549,13 @@ IMPL-TRACEABILITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Enhanced Traceability Design
@@ -4246,13 +4611,13 @@ IMPL-ZIP_FORMAT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: ZIP Archive Format Implementation

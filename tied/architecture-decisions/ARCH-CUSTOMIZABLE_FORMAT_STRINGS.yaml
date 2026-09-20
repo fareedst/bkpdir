@@ -46,7 +46,7 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
     - No breaking changes to configuration schema
     - Users who don't specify format strings get default behavior
   cross-references: '[REQ-CUSTOMIZABLE_FORMAT_STRINGS], [REQ-CONFIGURATION], [REQ-OUTPUT_FORMATTING], [REQ-USABILITY], [ARCH-CONFIG_SYSTEM], [ARCH-OUTPUT_FORMATTING]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-CUSTOMIZABLE_FORMAT_STRINGS
     - REQ-OUTPUT_FORMATTING
@@ -62,13 +62,13 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: User-Customizable Format Strings
@@ -85,7 +85,11 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
       Validation prevents common mistakes and improves user experience
       Enhances usability without requiring source code modifications
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   separate_format_string_files: Rejected - adds complexity, YAML config sufficient
@@ -99,7 +103,11 @@ ARCH-CUSTOMIZABLE_FORMAT_STRINGS:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []
   validation_strategy:
     - Allow users to disable validation if needed

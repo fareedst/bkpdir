@@ -5,43 +5,6 @@ IMPL-INTERFACE_DRIVEN:
   cross_references:
     - ARCH-CODE_ORGANIZATION
     - REQ-MAINTAINABILITY
-  essence_pseudocode: |-
-    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Contracts-first design for extracted packages (pkg/config, pkg/fileops, pkg/git, pkg/formatter).
-
-    INPUT: package boundaries from ARCH-CODE_ORGANIZATION
-    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: OUTPUT: Go interfaces consumed by main and tests; concrete types stay internal or behind adapters
-    OUTPUT: Go interfaces consumed by main and tests; concrete types stay internal or behind adapters
-
-    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE discover_consumer_surface(providerPkg, consumerRoots):
-    PROCEDURE discover_consumer_surface(providerPkg, consumerRoots):
-      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Map call sites in main/pkg/tests to minimal method sets for testability
-      FOR EACH reference FROM consumerRoots TO providerPkg:
-        record method name and argument shapes
-      END FOR
-      RETURN deduplicated method list
-
-    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE define_interface_in_consumer(name, methods):
-    PROCEDURE define_interface_in_consumer(name, methods):
-      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Declare Go interface in consumer package per Go idiom
-      emit type name interface { methods... }
-      document each method with godoc linking [REQ-MAINTAINABILITY]
-
-    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE implement_and_register(rootWire):
-    PROCEDURE implement_and_register(rootWire):
-      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Concrete structs satisfy interfaces; wiring only at composition root
-      FOR EACH interface I required by rootWire:
-        instantiate concrete type T from provider package
-        assert T satisfies I at compile time
-        inject T into handlers (CLI, tests)
-      END FOR
-
-    # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE verify_with_mocks():
-    PROCEDURE verify_with_mocks():
-      # [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Unit tests use fakes for each interface boundary
-      FOR EACH package under pkg/ with external deps:
-        substitute mock implementations in _test.go
-        run go test without live filesystem/git where possible
-      END FOR
   implementation_approach:
     details:
       - Create clear interfaces for all extracted components
@@ -50,8 +13,11 @@ IMPL-INTERFACE_DRIVEN:
     summary: Define contracts before extracting concrete implementations
   metadata:
     author: AI Agent
-    created: "2026-03-12"
-    last_updated: "2026-03-12"
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Interface-Driven Design
   rationale:
     benefits:

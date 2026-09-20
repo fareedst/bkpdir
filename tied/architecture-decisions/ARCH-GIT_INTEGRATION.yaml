@@ -1,7 +1,7 @@
 ARCH-GIT_INTEGRATION:
   alternatives_considered: []
   cross-references: '[REQ-GIT_INTEGRATION]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-GIT_INTEGRATION
   decision: Git command-line interface for repository information
   implementation:
@@ -19,13 +19,13 @@ ARCH-GIT_INTEGRATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Git Integration
@@ -38,7 +38,8 @@ ARCH-GIT_INTEGRATION:
       Consistent with user's Git configuration
       Lightweight implementation
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-GIT_INTEGRATION
     informs: []
     see_also: []
   status: Active
@@ -47,5 +48,6 @@ ARCH-GIT_INTEGRATION:
       - ARCH-GIT_INTEGRATION
       - REQ-GIT_INTEGRATION
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-GIT_INTEGRATION
     tests: []

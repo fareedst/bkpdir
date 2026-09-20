@@ -57,77 +57,6 @@ IMPL-LIST_LIMIT:
     - REQ-USABILITY
   directory_comparison: Compare current directory against reconstructed state
   error_handling: Improved handling of "no archives found" case - displays user-friendly message using `PrintNoArchivesFound()` instead of generic error
-  essence_pseudocode: |-
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-USABILITY] — Limit list command output to newest N items
-
-    # --- Flag registration (main.go) --- [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [ARCH-CLI_COMMANDS] [REQ-LIST_LIMIT] [REQ-USABILITY] Register --limit as persistent flag
-    procedure register_limit_flag():
-      var listLimit int
-      rootCmd.PersistentFlags.IntVarP(&listLimit, "limit", "n", 10, "Limit the number of items to display (0 = show all)")
-      # Persistent so it applies to both `list` subcommand and `--list` flag on root [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]
-
-    # --- List archives (main.go: handleListCommand + ListArchivesEnhanced) --- [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] Limit archive listing output
-    procedure handleListCommand():
-      cwd = os.Getwd()
-      cfg = LoadConfig(cwd)
-      formatter = NewOutputFormatter(cfg)
-      ListArchivesEnhanced(cfg, formatter, listLimit)
-
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — Block implements documented behavior for: procedure ListArchivesEnhanced(cfg, formatter, limit):
-    procedure ListArchivesEnhanced(cfg, formatter, limit):
-      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Accept limit and apply after sorting
-      cwd = os.Getwd()
-      archiveDir = resolve archive directory from cfg
-      archives = ListArchives(archiveDir)
-      if archives is empty: print "no archives found", return
-
-      # [IMPL-LIST_LIMIT] [REQ-LIST_LIMIT] Sort most recent first [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON]
-      sort archives by CreationTime descending
-
-      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Apply limit (0 = show all)
-      if limit > 0 and len(archives) > limit:
-        archives = archives[:limit]
-
-      # [IMPL-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] Format and print each archive [ARCH-LIST_LIMIT] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON]
-      for each archive in archives:
-        output = formatter.FormatListArchiveWithExtraction(archive.Path, creationTime)
-        print output
-
-    # --- List file backups (main.go: handleListFileBackupsCommand, backup.go: ListFileBackupsEnhanced) --- [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-USABILITY] Limit file backup listing output
-    procedure handleListFileBackupsCommand(args):
-      filePath = listFile or args[0]
-      cfg = LoadConfig(cwd)
-      formatter = NewOutputFormatter(cfg)
-      ListFileBackupsEnhanced(cfg, formatter, filePath, listLimit)
-
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — Block implements documented behavior for: procedure ListFileBackupsEnhanced(cfg, formatter, filePath, limit):
-    procedure ListFileBackupsEnhanced(cfg, formatter, filePath, limit):
-      backupDir = resolve backup directory from cfg
-      backups = ListFileBackups(backupDir, baseFilename)
-      if backups is empty: print "no backups found", return
-
-      # Sort most recent first [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]
-      sort backups by modification time descending
-
-      # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Apply limit (0 = show all)
-      if limit > 0 and len(backups) > limit:
-        backups = backups[:limit]
-
-      for each backup in backups:
-        print formatted backup info
-
-    # --- CommandHandler path (main.go: HandleListArchives) --- [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT]
-    # [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] Default limit for CommandHandler
-    procedure CommandHandler.HandleListArchives(args):
-      archives = ListArchives(archiveDir)
-      sort archives most-recent-first
-      limit = 10  # default for CommandHandler path
-      if limit > 0 and len(archives) > limit:
-        archives = archives[:limit]
-      format and print archives
   implementation: Filter appropriate archives (full vs incremental), sort alphabetically by name, return the last archive (most recent when sorted ascending)
   implementation_approach:
     details: []
@@ -142,13 +71,13 @@ IMPL-LIST_LIMIT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: AI agent
   name: List Command Limit Implementation

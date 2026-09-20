@@ -1,68 +1,18 @@
 IMPL-CFG_MIXED_MODE_MERGE_FIX:
   code_locations:
     files:
-      - path: config.go
-        description: applyMergeStrategies() function containing the accumulate field strategy override logic
+      - description: applyMergeStrategies() function containing the accumulate field strategy override logic
+        path: config.go
     functions:
-      - name: applyMergeStrategies
-        description: Contains the MergeBehaviorAccumulate override logic
+      - description: Contains the MergeBehaviorAccumulate override logic
         file: config.go
         line: 1909
+        name: applyMergeStrategies
   cross_references:
     - ARCH-CFG_001
     - ARCH-CFG_005
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  essence_pseudocode: |-
-    # [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
-    # Ensures MergeBehaviorAccumulate fields always merge (unless explicit prefix), regardless of context. [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-
-    # [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: PROCEDURE applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap, initialDefaultCfg, explicitlySetFields)
-    PROCEDURE applyMergeStrategies(dst, src *Config, inheritContext bool, rawSrcMap, initialDefaultCfg, explicitlySetFields) -> (*Config, error):
-      processor := newMergeStrategyProcessor()
-      srcMap := rawSrcMap OR configToMap(src)
-      processed := processor.processKeys(srcMap)
-
-      # Build explicit prefix map from rawSrcMap [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-      hasExplicitPrefix := map[string]bool{}
-      FOR origKey in rawSrcMap:
-        cleanKey := stripQuotes(origKey)
-        IF cleanKey starts with '!' OR '+' OR '^' OR '=' THEN
-          hasExplicitPrefix[cleanKey[1:]] = true
-        END
-      END
-
-      # [IMPL-CFG_MIXED_MODE_MERGE_FIX] — Apply field-specific merge behavior [ARCH-CFG_005] [ARCH-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION]
-      FOR each key, operation in processed.operations:
-        behavior := getFieldMergeBehavior(key)
-        hasExplicitPrefixForField := hasExplicitPrefix[key]
-
-        IF behavior == MergeBehaviorAccumulate THEN
-          # CFG-005: Array fields default to merge in ALL contexts [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-          IF operation.strategy == "override" AND NOT hasExplicitPrefixForField THEN
-            # Change default "override" to "merge" for accumulate fields [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-            # This ensures exclude_patterns merges with defaults instead of replacing [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-            operation.strategy = "merge"
-          END
-          # For "replace" (!), "merge" (+), "prepend" (^), "default" (=): keep as-is [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-        ELSE
-          # [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] MergeBehaviorPrecedence: keep strategy as-is (CFG-001) [ARCH-CFG_005] [REQ-CFG_005]
-        END
-      END
-
-      # Apply processed operations to result config [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-      result := copy of dst
-      FOR each key, operation in processed.operations:
-        dstValue := getConfigFieldValue(result, key)
-        originalDstValue := getConfigFieldValue(dst, key)
-        applyMergeOperation(result, key, operation, dstValue, originalDstValue,
-            inheritContext, defaultCfg, explicitlySetFields)
-      END
-
-      # Merge remaining fields not in processed operations via mergeConfigs [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_005] [REQ-CFG_005]
-      mergeConfigs(result, src, inheritContext, defaultCfg, rawSrcMap,
-          initialDefaultCfg, dst, explicitlySetFields)
-      RETURN result, nil
   implementation_approach:
     details:
       - Explicit prefixes (!, +, ^, =) keep their strategy as-is
@@ -74,13 +24,13 @@ IMPL-CFG_MIXED_MODE_MERGE_FIX:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: AI agent
   name: Mixed-Mode Merge Strategy Fix

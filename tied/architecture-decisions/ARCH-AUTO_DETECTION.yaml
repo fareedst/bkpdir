@@ -1,7 +1,7 @@
 ARCH-AUTO_DETECTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Separate auto-detect command: Rejected due to reduced usability
@@ -16,14 +16,14 @@ ARCH-AUTO_DETECTION:
     - Known commands bypass auto-detection (create, config, list, verify, backup, etc.)
     - Positional arguments trigger auto-detection when not a known command
   cross-references: '[REQ-USABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-USABILITY
   decision: Automatic command detection based on path type (CLI-015)
   detection_logic:
     - 'Directory detection: Routes to directory archive operation'
     - 'File detection: Routes to file backup operation'
-    - 'Unsupported types: Clear error messages with guidance'
     - Path type detection via `os.Stat()` and file mode checking
+    - 'Unsupported types: Clear error messages with guidance'
   implementation:
     - '`executeWithAutoDetection()`: Integrates with Cobra command execution'
     - '`handleAutoDetectedCommand()`: Routes to appropriate handler'
@@ -41,13 +41,13 @@ ARCH-AUTO_DETECTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Auto-Detection Architecture
@@ -60,7 +60,8 @@ ARCH-AUTO_DETECTION:
       Maintains backward compatibility with explicit commands
       Supports both file and directory operations seamlessly
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -69,5 +70,6 @@ ARCH-AUTO_DETECTION:
       - ARCH-AUTO_DETECTION
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-USABILITY
     tests: []

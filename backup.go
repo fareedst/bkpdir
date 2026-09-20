@@ -8,7 +8,6 @@
 // [ARCH-RESOURCE_MANAGEMENT] Atomic operations for file backups
 // [ARCH-SYSTEM_COMPONENTS] Backup data models and interface adapters
 // [IMPL-ATOMIC_OPS] Temporary files with atomic rename
-// [IMPL-DATA_MODELS] BackupInfo, Backup, BackupOptions structs; BackupConfigInterface, BackupFormatterInterface; adapter types
 package main
 
 import (
@@ -26,8 +25,7 @@ import (
 // REFACTOR-004: See specification.md - Error Handling and Recovery [DECISION:maintenance]
 // REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// BackupConfigInterface abstracts configuration dependencies for backup operations
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: abstract backup directory path, naming toggle, and backup-related status codes.
 type BackupConfigInterface interface {
 	GetBackupDirPath() string
 	GetUseCurrentDirNameForFiles() bool
@@ -38,8 +36,7 @@ type BackupConfigInterface interface {
 	GetStatusFileIsIdenticalToExistingBackup() int
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// BackupFormatterInterface abstracts formatter dependencies for backup operations
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: abstract backup dry-run, identical, created, and not-found output methods.
 type BackupFormatterInterface interface {
 	PrintDryRunBackup(path string)
 	PrintIdenticalBackup(path string)
@@ -47,8 +44,7 @@ type BackupFormatterInterface interface {
 	PrintNoBackupsFound(filename, backupDir string)
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: wrap *Config and delegate BackupConfigInterface getters to Config fields.
 type ConfigToBackupConfigAdapter struct {
 	cfg *Config
 }
@@ -81,8 +77,7 @@ func (a *ConfigToBackupConfigAdapter) GetStatusFileIsIdenticalToExistingBackup()
 	return a.cfg.StatusFileIsIdenticalToExistingBackup
 }
 
-// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
-// OutputFormatterToBackupFormatterAdapter adapts OutputFormatter to BackupFormatterInterface
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: wrap *OutputFormatter and forward each BackupFormatterInterface call.
 type OutputFormatterToBackupFormatterAdapter struct {
 	formatter *OutputFormatter
 }
@@ -103,7 +98,7 @@ func (a *OutputFormatterToBackupFormatterAdapter) PrintNoBackupsFound(filename, 
 	a.formatter.PrintNoBackupsFound(filename, backupDir)
 }
 
-// BackupInfo represents information about a file backup
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: capture list/compare metadata (name, path, creation time, size) for backup discovery.
 type BackupInfo struct {
 	Name         string
 	Path         string
@@ -111,7 +106,7 @@ type BackupInfo struct {
 	Size         int64
 }
 
-// Backup represents a single file backup with metadata
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: represent one backup file with source path and optional note segment.
 type Backup struct {
 	Name         string
 	Path         string
@@ -120,7 +115,7 @@ type Backup struct {
 	Note         string
 }
 
-// BackupOptions holds parameters for backup creation functions
+// - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: bundle context, config, formatter, file path, note, and dry-run for createFileBackupInternal.
 type BackupOptions struct {
 	Context   context.Context
 	Config    *Config
@@ -364,8 +359,7 @@ func ListFileBackups(backupDir, baseFilename string) ([]BackupInfo, error) {
 	return backups, nil
 }
 
-// ListFileBackupsEnhanced lists backups with enhanced formatting
-// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Accept limit parameter and apply after sorting
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] — How: sort backups most-recent-first then truncate to limit when limit > 0 before formatted output.
 func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInterface, filePath string, limit int) error {
 	baseFilename := filepath.Base(filePath)
 
@@ -401,7 +395,6 @@ func ListFileBackupsEnhanced(cfg *Config, formatter formatter.OutputFormatterInt
 		return nil
 	}
 
-	// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Apply limit after sorting (limit > 0 means limit, 0 means show all)
 	// Note: ListFileBackups already sorts by creation time (most recent first)
 	if limit > 0 && len(backups) > limit {
 		backups = backups[:limit]

@@ -1,5 +1,4 @@
 package main
-
 import (
 	"fmt"
 	"io/ioutil"
@@ -10,7 +9,8 @@ import (
 
 // Tests for adapter paths (FormatterAdapter and AIFormatterAdapter)
 
-// [IMPL-LIST_FORMAT_SAFETY] TestFormatterAdapter_PrintfStyle_IMPL_LIST_FORMAT_SAFETY ensures adapter fallback behavior for printf-style formats
+// - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: verify template-style FormatListArchiveWithExtraction replaces #{size_human} and includes path.
+// - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: verify printf-style FormatListArchiveWithExtraction matches FORMAT_WITH_PLACEHOLDERS output without EXTRA args.
 func TestFormatterAdapter_PrintfStyle_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	// The simplified FormatterAdapter implementation does NOT interpret printf-style formats (%s)
 	// and will fall back to template formatting (default or TemplateListArchive). Ensure safe fallback.
@@ -28,7 +28,6 @@ func TestFormatterAdapter_PrintfStyle_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	}
 }
 
-// [IMPL-LIST_FORMAT_SAFETY] TestFormatterAdapter_TemplateStyle_IMPL_LIST_FORMAT_SAFETY verifies adapter replaces template placeholders
 func TestFormatterAdapter_TemplateStyle_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	// create temp file to have real stats
 	f, err := ioutil.TempFile("", "bkpdir-adapter-test-*.txt")
@@ -54,7 +53,6 @@ func TestFormatterAdapter_TemplateStyle_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	}
 }
 
-// [IMPL-LIST_FORMAT_SAFETY] TestAIFormatterAdapter_TemplateStyle_IMPL_LIST_FORMAT_SAFETY verifies AI adapter replaces template placeholders
 func TestAIFormatterAdapter_TemplateStyle_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	// create temp file to have real stats
 	f, err := ioutil.TempFile("", "bkpdir-ai-adapter-test-*.txt")
@@ -80,7 +78,6 @@ func TestAIFormatterAdapter_TemplateStyle_IMPL_LIST_FORMAT_SAFETY(t *testing.T) 
 	}
 }
 
-// [IMPL-LIST_FORMAT_SAFETY] TestAIFormatterAdapter_TemplateFallback_IMPL_LIST_FORMAT_SAFETY verifies AI adapter falls back to TemplateListArchive
 func TestAIFormatterAdapter_TemplateFallback_IMPL_LIST_FORMAT_SAFETY(t *testing.T) {
 	// create temp file to have real stats
 	f, err := ioutil.TempFile("", "bkpdir-ai-adapter-test-2-*.txt")

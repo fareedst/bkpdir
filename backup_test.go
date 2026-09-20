@@ -7,7 +7,6 @@
 // [IMPL-ATOMIC_OPS] Atomic file operations implementation validation
 // [IMPL-DATA_MODELS] BackupInfo, Backup, BackupOptions struct validation
 package main
-
 import (
 	"context"
 	"fmt"
@@ -957,7 +956,7 @@ func testPermissionDeniedDuringComparison(t *testing.T) {
 	}
 }
 
-// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Test file backup list limit functionality
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] — How: sort backups most-recent-first then truncate to limit when limit > 0 before formatted output.
 func TestListFileBackupsEnhanced_WithLimit(t *testing.T) {
 	t.Run("default limit of 10", func(t *testing.T) {
 		testListFileBackupsDefaultLimit(t)

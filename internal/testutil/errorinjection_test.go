@@ -12,7 +12,6 @@
 // IMPLEMENTATION-NOTES: Comprehensive testing of error injection, propagation, and recovery
 
 package testutil
-
 import (
 	"errors"
 	"fmt"

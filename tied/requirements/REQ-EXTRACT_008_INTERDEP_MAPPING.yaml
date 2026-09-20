@@ -8,13 +8,13 @@ REQ-EXTRACT_008_INTERDEP_MAPPING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Package Interdependency Mapping for EXTRACT-008
@@ -43,5 +43,5 @@ REQ-EXTRACT_008_INTERDEP_MAPPING:
     - Diagrams render correctly in docs and link to package README entries
     - Review by maintainer shows coverage of all 8 packages
   validation_criteria:
-    - method: Manual verification
-      coverage: See detail file
+    - coverage: See detail file
+      method: Manual verification

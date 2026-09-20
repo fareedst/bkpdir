@@ -1,7 +1,7 @@
 ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Manual, non-data-driven sketches: rejected (drift risk, no repeatability).
@@ -14,7 +14,7 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
     - A canonical `docs/package-interdependency-mapping.md` is required and serves as the authoritative mapping for EXTRACT-008.
     - Where coupling is unavoidable, introduce small interfaces to break cycles and record these interface contracts in the mapping document and in `implementation-decisions.md`.
   cross-references: '[REQ-STDD_VIS], [REQ-MODULE_VALIDATION]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-DIFF_COMMAND
     - REQ-EXTRACT_008_INTERDEP_MAPPING
     - REQ-INCREMENTAL_DUPLICATE_PREVENTION
@@ -41,13 +41,13 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   module_boundaries_(for_[req-module_validation],_token_emphasis):
@@ -64,7 +64,14 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
       A data-driven pipeline (sourced from existing `tied/*.md` plus representative code/test anchors) keeps token prominence accurate as the registry evolves.
       Complementary artifacts (layered flow + timeline/animation) address both static comprehension and process storytelling while keeping tokens in the spotlight.
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-DIFF_COMMAND
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-MAINTAINABILITY
+      - REQ-MODULE_VALIDATION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-STDD_VIS
     informs: []
     see_also: []
   reuse_diff_logic: Leverage diff command comparison engine for duplicate detection
@@ -83,7 +90,14 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
       - REQ-OUTPUT_FORMATTING
       - REQ-STDD_VIS
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-DIFF_COMMAND
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-MAINTAINABILITY
+      - REQ-MODULE_VALIDATION
+      - REQ-OUTPUT_FORMATTING
+      - REQ-STDD_VIS
     tests: []
   user_feedback: Display appropriate message when archive creation is skipped
   visualization_module: Generate a layered flow (e.g., swimlane/graph or Sankey-style) where tokens are the dominant nodes (color/weight/labels), edges clarify trace paths, and legends explain token roles.

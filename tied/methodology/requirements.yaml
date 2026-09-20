@@ -1,259 +1,144 @@
-# Requirements Index (YAML Database)
-#
-# This YAML file serves as the central index/registry for all requirements in the project.
-# Each top-level key is a semantic token (e.g., REQ-TIED_SETUP).
-#
-# To append a new requirement:
-# 1. Copy the template block at the bottom of this file (REQ-IDENTIFIER)
-# 2. Paste it at the end with a blank line before it
-# 3. Replace REQ-IDENTIFIER with your new token
-# 4. Fill in all fields
-# 5. Update the detail_file path to match your new .yaml file in requirements/ directory
-#
-# Field descriptions:
-#   name: Short descriptive name of the requirement
-#   category: Functional | Non-Functional | Immutable
-#   priority: P0 (Critical) | P1 (Important) | P2 (Nice-to-have) | P3 (Future)
-#   status: "Implemented" | "Planned" | "Template"
-#   rationale: Structured explanation with why, problems_solved, benefits
-#   satisfaction_criteria: List of criterion items with optional metrics
-#   validation_criteria: List of validation method items with coverage details
-#   traceability: Structured links to architecture, implementation, tests, code_annotations
-#   related_requirements: Lists of depends_on, related_to, supersedes (YAML lists or [])
-#   detail_file: Path to the detailed .yaml file in requirements/ directory
-#   metadata: Structured metadata with created, last_updated, last_validated info
+REQ-EVIDENCE_CHAIN_PROFILE:
+  category: Functional
+  description: Produce a versioned read-only evidence-chain-profile.v1 artifact that reports completeness, provenance, denominators, and proof boundaries.
+  detail_file: requirements/REQ-EVIDENCE_CHAIN_PROFILE.yaml
+  name: Evidence chain profile
+  priority: P1
+  related_requirements:
+    depends_on:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+      - REQ-TIED_FIDELITY_RESEARCH
+    related_to: []
+    supersedes: []
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-EVIDENCE_CHAIN_PROFILE
+    implementation:
+      - IMPL-EVIDENCE_CHAIN_PROFILE
 REQ-FEEDBACK_TO_TIED:
   category: Functional
   detail_file: requirements/REQ-FEEDBACK_TO_TIED.yaml
   metadata:
-    created:
-      author: AI Agent
-      date: 2026-03-03
     last_updated:
-      author: AI Agent
-      date: 2026-03-03
-      reason: Initial creation
-    last_validated:
-      date: 2026-03-03
-      result: pass
-      # ---
-      # Template Record - Copy this block to create new requirements
-      # ---
-      #
-      # REQ-IDENTIFIER:
-      #   name: Requirement Name
-      #   category: Functional
-      #   priority: P1
-      #   status: "Planned"
-      #   rationale:
-      #     why: "Primary reason for this requirement"
-      #     problems_solved:
-      #       - "Problem 1"
-      #       - "Problem 2"
-      #     benefits:
-      #       - "Benefit 1"
-      #       - "Benefit 2"
-      #   satisfaction_criteria:
-      #     - criterion: "Criterion description 1"
-      #       metric: "Measurable target (optional)"
-      #     - criterion: "Criterion description 2"
-      #   validation_criteria:
-      #     - method: "Unit tests"
-      #       coverage: "All core functions"
-      #     - method: "Integration tests"
-      #       coverage: "End-to-end flows"
-      #     - method: "Manual testing"
-      #       coverage: "QA checklist"
-      #   traceability:
-      #     architecture:
-      #       - ARCH-IDENTIFIER
-      #     implementation:
-      #       - IMPL-IDENTIFIER
-      #     tests:
-      #       - testFeatureName_REQ_IDENTIFIER
-      #     code_annotations:
-      #       - REQ-IDENTIFIER
-      #   related_requirements:
-      #     depends_on: []
-      #     related_to: []
-      #     supersedes: []
-      #   detail_file: requirements/REQ-IDENTIFIER.yaml
-      #   metadata:
-      #     created:
-      #       date: YYYY-MM-DD
-      #       author: "agent/contributor"
-      #     last_updated:
-      #       date: YYYY-MM-DD
-      #       author: "agent/contributor"
-      #       reason: "Initial creation"
-      #     last_validated:
-      #       date: YYYY-MM-DD
-      #       validator: "agent/contributor"
-      #       result: "pass"
-      validator: AI Agent
+      reason: 'Methodology seed; procedure: tied/docs/agent-req-implementation-checklist.yaml'
   name: Feedback to TIED (Feature Requests, Bug Reports, Methodology)
   priority: P1
-  rationale:
-    benefits:
-      - Export format suitable for reporting to the TIED project (e.g. GitHub issues)
-      - Structured feedback stored under the project TIED tree
-      - Traceability of feedback types (feature_request, bug_report, methodology_improvement)
-    problems_solved:
-      - Methodology improvements from the field are not easily reported upstream
-      - No structured way to collect feedback from TIED adopters
-    why: Projects and users need a standard way to submit feature requests, bug reports, and methodology improvement suggestions and to report them to the TIED project
   related_requirements:
     depends_on: []
     related_to:
       - REQ-TIED_SETUP
     supersedes: []
-  satisfaction_criteria:
-    - criterion: MCP tools allow adding feedback entries (type, title, description, optional context)
-      metric: tied_feedback_add creates/updates tied/feedback.yaml
-    - criterion: Feedback can be exported for reporting to TIED
-      metric: tied_feedback_export returns markdown or JSON of all entries
   status: Implemented
   traceability:
     architecture:
       - ARCH-FEEDBACK_STORAGE
-    code_annotations:
-      - ARCH-FEEDBACK_STORAGE
-      - IMPL-MCP_FEEDBACK_TOOLS
-      - REQ-FEEDBACK_TO_TIED
     implementation:
       - IMPL-MCP_FEEDBACK_TOOLS
-    tests:
-      - feedback.test.ts
-  validation_criteria:
-    - method: Unit tests
-      coverage: Feedback module load/append/export and tool handlers
-    - method: Manual or E2E
-      coverage: MCP client can call tools and get valid output
 REQ-MODULE_VALIDATION:
   category: Functional
   detail_file: requirements/REQ-MODULE_VALIDATION.yaml
   metadata:
-    created:
-      author: AI Agent
-      date: 2025-01-27
     last_updated:
-      author: AI Agent
-      date: 2026-02-06
-      reason: Restructured to v1.5.0 schema with machine-parseable fields
-    last_validated:
-      date: 2026-02-06
-      result: pass
-      validator: AI Agent
+      reason: 'Methodology seed; procedure: tied/docs/agent-req-implementation-checklist.yaml'
   name: Independent Module Validation Before Integration
   priority: P0
-  rationale:
-    benefits:
-      - Bugs caught early before integration
-      - Clear module boundaries and contracts
-      - Easier debugging by isolating issues to specific modules
-      - Reduced integration complexity
-    problems_solved:
-      - Bugs discovered too late in the development cycle
-      - Integration complexity causing difficult-to-debug issues
-      - Module contracts not properly validated before integration
-    why: To eliminate bugs related to code complexity by ensuring each module works correctly in isolation before combining with other modules
   related_requirements:
     depends_on:
       - REQ-TIED_SETUP
     related_to: []
     supersedes: []
-  satisfaction_criteria:
-    - criterion: All logical modules identified and documented with clear boundaries before development
-    - criterion: Module interfaces and contracts defined and documented
-    - criterion: Module validation criteria specified for each module
-      metric: What 'validated' means is explicitly defined
-    - criterion: Each module developed independently
-    - criterion: Each module passes independent validation before integration
-      metric: Unit tests with mocks, integration tests with test doubles, contract validation, edge case testing, error handling validation all passing
-    - criterion: Integration only occurs after module validation passes
-    - criterion: Integration tasks separate from module development tasks
-    - criterion: Minimize code measurable only from outside testing (E2E/manual); every IMPL has test strategy (unit/integration or E2E/glue-only with documented reason)
-    - criterion: Module validation results documented
-    - criterion: No non-trivial logic in entry points unless documented as glue with reason
   status: Implemented
   traceability:
     architecture:
       - ARCH-MODULE_VALIDATION
-    code_annotations:
-      - IMPL-MODULE_VALIDATION
-      - REQ-MODULE_VALIDATION
     implementation:
       - IMPL-MODULE_VALIDATION
-    tests:
-      - testModuleName_IndependentValidation_REQ_MODULE_VALIDATION
-  validation_criteria:
-    - method: Manual verification
-      coverage: Modules identified and documented before development starts
-    - method: Automated testing
-      coverage: Module validation tests exist and pass before integration
-    - method: Code review
-      coverage: Integration code references validated modules
-    - method: Documentation review
-      coverage: Module validation results are documented
-    - method: Integration testing
-      coverage: Integration tests validate combined behavior of validated modules
-    - method: Coverage gates and gap report
-      coverage: IMPL traceability.tests or test_coverage_note (E2E-only with reason) for every Active IMPL
+REQ-QUALITY_ASSURANCE_EVIDENCE:
+  category: Non-Functional
+  cross_references:
+    - ARCH-QUALITY_ASSURANCE_PROFILES
+    - IMPL-QUALITY_EVIDENCE_MANIFEST
+  description: Every behavior-changing change selects applicable quality attributes from a bounded risk profile and records reproducible evidence, limitations, and accepted residual risk without imposing irrelevant checks.
+  detail_file: requirements/REQ-QUALITY_ASSURANCE_EVIDENCE.yaml
+  name: Risk-triggered quality assurance evidence
+  priority: P0
+  related_requirements:
+    depends_on:
+      - REQ-MODULE_VALIDATION
+      - REQ-TIED_SETUP
+    related_to: []
+    supersedes: []
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-QUALITY_ASSURANCE_PROFILES
+    implementation:
+      - IMPL-QUALITY_EVIDENCE_MANIFEST
+REQ-TIED_ADVERSARIAL_INQUIRY:
+  category: Functional
+  cross_references:
+    - ARCH-TIED_ADVERSARIAL_INQUIRY
+    - IMPL-TIED_ADVERSARIAL_INQUIRY
+    - IMPL-TIED_ADVERSARIAL_INQUIRY_CHECKLIST
+  description: Provide bounded, read-only obligation mapping and bidirectional fidelity evidence without treating structural presence as semantic or runtime proof.
+  detail_file: requirements/REQ-TIED_ADVERSARIAL_INQUIRY.yaml
+  metadata:
+    last_updated:
+      reason: Methodology seed for bounded adversarial inquiry and fidelity evidence
+  name: Adversarial inquiry for obligation and fidelity evidence
+  priority: P0
+  related_requirements:
+    depends_on:
+      - REQ-MODULE_VALIDATION
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+      - REQ-TIED_FIDELITY_RESEARCH
+    related_to:
+      - REQ-TIED_SETUP
+    supersedes: []
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-TIED_ADVERSARIAL_INQUIRY
+    implementation:
+      - IMPL-TIED_ADVERSARIAL_INQUIRY
+      - IMPL-TIED_ADVERSARIAL_INQUIRY_CHECKLIST
+REQ-TIED_FIDELITY_RESEARCH:
+  category: Functional
+  detail_file: requirements/REQ-TIED_FIDELITY_RESEARCH.yaml
+  metadata:
+    last_updated:
+      reason: 'Methodology seed for read-only fidelity and defect-origin research; procedure: tied/docs/tied-fidelity-research.md'
+  name: TIED Fidelity Research
+  priority: P1
+  related_requirements:
+    depends_on:
+      - REQ-MODULE_VALIDATION
+      - REQ-TIED_SETUP
+    related_to:
+      - REQ-QUALITY_ASSURANCE_EVIDENCE
+    supersedes: []
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-TIED_FIDELITY_RESEARCH
+    implementation:
+      - IMPL-TIED_FIDELITY_RESEARCH
 REQ-TIED_SETUP:
   category: Functional
   detail_file: requirements/REQ-TIED_SETUP.yaml
   metadata:
-    created:
-      author: AI Agent
-      date: 2025-11-08
     last_updated:
-      author: AI Agent
-      date: 2026-02-06
-      reason: Restructured to v1.5.0 schema with machine-parseable fields
-    last_validated:
-      date: 2026-02-06
-      result: pass
-      validator: AI Agent
+      reason: 'Methodology seed; procedure: tied/docs/agent-req-implementation-checklist.yaml'
   name: TIED Methodology Setup
   priority: P0
-  rationale:
-    benefits:
-      - AI-friendly documentation structure
-      - Complete traceability from requirements to code
-      - Consistent development methodology
-    problems_solved:
-      - Difficulty tracking requirements through architecture to implementation
-      - Inconsistent documentation practices across projects
-      - Loss of intent during development lifecycle
-    why: To ensure traceability of intent from requirements to code and to maintain a consistent development process
   related_requirements:
     depends_on: []
     related_to: []
     supersedes: []
-  satisfaction_criteria:
-    - criterion: All required documentation files exist and are populated from templates
-    - criterion: tied/ directory exists with proper structure
-      metric: requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml, semantic-tokens.md, processes.md all present
-    - criterion: Base files properly configured
-      metric: .cursorrules contains TIED rules, AGENTS.md contains canonical AI agent instructions
-    - criterion: Detail directories exist
-      metric: requirements/, architecture-decisions/, implementation-decisions/ directories present
   status: Implemented
   traceability:
     architecture:
       - ARCH-TIED_STRUCTURE
-    code_annotations:
-      - ARCH-TIED_STRUCTURE
-      - IMPL-TIED_FILES
-      - REQ-TIED_SETUP
     implementation:
       - IMPL-TIED_FILES
-    tests:
-      - Manual verification checklists
-  validation_criteria:
-    - method: Manual verification
-      coverage: File existence checks for all required files and directories
-    - method: AI agent acknowledgment
-      coverage: Agent responds with 'Observing AI principles!' confirming rules are loaded
-    - method: Structure validation
-      coverage: All index files have corresponding detail directories with proper naming

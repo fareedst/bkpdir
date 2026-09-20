@@ -3,13 +3,13 @@ REQ-TIED_SETUP:
   metadata:
     created:
       author: AI Agent
-      date: 2025-11-08
+      date: {}
     last_updated:
       author: AI Agent
-      date: 2026-02-06
+      date: {}
       reason: Restructured to v1.5.0 schema with machine-parseable fields
     last_validated:
-      date: 2026-02-06
+      date: {}
       result: pass
       validator: AI Agent
   name: TIED Methodology Setup
@@ -30,12 +30,12 @@ REQ-TIED_SETUP:
     supersedes: []
   satisfaction_criteria:
     - criterion: All required documentation files exist and are populated from templates
-    - criterion: tied/ directory exists with proper structure
-      metric: requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml, semantic-tokens.md, processes.md all present
     - criterion: Base files properly configured
       metric: .cursorrules contains TIED rules, AGENTS.md contains canonical AI agent instructions
     - criterion: Detail directories exist
       metric: requirements/, architecture-decisions/, implementation-decisions/ directories present
+    - criterion: tied/ directory exists with proper structure
+      metric: requirements.yaml, architecture-decisions.yaml, implementation-decisions.yaml, semantic-tokens.yaml, semantic-tokens.md, processes.md all present
   status: Implemented
   traceability:
     architecture:
@@ -49,9 +49,9 @@ REQ-TIED_SETUP:
     tests:
       - Manual verification checklists
   validation_criteria:
-    - method: Manual verification
-      coverage: File existence checks for all required files and directories
-    - method: AI agent acknowledgment
-      coverage: Agent responds with 'Observing AI principles!' confirming rules are loaded
-    - method: Structure validation
-      coverage: All index files have corresponding detail directories with proper naming
+    - coverage: Agent responds with 'Observing AI principles!' confirming rules are loaded
+      method: AI agent acknowledgment
+    - coverage: File existence checks for all required files and directories
+      method: Manual verification
+    - coverage: All index files have corresponding detail directories with proper naming
+      method: Structure validation

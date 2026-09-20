@@ -1,8 +1,8 @@
 ARCH-TOKEN_SYSTEM:
   ai_assistant_integration: Token-based navigation and feature discovery
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Feature IDs without tokens: Rejected due to lack of traceability
@@ -16,7 +16,7 @@ ARCH-TOKEN_SYSTEM:
   cross-layer_traceability: Requirements → Architecture → Implementation → Tests → Code
   cross-link_layer: For each legacy token, map to an explicit `[REQ-*]`, `[ARCH-*]`, `[IMPL-*]`, and referenced tests/files; open tasks whenever a mapping gap is detected.
   cross-references: '[REQ-DOC_016], [REQ-GOV_REGISTRY_COMPLETENESS], [ARCH-TOKEN_SYSTEM], [IMPL-TOKEN_SYSTEM]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-DOC_016
     - REQ-GOV_DISCOVERABILITY
     - REQ-GOV_REGISTRY_COMPLETENESS
@@ -30,13 +30,13 @@ ARCH-TOKEN_SYSTEM:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Token System Architecture
@@ -50,7 +50,11 @@ ARCH-TOKEN_SYSTEM:
       Enables validation scripts to reason over one canonical markdown source.
   registry_layer: Extend `tied/semantic-tokens.md` with tables that capture description, governance status, linked documents, and validation owners per token.
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-DOC_016
+      - REQ-GOV_DISCOVERABILITY
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -72,7 +76,11 @@ ARCH-TOKEN_SYSTEM:
       - REQ-GOV_REGISTRY_COMPLETENESS
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-DOC_016
+      - REQ-GOV_DISCOVERABILITY
+      - REQ-GOV_REGISTRY_COMPLETENESS
+      - REQ-MAINTAINABILITY
     tests: []
   validation_requirements:
     - Cross-layer token consistency validation

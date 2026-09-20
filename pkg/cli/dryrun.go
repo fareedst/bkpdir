@@ -1,4 +1,3 @@
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_COMMANDS] [REQ-IMMUTABLE_CLI_COMMANDS]
 package cli
 
 import (
@@ -9,11 +8,13 @@ import (
 type DefaultDryRunManager struct{}
 
 // NewDryRunManager creates a new dry-run manager
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
 func NewDryRunManager() DryRunManager {
 	return &DefaultDryRunManager{}
 }
 
-// Execute runs the operation or simulates it based on dry-run flag
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: log Describe output when DryRun; otherwise run operation Execute.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root command without extra signal context.
 func (drm *DefaultDryRunManager) Execute(ctx CommandContext, op DryRunOperation) error {
 	if ctx.DryRun {
 		// In dry-run mode, log what would be done and skip execution

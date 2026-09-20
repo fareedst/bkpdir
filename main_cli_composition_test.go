@@ -1,8 +1,6 @@
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
 // Composition tests: production CLI wiring (newRootCommand + executeWithAutoDetection)
 // without duplicating a partial Cobra tree. See tied/docs/composition-coverage.md.
 package main
-
 import (
 	"bytes"
 	"io"
@@ -25,7 +23,7 @@ func sortedSubcommandNames(root *cobra.Command) []string {
 	return names
 }
 
-// [REQ-USABILITY] [IMPL-AUTO_DETECTION] Production root registers all subcommands (no drift vs createTestRootCmd).
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: production newRootCommand registers fixed subcommand set matching composition contract.
 func TestComposition_NewRootCommand_Subcommands_REQ_USABILITY(t *testing.T) {
 	root := newRootCommand()
 	got := sortedSubcommandNames(root)
@@ -35,7 +33,7 @@ func TestComposition_NewRootCommand_Subcommands_REQ_USABILITY(t *testing.T) {
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] First token is a known subcommand → Cobra Execute (not path auto-detect).
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: first token template routes through Cobra Execute and emits help output.
 func TestComposition_ExecuteWithAutoDetection_KnownSubcommandHelp_REQ_USABILITY(t *testing.T) {
 	root := newRootCommand()
 	var out bytes.Buffer
@@ -49,7 +47,7 @@ func TestComposition_ExecuteWithAutoDetection_KnownSubcommandHelp_REQ_USABILITY(
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] First token is a filesystem path → auto-detect path (dry-run file backup).
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: path-first argv with dry-run exercises auto-detect file backup without writing archives.
 func TestComposition_ExecuteWithAutoDetection_PathArg_FileDryRun_REQ_USABILITY(t *testing.T) {
 	origDry, origNote := dryRun, note
 	defer func() {
@@ -136,7 +134,7 @@ func TestComposition_RootPersistentConfigFlag_REQ_CONFIGURATION(t *testing.T) {
 	}
 }
 
-// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] Root --list with --limit uses handleListFileBackupsCommand (no backups OK).
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] — How: resolve file path from --list or args and pass listLimit to ListFileBackupsEnhanced.
 func TestComposition_RootListAndLimit_REQ_LIST_LIMIT(t *testing.T) {
 	tmp := t.TempDir()
 	if err := os.WriteFile(filepath.Join(tmp, "listed.txt"), []byte("x"), 0644); err != nil {

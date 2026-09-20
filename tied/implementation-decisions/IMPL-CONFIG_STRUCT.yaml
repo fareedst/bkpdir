@@ -1,172 +1,62 @@
 IMPL-CONFIG_STRUCT:
   code_locations:
     files:
-      - path: config.go
-        description: Config struct definition, DefaultConfig(), GetAllConfigFields(), reflectConfigFields(), GetConfigValues(), GetConfigValuesWithSources(), configFieldInfo, ConfigValue
-      - path: config_impl.go
-        description: Concrete implementations of configuration interfaces (DefaultConfigLoader, DefaultConfigMerger, BackupAppValidator, FileConfigSource, etc.)
-      - path: config_interfaces.go
-        description: Application-level configuration interfaces (ConfigLoader, ConfigMerger, ConfigSource, ConfigValidator, ApplicationConfig, etc.)
-      - path: pkg/config/interfaces.go
-        description: Extracted generic configuration interfaces for schema-agnostic config management
-      - path: pkg/config/utils.go
-        description: Configuration utility components (DefaultFileOperations, GenericValidator, GenericSourceDeterminer, GenericValueExtractor)
-      - path: pkg/config/discovery.go
-        description: Configuration path discovery and environment provider (PathDiscovery, DiscoveryConfig, DefaultEnvironmentProvider)
-      - path: pkg/config/loader.go
-        description: Generic configuration loader implementation (GenericConfigLoader, GenericConfigMerger)
+      - description: Application-level configuration interfaces (ConfigLoader, ConfigMerger, ConfigSource, ConfigValidator, ApplicationConfig, etc.)
+        path: config_interfaces.go
+      - description: Concrete implementations of configuration interfaces (DefaultConfigLoader, DefaultConfigMerger, BackupAppValidator, FileConfigSource, etc.)
+        path: config_impl.go
+      - description: Config struct definition, DefaultConfig(), GetAllConfigFields(), reflectConfigFields(), GetConfigValues(), GetConfigValuesWithSources(), configFieldInfo, ConfigValue
+        path: config.go
+      - description: Configuration path discovery and environment provider (PathDiscovery, DiscoveryConfig, DefaultEnvironmentProvider)
+        path: pkg/config/discovery.go
+      - description: Configuration utility components (DefaultFileOperations, GenericValidator, GenericSourceDeterminer, GenericValueExtractor)
+        path: pkg/config/utils.go
+      - description: Extracted generic configuration interfaces for schema-agnostic config management
+        path: pkg/config/interfaces.go
+      - description: Generic configuration loader implementation (GenericConfigLoader, GenericConfigMerger)
+        path: pkg/config/loader.go
     functions:
-      - name: Config struct
-        file: config.go
+      - file: config.go
         line: 59
-      - name: DefaultConfig
-        file: config.go
-        line: 253
-      - name: GetAllConfigFields
-        file: config.go
-        line: 3122
-      - name: reflectConfigFields
-        file: config.go
-        line: 3231
-      - name: updateFieldValues
-        file: config.go
-        line: 3170
-      - name: getFieldValueByPath
-        file: config.go
-        line: 3192
-      - name: determineFieldCategory
-        file: config.go
-        line: 3329
-      - name: GetConfigValues
-        file: config.go
-        line: 1218
-      - name: GetConfigValuesWithSources
-        file: config.go
-        line: 1236
-      - name: configFieldInfo struct
-        file: config.go
+        name: Config struct
+      - file: config.go
         line: 3039
-      - name: ConfigValue struct
-        file: config.go
+        name: configFieldInfo struct
+      - file: config.go
         line: 224
-      - name: GetAllConfigValuesWithSources
-        file: config.go
+        name: ConfigValue struct
+      - file: config.go
+        line: 253
+        name: DefaultConfig
+      - file: config.go
+        line: 3329
+        name: determineFieldCategory
+      - file: config.go
+        line: 3122
+        name: GetAllConfigFields
+      - file: config.go
         line: 3360
+        name: GetAllConfigValuesWithSources
+      - file: config.go
+        line: 1218
+        name: GetConfigValues
+      - file: config.go
+        line: 1236
+        name: GetConfigValuesWithSources
+      - file: config.go
+        line: 3192
+        name: getFieldValueByPath
+      - file: config.go
+        line: 3231
+        name: reflectConfigFields
+      - file: config.go
+        line: 3170
+        name: updateFieldValues
   cross_references:
     - ARCH-CFG_006
     - ARCH-CONFIG_SYSTEM
     - REQ-CFG_006
     - REQ-CONFIGURATION
-  essence_pseudocode: |-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [ARCH-CFG_006] [REQ-CONFIGURATION] [REQ-CFG_006]
-    # Defines configuration struct, default values, reflection-based field discovery, and value extraction for display. [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: DATA Config struct:
-    DATA Config struct:
-      # All configuration fields with YAML tags for serialization and display [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      ArchiveDirPath string       `yaml:"archive_dir_path"`
-      UseCurrentDirName bool      `yaml:"use_current_dir_name"`
-      ExcludePatterns []string    `yaml:"exclude_patterns"`
-      IncludeGitInfo bool         `yaml:"include_git_info"`      # Legacy
-      ShowGitDirtyStatus bool     `yaml:"show_git_dirty_status"` # Legacy
-      Inherit []string            `yaml:"inherit,omitempty"`     # CFG-005 inheritance
-      Git *GitConfig              `yaml:"git,omitempty"`         # Nested git config
-      BackupDirPath string        `yaml:"backup_dir_path"`
-      UseCurrentDirNameForFiles bool
-      StatusCodes (directory + file)
-      FormatStrings (printf + template, directory + file)
-      Patterns (regex for archive, backup, config, timestamp)
-      Extended format strings and templates
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: DATA configFieldInfo struct:
-    DATA configFieldInfo struct:
-      # Metadata for a single configuration field discovered via reflection [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      Name, YAMLName, Type string
-      Kind reflect.Kind
-      Value interface{}
-      IsPointer, IsSlice, IsStruct bool
-      Category, Path string
-      Importance int
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE DefaultConfig() -> *Config:
-    PROCEDURE DefaultConfig() -> *Config:
-      # Returns Config populated with preset default values [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      RETURN &Config{
-        ArchiveDirPath: "../.bkpdir",
-        UseCurrentDirName: true,
-        ExcludePatterns: [],
-        Git: DefaultGitConfig(),
-        BackupDirPath: "../.bkpdir",
-        StatusCodes: standard exit codes,
-        FormatStrings: default printf patterns,
-        Templates: default template patterns,
-        Patterns: default regex patterns
-      }
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE GetAllConfigFields(cfg *Config) -> []configFieldInfo:
-    PROCEDURE GetAllConfigFields(cfg *Config) -> []configFieldInfo:
-      # [IMPL-CONFIG_STRUCT] [ARCH-CFG_006] [REQ-CFG_006] — Uses cached reflection to discover all config fields
-      IF cachedFields := globalFieldCache.getCachedFields() THEN
-        # Performance: reuse cached field metadata, update values only [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-        RETURN updateFieldValues(cachedFields, cfg)
-      END
-      # Cache miss: perform expensive reflection [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      configType := reflect.TypeOf(*cfg)
-      configValue := reflect.ValueOf(*cfg)
-      fields := reflectConfigFields(configType, configValue, "", "")
-      SORT fields by Name
-      # Cache field metadata (without values) for future calls [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      globalFieldCache.setCachedFields(fieldMetadata)
-      RETURN fields
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE reflectConfigFields(structType, structValue, prefix, category) -> []configFieldInfo:
-    PROCEDURE reflectConfigFields(structType, structValue, prefix, category) -> []configFieldInfo:
-      # Recursively walks struct fields extracting YAML tag names, types, and values [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      FOR i := 0; i < structType.NumField(); i++:
-        field := structType.Field(i)
-        # Skip unexported fields [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-        IF NOT field.IsExported() THEN CONTINUE END
-        # Extract YAML tag name (e.g., "archive_dir_path" from yaml:"archive_dir_path") [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-        yamlName := extractYAMLTag(field)
-        IF field is struct or pointer-to-struct THEN
-          # Recurse into nested structs (e.g., Git *GitConfig) [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-          nestedCategory := determineFieldCategory(field.Name, category)
-          APPEND reflectConfigFields(fieldType, fieldValue, prefix+field.Name+".", nestedCategory)
-        ELSE
-          # Leaf field: emit configFieldInfo [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-          APPEND configFieldInfo{
-            Name: field.Name, YAMLName: yamlName,
-            Type: fieldType.String(), Kind: fieldType.Kind(),
-            Value: fieldValue.Interface(),
-            Category: determineFieldCategory(field.Name, category),
-            Path: prefix + field.Name
-          }
-        END
-      END
-      RETURN fields
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE updateFieldValues(cachedFields, cfg) -> []configFieldInfo:
-    PROCEDURE updateFieldValues(cachedFields, cfg) -> []configFieldInfo:
-      # Updates cached metadata with current config values via field path resolution [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      FOR each cachedField:
-        value := getFieldValueByPath(reflect.ValueOf(*cfg), cachedField.Path)
-        cachedField.Value = value
-      END
-      RETURN updated fields
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE GetConfigValues(cfg *Config) -> []ConfigValue:
-    PROCEDURE GetConfigValues(cfg *Config) -> []ConfigValue:
-      # Extracts configuration values for display without source tracking [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      defaultCfg := DefaultConfig()
-      getSource := createSourceDeterminer("default")
-      RETURN getBasicConfigValues(cfg, defaultCfg, getSource) + getStatusCodeValues(...)
-
-    # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — Block implements documented behavior for: PROCEDURE GetConfigValuesWithSources(cfg *Config, root string) -> []ConfigValue:
-    PROCEDURE GetConfigValuesWithSources(cfg *Config, root string) -> []ConfigValue:
-      # [ARCH-CFG_006] [REQ-CFG_006] — Extracts values with source tracking (default/file/computed) [IMPL-CONFIG_STRUCT]
-      configSource := determineConfigSource(root)
-      getSource := createSourceDeterminer(configSource)
-      RETURN getBasicConfigValues(cfg, defaultCfg, getSource) + getStatusCodeValues(...)
   implementation_approach:
     details:
       - Config struct with ~80 YAML-tagged fields covers archiving, backups, git, formatting, status codes, patterns
@@ -180,13 +70,13 @@ IMPL-CONFIG_STRUCT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-29"
-      reason: DefaultConfig ExcludePatterns empty; pseudocode aligned
+      date: '2026-06-02'
+      reason: 'Manual deep sync: pilot-quality three-way block leads'
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: AI agent
   name: Configuration Structure

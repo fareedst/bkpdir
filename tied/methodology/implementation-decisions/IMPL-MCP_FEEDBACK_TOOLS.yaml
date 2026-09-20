@@ -1,25 +1,23 @@
 IMPL-MCP_FEEDBACK_TOOLS:
   code_locations:
     files:
-      - path: mcp-server/src/feedback.ts
-        description: Feedback load/append/export logic [REQ-FEEDBACK_TO_TIED] [ARCH-FEEDBACK_STORAGE] [IMPL-MCP_FEEDBACK_TOOLS]
-      - path: mcp-server/src/feedback.test.ts
-        description: Unit tests for feedback module
-      - path: mcp-server/src/tools/index.ts
-        description: Tool handlers tied_feedback_add, tied_feedback_export
+      - description: Feedback load/append/export logic [REQ-FEEDBACK_TO_TIED] [ARCH-FEEDBACK_STORAGE] [IMPL-MCP_FEEDBACK_TOOLS]
+        path: MCP server feedback module
+      - description: Tool handlers tied_feedback_add, tied_feedback_export
+        path: MCP server tool registry
     functions:
-      - name: loadFeedback
-        description: Load feedback.yaml or default structure
-        file: mcp-server/src/feedback.ts
-      - name: appendEntry
-        description: Append one entry with id and created_at
-        file: mcp-server/src/feedback.ts
-      - name: exportMarkdown
-        description: Export entries as markdown for TIED report
-        file: mcp-server/src/feedback.ts
-      - name: exportJson
-        description: Export entries as JSON string
-        file: mcp-server/src/feedback.ts
+      - description: Append one entry with id and created_at
+        file: MCP server feedback module
+        name: appendEntry
+      - description: Export entries as JSON string
+        file: MCP server feedback module
+        name: exportJson
+      - description: Export entries as markdown for TIED report
+        file: MCP server feedback module
+        name: exportMarkdown
+      - description: Load feedback.yaml or default structure
+        file: MCP server feedback module
+        name: loadFeedback
   cross_references:
     - ARCH-FEEDBACK_STORAGE
     - REQ-FEEDBACK_TO_TIED
@@ -36,13 +34,13 @@ IMPL-MCP_FEEDBACK_TOOLS:
   metadata:
     created:
       author: AI Agent
-      date: 2026-03-03
+      date: '2026-03-03'
     last_updated:
       author: AI Agent
-      date: 2026-03-03
+      date: '2026-03-03'
       reason: Initial creation
     last_validated:
-      date: 2026-03-03
+      date: '2026-03-03'
       result: pass
       validator: AI Agent
   name: MCP Feedback Tools (tied_feedback_add, tied_feedback_export)
@@ -70,4 +68,4 @@ IMPL-MCP_FEEDBACK_TOOLS:
     requirements:
       - REQ-FEEDBACK_TO_TIED
     tests:
-      - feedback.test.ts
+      - MCP feedback tool unit tests

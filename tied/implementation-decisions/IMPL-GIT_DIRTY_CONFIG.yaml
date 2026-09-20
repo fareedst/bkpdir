@@ -16,79 +16,6 @@ IMPL-GIT_DIRTY_CONFIG:
     - ARCH-GIT_INTEGRATION
     - REQ-GIT_INTEGRATION
   description: Make the Git dirty status indicator (-dirty suffix) configurable through the configuration system, allowing users to enable/disable this feature via show_git_dirty_status boolean option
-  essence_pseudocode: |-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Configurable -dirty suffix via show_git_dirty_status boolean
-
-    struct Config (relevant fields):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Boolean option controlling dirty suffix
-      ShowGitDirtyStatus bool  yaml:"show_git_dirty_status"  # default: true
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: struct ArchiveConfig (relevant fields):
-    struct ArchiveConfig (relevant fields):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Propagated from Config for archive naming
-      ShowGitDirtyStatus bool
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: procedure generateFullArchiveNameFromConfig(cfg):
-    procedure generateFullArchiveNameFromConfig(cfg):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Conditionally append -dirty based on config
-      name = build prefix + timestamp
-      if cfg.IsGit and cfg.GitBranch != "" and cfg.GitHash != "":
-        name += "=" + cfg.GitBranch + "=" + cfg.GitHash
-        if not cfg.GitIsClean and cfg.ShowGitDirtyStatus:
-          name += "-dirty"    # Only if ShowGitDirtyStatus is true
-      if cfg.Note != "": name += "=" + cfg.Note
-      return name + ".zip"
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: procedure generateIncrementalArchiveName(cfg):
-    procedure generateIncrementalArchiveName(cfg):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Same conditional dirty for incremental names
-      name = baseName + "_update=" + timestamp
-      if cfg.IsGit and cfg.GitBranch != "" and cfg.GitHash != "":
-        name += "=" + cfg.GitBranch + "=" + cfg.GitHash
-        if not cfg.GitIsClean and cfg.ShowGitDirtyStatus:
-          name += "-dirty"
-      if cfg.Note != "": name += "=" + cfg.Note
-      return name + ".zip"
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: procedure GenerateFullArchiveName(cfg, cwd, note):
-    procedure GenerateFullArchiveName(cfg, cwd, note):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Propagate ShowGitDirtyStatus from Config to ArchiveConfig
-      archiveConfig = ArchiveConfig{Prefix: basename(cwd), Timestamp: now(), Note: note}
-      archiveConfig.ShowGitDirtyStatus = cfg.ShowGitDirtyStatus   # propagate setting
-      if cfg.IncludeGitInfo and IsGitRepository(cwd):
-        branch, hash, isClean = GetGitInfoWithStatus(cwd)
-        archiveConfig.IsGit = true; set branch, hash, isClean
-      return GenerateArchiveName(archiveConfig)
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: procedure mergeBasicSettings(dst, src, inheritContext, ...):
-    procedure mergeBasicSettings(dst, src, inheritContext, ...):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Merge show_git_dirty_status respecting CFG-001 precedence
-      if inheritContext:
-        if explicitlySetInSrc("show_git_dirty_status"):
-          dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
-        elif src.ShowGitDirtyStatus != default:
-          dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
-      else:
-        if not explicitlySetByEarlier and explicitlySetInSrc and src differs from default:
-          dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: procedure mergeGitSettings(dst, src, inheritContext, ...):
-    procedure mergeGitSettings(dst, src, inheritContext, ...):
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Keep legacy ShowGitDirtyStatus in sync with Git.ShowDirtyStatus
-      if inheritContext:
-        if not explicitlySetByEarlier("show_git_dirty_status"):
-          if explicitlySetInSrc or src differs from defaultGit:
-            dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
-            dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus   # keep legacy in sync
-      else:
-        if not explicitlySetByEarlier and explicitlySetInSrc and src differs from defaultGit:
-          dst.Git.ShowDirtyStatus = src.ShowGitDirtyStatus
-          dst.ShowGitDirtyStatus = src.ShowGitDirtyStatus
-
-    # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — Block implements documented behavior for: adapter ConfigToArchiveConfigAdapter:
-    adapter ConfigToArchiveConfigAdapter:
-      # [IMPL-GIT_DIRTY_CONFIG] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] Expose ShowGitDirtyStatus via interface
-      GetShowGitDirtyStatus(): return cfg.ShowGitDirtyStatus
   implementation_approach:
     details:
       - Added proper merging of the new option in mergeBasicSettings
@@ -100,11 +27,11 @@ IMPL-GIT_DIRTY_CONFIG:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Configurable Git Dirty Status
   rationale:
     benefits:

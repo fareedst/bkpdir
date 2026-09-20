@@ -1,0 +1,275 @@
+lead_check_skip:
+  - IMPL-BACKWARD_COMPAT
+  - IMPL-CFG_HIERARCHY_PRESERVATION
+  - IMPL-CODE_STYLE
+  - IMPL-DEPENDENCY_MGMT
+  - IMPL-DOC_ENHANCEMENT
+  - IMPL-EXTRACT_008_DOC_MIGRATION
+  - IMPL-EXTRACTION_CHALLENGES
+  - IMPL-EXTRACTION_PRINCIPLES
+  - IMPL-INTERFACE_DRIVEN
+  - IMPL-INTERFACE_FIRST
+  - IMPL-LARGE_FILE_CHALLENGE
+  - IMPL-LARGE_FILE_DECOMP
+  - IMPL-LAYERED_EXTRACTION
+  - IMPL-MCP_FEEDBACK_TOOLS
+  - IMPL-MODULE_VALIDATION
+  - IMPL-REFACTOR_PREP
+  - IMPL-SEMANTIC_CROSS_REF
+  - IMPL-SPEC_CTL
+  - IMPL-STDD_VIS_ASSETS
+  - IMPL-STDD_VIS_DATA_PIPELINE
+  - IMPL-TESTING_COMPLEXITY
+  - IMPL-TIED_FILES
+  - IMPL-TOKEN_COVERAGE_AUDIT
+  - IMPL-TOKEN_MIGRATION_COMPLETE
+  - IMPL-TOKEN_SYSTEM
+  - IMPL-TRACEABILITY
+  - IMPL-ZERO_BREAKING
+waivers:
+  - block: ANALYZE_AND_CLEANUP_DEPENDENCIES
+    impl: IMPL-REFACTOR_PREP
+    reason: INFRA-doc-only-sidecar-block
+  - block: ANALYZE_CHANGE_IMPACT
+    impl: IMPL-DOC_ENHANCEMENT
+    reason: INFRA-doc-only-sidecar-block
+  - block: APPEND_ENTRY
+    impl: IMPL-MCP_FEEDBACK_TOOLS
+    reason: INFRA-doc-only-sidecar-block
+  - block: APPLY_OVERRIDE_WITH_PRESERVATION
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    reason: INFRA-doc-only-sidecar-block
+  - block: ARCHIVE_MIGRATION_ARTIFACTS
+    impl: IMPL-TOKEN_MIGRATION_COMPLETE
+    reason: INFRA-doc-only-sidecar-block
+  - block: AUDIT_MODULE_COVERAGE
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    reason: INFRA-doc-only-sidecar-block
+  - block: BUILD_DEPENDENCY_GRAPH (DOC-ONLY NOTE)
+    impl: IMPL-TRACEABILITY
+    reason: INFRA-doc-only-sidecar-block
+  - block: BUILD_FEATURE_REFERENCE_BLOCKS
+    impl: IMPL-SEMANTIC_CROSS_REF
+    reason: INFRA-doc-only-sidecar-block
+  - block: CHECK_LEADS_COMMAND
+    impl: IMPL-SPEC_CTL
+    reason: INFRA-SPEC-CTL
+  - block: CREATE_PACKAGE_SPECIFIC_TESTS
+    impl: IMPL-EXTRACTION_CHALLENGES
+    reason: INFRA-doc-only-sidecar-block
+  - block: DECOMPOSE_LARGE_FILES
+    impl: IMPL-REFACTOR_PREP
+    reason: INFRA-doc-only-sidecar-block
+  - block: DEFINE_BEHAVIORAL_CONTRACTS
+    impl: IMPL-DOC_ENHANCEMENT
+    reason: INFRA-doc-only-sidecar-block
+  - block: DEFINE_BEHAVIORAL_CONTRACTS (DOC-ONLY NOTE)
+    impl: IMPL-TRACEABILITY
+    reason: INFRA-doc-only-sidecar-block
+  - block: DEFINE_INTERFACE_IN_CONSUMER
+    impl: IMPL-INTERFACE_DRIVEN
+    reason: INFRA-doc-only-sidecar-block
+  - block: DEFINE_INTERFACES_BEFORE_EXTRACTION
+    impl: IMPL-REFACTOR_PREP
+    reason: INFRA-doc-only-sidecar-block
+  - block: DESIGN_PACKAGE_INTERFACES
+    impl: IMPL-INTERFACE_FIRST
+    reason: INFRA-doc-only-sidecar-block
+  - block: DEVELOP_INDEPENDENTLY
+    impl: IMPL-MODULE_VALIDATION
+    reason: INFRA-doc-only-sidecar-block
+  - block: DISCOVER_CONSUMER_SURFACE
+    impl: IMPL-INTERFACE_DRIVEN
+    reason: INFRA-doc-only-sidecar-block
+  - block: DOCUMENTATION_RULES
+    impl: IMPL-CODE_STYLE
+    reason: INFRA-doc-only-sidecar-block
+  - block: 'EMBEDDED_MINITEST: archive error string'
+    impl: IMPL-STRUCTURED_ERRORS
+    reason: INFRA-test-only-sidecar-block
+  - block: 'EMBEDDED_MINITEST: disk full classifier'
+    impl: IMPL-STRUCTURED_ERRORS
+    reason: INFRA-test-only-sidecar-block
+  - block: 'EMBEDDED_MINITEST: permission classifier'
+    impl: IMPL-STRUCTURED_ERRORS
+    reason: INFRA-test-only-sidecar-block
+  - block: 'EMBEDDED_MINITEST: pkg handle error'
+    impl: IMPL-STRUCTURED_ERRORS
+    reason: INFRA-test-only-sidecar-block
+  - block: 'EMBEDDED_MINITEST: printf-style list archive'
+    impl: IMPL-LIST_FORMAT_SAFETY
+    reason: INFRA-test-only-sidecar-block
+  - block: 'EMBEDDED_MINITEST: template placeholder list archive'
+    impl: IMPL-LIST_FORMAT_SAFETY
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_BACKWARD_COMPAT
+    impl: IMPL-AUTO_DETECTION
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND
+    impl: IMPL-AUTO_DETECTION
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN
+    impl: IMPL-AUTO_DETECTION
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS
+    impl: IMPL-AUTO_DETECTION
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_DEFAULT_CONFIG
+    impl: IMPL-CONFIG_STRUCT
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_MERGE_STRATEGY
+    impl: IMPL-ATOMIC_OPS
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_MERGE_STRATEGY
+    impl: IMPL-CFG_006
+    reason: INFRA-test-only-sidecar-block
+  - block: EMBEDDED_MINITEST_PATH_TYPE_DETECTION
+    impl: IMPL-AUTO_DETECTION
+    reason: INFRA-test-only-sidecar-block
+  - block: ENABLE_INDEPENDENT_TESTING
+    impl: IMPL-INTERFACE_FIRST
+    reason: INFRA-doc-only-sidecar-block
+  - block: ENFORCE_CROSS_REFERENCE_CONSISTENCY
+    impl: IMPL-SEMANTIC_CROSS_REF
+    reason: INFRA-doc-only-sidecar-block
+  - block: ENFORCE_DEPENDENCY_RULES
+    impl: IMPL-DEPENDENCY_MGMT
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXPORT_ARTIFACTS
+    impl: IMPL-STDD_VIS_DATA_PIPELINE
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXPORT_ENTRIES
+    impl: IMPL-MCP_FEEDBACK_TOOLS
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_008_DOCUMENTATION_MIGRATION
+    impl: IMPL-EXTRACT_008_DOC_MIGRATION
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_FRAMEWORK_LAYER
+    impl: IMPL-LAYERED_EXTRACTION
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_INFRASTRUCTURE_LAYER
+    impl: IMPL-LAYERED_EXTRACTION
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_PATTERNS_LAYER
+    impl: IMPL-LAYERED_EXTRACTION
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_TEST_UTILITIES
+    impl: IMPL-EXTRACTION_CHALLENGES
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_UTILITIES_LAYER
+    impl: IMPL-LAYERED_EXTRACTION
+    reason: INFRA-doc-only-sidecar-block
+  - block: EXTRACT_WITH_INTERFACE_COMPAT
+    impl: IMPL-LARGE_FILE_DECOMP
+    reason: INFRA-doc-only-sidecar-block
+  - block: FORMATTING_RULES
+    impl: IMPL-CODE_STYLE
+    reason: INFRA-doc-only-sidecar-block
+  - block: GENERATE_TOKEN_INVENTORY
+    impl: IMPL-TOKEN_MIGRATION_COMPLETE
+    reason: INFRA-doc-only-sidecar-block
+  - block: IDENTIFY_COMPONENT_BOUNDARIES
+    impl: IMPL-LARGE_FILE_DECOMP
+    reason: INFRA-doc-only-sidecar-block
+  - block: IDENTIFY_MODULES
+    impl: IMPL-MODULE_VALIDATION
+    reason: INFRA-doc-only-sidecar-block
+  - block: IMPLEMENT_AGAINST_INTERFACES
+    impl: IMPL-INTERFACE_FIRST
+    reason: INFRA-doc-only-sidecar-block
+  - block: IMPLEMENT_AND_REGISTER
+    impl: IMPL-INTERFACE_DRIVEN
+    reason: INFRA-doc-only-sidecar-block
+  - block: ISOLATE_VIA_INTERFACES
+    impl: IMPL-BACKWARD_COMPAT
+    reason: INFRA-doc-only-sidecar-block
+  - block: LARGE_FILE_DECOMPOSITION
+    impl: IMPL-LARGE_FILE_CHALLENGE
+    reason: INFRA-doc-only-sidecar-block
+  - block: LAYERED_FLOW_DIAGRAM
+    impl: IMPL-STDD_VIS_ASSETS
+    reason: INFRA-doc-only-sidecar-block
+  - block: LOAD_FEEDBACK
+    impl: IMPL-MCP_FEEDBACK_TOOLS
+    reason: INFRA-doc-only-sidecar-block
+  - block: MAINTAIN_COMPREHENSIVE_COVERAGE
+    impl: IMPL-ZERO_BREAKING
+    reason: INFRA-doc-only-sidecar-block
+  - block: MAINTAIN_CROSS_DOCUMENT_CONSISTENCY
+    impl: IMPL-DOC_ENHANCEMENT
+    reason: INFRA-doc-only-sidecar-block
+  - block: MATRIX_COMMAND
+    impl: IMPL-SPEC_CTL
+    reason: INFRA-SPEC-CTL
+  - block: MCP_HANDLER_ADD
+    impl: IMPL-MCP_FEEDBACK_TOOLS
+    reason: INFRA-doc-only-sidecar-block
+  - block: MCP_HANDLER_EXPORT
+    impl: IMPL-MCP_FEEDBACK_TOOLS
+    reason: INFRA-doc-only-sidecar-block
+  - block: MERGE_BASIC_SETTINGS_WITH_PRESERVATION
+    impl: IMPL-CFG_HIERARCHY_PRESERVATION
+    reason: INFRA-doc-only-sidecar-block
+  - block: NAMING_RULES
+    impl: IMPL-CODE_STYLE
+    reason: INFRA-doc-only-sidecar-block
+  - block: NORMALIZE_GRAPH
+    impl: IMPL-STDD_VIS_DATA_PIPELINE
+    reason: INFRA-doc-only-sidecar-block
+  - block: PLAN_EXTRACTION_ORDER
+    impl: IMPL-EXTRACTION_PRINCIPLES
+    reason: INFRA-doc-only-sidecar-block
+  - block: PRESERVE_EXISTING_TESTS
+    impl: IMPL-ZERO_BREAKING
+    reason: INFRA-doc-only-sidecar-block
+  - block: PROVIDE_TYPE_ALIASES
+    impl: IMPL-BACKWARD_COMPAT
+    reason: INFRA-doc-only-sidecar-block
+  - block: PROVIDE_WRAPPER_FUNCTIONS
+    impl: IMPL-BACKWARD_COMPAT
+    reason: INFRA-doc-only-sidecar-block
+  - block: REGISTRY_AUTHORING (DOC-ONLY NOTE)
+    impl: IMPL-TOKEN_SYSTEM
+    reason: INFRA-doc-only-sidecar-block
+  - block: RENDER_TOKEN_TABLES
+    impl: IMPL-TOKEN_MIGRATION_COMPLETE
+    reason: INFRA-doc-only-sidecar-block
+  - block: RESOLVE_CONFIG_COUPLING
+    impl: IMPL-EXTRACTION_CHALLENGES
+    reason: INFRA-doc-only-sidecar-block
+  - block: TESTING_COMPLEXITY_CHALLENGE
+    impl: IMPL-TESTING_COMPLEXITY
+    reason: INFRA-doc-only-sidecar-block
+  - block: TIED_FILE_CREATION
+    impl: IMPL-TIED_FILES
+    reason: INFRA-doc-only-sidecar-block
+  - block: TIMELINE_ANIMATION
+    impl: IMPL-STDD_VIS_ASSETS
+    reason: INFRA-doc-only-sidecar-block
+  - block: VALIDATE_DOCUMENTATION_CONSISTENCY
+    impl: IMPL-DOC_ENHANCEMENT
+    reason: INFRA-doc-only-sidecar-block
+  - block: VALIDATE_INDEPENDENTLY
+    impl: IMPL-MODULE_VALIDATION
+    reason: INFRA-doc-only-sidecar-block
+  - block: VALIDATE_LINK_INTEGRITY
+    impl: IMPL-SEMANTIC_CROSS_REF
+    reason: INFRA-doc-only-sidecar-block
+  - block: VERIFY_BEHAVIOR_AT_EACH_STEP
+    impl: IMPL-ZERO_BREAKING
+    reason: INFRA-doc-only-sidecar-block
+  - block: VERIFY_DECOMPOSITION_WITH_TESTS
+    impl: IMPL-LARGE_FILE_DECOMP
+    reason: INFRA-doc-only-sidecar-block
+  - block: VERIFY_WITH_MOCKS
+    impl: IMPL-INTERFACE_DRIVEN
+    reason: INFRA-doc-only-sidecar-block
+  - block: VERSION_INTERFACE_EVOLUTION
+    impl: IMPL-INTERFACE_FIRST
+    reason: INFRA-doc-only-sidecar-block
+  - block: VERSION_WITH_GO_MODULES
+    impl: IMPL-DEPENDENCY_MGMT
+    reason: INFRA-doc-only-sidecar-block
+  - block: YAML_DECOMMISSIONING (DOC-ONLY NOTE)
+    impl: IMPL-TOKEN_SYSTEM
+    reason: INFRA-doc-only-sidecar-block

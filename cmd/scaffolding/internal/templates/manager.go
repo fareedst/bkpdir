@@ -1,5 +1,4 @@
-// [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY]
-// CFG-003: See specification.md - Configuration Management [DECISION:maintenance]
+// - [IMPL-PACKAGE_EXTRACTION] [ARCH-PACKAGE_EXTRACTION] [REQ-MAINTAINABILITY] — How: expose type aliases and delegating wrappers at root with deprecation comments pointing to new pkg paths.
 package templates
 
 import (

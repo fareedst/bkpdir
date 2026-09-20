@@ -1,8 +1,5 @@
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS]
-// Package cli tests for CLI framework components: command building,
-// context management, dry-run, flags, and version management.
+// Package cli tests for CLI framework components.
 package cli
-
 import (
 	"bytes"
 	"context"
@@ -12,8 +9,28 @@ import (
 
 	"github.com/spf13/cobra"
 )
-
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Validates BuildInfo struct fields
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create a subcommand with use, short, and long description fields.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: attach RunE handler to command and return command for fluent chaining.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: register each child command on parent and return parent.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultRootCommandBuilder with default flag and version managers when nil.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: build root command from AppInfo with formatted version, version template, and help when invoked without subcommand.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: materialize command from CommandTemplate including handler, prerun, postrun, flags, and subcommands.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: add persistent help and verbose flags via provided or embedded FlagManager.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: wire all managers and builders then create root command from AppInfo.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: attach subcommand to application root.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root command without extra signal context.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root with signal-handled context on command; exit non-zero on error.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: register dry-run, note, config, incremental, and list flags when FlagSet pointers are non-nil.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: add persistent help and verbose flags to command.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: return cancellable child context defaulting parent to background.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: parse duration string; on parse failure return cancel-only context without timeout.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: listen for interrupt/terminate and invoke cancel when signal received.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: wrap function as operation that returns canceled when Cancel was called.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create cancelable context that cancels on INT/TERM or parent done.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: log Describe output when DryRun; otherwise run operation Execute.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: format version, build date, and platform into display string.
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create version subcommand that prints FormatVersion on run.
 func TestBuildInfo(t *testing.T) {
 	info := BuildInfo{
 		Version:  "1.0.0",
@@ -27,7 +44,6 @@ func TestBuildInfo(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Validates AppInfo struct fields
 func TestAppInfo(t *testing.T) {
 	build := BuildInfo{
 		Version:  "1.0.0",
@@ -48,7 +64,7 @@ func TestAppInfo(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests version formatting, template, and command creation
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify FormatVersion, CreateVersionTemplate, and CreateVersionCommand outputs.
 func TestVersionManager(t *testing.T) {
 	vm := NewVersionManager()
 
@@ -77,7 +93,7 @@ func TestVersionManager(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests dry-run simulation and actual execution
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify dry-run skips Execute and logs [DRY-RUN] prefix; non-dry-run runs operation.
 func TestDryRunManager(t *testing.T) {
 	drm := NewDryRunManager()
 
@@ -124,7 +140,7 @@ func TestDryRunManager(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests context creation and cancellation
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify Create yields active context until cancel; WithTimeout ends after duration.
 func TestContextManager(t *testing.T) {
 	cm := NewContextManager()
 
@@ -153,7 +169,6 @@ func TestContextManager(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests context timeout behavior
 func TestContextManagerWithTimeout(t *testing.T) {
 	cm := NewContextManager()
 
@@ -176,7 +191,7 @@ func TestContextManagerWithTimeout(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests flag registration (dry-run, note)
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify AddDryRunFlag and AddNoteFlag register expected flags.
 func TestFlagManager(t *testing.T) {
 	fm := NewFlagManager()
 	cmd := &cobra.Command{Use: "test"}
@@ -204,7 +219,7 @@ func TestFlagManager(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests command creation, handler setting, execution
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify NewCommand sets use/short and WithHandler invokes RunE.
 func TestCommandBuilder(t *testing.T) {
 	fm := NewFlagManager()
 	cb := NewCommandBuilder(fm)
@@ -240,7 +255,7 @@ func TestCommandBuilder(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests root command creation with AppInfo
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify NewRootCommand sets name, short, and non-empty version from AppInfo.
 func TestRootCommandBuilder(t *testing.T) {
 	fm := NewFlagManager()
 	vm := NewVersionManager()
@@ -274,7 +289,7 @@ func TestRootCommandBuilder(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests full CLIApp creation and command addition
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify NewCLIApp preserves AppInfo and AddCommand registers subcommand on root.
 func TestCLIApp(t *testing.T) {
 	buildInfo := BuildInfo{
 		Version:  "1.0.0",
@@ -325,7 +340,7 @@ func TestCLIApp(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests cancellable operation execution and cancellation
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify Execute runs until Cancel then returns canceled.
 func TestCancellableOperation(t *testing.T) {
 	executed := false
 	op := NewCancellableOperation(func(ctx context.Context) error {
@@ -360,7 +375,7 @@ func TestCancellableOperation(t *testing.T) {
 	}
 }
 
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] Tests signal handling context
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: verify WithSignalHandling context is active until manual cancel.
 func TestWithSignalHandling(t *testing.T) {
 	ctx, cancel := WithSignalHandling(context.Background())
 	defer cancel()

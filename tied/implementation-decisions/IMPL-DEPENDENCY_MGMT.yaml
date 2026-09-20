@@ -7,60 +7,6 @@ IMPL-DEPENDENCY_MGMT:
     - ARCH-CODE_ORGANIZATION
     - REQ-MAINTAINABILITY
   description: Design clear dependency hierarchy for extracted packages using Go modules for versioning. Core packages have no internal dependencies; higher-level packages compose core packages.
-  essence_pseudocode: |-
-    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # Dependency management: clear hierarchy with core packages having zero internal [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # deps, higher-level packages composing core, and Go modules for versioning. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-
-    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA dependency_hierarchy:
-    DATA dependency_hierarchy:
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Defines allowed dependency directions between package layers. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      core_packages:
-        members: [pkg/config, pkg/errors]
-        allowed_deps: [Go stdlib only]
-        constraint: "No internal package imports"
-      utility_packages:
-        members: [pkg/formatter, pkg/git, pkg/fileops]
-        allowed_deps: [core_packages, Go stdlib]
-        constraint: "May import core; must not import each other"
-      framework_packages:
-        members: [pkg/cli]
-        allowed_deps: [core_packages, utility_packages, Go stdlib]
-        constraint: "Wires utilities; no circular refs"
-      pattern_packages:
-        members: [pkg/processing, pkg/resources]
-        allowed_deps: [core_packages, utility_packages, Go stdlib]
-        constraint: "Reusable patterns built on utilities"
-
-    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE enforce_dependency_rules():
-    PROCEDURE enforce_dependency_rules():
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Each package may only import from its declared dependency set. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each package in all_packages:
-        extract actual imports from source files
-        determine package's layer from dependency_hierarchy
-        CHECK all imports are within allowed_deps for that layer
-        REPORT violations with import path and layer context
-      END FOR
-
-    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE version_with_go_modules():
-    PROCEDURE version_with_go_modules():
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Go modules provide versioning for extracted packages. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      each extracted package has its own go.mod (or is a sub-package)
-      version packages independently using semantic versioning
-      pin dependency versions in go.mod to prevent drift
-      use go mod tidy to validate dependency graph consistency
-
-    # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE no_circular_dependencies():
-    VALIDATE no_circular_dependencies():
-      # [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      # Circular dependency prevention is enforced at build time. [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      run go vet ./... to check for import cycles
-      build import DAG from all packages
-      CHECK DAG has no cycles
-      CHECK DAG respects layer ordering from dependency_hierarchy
   implementation_approach:
     details:
       - Clear layering prevents circular dependencies
@@ -70,11 +16,11 @@ IMPL-DEPENDENCY_MGMT:
     summary: Design clear dependency hierarchy with Go modules for versioning
   metadata:
     author: AI Agent
-    created: "2026-03-12"
+    created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Dependency Management
   rationale:
     benefits:

@@ -10,7 +10,6 @@
 // Source: main.go - CLI-GLOBAL-001
 // Impact: Validates global CLI options functionality
 package main
-
 import (
 	"bytes"
 	"fmt"
@@ -1026,7 +1025,7 @@ func TestMain_Integration_CommandValidation(t *testing.T) {
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Path type detection and command routing validation
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: integration test validates validatePath, isFile, and isDirectory for file, directory, missing, and absolute paths.
 func TestMain_Integration_CLI015_AutoDetection(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1129,7 +1128,7 @@ func TestMain_Integration_CLI015_AutoDetection(t *testing.T) {
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Backward compatibility with explicit commands
+// - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: explicit backup, create, and full subcommands still execute via Cobra without auto-detect path routing.
 func TestMain_Integration_CLI015_BackwardCompatibility(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1167,7 +1166,6 @@ func TestMain_Integration_CLI015_BackwardCompatibility(t *testing.T) {
 	}
 }
 
-// [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Edge cases: symlinks, special characters in paths
 func TestMain_Integration_CLI015_EdgeCases(t *testing.T) {
 	tmpDir := t.TempDir()
 	originalWd, _ := os.Getwd()
@@ -1280,7 +1278,7 @@ func TestDebugFlagControlsOutput(t *testing.T) {
 	}
 }
 
-// [REQ-LIST_LIMIT] [ARCH-LIST_LIMIT] [IMPL-LIST_LIMIT] [TEST-LIST_LIMIT] Test list command limit functionality
+// - [IMPL-LIST_LIMIT] [ARCH-LIST_LIMIT] [REQ-LIST_LIMIT] [REQ-OUTPUT_FORMATTING] — How: sort archives most-recent-first then truncate to limit when limit > 0 before formatted output.
 func TestListArchivesEnhanced_WithLimit(t *testing.T) {
 	t.Run("default limit of 10", func(t *testing.T) {
 		testListArchivesDefaultLimit(t)

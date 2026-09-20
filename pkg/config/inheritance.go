@@ -1,4 +1,3 @@
-// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
 // Package config provides inheritance chain building and path resolution.
 //
 // This file implements the core inheritance functionality that builds dependency
@@ -60,7 +59,7 @@ func (b *DefaultInheritanceChainBuilder) BuildChain(configPath string, pathResol
 	return chain, nil
 }
 
-// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
+// - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: resolve path, detect circular visit, load inherit list, recurse parents with parent directory as base, append file to chain.
 func (b *DefaultInheritanceChainBuilder) buildChainRecursive(configPath, basePath string, pathResolver PathResolver, chain *InheritanceChain) error {
 	// Resolve the full path
 	resolvedPath, err := pathResolver.ResolvePath(configPath, basePath)
@@ -206,7 +205,7 @@ func NewPathResolver(fileOps ConfigFileOperations) *DefaultPathResolver {
 	}
 }
 
-// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
+// - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: expand path then return absolute clean path or join with base directory of parent config file.
 func (r *DefaultPathResolver) ResolvePath(path string, basePath string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")
@@ -239,7 +238,7 @@ func (r *DefaultPathResolver) ResolvePath(path string, basePath string) (string,
 	return filepath.Clean(resolvedPath), nil
 }
 
-// [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
+// - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: expand tilde-prefixed paths to home directory and expand environment variables in path text.
 func (r *DefaultPathResolver) ExpandPath(path string) (string, error) {
 	if path == "" {
 		return "", fmt.Errorf("path cannot be empty")

@@ -8,21 +8,6 @@ IMPL-STDD_VIS_ASSETS:
     - ARCH-STDD_VIS_FLOW
     - REQ-MODULE_VALIDATION
     - REQ-STDD_VIS
-  essence_pseudocode: |-
-    # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
-
-    procedure stdd_visualization_asset_plan():
-      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Layered Flow Diagram: swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST/CODE; tokens visually dominant
-      layered_flow_diagram("swimlane/Sankey-style view with lanes for REQ/ARCH/IMPL/TEST")
-      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Timeline/Animation: stepwise frames showing requirement through architecture, implementation, tests, and code; token badges visible per step
-      timeline_animation("stepwise frames showing requirement through architecture, im")
-      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Asset locations: docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-timeline.gif/mp4
-      asset_locations("docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-t")
-      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Validation: visual review checklist centered on token prominence, color map alignment, edge correctness
-      validation("visual review checklist centered on token prominence, color ")
-      # [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Module boundaries: Visualization (static) and AnimationTimeline (dynamic) consume same data snapshot
-      module_boundaries("Visualization (static) and AnimationTimeline (dynamic) consu")
-      end
   implementation_approach:
     details:
       - 'Asset locations: docs/images/stdd-trace-flow.svg and docs/images/stdd-trace-timeline.gif/mp4'
@@ -33,8 +18,11 @@ IMPL-STDD_VIS_ASSETS:
     summary: Produce layered flow diagram and timeline/animation artifacts from the data pipeline with token-centric design
   metadata:
     author: AI Agent
-    created: "2026-03-12"
-    last_updated: "2026-03-12"
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: STDD Visualization Asset Plan
   rationale:
     benefits:

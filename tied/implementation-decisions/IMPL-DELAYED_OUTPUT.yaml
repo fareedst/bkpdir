@@ -1,154 +1,63 @@
 IMPL-DELAYED_OUTPUT:
   code_locations:
     files:
-      - path: formatter.go
-        description: OutputMessage struct, OutputCollector type and methods, OutputFormatter delayed-mode fields and Print* routing
-      - path: ai_formatter_adapter.go
-        description: NewOutputFormatterWithCollector constructor bridging Config + OutputCollector to AIFormatterAdapter
-      - path: pkg/formatter/formatter_test.go
-        description: Unit tests for OutputCollector and delayed output mode
+      - description: NewOutputFormatterWithCollector constructor bridging Config + OutputCollector to AIFormatterAdapter
+        path: ai_formatter_adapter.go
+      - description: OutputMessage struct, OutputCollector type and methods, OutputFormatter delayed-mode fields and Print* routing
+        path: formatter.go
+      - description: Unit tests for OutputCollector and delayed output mode
+        path: pkg/formatter/formatter_test.go
     functions:
-      - name: OutputMessage
-        description: Struct with Content, Destination, and Type fields for delayed messages
+      - description: Appends a stderr message to the collector
         file: formatter.go
-      - name: OutputCollector
-        description: Collects OutputMessage items for deferred display
+        name: OutputCollector.AddStderr
+      - description: Appends a stdout message to the collector
         file: formatter.go
-      - name: NewOutputCollector
-        description: Constructor returning empty OutputCollector
+        name: OutputCollector.AddStdout
+      - description: Attaches or removes the OutputCollector
         file: formatter.go
-      - name: OutputCollector.AddStdout
-        description: Appends a stdout message to the collector
+        name: OutputFormatter.SetCollector
+      - description: Collects OutputMessage items for deferred display
         file: formatter.go
-      - name: OutputCollector.AddStderr
-        description: Appends a stderr message to the collector
+        name: OutputCollector
+      - description: Constructor returning empty OutputCollector
         file: formatter.go
-      - name: OutputCollector.GetMessages
-        description: Returns all collected messages
-        file: formatter.go
-      - name: OutputCollector.FlushAll
-        description: Writes all collected messages to their destinations and clears
-        file: formatter.go
-      - name: OutputCollector.FlushStdout
-        description: Writes only stdout messages and retains stderr
-        file: formatter.go
-      - name: OutputCollector.FlushStderr
-        description: Writes only stderr messages and retains stdout
-        file: formatter.go
-      - name: OutputCollector.Clear
-        description: Discards all collected messages without writing
-        file: formatter.go
-      - name: OutputFormatter.IsDelayedMode
-        description: Returns true when a collector is set
-        file: formatter.go
-      - name: OutputFormatter.GetCollector
-        description: Returns the current OutputCollector or nil
-        file: formatter.go
-      - name: OutputFormatter.SetCollector
-        description: Attaches or removes the OutputCollector
-        file: formatter.go
-      - name: NewOutputFormatterWithCollector
-        description: Creates AIFormatterAdapter in delayed mode with a pre-set collector
+        name: NewOutputCollector
+      - description: Creates AIFormatterAdapter in delayed mode with a pre-set collector
         file: ai_formatter_adapter.go
+        name: NewOutputFormatterWithCollector
+      - description: Discards all collected messages without writing
+        file: formatter.go
+        name: OutputCollector.Clear
+      - description: Returns all collected messages
+        file: formatter.go
+        name: OutputCollector.GetMessages
+      - description: Returns the current OutputCollector or nil
+        file: formatter.go
+        name: OutputFormatter.GetCollector
+      - description: Returns true when a collector is set
+        file: formatter.go
+        name: OutputFormatter.IsDelayedMode
+      - description: Struct with Content, Destination, and Type fields for delayed messages
+        file: formatter.go
+        name: OutputMessage
+      - description: Writes all collected messages to their destinations and clears
+        file: formatter.go
+        name: OutputCollector.FlushAll
+      - description: Writes only stderr messages and retains stdout
+        file: formatter.go
+        name: OutputCollector.FlushStderr
+      - description: Writes only stdout messages and retains stderr
+        file: formatter.go
+        name: OutputCollector.FlushStdout
   cross_references:
     - ARCH-OUTPUT_FORMATTING
     - REQ-OUTPUT_FORMATTING
   description: Implement delayed output functionality by returning output messages to calling functions instead of direct stdout/stderr printing, enabling better control over when and how output is displayed
-  essence_pseudocode: |-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Delayed output management: buffer output messages and flush selectively
-
-    struct OutputMessage:                              # [IMPL-DELAYED_OUTPUT] — data carrier for one deferred message
-      Content     string                               # the text to display
-      Destination string                               # "stdout" or "stderr"
-      Type        string                               # "info", "error", "warning", etc.
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: struct OutputCollector:                             # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] — accumulates Outpu
-    struct OutputCollector:                             # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] — accumulates OutputMessages for later display
-      messages []OutputMessage
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure NewOutputCollector() -> *OutputCollector: # [IMPL-DELAYED_OUTPUT] — factory: returns empty collector
-    procedure NewOutputCollector() -> *OutputCollector: # [IMPL-DELAYED_OUTPUT] — factory: returns empty collector
-      return &OutputCollector{messages: []}
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure AddStdout(content, messageType):          # [IMPL-DELAYED_OUTPUT] [REQ-OUTPUT_FORMATTING] — append a stdout-bo
-    procedure AddStdout(content, messageType):          # [IMPL-DELAYED_OUTPUT] [REQ-OUTPUT_FORMATTING] — append a stdout-bound message
-      append messages <- OutputMessage{content, "stdout", messageType}
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure AddStderr(content, messageType):          # [IMPL-DELAYED_OUTPUT] [REQ-OUTPUT_FORMATTING] — append a stderr-bo
-    procedure AddStderr(content, messageType):          # [IMPL-DELAYED_OUTPUT] [REQ-OUTPUT_FORMATTING] — append a stderr-bound message
-      append messages <- OutputMessage{content, "stderr", messageType}
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure GetMessages() -> []OutputMessage:         # [IMPL-DELAYED_OUTPUT] — return snapshot of buffered messages
-    procedure GetMessages() -> []OutputMessage:         # [IMPL-DELAYED_OUTPUT] — return snapshot of buffered messages
-      return messages
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure FlushAll():                               # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] — write every messa
-    procedure FlushAll():                               # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] — write every message to its destination, then clear
-      for msg in messages:
-        if msg.Destination == "stderr":
-          write msg.Content to stderr
-        else:
-          write msg.Content to stdout
-      messages = []
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure FlushStdout():                            # [IMPL-DELAYED_OUTPUT] — write only stdout messages, keep stderr
-    procedure FlushStdout():                            # [IMPL-DELAYED_OUTPUT] — write only stdout messages, keep stderr
-      remaining = []
-      for msg in messages:
-        if msg.Destination == "stdout":
-          write msg.Content to stdout
-        else:
-          append remaining <- msg
-      messages = remaining
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure FlushStderr():                            # [IMPL-DELAYED_OUTPUT] — write only stderr messages, keep stdout
-    procedure FlushStderr():                            # [IMPL-DELAYED_OUTPUT] — write only stderr messages, keep stdout
-      remaining = []
-      for msg in messages:
-        if msg.Destination == "stderr":
-          write msg.Content to stderr
-        else:
-          append remaining <- msg
-      messages = remaining
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure Clear():                                  # [IMPL-DELAYED_OUTPUT] — discard all buffered messages
-    procedure Clear():                                  # [IMPL-DELAYED_OUTPUT] — discard all buffered messages
-      messages = []
-
-    # --- OutputFormatter delayed-mode integration --- [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: struct OutputFormatter:                              # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] — extended with op
-    struct OutputFormatter:                              # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] — extended with optional collector
-      cfg       *Config
-      collector *OutputCollector                         # nil = immediate mode; non-nil = delayed mode
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure IsDelayedMode() -> bool:                  # [IMPL-DELAYED_OUTPUT] — check whether collector is attached
-    procedure IsDelayedMode() -> bool:                  # [IMPL-DELAYED_OUTPUT] — check whether collector is attached
-      return collector != nil
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure GetCollector() -> *OutputCollector:        # [IMPL-DELAYED_OUTPUT] — accessor
-    procedure GetCollector() -> *OutputCollector:        # [IMPL-DELAYED_OUTPUT] — accessor
-      return collector
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure SetCollector(c *OutputCollector):          # [IMPL-DELAYED_OUTPUT] — mutator (nil removes delayed mode)
-    procedure SetCollector(c *OutputCollector):          # [IMPL-DELAYED_OUTPUT] — mutator (nil removes delayed mode)
-      collector = c
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure Print*(args...):                          # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATT
-    procedure Print*(args...):                          # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — every Print method routes through collector when delayed
-      message = Format*(args...)
-      if collector != nil:
-        collector.AddStdout(message, type)              # or AddStderr for error messages
-      else:
-        write message to stdout                         # or stderr for error messages
-
-    # [IMPL-DELAYED_OUTPUT] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure NewOutputFormatterWithCollector(cfg, collector): # [IMPL-DELAYED_OUTPUT] — constructor for delayed mode
-    procedure NewOutputFormatterWithCollector(cfg, collector): # [IMPL-DELAYED_OUTPUT] — constructor for delayed mode
-      return AIFormatterAdapter with cfg and collector pre-set
   implementation_approach:
     details:
-      - 'Added OutputCollector with methods: AddStdout, AddStderr, FlushAll, FlushStdout, FlushStderr, Clear'
       - Added NewOutputFormatterWithCollector constructor for delayed output mode
+      - 'Added OutputCollector with methods: AddStdout, AddStderr, FlushAll, FlushStdout, FlushStderr, Clear'
       - Added OutputMessage struct with Content, Destination, and Type fields
       - Enhanced OutputFormatter with optional collector field and delayed mode support
       - Maintained full backward compatibility - existing code works unchanged
@@ -156,11 +65,11 @@ IMPL-DELAYED_OUTPUT:
     summary: Add OutputCollector with OutputMessage structs and enhance OutputFormatter with optional delayed mode
   metadata:
     author: AI Agent
-    created: "2026-03-12"
+    created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Delayed Output Management
   rationale:
     benefits:
@@ -186,12 +95,12 @@ IMPL-DELAYED_OUTPUT:
     requirements:
       - REQ-OUTPUT_FORMATTING
     tests:
-      - name: TestOutputCollector
-        description: Validates AddStdout, AddStderr, GetMessages, Clear lifecycle
+      - description: Validates AddStdout, AddStderr, GetMessages, Clear lifecycle
         file: pkg/formatter/formatter_test.go
-      - name: TestDelayedOutputMode
-        description: Validates IsDelayedMode, GetCollector, PrintCreatedArchive and PrintError routing through collector
+        name: TestOutputCollector
+      - description: Validates IsDelayedMode, GetCollector, PrintCreatedArchive and PrintError routing through collector
         file: pkg/formatter/formatter_test.go
-      - name: TestInterfaceCompliance
-        description: Validates SetCollector and delayed-output interface methods
+        name: TestDelayedOutputMode
+      - description: Validates SetCollector and delayed-output interface methods
         file: pkg/formatter/formatter_test.go
+        name: TestInterfaceCompliance

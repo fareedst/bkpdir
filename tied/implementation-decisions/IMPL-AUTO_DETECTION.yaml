@@ -17,102 +17,6 @@ IMPL-AUTO_DETECTION:
     - ARCH-AUTO_DETECTION
     - REQ-USABILITY
   description: Path type detection with command routing logic enabling intuitive CLI usage where users can pass a file or directory path directly instead of using explicit subcommands
-  essence_pseudocode: |-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Path type detection with command routing logic for intuitive CLI usage
-
-    function isFile(path string) -> bool:
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Detect if path is a regular file using os.Stat
-      info, err := os.Stat(path)
-      if err != nil: return false
-      return info.Mode().IsRegular()
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function isDirectory(path string) -> bool:
-    function isDirectory(path string) -> bool:
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Detect if path is a directory using os.Stat
-      info, err := os.Stat(path)
-      if err != nil: return false
-      return info.IsDir()
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function validatePath(path string) -> error:
-    function validatePath(path string) -> error:
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Validate path exists and is accessible with specific error messages
-      _, err := os.Stat(path)
-      if err:
-        if os.IsNotExist(err): return "path does not exist: {path}"
-        if os.IsPermission(err): return "permission denied accessing path: {path}"
-        return "error accessing path {path}: {err}"
-      return nil
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function newRootCommand() -> *cobra.Command:
-    function newRootCommand() -> *cobra.Command:
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Assemble production root: metadata, PersistentFlags, root Run, AddCommand(create, config, template, full, inc, list, diff, backup, version); shared by main and tests
-      return rootCmd
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function executeWithAutoDetection(rootCmd *cobra.Command, args []string) -> error:
-    function executeWithAutoDetection(rootCmd *cobra.Command, args []string) -> error:
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] args is argv without program name; main passes os.Args[1:]; call rootCmd.SetArgs(args) before rootCmd.Execute when dispatching to Cobra
-      if len(args) == 0:
-        rootCmd.SetArgs(args)
-        return rootCmd.Execute()
-
-      firstArg := args[0]
-
-      # Check if first arg is a known command (create, config, list, etc.) or flag (--help, -h, etc.) [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-      knownCommands := [create, config, template, full, inc, list, backup, version, diff, help, --help, -h, --version, -v]
-      globalFlags := [--config, --dry-run, -d, --list]
-      if firstArg in knownCommands or firstArg in globalFlags or firstArg starts with "-":
-        rootCmd.SetArgs(args)
-        return rootCmd.Execute()
-
-      # Parse remaining args to extract global flags (--dry-run, --note) and filter path args [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-      filteredArgs, dryRunFlag, noteFlag := parseGlobalFlags(args)
-
-      # Set global variables dryRun and note for handlers [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-      dryRun = dryRunFlag
-      if noteFlag != "": note = noteFlag
-
-      # Delegate to auto-detection handler [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY]
-      handleAutoDetectedCommand(filteredArgs)
-      return nil
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function handleAutoDetectedCommand(args []string):
-    function handleAutoDetectedCommand(args []string):
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Route to file backup or directory archive based on detected path type
-      if len(args) == 0: exit with "no path provided"
-      path := args[0]
-
-      if err := validatePath(path); err != nil:
-        exit with error
-
-      if isFile(path):
-        handleAutoDetectedFileBackup(args)
-      else if isDirectory(path):
-        handleAutoDetectedDirectoryArchive(args)
-      else:
-        exit with "unsupported file type for path: {path}"
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function handleAutoDetectedFileBackup(args []string):
-    function handleAutoDetectedFileBackup(args []string):
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Load config, build BackupOptions, call CreateFileBackupEnhanced for file path
-      ctx := context.Background()
-      cwd := os.Getwd()
-      cfg := LoadConfig(cwd)
-      formatter := NewOutputFormatter(cfg)
-      filePath := args[0]
-      backupNote := note  # use global --note flag, or args[1] if present
-      CreateFileBackupEnhanced(BackupOptions{ctx, cfg, formatter, filePath, backupNote, dryRun})
-
-    # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — Block implements documented behavior for: function handleAutoDetectedDirectoryArchive(args []string):
-    function handleAutoDetectedDirectoryArchive(args []string):
-      # [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] Chdir to target dir, load config, call CreateFullArchiveWithContext for directory path
-      ctx := context.Background()
-      dirPath := args[0]
-      originalDir := os.Getwd()
-      os.Chdir(dirPath)
-      defer os.Chdir(originalDir)
-      cfg := LoadConfig(".")
-      archiveNote := note  # use global --note flag, or args[1] if present
-      CreateFullArchiveWithContext(ctx, cfg, archiveNote, dryRun)
   implementation_approach:
     details:
       - executeWithAutoDetection(rootCmd, args) takes argv without the program name; calls rootCmd.SetArgs(args) before rootCmd.Execute when dispatching to Cobra; main passes os.Args[1:]; filters known commands/flags; on auto-detect path extracts global flags (--dry-run, --note), then delegates to handleAutoDetectedCommand
@@ -130,13 +34,13 @@ IMPL-AUTO_DETECTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: AI agent
   name: Auto-Detection Implementation

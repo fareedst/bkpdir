@@ -1,5 +1,5 @@
-// [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY]
-// EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// SPEC-ID: IMPL-TESTING::TESTUTIL_FILESYSTEM
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: provide CreateTempDir and CreateTempFile with t.Cleanup registration for isolated filesystem tests.
 package testutil
 
 import (

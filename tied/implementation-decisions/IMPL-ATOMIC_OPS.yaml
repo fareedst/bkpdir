@@ -21,112 +21,6 @@ IMPL-ATOMIC_OPS:
     - ARCH-RESOURCE_MANAGEMENT
     - ARCH-TESTING_STRATEGY
     - REQ-RESOURCE_MANAGEMENT
-  essence_pseudocode: |-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-    # Atomic file operations: write-to-temp then rename for corruption-safe file I/O. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: TYPE AtomicWriter:
-    TYPE AtomicWriter:
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Encapsulates temp-file lifecycle for a single atomic write target. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      FIELDS: targetPath, tempPath, tempFile, isCommitted, isClosed
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: INTERFACE AtomicOp:
-    INTERFACE AtomicOp:
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Contract for atomic write/commit/rollback operations. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      Write(data) -> (n, error)
-      WriteString(s) -> (n, error)
-      Commit() -> error
-      Rollback() -> error
-      Close() -> error
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure NewAtomicWriter(targetPath) -> (*AtomicWriter, error):
-    procedure NewAtomicWriter(targetPath) -> (*AtomicWriter, error):
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Creates temp file in same dir as target for same-filesystem rename. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      INPUT: targetPath string
-      OUTPUT: *AtomicWriter or error
-      validate targetPath via ValidatePath
-      dir = directory of targetPath
-      ensure dir exists (os.MkdirAll)
-      create temp file in dir with pattern base+".tmp.*"
-      return AtomicWriter{targetPath, tempPath, tempFile, committed=false, closed=false}
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriter.Write(data) -> (int, error):
-    procedure AtomicWriter.Write(data) -> (int, error):
-      # [IMPL-ATOMIC_OPS] — Writes bytes to the temp file; guards closed state. [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT]
-      if writer is closed -> error
-      if tempFile is nil -> error
-      delegate to tempFile.Write(data)
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriter.WriteString(s) -> (int, error):
-    procedure AtomicWriter.WriteString(s) -> (int, error):
-      # [IMPL-ATOMIC_OPS] — Convenience wrapper converting string to bytes. [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT]
-      return Write([]byte(s))
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriter.Commit() -> error:
-    procedure AtomicWriter.Commit() -> error:
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Closes temp file then atomically renames to target; cleans up on failure. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      if already committed -> error
-      if closed but tempFile not nil -> error (inconsistent state)
-      close tempFile
-      os.Rename(tempPath, targetPath)   # atomic on same filesystem
-      on rename failure -> cleanup temp file
-      mark committed=true, closed=true
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriter.Rollback() -> error:
-    procedure AtomicWriter.Rollback() -> error:
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Removes temp file without committing; prevents committed rollback. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      if committed -> error
-      call cleanup()
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriter.Close() -> error:
-    procedure AtomicWriter.Close() -> error:
-      # [IMPL-ATOMIC_OPS] — Idempotent close; rolls back if not committed. [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT]
-      if already closed -> no-op
-      if not committed -> Rollback()
-      mark closed=true
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriter.cleanup() -> error:
-    procedure AtomicWriter.cleanup() -> error:
-      # [IMPL-ATOMIC_OPS] — Closes temp file handle and removes temp file from disk. [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT]
-      close tempFile if open
-      remove tempPath (ignore not-exist errors)
-      mark closed=true
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicCopy(src, dst) -> error:
-    procedure AtomicCopy(src, dst) -> error:
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Copies a file atomically: validate paths, stream to AtomicWriter, set perms, commit. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      INPUT: src, dst strings
-      OUTPUT: error
-      validate src readable (ValidateReadable)
-      validate dst path (ValidatePath)
-      open src
-      get src file info for permissions
-      create AtomicWriter for dst (defer Close)
-      io.Copy from src to writer
-      chmod tempPath to match src permissions
-      writer.Commit()
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriteFile(filename, data, perm) -> error:
-    procedure AtomicWriteFile(filename, data, perm) -> error:
-      # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      # Convenience: writes byte slice to file atomically with given permissions. [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-      INPUT: filename string, data []byte, perm FileMode
-      OUTPUT: error
-      create AtomicWriter for filename (defer Close)
-      writer.Write(data)
-      chmod tempPath to perm
-      writer.Commit()
-
-    # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — Block implements documented behavior for: procedure AtomicWriteString(filename, data, perm) -> error:
-    procedure AtomicWriteString(filename, data, perm) -> error:
-      # [IMPL-ATOMIC_OPS] — Convenience: converts string and delegates to AtomicWriteFile. [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT]
-      return AtomicWriteFile(filename, []byte(data), perm)
   implementation_approach:
     details: []
     summary: |-
@@ -150,13 +44,13 @@ IMPL-ATOMIC_OPS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Atomic File Operations
@@ -229,7 +123,31 @@ IMPL-ATOMIC_OPS:
       - errors_test.go::TestAtomicWriteFile
       - errors_test.go::TestAtomicWriteFile_RenameFailure
       - pkg/resources/resources_test.go::TestAtomicWriteFile
-  unit_test_structure: "```go\nfunc TestExampleFeature(t *testing.T) {\n    tests := []struct {\n        name     string\n        input    InputType\n        expected OutputType\n    }{\n        {\n            name:     \"test case 1\",\n            input:    inputValue,\n            expected: expectedValue,\n        },\n    }\n    \n    for _, tt := range tests {\n        t.Run(tt.name, func(t *testing.T) {\n            result := functionUnderTest(tt.input)\n            if result != tt.expected {\n                t.Errorf(\"expected %v, got %v\", tt.expected, result)\n            }\n        })\n    }\n}\n```"
+  unit_test_structure: |-
+    ```go
+    func TestExampleFeature(t *testing.T) {
+        tests := []struct {
+            name     string
+            input    InputType
+            expected OutputType
+        }{
+            {
+                name:     "test case 1",
+                input:    inputValue,
+                expected: expectedValue,
+            },
+        }
+        
+        for _, tt := range tests {
+            t.Run(tt.name, func(t *testing.T) {
+                result := functionUnderTest(tt.input)
+                if result != tt.expected {
+                    t.Errorf("expected %v, got %v", tt.expected, result)
+                }
+            })
+        }
+    }
+    ```
   validation: |-
     - Add unit tests exercising assertion helpers, temp dir lifecycle, archive creation, and command execution patterns.
     - Migrate a small set of tests (e.g., `pkg/config`, `pkg/formatter`, `pkg/fileops`) to demonstrate usage and validate no regressions.

@@ -1,16 +1,16 @@
 IMPL-MODULE_VALIDATION:
   code_locations:
     files:
-      - path: '*_module_test.[ext]'
-        description: Module validation test files
-      - path: '*_validation_test.[ext]'
-        description: Module validation test files (alternate pattern)
-      - path: '*_integration_test.[ext]'
-        description: Integration test files
+      - description: Integration test files
+        path: '*_integration_test.[ext]'
+      - description: Module validation test files
+        path: '*_module_test.[ext]'
+      - description: Module validation test files (alternate pattern)
+        path: '*_validation_test.[ext]'
     functions:
-      - name: testModuleName_IndependentValidation_REQ_MODULE_VALIDATION
-        description: Module validation test function pattern
+      - description: Module validation test function pattern
         file: various test files
+        name: testModuleName_IndependentValidation_REQ_MODULE_VALIDATION
   cross_references:
     - ARCH-MODULE_VALIDATION
     - REQ-MODULE_VALIDATION
@@ -40,13 +40,13 @@ IMPL-MODULE_VALIDATION:
   metadata:
     created:
       author: AI Agent
-      date: 2025-12-18
+      date: {}
     last_updated:
       author: AI Agent
-      date: 2026-02-06
+      date: {}
       reason: Restructured to v1.5.0 schema with machine-parseable fields
     last_validated:
-      date: 2026-02-06
+      date: {}
       result: pass
       validator: AI Agent
   name: Module Validation Implementation

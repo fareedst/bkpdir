@@ -1,0 +1,44 @@
+ARCH-SPEC_DSL_AND_ORACLE:
+  cross_references:
+    - REQ-MODULE_VALIDATION
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  decision: Parse IMPL formal DSL into an AST; interpret bounded domains via internal/specmodel reference oracle; compare implementation and tests through specctl and specconformance packages
+  implementation_approach:
+    details:
+      - internal/specmodel provides deterministic oracle for pilot domains (e.g. AtomicWriter state machine)
+      - internal/specparse parses sidecar Markdown blocks
+      - specctl matrix links SPEC-ID and STEP to Go tests and symbols
+      - test/specconformance runs property/state tests against oracle and pkg/*
+    summary: DSL parser plus reference model boundary separate from production I/O where full formalization is impractical
+  metadata:
+    created:
+      author: AI Agent
+      date: '2026-06-02'
+    last_updated:
+      author: AI Agent
+      date: '2026-06-02'
+      reason: Formal verification architecture
+  name: Spec DSL Parser and Reference Oracle
+  rationale:
+    benefits:
+      - Testable PRE/POST without pasting Go into sidecars
+      - Unambiguous spec element IDs for CI coverage
+    problems_solved:
+      - Layer B checklist assumed parser output that did not exist
+    why: Close the gap between traceability discipline and machine-verifiable specification
+  related_decisions:
+    depends_on: []
+    informs:
+      - IMPL-SPEC_CTL
+    see_also:
+      - ARCH-MODULE_VALIDATION
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-SPEC_DSL_AND_ORACLE
+    implementation:
+      - IMPL-SPEC_CTL
+    requirements:
+      - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    tests:
+      - TestSpecctlValidate_REQ_PSEUDOCODE_FORMAL_VERIFICATION

@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "receipt": {
+    "success": true,
+    "tool": "tied_adversarial_inquiry_run",
+    "request_token": "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+    "project_id": "/Users/fareed/Documents/dev/go/bkpdir",
+    "run_id": "lead-hygiene-20260919-pre",
+    "phase": "pre_implementation",
+    "scope_hash": "46d09bf752da0e6eb61e8ad64d67462539c9ce3793736f04c37acf13a1537b75",
+    "artifact_hashes": {
+      "obligation-report.json": "0ebef0bd6b7b944bfaef6cad58df6bbf3c63c7acd1aaa498674905c56b91ff37",
+      "finding-ledger.jsonl": "866143998f277c2fa18b1451df92edf30aa39fc8d4b61eb14a19167df1b48d36",
+      "gate-result.json": "5822af649d681989781735a4f716c674e3e6b510253245f130aefd41aa2fd607",
+      "evidence-provenance.json": "660496135561dce7f679d2d5ef3493e682c8d8820ea8abf1e236a498f425f2de"
+    }
+  },
+  "artifacts": {
+    "obligation-report.json": {"valid": true, "hash": "0ebef0bd6b7b944bfaef6cad58df6bbf3c63c7acd1aaa498674905c56b91ff37", "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/obligation-report.json"},
+    "finding-ledger.jsonl": {"valid": true, "hash": "866143998f277c2fa18b1451df92edf30aa39fc8d4b61eb14a19167df1b48d36", "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/finding-ledger.jsonl"},
+    "gate-result.json": {"valid": true, "hash": "5822af649d681989781735a4f716c674e3e6b510253245f130aefd41aa2fd607", "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/gate-result.json"},
+    "evidence-provenance.json": {"valid": true, "hash": "660496135561dce7f679d2d5ef3493e682c8d8820ea8abf1e236a498f425f2de", "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/evidence-provenance.json"}
+  }
+}

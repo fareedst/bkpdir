@@ -2,7 +2,7 @@ ARCH-LIST_LIMIT:
   alternatives_considered: []
   configuration-based_limit: Rejected - command-line flag is more flexible and immediate
   cross-references: '[REQ-LIST_LIMIT], [REQ-USABILITY], [ARCH-CLI_COMMANDS]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-LIST_LIMIT
     - REQ-USABILITY
   decision: Command-line flag to limit list output with default of 10 entries
@@ -19,13 +19,13 @@ ARCH-LIST_LIMIT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: List Command Limit Architecture
@@ -40,7 +40,9 @@ ARCH-LIST_LIMIT:
       Maintains backward compatibility with existing workflows
       Improves usability for common use cases
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -50,5 +52,7 @@ ARCH-LIST_LIMIT:
       - REQ-LIST_LIMIT
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-LIST_LIMIT
+      - REQ-USABILITY
     tests: []

@@ -25,98 +25,19 @@ IMPL-FILE_STATISTICS_TEMPLATE_FIX:
     - ARCH-FILE_STATISTICS
     - REQ-OUT_002
     - REQ-OUTPUT_FORMATTING
-  essence_pseudocode: |-
-    # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
-    # Simplified template processing using direct placeholder replacement for stat-enhanced output [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
-
-    # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] — Block implements documented behavior for: procedure FormatCreatedArchiveWithStats(path):
-    procedure FormatCreatedArchiveWithStats(path):
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [IMPL-FILE_STATISTICS] [REQ-OUT_002] Gather file stats [ARCH-FILE_STATISTICS]
-      statInfo, err = GatherFileStatInfo(path)
-      if err != nil:
-        # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [REQ-OUTPUT_FORMATTING] Graceful fallback to basic printf format [ARCH-FILE_STATISTICS]
-        return FormatCreatedArchive(path)
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [REQ-OUT_002] Build data map from file stats [ARCH-FILE_STATISTICS]
-      data = {
-        "path": statInfo.Path, "name": statInfo.Name,
-        "size": str(statInfo.Size), "size_human": statInfo.SizeHuman,
-        "mtime": statInfo.MTime.Format(...), "mtime_unix": str(statInfo.MTimeUnix),
-        "mode": statInfo.Mode.String(), "type": statInfo.Type,
-      }
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] Load detailed template from config [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
-      templateStr = config.TemplateCreatedArchiveDetailed
-      if templateStr == "":
-        return FormatCreatedArchive(path)
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [REQ-OUTPUT_FORMATTING] Direct #{key} placeholder replacement [ARCH-FILE_STATISTICS]
-      # (bypasses complex formatTemplate to avoid Go text/template fmt conflicts) [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002]
-      result = templateStr
-      for each (key, value) in data:
-        result = replaceAll(result, "#{" + key + "}", value)
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [REQ-OUTPUT_FORMATTING] Safety: fill remaining known placeholders [ARCH-FILE_STATISTICS]
-      if result contains "#{":
-        for each known placeholder, check data map first then use default
-        replace remaining "#{size_human}", "#{size}", "#{mtime}", etc.
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] Final fallback if any unreplaced placeholders remain [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
-      if result still contains "#{":
-        return FormatCreatedArchive(path)
-      return result
-
-    # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] — Block implements documented behavior for: procedure FormatIncrementalCreatedWithStats(path):
-    procedure FormatIncrementalCreatedWithStats(path):
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [IMPL-FILE_STATISTICS] [REQ-OUT_002] Same logic as above for incremental archives [ARCH-FILE_STATISTICS]
-      statInfo, err = GatherFileStatInfo(path)
-      if err != nil:
-        return FormatIncrementalCreated(path)
-
-      data = build_stats_data_map(statInfo)
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] Use incremental detailed template [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
-      templateStr = config.TemplateIncrementalCreatedDetailed
-      if templateStr == "":
-        return FormatIncrementalCreated(path)
-
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [REQ-OUTPUT_FORMATTING] Direct placeholder replacement (same approach) [ARCH-FILE_STATISTICS]
-      result = direct_placeholder_replace(templateStr, data)
-      apply safety fallback for remaining known placeholders
-      if result still contains "#{":
-        return FormatIncrementalCreated(path)
-      return result
-
-    # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] — Block implements documented behavior for: procedure PrintCreatedArchiveWithStats(path):
-    procedure PrintCreatedArchiveWithStats(path):
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [IMPL-DELAYED_OUTPUT] Output routing with delayed mode support [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
-      message = FormatCreatedArchiveWithStats(path)
-      if collector != nil:
-        collector.AddStdout(message, "info")
-      else:
-        print(message)
-
-    # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] — Block implements documented behavior for: procedure PrintIncrementalCreatedWithStats(path):
-    procedure PrintIncrementalCreatedWithStats(path):
-      # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [IMPL-DELAYED_OUTPUT] Same routing for incremental [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING]
-      message = FormatIncrementalCreatedWithStats(path)
-      if collector != nil:
-        collector.AddStdout(message, "info")
-      else:
-        print(message)
   implementation_approach:
     details: []
     summary: '- **Simplified Template Processing**: Replaced complex `formatTemplate` call with direct placeholder replacement loop in `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats`'
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Statistics Template Processing Fix

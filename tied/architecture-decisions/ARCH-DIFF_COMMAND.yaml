@@ -7,7 +7,7 @@ ARCH-DIFF_COMMAND:
   compare_only_against_most_recent_incremental: Rejected - incremental archives are deltas, not complete states
   comparison_engine: Compare reconstructed archive state against current directory state
   cross-references: '[REQ-DIFF_COMMAND], [REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-OUTPUT_FORMATTING], [REQ-CONFIGURATION], [ARCH-DIRECTORY_COMPARISON], [ARCH-CLI_COMMANDS]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CONFIGURATION
     - REQ-DIFF_COMMAND
     - REQ-INCREMENTAL_DUPLICATE_PREVENTION
@@ -38,13 +38,13 @@ ARCH-DIFF_COMMAND:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Diff Command Architecture
@@ -58,7 +58,11 @@ ARCH-DIFF_COMMAND:
       Reusing diff logic for duplicate prevention ensures consistency
       Enables users to preview what would be included in next incremental backup
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
     informs: []
     see_also: []
   separate_diff_logic_from_duplicate_prevention: Rejected - code duplication, inconsistency risk
@@ -71,6 +75,10 @@ ARCH-DIFF_COMMAND:
       - REQ-INCREMENTAL_DUPLICATE_PREVENTION
       - REQ-OUTPUT_FORMATTING
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
     tests: []
   use_file_modification_times_for_archive_selection: Rejected - less reliable than name-based sorting, archive names include timestamps that are alphabetically sortable, simpler implementation without file system stat calls

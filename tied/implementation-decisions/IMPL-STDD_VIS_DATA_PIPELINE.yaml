@@ -8,36 +8,22 @@ IMPL-STDD_VIS_DATA_PIPELINE:
     - ARCH-STDD_VIS_FLOW
     - REQ-MODULE_VALIDATION
     - REQ-STDD_VIS
-  essence_pseudocode: |-
-    # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — Input STDD documents, normalize token nodes by type, emit cross-reference edges, export graph JSON and sample CSV
-
-    procedure stdd_visualization_data_pipeline():
-      # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Input sources: semantic-tokens.md, requirements.md, architecture-decisions.md, implementation-decisions.md, and sampled code/test anchors
-      input_sources("semantic-tokens.md, requirements.md, architecture-decisions.")
-      # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references
-      normalize_nodes_by_type()
-      # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Capture token metadata (type, status, sample refs) for token prominence in visuals
-      capture_token_metadata_type()
-      # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Export artifacts: docs/data/stdd-trace.json (graph) and docs/data/stdd-samples.csv (sample chains)
-      export_artifacts("docs/data/stdd-trace.json (graph) and docs/data/stdd-samples")
-      # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Validation hooks: schema check, count consistency vs token registry, spot-check two sample chains
-      validation_hooks("schema check, count consistency vs token registry, spot-chec")
-      # [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] Module boundary: DataExtraction outputs normalized graph once; downstream modules consume without re-parsing
-      module_boundary("DataExtraction outputs normalized graph once; downstream mod")
-      end
   implementation_approach:
     details:
+      - Capture token metadata (type, status, sample refs) for token prominence in visuals
       - 'Export artifacts: docs/data/stdd-trace.json (graph) and docs/data/stdd-samples.csv (sample chains)'
       - 'Input sources: semantic-tokens.md, requirements.md, architecture-decisions.md, implementation-decisions.md, and sampled code/test anchors'
       - 'Module boundary: DataExtraction outputs normalized graph once; downstream modules consume without re-parsing'
-      - 'Validation hooks: schema check, count consistency vs token registry, spot-check two sample chains'
-      - Capture token metadata (type, status, sample refs) for token prominence in visuals
       - Normalize nodes by type (REQ/ARCH/IMPL/TEST/CODE) and emit edges for cross-references
+      - 'Validation hooks: schema check, count consistency vs token registry, spot-check two sample chains'
     summary: Input STDD documents, normalize token nodes by type, emit cross-reference edges, export graph JSON and sample CSV
   metadata:
     author: AI Agent
-    created: "2026-03-12"
-    last_updated: "2026-03-12"
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: STDD Visualization Data Pipeline
   rationale:
     benefits:

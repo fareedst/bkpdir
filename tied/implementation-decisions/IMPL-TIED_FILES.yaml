@@ -1,11 +1,11 @@
 IMPL-TIED_FILES:
   code_locations:
     files:
-      - path: copy_files.sh
-        description: Bootstrap script that sets up TIED structure
+      - description: Bootstrap script that sets up TIED structure
         lines:
           - 1
           - 352
+        path: copy_files.sh
   cross_references:
     - ARCH-TIED_STRUCTURE
     - REQ-TIED_SETUP
@@ -35,13 +35,13 @@ IMPL-TIED_FILES:
   metadata:
     created:
       author: AI Agent
-      date: 2025-12-18
+      date: {}
     last_updated:
       author: AI Agent
-      date: 2026-03-27
+      date: {}
       reason: copy_files.sh line range; remove phantom function entry [IMPL-TIED_FILES]
     last_validated:
-      date: 2026-02-06
+      date: {}
       result: pass
       validator: AI Agent
   name: TIED File Creation

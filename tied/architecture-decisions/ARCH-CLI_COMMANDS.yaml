@@ -15,7 +15,7 @@ ARCH-CLI_COMMANDS:
     ```
   context_support: All long-running operations support context cancellation
   cross-references: '[REQ-USABILITY], [REQ-OUTPUT_FORMATTING]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-OUTPUT_FORMATTING
     - REQ-USABILITY
   decision: Intuitive command structure with backward compatibility
@@ -29,13 +29,13 @@ ARCH-CLI_COMMANDS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CLI Commands Architecture
@@ -49,7 +49,9 @@ ARCH-CLI_COMMANDS:
       Supports both directory and file operations
       Clear command hierarchy
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -59,5 +61,7 @@ ARCH-CLI_COMMANDS:
       - REQ-OUTPUT_FORMATTING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-OUTPUT_FORMATTING
+      - REQ-USABILITY
     tests: []

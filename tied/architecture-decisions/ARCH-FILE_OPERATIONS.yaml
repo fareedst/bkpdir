@@ -1,14 +1,14 @@
 ARCH-FILE_OPERATIONS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Direct standard library usage: Rejected due to lack of atomic operations and security checks
         Third-party file libraries: Rejected due to dependency concerns
   atomic_operations: Safe file writing with rollback capabilities
   cross-references: '[REQ-RELIABILITY], [REQ-RESOURCE_MANAGEMENT]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-RELIABILITY
     - REQ-RESOURCE_MANAGEMENT
   decision: Extracted file operations package with atomic operations and security focus
@@ -20,13 +20,13 @@ ARCH-FILE_OPERATIONS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Operations Architecture
@@ -47,7 +47,9 @@ ARCH-FILE_OPERATIONS:
       Supports complex directory traversal scenarios
       Enables file comparison and snapshot capabilities
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     informs: []
     see_also: []
   security_focus:
@@ -62,5 +64,7 @@ ARCH-FILE_OPERATIONS:
       - REQ-RELIABILITY
       - REQ-RESOURCE_MANAGEMENT
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-RELIABILITY
+      - REQ-RESOURCE_MANAGEMENT
     tests: []

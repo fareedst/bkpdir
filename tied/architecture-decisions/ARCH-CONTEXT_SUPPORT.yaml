@@ -1,7 +1,7 @@
 ARCH-CONTEXT_SUPPORT:
   alternatives_considered: []
   cross-references: '[REQ-CONTEXT_SUPPORT], [REQ-USABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CONTEXT_SUPPORT
     - REQ-USABILITY
   decision: Support context cancellation for long-running operations
@@ -20,13 +20,13 @@ ARCH-CONTEXT_SUPPORT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Context-Aware Operations
@@ -39,7 +39,9 @@ ARCH-CONTEXT_SUPPORT:
       Better user experience for long operations
       Standard Go pattern for cancellable operations
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -49,5 +51,7 @@ ARCH-CONTEXT_SUPPORT:
       - REQ-CONTEXT_SUPPORT
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
     tests: []

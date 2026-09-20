@@ -11,77 +11,19 @@ IMPL-EXTRACTION_CHALLENGES:
     - REQ-CONFIGURATION
     - REQ-MAINTAINABILITY
   design_note: Comprehensive testing ensures extracted components are production-ready
-  essence_pseudocode: |-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION]
-    # [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION] [IMPL-EXTRACTION_CHALLENGES]
-    # Strategies for handling challenges that arise during package extraction: [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-    # test migration, config coupling, and integration test preservation. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: DATA challenge_registry:
-    DATA challenge_registry:
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] [REQ-CONFIGURATION]
-      # [REQ-MAINTAINABILITY] [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION]
-      # Known extraction challenges with their resolution strategies. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      test_duplication:
-        problem: "Extracted packages need tests without duplicating root-level tests"
-        solution: "Create package-specific unit tests; keep root integration tests"
-      config_coupling:
-        problem: "Config struct used across all packages creates tight coupling"
-        solution: "Define per-package config interfaces; adapter pattern at boundaries"
-      integration_breakage:
-        problem: "Moving code to packages may break existing integration tests"
-        solution: "Maintain wrapper functions and type aliases during transition"
-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE extract_test_utilities():
-    PROCEDURE extract_test_utilities():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
-      # Extract shared test helpers first so package-specific tests can use them. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      identify shared test helpers (builders, fixtures, assertions)
-      move helpers to testutil package or package-internal test helpers
-      update import paths in all consuming test files
-      VALIDATE all existing tests still pass after helper extraction
-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE create_package_specific_tests():
-    PROCEDURE create_package_specific_tests():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
-      # Each extracted package gets focused unit tests covering its interface contract. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      FOR each extracted_package:
-        write unit tests for public API surface
-        write edge-case tests for error paths
-        mock dependencies using interfaces (not concrete types)
-        VALIDATE package tests pass in isolation (no root-level imports)
-      END FOR
-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: PROCEDURE resolve_config_coupling():
-    PROCEDURE resolve_config_coupling():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-      # Config coupling is the hardest extraction challenge; resolved via interfaces. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      define ConfigProvider interface per package (minimal method set)
-      implement adapter in root package that wraps full Config struct
-      extracted package depends only on its ConfigProvider interface
-      VALIDATE no extracted package imports root config directly
-
-    # [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Block implements documented behavior for: VALIDATE integration_test_preservation():
-    VALIDATE integration_test_preservation():
-      # [IMPL-EXTRACTION_CHALLENGES] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY]
-      # Original integration tests must continue to pass throughout extraction. [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY]
-      run full integration test suite after each package extraction
-      CHECK no test failures introduced by extraction
-      CHECK test coverage does not decrease
-      REPORT any tests that need updating due to import path changes
   implementation_approach:
     details: []
     summary: See detail file
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Extraction Challenges and Solutions

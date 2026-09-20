@@ -6,76 +6,35 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
     - '`config.go` line 2289: `buildChainRecursive(parentPath, filepath.Dir(resolvedPath), pathResolver, chain)`'
   code_locations:
     files:
-      - path: config.go
-        description: Core path resolution and inheritance chain building for configuration files
-      - path: pkg/config/inheritance.go
-        description: Extracted inheritance chain builder, path resolver, and circular dependency detector
+      - description: Core path resolution and inheritance chain building for configuration files
+        path: config.go
+      - description: Extracted inheritance chain builder, path resolver, and circular dependency detector
+        path: pkg/config/inheritance.go
     functions:
-      - name: buildChainRecursive
-        description: Recursively builds inheritance chain; passes filepath.Dir(resolvedPath) as basePath for parent resolution
+      - description: Expands ~ to home directory and environment variables in paths
         file: config.go
-      - name: resolvePath
-        description: Resolves relative paths against basePath with home directory expansion and directory/file detection
+        name: ExpandPath
+      - description: Extracted path expansion for ~ and environment variables
+        file: pkg/config/inheritance.go
+        name: ExpandPath
+      - description: Extracted path resolver with ~ expansion and relative path joining
+        file: pkg/config/inheritance.go
+        name: ResolvePath
+      - description: Extracted version; passes filepath.Dir(resolvedPath) as basePath for parent resolution
+        file: pkg/config/inheritance.go
+        name: buildChainRecursive
+      - description: Recursively builds inheritance chain; passes filepath.Dir(resolvedPath) as basePath for parent resolution
         file: config.go
-      - name: ExpandPath
-        description: Expands ~ to home directory and environment variables in paths
+        name: buildChainRecursive
+      - description: Resolves relative paths against basePath with home directory expansion and directory/file detection
         file: config.go
-      - name: buildChainRecursive
-        description: Extracted version; passes filepath.Dir(resolvedPath) as basePath for parent resolution
-        file: pkg/config/inheritance.go
-      - name: ResolvePath
-        description: Extracted path resolver with ~ expansion and relative path joining
-        file: pkg/config/inheritance.go
-      - name: ExpandPath
-        description: Extracted path expansion for ~ and environment variables
-        file: pkg/config/inheritance.go
+        name: resolvePath
   cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CONFIGURATION], [IMPL-TEST_CFG_005_P1]'
   cross_references:
     - ARCH-CFG_005
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  date: "2025-12-11"
-  essence_pseudocode: |-
-    # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
-    # Bug fixes for inheritance path resolution: buildChainRecursive passes directory [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-    # (not file path) as basePath; resolvePath expands ~ before resolving; resolvePath [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-    # distinguishes directory vs file basePath. [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-
-    # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: procedure ExpandPath(path):
-    procedure ExpandPath(path):
-      # Expands ~ and environment variables in a path string. [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-      IF path is empty THEN RETURN error
-      IF path starts with "~/" THEN
-        homeDir = os.UserHomeDir()
-        RETURN join(homeDir, path[2:])
-      RETURN os.ExpandEnv(path)
-
-    # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: procedure resolvePath(path, basePath):
-    procedure resolvePath(path, basePath):
-      # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] — resolves path relative to basePath with ~ expansion. [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
-      expandedPath = ExpandPath(path)
-      IF expandedPath is absolute THEN RETURN clean(expandedPath)
-      IF basePath is empty THEN RETURN expandedPath
-      # Determine if basePath is a directory or file [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-      IF stat(basePath).IsDir() THEN
-        baseDir = basePath
-      ELSE
-        baseDir = filepath.Dir(basePath)
-      # If basePath doesn't exist, assume it's already a directory (from filepath.Dir) [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-      RETURN clean(join(baseDir, expandedPath))
-
-    # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: procedure buildChainRecursive(configPath, basePath, pathResolver, chain):
-    procedure buildChainRecursive(configPath, basePath, pathResolver, chain):
-      # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] — builds inheritance chain recursively. [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION]
-      resolvedPath = pathResolver.resolvePath(configPath, basePath)
-      IF chain.visited[resolvedPath] THEN RETURN error("circular dependency")
-      pathResolver.validatePath(resolvedPath)
-      chain.visited[resolvedPath] = true
-      inheritance = loadInheritanceMetadata(resolvedPath)
-      FOR EACH parentPath IN inheritance:
-        # KEY FIX: pass filepath.Dir(resolvedPath) not resolvedPath as basePath [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005]
-        buildChainRecursive(parentPath, filepath.Dir(resolvedPath), pathResolver, chain)
-      chain.files.append(resolvedPath)
+  date: '2025-12-11'
   fixed_buildchainrecursive_basepath: Changed line 2289 from `resolvedPath` to `filepath.Dir(resolvedPath)` when passing basePath to recursive calls
   fixed_resolvepath_directory_handling: 'Updated `resolvePath` to:'
   implementation_approach:
@@ -84,13 +43,13 @@ IMPL-CFG_INHERITANCE_PATH_RESOLUTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Inheritance Path Resolution Fix

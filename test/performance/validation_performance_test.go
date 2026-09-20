@@ -1,6 +1,5 @@
 // [REQ-PERFORMANCE]
 package performance
-
 import (
 	"context"
 	"encoding/json"

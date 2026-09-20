@@ -1,7 +1,7 @@
 ARCH-CLI_FRAMEWORK:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Custom CLI framework: Rejected due to maintenance overhead
@@ -9,7 +9,7 @@ ARCH-CLI_FRAMEWORK:
   command_builder: Builder pattern for constructing Cobra commands
   context_manager: Context propagation for cancellation and timeouts
   cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
   decision: Extracted CLI framework with builder patterns and Cobra integration
@@ -30,13 +30,13 @@ ARCH-CLI_FRAMEWORK:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CLI Framework Architecture
@@ -50,7 +50,9 @@ ARCH-CLI_FRAMEWORK:
       Enables consistent user experience across applications
       Integrates with popular Cobra framework
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     informs: []
     see_also: []
   status: Active
@@ -60,6 +62,8 @@ ARCH-CLI_FRAMEWORK:
       - REQ-MAINTAINABILITY
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     tests: []
   version_manager: Version display and build information handling

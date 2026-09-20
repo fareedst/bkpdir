@@ -151,8 +151,7 @@ func (f *AICoreFormatter) FormatWithPlaceholders(format string, data map[string]
 	return result, nil
 }
 
-// [CRITICAL] FMT-001: AI-friendly context formatting - [ACTION:core-functionality]
-// [IMPL-LIST_FORMAT_SAFETY] Guard list formatting and use placeholder substitution when appropriate
+// - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: guard list FormatWithContext branch with template detection before printf.
 func (f *AICoreFormatter) FormatWithContext(ctx FormatContext) (string, error) {
 	switch ctx.FormatType {
 	case FormatTypeCreated, FormatTypeIdentical, FormatTypeDryRun:

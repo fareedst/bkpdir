@@ -5,17 +5,6 @@ IMPL-ZERO_BREAKING:
   cross_references:
     - ARCH-CODE_ORGANIZATION
     - REQ-MAINTAINABILITY
-  essence_pseudocode: |-
-    # [IMPL-ZERO_BREAKING] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — Comprehensive test coverage and behavioral verification ensure extraction does not change existing application behavior
-
-    procedure zero_breaking_change_extraction():
-      # [IMPL-ZERO_BREAKING] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Existing tests must continue to pass without modification
-      existing_tests_must_continue()
-      # [IMPL-ZERO_BREAKING] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Comprehensive test coverage before and after extraction
-      comprehensive_test_coverage_before()
-      # [IMPL-ZERO_BREAKING] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] Behavioral verification at each extraction step
-      behavioral_verification_at_each()
-      end
   implementation_approach:
     details:
       - Behavioral verification at each extraction step
@@ -24,8 +13,11 @@ IMPL-ZERO_BREAKING:
     summary: Comprehensive test coverage and behavioral verification ensure extraction does not change existing application behavior
   metadata:
     author: AI Agent
-    created: "2026-03-12"
-    last_updated: "2026-03-12"
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
   name: Zero-Breaking-Change Extraction
   rationale:
     benefits:

@@ -41,88 +41,6 @@ IMPL-DUAL_FORMATTING:
   cross_references:
     - ARCH-OUTPUT_FORMATTING
     - REQ-OUTPUT_FORMATTING
-  essence_pseudocode: |-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
-    # Dual-mode output formatting: printf-style for backward-compat, template-style for rich data [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING]
-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure format_with_printf(formatType, args...):
-    procedure format_with_printf(formatType, args...):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf formatting path
-      formatStr = config.GetFormatString(formatType)
-      if formatStr == "":
-        formatStr = defaultFormats[formatType]
-      return sprintf(formatStr, args...)
-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure format_with_template(templateStr, data map):
-    procedure format_with_template(templateStr, data map):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Template placeholder replacement
-      result = templateStr
-
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Replace #{key} placeholders from data map [ARCH-OUTPUT_FORMATTING]
-      for each (key, value) in data:
-        placeholder = "#{" + key + "}"
-        result = replaceAll(result, placeholder, value)
-
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Fill known missing placeholders with defaults [ARCH-OUTPUT_FORMATTING]
-      knownDefaults = {"#{size_human}": "unknown", "#{size}": "0", "#{mtime}": "unknown"}
-      for each (placeholder, default) in knownDefaults:
-        if result contains placeholder:
-          result = replaceAll(result, placeholder, default)
-
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Handle mixed printf+template strings [ARCH-OUTPUT_FORMATTING]
-      if result contains "%s":
-        replace first %s with data["path"] or data["name"]
-        replace second %s with data["creation_time"] if present
-
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Go text/template fallback [REQ-OUTPUT_FORMATTING]
-      if result contains "{{" and not "#{":
-        parse and execute as Go text/template with data
-        on error: return result as-is (graceful fallback)
-
-      return result
-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure format_list_archive(path, creationTime):
-    procedure format_list_archive(path, creationTime):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] Dual-mode list formatting
-      formatStr = config.GetFormatString("list_archive")
-      if formatStr contains "#{":
-        # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Template path with file stats [ARCH-OUTPUT_FORMATTING]
-        data = {"path": path, "creation_time": creationTime}
-        statInfo = GatherFileStatInfo(path)
-        if statInfo != nil:
-          merge statInfo fields into data
-        else:
-          fill data with safe defaults
-        return format_with_template(formatStr, data)
-      else:
-        # [IMPL-DUAL_FORMATTING] [REQ-OUTPUT_FORMATTING] Printf fallback for backward compatibility [ARCH-OUTPUT_FORMATTING]
-        return sprintf(formatStr, path, creationTime)
-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure print_formatted(formatType, message):
-    procedure print_formatted(formatType, message):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [IMPL-DELAYED_OUTPUT] Output routing [REQ-OUTPUT_FORMATTING]
-      if collector != nil:
-        collector.AddStdout(message, formatType)
-      else:
-        print(message)
-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure extract_pattern_data(pattern, text):
-    procedure extract_pattern_data(pattern, text):
-      # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] Regex-based data extraction for template processing [REQ-OUTPUT_FORMATTING]
-      re = compile(pattern)
-      matches = re.FindStringSubmatch(text)
-      result = empty map
-      for each named group in matches:
-        result[name] = match_value
-      return result
-
-    # [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — Block implements documented behavior for: procedure replace_placeholders(formatStr, data):
-    procedure replace_placeholders(formatStr, data):
-      # [IMPL-DUAL_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Simple #{key} replacement [ARCH-OUTPUT_FORMATTING]
-      result = formatStr
-      for each (key, value) in data:
-        result = replaceAll(result, "#{" + key + "}", value)
-      return result
   implementation_approach:
     details: []
     summary: |-
@@ -133,13 +51,13 @@ IMPL-DUAL_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Dual Printf/Template Formatting

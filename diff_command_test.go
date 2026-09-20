@@ -2,7 +2,6 @@
 // [ARCH-DIFF_COMMAND] Diff command architecture validation
 // [IMPL-DIFF_COMMAND] ReconstructArchiveState and CalculateDiff validation
 package main
-
 import (
 	"archive/zip"
 	"crypto/sha256"

@@ -3,7 +3,7 @@ ARCH-DEPLOYMENT:
   configuration_validation: Schema-based validation with error reporting
   cross-platform: Linux, macOS, Windows support
   cross-references: '[REQ-USABILITY], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-USABILITY
   decision: Single binary distribution with embedded configuration
@@ -15,13 +15,13 @@ ARCH-DEPLOYMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   migration_support: Configuration version upgrades
@@ -35,7 +35,9 @@ ARCH-DEPLOYMENT:
       Fast execution
       Simple installation
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     informs: []
     see_also: []
   single_binary: Self-contained executable with embedded defaults
@@ -47,6 +49,8 @@ ARCH-DEPLOYMENT:
       - REQ-MAINTAINABILITY
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-USABILITY
     tests: []
   version_embedding: Build-time version info with Git integration

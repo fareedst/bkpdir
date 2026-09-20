@@ -8,7 +8,6 @@
 // Licensed under the MIT License
 
 package config
-
 import (
 	"os"
 	"path/filepath"
@@ -27,6 +26,27 @@ type TestConfig struct {
 
 // [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // TestGenericConfigLoader validates the generic config loader with pluggable schema.
+// - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: expand tilde-prefixed paths to home directory and expand environment variables in path text.
+// - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: expand path then return absolute clean path or join with base directory of parent config file.
+// - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: resolve path, detect circular visit, load inherit list, recurse parents with parent directory as base, append file to chain.
+// - [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: return registry entry for field or default to precedence behavior for unknown fields.
+// - [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: on sequential merge skip replace when earlier file set field or dst differs from default; otherwise set field to new value.
+// - [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: for each search path build inheritance chain, merge files in order, track explicitlySetFields only for single-file chains.
+// - [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: in inheritance context skip precedence scalars when earlier sequential file set field; in sequential context skip when explicitlySetFields or dst differs from default.
+// - [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: preserve dst when earlier sequential file set key or sequential dst differs from default; inheritance only checks explicitlySetFields.
+// - [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: walk search paths in order; first file uses inheritContext true; record every raw key in explicitlySetFields after each merge.
+// - [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: delegate to category merge helpers passing explicitlySetFields for precedence-aware scalar merges.
+// - [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: sequential mode only writes fields present in rawSrcMap and not already in explicitlySetFields; inheritance mode allows child overrides when src differs from default.
+// - [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — How: dispatch override, merge, prepend, replace, and default handlers for one processed key.
+// - [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — How: when + merge hits a non-array MergeBehaviorPrecedence field in sequential loading, keep dstValue if an earlier file already set it or dst differs from default.
+// - [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — How: when ^ prepend hits a non-array MergeBehaviorPrecedence field sequentially, preserve dstValue under the same earlier-file rules as applyMerge scalars.
+// - [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: process prefixed keys into operations, honor explicit prefixes over accumulate defaults, and apply each operation via applyMergeOperation with registry-driven behavior.
+// - [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: two-pass scan prefers explicit-prefix keys over duplicate unprefixed entries when building operations per cleanKey.
+// - [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: strip YAML quotes then map leading ! + ^ = to override merge prepend replace default strategies and return strategy plus base field name.
+// - [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — How: for accumulate fields without explicit prefix, change unprefixed override to merge so exclude_patterns append across inheritance files.
+// - [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — How: convert []interface{} to []string, append source items not already in destination slice, write via setConfigField.
+// - [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — How: assign exclude_patterns and other known keys with YAML []interface{} to []string conversion.
+// - [IMPL-EXCLUDE_MERGE_FIX] [ARCH-EXCLUDE_MERGE_FIX] [REQ-CFG_005] [REQ-CONFIGURATION] [REQ-TEST_EXCLUDE_MERGE] — How: guard merge pipeline against unknown YAML keys.
 func TestGenericConfigLoader(t *testing.T) {
 	// Create a temporary directory for test
 	tempDir, err := os.MkdirTemp("", "config_test")

@@ -1,0 +1,49 @@
+CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-SCAN-ROOT:
+  change_definition:
+    current_behavior: specctl check-leads scanned pkg/ only
+    desired_behavior: LeadScanDirPaths includes pkg internal cmd test
+    success_criteria:
+      - check-leads 73/73 pass
+      - leads_test.go passes
+    unchanged_behavior: Runtime unchanged
+  completion_criteria:
+    activation:
+      phase: close_out
+      run_id: scan-root-20260920-close
+    inquiry_run_ids:
+      close_out: scan-root-20260920-close
+      pre_implementation: scan-root-20260920-pre
+      verification: scan-root-20260920-ver
+  evidence:
+    commands:
+      - go run ./cmd/specctl check-leads tied/implementation-decisions/*-pseudocode.md
+      - go test ./internal/speccheck/... -count=1
+  impact_analysis:
+    tied_tokens_affected:
+      - IMPL-SPEC_CTL
+      - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  leap_feedback:
+    divergences_from_analysis: none
+    record_status: applied
+    tied_stack_updates_required: []
+  record_identity:
+    change_request_id: REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    recorded_at: '2026-09-20'
+    title: check-leads scan roots integrated close-out
+  risk_analysis:
+    adversarial_inquiry:
+      counterexamples:
+        - Lead only in tools/ still TRACE-002
+      depth_tier: integrated
+      disconfirming_observations:
+        - wider scan adds comment sources only
+      eligibility_triggers_matched:
+        - strict_close_out
+      evidence_references:
+        - working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/evidence/check-leads-regression.log
+      falsification_questions:
+        - check-leads pass does not require pkg-only leads
+      gate_policy: advisory
+      prior_depth_tier: minimal
+    quality_profiles:
+      - baseline-functional

@@ -1,0 +1,31 @@
+# Implement (when design is composed)
+
+## Implement (when design is composed)
+
+Follow **Rules**, run **Checklist** steps from the **Tracker** copy, author/repair in **Pseudo-code** before RED, apply **LEAP** on divergence, persist **Change records** when behavior changes, mutate **project** YAML via **tied-cli** (not `tied/methodology/`), finish with **`verification-gate`** and `tied_validate_consistency`. The shared `tied_checklist_gate_validate` result is authoritative; do not replace it with caller assertions.
+
+1. Update TIED before implementing; apply LEAP so pseudo-code logic is valid and block-commented.
+2. RECORD vocabulary after TIED/YAML edits.
+3. RED tests before code (TDD); then composition/E2E only where **Checklist** requires.
+4. RECORD vocabulary after tests/code; VALIDATE before commit.
+5. Before implementation, validate `phase: pre_implementation`; before status
+   updates, validate `phase: verification` and pass the result to
+   `tied_verify`. When `depth_tier` is `integrated` or `strict_candidate`, use
+   identity-bound activation evidence (prefer `tied_checklist_activation_collect`
+   when `working/{REQ-TOKEN}/adversarial-inquiry/phase-{phase}/` exists). Any
+   missing, malformed, stale, or unjustified evidence blocks progression.
+6. Before handoff or close-out claims, when `depth_tier` is `integrated` or
+   `strict_candidate`, require verification gate `allowed: true` and document
+   that `plan-close-out` must call `tied_checklist_gate_validate` with
+   `phase: close_out` and activation (or a valid close-out inquiry waiver). If
+   the gate returns `allowed: false`, label the work **incomplete** — do not
+   claim success.
+7. **Unified close-out is mandatory for completion claims.** Gate success alone
+   is not machine close-out. Before any “complete” or “ready to commit” handoff,
+   CALL `sub-close-out-evidence-sync` or run
+   `tools/bootstrap/templates/run-close-out-gates.mjs --envelope-blocking
+   --sync-dispositions`, then validate the envelope with `fail_on_error_gaps:
+   true`. Report the three completion signals per
+   [completion-signals-handoff.md](completion-signals-handoff.md) — never
+   collapse machine close-out, process contract, and adherence ledger into a
+   single “done.”

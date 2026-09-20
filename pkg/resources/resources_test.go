@@ -1,11 +1,9 @@
-// [IMPL-RESOURCE_MANAGER] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-CONTEXT_SUPPORT]
 // [REQ-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]
 // Tests for the pkg/resources package validating resource management and context operations.
 //
 // Copyright (c) 2024 BkpDir Contributors
 // Licensed under the MIT License
 package resources
-
 import (
 	"context"
 	"os"
@@ -17,8 +15,18 @@ import (
 	"time"
 )
 
-// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Validates TempFile: creation, string identity, cleanup, and cleanup-of-nonexistent.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: wrap ctx with a freshly allocated ResourceManager for scoped cleanup during the operation.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: non-blocking select on ctx.Done(); return true when cancellation signaled.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: when ctx.Err() is set, run CleanupWithPanicRecovery and combine cleanup failure with context error.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: store a new ResourceManager in context under ResourceManagerKey for downstream retrieval.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: attach operationID to context under OperationIDKey for tracing nested work.
+// - [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: read OperationIDKey from context and report whether a string ID was stored.
+// - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: wrap AddResource with TempFile or TempDir for common temp path registration.
+// - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: remove matching resource from tracking by String() identity without invoking Cleanup.
+// - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: invoke Cleanup on every tracked resource, retain last error, then clear the slice.
+// - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: defer recover around CLEANUP and convert panics into returned errors.
+// - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT] — How: return ctx.Err() immediately or between resources when context is cancelled during cleanup.
 func TestTempFile(t *testing.T) {
 	// Create a temporary file for testing
 	tempDir := t.TempDir()
@@ -61,7 +69,6 @@ func TestTempFile(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Validates TempDir: creation, string identity, recursive cleanup.
 func TestTempDir(t *testing.T) {
 	// Create a temporary directory for testing
@@ -111,8 +118,7 @@ func TestTempDir(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
-// Validates ResourceManager: add, count, type filtering, cleanup.
+// - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: append a Resource to the tracked slice under write lock for later cleanup.
 func TestResourceManager(t *testing.T) {
 	rm := NewResourceManager()
 
@@ -190,7 +196,6 @@ func TestResourceManager(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] — validates REMOVE_RESOURCE: removes from tracking without cleanup.
 func TestResourceManager_RemoveResource(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -221,7 +226,6 @@ func TestResourceManager_RemoveResource(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] — validates CLEANUP_IF: predicate-based selective cleanup.
 func TestResourceManager_CleanupIf(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -263,7 +267,6 @@ func TestResourceManager_CleanupIf(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Validates CLEANUP_WITH_PANIC_RECOVERY: panic during cleanup is recovered and returned as error.
 func TestResourceManager_CleanupWithPanicRecovery(t *testing.T) {
 	rm := NewResourceManager()
@@ -283,7 +286,6 @@ func TestResourceManager_CleanupWithPanicRecovery(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]
 // Validates CLEANUP_WITH_CONTEXT: cancellation stops cleanup mid-stream.
 func TestResourceManager_CleanupWithContext(t *testing.T) {
 	rm := NewResourceManager()
@@ -325,7 +327,6 @@ func TestResourceManager_CleanupWithContext(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // Validates thread-safety: concurrent AddResource + GetResourceCount + GetResources.
 func TestResourceManager_ConcurrentAccess(t *testing.T) {
 	rm := NewResourceManager()
@@ -379,7 +380,6 @@ func TestResourceManager_ConcurrentAccess(t *testing.T) {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // Validates CONTEXTUAL_OPERATION: creation, cancellation detection, and cleanup delegation.
 func TestContextualOperation(t *testing.T) {
 	ctx := context.Background()
@@ -443,8 +443,7 @@ func TestContextualOperation(t *testing.T) {
 	}
 }
 
-// [IMPL-ATOMIC_OPS] [IMPL-CONTEXT_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT]
-// Validates AtomicWriteFile and AtomicWriteFileWithContext: atomic writes and cancellation.
+// - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: delegate to context-aware atomic write with background context.
 func TestAtomicWriteFile(t *testing.T) {
 	rm := NewResourceManager()
 	tempDir := t.TempDir()
@@ -499,7 +498,6 @@ func TestAtomicWriteFile(t *testing.T) {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // Validates WITH_RESOURCE_MANAGER, GET_RESOURCE_MANAGER, WITH_OPERATION_ID, CHECK_CONTEXT_AND_CLEANUP.
 func TestContextUtilities(t *testing.T) {
 	// Test WithResourceManager
@@ -592,7 +590,6 @@ func TestContextUtilities(t *testing.T) {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-STRUCTURED_ERRORS] — validates CombineErrors multi-error handling.
 func TestCombineErrors(t *testing.T) {
 	// Test with no errors
 	combinedErr := CombineErrors()
@@ -646,7 +643,6 @@ func TestCombineErrors(t *testing.T) {
 	}
 }
 
-// [IMPL-CONTEXT_OPS] [IMPL-RESOURCE_MANAGER] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT]
 // Validates integration: ContextualOperation with multiple resources and cleanup.
 func TestResourceManagement_Integration(t *testing.T) {
 	// Create a contextual operation
@@ -704,7 +700,6 @@ func TestResourceManagement_Integration(t *testing.T) {
 	}
 }
 
-// [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT]
 // MockPanicResource is a resource that panics during cleanup for testing panic recovery
 type MockPanicResource struct{}
 

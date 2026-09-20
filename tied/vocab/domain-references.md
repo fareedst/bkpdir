@@ -1,20 +1,16 @@
-# Domain vocabulary index (canonical)
+# Client vocabulary catalog
 
-**Scope:** Single-page directory for all domain vocabulary glossaries under `tied/vocab/`. Lists priority, scope, and cross-topic notes. This page is an **index only** — canonical terms live in the linked sibling files. Algorithms and step-by-step behavior stay in `tied/implementation-decisions/*-pseudocode.md`.
+**Scope:** Index of client-owned domain vocabulary. TIED methodology vocabulary is cataloged separately under [`../methodology/vocab/domain-references.md`](../methodology/vocab/domain-references.md).
 
-**Traceability:** [PROC-VOCABULARY_INDEX](../docs/processes.md) · [REQ-TIED_SETUP](../requirements/REQ-TIED_SETUP.yaml) · [REQ-GOV_DISCOVERABILITY](../requirements/REQ-GOV_DISCOVERABILITY.yaml)
-
-**Help coverage:** N/A (no in-app Help in this repository)
-
-**Checklist path:** [`../docs/agent-req-implementation-checklist.yaml`](../docs/agent-req-implementation-checklist.yaml) sets `VOCAB_INDEX: ./tied/vocab`. Agents **CALL** `sub-vocabulary-sync` (RESOLVE before naming/writing; RECORD when concepts are generated or artifacts change) per [`../docs/processes.md`](../docs/processes.md) § `[PROC-VOCABULARY_INDEX]`.
-
-**Standards:** [`../../docs/vocabulary-index-analysis-and-standards.md`](../../docs/vocabulary-index-analysis-and-standards.md).
-
-**See also:** [`tied-methodology.md`](tied-methodology.md) · [`immutable-contracts.md`](immutable-contracts.md) · [`../../docs/vocabulary-index-analysis-and-standards.md`](../../docs/vocabulary-index-analysis-and-standards.md)
+**Procedure:** Read [`routing.md`](routing.md) first. Use the methodology catalog for TIED concepts and this catalog for client product concepts.
 
 ---
 
-## Canonical glossaries
+## TIED methodology catalog
+
+The refreshable TIED vocabulary catalog is [`../methodology/vocab/domain-references.md`](../methodology/vocab/domain-references.md).
+
+## Client canonical glossaries
 
 | Priority | Document | Scope |
 |----------|----------|-------|
@@ -58,10 +54,17 @@
 
 ---
 
+## Ownership
+
+This catalog and all non-index glossaries in `tied/vocab/` are client-owned. The methodology catalog and its linked glossaries are refreshed under `tied/methodology/vocab/`.
+
 ## Alphabetical index
 
 | Term | Section |
 |------|---------|
+| client canonical glossaries | Client canonical glossaries |
+| client vocabulary catalog | Title |
+| TIED methodology catalog | TIED methodology catalog |
 | agent-stream | Cross-topic notes |
 | agentstream | Cross-topic notes |
 | bkpdir product glossaries | Cross-topic notes |

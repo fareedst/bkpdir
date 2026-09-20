@@ -1,0 +1,268 @@
+oracle_targets: 48
+oracles:
+  - conformance_test: test/specconformance/archive_conformance_test.go
+    impl: IMPL-DATA_MODELS
+    pkg_paths: []
+    specmodel_file: internal/specmodel/archive.go
+    status: verified
+  - conformance_test: test/specconformance/archive_conformance_test.go
+    impl: IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    pkg_paths: []
+    specmodel_file: internal/specmodel/archive.go
+    status: verified
+  - conformance_test: test/specconformance/archive_conformance_test.go
+    impl: IMPL-ZIP_FORMAT
+    pkg_paths: []
+    specmodel_file: internal/specmodel/archive.go
+    status: verified
+  - conformance_test: test/specconformance/atomic_pbt_test.go
+    impl: IMPL-ATOMIC_OPS
+    pkg_paths:
+      - pkg/fileops
+    specmodel_file: internal/specmodel/atomic.go
+    status: verified
+  - conformance_test: test/specconformance/autodetect_conformance_test.go
+    impl: IMPL-AUTO_DETECTION
+    pkg_paths: []
+    specmodel_file: internal/specmodel/autodetect.go
+    status: verified
+  - conformance_test: test/specconformance/cli_conformance_test.go
+    impl: IMPL-CLI_FRAMEWORK
+    pkg_paths:
+      - pkg/cli
+    specmodel_file: internal/specmodel/cli.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_006
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_INHERITANCE_PATH_RESOLUTION
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_MIXED_MODE_MERGE_FIX
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_PRECEDENCE_FIX
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CFG_QUOTED_KEY_PREFIX
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CONFIG_OUTPUT_GROUPING
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CONFIG_SCHEMA_FLEX
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-CONFIG_STRUCT
+    pkg_paths:
+      - pkg/config
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-EXCLUDE_MERGE_FIX
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-TEST_DEFAULT_STRATEGY_EDGES
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-TEST_EMPTY_STRING_HANDLING
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-TEST_EXCLUDE_MERGE
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-TEST_PREPEND_ORDERING
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/config_conformance_test.go
+    impl: IMPL-TEST_UNICODE_HANDLING
+    pkg_paths: []
+    specmodel_file: internal/specmodel/config.go
+    status: verified
+  - conformance_test: test/specconformance/errors_conformance_test.go
+    impl: IMPL-STRUCTURED_ERRORS
+    pkg_paths:
+      - pkg/errors
+    specmodel_file: internal/specmodel/errors.go
+    status: verified
+  - conformance_test: test/specconformance/extraction_conformance_test.go
+    impl: IMPL-PACKAGE_EXTRACTION
+    pkg_paths: []
+    specmodel_file: internal/specmodel/extraction.go
+    status: verified
+  - conformance_test: test/specconformance/fileops_conformance_test.go
+    impl: IMPL-DIFF_COMMAND
+    pkg_paths:
+      - pkg/fileops
+    specmodel_file: internal/specmodel/fileops.go
+    status: verified
+  - conformance_test: test/specconformance/fileops_conformance_test.go
+    impl: IMPL-DIRECTORY_COMPARISON
+    pkg_paths:
+      - pkg/fileops
+    specmodel_file: internal/specmodel/fileops.go
+    status: verified
+  - conformance_test: test/specconformance/fileops_conformance_test.go
+    impl: IMPL-EXCLUSION_PATTERNS
+    pkg_paths:
+      - pkg/fileops
+    specmodel_file: internal/specmodel/fileops.go
+    status: verified
+  - conformance_test: test/specconformance/fileops_conformance_test.go
+    impl: IMPL-FILE_OPERATIONS
+    pkg_paths:
+      - pkg/fileops
+    specmodel_file: internal/specmodel/fileops.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-DELAYED_OUTPUT
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-DUAL_FORMATTING
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-FILE_STATISTICS
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-FILE_STATISTICS_TEMPLATE_FIX
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-LIST_FORMAT_SAFETY
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-LIST_LIMIT
+    pkg_paths: []
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/formatter_conformance_test.go
+    impl: IMPL-TEST_COVERAGE
+    pkg_paths:
+      - pkg/formatter
+    specmodel_file: internal/specmodel/formatter.go
+    status: verified
+  - conformance_test: test/specconformance/git_conformance_test.go
+    impl: IMPL-GIT_CLI
+    pkg_paths:
+      - pkg/git
+    specmodel_file: internal/specmodel/git.go
+    status: verified
+  - conformance_test: test/specconformance/git_conformance_test.go
+    impl: IMPL-GIT_DIRTY_CONFIG
+    pkg_paths: []
+    specmodel_file: internal/specmodel/git.go
+    status: verified
+  - conformance_test: test/specconformance/meta_conformance_test.go
+    impl: IMPL-DOC_ENHANCEMENT
+    pkg_paths: []
+    specmodel_file: internal/specmodel/meta.go
+    status: verified
+  - conformance_test: test/specconformance/meta_conformance_test.go
+    impl: IMPL-TOKEN_COVERAGE_AUDIT
+    pkg_paths: []
+    specmodel_file: internal/specmodel/meta.go
+    status: verified
+  - conformance_test: test/specconformance/meta_conformance_test.go
+    impl: IMPL-TOKEN_SYSTEM
+    pkg_paths: []
+    specmodel_file: internal/specmodel/meta.go
+    status: verified
+  - conformance_test: test/specconformance/meta_conformance_test.go
+    impl: IMPL-TRACEABILITY
+    pkg_paths: []
+    specmodel_file: internal/specmodel/meta.go
+    status: verified
+  - conformance_test: test/specconformance/processing_conformance_test.go
+    impl: IMPL-PROCESSING_PATTERNS
+    pkg_paths:
+      - pkg/processing
+    specmodel_file: internal/specmodel/processing.go
+    status: verified
+  - conformance_test: test/specconformance/resources_conformance_test.go
+    impl: IMPL-CONTEXT_OPS
+    pkg_paths:
+      - pkg/resources
+    specmodel_file: internal/specmodel/resources.go
+    status: verified
+  - conformance_test: test/specconformance/resources_conformance_test.go
+    impl: IMPL-RESOURCE_MANAGER
+    pkg_paths:
+      - pkg/resources
+    specmodel_file: internal/specmodel/resources.go
+    status: verified
+  - conformance_test: test/specconformance/specctl_conformance_test.go
+    impl: IMPL-SPEC_CTL
+    pkg_paths: []
+    specmodel_file: internal/specmodel/specctl.go
+    status: verified
+  - conformance_test: test/specconformance/testutil_conformance_test.go
+    impl: IMPL-TESTING
+    pkg_paths:
+      - pkg/testutil
+    specmodel_file: internal/specmodel/testutil.go
+    status: verified

@@ -1,5 +1,4 @@
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_COMMANDS] [REQ-IMMUTABLE_CLI_COMMANDS]
-// CLI command builder implementation — links to STDD tokens for traceability.
+// Package cli provides command and root builders for the CLI framework.
 package cli
 
 import (
@@ -14,7 +13,7 @@ type DefaultCommandBuilder struct {
 	flagManager FlagManager
 }
 
-// NewCommandBuilder creates a new command builder
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
 func NewCommandBuilder(flagMgr FlagManager) CommandBuilder {
 	if flagMgr == nil {
 		flagMgr = NewFlagManager()
@@ -24,7 +23,7 @@ func NewCommandBuilder(flagMgr FlagManager) CommandBuilder {
 	}
 }
 
-// NewCommand creates a new command with standard setup
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create a subcommand with use, short, and long description fields.
 func (cb *DefaultCommandBuilder) NewCommand(name, short, long string) *cobra.Command {
 	return &cobra.Command{
 		Use:   name,
@@ -33,7 +32,7 @@ func (cb *DefaultCommandBuilder) NewCommand(name, short, long string) *cobra.Com
 	}
 }
 
-// WithHandler sets the command handler function
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: attach RunE handler to command and return command for fluent chaining.
 func (cb *DefaultCommandBuilder) WithHandler(cmd *cobra.Command, handler func(*cobra.Command, []string) error) *cobra.Command {
 	cmd.RunE = handler
 	return cmd
@@ -54,7 +53,7 @@ func (cb *DefaultCommandBuilder) WithFlags(cmd *cobra.Command, flags []string) *
 	return cmd
 }
 
-// WithSubcommands adds subcommands to a parent command
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: register each child command on parent and return parent.
 func (cb *DefaultCommandBuilder) WithSubcommands(parent *cobra.Command, children ...*cobra.Command) *cobra.Command {
 	for _, child := range children {
 		parent.AddCommand(child)
@@ -68,7 +67,7 @@ type DefaultRootCommandBuilder struct {
 	versionManager VersionManager
 }
 
-// NewRootCommandBuilder creates a new root command builder
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultRootCommandBuilder with default flag and version managers when nil.
 func NewRootCommandBuilder(flagMgr FlagManager, versionMgr VersionManager) RootCommandBuilder {
 	if flagMgr == nil {
 		flagMgr = NewFlagManager()
@@ -82,7 +81,7 @@ func NewRootCommandBuilder(flagMgr FlagManager, versionMgr VersionManager) RootC
 	}
 }
 
-// NewRootCommand creates the root command with application info
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: build root command from AppInfo with formatted version, version template, and help when invoked without subcommand.
 func (rb *DefaultRootCommandBuilder) NewRootCommand(info AppInfo) *cobra.Command {
 	// Create the long description
 	longDesc := info.Long
@@ -111,7 +110,7 @@ func (rb *DefaultRootCommandBuilder) WithVersionTemplate(cmd *cobra.Command, tem
 	return cmd
 }
 
-// WithGlobalFlags adds global flags to root command
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: add persistent help and verbose flags via provided or embedded FlagManager.
 func (rb *DefaultRootCommandBuilder) WithGlobalFlags(cmd *cobra.Command, flagMgr FlagManager) *cobra.Command {
 	if flagMgr != nil {
 		flagMgr.AddGlobalFlags(cmd)
@@ -140,7 +139,7 @@ type CommandTemplate struct {
 	Subcommands []*cobra.Command
 }
 
-// BuildCommand creates a cobra command from a template
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: materialize command from CommandTemplate including handler, prerun, postrun, flags, and subcommands.
 func (rb *DefaultRootCommandBuilder) BuildCommand(template CommandTemplate) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     template.Name,
@@ -185,7 +184,7 @@ type CLIApp struct {
 	dryRunManager  DryRunManager
 }
 
-// NewCLIApp creates a new CLI application
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: wire all managers and builders then create root command from AppInfo.
 func NewCLIApp(info AppInfo) *CLIApp {
 	versionMgr := NewVersionManager()
 	flagMgr := NewFlagManager()
@@ -208,17 +207,17 @@ func NewCLIApp(info AppInfo) *CLIApp {
 	}
 }
 
-// AddCommand adds a command to the CLI application
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: attach subcommand to application root.
 func (app *CLIApp) AddCommand(cmd *cobra.Command) {
 	app.RootCommand.AddCommand(cmd)
 }
 
-// Execute runs the CLI application
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root command without extra signal context.
 func (app *CLIApp) Execute() error {
 	return app.RootCommand.Execute()
 }
 
-// ExecuteWithContext runs the CLI application with signal handling
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root with signal-handled context on command; exit non-zero on error.
 func (app *CLIApp) ExecuteWithContext() error {
 	ctx, cancel := WithSignalHandling(nil)
 	defer cancel()

@@ -1,7 +1,7 @@
 ARCH-TESTING_STRATEGY:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Keep helpers in `internal/testutil/` only (rejected: not importable by `pkg/*` packages).
@@ -11,7 +11,7 @@ ARCH-TESTING_STRATEGY:
     - Migration adapters/wrappers should be provided to enable incremental migration without breaking existing tests.
     - Specialized, heavy-weight testing infrastructure remains in `internal/testutil/` for integration/system tests.
   cross-references: '[REQ-EXTRACT-009], [IMPL-EXTRACT-009_TESTUTIL]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-RELIABILITY
   decision: Comprehensive testing with unit, integration, and infrastructure tests
@@ -21,13 +21,13 @@ ARCH-TESTING_STRATEGY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Testing Strategy
@@ -40,7 +40,9 @@ ARCH-TESTING_STRATEGY:
       Provide a stable, well-documented API for test fixtures and helpers so multiple packages can migrate without duplication.
       Preserve specialized tools in `internal/testutil/` for heavy integration tests while offering lightweight helpers for unit tests in `pkg/testutil`.
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   status: Active
@@ -55,5 +57,7 @@ ARCH-TESTING_STRATEGY:
       - REQ-MAINTAINABILITY
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-RELIABILITY
     tests: []

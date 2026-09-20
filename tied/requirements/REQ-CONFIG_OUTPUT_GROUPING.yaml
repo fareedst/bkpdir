@@ -4,10 +4,10 @@ REQ-CONFIG_OUTPUT_GROUPING:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
   name: Configuration Output Grouping
   priority: P1
   rationale:
@@ -36,5 +36,5 @@ REQ-CONFIG_OUTPUT_GROUPING:
       - IMPL-CONFIG_OUTPUT_GROUPING
     tests: []
   validation_criteria:
-    - method: Unit tests
-      coverage: Output grouping produces correct category groupings
+    - coverage: Output grouping produces correct category groupings
+      method: Unit tests

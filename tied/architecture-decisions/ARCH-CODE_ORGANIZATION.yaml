@@ -1,7 +1,7 @@
 ARCH-CODE_ORGANIZATION:
   alternatives_considered: []
   cross-references: '[REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
   decision: Clear responsibilities with interfaces for testability
   implementation_approach:
@@ -10,13 +10,13 @@ ARCH-CODE_ORGANIZATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Code Organization Principles
@@ -35,7 +35,8 @@ ARCH-CODE_ORGANIZATION:
       Easy to extend
       Maintainable codebase
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
     informs: []
     see_also: []
   status: Active
@@ -44,5 +45,6 @@ ARCH-CODE_ORGANIZATION:
       - ARCH-CODE_ORGANIZATION
       - REQ-MAINTAINABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
     tests: []

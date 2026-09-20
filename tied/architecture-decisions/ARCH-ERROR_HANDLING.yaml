@@ -1,7 +1,7 @@
 ARCH-ERROR_HANDLING:
   alternatives_considered: []
   cross-references: '[REQ-ERROR_HANDLING], [REQ-RELIABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-ERROR_HANDLING
     - REQ-RELIABILITY
   decision: Structured error types with status codes and operation context
@@ -19,13 +19,13 @@ ARCH-ERROR_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Error Handling Strategy
@@ -38,7 +38,9 @@ ARCH-ERROR_HANDLING:
       Enhanced debugging with operation context
       Supports template-based error formatting
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-ERROR_HANDLING
+      - REQ-RELIABILITY
     informs: []
     see_also: []
   status: Active
@@ -48,5 +50,7 @@ ARCH-ERROR_HANDLING:
       - REQ-ERROR_HANDLING
       - REQ-RELIABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-ERROR_HANDLING
+      - REQ-RELIABILITY
     tests: []

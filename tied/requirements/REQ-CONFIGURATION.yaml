@@ -6,13 +6,13 @@ REQ-CONFIGURATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Management Requirements
@@ -26,9 +26,9 @@ REQ-CONFIGURATION:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'Precedence: command line > environment > files > defaults'
     - criterion: Configuration loaded from multiple sources
     - criterion: Environment variable support for search paths
+    - criterion: 'Precedence: command line > environment > files > defaults'
     - criterion: Source tracking shows value origins
   status: Implemented
   traceability:

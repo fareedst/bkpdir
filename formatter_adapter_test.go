@@ -1,6 +1,4 @@
-// [IMPL-LIST_FORMAT_SAFETY] [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] [REQ-OUT_002]
 package main
-
 import (
 	"bkpdir/pkg/formatter"
 	"fmt"
@@ -12,6 +10,7 @@ import (
 
 // TestFormatListArchiveSimple_Comprehensive tests the simplified list formatting implementation
 // with comprehensive test cases covering all scenarios
+// - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: verify template-style FormatListArchiveWithExtraction replaces #{size_human} and includes path.
 func TestFormatListArchiveSimple_Comprehensive(t *testing.T) {
 	// Setup: Create a test file with known content
 	tmpDir := t.TempDir()

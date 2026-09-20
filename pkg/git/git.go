@@ -1,6 +1,5 @@
 // [REQ-GIT_INTEGRATION] Git integration for repository detection and metadata extraction
 // [ARCH-GIT_INTEGRATION] Git command-line integration architecture
-// [IMPL-GIT_CLI] Git command-line interface implementation
 // This file is part of bkpdir
 //
 // Package git provides Git integration for repository detection, metadata extraction,
@@ -18,7 +17,6 @@ import (
 	"strings"
 )
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // Config represents Git integration configuration options
 type Config struct {
 	// Basic Git integration settings
@@ -49,8 +47,7 @@ type Config struct {
 	GitCommand         string // Legacy: use Command instead
 }
 
-// DefaultConfig returns a Config with sensible defaults
-// [IMPL-GIT_CLI] Provides default configuration for git operations
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: return Config with Enabled, Command git, WorkingDirectory, and submodule/status defaults.
 func DefaultConfig() *Config {
 	return &Config{
 		Enabled:           true,
@@ -72,7 +69,6 @@ func DefaultConfig() *Config {
 	}
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // GitError represents an error that occurred during Git operations.
 // It includes the operation that failed and the underlying error.
 type GitError struct {
@@ -84,7 +80,6 @@ func (e *GitError) Error() string {
 	return fmt.Sprintf("git %s failed: %v", e.Operation, e.Err)
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // Info represents Git repository information
 type Info struct {
 	Branch      string
@@ -95,7 +90,6 @@ type Info struct {
 	Submodules  []SubmoduleInfo
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // SubmoduleInfo represents information about a Git submodule
 type SubmoduleInfo struct {
 	Name   string // Submodule name
@@ -105,7 +99,6 @@ type SubmoduleInfo struct {
 	Status string // Submodule status (e.g., "clean", "dirty", "uninitialized")
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // Repository defines the interface for Git operations
 type Repository interface {
 	IsRepository() bool
@@ -114,19 +107,16 @@ type Repository interface {
 	IsWorkingDirectoryClean() (bool, error)
 	GetInfo() (*Info, error)
 	GetInfoWithStatus() (*Info, error)
-	// [IMPL-GIT_CLI] Submodule interface methods
 	IsSubmodule() (bool, error)
 	GetSubmodules() ([]SubmoduleInfo, error)
 	GetSubmoduleStatus(path string) (string, error)
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // Repo implements the Repository interface using command-line Git
 type Repo struct {
 	config *Config
 }
 
-// NewRepository creates a new Git repository instance with default configuration
 func NewRepository() Repository {
 	return &Repo{config: DefaultConfig()}
 }
@@ -136,10 +126,8 @@ func NewRepositoryWithConfig(config *Config) Repository {
 	return &Repo{config: config}
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// executeGitCommand runs a Git command with the configured parameters
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: resolve Command/GitCommand/git binary, run in WorkingDirectory, return trimmed stdout or GitError.
 func (r *Repo) executeGitCommand(args ...string) (string, error) {
-	// [IMPL-GIT_CLI] Resolves git command path with legacy fallback
 	gitCmd := r.config.Command
 	if gitCmd == "" {
 		gitCmd = r.config.GitCommand // Legacy fallback
@@ -160,15 +148,13 @@ func (r *Repo) executeGitCommand(args ...string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// IsRepository checks if the configured directory is a Git repository
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: git rev-parse --is-inside-work-tree equals true without error.
 func (r *Repo) IsRepository() bool {
 	out, err := r.executeGitCommand("rev-parse", "--is-inside-work-tree")
 	return err == nil && out == "true"
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// GetBranch returns the current Git branch name
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: rev-parse --abbrev-ref HEAD when inside a repository.
 func (r *Repo) GetBranch() (string, error) {
 	if !r.IsRepository() {
 		return "", &GitError{Operation: "branch detection", Err: fmt.Errorf("not a git repository")}
@@ -176,8 +162,7 @@ func (r *Repo) GetBranch() (string, error) {
 	return r.executeGitCommand("rev-parse", "--abbrev-ref", "HEAD")
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// GetShortHash returns the short commit hash of the current HEAD
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: rev-parse --short HEAD when inside a repository.
 func (r *Repo) GetShortHash() (string, error) {
 	if !r.IsRepository() {
 		return "", &GitError{Operation: "hash extraction", Err: fmt.Errorf("not a git repository")}
@@ -185,8 +170,7 @@ func (r *Repo) GetShortHash() (string, error) {
 	return r.executeGitCommand("rev-parse", "--short", "HEAD")
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// IsWorkingDirectoryClean checks if the Git working directory is clean
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: git status --porcelain empty means clean working tree.
 func (r *Repo) IsWorkingDirectoryClean() (bool, error) {
 	if !r.IsRepository() {
 		return false, &GitError{Operation: "status check", Err: fmt.Errorf("not a git repository")}
@@ -200,8 +184,7 @@ func (r *Repo) IsWorkingDirectoryClean() (bool, error) {
 	return len(out) == 0, nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// GetInfo returns complete Git repository information
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: populate Info with IsRepo, Branch, Hash, and IsClean from branch/hash/status helpers.
 func (r *Repo) GetInfo() (*Info, error) {
 	info := &Info{IsRepo: r.IsRepository()}
 	if !info.IsRepo {
@@ -222,15 +205,13 @@ func (r *Repo) GetInfo() (*Info, error) {
 	return info, nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// GetInfoWithStatus returns complete Git information including working directory status
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: extend GetInfo with optional clean check and submodule listing when configured.
 func (r *Repo) GetInfoWithStatus() (*Info, error) {
 	info, err := r.GetInfo()
 	if err != nil || !info.IsRepo {
 		return info, err
 	}
 
-	// [IMPL-GIT_CLI] Check dirty status based on config flags
 	includeDirtyStatus := r.config.ShowDirtyStatus || r.config.IncludeDirtyStatus
 	if includeDirtyStatus {
 		info.IsClean, err = r.IsWorkingDirectoryClean()
@@ -239,7 +220,6 @@ func (r *Repo) GetInfoWithStatus() (*Info, error) {
 		}
 	}
 
-	// [IMPL-GIT_CLI] Include submodule info if configured
 	if r.config.IncludeSubmodules {
 		info.IsSubmodule, err = r.IsSubmodule()
 		if err != nil {
@@ -255,8 +235,7 @@ func (r *Repo) GetInfoWithStatus() (*Info, error) {
 	return info, nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// IsSubmodule checks if the current directory is a Git submodule
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: rev-parse --show-superproject-working-tree non-empty means submodule checkout.
 func (r *Repo) IsSubmodule() (bool, error) {
 	if !r.IsRepository() {
 		return false, nil
@@ -270,8 +249,7 @@ func (r *Repo) IsSubmodule() (bool, error) {
 	return strings.TrimSpace(out) != "", nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// GetSubmodules returns information about all submodules in the repository
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: parse git submodule status lines into SubmoduleInfo records with path and URL.
 func (r *Repo) GetSubmodules() ([]SubmoduleInfo, error) {
 	if !r.IsRepository() {
 		return nil, &GitError{Operation: "submodule listing", Err: fmt.Errorf("not a git repository")}
@@ -302,7 +280,6 @@ func (r *Repo) GetSubmodules() ([]SubmoduleInfo, error) {
 	return submodules, nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // GetSubmoduleStatus returns the status of a specific submodule
 func (r *Repo) GetSubmoduleStatus(path string) (string, error) {
 	if !r.IsRepository() {
@@ -333,8 +310,6 @@ func (r *Repo) GetSubmoduleStatus(path string) (string, error) {
 	}
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
-// parseSubmoduleStatusLine parses a line from git submodule status output
 func (r *Repo) parseSubmoduleStatusLine(line string) (SubmoduleInfo, error) {
 	// Git submodule status format: [status][hash] [path] [(description)]
 	// Status characters: ' ' (clean), '+' (dirty), '-' (uninitialized), 'U' (conflict)
@@ -385,7 +360,6 @@ func (r *Repo) parseSubmoduleStatusLine(line string) (SubmoduleInfo, error) {
 	}, nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // getSubmoduleURL gets the remote URL for a submodule
 func (r *Repo) getSubmoduleURL(path string) (string, error) {
 	out, err := r.executeGitCommand("config", "--file", ".gitmodules", "--get", "submodule."+path+".url")
@@ -395,11 +369,11 @@ func (r *Repo) getSubmoduleURL(path string) (string, error) {
 	return strings.TrimSpace(out), nil
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // Package-level convenience functions that maintain the original API
 
+// SPEC-ID: IMPL-GIT_CLI::LEGACY_IS_GIT_REPOSITORY_WRAPPER
 // IsGitRepository checks if the given directory is a Git repository
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to IsRepository
+// - [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: delegate to pkg/git IsGitRepository wrapper around rev-parse --is-inside-work-tree.
 func IsGitRepository(dir string) bool {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -407,7 +381,6 @@ func IsGitRepository(dir string) bool {
 }
 
 // GetGitBranch returns the current Git branch name for the given directory
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to GetBranch
 func GetGitBranch(dir string) string {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -419,7 +392,6 @@ func GetGitBranch(dir string) string {
 }
 
 // GetGitShortHash returns the short commit hash for the given directory
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to GetShortHash
 func GetGitShortHash(dir string) string {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -431,7 +403,6 @@ func GetGitShortHash(dir string) string {
 }
 
 // GetGitInfo returns both branch name and commit hash for the given directory
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to GetInfo
 func GetGitInfo(dir string) (branch, hash string) {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -443,7 +414,6 @@ func GetGitInfo(dir string) (branch, hash string) {
 }
 
 // IsGitWorkingDirectoryClean checks if the Git working directory is clean
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to IsWorkingDirectoryClean
 func IsGitWorkingDirectoryClean(dir string) bool {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -455,7 +425,6 @@ func IsGitWorkingDirectoryClean(dir string) bool {
 }
 
 // GetGitInfoWithStatus returns branch name, commit hash, and working directory status
-// [IMPL-GIT_CLI] Creates ephemeral Repo with dirty-status enabled, delegates to GetInfoWithStatus
 func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
 	config := &Config{
 		WorkingDirectory:   dir,
@@ -470,11 +439,9 @@ func GetGitInfoWithStatus(dir string) (branch, hash string, isClean bool) {
 	return info.Branch, info.Hash, info.IsClean
 }
 
-// [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION]
 // Submodule convenience functions
 
 // IsGitSubmodule checks if the given directory is a Git submodule
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to IsSubmodule
 func IsGitSubmodule(dir string) bool {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -486,7 +453,6 @@ func IsGitSubmodule(dir string) bool {
 }
 
 // GetGitSubmodules returns information about all submodules in the given directory
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to GetSubmodules
 func GetGitSubmodules(dir string) []SubmoduleInfo {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}
@@ -498,7 +464,6 @@ func GetGitSubmodules(dir string) []SubmoduleInfo {
 }
 
 // GetGitSubmoduleStatus returns the status of a specific submodule
-// [IMPL-GIT_CLI] Creates ephemeral Repo, delegates to GetSubmoduleStatus
 func GetGitSubmoduleStatus(dir, path string) string {
 	config := &Config{WorkingDirectory: dir, GitCommand: "git"}
 	repo := &Repo{config: config}

@@ -1,7 +1,7 @@
 ARCH-PROCESSING_PATTERNS:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Inline processing logic: Rejected due to code duplication
@@ -12,7 +12,7 @@ ARCH-PROCESSING_PATTERNS:
     - Resource cleanup on completion
     - Worker pool management
   cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-PERFORMANCE
   decision: Extracted data processing patterns with pipeline and concurrent processing support
@@ -22,13 +22,13 @@ ARCH-PROCESSING_PATTERNS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Processing Patterns Architecture
@@ -52,7 +52,9 @@ ARCH-PROCESSING_PATTERNS:
       Supports concurrent processing for performance
       Standardizes naming conventions
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -62,5 +64,7 @@ ARCH-PROCESSING_PATTERNS:
       - REQ-MAINTAINABILITY
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     tests: []

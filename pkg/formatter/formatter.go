@@ -13,7 +13,6 @@ import (
 	"strings"
 )
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] DefaultOutputFormatter provides comprehensive output formatting functionality
 type DefaultOutputFormatter struct {
 	configProvider    ConfigProvider
 	templateFormatter TemplateFormatter
@@ -21,7 +20,6 @@ type DefaultOutputFormatter struct {
 	collector         *OutputCollector
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewDefaultOutputFormatter creates a new DefaultOutputFormatter
 func NewDefaultOutputFormatter(configProvider ConfigProvider) *DefaultOutputFormatter {
 	return &DefaultOutputFormatter{
@@ -32,7 +30,6 @@ func NewDefaultOutputFormatter(configProvider ConfigProvider) *DefaultOutputForm
 	}
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // NewDefaultOutputFormatterWithCollector creates a formatter with delayed output support
 func NewDefaultOutputFormatterWithCollector(configProvider ConfigProvider, collector *OutputCollector) *DefaultOutputFormatter {
 	return &DefaultOutputFormatter{
@@ -43,25 +40,21 @@ func NewDefaultOutputFormatterWithCollector(configProvider ConfigProvider, colle
 	}
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // IsDelayedMode returns true if the formatter is collecting output instead of printing immediately
 func (f *DefaultOutputFormatter) IsDelayedMode() bool {
 	return f.collector != nil
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // GetCollector returns the OutputCollector if in delayed mode, nil otherwise
 func (f *DefaultOutputFormatter) GetCollector() *OutputCollector {
 	return f.collector
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 // SetCollector sets the OutputCollector for delayed output mode
 func (f *DefaultOutputFormatter) SetCollector(collector *OutputCollector) {
 	f.collector = collector
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // FormatCreatedArchive formats a created archive message using printf-style formatting
 func (f *DefaultOutputFormatter) FormatCreatedArchive(path string) string {
@@ -85,6 +78,7 @@ func (f *DefaultOutputFormatter) FormatIdenticalArchive(path string) string {
 // [REQ-CUSTOMIZABLE_FORMAT_STRINGS] Supports both printf-style (%s) and template-style (#{name}) placeholders.
 // If template placeholders are detected, gathers file statistics and uses template formatting.
 // Otherwise, uses printf formatting for backward compatibility.
+// - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: if format contains #{ use formatTemplate with GatherFileStatInfo data; elif contains % use sprintf; else return literal format string.
 func (f *DefaultOutputFormatter) FormatListArchive(path, creationTime string) string {
 	formatStr := f.configProvider.GetFormatString("list_archive")
 	if formatStr == "" {
@@ -246,7 +240,6 @@ func (f *DefaultOutputFormatter) FormatDryRunBackup(path string) string {
 	return fmt.Sprintf(formatStr, path)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // PrintCreatedArchive prints a created archive message
 func (f *DefaultOutputFormatter) PrintCreatedArchive(path string) {
@@ -348,9 +341,8 @@ func (f *DefaultOutputFormatter) PrintDryRunBackup(path string) {
 	}
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
-
 // FormatWithTemplate delegates to the template formatter
+// - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: compile regex pattern, extract named submatches into data map, delegate to FormatWithPlaceholders on template string.
 func (f *DefaultOutputFormatter) FormatWithTemplate(input, pattern, tmplStr string) (string, error) {
 	return f.templateFormatter.FormatWithTemplate(input, pattern, tmplStr)
 }
@@ -390,7 +382,6 @@ func (f *DefaultOutputFormatter) TemplateError(data map[string]string) string {
 	return f.templateFormatter.TemplateError(data)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // ExtractArchiveFilenameData delegates to the pattern extractor
 func (f *DefaultOutputFormatter) ExtractArchiveFilenameData(filename string) map[string]string {
@@ -403,11 +394,11 @@ func (f *DefaultOutputFormatter) ExtractBackupFilenameData(filename string) map[
 }
 
 // ExtractPatternData delegates to the pattern extractor
+// - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: compile configured regex and return map of named capture groups from input text.
 func (f *DefaultOutputFormatter) ExtractPatternData(pattern, text string) map[string]string {
 	return f.patternExtractor.ExtractPatternData(pattern, text)
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // FormatDiskFullError formats a disk full error message
 func (f *DefaultOutputFormatter) FormatDiskFullError(err error) string {
@@ -463,7 +454,6 @@ func (f *DefaultOutputFormatter) FormatInvalidFile(err error) string {
 	return fmt.Sprintf(formatStr, err.Error())
 }
 
-// [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING]
 
 // TemplateDiskFullError formats a disk full error using template
 func (f *DefaultOutputFormatter) TemplateDiskFullError(err error) string {

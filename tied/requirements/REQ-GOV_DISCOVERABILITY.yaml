@@ -4,13 +4,13 @@ REQ-GOV_DISCOVERABILITY:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-06-02"
+      date: '2026-06-02'
       reason: Flatten double-nested detail structure; merge satisfaction_criteria including vocab index criterion
     last_validated:
-      date: "2026-06-02"
+      date: '2026-06-02'
       result: pass
       validator: AI Agent
   name: Token Discoverability

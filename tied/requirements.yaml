@@ -9,10 +9,10 @@ REQ-CFG_001:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Basic Configuration Management
   priority: P0
@@ -26,13 +26,13 @@ REQ-CFG_005:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Layered Configuration Inheritance Requirements
@@ -46,7 +46,6 @@ REQ-CFG_005:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'Order is preserved: defaults/parent values first, then child additions'
     - criterion: Array field values from defaults and parent configs are preserved when child configs add values
     - criterion: Array fields default to merge (accumulate) strategy when no prefix is specified
     - criterion: Circular dependencies detected and prevented
@@ -54,6 +53,7 @@ REQ-CFG_005:
     - criterion: Duplicate values in arrays are deduplicated during merge
     - criterion: Inheritance chains processed in correct order
     - criterion: Merge strategies (override, append, prepend, replace, default) work correctly
+    - criterion: 'Order is preserved: defaults/parent values first, then child additions'
   status: Implemented
   traceability:
     architecture:
@@ -72,13 +72,13 @@ REQ-CFG_006:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Complete Configuration Reflection and Visibility Requirements
@@ -126,13 +126,13 @@ REQ-CICD_001:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: AI-First Development Optimization Requirements
@@ -176,13 +176,13 @@ REQ-CODE_QUALITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Code Quality and Linting Requirements
@@ -219,10 +219,10 @@ REQ-CONFIG_OUTPUT_GROUPING:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
   name: Configuration Output Grouping
   priority: P1
   status: Implemented
@@ -235,13 +235,13 @@ REQ-CONFIGURATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Management Requirements
@@ -255,9 +255,9 @@ REQ-CONFIGURATION:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'Precedence: command line > environment > files > defaults'
     - criterion: Configuration loaded from multiple sources
     - criterion: Environment variable support for search paths
+    - criterion: 'Precedence: command line > environment > files > defaults'
     - criterion: Source tracking shows value origins
   status: Implemented
   traceability:
@@ -277,13 +277,13 @@ REQ-CONTEXT_SUPPORT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Context Support Requirements
@@ -319,13 +319,13 @@ REQ-COV_003:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Selective Coverage Reporting Requirements
@@ -364,13 +364,13 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   migration_complete: All code, tests, and documentation updated to use `#{...}` syntax exclusively
@@ -396,8 +396,8 @@ REQ-CUSTOMIZABLE_FORMAT_STRINGS:
     - criterion: '*REQUIRED**: The default list output format MUST include file size information using `#{size_human}` placeholder (e.g., `#{path} (size: #{size_human})`)'
     - criterion: '*REQUIRED**: The substring `(size: #{size_human})` MUST be supported and display as `(size: 1 byte)` or similar human-readable size format (e.g., `(size: 1.2MB)`, `(size: 455KB)`)'
     - criterion: '*REQUIRED**: Users MUST be able to use placeholders like `#{size_human}`, `#{path}`, `#{creation_time}`, and other named attributes in the list output format'
-    - criterion: 'All placeholders MUST use the named format: `#{path}`, `#{size_human}`, `#{creation_time}`, etc.'
     - criterion: All format strings can be overridden in `.bkpdir.yml`
+    - criterion: 'All placeholders MUST use the named format: `#{path}`, `#{size_human}`, `#{creation_time}`, etc.'
     - criterion: Backward compatibility maintained (defaults work when not specified)
     - criterion: Brief example configuration file demonstrates common customizations
     - criterion: Comprehensive reference documentation lists all available format strings with their placeholders
@@ -432,13 +432,13 @@ REQ-DEBUG_OUTPUT_CONTROL:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Debug and Diagnostic Output Control Requirements
@@ -490,13 +490,13 @@ REQ-DIFF_COMMAND:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Diff Command Requirements
@@ -552,10 +552,10 @@ REQ-DOC_001:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Documentation Enhancement
   priority: P1
@@ -570,10 +570,10 @@ REQ-DOC_003:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Documentation Traceability
   priority: P1
@@ -587,13 +587,13 @@ REQ-DOC_011:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Token Validation Integration for AI Assistants Requirements
@@ -645,13 +645,13 @@ REQ-DOC_013:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: AI-First Documentation and Code Maintenance Requirements
@@ -695,13 +695,13 @@ REQ-DOC_015:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Unicode to Semantic Token Mapping Requirements
@@ -741,13 +741,13 @@ REQ-DOC_016:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: AI-First Comprehensive Token System Requirements
@@ -787,13 +787,13 @@ REQ-ERROR_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Enhanced Error Handling Requirements
@@ -831,13 +831,13 @@ REQ-EXTRACT_008_INTERDEP_MAPPING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Package Interdependency Mapping for EXTRACT-008
@@ -866,8 +866,8 @@ REQ-EXTRACT_008_INTERDEP_MAPPING:
     - Diagrams render correctly in docs and link to package README entries
     - Review by maintainer shows coverage of all 8 packages
   validation_criteria:
-    - method: Manual verification
-      coverage: See detail file
+    - coverage: See detail file
+      method: Manual verification
 REQ-FEEDBACK_TO_TIED:
   category: Functional
   cross_references:
@@ -878,10 +878,10 @@ REQ-FEEDBACK_TO_TIED:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-03"
+      date: '2026-03-03'
     last_updated:
       author: AI Agent
-      date: "2026-03-03"
+      date: '2026-03-03'
   name: Feedback to TIED (Feature Requests, Bug Reports, Methodology)
   priority: P1
   status: Implemented
@@ -894,13 +894,13 @@ REQ-FILE_BACKUP:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Backup Requirements
@@ -937,13 +937,13 @@ REQ-GIT_INTEGRATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Git Integration Requirements
@@ -980,10 +980,10 @@ REQ-GOV_DISCOVERABILITY:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Token Discoverability
   priority: P1
@@ -998,10 +998,10 @@ REQ-GOV_REGISTRY_COMPLETENESS:
   metadata:
     created:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI Agent
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Initial creation of missing token
   name: Token Registry Completeness
   priority: P1
@@ -1015,13 +1015,13 @@ REQ-IMMUTABLE_ARCHIVE_NAMING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Archive Naming Convention (Immutable)
@@ -1058,13 +1058,13 @@ REQ-IMMUTABLE_BUILD_SYSTEM:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Build System Requirements (Immutable)
@@ -1105,13 +1105,13 @@ REQ-IMMUTABLE_CLI_COMMANDS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: CLI Commands Structure (Immutable)
@@ -1149,13 +1149,13 @@ REQ-IMMUTABLE_CODE_QUALITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Code Quality Standards (Immutable)
@@ -1196,13 +1196,13 @@ REQ-IMMUTABLE_CONFIGURATION_DEFAULTS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Defaults (Immutable)
@@ -1240,13 +1240,13 @@ REQ-IMMUTABLE_DIRECTORY_OPERATIONS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Directory Operations Requirements (Immutable)
@@ -1287,13 +1287,13 @@ REQ-IMMUTABLE_ERROR_HANDLING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Error Handling Requirements (Immutable)
@@ -1334,13 +1334,13 @@ REQ-IMMUTABLE_FEATURE_PRESERVATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Feature Preservation Rules (Immutable)
@@ -1378,13 +1378,13 @@ REQ-IMMUTABLE_FILE_BACKUP_NAMING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Backup Naming Convention (Immutable)
@@ -1421,13 +1421,13 @@ REQ-IMMUTABLE_FILE_BACKUP_OPERATIONS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Backup Operations Requirements (Immutable)
@@ -1468,13 +1468,13 @@ REQ-IMMUTABLE_FILE_EXCLUSION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: File Exclusion Requirements (Immutable)
@@ -1514,13 +1514,13 @@ REQ-IMMUTABLE_GIT_INTEGRATION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Git Integration Requirements (Immutable)
@@ -1560,13 +1560,13 @@ REQ-IMMUTABLE_GLOBAL_OPTIONS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Global Options (Immutable)
@@ -1604,13 +1604,13 @@ REQ-IMMUTABLE_OUTPUT_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Output Formatting Requirements (Immutable)
@@ -1653,13 +1653,13 @@ REQ-IMMUTABLE_PERFORMANCE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Performance Requirements (Immutable)
@@ -1703,13 +1703,13 @@ REQ-IMMUTABLE_PLATFORM_COMPATIBILITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Platform Compatibility Requirements (Immutable)
@@ -1751,13 +1751,13 @@ REQ-IMMUTABLE_RESOURCE_MANAGEMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Resource Management Requirements (Immutable)
@@ -1801,13 +1801,13 @@ REQ-IMMUTABLE_TEMPLATE_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Template Formatting Requirements (Immutable)
@@ -1851,13 +1851,13 @@ REQ-IMMUTABLE_TESTING_INFRASTRUCTURE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Testing Infrastructure Immutable Requirements
@@ -1896,13 +1896,13 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Incremental Archive Duplicate Prevention Requirements
@@ -1920,12 +1920,12 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)'
     - criterion: Appropriate message displayed when archive creation is skipped due to no changes
     - criterion: Archive selection uses name-based sorting (archive names include alphabetically sortable timestamps)
     - criterion: Behavior is consistent with diff command output
     - criterion: Comparison logic reuses diff command analysis for consistency
     - criterion: Comparison respects exclude patterns from configuration
+    - criterion: 'Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)'
     - criterion: If no changes detected compared to reconstructed state, skip archive creation
     - criterion: Incremental archive creation compares against the union of most recent incremental + most recent full archive
   status: Implemented
@@ -1955,13 +1955,13 @@ REQ-LINT_001:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Code Linting Compliance Requirements
@@ -1997,13 +1997,13 @@ REQ-LIST_LIMIT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: List Command Output Limit Requirements
@@ -2017,11 +2017,11 @@ REQ-LIST_LIMIT:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'Backward compatibility: Existing scripts and workflows continue to work'
-    - criterion: 'Default behavior: Display only the newest 10 files'
     - criterion: Archives remain sorted by creation time (most recent first)
+    - criterion: 'Backward compatibility: Existing scripts and workflows continue to work'
     - criterion: Both `list` command (directory archives) and `--list` command (file backups) support the limit option
     - criterion: Command-line option to control the limit (e.g., `--limit N` or `-n N`)
+    - criterion: 'Default behavior: Display only the newest 10 files'
     - criterion: Option to show all files (e.g., `--limit 0` or `--all`)
   status: Implemented
   traceability:
@@ -2048,13 +2048,13 @@ REQ-MAINTAINABILITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Maintainability Requirements
@@ -2091,10 +2091,10 @@ REQ-MODULE_VALIDATION:
   metadata:
     created:
       author: AI Agent
-      date: "2025-01-27"
+      date: '2025-01-27'
     last_updated:
       author: AI Agent
-      date: "2026-02-06"
+      date: '2026-02-06'
       reason: Restructured to v1.5.0 schema
   name: Independent Module Validation Before Integration
   priority: P0
@@ -2108,13 +2108,13 @@ REQ-OUT_002:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Enhanced Command Output with File Statistics Requirements
@@ -2158,13 +2158,13 @@ REQ-OUTPUT_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Output Formatting Requirements
@@ -2200,13 +2200,13 @@ REQ-PERFORMANCE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Performance Requirements
@@ -2233,6 +2233,35 @@ REQ-PERFORMANCE:
     implementation:
       - IMPL-TESTING
     tests: []
+REQ-PSEUDOCODE_FORMAL_VERIFICATION:
+  architecture: tied/architecture-decisions/ARCH-SPEC_DSL_AND_ORACLE.yaml
+  category: Functional
+  cross_references:
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - IMPL-SPEC_CTL
+  description: Formal IMPL pseudocode with SPEC-ID/STEP/PRE/POST; specctl CI gates; property conformance and mutation thresholds on pilot packages
+  detail_file: requirements/REQ-PSEUDOCODE_FORMAL_VERIFICATION.yaml
+  implementation: tied/implementation-decisions/IMPL-SPEC_CTL.yaml
+  metadata:
+    created:
+      author: AI Agent
+      date: '2026-06-02'
+    last_updated:
+      author: AI Agent
+      date: '2026-06-02'
+      reason: Formal pseudocode verification requirement
+  name: Formal IMPL Pseudocode Verification
+  priority: P0
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-SPEC_DSL_AND_ORACLE
+    code_annotations:
+      - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    implementation:
+      - IMPL-SPEC_CTL
+    tests:
+      - TestSpecctlValidate_REQ_PSEUDOCODE_FORMAL_VERIFICATION
 REQ-RELIABILITY:
   architecture: tied/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml; tied/architecture-decisions/ARCH-ERROR_HANDLING.yaml
   category: Functional
@@ -2242,13 +2271,13 @@ REQ-RELIABILITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Reliability Requirements
@@ -2286,13 +2315,13 @@ REQ-RESOURCE_MANAGEMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Resource Management Requirements
@@ -2328,13 +2357,13 @@ REQ-STDD_VIS:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: TIED Visualization and Storytelling Requirements
@@ -2350,8 +2379,8 @@ REQ-STDD_VIS:
     related_to: []
     supersedes: []
   satisfaction_criteria:
-    - criterion: 'At least two complementary token-first visuals: (1) layered flow/graph emphasizing tokens as primary nodes; (2) timeline/animation highlighting token handoffs over time.'
     - criterion: Assets live under `docs/` (e.g., `docs/images/`) and are referenced from TIED-linked docs; include backward links to source docs per token.
+    - criterion: 'At least two complementary token-first visuals: (1) layered flow/graph emphasizing tokens as primary nodes; (2) timeline/animation highlighting token handoffs over time.'
     - criterion: Each visual annotates at least two real token chains (e.g., `[REQ-CFG_005] Ã¿Ã¿Ã¿ [ARCH-CFG_005] Ã¿Ã¿Ã¿ [IMPL-EXCLUDE_MERGE_FIX] Ã¿Ã¿Ã¿ tests/code refs`) with token-forward callouts and a legend that explains token roles.
     - criterion: Module boundaries captured per [REQ-MODULE_VALIDATION] (data extraction, visualization rendering, animation/timeline, integration) with validation notes before integration.
     - criterion: Tokens visually dominate (color/weight/position); edges and captions reinforce token traceability.
@@ -2381,13 +2410,13 @@ REQ-TEMPLATE_FORMATTING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Template Formatting Requirements
@@ -2424,13 +2453,13 @@ REQ-TEST_EXCLUDE_MERGE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Exclude Patterns Merge Testing Requirements
@@ -2475,16 +2504,16 @@ REQ-TIED_SETUP:
   description: TIED methodology setup requirement
   detail_file: requirements/REQ-TIED_SETUP.yaml
   last_validated:
-    date: "2026-02-06"
+    date: '2026-02-06'
     result: pass
     validator: AI Agent
   metadata:
     created:
       author: AI Agent
-      date: "2025-11-08"
+      date: '2025-11-08'
     last_updated:
       author: AI Agent
-      date: "2026-02-06"
+      date: '2026-02-06'
       reason: Restructured to v1.5.0 schema
   name: TIED Methodology Setup
   priority: P0
@@ -2498,13 +2527,13 @@ REQ-USABILITY:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Usability Requirements

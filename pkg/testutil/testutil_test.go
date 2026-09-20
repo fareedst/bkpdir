@@ -1,7 +1,6 @@
 // [REQ-CODE_QUALITY]
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 package testutil
-
 import (
 	"os"
 	"path/filepath"
@@ -14,6 +13,11 @@ import (
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TEST-REF: Feature tracking matrix EXTRACT-009
 // IMMUTABLE-REF: TestUtil Provider System
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: express unit tests as struct slices with name/input/want fields and t.Run subtests per case.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: provide CreateTempDir and CreateTempFile with t.Cleanup registration for isolated filesystem tests.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: build reusable git repos, archives, backups, and config fixtures for integration tests.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: centralize AssertNoTempFiles, AssertArchiveContents, and output capture helpers for tests.
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths.
 func TestDefaultTestUtilProvider(t *testing.T) {
 	provider := NewTestUtilProvider()
 
@@ -97,6 +101,7 @@ func TestAssertionHelper(t *testing.T) {
 	})
 }
 
+// SPEC-ID: IMPL-TESTING::TABLE_DRIVEN_UNIT_TESTS
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
 // TEST-REF: Feature tracking matrix EXTRACT-009
 // IMMUTABLE-REF: TestUtil FileSystem System

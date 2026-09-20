@@ -2,7 +2,6 @@
 // [ARCH-FILE_STATISTICS] File statistics output formatting validation
 // [IMPL-FILE_STATISTICS] [IMPL-FILE_STATISTICS_TEMPLATE_FIX] FormatCreatedArchiveWithStats and FormatIncrementalCreatedWithStats validation
 package main
-
 import (
 	"os"
 	"path/filepath"
@@ -10,8 +9,8 @@ import (
 	"testing"
 )
 
-// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
-// TestFormatCreatedArchiveWithStats tests format string processing with named replacements for full archives
+// SPEC-ID: IMPL-TEST_COVERAGE::TEST_FILE_STATS_AND_COMPAT
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING] — How: assert FormatCreatedArchiveWithStats and Print*WithStats include size placeholders and basic methods remain compatible.
 func TestFormatCreatedArchiveWithStats_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-archive.zip")
@@ -287,8 +286,7 @@ func TestPrintIncrementalCreatedWithStats_REQ_OUT_002(t *testing.T) {
 	}
 }
 
-// [REQ-OUT_002] [ARCH-FILE_STATISTICS] [IMPL-FILE_STATISTICS]
-// TestBackwardCompatibilityFormatStrings tests that existing format strings still work
+// - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING] — How: assert FormatCreatedArchiveWithStats and Print*WithStats include size placeholders and basic methods remain compatible.
 func TestBackwardCompatibilityFormatStrings_REQ_OUT_002(t *testing.T) {
 	tmpDir := t.TempDir()
 	testArchive := filepath.Join(tmpDir, "test-backward-compat.zip")

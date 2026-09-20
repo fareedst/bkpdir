@@ -2,7 +2,6 @@
 // Tests for file exclusion logic: validates pattern matching and exclusion behavior
 // for directory patterns, glob patterns, and exact matches.
 package main
-
 import "testing"
 
 // [REQ-CONFIGURATION] [ARCH-EXCLUSION_PATTERNS] [IMPL-EXCLUSION_PATTERNS]

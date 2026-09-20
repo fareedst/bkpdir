@@ -9,24 +9,24 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
     - '`config.go` line 928-940: Updated `mergeFileBackupSettings` to check `explicitlySetFields` when `inheritContext=true`'
   code_locations:
     files:
-      - path: config.go
-        description: Configuration loading with mixed sequential and inheritance file processing
+      - description: Configuration loading with mixed sequential and inheritance file processing
+        path: config.go
     functions:
-      - name: LoadConfigWithInheritance
-        description: Main config loading function; detects single-file chains and tracks fields in explicitlySetFields
+      - description: Checks explicitlySetFields when inheritContext=true to preserve sequential file values
         file: config.go
-      - name: mergeBasicSettings
-        description: Merges basic settings checking explicitlySetFields when inheritContext=true
+        name: applyOverride
+      - description: Main config loading function; detects single-file chains and tracks fields in explicitlySetFields
         file: config.go
-      - name: mergeGitSettings
-        description: Merges git settings checking explicitlySetFields when inheritContext=true
+        name: LoadConfigWithInheritance
+      - description: Merges basic settings checking explicitlySetFields when inheritContext=true
         file: config.go
-      - name: mergeFileBackupSettings
-        description: Merges file backup settings checking explicitlySetFields when inheritContext=true
+        name: mergeBasicSettings
+      - description: Merges file backup settings checking explicitlySetFields when inheritContext=true
         file: config.go
-      - name: applyOverride
-        description: Checks explicitlySetFields when inheritContext=true to preserve sequential file values
+        name: mergeFileBackupSettings
+      - description: Merges git settings checking explicitlySetFields when inheritContext=true
         file: config.go
+        name: mergeGitSettings
   code_markers: '`isSingleFileChain`, `explicitlySetFields`, `mergeBasicSettings`, `mergeGitSettings`, `mergeFileBackupSettings`, `applyOverride`, `// CFG-001: Track fields explicitly set in this file for later precedence checks`'
   cross-references: '[ARCH-CFG_005], [REQ-CFG_005], [REQ-CFG_001], [REQ-CONFIGURATION]'
   cross_references:
@@ -34,55 +34,6 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
     - REQ-CFG_001
     - REQ-CFG_005
     - REQ-CONFIGURATION
-  essence_pseudocode: |-
-    # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
-    # Mixed sequential and inheritance file processing: track fields from sequential [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-    # (single-file chain) files in explicitlySetFields so inheritance chains processed [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-    # later cannot override them, preserving CFG-001 precedence. [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-
-    # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: procedure LoadConfigWithInheritance(searchPaths, explicitlySetFields):
-    procedure LoadConfigWithInheritance(searchPaths, explicitlySetFields):
-      # Processes config files from search paths, building inheritance chains. [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-      FOR EACH searchPath IN searchPaths:
-        chain = buildChain(searchPath)
-        isInheritanceChain = len(chain.files) > 1
-        isSingleFileChain  = len(chain.files) == 1
-        FOR EACH filePath IN chain.files:
-          tempCfg = loadSingleConfigFile(filePath)
-          inheritContext = isInheritanceChain OR isFirstFile
-          mergedCfg = applyMergeStrategies(finalCfg, tempCfg, inheritContext, rawMap, defaultCfg, explicitlySetFields)
-          finalCfg = mergedCfg
-
-        # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [REQ-CFG_001] [ARCH-CFG_005]
-        # Track fields from single-file chains (sequential files) to preserve precedence. [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-        # Do NOT track fields from true inheritance chains (len > 1) so child can override parent. [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-        IF isSingleFileChain AND rawMap != nil THEN
-          FOR EACH key IN rawMap:
-            baseKey = strip prefix characters (!, +, ^, =) from key
-            explicitlySetFields[baseKey] = true
-
-    # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: procedure mergeBasicSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explici
-    procedure mergeBasicSettings(dst, src, inheritContext, defaultCfg, rawSrcMap, initialDefaultCfg, dstBeforeMerge, explicitlySetFields):
-      # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] — checks explicitlySetFields for precedence fields. [ARCH-CFG_005] [REQ-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION]
-      FOR EACH precedence field (archive_dir_path, use_current_dir_name, etc.):
-        IF inheritContext THEN
-          # Within inheritance chains: allow override UNLESS field was set by earlier sequential file [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-          IF explicitlySetFields[field] THEN SKIP (preserve sequential file value)
-        ELSE
-          # Sequential files: standard CFG-001 earlier-file-wins [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-          IF dstValue differs from default THEN SKIP
-
-    # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005] — Block implements documented behavior for: procedure applyOverride(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
-    procedure applyOverride(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
-      # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [REQ-CFG_001] [ARCH-CFG_005]
-      # Respects earlier file precedence in both sequential and inheritance contexts. [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_005]
-      wasSetByEarlierFile = explicitlySetFields[key]
-      IF NOT inheritContext THEN
-        shouldPreserve = wasSetByEarlierFile OR dstDiffersFromDefault
-      ELSE
-        shouldPreserve = wasSetByEarlierFile  # only protect sequential-file fields
-      IF shouldPreserve THEN RETURN setConfigField(result, key, dstValue)
-      RETURN setConfigField(result, key, value)
   field_tracking_strategy:
     - Do NOT track fields from true inheritance chain files (`len(chain.files) > 1`) to allow child files to override parent files
     - Track fields in `explicitlySetFields` only from sequential files (single-file chains, `len(chain.files) == 1`)
@@ -100,13 +51,13 @@ IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code, populated code_locations and traceability.tests per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Mixed Sequential and Inheritance File Processing

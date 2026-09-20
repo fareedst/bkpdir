@@ -6,61 +6,6 @@ IMPL-DOC_ENHANCEMENT:
   cross_references:
     - ARCH-DOCUMENTATION_ARCHITECTURE
     - REQ-DOC_001
-  essence_pseudocode: |-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-    # Documentation quality improvement via semantic tokens, automated validation, [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-    # behavioral contracts, and dependency mapping for change-impact analysis. [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: DATA semantic_token_registry:
-    DATA semantic_token_registry:
-      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Canonical registry of all tokens used across documents, code, and tests. [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      tokens: map[token_id -> { type, name, status, cross_references }]
-      token_types: [REQ, ARCH, IMPL, PROC]
-      format_convention: "[TYPE-IDENTIFIER]"
-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE maintain_cross_document_consistency():
-    PROCEDURE maintain_cross_document_consistency():
-      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Intentional cross-document repetition aids LLM comprehension and ensures [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # each document layer is self-contained while linked to others. [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      FOR each document in documentation_set:
-        embed semantic tokens inline at every reference point
-        replicate critical context across layers (REQ, ARCH, IMPL)
-        link each section to its corresponding tokens in the registry
-      END FOR
-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE validate_documentation_consistency():
-    PROCEDURE validate_documentation_consistency():
-      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Automated checks prevent drift between documents and code. [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      CHECK all tokens in code appear in semantic_token_registry
-      CHECK all tokens in tests reference valid IMPL/ARCH/REQ entries
-      CHECK bi-directional links: if A references B, B references A
-      CHECK no orphaned tokens exist (tokens without code or test references)
-      REPORT inconsistencies with file, line, and token context
-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE define_behavioral_contracts():
-    PROCEDURE define_behavioral_contracts():
-      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Behavioral contracts specify invariants that must hold across changes. [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      FOR each feature in documented_features:
-        define input/output contracts
-        define invariants that cannot change without version bump
-        link contracts to requirement tokens
-      END FOR
-
-    # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — Block implements documented behavior for: PROCEDURE analyze_change_impact():
-    PROCEDURE analyze_change_impact():
-      # [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # Dependency mapping reveals which documents, tests, and code are affected [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      # when a requirement, architecture, or implementation decision changes. [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001]
-      build dependency_graph from semantic_token_registry cross_references
-      FOR each proposed change:
-        trace affected tokens through dependency_graph
-        identify impacted documents, code files, and test files
-        report change-impact summary
-      END FOR
   implementation_approach:
     details: []
     summary: |-
@@ -71,13 +16,13 @@ IMPL-DOC_ENHANCEMENT:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: AI agent
-      date: "2026-03-12"
-      reason: Enriched pseudo-code per PROC-IMPL_CODE_TEST_SYNC
+      date: '2026-06-02'
+      reason: Track C bulk sidecar migration from inline essence
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Documentation Enhancement Framework

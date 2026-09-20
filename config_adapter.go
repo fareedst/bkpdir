@@ -1,4 +1,3 @@
-// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // This file is part of bkpdir
 //
 // Package main provides backward compatibility adapter for the extracted configuration system.
@@ -25,7 +24,6 @@ import (
 	"bkpdir/pkg/config"
 )
 
-// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 // ConfigAdapter provides backward compatibility between the original Config struct
 // and the extracted pkg/config package.
 type ConfigAdapter struct {
@@ -37,7 +35,6 @@ type ConfigAdapter struct {
 	envProvider config.EnvironmentProvider
 }
 
-// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
 func NewConfigAdapter() *ConfigAdapter {
 	pathDiscovery := config.NewDefaultPathDiscovery()
 	envProvider := config.NewBackupEnvironmentProvider()
@@ -54,8 +51,8 @@ func NewConfigAdapter() *ConfigAdapter {
 	}
 }
 
-// [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION]
-// LoadConfig delegates to GenericConfigLoader then type-asserts back to *Config.
+// SPEC-ID: IMPL-CONFIG_SCHEMA_FLEX::CONFIG_ADAPTER_LOAD
+// - [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: delegate to GenericConfigLoader with DefaultConfig() then type-assert to *Config or fall back to defaults.
 func (a *ConfigAdapter) LoadConfig(root string) (*Config, error) {
 	// Use the extracted package to load configuration with default config
 	defaultConfig := DefaultConfig()

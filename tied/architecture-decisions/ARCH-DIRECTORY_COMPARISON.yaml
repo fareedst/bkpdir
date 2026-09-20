@@ -1,7 +1,7 @@
 ARCH-DIRECTORY_COMPARISON:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Timestamp-only comparison: Rejected due to accuracy concerns
@@ -10,7 +10,7 @@ ARCH-DIRECTORY_COMPARISON:
   createarchivesnapshot: Build snapshot from ZIP archive
   createdirectorysnapshot: Build snapshot from directory with exclusions
   cross-references: '[REQ-PERFORMANCE]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-PERFORMANCE
   decision: Snapshot-based directory comparison system
   directorysnapshot: Map of file paths to FileInfo
@@ -27,13 +27,13 @@ ARCH-DIRECTORY_COMPARISON:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Directory Comparison Architecture
@@ -46,7 +46,8 @@ ARCH-DIRECTORY_COMPARISON:
       Provides hash-based content verification
       Enables incremental archive detection
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -55,7 +56,8 @@ ARCH-DIRECTORY_COMPARISON:
       - ARCH-DIRECTORY_COMPARISON
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-PERFORMANCE
     tests: []
   use_cases:
     - Archive verification (compare archive to source directory)

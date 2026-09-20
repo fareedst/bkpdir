@@ -5,13 +5,13 @@ REQ-DOC_003:
     metadata:
       created:
         author: AI Agent
-        date: "2026-03-12"
+        date: '2026-03-12'
       last_updated:
         author: AI Agent
-        date: "2026-03-12"
+        date: '2026-03-12'
         reason: Initial creation of missing token
       last_validated:
-        date: "2026-03-12"
+        date: '2026-03-12'
         result: pass
         validator: AI Agent
     name: Documentation Traceability

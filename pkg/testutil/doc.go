@@ -1,4 +1,5 @@
 // EXTRACT-008: See architecture.md - Package Extraction [DECISION:maintenance]
+// - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths.
 // Package testutil provides common testing utilities and patterns for CLI applications.
 //
 // This package extracts reusable testing patterns from the bkpdir application into
@@ -76,7 +77,9 @@
 //
 // Applications can use both packages together for comprehensive testing capabilities.
 //
-// [REQ-DOC_016] Semantic token coverage audit marker
-// [ARCH-TOKEN_SYSTEM] Token system architecture
-// [IMPL-TOKEN_COVERAGE_AUDIT] Applied audit annotation
+// - [IMPL-TOKEN_COVERAGE_AUDIT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] — How: scan each module file for REQ/ARCH/IMPL comments and record missing expected tokens.
+// - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] — How: parse legacy token YAML groups and emit normalized JSON with descriptions, status, and source paths per category.
+// - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] — How: resolve canonical REQ/ARCH/IMPL references for each legacy token and flag gaps when links are missing.
+// - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: hash interface signatures plus documented behavioral contracts to assign stable feature fingerprints linked to semantic tokens.
+// - [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: extract shared test utilities first, add package-focused tests, and keep root integration tests green after package extraction.
 package testutil

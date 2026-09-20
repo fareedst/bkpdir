@@ -1,14 +1,14 @@
 ARCH-LANGUAGE_SELECTION:
   alternatives_considered:
-    - name: See detail file
-      cons: []
+    - cons: []
+      name: See detail file
       pros: []
       rejected_reason: |-
         Python: Rejected due to runtime dependencies and slower performance
         Rust: Rejected due to complexity and longer development time
         C/C++: Rejected due to manual memory management complexity
   cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-MAINTAINABILITY
     - REQ-PERFORMANCE
   decision: Go (Golang)
@@ -18,13 +18,13 @@ ARCH-LANGUAGE_SELECTION:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Language and Runtime
@@ -38,7 +38,9 @@ ARCH-LANGUAGE_SELECTION:
       Excellent tooling (go fmt, go test, go vet)
       Fast compilation and execution
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     informs: []
     see_also: []
   status: Active
@@ -48,5 +50,7 @@ ARCH-LANGUAGE_SELECTION:
       - REQ-MAINTAINABILITY
       - REQ-PERFORMANCE
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
     tests: []

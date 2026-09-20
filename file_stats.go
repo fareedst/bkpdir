@@ -8,7 +8,6 @@
 
 // [REQ-OUTPUT_FORMATTING] File statistics and information gathering
 // [ARCH-FILE_STATISTICS] File statistics gathering for enhanced output formatting
-// [IMPL-FILE_STATISTICS] FileStatInfo structure with human-readable formatting
 package main
 
 import (
@@ -18,7 +17,6 @@ import (
 	"time"
 )
 
-// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
 // FileStatInfo contains statistical information about a file for output formatting
 type FileStatInfo struct {
 	Path      string      // Full file path
@@ -31,9 +29,7 @@ type FileStatInfo struct {
 	Type      string      // File type (regular, directory, symlink)
 }
 
-// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
-// GatherFileStatInfo gathers statistical information about a file for output formatting.
-// It returns a FileStatInfo struct containing path, size, modification time, permissions, and type.
+// - [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: stat path and populate FileStatInfo with name, size, human size, mtime, mode, and type.
 func GatherFileStatInfo(path string) (*FileStatInfo, error) {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -52,9 +48,7 @@ func GatherFileStatInfo(path string) (*FileStatInfo, error) {
 	}, nil
 }
 
-// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
-// formatHumanSize converts a size in bytes to a human-readable format.
-// Examples: 1024 -> "1.0KB", 1536 -> "1.5KB", 1048576 -> "1.0MB"
+// - [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: scale bytes to TB/GB/MB/KB/B with one decimal for large units.
 func formatHumanSize(size int64) string {
 	const (
 		KB = 1024
@@ -77,9 +71,7 @@ func formatHumanSize(size int64) string {
 	}
 }
 
-// [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUTPUT_FORMATTING]
-// getFileType determines the type of a file based on its FileInfo.
-// Returns "regular", "directory", "symlink", "device", "pipe", "socket", or "other".
+// - [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: classify regular, directory, symlink, device, pipe, socket, or other from mode bits.
 func getFileType(info os.FileInfo) string {
 	mode := info.Mode()
 	switch {

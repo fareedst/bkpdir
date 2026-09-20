@@ -1,0 +1,807 @@
+{
+  "canonicalMutation": false,
+  "findings": [
+    {
+      "direction": "A",
+      "id": "02399096fd86fcde",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-24"
+    },
+    {
+      "direction": "A",
+      "id": "025461a2370ff26f",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-4"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-61-t.Fatal"
+      ],
+      "id": "0823ce28e9195c3a",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 61,
+        "location": "internal/speccheck/leads_test.go:61"
+      },
+      "statementId": "gotest-61-t.Fatal"
+    },
+    {
+      "direction": "B",
+      "id": "09783ba370d0c52b",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-10"
+    },
+    {
+      "direction": "B",
+      "id": "0d8a9f94349e03c6",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-23"
+    },
+    {
+      "direction": "A",
+      "id": "12b19c44d2e3c3a7",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-9"
+    },
+    {
+      "direction": "B",
+      "id": "14e2cf9a61023cb9",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-15"
+    },
+    {
+      "direction": "A",
+      "id": "1517914f5fc54be2",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-14"
+    },
+    {
+      "direction": "A",
+      "id": "163f57f61aa3933c",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-31"
+    },
+    {
+      "direction": "B",
+      "id": "1924ced5f358bf6e",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-1"
+    },
+    {
+      "direction": "A",
+      "id": "1b3ceb0904955f7f",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-7"
+    },
+    {
+      "direction": "B",
+      "id": "1f3d2627dc969878",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-12"
+    },
+    {
+      "direction": "A",
+      "id": "238c9ed493477c4d",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-29"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-26-t.Fatalf"
+      ],
+      "id": "25b3a67050378568",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 4,
+        "line": 26,
+        "location": "internal/speccheck/leads_test.go:26"
+      },
+      "statementId": "gotest-26-t.Fatalf"
+    },
+    {
+      "direction": "B",
+      "id": "25fb3690913d3b79",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-29"
+    },
+    {
+      "direction": "A",
+      "id": "284219d731b8a40b",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-10"
+    },
+    {
+      "direction": "A",
+      "id": "28ea5ae4ab595b34",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-15"
+    },
+    {
+      "direction": "B",
+      "id": "2a76f8c33a392c5b",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-31"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-35-t.Fatal"
+      ],
+      "id": "2e7cba8a03b4f667",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 35,
+        "location": "internal/speccheck/leads_test.go:35"
+      },
+      "statementId": "gotest-35-t.Fatal"
+    },
+    {
+      "direction": "A",
+      "id": "2fdf7f5fcc9b1cf9",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-17"
+    },
+    {
+      "direction": "B",
+      "id": "31ecbe2d23742770",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-14"
+    },
+    {
+      "direction": "B",
+      "id": "3421c95f5b798c6a",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-8"
+    },
+    {
+      "direction": "A",
+      "id": "377b19f4d89ddf0a",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-32"
+    },
+    {
+      "direction": "B",
+      "id": "37811748f78cc86d",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-21"
+    },
+    {
+      "direction": "B",
+      "id": "37cda426f58c21be",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-28"
+    },
+    {
+      "direction": "B",
+      "id": "3e347223b80c41c6",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-25"
+    },
+    {
+      "direction": "B",
+      "id": "417b198b3e2ba280",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-26"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-49-t.Fatal"
+      ],
+      "id": "4194c004318198d6",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 49,
+        "location": "internal/speccheck/leads_test.go:49"
+      },
+      "statementId": "gotest-49-t.Fatal"
+    },
+    {
+      "direction": "A",
+      "id": "4b1325811468c1ee",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-3"
+    },
+    {
+      "direction": "B",
+      "id": "561e410b3bda887f",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-32"
+    },
+    {
+      "direction": "B",
+      "id": "580f0969b8ecab16",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-24"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-41-t.Fatal"
+      ],
+      "id": "5890dc6b5ae7bd0a",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 41,
+        "location": "internal/speccheck/leads_test.go:41"
+      },
+      "statementId": "gotest-41-t.Fatal"
+    },
+    {
+      "direction": "B",
+      "id": "5f7e7fccc2770508",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-7"
+    },
+    {
+      "direction": "B",
+      "id": "6c2c23f8edb9faec",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-9"
+    },
+    {
+      "direction": "A",
+      "id": "7119de87fbb6b547",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-2"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-22-t.Fatalf"
+      ],
+      "id": "72a7f7f68b2d141b",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 22,
+        "location": "internal/speccheck/leads_test.go:22"
+      },
+      "statementId": "gotest-22-t.Fatalf"
+    },
+    {
+      "direction": "A",
+      "id": "765e6cbccb47ed83",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-22"
+    },
+    {
+      "direction": "A",
+      "id": "79828824c061a604",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-21"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-67-t.Fatal"
+      ],
+      "id": "79a8368a8552a882",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 67,
+        "location": "internal/speccheck/leads_test.go:67"
+      },
+      "statementId": "gotest-67-t.Fatal"
+    },
+    {
+      "direction": "A",
+      "id": "7b22fbf061724e25",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-11"
+    },
+    {
+      "direction": "A",
+      "id": "7d74f2c099b0686f",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-6"
+    },
+    {
+      "direction": "A",
+      "id": "7fbdf477704de584",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-1"
+    },
+    {
+      "direction": "B",
+      "id": "84650a52282cb0ec",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-2"
+    },
+    {
+      "direction": "B",
+      "id": "87d4780b2f30365f",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-33"
+    },
+    {
+      "direction": "A",
+      "id": "8ca4eb99a79e65fa",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-8"
+    },
+    {
+      "direction": "A",
+      "id": "90072a92284a2c67",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-19"
+    },
+    {
+      "direction": "B",
+      "id": "92e649332978440d",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-30"
+    },
+    {
+      "direction": "A",
+      "id": "98f31c7bf7dc73a4",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-18"
+    },
+    {
+      "direction": "A",
+      "id": "9b5ce1a653908f0e",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-25"
+    },
+    {
+      "direction": "A",
+      "id": "9f636510bb265b66",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-28"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-45-t.Fatal"
+      ],
+      "id": "9fa096ae0deb32f8",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 45,
+        "location": "internal/speccheck/leads_test.go:45"
+      },
+      "statementId": "gotest-45-t.Fatal"
+    },
+    {
+      "direction": "B",
+      "id": "a1db13020ad27957",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-22"
+    },
+    {
+      "direction": "B",
+      "id": "a94f0aa2cf27a8f0",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-5"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-16-t.Fatal"
+      ],
+      "id": "ab7f220c45cef640",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 4,
+        "line": 16,
+        "location": "internal/speccheck/leads_test.go:16"
+      },
+      "statementId": "gotest-16-t.Fatal"
+    },
+    {
+      "direction": "A",
+      "id": "aeee07e32f994a92",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-16"
+    },
+    {
+      "direction": "B",
+      "id": "b0c27237ee81883d",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-16"
+    },
+    {
+      "direction": "A",
+      "id": "b5752700fb044f35",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-20"
+    },
+    {
+      "direction": "A",
+      "id": "bc2978fcd232943e",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-30"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-58-t.Fatal"
+      ],
+      "id": "bc56b07e2aa7186e",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 58,
+        "location": "internal/speccheck/leads_test.go:58"
+      },
+      "statementId": "gotest-58-t.Fatal"
+    },
+    {
+      "direction": "B",
+      "id": "c04d719fdbd454df",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-27"
+    },
+    {
+      "direction": "A",
+      "id": "c3dc67dc66245544",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-27"
+    },
+    {
+      "direction": "A",
+      "id": "c8c5147d309b7c2c",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-26"
+    },
+    {
+      "direction": "A",
+      "id": "c95341b9a6299ce4",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-23"
+    },
+    {
+      "direction": "A",
+      "id": "cb989b12f32e0601",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-33"
+    },
+    {
+      "direction": "B",
+      "id": "d14cbc7b43b21845",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-4"
+    },
+    {
+      "direction": "B",
+      "id": "d2aa059fbf9a2cd1",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-3"
+    },
+    {
+      "direction": "B",
+      "id": "d460291507053a5d",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-17"
+    },
+    {
+      "direction": "A",
+      "id": "dd7ed816e3acf7a0",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-13"
+    },
+    {
+      "direction": "B",
+      "id": "e6b9e539bbec46de",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-18"
+    },
+    {
+      "direction": "B",
+      "id": "e7611ea538178bd9",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-19"
+    },
+    {
+      "direction": "A",
+      "id": "ef48e6d365889ed9",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-5"
+    },
+    {
+      "direction": "B",
+      "id": "f41dc52265ce2517",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-6"
+    },
+    {
+      "direction": "B",
+      "id": "f7d648675819aab4",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-20"
+    },
+    {
+      "direction": "B",
+      "id": "f92a7f574c59bdc4",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-11"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-52-t.Fatal"
+      ],
+      "id": "f9773aeb90724ae8",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 52,
+        "location": "internal/speccheck/leads_test.go:52"
+      },
+      "statementId": "gotest-52-t.Fatal"
+    },
+    {
+      "direction": "A",
+      "evidenceRefs": [
+        "gotest-70-t.Fatalf"
+      ],
+      "id": "fc6d1e9d8d208639",
+      "kind": "reliability",
+      "message": "Evidence describes behavior not represented in the specification.",
+      "proofBoundary": "semantic_fidelity",
+      "source": {
+        "column": 3,
+        "line": 70,
+        "location": "internal/speccheck/leads_test.go:70"
+      },
+      "statementId": "gotest-70-t.Fatalf"
+    },
+    {
+      "direction": "B",
+      "id": "fea733d37bbfdf85",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-13"
+    },
+    {
+      "direction": "A",
+      "id": "fece939d7ab9366b",
+      "kind": "completeness",
+      "message": "Specification statement has no corresponding evidence.",
+      "proofBoundary": "semantic_fidelity",
+      "statementId": "statement-12"
+    }
+  ],
+  "graph": {
+    "edges": [
+      {
+        "from": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-001",
+        "kind": "criterion_constraint",
+        "to": "constraint:constraint-REQ-PSEUDOCODE_FORMAL_VERIFICATION"
+      },
+      {
+        "from": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-002",
+        "kind": "criterion_constraint",
+        "to": "constraint:constraint-REQ-PSEUDOCODE_FORMAL_VERIFICATION"
+      },
+      {
+        "from": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-003",
+        "kind": "criterion_constraint",
+        "to": "constraint:constraint-REQ-PSEUDOCODE_FORMAL_VERIFICATION"
+      },
+      {
+        "from": "constraint:constraint-REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+        "kind": "constraint_block",
+        "to": "IMPL-SPEC_CTL#VALIDATE#94df288906b36754"
+      },
+      {
+        "from": "IMPL-SPEC_CTL#VALIDATE#94df288906b36754",
+        "kind": "block_evidence",
+        "to": "evidence:production-locus"
+      },
+      {
+        "from": "IMPL-SPEC_CTL#VALIDATE#94df288906b36754",
+        "kind": "block_evidence",
+        "to": "evidence:test-locus"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "constraint:constraint-REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+        "kind": "constraint"
+      },
+      {
+        "id": "evidence:production-locus",
+        "kind": "evidence",
+        "revision": "1f6074482fc7c1db"
+      },
+      {
+        "id": "evidence:test-locus",
+        "kind": "evidence",
+        "revision": "1f6074482fc7c1db"
+      },
+      {
+        "id": "IMPL-SPEC_CTL#VALIDATE#94df288906b36754",
+        "kind": "block",
+        "revision": "39b0b3d4a7d0342b"
+      },
+      {
+        "id": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-001",
+        "kind": "criterion",
+        "revision": "fce6f04733e14806"
+      },
+      {
+        "id": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-002",
+        "kind": "criterion",
+        "revision": "06a87ede2a590528"
+      },
+      {
+        "id": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-003",
+        "kind": "criterion",
+        "revision": "e18debf6cd2b1902"
+      }
+    ],
+    "projectId": "/Users/fareed/Documents/dev/go/bkpdir"
+  },
+  "projectId": "/Users/fareed/Documents/dev/go/bkpdir",
+  "proofBoundaries": [
+    "semantic_fidelity"
+  ],
+  "readOnly": true,
+  "schemaVersion": "adversarial-inquiry-report.v1",
+  "scope": [
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-001",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-002",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-003"
+  ]
+}

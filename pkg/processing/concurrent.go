@@ -1,4 +1,3 @@
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PERFORMANCE] [REQ-PERFORMANCE]
 // ARCH-001: See architecture.md - Core Architecture [DECISION:maintenance]
 package processing
 
@@ -116,7 +115,7 @@ type Worker struct {
 	wg          *sync.WaitGroup
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] NewConcurrentProcessor creates a new concurrent processor with NumCPU workers
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: construct ConcurrentProcessor with NumCPU workers and buffered task/result channels.
 func NewConcurrentProcessor(processFunc func(ctx context.Context, item *ProcessingItem) (interface{}, error)) *ConcurrentProcessor {
 	workerCount := runtime.NumCPU()
 
@@ -149,6 +148,7 @@ func (cp *ConcurrentProcessor) SetBatchSize(size int) {
 }
 
 // GetStatus returns the current processing status
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: execute pipeline stages sequentially with context cancellation, retries, and progress tracking.
 func (cp *ConcurrentProcessor) GetStatus() *ConcurrentStatus {
 	cp.statusMu.RLock()
 	defer cp.statusMu.RUnlock()
@@ -176,7 +176,7 @@ func (cp *ConcurrentProcessor) GetStatus() *ConcurrentStatus {
 	return &status
 }
 
-// [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] Process executes concurrent processing using worker pools
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: initialize worker pool, submit items via task channel, collect results from result channel.
 func (cp *ConcurrentProcessor) Process(ctx context.Context, items []ProcessingItem) (*ConcurrentResult, error) {
 	start := time.Now()
 
@@ -402,7 +402,8 @@ func (cp *ConcurrentProcessor) createFinalResult(results []*TaskResult, duration
 
 // Worker implementation
 
-// [IMPL-PROCESSING_PATTERNS] [REQ-PERFORMANCE] run executes the worker main loop, reading tasks from queue
+// SPEC-ID: IMPL-PROCESSING_PATTERNS::WORKER_RUN
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: worker loop reads tasks from queue until closed or context cancelled, dispatching each to processTask.
 func (w *Worker) run() {
 	defer w.wg.Done()
 
@@ -429,6 +430,7 @@ func (w *Worker) run() {
 }
 
 // processTask processes a single task
+// - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: check cancellation then invoke processFunc and record TaskResult with duration and error state.
 func (w *Worker) processTask(task *ProcessingTask) *TaskResult {
 	start := time.Now()
 

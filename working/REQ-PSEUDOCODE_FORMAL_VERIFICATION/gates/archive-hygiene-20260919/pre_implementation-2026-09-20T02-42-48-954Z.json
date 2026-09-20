@@ -1,0 +1,40 @@
+{
+  "schema_version": "checklist-gate-receipt.v1",
+  "phase": "pre_implementation",
+  "timestamp": "2026-09-20T02:42:48.954Z",
+  "allowed": false,
+  "diagnostics": [
+    "tracker_sparse",
+    "missing_not_applicable_policy_or_rationale:gate-pseudocode-validation",
+    "missing_required_step:sub-adversarial-inquiry-pass",
+    "missing_expected_identity",
+    "missing_activation_artifact:obligation-report.json",
+    "missing_activation_artifact:finding-ledger.jsonl",
+    "missing_activation_artifact:gate-result.json",
+    "missing_artifact_hash:evidence-provenance.json",
+    "missing_receipt_artifact_hashes"
+  ],
+  "depth": "integrated",
+  "input_hashes": {
+    "tracker_hash": "sha256:fc0c793265a2639de25d8cc318eadb4014e28932a32d27d6fdbd44c7c94efdb6",
+    "citdp_hash": "sha256:31f8f942a4fcb85a5ee2b6376f4af9a22589288a6c5071a9b6d9e6567bf4b3d6"
+  },
+  "gate_result": {
+    "allowed": false,
+    "ok": false,
+    "blocking": true,
+    "depth": "integrated",
+    "phase": "pre_implementation",
+    "diagnostics": [
+      "tracker_sparse",
+      "missing_not_applicable_policy_or_rationale:gate-pseudocode-validation",
+      "missing_required_step:sub-adversarial-inquiry-pass",
+      "missing_expected_identity",
+      "missing_activation_artifact:obligation-report.json",
+      "missing_activation_artifact:finding-ledger.jsonl",
+      "missing_activation_artifact:gate-result.json",
+      "missing_artifact_hash:evidence-provenance.json",
+      "missing_receipt_artifact_hashes"
+    ]
+  }
+}

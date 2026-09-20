@@ -2,7 +2,7 @@ ARCH-CONFIG_OUTPUT_GROUPING:
   alternatives_considered: []
   categories: Defined logical groups (Basic, Archive, Backup, Git, Output, Advanced)
   cross-references: '[REQ-CONFIG_OUTPUT_GROUPING], [REQ-USABILITY]'
-  cross_references: &ref_0
+  cross_references:
     - REQ-CONFIG_OUTPUT_GROUPING
     - REQ-USABILITY
   decision: Group configuration output by category and rank by importance
@@ -15,13 +15,13 @@ ARCH-CONFIG_OUTPUT_GROUPING:
   metadata:
     created:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
     last_updated:
       author: MCP converter
-      date: "2026-03-12"
+      date: '2026-03-12'
       reason: Converted from monolithic
     last_validated:
-      date: "2026-03-12"
+      date: '2026-03-12'
       result: pass
       validator: MCP converter
   name: Configuration Output Grouping
@@ -34,7 +34,9 @@ ARCH-CONFIG_OUTPUT_GROUPING:
       Maintains backward compatibility via flags
       Aligns with standard CLI best practices
   related_decisions:
-    depends_on: *ref_0
+    depends_on:
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
     informs: []
     see_also: []
   sorting: Category Priority -> Importance -> Name
@@ -45,5 +47,7 @@ ARCH-CONFIG_OUTPUT_GROUPING:
       - REQ-CONFIG_OUTPUT_GROUPING
       - REQ-USABILITY
     implementation: []
-    requirements: *ref_0
+    requirements:
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
     tests: []

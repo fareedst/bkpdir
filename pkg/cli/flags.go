@@ -1,4 +1,3 @@
-// [IMPL-CLI_FRAMEWORK] [ARCH-CLI_COMMANDS] [REQ-IMMUTABLE_CLI_COMMANDS]
 package cli
 
 import (
@@ -9,11 +8,12 @@ import (
 type DefaultFlagManager struct{}
 
 // NewFlagManager creates a new flag manager
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
 func NewFlagManager() FlagManager {
 	return &DefaultFlagManager{}
 }
 
-// AddGlobalFlags adds common global flags to a command
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: add persistent help and verbose flags to command.
 func (fm *DefaultFlagManager) AddGlobalFlags(cmd *cobra.Command) error {
 	// Add commonly used global flags
 	cmd.PersistentFlags().BoolP("help", "h", false, "Help for this command")
@@ -68,7 +68,7 @@ type FlagSet struct {
 	Verbose     *bool
 }
 
-// AddFlags adds all configured flags to the command
+// - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: register dry-run, note, config, incremental, and list flags when FlagSet pointers are non-nil.
 func (fm *DefaultFlagManager) AddFlags(cmd *cobra.Command, flagSet FlagSet) error {
 	if flagSet.DryRun != nil {
 		if err := fm.AddDryRunFlag(cmd, flagSet.DryRun); err != nil {
