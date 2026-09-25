@@ -75,16 +75,18 @@ EFFECTS: FS.Write, FS.Rename, State.ResourceManager
 SPEC-ID: IMPL-ZIP_FORMAT::ADD_FILE_TO_ZIP
 STEP T001: Write one entry with Deflate header, copying file content or symlink target and honoring skip_broken_symlinks
 
-- [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: write one entry with Deflate header, copying file content or symlink target and honoring skip_broken_symlinks.
+- [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: normalize rel to OracleZipEntryPath for zip member name, then write one Deflate entry copying file content or symlink target and honoring skip_broken_symlinks.
 
 PROCEDURE ADD_FILE_TO_ZIP(sourceDir, rel, zipWriter, config):
 Contract:
 PRE: true
-POST: true
+POST: hdr.Name equals OracleZipEntryPath(rel) with forward slashes only and no ./ prefix
 INPUT: sourceDir, rel, zipWriter, config
 OUTPUT: result of ADD_FILE_TO_ZIP
-EFFECTS: FS.Write, FS.Rename, State.ResourceManager
-  BUILD zip header with Deflate method
+EFFECTS: FS.Write, State.ResourceManager; zip central directory entry name normalized
+  SET entryName = OracleZipEntryPath(rel)
+  SET absPath = JOIN(sourceDir, FromSlash(entryName)) for filesystem access
+  BUILD zip header with Deflate method; hdr.Name = entryName
   IF symlink AND broken AND config.skip_broken_symlinks THEN RETURN
   WRITE file or link target bytes to zip entry
 

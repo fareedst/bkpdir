@@ -23,6 +23,15 @@ func TestArchiveNaming_Oracle(t *testing.T) {
 	}
 }
 
+func TestZipEntryPath_Oracle(t *testing.T) {
+	if got := specmodel.OracleZipEntryPath(`tied\foo.yaml`); got != "tied/foo.yaml" {
+		t.Fatalf("OracleZipEntryPath backslash: got %q", got)
+	}
+	if got := specmodel.OracleZipEntryPath("./a/b"); got != "a/b" {
+		t.Fatalf("OracleZipEntryPath dot prefix: got %q", got)
+	}
+}
+
 func TestDuplicatePrevention_Oracle(t *testing.T) {
 	if !specmodel.OracleDuplicatePrevented([]string{"a.zip"}, "b.zip") {
 		t.Fatal("expected unique candidate allowed")

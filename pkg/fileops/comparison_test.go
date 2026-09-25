@@ -37,6 +37,42 @@ import (
 // - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: delegate text payload to ATOMICWRITEFILE.
 // - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: delegate to context-aware atomic write with background context.
 // - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: check cancellation before each stage, write temp path, rename to final, untrack temp on success.
+func TestCreateDirectorySnapshot_SymlinkToDirectory_REQ_DIFF_COMMAND(t *testing.T) {
+	dir := t.TempDir()
+	target := filepath.Join(dir, "packages", "agentstream")
+	if err := os.MkdirAll(target, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(target, "package.json"), []byte("{}"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	linkDir := filepath.Join(dir, "node_modules", "@tied")
+	if err := os.MkdirAll(linkDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	linkPath := filepath.Join(linkDir, "agentstream")
+	if err := os.Symlink("../../packages/agentstream", linkPath); err != nil {
+		t.Fatal(err)
+	}
+
+	snap, err := CreateDirectorySnapshot(dir, nil)
+	if err != nil {
+		t.Fatalf("CreateDirectorySnapshot with dir symlink: %v", err)
+	}
+	var found bool
+	for _, f := range snap.Files {
+		if f.RelativePath == filepath.Join("node_modules", "@tied", "agentstream") {
+			found = true
+			if f.Hash == "" {
+				t.Fatal("expected symlink entry to have content hash")
+			}
+		}
+	}
+	if !found {
+		t.Fatal("expected symlink entry in snapshot")
+	}
+}
+
 func TestCreateDirectorySnapshot_NoExclusions_REQ_DIFF_COMMAND(t *testing.T) {
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, "a.txt"), []byte("alpha"), 0644); err != nil {

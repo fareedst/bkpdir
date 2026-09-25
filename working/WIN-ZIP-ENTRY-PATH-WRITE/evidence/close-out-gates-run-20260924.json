@@ -1,0 +1,25 @@
+{
+  "schema_version": "close-out-gates-run.v1",
+  "generated_at": "2026-09-24T17:31:00-07:00",
+  "request_token": "WIN-ZIP-ENTRY-PATH-WRITE",
+  "phase": "close_out",
+  "gate_validate": {
+    "allowed": true,
+    "receipt_path": "working/WIN-ZIP-ENTRY-PATH-WRITE/gates/close_out-2026-09-25T00-31-13-154Z.json"
+  },
+  "tests": {
+    "command": "go test ./... && cd pkg/fileops && go test ./...",
+    "log_path": "working/WIN-ZIP-ENTRY-PATH-WRITE/evidence/close-out-go-test-2026-09-24.txt",
+    "exit_code": 0
+  },
+  "tied_validate_consistency": {
+    "ok": true,
+    "date": "2026-09-24"
+  },
+  "companion_change": {
+    "id": "INC-SNAPSHOT-SYMLINK",
+    "citdp": "tied/citdp/CITDP-INC-SNAPSHOT-SYMLINK.yaml",
+    "evidence": "working/INC-SNAPSHOT-SYMLINK/evidence/close-out-summary.md"
+  },
+  "envelope_build_note": "request_evidence_envelope_build returned InvalidRequestToken for non-REQ change_request_id; gate receipt + test log used as typed evidence."
+}

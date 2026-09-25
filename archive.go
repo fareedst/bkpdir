@@ -19,6 +19,7 @@ package main
 
 import (
 	"archive/zip"
+	"bkpdir/internal/specmodel"
 	"bkpdir/pkg/formatter"
 	"context"
 	"fmt"
@@ -903,7 +904,8 @@ func addFilesToZipWithConfig(ctx context.Context, sourceDir string, files []stri
 }
 
 func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
-	abs := filepath.Join(sourceDir, rel)
+	entryName := specmodel.OracleZipEntryPath(rel)
+	abs := filepath.Join(sourceDir, filepath.FromSlash(entryName))
 	info, err := os.Lstat(abs)
 	if err != nil {
 		return err
@@ -914,7 +916,8 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 		return err
 	}
 
-	hdr.Name = rel
+	// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: OracleZipEntryPath normalizes zip member names for cross-platform archives.
+	hdr.Name = entryName
 	hdr.Method = zip.Deflate
 	w, err := zipw.CreateHeader(hdr)
 	if err != nil {
@@ -950,7 +953,8 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 
 // - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: write one entry with Deflate header, copying file content or symlink target and honoring skip_broken_symlinks.
 func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg ArchiveConfigInterface) error {
-	abs := filepath.Join(sourceDir, rel)
+	entryName := specmodel.OracleZipEntryPath(rel)
+	abs := filepath.Join(sourceDir, filepath.FromSlash(entryName))
 	info, err := os.Lstat(abs)
 	if err != nil {
 		return err
@@ -961,7 +965,8 @@ func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg Archive
 		return err
 	}
 
-	hdr.Name = rel
+	// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: OracleZipEntryPath normalizes zip member names for cross-platform archives.
+	hdr.Name = entryName
 	hdr.Method = zip.Deflate
 	w, err := zipw.CreateHeader(hdr)
 	if err != nil {

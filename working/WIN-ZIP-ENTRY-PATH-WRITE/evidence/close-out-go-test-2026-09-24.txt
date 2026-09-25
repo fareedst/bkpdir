@@ -1,0 +1,26 @@
+ok  	bkpdir	6.118s
+?   	bkpdir/cmd/ai-validation	[no test files]
+?   	bkpdir/cmd/realtime-validator	[no test files]
+?   	bkpdir/cmd/specctl	[no test files]
+ok  	bkpdir/cmd/token-suggester	(cached)
+?   	bkpdir/docs/examples/pipeline-example/example-code	[no test files]
+ok  	bkpdir/internal/speccheck	(cached)
+ok  	bkpdir/internal/specmodel	(cached)
+ok  	bkpdir/internal/specmodel/contract	(cached)
+ok  	bkpdir/internal/specparse	(cached)
+ok  	bkpdir/internal/testutil	(cached)
+ok  	bkpdir/internal/validation	(cached)
+ok  	bkpdir/internal/ziprepair	(cached)
+ok  	bkpdir/pkg/cli	(cached)
+ok  	bkpdir/pkg/config	(cached)
+ok  	bkpdir/pkg/errors	(cached)
+ok  	bkpdir/pkg/git	1.715s
+ok  	bkpdir/pkg/processing	(cached)
+ok  	bkpdir/pkg/resources	(cached)
+ok  	bkpdir/test/metrics	(cached)
+ok  	bkpdir/test/performance	(cached)
+ok  	bkpdir/test/scenarios	(cached)
+ok  	bkpdir/test/specconformance	(cached)
+ok  	bkpdir/tools	(cached)
+?   	bkpdir/tools/repair_zip_entry_paths	[no test files]
+ok  	bkpdir/pkg/fileops	0.159s

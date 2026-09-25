@@ -18,6 +18,28 @@ STEP T001: DELEGATE to fileops.CreateDirectorySnapshot with exclude patterns
 PROCEDURE CREATE_DIRECTORY_SNAPSHOT(root, excludePatterns):
   RETURN fileops.CreateDirectorySnapshot(root, excludePatterns)
 
+## FILEOPS_CREATE_DIRECTORY_SNAPSHOT
+
+SPEC-ID: IMPL-DIRECTORY_COMPARISON::FILEOPS_CREATE_DIRECTORY_SNAPSHOT
+STEP T001: Walk tree with exclusion patterns (SkipDir on excluded directories)
+STEP T002: For each non-directory entry, compute SHA-256 content hash aligned with archive representation
+
+- [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [ARCH-ARCHIVE_FORMAT] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: walk applies ShouldExcludeFile; regular files hash file bytes; symlinks hash Readlink target bytes (same as zip symlink entries) without following the link.
+
+PRE: root path exists and is readable
+POST: DirectorySnapshot lists RelativePath, Size, ModTime, IsDir, Hash for every non-excluded walk entry
+EFFECTS: Symlink-to-directory entries no longer fail diff/inc snapshot creation
+FAILURE_MODES: unreadable path or broken Readlink propagate walk error
+
+PROCEDURE FILEOPS_CREATE_DIRECTORY_SNAPSHOT(root, excludePatterns):
+  FOR EACH path IN Walk(root):
+    IF excluded THEN SkipDir or CONTINUE
+    IF IsDir THEN record metadata only
+    ELSE IF ModeSymlink THEN hash = SHA256(Readlink(path))
+    ELSE hash = SHA256(file bytes at path)
+  SORT files by RelativePath
+  RETURN snapshot
+
 ## CREATE_ARCHIVE_SNAPSHOT
 
 SPEC-ID: IMPL-DIRECTORY_COMPARISON::CREATE_ARCHIVE_SNAPSHOT

@@ -1,0 +1,32 @@
+record_identity:
+  change_request_id: INC-SNAPSHOT-SYMLINK
+  title: Hash symlink targets in directory snapshots for inc/diff
+  recorded_at: "2026-09-24"
+change_definition:
+  current_behavior: |
+    CreateDirectorySnapshot hashes non-directory walk entries by opening the path;
+    symlinks to directories are followed and fail with read is a directory.
+  desired_behavior: |
+    Symlink entries hash Readlink target bytes, matching zip archive representation;
+    inc and diff succeed on npm workspace symlinks.
+  non_goals:
+    - Change zip write symlink handling
+    - Follow symlinks during directory walk
+  success_criteria:
+    - TestCreateDirectorySnapshot_SymlinkToDirectory_REQ_DIFF_COMMAND passes
+    - bkpdir inc succeeds on trees with directory symlinks in node_modules
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: minimal
+    gate_policy: advisory
+    research_profile: none
+    assurance_profile: baseline-functional
+    rationale: Local filesystem snapshot fix; small production change plus test and IMPL doc.
+test_strategy:
+  unit:
+    - TestCreateDirectorySnapshot_SymlinkToDirectory_REQ_DIFF_COMMAND
+  integration:
+    - IncCommand integration tests in inc_diff_integration_test.go
+completion_criteria:
+  activation:
+    run_id: inc-symlink-20260924

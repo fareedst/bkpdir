@@ -87,9 +87,18 @@ func (c *DefaultComparer) CreateDirectorySnapshot(rootPath string, excludePatter
 			IsDir:        info.IsDir(),
 		}
 
-		// Calculate hash for regular files
+		// Calculate hash for regular files and symlinks (archive stores symlink target bytes, not followed content)
 		if !info.IsDir() {
-			hash, err := c.calculateFileHash(path)
+			var hash string
+			if info.Mode()&os.ModeSymlink != 0 {
+				linkTarget, rerr := os.Readlink(path)
+				if rerr != nil {
+					return rerr
+				}
+				hash, err = c.calculateContentHash([]byte(linkTarget))
+			} else {
+				hash, err = c.calculateFileHash(path)
+			}
 			if err != nil {
 				return err
 			}
@@ -197,6 +206,13 @@ func (c *DefaultComparer) IsDirectoryIdenticalToArchive(dirPath, archivePath str
 
 	// Compare snapshots
 	return c.CompareSnapshots(dirSnapshot, archiveSnapshot), nil
+}
+
+// calculateContentHash calculates SHA-256 hash of a byte slice (e.g. symlink target stored in archives).
+func (c *DefaultComparer) calculateContentHash(data []byte) (string, error) {
+	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
+	sum := sha256.Sum256(data)
+	return fmt.Sprintf("%x", sum[:]), nil
 }
 
 // calculateFileHash calculates SHA-256 hash of a file

@@ -102,7 +102,8 @@ Key functions: `CreateDirectorySnapshot`, `CreateArchiveSnapshot`, `CompareSnaps
 
 | Preferred term | UPPER_SNAKE block | Owning IMPL |
 |----------------|-------------------|-------------|
-| Create directory snapshot | `CREATE_DIRECTORY_SNAPSHOT` | [IMPL-DIRECTORY_COMPARISON](../implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml) |
+| Create directory snapshot | `CREATE_DIRECTORY_SNAPSHOT` / `FILEOPS_CREATE_DIRECTORY_SNAPSHOT` | [IMPL-DIRECTORY_COMPARISON](../implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml) |
+| Symlink snapshot hash | `FILEOPS_CREATE_DIRECTORY_SNAPSHOT` (Readlink target bytes) | [IMPL-DIRECTORY_COMPARISON](../implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml), [IMPL-ZIP_FORMAT](../implementation-decisions/IMPL-ZIP_FORMAT.yaml) |
 | Create archive snapshot | `CREATE_ARCHIVE_SNAPSHOT` | [IMPL-DIRECTORY_COMPARISON](../implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml) |
 | Compare snapshots | `COMPARE_SNAPSHOTS` | [IMPL-DIRECTORY_COMPARISON](../implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml) |
 | Identical directory check | `IS_DIRECTORY_IDENTICAL_TO_ARCHIVE` | [IMPL-DIRECTORY_COMPARISON](../implementation-decisions/IMPL-DIRECTORY_COMPARISON.yaml) |

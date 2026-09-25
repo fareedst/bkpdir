@@ -511,6 +511,52 @@ func TestIncrementalArchiveDirectoryStructure(t *testing.T) {
 	})
 }
 
+// - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: verify zip central-directory names use OracleZipEntryPath even when rel contains OS backslashes.
+func TestAddFileToZipWithConfig_normalizesEntryPathSeparators_REQ_FILE_BACKUP(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "bkpdir_zip_path_test")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	subdir := filepath.Join(tempDir, "subdir")
+	if err := os.MkdirAll(subdir, 0755); err != nil {
+		t.Fatalf("Failed to create subdir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(subdir, "file.txt"), []byte("payload"), 0644); err != nil {
+		t.Fatalf("Failed to create file: %v", err)
+	}
+
+	cfg := &Config{}
+	archiveConfig := &ConfigToArchiveConfigAdapter{cfg: cfg}
+
+	var buf bytes.Buffer
+	zipw := zip.NewWriter(&buf)
+	// Simulate Windows filepath.Rel output while on-disk path uses native separators.
+	rel := "subdir\\file.txt"
+	if err := addFileToZipWithConfig(tempDir, rel, zipw, archiveConfig); err != nil {
+		t.Fatalf("addFileToZipWithConfig: %v", err)
+	}
+	if err := zipw.Close(); err != nil {
+		t.Fatalf("zip close: %v", err)
+	}
+
+	zr, err := zip.NewReader(bytes.NewReader(buf.Bytes()), int64(buf.Len()))
+	if err != nil {
+		t.Fatalf("zip reader: %v", err)
+	}
+	if len(zr.File) != 1 {
+		t.Fatalf("entry count = %d, want 1", len(zr.File))
+	}
+	name := zr.File[0].Name
+	if strings.Contains(name, `\`) {
+		t.Errorf("entry name contains backslash: %q", name)
+	}
+	if name != "subdir/file.txt" {
+		t.Errorf("entry name = %q, want subdir/file.txt", name)
+	}
+}
+
 func TestSkipBrokenSymlinks(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir, err := os.MkdirTemp("", "bkpdir_symlink_test")

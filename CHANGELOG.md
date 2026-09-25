@@ -38,6 +38,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **ZIP entry paths (`[IMPL-ZIP_FORMAT]`)**: `addFileToZip*` writes central-directory names via `OracleZipEntryPath` so Windows backslash `rel` values produce forward-slash member names (Mac/Linux behavior unchanged).
+- **Incremental diff snapshots (`[IMPL-DIRECTORY_COMPARISON]`)**: `pkg/fileops` directory snapshots hash symlink targets via `Readlink` (matching zip archive entries) so `bkpdir inc` / diff no longer fail on npm-style directory symlinks (e.g. `node_modules/@scope/pkg` → workspace package).
 - **`refactoring_validation_test.go`**: Required-doc expectations now target TIED IMPL YAML paths after long-form refactoring markdown removal.
 - **`tools/coverage-differential.go`**: Treat missing `docs/coverage-baseline.md` as an empty baseline instead of failing.
 

@@ -11,6 +11,7 @@ IMPL-DIRECTORY_COMPARISON:
       - CreateArchiveSnapshot
       - CreateDirectorySnapshot
       - DefaultComparer.calculateArchiveFileHash
+      - DefaultComparer.calculateContentHash
       - DefaultComparer.calculateFileHash
       - DefaultComparer.CompareSnapshots
       - DefaultComparer.CreateArchiveSnapshot
@@ -178,6 +179,7 @@ IMPL-DIRECTORY_COMPARISON:
       - TestCreateArchiveSnapshot_ErrorCases
       - TestCreateDirectorySnapshot
       - TestCreateDirectorySnapshot_NoExclusions_REQ_DIFF_COMMAND
+      - TestCreateDirectorySnapshot_SymlinkToDirectory_REQ_DIFF_COMMAND
       - TestCreateDirectorySnapshot_WithExclusions_REQ_DIFF_COMMAND
       - TestFindMostRecentArchive
       - TestFindMostRecentArchive_ErrorCases
