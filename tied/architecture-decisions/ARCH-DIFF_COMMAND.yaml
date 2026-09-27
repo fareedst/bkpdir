@@ -1,7 +1,7 @@
 ARCH-DIFF_COMMAND:
   alternatives_considered: []
   archive_selection: Use name-based sorting to find most recent archives (archive names include alphabetically sortable timestamps in ISO 8601 format)
-  archive_state_reconstruction: Reconstruct effective state by applying most recent incremental archive on top of most recent full archive
+  archive_state_reconstruction: Reconstruct effective state by applying every matching incremental archive for the current full base in name order on top of the most recent full archive
   change_detection: Identify added files, modified files, and deleted files
   compare_only_against_full_archive: Rejected - doesn't account for existing incremental changes
   compare_only_against_most_recent_incremental: Rejected - incremental archives are deltas, not complete states
@@ -40,9 +40,9 @@ ARCH-DIFF_COMMAND:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
-      author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      author: AI agent
+      date: '2026-09-24'
+      reason: LEAP — incremental chain reconstruction
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -54,7 +54,7 @@ ARCH-DIFF_COMMAND:
     problems_solved: []
     why: |-
       Users need visibility into changes before creating incremental archives
-      Comparing against the union (full + most recent incremental) provides accurate change detection
+      Comparing against the union (full + ordered incremental chain) provides accurate change detection when each incremental stores a delta since the prior effective state
       Reusing diff logic for duplicate prevention ensures consistency
       Enables users to preview what would be included in next incremental backup
   related_decisions:

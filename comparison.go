@@ -145,8 +145,8 @@ type DiffResult struct {
 	Deleted  []string
 }
 
-// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: select incrementals whose name prefix matches base full archive _update= pattern; return latest by name.
-func findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (*Archive, error) {
+// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted by name (oldest first).
+func findMatchingIncrementalArchives(archiveDir string, baseFullArchive *Archive) ([]Archive, error) {
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
 		return nil, err
@@ -155,14 +155,11 @@ func findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (
 		return nil, nil
 	}
 
-	// Extract base name from full archive (without .zip extension)
 	baseName := strings.TrimSuffix(baseFullArchive.Name, ".zip")
 	if debug {
-		fmt.Fprintf(os.Stderr, "DEBUG: findLatestIncrementalArchive - Looking for incrementals based on: %s\n", baseName)
+		fmt.Fprintf(os.Stderr, "DEBUG: findMatchingIncrementalArchives - Looking for incrementals based on: %s\n", baseName)
 	}
 
-	// Filter incremental archives that are based on the given full archive
-	// Incremental archives are named: BASENAME_update=...
 	var matchingIncrementals []Archive
 	expectedPrefix := baseName + "_update="
 
@@ -171,12 +168,12 @@ func findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (
 			incrementalBaseName := strings.TrimSuffix(archives[i].Name, ".zip")
 			if !strings.HasPrefix(incrementalBaseName, expectedPrefix) {
 				if debug {
-					fmt.Fprintf(os.Stderr, "DEBUG: findLatestIncrementalArchive - Skipping %s (doesn't match prefix %s)\n", archives[i].Name, expectedPrefix)
+					fmt.Fprintf(os.Stderr, "DEBUG: findMatchingIncrementalArchives - Skipping %s (doesn't match prefix %s)\n", archives[i].Name, expectedPrefix)
 				}
-				continue // Skip incrementals not based on this full archive
+				continue
 			}
 			if debug {
-				fmt.Fprintf(os.Stderr, "DEBUG: findLatestIncrementalArchive - Considering incremental: %s\n", archives[i].Name)
+				fmt.Fprintf(os.Stderr, "DEBUG: findMatchingIncrementalArchives - Considering incremental: %s\n", archives[i].Name)
 			}
 			matchingIncrementals = append(matchingIncrementals, archives[i])
 		}
@@ -186,21 +183,14 @@ func findLatestIncrementalArchive(archiveDir string, baseFullArchive *Archive) (
 		return nil, nil
 	}
 
-	// Sort by name (archive names include timestamps that are alphabetically sortable)
-	// Most recent archive will be last when sorted ascending
 	sort.Slice(matchingIncrementals, func(i, j int) bool {
 		return matchingIncrementals[i].Name < matchingIncrementals[j].Name
 	})
 
-	// Return the last (most recent) incremental archive
-	latestIncremental := matchingIncrementals[len(matchingIncrementals)-1]
-	if debug {
-		fmt.Fprintf(os.Stderr, "DEBUG: findLatestIncrementalArchive - Selected latest: %s\n", latestIncremental.Name)
-	}
-	return &latestIncremental, nil
+	return matchingIncrementals, nil
 }
 
-// - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: load full zip snapshot, overlay incremental zip files by RelativePath, return merged DirectorySnapshot.
+// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full zip snapshot, overlay each matching incremental zip in chronological order by RelativePath, return merged DirectorySnapshot.
 func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 	// Find most recent full archive
 	latestFullArchive, err := findLatestFullArchive(archiveDir)
@@ -221,14 +211,12 @@ func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Loaded full archive snapshot: %s, %d files\n", latestFullArchive.Path, len(fullSnapshot.Files))
 	}
 
-	// Find most recent incremental archive that is based on the latest full archive
-	latestIncremental, err := findLatestIncrementalArchive(archiveDir, latestFullArchive)
+	incrementalArchives, err := findMatchingIncrementalArchives(archiveDir, latestFullArchive)
 	if err != nil {
-		return nil, fmt.Errorf("failed to find incremental archive: %w", err)
+		return nil, fmt.Errorf("failed to find incremental archives: %w", err)
 	}
 
-	// If no incremental archive exists, return full archive snapshot
-	if latestIncremental == nil {
+	if len(incrementalArchives) == 0 {
 		if debug {
 			fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - No incremental archive found for base %s\n", latestFullArchive.Name)
 		}
@@ -236,39 +224,32 @@ func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 	}
 
 	if debug {
-		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Found latest incremental archive: %s\n", latestIncremental.Name)
+		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Applying %d incremental archives for base %s\n", len(incrementalArchives), latestFullArchive.Name)
 	}
 
-	// Load incremental archive snapshot
-	incrementalSnapshot, err := CreateArchiveSnapshot(latestIncremental.Path)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load incremental archive snapshot: %w", err)
-	}
-	if debug {
-		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Loaded incremental archive snapshot: %s, %d files\n", latestIncremental.Path, len(incrementalSnapshot.Files))
-		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Full archive has %d files, incremental has %d files\n", len(fullSnapshot.Files), len(incrementalSnapshot.Files))
-	}
-
-	// Merge incremental changes on top of full archive
-	// Create a map for efficient lookup
 	fullMap := make(map[string]FileInfo)
 	for _, file := range fullSnapshot.Files {
 		fullMap[file.RelativePath] = file
 	}
 
-	// Apply incremental changes (incremental files override/add to full archive)
-	if debug {
-		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Applying %d incremental files to full archive\n", len(incrementalSnapshot.Files))
-	}
-	for _, file := range incrementalSnapshot.Files {
-		if debug {
-			if _, exists := fullMap[file.RelativePath]; exists {
-				fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Incremental overriding file: %s (size=%d, hash=%s)\n", file.RelativePath, file.Size, file.Hash[:16])
-			} else {
-				fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Incremental adding new file: %s (size=%d, hash=%s)\n", file.RelativePath, file.Size, file.Hash[:16])
-			}
+	for _, incremental := range incrementalArchives {
+		incrementalSnapshot, err := CreateArchiveSnapshot(incremental.Path)
+		if err != nil {
+			return nil, fmt.Errorf("failed to load incremental archive snapshot %s: %w", incremental.Path, err)
 		}
-		fullMap[file.RelativePath] = file
+		if debug {
+			fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Loaded incremental archive snapshot: %s, %d files\n", incremental.Path, len(incrementalSnapshot.Files))
+		}
+		for _, file := range incrementalSnapshot.Files {
+			if debug {
+				if _, exists := fullMap[file.RelativePath]; exists {
+					fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Incremental overriding file: %s (size=%d, hash=%s)\n", file.RelativePath, file.Size, file.Hash[:16])
+				} else {
+					fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Incremental adding new file: %s (size=%d, hash=%s)\n", file.RelativePath, file.Size, file.Hash[:16])
+				}
+			}
+			fullMap[file.RelativePath] = file
+		}
 	}
 
 	// Convert map back to slice and sort

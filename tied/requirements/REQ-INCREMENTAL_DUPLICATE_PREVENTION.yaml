@@ -2,16 +2,16 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
   architecture: tied/architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   category: Functional
   cross-references: '[REQ-DIFF_COMMAND] (Diff Command), [REQ-OUTPUT_FORMATTING] (Output Formatting), [REQ-CONFIGURATION] (Configuration Management), [REQ-CONTEXT_SUPPORT] (Context Support)'
-  description: Prevent creation of duplicate incremental archives when there are no observable changes compared to the most recent incremental archive. The system must compare the current directory state against the union of the most recent incremental archive applied on top of the most recent full archive, rather than comparing only against the full archive. If no changes are detected, the incremental archive creation must be skipped with an appropriate message. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
+  description: Prevent creation of duplicate incremental archives when there are no observable changes compared to the effective archived state. The system must compare the current directory state against the union of the most recent full archive and every incremental archive for that full base applied in name order (oldest first), rather than comparing only against the full archive or only the latest incremental. If no changes are detected, the incremental archive creation must be skipped with an appropriate message. Archive selection (finding the most recent full archive and matching incrementals) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
   implementation: tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
-      author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      author: AI agent
+      date: '2026-09-24'
+      reason: LEAP — incremental chain reconstruction for duplicate prevention
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -38,7 +38,7 @@ REQ-INCREMENTAL_DUPLICATE_PREVENTION:
     - criterion: Comparison respects exclude patterns from configuration
     - criterion: 'Handles edge cases: no incremental exists (compare against full), no archives exist (error appropriately)'
     - criterion: If no changes detected compared to reconstructed state, skip archive creation
-    - criterion: Incremental archive creation compares against the union of most recent incremental + most recent full archive
+    - criterion: Incremental archive creation compares against full archive plus ordered incremental chain for that full base
   status: Implemented
   traceability:
     architecture:

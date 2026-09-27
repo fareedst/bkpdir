@@ -1,0 +1,66 @@
+record_identity:
+  change_request_id: INC-CHAIN-RECONSTRUCT
+  title: Apply full incremental chain in ReconstructArchiveState
+  recorded_at: "2026-09-24"
+change_definition:
+  current_behavior: |
+    ReconstructArchiveState merged only the latest incremental zip onto the latest full
+    archive. Each incremental stores a delta since the prior effective state, so skipping
+    older incrementals made duplicate-prevention and diff baselines wrong (false changes,
+    repeated bkpdir inc, same-minute zip overwrite).
+  desired_behavior: |
+    ReconstructArchiveState loads the latest full archive and applies every incremental
+    whose name matches BASE_update= for that full base, in ascending name order (oldest first).
+    bkpdir inc skips when CalculateDiff against that chained state is empty.
+  non_goals:
+    - Sub-minute incremental filename collision handling
+    - New REQ token; extends REQ-INCREMENTAL_DUPLICATE_PREVENTION and REQ-DIFF_COMMAND
+  success_criteria:
+    - comparison.go chains incrementals in ReconstructArchiveState
+    - TestReconstructArchiveStateMultipleFullAndIncremental expects first incremental overlay
+    - Two successive bkpdir inc with unchanged tree skips on second run
+    - TIED LEAP updates IMPL/ARCH/REQ wording for incremental chain
+  unchanged_behavior: |
+    Archive naming, zip write paths, exclude patterns, full archive creation.
+impact_analysis:
+  modules_or_boundaries:
+    - comparison.go (ReconstructArchiveState, findMatchingIncrementalArchives)
+    - archive.go (createIncrementalArchive uses reconstruction)
+    - diff_command_test.go
+  tied_tokens_affected:
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-DIFF_COMMAND
+    - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    - ARCH-DIFF_COMMAND
+    - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    - IMPL-DIFF_COMMAND
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: minimal
+    prior_depth_tier: null
+    gate_policy: advisory
+    research_profile: none
+    assurance_profile: baseline-functional
+    rationale: |
+      Local filesystem archive merge logic; no auth, network, or schema change.
+      Regression covered by existing diff and incremental duplicate-prevention tests.
+    eligibility_triggers_matched: []
+    counterexamples:
+      - "Out-of-order incremental filenames break chronological merge — mitigated by name sort convention"
+    falsification_questions:
+      - "If only latest incremental is applied, second inc still creates archives — TestIncCommandIntegration skip path"
+    disconfirming_observations:
+      - "Second consecutive bkpdir inc still prints Created incremental archive with unchanged tree after chain fix"
+    evidence_references:
+      - working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/minimal-inquiry-waiver.md
+test_strategy:
+  summary: Update IMPL sidecars, implement chain merge, adjust reconstruction test, run incremental/diff test subset.
+  unit:
+    - TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND
+    - TestIncrementalArchiveSkipNoChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+  integration:
+    - go test -run 'TestIncremental|TestReconstruct|TestIncCommand|TestCalculateDiff' .
+completion_criteria:
+  activation:
+    run_id: inc-chain-reconstruct-20260924
+    request_token: REQ-INCREMENTAL_DUPLICATE_PREVENTION

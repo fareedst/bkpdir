@@ -210,13 +210,13 @@ func TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND(t *t
 		}
 	}
 
-	// Should have new_file2.txt from full archive (second incremental doesn't include it, so it keeps full archive value)
+	// Should have new_file2.txt from first incremental (chain applies all incrementals in order)
 	if hash, exists := reconstructedMap["new_file2.txt"]; !exists {
 		t.Error("Expected new_file2.txt in reconstructed state, but not found")
 	} else {
-		expectedHash := calculateFileHash([]byte("new_content2"))
+		expectedHash := calculateFileHash([]byte("new_modified_content2"))
 		if hash != expectedHash {
-			t.Errorf("Expected new_file2.txt to have hash from full archive (second incremental doesn't modify it), got %s, expected %s", hash, expectedHash)
+			t.Errorf("Expected new_file2.txt to have hash from first incremental, got %s, expected %s", hash, expectedHash)
 		}
 	}
 

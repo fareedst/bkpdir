@@ -1,0 +1,26 @@
+{
+  "schema_version": "close-out-gates-run.v1",
+  "generated_at": "2026-09-24T20:34:00-07:00",
+  "request_token": "REQ-INCREMENTAL_DUPLICATE_PREVENTION",
+  "change_request_id": "INC-CHAIN-RECONSTRUCT",
+  "phase": "close_out",
+  "gate_validate": {
+    "allowed": true,
+    "receipt_path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/gates/close_out-2026-09-25T03-33-59-027Z.json"
+  },
+  "envelope_validate": {
+    "ok": true,
+    "fail_on_error_gaps": true,
+    "blocking_gap_count": 0,
+    "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/request-evidence-envelope.v1.json"
+  },
+  "tests": {
+    "command": "go test -count=1 -run 'TestIncremental|TestReconstruct|TestIncCommand|TestCalculateDiff' ./",
+    "log_path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/close-out-go-test-2026-09-24.txt",
+    "exit_code": 0
+  },
+  "tied_validate_consistency": {
+    "ok": true,
+    "date": "2026-09-24"
+  }
+}

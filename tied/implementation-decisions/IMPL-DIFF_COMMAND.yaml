@@ -1,16 +1,10 @@
 IMPL-DIFF_COMMAND:
   code_locations:
-    files:
-      - archive.go
-      - comparison.go
-      - config.go
-      - formatter.go
-      - main.go
     functions:
       - CalculateDiff
       - diffCmd
       - findLatestFullArchive
-      - findLatestIncrementalArchive
+      - findMatchingIncrementalArchives
       - FindMostRecentArchive
       - FormatDiffResult
       - PrintDiffResult
@@ -23,16 +17,16 @@ IMPL-DIFF_COMMAND:
     - REQ-DIFF_COMMAND
     - REQ-INCREMENTAL_DUPLICATE_PREVENTION
     - REQ-OUTPUT_FORMATTING
-  description: Implement diff command with archive state reconstruction and comparison engine. Reconstructs effective state by applying incremental on top of full archive, provides accurate change detection, reuses comparison logic for duplicate prevention consistency.
+  description: Implement diff command with archive state reconstruction and comparison engine. Reconstructs effective state by applying every matching incremental for the current full base in name order on top of the full archive snapshot; provides accurate change detection; reuses comparison logic for duplicate prevention consistency.
   implementation_approach:
     details:
       - 'Archive Selection Strategy: All selection functions use name-based sorting (ISO 8601 timestamps are alphabetically sortable) instead of file modification times'
-      - 'Archive State Reconstruction: Load most recent full archive, apply most recent incremental changes, return reconstructed DirectorySnapshot'
+      - 'Archive State Reconstruction: Load most recent full archive, apply every matching incremental in name order, return reconstructed DirectorySnapshot'
       - 'Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case'
       - 'CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection'
       - 'Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns'
     summary: |-
-      CLI diff command reconstructs effective archive state from latest full plus incremental zip snapshots, compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
+      CLI diff command reconstructs effective archive state from latest full plus every matching incremental zip (chronological name order), compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
       INPUT: archiveDir, cwd, exclude patterns, context
       OUTPUT: DiffResult, stdout diff text
       DATA: DirectorySnapshot maps by RelativePath, name-sorted Archive list
@@ -42,8 +36,8 @@ IMPL-DIFF_COMMAND:
     created: '2026-03-12'
     last_updated:
       author: AI agent
-      date: '2026-09-20'
-      reason: probe
+      date: '2026-09-24'
+      reason: LEAP — incremental chain reconstruction in comparison.go
   name: Diff Command Implementation
   rationale:
     benefits:
@@ -73,9 +67,9 @@ IMPL-DIFF_COMMAND:
       - 'archive.go: findLatestFullArchive — filters full archives, sorts by name, returns latest with error on empty'
       - 'comparison.go: CalculateDiff — snapshots current dir, compares against reconstructed state by hash/size'
       - 'comparison.go: DiffResult struct — holds Added, Modified, Deleted string slices'
-      - 'comparison.go: findLatestIncrementalArchive — filters incremental archives by base name prefix, sorts by name, returns latest'
+      - 'comparison.go: findMatchingIncrementalArchives — filters incremental archives by base name prefix, sorts by name ascending'
       - 'comparison.go: FindMostRecentArchive — filters full archives from ListArchives, sorts by name, returns latest'
-      - 'comparison.go: ReconstructArchiveState — loads full archive snapshot, merges incremental on top'
+      - 'comparison.go: ReconstructArchiveState — loads full archive snapshot, merges incremental chain in name order'
       - 'formatter.go: FormatDiffResult — formats DiffResult with configurable format strings'
       - 'formatter.go: PrintDiffResult — prints formatted diff result to stdout or collector'
       - 'main.go: diffCmd — cobra command with context cancellation, archive state reconstruction, diff calculation, result printing'

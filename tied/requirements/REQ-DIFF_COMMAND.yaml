@@ -2,16 +2,16 @@ REQ-DIFF_COMMAND:
   architecture: tied/architecture-decisions/ARCH-DIFF_COMMAND.yaml
   category: Functional
   cross-references: '[REQ-INCREMENTAL_DUPLICATE_PREVENTION] (Incremental Archive Duplicate Prevention), [REQ-OUTPUT_FORMATTING] (Output Formatting), [REQ-CONFIGURATION] (Configuration Management), [REQ-CONTEXT_SUPPORT] (Context Support)'
-  description: Implement a CLI `diff` command that reports if there are any changes between the current directory files and the union of the most recent incremental archive on top of the most recent full archive. The command must reconstruct the effective state by applying incremental changes to the full archive, then compare that reconstructed state against the current directory. Archive selection (finding the most recent full and incremental archives) must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.
+  description: 'Implement a CLI `diff` command that reports if there are any changes between the current directory files and the effective archived state: the most recent full archive with every matching incremental archive for that full base applied in name order (oldest first). The command must reconstruct that state by overlaying incremental zip entries on the full archive snapshot, then compare the reconstructed state against the current directory. Archive selection must use name-based sorting since archive names include timestamps in ISO 8601 format (`YYYY-MM-DDTHHmmss`) which are alphabetically sortable.'
   implementation: tied/implementation-decisions/IMPL-DIFF_COMMAND.yaml
   metadata:
     created:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
-      author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      author: AI agent
+      date: '2026-09-24'
+      reason: LEAP — incremental chain reconstruction for diff baseline
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -40,7 +40,7 @@ REQ-DIFF_COMMAND:
     - criterion: Handles cases where no incremental archive exists (compares against full archive only)
     - criterion: Output shows added files, modified files, and deleted files
     - criterion: Output uses configurable format strings consistent with other commands
-    - criterion: Reconstructs effective state by applying most recent incremental archive on top of most recent full archive
+    - criterion: Reconstructs effective state by applying every matching incremental archive on top of the most recent full archive in name order
   status: Implemented
   traceability:
     architecture:

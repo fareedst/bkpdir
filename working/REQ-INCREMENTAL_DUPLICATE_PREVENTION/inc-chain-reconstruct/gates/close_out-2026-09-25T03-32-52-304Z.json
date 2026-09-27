@@ -1,0 +1,46 @@
+{
+  "schema_version": "checklist-gate-receipt.v1",
+  "phase": "close_out",
+  "timestamp": "2026-09-25T03:32:52.304Z",
+  "allowed": false,
+  "diagnostics": [
+    "missing_required_step:sub-adversarial-inquiry-pass",
+    "invalid_slug:validate-pseudocode",
+    "invalid_slug:author-implementation-pseudocode",
+    "invalid_slug:red-unit-tests",
+    "invalid_slug:green-unit-code",
+    "invalid_slug:verification-run-tests",
+    "invalid_slug:leap-stack-sync",
+    "missing_counterexamples",
+    "missing_falsification_questions",
+    "missing_disconfirming_observations",
+    "missing_adversarial_evidence_references",
+    "invalid_slug"
+  ],
+  "depth": "minimal",
+  "input_hashes": {
+    "tracker_hash": "sha256:8892cdf7984bedf55135517f3380dc3b7346a3fe93be06fe7eb793cb8d95850b",
+    "citdp_hash": "sha256:1c295d4dc78fd265853745ebba06c3b82c33b4c43e475443be1a20a3f6f65265"
+  },
+  "gate_result": {
+    "allowed": false,
+    "ok": false,
+    "blocking": true,
+    "depth": "minimal",
+    "phase": "close_out",
+    "diagnostics": [
+      "missing_required_step:sub-adversarial-inquiry-pass",
+      "invalid_slug:validate-pseudocode",
+      "invalid_slug:author-implementation-pseudocode",
+      "invalid_slug:red-unit-tests",
+      "invalid_slug:green-unit-code",
+      "invalid_slug:verification-run-tests",
+      "invalid_slug:leap-stack-sync",
+      "missing_counterexamples",
+      "missing_falsification_questions",
+      "missing_disconfirming_observations",
+      "missing_adversarial_evidence_references",
+      "invalid_slug"
+    ]
+  }
+}

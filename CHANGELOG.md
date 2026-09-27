@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- **Incremental reconstruction (`[IMPL-DIFF_COMMAND]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]`)**: `ReconstructArchiveState` merges all incrementals for the current full base in name order, fixing false `bkpdir inc` diffs and duplicate archives when multiple `_update=` zips exist.
 - **ZIP entry paths (`[IMPL-ZIP_FORMAT]`)**: `addFileToZip*` writes central-directory names via `OracleZipEntryPath` so Windows backslash `rel` values produce forward-slash member names (Mac/Linux behavior unchanged).
 - **Incremental diff snapshots (`[IMPL-DIRECTORY_COMPARISON]`)**: `pkg/fileops` directory snapshots hash symlink targets via `Readlink` (matching zip archive entries) so `bkpdir inc` / diff no longer fail on npm-style directory symlinks (e.g. `node_modules/@scope/pkg` → workspace package).
 - **`refactoring_validation_test.go`**: Required-doc expectations now target TIED IMPL YAML paths after long-form refactoring markdown removal.

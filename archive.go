@@ -635,7 +635,7 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
-	// Reconstruct archive state (full + most recent incremental) and check for changes
+	// Reconstruct archive state (full + incremental chain) and check for changes
 	reconstructedState, err := ReconstructArchiveState(archiveDir)
 	var modifiedFiles []string
 

@@ -43,9 +43,9 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
       author: MCP converter
       date: '2026-03-12'
     last_updated:
-      author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      author: AI agent
+      date: '2026-09-24'
+      reason: LEAP — incremental chain reconstruction for skip baseline
     last_validated:
       date: '2026-03-12'
       result: pass
@@ -77,7 +77,7 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   reuse_diff_logic: Leverage diff command comparison engine for duplicate detection
   separate_comparison_logic: Rejected - code duplication and potential inconsistency
   skip_creation: Skip incremental archive creation if no changes detected
-  state_reconstruction: Reconstruct effective state from full + most recent incremental archive
+  state_reconstruction: Reconstruct effective state from full archive plus every matching incremental for that full base applied in name order
   status: Active
   traceability:
     code_annotations:

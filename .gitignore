@@ -66,6 +66,7 @@ scripts/lint.sh
 prompts
 *.tmp
 .cursor/plans
+.cursor/debug-*.log
 docs/.markscope-preview-cache
 docs/markscope/.markscope-preview-cache
 report.json

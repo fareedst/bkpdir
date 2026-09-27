@@ -20,7 +20,7 @@
 | **incremental archive** | delta backup | ZIP of changed files since base full archive |
 | **file backup** | file archive | Single-file timestamped copy (not ZIP) |
 | **base archive** | parent archive | Most recent full archive for incremental chain |
-| **effective archive state** | merged archive | Full + latest incremental combined view |
+| **effective archive state** | merged archive | Full + all incrementals for that full base, applied oldest → newest (name sort) |
 | **identical directory** | no changes | Skip create when dir matches archive |
 | **identical file** | unchanged file | Skip backup when content matches |
 | **directory snapshot** | dir scan | Path → hash map for comparison |

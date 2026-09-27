@@ -1,0 +1,47 @@
+{
+  "schema_version": "request-evidence-envelope.v1",
+  "envelope_meta": {
+    "generated_at": "2026-09-25T03:32:22.284Z",
+    "generator": "request_evidence_envelope_build",
+    "revision": 1
+  },
+  "identity": {
+    "request_token": "REQ-INCREMENTAL_DUPLICATE_PREVENTION",
+    "project_id": "af8451e933f573ec",
+    "depth_tier": "minimal",
+    "gate_policy": "advisory",
+    "methodology_snapshot_id": "3.0.0"
+  },
+  "runs": [],
+  "artifacts": [
+    {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/evidence/not-applicable-receipt.v1.json",
+      "content_hash": "sha256:f48c14ca3016a2417c69ae2db579868288ecc7a776a335c6de8d2375cfe6c508",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "request_evidence_envelope",
+      "schema_version": "request-evidence-envelope.v1",
+      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/evidence/request-evidence-envelope.v1.json",
+      "content_hash": "sha256:6826e079fb85550450668255d912e126db9757e46b21d1a854b8684dd633e541",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    }
+  ],
+  "cross_links": {
+    "tracker_path": null,
+    "tracker_hash": null,
+    "citdp_path": null,
+    "evidence_chain_profile_path": null
+  },
+  "gaps": []
+}

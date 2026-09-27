@@ -2037,14 +2037,14 @@ IMPL-DIFF_COMMAND:
   detail_file: implementation-decisions/IMPL-DIFF_COMMAND.yaml
   implementation_approach:
     summary: |-
-      CLI diff command reconstructs effective archive state from latest full plus incremental zip snapshots, compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
+      CLI diff command reconstructs effective archive state from latest full plus every matching incremental zip (chronological name order), compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
       INPUT: archiveDir, cwd, exclude patterns, context
       OUTPUT: DiffResult, stdout diff text
       DATA: DirectorySnapshot maps by RelativePath, name-sorted Archive list
       Canonical behavior: tied/implementation-decisions/IMPL-DIFF_COMMAND-pseudocode.md
   metadata:
     last_updated:
-      date: '2026-09-20'
+      date: '2026-09-24'
       reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Diff Command Implementation
   status: Active
@@ -3106,14 +3106,14 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
   detail_file: implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   implementation_approach:
     summary: |-
-      Skip creating incremental archives when reconstructed archive state shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
+      Skip creating incremental archives when reconstructed archive state (full plus ordered incremental chain per IMPL-DIFF_COMMAND) shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
       INPUT: IncrementalArchiveConfig, archiveDir, cwd, exclude patterns
       OUTPUT: nil when skipped, archive path when changes exist
       DATA: reconstructedState, DirectoryDiff, FormatIncrementalSkippedNoChanges
       Canonical behavior: tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION-pseudocode.md
   metadata:
     last_updated:
-      date: '2026-09-20'
+      date: '2026-09-24'
       reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Incremental Archive Duplicate Prevention
   status: Active

@@ -2,7 +2,7 @@
 
 ## Summary contract
 
-CLI diff command reconstructs effective archive state from latest full plus incremental zip snapshots, compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
+CLI diff command reconstructs effective archive state from latest full plus every matching incremental zip (chronological name order), compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
 
 INPUT: archiveDir, cwd, exclude patterns, context
 OUTPUT: DiffResult, stdout diff text
@@ -19,30 +19,34 @@ PROCEDURE FIND_LATEST_FULL_ARCHIVE(archiveDir):
   fullArchives = FILTER ListArchives WHERE NOT IsIncremental
   SORT BY Name; RETURN last entry OR error if empty
 
-## FIND_LATEST_INCREMENTAL_ARCHIVE
+## FIND_MATCHING_INCREMENTAL_ARCHIVES
 
-SPEC-ID: IMPL-DIFF_COMMAND::FIND_LATEST_INCREMENTAL_ARCHIVE
-STEP T001: FILTER incrementals by base prefix AND return latest by name
+SPEC-ID: IMPL-DIFF_COMMAND::FIND_MATCHING_INCREMENTAL_ARCHIVES
+STEP T001: FILTER incrementals by base prefix AND return all matches sorted by name
 
-- [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: select incrementals whose name prefix matches base full archive _update= pattern; return latest by name.
+- [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted ascending by name (oldest first).
 
-PROCEDURE FIND_LATEST_INCREMENTAL_ARCHIVE(archiveDir, baseFull):
+PROCEDURE FIND_MATCHING_INCREMENTAL_ARCHIVES(archiveDir, baseFull):
   matching = FILTER incrementals WITH prefix baseName + "_update="
-  SORT BY Name; RETURN last OR nil
+  SORT BY Name ascending; RETURN matching slice OR empty
 
 ## RECONSTRUCT_ARCHIVE_STATE
 
 SPEC-ID: IMPL-DIFF_COMMAND::RECONSTRUCT_ARCHIVE_STATE
-STEP T001: LOAD full zip snapshot AND overlay incremental entries by path
+STEP T001: LOAD full zip snapshot AND overlay each incremental in chain order
 
-- [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: load full zip snapshot, overlay incremental zip files by RelativePath, return merged DirectorySnapshot.
+- [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full zip snapshot, overlay each matching incremental zip in name order; later entries override earlier by RelativePath; return merged DirectorySnapshot.
 
 PROCEDURE RECONSTRUCT_ARCHIVE_STATE(archiveDir):
   fullSnapshot = CreateArchiveSnapshot(latestFull.Path)
-  IF no incremental: RETURN fullSnapshot
-  incrementalSnapshot = CreateArchiveSnapshot(latestIncremental.Path)
-  MERGE maps: incremental entries override full by RelativePath
-  RETURN sorted file list snapshot
+  incrementals = FIND_MATCHING_INCREMENTAL_ARCHIVES(archiveDir, latestFull)
+  IF incrementals empty: RETURN fullSnapshot
+  fullMap = MAP RelativePath -> FileInfo FROM fullSnapshot
+  FOR EACH inc IN incrementals (in sort order):
+    incrementalSnapshot = CreateArchiveSnapshot(inc.Path)
+    FOR EACH file IN incrementalSnapshot.Files:
+      fullMap[file.RelativePath] = file
+  RETURN sorted file list FROM fullMap values
 
 ## CALCULATE_DIFF
 

@@ -1051,7 +1051,7 @@ ARCH-DEPLOYMENT:
 ARCH-DIFF_COMMAND:
   alternatives_considered: []
   archive_selection: Use name-based sorting to find most recent archives (archive names include alphabetically sortable timestamps in ISO 8601 format)
-  archive_state_reconstruction: Reconstruct effective state by applying most recent incremental archive on top of most recent full archive
+  archive_state_reconstruction: Reconstruct effective state by applying every matching incremental archive for the current full base in name order on top of the most recent full archive
   change_detection: Identify added files, modified files, and deleted files
   compare_only_against_full_archive: Rejected - doesn't account for existing incremental changes
   compare_only_against_most_recent_incremental: Rejected - incremental archives are deltas, not complete states
@@ -1806,7 +1806,7 @@ ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   reuse_diff_logic: Leverage diff command comparison engine for duplicate detection
   separate_comparison_logic: Rejected - code duplication and potential inconsistency
   skip_creation: Skip incremental archive creation if no changes detected
-  state_reconstruction: Reconstruct effective state from full + most recent incremental archive
+  state_reconstruction: Reconstruct effective state from full archive plus every matching incremental for that full base applied in name order
   status: Active
   traceability:
     code_annotations:

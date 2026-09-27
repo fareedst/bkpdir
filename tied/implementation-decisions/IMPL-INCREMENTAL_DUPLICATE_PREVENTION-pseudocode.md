@@ -2,7 +2,7 @@
 
 ## Summary contract
 
-Skip creating incremental archives when reconstructed archive state shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
+Skip creating incremental archives when reconstructed archive state (full plus ordered incremental chain per IMPL-DIFF_COMMAND) shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
 
 INPUT: IncrementalArchiveConfig, archiveDir, cwd, exclude patterns
 OUTPUT: nil when skipped, archive path when changes exist
@@ -14,7 +14,7 @@ SPEC-ID: IMPL-INCREMENTAL_DUPLICATE_PREVENTION::CREATE_INCREMENTAL_ARCHIVE
 STEP T001: RECONSTRUCT archive state AND skip when diff has no changes
 STEP T002: CONTINUE incremental creation with modified file list
 
-- [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: reconstruct archive state, CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
+- [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: ReconstructArchiveState (full + incremental chain), CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
 
 PROCEDURE CREATE_INCREMENTAL_ARCHIVE(config):
   archiveDir = prepareArchiveDirectory(...)
