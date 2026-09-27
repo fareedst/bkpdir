@@ -58,6 +58,10 @@ docs/cli-app-spec.zip
 # temporary
 *.bak
 
+# Agent request scratch (ephemeral CITDP/checklist/evidence; not product source)
+working/WIN-ZIP-*/
+working/tied-new-client-audit*.json
+
 /test-dir/
 /bkpdir-test
 .cursor/mcp.json

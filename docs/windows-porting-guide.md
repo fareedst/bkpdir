@@ -33,7 +33,7 @@ Directory archives store each file’s path in the ZIP central directory. On Win
 After the write-path fix in `archive.go`:
 
 - **New archives** created on any OS use `/` in member names (same as Mac/Linux today).
-- **Archives created on Windows before the fix** may still contain `\` in names; re-create the archive on a fixed build or use an offline repair utility if you maintain one separately.
+- **Archives created on Windows before the fix** may still contain `\` in names; re-create the archive on a fixed build.
 
 No change to archive **filenames** on disk (`bkpdir-YYYY-MM-DD-hh-mm.zip` grammar is unchanged).
 

@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - **Makefile**: `make test` runs `go test ./...` and then `cd pkg/fileops && go test ./...`.
 - **TIED**: Updated `IMPL-AUTO_DETECTION`, `IMPL-CLI_FRAMEWORK`, `IMPL-DIRECTORY_COMPARISON`, and `tied/implementation-decisions.yaml` for the new entry shape and fileops test traceability.
 - **Documentation**: Removed non-essential `docs/` markdown (session summaries, unicode migration logs, extraction working plans, duplicate system comparisons, and similar). Slimmed `docs/index.md`, `docs/governance/*`, and `docs/context/README.md`; updated `docs/user/specification.md`, `docs/integration-guide.md`, `docs/package-interdependency-mapping.md`, and `docs/semantic-token-system-requirements.md`.
+- **Windows porting guide**: Legacy Windows archives with backslash member names — re-create on a fixed build only (no separate offline repair utility).
 - **TIED paths**: `tied/requirements.yaml` and `tied/requirements/REQ-*.yaml` now reference concrete `tied/architecture-decisions/ARCH-*.yaml` and `tied/implementation-decisions/IMPL-*.yaml` instead of monolithic markdown section cites. `tied/semantic-tokens.md` and selected ARCH/IMPL YAML updated (`stdd/` → `tied/` where applicable).
 - **`project-tokens.yaml`**: Replaced the legacy embedded registry with a **short pointer** to `tied/semantic-tokens.yaml` and TIED indexes.
 - **Token validation**: Regenerated `semantic-token-validation-report.md`; `scripts/validate-semantic-tokens.sh` report template documents TIED canonical registry and may exit non-zero while still writing the report.
@@ -34,6 +35,7 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 
+- **WIN-ZIP request scratch**: Tracked close-out evidence under `working/WIN-ZIP-ENTRY-PATH-WRITE/` (one-off ziprepair run; write-path fix stays in `[IMPL-ZIP_FORMAT]` / `archive.go`).
 - Bulk deletion of ad-hoc and duplicate documentation under `docs/` (see git history for file list). `bin/` prebuilt binaries remain documented under [1.7.2] below.
 
 ### Fixed
