@@ -1,0 +1,52 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "inc-chain-reconstruct-20260928",
+  "commit": "946fad2fe4ef753fd088846189fccba66caec002",
+  "environment": {
+    "go": "1.22+"
+  },
+  "command_results": [
+    {
+      "id": "inc-close-out-go-test",
+      "command": [
+        "go",
+        "test",
+        "-count=1",
+        "-run",
+        "TestIncrementalSkip|TestIncrementalArchiveSkip|TestReconstructArchiveStateMultipleFullAndIncremental|TestIncCommandIntegration",
+        "."
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": [
+        "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/close-out-go-test-2026-09-28.txt"
+      ]
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "unit-incremental-dup-prevention",
+      "attribute": "regression",
+      "applicability": "applicable",
+      "rationale": "Incremental chain and deletion-only skip",
+      "evidence_method": "go test",
+      "command_or_test": "TestIncrementalSkip*",
+      "threshold": "exit 0",
+      "result": "passed"
+    }
+  ],
+  "covered_tokens": [
+    "REQ-INCREMENTAL_DUPLICATE_PREVENTION",
+    "IMPL-INCREMENTAL_DUPLICATE_PREVENTION",
+    "IMPL-DIFF_COMMAND"
+  ],
+  "proof_boundaries": [
+    "command_exit_code",
+    "test_log_artifact"
+  ],
+  "human_decisions": {
+    "stored_separately": true,
+    "references": []
+  }
+}

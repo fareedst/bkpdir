@@ -360,6 +360,205 @@ func TestIncrementalArchiveSkipWithFullOnly_REQ_INCREMENTAL_DUPLICATE_PREVENTION
 }
 
 // [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION]
+// TestIncrementalSkipRequiresFullIncrementalChain verifies duplicate prevention uses every
+// incremental on the base full archive, not only the latest zip (oscillating re-create bug).
+func TestIncrementalSkipRequiresFullIncrementalChain_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
+	tmpDir := t.TempDir()
+	sourceDir := filepath.Join(tmpDir, "source")
+	archiveDir := filepath.Join(tmpDir, "archives")
+
+	if err := os.MkdirAll(sourceDir, 0755); err != nil {
+		t.Fatalf("Failed to create source directory: %v", err)
+	}
+	if err := os.MkdirAll(archiveDir, 0755); err != nil {
+		t.Fatalf("Failed to create archive directory: %v", err)
+	}
+
+	for relPath, content := range map[string]string{
+		"file1.txt": "content1",
+		"file2.txt": "content2",
+	} {
+		fullPath := filepath.Join(sourceDir, relPath)
+		if err := os.WriteFile(fullPath, []byte(content), 0644); err != nil {
+			t.Fatalf("Failed to create file: %v", err)
+		}
+	}
+
+	originalCwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Failed to get current directory: %v", err)
+	}
+	if err := os.Chdir(sourceDir); err != nil {
+		t.Fatalf("Failed to change to source directory: %v", err)
+	}
+	defer os.Chdir(originalCwd)
+
+	cfg := DefaultConfig()
+	cfg.ArchiveDirPath = archiveDir
+	cfg.UseCurrentDirName = false
+
+	if err := CreateFullArchive(cfg, "chain-test", false); err != nil {
+		t.Fatalf("Failed to create full archive: %v", err)
+	}
+
+	archives, err := ListArchives(archiveDir)
+	if err != nil {
+		t.Fatalf("Failed to list archives: %v", err)
+	}
+	var fullName string
+	for _, a := range archives {
+		if !a.IsIncremental {
+			fullName = a.Name
+		}
+	}
+	if fullName == "" {
+		t.Fatal("Expected full archive")
+	}
+
+	base := strings.TrimSuffix(fullName, ".zip")
+	if err := os.WriteFile(filepath.Join(sourceDir, "file1.txt"), []byte("content1-b"), 0644); err != nil {
+		t.Fatalf("Failed to update file1: %v", err)
+	}
+	inc1Path := filepath.Join(archiveDir, base+"_update=2026-01-01T100000.zip")
+	if err := createTestArchive(inc1Path, sourceDir, map[string]string{"file1.txt": "content1-b"}); err != nil {
+		t.Fatalf("Failed to create first incremental: %v", err)
+	}
+
+	if err := os.WriteFile(filepath.Join(sourceDir, "file2.txt"), []byte("content2-b"), 0644); err != nil {
+		t.Fatalf("Failed to update file2: %v", err)
+	}
+	inc2Path := filepath.Join(archiveDir, base+"_update=2026-01-01T110000.zip")
+	if err := createTestArchive(inc2Path, sourceDir, map[string]string{"file2.txt": "content2-b"}); err != nil {
+		t.Fatalf("Failed to create second incremental: %v", err)
+	}
+
+	incrementalCountBefore, err := countIncrementalArchives(archiveDir)
+	if err != nil {
+		t.Fatalf("Failed to count incrementals: %v", err)
+	}
+
+	originalStdout := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+	err = createIncrementalArchive(IncrementalArchiveConfig{
+		Config:  cfg,
+		Context: context.Background(),
+	})
+	w.Close()
+	os.Stdout = originalStdout
+
+	buf := make([]byte, 2048)
+	n, _ := r.Read(buf)
+	output := string(buf[:n])
+
+	if err != nil {
+		t.Fatalf("Expected skip without error, got: %v (output: %q)", err, output)
+	}
+	if !strings.Contains(output, "Skipping") && !strings.Contains(strings.ToLower(output), "no changes") {
+		t.Fatalf("Expected skip message, got: %q", output)
+	}
+
+	incrementalCountAfter, err := countIncrementalArchives(archiveDir)
+	if err != nil {
+		t.Fatalf("Failed to count incrementals after skip: %v", err)
+	}
+	if incrementalCountAfter != incrementalCountBefore {
+		t.Errorf("Expected %d incrementals after skip, got %d", incrementalCountBefore, incrementalCountAfter)
+	}
+}
+
+// TestIncrementalSkipDeletedOnlyDiff verifies inc skips when diff is deletion-only (no empty zip).
+func TestIncrementalSkipDeletedOnlyDiff_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
+	tmpDir := t.TempDir()
+	sourceDir := filepath.Join(tmpDir, "source")
+	archiveDir := filepath.Join(tmpDir, "archives")
+
+	if err := os.MkdirAll(sourceDir, 0755); err != nil {
+		t.Fatalf("Failed to create source directory: %v", err)
+	}
+	if err := os.MkdirAll(archiveDir, 0755); err != nil {
+		t.Fatalf("Failed to create archive directory: %v", err)
+	}
+
+	for relPath, content := range map[string]string{
+		"keep.txt":    "stay",
+		"removed.txt": "gone",
+	} {
+		if err := os.WriteFile(filepath.Join(sourceDir, relPath), []byte(content), 0644); err != nil {
+			t.Fatalf("Failed to create file: %v", err)
+		}
+	}
+
+	originalCwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Failed to get current directory: %v", err)
+	}
+	if err := os.Chdir(sourceDir); err != nil {
+		t.Fatalf("Failed to change to source directory: %v", err)
+	}
+	defer os.Chdir(originalCwd)
+
+	cfg := DefaultConfig()
+	cfg.ArchiveDirPath = archiveDir
+	cfg.UseCurrentDirName = false
+
+	if err := CreateFullArchive(cfg, "deleted-only-test", false); err != nil {
+		t.Fatalf("Failed to create full archive: %v", err)
+	}
+
+	if err := os.Remove(filepath.Join(sourceDir, "removed.txt")); err != nil {
+		t.Fatalf("Failed to remove file from working tree: %v", err)
+	}
+
+	incrementalCountBefore, err := countIncrementalArchives(archiveDir)
+	if err != nil {
+		t.Fatalf("Failed to count incrementals: %v", err)
+	}
+
+	originalStdout := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+	err = createIncrementalArchive(IncrementalArchiveConfig{
+		Config:  cfg,
+		Context: context.Background(),
+	})
+	w.Close()
+	os.Stdout = originalStdout
+
+	buf := make([]byte, 2048)
+	n, _ := r.Read(buf)
+	output := string(buf[:n])
+
+	if err != nil {
+		t.Fatalf("Expected skip without error, got: %v (output: %q)", err, output)
+	}
+	if !strings.Contains(output, "Skipping") && !strings.Contains(strings.ToLower(output), "no changes") {
+		t.Fatalf("Expected skip message, got: %q", output)
+	}
+
+	incrementalCountAfter, err := countIncrementalArchives(archiveDir)
+	if err != nil {
+		t.Fatalf("Failed to count incrementals after skip: %v", err)
+	}
+	if incrementalCountAfter != incrementalCountBefore {
+		t.Errorf("Expected %d incrementals after deletion-only skip, got %d", incrementalCountBefore, incrementalCountAfter)
+	}
+}
+
+func countIncrementalArchives(archiveDir string) (int, error) {
+	archives, err := ListArchives(archiveDir)
+	if err != nil {
+		return 0, err
+	}
+	n := 0
+	for _, a := range archives {
+		if a.IsIncremental {
+			n++
+		}
+	}
+	return n, nil
+}
+
 // TestIncrementalArchiveProceedWithNewFile tests that new files trigger archive creation
 func TestIncrementalArchiveProceedWithNewFile_REQ_INCREMENTAL_DUPLICATE_PREVENTION(t *testing.T) {
 	tmpDir := t.TempDir()

@@ -1,9 +1,9 @@
 {
   "schema_version": "request-evidence-envelope.v1",
   "envelope_meta": {
-    "generated_at": "2026-09-25T03:32:22.284Z",
+    "generated_at": "2026-09-29T04:50:00.000Z",
     "generator": "request_evidence_envelope_build",
-    "revision": 1
+    "revision": 2
   },
   "identity": {
     "request_token": "REQ-INCREMENTAL_DUPLICATE_PREVENTION",
@@ -12,24 +12,43 @@
     "gate_policy": "advisory",
     "methodology_snapshot_id": "3.0.0"
   },
-  "runs": [],
+  "runs": [
+    {
+      "run_id": "inc-chain-reconstruct-20260928",
+      "phase": "verification",
+      "started_at": "2026-09-29T04:45:00.000Z",
+      "generator": "close-out-evidence-sync"
+    }
+  ],
   "artifacts": [
     {
-      "kind": "not_applicable_receipt",
-      "schema_version": "not-applicable-receipt.v1",
-      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/evidence/not-applicable-receipt.v1.json",
-      "content_hash": "sha256:f48c14ca3016a2417c69ae2db579868288ecc7a776a335c6de8d2375cfe6c508",
-      "phase": null,
+      "kind": "verification_evidence_manifest",
+      "schema_version": "verification-evidence-manifest.v1",
+      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/verification-evidence-manifest.v1.json",
+      "content_hash": "sha256:b6b4567f0a9828b3ed4545c9d21e87b8a4b9358d470a042c53b65bfab42378eb",
+      "phase": "verification",
       "status": "present",
       "proof_boundaries": [
-        "artifact_presence_only"
+        "command_exit_code",
+        "test_log_artifact"
       ]
     },
     {
-      "kind": "request_evidence_envelope",
-      "schema_version": "request-evidence-envelope.v1",
-      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/evidence/request-evidence-envelope.v1.json",
-      "content_hash": "sha256:6826e079fb85550450668255d912e126db9757e46b21d1a854b8684dd633e541",
+      "kind": "command_evidence",
+      "schema_version": "command-evidence.v1",
+      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/close-out-go-test-2026-09-28.txt",
+      "content_hash": "sha256:f5c34f14928f41e55914c8597e492c990ec0dfb9905a40cc66416646638f98d8",
+      "phase": "verification",
+      "status": "present",
+      "proof_boundaries": [
+        "stdout_capture"
+      ]
+    },
+    {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/minimal-inquiry-waiver.md",
+      "content_hash": "sha256:0b6c1f029dcb0812517f90df6ca57e607988299db08a6acdeeec27b65de79203",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -38,9 +57,10 @@
     }
   ],
   "cross_links": {
-    "tracker_path": null,
-    "tracker_hash": null,
-    "citdp_path": null,
+    "tracker_path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/agent-req-implementation-checklist.yaml",
+    "tracker_hash": "sha256:697acb2c1adc532803e876916a5769e4915c1d00a8fd633ffbe08222a46f991d",
+    "citdp_path": "working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/CITDP-INC-CHAIN-RECONSTRUCT.yaml",
+    "citdp_hash": "sha256:f8e56068ed791f158fb3941d512c235b96e16ef22926ed469aa6446fc112fc97",
     "evidence_chain_profile_path": null
   },
   "gaps": []

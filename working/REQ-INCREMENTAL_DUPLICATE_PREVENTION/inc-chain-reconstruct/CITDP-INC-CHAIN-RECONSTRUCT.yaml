@@ -11,7 +11,8 @@ change_definition:
   desired_behavior: |
     ReconstructArchiveState loads the latest full archive and applies every incremental
     whose name matches BASE_update= for that full base, in ascending name order (oldest first).
-    bkpdir inc skips when CalculateDiff against that chained state is empty.
+    bkpdir inc skips when CalculateDiff against that chained state is empty, and skips
+    deletion-only diffs without writing an empty incremental (avoids breaking the chain).
   non_goals:
     - Sub-minute incremental filename collision handling
     - New REQ token; extends REQ-INCREMENTAL_DUPLICATE_PREVENTION and REQ-DIFF_COMMAND
@@ -19,7 +20,9 @@ change_definition:
     - comparison.go chains incrementals in ReconstructArchiveState
     - TestReconstructArchiveStateMultipleFullAndIncremental expects first incremental overlay
     - Two successive bkpdir inc with unchanged tree skips on second run
-    - TIED LEAP updates IMPL/ARCH/REQ wording for incremental chain
+    - TestIncrementalSkipRequiresFullIncrementalChain skips when multi-incremental chain matches cwd
+    - TestIncrementalSkipDeletedOnlyDiff skips without new zip when diff is deletion-only
+    - TIED LEAP updates IMPL/ARCH/REQ wording for incremental chain and deletion-only skip
   unchanged_behavior: |
     Archive naming, zip write paths, exclude patterns, full archive creation.
 impact_analysis:
@@ -58,6 +61,8 @@ test_strategy:
   unit:
     - TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND
     - TestIncrementalArchiveSkipNoChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+    - TestIncrementalSkipRequiresFullIncrementalChain_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+    - TestIncrementalSkipDeletedOnlyDiff_REQ_INCREMENTAL_DUPLICATE_PREVENTION
   integration:
     - go test -run 'TestIncremental|TestReconstruct|TestIncCommand|TestCalculateDiff' .
 completion_criteria:

@@ -21,9 +21,11 @@ entry_points:
     start_at: session-bootstrap
 execution_evidence:
   close_out_evidence:
-    date: null
+    date: "2026-09-28"
     deferred: []
-    gates: {}
+    gates:
+      verification: "2026-09-29T04:45:00Z"
+      close_out: "2026-09-29T04:46:58Z"
     master_checklist: working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/agent-req-implementation-checklist.yaml
   completed:
     - session-bootstrap
@@ -33,6 +35,13 @@ execution_evidence:
     - risk-assessment
     - test-strategy
     - sub-adversarial-inquiry-pass
+    - resolve-pseudocode
+    - sync-tied-stack
+    - unit-test-green
+    - verification-gate
+    - sub-close-out-evidence-sync
+    - user-facing-release-notes
+    - gitignore-close-out-hygiene
   request: REQ-INCREMENTAL_DUPLICATE_PREVENTION
   envelope_path: working/REQ-INCREMENTAL_DUPLICATE_PREVENTION/inc-chain-reconstruct/evidence/request-evidence-envelope.v1.json
   evidence_refs_format: |

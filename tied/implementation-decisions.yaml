@@ -3106,14 +3106,14 @@ IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
   detail_file: implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   implementation_approach:
     summary: |-
-      Skip creating incremental archives when reconstructed archive state (full plus ordered incremental chain per IMPL-DIFF_COMMAND) shows no added, modified, or deleted files versus the working tree, using diff command primitives and a configurable skip message.
+      Skip creating incremental archives when reconstructed archive state (full plus ordered incremental chain per IMPL-DIFF_COMMAND) matches the working tree for archivable changes, using diff command primitives and a configurable skip message. Deletion-only diffs skip as well (incremental zips cannot record tombstones).
       INPUT: IncrementalArchiveConfig, archiveDir, cwd, exclude patterns
       OUTPUT: nil when skipped, archive path when changes exist
       DATA: reconstructedState, DirectoryDiff, FormatIncrementalSkippedNoChanges
       Canonical behavior: tied/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION-pseudocode.md
   metadata:
     last_updated:
-      date: '2026-09-24'
+      date: '2026-09-28'
       reason: Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])
   name: Incremental Archive Duplicate Prevention
   status: Active

@@ -25,6 +25,7 @@
 | **identical file** | unchanged file | Skip backup when content matches |
 | **directory snapshot** | dir scan | Path → hash map for comparison |
 | **diff result** | change list | Added / modified / deleted file sets |
+| **deletion-only diff** | deleted-only changes | Diff with deleted paths only; `bkpdir inc` skips (no tombstones in incremental ZIP) |
 
 ---
 

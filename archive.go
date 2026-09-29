@@ -679,6 +679,13 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		modifiedFiles = append(modifiedFiles, diff.Modified...)
 		// Note: diff.Deleted files are changes that trigger archive creation,
 		// but they don't exist so they can't be added to the archive
+		if len(modifiedFiles) == 0 {
+			// Deletion-only diffs cannot be encoded in an incremental zip; creating one would
+			// overwrite the latest incremental with an empty archive and break chain reconstruction.
+			formatter := NewOutputFormatter(config.Config)
+			formatter.PrintIncrementalSkippedNoChanges()
+			return nil
+		}
 	}
 
 	// Get latest full archive for naming (needed in both paths)
