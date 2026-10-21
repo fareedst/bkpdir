@@ -1,0 +1,71 @@
+CITDP-EXCLUDE-MULTI-SEG-ANY-DEPTH:
+  change_definition:
+    current_behavior: "Multi-segment directory patterns ending with / (e.g. .venv/lib/, demo/batches/) are matched only when the relative path is prefixed at backup root via strings.HasPrefix."
+    desired_behavior: "Multi-segment patterns without a leading / match segment-safe at any depth; leading / keeps backup-root-only semantics."
+    non_goals:
+      - "Add new REQ tokens"
+      - "Change **/ or single-segment dir/ behavior"
+    success_criteria:
+      - "Docs and CHANGELOG document breaking migration to /prefix/"
+      - "go test ./... passes"
+      - "New unit tests pass for nested .venv/lib/ and /demo/batches/ anchor"
+  evidence:
+    commands:
+      - "go test -run TestMultiSegmentDirPatternAnyDepth_REQ_IMMUTABLE_FILE_EXCLUSION"
+      - "go test ./..."
+  impact_analysis:
+    code_paths:
+      - "exclude_test.go"
+      - "pkg/fileops/exclusion.go"
+    tied_tokens_affected:
+      - "ARCH-EXCLUSION_PATTERNS"
+      - "IMPL-EXCLUSION_PATTERNS"
+      - "REQ-CONFIGURATION"
+      - "REQ-IMMUTABLE_FILE_EXCLUSION"
+  leap_feedback:
+    divergences_from_analysis: "none"
+    record_status: "applied"
+    tied_stack_updates_required: []
+  record_identity:
+    change_request_id: "EXCLUDE-MULTI-SEG-ANY-DEPTH"
+    recorded_at: "2026-10-21"
+    title: "Multi-segment directory exclude patterns match at any depth"
+  risk_analysis:
+    adversarial_inquiry:
+      adversarial_evidence_references:
+        - kind: "file_path"
+          path: "exclude_test.go"
+        - kind: "file_path"
+          path: "tied-project/citdp/CITDP-EXCLUDE-MULTI-SEG-ANY-DEPTH.yaml"
+      assurance_profile: "baseline-functional"
+      counterexamples:
+        - detail: ".venv/lib/ must not exclude .venv/bin/python when only lib tree is configured"
+          id: "CE-PARTIAL-VENV"
+        - detail: "foox.venv/lib/x must not match .venv/lib/ if segment boundaries are wrong"
+          id: "CE-SEGMENT-BOUNDARY"
+      depth_tier: "minimal"
+      disconfirming_observations:
+        - "Existing vendor/ and **/node_modules/ tests remain green after change"
+      evidence_references:
+        - "tied-project/citdp/CITDP-EXCLUDE-MULTI-SEG-ANY-DEPTH.yaml"
+        - "tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/verification-summary.md"
+      falsification_questions:
+        - "Does root-anchored /demo/batches/ still exclude nested other/demo/batches/x?"
+        - "Would a substring match on foox.venv/lib falsely exclude?"
+      gate_policy: "advisory"
+      rationale: "Local path matching only; no auth, network, or persistence."
+      research_profile: "none"
+    risks:
+      - detail: "Configs relying on root-only multi-segment without leading / change behavior"
+        id: "RISK-BREAKING-ROOT-MULTI"
+        mitigation: "Document /prefix/ migration; CHANGELOG major-version note per REQ-IMMUTABLE_FILE_EXCLUSION"
+  test_strategy:
+    manual:
+      - "stdd backup spot-check: tools/langgraph-pilot/.venv/lib absent when .venv/lib/ configured"
+    tied:
+      - "pseudocode_validate on IMPL-EXCLUSION_PATTERNS sidecar"
+      - "tied_validate_consistency"
+    unit_green:
+      - "go test ./..."
+    unit_red:
+      - "TestMultiSegmentDirPatternAnyDepth_REQ_IMMUTABLE_FILE_EXCLUSION in exclude_test.go"

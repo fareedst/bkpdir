@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- **Exclude patterns (`[REQ-IMMUTABLE_FILE_EXCLUSION]`, `[IMPL-EXCLUSION_PATTERNS]`)**: Multi-segment directory patterns without a leading `/` (e.g. `.venv/lib/`, `demo/batches/`) now match at any depth in the tree, not only from the backup root. Use a leading `/` to keep root-only behavior (e.g. `/demo/batches/`). **Breaking** for configs that relied on the old root-only multi-segment semantics — plan a major version bump per `[REQ-IMMUTABLE_FILE_EXCLUSION]`.
 - **Agent canon**: `AGENTS.md`, `tied/docs/impl-deep-sync-agent-guide.md` (§ Sidecar-canonical YAML projection), `tied/docs/client-development-index.md`, `docs/markscope/spec-verification.md` (agent quick path). `[ARCH-SPEC_DSL_AND_ORACLE]` sidecar-canonical policy; 73/73 IMPL `implementation_approach.summary` projections synced from sidecar `## Summary contract`.
 - **Logic tracking**: Honest L3/L2/L1 distribution and oracle 50/50; improvement-queue and oracle-registry updates; HYGIENE_POLICY waiver for lead placement on `IMPL-TOKEN_COVERAGE_AUDIT`.
 - **Test traceability**: Restored func-scoped IMPL leads across root/pkg/internal/test `*_test.go`; production backfill in `comparison.go` and `pkg/testutil/doc.go`. Classifier alignment excludes `scripts/testdata` from Go lead scans.

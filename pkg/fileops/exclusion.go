@@ -51,6 +51,7 @@ func (pm *PatternMatcher) matchesPattern(path, pattern string) bool {
 	return path == normalizedPattern
 }
 
+// - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] [REQ-CONFIGURATION] How: dispatch trailing-slash patterns through segment, glob, root-anchored, and any-depth multi-segment rules.
 // matchesDirectoryPattern handles patterns ending with /
 func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 	patternBase := strings.TrimSuffix(pattern, "/")
@@ -89,11 +90,35 @@ func (pm *PatternMatcher) matchesDirectoryPattern(path, pattern string) bool {
 		return pathHasDirSegment(path, patternBase)
 	}
 
-	// Multi-segment non-** patterns: path must be under that directory prefix
-	if !strings.HasPrefix(path, patternBase+"/") && path != patternBase+"/" {
+	// Root-anchored multi-segment (e.g. /demo/batches/): only from backup root
+	if strings.HasPrefix(pattern, "/") {
+		anchoredBase := strings.TrimPrefix(patternBase, "/")
+		if path == anchoredBase || strings.HasPrefix(path, anchoredBase+"/") {
+			return true
+		}
 		return false
 	}
-	return true
+
+	// Multi-segment at any depth (segment-safe)
+	return pathUnderDirPrefixAnyDepth(path, patternBase)
+}
+
+// - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] How: segment-safe prefix match so multi-segment dir patterns apply at any depth without substring false positives.
+func pathUnderDirPrefixAnyDepth(path, patternBase string) bool {
+	if patternBase == "" {
+		return false
+	}
+	if strings.HasPrefix(path, patternBase+"/") {
+		return true
+	}
+	needle := "/" + patternBase + "/"
+	if strings.Contains(path, needle) {
+		return true
+	}
+	if strings.HasSuffix(path, "/"+patternBase) {
+		return true
+	}
+	return false
 }
 
 // pathHasDirSegment reports whether path contains a path segment exactly equal to seg (e.g. node_modules).

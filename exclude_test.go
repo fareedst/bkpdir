@@ -81,3 +81,76 @@ func TestDirectoryExclusionPattern_REQ_CONFIGURATION(t *testing.T) {
 		}
 	}
 }
+
+// [REQ-IMMUTABLE_FILE_EXCLUSION] [ARCH-EXCLUSION_PATTERNS] [IMPL-EXCLUSION_PATTERNS]
+// - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] [REQ-CONFIGURATION] How: dispatch trailing-slash patterns through segment, glob, root-anchored, and any-depth multi-segment rules.
+func TestMultiSegmentDirPatternAnyDepth_REQ_IMMUTABLE_FILE_EXCLUSION(t *testing.T) {
+	tests := []struct {
+		name     string
+		patterns []string
+		relPath  string
+		excluded bool
+	}{
+		{
+			name:     "nested venv lib tree",
+			patterns: []string{".venv/lib/"},
+			relPath:  "tools/langgraph-pilot/.venv/lib/site-packages/x",
+			excluded: true,
+		},
+		{
+			name:     "skipdir dir node under lib",
+			patterns: []string{".venv/lib/"},
+			relPath:  "tools/pilot/.venv/lib",
+			excluded: true,
+		},
+		{
+			name:     "partial venv excludes lib not bin",
+			patterns: []string{".venv/lib/"},
+			relPath:  "tools/pilot/.venv/bin/python",
+			excluded: false,
+		},
+		{
+			name:     "any depth multi-segment",
+			patterns: []string{"demo/batches/"},
+			relPath:  "other/demo/batches/file.txt",
+			excluded: true,
+		},
+		{
+			name:     "root anchored allows only from backup root",
+			patterns: []string{"/demo/batches/"},
+			relPath:  "demo/batches/x",
+			excluded: true,
+		},
+		{
+			name:     "root anchored rejects nested same suffix",
+			patterns: []string{"/demo/batches/"},
+			relPath:  "other/demo/batches/x",
+			excluded: false,
+		},
+		{
+			name:     "segment safety no false substring",
+			patterns: []string{".venv/lib/"},
+			relPath:  "foox.venv/lib/x",
+			excluded: false,
+		},
+		{
+			name:     "regression vendor any depth",
+			patterns: []string{"vendor/"},
+			relPath:  "deep/vendor/x",
+			excluded: true,
+		},
+		{
+			name:     "regression doublestar node_modules",
+			patterns: []string{"**/node_modules/"},
+			relPath:  "project/node_modules/pkg/index.js",
+			excluded: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ShouldExcludeFile(tt.relPath, tt.patterns); got != tt.excluded {
+				t.Errorf("ShouldExcludeFile(%q, %v) = %v, want %v", tt.relPath, tt.patterns, got, tt.excluded)
+			}
+		})
+	}
+}

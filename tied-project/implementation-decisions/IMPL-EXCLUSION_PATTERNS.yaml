@@ -1,0 +1,69 @@
+IMPL-EXCLUSION_PATTERNS:
+  code_locations:
+    functions:
+      - "fileops.NewPatternMatcher"
+      - "fileops.pathUnderDirPrefixAnyDepth"
+      - "fileops.PatternMatcher.matchesDirectoryLevelPattern"
+      - "fileops.PatternMatcher.matchesDirectoryPattern"
+      - "fileops.PatternMatcher.matchesGlobPattern"
+      - "fileops.PatternMatcher.matchesPattern"
+      - "fileops.PatternMatcher.matchesRootLevelPattern"
+      - "fileops.PatternMatcher.ShouldExclude"
+      - "fileops.ShouldExcludeFile"
+      - "main.NewPatternMatcher"
+      - "main.ShouldExcludeFile"
+  code_markers: "`pkg/fileops/exclusion.go`, `PatternMatcher` struct, doublestar imports"
+  convenience_functions: "```go\nfunc ShouldExcludeFile(path string, exclusions []string) bool {\n    if len(exclusions) == 0 {\n        return false\n    }\n    \n    matcher := NewPatternMatcher(exclusions)\n    return matcher.Match(path)\n}\n\nfunc FilterPaths(paths []string, exclusions []string) []string {\n    matcher := NewPatternMatcher(exclusions)\n    var filtered []string\n    \n    for _, path := range paths {\n        if !matcher.Match(path) {\n            filtered = append(filtered, path)\n        }\n    }\n    \n    return filtered\n}\n```"
+  cross_references:
+    - "ARCH-EXCLUSION_PATTERNS"
+    - "REQ-CONFIGURATION"
+  directory_patterns: "`.git/`, `node_modules/`"
+  doublestar: "`**` for recursive matching"
+  glob_patterns: "`*.tmp`, `*.log`, `build/`"
+  implementation_approach:
+    details: []
+    summary: "Match paths against configured exclusion patterns using directory suffix, glob, and exact rules with normalized forward-slash paths.\nINPUT: path string, pattern list\nOUTPUT: boolean excluded\nDATA: PatternMatcher.patterns, doublestar globs\nCanonical behavior: tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md"
+  metadata:
+    created:
+      author: "MCP converter"
+      date: "2026-03-12"
+    last_updated:
+      author: "AI agent"
+      date: "2026-10-21"
+      reason: "Multi-segment any-depth directory exclude semantics"
+    last_validated:
+      date: "2026-03-12"
+      result: "pass"
+      validator: "MCP converter"
+  multiple_patterns: "Array of patterns for complex exclusions"
+  name: "Exclusion Patterns Implementation"
+  patternmatcher_implementation: "```go\ntype PatternMatcher struct {\n    patterns []string\n    compiled []glob.Glob\n}\n\nfunc NewPatternMatcher(patterns []string) *PatternMatcher {\n    pm := &PatternMatcher{\n        patterns: patterns,\n        compiled: make([]glob.Glob, 0, len(patterns)),\n    }\n    \n    for _, pattern := range patterns {\n        if g, err := glob.Compile(pattern); err == nil {\n            pm.compiled = append(pm.compiled, g)\n        }\n    }\n    \n    return pm\n}\n\nfunc (pm *PatternMatcher) Match(path string) bool {\n    for _, g := range pm.compiled {\n        if g.Match(path) {\n            return true\n        }\n    }\n    return false\n}\n```"
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: "Supports flexible file filtering\nEnables efficient pattern matching\nHandles recursive patterns (`**`)\nIntegrates with configuration system"
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - "ARCH-EXCLUSION_PATTERNS"
+      - "REQ-CONFIGURATION"
+    supersedes: []
+  status: "Active"
+  traceability:
+    architecture:
+      - "ARCH-EXCLUSION_PATTERNS"
+    code_annotations:
+      - "ARCH-EXCLUSION_PATTERNS"
+      - "IMPL-EXCLUSION_PATTERNS"
+      - "REQ-CONFIGURATION"
+    requirements:
+      - "REQ-CONFIGURATION"
+      - "REQ-IMMUTABLE_FILE_EXCLUSION"
+    tests:
+      - "exclude_test.go::TestDirectoryExclusionPattern_REQ_CONFIGURATION"
+      - "exclude_test.go::TestMultiSegmentDirPatternAnyDepth_REQ_IMMUTABLE_FILE_EXCLUSION"
+      - "exclude_test.go::TestShouldExcludeFile_REQ_CONFIGURATION"
+      - "exclude_test.go::TestSingleSegmentDirPatternAnyDepth_REQ_CONFIGURATION"
+      - "pkg/fileops/exclusion_test.go::TestPatternMatcher_ShouldExclude_REQ_CONFIGURATION"
+      - "pkg/fileops/exclusion_test.go::TestShouldExcludeFile_GlobAndExact_REQ_CONFIGURATION"

@@ -85,8 +85,11 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
    - List of glob patterns to exclude from archiving
    - Default: empty unless configured (see [README.md](../../README.md))
    - YAML key: `exclude_patterns`
-   - Uses doublestar glob pattern matching
-   - Example: `["*.tmp", "node_modules/", ".DS_Store"]`
+   - Uses doublestar glob pattern matching for `*` patterns; directory patterns ending in `/` use segment-aware rules
+   - Single-segment directory patterns (e.g. `vendor/`, `node_modules/`) match that directory name at any depth
+   - Multi-segment directory patterns (e.g. `.venv/lib/`, `demo/batches/`) match at any depth under the backup root
+   - A leading `/` on a directory pattern anchors it to the backup root only (e.g. `/demo/batches/` excludes `demo/batches/...` but not `other/demo/batches/...`)
+   - Example: `["*.tmp", "node_modules/", ".venv/lib/", ".DS_Store"]`
 
 4. **Git Integration**
    - Automatically detects Git repositories using `git rev-parse --is-inside-work-tree`
