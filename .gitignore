@@ -58,9 +58,8 @@ docs/cli-app-spec.zip
 # temporary
 *.bak
 
-# Agent request scratch (ephemeral CITDP/checklist/evidence; not product source)
-working/WIN-ZIP-*/
-working/tied-new-client-audit*.json
+# Repo-root working/ is legacy; committed request history lives under tied-project/working/
+/working/
 
 /test-dir/
 /bkpdir-test
