@@ -252,6 +252,7 @@ go run ./cmd/specctl matrix --check-coverage tied-project/implementation-decisio
 | `SKIP_TIED_MCP=1` | `run-spec-verification.sh` does not call `validate-tied-mcp.sh` |
 | `MUTATION_SCORE_THRESHOLD=80` | Mutation pilot pass threshold (default `70`) |
 | `RUN_LAYER_C=1` | `run-spec-verification.sh` runs Tier A `pseudocode_analyze` gate (`scripts/run_layer_c_gate.sh`) |
+| `RUN_LAYER_B=1` | Optional Layer B batch: `scripts/run-pseudocode-layer-b-batch.sh --wave w0` (MCP `pseudocode_validate`; use `--enforce` for fail-closed wave tokens) |
 | `RUN_L4_PILOT=1` | `spec-corpus-status.sh` runs L4 pilot section (mutation + optional REQ strict) |
 | `RUN_L4_REQ_STRICT=1` | With `RUN_L4_PILOT=1`, run `--req-criteria-scoped` CRIT-001 audit |
 | `MUTATION_WAVE=0`–`4` / `all` | Wave filter for `run-mutation-pilot.sh` (see `tied-project/spec/mutation-wave-registry.yaml`) |

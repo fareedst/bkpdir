@@ -1,0 +1,7 @@
+# ./pkg/fileops/...
+pattern ./pkg/fileops/...: main module (bkpdir) does not contain package bkpdir/pkg/fileops
+FAIL	./pkg/fileops/... [setup failed]
+ok  	bkpdir/test/specconformance	0.506s
+ok  	bkpdir/internal/specmodel	0.608s
+ok  	bkpdir/internal/specmodel/contract	0.247s
+FAIL

@@ -1,0 +1,3 @@
+ok  	bkpdir/test/specconformance	0.205s
+ok  	bkpdir/internal/specmodel	0.259s
+ok  	bkpdir/internal/specmodel/contract	0.371s

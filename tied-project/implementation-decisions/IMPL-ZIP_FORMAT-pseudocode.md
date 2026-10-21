@@ -1,5 +1,7 @@
 # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP]
 
+Grammar-Version: v2
+
 ## Summary contract
 
 Creates and lists ZIP archives with atomic temp-file writes, deflate compression, exclusion-aware file collection, and git-aware naming.
@@ -173,11 +175,12 @@ STEP T001: Read archive directory entries and return Archive metadata for each .
 
 PROCEDURE LIST_ARCHIVES(archiveDir):
 Contract:
-PRE: true
-POST: true
+PRE: archiveDir is readable directory path
+POST: on success returns metadata for each .zip entry
 INPUT: archiveDir
-OUTPUT: result of LIST_ARCHIVES
-EFFECTS: FS.Write, FS.Rename, State.ResourceManager
+OUTPUT: []Archive metadata
+EFFECTS: FS.Read, FS.Stat, pure
+  # [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] How: read archive directory entries and return Archive metadata for each .zip file.
   FOR EACH directory entry:
     IF name ends with .zip THEN append createArchiveFromEntry result
   RETURN archives

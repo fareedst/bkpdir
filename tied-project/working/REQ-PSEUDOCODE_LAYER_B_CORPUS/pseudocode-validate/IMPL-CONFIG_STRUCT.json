@@ -1,0 +1,123 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "CONFIG",
+      "line": 20,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CONFIG_STRUCT",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCONFIG",
+      "line": 60,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CONFIG_STRUCT",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GETCONFIGVALUES",
+      "line": 77,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CONFIG_STRUCT",
+        "REQ-CFG_006",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GETCONFIGVALUESWITHSOURCES",
+      "line": 94,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CONFIG_STRUCT",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+      "line": 109,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CONFIG_STRUCT",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "CONFIG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCONFIG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GETCONFIGVALUES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GETCONFIGVALUESWITHSOURCES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_DEFAULT_CONFIG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -1,5 +1,7 @@
 # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [ARCH-CFG_006] [REQ-CONFIGURATION] [REQ-CFG_006]
 
+Grammar-Version: v2
+
 ## Summary contract
 
 Central configuration model: YAML-serializable Config aggregate, default factory, and legacy display adapters. Reflection field discovery and flat display are owned by [IMPL-CFG_006] and [IMPL-CONFIG_DISPLAY_FLATTENING].
@@ -106,10 +108,11 @@ EFFECTS: State.Config, pure
 
 PROCEDURE EMBEDDED_MINITEST_DEFAULT_CONFIG():
 Contract:
-PRE: true
-POST: true
+PRE: test harness initialized
+POST: assertions pass for DefaultConfig preset fields
 INPUT: context for EMBEDDED_MINITEST_DEFAULT_CONFIG
-OUTPUT: result of EMBEDDED_MINITEST_DEFAULT_CONFIG
+OUTPUT: test success
 EFFECTS: State.Config, pure
+  # [IMPL-CONFIG_STRUCT] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] How: verify DefaultConfig preset values for archive path, flags, and exclude patterns.
   cfg = DefaultConfig()
   ASSERT archive_dir_path, use_current_dir_name, exclude_patterns match expected defaults

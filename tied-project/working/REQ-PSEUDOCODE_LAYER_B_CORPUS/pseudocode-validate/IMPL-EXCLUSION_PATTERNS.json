@@ -1,0 +1,65 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "MATCHES_DIRECTORY_PATTERN",
+      "line": 17,
+      "token_refs": [
+        "ARCH-EXCLUSION_PATTERNS",
+        "IMPL-EXCLUSION_PATTERNS",
+        "REQ-IMMUTABLE_FILE_EXCLUSION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PATH_UNDER_DIR_PREFIX_ANY_DEPTH",
+      "line": 48,
+      "token_refs": [
+        "ARCH-EXCLUSION_PATTERNS",
+        "IMPL-EXCLUSION_PATTERNS",
+        "REQ-IMMUTABLE_FILE_EXCLUSION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "MATCHES_DIRECTORY_PATTERN",
+      "branch_lines": [
+        26,
+        29,
+        31
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PATH_UNDER_DIR_PREFIX_ANY_DEPTH",
+      "branch_lines": [
+        56,
+        58,
+        61,
+        63
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -1,4 +1,3 @@
-// [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-CONFIGURATION]
 // Tests for file exclusion logic: validates pattern matching and exclusion behavior
 // for directory patterns, glob patterns, and exact matches.
 package main

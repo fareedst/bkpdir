@@ -1,0 +1,222 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "CREATE_FULL_ARCHIVE",
+      "line": 20,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CREATE_AND_VERIFY_ARCHIVE",
+      "line": 41,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CREATE_ZIP_ARCHIVE",
+      "line": 62,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP",
+        "REQ-IMMUTABLE_PLATFORM_COMPATIBILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ADD_FILE_TO_ZIP",
+      "line": 82,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GENERATE_ARCHIVE_NAME",
+      "line": 102,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GENERATE_FULL_ARCHIVE_NAME",
+      "line": 120,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+      "line": 137,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "COLLECT_FILES_TO_ARCHIVE",
+      "line": 155,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LIST_ARCHIVES",
+      "line": 176,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "CREATE_FULL_ARCHIVE",
+      "branch_lines": [
+        31
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CREATE_AND_VERIFY_ARCHIVE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CREATE_ZIP_ARCHIVE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ADD_FILE_TO_ZIP",
+      "branch_lines": [
+        92
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GENERATE_ARCHIVE_NAME",
+      "branch_lines": [
+        109
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GENERATE_FULL_ARCHIVE_NAME",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "COLLECT_FILES_TO_ARCHIVE",
+      "branch_lines": [
+        165,
+        166
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LIST_ARCHIVES",
+      "branch_lines": [
+        185
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

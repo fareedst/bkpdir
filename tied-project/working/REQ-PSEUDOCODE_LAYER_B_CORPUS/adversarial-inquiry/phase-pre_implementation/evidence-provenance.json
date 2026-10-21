@@ -1,0 +1,46 @@
+{
+  "provenance": {
+    "adapter": "go-test",
+    "adapterDiagnostics": [],
+    "blockScope": [
+      "VALIDATE"
+    ],
+    "command": "tied_adversarial_inquiry_run",
+    "manifest": {
+      "ignoreRules": [],
+      "languages": [
+        "go"
+      ],
+      "projectRoot": "/Users/fareed/Documents/dev/go/bkpdir",
+      "testClassifiers": [
+        "go-test"
+      ],
+      "tiedBasePath": "/Users/fareed/Documents/dev/go/bkpdir/tied-project",
+      "version": "mode-b-fixture"
+    },
+    "mode": "project",
+    "phase": "pre_implementation",
+    "primaryBlock": "VALIDATE",
+    "proofBoundaries": [
+      "traceability_structure",
+      "semantic_fidelity"
+    ],
+    "request_token": "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+    "run_id": "layer-b-corpus-20261021-pre",
+    "scopeMode": "criterion",
+    "sourceRevisions": {
+      "architecture": "6bae58d93e7612da",
+      "architectureDetail": "b0b8929f7f1c4177",
+      "implementation": "6e43176fde9e3226",
+      "implementationDetail": "c767e22d292a0995",
+      "implementationPseudocode": "1f6074482fc7c1db",
+      "production": "b7c824888c6811b5",
+      "requirementDetail": "b995c41ddb870806",
+      "requirements": "51e7885ed8a549bb",
+      "semanticTokens": "f6ef29c350595a5b",
+      "test": "bdcc94adfeee566d"
+    },
+    "tool_version": "1.0.0"
+  },
+  "schemaVersion": "adversarial-inquiry-provenance.v1"
+}

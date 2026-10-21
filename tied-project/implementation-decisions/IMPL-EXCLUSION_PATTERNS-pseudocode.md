@@ -4,6 +4,9 @@ Grammar-Version: v2
 
 ## MATCHES_DIRECTORY_PATTERN
 
+SPEC-ID: IMPL-EXCLUSION_PATTERNS::MATCHES_DIRECTORY_PATTERN
+STEP T001: DISPATCH trailing-slash directory pattern branches (legacy **/, segment, root-anchored, any-depth)
+
 - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] [REQ-CONFIGURATION] How: dispatch trailing-slash patterns through segment, glob, root-anchored, and any-depth multi-segment rules.
 - Contract:
   - INPUT: normalizedPath (forward slashes), normalizedPattern (forward slashes, may end with /)
@@ -14,7 +17,7 @@ Grammar-Version: v2
     - on success without match: false when no branch matches
   - EFFECTS: pure
   - TERMINATION: total
-procedure MATCHES_DIRECTORY_PATTERN:
+PROCEDURE MATCHES_DIRECTORY_PATTERN(normalizedPath, normalizedPattern):
   # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] How: strip trailing slash to patternBase then branch.
   Contract:
     INPUT: normalizedPath, normalizedPattern
@@ -35,6 +38,9 @@ procedure MATCHES_DIRECTORY_PATTERN:
 
 ## PATH_UNDER_DIR_PREFIX_ANY_DEPTH
 
+SPEC-ID: IMPL-EXCLUSION_PATTERNS::PATH_UNDER_DIR_PREFIX_ANY_DEPTH
+STEP T001: SEGMENT-BOUNDARY prefix match for multi-segment patternBase at any depth
+
 - [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] How: segment-safe prefix match so multi-segment dir patterns apply at any depth without substring false positives.
 - Contract:
   - INPUT: normalizedPath, patternBase (no trailing slash, contains at least one /)
@@ -45,7 +51,7 @@ procedure MATCHES_DIRECTORY_PATTERN:
     - on success false: path does not contain patternBase as a full path prefix
   - EFFECTS: pure
   - TERMINATION: total
-procedure PATH_UNDER_DIR_PREFIX_ANY_DEPTH:
+PROCEDURE PATH_UNDER_DIR_PREFIX_ANY_DEPTH(normalizedPath, patternBase):
   # [IMPL-EXCLUSION_PATTERNS] [ARCH-EXCLUSION_PATTERNS] [REQ-IMMUTABLE_FILE_EXCLUSION] How: require "/" + patternBase + "/" in path or path prefix/suffix equality at boundaries.
   Contract:
     INPUT: normalizedPath, patternBase

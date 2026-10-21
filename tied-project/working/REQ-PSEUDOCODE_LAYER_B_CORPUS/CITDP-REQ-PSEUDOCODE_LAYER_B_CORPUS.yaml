@@ -1,0 +1,93 @@
+record_identity:
+  change_request_id: REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  slice_id: REQ-PSEUDOCODE_LAYER_B_CORPUS
+  title: "Corpus Layer B modernization (73 formal sidecars) — waves W0–W4"
+  recorded_at: "2026-10-21"
+change_definition:
+  current_behavior: >-
+    All 73 formal_spec IMPL sidecars pass L0 specctl (PARSE, matrix, check-leads) and logic-audit
+    tracking; procedure-level contracts often use PRE/POST true; Grammar-Version v2 on one sidecar only.
+  desired_behavior: >-
+    Each wave-enforced IMPL passes Layer B minimum_gating_rules at verification-gate (pseudocode_validate
+    full mode), Layer C pseudocode_analyze gate_mode on changed sidecars, and integrated adversarial
+    inquiry artifacts per wave; L0 remains regression guard throughout migration.
+  non_goals:
+    - Bulk constraint-enforced-v2 or constraint_flow fleet promotion in one pass
+    - Rewriting runtime behavior without LEAP and RED tests
+    - Replacing specctl L0 with duplicated SHAPE logic in Go (MCP checklist remains Layer B authority)
+  success_criteria:
+    - Phase 0 corpus-layer-b-gap-report quantifies dominant SHAPE/COVER/CONTRACT failures on pilot 10
+    - run-pseudocode-layer-b-batch.sh reproducible with wave-scoped --enforce
+    - W0 tokens pass verification-gate Layer B full + L0 green after sponsor TIED pass
+  unchanged_behavior: bkpdir backup/archive/config runtime semantics unless a wave explicitly LEAPs behavior.
+impact_analysis:
+  modules_or_boundaries:
+    - tied-project/implementation-decisions/*-pseudocode.md
+    - scripts/run-spec-verification.sh
+    - cmd/specctl
+    - internal/specparse
+    - docs/markscope/spec-verification.md
+  tied_tokens_affected:
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    - ARCH-SPEC_DSL_AND_ORACLE
+    - IMPL-SPEC_CTL
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: integrated
+    prior_depth_tier: null
+    gate_policy: advisory
+    research_profile: integrated-agent
+    assurance_profile: baseline-functional
+    rationale: >-
+      Corpus-wide contract and failure-mode uplift touches persistence, I/O, and config merge domains;
+      integrated structural inquiry at pre_implementation and case binding at verification per checklist.
+    eligibility_triggers_matched:
+      - persistence
+      - external_input_paths
+    integrated_waiver: null
+    counterexamples:
+      - "Precision-only PRE/POST edit exposes missing COVER-002 without new tests — gate fails verification"
+      - "Bulk Grammar-Version v2 header without contracts — false Layer B readiness"
+    falsification_questions:
+      - "If L0 is green, is Layer B satisfied? No — independent minimum_gating_rules at verification-gate."
+      - "Can tooling-only Track A prove corpus migrated? No — sidecar waves require TIED pass evidence."
+    disconfirming_observations:
+      - "Pilot pseudocode_validate passes on legacy ATOMIC_OPS without sidecar edits — target bar too low"
+  residual_risk:
+    summary: Multi-wave drift between queue registry and formal_spec list if waves desync
+    owner: sponsor
+    expiry: "2027-03-31"
+  quality_profiles:
+    - baseline-functional
+test_strategy:
+  unit: >-
+    Go tests for new specctl/shape lint if added; Python tests for audit scripts and formal_spec_registry;
+    shell tests for run-pseudocode-layer-b-batch.sh with testdata sidecars.
+  integration: >-
+    Pilot 10 IMPLs — specctl validate vs pseudocode_validate structural/full; Layer C gate_mode on W0 set.
+  regression: SKIP_TIED_MCP=1 scripts/run-spec-verification.sh must stay green until wave PR merges enforce Layer B.
+  red_before_code: >-
+    Track A — failing tests for batch driver exit codes and FAILURE_MODES lint before script implementation.
+    Track B — RED failure-path tests when FAILURE_MODES expand before production changes.
+  security: No new network surface; audit scripts read sidecars only; fail-closed on empty formal_spec registry parse.
+evidence:
+  proof_boundaries:
+    - traceability_structure
+    - tooling_automation
+    - sidecar_contract_precision
+  planned_artifacts:
+    - working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/corpus-layer-b-gap-report.json
+    - working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate/
+    - working/REQ-PSEUDOCODE_LAYER_B_CORPUS/adversarial-inquiry/phase-pre_implementation/
+completion_criteria:
+  activation:
+    run_id: layer-b-corpus-20261021-pre
+    phase: pre_implementation
+  inquiry_run_ids:
+    pre_implementation: layer-b-corpus-20261021-pre
+    verification: layer-b-corpus-20261021-ver
+    close_out: layer-b-corpus-20261021-close
+leap_feedback:
+  record_status: pending
+  divergences_from_analysis: none
+  tied_stack_updates_required: []

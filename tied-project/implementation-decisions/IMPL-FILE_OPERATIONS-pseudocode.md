@@ -1,5 +1,7 @@
 # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY]
 
+Grammar-Version: v2
+
 ## Summary contract
 
 pkg/fileops provides secure path validation and directory traversal with exclusions, depth limits, symlink policy, and file listing helpers.
@@ -157,11 +159,12 @@ STEP T002: CLEAN path WITHOUT failing on normalization drift
 
 PROCEDURE VALIDATE_PATH(path):
 Contract:
-PRE: true
-POST: true
+PRE: path string provided
+POST: on success path is non-empty and passes IsSecurePath
 INPUT: path
-OUTPUT: result of VALIDATE_PATH
+OUTPUT: nil | ERROR
 EFFECTS: FS.Read, FS.Stat, pure
+FAILURE_MODES: ErrEmptyPath, ErrUnsafePath, ErrNormalizationDrift
   IF path empty THEN error
   IF NOT IsSecurePath(path) THEN error unsafe path
   RETURN nil
@@ -175,11 +178,12 @@ STEP T001: VALIDATE_PATH THEN Stat path
 
 PROCEDURE VALIDATE_EXISTENCE(path):
 Contract:
-PRE: true
-POST: true
+PRE: VALIDATE_PATH(path) succeeds
+POST: on success path exists on filesystem
 INPUT: path
-OUTPUT: result of VALIDATE_EXISTENCE
+OUTPUT: nil | ERROR
 EFFECTS: FS.Read, FS.Stat, pure
+FAILURE_MODES: ErrPathInvalid, ErrNotExist, ErrAccessDenied
   VALIDATE_PATH(path)
   Stat path OR return does-not-exist error
 
@@ -192,11 +196,12 @@ STEP T001: VALIDATE_EXISTENCE THEN Open path for read
 
 PROCEDURE VALIDATE_READABLE(path):
 Contract:
-PRE: true
-POST: true
+PRE: VALIDATE_EXISTENCE(path) succeeds
+POST: on success file opened for read then closed
 INPUT: path
-OUTPUT: result of VALIDATE_READABLE
+OUTPUT: nil | ERROR
 EFFECTS: FS.Read, FS.Stat, pure
+FAILURE_MODES: ErrPathInvalid, ErrNotReadable, ErrOpenFailed
   VALIDATE_EXISTENCE(path)
   Open for read OR return not-readable error
 
@@ -227,10 +232,11 @@ STEP T001: REJECT .. traversal AND suspicious shell-expansion characters
 
 PROCEDURE IS_SECURE_PATH(path):
 Contract:
-PRE: true
-POST: true
+PRE: path string provided
+POST: returns true only when path has no traversal or shell-expansion characters
 INPUT: path
-OUTPUT: result of IS_SECURE_PATH
-EFFECTS: FS.Read, FS.Stat, pure
+OUTPUT: boolean
+EFFECTS: pure
+  # [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] How: reject .. traversal, null bytes, newlines, and shell-expansion characters in path strings.
   IF CONTAINS ".." OR suspicious chars (~, $, null, CR, LF) THEN RETURN false
   RETURN true

@@ -1,0 +1,7 @@
+DEBUG: Layer B validate IMPL-ATOMIC_OPS mode=full -> tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-ATOMIC_OPS.json
+DEBUG: Layer B validate IMPL-CONFIG_STRUCT mode=full -> tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-CONFIG_STRUCT.json
+DEBUG: Layer B validate IMPL-CFG_006 mode=full -> tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-CFG_006.json
+DEBUG: Layer B validate IMPL-FILE_OPERATIONS mode=full -> tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-FILE_OPERATIONS.json
+DEBUG: Layer B validate IMPL-ZIP_FORMAT mode=full -> tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-ZIP_FORMAT.json
+DEBUG: Layer B validate IMPL-EXCLUSION_PATTERNS mode=full -> tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-EXCLUSION_PATTERNS.json
+DIAGNOSTIC: Layer B batch finished for 6 token(s)

@@ -1,0 +1,101 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "layer-b-corpus-w0-ver-20261021",
+  "commit": "8fcb9215c9b55a5ef2a84d8af80718ebf6ef812c",
+  "environment": {
+    "date": "2026-10-21",
+    "os": "darwin"
+  },
+  "command_results": [
+    {
+      "id": "go-test-specconformance",
+      "command": ["go", "test", "./test/specconformance/...", "./internal/specmodel/...", "-count=1"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": ["tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/manifest-run-w0/go-test-specconformance.stdout.txt"]
+    },
+    {
+      "id": "layer-b-w0-full",
+      "command": ["bash", "scripts/run-pseudocode-layer-b-batch.sh", "--mode", "full", "--wave", "w0"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": ["tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-full/IMPL-ATOMIC_OPS.json"]
+    },
+    {
+      "id": "w0-check-leads",
+      "command": ["go", "run", "./cmd/specctl", "check-leads", "tied-project/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md", "tied-project/implementation-decisions/IMPL-CONFIG_STRUCT-pseudocode.md", "tied-project/implementation-decisions/IMPL-CFG_006-pseudocode.md", "tied-project/implementation-decisions/IMPL-FILE_OPERATIONS-pseudocode.md", "tied-project/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md", "tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "layer-c-w0",
+      "command": ["bash", "scripts/run_layer_c_gate.sh"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": ["tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/manifest-run-w0/layer-c-gate.stdout.txt"]
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "w0-layer-b-full",
+      "attribute": "LayerBMinimumGating",
+      "applicability": "applicable",
+      "rationale": "W0 enforced tokens pass pseudocode_validate full mode",
+      "evidence_method": "script",
+      "command_or_test": "run-pseudocode-layer-b-batch.sh --mode full --wave w0 --enforce",
+      "result": "passed",
+      "owner": "agent"
+    },
+    {
+      "id": "w0-conformance",
+      "attribute": "SpecConformanceTests",
+      "applicability": "applicable",
+      "rationale": "Oracle/PBT for runtime IMPLs in W0",
+      "evidence_method": "go_test",
+      "command_or_test": "go test ./test/specconformance/...",
+      "result": "passed",
+      "owner": "agent"
+    },
+    {
+      "id": "w0-traceability-leads",
+      "attribute": "BlockLeadSync",
+      "applicability": "applicable",
+      "rationale": "W0 subset check-leads; full registry TRACE-002 debt documented out of wave scope",
+      "evidence_method": "specctl",
+      "command_or_test": "specctl check-leads (W0 six sidecars)",
+      "result": "passed",
+      "owner": "agent"
+    },
+    {
+      "id": "full-corpus-l0",
+      "attribute": "L0SpecctlRegression",
+      "applicability": "accepted_risk",
+      "rationale": "run-spec-verification.sh fails on non-W0 TRACE-002; W0 slice gates use subset commands above",
+      "evidence_method": "script",
+      "command_or_test": "run-spec-verification.sh",
+      "result": "failed",
+      "owner": "sponsor",
+      "limitation": "Corpus-wide lead sync deferred to W1+",
+      "waiver": {
+        "required": true,
+        "reason": "W0 verification-gate scoped to six sidecars per CITDP wave policy",
+        "owner": "sponsor",
+        "expiry": "2027-03-31"
+      }
+    }
+  ],
+  "covered_tokens": [
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+    "IMPL-ATOMIC_OPS",
+    "IMPL-CONFIG_STRUCT",
+    "IMPL-CFG_006",
+    "IMPL-FILE_OPERATIONS",
+    "IMPL-ZIP_FORMAT",
+    "IMPL-EXCLUSION_PATTERNS"
+  ],
+  "proof_boundaries": ["traceability_structure", "pseudo_code_structure", "executable_behavior"]
+}

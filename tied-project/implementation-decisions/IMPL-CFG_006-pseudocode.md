@@ -1,5 +1,7 @@
 # [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006]
 
+Grammar-Version: v2
+
 ## Summary contract
 
 Reflection-based configuration field discovery with thread-safe schema cache, value formatting, and merge-strategy inference. Flat YAML-tag reflection and display grouping are owned by [IMPL-CONFIG_DISPLAY_FLATTENING] (reflectConfigFields, determineFieldCategory). Backward compatibility: existing GetConfigValuesWithSources callers unchanged. Source tracking shows inheritance chain origins per field.
@@ -59,11 +61,12 @@ STEP T001: WALK struct fields by dot path
 
 PROCEDURE GET_FIELD_VALUE_BY_PATH(structValue, path):
 Contract:
-PRE: true
-POST: true
+PRE: path is non-empty dot-separated field path
+POST: on success returns leaf interface value
 INPUT: structValue, path
-OUTPUT: result of GET_FIELD_VALUE_BY_PATH
+OUTPUT: interface value | ERROR
 EFFECTS: State.Config, State.FieldCache, pure
+FAILURE_MODES: ErrNilPointer, ErrNotStruct, ErrMissingField
   FOR EACH part IN SPLIT(path, "."):
     IF pointer THEN dereference OR error if nil
     IF not struct THEN error
@@ -150,9 +153,10 @@ STEP T001: TABLE test determineMergeStrategyForField
 
 PROCEDURE EMBEDDED_MINITEST_MERGE_STRATEGY():
 Contract:
-PRE: true
-POST: true
+PRE: test table loaded
+POST: all merge-strategy cases match expected
 INPUT: context for EMBEDDED_MINITEST_MERGE_STRATEGY
-OUTPUT: result of EMBEDDED_MINITEST_MERGE_STRATEGY
+OUTPUT: test success
 EFFECTS: State.Config, State.FieldCache, pure
+  # [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] How: table-driven test asserts determineMergeStrategyForField paths map to expected strategies.
   FOR EACH case CALL determineMergeStrategyForField AND ASSERT expected

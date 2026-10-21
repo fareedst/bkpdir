@@ -4,6 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+export TIED_BASE_PATH="${TIED_BASE_PATH:-$ROOT/tied-project}"
 TIED_CLI="$ROOT/.cursor/skills/tied-yaml/scripts/tied-cli.sh"
 OUT_DIR="${LAYER_C_REPORT_DIR:-$ROOT/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis}"
 mkdir -p "$OUT_DIR"
@@ -14,6 +15,7 @@ TIER_A=(
   IMPL-CFG_006
   IMPL-FILE_OPERATIONS
   IMPL-ZIP_FORMAT
+  IMPL-EXCLUSION_PATTERNS
 )
 
 fail=0
@@ -29,33 +31,37 @@ import yaml
 root = Path("$ROOT")
 reg = yaml.safe_load((root / "tied-project/semantic-tokens.yaml").read_text())
 known = sorted(k for k in reg if k.startswith(("REQ-", "ARCH-", "IMPL-")))
+sidecar = root / "tied-project/implementation-decisions/${token}-pseudocode.md"
 print(json.dumps({
   "token": "$token",
-  "essence_pseudocode_path": "implementation-decisions/${token}-pseudocode.md",
+  "essence_pseudocode_path": str(sidecar),
   "gate_mode": True,
   "known_tokens": known,
+  "tied_base_path": str(root / "tied-project"),
 }))
 PY
   echo "DEBUG: Layer C analyze $token -> $report"
-  if ! "$TIED_CLI" pseudocode_analyze "@$args_file" > "$report"; then
+  if ! env TIED_BASE_PATH="$TIED_BASE_PATH" "$TIED_CLI" pseudocode_analyze "@$args_file" > "$report"; then
     echo "FAIL: pseudocode_analyze RPC failed for $token"
     rm -f "$args_file"
     fail=1
     continue
   fi
   rm -f "$args_file"
-  if ! python3 - <<PY
-import json, sys
-r = json.load(open("$report"))
+  if ! REPORT="$report" TOKEN="$token" python3 - <<'PY'
+import json, os, sys
+r = json.load(open(os.environ["REPORT"]))
 ok = r.get("ok") is True and r.get("gate_mode_applied") is True
 if not ok:
     di = r.get("diagnostics") or []
     errs = [d for d in di if d.get("severity") == "error"]
-    print(f"FAIL $token: ok={r.get('ok')} errors={len(errs)}", file=sys.stderr)
+    print(f"FAIL {os.environ['TOKEN']}: ok={r.get('ok')} errors={len(errs)}", file=sys.stderr)
+    if r.get("error"):
+        print(f"  error: {r.get('error')}", file=sys.stderr)
     for d in errs[:8]:
         print(f"  {d.get('code')}: {d.get('message')}", file=sys.stderr)
     sys.exit(1)
-print(f"PASS $token Layer C gate")
+print(f"PASS {os.environ['TOKEN']} Layer C gate")
 PY
   then
     fail=1

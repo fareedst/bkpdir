@@ -1,5 +1,7 @@
 # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT]
 
+Grammar-Version: v2
+
 ## Summary contract
 
 Atomic file I/O via write-to-temporary-file then rename on the same filesystem, with rollback on failure and convenience helpers for copy and full-file writes.
@@ -24,11 +26,12 @@ STEP T002: CREATE_TEMP_FILE_IN(dir, pattern)
 
 PROCEDURE NEWATOMICWRITER(targetPath):
 Contract:
-PRE: true
-POST: true
+PRE: VALIDATE_PATH(targetPath) == ok AND PARENT_DIRECTORY(targetPath) is creatable
+POST: writer.targetPath == targetPath AND writer.HasHandle == true AND writer.committed == false
 INPUT: targetPath string
 OUTPUT: AtomicWriter | ERROR
 EFFECTS: FS.CreateTemp, FS.MkdirAll
+FAILURE_MODES: ErrInvalidPath, ErrCreateTemp, ErrMkdir
   IF VALIDATE_PATH(targetPath) fails THEN RETURN ERROR
   dir = PARENT_DIRECTORY(targetPath)
   ENSURE_DIRECTORY_EXISTS(dir)
@@ -47,11 +50,12 @@ ERROR E001: RETURN ERROR "writer is closed"
 
 PROCEDURE ATOMICWRITER_WRITE(writer, data):
 Contract:
-PRE: true
+PRE: writer.closed == false
 POST: true
 INPUT: writer, data
-OUTPUT: result of ATOMICWRITER_WRITE
+OUTPUT: success | ERROR
 EFFECTS: FS.Write, FS.Rename, State.AtomicWriter
+FAILURE_MODES: ErrWriterClosed, ErrMissingTempHandle, ErrWriteFailed
   IF writer.closed THEN RETURN ERROR "writer is closed"
   IF writer.temp handle missing THEN RETURN ERROR
   RETURN WRITE_BYTES_TO_TEMP(data)
@@ -65,11 +69,12 @@ STEP T001: DELEGATE to ATOMICWRITER_WRITE(BYTES(text))
 
 PROCEDURE ATOMICWRITER_WRITESTRING(writer, text):
 Contract:
-PRE: true
+PRE: writer.closed == false
 POST: true
 INPUT: writer, text
-OUTPUT: result of ATOMICWRITER_WRITESTRING
+OUTPUT: success | ERROR
 EFFECTS: FS.Write, FS.Rename, State.AtomicWriter
+FAILURE_MODES: ErrWriterClosed, ErrMissingTempHandle, ErrWriteFailed
   RETURN ATOMICWRITER_WRITE(writer, BYTES(text))
 
 ## ATOMICWRITER_COMMIT
@@ -86,10 +91,11 @@ ERROR E001: RETURN ERROR "already committed"
 PROCEDURE ATOMICWRITER_COMMIT(writer):
 Contract:
 PRE: true
-POST: true
+POST: writer.committed == true AND writer.closed == true
 INPUT: writer
-OUTPUT: result of ATOMICWRITER_COMMIT
+OUTPUT: success | ERROR
 EFFECTS: FS.Write, FS.Rename, State.AtomicWriter
+FAILURE_MODES: ErrAlreadyCommitted, ErrRenameFailed, ErrCloseFailed
   IF writer.committed THEN RETURN ERROR "already committed"
   CLOSE_TEMP_HANDLE(writer)
   IF ATOMIC_RENAME(writer.tempPath, writer.targetPath) fails THEN CLEANUP(writer); RETURN ERROR
@@ -106,11 +112,12 @@ ERROR E001: RETURN ERROR "cannot rollback after commit"
 
 PROCEDURE ATOMICWRITER_ROLLBACK(writer):
 Contract:
-PRE: true
-POST: true
+PRE: writer.committed == false
+POST: writer.closed == true
 INPUT: writer
-OUTPUT: result of ATOMICWRITER_ROLLBACK
+OUTPUT: success | ERROR
 EFFECTS: FS.Write, FS.Rename, State.AtomicWriter
+FAILURE_MODES: ErrCannotRollbackAfterCommit, ErrCleanupFailed
   IF writer.committed THEN RETURN ERROR "cannot rollback after commit"
   RETURN CLEANUP(writer)
 
@@ -237,11 +244,13 @@ STEP T002: WRITE_FILE tempPath THEN ATOMIC_RENAME
 
 PROCEDURE RESOURCE_ATOMICWRITEFILEWITHCONTEXT(ctx, path, data, resourceManager):
 Contract:
-PRE: true
-POST: true
+PRE: ctx is not cancelled at stage entry AND path is valid
+POST: committed file at path AND temp unregistered from resourceManager
 INPUT: ctx, path, data, resourceManager
-OUTPUT: result of RESOURCE_ATOMICWRITEFILEWITHCONTEXT
+OUTPUT: success | ERROR
 EFFECTS: FS.Write, FS.Rename, State.AtomicWriter
+FAILURE_MODES: ErrContextCancelled, ErrWriteFailed, ErrRenameFailed
+  # [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] How: staged temp write with cancellation checks before rename.
   IF ctx cancelled THEN RETURN cancellation ERROR
   tempPath = path + ".tmp"
   REGISTER_TEMP_WITH(resourceManager, tempPath)

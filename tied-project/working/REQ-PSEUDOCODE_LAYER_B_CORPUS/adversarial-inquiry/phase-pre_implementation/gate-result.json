@@ -1,0 +1,16 @@
+{
+  "blocking": false,
+  "diagnostics": [],
+  "policy": "advisory",
+  "proofBoundary": "human_decision",
+  "schemaVersion": "adversarial-inquiry-gate.v1",
+  "scope": [
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-001",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-002",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-003",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-004",
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-005"
+  ],
+  "status": "warn",
+  "verdict": "UNRESOLVED"
+}
