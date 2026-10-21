@@ -12,8 +12,8 @@ Overview: Lightweight, plan-driven governance change lifecycle to move from poli
 
 ## Artifacts
 - Cross-links: canonical in each TIED detail file’s `traceability`; see [`cross-links.md`](cross-links.md) for how to query.
-- Architecture / implementation: [`tied/architecture-decisions.yaml`](../../tied/architecture-decisions.yaml), [`tied/implementation-decisions.yaml`](../../tied/implementation-decisions.yaml) and detail dirs under `tied/`.
-- Token registry: [`tied/semantic-tokens.yaml`](../../tied/semantic-tokens.yaml), [`tied/semantic-tokens.md`](../../tied/semantic-tokens.md).
+- Architecture / implementation: [`tied-project/architecture-decisions.yaml`](../../tied-project/architecture-decisions.yaml), [`tied-project/implementation-decisions.yaml`](../../tied-project/implementation-decisions.yaml) and detail dirs under `tied-project/`.
+- Token registry: [`tied-project/semantic-tokens.yaml`](../../tied-project/semantic-tokens.yaml), [`tied-bundle/docs/semantic-tokens.md`](../../tied-bundle/docs/semantic-tokens.md).
 
 ## Cadence
 - Quarterly governance reviews; escalate any high-risk changes earlier as needed.

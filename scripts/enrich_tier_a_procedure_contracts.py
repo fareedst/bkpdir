@@ -111,7 +111,7 @@ def main() -> int:
     tokens = args.token or list(TIER_A)
     total = 0
     for token in tokens:
-        path = REPO / "tied/implementation-decisions" / f"{token}-pseudocode.md"
+        path = REPO / "tied-project/implementation-decisions" / f"{token}-pseudocode.md"
         if not path.exists():
             print(f"SKIP missing {path}")
             continue

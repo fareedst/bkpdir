@@ -1,0 +1,31 @@
+mutation_threshold: 70
+waves:
+  - notes: Largest; test-strength prep required
+    packages:
+      - pkg/config
+      - pkg/formatter
+    status: pending
+    wave: 4
+  - notes: Medium packages
+    packages:
+      - pkg/processing
+      - pkg/resources
+      - pkg/testutil
+    status: pending
+    wave: 3
+  - notes: Original pilot; gopter + conformance coverage
+    packages:
+      - pkg/fileops
+    status: pilot
+    wave: 0
+  - notes: Single-domain each
+    packages:
+      - pkg/cli
+      - pkg/git
+    status: pending
+    wave: 2
+  - notes: Small surface; expand after wave 0 green
+    packages:
+      - pkg/errors
+    status: pilot
+    wave: 1

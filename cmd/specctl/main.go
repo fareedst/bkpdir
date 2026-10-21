@@ -50,7 +50,7 @@ func repoRoot() string {
 
 func expandPaths(args []string) ([]string, error) {
 	if len(args) == 0 {
-		args = []string{"tied/implementation-decisions/*-pseudocode.md"}
+		args = []string{"tied-project/implementation-decisions/*-pseudocode.md"}
 	}
 	var out []string
 	for _, pattern := range args {

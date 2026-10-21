@@ -15,8 +15,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
-IMPL_DIR = REPO / "tied/implementation-decisions"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
 
 sys.path.insert(0, str(REPO / "scripts"))
 from load_improvement_queue import load_queue, save_queue  # noqa: E402

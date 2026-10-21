@@ -2,7 +2,7 @@
 """Migrate inline IMPL essence_pseudocode to sidecar markdown files.
 
 Track C brownfield migration: extract inline YAML essence, de-Go-ify, write
-tied/implementation-decisions/IMPL-*-pseudocode.md, optionally register via tied-cli.
+tied-project/implementation-decisions/IMPL-*-pseudocode.md, optionally register via tied-cli.
 """
 from __future__ import annotations
 

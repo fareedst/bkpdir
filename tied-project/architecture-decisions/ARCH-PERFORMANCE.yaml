@@ -1,0 +1,60 @@
+ARCH-PERFORMANCE:
+  alternatives_considered: []
+  buffer_pooling: Memory reuse with efficient allocation
+  buffered_i/o: Efficient file operations with context cancellation
+  compression_tuning: Optimal compression settings with performance monitoring
+  cross-references: '[REQ-PERFORMANCE], [REQ-RELIABILITY]'
+  cross_references:
+    - REQ-PERFORMANCE
+    - REQ-RELIABILITY
+  decision: Optimized performance with streaming, caching, and concurrent processing
+  deep_hierarchies: Stack-safe recursion with cancellation checks
+  disk_space_monitoring: Available space checking with enhanced error detection
+  garbage_collection: Minimal allocation with resource cleanup
+  implementation_approach:
+    details: []
+    summary: Optimized performance with streaming, caching, and concurrent processing
+  large_directories: Efficient directory traversal with context support
+  long-running_operations: Progress reporting with context cancellation
+  many_files: Scalable file processing with resource management
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Performance Architecture
+  parallel_processing: Concurrent file handling with thread safety
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Ensures responsive user experience
+      Handles large directories efficiently
+      Minimizes resource usage
+      Supports scalable operations
+  related_decisions:
+    depends_on:
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
+    informs: []
+    see_also: []
+  resource_cleanup: Automatic resource management with panic recovery
+  status: Active
+  streaming_processing: Large file handling with context support
+  traceability:
+    code_annotations:
+      - ARCH-PERFORMANCE
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
+    implementation: []
+    requirements:
+      - REQ-PERFORMANCE
+      - REQ-RELIABILITY
+    tests: []

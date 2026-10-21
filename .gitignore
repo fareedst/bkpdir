@@ -75,3 +75,17 @@ docs/.markscope-preview-cache
 docs/markscope/.markscope-preview-cache
 report.json
 scripts/__pycache__
+# BEGIN TIED INSTALL MANAGED
+.cursor/mcp.json
+.mcp.json
+.cursor/skills/
+.claude/skills/
+skills/
+tied-bundle/
+CLAUDE.md
+AGENTS.md
+.cursorrules
+.cursor/hooks.json
+.claude/hooks/
+.claude/settings.json
+# END TIED INSTALL MANAGED

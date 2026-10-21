@@ -11,9 +11,9 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-QUEUE = REPO / "tied/docs/impl-pseudocode-improvement-queue.yaml"
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
-ORACLE_REG = REPO / "tied/spec/oracle-registry.yaml"
+QUEUE = REPO / "tied-bundle/docs/impl-pseudocode-improvement-queue.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
+ORACLE_REG = REPO / "tied-project/spec/oracle-registry.yaml"
 UPDATE_SCRIPT = REPO / "scripts/update_impl_sync_checklist.py"
 
 

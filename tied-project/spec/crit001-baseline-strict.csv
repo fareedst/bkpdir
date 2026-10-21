@@ -1,0 +1,114 @@
+impl,req,crit_id,role,text,suggested_action
+IMPL-AUTO_DETECTION,REQ-USABILITY,CRIT-REQ-USABILITY-002,auxiliary,Configuration options are discoverable,scope registry subset or sidecar map
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION,REQ-CFG_005,CRIT-REQ-CFG_005-002,auxiliary,Array field values from defaults and parent configs are preserved when child con,scope registry subset or sidecar map
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION,REQ-CFG_005,CRIT-REQ-CFG_005-003,auxiliary,Array fields default to merge (accumulate) strategy when no prefix is specified,scope registry subset or sidecar map
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION,REQ-CFG_005,CRIT-REQ-CFG_005-006,auxiliary,Duplicate values in arrays are deduplicated during merge,scope registry subset or sidecar map
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION,REQ-CFG_005,CRIT-REQ-CFG_005-008,auxiliary,"Merge strategies (override, append, prepend, replace, default) work correctly",scope registry subset or sidecar map
+IMPL-CFG_INHERITANCE_PATH_RESOLUTION,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-004,auxiliary,Source tracking shows value origins,scope registry subset or sidecar map
+IMPL-CFG_MERGE_BEHAVIOR_REGISTRY,REQ-CFG_005,CRIT-REQ-CFG_005-001,auxiliary,"Order is preserved: defaults/parent values first, then child additions",scope registry subset or sidecar map
+IMPL-CFG_MERGE_BEHAVIOR_REGISTRY,REQ-CFG_005,CRIT-REQ-CFG_005-002,auxiliary,Array field values from defaults and parent configs are preserved when child con,scope registry subset or sidecar map
+IMPL-CFG_MERGE_BEHAVIOR_REGISTRY,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-CFG_MERGE_BEHAVIOR_REGISTRY,REQ-CFG_005,CRIT-REQ-CFG_005-007,auxiliary,Inheritance chains processed in correct order,scope registry subset or sidecar map
+IMPL-CFG_MERGE_BEHAVIOR_REGISTRY,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE,REQ-CFG_005,CRIT-REQ-CFG_005-006,auxiliary,Duplicate values in arrays are deduplicated during merge,scope registry subset or sidecar map
+IMPL-CLI_FRAMEWORK,REQ-USABILITY,CRIT-REQ-USABILITY-002,auxiliary,Configuration options are discoverable,scope registry subset or sidecar map
+IMPL-CONFIGURABLE_STRINGS,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-CONFIG_STRUCT,REQ-CFG_006,CRIT-REQ-CFG_006-002,auxiliary,*Backward Compatibility**: Existing GetConfigValuesWithSources() function works ,scope registry subset or sidecar map
+IMPL-CONFIG_STRUCT,REQ-CFG_006,CRIT-REQ-CFG_006-006,auxiliary,"*Performance**: Configuration inspection completes in <100ms for typical usage, ",scope registry subset or sidecar map
+IMPL-DELAYED_OUTPUT,REQ-OUTPUT_FORMATTING,CRIT-REQ-OUTPUT_FORMATTING-003,auxiliary,Named placeholders supported,scope registry subset or sidecar map
+IMPL-DIFF_COMMAND,REQ-OUTPUT_FORMATTING,CRIT-REQ-OUTPUT_FORMATTING-003,auxiliary,Named placeholders supported,scope registry subset or sidecar map
+IMPL-DIRECTORY_COMPARISON,REQ-FILE_BACKUP,CRIT-REQ-FILE_BACKUP-001,auxiliary,Atomic operations prevent corruption,scope registry subset or sidecar map
+IMPL-DIRECTORY_COMPARISON,REQ-PERFORMANCE,CRIT-REQ-PERFORMANCE-002,auxiliary,Configuration loading remains responsive,scope registry subset or sidecar map
+IMPL-DIRECTORY_COMPARISON,REQ-PERFORMANCE,CRIT-REQ-PERFORMANCE-004,auxiliary,Reflection caching reduces overhead,scope registry subset or sidecar map
+IMPL-EXCLUDE_MERGE_FIX,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-EXCLUDE_MERGE_FIX,REQ-CFG_005,CRIT-REQ-CFG_005-007,auxiliary,Inheritance chains processed in correct order,scope registry subset or sidecar map
+IMPL-EXCLUDE_MERGE_FIX,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-EXCLUSION_PATTERNS,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-001,auxiliary,Precedence: command line > environment > files > defaults,scope registry subset or sidecar map
+IMPL-EXCLUSION_PATTERNS,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-004,auxiliary,Source tracking shows value origins,scope registry subset or sidecar map
+IMPL-FILE_OPERATIONS,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-002,auxiliary,Panic recovery prevents leaks,scope registry subset or sidecar map
+IMPL-FILE_OPERATIONS,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-003,auxiliary,Resource cleanup continues on failures,scope registry subset or sidecar map
+IMPL-FILE_OPERATIONS,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-004,auxiliary,Thread-safety verified,scope registry subset or sidecar map
+IMPL-FILE_STATISTICS,REQ-OUTPUT_FORMATTING,CRIT-REQ-OUTPUT_FORMATTING-003,auxiliary,Named placeholders supported,scope registry subset or sidecar map
+IMPL-FILE_STATISTICS_TEMPLATE_FIX,REQ-OUT_002,CRIT-REQ-OUT_002-002,auxiliary,Both inc and full commands behave consistently,scope registry subset or sidecar map
+IMPL-FILE_STATISTICS_TEMPLATE_FIX,REQ-OUT_002,CRIT-REQ-OUT_002-V002,auxiliary,Command output behavior tests for inc and full commands,scope registry subset or sidecar map
+IMPL-INCREMENTAL_DUPLICATE_PREVENTION,REQ-DIFF_COMMAND,CRIT-REQ-DIFF_COMMAND-V002,auxiliary,Tests verify context cancellation support,scope registry subset or sidecar map
+IMPL-INCREMENTAL_DUPLICATE_PREVENTION,REQ-OUTPUT_FORMATTING,CRIT-REQ-OUTPUT_FORMATTING-003,auxiliary,Named placeholders supported,scope registry subset or sidecar map
+IMPL-LIST_FORMAT_SAFETY,REQ-OUT_002,CRIT-REQ-OUT_002-002,auxiliary,Both inc and full commands behave consistently,scope registry subset or sidecar map
+IMPL-LIST_FORMAT_SAFETY,REQ-OUT_002,CRIT-REQ-OUT_002-V005,auxiliary,Unit tests for stat gathering functionality,scope registry subset or sidecar map
+IMPL-LIST_LIMIT,REQ-OUTPUT_FORMATTING,CRIT-REQ-OUTPUT_FORMATTING-003,auxiliary,Named placeholders supported,scope registry subset or sidecar map
+IMPL-PACKAGE_EXTRACTION,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-PROCESSING_PATTERNS,REQ-PERFORMANCE,CRIT-REQ-PERFORMANCE-002,auxiliary,Configuration loading remains responsive,scope registry subset or sidecar map
+IMPL-PROCESSING_PATTERNS,REQ-PERFORMANCE,CRIT-REQ-PERFORMANCE-004,auxiliary,Reflection caching reduces overhead,scope registry subset or sidecar map
+IMPL-STDD_VIS_ASSETS,REQ-MODULE_VALIDATION,CRIT-REQ-MODULE_VALIDATION-V001,auxiliary,Modules identified and documented before development starts,scope registry subset or sidecar map
+IMPL-TESTING,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-001,auxiliary,Errors handled without crashing,scope registry subset or sidecar map
+IMPL-TESTING,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-002,auxiliary,Panic recovery prevents leaks,scope registry subset or sidecar map
+IMPL-TESTING,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-004,auxiliary,Thread-safety verified,scope registry subset or sidecar map
+IMPL-TOKEN_COVERAGE_AUDIT,REQ-DOC_016,CRIT-REQ-DOC_016-002,auxiliary,AI assistant effectiveness >95% feature navigation accuracy using tokens,scope registry subset or sidecar map
+IMPL-TOKEN_COVERAGE_AUDIT,REQ-DOC_016,CRIT-REQ-DOC_016-003,auxiliary,Automated validation integration with existing systems,scope registry subset or sidecar map
+IMPL-TOKEN_COVERAGE_AUDIT,REQ-DOC_016,CRIT-REQ-DOC_016-004,auxiliary,Complete feature traceability from specification to implementation,scope registry subset or sidecar map
+IMPL-TOKEN_COVERAGE_AUDIT,REQ-DOC_016,CRIT-REQ-DOC_016-V001,auxiliary,AI assistant navigation accuracy testing,scope registry subset or sidecar map
+IMPL-TOKEN_COVERAGE_AUDIT,REQ-DOC_016,CRIT-REQ-DOC_016-V002,auxiliary,Automated validation integration testing,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-CODE_QUALITY,CRIT-REQ-CODE_QUALITY-002,auxiliary,All function return values are checked,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-CODE_QUALITY,CRIT-REQ-CODE_QUALITY-003,auxiliary,All operations handle errors appropriately,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-DOC_016,CRIT-REQ-DOC_016-002,auxiliary,AI assistant effectiveness >95% feature navigation accuracy using tokens,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-DOC_016,CRIT-REQ-DOC_016-003,auxiliary,Automated validation integration with existing systems,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-DOC_016,CRIT-REQ-DOC_016-005,auxiliary,Cross-layer consistency with token validation passing,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-DOC_016,CRIT-REQ-DOC_016-V001,auxiliary,AI assistant navigation accuracy testing,scope registry subset or sidecar map
+IMPL-TOKEN_MIGRATION_COMPLETE,REQ-DOC_016,CRIT-REQ-DOC_016-V002,auxiliary,Automated validation integration testing,scope registry subset or sidecar map
+IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-CFG_MIXED_MODE_MERGE_FIX,REQ-CFG_005,CRIT-REQ-CFG_005-001,auxiliary,"Order is preserved: defaults/parent values first, then child additions",scope registry subset or sidecar map
+IMPL-CFG_MIXED_MODE_MERGE_FIX,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-CFG_MIXED_MODE_MERGE_FIX,REQ-CFG_005,CRIT-REQ-CFG_005-006,auxiliary,Duplicate values in arrays are deduplicated during merge,scope registry subset or sidecar map
+IMPL-CFG_MIXED_MODE_MERGE_FIX,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-CFG_QUOTED_KEY_PREFIX,REQ-CFG_005,CRIT-REQ-CFG_005-001,auxiliary,"Order is preserved: defaults/parent values first, then child additions",scope registry subset or sidecar map
+IMPL-CFG_QUOTED_KEY_PREFIX,REQ-CFG_005,CRIT-REQ-CFG_005-002,auxiliary,Array field values from defaults and parent configs are preserved when child con,scope registry subset or sidecar map
+IMPL-CFG_QUOTED_KEY_PREFIX,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-CFG_QUOTED_KEY_PREFIX,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-001,auxiliary,Precedence: command line > environment > files > defaults,scope registry subset or sidecar map
+IMPL-CFG_QUOTED_KEY_PREFIX,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-CONFIG_DISPLAY_FLATTENING,REQ-CFG_006,CRIT-REQ-CFG_006-002,auxiliary,*Backward Compatibility**: Existing GetConfigValuesWithSources() function works ,scope registry subset or sidecar map
+IMPL-CONFIG_DISPLAY_FLATTENING,REQ-CFG_006,CRIT-REQ-CFG_006-004,auxiliary,*Inheritance Integration**: Integration with CFG-005 inheritance system showing ,scope registry subset or sidecar map
+IMPL-CONFIG_DISPLAY_FLATTENING,REQ-CFG_006,CRIT-REQ-CFG_006-006,auxiliary,"*Performance**: Configuration inspection completes in <100ms for typical usage, ",scope registry subset or sidecar map
+IMPL-CONFIG_DISPLAY_FLATTENING,REQ-CFG_006,CRIT-REQ-CFG_006-008,auxiliary,*Test Coverage**: Comprehensive test suite with >95% coverage including edge cas,scope registry subset or sidecar map
+IMPL-DEPENDENCY_MGMT,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-DEPENDENCY_MGMT,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-004,auxiliary,Tests are easy to understand and modify,scope registry subset or sidecar map
+IMPL-LARGE_FILE_CHALLENGE,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-LARGE_FILE_CHALLENGE,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-003,auxiliary,Documentation is complete and up-to-date,scope registry subset or sidecar map
+IMPL-TEST_DEFAULT_STRATEGY_EDGES,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-TEST_DEFAULT_STRATEGY_EDGES,REQ-CFG_005,CRIT-REQ-CFG_005-007,auxiliary,Inheritance chains processed in correct order,scope registry subset or sidecar map
+IMPL-TEST_DEFAULT_STRATEGY_EDGES,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-TEST_EMPTY_STRING_HANDLING,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-TEST_EMPTY_STRING_HANDLING,REQ-CFG_005,CRIT-REQ-CFG_005-007,auxiliary,Inheritance chains processed in correct order,scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CFG_006,CRIT-REQ-CFG_006-001,auxiliary,*Automatic Field Discovery**: All configuration fields (100+ fields) discovered ,scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CFG_006,CRIT-REQ-CFG_006-002,auxiliary,*Backward Compatibility**: Existing GetConfigValuesWithSources() function works ,scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CFG_006,CRIT-REQ-CFG_006-005,auxiliary,"*Multiple Output Formats**: Support for table format (quick scanning), tree form",scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CFG_006,CRIT-REQ-CFG_006-006,auxiliary,"*Performance**: Configuration inspection completes in <100ms for typical usage, ",scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CFG_006,CRIT-REQ-CFG_006-009,auxiliary,"*Type Support**: Correct handling of strings, bools, ints, slices, pointers, str",scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CFG_006,CRIT-REQ-CFG_006-V001,auxiliary,"*Edge Case Testing**: Anonymous embedded fields, unexported field exclusion, int",scope registry subset or sidecar map
+IMPL-TEST_EXCLUDE_MERGE,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-TEST_PREPEND_ORDERING,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-TEST_PREPEND_ORDERING,REQ-CFG_005,CRIT-REQ-CFG_005-006,auxiliary,Duplicate values in arrays are deduplicated during merge,scope registry subset or sidecar map
+IMPL-TEST_PREPEND_ORDERING,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-001,auxiliary,Precedence: command line > environment > files > defaults,scope registry subset or sidecar map
+IMPL-TEST_PREPEND_ORDERING,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-003,auxiliary,Environment variable support for search paths,scope registry subset or sidecar map
+IMPL-TEST_UNICODE_HANDLING,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-TEST_UNICODE_HANDLING,REQ-CFG_005,CRIT-REQ-CFG_005-007,auxiliary,Inheritance chains processed in correct order,scope registry subset or sidecar map
+IMPL-TOKEN_SYSTEM,REQ-IMMUTABLE_DIRECTORY_OPERATIONS,CRIT-REQ-IMMUTABLE_DIRECTORY_OPERATIONS-007,auxiliary,Special files are handled correctly,scope registry subset or sidecar map
+IMPL-TESTING_COMPLEXITY,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-001,auxiliary,Errors handled without crashing,scope registry subset or sidecar map
+IMPL-TESTING_COMPLEXITY,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-002,auxiliary,Panic recovery prevents leaks,scope registry subset or sidecar map
+IMPL-TESTING_COMPLEXITY,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-003,auxiliary,Resource cleanup continues on failures,scope registry subset or sidecar map
+IMPL-TESTING_COMPLEXITY,REQ-RELIABILITY,CRIT-REQ-RELIABILITY-004,auxiliary,Thread-safety verified,scope registry subset or sidecar map
+IMPL-TEST_CFG_005_P1,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-BACKWARD_COMPAT,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-BACKWARD_COMPAT,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-004,auxiliary,Tests are easy to understand and modify,scope registry subset or sidecar map
+IMPL-CFG_HIERARCHY_PRESERVATION,REQ-CFG_005,CRIT-REQ-CFG_005-004,auxiliary,Circular dependencies detected and prevented,scope registry subset or sidecar map
+IMPL-EXTRACTION_CHALLENGES,REQ-CONFIGURATION,CRIT-REQ-CONFIGURATION-004,auxiliary,Source tracking shows value origins,scope registry subset or sidecar map
+IMPL-EXTRACTION_PRINCIPLES,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-INTERFACE_FIRST,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-LARGE_FILE_DECOMP,REQ-GIT_INTEGRATION,CRIT-REQ-GIT_INTEGRATION-003,auxiliary,Git repository detected automatically,scope registry subset or sidecar map
+IMPL-LARGE_FILE_DECOMP,REQ-GIT_INTEGRATION,CRIT-REQ-GIT_INTEGRATION-004,auxiliary,Status detection works for clean/dirty state,scope registry subset or sidecar map
+IMPL-LAYERED_EXTRACTION,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-LAYERED_EXTRACTION,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-004,auxiliary,Tests are easy to understand and modify,scope registry subset or sidecar map
+IMPL-REFACTOR_PREP,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-REFACTOR_PREP,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-004,auxiliary,Tests are easy to understand and modify,scope registry subset or sidecar map
+IMPL-ZERO_BREAKING,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-002,auxiliary,Configuration system supports new fields automatically,scope registry subset or sidecar map
+IMPL-ZERO_BREAKING,REQ-MAINTAINABILITY,CRIT-REQ-MAINTAINABILITY-003,auxiliary,Documentation is complete and up-to-date,scope registry subset or sidecar map

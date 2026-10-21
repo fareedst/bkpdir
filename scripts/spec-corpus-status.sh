@@ -9,13 +9,13 @@ source "$ROOT/scripts/lib/formal_spec_registry.sh"
 FORMAL_SPEC_REGISTRY_ROOT="$ROOT"
 
 fail=0
-SIDECARS=$(find tied/implementation-decisions -maxdepth 1 -name 'IMPL-*-pseudocode.md' 2>/dev/null | wc -l | tr -d ' ')
+SIDECARS=$(find tied-project/implementation-decisions -maxdepth 1 -name 'IMPL-*-pseudocode.md' 2>/dev/null | wc -l | tr -d ' ')
 REGISTRY="$(formal_spec_registry_count)"
 if [[ "$REGISTRY" -eq 0 ]]; then
   echo "DIAGNOSTIC: formal-spec-registry parse returned 0 tokens"
   exit 1
 fi
-LEAD_SKIP=$(grep -A999 '^lead_check_skip:' tied/spec/coverage-waivers.yaml 2>/dev/null | grep -cE '^\s+- IMPL-' || true)
+LEAD_SKIP=$(grep -A999 '^lead_check_skip:' tied-project/spec/coverage-waivers.yaml 2>/dev/null | grep -cE '^\s+- IMPL-' || true)
 
 queue_complete=""
 if command -v python3 >/dev/null 2>&1; then
@@ -32,7 +32,7 @@ PY
 )
 fi
 
-VALIDATE_OUT="$(go run ./cmd/specctl validate tied/implementation-decisions/*-pseudocode.md 2>&1)" || true
+VALIDATE_OUT="$(go run ./cmd/specctl validate tied-project/implementation-decisions/*-pseudocode.md 2>&1)" || true
 VAL_ERRORS=$(printf '%s\n' "$VALIDATE_OUT" | grep -c '\[error\]' || true)
 VAL_WARNINGS=$(printf '%s\n' "$VALIDATE_OUT" | grep -c '\[warning\]' || true)
 
@@ -62,7 +62,7 @@ else
   check "specctl validate" 0 "${VAL_ERRORS} errors, ${VAL_WARNINGS} warnings"
 fi
 
-if go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pseudocode.md >/dev/null 2>&1; then
+if go run ./cmd/specctl matrix --check-coverage tied-project/implementation-decisions/*-pseudocode.md >/dev/null 2>&1; then
   check "matrix coverage" 1 "COVER-001 clear (waivers applied)"
 else
   check "matrix coverage" 0 "uncovered formal blocks — run matrix --check-coverage"
@@ -71,7 +71,7 @@ fi
 FORMAL_SIDECARS=()
 while IFS= read -r token; do
   [[ -z "$token" ]] && continue
-  path="tied/implementation-decisions/${token}-pseudocode.md"
+  path="tied-project/implementation-decisions/${token}-pseudocode.md"
   [[ -f "$path" ]] && FORMAL_SIDECARS+=("$path")
 done < <(formal_spec_registry_tokens)
 
@@ -98,7 +98,7 @@ if command -v python3 >/dev/null 2>&1; then
   ORACLE_STATS=$(python3 - <<'PY'
 import yaml
 from pathlib import Path
-p = Path("tied/spec/oracle-registry.yaml")
+p = Path("tied-project/spec/oracle-registry.yaml")
 if not p.exists():
     print("0/50")
 else:

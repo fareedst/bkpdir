@@ -11,15 +11,15 @@ Work on the current branch includes:
 - **Config errors**: Failed config file reads print a **stderr warning** and a short **YAML hint** (e.g. quoting globs such as `*.tsbuildinfo` when the parser reports alias/anchor issues).
 - **Exclusions**: Trailing-slash patterns with a **single** path segment (e.g. `node_modules/`) match that directory name **at any depth** in the tree.
 - **Lint / check**: `make lint` runs **TIED MCP validation** (`validate-tied-mcp`) before `revive`; `make check` runs fmt, vet, and lint only—run `make validate-token-enforcement` separately for the optional DOC-008 scan. See [Development](#development).
-- **TIED**: REQ/ARCH detail YAML no longer embed invalid `detail_file`; IMPL decision files normalized and pseudocode aligned; canonical registry in `tied/semantic-tokens.yaml`; `project-tokens.yaml` is a short pointer only; agent checklist docs updated.
+- **TIED**: REQ/ARCH detail YAML no longer embed invalid `detail_file`; IMPL decision files normalized and pseudocode aligned; canonical registry in `tied-project/semantic-tokens.yaml`; `project-tokens.yaml` is a short pointer only; agent checklist docs updated.
 - **Repository**: Prebuilt platform binaries were **removed** from `bin/` (build locally or via CI).
 - **CLI (tests and wiring)**: No change to the commands or flags you use day to day. Internally, the same production Cobra tree (including `diff`, `template`, and root flags) is built once via `newRootCommand()` and tests use that tree, so integration tests stay aligned with the real binary.
 
 ### Documentation, TIED paths, and token validation
 
-- **Docs pruned**: Many non-essential `docs/` files (session write-ups, migration logs, duplicate analyses, old working plans) were **removed** on purpose. Normative requirements and decisions live under **`tied/`**; use **git history** or [docs/archive/README.md](docs/archive/README.md) if you need retired narratives.
-- **Registry**: **`project-tokens.yaml`** is only a **pointer** to `tied/semantic-tokens.yaml` and the TIED indexes. Do not treat it as a token matrix; extend **`tied/semantic-tokens.yaml`** and detail YAML instead (`[REQ-DOC_016]`).
-- **Requirements index**: [`tied/requirements.yaml`](tied/requirements.yaml) and REQ detail files cite concrete **`tied/architecture-decisions/ARCH-*.yaml`** and **`tied/implementation-decisions/IMPL-*.yaml`** paths instead of monolithic `architecture-decisions.md` / `implementation-decisions.md` section references.
+- **Docs pruned**: Many non-essential `docs/` files (session write-ups, migration logs, duplicate analyses, old working plans) were **removed** on purpose. Normative requirements and decisions live under **`tied-project/`**; use **git history** or [docs/archive/README.md](docs/archive/README.md) if you need retired narratives.
+- **Registry**: **`project-tokens.yaml`** is only a **pointer** to `tied-project/semantic-tokens.yaml` and the TIED indexes. Do not treat it as a token matrix; extend **`tied-project/semantic-tokens.yaml`** and detail YAML instead (`[REQ-DOC_016]`).
+- **Requirements index**: [`tied-project/requirements.yaml`](tied-project/requirements.yaml) and REQ detail files cite concrete **`tied-project/architecture-decisions/ARCH-*.yaml`** and **`tied-project/implementation-decisions/IMPL-*.yaml`** paths instead of monolithic `architecture-decisions.md` / `implementation-decisions.md` section references.
 - **Tooling alignment**: Refactoring validation tests and coverage differential were updated for removed doc paths (including optional `docs/coverage-baseline.md`).
 - **Validation script**: [`scripts/validate-semantic-tokens.sh`](scripts/validate-semantic-tokens.sh) regenerates [`semantic-token-validation-report.md`](semantic-token-validation-report.md) with TIED / canonical-registry wording. The script may still exit **non-zero** when per-file checks fail (e.g. remaining Unicode icons), but it **writes the report** before exiting.
 
@@ -287,7 +287,7 @@ This project uses a **semantic token system** for AI-optimized development:
 - **Perfect searchability**: `grep "\[CRITICAL\]" *.go` works everywhere
 - **AI-native**: Semantic parsing vs visual interpretation
 - **Cross-platform**: No Unicode or font dependencies
-- **Maintainable**: Single source of truth in `tied/semantic-tokens.yaml` (see `project-tokens.yaml` for legacy pointer metadata)
+- **Maintainable**: Single source of truth in `tied-project/semantic-tokens.yaml` (see `project-tokens.yaml` for legacy pointer metadata)
 
 ### Development Requirements
 
@@ -295,7 +295,7 @@ All development work must comply with:
 
 1. **Semantic tokens** - Use `[CRITICAL|HIGH|MEDIUM|LOW] FEATURE-ID: Description [ACTION-context]`
 2. **Validation** - Pass `make validate-token-enforcement`
-3. **Registry compliance** - Use tokens registered in `tied/semantic-tokens.yaml`
+3. **Registry compliance** - Use tokens registered in `tied-project/semantic-tokens.yaml`
 4. **Documentation consistency** - Keep tokens aligned across all files
 5. **Milestone tracking** - Document completion of major milestones during development
 
@@ -321,8 +321,8 @@ bkpdir/
 │   └── testutil/              # Testing utilities
 ├── scripts/                   # Build and validation scripts
 ├── docs/                      # Documentation
-├── tied/                      # TIED: REQ/ARCH/IMPL YAML (canonical token registry)
-└── project-tokens.yaml        # Legacy pointer to tied/ (do not extend with token matrices)
+├── tied-project/                      # TIED: REQ/ARCH/IMPL YAML (canonical token registry)
+└── project-tokens.yaml        # Legacy pointer to tied-project/ (do not extend with token matrices)
 ```
 
 ## Features
@@ -440,7 +440,7 @@ make validate-tokens
 
 The project uses a central registry for semantic tokens:
 
-**Canonical registry:** `tied/semantic-tokens.yaml` (indexes + detail under `tied/`). **`project-tokens.yaml`** is a short pointer only.
+**Canonical registry:** `tied-project/semantic-tokens.yaml` (indexes + detail under `tied-project/`). **`project-tokens.yaml`** is a short pointer only.
 
 ### Valid Priorities
 - `CRITICAL` - Blocking operations, core system integrity
@@ -494,7 +494,7 @@ The project is migrating from Unicode icons to semantic tokens:
 ### AI Assistant Guidelines
 
 - **Token system first** - Always use semantic tokens
-- **Registry compliance** - Check `tied/semantic-tokens.yaml` for valid tokens
+- **Registry compliance** - Check `tied-project/semantic-tokens.yaml` for valid tokens
 - **Validation integration** - Run validation after changes
 - **Consistency maintenance** - Keep tokens aligned across all files
 
@@ -505,7 +505,7 @@ MIT License - see LICENSE file for details.
 ## Links
 
 - [Documentation](docs/)
-- [Semantic token system (pointer)](docs/semantic-token-system-requirements.md) — canonical registry in `tied/semantic-tokens.yaml`
+- [Semantic token system (pointer)](docs/semantic-token-system-requirements.md) — canonical registry in `tied-project/semantic-tokens.yaml`
 - [AI / developer context](docs/context/README.md)
 - [Package Reference](docs/package-reference.md)
 - [Migration Guide](docs/migration-guide.md)

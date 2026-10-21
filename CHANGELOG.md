@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Two-folder TIED layout (CITDP-BKPDIR-TWO-FOLDER-CLEANUP)**: Git-tracked project traceability under `tied-project/` (indexes, REQ/ARCH/IMPL detail, CITDP, working history); methodology consumed via linked `tied-bundle/` (install-managed, gitignored). Close-out under `tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/`.
 - **TIED Canon (`[REQ-PSEUDOCODE_FORMAL_VERIFICATION]`)**: Sidecar-canonical YAML projection (`scripts/sync_tied_yaml_projections.py`), formal spec registry parser (`scripts/formal_spec_registry.py`, `scripts/lib/formal_spec_registry.sh`), logic rebaseline (`scripts/rebaseline_logic_tracking.py`), Tier A Layer C contracts (`scripts/enrich_tier_a_procedure_contracts.py`, `scripts/run_layer_c_gate.sh`), fail-closed corpus gates in `run-spec-verification.sh` / `spec-corpus-status.sh`. CITDP `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-TIED-CANON.yaml`; working slice `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/` (tracker, gates, mutation wave 4 + CRIT-001 strict evidence, minimal inquiry waiver).
 - **Lead hygiene (`[REQ-PSEUDOCODE_FORMAL_VERIFICATION]`)**: `scripts/lead_hygiene.py`, `audit_package_level_leads.py`, `strip_package_level_leads.py`, `strip_redundant_impl_banners.py` (D15), and `test_lead_hygiene.py` to detect and remove package-level `// - [IMPL-*]` blocks in `*_test.go`; audit wired into `run-spec-verification.sh`. Bulk `add-test-leads --all` disabled in `impl_pseudocode_remediation.py`.
 - **Scan-root check-leads (`[IMPL-SPEC_CTL]`)**: `LeadScanDirPaths` scans `pkg/`, `internal/`, `cmd/`, and `test/`; `internal/speccheck/leads_test.go`; CITDP `tied/citdp/CITDP-REQ-PSEUDOCODE_FORMAL_VERIFICATION-SCAN-ROOT.yaml`; integrated close-out under `working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/scan-root/`.
@@ -15,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- **Documentation paths**: `docs/user/specification.md` normative links use `tied-project/` and `tied-bundle/docs/` instead of legacy `tied/` monolith paths (two-folder cleanup).
 - **Exclude patterns (`[REQ-IMMUTABLE_FILE_EXCLUSION]`, `[IMPL-EXCLUSION_PATTERNS]`)**: Multi-segment directory patterns without a leading `/` (e.g. `.venv/lib/`, `demo/batches/`) now match at any depth in the tree, not only from the backup root. Use a leading `/` to keep root-only behavior (e.g. `/demo/batches/`). **Breaking** for configs that relied on the old root-only multi-segment semantics — plan a major version bump per `[REQ-IMMUTABLE_FILE_EXCLUSION]`.
 - **Agent canon**: `AGENTS.md`, `tied/docs/impl-deep-sync-agent-guide.md` (§ Sidecar-canonical YAML projection), `tied/docs/client-development-index.md`, `docs/markscope/spec-verification.md` (agent quick path). `[ARCH-SPEC_DSL_AND_ORACLE]` sidecar-canonical policy; 73/73 IMPL `implementation_approach.summary` projections synced from sidecar `## Summary contract`.
 - **Logic tracking**: Honest L3/L2/L1 distribution and oracle 50/50; improvement-queue and oracle-registry updates; HYGIENE_POLICY waiver for lead placement on `IMPL-TOKEN_COVERAGE_AUDIT`.

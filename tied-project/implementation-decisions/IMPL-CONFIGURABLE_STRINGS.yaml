@@ -1,0 +1,60 @@
+IMPL-CONFIGURABLE_STRINGS:
+  code_locations:
+    files:
+      - config.go
+      - errors.go
+      - formatter.go
+    functions:
+      - HandleArchiveError
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - REQ-CONFIGURATION
+  description: Comprehensive string externalization system allowing all user-facing strings to be loaded from configuration files rather than hardcoded, with enhanced template formatting using named elements in data structures
+  implementation_approach:
+    details:
+      - Added 12 new error message format strings (FormatDiskFullError, FormatPermissionError, etc.)
+      - Added corresponding template versions with named data structure support
+      - All error messages now use OutputFormatter methods instead of hardcoded strings
+      - Maintained full backward compatibility with existing format strings
+      - Updated HandleArchiveError to use configurable error messages
+    summary: |-
+      Externalize user-facing error and status format strings on Config with YAML defaults, expose them via GetErrorFormatStrings, format through OutputFormatter methods, and route archive failures through HandleArchiveError instead of hardcoded text.
+      INPUT: err, cfg format fields, formatter interface
+      OUTPUT: printed message and process exit status
+      DATA: Format*Error strings, Template*Error strings, status code map
+      Canonical behavior: tied-project/implementation-decisions/IMPL-CONFIGURABLE_STRINGS-pseudocode.md
+  metadata:
+    author: AI Agent
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+  name: Eliminate Hardcoded Strings and Enhance Template Formatting
+  rationale:
+    benefits:
+      - All user-facing strings configurable via configuration files
+      - Full backward compatibility maintained
+      - OutputFormatter methods used instead of hardcoded strings
+      - Template-based error formatting with named elements
+    problems_solved:
+      - Difficulty customizing output messages
+      - Hardcoded user-facing strings scattered across codebase
+      - Inflexible error message formatting
+    why: Hardcoded strings prevent customization and localization; template formatting with named elements improves maintainability
+  related_decisions:
+    depends_on: []
+    see_also:
+      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+      - IMPL-DUAL_FORMATTING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+    code_annotations:
+      - Configurable format strings
+      - template-based error formatting with named elements
+    requirements:
+      - REQ-CONFIGURATION
+    tests: []

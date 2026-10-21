@@ -1,0 +1,194 @@
+IMPL-DIRECTORY_COMPARISON:
+  code_locations:
+    files:
+      - comparison.go
+      - pkg/fileops/comparison.go
+      - pkg/fileops/comparison_test.go
+      - pkg/fileops/exclusion_test.go
+    functions:
+      - CheckForIdenticalArchive
+      - CompareSnapshots
+      - CreateArchiveSnapshot
+      - CreateDirectorySnapshot
+      - DefaultComparer.calculateArchiveFileHash
+      - DefaultComparer.calculateContentHash
+      - DefaultComparer.calculateFileHash
+      - DefaultComparer.CompareSnapshots
+      - DefaultComparer.CreateArchiveSnapshot
+      - DefaultComparer.CreateDirectorySnapshot
+      - DefaultComparer.IsDirectoryIdenticalToArchive
+      - FindMostRecentArchive
+      - GetArchiveTreeSummary
+      - GetDirectoryTreeSummary
+      - IsDirectoryIdenticalToArchive
+      - NewComparer
+  code_markers: '`pkg/fileops/comparison.go`, snapshot structures, comparison functions'
+  comparison_algorithm: |-
+    ```go
+    func CompareSnapshots(snap1, snap2 *DirectorySnapshot) bool {
+        if len(snap1.Files) != len(snap2.Files) {
+            return false
+        }
+        
+        for path, info1 := range snap1.Files {
+            info2, exists := snap2.Files[path]
+            if !exists {
+                return false
+            }
+            
+            if info1.Hash != info2.Hash || info1.Size != info2.Size {
+                return false
+            }
+        }
+        
+        return true
+    }
+    ```
+  cross_references:
+    - ARCH-DIRECTORY_COMPARISON
+    - REQ-DIFF_COMMAND
+    - REQ-FILE_BACKUP
+    - REQ-PERFORMANCE
+  directorysnapshot: |-
+    ```go
+    type DirectorySnapshot struct {
+        Files map[string]FileInfo
+        Root  string
+    }
+
+    type FileInfo struct {
+        Path     string
+        Size     int64
+        ModTime  time.Time
+        Hash     string
+        IsDir    bool
+    }
+    ```
+  from_archive: |-
+    ```go
+    func CreateArchiveSnapshot(archivePath string) (*DirectorySnapshot, error) {
+        reader, err := zip.OpenReader(archivePath)
+        if err != nil {
+            return nil, err
+        }
+        defer reader.Close()
+        
+        snapshot := &DirectorySnapshot{
+            Files: make(map[string]FileInfo),
+            Root:  archivePath,
+        }
+        
+        for _, file := range reader.File {
+            hash := calculateArchiveFileHash(file)
+            snapshot.Files[file.Name] = FileInfo{
+                Path:    file.Name,
+                Size:    int64(file.UncompressedSize64),
+                ModTime: file.ModTime(),
+                Hash:    hash,
+                IsDir:   file.FileInfo().IsDir(),
+            }
+        }
+        
+        return snapshot, nil
+    }
+    ```
+  from_directory: |-
+    ```go
+    func CreateDirectorySnapshot(root string, exclusions []string) (*DirectorySnapshot, error) {
+        snapshot := &DirectorySnapshot{
+            Files: make(map[string]FileInfo),
+            Root:  root,
+        }
+        
+        err := WalkWithExclusions(root, exclusions, func(path string, info os.FileInfo, err error) error {
+            if err != nil {
+                return err
+            }
+            
+            hash := calculateFileHash(path)
+            snapshot.Files[path] = FileInfo{
+                Path:    path,
+                Size:    info.Size(),
+                ModTime: info.ModTime(),
+                Hash:    hash,
+                IsDir:   info.IsDir(),
+            }
+            return nil
+        })
+        
+        return snapshot, err
+    }
+    ```
+  implementation_approach:
+    details: []
+    summary: |-
+      Snapshot-based directory and zip archive comparison via pkg/fileops wrappers, plus helpers to find the latest full archive and detect directory-archive identity.
+      INPUT: root path, archive zip path, exclude patterns
+      OUTPUT: DirectorySnapshot, boolean identical, most recent archive path
+      DATA: FileInfo RelativePath, Size, Hash
+      Canonical behavior: tied-project/implementation-decisions/IMPL-DIRECTORY_COMPARISON-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Directory Comparison Implementation
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Enables efficient comparison
+      Supports archive-to-directory comparison
+      Provides accurate change detection
+      Handles file renames and moves
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-DIRECTORY_COMPARISON
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-DIRECTORY_COMPARISON
+    code_annotations:
+      - ARCH-DIRECTORY_COMPARISON
+      - IMPL-DIRECTORY_COMPARISON
+      - REQ-DIFF_COMMAND
+      - REQ-FILE_BACKUP
+      - REQ-PERFORMANCE
+    requirements:
+      - REQ-DIFF_COMMAND
+      - REQ-FILE_BACKUP
+      - REQ-PERFORMANCE
+    tests:
+      - TestCalculateArchiveFileHash
+      - TestCheckForIdenticalArchive
+      - TestCompareFiles
+      - TestCompareSnapshots
+      - TestCompareSnapshots_IdenticalAndDifferent_REQ_DIFF_COMMAND
+      - TestCreateArchiveSnapshot
+      - TestCreateArchiveSnapshot_AndCompareToDir_REQ_DIFF_COMMAND
+      - TestCreateArchiveSnapshot_ErrorCases
+      - TestCreateDirectorySnapshot
+      - TestCreateDirectorySnapshot_NoExclusions_REQ_DIFF_COMMAND
+      - TestCreateDirectorySnapshot_SymlinkToDirectory_REQ_DIFF_COMMAND
+      - TestCreateDirectorySnapshot_WithExclusions_REQ_DIFF_COMMAND
+      - TestFindMostRecentArchive
+      - TestFindMostRecentArchive_ErrorCases
+      - TestGetArchiveTreeSummary
+      - TestGetArchiveTreeSummary_ErrorCases
+      - TestGetDirectoryTreeSummary
+      - TestGetDirectoryTreeSummary_ErrorCases
+      - TestIsDirectoryIdenticalToArchive
+      - TestIsDirectoryIdenticalToArchive_ErrorCases
+      - TestIsDirectoryIdenticalToArchive_ExtraFileInDir_REQ_DIFF_COMMAND
+      - TestPatternMatcher_ShouldExclude_REQ_CONFIGURATION
+      - TestShouldExcludeFile_GlobAndExact_REQ_CONFIGURATION

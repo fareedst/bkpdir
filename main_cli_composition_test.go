@@ -1,5 +1,5 @@
 // Composition tests: production CLI wiring (newRootCommand + executeWithAutoDetection)
-// without duplicating a partial Cobra tree. See tied/docs/composition-coverage.md.
+// without duplicating a partial Cobra tree. See tied-bundle/docs/composition-coverage.md.
 package main
 
 import (

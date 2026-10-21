@@ -25,8 +25,8 @@ Machine-checkable IMPL sidecars across **four validation layers**:
 | **D — Projected** | STEP-behavior test strength, mutation score, semantic PRE/POST proof | mutation pilot, future oracle interpreter |
 
 **Tokens:** `REQ-PSEUDOCODE_FORMAL_VERIFICATION` · `ARCH-SPEC_DSL_AND_ORACLE` · `IMPL-SPEC_CTL`  
-**Grammar:** [tied/docs/pseudocode-dsl-grammar.md](../../tied/docs/pseudocode-dsl-grammar.md)  
-**Logic runbook:** [tied/docs/impl-deep-sync-agent-guide.md §14](../../tied/docs/impl-deep-sync-agent-guide.md)
+**Grammar:** [tied-bundle/docs/pseudocode-dsl-grammar.md](../../tied-bundle/docs/pseudocode-dsl-grammar.md)  
+**Logic runbook:** [tied-bundle/docs/impl-deep-sync-agent-guide.md §14](../../tied-bundle/docs/impl-deep-sync-agent-guide.md)
 
 ---
 
@@ -41,7 +41,7 @@ The **strongest enforced bar** today is **Layer B (L0) + Layer C tracking** on a
 | Traceability (L0) | No `COVER-001` on formal blocks | `matrix --check-coverage` |
 | Block leads (L0) | No `TRACE-002` (Tier A/B Go sync; Tier C waived) | `check-leads` |
 | Conformance (L3) | `specparse`, `specmodel`, `specconformance` tests pass | `go test` |
-| Oracle (L3) | **50/50** runtime IMPLs in [`oracle-registry.yaml`](../../tied/spec/oracle-registry.yaml) | `spec-corpus-status` |
+| Oracle (L3) | **50/50** runtime IMPLs in [`oracle-registry.yaml`](../../tied-project/spec/oracle-registry.yaml) | `spec-corpus-status` |
 | Logic audit (L1–L3) | **73/73** `logic_verified` + **73/73** `req_audit_pass` (manual gate) | improvement queue |
 | CRIT-001 scoped (L4) | **73/73** `crit001_pass` (scope registry + `--req-criteria-scoped`) | improvement queue + runbook |
 | Three-way sync | Sidecar `// -` leads match Go for Tier A/B (`run_impl_logic_audit.py`) | logic audit script |
@@ -123,7 +123,7 @@ Reset tracking: `python3 scripts/reset_impl_logic_audit_queue.py`
 | **Property / model tests** | `go test ./test/specconformance/... -count=1` | Oracle vs `internal/specmodel` |
 | **Mutation strength (L4 pilot)** | @code-as-button(run-mutation-pilot) | Requires `go-mutesting` on `PATH` |
 | **L4 REQ scoped audit** | `python3 scripts/run_impl_logic_audit.py --batch all --req-criteria-scoped` | CRIT-001 scoped check (corpus bar) |
-| **L4 REQ strict debt** | `python3 scripts/report_crit001_orphans.py --batch all --mode strict --csv` | Informational; see `tied/spec/crit001-baseline-strict.csv` |
+| **L4 REQ strict debt** | `python3 scripts/report_crit001_orphans.py --batch all --mode strict --csv` | Informational; see `tied-project/spec/crit001-baseline-strict.csv` |
 | **L4 corpus + pilots** | `RUN_L4_PILOT=1 scripts/spec-corpus-status.sh` | Mutation wave + optional REQ strict |
 | **L4 mutation waves 0–4** | `scripts/run-mutation-waves.sh` | Sequential rollout (opt-in) |
 
@@ -133,7 +133,7 @@ Reset tracking: `python3 scripts/reset_impl_logic_audit_queue.py`
 
 ### Agent quick path (sidecar edit)
 
-1. Edit `tied/implementation-decisions/IMPL-*-pseudocode.md` (behavior + `## Summary contract`).
+1. Edit `tied-project/implementation-decisions/IMPL-*-pseudocode.md` (behavior + `## Summary contract`).
 2. `python3 scripts/sync_tied_yaml_projections.py --check` (or `--apply` before commit).
 3. `SKIP_TIED_MCP=1 scripts/run-spec-verification.sh` (Layer B corpus gate; optional `RUN_LAYER_C=1` for Tier A contract analyze).
 
@@ -160,7 +160,7 @@ Runs: `yaml_index_validate` + `tied_validate_consistency` (Node MCP), then the s
 ```ux
 act: :allow
 allow:
-  command: 'ls -1 tied/implementation-decisions/IMPL-*-pseudocode.md'
+  command: 'ls -1 tied-project/implementation-decisions/IMPL-*-pseudocode.md'
   separator: "\n"
 init: false
 name: SIDECAR
@@ -177,7 +177,7 @@ Add `matrix --check-coverage` only if that IMPL is listed under `formal_spec` in
 
 ### CRIT-001 scoped audit (L4 corpus)
 
-Scoped mode checks only **in-scope** REQ criteria per [`req-criteria-scope-registry.yaml`](../../tied/spec/req-criteria-scope-registry.yaml): primary-owner REQs need full coverage; auxiliary cites use the registry subset (empty list = traceability-only). Runbook: [`crit001-corpus-alignment-runbook.md`](../../tied/docs/crit001-corpus-alignment-runbook.md).
+Scoped mode checks only **in-scope** REQ criteria per [`req-criteria-scope-registry.yaml`](../../tied-project/spec/req-criteria-scope-registry.yaml): primary-owner REQs need full coverage; auxiliary cites use the registry subset (empty list = traceability-only). Runbook: [`crit001-corpus-alignment-runbook.md`](../../tied-bundle/docs/crit001-corpus-alignment-runbook.md).
 
 **Corpus-wide gate** — all 73 sidecars; `--skip-specctl` keeps the loop fast (structure + CRIT-001 only):
 
@@ -224,23 +224,23 @@ go run ./cmd/specctl matrix --check-coverage [paths...]
 go run ./cmd/specctl check-leads [paths...]
 ```
 
-**Paths:** Glob or explicit files. Default if omitted: `tied/implementation-decisions/*-pseudocode.md`.
+**Paths:** Glob or explicit files. Default if omitted: `tied-project/implementation-decisions/*-pseudocode.md`.
 
 **Examples:**
 
 ```bash
 # All sidecars — parse + schema + symbols (formal rules only for registry IMPLs)
-go run ./cmd/specctl validate tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl validate tied-project/implementation-decisions/*-pseudocode.md
 
 # Traceability table (stdout: IMPL, SPEC-ID, STEP, test/code flags)
-go run ./cmd/specctl matrix tied/implementation-decisions/IMPL-CFG_006-pseudocode.md
+go run ./cmd/specctl matrix tied-project/implementation-decisions/IMPL-CFG_006-pseudocode.md
 
 # Fail on uncovered formal blocks (COVER-001)
 go run ./cmd/specctl matrix --check-coverage "$SIDECAR"
 ```
 
 ```bash @n:check-coverage-all-sidecars @r:trace
-go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl matrix --check-coverage tied-project/implementation-decisions/*-pseudocode.md
 ```
 
 ---
@@ -254,7 +254,7 @@ go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pse
 | `RUN_LAYER_C=1` | `run-spec-verification.sh` runs Tier A `pseudocode_analyze` gate (`scripts/run_layer_c_gate.sh`) |
 | `RUN_L4_PILOT=1` | `spec-corpus-status.sh` runs L4 pilot section (mutation + optional REQ strict) |
 | `RUN_L4_REQ_STRICT=1` | With `RUN_L4_PILOT=1`, run `--req-criteria-scoped` CRIT-001 audit |
-| `MUTATION_WAVE=0`–`4` / `all` | Wave filter for `run-mutation-pilot.sh` (see `tied/spec/mutation-wave-registry.yaml`) |
+| `MUTATION_WAVE=0`–`4` / `all` | Wave filter for `run-mutation-pilot.sh` (see `tied-project/spec/mutation-wave-registry.yaml`) |
 | `MUTATION_FROM_REGISTRY=1` | Mutate all unique `pkg_paths` from oracle registry |
 | `MUTATION_PKG=pkg/errors` | Single-package mutation target |
 
@@ -292,7 +292,7 @@ All of the following before wiring L4 into `run-spec-verification.sh`:
 | 3 | `pkg/resources`, `pkg/processing`, `pkg/testutil` |
 | 4 | `pkg/config`, `pkg/formatter` |
 
-Registry: [`tied/spec/mutation-wave-registry.yaml`](../../tied/spec/mutation-wave-registry.yaml)
+Registry: [`tied-project/spec/mutation-wave-registry.yaml`](../../tied-project/spec/mutation-wave-registry.yaml)
 
 When L4 is promoted globally, extend the default `spec-corpus-status.sh` exit criteria; until then, **release bar = Layer A + all-green Layer B/C rows above**.
 
@@ -353,14 +353,14 @@ Checks indexes, detail YAML, and **token comments** in `essence_pseudocode` — 
 
 | Resource | Path | Role |
 |----------|------|------|
-| Sidecar source | `tied/implementation-decisions/IMPL-{TOKEN}-pseudocode.md` | Authoritative pseudocode body |
-| Formal IMPL list | `tied/spec/formal-spec-registry.yaml` | **73** tokens under `formal_spec:` (quoted or unquoted YAML list entries) |
+| Sidecar source | `tied-project/implementation-decisions/IMPL-{TOKEN}-pseudocode.md` | Authoritative pseudocode body |
+| Formal IMPL list | `tied-project/spec/formal-spec-registry.yaml` | **73** tokens under `formal_spec:` (quoted or unquoted YAML list entries) |
 | Registry parser | `scripts/lib/formal_spec_registry.sh` + `scripts/formal_spec_registry.py` | Shared token list for status/verification; **fail closed** if parse count is 0 |
 | YAML projection | `scripts/sync_tied_yaml_projections.py` | `--check` / `--apply` syncs index (+ detail) `implementation_approach.summary` from sidecar `## Summary contract` |
-| Coverage waivers | `tied/spec/coverage-waivers.yaml` | `INFRA-*` blocks exempt from coverage; `lead_check_skip` exempt from check-leads; `HYGIENE_POLICY` on `IMPL-TOKEN_COVERAGE_AUDIT` is `INFRA-policy-sidecar-block` |
+| Coverage waivers | `tied-project/spec/coverage-waivers.yaml` | `INFRA-*` blocks exempt from coverage; `lead_check_skip` exempt from check-leads; `HYGIENE_POLICY` on `IMPL-TOKEN_COVERAGE_AUDIT` is `INFRA-policy-sidecar-block` |
 | Status script | `scripts/spec-corpus-status.sh` | One-screen all-green dashboard (exit 0 = pass) |
 | Gate script | `scripts/run-spec-verification.sh` | Full Layer B pipeline + status summary |
-| Oracle registry | `tied/spec/oracle-registry.yaml` | **50** L3 domains (`status: verified`) |
+| Oracle registry | `tied-project/spec/oracle-registry.yaml` | **50** L3 domains (`status: verified`) |
 | Logic audit | `scripts/run_impl_logic_audit.py` | Per-token / batch structural + lead sync audit |
 | Logic rebaseline | `scripts/rebaseline_logic_tracking.py` | Sync queue + checklist from audit (no `--mark-complete`) |
 | Tier A contracts | `scripts/enrich_tier_a_procedure_contracts.py` | Insert `Contract:` stanzas (INPUT/OUTPUT/PRE/POST/EFFECTS) under `PROCEDURE` blocks |
@@ -368,17 +368,17 @@ Checks indexes, detail YAML, and **token comments** in `essence_pseudocode` — 
 | Logic complete | `scripts/mark_impl_logic_audit_complete.py` | Sets `req_audit_pass` after gates (manual sign-off); `--logic-level L4` sets `mutation_verified` |
 | Mutation tracking | `scripts/seed_mutation_tracking.py` | Adds `mutation_verified` / `mutation_score` fields (not proof) |
 | Mutation waves | `scripts/run-mutation-waves.sh` | Sequential L4 wave rollout |
-| Wave registry | `tied/spec/mutation-wave-registry.yaml` | Packages per wave 0–4 |
+| Wave registry | `tied-project/spec/mutation-wave-registry.yaml` | Packages per wave 0–4 |
 | REQ criteria loader | `scripts/req_criteria_loader.py` | CRIT-001 orphan detection (scoped + strict) |
-| CRIT-001 runbook | `tied/docs/crit001-corpus-alignment-runbook.md` | Corpus alignment program |
-| Scope registry | `tied/spec/req-criteria-scope-registry.yaml` | Primary/auxiliary REQ criteria scope |
-| Strict debt CSV | `tied/spec/crit001-baseline-strict.csv` | Informational full-strict orphans |
+| CRIT-001 runbook | `tied-bundle/docs/crit001-corpus-alignment-runbook.md` | Corpus alignment program |
+| Scope registry | `tied-project/spec/req-criteria-scope-registry.yaml` | Primary/auxiliary REQ criteria scope |
+| Strict debt CSV | `tied-project/spec/crit001-baseline-strict.csv` | Informational full-strict orphans |
 | Queue reset | `scripts/reset_impl_logic_audit_queue.py` | Batch 0: `pending_audit`, P0–P2 priorities |
 | Oracle refresh | `scripts/seed_logic_verification_tracking.py` | Oracle counts only — **not** REQ audit proof |
-| AST JSON schema | `tied/spec/grammar/schema.json` | Normalized block shape (tooling) |
-| Layer B checklist | `tied/docs/pseudocode-validation-checklist.yaml` | PARSE/SHAPE/RESOLVE/COVER codes |
-| Sync checklist | `tied/docs/impl-pseudocode-sync-checklist.yaml` | Per-token `formal_spec`, `req_audit_pass` (73/73) |
-| Improvement queue | `tied/docs/impl-pseudocode-improvement-queue.yaml` | `logic_level`, `target_logic_level`, `priority`, `audit_notes` |
+| AST JSON schema | `tied-project/spec/grammar/schema.json` | Normalized block shape (tooling) |
+| Layer B checklist | `tied-bundle/docs/pseudocode-validation-checklist.yaml` | PARSE/SHAPE/RESOLVE/COVER codes |
+| Sync checklist | `tied-bundle/docs/impl-pseudocode-sync-checklist.yaml` | Per-token `formal_spec`, `req_audit_pass` (73/73) |
+| Improvement queue | `tied-bundle/docs/impl-pseudocode-improvement-queue.yaml` | `logic_level`, `target_logic_level`, `priority`, `audit_notes` |
 
 **Adding a new formal IMPL:** add `SPEC-ID` / `STEP` per grammar, add token under `formal_spec:` in the registry, sync Go refs, update tracking YAML, then run @code-as-button(corpus-status).
 
@@ -413,7 +413,7 @@ Exit code **0** = pass; **1** = at least one error-severity finding (validate/ma
 
 ## Related docs
 
-- [tied/docs/pseudocode-writing-and-validation.md](../../tied/docs/pseudocode-writing-and-validation.md) — three-way alignment, Layer A/B order  
-- [tied/docs/pseudocode-format-and-practices.md](../../tied/docs/pseudocode-format-and-practices.md) — vocabulary and formal IDs  
-- [tied/docs/pseudocode-dsl-grammar.md](../../tied/docs/pseudocode-dsl-grammar.md) — normative formal DSL + validation profiles (L0–L4)  
-- [tied/docs/impl-deep-sync-agent-guide.md](../../tied/docs/impl-deep-sync-agent-guide.md) — Track C sync, REQ audit §14, logic scripts
+- [tied-bundle/docs/pseudocode-writing-and-validation.md](../../tied-bundle/docs/pseudocode-writing-and-validation.md) — three-way alignment, Layer A/B order  
+- [tied-bundle/docs/pseudocode-format-and-practices.md](../../tied-bundle/docs/pseudocode-format-and-practices.md) — vocabulary and formal IDs  
+- [tied-bundle/docs/pseudocode-dsl-grammar.md](../../tied-bundle/docs/pseudocode-dsl-grammar.md) — normative formal DSL + validation profiles (L0–L4)  
+- [tied-bundle/docs/impl-deep-sync-agent-guide.md](../../tied-bundle/docs/impl-deep-sync-agent-guide.md) — Track C sync, REQ audit §14, logic scripts

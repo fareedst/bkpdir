@@ -1,0 +1,73 @@
+ARCH-EXCLUSION_PATTERNS:
+  alternatives_considered:
+    - cons: []
+      name: See detail file
+      pros: []
+      rejected_reason: |-
+        Regex patterns: Rejected due to complexity and performance
+        Simple string matching: Rejected due to limited functionality
+  common_patterns:
+    - 'Build artifacts: `build/`, `dist/`, `target/`, `*.o`'
+    - 'Dependencies: `node_modules/`, `vendor/`'
+    - 'OS files: `.DS_Store`, `Thumbs.db`'
+    - 'Temporary files: `*.tmp`, `*.temp`, `*.swp`'
+    - 'Version control: `.git/`, `.svn/`, `.hg/`'
+  cross-references: '[REQ-CONFIGURATION], [REQ-PERFORMANCE]'
+  cross_references:
+    - REQ-CONFIGURATION
+    - REQ-PERFORMANCE
+  decision: Pattern-based file exclusion system with glob support
+  doublestar_glob_patterns: Supports `**` for recursive matching
+  implementation_approach:
+    details: []
+    summary: Pattern-based file exclusion system with glob support
+  integration:
+    - Configurable via configuration files
+    - Integrates with archive and backup operations
+    - Supports per-operation exclusion patterns
+    - Used by directory traversal for filtering
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  multiple_patterns: Supports arrays of exclusion patterns
+  name: Exclusion Patterns Architecture
+  path-based_matching: Matches against full file paths
+  pattern_matcher: Compiled pattern matcher for efficient matching
+  performance:
+    - Pattern compilation for efficiency
+    - Supports large pattern sets
+    - ~10μs per file for complex glob patterns
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Enables flexible file filtering for archives and backups
+      Supports common exclusion patterns (version control, build artifacts)
+      Provides consistent exclusion behavior across operations
+      Integrates with configuration system
+  related_decisions:
+    depends_on:
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-EXCLUSION_PATTERNS
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
+    implementation: []
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-PERFORMANCE
+    tests: []

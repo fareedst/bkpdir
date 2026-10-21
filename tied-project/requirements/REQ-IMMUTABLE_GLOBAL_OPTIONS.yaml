@@ -1,0 +1,43 @@
+REQ-IMMUTABLE_GLOBAL_OPTIONS:
+  architecture: tied-project/architecture-decisions/ARCH-CLI_COMMANDS.yaml
+  category: Functional
+  description: 'Global options must be maintained:'
+  implementation: tied-project/implementation-decisions/IMPL-CLI_FRAMEWORK.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Global Options (Immutable)
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Global options are fundamental to user experience. Changing them would break user workflows.
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: '`--dry-run` flag works as specified'
+    - criterion: Flag behavior is maintained
+    - criterion: Output formatting uses configurable format strings
+    - criterion: Resource cleanup is verified in dry-run
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CLI_COMMANDS
+    code_annotations:
+      - REQ-IMMUTABLE_GLOBAL_OPTIONS
+    implementation:
+      - IMPL-CLI_FRAMEWORK
+    tests: []
+  validation_criteria:
+    - method: Global options tests verify all requirements. Breaking changes require major version bump.

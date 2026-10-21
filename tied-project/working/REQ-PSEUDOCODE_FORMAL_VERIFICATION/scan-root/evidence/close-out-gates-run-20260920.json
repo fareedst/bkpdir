@@ -1,0 +1,255 @@
+DIAGNOSTIC: envelope patch failed for working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/verification-evidence-manifest.v1.json: envelope_revision_conflict
+{
+  "phase": "close_out",
+  "depth_tier": "integrated",
+  "activation_collect": {
+    "skipped": false,
+    "reason": "collect",
+    "run_id": "scan-root-20260920-close"
+  },
+  "reconcile": {
+    "ok": true,
+    "report": {
+      "findings": [
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/close_out-2026-09-20T02-44-26-238Z.json",
+            "stored_citdp_hash": "sha256:31f8f942a4fcb85a5ee2b6376f4af9a22589288a6c5071a9b6d9e6567bf4b3d6",
+            "stored_tracker_hash": "sha256:1685340c6dd95822388fbecc12656c46d2b82d82ea8dfaaa48642eec92b47fc5"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/close_out-2026-09-20T02-44-54-750Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:58ff84dafd929ba2f2a8bcec8c1746d070425306b4b689d1a87f2ae326f43891"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/close_out-2026-09-20T02-51-32-280Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/close_out-2026-09-20T02-51-39-790Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/close_out-2026-09-20T02-52-14-546Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/pre_implementation-2026-09-20T02-42-48-954Z.json",
+            "stored_citdp_hash": "sha256:31f8f942a4fcb85a5ee2b6376f4af9a22589288a6c5071a9b6d9e6567bf4b3d6",
+            "stored_tracker_hash": "sha256:fc0c793265a2639de25d8cc318eadb4014e28932a32d27d6fdbd44c7c94efdb6"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/pre_implementation-2026-09-20T02-43-29-472Z.json",
+            "stored_citdp_hash": "sha256:1bf65329a402e03c2a42285ed3a0fa86e79830dbe27dcd1d607722ed1ad1acce",
+            "stored_tracker_hash": "sha256:fcad50d6259851e3d556caef56b569a5ac989e42db824d1ecd14a5417dd5eccf"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/pre_implementation-2026-09-20T02-44-25-078Z.json",
+            "stored_citdp_hash": "sha256:31f8f942a4fcb85a5ee2b6376f4af9a22589288a6c5071a9b6d9e6567bf4b3d6",
+            "stored_tracker_hash": "sha256:1685340c6dd95822388fbecc12656c46d2b82d82ea8dfaaa48642eec92b47fc5"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/pre_implementation-2026-09-20T02-51-30-941Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/pre_implementation-2026-09-20T02-51-38-680Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/pre_implementation-2026-09-20T02-52-13-441Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/verification-2026-09-20T02-44-25-661Z.json",
+            "stored_citdp_hash": "sha256:31f8f942a4fcb85a5ee2b6376f4af9a22589288a6c5071a9b6d9e6567bf4b3d6",
+            "stored_tracker_hash": "sha256:1685340c6dd95822388fbecc12656c46d2b82d82ea8dfaaa48642eec92b47fc5"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/verification-2026-09-20T02-44-54-145Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:58ff84dafd929ba2f2a8bcec8c1746d070425306b4b689d1a87f2ae326f43891"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/verification-2026-09-20T02-51-31-626Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/verification-2026-09-20T02-51-39-242Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "current_citdp_hash": "sha256:8cc1a2d027523152a3fa3ce2b4ce4b1a48327391b16a9c707e637d41a8f4a5af",
+            "current_tracker_hash": "sha256:90baccde6999111b6f2c78c4685945fe987157a807517f4a852f2bea27f3b977",
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/gates/verification-2026-09-20T02-52-13-989Z.json",
+            "stored_citdp_hash": "sha256:7b5ac3a9ae0c7be2138ab989b08ec6ab1f3249231cc5b02a6aac2af747310f7a",
+            "stored_tracker_hash": "sha256:c64551152f1fb6bf6c7674f5f43d89e23ce29091f9c13147825e4bd8b79f1700"
+          }
+        }
+      ],
+      "ledger_rows": 19,
+      "read_only": true,
+      "process_grade": {
+        "score": 63,
+        "band": "C",
+        "dimensions": [
+          {
+            "name": "tracker_integrity",
+            "score": 100,
+            "weight": 0.3
+          },
+          {
+            "name": "verification_manifest",
+            "score": 0,
+            "weight": 0.25,
+            "gap_codes": [
+              "expected_artifact_missing"
+            ]
+          },
+          {
+            "name": "hash_alignment",
+            "score": 40,
+            "weight": 0.2,
+            "gap_codes": [
+              "evidence_stale"
+            ]
+          },
+          {
+            "name": "ledger_correlation",
+            "score": 100,
+            "weight": 0.15
+          },
+          {
+            "name": "typed_evidence_refs",
+            "score": 100,
+            "weight": 0.1
+          }
+        ],
+        "gap_codes": [
+          "expected_artifact_missing",
+          "evidence_stale"
+        ]
+      }
+    }
+  },
+  "quality_manifest": {
+    "ok": true,
+    "manifest_path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/verification-evidence-manifest.v1.json",
+    "schema_version": "verification-evidence-manifest.v1"
+  },
+  "evidence_chain_profile": {
+    "ok": false,
+    "skipped": true,
+    "reason": "no_psa_reports"
+  },
+  "merged_decision": {
+    "allowed": false,
+    "gate_allowed": false,
+    "envelope_ok": true,
+    "blocking": true
+  },
+  "gate": {
+    "allowed": false,
+    "blocking": true,
+    "diagnostics": [
+      "impl_inventory_empty",
+      "pseudocode_analysis_incomplete",
+      "finding_unresolved",
+      "warn_not_success"
+    ],
+    "evidence_hydrated": true,
+    "hydration_diagnostics": []
+  },
+  "envelope": {
+    "ok": true,
+    "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/request-evidence-envelope.v1.json",
+    "blocking_gap_count": 0,
+    "advisory_gap_count": 7,
+    "diagnostics": []
+  }
+}

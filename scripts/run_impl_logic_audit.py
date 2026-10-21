@@ -17,11 +17,11 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-IMPL_DIR = REPO / "tied/implementation-decisions"
-REQ_INDEX = REPO / "tied/requirements.yaml"
-REQ_DIR = REPO / "tied/requirements"
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
-QUEUE = REPO / "tied/docs/impl-pseudocode-improvement-queue.yaml"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
+REQ_INDEX = REPO / "tied-project/requirements.yaml"
+REQ_DIR = REPO / "tied-project/requirements"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
+QUEUE = REPO / "tied-bundle/docs/impl-pseudocode-improvement-queue.yaml"
 
 BOILERPLATE = (
     "Block implements documented behavior",
@@ -45,7 +45,7 @@ def load_req_tokens() -> set[str]:
     if REQ_DIR.exists():
         for f in REQ_DIR.glob("REQ-*.yaml"):
             tokens.add(f.stem)
-    meth = REPO / "tied/methodology/requirements.yaml"
+    meth = REPO / "tied-bundle/requirements.yaml"
     if meth.exists():
         data = yaml.safe_load(meth.read_text())
         if isinstance(data, dict):

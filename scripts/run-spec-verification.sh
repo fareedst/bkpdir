@@ -15,13 +15,13 @@ echo "DEBUG: D15 redundant IMPL banner audit"
 python3 scripts/strip_redundant_impl_banners.py --fail-on-redundant
 
 echo "DEBUG: specctl validate"
-go run ./cmd/specctl validate tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl validate tied-project/implementation-decisions/*-pseudocode.md
 
 echo "DEBUG: specctl matrix (report)"
-go run ./cmd/specctl matrix tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl matrix tied-project/implementation-decisions/*-pseudocode.md
 
 echo "DEBUG: specctl matrix --check-coverage (formal_spec only)"
-go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl matrix --check-coverage tied-project/implementation-decisions/*-pseudocode.md
 
 echo "DEBUG: specctl check-leads (all formal_spec registry sidecars)"
 REGISTRY_COUNT="$(formal_spec_registry_count)"
@@ -32,7 +32,7 @@ fi
 FORMAL_SIDECARS=()
 while IFS= read -r token; do
   [[ -z "$token" ]] && continue
-  path="tied/implementation-decisions/${token}-pseudocode.md"
+  path="tied-project/implementation-decisions/${token}-pseudocode.md"
   if [[ -f "$path" ]]; then
     FORMAL_SIDECARS+=("$path")
   fi

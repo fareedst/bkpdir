@@ -1,0 +1,57 @@
+ARCH-CONTEXT_SUPPORT:
+  alternatives_considered: []
+  cross-references: '[REQ-CONTEXT_SUPPORT], [REQ-USABILITY]'
+  cross_references:
+    - REQ-CONTEXT_SUPPORT
+    - REQ-USABILITY
+  decision: Support context cancellation for long-running operations
+  implementation:
+    - All long-running operations accept `context.Context`
+    - Context-aware file operations
+    - Periodic cancellation checks during operations
+    - Timeout support via `context.WithTimeout()`
+  implementation_approach:
+    details: []
+    summary: |-
+      - All long-running operations accept `context.Context`
+      - Periodic cancellation checks during operations
+      - Context-aware file operations
+      - Timeout support via `context.WithTimeout()`
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Context-Aware Operations
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Enables operation timeouts
+      Supports graceful cancellation
+      Better user experience for long operations
+      Standard Go pattern for cancellable operations
+  related_decisions:
+    depends_on:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-CONTEXT_SUPPORT
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
+    implementation: []
+    requirements:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-USABILITY
+    tests: []

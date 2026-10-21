@@ -1,0 +1,1976 @@
+{
+  "ok": true,
+  "gate_mode_applied": true,
+  "schema_version": "pseudocode-analysis-report.v1",
+  "grammar_version": "pseudocode-grammar.v1",
+  "analyzer_version": "1.0.0",
+  "proof_boundary": "Deterministic static analysis of essence_pseudocode within declared grammar and budgets; not runtime execution, not test execution, not complete behavioral verification.",
+  "token": "IMPL-FILE_OPERATIONS",
+  "input_identity": {
+    "algorithm": "sha256",
+    "hash": "6499242fa0aa217781621c2913b0578f7dd137a8fc3d63182e94f862bd101fde",
+    "byte_length": 8009
+  },
+  "budgets_applied": {
+    "requested": {},
+    "effective": {
+      "max_parse_nodes": 5000,
+      "max_procedures": 256,
+      "max_cfg_blocks_per_procedure": 512,
+      "max_call_graph_edges": 2048,
+      "max_fixed_point_iterations": 32,
+      "max_path_conditions": 64,
+      "max_report_diagnostics": 500,
+      "max_source_bytes": 512000,
+      "max_cfg_join_iterations": 32
+    }
+  },
+  "truncated": false,
+  "diagnostics_truncated": false,
+  "sections": {
+    "parse": {
+      "procedure_count": 13,
+      "parse_node_count": 68,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "unsupported_syntax_count": 29
+    },
+    "symbols": {
+      "procedures": [
+        "IS_SECURE_PATH",
+        "LIST_FILES",
+        "LIST_FILES_WITH_EXCLUSIONS",
+        "NEW_TRAVERSER",
+        "NEW_TRAVERSER_WITH_PATTERNS",
+        "VALIDATE_EXISTENCE",
+        "VALIDATE_PATH",
+        "VALIDATE_READABLE",
+        "VALIDATE_WRITABLE",
+        "WALK",
+        "WALK_RECURSIVE",
+        "WALK_WITH_EXCLUSIONS",
+        "WALK_WITH_OPTIONS"
+      ],
+      "symbols": [
+        {
+          "name": "BUILD",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "WALK_WITH_OPTIONS"
+        },
+        {
+          "name": "CALL",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "WALK_RECURSIVE"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "WALK_RECURSIVE"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "VALIDATE_PATH"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "IS_SECURE_PATH"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "VALIDATE_WRITABLE"
+        },
+        {
+          "name": "IS_SECURE_PATH",
+          "kind": "procedure",
+          "declared_line": 228
+        },
+        {
+          "name": "LIST_FILES",
+          "kind": "procedure",
+          "declared_line": 125
+        },
+        {
+          "name": "LIST_FILES_WITH_EXCLUSIONS",
+          "kind": "procedure",
+          "declared_line": 141
+        },
+        {
+          "name": "LSTAT",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "WALK_RECURSIVE"
+        },
+        {
+          "name": "NEW_TRAVERSER",
+          "kind": "procedure",
+          "declared_line": 18
+        },
+        {
+          "name": "NEW_TRAVERSER_WITH_PATTERNS",
+          "kind": "procedure",
+          "declared_line": 34
+        },
+        {
+          "name": "OPTIONS",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "WALK"
+        },
+        {
+          "name": "OPTIONS",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "WALK_WITH_EXCLUSIONS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "NEW_TRAVERSER"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "NEW_TRAVERSER_WITH_PATTERNS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "LIST_FILES"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "LIST_FILES_WITH_EXCLUSIONS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "WALK"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "WALK_WITH_EXCLUSIONS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "VALIDATE_EXISTENCE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "VALIDATE_READABLE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "WALK_WITH_OPTIONS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "VALIDATE_PATH"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "VALIDATE_WRITABLE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "WALK_RECURSIVE"
+        },
+        {
+          "name": "VALIDATE",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "WALK_WITH_OPTIONS"
+        },
+        {
+          "name": "VALIDATE_EXISTENCE",
+          "kind": "procedure",
+          "declared_line": 176
+        },
+        {
+          "name": "VALIDATE_PATH",
+          "kind": "procedure",
+          "declared_line": 158
+        },
+        {
+          "name": "VALIDATE_READABLE",
+          "kind": "procedure",
+          "declared_line": 193
+        },
+        {
+          "name": "VALIDATE_WRITABLE",
+          "kind": "procedure",
+          "declared_line": 210
+        },
+        {
+          "name": "WALK",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "LIST_FILES_WITH_EXCLUSIONS"
+        },
+        {
+          "name": "WALK",
+          "kind": "procedure",
+          "declared_line": 50
+        },
+        {
+          "name": "WALK_RECURSIVE",
+          "kind": "procedure",
+          "declared_line": 104
+        },
+        {
+          "name": "WALK_WITH_EXCLUSIONS",
+          "kind": "procedure",
+          "declared_line": 67
+        },
+        {
+          "name": "WALK_WITH_OPTIONS",
+          "kind": "procedure",
+          "declared_line": 85
+        }
+      ],
+      "defined_calls": [],
+      "unresolved_calls": []
+    },
+    "cfg": {
+      "procedures": [
+        {
+          "procedure": "NEW_TRAVERSER",
+          "nodes": [
+            {
+              "id": "NEW_TRAVERSER::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 27
+              }
+            },
+            {
+              "id": "NEW_TRAVERSER::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 71
+              }
+            },
+            {
+              "id": "NEW_TRAVERSER::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 18
+            },
+            {
+              "id": "NEW_TRAVERSER::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 18
+            }
+          ],
+          "edges": [
+            {
+              "from": "NEW_TRAVERSER::entry",
+              "to": "NEW_TRAVERSER::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEW_TRAVERSER::n1",
+              "to": "NEW_TRAVERSER::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEW_TRAVERSER::n2",
+              "to": "NEW_TRAVERSER::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "NEW_TRAVERSER::entry",
+            "NEW_TRAVERSER::exit",
+            "NEW_TRAVERSER::n1",
+            "NEW_TRAVERSER::n2"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "NEW_TRAVERSER_WITH_PATTERNS",
+          "nodes": [
+            {
+              "id": "NEW_TRAVERSER_WITH_PATTERNS::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 63
+              }
+            },
+            {
+              "id": "NEW_TRAVERSER_WITH_PATTERNS::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 68
+              }
+            },
+            {
+              "id": "NEW_TRAVERSER_WITH_PATTERNS::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 34
+            },
+            {
+              "id": "NEW_TRAVERSER_WITH_PATTERNS::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 34
+            }
+          ],
+          "edges": [
+            {
+              "from": "NEW_TRAVERSER_WITH_PATTERNS::entry",
+              "to": "NEW_TRAVERSER_WITH_PATTERNS::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEW_TRAVERSER_WITH_PATTERNS::n1",
+              "to": "NEW_TRAVERSER_WITH_PATTERNS::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEW_TRAVERSER_WITH_PATTERNS::n2",
+              "to": "NEW_TRAVERSER_WITH_PATTERNS::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "NEW_TRAVERSER_WITH_PATTERNS::entry",
+            "NEW_TRAVERSER_WITH_PATTERNS::exit",
+            "NEW_TRAVERSER_WITH_PATTERNS::n1",
+            "NEW_TRAVERSER_WITH_PATTERNS::n2"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "WALK",
+          "nodes": [
+            {
+              "id": "WALK::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "WALK::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 48
+              }
+            },
+            {
+              "id": "WALK::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 69
+              }
+            },
+            {
+              "id": "WALK::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 50
+            },
+            {
+              "id": "WALK::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 50
+            }
+          ],
+          "edges": [
+            {
+              "from": "WALK::entry",
+              "to": "WALK::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK::n1",
+              "to": "WALK::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK::n2",
+              "to": "WALK::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK::n3",
+              "to": "WALK::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "WALK::entry",
+            "WALK::exit",
+            "WALK::n1",
+            "WALK::n2",
+            "WALK::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "WALK_WITH_EXCLUSIONS",
+          "nodes": [
+            {
+              "id": "WALK_WITH_EXCLUSIONS::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 74
+              }
+            },
+            {
+              "id": "WALK_WITH_EXCLUSIONS::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 58
+              }
+            },
+            {
+              "id": "WALK_WITH_EXCLUSIONS::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 43
+              }
+            },
+            {
+              "id": "WALK_WITH_EXCLUSIONS::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 65
+              }
+            },
+            {
+              "id": "WALK_WITH_EXCLUSIONS::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 67
+            },
+            {
+              "id": "WALK_WITH_EXCLUSIONS::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 67
+            }
+          ],
+          "edges": [
+            {
+              "from": "WALK_WITH_EXCLUSIONS::entry",
+              "to": "WALK_WITH_EXCLUSIONS::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_EXCLUSIONS::n1",
+              "to": "WALK_WITH_EXCLUSIONS::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_EXCLUSIONS::n2",
+              "to": "WALK_WITH_EXCLUSIONS::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_EXCLUSIONS::n3",
+              "to": "WALK_WITH_EXCLUSIONS::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_EXCLUSIONS::n4",
+              "to": "WALK_WITH_EXCLUSIONS::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "WALK_WITH_EXCLUSIONS::entry",
+            "WALK_WITH_EXCLUSIONS::exit",
+            "WALK_WITH_EXCLUSIONS::n1",
+            "WALK_WITH_EXCLUSIONS::n2",
+            "WALK_WITH_EXCLUSIONS::n3",
+            "WALK_WITH_EXCLUSIONS::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "WALK_WITH_OPTIONS",
+          "nodes": [
+            {
+              "id": "WALK_WITH_OPTIONS::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 34
+              }
+            },
+            {
+              "id": "WALK_WITH_OPTIONS::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 74
+              }
+            },
+            {
+              "id": "WALK_WITH_OPTIONS::n3",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 79
+              }
+            },
+            {
+              "id": "WALK_WITH_OPTIONS::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "WALK_WITH_OPTIONS::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 16,
+              "span": {
+                "line": 16,
+                "column": 1,
+                "end_line": 16,
+                "end_column": 52
+              }
+            },
+            {
+              "id": "WALK_WITH_OPTIONS::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 85
+            },
+            {
+              "id": "WALK_WITH_OPTIONS::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 85
+            }
+          ],
+          "edges": [
+            {
+              "from": "WALK_WITH_OPTIONS::entry",
+              "to": "WALK_WITH_OPTIONS::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_OPTIONS::n1",
+              "to": "WALK_WITH_OPTIONS::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_OPTIONS::n2",
+              "to": "WALK_WITH_OPTIONS::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_OPTIONS::n3",
+              "to": "WALK_WITH_OPTIONS::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_OPTIONS::n4",
+              "to": "WALK_WITH_OPTIONS::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_WITH_OPTIONS::n5",
+              "to": "WALK_WITH_OPTIONS::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "WALK_WITH_OPTIONS::entry",
+            "WALK_WITH_OPTIONS::exit",
+            "WALK_WITH_OPTIONS::n1",
+            "WALK_WITH_OPTIONS::n2",
+            "WALK_WITH_OPTIONS::n3",
+            "WALK_WITH_OPTIONS::n4",
+            "WALK_WITH_OPTIONS::n5"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "WALK_RECURSIVE",
+          "nodes": [
+            {
+              "id": "WALK_RECURSIVE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 33
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 61
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 54
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 3,
+                "end_line": 12,
+                "end_column": 79
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 3,
+                "end_line": 13,
+                "end_column": 62
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::n7",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 65
+              }
+            },
+            {
+              "id": "WALK_RECURSIVE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 104
+            },
+            {
+              "id": "WALK_RECURSIVE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 104
+            }
+          ],
+          "edges": [
+            {
+              "from": "WALK_RECURSIVE::entry",
+              "to": "WALK_RECURSIVE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n1",
+              "to": "WALK_RECURSIVE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n2",
+              "to": "WALK_RECURSIVE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n3",
+              "to": "WALK_RECURSIVE::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n4",
+              "to": "WALK_RECURSIVE::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n5",
+              "to": "WALK_RECURSIVE::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n6",
+              "to": "WALK_RECURSIVE::n7",
+              "kind": "sequential"
+            },
+            {
+              "from": "WALK_RECURSIVE::n7",
+              "to": "WALK_RECURSIVE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "WALK_RECURSIVE::entry",
+            "WALK_RECURSIVE::exit",
+            "WALK_RECURSIVE::n1",
+            "WALK_RECURSIVE::n2",
+            "WALK_RECURSIVE::n3",
+            "WALK_RECURSIVE::n4",
+            "WALK_RECURSIVE::n5",
+            "WALK_RECURSIVE::n6",
+            "WALK_RECURSIVE::n7"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "LIST_FILES",
+          "nodes": [
+            {
+              "id": "LIST_FILES::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 45
+              }
+            },
+            {
+              "id": "LIST_FILES::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 63
+              }
+            },
+            {
+              "id": "LIST_FILES::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 125
+            },
+            {
+              "id": "LIST_FILES::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 125
+            }
+          ],
+          "edges": [
+            {
+              "from": "LIST_FILES::entry",
+              "to": "LIST_FILES::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_FILES::n1",
+              "to": "LIST_FILES::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_FILES::n2",
+              "to": "LIST_FILES::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "LIST_FILES::entry",
+            "LIST_FILES::exit",
+            "LIST_FILES::n1",
+            "LIST_FILES::n2"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "LIST_FILES_WITH_EXCLUSIONS",
+          "nodes": [
+            {
+              "id": "LIST_FILES_WITH_EXCLUSIONS::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 62
+              }
+            },
+            {
+              "id": "LIST_FILES_WITH_EXCLUSIONS::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "LIST_FILES_WITH_EXCLUSIONS::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 60
+              }
+            },
+            {
+              "id": "LIST_FILES_WITH_EXCLUSIONS::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 141
+            },
+            {
+              "id": "LIST_FILES_WITH_EXCLUSIONS::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 141
+            }
+          ],
+          "edges": [
+            {
+              "from": "LIST_FILES_WITH_EXCLUSIONS::entry",
+              "to": "LIST_FILES_WITH_EXCLUSIONS::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_FILES_WITH_EXCLUSIONS::n1",
+              "to": "LIST_FILES_WITH_EXCLUSIONS::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_FILES_WITH_EXCLUSIONS::n2",
+              "to": "LIST_FILES_WITH_EXCLUSIONS::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_FILES_WITH_EXCLUSIONS::n3",
+              "to": "LIST_FILES_WITH_EXCLUSIONS::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "LIST_FILES_WITH_EXCLUSIONS::entry",
+            "LIST_FILES_WITH_EXCLUSIONS::exit",
+            "LIST_FILES_WITH_EXCLUSIONS::n1",
+            "LIST_FILES_WITH_EXCLUSIONS::n2",
+            "LIST_FILES_WITH_EXCLUSIONS::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "VALIDATE_PATH",
+          "nodes": [
+            {
+              "id": "VALIDATE_PATH::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 26
+              }
+            },
+            {
+              "id": "VALIDATE_PATH::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "VALIDATE_PATH::n3",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 12
+              }
+            },
+            {
+              "id": "VALIDATE_PATH::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 39
+              }
+            },
+            {
+              "id": "VALIDATE_PATH::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 158
+            },
+            {
+              "id": "VALIDATE_PATH::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 158
+            }
+          ],
+          "edges": [
+            {
+              "from": "VALIDATE_PATH::entry",
+              "to": "VALIDATE_PATH::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_PATH::n1",
+              "to": "VALIDATE_PATH::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_PATH::n2",
+              "to": "VALIDATE_PATH::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_PATH::n3",
+              "to": "VALIDATE_PATH::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_PATH::n4",
+              "to": "VALIDATE_PATH::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "VALIDATE_PATH::entry",
+            "VALIDATE_PATH::exit",
+            "VALIDATE_PATH::n1",
+            "VALIDATE_PATH::n2",
+            "VALIDATE_PATH::n3",
+            "VALIDATE_PATH::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "VALIDATE_EXISTENCE",
+          "nodes": [
+            {
+              "id": "VALIDATE_EXISTENCE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 53
+              }
+            },
+            {
+              "id": "VALIDATE_EXISTENCE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 176
+            },
+            {
+              "id": "VALIDATE_EXISTENCE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 176
+            }
+          ],
+          "edges": [
+            {
+              "from": "VALIDATE_EXISTENCE::entry",
+              "to": "VALIDATE_EXISTENCE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_EXISTENCE::n1",
+              "to": "VALIDATE_EXISTENCE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "VALIDATE_EXISTENCE::entry",
+            "VALIDATE_EXISTENCE::exit",
+            "VALIDATE_EXISTENCE::n1"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "VALIDATE_READABLE",
+          "nodes": [
+            {
+              "id": "VALIDATE_READABLE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 73
+              }
+            },
+            {
+              "id": "VALIDATE_READABLE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 193
+            },
+            {
+              "id": "VALIDATE_READABLE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 193
+            }
+          ],
+          "edges": [
+            {
+              "from": "VALIDATE_READABLE::entry",
+              "to": "VALIDATE_READABLE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_READABLE::n1",
+              "to": "VALIDATE_READABLE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "VALIDATE_READABLE::entry",
+            "VALIDATE_READABLE::exit",
+            "VALIDATE_READABLE::n1"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "VALIDATE_WRITABLE",
+          "nodes": [
+            {
+              "id": "VALIDATE_WRITABLE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 48
+              }
+            },
+            {
+              "id": "VALIDATE_WRITABLE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 64
+              }
+            },
+            {
+              "id": "VALIDATE_WRITABLE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 72
+              }
+            },
+            {
+              "id": "VALIDATE_WRITABLE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 210
+            },
+            {
+              "id": "VALIDATE_WRITABLE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 210
+            }
+          ],
+          "edges": [
+            {
+              "from": "VALIDATE_WRITABLE::entry",
+              "to": "VALIDATE_WRITABLE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_WRITABLE::n1",
+              "to": "VALIDATE_WRITABLE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_WRITABLE::n2",
+              "to": "VALIDATE_WRITABLE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "VALIDATE_WRITABLE::n3",
+              "to": "VALIDATE_WRITABLE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "VALIDATE_WRITABLE::entry",
+            "VALIDATE_WRITABLE::exit",
+            "VALIDATE_WRITABLE::n1",
+            "VALIDATE_WRITABLE::n2",
+            "VALIDATE_WRITABLE::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "IS_SECURE_PATH",
+          "nodes": [
+            {
+              "id": "IS_SECURE_PATH::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 77
+              }
+            },
+            {
+              "id": "IS_SECURE_PATH::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 13
+              }
+            },
+            {
+              "id": "IS_SECURE_PATH::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 228
+            },
+            {
+              "id": "IS_SECURE_PATH::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 228
+            }
+          ],
+          "edges": [
+            {
+              "from": "IS_SECURE_PATH::entry",
+              "to": "IS_SECURE_PATH::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "IS_SECURE_PATH::n1",
+              "to": "IS_SECURE_PATH::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "IS_SECURE_PATH::n2",
+              "to": "IS_SECURE_PATH::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "IS_SECURE_PATH::entry",
+            "IS_SECURE_PATH::exit",
+            "IS_SECURE_PATH::n1",
+            "IS_SECURE_PATH::n2"
+          ],
+          "truncated": false
+        }
+      ]
+    },
+    "call_graph": {
+      "edges": [],
+      "unresolved": [],
+      "truncated": false
+    },
+    "abstract": {
+      "facts": [
+        {
+          "variable": "STEP",
+          "procedure": "LIST_FILES",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "STEP",
+          "procedure": "LIST_FILES_WITH_EXCLUSIONS",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "STEP",
+          "procedure": "LIST_FILES_WITH_EXCLUSIONS",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "WALK",
+          "procedure": "LIST_FILES_WITH_EXCLUSIONS",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "NEW_TRAVERSER",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "STEP",
+          "procedure": "NEW_TRAVERSER_WITH_PATTERNS",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "IF",
+          "procedure": "VALIDATE_PATH",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "VALIDATE_PATH",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "VALIDATE_PATH",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "OPTIONS",
+          "procedure": "WALK",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "WALK",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "CALL",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "IF",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "IF",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "IF",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "LSTAT",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "WALK_RECURSIVE",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "OPTIONS",
+          "procedure": "WALK_WITH_EXCLUSIONS",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "WALK_WITH_EXCLUSIONS",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "STEP",
+          "procedure": "WALK_WITH_EXCLUSIONS",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "BUILD",
+          "procedure": "WALK_WITH_OPTIONS",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "WALK_WITH_OPTIONS",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "STEP",
+          "procedure": "WALK_WITH_OPTIONS",
+          "fact": "defined",
+          "line": 16
+        },
+        {
+          "variable": "VALIDATE",
+          "procedure": "WALK_WITH_OPTIONS",
+          "fact": "defined",
+          "line": 8
+        }
+      ],
+      "path_conditions": [],
+      "effect_gaps": [],
+      "termination_unknown": []
+    },
+    "obligations": {
+      "decision_tables": [],
+      "path_obligations": []
+    },
+    "traceability": {
+      "block_edges": [
+        {
+          "block": "IS_SECURE_PATH",
+          "tokens": [],
+          "line": 228
+        },
+        {
+          "block": "LIST_FILES",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 125
+        },
+        {
+          "block": "LIST_FILES_WITH_EXCLUSIONS",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 141
+        },
+        {
+          "block": "NEW_TRAVERSER",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 18
+        },
+        {
+          "block": "NEW_TRAVERSER_WITH_PATTERNS",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 34
+        },
+        {
+          "block": "VALIDATE_EXISTENCE",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 176
+        },
+        {
+          "block": "VALIDATE_PATH",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 158
+        },
+        {
+          "block": "VALIDATE_READABLE",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 193
+        },
+        {
+          "block": "VALIDATE_WRITABLE",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 210
+        },
+        {
+          "block": "WALK",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 50
+        },
+        {
+          "block": "WALK_RECURSIVE",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 104
+        },
+        {
+          "block": "WALK_WITH_EXCLUSIONS",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 67
+        },
+        {
+          "block": "WALK_WITH_OPTIONS",
+          "tokens": [
+            "ARCH-FILE_OPERATIONS",
+            "IMPL-FILE_OPERATIONS",
+            "REQ-RELIABILITY"
+          ],
+          "line": 85
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "READ_BEFORE_WRITE",
+      "message": "Possible read-before-write for IF in WALK_RECURSIVE",
+      "line": 8,
+      "block": "WALK_RECURSIVE",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 33
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "MISSING_CONTRACT_FIELD",
+      "message": "Block IS_SECURE_PATH does not reference target token IMPL-FILE_OPERATIONS",
+      "line": 228,
+      "block": "IS_SECURE_PATH"
+    }
+  ],
+  "unsupported_syntax": [
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: VALIDATE_PATH(path)",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 21
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: VALIDATE_EXISTENCE(path)",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 26
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: VALIDATE_PATH(path)",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 21
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Stat path OR return does-not-exist error",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 42
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: Open for read OR return not-readable error",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::NEW_TRAVERSER_WITH_PATTERNS",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 58
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::WALK",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 35
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::LIST_FILES_WITH_EXCLUSIONS",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 57
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::VALIDATE_PATH",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::WALK_WITH_EXCLUSIONS",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 51
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::WALK_WITH_OPTIONS",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 48
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::VALIDATE_READABLE",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 48
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::VALIDATE_WRITABLE",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 48
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::WALK_RECURSIVE",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 45
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::VALIDATE_EXISTENCE",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 49
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::IS_SECURE_PATH",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 45
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: construct DefaultTraverser with PatternMatcher built from initial pattern list.",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 152
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: delegate to WalkWithOptions with default options (no exclusions, unlimited depth).",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 155
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: walk tree applying exclusion patterns and append file paths only.",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 138
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: WalkWithOptions with ExcludePatterns, no symlink follow, ignore permission errors.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 155
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: reject empty paths, run IsSecurePath, clean path without failing on normalization drift.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 161
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidateExistence then Open path for read; close on success.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 133
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidatePath then test write via temp file in directory or OpenFile WRONLY for files; recurse to parent when path missing.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 195
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: validate root exists, build PatternMatcher from options or traverser matcher, invoke walkRecursive.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 172
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-FILE_OPERATIONS::LIST_FILES",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 41
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: ValidatePath then Stat path; return not-exist or access errors.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 136
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: reject .. traversal, null bytes, newlines, and shell-expansion characters in path strings.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 163
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: enforce depth limit, apply exclusion and hidden-file rules, optionally follow symlinks, call visitor, recurse into directories.",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 200
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-FILE_OPERATIONS] [ARCH-FILE_OPERATIONS] [REQ-RELIABILITY] — How: collect regular file paths under root with optional recursion via ListFilesWithExclusions.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 163
+      }
+    }
+  ],
+  "unknowns": [
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in VALIDATE_EXISTENCE",
+      "procedure": "VALIDATE_EXISTENCE",
+      "line": 14,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in VALIDATE_READABLE",
+      "procedure": "VALIDATE_READABLE",
+      "line": 14,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in VALIDATE_WRITABLE",
+      "procedure": "VALIDATE_WRITABLE",
+      "line": 9,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in IS_SECURE_PATH",
+      "procedure": "IS_SECURE_PATH",
+      "line": 8,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    }
+  ]
+}

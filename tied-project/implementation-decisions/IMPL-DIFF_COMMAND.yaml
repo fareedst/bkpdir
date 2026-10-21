@@ -1,0 +1,94 @@
+IMPL-DIFF_COMMAND:
+  code_locations:
+    functions:
+      - CalculateDiff
+      - diffCmd
+      - findLatestFullArchive
+      - findMatchingIncrementalArchives
+      - FindMostRecentArchive
+      - FormatDiffResult
+      - PrintDiffResult
+      - ReconstructArchiveState
+  cross_references:
+    - ARCH-CLI_COMMANDS
+    - ARCH-DIFF_COMMAND
+    - ARCH-DIRECTORY_COMPARISON
+    - REQ-CONTEXT_SUPPORT
+    - REQ-DIFF_COMMAND
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-OUTPUT_FORMATTING
+  description: Implement diff command with archive state reconstruction and comparison engine. Reconstructs effective state by applying every matching incremental for the current full base in name order on top of the full archive snapshot; provides accurate change detection; reuses comparison logic for duplicate prevention consistency.
+  implementation_approach:
+    details:
+      - 'Archive Selection Strategy: All selection functions use name-based sorting (ISO 8601 timestamps are alphabetically sortable) instead of file modification times'
+      - 'Archive State Reconstruction: Load most recent full archive, apply every matching incremental in name order, return reconstructed DirectorySnapshot'
+      - 'Change Reporting: Use configurable format strings, display added/modified/deleted files, handle no-changes case'
+      - 'CLI Command Integration: diffCmd() in main.go, context cancellation support, added to knownCommands list for auto-detection'
+      - 'Directory Comparison: Create snapshot of current directory, compare against reconstructed state, identify added/modified/deleted files, respect exclude patterns'
+    summary: |-
+      CLI diff command reconstructs effective archive state from latest full plus every matching incremental zip (chronological name order), compares cwd snapshot to that state, and prints configurable added/modified/deleted reports.
+      INPUT: archiveDir, cwd, exclude patterns, context
+      OUTPUT: DiffResult, stdout diff text
+      DATA: DirectorySnapshot maps by RelativePath, name-sorted Archive list
+      Canonical behavior: tied-project/implementation-decisions/IMPL-DIFF_COMMAND-pseudocode.md
+  metadata:
+    author: AI Agent
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-24'
+      reason: LEAP — incremental chain reconstruction in comparison.go
+  name: Diff Command Implementation
+  rationale:
+    benefits:
+      - Accurate change detection by comparing against reconstructed state
+      - Integrates with existing CLI framework and output formatting
+      - Reuses comparison logic for duplicate prevention consistency
+      - Supports context cancellation for long-running operations
+      - User-friendly error messages for edge cases
+    problems_solved:
+      - Inconsistent comparison logic between features
+      - Manual comparison of directory state vs archived state
+      - No visibility into changes since last archive
+    why: Users need to see what changed since the last archive to decide whether to create a new one
+  related_decisions:
+    depends_on:
+      - IMPL-DIRECTORY_COMPARISON
+    see_also:
+      - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CLI_COMMANDS
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+    code_annotations:
+      - 'archive.go: findLatestFullArchive — filters full archives, sorts by name, returns latest with error on empty'
+      - 'comparison.go: CalculateDiff — snapshots current dir, compares against reconstructed state by hash/size'
+      - 'comparison.go: DiffResult struct — holds Added, Modified, Deleted string slices'
+      - 'comparison.go: findMatchingIncrementalArchives — filters incremental archives by base name prefix, sorts by name ascending'
+      - 'comparison.go: FindMostRecentArchive — filters full archives from ListArchives, sorts by name, returns latest'
+      - 'comparison.go: ReconstructArchiveState — loads full archive snapshot, merges incremental chain in name order'
+      - 'formatter.go: FormatDiffResult — formats DiffResult with configurable format strings'
+      - 'formatter.go: PrintDiffResult — prints formatted diff result to stdout or collector'
+      - 'main.go: diffCmd — cobra command with context cancellation, archive state reconstruction, diff calculation, result printing'
+    requirements:
+      - REQ-CONTEXT_SUPPORT
+      - REQ-DIFF_COMMAND
+      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+      - REQ-OUTPUT_FORMATTING
+    tests:
+      - TestCalculateDiffAddedFiles_REQ_DIFF_COMMAND
+      - TestCalculateDiffDeletedFiles_REQ_DIFF_COMMAND
+      - TestCalculateDiffModifiedFiles_REQ_DIFF_COMMAND
+      - TestCalculateDiffNoChanges_REQ_DIFF_COMMAND
+      - TestDiffCommandIntegration_REQ_DIFF_COMMAND
+      - TestDiffCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestDiffCommandNoArchives_REQ_DIFF_COMMAND
+      - TestFormatDiffResult_REQ_DIFF_COMMAND
+      - TestIncDiffIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION
+      - TestPrintDiffResult_REQ_DIFF_COMMAND
+      - TestReconstructArchiveStateFullAndIncremental_REQ_DIFF_COMMAND
+      - TestReconstructArchiveStateFullOnly_REQ_DIFF_COMMAND
+      - TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND

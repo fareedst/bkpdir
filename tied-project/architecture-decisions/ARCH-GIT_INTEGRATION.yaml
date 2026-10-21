@@ -1,0 +1,53 @@
+ARCH-GIT_INTEGRATION:
+  alternatives_considered: []
+  cross-references: '[REQ-GIT_INTEGRATION]'
+  cross_references:
+    - REQ-GIT_INTEGRATION
+  decision: Git command-line interface for repository information
+  implementation:
+    - Branch and hash extraction via `git rev-parse`
+    - Repository detection via `git rev-parse --is-inside-work-tree`
+    - Status detection via `git status --porcelain`
+    - Uses `exec.Command("git", ...)` for Git operations
+  implementation_approach:
+    details: []
+    summary: |-
+      - Uses `exec.Command("git", ...)` for Git operations
+      - Repository detection via `git rev-parse --is-inside-work-tree`
+      - Branch and hash extraction via `git rev-parse`
+      - Status detection via `git status --porcelain`
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Git Integration
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Simplicity over Git library dependencies
+      Relies on user's Git installation
+      Consistent with user's Git configuration
+      Lightweight implementation
+  related_decisions:
+    depends_on:
+      - REQ-GIT_INTEGRATION
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-GIT_INTEGRATION
+      - REQ-GIT_INTEGRATION
+    implementation: []
+    requirements:
+      - REQ-GIT_INTEGRATION
+    tests: []

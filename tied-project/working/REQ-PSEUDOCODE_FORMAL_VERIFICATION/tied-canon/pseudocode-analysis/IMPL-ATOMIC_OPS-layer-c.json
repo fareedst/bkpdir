@@ -1,0 +1,2282 @@
+{
+  "ok": true,
+  "gate_mode_applied": true,
+  "schema_version": "pseudocode-analysis-report.v1",
+  "grammar_version": "pseudocode-grammar.v1",
+  "analyzer_version": "1.0.0",
+  "proof_boundary": "Deterministic static analysis of essence_pseudocode within declared grammar and budgets; not runtime execution, not test execution, not complete behavioral verification.",
+  "token": "IMPL-ATOMIC_OPS",
+  "input_identity": {
+    "algorithm": "sha256",
+    "hash": "2b152244f780404506efcd7c6f5ce151b6812f958f2c3e65d0cd75876ca81b88",
+    "byte_length": 9175
+  },
+  "budgets_applied": {
+    "requested": {},
+    "effective": {
+      "max_parse_nodes": 5000,
+      "max_procedures": 256,
+      "max_cfg_blocks_per_procedure": 512,
+      "max_call_graph_edges": 2048,
+      "max_fixed_point_iterations": 32,
+      "max_path_conditions": 64,
+      "max_report_diagnostics": 500,
+      "max_source_bytes": 512000,
+      "max_cfg_join_iterations": 32
+    }
+  },
+  "truncated": false,
+  "diagnostics_truncated": false,
+  "sections": {
+    "parse": {
+      "procedure_count": 12,
+      "parse_node_count": 89,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "unsupported_syntax_count": 44
+    },
+    "symbols": {
+      "procedures": [
+        "ATOMICCOPY",
+        "ATOMICWRITEFILE",
+        "ATOMICWRITER_CLEANUP",
+        "ATOMICWRITER_CLOSE",
+        "ATOMICWRITER_COMMIT",
+        "ATOMICWRITER_ROLLBACK",
+        "ATOMICWRITER_WRITE",
+        "ATOMICWRITER_WRITESTRING",
+        "ATOMICWRITESTRING",
+        "NEWATOMICWRITER",
+        "RESOURCE_ATOMICWRITEFILE",
+        "RESOURCE_ATOMICWRITEFILEWITHCONTEXT"
+      ],
+      "symbols": [
+        {
+          "name": "ATOMICCOPY",
+          "kind": "procedure",
+          "declared_line": 163
+        },
+        {
+          "name": "ATOMICWRITEFILE",
+          "kind": "procedure",
+          "declared_line": 186
+        },
+        {
+          "name": "ATOMICWRITER_CLEANUP",
+          "kind": "procedure",
+          "declared_line": 144
+        },
+        {
+          "name": "ATOMICWRITER_CLOSE",
+          "kind": "procedure",
+          "declared_line": 125
+        },
+        {
+          "name": "ATOMICWRITER_COMMIT",
+          "kind": "procedure",
+          "declared_line": 86
+        },
+        {
+          "name": "ATOMICWRITER_ROLLBACK",
+          "kind": "procedure",
+          "declared_line": 107
+        },
+        {
+          "name": "ATOMICWRITER_WRITE",
+          "kind": "procedure",
+          "declared_line": 48
+        },
+        {
+          "name": "ATOMICWRITER_WRITESTRING",
+          "kind": "procedure",
+          "declared_line": 66
+        },
+        {
+          "name": "ATOMICWRITESTRING",
+          "kind": "procedure",
+          "declared_line": 205
+        },
+        {
+          "name": "BRANCH",
+          "kind": "local",
+          "declared_line": 16,
+          "procedure": "ATOMICWRITER_WRITESTRING"
+        },
+        {
+          "name": "BRANCH",
+          "kind": "local",
+          "declared_line": 17,
+          "procedure": "ATOMICWRITER_COMMIT"
+        },
+        {
+          "name": "BRANCH",
+          "kind": "local",
+          "declared_line": 19,
+          "procedure": "NEWATOMICWRITER"
+        },
+        {
+          "name": "ERROR",
+          "kind": "local",
+          "declared_line": 17,
+          "procedure": "ATOMICWRITER_WRITESTRING"
+        },
+        {
+          "name": "ERROR",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "ATOMICWRITER_COMMIT"
+        },
+        {
+          "name": "ERROR",
+          "kind": "local",
+          "declared_line": 20,
+          "procedure": "NEWATOMICWRITER"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "NEWATOMICWRITER"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "ATOMICWRITER_WRITE"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "ATOMICWRITER_COMMIT"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "ATOMICWRITER_ROLLBACK"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "ATOMICWRITER_CLOSE"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT"
+        },
+        {
+          "name": "NEWATOMICWRITER",
+          "kind": "procedure",
+          "declared_line": 25
+        },
+        {
+          "name": "RESOURCE_ATOMICWRITEFILE",
+          "kind": "procedure",
+          "declared_line": 221
+        },
+        {
+          "name": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+          "kind": "procedure",
+          "declared_line": 238
+        },
+        {
+          "name": "SET",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "ATOMICWRITER_CLOSE"
+        },
+        {
+          "name": "SET",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "ATOMICWRITER_CLEANUP"
+        },
+        {
+          "name": "SET",
+          "kind": "local",
+          "declared_line": 11,
+          "procedure": "ATOMICWRITER_COMMIT"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "ATOMICWRITER_WRITESTRING"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "ATOMICWRITESTRING"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "RESOURCE_ATOMICWRITEFILE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "ATOMICWRITER_ROLLBACK"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "ATOMICWRITER_WRITE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "ATOMICWRITER_CLOSE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "ATOMICWRITER_CLEANUP"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 16,
+          "procedure": "ATOMICWRITER_COMMIT"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 16,
+          "procedure": "ATOMICWRITEFILE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 17,
+          "procedure": "NEWATOMICWRITER"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 19,
+          "procedure": "ATOMICCOPY"
+        }
+      ],
+      "defined_calls": [],
+      "unresolved_calls": []
+    },
+    "cfg": {
+      "procedures": [
+        {
+          "procedure": "NEWATOMICWRITER",
+          "nodes": [
+            {
+              "id": "NEWATOMICWRITER::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 54
+              }
+            },
+            {
+              "id": "NEWATOMICWRITER::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 3,
+                "end_line": 12,
+                "end_column": 88
+              }
+            },
+            {
+              "id": "NEWATOMICWRITER::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 17,
+              "span": {
+                "line": 17,
+                "column": 1,
+                "end_line": 17,
+                "end_column": 34
+              }
+            },
+            {
+              "id": "NEWATOMICWRITER::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "NEWATOMICWRITER::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 19,
+              "span": {
+                "line": 19,
+                "column": 1,
+                "end_line": 19,
+                "end_column": 34
+              }
+            },
+            {
+              "id": "NEWATOMICWRITER::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 20,
+              "span": {
+                "line": 20,
+                "column": 1,
+                "end_line": 20,
+                "end_column": 43
+              }
+            },
+            {
+              "id": "NEWATOMICWRITER::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 25
+            },
+            {
+              "id": "NEWATOMICWRITER::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 25
+            }
+          ],
+          "edges": [
+            {
+              "from": "NEWATOMICWRITER::entry",
+              "to": "NEWATOMICWRITER::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEWATOMICWRITER::n1",
+              "to": "NEWATOMICWRITER::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEWATOMICWRITER::n2",
+              "to": "NEWATOMICWRITER::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEWATOMICWRITER::n3",
+              "to": "NEWATOMICWRITER::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEWATOMICWRITER::n4",
+              "to": "NEWATOMICWRITER::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEWATOMICWRITER::n5",
+              "to": "NEWATOMICWRITER::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "NEWATOMICWRITER::n6",
+              "to": "NEWATOMICWRITER::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "NEWATOMICWRITER::entry",
+            "NEWATOMICWRITER::exit",
+            "NEWATOMICWRITER::n1",
+            "NEWATOMICWRITER::n2",
+            "NEWATOMICWRITER::n3",
+            "NEWATOMICWRITER::n4",
+            "NEWATOMICWRITER::n5",
+            "NEWATOMICWRITER::n6"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITER_WRITE",
+          "nodes": [
+            {
+              "id": "ATOMICWRITER_WRITE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 55
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 49
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITE::n3",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 34
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITE::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 54
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 48
+            },
+            {
+              "id": "ATOMICWRITER_WRITE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 48
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITER_WRITE::entry",
+              "to": "ATOMICWRITER_WRITE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITE::n1",
+              "to": "ATOMICWRITER_WRITE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITE::n2",
+              "to": "ATOMICWRITER_WRITE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITE::n3",
+              "to": "ATOMICWRITER_WRITE::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITE::n4",
+              "to": "ATOMICWRITER_WRITE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITER_WRITE::entry",
+            "ATOMICWRITER_WRITE::exit",
+            "ATOMICWRITER_WRITE::n1",
+            "ATOMICWRITER_WRITE::n2",
+            "ATOMICWRITER_WRITE::n3",
+            "ATOMICWRITER_WRITE::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITER_WRITESTRING",
+          "nodes": [
+            {
+              "id": "ATOMICWRITER_WRITESTRING::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 48
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITESTRING::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITESTRING::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 60
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITESTRING::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 16,
+              "span": {
+                "line": 16,
+                "column": 1,
+                "end_line": 16,
+                "end_column": 37
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITESTRING::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 17,
+              "span": {
+                "line": 17,
+                "column": 1,
+                "end_line": 17,
+                "end_column": 44
+              }
+            },
+            {
+              "id": "ATOMICWRITER_WRITESTRING::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 66
+            },
+            {
+              "id": "ATOMICWRITER_WRITESTRING::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 66
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITER_WRITESTRING::entry",
+              "to": "ATOMICWRITER_WRITESTRING::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITESTRING::n1",
+              "to": "ATOMICWRITER_WRITESTRING::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITESTRING::n2",
+              "to": "ATOMICWRITER_WRITESTRING::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITESTRING::n3",
+              "to": "ATOMICWRITER_WRITESTRING::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITESTRING::n4",
+              "to": "ATOMICWRITER_WRITESTRING::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_WRITESTRING::n5",
+              "to": "ATOMICWRITER_WRITESTRING::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITER_WRITESTRING::entry",
+            "ATOMICWRITER_WRITESTRING::exit",
+            "ATOMICWRITER_WRITESTRING::n1",
+            "ATOMICWRITER_WRITESTRING::n2",
+            "ATOMICWRITER_WRITESTRING::n3",
+            "ATOMICWRITER_WRITESTRING::n4",
+            "ATOMICWRITER_WRITESTRING::n5"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITER_COMMIT",
+          "nodes": [
+            {
+              "id": "ATOMICWRITER_COMMIT::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 59
+              }
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 95
+              }
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 40
+              }
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 16,
+              "span": {
+                "line": 16,
+                "column": 1,
+                "end_line": 16,
+                "end_column": 26
+              }
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 17,
+              "span": {
+                "line": 17,
+                "column": 1,
+                "end_line": 17,
+                "end_column": 37
+              }
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 55
+              }
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 86
+            },
+            {
+              "id": "ATOMICWRITER_COMMIT::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 86
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITER_COMMIT::entry",
+              "to": "ATOMICWRITER_COMMIT::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_COMMIT::n1",
+              "to": "ATOMICWRITER_COMMIT::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_COMMIT::n2",
+              "to": "ATOMICWRITER_COMMIT::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_COMMIT::n3",
+              "to": "ATOMICWRITER_COMMIT::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_COMMIT::n4",
+              "to": "ATOMICWRITER_COMMIT::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_COMMIT::n5",
+              "to": "ATOMICWRITER_COMMIT::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_COMMIT::n6",
+              "to": "ATOMICWRITER_COMMIT::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITER_COMMIT::entry",
+            "ATOMICWRITER_COMMIT::exit",
+            "ATOMICWRITER_COMMIT::n1",
+            "ATOMICWRITER_COMMIT::n2",
+            "ATOMICWRITER_COMMIT::n3",
+            "ATOMICWRITER_COMMIT::n4",
+            "ATOMICWRITER_COMMIT::n5",
+            "ATOMICWRITER_COMMIT::n6"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITER_ROLLBACK",
+          "nodes": [
+            {
+              "id": "ATOMICWRITER_ROLLBACK::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 70
+              }
+            },
+            {
+              "id": "ATOMICWRITER_ROLLBACK::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 24
+              }
+            },
+            {
+              "id": "ATOMICWRITER_ROLLBACK::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 69
+              }
+            },
+            {
+              "id": "ATOMICWRITER_ROLLBACK::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 107
+            },
+            {
+              "id": "ATOMICWRITER_ROLLBACK::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 107
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITER_ROLLBACK::entry",
+              "to": "ATOMICWRITER_ROLLBACK::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_ROLLBACK::n1",
+              "to": "ATOMICWRITER_ROLLBACK::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_ROLLBACK::n2",
+              "to": "ATOMICWRITER_ROLLBACK::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_ROLLBACK::n3",
+              "to": "ATOMICWRITER_ROLLBACK::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITER_ROLLBACK::entry",
+            "ATOMICWRITER_ROLLBACK::exit",
+            "ATOMICWRITER_ROLLBACK::n1",
+            "ATOMICWRITER_ROLLBACK::n2",
+            "ATOMICWRITER_ROLLBACK::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITER_CLOSE",
+          "nodes": [
+            {
+              "id": "ATOMICWRITER_CLOSE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 38
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLOSE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 67
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLOSE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 19
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLOSE::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 39
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLOSE::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 16,
+              "span": {
+                "line": 16,
+                "column": 1,
+                "end_line": 16,
+                "end_column": 39
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLOSE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 125
+            },
+            {
+              "id": "ATOMICWRITER_CLOSE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 125
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITER_CLOSE::entry",
+              "to": "ATOMICWRITER_CLOSE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLOSE::n1",
+              "to": "ATOMICWRITER_CLOSE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLOSE::n2",
+              "to": "ATOMICWRITER_CLOSE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLOSE::n3",
+              "to": "ATOMICWRITER_CLOSE::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLOSE::n4",
+              "to": "ATOMICWRITER_CLOSE::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLOSE::n5",
+              "to": "ATOMICWRITER_CLOSE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITER_CLOSE::entry",
+            "ATOMICWRITER_CLOSE::exit",
+            "ATOMICWRITER_CLOSE::n1",
+            "ATOMICWRITER_CLOSE::n2",
+            "ATOMICWRITER_CLOSE::n3",
+            "ATOMICWRITER_CLOSE::n4",
+            "ATOMICWRITER_CLOSE::n5"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITER_CLEANUP",
+          "nodes": [
+            {
+              "id": "ATOMICWRITER_CLEANUP::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 19
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLEANUP::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 33
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLEANUP::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 16,
+              "span": {
+                "line": 16,
+                "column": 1,
+                "end_line": 16,
+                "end_column": 44
+              }
+            },
+            {
+              "id": "ATOMICWRITER_CLEANUP::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 144
+            },
+            {
+              "id": "ATOMICWRITER_CLEANUP::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 144
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITER_CLEANUP::entry",
+              "to": "ATOMICWRITER_CLEANUP::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLEANUP::n1",
+              "to": "ATOMICWRITER_CLEANUP::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLEANUP::n2",
+              "to": "ATOMICWRITER_CLEANUP::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITER_CLEANUP::n3",
+              "to": "ATOMICWRITER_CLEANUP::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITER_CLEANUP::entry",
+            "ATOMICWRITER_CLEANUP::exit",
+            "ATOMICWRITER_CLEANUP::n1",
+            "ATOMICWRITER_CLEANUP::n2",
+            "ATOMICWRITER_CLEANUP::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICCOPY",
+          "nodes": [
+            {
+              "id": "ATOMICCOPY::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 3,
+                "end_line": 14,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "ATOMICCOPY::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 19,
+              "span": {
+                "line": 19,
+                "column": 1,
+                "end_line": 19,
+                "end_column": 35
+              }
+            },
+            {
+              "id": "ATOMICCOPY::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 20,
+              "span": {
+                "line": 20,
+                "column": 1,
+                "end_line": 20,
+                "end_column": 38
+              }
+            },
+            {
+              "id": "ATOMICCOPY::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 163
+            },
+            {
+              "id": "ATOMICCOPY::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 163
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICCOPY::entry",
+              "to": "ATOMICCOPY::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICCOPY::n1",
+              "to": "ATOMICCOPY::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICCOPY::n2",
+              "to": "ATOMICCOPY::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICCOPY::n3",
+              "to": "ATOMICCOPY::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICCOPY::entry",
+            "ATOMICCOPY::exit",
+            "ATOMICCOPY::n1",
+            "ATOMICCOPY::n2",
+            "ATOMICCOPY::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITEFILE",
+          "nodes": [
+            {
+              "id": "ATOMICWRITEFILE::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "ATOMICWRITEFILE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 16,
+              "span": {
+                "line": 16,
+                "column": 1,
+                "end_line": 16,
+                "end_column": 51
+              }
+            },
+            {
+              "id": "ATOMICWRITEFILE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 186
+            },
+            {
+              "id": "ATOMICWRITEFILE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 186
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITEFILE::entry",
+              "to": "ATOMICWRITEFILE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITEFILE::n1",
+              "to": "ATOMICWRITEFILE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITEFILE::n2",
+              "to": "ATOMICWRITEFILE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITEFILE::entry",
+            "ATOMICWRITEFILE::exit",
+            "ATOMICWRITEFILE::n1",
+            "ATOMICWRITEFILE::n2"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ATOMICWRITESTRING",
+          "nodes": [
+            {
+              "id": "ATOMICWRITESTRING::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 53
+              }
+            },
+            {
+              "id": "ATOMICWRITESTRING::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 75
+              }
+            },
+            {
+              "id": "ATOMICWRITESTRING::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 205
+            },
+            {
+              "id": "ATOMICWRITESTRING::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 205
+            }
+          ],
+          "edges": [
+            {
+              "from": "ATOMICWRITESTRING::entry",
+              "to": "ATOMICWRITESTRING::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITESTRING::n1",
+              "to": "ATOMICWRITESTRING::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ATOMICWRITESTRING::n2",
+              "to": "ATOMICWRITESTRING::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ATOMICWRITESTRING::entry",
+            "ATOMICWRITESTRING::exit",
+            "ATOMICWRITESTRING::n1",
+            "ATOMICWRITESTRING::n2"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "RESOURCE_ATOMICWRITEFILE",
+          "nodes": [
+            {
+              "id": "RESOURCE_ATOMICWRITEFILE::n1",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 93
+              }
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 1,
+                "end_line": 13,
+                "end_column": 30
+              }
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 49
+              }
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 221
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 221
+            }
+          ],
+          "edges": [
+            {
+              "from": "RESOURCE_ATOMICWRITEFILE::entry",
+              "to": "RESOURCE_ATOMICWRITEFILE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "RESOURCE_ATOMICWRITEFILE::n1",
+              "to": "RESOURCE_ATOMICWRITEFILE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "RESOURCE_ATOMICWRITEFILE::n2",
+              "to": "RESOURCE_ATOMICWRITEFILE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "RESOURCE_ATOMICWRITEFILE::n3",
+              "to": "RESOURCE_ATOMICWRITEFILE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "RESOURCE_ATOMICWRITEFILE::entry",
+            "RESOURCE_ATOMICWRITEFILE::exit",
+            "RESOURCE_ATOMICWRITEFILE::n1",
+            "RESOURCE_ATOMICWRITEFILE::n2",
+            "RESOURCE_ATOMICWRITEFILE::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+          "nodes": [
+            {
+              "id": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 49
+              }
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 49
+              }
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 3,
+                "end_line": 13,
+                "end_column": 49
+              }
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 238
+            },
+            {
+              "id": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 238
+            }
+          ],
+          "edges": [
+            {
+              "from": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::entry",
+              "to": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n1",
+              "to": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n2",
+              "to": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n3",
+              "to": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::entry",
+            "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::exit",
+            "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n1",
+            "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n2",
+            "RESOURCE_ATOMICWRITEFILEWITHCONTEXT::n3"
+          ],
+          "truncated": false
+        }
+      ]
+    },
+    "call_graph": {
+      "edges": [],
+      "unresolved": [],
+      "truncated": false
+    },
+    "abstract": {
+      "facts": [
+        {
+          "variable": "SET",
+          "procedure": "ATOMICWRITER_CLEANUP",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_CLEANUP",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_CLEANUP",
+          "fact": "defined",
+          "line": 16
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_CLOSE",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_CLOSE",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "SET",
+          "procedure": "ATOMICWRITER_CLOSE",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_CLOSE",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_CLOSE",
+          "fact": "defined",
+          "line": 16
+        },
+        {
+          "variable": "BRANCH",
+          "procedure": "ATOMICWRITER_COMMIT",
+          "fact": "defined",
+          "line": 17
+        },
+        {
+          "variable": "ERROR",
+          "procedure": "ATOMICWRITER_COMMIT",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_COMMIT",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_COMMIT",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "SET",
+          "procedure": "ATOMICWRITER_COMMIT",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_COMMIT",
+          "fact": "defined",
+          "line": 16
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_ROLLBACK",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_ROLLBACK",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_WRITE",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "ATOMICWRITER_WRITE",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_WRITE",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "BRANCH",
+          "procedure": "ATOMICWRITER_WRITESTRING",
+          "fact": "defined",
+          "line": 16
+        },
+        {
+          "variable": "ERROR",
+          "procedure": "ATOMICWRITER_WRITESTRING",
+          "fact": "defined",
+          "line": 17
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_WRITESTRING",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ATOMICWRITER_WRITESTRING",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "BRANCH",
+          "procedure": "NEWATOMICWRITER",
+          "fact": "defined",
+          "line": 19
+        },
+        {
+          "variable": "ERROR",
+          "procedure": "NEWATOMICWRITER",
+          "fact": "defined",
+          "line": 20
+        },
+        {
+          "variable": "IF",
+          "procedure": "NEWATOMICWRITER",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "NEWATOMICWRITER",
+          "fact": "defined",
+          "line": 17
+        },
+        {
+          "variable": "STEP",
+          "procedure": "NEWATOMICWRITER",
+          "fact": "defined",
+          "line": 18
+        }
+      ],
+      "path_conditions": [],
+      "effect_gaps": [],
+      "termination_unknown": []
+    },
+    "obligations": {
+      "decision_tables": [],
+      "path_obligations": []
+    },
+    "traceability": {
+      "block_edges": [
+        {
+          "block": "ATOMICCOPY",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 163
+        },
+        {
+          "block": "ATOMICWRITEFILE",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 186
+        },
+        {
+          "block": "ATOMICWRITER_CLEANUP",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 144
+        },
+        {
+          "block": "ATOMICWRITER_CLOSE",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 125
+        },
+        {
+          "block": "ATOMICWRITER_COMMIT",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 86
+        },
+        {
+          "block": "ATOMICWRITER_ROLLBACK",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 107
+        },
+        {
+          "block": "ATOMICWRITER_WRITE",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 48
+        },
+        {
+          "block": "ATOMICWRITER_WRITESTRING",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 66
+        },
+        {
+          "block": "ATOMICWRITESTRING",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 205
+        },
+        {
+          "block": "NEWATOMICWRITER",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "ARCH-TESTING_STRATEGY",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 25
+        },
+        {
+          "block": "RESOURCE_ATOMICWRITEFILE",
+          "tokens": [
+            "ARCH-RESOURCE_MANAGEMENT",
+            "IMPL-ATOMIC_OPS",
+            "REQ-RESOURCE_MANAGEMENT"
+          ],
+          "line": 221
+        },
+        {
+          "block": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+          "tokens": [],
+          "line": 238
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "READ_BEFORE_WRITE",
+      "message": "Possible read-before-write for IF in ATOMICWRITER_CLOSE",
+      "line": 8,
+      "block": "ATOMICWRITER_CLOSE",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 38
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "READ_BEFORE_WRITE",
+      "message": "Possible read-before-write for IF in ATOMICWRITER_ROLLBACK",
+      "line": 8,
+      "block": "ATOMICWRITER_ROLLBACK",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 70
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "READ_BEFORE_WRITE",
+      "message": "Possible read-before-write for ERROR in ATOMICWRITER_COMMIT",
+      "line": 18,
+      "block": "ATOMICWRITER_COMMIT",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 55
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "READ_BEFORE_WRITE",
+      "message": "Possible read-before-write for ERROR in NEWATOMICWRITER",
+      "line": 20,
+      "block": "NEWATOMICWRITER",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 43
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "MISSING_CONTRACT_FIELD",
+      "message": "Block RESOURCE_ATOMICWRITEFILEWITHCONTEXT does not reference target token IMPL-ATOMIC_OPS",
+      "line": 238,
+      "block": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT"
+    }
+  ],
+  "unsupported_syntax": [
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: CLOSE_HANDLE_IF_OPEN(writer)",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 30
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: VALIDATE_READABLE(src)",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 24
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: writer = NEWATOMICWRITER(filename) WITH defer CLOSE",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 53
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: dir = PARENT_DIRECTORY(targetPath)",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 36
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: CLOSE_TEMP_HANDLE(writer)",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 27
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: REMOVE_FILE(writer.tempPath) ignoring not-exist",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 49
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: VALIDATE_PATH(dst)",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 20
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: ATOMICWRITER_WRITE(writer, data)",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 34
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: tempPath = path + \".tmp\"",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 26
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: ENSURE_DIRECTORY_EXISTS(dir)",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 30
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: srcInfo = STAT(src)",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 21
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SET_PERMISSIONS(writer.tempPath, perm)",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 40
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: REGISTER_TEMP_WITH(resourceManager, tempPath)",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 47
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: temp = CREATE_TEMP_FILE_IN(dir, pattern FROM base name + \".tmp.*\")",
+      "span": {
+        "line": 11,
+        "column": 3,
+        "end_line": 11,
+        "end_column": 68
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: writer = NEWATOMICWRITER(dst) WITH defer CLOSE",
+      "span": {
+        "line": 11,
+        "column": 3,
+        "end_line": 11,
+        "end_column": 48
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITER_COMMIT",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 45
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::RESOURCE_ATOMICWRITEFILE",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 50
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+      "span": {
+        "line": 12,
+        "column": 1,
+        "end_line": 12,
+        "end_column": 61
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: COPY_STREAM(src, writer)",
+      "span": {
+        "line": 12,
+        "column": 3,
+        "end_line": 12,
+        "end_column": 26
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: WRITE_FILE(tempPath, data)",
+      "span": {
+        "line": 12,
+        "column": 3,
+        "end_line": 12,
+        "end_column": 28
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITER_CLOSE",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SET_PERMISSIONS(writer.tempPath, srcInfo.mode)",
+      "span": {
+        "line": 13,
+        "column": 3,
+        "end_line": 13,
+        "end_column": 48
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITER_WRITESTRING",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 50
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITER_CLEANUP",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 46
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICCOPY",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 36
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: ATOMIC_RENAME(tempPath, path)",
+      "span": {
+        "line": 14,
+        "column": 3,
+        "end_line": 14,
+        "end_column": 31
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: POST: writer.committed == true AND writer.closed == true",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 56
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITER_ROLLBACK",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 47
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: POST: writer.closed == true",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 27
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITESTRING",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 43
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: delegate to context-aware atomic write with background context.",
+      "span": {
+        "line": 15,
+        "column": 1,
+        "end_line": 15,
+        "end_column": 143
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: UNREGISTER_TEMP(resourceManager, tempPath)",
+      "span": {
+        "line": 15,
+        "column": 3,
+        "end_line": 15,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITER_WRITE",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: check cancellation before each stage, write temp path, rename to final, untrack temp on success.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 176
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: convert text to bytes and delegate to ATOMICWRITER_WRITE.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 161
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: idempotent close; roll back when not committed.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 151
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: close open handle and remove temp path from disk ignoring not-exist.",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 172
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: validate readable source and destination, stream to AtomicWriter, match permissions, commit.",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 196
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ATOMIC_OPS::ATOMICWRITEFILE",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 41
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: delegate text payload to ATOMICWRITEFILE.",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 145
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: close temp handle then ATOMIC_RENAME temp to target; cleanup temp on failure; mark committed and closed.",
+      "span": {
+        "line": 19,
+        "column": 1,
+        "end_line": 19,
+        "end_column": 208
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: forbid rollback after commit; remove temp file via CLEANUP.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 163
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: reject writes when writer is closed or temp handle missing; otherwise write bytes to temp file.",
+      "span": {
+        "line": 22,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 199
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: write byte slice through AtomicWriter, set permissions on temp, commit.",
+      "span": {
+        "line": 22,
+        "column": 1,
+        "end_line": 22,
+        "end_column": 175
+      }
+    }
+  ],
+  "unknowns": [
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in ATOMICCOPY",
+      "procedure": "ATOMICCOPY",
+      "line": 14,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in ATOMICWRITEFILE",
+      "procedure": "ATOMICWRITEFILE",
+      "line": 11,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in ATOMICWRITESTRING",
+      "procedure": "ATOMICWRITESTRING",
+      "line": 8,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in RESOURCE_ATOMICWRITEFILE",
+      "procedure": "RESOURCE_ATOMICWRITEFILE",
+      "line": 8,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    },
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+      "procedure": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+      "line": 8,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": "request-evidence-envelope.v1",
+  "envelope_meta": {
+    "generated_at": "2026-10-21T20:37:03.682Z",
+    "generator": "request_evidence_envelope_build",
+    "revision": 1
+  },
+  "identity": {
+    "request_token": "PLAN-BKPDIR-TWO-FOLDER-CLEANUP",
+    "project_id": "453495ab14512f89",
+    "depth_tier": "minimal",
+    "gate_policy": "advisory",
+    "methodology_snapshot_id": "3.0.0"
+  },
+  "runs": [],
+  "artifacts": [
+    {
+      "kind": "checklist_tracker",
+      "schema_version": null,
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/agent-req-implementation-checklist.yaml",
+      "content_hash": "sha256:cc20feea01195a4773d80bcdda693f9ee738e45c86d0d37944233ab13162064c",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "tracker_disposition_only"
+      ]
+    },
+    {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/not-applicable-receipt.v1.json",
+      "content_hash": "sha256:50f3a28f9f0e1db9bbcd00cfc4a95eb7b3482e04e1804dbad8e1e4a0ceb21dc6",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "request_evidence_envelope",
+      "schema_version": "request-evidence-envelope.v1",
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/request-evidence-envelope.v1.json",
+      "content_hash": "sha256:fefb9b3bca7ea4d8174000a72d5f3cd4566a97e3d69114814739ef956b3e76c1",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/close-out-blockers.md",
+      "content_hash": "sha256:3056f4e18ceb296fa66e16a35d77c8920855d6b055c7a18e7926d99799f84977",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/git-hygiene-receipt-2026-10-21.md",
+      "content_hash": "sha256:1fe0634f49dabdda5fdfb875ac3041720a370d394fd30d5638a6c985dd523298",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/proposed-commit-message.txt",
+      "content_hash": "sha256:e33756b3220f781696e468e7a2fe018d634bf07375c73bfc62329cd3a5833cb5",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/traceable-commit-evidence.md",
+      "content_hash": "sha256:6709a8f4e19c15fa97086497a67edea4885ae4be532a5f3f9b108aee9bba1905",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    }
+  ],
+  "cross_links": {
+    "tracker_path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/agent-req-implementation-checklist.yaml",
+    "tracker_hash": "sha256:4c0e716ee6aef1d2367fe67b408236d3bcdf26ed37454a352efb665bd35da47d",
+    "citdp_path": null,
+    "evidence_chain_profile_path": null
+  },
+  "gaps": []
+}

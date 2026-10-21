@@ -6,7 +6,7 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-DEFAULT_QUEUE = REPO / "tied/docs/impl-pseudocode-improvement-queue.yaml"
+DEFAULT_QUEUE = REPO / "tied-bundle/docs/impl-pseudocode-improvement-queue.yaml"
 
 
 def load_queue(path: Path | None = None) -> dict:

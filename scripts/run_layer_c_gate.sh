@@ -18,7 +18,7 @@ TIER_A=(
 
 fail=0
 for token in "${TIER_A[@]}"; do
-  sidecar="tied/implementation-decisions/${token}-pseudocode.md"
+  sidecar="tied-project/implementation-decisions/${token}-pseudocode.md"
   [[ -f "$sidecar" ]] || continue
   report="$OUT_DIR/${token}-layer-c.json"
   args_file="$(mktemp)"
@@ -27,7 +27,7 @@ import json
 from pathlib import Path
 import yaml
 root = Path("$ROOT")
-reg = yaml.safe_load((root / "tied/semantic-tokens.yaml").read_text())
+reg = yaml.safe_load((root / "tied-project/semantic-tokens.yaml").read_text())
 known = sorted(k for k in reg if k.startswith(("REQ-", "ARCH-", "IMPL-")))
 print(json.dumps({
   "token": "$token",

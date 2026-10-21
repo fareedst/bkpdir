@@ -206,16 +206,16 @@ func testImplementationTokens(t *testing.T) {
 func testDocumentationSynchronization(t *testing.T) {
 	// Validate that key documentation files exist and contain expected content
 	requiredDocs := map[string][]string{
-		"tied/implementation-decisions/IMPL-REFACTOR_PREP.yaml": {
+		"tied-project/implementation-decisions/IMPL-REFACTOR_PREP.yaml": {
 			"IMPL-REFACTOR_PREP", "Dependency analysis", "extraction",
 		},
-		"tied/implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml": {
+		"tied-project/implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml": {
 			"IMPL-LARGE_FILE_DECOMP", "decomposition", "component",
 		},
-		"tied/implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX.yaml": {
+		"tied-project/implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX.yaml": {
 			"IMPL-CONFIG_SCHEMA_FLEX", "ConfigLoader", "schema",
 		},
-		"tied/implementation-decisions/IMPL-INTERFACE_FIRST.yaml": {
+		"tied-project/implementation-decisions/IMPL-INTERFACE_FIRST.yaml": {
 			"IMPL-INTERFACE_FIRST", "Interface", "extraction",
 		},
 	}
@@ -263,11 +263,11 @@ func testRefactorExtractionReadiness(t *testing.T) {
 	// Validate extraction readiness criteria
 	readinessCriteria := map[string]func() bool{
 		"Dependency analysis complete": func() bool {
-			_, err := os.Stat("tied/implementation-decisions/IMPL-REFACTOR_PREP.yaml")
+			_, err := os.Stat("tied-project/implementation-decisions/IMPL-REFACTOR_PREP.yaml")
 			return err == nil
 		},
 		"Formatter decomposition complete": func() bool {
-			_, err := os.Stat("tied/implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml")
+			_, err := os.Stat("tied-project/implementation-decisions/IMPL-LARGE_FILE_DECOMP.yaml")
 			return err == nil
 		},
 		"Config abstraction ready": func() bool {
@@ -277,7 +277,7 @@ func testRefactorExtractionReadiness(t *testing.T) {
 			return err == nil
 		},
 		"Interface-first extraction documented": func() bool {
-			_, err := os.Stat("tied/implementation-decisions/IMPL-INTERFACE_FIRST.yaml")
+			_, err := os.Stat("tied-project/implementation-decisions/IMPL-INTERFACE_FIRST.yaml")
 			return err == nil
 		},
 	}

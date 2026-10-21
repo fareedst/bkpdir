@@ -15,7 +15,7 @@ Usage: run-mutation-pilot.sh [options]
 
 Environment:
   MUTATION_PKG              Single package path (default: pkg/fileops)
-  MUTATION_FROM_REGISTRY=1  All unique pkg_paths from tied/spec/oracle-registry.yaml
+  MUTATION_FROM_REGISTRY=1  All unique pkg_paths from tied-project/spec/oracle-registry.yaml
   MUTATION_WAVE             Wave filter: 0|1|2|3|4|all (default all)
   MUTATION_SCORE_THRESHOLD  Pass threshold percent (default 70)
 
@@ -127,7 +127,7 @@ collect_registry_packages() {
   python3 - <<'PY'
 import yaml
 from pathlib import Path
-p = Path("tied/spec/oracle-registry.yaml")
+p = Path("tied-project/spec/oracle-registry.yaml")
 if not p.exists():
     raise SystemExit(0)
 data = yaml.safe_load(p.read_text())

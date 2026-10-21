@@ -10,7 +10,7 @@ import (
 
 // SidecarForImpl loads the pseudocode sidecar for an IMPL token.
 func SidecarForImpl(repoRoot, impl string) (*specparse.Document, error) {
-	path := filepath.Join(repoRoot, "tied", "implementation-decisions", impl+"-pseudocode.md")
+	path := filepath.Join(repoRoot, "tied-project", "implementation-decisions", impl+"-pseudocode.md")
 	return specparse.ParseFile(path)
 }
 

@@ -10,7 +10,7 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-IMPL_DIR = REPO / "tied/implementation-decisions"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
 
 BLOCK_LEAD_RE = re.compile(r"^\s*// - (\[IMPL-[^\]]+\].*)$")
 # D15: paraphrased file-level banners (not literal block leads)

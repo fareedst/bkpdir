@@ -1,0 +1,104 @@
+IMPL-TEST_UNICODE_HANDLING:
+  code_locations:
+    files:
+      - config_test.go
+    functions:
+      - TestSpecialCharactersInPaths
+      - TestUnicodeHandling
+  code_markers: '`config_test.go` line ~6470-6600, `TestUnicodeHandling`, `TestSpecialCharactersInPaths`, `createTestConfigFileWithData`'
+  cross-references: '[ARCH-TESTING_STRATEGY], [REQ-CONFIGURATION], [REQ-CFG_005], [REQ-CFG_001]'
+  cross_references:
+    - ARCH-TESTING_STRATEGY
+    - REQ-CFG_001
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  implementation_approach:
+    details: []
+    summary: |-
+      Ensures Unicode and special characters survive YAML load, merge with defaults, and config paths containing spaces or non-ASCII directory names.
+      INPUT: UTF-8 config values and filesystem paths
+      OUTPUT: LoadConfig results preserving characters
+      DATA: archive_dir_path, exclude_patterns, temp directories
+      Canonical behavior: tied-project/implementation-decisions/IMPL-TEST_UNICODE_HANDLING-pseudocode.md
+  merge_behavior: Unicode patterns merge with defaults per CFG-005 (array fields default to merge)
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Unicode and Special Character Handling Tests
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Ensures configuration system correctly handles Unicode characters in paths and patterns
+      Validates that special characters in config file paths don't break loading
+      Critical for internationalization and real-world usage scenarios
+      Part of comprehensive configuration merge test plan
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-TESTING_STRATEGY
+      - REQ-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    supersedes: []
+  special_chars_in_paths: Config files load correctly regardless of path characters
+  status: Active
+  test_coverage:
+    - 'Config file paths with both: `path with 特殊 chars/.bkpdir.yml`'
+    - 'Config file paths with spaces: `path with spaces/.bkpdir.yml`'
+    - 'Config file paths with Unicode: `path-with-特殊/.bkpdir.yml`'
+    - 'Merge behavior validation: Unicode patterns merge correctly with defaults per CFG-005'
+    - 'Unicode characters in `archive_dir_path`: `/path/with/émojis/🚀/and/特殊字符`'
+    - 'Unicode patterns in `exclude_patterns`: `["*.文件", "测试/*", "unicode-文件.log", "émoji-🚀.tmp"]`'
+  test_structure: |-
+    ```go
+    // TestUnicodeHandling tests Unicode and special characters in configuration values
+    // [REQ-CONFIGURATION] [REQ-CFG_005] Validates Unicode character preservation
+    func TestUnicodeHandling(t *testing.T) {
+        // Creates config with Unicode in archive_dir_path and exclude_patterns
+        // Verifies all Unicode characters preserved correctly
+        // Validates merge behavior with defaults (CFG-005)
+    }
+
+    // TestSpecialCharactersInPaths tests special characters in config file paths
+    // [REQ-CONFIGURATION] [REQ-CFG_001] Validates config file loading with special paths
+    func TestSpecialCharactersInPaths(t *testing.T) {
+        // Tests spaces in path
+        // Tests Unicode in path
+        // Tests both spaces and Unicode in path
+        // Verifies LoadConfig works correctly
+    }
+    ```
+  testspecialcharactersinpaths: Tests special characters in config file paths
+  testunicodehandling: Tests Unicode characters (émojis, 特殊字符) in configuration values
+  traceability:
+    architecture:
+      - ARCH-TESTING_STRATEGY
+    code_annotations:
+      - ARCH-TESTING_STRATEGY
+      - IMPL-TEST_UNICODE_HANDLING
+      - REQ-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    requirements:
+      - REQ-CFG_001
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests:
+      - TestSpecialCharactersInPaths
+      - TestSpecialCharactersInPaths/config_file_path_with_both_spaces_and_special_characters
+      - TestSpecialCharactersInPaths/config_file_path_with_spaces
+      - TestSpecialCharactersInPaths/config_file_path_with_special_characters
+      - TestUnicodeHandling
+  unicode_in_patterns: Unicode patterns work correctly in exclude_patterns
+  unicode_in_values: All Unicode characters preserved exactly as specified

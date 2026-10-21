@@ -1,0 +1,13 @@
+{
+  "phase": "close_out",
+  "depth_tier": "minimal",
+  "merged_decision": {
+    "allowed": true,
+    "gate_allowed": true,
+    "envelope_ok": true,
+    "blocking": false
+  },
+  "envelope_path": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/request-evidence-envelope.v1.json",
+  "not_applicable_receipt": "tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/not-applicable-receipt.v1.json",
+  "run_id": "plan-bkpdir-two-folder-close-out-20261021"
+}

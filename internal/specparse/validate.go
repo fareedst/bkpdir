@@ -15,9 +15,9 @@ type Registry struct {
 	FormalSpec map[string]bool `yaml:"formal_spec"`
 }
 
-// LoadRegistry reads tied/spec/formal-spec-registry.yaml.
+// LoadRegistry reads tied-project/spec/formal-spec-registry.yaml.
 func LoadRegistry(repoRoot string) (*Registry, error) {
-	path := filepath.Join(repoRoot, "tied", "spec", "formal-spec-registry.yaml")
+	path := filepath.Join(repoRoot, "tied-project", "spec", "formal-spec-registry.yaml")
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return &Registry{FormalSpec: map[string]bool{}}, nil

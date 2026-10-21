@@ -1,0 +1,43 @@
+REQ-CODE_QUALITY:
+  architecture: tied-project/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
+  category: Functional
+  description: All code must pass automated quality checks (linting and testing) before successful build. All errors must be properly handled with no unhandled errors allowed.
+  implementation: tied-project/implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Code Quality and Linting Requirements
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Ensures code quality standards and prevents bugs through automated validation
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: All code passes automated linter checks
+    - criterion: All function return values are checked
+    - criterion: All operations handle errors appropriately
+    - criterion: Build system enforces quality gates before compilation
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations:
+      - REQ-CODE_QUALITY
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+  validation_criteria:
+    - method: tied-project/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied-project/implementation-decisions/IMPL-TESTING.yaml

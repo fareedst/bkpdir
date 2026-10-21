@@ -9,7 +9,7 @@ from datetime import date
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-IMPL_DIR = REPO / "tied/implementation-decisions"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
 
 sys.path.insert(0, str(REPO / "scripts"))
 from load_improvement_queue import load_queue, save_queue  # noqa: E402

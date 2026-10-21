@@ -1,0 +1,53 @@
+ARCH-CONFIG_OUTPUT_GROUPING:
+  alternatives_considered: []
+  categories: Defined logical groups (Basic, Archive, Backup, Git, Output, Advanced)
+  cross-references: '[REQ-CONFIG_OUTPUT_GROUPING], [REQ-USABILITY]'
+  cross_references:
+    - REQ-CONFIG_OUTPUT_GROUPING
+    - REQ-USABILITY
+  decision: Group configuration output by category and rank by importance
+  flat_(legacy): Single alphabetical list, accessible via `--flat`
+  grouped_(default): Categories with headers, sorted by importance
+  implementation_approach:
+    details: []
+    summary: Group configuration output by category and rank by importance
+  importance: Critical, High, Medium, Low
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Configuration Output Grouping
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Improves usability by organizing numerous configuration options
+      Highlights critical settings for better visibility
+      Maintains backward compatibility via flags
+      Aligns with standard CLI best practices
+  related_decisions:
+    depends_on:
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
+    informs: []
+    see_also: []
+  sorting: Category Priority -> Importance -> Name
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-CONFIG_OUTPUT_GROUPING
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
+    implementation: []
+    requirements:
+      - REQ-CONFIG_OUTPUT_GROUPING
+      - REQ-USABILITY
+    tests: []

@@ -1,0 +1,72 @@
+record_identity:
+  change_request_id: REQ-PSEUDOCODE_FORMAL_VERIFICATION
+  title: Repair bulk IMPL package-level lead blocks in Go tests
+  recorded_at: "2026-09-19"
+change_definition:
+  current_behavior: Bulk add-test-leads pasted full sidecar leads after package in many *_test.go files.
+  desired_behavior: Block leads only before implementing func or covering Test/Benchmark; specctl check-leads satisfied from production placement.
+  non_goals:
+    - Expanding specctl scanDirs to internal/cmd/test in this change
+  success_criteria:
+    - Zero suspect package-level mega blocks per audit script
+    - run-spec-verification.sh ALL GREEN after waves
+  unchanged_behavior: Runtime backup/archive/config behavior unchanged.
+impact_analysis:
+  modules_or_boundaries: Root main package tests, pkg/** tests, hygiene paths internal/test/cmd/tools
+  tied_tokens_affected:
+    - REQ-PSEUDOCODE_FORMAL_VERIFICATION
+    - REQ-DOC_016
+    - IMPL-SPEC_CTL
+    - IMPL-TOKEN_COVERAGE_AUDIT
+  impl_inventory_notes: See working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/archive-lead-hygiene-20260919/bulk-lead-audit.json after Phase 0 audit (relocated 2026-09-20).
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: integrated
+    prior_depth_tier: minimal
+    gate_policy: advisory
+    research_profile: integrated-agent
+    assurance_profile: baseline-functional
+    rationale: Comment and traceability hygiene remains behavior-neutral, but the requested strict close-out evidence path is an eligibility trigger for integrated inquiry. Advisory policy keeps findings warn-only while preserving the fail-closed artifact and gate contracts.
+    eligibility_triggers_matched:
+      - strict_close_out
+    integrated_waiver: null
+    depth_change_waiver: null
+    close_out_inquiry_waiver: null
+    strict_eligibility_prerequisites: []
+  residual_risk:
+    summary: TRACE-002 if production backfill skipped after strip
+    owner: implementer
+    expiry: "2026-12-31"
+  counterexamples:
+    - "Strip removes pkg/config CFG merge prefix leads → merge tests fail or lose traceability"
+    - "Production backfill skipped → specctl check-leads TRACE-002 while tests look clean"
+  falsification_questions:
+    - "If every lead still appears somewhere in repo comments, does per-file traceability still mislead? Yes — package paste must be gone."
+    - "If go test passes, are block leads correctly placed? Only if check-leads and audit --fail-on-suspect pass."
+  disconfirming_observations:
+    - "Audit suspect count reaches zero before footgun script is fixed → recurrence risk remains until Phase 4."
+  adversarial_evidence_references:
+    - "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/archive-lead-hygiene-20260919/bulk-lead-audit.json"
+test_strategy:
+  script_unit: pytest on scripts/testdata/lead_hygiene fixtures for audit and strip
+  regression: go test ./... after each strip wave
+  verification: specctl validate/check-leads, run_impl_logic_audit.py, spec-corpus-status
+completion_criteria:
+  activation:
+    run_id: lead-hygiene-20260919-close
+    phase: close_out
+    note: Hygiene close-out binds verification inquiry receipt to late-phase gates.
+  inquiry_run_ids:
+    pre_implementation: lead-hygiene-20260919-pre
+    verification: lead-hygiene-20260919-ver
+    close_out: lead-hygiene-20260919-close
+  replay_note: tied_checklist_activation_collect must use the phase-specific run_id; CITDP activation.run_id is close_out only.
+evidence:
+  profile_reference: working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/evidence-chain-profile.v1.json
+  archive_root: working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/evidence/archive-lead-hygiene-20260919
+  archive_relocated_at: "2026-09-20"
+  archive_note: Hygiene discovery logs, bulk audit, and pre-scan-root manifest captures moved under archive_root; active verification manifest is scan-root (run_id scan-root-manifest-20260920).
+leap_feedback:
+  record_status: applied
+  divergences_from_analysis: none
+  tied_stack_updates_required: []

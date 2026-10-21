@@ -6,9 +6,9 @@
 
 ## Normative architecture (TIED)
 
-- [ARCH-PACKAGE_EXTRACTION](../tied/architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml)
-- [ARCH-SYSTEM_COMPONENTS](../tied/architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml)
-- [REQ-EXTRACT_008_INTERDEP_MAPPING](../tied/requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml)
+- [ARCH-PACKAGE_EXTRACTION](../tied-project/architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml)
+- [ARCH-SYSTEM_COMPONENTS](../tied-project/architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml)
+- [REQ-EXTRACT_008_INTERDEP_MAPPING](../tied-project/requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml)
 
 ## Quick reference
 
@@ -53,7 +53,7 @@ Static SVG: [images/package-interdependency-mapping.svg](images/package-interdep
 - This file — quick map + TIED pointers (REQ-named deliverable).
 - [integration-guide.md](integration-guide.md) — integration narrative and code samples.
 - `docs/images/package-interdependency-mapping.svg` — visual diagram.
-- Tokens cross-referenced in `tied/semantic-tokens.yaml` / `tied/semantic-tokens.md`.
+- Tokens cross-referenced in `tied-project/semantic-tokens.yaml` / `tied-bundle/docs/semantic-tokens.md`.
 
 ## Remaining actions
 

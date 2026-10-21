@@ -130,7 +130,7 @@ trace_token() {
     
     # Requirements layer
     echo -e "${GREEN}[1] Requirements Layer:${NC}"
-    grep -rn "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied/requirements.yaml" 2>/dev/null | \
+    grep -rn "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied-project/requirements.yaml" 2>/dev/null | \
         head -5 | sed 's|^|  |' || echo "  Not found in requirements.yaml"
     
     echo ""

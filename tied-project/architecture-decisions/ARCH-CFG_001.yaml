@@ -1,0 +1,60 @@
+ARCH-CFG_001:
+  ARCH-CFG_001:
+    alternatives_considered:
+      - cons:
+          - Less human-readable than YAML
+          - No comment support
+        name: JSON configuration
+        pros:
+          - Widely supported
+        rejected_reason: YAML provides better readability and comment support for configuration files
+    cross_references:
+      - IMPL-CONFIG_STRUCT
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    decision: Use YAML-based configuration with a structured merge strategy system that supports override, append, prepend, and replace operations
+    description: Architecture decision for base configuration system design including YAML loading and merge strategies
+    implementation_approach:
+      details: []
+      summary: YAML configuration loading with pluggable merge strategies and validation pipeline
+    metadata:
+      created:
+        author: AI Agent
+        date: '2026-03-12'
+      last_updated:
+        author: AI Agent
+        date: '2026-03-12'
+        reason: Initial creation of missing token
+      last_validated:
+        date: '2026-03-12'
+        result: pass
+        validator: AI Agent
+    name: Basic Configuration Architecture
+    rationale:
+      benefits:
+        - Clean separation of configuration loading and merging concerns
+        - Consistent configuration access across the application
+        - Extensible merge strategy pattern
+      problems_solved:
+        - Need for a consistent configuration loading architecture
+        - Need for configuration validation pipeline
+        - Need for extensible merge strategy framework
+      why: Establishes the foundational architecture for configuration management including YAML loading, parsing, and merge strategy selection.
+    related_decisions:
+      depends_on:
+        - REQ-CFG_001
+      informs:
+        - ARCH-CFG_005
+        - ARCH-CFG_006
+      see_also:
+        - ARCH-CONFIG_SYSTEM
+    status: Active
+    traceability:
+      code_annotations:
+        - ARCH-CFG_001
+      implementation:
+        - IMPL-CONFIG_STRUCT
+      requirements:
+        - REQ-CFG_001
+        - REQ-CONFIGURATION
+      tests: []

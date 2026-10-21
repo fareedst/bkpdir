@@ -30,7 +30,7 @@ func TestLeadScanDirPaths_includesStandardRoots(t *testing.T) {
 
 func TestCheckLeads_findsLeadInInternalOnly(t *testing.T) {
 	root := t.TempDir()
-	sidecarDir := filepath.Join(root, "tied", "implementation-decisions")
+	sidecarDir := filepath.Join(root, "tied-project", "implementation-decisions")
 	if err := os.MkdirAll(sidecarDir, 0o755); err != nil {
 		t.Fatal(err)
 	}

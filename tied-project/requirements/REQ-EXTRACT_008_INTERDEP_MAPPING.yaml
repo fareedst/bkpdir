@@ -1,0 +1,47 @@
+REQ-EXTRACT_008_INTERDEP_MAPPING:
+  category: Functional
+  description: |-
+    Document clear usage patterns and dependency relationships for the packages extracted as part of EXTRACT-008 (CLI Application Template). Deliverables include:
+    - `docs/package-interdependency-mapping.md` (visual diagrams + narrative)
+    - Package usage patterns and integration examples
+    - Performance impact notes and recommended integration strategies
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Package Interdependency Mapping for EXTRACT-008
+  priority: P1
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Provides a canonical map showing how the extracted packages interact, so maintainers and downstream consumers can understand integration points and avoid circular dependencies during extraction.
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: All extracted packages (pkg/config, pkg/errors, pkg/resources, pkg/formatter, pkg/git, pkg/cli, pkg/fileops, pkg/processing) are mapped
+    - criterion: Integration examples exist for at least 3 common scenarios (example CLI templates)
+    - criterion: Performance implications noted where coupling may introduce overhead
+    - criterion: Visual diagrams (SVG or PNG) accompany the narrative doc
+  status: Planned
+  traceability:
+    architecture: []
+    code_annotations:
+      - REQ-EXTRACT_008_INTERDEP_MAPPING
+    implementation: []
+    tests: []
+  validation:
+    - Diagrams render correctly in docs and link to package README entries
+    - Review by maintainer shows coverage of all 8 packages
+  validation_criteria:
+    - coverage: See detail file
+      method: Manual verification

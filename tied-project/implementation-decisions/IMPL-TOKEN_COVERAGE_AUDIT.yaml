@@ -1,0 +1,140 @@
+IMPL-TOKEN_COVERAGE_AUDIT:
+  archive_module_(`archive_go`,_`archive_test_go`): Documented `[REQ-FILE_BACKUP]`, `[ARCH-ARCHIVE_FORMAT]`, `[ARCH-PROCESSING_PATTERNS]`, `[ARCH-CONTEXT_SUPPORT]`, `[IMPL-ZIP_FORMAT]`, `[IMPL-PROCESSING_PATTERNS]`, `[IMPL-CONTEXT_OPS]`, `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` with matching test references (e.g., `TestCreateFullArchive_REQ_FILE_BACKUP`).
+  backup_module_(`backup_go`,_`backup_test_go`): Annotated `[REQ-FILE_BACKUP]`, `[ARCH-RESOURCE_MANAGEMENT]`, `[IMPL-ATOMIC_OPS]`, additional `[REQ-LIST_LIMIT]` tokens for list helpers so the requirement coverage remains visible.
+  code_locations:
+    files: []
+    functions: []
+  code_markers: '`archive.go`, `backup.go`, `errors.go`, `comparison.go`, `exclude.go`, `formatter.go`, `git.go` and their `_test.go` files that now consistently mention the appropriate tokens.'
+  comparison_module_(`comparison_go`,_`comparison_test_go`): Snapshot utilities reference `[ARCH-DIRECTORY_COMPARISON]`, `[ARCH-DIFF_COMMAND]`, `[IMPL-DIRECTORY_COMPARISON]`, `[IMPL-DIFF_COMMAND]`, `[REQ-DIFF_COMMAND]` for diffing features.
+  cross_references:
+    - ARCH-ARCHIVE_FORMAT
+    - ARCH-CONTEXT_SUPPORT
+    - ARCH-DIFF_COMMAND
+    - ARCH-DIRECTORY_COMPARISON
+    - ARCH-ERROR_HANDLING
+    - ARCH-EXCLUSION_PATTERNS
+    - ARCH-GIT_INTEGRATION
+    - ARCH-OUTPUT_FORMATTING
+    - ARCH-PACKAGE_EXTRACTION
+    - ARCH-PROCESSING_PATTERNS
+    - ARCH-RESOURCE_MANAGEMENT
+    - ARCH-TOKEN_SYSTEM
+    - REQ-CONFIGURATION
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    - REQ-DIFF_COMMAND
+    - REQ-DOC_016
+    - REQ-ERROR_HANDLING
+    - REQ-FILE_BACKUP
+    - REQ-GIT_INTEGRATION
+    - REQ-LIST_LIMIT
+    - REQ-OUTPUT_FORMATTING
+  documentation:
+    - Capture this audit in `tied-bundle/docs/semantic-tokens.md` by registering `[IMPL-TOKEN_COVERAGE_AUDIT]` with the contexts above.
+    - Point future audits to this decision to reuse the pattern and ensure coverage plans explicitly mention `REQ:DOC_016` and `ARCH:TOKEN_SYSTEM`.
+  errors_module_(`errors_go`,_`errors_test_go`): Structured errors are marked with `[REQ-ERROR_HANDLING]`, `[ARCH-ERROR_HANDLING]`, `[IMPL-STRUCTURED_ERRORS]`; tests mirror these tags.
+  exclusion_module_(`exclude_go`,_`exclude_test_go`): Pattern helpers keep `[REQ-CONFIGURATION]`, `[ARCH-EXCLUSION_PATTERNS]`, `[ARCH-PACKAGE_EXTRACTION]`, `[IMPL-EXCLUSION_PATTERNS]` references across adapters and wrappers.
+  formatter_module_(`formatter_go`,_`formatter_test_go`): Added `[REQ-OUTPUT_FORMATTING]`, `[ARCH-OUTPUT_FORMATTING]`, `[IMPL-DUAL_FORMATTING]` anchors so the formatting requirement is traceable from both implementation and tests; helper functions continue to reference `[REQ-CUSTOMIZABLE_FORMAT_STRINGS]`, `[IMPL-DIFF_COMMAND]`, and `[IMPL-INCREMENTAL_DUPLICATE_PREVENTION]` for contextual behavior.
+  git_module_(`git_go`,_`git_test_go`): Maintains `[REQ-GIT_INTEGRATION]`, `[ARCH-GIT_INTEGRATION]`, `[IMPL-GIT_CLI]`, and tests now restate them for repository detection and naming flows.
+  implementation_approach:
+    details: []
+    summary: |-
+      Audit modules for expected REQ/ARCH/IMPL token annotations and remediate gaps across the codebase.
+      INPUT: module file lists, expected token sets per module
+      OUTPUT: coverage report, added annotations in source and tests
+      DATA: scanned token comments, gap records, cross-module aggregates
+      Canonical behavior: tied-project/implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Semantic Token Coverage Audit
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Demonstrates that the AI-first toolchain can rely on tokens to trace code/tests back to intent.
+      Highlights gaps (e.g., `formatter.go`/`formatter_test.go`) and fixes them before broader refactors.
+      Provides a repeatable checklist for future module audits.
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-GIT_INTEGRATION
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TOKEN_SYSTEM
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-DIFF_COMMAND
+      - REQ-DOC_016
+      - REQ-ERROR_HANDLING
+      - REQ-FILE_BACKUP
+      - REQ-GIT_INTEGRATION
+      - REQ-LIST_LIMIT
+      - REQ-OUTPUT_FORMATTING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-GIT_INTEGRATION
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TOKEN_SYSTEM
+    code_annotations:
+      - ARCH-ARCHIVE_FORMAT
+      - ARCH-CONTEXT_SUPPORT
+      - ARCH-DIFF_COMMAND
+      - ARCH-DIRECTORY_COMPARISON
+      - ARCH-ERROR_HANDLING
+      - ARCH-EXCLUSION_PATTERNS
+      - ARCH-GIT_INTEGRATION
+      - ARCH-OUTPUT_FORMATTING
+      - ARCH-PACKAGE_EXTRACTION
+      - ARCH-PROCESSING_PATTERNS
+      - ARCH-RESOURCE_MANAGEMENT
+      - ARCH-TOKEN_SYSTEM
+      - IMPL-TOKEN_COVERAGE_AUDIT
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-DIFF_COMMAND
+      - REQ-DOC_016
+      - REQ-ERROR_HANDLING
+      - REQ-FILE_BACKUP
+      - REQ-GIT_INTEGRATION
+      - REQ-LIST_LIMIT
+      - REQ-OUTPUT_FORMATTING
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-DIFF_COMMAND
+      - REQ-DOC_016
+      - REQ-ERROR_HANDLING
+      - REQ-FILE_BACKUP
+      - REQ-GIT_INTEGRATION
+      - REQ-LIST_LIMIT
+      - REQ-OUTPUT_FORMATTING
+    tests: []

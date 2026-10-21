@@ -1,0 +1,42 @@
+REQ-IMMUTABLE_ARCHIVE_NAMING:
+  architecture: tied-project/architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
+  category: Functional
+  description: 'Archive naming convention is fixed and must not be modified. Format: `{prefix}-{timestamp}-{git_info}-{note}.zip`'
+  implementation: tied-project/implementation-decisions/IMPL-ZIP_FORMAT.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Archive Naming Convention (Immutable)
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations.
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: All components (prefix, timestamp, git_info, note) are correctly formatted
+    - criterion: Archive names follow the exact format specified
+    - criterion: Default prefix is "bkp" when not specified
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-ARCHIVE_FORMAT
+    code_annotations:
+      - REQ-IMMUTABLE_ARCHIVE_NAMING
+    implementation:
+      - IMPL-ZIP_FORMAT
+    tests: []
+  validation_criteria:
+    - method: Archive naming tests verify format compliance. Breaking changes require major version bump.

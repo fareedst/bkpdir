@@ -582,4 +582,4 @@ These warnings are informational and won't prevent your configuration from loadi
 
 - [Configuration Management](../README.md#configuration)
 - [Example Configuration Files](../example-custom-formats.yml)
-- [Output formatting (REQ-OUTPUT_FORMATTING)](../../tied/requirements/REQ-OUTPUT_FORMATTING.yaml)
+- [Output formatting (REQ-OUTPUT_FORMATTING)](../../tied-project/requirements/REQ-OUTPUT_FORMATTING.yaml)

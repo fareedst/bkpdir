@@ -1,0 +1,20 @@
+FAIL IMPL-TEST_UNICODE_HANDLING: ['CRIT-001:orphan:CRIT-REQ-CFG_005-003:REQ-CFG_005:Circular dependencies detected and prevented', 'CRIT-001:orphan:CRIT-REQ-CFG_005-006:REQ-CFG_005:Inheritance chains processed in correct order']
+PASS IMPL-TIED_FILES
+FAIL IMPL-TOKEN_SYSTEM: ['CRIT-001:orphan:CRIT-REQ-IMMUTABLE_DIRECTORY_OPERATIONS-007:REQ-IMMUTABLE_DIRECTORY_OPERATIONS:Special files are handled correctly']
+PASS IMPL-TRACEABILITY
+FAIL IMPL-TESTING_COMPLEXITY: ['CRIT-001:orphan:CRIT-REQ-RELIABILITY-001:REQ-RELIABILITY:Errors handled without crashing', 'CRIT-001:orphan:CRIT-REQ-RELIABILITY-002:REQ-RELIABILITY:Panic recovery prevents leaks', 'CRIT-001:orphan:CRIT-REQ-RELIABILITY-003:REQ-RELIABILITY:Resource cleanup continues on failures', 'CRIT-001:orphan:CRIT-REQ-RELIABILITY-004:REQ-RELIABILITY:Thread-safety verified']
+FAIL IMPL-TEST_CFG_005_P1: ['CRIT-001:orphan:CRIT-REQ-CFG_005-003:REQ-CFG_005:Circular dependencies detected and prevented']
+FAIL IMPL-BACKWARD_COMPAT: ['CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-002:REQ-MAINTAINABILITY:Configuration system supports new fields automatically', 'CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-004:REQ-MAINTAINABILITY:Tests are easy to understand and modify']
+FAIL IMPL-CFG_HIERARCHY_PRESERVATION: ['CRIT-001:orphan:CRIT-REQ-CFG_005-003:REQ-CFG_005:Circular dependencies detected and prevented']
+PASS IMPL-CODE_STYLE
+FAIL IMPL-EXTRACTION_CHALLENGES: ['CRIT-001:orphan:CRIT-REQ-CONFIGURATION-004:REQ-CONFIGURATION:Source tracking shows value origins']
+FAIL IMPL-EXTRACTION_PRINCIPLES: ['CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-002:REQ-MAINTAINABILITY:Configuration system supports new fields automatically']
+PASS IMPL-INTERFACE_DRIVEN
+FAIL IMPL-INTERFACE_FIRST: ['CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-002:REQ-MAINTAINABILITY:Configuration system supports new fields automatically']
+FAIL IMPL-LARGE_FILE_DECOMP: ['CRIT-001:orphan:CRIT-REQ-GIT_INTEGRATION-003:REQ-GIT_INTEGRATION:Git repository detected automatically', 'CRIT-001:orphan:CRIT-REQ-GIT_INTEGRATION-004:REQ-GIT_INTEGRATION:Status detection works for clean/dirty state']
+FAIL IMPL-LAYERED_EXTRACTION: ['CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-002:REQ-MAINTAINABILITY:Configuration system supports new fields automatically', 'CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-004:REQ-MAINTAINABILITY:Tests are easy to understand and modify']
+FAIL IMPL-REFACTOR_PREP: ['CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-002:REQ-MAINTAINABILITY:Configuration system supports new fields automatically', 'CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-004:REQ-MAINTAINABILITY:Tests are easy to understand and modify']
+PASS IMPL-SEMANTIC_CROSS_REF
+FAIL IMPL-ZERO_BREAKING: ['CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-002:REQ-MAINTAINABILITY:Configuration system supports new fields automatically', 'CRIT-001:orphan:CRIT-REQ-MAINTAINABILITY-003:REQ-MAINTAINABILITY:Documentation is complete and up-to-date']
+PASS IMPL-SPEC_CTL
+--- 26/73 passed ---

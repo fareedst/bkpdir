@@ -1,0 +1,56 @@
+CITDP-BKPDIR-TWO-FOLDER-CLEANUP:
+  change_definition:
+    current_behavior: |
+      Git tracked legacy monolithic TIED guides under tied-project/, STDD comparison
+      docs, root registry pointers, stale tied/ path strings, and install-managed
+      .cursor/skills paths still indexed.
+    desired_behavior: |
+      Git tracks only tied-project traceability and product source; methodology
+      consumed via linked tied-bundle/ (gitignored); path references use
+      tied-project/ or tied-bundle/; MCP TIED_BASE_PATH is tied-project/.
+    non_goals:
+      - Change bkpdir runtime behavior
+      - Delete tied-project/working request history folders
+    success_criteria:
+      - rg 'tied/' outside tied-bundle/ returns zero (or documented exceptions)
+      - tied_validate_consistency ok
+      - run-tied-new-client-audit ok for client root
+  record_identity:
+    change_request_id: BKPDIR-TWO-FOLDER-CLEANUP
+    title: bkpdir brownfield two-folder layout hygiene
+  risk_analysis:
+    adversarial_inquiry:
+      depth_tier: minimal
+      gate_policy: advisory
+      research_profile: none
+      assurance_profile: hygiene_only
+      rationale: Deletions and path rewrites only; no auth, network, or persistence logic.
+      counterexamples:
+        - Ordered bulk replace corrupts YAML or false-positives on unrelated tied substring matches
+        - MCP TIED_BASE_PATH points at wrong clone while agents edit project YAML
+      falsification_questions:
+        - Would tied_validate_consistency pass if project indexes were never git-added?
+        - Does rg tied/ stay zero after specification.md migration without updating tests?
+      disconfirming_observations:
+        - Untracked tied-project/ tree with only partial tracked indexes indicates incomplete migration
+        - Client audit SC-TFL-NO-ROOT-WORKING warns when repo-root working/ duplicates tied-project/working/
+      evidence_references:
+        - tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/verification-summary.md
+        - tied-project/citdp/CITDP-BKPDIR-TWO-FOLDER-CLEANUP.yaml
+    risks:
+      - id: RISK-BULK-REPLACE
+        detail: Ordered replace corrupts YAML or false-positive on substrings
+        mitigation: Longest-prefix order; exclude tied-bundle/ and binaries; lint_yaml + consistency
+      - id: RISK-WRONG-MCP-BASE
+        detail: MCP writes wrong repo if TIED_BASE_PATH misaligned
+        mitigation: tied_config_get_base_path before any MCP YAML write (RISK-010)
+  test_strategy:
+    tied:
+      - lint_yaml on changed tied-project/**/*.yaml
+      - tied_validate_consistency (merged view)
+      - tied_project_lint (client root)
+      - node .../run-tied-new-client-audit.mjs bkpdir
+    product:
+      - make test && make check
+      - make validate-token-enforcement and/or ./scripts/validate_tokens.sh (after path updates)
+    unit_red: not_required

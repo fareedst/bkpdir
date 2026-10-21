@@ -1,0 +1,1635 @@
+{
+  "ok": true,
+  "gate_mode_applied": true,
+  "schema_version": "pseudocode-analysis-report.v1",
+  "grammar_version": "pseudocode-grammar.v1",
+  "analyzer_version": "1.0.0",
+  "proof_boundary": "Deterministic static analysis of essence_pseudocode within declared grammar and budgets; not runtime execution, not test execution, not complete behavioral verification.",
+  "token": "IMPL-ZIP_FORMAT",
+  "input_identity": {
+    "algorithm": "sha256",
+    "hash": "0ca9bdc1d1381e08e74e5317d894a2086b6827cd62b4192662da06ba3c117689",
+    "byte_length": 6873
+  },
+  "budgets_applied": {
+    "requested": {},
+    "effective": {
+      "max_parse_nodes": 5000,
+      "max_procedures": 256,
+      "max_cfg_blocks_per_procedure": 512,
+      "max_call_graph_edges": 2048,
+      "max_fixed_point_iterations": 32,
+      "max_path_conditions": 64,
+      "max_report_diagnostics": 500,
+      "max_source_bytes": 512000,
+      "max_cfg_join_iterations": 32
+    }
+  },
+  "truncated": false,
+  "diagnostics_truncated": false,
+  "sections": {
+    "parse": {
+      "procedure_count": 9,
+      "parse_node_count": 61,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "IMPL-ZIP_FORMAT",
+        "REQ-FILE_BACKUP"
+      ],
+      "unsupported_syntax_count": 29
+    },
+    "symbols": {
+      "procedures": [
+        "ADD_FILE_TO_ZIP",
+        "COLLECT_FILES_TO_ARCHIVE",
+        "CREATE_AND_VERIFY_ARCHIVE",
+        "CREATE_FULL_ARCHIVE",
+        "CREATE_ZIP_ARCHIVE",
+        "GENERATE_ARCHIVE_NAME",
+        "GENERATE_FULL_ARCHIVE_NAME",
+        "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+        "LIST_ARCHIVES"
+      ],
+      "symbols": [
+        {
+          "name": "ADD_FILE_TO_ZIP",
+          "kind": "procedure",
+          "declared_line": 80
+        },
+        {
+          "name": "ASSEMBLE",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "GENERATE_FULL_ARCHIVE_NAME"
+        },
+        {
+          "name": "ASSEMBLE",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "GENERATE_INCREMENTAL_ARCHIVE_NAME"
+        },
+        {
+          "name": "BUILD",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "ADD_FILE_TO_ZIP"
+        },
+        {
+          "name": "CHECK",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "CREATE_ZIP_ARCHIVE"
+        },
+        {
+          "name": "CHECK",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "COLLECT_FILES_TO_ARCHIVE"
+        },
+        {
+          "name": "COLLECT_FILES_TO_ARCHIVE",
+          "kind": "procedure",
+          "declared_line": 151
+        },
+        {
+          "name": "CREATE_AND_VERIFY_ARCHIVE",
+          "kind": "procedure",
+          "declared_line": 39
+        },
+        {
+          "name": "CREATE_FULL_ARCHIVE",
+          "kind": "procedure",
+          "declared_line": 18
+        },
+        {
+          "name": "CREATE_ZIP_ARCHIVE",
+          "kind": "procedure",
+          "declared_line": 60
+        },
+        {
+          "name": "GENERATE_ARCHIVE_NAME",
+          "kind": "procedure",
+          "declared_line": 98
+        },
+        {
+          "name": "GENERATE_FULL_ARCHIVE_NAME",
+          "kind": "procedure",
+          "declared_line": 116
+        },
+        {
+          "name": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+          "kind": "procedure",
+          "declared_line": 133
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "GENERATE_ARCHIVE_NAME"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "ADD_FILE_TO_ZIP"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "LIST_ARCHIVES"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 11,
+          "procedure": "COLLECT_FILES_TO_ARCHIVE"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 12,
+          "procedure": "CREATE_FULL_ARCHIVE"
+        },
+        {
+          "name": "LIST_ARCHIVES",
+          "kind": "procedure",
+          "declared_line": 172
+        },
+        {
+          "name": "OPEN",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "CREATE_ZIP_ARCHIVE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "GENERATE_FULL_ARCHIVE_NAME"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "ADD_FILE_TO_ZIP"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "GENERATE_ARCHIVE_NAME"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "GENERATE_INCREMENTAL_ARCHIVE_NAME"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 17,
+          "procedure": "CREATE_ZIP_ARCHIVE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "CREATE_FULL_ARCHIVE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "CREATE_AND_VERIFY_ARCHIVE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "COLLECT_FILES_TO_ARCHIVE"
+        },
+        {
+          "name": "WALK",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "COLLECT_FILES_TO_ARCHIVE"
+        },
+        {
+          "name": "WRITE",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "ADD_FILE_TO_ZIP"
+        }
+      ],
+      "defined_calls": [],
+      "unresolved_calls": []
+    },
+    "cfg": {
+      "procedures": [
+        {
+          "procedure": "CREATE_FULL_ARCHIVE",
+          "nodes": [
+            {
+              "id": "CREATE_FULL_ARCHIVE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 3,
+                "end_line": 12,
+                "end_column": 43
+              }
+            },
+            {
+              "id": "CREATE_FULL_ARCHIVE::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 3,
+                "end_line": 13,
+                "end_column": 68
+              }
+            },
+            {
+              "id": "CREATE_FULL_ARCHIVE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 18
+            },
+            {
+              "id": "CREATE_FULL_ARCHIVE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 18
+            },
+            {
+              "id": "CREATE_FULL_ARCHIVE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 94
+              }
+            }
+          ],
+          "edges": [
+            {
+              "from": "CREATE_FULL_ARCHIVE::entry",
+              "to": "CREATE_FULL_ARCHIVE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_FULL_ARCHIVE::n1",
+              "to": "CREATE_FULL_ARCHIVE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_FULL_ARCHIVE::n2",
+              "to": "CREATE_FULL_ARCHIVE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_FULL_ARCHIVE::n3",
+              "to": "CREATE_FULL_ARCHIVE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "CREATE_FULL_ARCHIVE::entry",
+            "CREATE_FULL_ARCHIVE::exit",
+            "CREATE_FULL_ARCHIVE::n1",
+            "CREATE_FULL_ARCHIVE::n2",
+            "CREATE_FULL_ARCHIVE::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "CREATE_AND_VERIFY_ARCHIVE",
+          "nodes": [
+            {
+              "id": "CREATE_AND_VERIFY_ARCHIVE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 102
+              }
+            },
+            {
+              "id": "CREATE_AND_VERIFY_ARCHIVE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 39
+            },
+            {
+              "id": "CREATE_AND_VERIFY_ARCHIVE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 39
+            }
+          ],
+          "edges": [
+            {
+              "from": "CREATE_AND_VERIFY_ARCHIVE::entry",
+              "to": "CREATE_AND_VERIFY_ARCHIVE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_AND_VERIFY_ARCHIVE::n1",
+              "to": "CREATE_AND_VERIFY_ARCHIVE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "CREATE_AND_VERIFY_ARCHIVE::entry",
+            "CREATE_AND_VERIFY_ARCHIVE::exit",
+            "CREATE_AND_VERIFY_ARCHIVE::n1"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "CREATE_ZIP_ARCHIVE",
+          "nodes": [
+            {
+              "id": "CREATE_ZIP_ARCHIVE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 28
+              }
+            },
+            {
+              "id": "CREATE_ZIP_ARCHIVE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 40
+              }
+            },
+            {
+              "id": "CREATE_ZIP_ARCHIVE::n3",
+              "kind": "loop",
+              "label": "for",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 24
+              }
+            },
+            {
+              "id": "CREATE_ZIP_ARCHIVE::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 5,
+                "end_line": 11,
+                "end_column": 30
+              }
+            },
+            {
+              "id": "CREATE_ZIP_ARCHIVE::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 17,
+              "span": {
+                "line": 17,
+                "column": 1,
+                "end_line": 17,
+                "end_column": 120
+              }
+            },
+            {
+              "id": "CREATE_ZIP_ARCHIVE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 60
+            },
+            {
+              "id": "CREATE_ZIP_ARCHIVE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 60
+            }
+          ],
+          "edges": [
+            {
+              "from": "CREATE_ZIP_ARCHIVE::entry",
+              "to": "CREATE_ZIP_ARCHIVE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_ZIP_ARCHIVE::n1",
+              "to": "CREATE_ZIP_ARCHIVE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_ZIP_ARCHIVE::n2",
+              "to": "CREATE_ZIP_ARCHIVE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_ZIP_ARCHIVE::n3",
+              "to": "CREATE_ZIP_ARCHIVE::n3",
+              "kind": "loop_back"
+            },
+            {
+              "from": "CREATE_ZIP_ARCHIVE::n3",
+              "to": "CREATE_ZIP_ARCHIVE::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_ZIP_ARCHIVE::n4",
+              "to": "CREATE_ZIP_ARCHIVE::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "CREATE_ZIP_ARCHIVE::n5",
+              "to": "CREATE_ZIP_ARCHIVE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "CREATE_ZIP_ARCHIVE::entry",
+            "CREATE_ZIP_ARCHIVE::exit",
+            "CREATE_ZIP_ARCHIVE::n1",
+            "CREATE_ZIP_ARCHIVE::n2",
+            "CREATE_ZIP_ARCHIVE::n3",
+            "CREATE_ZIP_ARCHIVE::n4",
+            "CREATE_ZIP_ARCHIVE::n5"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "ADD_FILE_TO_ZIP",
+          "nodes": [
+            {
+              "id": "ADD_FILE_TO_ZIP::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 38
+              }
+            },
+            {
+              "id": "ADD_FILE_TO_ZIP::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 67
+              }
+            },
+            {
+              "id": "ADD_FILE_TO_ZIP::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 46
+              }
+            },
+            {
+              "id": "ADD_FILE_TO_ZIP::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 82
+              }
+            },
+            {
+              "id": "ADD_FILE_TO_ZIP::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 80
+            },
+            {
+              "id": "ADD_FILE_TO_ZIP::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 80
+            }
+          ],
+          "edges": [
+            {
+              "from": "ADD_FILE_TO_ZIP::entry",
+              "to": "ADD_FILE_TO_ZIP::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "ADD_FILE_TO_ZIP::n1",
+              "to": "ADD_FILE_TO_ZIP::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "ADD_FILE_TO_ZIP::n2",
+              "to": "ADD_FILE_TO_ZIP::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "ADD_FILE_TO_ZIP::n3",
+              "to": "ADD_FILE_TO_ZIP::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "ADD_FILE_TO_ZIP::n4",
+              "to": "ADD_FILE_TO_ZIP::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "ADD_FILE_TO_ZIP::entry",
+            "ADD_FILE_TO_ZIP::exit",
+            "ADD_FILE_TO_ZIP::n1",
+            "ADD_FILE_TO_ZIP::n2",
+            "ADD_FILE_TO_ZIP::n3",
+            "ADD_FILE_TO_ZIP::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GENERATE_ARCHIVE_NAME",
+          "nodes": [
+            {
+              "id": "GENERATE_ARCHIVE_NAME::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 58
+              }
+            },
+            {
+              "id": "GENERATE_ARCHIVE_NAME::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 5,
+                "end_line": 9,
+                "end_column": 52
+              }
+            },
+            {
+              "id": "GENERATE_ARCHIVE_NAME::n3",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 43
+              }
+            },
+            {
+              "id": "GENERATE_ARCHIVE_NAME::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 101
+              }
+            },
+            {
+              "id": "GENERATE_ARCHIVE_NAME::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 98
+            },
+            {
+              "id": "GENERATE_ARCHIVE_NAME::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 98
+            }
+          ],
+          "edges": [
+            {
+              "from": "GENERATE_ARCHIVE_NAME::entry",
+              "to": "GENERATE_ARCHIVE_NAME::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_ARCHIVE_NAME::n1",
+              "to": "GENERATE_ARCHIVE_NAME::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_ARCHIVE_NAME::n2",
+              "to": "GENERATE_ARCHIVE_NAME::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_ARCHIVE_NAME::n3",
+              "to": "GENERATE_ARCHIVE_NAME::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_ARCHIVE_NAME::n4",
+              "to": "GENERATE_ARCHIVE_NAME::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GENERATE_ARCHIVE_NAME::entry",
+            "GENERATE_ARCHIVE_NAME::exit",
+            "GENERATE_ARCHIVE_NAME::n1",
+            "GENERATE_ARCHIVE_NAME::n2",
+            "GENERATE_ARCHIVE_NAME::n3",
+            "GENERATE_ARCHIVE_NAME::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GENERATE_FULL_ARCHIVE_NAME",
+          "nodes": [
+            {
+              "id": "GENERATE_FULL_ARCHIVE_NAME::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 62
+              }
+            },
+            {
+              "id": "GENERATE_FULL_ARCHIVE_NAME::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 22
+              }
+            },
+            {
+              "id": "GENERATE_FULL_ARCHIVE_NAME::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 106
+              }
+            },
+            {
+              "id": "GENERATE_FULL_ARCHIVE_NAME::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 116
+            },
+            {
+              "id": "GENERATE_FULL_ARCHIVE_NAME::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 116
+            }
+          ],
+          "edges": [
+            {
+              "from": "GENERATE_FULL_ARCHIVE_NAME::entry",
+              "to": "GENERATE_FULL_ARCHIVE_NAME::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_FULL_ARCHIVE_NAME::n1",
+              "to": "GENERATE_FULL_ARCHIVE_NAME::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_FULL_ARCHIVE_NAME::n2",
+              "to": "GENERATE_FULL_ARCHIVE_NAME::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_FULL_ARCHIVE_NAME::n3",
+              "to": "GENERATE_FULL_ARCHIVE_NAME::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GENERATE_FULL_ARCHIVE_NAME::entry",
+            "GENERATE_FULL_ARCHIVE_NAME::exit",
+            "GENERATE_FULL_ARCHIVE_NAME::n1",
+            "GENERATE_FULL_ARCHIVE_NAME::n2",
+            "GENERATE_FULL_ARCHIVE_NAME::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+          "nodes": [
+            {
+              "id": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 62
+              }
+            },
+            {
+              "id": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n2",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 22
+              }
+            },
+            {
+              "id": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 115
+              }
+            },
+            {
+              "id": "GENERATE_INCREMENTAL_ARCHIVE_NAME::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 133
+            },
+            {
+              "id": "GENERATE_INCREMENTAL_ARCHIVE_NAME::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 133
+            }
+          ],
+          "edges": [
+            {
+              "from": "GENERATE_INCREMENTAL_ARCHIVE_NAME::entry",
+              "to": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n1",
+              "to": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n2",
+              "to": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GENERATE_INCREMENTAL_ARCHIVE_NAME::n3",
+              "to": "GENERATE_INCREMENTAL_ARCHIVE_NAME::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GENERATE_INCREMENTAL_ARCHIVE_NAME::entry",
+            "GENERATE_INCREMENTAL_ARCHIVE_NAME::exit",
+            "GENERATE_INCREMENTAL_ARCHIVE_NAME::n1",
+            "GENERATE_INCREMENTAL_ARCHIVE_NAME::n2",
+            "GENERATE_INCREMENTAL_ARCHIVE_NAME::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "COLLECT_FILES_TO_ARCHIVE",
+          "nodes": [
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 11
+              }
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 5,
+                "end_line": 10,
+                "end_column": 30
+              }
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 5,
+                "end_line": 11,
+                "end_column": 48
+              }
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 5,
+                "end_line": 12,
+                "end_column": 35
+              }
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::n5",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 3,
+                "end_line": 13,
+                "end_column": 14
+              }
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 88
+              }
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 151
+            },
+            {
+              "id": "COLLECT_FILES_TO_ARCHIVE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 151
+            }
+          ],
+          "edges": [
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::entry",
+              "to": "COLLECT_FILES_TO_ARCHIVE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::n1",
+              "to": "COLLECT_FILES_TO_ARCHIVE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::n2",
+              "to": "COLLECT_FILES_TO_ARCHIVE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::n3",
+              "to": "COLLECT_FILES_TO_ARCHIVE::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::n4",
+              "to": "COLLECT_FILES_TO_ARCHIVE::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::n5",
+              "to": "COLLECT_FILES_TO_ARCHIVE::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "COLLECT_FILES_TO_ARCHIVE::n6",
+              "to": "COLLECT_FILES_TO_ARCHIVE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "COLLECT_FILES_TO_ARCHIVE::entry",
+            "COLLECT_FILES_TO_ARCHIVE::exit",
+            "COLLECT_FILES_TO_ARCHIVE::n1",
+            "COLLECT_FILES_TO_ARCHIVE::n2",
+            "COLLECT_FILES_TO_ARCHIVE::n3",
+            "COLLECT_FILES_TO_ARCHIVE::n4",
+            "COLLECT_FILES_TO_ARCHIVE::n5",
+            "COLLECT_FILES_TO_ARCHIVE::n6"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "LIST_ARCHIVES",
+          "nodes": [
+            {
+              "id": "LIST_ARCHIVES::n1",
+              "kind": "loop",
+              "label": "for",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 27
+              }
+            },
+            {
+              "id": "LIST_ARCHIVES::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 5,
+                "end_line": 9,
+                "end_column": 68
+              }
+            },
+            {
+              "id": "LIST_ARCHIVES::n3",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 17
+              }
+            },
+            {
+              "id": "LIST_ARCHIVES::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 172
+            },
+            {
+              "id": "LIST_ARCHIVES::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 172
+            }
+          ],
+          "edges": [
+            {
+              "from": "LIST_ARCHIVES::entry",
+              "to": "LIST_ARCHIVES::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_ARCHIVES::n1",
+              "to": "LIST_ARCHIVES::n1",
+              "kind": "loop_back"
+            },
+            {
+              "from": "LIST_ARCHIVES::n1",
+              "to": "LIST_ARCHIVES::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_ARCHIVES::n2",
+              "to": "LIST_ARCHIVES::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "LIST_ARCHIVES::n3",
+              "to": "LIST_ARCHIVES::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "LIST_ARCHIVES::entry",
+            "LIST_ARCHIVES::exit",
+            "LIST_ARCHIVES::n1",
+            "LIST_ARCHIVES::n2",
+            "LIST_ARCHIVES::n3"
+          ],
+          "truncated": false
+        }
+      ]
+    },
+    "call_graph": {
+      "edges": [],
+      "unresolved": [],
+      "truncated": false
+    },
+    "abstract": {
+      "facts": [
+        {
+          "variable": "BUILD",
+          "procedure": "ADD_FILE_TO_ZIP",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "ADD_FILE_TO_ZIP",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "ADD_FILE_TO_ZIP",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "WRITE",
+          "procedure": "ADD_FILE_TO_ZIP",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "CHECK",
+          "procedure": "COLLECT_FILES_TO_ARCHIVE",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "IF",
+          "procedure": "COLLECT_FILES_TO_ARCHIVE",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "IF",
+          "procedure": "COLLECT_FILES_TO_ARCHIVE",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "STEP",
+          "procedure": "COLLECT_FILES_TO_ARCHIVE",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "WALK",
+          "procedure": "COLLECT_FILES_TO_ARCHIVE",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "CREATE_AND_VERIFY_ARCHIVE",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "IF",
+          "procedure": "CREATE_FULL_ARCHIVE",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "STEP",
+          "procedure": "CREATE_FULL_ARCHIVE",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "CHECK",
+          "procedure": "CREATE_ZIP_ARCHIVE",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "CHECK",
+          "procedure": "CREATE_ZIP_ARCHIVE",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "OPEN",
+          "procedure": "CREATE_ZIP_ARCHIVE",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "CREATE_ZIP_ARCHIVE",
+          "fact": "defined",
+          "line": 17
+        },
+        {
+          "variable": "IF",
+          "procedure": "GENERATE_ARCHIVE_NAME",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GENERATE_ARCHIVE_NAME",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "ASSEMBLE",
+          "procedure": "GENERATE_FULL_ARCHIVE_NAME",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GENERATE_FULL_ARCHIVE_NAME",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "ASSEMBLE",
+          "procedure": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "IF",
+          "procedure": "LIST_ARCHIVES",
+          "fact": "defined",
+          "line": 9
+        }
+      ],
+      "path_conditions": [],
+      "effect_gaps": [],
+      "termination_unknown": [
+        "CREATE_ZIP_ARCHIVE",
+        "LIST_ARCHIVES"
+      ]
+    },
+    "obligations": {
+      "decision_tables": [],
+      "path_obligations": []
+    },
+    "traceability": {
+      "block_edges": [
+        {
+          "block": "ADD_FILE_TO_ZIP",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 80
+        },
+        {
+          "block": "COLLECT_FILES_TO_ARCHIVE",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 151
+        },
+        {
+          "block": "CREATE_AND_VERIFY_ARCHIVE",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 39
+        },
+        {
+          "block": "CREATE_FULL_ARCHIVE",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 18
+        },
+        {
+          "block": "CREATE_ZIP_ARCHIVE",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 60
+        },
+        {
+          "block": "GENERATE_ARCHIVE_NAME",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 98
+        },
+        {
+          "block": "GENERATE_FULL_ARCHIVE_NAME",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 116
+        },
+        {
+          "block": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+          "tokens": [
+            "ARCH-ARCHIVE_FORMAT",
+            "IMPL-ZIP_FORMAT",
+            "REQ-FILE_BACKUP"
+          ],
+          "line": 133
+        },
+        {
+          "block": "LIST_ARCHIVES",
+          "tokens": [],
+          "line": 172
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "severity": "info",
+      "code": "TERMINATION_UNKNOWN",
+      "message": "Termination unknown for loop in LIST_ARCHIVES",
+      "line": 8,
+      "block": "LIST_ARCHIVES"
+    },
+    {
+      "severity": "info",
+      "code": "TERMINATION_UNKNOWN",
+      "message": "Termination unknown for loop in CREATE_ZIP_ARCHIVE",
+      "line": 10,
+      "block": "CREATE_ZIP_ARCHIVE"
+    },
+    {
+      "severity": "warning",
+      "code": "MISSING_CONTRACT_FIELD",
+      "message": "Block LIST_ARCHIVES does not reference target token IMPL-ZIP_FORMAT",
+      "line": 172,
+      "block": "LIST_ARCHIVES"
+    }
+  ],
+  "unsupported_syntax": [
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: validate directory and context",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 32
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: tempFile = path + \".tmp\"",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 26
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: base = strip .zip suffix from base_name",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 41
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: files = []",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 12
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: rm = NEW_RESOURCE_MANAGER(); DEFER cleanup_with_panic_recovery",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 64
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: rm.AddTempFile(tempFile)",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 26
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: files = COLLECT_FILES_TO_ARCHIVE(ctx, cwd, excludePatterns)",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 61
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: CREATE_ZIP_ARCHIVE(ctx, cwd, tempFile, files)",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 47
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: archivePath = join(archiveDir, GENERATE_FULL_ARCHIVE_NAME(...))",
+      "span": {
+        "line": 11,
+        "column": 3,
+        "end_line": 11,
+        "end_column": 65
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: rename(tempFile, path)",
+      "span": {
+        "line": 11,
+        "column": 3,
+        "end_line": 11,
+        "end_column": 24
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: rm.RemoveResource(tempFile)",
+      "span": {
+        "line": 12,
+        "column": 3,
+        "end_line": 12,
+        "end_column": 29
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: ADD_FILE_TO_ZIP(sourceDir, rel, zipWriter, config)",
+      "span": {
+        "line": 12,
+        "column": 5,
+        "end_line": 12,
+        "end_column": 54
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::GENERATE_INCREMENTAL_ARCHIVE_NAME",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 59
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: print created archive with stats",
+      "span": {
+        "line": 13,
+        "column": 3,
+        "end_line": 13,
+        "end_column": 34
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::GENERATE_ARCHIVE_NAME",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 47
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::GENERATE_FULL_ARCHIVE_NAME",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 52
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::COLLECT_FILES_TO_ARCHIVE",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 50
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::ADD_FILE_TO_ZIP",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 41
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: build {base}_update={timestamp}[={branch}={hash}[-dirty]][={note}].zip for incremental archives.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 163
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::CREATE_AND_VERIFY_ARCHIVE",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 51
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::CREATE_ZIP_ARCHIVE",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: route to incremental or full archive name builder based on config flags.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 139
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: build {prefix}-{timestamp}[={branch}={hash}[-dirty]][={note}].zip from config git segments.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 158
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: walk cwd tree, skip excluded paths and directories, collect relative file paths with cancellation checks.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 172
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-ZIP_FORMAT::LIST_ARCHIVES",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 39
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: write one entry with Deflate header, copying file content or symlink target and honoring skip_broken_symlinks.",
+      "span": {
+        "line": 19,
+        "column": 1,
+        "end_line": 19,
+        "end_column": 177
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: write zip to path.tmp, rename to final path, untrack temp file, print created stats.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 151
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: create zip writer with Deflate and add each collected file with context cancellation checks.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 159
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: read archive directory entries and return Archive metadata for each .zip file.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 145
+      }
+    }
+  ],
+  "unknowns": []
+}

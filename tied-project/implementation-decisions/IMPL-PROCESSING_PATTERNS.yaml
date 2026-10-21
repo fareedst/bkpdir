@@ -1,0 +1,151 @@
+IMPL-PROCESSING_PATTERNS:
+  code_locations:
+    files:
+      - pkg/processing/concurrent.go
+      - pkg/processing/doc.go
+      - pkg/processing/naming.go
+      - pkg/processing/pipeline.go
+      - pkg/processing/processor.go
+      - pkg/processing/processor_test.go
+    functions:
+      - BaseStage.CanSkip
+      - BaseStage.GetDescription
+      - BaseStage.GetEstimatedDuration
+      - BaseStage.GetName
+      - ConcurrentProcessor.GetStatus
+      - ConcurrentProcessor.Process
+      - ConcurrentProcessor.SetBatchSize
+      - ConcurrentProcessor.SetWorkerCount
+      - DefaultProcessingOptions
+      - NamingProvider.CreateTimestamp
+      - NamingProvider.FormatTimestamp
+      - NamingProvider.GenerateArchiveName
+      - NamingProvider.GenerateBackupName
+      - NamingProvider.GenerateName
+      - NamingProvider.GetSupportedFormats
+      - NamingProvider.ParseName
+      - NamingProvider.ValidateName
+      - NewBaseStage
+      - NewConcurrentProcessor
+      - NewNamingProvider
+      - NewPipeline
+      - NewProcessingError
+      - Pipeline.AddStage
+      - Pipeline.Execute
+      - Pipeline.executeStageWithRetries
+      - Pipeline.finalizeExecution
+      - Pipeline.GetProgress
+      - Pipeline.GetStages
+      - Pipeline.handleCancellation
+      - Pipeline.handleSkippedStage
+      - Pipeline.initializeExecution
+      - Pipeline.SetProgressCallback
+      - Pipeline.SetStopOnError
+      - Pipeline.updateCurrentStage
+      - Pipeline.updateProgress
+      - ProcessItems
+      - ProcessItemsWithOptions
+      - Worker.processTask
+      - Worker.run
+  code_markers: '`pkg/processing/` package, pipeline stages, worker pools'
+  concurrentprocessor: |-
+    ```go
+    type ConcurrentProcessor struct {
+        workers    int
+        queue      chan WorkItem
+        results    chan Result
+        ctx        context.Context
+        cancel     context.CancelFunc
+        wg         sync.WaitGroup
+        processed  int64
+        failed     int64
+    }
+
+    func NewConcurrentProcessor(workers int) *ConcurrentProcessor
+    func (cp *ConcurrentProcessor) Submit(item WorkItem) error
+    func (cp *ConcurrentProcessor) Process(ctx context.Context) error
+    func (cp *ConcurrentProcessor) GetStats() Stats
+    ```
+  cross_references:
+    - ARCH-PROCESSING_PATTERNS
+    - REQ-PERFORMANCE
+  implementation_approach:
+    details: []
+    summary: |-
+      Provides pipeline stage execution with retries and concurrent worker-pool processing plus archive/backup naming helpers.
+      INPUT: ProcessingInput, ProcessingItem slices, NamingTemplate, filename strings
+      OUTPUT: ProcessingResult, ConcurrentResult, generated or parsed names
+      DATA: Pipeline stages, worker channels, retry counters, regex name patterns
+      Canonical behavior: tied-project/implementation-decisions/IMPL-PROCESSING_PATTERNS-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Processing Patterns Implementation
+  naming_patterns:
+    - 'Archive pattern: `{prefix}-{timestamp}-{note}.zip`'
+    - 'Backup pattern: `{name}-{timestamp}-{note}.bak`'
+    - 'Git integration: `{branch}-{hash}-{dirty}`'
+    - 'ISO 8601 timestamp: `2006-01-02T150405`'
+  namingprovider: |-
+    ```go
+    type NamingProviderInterface interface {
+        GenerateName(pattern string, metadata map[string]string) (string, error)
+        ParseName(name string, pattern string) (map[string]string, error)
+    }
+    ```
+  pipeline_interface: |-
+    ```go
+    type PipelineInterface interface {
+        AddStage(stage Stage) PipelineInterface
+        Execute(ctx context.Context, input interface{}) (interface{}, error)
+        GetProgress() Progress
+    }
+    ```
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Enables reusable processing patterns
+      Supports high-performance concurrent operations
+      Standardizes naming conventions
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+    supersedes: []
+  stage_interface: |-
+    ```go
+    type Stage interface {
+        Process(ctx context.Context, input interface{}) (interface{}, error)
+        Name() string
+    }
+    ```
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-PROCESSING_PATTERNS
+    code_annotations:
+      - ARCH-PROCESSING_PATTERNS
+      - IMPL-PROCESSING_PATTERNS
+      - REQ-PERFORMANCE
+    requirements:
+      - REQ-PERFORMANCE
+    tests:
+      - BenchmarkConcurrentProcessing
+      - BenchmarkNamingProvider
+      - TestConcurrentProcessor
+      - TestContextCancellation
+      - TestNamingProvider
+      - TestPipeline
+      - TestUtilityFunctions

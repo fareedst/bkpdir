@@ -1,0 +1,56 @@
+IMPL-CODE_STYLE:
+  code_locations:
+    files: []
+    functions: []
+  cross_references: []
+  documentation:
+    - Examples in test files
+    - Exported function documentation
+    - Inline comments for complex logic
+    - Package-level documentation
+  formatting:
+    - Follow Go standard formatting
+    - Use `go fmt` for code formatting
+    - Use `revive` linter for code quality
+  implementation_approach:
+    details: []
+    summary: |-
+      Enforce project naming, formatting, and documentation conventions so public APIs stay consistent and lint-clean across the project.
+      INPUT: source files, public symbols
+      OUTPUT: pass/fail validation results
+      DATA: naming rules, formatting rules, documentation rules
+      Canonical behavior: tied-project/implementation-decisions/IMPL-CODE_STYLE-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Code Style and Conventions
+  naming:
+    - 'Exported types/functions: PascalCase'
+    - Follow Go naming conventions
+    - 'Unexported: camelCase'
+    - Use descriptive names
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: See detail file
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also: []
+    supersedes: []
+  status: Active
+  traceability:
+    architecture: []
+    code_annotations:
+      - IMPL-CODE_STYLE
+    requirements: []
+    tests: []

@@ -1,0 +1,44 @@
+REQ-IMMUTABLE_CLI_COMMANDS:
+  architecture: tied-project/architecture-decisions/ARCH-CLI_COMMANDS.yaml
+  category: Functional
+  description: 'CLI command structure must be preserved:'
+  implementation: tied-project/implementation-decisions/IMPL-CLI_FRAMEWORK.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: CLI Commands Structure (Immutable)
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: CLI command structure is fundamental to user experience. Changing it would break user workflows and scripts.
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: All commands work as specified
+    - criterion: Atomic operations and context cancellation are supported
+    - criterion: CLI command surface vocabulary is canonical in tied-project/vocab/bkpdir-cli.md
+    - criterion: Command aliases are preserved
+    - criterion: Output formatting uses configurable format strings
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CLI_COMMANDS
+    code_annotations:
+      - REQ-IMMUTABLE_CLI_COMMANDS
+    implementation:
+      - IMPL-CLI_FRAMEWORK
+    tests: []
+  validation_criteria:
+    - method: CLI command tests verify all requirements. Breaking changes require major version bump.

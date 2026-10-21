@@ -1,0 +1,56 @@
+ARCH-LANGUAGE_SELECTION:
+  alternatives_considered:
+    - cons: []
+      name: See detail file
+      pros: []
+      rejected_reason: |-
+        Python: Rejected due to runtime dependencies and slower performance
+        Rust: Rejected due to complexity and longer development time
+        C/C++: Rejected due to manual memory management complexity
+  cross-references: '[REQ-PERFORMANCE], [REQ-MAINTAINABILITY]'
+  cross_references:
+    - REQ-MAINTAINABILITY
+    - REQ-PERFORMANCE
+  decision: Go (Golang)
+  implementation_approach:
+    details: []
+    summary: Go (Golang)
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Language and Runtime
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Excellent standard library support for file operations, ZIP archives, and CLI tools
+      Strong concurrency support with goroutines and channels
+      Cross-platform compilation to single binaries
+      Excellent tooling (go fmt, go test, go vet)
+      Fast compilation and execution
+  related_decisions:
+    depends_on:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
+    informs: []
+    see_also: []
+  status: Active
+  traceability:
+    code_annotations:
+      - ARCH-LANGUAGE_SELECTION
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
+    implementation: []
+    requirements:
+      - REQ-MAINTAINABILITY
+      - REQ-PERFORMANCE
+    tests: []

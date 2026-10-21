@@ -3,28 +3,28 @@
 ## 🎯 Overview
 BkpDir is a command-line application for macOS and Linux that creates ZIP-based archives of directories and backups of individual files. It supports Git integration, customizable naming patterns, file exclusion patterns, maintains a history of directory archives and file backups, and provides robust error handling with automatic resource cleanup. It also features configurable printf-style and template-based output formatting for enhanced user experience.
 
-> **Important**: This document is a **user-oriented** guide (examples, keys, CLI behavior). **Normative** requirements, architecture, and implementation—including behaviors that must not change without explicit versioning—live in **TIED** under [`tied/requirements/`](../../tied/requirements/), [`tied/architecture-decisions/`](../../tied/architecture-decisions/), and [`tied/implementation-decisions/`](../../tied/implementation-decisions/). Immutable-style constraints are captured in `REQ-IMMUTABLE_*` requirement files in `tied/requirements/`.
+> **Important**: This document is a **user-oriented** guide (examples, keys, CLI behavior). **Normative** requirements, architecture, and implementation—including behaviors that must not change without explicit versioning—live in **TIED** under [`tied-project/requirements/`](../../tied-project/requirements/), [`tied-project/architecture-decisions/`](../../tied-project/architecture-decisions/), and [`tied-project/implementation-decisions/`](../../tied-project/implementation-decisions/). Immutable-style constraints are captured in `REQ-IMMUTABLE_*` requirement files in `tied-project/requirements/`.
 
 ## Normative traceability (do not duplicate in prose)
 
 | Topic | TIED (authoritative) |
 |--------|----------------------|
-| Configuration discovery, merge, precedence | [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml), [REQ-CFG_005](../../tied/requirements/REQ-CFG_005.yaml), [REQ-CFG_006](../../tied/requirements/REQ-CFG_006.yaml) |
-| Output / format strings | [REQ-OUTPUT_FORMATTING](../../tied/requirements/REQ-OUTPUT_FORMATTING.yaml), [REQ-CUSTOMIZABLE_FORMAT_STRINGS](../../tied/requirements/REQ-CUSTOMIZABLE_FORMAT_STRINGS.yaml) |
-| Errors, resources, Git, CLI | [REQ-ERROR_HANDLING](../../tied/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-GIT_INTEGRATION](../../tied/requirements/REQ-GIT_INTEGRATION.yaml), [REQ-IMMUTABLE_CLI_COMMANDS](../../tied/requirements/REQ-IMMUTABLE_CLI_COMMANDS.yaml) |
-| Token registry and agent rules | [tied/semantic-tokens.yaml](../../tied/semantic-tokens.yaml), [AGENTS.md](../../AGENTS.md), [tied/ai-assistant-compliance.md](../../tied/ai-assistant-compliance.md) |
+| Configuration discovery, merge, precedence | [REQ-CONFIGURATION](../../tied-project/requirements/REQ-CONFIGURATION.yaml), [REQ-CFG_005](../../tied-project/requirements/REQ-CFG_005.yaml), [REQ-CFG_006](../../tied-project/requirements/REQ-CFG_006.yaml) |
+| Output / format strings | [REQ-OUTPUT_FORMATTING](../../tied-project/requirements/REQ-OUTPUT_FORMATTING.yaml), [REQ-CUSTOMIZABLE_FORMAT_STRINGS](../../tied-project/requirements/REQ-CUSTOMIZABLE_FORMAT_STRINGS.yaml) |
+| Errors, resources, Git, CLI | [REQ-ERROR_HANDLING](../../tied-project/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied-project/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-GIT_INTEGRATION](../../tied-project/requirements/REQ-GIT_INTEGRATION.yaml), [REQ-IMMUTABLE_CLI_COMMANDS](../../tied-project/requirements/REQ-IMMUTABLE_CLI_COMMANDS.yaml) |
+| Token registry and agent rules | [tied-project/semantic-tokens.yaml](../../tied-project/semantic-tokens.yaml), [tied-bundle/docs/semantic-tokens.md](../../tied-bundle/docs/semantic-tokens.md), [AGENTS.md](../../AGENTS.md) |
 
 ## 🤖 AI Assistant Navigation Guide
 
 ### Critical
-- **Immutables / constraints**: [`tied/requirements/`](../../tied/requirements/) — files `REQ-IMMUTABLE_*.yaml`
-- **Token registry**: [tied/semantic-tokens.md](../../tied/semantic-tokens.md)
-- **Agent compliance**: [tied/ai-assistant-compliance.md](../../tied/ai-assistant-compliance.md)
+- **Immutables / constraints**: [`tied-project/requirements/`](../../tied-project/requirements/) — files `REQ-IMMUTABLE_*.yaml`
+- **Token registry**: [tied-project/semantic-tokens.yaml](../../tied-project/semantic-tokens.yaml), [tied-bundle/docs/semantic-tokens.md](../../tied-bundle/docs/semantic-tokens.md)
+- **Agent compliance**: [AGENTS.md](../../AGENTS.md), [tied-bundle/docs/ai-principles.md](../../tied-bundle/docs/ai-principles.md)
 
 ### High
-- **Architecture digest**: [tied/architecture-decisions.md](../../tied/architecture-decisions.md) (detail YAML in `tied/architecture-decisions/`)
-- **Requirements digest**: [tied/requirements.md](../../tied/requirements.md) (detail YAML in `tied/requirements/`)
-- **Implementation / testing linkage**: [tied/implementation-decisions.md](../../tied/implementation-decisions.md)
+- **Architecture digest**: [tied-bundle/docs/architecture-decisions.md](../../tied-bundle/docs/architecture-decisions.md) (detail YAML in `tied-project/architecture-decisions/`)
+- **Requirements digest**: [tied-bundle/docs/requirements.md](../../tied-bundle/docs/requirements.md) (detail YAML in `tied-project/requirements/`)
+- **Implementation / testing linkage**: [tied-bundle/docs/implementation-decisions.md](../../tied-bundle/docs/implementation-decisions.md)
 
 ### Medium / low
 - Configuration and Git: sections below in this spec (cross-check TIED table above)
@@ -36,16 +36,16 @@ BkpDir is a command-line application for macOS and Linux that creates ZIP-based 
 - This [specification](specification.md) plus [README.md](../../README.md)
 
 ### Developers / contributors
-- [AGENTS.md](../../AGENTS.md), [ai-principles.md](../../ai-principles.md), and TIED YAML under `tied/`
+- [AGENTS.md](../../AGENTS.md), [tied-bundle/docs/ai-principles.md](../../tied-bundle/docs/ai-principles.md), project TIED YAML under `tied-project/`, methodology under `tied-bundle/`
 - Change **requirements and decisions** in TIED first per methodology; keep this spec aligned for UX, not as a second source of truth
 
 ## ✅ Quality assurance (pointer)
 
-Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMMUTABLE_CODE_QUALITY](../../tied/requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml), [REQ-ERROR_HANDLING](../../tied/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml)). Use **`make lint`**, **`make test`**, and targets in [README.md](../../README.md).
+Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMMUTABLE_CODE_QUALITY](../../tied-project/requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml), [REQ-ERROR_HANDLING](../../tied-project/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied-project/requirements/REQ-RESOURCE_MANAGEMENT.yaml)). Use **`make lint`**, **`make test`**, and targets in [README.md](../../README.md).
 
 ## Configuration Discovery
 
-**Normative**: [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml). The bullets below summarize user-visible behavior.
+**Normative**: [REQ-CONFIGURATION](../../tied-project/requirements/REQ-CONFIGURATION.yaml). The bullets below summarize user-visible behavior.
 
 - Configuration files are discovered using a configurable search path
 - The search path is controlled by the `BKPDIR_CONFIG` environment variable
@@ -62,7 +62,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ## Configuration File
 
-**Normative**: [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml), defaults in [REQ-IMMUTABLE_CONFIGURATION_DEFAULTS](../../tied/requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml) (see also [README.md](../../README.md) for current default behavior).
+**Normative**: [REQ-CONFIGURATION](../../tied-project/requirements/REQ-CONFIGURATION.yaml), defaults in [REQ-IMMUTABLE_CONFIGURATION_DEFAULTS](../../tied-project/requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml) (see also [README.md](../../README.md) for current default behavior).
 
 - Configuration is stored in YAML files with names specified by the configuration discovery system
 - If no configuration files are found, default values apply per TIED immutables and code
@@ -117,7 +117,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 7. **Status Code Configuration**
    - Configures exit status codes returned for different application conditions
-   - Status codes have specific defaults if not specified (see [REQ-IMMUTABLE_CONFIGURATION_DEFAULTS](../../tied/requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml))
+   - Status codes have specific defaults if not specified (see [REQ-IMMUTABLE_CONFIGURATION_DEFAULTS](../../tied-project/requirements/REQ-IMMUTABLE_CONFIGURATION_DEFAULTS.yaml))
    - YAML keys for directory operation status codes:
      - `status_created_archive`: Exit code when a new archive is successfully created (default: 0)
      - `status_failed_to_create_archive_directory`: Exit code when archive directory creation fails (default: 31)
@@ -159,7 +159,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
    - Format strings support text highlighting and structure formatting
    - Templates support both Go text/template syntax ({{.name}}) and placeholder syntax (#{name})
    - All user-facing text is extracted from code into configuration data
-   - Format strings have specific defaults if not specified (see [REQ-IMMUTABLE_OUTPUT_FORMATTING](../../tied/requirements/REQ-IMMUTABLE_OUTPUT_FORMATTING.yaml) and related immutables)
+   - Format strings have specific defaults if not specified (see [REQ-IMMUTABLE_OUTPUT_FORMATTING](../../tied-project/requirements/REQ-IMMUTABLE_OUTPUT_FORMATTING.yaml) and related immutables)
    - YAML keys for printf-style format strings for directory operations:
      - `format_created_archive`: Format for successful archive creation messages (default: "Created archive: %s\n")
      - `format_identical_archive`: Format for identical directory messages (default: "Directory is identical to existing archive: %s\n")
@@ -255,7 +255,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
      pattern_timestamp: "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})\\s+(?P<hour>\\d{2}):(?P<minute>\\d{2}):(?P<second>\\d{2})"
      ```
 
-9. **Layered configuration inheritance** ([REQ-CFG_005](../../tied/requirements/REQ-CFG_005.yaml))
+9. **Layered configuration inheritance** ([REQ-CFG_005](../../tied-project/requirements/REQ-CFG_005.yaml))
    - Configuration files can inherit from other configuration files using explicit declarations
    - Supports flexible merge strategies for different data types (arrays, objects, primitives)
    - Prevents circular inheritance through automatic dependency tracking
@@ -455,7 +455,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ### Global options (dry-run)
 
-**Normative**: [REQ-IMMUTABLE_GLOBAL_OPTIONS](../../tied/requirements/REQ-IMMUTABLE_GLOBAL_OPTIONS.yaml), [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml).
+**Normative**: [REQ-IMMUTABLE_GLOBAL_OPTIONS](../../tied-project/requirements/REQ-IMMUTABLE_GLOBAL_OPTIONS.yaml), [REQ-CONFIGURATION](../../tied-project/requirements/REQ-CONFIGURATION.yaml).
 
 - **Dry-Run Mode**: When enabled with `--dry-run` flag:
   - For directory operations: Shows the archive filename that would be created using `format_dry_run_archive` or `template_dry_run_archive` configuration
@@ -474,7 +474,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ### Archive features
 
-**Normative**: [REQ-FILE_BACKUP](../../tied/requirements/REQ-FILE_BACKUP.yaml), [REQ-GIT_INTEGRATION](../../tied/requirements/REQ-GIT_INTEGRATION.yaml), [REQ-INCREMENTAL_DUPLICATE_PREVENTION](../../tied/requirements/REQ-INCREMENTAL_DUPLICATE_PREVENTION.yaml), exclusion behavior in [REQ-IMMUTABLE_FILE_EXCLUSION](../../tied/requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml).
+**Normative**: [REQ-FILE_BACKUP](../../tied-project/requirements/REQ-FILE_BACKUP.yaml), [REQ-GIT_INTEGRATION](../../tied-project/requirements/REQ-GIT_INTEGRATION.yaml), [REQ-INCREMENTAL_DUPLICATE_PREVENTION](../../tied-project/requirements/REQ-INCREMENTAL_DUPLICATE_PREVENTION.yaml), exclusion behavior in [REQ-IMMUTABLE_FILE_EXCLUSION](../../tied-project/requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml).
 
 ### Git Integration
 - Automatically detects Git repositories using `git rev-parse --is-inside-work-tree`
@@ -487,7 +487,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ### File Exclusion
 - Supports glob patterns for excluding files and directories
-- **Default**: built-in default list is empty unless configured; see [README.md](../../README.md) and [REQ-IMMUTABLE_FILE_EXCLUSION](../../tied/requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml)
+- **Default**: built-in default list is empty unless configured; see [README.md](../../README.md) and [REQ-IMMUTABLE_FILE_EXCLUSION](../../tied-project/requirements/REQ-IMMUTABLE_FILE_EXCLUSION.yaml)
 - Uses doublestar glob matching for advanced patterns
 - Configurable via `exclude_patterns` setting
 - Patterns are applied recursively to directory tree
@@ -503,7 +503,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ## Error Handling and Recovery
 
-**Normative**: [REQ-ERROR_HANDLING](../../tied/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-IMMUTABLE_ERROR_HANDLING](../../tied/requirements/REQ-IMMUTABLE_ERROR_HANDLING.yaml).
+**Normative**: [REQ-ERROR_HANDLING](../../tied-project/requirements/REQ-ERROR_HANDLING.yaml), [REQ-RESOURCE_MANAGEMENT](../../tied-project/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-IMMUTABLE_ERROR_HANDLING](../../tied-project/requirements/REQ-IMMUTABLE_ERROR_HANDLING.yaml).
 
 ### Structured Error Reporting
 - All operations return structured errors with specific status codes
@@ -538,7 +538,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ## Resource Management
 
-**Normative**: [REQ-RESOURCE_MANAGEMENT](../../tied/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-IMMUTABLE_RESOURCE_MANAGEMENT](../../tied/requirements/REQ-IMMUTABLE_RESOURCE_MANAGEMENT.yaml).
+**Normative**: [REQ-RESOURCE_MANAGEMENT](../../tied-project/requirements/REQ-RESOURCE_MANAGEMENT.yaml), [REQ-IMMUTABLE_RESOURCE_MANAGEMENT](../../tied-project/requirements/REQ-IMMUTABLE_RESOURCE_MANAGEMENT.yaml).
 
 ### Automatic Cleanup
 - All temporary files and directories are automatically cleaned up
@@ -560,11 +560,11 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 
 ## Build and Development Requirements
 
-**Normative**: [REQ-IMMUTABLE_BUILD_SYSTEM](../../tied/requirements/REQ-IMMUTABLE_BUILD_SYSTEM.yaml), [REQ-IMMUTABLE_CODE_QUALITY](../../tied/requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml), [REQ-MODULE_VALIDATION](../../tied/requirements/REQ-MODULE_VALIDATION.yaml). Commands: [README.md](../../README.md) and Makefile.
+**Normative**: [REQ-IMMUTABLE_BUILD_SYSTEM](../../tied-project/requirements/REQ-IMMUTABLE_BUILD_SYSTEM.yaml), [REQ-IMMUTABLE_CODE_QUALITY](../../tied-project/requirements/REQ-IMMUTABLE_CODE_QUALITY.yaml), [REQ-MODULE_VALIDATION](../../tied-project/requirements/REQ-MODULE_VALIDATION.yaml). Commands: [README.md](../../README.md) and Makefile.
 
 ## Testing Infrastructure
 
-**Normative**: [REQ-IMMUTABLE_TESTING_INFRASTRUCTURE](../../tied/requirements/REQ-IMMUTABLE_TESTING_INFRASTRUCTURE.yaml).
+**Normative**: [REQ-IMMUTABLE_TESTING_INFRASTRUCTURE](../../tied-project/requirements/REQ-IMMUTABLE_TESTING_INFRASTRUCTURE.yaml).
 
 ### Archive Corruption Testing Framework (TEST-INFRA-001-A) ✅ COMPLETED
 
@@ -672,23 +672,23 @@ if !contains(detected, CorruptionCRC) {
 This testing infrastructure provides the foundation for comprehensive verification testing, enabling systematic validation of archive verification logic against real-world corruption scenarios that would otherwise be difficult to reproduce reliably.
 
 ## Implementation Details
-For implementation requirements and constraints, use **TIED**: [tied/requirements.md](../../tied/requirements.md), [tied/architecture-decisions.md](../../tied/architecture-decisions.md), [tied/implementation-decisions.md](../../tied/implementation-decisions.md), and detail YAML under `tied/`.
+For implementation requirements and constraints, use **TIED**: [tied-bundle/docs/requirements.md](../../tied-bundle/docs/requirements.md), [tied-bundle/docs/architecture-decisions.md](../../tied-bundle/docs/architecture-decisions.md), [tied-bundle/docs/implementation-decisions.md](../../tied-bundle/docs/implementation-decisions.md), and project detail YAML under `tied-project/`.
 
 ## Platform compatibility
 
-**Normative**: [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY](../../tied/requirements/REQ-IMMUTABLE_PLATFORM_COMPATIBILITY.yaml). This tool targets macOS and Linux; paths and permissions behavior follow TIED and implementation.
+**Normative**: [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY](../../tied-project/requirements/REQ-IMMUTABLE_PLATFORM_COMPATIBILITY.yaml). This tool targets macOS and Linux; paths and permissions behavior follow TIED and implementation.
 
 ## Performance
 
-**Normative**: [REQ-PERFORMANCE](../../tied/requirements/REQ-PERFORMANCE.yaml), [REQ-IMMUTABLE_PERFORMANCE](../../tied/requirements/REQ-IMMUTABLE_PERFORMANCE.yaml).
+**Normative**: [REQ-PERFORMANCE](../../tied-project/requirements/REQ-PERFORMANCE.yaml), [REQ-IMMUTABLE_PERFORMANCE](../../tied-project/requirements/REQ-IMMUTABLE_PERFORMANCE.yaml).
 
 ## CI/CD, documentation-process, and validation (TIED)
 
 Older DOC/CICD narrative in this spec duplicated requirements that belong in TIED. Use the detail files instead:
 
-- [REQ-DOC_011](../../tied/requirements/REQ-DOC_011.yaml), [REQ-DOC_013](../../tied/requirements/REQ-DOC_013.yaml), [REQ-DOC_015](../../tied/requirements/REQ-DOC_015.yaml), [REQ-DOC_016](../../tied/requirements/REQ-DOC_016.yaml)
-- Pipeline / build: [ARCH-CICD_PIPELINE](../../tied/architecture-decisions/ARCH-CICD_PIPELINE.yaml), [README.md](../../README.md) CI section
+- [REQ-DOC_011](../../tied-project/requirements/REQ-DOC_011.yaml), [REQ-DOC_013](../../tied-project/requirements/REQ-DOC_013.yaml), [REQ-DOC_015](../../tied-project/requirements/REQ-DOC_015.yaml), [REQ-DOC_016](../../tied-project/requirements/REQ-DOC_016.yaml)
+- Pipeline / build: [ARCH-CICD_PIPELINE](../../tied-project/architecture-decisions/ARCH-CICD_PIPELINE.yaml), [README.md](../../README.md) CI section
 
 ## Multi-file configuration search path and inheritance
 
-**Normative**: Processing order, inheritance, and merge behavior are defined under [REQ-CONFIGURATION](../../tied/requirements/REQ-CONFIGURATION.yaml) and [REQ-CFG_005](../../tied/requirements/REQ-CFG_005.yaml) (all files in the search path are considered; earlier files take precedence over later files; inheritance chains merged per those requirements).
+**Normative**: Processing order, inheritance, and merge behavior are defined under [REQ-CONFIGURATION](../../tied-project/requirements/REQ-CONFIGURATION.yaml) and [REQ-CFG_005](../../tied-project/requirements/REQ-CFG_005.yaml) (all files in the search path are considered; earlier files take precedence over later files; inheritance chains merged per those requirements).

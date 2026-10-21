@@ -1,0 +1,37 @@
+execution_evidence:
+  request: PLAN-BKPDIR-TWO-FOLDER-CLEANUP
+steps:
+  - slug: session-bootstrap
+    disposition: completed
+  - slug: translate-sponsor-intent
+    disposition: completed
+  - slug: change-definition
+    disposition: completed
+  - slug: impact-discovery
+    disposition: completed
+  - slug: risk-assessment
+    disposition: completed
+  - slug: test-strategy
+    disposition: completed
+  - slug: author-requirement
+    disposition: not_applicable
+  - slug: unit-test-red
+    disposition: not_applicable
+  - slug: unit-test-green
+    disposition: not_applicable
+  - slug: sub-adversarial-inquiry-pass
+    disposition: not_applicable
+    policy: minimal-depth-no-inquiry
+    rationale: Hygiene-only layout cleanup; depth_tier minimal per CITDP-BKPDIR-TWO-FOLDER-CLEANUP.
+  - slug: sync-tied-stack
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/citdp/CITDP-BKPDIR-TWO-FOLDER-CLEANUP.yaml
+  - slug: verification-gate
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/verification-summary.md
+  - slug: traceable-commit
+    disposition: pending

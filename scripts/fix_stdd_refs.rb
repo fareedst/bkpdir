@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Ruby 3.0.3 script to update stdd/ path references to tied/ in tied/*.md files.
+# Ruby 3.0.3 script to update stdd/ path references to tied-project/ in tied-project/*.md files.
 # Also updates stdd/ references in root-level files.
 
 require 'find'
@@ -10,23 +10,23 @@ DRY_RUN = ARGV.include?('--dry-run')
 ROOT = File.expand_path('..', __dir__)
 
 REPLACEMENTS = {
-  'stdd/requirements.md' => 'tied/requirements.md',
-  'stdd/architecture-decisions.md' => 'tied/architecture-decisions.md',
-  'stdd/implementation-decisions.md' => 'tied/implementation-decisions.md',
-  'stdd/semantic-tokens.md' => 'tied/semantic-tokens.md',
-  'stdd/ai-principles.md' => 'tied/ai-principles.md',
-  'stdd/ai-assistant-compliance.md' => 'tied/ai-assistant-compliance.md',
-  'stdd/merge-strategy-conflict-resolution.md' => 'tied/merge-strategy-conflict-resolution.md',
-  'stdd/tasks.md' => 'tied/tasks.md',
-  '`stdd/' => '`tied/',
-  'stdd/*.md' => 'tied/*.md',
+  'stdd/requirements.md' => 'tied-project/requirements.md',
+  'stdd/architecture-decisions.md' => 'tied-project/architecture-decisions.md',
+  'stdd/implementation-decisions.md' => 'tied-project/implementation-decisions.md',
+  'stdd/semantic-tokens.md' => 'tied-bundle/docs/semantic-tokens.md',
+  'stdd/ai-principles.md' => 'tied-project/ai-principles.md',
+  'stdd/ai-assistant-compliance.md' => 'tied-project/ai-assistant-compliance.md',
+  'stdd/merge-strategy-conflict-resolution.md' => 'tied-project/merge-strategy-conflict-resolution.md',
+  'stdd/tasks.md' => 'tied-bundle/docs/tasks.md',
+  '`stdd/' => '`tied-project/',
+  'stdd/*.md' => 'tied-project/*.md',
 }
 
 STDD_PATH_RE = /\bstdd\//
 
 def target_files
   files = []
-  # tied/ markdown files
+  # tied-project/ markdown files
   Dir.glob(File.join(ROOT, 'tied', '*.md')).each { |f| files << f }
   # Root-level files
   %w[README.md CHANGELOG.md .ai-agent-instructions ai-principles.md].each do |name|

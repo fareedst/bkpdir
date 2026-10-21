@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
 TIED = REPO / "tied"
 IMPL_DIR = TIED / "implementation-decisions"
 

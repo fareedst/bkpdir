@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-IMPL_DIR = REPO / "tied/implementation-decisions"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
 
 
 def parse_sidecar_leads(sidecar_path: Path) -> list[tuple[str, str]]:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Parse IMPL tokens from tied/spec/formal-spec-registry.yaml. [REQ-PSEUDOCODE_FORMAL_VERIFICATION]"""
+"""Parse IMPL tokens from tied-project/spec/formal-spec-registry.yaml. [REQ-PSEUDOCODE_FORMAL_VERIFICATION]"""
 from __future__ import annotations
 
 import re
@@ -15,7 +15,7 @@ def registry_path(explicit: Path | None = None) -> Path:
     env = __import__("os").environ.get("FORMAL_SPEC_REGISTRY_PATH")
     if env:
         return Path(env)
-    return Path("tied/spec/formal-spec-registry.yaml")
+    return Path("tied-project/spec/formal-spec-registry.yaml")
 
 
 def iter_tokens(path: Path | None = None) -> list[str]:

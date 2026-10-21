@@ -1,0 +1,1573 @@
+{
+  "ok": true,
+  "gate_mode_applied": true,
+  "schema_version": "pseudocode-analysis-report.v1",
+  "grammar_version": "pseudocode-grammar.v1",
+  "analyzer_version": "1.0.0",
+  "proof_boundary": "Deterministic static analysis of essence_pseudocode within declared grammar and budgets; not runtime execution, not test execution, not complete behavioral verification.",
+  "token": "IMPL-CFG_006",
+  "input_identity": {
+    "algorithm": "sha256",
+    "hash": "ed9ce159ad6e28aa941bc44102518b2683b34e97863a621669c0e29d0fc96991",
+    "byte_length": 6153
+  },
+  "budgets_applied": {
+    "requested": {},
+    "effective": {
+      "max_parse_nodes": 5000,
+      "max_procedures": 256,
+      "max_cfg_blocks_per_procedure": 512,
+      "max_call_graph_edges": 2048,
+      "max_fixed_point_iterations": 32,
+      "max_path_conditions": 64,
+      "max_report_diagnostics": 500,
+      "max_source_bytes": 512000,
+      "max_cfg_join_iterations": 32
+    }
+  },
+  "truncated": false,
+  "diagnostics_truncated": false,
+  "sections": {
+    "parse": {
+      "procedure_count": 8,
+      "parse_node_count": 54,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-CFG_006",
+        "IMPL-CONFIG_DISPLAY_FLATTENING",
+        "REQ-CFG_006"
+      ],
+      "unsupported_syntax_count": 21
+    },
+    "symbols": {
+      "procedures": [
+        "CONFIG_FIELD_CACHE",
+        "DETECT_MERGE_STRATEGY_FROM_FIELD",
+        "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+        "EMBEDDED_MINITEST_MERGE_STRATEGY",
+        "FORMAT_FIELD_VALUE",
+        "GET_ALL_CONFIG_FIELDS",
+        "GET_FIELD_VALUE_BY_PATH",
+        "UPDATE_FIELD_VALUES"
+      ],
+      "symbols": [
+        {
+          "name": "CONFIG_FIELD_CACHE",
+          "kind": "procedure",
+          "declared_line": 140
+        },
+        {
+          "name": "COPY",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "UPDATE_FIELD_VALUES"
+        },
+        {
+          "name": "DEFAULT",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD"
+        },
+        {
+          "name": "DEFAULT",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD"
+        },
+        {
+          "name": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "kind": "procedure",
+          "declared_line": 118
+        },
+        {
+          "name": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "kind": "procedure",
+          "declared_line": 97
+        },
+        {
+          "name": "EMBEDDED_MINITEST_MERGE_STRATEGY",
+          "kind": "procedure",
+          "declared_line": 151
+        },
+        {
+          "name": "FOR",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "EMBEDDED_MINITEST_MERGE_STRATEGY"
+        },
+        {
+          "name": "FORMAT_FIELD_VALUE",
+          "kind": "procedure",
+          "declared_line": 80
+        },
+        {
+          "name": "GET_ALL_CONFIG_FIELDS",
+          "kind": "procedure",
+          "declared_line": 20
+        },
+        {
+          "name": "GET_FIELD_VALUE_BY_PATH",
+          "kind": "procedure",
+          "declared_line": 60
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "FORMAT_FIELD_VALUE"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "GET_ALL_CONFIG_FIELDS"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "GET_FIELD_VALUE_BY_PATH"
+        },
+        {
+          "name": "SET",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "UPDATE_FIELD_VALUES"
+        },
+        {
+          "name": "SORT",
+          "kind": "local",
+          "declared_line": 11,
+          "procedure": "GET_ALL_CONFIG_FIELDS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 8,
+          "procedure": "CONFIG_FIELD_CACHE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 14,
+          "procedure": "FORMAT_FIELD_VALUE"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "UPDATE_FIELD_VALUES"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 17,
+          "procedure": "GET_FIELD_VALUE_BY_PATH"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 19,
+          "procedure": "GET_ALL_CONFIG_FIELDS"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 19,
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD"
+        },
+        {
+          "name": "SWITCH",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "FORMAT_FIELD_VALUE"
+        },
+        {
+          "name": "UPDATE_FIELD_VALUES",
+          "kind": "procedure",
+          "declared_line": 42
+        }
+      ],
+      "defined_calls": [],
+      "unresolved_calls": []
+    },
+    "cfg": {
+      "procedures": [
+        {
+          "procedure": "GET_ALL_CONFIG_FIELDS",
+          "nodes": [
+            {
+              "id": "GET_ALL_CONFIG_FIELDS::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 61
+              }
+            },
+            {
+              "id": "GET_ALL_CONFIG_FIELDS::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 21
+              }
+            },
+            {
+              "id": "GET_ALL_CONFIG_FIELDS::n3",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 3,
+                "end_line": 14,
+                "end_column": 32
+              }
+            },
+            {
+              "id": "GET_ALL_CONFIG_FIELDS::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 19,
+              "span": {
+                "line": 19,
+                "column": 1,
+                "end_line": 19,
+                "end_column": 60
+              }
+            },
+            {
+              "id": "GET_ALL_CONFIG_FIELDS::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 20
+            },
+            {
+              "id": "GET_ALL_CONFIG_FIELDS::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 20
+            }
+          ],
+          "edges": [
+            {
+              "from": "GET_ALL_CONFIG_FIELDS::entry",
+              "to": "GET_ALL_CONFIG_FIELDS::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_ALL_CONFIG_FIELDS::n1",
+              "to": "GET_ALL_CONFIG_FIELDS::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_ALL_CONFIG_FIELDS::n2",
+              "to": "GET_ALL_CONFIG_FIELDS::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_ALL_CONFIG_FIELDS::n3",
+              "to": "GET_ALL_CONFIG_FIELDS::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_ALL_CONFIG_FIELDS::n4",
+              "to": "GET_ALL_CONFIG_FIELDS::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GET_ALL_CONFIG_FIELDS::entry",
+            "GET_ALL_CONFIG_FIELDS::exit",
+            "GET_ALL_CONFIG_FIELDS::n1",
+            "GET_ALL_CONFIG_FIELDS::n2",
+            "GET_ALL_CONFIG_FIELDS::n3",
+            "GET_ALL_CONFIG_FIELDS::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "UPDATE_FIELD_VALUES",
+          "nodes": [
+            {
+              "id": "UPDATE_FIELD_VALUES::n1",
+              "kind": "loop",
+              "label": "for",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 33
+              }
+            },
+            {
+              "id": "UPDATE_FIELD_VALUES::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 5,
+                "end_line": 9,
+                "end_column": 17
+              }
+            },
+            {
+              "id": "UPDATE_FIELD_VALUES::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 5,
+                "end_line": 10,
+                "end_column": 69
+              }
+            },
+            {
+              "id": "UPDATE_FIELD_VALUES::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 41
+              }
+            },
+            {
+              "id": "UPDATE_FIELD_VALUES::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 42
+            },
+            {
+              "id": "UPDATE_FIELD_VALUES::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 42
+            }
+          ],
+          "edges": [
+            {
+              "from": "UPDATE_FIELD_VALUES::entry",
+              "to": "UPDATE_FIELD_VALUES::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "UPDATE_FIELD_VALUES::n1",
+              "to": "UPDATE_FIELD_VALUES::n1",
+              "kind": "loop_back"
+            },
+            {
+              "from": "UPDATE_FIELD_VALUES::n1",
+              "to": "UPDATE_FIELD_VALUES::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "UPDATE_FIELD_VALUES::n2",
+              "to": "UPDATE_FIELD_VALUES::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "UPDATE_FIELD_VALUES::n3",
+              "to": "UPDATE_FIELD_VALUES::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "UPDATE_FIELD_VALUES::n4",
+              "to": "UPDATE_FIELD_VALUES::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "UPDATE_FIELD_VALUES::entry",
+            "UPDATE_FIELD_VALUES::exit",
+            "UPDATE_FIELD_VALUES::n1",
+            "UPDATE_FIELD_VALUES::n2",
+            "UPDATE_FIELD_VALUES::n3",
+            "UPDATE_FIELD_VALUES::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GET_FIELD_VALUE_BY_PATH",
+          "nodes": [
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::n1",
+              "kind": "loop",
+              "label": "for",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 36
+              }
+            },
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 5,
+                "end_line": 9,
+                "end_column": 47
+              }
+            },
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 5,
+                "end_line": 10,
+                "end_column": 28
+              }
+            },
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::n4",
+              "kind": "statement",
+              "label": "RETURN",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 3,
+                "end_line": 12,
+                "end_column": 24
+              }
+            },
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 17,
+              "span": {
+                "line": 17,
+                "column": 1,
+                "end_line": 17,
+                "end_column": 52
+              }
+            },
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 60
+            },
+            {
+              "id": "GET_FIELD_VALUE_BY_PATH::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 60
+            }
+          ],
+          "edges": [
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::entry",
+              "to": "GET_FIELD_VALUE_BY_PATH::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::n1",
+              "to": "GET_FIELD_VALUE_BY_PATH::n1",
+              "kind": "loop_back"
+            },
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::n1",
+              "to": "GET_FIELD_VALUE_BY_PATH::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::n2",
+              "to": "GET_FIELD_VALUE_BY_PATH::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::n3",
+              "to": "GET_FIELD_VALUE_BY_PATH::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::n4",
+              "to": "GET_FIELD_VALUE_BY_PATH::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "GET_FIELD_VALUE_BY_PATH::n5",
+              "to": "GET_FIELD_VALUE_BY_PATH::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GET_FIELD_VALUE_BY_PATH::entry",
+            "GET_FIELD_VALUE_BY_PATH::exit",
+            "GET_FIELD_VALUE_BY_PATH::n1",
+            "GET_FIELD_VALUE_BY_PATH::n2",
+            "GET_FIELD_VALUE_BY_PATH::n3",
+            "GET_FIELD_VALUE_BY_PATH::n4",
+            "GET_FIELD_VALUE_BY_PATH::n5"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "FORMAT_FIELD_VALUE",
+          "nodes": [
+            {
+              "id": "FORMAT_FIELD_VALUE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 34
+              }
+            },
+            {
+              "id": "FORMAT_FIELD_VALUE::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 79
+              }
+            },
+            {
+              "id": "FORMAT_FIELD_VALUE::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 1,
+                "end_line": 14,
+                "end_column": 48
+              }
+            },
+            {
+              "id": "FORMAT_FIELD_VALUE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 80
+            },
+            {
+              "id": "FORMAT_FIELD_VALUE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 80
+            }
+          ],
+          "edges": [
+            {
+              "from": "FORMAT_FIELD_VALUE::entry",
+              "to": "FORMAT_FIELD_VALUE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "FORMAT_FIELD_VALUE::n1",
+              "to": "FORMAT_FIELD_VALUE::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "FORMAT_FIELD_VALUE::n2",
+              "to": "FORMAT_FIELD_VALUE::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "FORMAT_FIELD_VALUE::n3",
+              "to": "FORMAT_FIELD_VALUE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "FORMAT_FIELD_VALUE::entry",
+            "FORMAT_FIELD_VALUE::exit",
+            "FORMAT_FIELD_VALUE::n1",
+            "FORMAT_FIELD_VALUE::n2",
+            "FORMAT_FIELD_VALUE::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "nodes": [
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 67
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 64
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 33
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 45
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 3,
+                "end_line": 12,
+                "end_column": 65
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 3,
+                "end_line": 13,
+                "end_column": 18
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n7",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 49
+              }
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 97
+            },
+            {
+              "id": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 97
+            }
+          ],
+          "edges": [
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::entry",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n1",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n2",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n3",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n4",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n5",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n6",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n7",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n7",
+              "to": "DETERMINE_MERGE_STRATEGY_FOR_FIELD::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::entry",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::exit",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n1",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n2",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n3",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n4",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n5",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n6",
+            "DETERMINE_MERGE_STRATEGY_FOR_FIELD::n7"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "nodes": [
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 30
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 30
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 34
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 39
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 3,
+                "end_line": 12,
+                "end_column": 33
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n6",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 3,
+                "end_line": 13,
+                "end_column": 45
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n7",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 3,
+                "end_line": 14,
+                "end_column": 18
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::n8",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 19,
+              "span": {
+                "line": 19,
+                "column": 1,
+                "end_line": 19,
+                "end_column": 56
+              }
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 118
+            },
+            {
+              "id": "DETECT_MERGE_STRATEGY_FROM_FIELD::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 118
+            }
+          ],
+          "edges": [
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::entry",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n1",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n2",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n3",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n4",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n5",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n6",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n6",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n7",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n7",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::n8",
+              "kind": "sequential"
+            },
+            {
+              "from": "DETECT_MERGE_STRATEGY_FROM_FIELD::n8",
+              "to": "DETECT_MERGE_STRATEGY_FROM_FIELD::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::entry",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::exit",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n1",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n2",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n3",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n4",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n5",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n6",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n7",
+            "DETECT_MERGE_STRATEGY_FROM_FIELD::n8"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "CONFIG_FIELD_CACHE",
+          "nodes": [
+            {
+              "id": "CONFIG_FIELD_CACHE::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 1,
+                "end_line": 8,
+                "end_column": 52
+              }
+            },
+            {
+              "id": "CONFIG_FIELD_CACHE::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 140
+            },
+            {
+              "id": "CONFIG_FIELD_CACHE::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 140
+            }
+          ],
+          "edges": [
+            {
+              "from": "CONFIG_FIELD_CACHE::entry",
+              "to": "CONFIG_FIELD_CACHE::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "CONFIG_FIELD_CACHE::n1",
+              "to": "CONFIG_FIELD_CACHE::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "CONFIG_FIELD_CACHE::entry",
+            "CONFIG_FIELD_CACHE::exit",
+            "CONFIG_FIELD_CACHE::n1"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "EMBEDDED_MINITEST_MERGE_STRATEGY",
+          "nodes": [
+            {
+              "id": "EMBEDDED_MINITEST_MERGE_STRATEGY::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 8,
+              "span": {
+                "line": 8,
+                "column": 3,
+                "end_line": 8,
+                "end_column": 71
+              }
+            },
+            {
+              "id": "EMBEDDED_MINITEST_MERGE_STRATEGY::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 151
+            },
+            {
+              "id": "EMBEDDED_MINITEST_MERGE_STRATEGY::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 151
+            }
+          ],
+          "edges": [
+            {
+              "from": "EMBEDDED_MINITEST_MERGE_STRATEGY::entry",
+              "to": "EMBEDDED_MINITEST_MERGE_STRATEGY::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "EMBEDDED_MINITEST_MERGE_STRATEGY::n1",
+              "to": "EMBEDDED_MINITEST_MERGE_STRATEGY::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "EMBEDDED_MINITEST_MERGE_STRATEGY::entry",
+            "EMBEDDED_MINITEST_MERGE_STRATEGY::exit",
+            "EMBEDDED_MINITEST_MERGE_STRATEGY::n1"
+          ],
+          "truncated": false
+        }
+      ]
+    },
+    "call_graph": {
+      "edges": [],
+      "unresolved": [],
+      "truncated": false
+    },
+    "abstract": {
+      "facts": [
+        {
+          "variable": "STEP",
+          "procedure": "CONFIG_FIELD_CACHE",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "DEFAULT",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "STEP",
+          "procedure": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "fact": "defined",
+          "line": 19
+        },
+        {
+          "variable": "DEFAULT",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "IF",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "STEP",
+          "procedure": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "IF",
+          "procedure": "FORMAT_FIELD_VALUE",
+          "fact": "defined",
+          "line": 8
+        },
+        {
+          "variable": "STEP",
+          "procedure": "FORMAT_FIELD_VALUE",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "SWITCH",
+          "procedure": "FORMAT_FIELD_VALUE",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "IF",
+          "procedure": "GET_ALL_CONFIG_FIELDS",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "SORT",
+          "procedure": "GET_ALL_CONFIG_FIELDS",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GET_ALL_CONFIG_FIELDS",
+          "fact": "defined",
+          "line": 19
+        },
+        {
+          "variable": "IF",
+          "procedure": "GET_FIELD_VALUE_BY_PATH",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "IF",
+          "procedure": "GET_FIELD_VALUE_BY_PATH",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GET_FIELD_VALUE_BY_PATH",
+          "fact": "defined",
+          "line": 17
+        },
+        {
+          "variable": "COPY",
+          "procedure": "UPDATE_FIELD_VALUES",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "SET",
+          "procedure": "UPDATE_FIELD_VALUES",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "STEP",
+          "procedure": "UPDATE_FIELD_VALUES",
+          "fact": "defined",
+          "line": 15
+        }
+      ],
+      "path_conditions": [],
+      "effect_gaps": [],
+      "termination_unknown": [
+        "GET_FIELD_VALUE_BY_PATH",
+        "UPDATE_FIELD_VALUES"
+      ]
+    },
+    "obligations": {
+      "decision_tables": [],
+      "path_obligations": []
+    },
+    "traceability": {
+      "block_edges": [
+        {
+          "block": "CONFIG_FIELD_CACHE",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 140
+        },
+        {
+          "block": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+          "tokens": [
+            "ARCH-CFG_006",
+            "ARCH-SYSTEM_COMPONENTS",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 118
+        },
+        {
+          "block": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 97
+        },
+        {
+          "block": "EMBEDDED_MINITEST_MERGE_STRATEGY",
+          "tokens": [],
+          "line": 151
+        },
+        {
+          "block": "FORMAT_FIELD_VALUE",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 80
+        },
+        {
+          "block": "GET_ALL_CONFIG_FIELDS",
+          "tokens": [
+            "ARCH-CFG_006",
+            "ARCH-SYSTEM_COMPONENTS",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 20
+        },
+        {
+          "block": "GET_FIELD_VALUE_BY_PATH",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 60
+        },
+        {
+          "block": "UPDATE_FIELD_VALUES",
+          "tokens": [
+            "ARCH-CFG_006",
+            "ARCH-SYSTEM_COMPONENTS",
+            "IMPL-CFG_006",
+            "REQ-CFG_006"
+          ],
+          "line": 42
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "severity": "info",
+      "code": "TERMINATION_UNKNOWN",
+      "message": "Termination unknown for loop in GET_FIELD_VALUE_BY_PATH",
+      "line": 8,
+      "block": "GET_FIELD_VALUE_BY_PATH"
+    },
+    {
+      "severity": "info",
+      "code": "TERMINATION_UNKNOWN",
+      "message": "Termination unknown for loop in UPDATE_FIELD_VALUES",
+      "line": 8,
+      "block": "UPDATE_FIELD_VALUES"
+    },
+    {
+      "severity": "warning",
+      "code": "DEREF_OBLIGATION",
+      "message": "Dereference obligation for IF in GET_FIELD_VALUE_BY_PATH",
+      "line": 9,
+      "block": "GET_FIELD_VALUE_BY_PATH",
+      "span": {
+        "line": 9,
+        "column": 5,
+        "end_line": 9,
+        "end_column": 47
+      }
+    },
+    {
+      "severity": "warning",
+      "code": "MISSING_CONTRACT_FIELD",
+      "message": "Block EMBEDDED_MINITEST_MERGE_STRATEGY does not reference target token IMPL-CFG_006",
+      "line": 151,
+      "block": "EMBEDDED_MINITEST_MERGE_STRATEGY"
+    }
+  ],
+  "unsupported_syntax": [
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: getCachedFields: IF valid AND structHash matches THEN return copy ELSE nil",
+      "span": {
+        "line": 2,
+        "column": 3,
+        "end_line": 2,
+        "end_column": 76
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: setCachedFields: store copy, hash, timestamp, valid=true",
+      "span": {
+        "line": 3,
+        "column": 3,
+        "end_line": 3,
+        "end_column": 58
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::EMBEDDED_MINITEST_MERGE_STRATEGY",
+      "span": {
+        "line": 7,
+        "column": 1,
+        "end_line": 7,
+        "end_column": 55
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: cached = globalFieldCache.getCachedFields()",
+      "span": {
+        "line": 8,
+        "column": 3,
+        "end_line": 8,
+        "end_column": 45
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: table-driven test asserts determineMergeStrategyForField paths map to expected strategies.",
+      "span": {
+        "line": 10,
+        "column": 1,
+        "end_line": 10,
+        "end_column": 143
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: fields = reflectConfigFields(TYPE_OF(cfg), VALUE_OF(cfg), \"\", \"\")  # see IMPL-CONFIG_DISPLAY_FLATTENING",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 105
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: current = FieldByName(part)",
+      "span": {
+        "line": 11,
+        "column": 5,
+        "end_line": 11,
+        "end_column": 31
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: metadata = COPY fields WITH Value = nil AND Importance filled",
+      "span": {
+        "line": 12,
+        "column": 3,
+        "end_line": 12,
+        "end_column": 63
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+      "span": {
+        "line": 13,
+        "column": 1,
+        "end_line": 13,
+        "end_column": 57
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: globalFieldCache.setCachedFields(metadata)",
+      "span": {
+        "line": 13,
+        "column": 3,
+        "end_line": 13,
+        "end_column": 44
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::GET_FIELD_VALUE_BY_PATH",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 46
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::FORMAT_FIELD_VALUE",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 41
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: infer append/prepend/merge/override/default from field path patterns and value comparison to old value.",
+      "span": {
+        "line": 16,
+        "column": 1,
+        "end_line": 16,
+        "end_column": 156
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — How: split dot path, dereference pointers, walk struct fields by name, return leaf interface.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 166
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::DETECT_MERGE_STRATEGY_FROM_FIELD",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 55
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::UPDATE_FIELD_VALUES",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 42
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CFG_006::CONFIG_FIELD_CACHE",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 41
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: format nil, bool, numeric, string, string-slice, pointer, and default kinds for config display.",
+      "span": {
+        "line": 19,
+        "column": 1,
+        "end_line": 19,
+        "end_column": 148
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: map field shape flags and name hints to append, merge, prepend, or override.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 129
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — How: copy cached metadata and populate Value via getFieldValueByPath or zero value on failure.",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 21,
+        "end_column": 167
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — How: RWMutex-backed cache invalidated when Config struct type hash changes.",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 21,
+        "end_column": 148
+      }
+    }
+  ],
+  "unknowns": [
+    {
+      "cause": "budget_exceeded",
+      "message": "Fixed-point iteration budget exceeded in EMBEDDED_MINITEST_MERGE_STRATEGY",
+      "procedure": "EMBEDDED_MINITEST_MERGE_STRATEGY",
+      "line": 8,
+      "proof_boundary": "Abstract facts beyond budget are unknown"
+    }
+  ]
+}

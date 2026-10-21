@@ -8,13 +8,13 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-SCOPE_REG = REPO / "tied/spec/req-criteria-scope-registry.yaml"
-IMPL_DIR = REPO / "tied/implementation-decisions"
+SCOPE_REG = REPO / "tied-project/spec/req-criteria-scope-registry.yaml"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
 REQ_DIRS = (
-    REPO / "tied/requirements",
-    REPO / "tied/methodology/requirements",
+    REPO / "tied-project/requirements",
+    REPO / "tied-bundle/requirements",
 )
-IMPL_DECISION_DIRS = (REPO / "tied/implementation-decisions",)
+IMPL_DECISION_DIRS = (REPO / "tied-project/implementation-decisions",)
 
 sys_path = REPO / "scripts"
 import sys
@@ -153,7 +153,7 @@ def main() -> int:
     header = """# REQ criteria scope per (IMPL, REQ) pair for CRIT-001 scoped audit.
 # [REQ-PSEUDOCODE_FORMAL_VERIFICATION] [IMPL-SPEC_CTL]
 # Seed: scripts/seed_req_criteria_scopes.py
-# Runbook: tied/docs/crit001-corpus-alignment-runbook.md
+# Runbook: tied-bundle/docs/crit001-corpus-alignment-runbook.md
 """
     SCOPE_REG.write_text(header + yaml.dump(data, default_flow_style=False, sort_keys=False, allow_unicode=True))
     primary_n = sum(1 for s in scopes if s["role"] == "primary")

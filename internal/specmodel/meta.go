@@ -10,7 +10,7 @@ import "bkpdir/internal/specparse"
 // - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: document behavioral contracts in TIED YAML and link each contract to requirement tokens.
 // - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: build semantic-token dependency graph from registry cross-references for change-impact analysis.
 // - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] — How: generate Markdown registry tables from normalized token artifacts for semantic-tokens.md.
-// - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] — How: replace legacy project token YAML with pointer stubs after migration to tied/semantic-tokens.yaml.
+// - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] — How: replace legacy project token YAML with pointer stubs after migration to tied-project/semantic-tokens.yaml.
 // - [IMPL-TOKEN_COVERAGE_AUDIT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] — How: aggregate module coverage scans into a cross-module audit report and remediation plan.
 
 // OracleSidecarFormalReady verifies L1/L2 sidecar shape for doc/tooling IMPLs.

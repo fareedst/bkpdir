@@ -1,0 +1,84 @@
+IMPL-CFG_MIXED_MODE_MERGE_FIX:
+  code_locations:
+    files:
+      - description: applyMergeStrategies() function containing the accumulate field strategy override logic
+        path: config.go
+    functions:
+      - description: Contains the MergeBehaviorAccumulate override logic
+        file: config.go
+        line: 1909
+        name: applyMergeStrategies
+  cross_references:
+    - ARCH-CFG_001
+    - ARCH-CFG_005
+    - REQ-CFG_005
+    - REQ-CONFIGURATION
+  implementation_approach:
+    details:
+      - Explicit prefixes (!, +, ^, =) keep their strategy as-is
+      - For MergeBehaviorAccumulate fields with "override" strategy and no explicit prefix, change to "merge"
+      - In applyMergeStrategies(), after processing keys, iterate operations
+      - MergeBehaviorPrecedence fields are unaffected (keep strategy as-is)
+      - This applies in ALL contexts (inheritance chains AND sequential file processing)
+    summary: |-
+      Applies per-field merge behavior when combining config sources: accumulate fields default to merge unless an explicit YAML prefix (!, +, ^, =) is present, with special handling for exclude_patterns and inheritance vs sequential context.
+      INPUT: dst and src Config, inheritContext, rawSrcMap, initialDefaultCfg, explicitlySetFields, excludeUnprefixedReplacesBuiltinDefaults
+      OUTPUT: merged Config or error
+      DATA: processed merge operations map, fieldMergeBehaviors, hasExplicitPrefix map
+      Canonical behavior: tied-project/implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: AI agent
+  name: Mixed-Mode Merge Strategy Fix
+  rationale:
+    benefits:
+      - Consistent accumulate behavior regardless of inheritance vs sequential
+      - exclude_patterns correctly merges with defaults in all contexts
+      - Explicit ! prefix still allows full replacement when needed
+    problems_solved:
+      - '"override" strategy was not changed to "merge" for accumulate fields in all contexts'
+      - Accumulate fields lost default values when first file provided new values
+      - Test expectations did not match CFG-005 merge requirement
+    why: |-
+      Bug fix: exclude_patterns and other MergeBehaviorAccumulate fields were not consistently merging with defaults per CFG-005 requirement.
+      The logic was incorrectly keeping "override" strategy for first file in sequential processing, causing defaults to be replaced instead of merged.
+      Test expectations were misaligned with CFG-005 requirement - updated to reflect correct merge behavior.
+      Ensures consistent behavior: accumulate fields always merge (unless explicit replace prefix), regardless of context.
+  related_decisions:
+    composed_with:
+      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    depends_on:
+      - IMPL-CFG_MERGE_BEHAVIOR_REGISTRY
+    see_also:
+      - IMPL-CFG_PRECEDENCE_FIX
+      - IMPL-EXCLUDE_MERGE_FIX
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+    code_annotations:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+      - IMPL-CFG_MIXED_MODE_MERGE_FIX
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    requirements:
+      - REQ-CFG_005
+      - REQ-CONFIGURATION
+    tests:
+      - TestEmptyArrayHandling
+      - TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE
+      - TestLoadConfigMultipleFiles
+      - TestMergeStrategiesInSequentialFiles
+      - TestMixedFieldBehaviors

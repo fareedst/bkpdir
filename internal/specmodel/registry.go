@@ -17,15 +17,15 @@ type OracleEntry struct {
 	Status          string   `yaml:"status"`
 }
 
-// OracleRegistry is tied/spec/oracle-registry.yaml.
+// OracleRegistry is tied-project/spec/oracle-registry.yaml.
 type OracleRegistry struct {
 	OracleTargets int           `yaml:"oracle_targets"`
 	Oracles       []OracleEntry `yaml:"oracles"`
 }
 
-// LoadOracleRegistry reads tied/spec/oracle-registry.yaml from repoRoot.
+// LoadOracleRegistry reads tied-project/spec/oracle-registry.yaml from repoRoot.
 func LoadOracleRegistry(repoRoot string) (*OracleRegistry, error) {
-	path := filepath.Join(repoRoot, "tied", "spec", "oracle-registry.yaml")
+	path := filepath.Join(repoRoot, "tied-project", "spec", "oracle-registry.yaml")
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err

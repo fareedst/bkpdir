@@ -12,14 +12,14 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-QUEUE = REPO / "tied/docs/impl-pseudocode-improvement-queue.yaml"
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
+QUEUE = REPO / "tied-bundle/docs/impl-pseudocode-improvement-queue.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
 
 QUEUE_HEADER = """# IMPL Logic Alignment improvement queue
 # Batch priorities: P0 orders 1-42, P1 orders 43-60, P2 orders 61-73
 # Reset: scripts/reset_impl_logic_audit_queue.py
 # Complete: scripts/mark_impl_logic_audit_complete.py IMPL-TOKEN [--logic-level L3]
-# REQ audit runbook: tied/docs/impl-deep-sync-agent-guide.md §14
+# REQ audit runbook: tied-bundle/docs/impl-deep-sync-agent-guide.md §14
 # Do NOT use seed_logic_verification_tracking.py to set req_audit_pass.
 """
 
@@ -61,7 +61,7 @@ def main() -> int:
     go_refs = {t["token"]: t.get("go_refs", 0) for t in checklist["impl_tokens"]}
     formal = {t["token"]: t.get("formal_spec", False) for t in checklist["impl_tokens"]}
 
-    oracle_reg = REPO / "tied/spec/oracle-registry.yaml"
+    oracle_reg = REPO / "tied-project/spec/oracle-registry.yaml"
     in_oracle: set[str] = set()
     if oracle_reg.exists():
         reg = yaml.safe_load(oracle_reg.read_text())
