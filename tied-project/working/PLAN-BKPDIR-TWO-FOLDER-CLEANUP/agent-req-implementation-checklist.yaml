@@ -34,4 +34,7 @@ steps:
       - kind: file_path
         path: tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/verification-summary.md
   - slug: traceable-commit
-    disposition: pending
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/working/PLAN-BKPDIR-TWO-FOLDER-CLEANUP/evidence/traceable-commit-evidence.md

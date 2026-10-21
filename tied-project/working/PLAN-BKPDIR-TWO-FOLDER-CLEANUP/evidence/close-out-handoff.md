@@ -13,4 +13,4 @@
 
 ## Commit
 
-See git log for SHA after traceable-commit step.
+**SHA:** `62a4bab` — `chore(tied): complete bkpdir two-folder client layout`
