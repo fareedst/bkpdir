@@ -34,7 +34,7 @@ EFFECTS: pure
     IF modifiedFiles empty: PrintIncrementalSkippedNoChanges(); RETURN nil
   CONTINUE incremental archive creation with modifiedFiles
 
-- [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] — How: when diff lists only deleted paths (incremental zip cannot store tombstones), skip and do not write an empty incremental that would erase chain overlays.
+  # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] — How: when diff lists only deleted paths (incremental zip cannot store tombstones), skip and do not write an empty incremental that would erase chain overlays.
 
 ## PRINT_INCREMENTAL_SKIPPED_NO_CHANGES
 
