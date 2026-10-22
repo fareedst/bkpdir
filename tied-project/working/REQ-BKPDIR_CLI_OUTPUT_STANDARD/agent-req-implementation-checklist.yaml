@@ -829,7 +829,11 @@ steps:
       retry_count: '0'
       returned_from: []
       state_history: []
-      status: pending
+      status: completed
+      evidence_refs: &ref_5
+        - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/verification-evidence-manifest.v1.json
+    disposition: completed
+    evidence_refs: *ref_5
   - agentstream_new_session: 'true'
     flow:
       branches:
@@ -896,10 +900,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_5
+      evidence_refs: &ref_6
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sync-tied-stack-evidence.md
     disposition: completed
-    evidence_refs: *ref_5
+    evidence_refs: *ref_6
   - flow:
       branches: []
       calls:
@@ -948,10 +952,10 @@ steps:
         - composition-integration
       state_history: []
       status: completed
-      evidence_refs: &ref_6
+      evidence_refs: &ref_7
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/apply-token-comments-evidence.md
     disposition: completed
-    evidence_refs: *ref_6
+    evidence_refs: *ref_7
   - flow:
       branches:
         - action: GOTO author-requirement first, then return here to define the fix
@@ -1017,10 +1021,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_7
+      evidence_refs: &ref_8
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/change-definition-evidence.md
     disposition: completed
-    evidence_refs: *ref_7
+    evidence_refs: *ref_8
   - flow:
       branches: []
       calls:
@@ -1088,10 +1092,10 @@ steps:
         - sync-tied-stack
       state_history: []
       status: completed
-      evidence_refs: &ref_8
+      evidence_refs: &ref_9
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/catalog-pseudocode-contracts-evidence.md
     disposition: completed
-    evidence_refs: *ref_8
+    evidence_refs: *ref_9
   - flow:
       branches: []
       calls: []
@@ -1145,10 +1149,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_9
+      evidence_refs: &ref_10
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/test-strategy-evidence.md
     disposition: completed
-    evidence_refs: *ref_9
+    evidence_refs: *ref_10
   - flow:
       branches:
         - action: Refactor (split or restructure) one IMPL before proceeding; do not paper over contradictions
@@ -1270,10 +1274,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_10
+      evidence_refs: &ref_11
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/session-bootstrap-evidence.md
     disposition: completed
-    evidence_refs: *ref_10
+    evidence_refs: *ref_11
   - flow:
       branches:
         - action: >-
@@ -1467,10 +1471,10 @@ steps:
         - sync-tied-stack
       state_history: []
       status: completed
-      evidence_refs: &ref_11
+      evidence_refs: &ref_12
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/author-architecture-evidence.md
     disposition: completed
-    evidence_refs: *ref_11
+    evidence_refs: *ref_12
   - flow:
       branches: []
       calls: []
@@ -1575,10 +1579,10 @@ steps:
         - sync-tied-stack
       state_history: []
       status: completed
-      evidence_refs: &ref_12
+      evidence_refs: &ref_13
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/author-requirement-evidence.md
     disposition: completed
-    evidence_refs: *ref_12
+    evidence_refs: *ref_13
   - flow:
       branches: []
       calls:
@@ -1645,10 +1649,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_13
+      evidence_refs: &ref_14
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/gate-pseudocode-validation-evidence.md
     disposition: completed
-    evidence_refs: *ref_13
+    evidence_refs: *ref_14
   - flow:
       branches: []
       calls:
@@ -1826,10 +1830,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_14
+      evidence_refs: &ref_15
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/impact-discovery-evidence.md
     disposition: completed
-    evidence_refs: *ref_14
+    evidence_refs: *ref_15
   - flow:
       branches: []
       calls: []
@@ -1853,10 +1857,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_15
+      evidence_refs: &ref_16
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/unit-refactor-evidence.md
     disposition: completed
-    evidence_refs: *ref_15
+    evidence_refs: *ref_16
   - flow:
       branches: []
       calls:
@@ -1948,10 +1952,10 @@ steps:
         - sync-tied-stack
       state_history: []
       status: completed
-      evidence_refs: &ref_16
+      evidence_refs: &ref_17
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/resolve-pseudocode-evidence.md
     disposition: completed
-    evidence_refs: *ref_16
+    evidence_refs: *ref_17
   - flow:
       branches:
         - action: Fix and repeat sub-yaml-edit-loop step
@@ -2014,10 +2018,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_17
+      evidence_refs: &ref_18
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml
     disposition: completed
-    evidence_refs: *ref_17
+    evidence_refs: *ref_18
   - flow:
       branches: []
       calls: []
@@ -2046,10 +2050,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_18
+      evidence_refs: &ref_19
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/gitignore-close-out-hygiene-evidence.md
     disposition: completed
-    evidence_refs: *ref_18
+    evidence_refs: *ref_19
   - flow:
       branches: []
       calls:
@@ -2111,10 +2115,10 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_19
+      evidence_refs: &ref_20
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/three-way-alignment-unit-evidence.md
     disposition: completed
-    evidence_refs: *ref_19
+    evidence_refs: *ref_20
   - flow:
       branches: []
       calls:
@@ -2176,40 +2180,40 @@ steps:
       returned_from: []
       state_history: []
       status: completed
-      evidence_refs: &ref_20
+      evidence_refs: &ref_21
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/persist-implementation-records-evidence.md
     disposition: completed
-    evidence_refs: *ref_20
+    evidence_refs: *ref_21
   - slug: sub-pseudocode-validation-pass
     tracking:
       status: completed
-      evidence_refs: &ref_21
+      evidence_refs: &ref_22
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sub-pseudocode-validation-pass-evidence.md
     disposition: completed
-    evidence_refs: *ref_21
+    evidence_refs: *ref_22
   - slug: sub-vocabulary-sync
     tracking:
       status: completed
-      evidence_refs: &ref_22
+      evidence_refs: &ref_23
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sub-vocabulary-sync-evidence.md
     disposition: completed
-    evidence_refs: *ref_22
+    evidence_refs: *ref_23
   - slug: sub-yaml-edit-loop
     tracking:
       status: completed
-      evidence_refs: &ref_23
+      evidence_refs: &ref_24
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sub-yaml-edit-loop-evidence.md
     disposition: completed
-    evidence_refs: *ref_23
+    evidence_refs: *ref_24
   - slug: sub-adversarial-inquiry-pass
     disposition: not_applicable
     policy: minimal-depth-no-inquiry
     rationale: CITDP depth_tier minimal; adversarial inquiry waived; not-applicable-receipt.v1.json recorded.
     tracking:
       status: not_applicable
-      evidence_refs: &ref_adv_na
+      evidence_refs: &ref_25
         - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/not-applicable-receipt.v1.json
-    evidence_refs: *ref_adv_na
+    evidence_refs: *ref_25
 sub_procedures:
   - flow:
       return_to: caller

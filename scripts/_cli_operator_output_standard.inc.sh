@@ -53,3 +53,55 @@ _cli_out_emit_usage() {
     fi
   done
 }
+
+# Appearance profile helpers (decorated when TTY + not plain).
+_cli_out_profile_rule() {
+  _cli_out_help_stream_init
+  _cli_out_plain_init
+  if [[ "${_CLI_PLAIN}" -eq 1 ]]; then
+    printf '%*s\n' 56 '' | tr ' ' '-' >&${_CLI_HELP_FD}
+  else
+    printf '\033[2m%*s\033[0m\n' 56 '' | tr ' ' $'\342\224\200' >&${_CLI_HELP_FD}
+  fi
+}
+
+# usage: _cli_out_profile_section "Section title:"
+_cli_out_profile_section() {
+  _cli_out_help_stream_init
+  _cli_out_plain_init
+  local title="$1"
+  if [[ "${_CLI_PLAIN}" -eq 1 ]]; then
+    printf '%s\n' "$title" >&${_CLI_HELP_FD}
+  else
+    printf '\033[1m\033[36m▶ %s\033[0m\n' "$title" >&${_CLI_HELP_FD}
+  fi
+  _cli_out_profile_rule
+}
+
+# usage: _cli_out_profile_cmd_row "command-name" "description"
+_cli_out_profile_cmd_row() {
+  _cli_out_help_stream_init
+  _cli_out_plain_init
+  local name="$1"
+  local desc="$2"
+  if [[ "${_CLI_PLAIN}" -eq 1 ]]; then
+    printf '  %-26s%s\n' "$name" "$desc" >&${_CLI_HELP_FD}
+  else
+    printf '  \033[1m%s\033[0m' "$name" >&${_CLI_HELP_FD}
+    local pad=$((26 - ${#name}))
+    if (( pad < 1 )); then pad=1; fi
+    printf '%*s\033[2m%s\033[0m\n' "$pad" '' "$desc" >&${_CLI_HELP_FD}
+  fi
+}
+
+# usage: _cli_out_profile_dim "dim body line"
+_cli_out_profile_dim() {
+  _cli_out_help_stream_init
+  _cli_out_plain_init
+  local line="$1"
+  if [[ "${_CLI_PLAIN}" -eq 1 ]]; then
+    printf '%s\n' "$line" >&${_CLI_HELP_FD}
+  else
+    printf '\033[2m%s\033[0m\n' "$line" >&${_CLI_HELP_FD}
+  fi
+}

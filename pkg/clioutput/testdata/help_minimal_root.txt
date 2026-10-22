@@ -1,0 +1,11 @@
+Backup directory archives and files
+
+Usage:
+  bkpdir [command]
+
+Available Commands:
+  backup      Backup a single file
+  list        List directory archives
+
+Flags:
+  -h, --help   help for bkpdir

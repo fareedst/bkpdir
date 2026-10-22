@@ -15,6 +15,12 @@ execution_evidence:
     - apply-token-comments
     - gate-pseudocode-validation
     - sync-tied-stack
+    - unit-test-red
+    - unit-refactor
+    - unit-test-green
+    - composition-integration
+    - three-way-alignment-unit
+    - verification-gate
 steps:
   - slug: session-bootstrap
     disposition: completed
@@ -59,4 +65,29 @@ steps:
     policy: minimal-depth-no-inquiry
     rationale: CLI stream routing only; depth_tier minimal per CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml.
   - slug: unit-test-red
-    disposition: pending
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: pkg/clioutput/help_render_test.go
+  - slug: unit-refactor
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: pkg/clioutput/help_render.go
+  - slug: unit-test-green
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/go-test-profile-2026-10-22.txt
+  - slug: composition-integration
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: pkg/clioutput/cobra_profile_test.go
+  - slug: three-way-alignment-unit
+    disposition: completed
+  - slug: verification-gate
+    disposition: completed
+    evidence_refs:
+      - kind: manifest_ref
+        path: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/verification-evidence-manifest.v1.json

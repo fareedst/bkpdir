@@ -40,22 +40,46 @@ EFFECTS: pure
     ELSE append to remaining
   RETURN remaining, peeledFlags
 
+## RENDER_HELP
+
+- [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] [ARCH-BKPDIR_CLI_OUTPUT_STANDARD] [REQ-BKPDIR_CLI_OUTPUT_STANDARD] — How: post-process Cobra-generated help text into working appearance profile (decorated or plain) without changing stream routing.
+
+PROCEDURE RENDER_HELP(cobraText, plain):
+Contract:
+INPUT: cobraText string, plain bool
+OUTPUT: rendered string
+PRE: true
+POST: IF plain THEN output contains no ESC sequences ELSE output may contain ANSI layout codes
+POST: non-structural lines preserved without destructive reflow
+EFFECTS: pure
+FAILURE_MODES: unparseable lines copied verbatim
+TERMINATION: returns on all input lengths including empty
+  SPLIT cobraText into lines
+  FOR each line classify as title, section header, command row, or body
+  IF plain THEN emit ASCII rules (56 hyphens), no arrow, fixed command columns
+  ELSE emit bold title, bold+cyan section headers with optional arrow, dim 56 rules, bold command names with dim descriptions
+  RETURN joined lines
+
+Implementation: pkg/clioutput/help_render.go
+Tests: pkg/clioutput/help_render_test.go
+Fixtures: pkg/clioutput/testdata/help_*.txt
+
 ## APPLY_TO_ROOT
 
-- [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] [ARCH-BKPDIR_CLI_OUTPUT_STANDARD] [REQ-BKPDIR_CLI_OUTPUT_STANDARD] — How: register persistent texture flags, SetOut stdout for machine data, SetErr stderr, custom HelpFunc writes to Policy help writer; failures stay on stderr.
+- [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] [ARCH-BKPDIR_CLI_OUTPUT_STANDARD] [REQ-BKPDIR_CLI_OUTPUT_STANDARD] — How: register persistent texture flags, SetOut stdout for machine data, SetErr stderr, custom HelpFunc captures default Cobra help then RENDER_HELP to policy help writer; failures stay on stderr.
 
 PROCEDURE APPLY_TO_ROOT(cmd, policy):
 Contract:
 INPUT: cmd, policy
 OUTPUT: configured cmd
 PRE: cmd != nil
-POST: cmd.HelpFunc writes only to policy help writer
+POST: cmd.HelpFunc writes only to policy help writer after RENDER_HELP
 EFFECTS: mutates cmd
 DATA_TRANSITION: cmd.Out/Err/HelpFunc and persistent flags
   REGISTER persistent --plain, --stdout on cmd
-  SET cmd.Out = stdout
-  SET cmd.Err = stderr
-  SET cmd.HelpFunc = lambda that renders help to policy.HelpWriter()
+  SET cmd.Out = data writer
+  SET cmd.Err = diagnostic writer
+  SET cmd.HelpFunc = lambda: buffer default HelpFunc output, RENDER_HELP(buffer, policy.Plain), write to policy.HelpWriter()
   RETURN cmd
 
 ## EXECUTE_WITH_POLICY

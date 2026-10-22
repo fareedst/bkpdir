@@ -1,0 +1,60 @@
+# Appearance-profile slice Tracker — [REQ-BKPDIR_CLI_OUTPUT_STANDARD]
+# Parent checklist: agent-req-implementation-checklist.yaml (stream slice complete)
+# copy_hygiene: slice re-runs documentation + TDD gates; do NOT treat stream close_out as profile proof.
+
+slice:
+  slice_id: appearance-profile-2026-10
+  parent_request: REQ-BKPDIR_CLI_OUTPUT_STANDARD
+  citdp_addendum: CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD-appearance-profile.yaml
+  test_strategy: test-strategy-appearance-profile.md
+  depth_tier: minimal
+  gate_policy: advisory
+
+execution_evidence:
+  request: REQ-BKPDIR_CLI_OUTPUT_STANDARD
+  slice_id: appearance-profile-2026-10
+  completed: []
+  close_out_evidence:
+    date: null
+    deferred: []
+    gates: {}
+  operator_evidence:
+    status: not_run
+  envelope_path: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/request-evidence-envelope.v1.json
+
+# Re-execute these checklist slugs in order (CALL subs per parent Tracker definitions).
+steps:
+  - slug: change-definition
+    note: CITDP addendum — profile success criterion + unchanged contract matrix
+  - slug: impact-discovery
+    note: pkg/clioutput renderer, cobra.go, shell include, seven scripts only
+  - slug: risk-assessment
+    note: CaptureHelp stacking; contract/profile assertion split
+  - slug: test-strategy
+    note: test-strategy-appearance-profile.md
+  - slug: resolve-pseudocode
+    note: RENDER_HELP + APPLY_TO_ROOT POST in IMPL sidecar
+  - slug: gate-pseudocode-validation
+    note: Layer B on changed sidecar
+  - slug: sub-yaml-edit-loop
+    note: only if REQ/IMPL index detail bullets need profile criterion
+  - slug: pre-implementation-gate
+    note: tied_checklist_gate_validate phase pre_implementation — fresh receipt under gates/
+  - slug: unit-test-red
+    note: help_render + cobra profile tests
+  - slug: unit-refactor
+    note: RenderHelp + installHelpFunc buffer path
+  - slug: unit-test-green
+  - slug: composition-integration
+    note: main_cli_composition / fleet inheritance
+  - slug: three-way-alignment-unit
+  - slug: verification-gate
+    note: tied_verify if project verification-gated
+  - slug: close-out-evidence-sync
+    note: envelope blocking gaps 0; update build-handoff gap #1
+
+blocked_until_gate:
+  - unit-test-red
+  - unit-refactor
+  - unit-test-green
+  - composition-integration

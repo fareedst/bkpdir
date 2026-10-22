@@ -23,6 +23,7 @@ CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD:
     success_criteria:
       - Acceptance matrix cases 1–7 pass for bkpdir and each adopted binary/script
       - Cross-tool conformance suite green in CI or documented local gate
+      - Profile suite: decorated TTY help via RenderHelp; plain/non-TTY/NO_COLOR paths contain no ESC
       - tied_validate_consistency and pseudocode validation pass for new R+A+I chain
       - bkpdir-cli.md documents standard terms, profile link, stderr-default migration
     unchanged_behavior: |

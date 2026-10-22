@@ -1,7 +1,7 @@
 {
   "schema_version": "request-evidence-envelope.v1",
   "envelope_meta": {
-    "generated_at": "2026-10-22T06:13:57.716Z",
+    "generated_at": "2026-10-22T06:48:27.624Z",
     "generator": "request_evidence_envelope_build",
     "revision": 1
   },
@@ -18,7 +18,7 @@
       "kind": "checklist_tracker",
       "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/agent-req-implementation-checklist.yaml",
-      "content_hash": "sha256:9ddf01efc67fe05f32766b058f95a09d98267919e90afce4ea58e97dd3ef899d",
+      "content_hash": "sha256:c20f4213dfff7264e4e5f0d7b989007eede975ec991d10759a0e993f0175ecde",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -29,7 +29,7 @@
       "kind": "citdp_record",
       "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml",
-      "content_hash": "sha256:3d68d1e9074bfda33553f61c2ab73deeeee0f91a821eca1029e38e263cecc90c",
+      "content_hash": "sha256:16f1da7df943f4fe6355844905072af4109af4e971e3b0949cfc7d408a0700c9",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -51,7 +51,7 @@
       "kind": "request_evidence_envelope",
       "schema_version": "request-evidence-envelope.v1",
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/request-evidence-envelope.v1.json",
-      "content_hash": "sha256:01323dd13e9c85a9b2cd3ab31e8b839004b830243b1e609e5a27cccc053c067b",
+      "content_hash": "sha256:845209060f952375543d78762774c954a35630ae63175be26e64ed0a22636714",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -95,7 +95,7 @@
       "kind": "unknown",
       "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/build-handoff.md",
-      "content_hash": "sha256:c32d57456f5a8b78743eb69c6af37194eef7f624d258cc0f9290e613455be100",
+      "content_hash": "sha256:8838d59318df194b928568a69a32309819073cac15b810384df800dd7b726e1c",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -127,8 +127,30 @@
     {
       "kind": "unknown",
       "schema_version": null,
-      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/close-out-gates-run.json",
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/close-out-gates-run-profile.json",
       "content_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/close-out-gates-run.json",
+      "content_hash": "sha256:527640eccc604bce2ab2cedb92459f1a917f9e57be06d57d8f6ba6f93fe74573",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/close-out-handoff.md",
+      "content_hash": "sha256:2baa022ff66e2955dde6bae0ac421e35e87e8e66da253fb3a6bf31c4e506d262",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -160,6 +182,17 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/git-hygiene-receipt-2026-10-22.md",
+      "content_hash": "sha256:61ca83162f9198a619a1c86e8a0d5d4d36d3bbd7a210cadfa7f4ba2b8b1efbe7",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/gitignore-close-out-hygiene-evidence.md",
       "content_hash": "sha256:20a1e3f897a2d7a8d9e9ca236d04435acaa8b27fba31f098d6b72dc31f1f9f8f",
       "phase": null,
@@ -182,8 +215,30 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/go-test-full-2026-10-22-profile.txt",
+      "content_hash": "sha256:c3bca5cc7de52ad34520dae8c286ed0c30d1b501ebbeaeb8c00b9fcb07d4dfdc",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/go-test-full-2026-10-22.txt",
       "content_hash": "sha256:eb50444a985d985433367bf8a28b6c8a53eee5cd911a2791122c01555b960131",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/go-test-profile-2026-10-22.txt",
+      "content_hash": "sha256:aa4788d409b16d2e01776373dc50f3517d6db35d00a1ca53164a144d9cba1ba5",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -217,6 +272,17 @@
       "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/persist-implementation-records-evidence.md",
       "content_hash": "sha256:7bd30aacbc95129a43055befebe168643ac372b3eb9f709233aa35a7a16dfe7b",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/proposed-commit-message.txt",
+      "content_hash": "sha256:918b3ba5bbaef2517e777d11015e64a48c31a48d1c0ebc02b441c7282e7ea32b",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -325,6 +391,17 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/traceable-commit-evidence.md",
+      "content_hash": "sha256:2a4b454458664248cb87b6fd0c9294aa8ed1fede8a6205f7ec507fd2160f0472",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/translate-sponsor-intent-evidence.md",
       "content_hash": "sha256:3aa293d10344260a5f8dd1b435d286efdedd77b58151ec08c15ca236ee6ba25f",
       "phase": null,
@@ -370,7 +447,7 @@
       "kind": "verification_evidence_manifest",
       "schema_version": "verification-evidence-manifest.v1",
       "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/verification-evidence-manifest.v1.json",
-      "content_hash": "sha256:6a0d2603b224d29d6ab90e3e95758fa7594cb5c825d3238bcad85341ca4c8b2e",
+      "content_hash": "sha256:0fc070d5f8ab7cff1caa8bb5688a8792d5f169d805a54649305a713e96f14e6f",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -380,7 +457,7 @@
   ],
   "cross_links": {
     "tracker_path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/agent-req-implementation-checklist.yaml",
-    "tracker_hash": "sha256:25ed5bb12e099c7b00d16e668426306f67b02a39f8ddef9692494ce0ff232718",
+    "tracker_hash": "sha256:c29a79323af71b605de4471ef6018f3c16d04fe1802e8317cc727e3e943b9859",
     "citdp_path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml",
     "evidence_chain_profile_path": null
   },
