@@ -1,11 +1,11 @@
-# Continuation handoff — W2 corpus (verification complete)
+# Continuation handoff — W2 corpus (close-out complete)
 
 **Parent slice:** `REQ-PSEUDOCODE_LAYER_B_CORPUS`  
 **Prior close-out:** W1 — [`close-out-handoff.md`](close-out-handoff.md) (commit `db5fb43913c8d615da7a12c84275bf4d86a87e95` on branch at session start)  
 **Wave map:** [`w1-w3-corpus-handoff.md`](w1-w3-corpus-handoff.md)  
-**Tracker:** `operator_evidence.status: w2_verification_complete` — [`../agent-req-implementation-checklist.yaml`](../agent-req-implementation-checklist.yaml)
+**Tracker:** `operator_evidence.status: w2_slice_close_out` — [`../agent-req-implementation-checklist.yaml`](../agent-req-implementation-checklist.yaml)
 
-**Suggested run IDs:** `layer-b-corpus-w2-close` (close-out when ready)
+**Close-out:** [`w2-close-out-handoff.md`](w2-close-out-handoff.md) (feature commit `f8608c1…`)
 
 ## W2 scope (2 IMPLs)
 
@@ -64,18 +64,9 @@ TIED_BASE_PATH="$PWD/tied-project" scripts/run-pseudocode-layer-b-batch.sh \
 TIED_BASE_PATH="$PWD/tied-project" .cursor/skills/tied-yaml/scripts/tied-cli.sh tied_validate_consistency
 ```
 
-## Not done — resume here
+## Next slice
 
-1. **`traceable-commit`** — stage sidecars, TIED YAML, tests, working evidence; **new** envelope + `close_out` gate (do not reuse W1 receipts).
-2. **`persist-citdp-record`** — copy working CITDP to `tied-project/citdp/` after commit.
-3. **W2 close-out** — `run-close-out-gates.mjs --envelope-blocking --sync-dispositions --reconcile`; handoff `w2-close-out-handoff.md`.
-
-## Uncommitted work
-
-**Modified:** `errors_test.go`, both W2 sidecars + detail/index YAML, tracker, CITDP working copy, handoff/evidence markdown.  
-**Untracked:** `config_pseudocode_w2_test.go`, W2 pseudocode validate/analysis JSON, new evidence files.
-
-**Base commit (unchanged until traceable-commit):** `db5fb43913c8d615da7a12c84275bf4d86a87e95`
+- **W3** — 27 `lead_check_skip` IMPLs; new session handoff when W3 work starts (do not mix with W2 PR).
 
 ## Remaining corpus after W2
 

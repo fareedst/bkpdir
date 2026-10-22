@@ -1,7 +1,7 @@
 {
   "schema_version": "request-evidence-envelope.v1",
   "envelope_meta": {
-    "generated_at": "2026-10-22T02:19:24.761Z",
+    "generated_at": "2026-10-22T02:21:10.256Z",
     "generator": "request_evidence_envelope_build",
     "revision": 1
   },
@@ -202,7 +202,7 @@
       "kind": "citdp_record",
       "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml",
-      "content_hash": "sha256:a7814dce4b64a4af1c843eb85163342cf1ac41d0fd7c4c5f7204735fe92d70de",
+      "content_hash": "sha256:99c17238e0f53075449e9f08be46dc01da6089a90f6428a2027b532c781c345f",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -224,7 +224,7 @@
       "kind": "request_evidence_envelope",
       "schema_version": "request-evidence-envelope.v1",
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json",
-      "content_hash": "sha256:b8293d4cd17cbc55e29d24f9bbf0c337ba6f463dc7fdcba4bbad12851fb579a6",
+      "content_hash": "sha256:a0180f8fb096a2de796f9ad2128f03b365a0bd966469f6d708078a9a46d724d5",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -267,8 +267,19 @@
     {
       "kind": "unknown",
       "schema_version": null,
-      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-w2-precommit.json",
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-w2-postcommit.json",
       "content_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-w2-precommit.json",
+      "content_hash": "sha256:ae9a4022cb0f59a59952af2f5eaf9f69dc62ec05f57a1d8637e89f865808b767",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -366,8 +377,30 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/proposed-commit-message-w2.txt",
+      "content_hash": "sha256:f85c8ce960b7afa86a2c20cbebe7bfb95867aa52afa56e1ff67b970642c0ab73",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/proposed-commit-message.txt",
       "content_hash": "sha256:64d8f86b24653e4c53d4f3572da8775f1a25358c0fd05ea21d1d600d88d746e2",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/traceable-commit-evidence-w2.md",
+      "content_hash": "sha256:27cd452e6feca65c60b45f820ca2091b5d66141875232f73f7ec172954d93c53",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -445,6 +478,17 @@
       "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w1-w3-corpus-handoff.md",
       "content_hash": "sha256:7d73ba49b74abbbab544bb72ff5368a2878f941a4389666652d986d3da23b70d",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w2-close-out-handoff.md",
+      "content_hash": "sha256:b17c64e43a969bb79afe2d6503059f308aebd08df411cd21b83c6bbc4593ca44",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
