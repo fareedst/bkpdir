@@ -1,0 +1,222 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "GET_ALL_CONFIG_FIELDS",
+      "line": 22,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "UPDATE_FIELD_VALUES",
+      "line": 44,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_FIELD_VALUE_BY_PATH",
+      "line": 62,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_FIELD_VALUE",
+      "line": 83,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+      "line": 100,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+      "line": 121,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CONFIG_FIELD_CACHE",
+      "line": 143,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_MERGE_STRATEGY",
+      "line": 154,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "GET_ALL_CONFIG_FIELDS",
+      "branch_lines": [
+        30
+      ],
+      "failure_modes": [
+        "- [IMPL-CFG_006] [ARCH-CFG_006] [ARCH-SYSTEM_COMPONENTS] [REQ-CFG_006] — How: copy cached metadata and populate Value via getFieldValueByPath or zero value on failure."
+      ],
+      "references": []
+    },
+    {
+      "block": "UPDATE_FIELD_VALUES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_FIELD_VALUE_BY_PATH",
+      "branch_lines": [
+        71,
+        72
+      ],
+      "failure_modes": [
+        "OUTPUT: interface value | ERROR",
+        "IF pointer THEN dereference OR error if nil",
+        "IF not struct THEN error"
+      ],
+      "references": []
+    },
+    {
+      "block": "FORMAT_FIELD_VALUE",
+      "branch_lines": [
+        90
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DETERMINE_MERGE_STRATEGY_FOR_FIELD",
+      "branch_lines": [
+        107,
+        108,
+        109,
+        110,
+        111
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DETECT_MERGE_STRATEGY_FROM_FIELD",
+      "branch_lines": [
+        128,
+        129,
+        130,
+        131,
+        132,
+        133
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CONFIG_FIELD_CACHE",
+      "branch_lines": [
+        144
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_MERGE_STRATEGY",
+      "branch_lines": [
+        162
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

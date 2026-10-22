@@ -1,0 +1,59 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "GET_FIELD_IMPORTANCE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CONFIG_OUTPUT_GROUPING",
+        "IMPL-CONFIG_OUTPUT_GROUPING",
+        "REQ-CONFIG_OUTPUT_GROUPING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DISPLAY_CONFIG_GROUPED",
+      "line": 40,
+      "token_refs": [
+        "IMPL-CONFIG_OUTPUT_GROUPING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "GET_FIELD_IMPORTANCE",
+      "branch_lines": [
+        26,
+        27,
+        28,
+        29
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DISPLAY_CONFIG_GROUPED",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

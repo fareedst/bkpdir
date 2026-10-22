@@ -1,0 +1,45 @@
+REQ-DOC_015:
+  architecture: tied-project/architecture-decisions/ARCH-AI_DOCUMENTATION.yaml
+  category: Functional
+  description: Replace all unicode icons with AI-first semantic tokens to improve AI assistant comprehension, enable automated validation, and create searchable documentation structure. Maintains backward compatibility with existing priority system ([CRITICAL][HIGH][MEDIUM][LOW]) while replacing decorative unicode icons with machine-readable semantic tokens.
+  implementation: tied-project/implementation-decisions/IMPL-DOC_ENHANCEMENT.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Unicode to Semantic Token Mapping Requirements
+  priority: P1
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Enhances AI assistant navigation and comprehension through searchable semantic tokens
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: AI assistants use semantic tokens for navigation and comprehension
+    - criterion: All validation systems recognize semantic tokens
+    - criterion: Backward compatibility preserved with existing priority system
+    - criterion: Semantic tokens used consistently across all documentation
+    - criterion: Zero unicode icons in documentation headers and structure
+  status: Planned
+  traceability:
+    architecture: []
+    code_annotations:
+      - REQ-DOC_015
+    implementation: []
+    tests: []
+  validation_criteria:
+    - method: AI assistant comprehension testing
+    - method: Semantic token validation for consistency
+    - method: tied-project/architecture-decisions/ARCH-AI_DOCUMENTATION.yaml; tied-project/implementation-decisions/IMPL-DOC_ENHANCEMENT.yaml
+    - method: Validation integration with DOC-008 system

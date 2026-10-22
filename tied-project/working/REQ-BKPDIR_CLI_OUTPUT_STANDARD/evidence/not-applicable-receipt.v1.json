@@ -1,0 +1,10 @@
+{
+  "schema_version": "not-applicable-receipt.v1",
+  "request_token": "REQ-BKPDIR_CLI_OUTPUT_STANDARD",
+  "artifact_kind": "adversarial_inquiry",
+  "depth_tier": "minimal",
+  "phases": ["pre_implementation", "verification", "close_out"],
+  "reason": "Adversarial inquiry not applicable at minimal depth_tier per CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD risk_analysis.adversarial_inquiry",
+  "generated_at": "2026-10-22T06:15:00.000Z",
+  "source": "close-out"
+}

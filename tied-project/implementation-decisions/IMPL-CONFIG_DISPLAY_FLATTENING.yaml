@@ -1,0 +1,68 @@
+IMPL-CONFIG_DISPLAY_FLATTENING:
+  code_locations:
+    files:
+      - "config.go"
+    functions:
+      - "determineFieldCategory"
+      - "GetAllConfigFields"
+      - "GetAllConfigValuesWithSources"
+      - "mergeGitSettings"
+      - "reflectConfigFields"
+      - "updateFieldValues"
+  cross_references:
+    - "ARCH-CFG_006"
+    - "IMPL-CFG_006"
+    - "REQ-CFG_006"
+  description: "Configuration keys are displayed as top-level keys in bkpdir config output, even when they are nested in the internal struct. The reflection-based configuration discovery system uses YAML tag names for display."
+  implementation_approach:
+    details:
+      - "bkpdir config command uses field.YAMLName for display resulting in top-level keys"
+      - "Configuration merging (mergeGitSettings) maintains backward compatibility with both formats"
+      - "Internal struct has Git *GitConfig with nested fields"
+      - "Reflection system (reflectConfigFields) recursively processes nested structs using YAML tag names"
+      - "YAML files support both top-level keys (include_git_info, include_branch) and nested format (git: { include_info: true })"
+    summary: "Presents configuration keys in flat YAML-tag form in `bkpdir config` output even when values live in nested structs, using reflection metadata (YAMLName) and legacy top-level Git field compatibility during merge.\nINPUT: Config struct, optional config root path for source attribution\nOUTPUT: sorted configFieldInfo list and ConfigValueWithMetadata rows for display\nDATA: yaml tags, field cache, legacy include_git_info / show_git_dirty_status keys\nCanonical behavior: tied-project/implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md"
+  metadata:
+    author: "AI Agent"
+    created: "2026-03-12"
+    last_updated:
+      author: "AI Agent"
+      date: "2026-10-21"
+      reason: "W2 Layer B corpus — contracts, token comments, Layer C gate ([REQ-PSEUDOCODE_LAYER_B_CORPUS])"
+  name: "Configuration Display Flattening"
+  rationale:
+    benefits:
+      - "Backward compatibility with both top-level and nested YAML formats"
+      - "Flat consistent view of all configuration options"
+      - "Users see configuration keys as they appear in YAML files"
+    problems_solved:
+      - "Inconsistency between YAML file format and config display"
+      - "Nested struct fields appearing as confusing paths in config display"
+      - "User confusion about configuration key names"
+    why: "Users need a flat, consistent view of all configuration options regardless of internal struct organization"
+  related_decisions:
+    depends_on:
+      - "IMPL-CFG_006"
+    see_also:
+      - "IMPL-CONFIG_STRUCT"
+    supersedes: []
+  status: "Active"
+  traceability:
+    architecture:
+      - "ARCH-CFG_006"
+    code_annotations:
+      - "config.go: determineFieldCategory — categorizes fields by name patterns for grouping in display"
+      - "config.go: GetAllConfigFields — uses cache-first strategy, falls back to reflectConfigFields for discovery"
+      - "config.go: GetAllConfigValuesWithSources — builds ConfigValueWithMetadata using reflection-discovered fields"
+      - "config.go: mergeGitSettings — maintains backward compatibility between top-level legacy keys and nested Git struct"
+      - "config.go: reflectConfigFields — recursively discovers fields using YAML tags; nested struct fields appear as top-level keys via YAMLName"
+    requirements:
+      - "REQ-CFG_006"
+    tests:
+      - "TestConfigReflection/Embedded_struct_deep_traversal"
+      - "TestConfigReflection/Field_categorization_works_correctly"
+      - "TestConfigReflection/Field_discovery_handles_complex_types"
+      - "TestConfigReflection/GetAllConfigFields_discovers_all_fields_automatically"
+      - "TestConfigReflection/Nested_struct_fields_are_handled_correctly"
+      - "TestConfigReflection/Unexported_fields_exclusion"
+      - "TestGetConfigValuesWithSources"

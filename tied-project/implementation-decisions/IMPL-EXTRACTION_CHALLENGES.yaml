@@ -1,0 +1,66 @@
+IMPL-EXTRACTION_CHALLENGES:
+  approach: Extract test utilities first, then create focused tests for each package
+  challenge: Extracted components need comprehensive testing without duplicating existing tests
+  code_locations:
+    files: []
+    functions: []
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-TESTING_STRATEGY
+    - REQ-CONFIGURATION
+    - REQ-MAINTAINABILITY
+  design_note: Comprehensive testing ensures extracted components are production-ready
+  implementation_approach:
+    details: []
+    summary: |-
+      Address the hardest extraction problems: shared test utilities, per-package test isolation, and config coupling via minimal interfaces.
+      INPUT: shared test helpers, extracted packages, config structs
+      OUTPUT: testutil package, package-scoped tests, ConfigProvider adapters
+      DATA: fixtures, mocks, interface method sets
+      Canonical behavior: tied-project/implementation-decisions/IMPL-EXTRACTION_CHALLENGES-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Extraction Challenges and Solutions
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: See detail file
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+      - REQ-CONFIGURATION
+      - REQ-MAINTAINABILITY
+    supersedes: []
+  solution: Create package-specific tests while ensuring original integration tests still pass
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+    code_annotations:
+      - ARCH-CODE_ORGANIZATION
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-TESTING_STRATEGY
+      - IMPL-EXTRACTION_CHALLENGES
+      - REQ-CONFIGURATION
+      - REQ-MAINTAINABILITY
+    requirements:
+      - REQ-CONFIGURATION
+      - REQ-MAINTAINABILITY
+    tests: []

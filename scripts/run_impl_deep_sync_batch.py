@@ -9,7 +9,7 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
 SKIP = {
     "IMPL-LIST_FORMAT_SAFETY",
     "IMPL-CLI_FRAMEWORK",

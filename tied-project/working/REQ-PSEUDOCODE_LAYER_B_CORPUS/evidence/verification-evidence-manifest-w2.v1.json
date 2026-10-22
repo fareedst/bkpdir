@@ -1,0 +1,104 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "layer-b-corpus-w2-ver",
+  "commit": "db5fb43913c8d615da7a12c84275bf4d86a87e95",
+  "environment": {
+    "date": "2026-10-21",
+    "os": "darwin"
+  },
+  "command_results": [
+    {
+      "id": "full-corpus-l0",
+      "command": [
+        "bash",
+        "scripts/run-spec-verification.sh"
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "go-test-w2-pseudocode",
+      "command": [
+        "go",
+        "test",
+        "-count=1",
+        "-run",
+        "TestIMPL_CONFIG|TestHandleArchiveError",
+        "."
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "layer-b-w2-full",
+      "command": [
+        "bash",
+        "scripts/run-pseudocode-layer-b-batch.sh",
+        "--mode",
+        "full",
+        "--wave",
+        "w2",
+        "--enforce",
+        "--out-dir",
+        "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-w2-full"
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": [
+        "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-w2-full/IMPL-CONFIG_DISPLAY_FLATTENING.json",
+        "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-w2-full/IMPL-CONFIGURABLE_STRINGS.json"
+      ]
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "w2-brownfield-tests",
+      "attribute": "ExecutableBehavior",
+      "applicability": "applicable",
+      "rationale": "COVER-001/002 tests lock STEP/FAILURE_MODES for W2 IMPLs",
+      "evidence_method": "go test",
+      "command_or_test": "go test -run TestIMPL_CONFIG|TestHandleArchiveError",
+      "result": "passed",
+      "owner": "agent"
+    },
+    {
+      "id": "w2-l0-full-registry",
+      "attribute": "L0SpecctlRegression",
+      "applicability": "applicable",
+      "rationale": "Full formal_spec registry remains green during W2 slice",
+      "evidence_method": "script",
+      "command_or_test": "run-spec-verification.sh",
+      "result": "passed",
+      "owner": "agent"
+    },
+    {
+      "id": "w2-layer-b-full",
+      "attribute": "LayerBMinimumGating",
+      "applicability": "applicable",
+      "rationale": "2 W2 registry tokens pass pseudocode_validate full mode",
+      "evidence_method": "script",
+      "command_or_test": "run-pseudocode-layer-b-batch.sh --mode full --wave w2 --enforce",
+      "result": "passed",
+      "owner": "agent"
+    }
+  ],
+  "covered_tokens": [
+    "IMPL-CONFIG_DISPLAY_FLATTENING",
+    "IMPL-CONFIGURABLE_STRINGS"
+  ],
+  "proof_boundaries": [
+    "executable_behavior",
+    "sidecar_contract_precision",
+    "tooling_automation",
+    "traceability_structure"
+  ],
+  "wave": "w2",
+  "token_count": 2,
+  "human_decisions": {
+    "stored_separately": true,
+    "references": []
+  }
+}

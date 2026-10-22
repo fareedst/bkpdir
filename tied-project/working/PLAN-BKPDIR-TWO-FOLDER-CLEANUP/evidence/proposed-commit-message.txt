@@ -1,0 +1,21 @@
+chore(tied): complete bkpdir two-folder client layout
+
+Track project TIED under tied-project/; consume methodology via linked
+tied-bundle/ (gitignored). Update docs, scripts, and specctl paths;
+refresh user specification TIED links; minimal DAE on cleanup CITDP.
+
+CITDP-BKPDIR-TWO-FOLDER-CLEANUP
+PLAN-BKPDIR-TWO-FOLDER-CLEANUP
+
+Completion signals: close_out gate allowed; envelope blocking_gaps=0;
+process_grade B (thin_ledger advisory).
+
+Staging map:
+- tied-project/
+- CHANGELOG.md, .gitignore, README.md
+- docs/** (path rewrites including docs/user/specification.md)
+- cmd/specctl/, internal/specmodel/, internal/speccheck/, internal/specparse/
+- scripts/** (path updates), test/specconformance/
+- main_cli_composition_test.go, refactoring-validation-report.md, refactoring_validation_test.go
+
+Exclude: repo-root working/REQ-IMMUTABLE_FILE_EXCLUSION/ (duplicate envelope)

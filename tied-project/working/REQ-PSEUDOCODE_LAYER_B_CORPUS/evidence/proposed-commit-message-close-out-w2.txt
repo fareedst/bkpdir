@@ -1,0 +1,9 @@
+chore(tied): W2 Layer B corpus close-out evidence
+
+[REQ-PSEUDOCODE_LAYER_B_CORPUS]
+
+Post-commit unified close_out gate (envelope-blocking, sync-dispositions,
+reconcile); CHANGELOG W2 entry; refreshed request-evidence-envelope.
+
+Machine close-out: allowed; blocking_gaps=0. Process: dual-write clear.
+Adherence: reconcile band B on stale prior receipts (advisory).

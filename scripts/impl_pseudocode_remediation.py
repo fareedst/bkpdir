@@ -2,7 +2,7 @@
 """Post-wave IMPL pseudocode remediation helpers.
 
 - audit_impl_alignment: report sidecar vs Go lead mismatches and boilerplate
-- seed_improvement_queue: write tied/docs/impl-pseudocode-improvement-queue.yaml
+- seed_improvement_queue: write tied-bundle/docs/impl-pseudocode-improvement-queue.yaml
 - add_test_leads_from_sidecar: prepend // - leads to *_test.go files by package mapping
 """
 from __future__ import annotations
@@ -17,8 +17,8 @@ import yaml
 
 REPO = Path(__file__).resolve().parents[1]
 IMPL_DIR = REPO / "tied" / "implementation-decisions"
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
-QUEUE = REPO / "tied/docs/impl-pseudocode-improvement-queue.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
+QUEUE = REPO / "tied-bundle/docs/impl-pseudocode-improvement-queue.yaml"
 
 BOILERPLATE = (
     "Block implements documented behavior",
@@ -215,7 +215,7 @@ def seed_queue() -> None:
         )
     header = """# IMPL Pseudocode Improvement Queue (post-wave audit)
 # Seeded by scripts/impl_pseudocode_remediation.py seed-queue
-# Agent guide: tied/docs/impl-deep-sync-agent-guide.md
+# Agent guide: tied-bundle/docs/impl-deep-sync-agent-guide.md
 # status: pending | in_progress | pilot_complete
 """
     body = yaml.safe_dump(

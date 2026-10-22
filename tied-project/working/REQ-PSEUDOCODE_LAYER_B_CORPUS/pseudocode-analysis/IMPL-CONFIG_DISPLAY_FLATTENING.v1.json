@@ -1,0 +1,774 @@
+{
+  "ok": true,
+  "gate_mode_applied": true,
+  "schema_version": "pseudocode-analysis-report.v1",
+  "grammar_version": "pseudocode-grammar.v1",
+  "analyzer_version": "1.0.0",
+  "proof_boundary": "Deterministic static analysis of essence_pseudocode within declared grammar and budgets; not runtime execution, not test execution, not complete behavioral verification.",
+  "token": "IMPL-CONFIG_DISPLAY_FLATTENING",
+  "input_identity": {
+    "algorithm": "sha256",
+    "hash": "b76cfa476f05ee4978fe05ce5609b344b8639f59ba73a88e605a06a3dc24e2f2",
+    "byte_length": 4666
+  },
+  "budgets_applied": {
+    "requested": {},
+    "effective": {
+      "max_parse_nodes": 5000,
+      "max_procedures": 256,
+      "max_cfg_blocks_per_procedure": 512,
+      "max_call_graph_edges": 2048,
+      "max_fixed_point_iterations": 32,
+      "max_path_conditions": 64,
+      "max_report_diagnostics": 500,
+      "max_source_bytes": 512000,
+      "max_cfg_join_iterations": 32
+    }
+  },
+  "truncated": false,
+  "diagnostics_truncated": false,
+  "sections": {
+    "parse": {
+      "procedure_count": 4,
+      "parse_node_count": 24,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "IMPL-CONFIG_DISPLAY_FLATTENING",
+        "REQ-CFG_006"
+      ],
+      "unsupported_syntax_count": 10
+    },
+    "symbols": {
+      "procedures": [
+        "determineFieldCategory",
+        "GetAllConfigValuesWithSources",
+        "mergeGitSettings",
+        "reflectConfigFields"
+      ],
+      "symbols": [
+        {
+          "name": "APPEND",
+          "kind": "local",
+          "declared_line": 12,
+          "procedure": "reflectConfigFields"
+        },
+        {
+          "name": "APPLY",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "mergeGitSettings"
+        },
+        {
+          "name": "determineFieldCategory",
+          "kind": "procedure",
+          "declared_line": 61
+        },
+        {
+          "name": "EMIT",
+          "kind": "local",
+          "declared_line": 13,
+          "procedure": "GetAllConfigValuesWithSources"
+        },
+        {
+          "name": "GetAllConfigValuesWithSources",
+          "kind": "procedure",
+          "declared_line": 40
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 9,
+          "procedure": "determineFieldCategory"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 11,
+          "procedure": "reflectConfigFields"
+        },
+        {
+          "name": "IF",
+          "kind": "local",
+          "declared_line": 12,
+          "procedure": "GetAllConfigValuesWithSources"
+        },
+        {
+          "name": "KEEP",
+          "kind": "local",
+          "declared_line": 11,
+          "procedure": "mergeGitSettings"
+        },
+        {
+          "name": "MATCH",
+          "kind": "local",
+          "declared_line": 10,
+          "procedure": "determineFieldCategory"
+        },
+        {
+          "name": "mergeGitSettings",
+          "kind": "procedure",
+          "declared_line": 79
+        },
+        {
+          "name": "reflectConfigFields",
+          "kind": "procedure",
+          "declared_line": 18
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 15,
+          "procedure": "determineFieldCategory"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 18,
+          "procedure": "GetAllConfigValuesWithSources"
+        },
+        {
+          "name": "STEP",
+          "kind": "local",
+          "declared_line": 19,
+          "procedure": "reflectConfigFields"
+        }
+      ],
+      "defined_calls": [],
+      "unresolved_calls": []
+    },
+    "cfg": {
+      "procedures": [
+        {
+          "procedure": "reflectConfigFields",
+          "nodes": [
+            {
+              "id": "reflectConfigFields::n1",
+              "kind": "loop",
+              "label": "for",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 26
+              }
+            },
+            {
+              "id": "reflectConfigFields::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 5,
+                "end_line": 11,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "reflectConfigFields::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 7,
+                "end_line": 12,
+                "end_column": 78
+              }
+            },
+            {
+              "id": "reflectConfigFields::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 14,
+              "span": {
+                "line": 14,
+                "column": 7,
+                "end_line": 14,
+                "end_column": 74
+              }
+            },
+            {
+              "id": "reflectConfigFields::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 18
+            },
+            {
+              "id": "reflectConfigFields::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 18
+            },
+            {
+              "id": "reflectConfigFields::n5",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 19,
+              "span": {
+                "line": 19,
+                "column": 1,
+                "end_line": 19,
+                "end_column": 58
+              }
+            }
+          ],
+          "edges": [
+            {
+              "from": "reflectConfigFields::entry",
+              "to": "reflectConfigFields::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "reflectConfigFields::n1",
+              "to": "reflectConfigFields::n1",
+              "kind": "loop_back"
+            },
+            {
+              "from": "reflectConfigFields::n1",
+              "to": "reflectConfigFields::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "reflectConfigFields::n2",
+              "to": "reflectConfigFields::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "reflectConfigFields::n3",
+              "to": "reflectConfigFields::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "reflectConfigFields::n4",
+              "to": "reflectConfigFields::n5",
+              "kind": "sequential"
+            },
+            {
+              "from": "reflectConfigFields::n5",
+              "to": "reflectConfigFields::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "reflectConfigFields::entry",
+            "reflectConfigFields::exit",
+            "reflectConfigFields::n1",
+            "reflectConfigFields::n2",
+            "reflectConfigFields::n3",
+            "reflectConfigFields::n4",
+            "reflectConfigFields::n5"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "GetAllConfigValuesWithSources",
+          "nodes": [
+            {
+              "id": "GetAllConfigValuesWithSources::n1",
+              "kind": "loop",
+              "label": "for",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 27
+              }
+            },
+            {
+              "id": "GetAllConfigValuesWithSources::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 12,
+              "span": {
+                "line": 12,
+                "column": 5,
+                "end_line": 12,
+                "end_column": 58
+              }
+            },
+            {
+              "id": "GetAllConfigValuesWithSources::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 13,
+              "span": {
+                "line": 13,
+                "column": 5,
+                "end_line": 13,
+                "end_column": 88
+              }
+            },
+            {
+              "id": "GetAllConfigValuesWithSources::n4",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 18,
+              "span": {
+                "line": 18,
+                "column": 1,
+                "end_line": 18,
+                "end_column": 51
+              }
+            },
+            {
+              "id": "GetAllConfigValuesWithSources::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 40
+            },
+            {
+              "id": "GetAllConfigValuesWithSources::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 40
+            }
+          ],
+          "edges": [
+            {
+              "from": "GetAllConfigValuesWithSources::entry",
+              "to": "GetAllConfigValuesWithSources::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "GetAllConfigValuesWithSources::n1",
+              "to": "GetAllConfigValuesWithSources::n1",
+              "kind": "loop_back"
+            },
+            {
+              "from": "GetAllConfigValuesWithSources::n1",
+              "to": "GetAllConfigValuesWithSources::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "GetAllConfigValuesWithSources::n2",
+              "to": "GetAllConfigValuesWithSources::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "GetAllConfigValuesWithSources::n3",
+              "to": "GetAllConfigValuesWithSources::n4",
+              "kind": "sequential"
+            },
+            {
+              "from": "GetAllConfigValuesWithSources::n4",
+              "to": "GetAllConfigValuesWithSources::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "GetAllConfigValuesWithSources::entry",
+            "GetAllConfigValuesWithSources::exit",
+            "GetAllConfigValuesWithSources::n1",
+            "GetAllConfigValuesWithSources::n2",
+            "GetAllConfigValuesWithSources::n3",
+            "GetAllConfigValuesWithSources::n4"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "determineFieldCategory",
+          "nodes": [
+            {
+              "id": "determineFieldCategory::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 9,
+              "span": {
+                "line": 9,
+                "column": 3,
+                "end_line": 9,
+                "end_column": 50
+              }
+            },
+            {
+              "id": "determineFieldCategory::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 60
+              }
+            },
+            {
+              "id": "determineFieldCategory::n3",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 15,
+              "span": {
+                "line": 15,
+                "column": 1,
+                "end_line": 15,
+                "end_column": 45
+              }
+            },
+            {
+              "id": "determineFieldCategory::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 61
+            },
+            {
+              "id": "determineFieldCategory::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 61
+            }
+          ],
+          "edges": [
+            {
+              "from": "determineFieldCategory::entry",
+              "to": "determineFieldCategory::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "determineFieldCategory::n1",
+              "to": "determineFieldCategory::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "determineFieldCategory::n2",
+              "to": "determineFieldCategory::n3",
+              "kind": "sequential"
+            },
+            {
+              "from": "determineFieldCategory::n3",
+              "to": "determineFieldCategory::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "determineFieldCategory::entry",
+            "determineFieldCategory::exit",
+            "determineFieldCategory::n1",
+            "determineFieldCategory::n2",
+            "determineFieldCategory::n3"
+          ],
+          "truncated": false
+        },
+        {
+          "procedure": "mergeGitSettings",
+          "nodes": [
+            {
+              "id": "mergeGitSettings::n1",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 10,
+              "span": {
+                "line": 10,
+                "column": 3,
+                "end_line": 10,
+                "end_column": 65
+              }
+            },
+            {
+              "id": "mergeGitSettings::n2",
+              "kind": "statement",
+              "label": "assignment",
+              "line": 11,
+              "span": {
+                "line": 11,
+                "column": 3,
+                "end_line": 11,
+                "end_column": 74
+              }
+            },
+            {
+              "id": "mergeGitSettings::entry",
+              "kind": "entry",
+              "label": "entry",
+              "line": 79
+            },
+            {
+              "id": "mergeGitSettings::exit",
+              "kind": "exit",
+              "label": "exit",
+              "line": 79
+            }
+          ],
+          "edges": [
+            {
+              "from": "mergeGitSettings::entry",
+              "to": "mergeGitSettings::n1",
+              "kind": "sequential"
+            },
+            {
+              "from": "mergeGitSettings::n1",
+              "to": "mergeGitSettings::n2",
+              "kind": "sequential"
+            },
+            {
+              "from": "mergeGitSettings::n2",
+              "to": "mergeGitSettings::exit",
+              "kind": "sequential"
+            }
+          ],
+          "reachable": [
+            "mergeGitSettings::entry",
+            "mergeGitSettings::exit",
+            "mergeGitSettings::n1",
+            "mergeGitSettings::n2"
+          ],
+          "truncated": false
+        }
+      ]
+    },
+    "call_graph": {
+      "edges": [],
+      "unresolved": [],
+      "truncated": false
+    },
+    "abstract": {
+      "facts": [
+        {
+          "variable": "IF",
+          "procedure": "determineFieldCategory",
+          "fact": "defined",
+          "line": 9
+        },
+        {
+          "variable": "MATCH",
+          "procedure": "determineFieldCategory",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "STEP",
+          "procedure": "determineFieldCategory",
+          "fact": "defined",
+          "line": 15
+        },
+        {
+          "variable": "EMIT",
+          "procedure": "GetAllConfigValuesWithSources",
+          "fact": "defined",
+          "line": 13
+        },
+        {
+          "variable": "IF",
+          "procedure": "GetAllConfigValuesWithSources",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "STEP",
+          "procedure": "GetAllConfigValuesWithSources",
+          "fact": "defined",
+          "line": 18
+        },
+        {
+          "variable": "APPLY",
+          "procedure": "mergeGitSettings",
+          "fact": "defined",
+          "line": 10
+        },
+        {
+          "variable": "KEEP",
+          "procedure": "mergeGitSettings",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "APPEND",
+          "procedure": "reflectConfigFields",
+          "fact": "defined",
+          "line": 12
+        },
+        {
+          "variable": "APPEND",
+          "procedure": "reflectConfigFields",
+          "fact": "defined",
+          "line": 14
+        },
+        {
+          "variable": "IF",
+          "procedure": "reflectConfigFields",
+          "fact": "defined",
+          "line": 11
+        },
+        {
+          "variable": "STEP",
+          "procedure": "reflectConfigFields",
+          "fact": "defined",
+          "line": 19
+        }
+      ],
+      "path_conditions": [],
+      "effect_gaps": [],
+      "termination_unknown": [
+        "GetAllConfigValuesWithSources",
+        "reflectConfigFields"
+      ]
+    },
+    "obligations": {
+      "decision_tables": [],
+      "path_obligations": []
+    },
+    "traceability": {
+      "block_edges": [
+        {
+          "block": "determineFieldCategory",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "IMPL-CONFIG_DISPLAY_FLATTENING",
+            "REQ-CFG_006"
+          ],
+          "line": 61
+        },
+        {
+          "block": "GetAllConfigValuesWithSources",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "IMPL-CONFIG_DISPLAY_FLATTENING",
+            "REQ-CFG_006"
+          ],
+          "line": 40
+        },
+        {
+          "block": "mergeGitSettings",
+          "tokens": [
+            "IMPL-CONFIG_DISPLAY_FLATTENING"
+          ],
+          "line": 79
+        },
+        {
+          "block": "reflectConfigFields",
+          "tokens": [
+            "ARCH-CFG_006",
+            "IMPL-CFG_006",
+            "IMPL-CONFIG_DISPLAY_FLATTENING",
+            "REQ-CFG_006"
+          ],
+          "line": 18
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "severity": "info",
+      "code": "TERMINATION_UNKNOWN",
+      "message": "Termination unknown for loop in reflectConfigFields",
+      "line": 9,
+      "block": "reflectConfigFields"
+    },
+    {
+      "severity": "info",
+      "code": "TERMINATION_UNKNOWN",
+      "message": "Termination unknown for loop in GetAllConfigValuesWithSources",
+      "line": 11,
+      "block": "GetAllConfigValuesWithSources"
+    }
+  ],
+  "unsupported_syntax": [
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: fields = GetAllConfigFields(cfg)",
+      "span": {
+        "line": 9,
+        "column": 3,
+        "end_line": 9,
+        "end_column": 34
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: defaultValues = map from DefaultConfig field paths",
+      "span": {
+        "line": 10,
+        "column": 3,
+        "end_line": 10,
+        "end_column": 52
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: yamlName = first segment of yaml struct tag or lowercase field name",
+      "span": {
+        "line": 10,
+        "column": 5,
+        "end_line": 10,
+        "end_column": 71
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: ELSE",
+      "span": {
+        "line": 13,
+        "column": 5,
+        "end_line": 13,
+        "end_column": 8
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_DISPLAY_FLATTENING::MERGEGITSETTINGS_LEGACY_FLAT_KEYS",
+      "span": {
+        "line": 14,
+        "column": 1,
+        "end_line": 14,
+        "end_column": 74
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_DISPLAY_FLATTENING::DETERMINEFIELDCATEGORY",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 63
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_DISPLAY_FLATTENING] [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: sync legacy top-level include_git_info and show_git_dirty_status with nested Git struct so YAML using either flat or nested git keys merges consistently for display and runtime.",
+      "span": {
+        "line": 17,
+        "column": 1,
+        "end_line": 17,
+        "end_column": 263
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: SPEC-ID: IMPL-CONFIG_DISPLAY_FLATTENING::GETALLCONFIGVALUESWITHSOURCES",
+      "span": {
+        "line": 18,
+        "column": 1,
+        "end_line": 18,
+        "end_column": 70
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_DISPLAY_FLATTENING] [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: assign display grouping (status_codes, format_strings, backup_settings, etc.) from field name patterns for sorted config command sections.",
+      "span": {
+        "line": 20,
+        "column": 1,
+        "end_line": 20,
+        "end_column": 224
+      }
+    },
+    {
+      "construct": "unsupported_statement",
+      "message": "Unsupported statement form: - [IMPL-CONFIG_DISPLAY_FLATTENING] [IMPL-CFG_006] [ARCH-CFG_006] [REQ-CFG_006] — How: build ConfigValueWithMetadata from reflected fields, skip struct container rows, attach default and file source metadata for each flat key.",
+      "span": {
+        "line": 21,
+        "column": 1,
+        "end_line": 21,
+        "end_column": 225
+      }
+    }
+  ],
+  "unknowns": []
+}

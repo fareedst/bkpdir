@@ -1,0 +1,21 @@
+{
+  "provenance": {
+    "blockScope": [
+      "W0_LAYER_B_CLOSEOUT"
+    ],
+    "command": "tied_adversarial_inquiry_run",
+    "mode": "close_out_structural",
+    "phase": "close_out",
+    "primaryBlock": "W0_LAYER_B_CLOSEOUT",
+    "proofBoundaries": [
+      "traceability_structure",
+      "tooling_automation",
+      "sidecar_contract_precision"
+    ],
+    "request_token": "REQ-PSEUDOCODE_LAYER_B_CORPUS",
+    "run_id": "layer-b-corpus-20261021-close-v2",
+    "scopeMode": "criterion",
+    "tool_version": "1.0.0"
+  },
+  "schemaVersion": "adversarial-inquiry-provenance.v1"
+}

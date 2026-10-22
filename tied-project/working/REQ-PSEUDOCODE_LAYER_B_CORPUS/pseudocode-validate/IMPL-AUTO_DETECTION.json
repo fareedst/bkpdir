@@ -1,0 +1,341 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "IS_FILE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_DIRECTORY",
+      "line": 37,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_PATH",
+      "line": 56,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "HANDLE_AUTO_DETECTED_COMMAND",
+      "line": 79,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "HANDLE_AUTO_DETECTED_FILE_BACKUP",
+      "line": 104,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "HANDLE_AUTO_DETECTED_DIRECTORY_ARCHIVE",
+      "line": 131,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEW_ROOT_COMMAND",
+      "line": 159,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXECUTE_WITH_AUTO_DETECTION",
+      "line": 185,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_PATH_TYPE_DETECTION",
+      "line": 205,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_BACKWARD_COMPAT",
+      "line": 219,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS",
+      "line": 233,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND",
+      "line": 247,
+      "token_refs": [
+        "ARCH-AUTO_DETECTION",
+        "IMPL-AUTO_DETECTION",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN",
+      "line": 261,
+      "token_refs": [
+        "IMPL-AUTO_DETECTION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "IS_FILE",
+      "branch_lines": [
+        27
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_DIRECTORY",
+      "branch_lines": [
+        46
+      ],
+      "failure_modes": [
+        "STEP T001: STAT path and map errors to not-exist, permission, or generic failure"
+      ],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_PATH",
+      "branch_lines": [
+        66,
+        67,
+        68,
+        77
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF not-exist THEN RETURN error \"path does not exist\"",
+        "IF permission denied THEN RETURN error \"permission denied\"",
+        "RETURN error \"error accessing path\" WITH underlying err"
+      ],
+      "references": []
+    },
+    {
+      "block": "HANDLE_AUTO_DETECTED_COMMAND",
+      "branch_lines": [
+        88,
+        90,
+        91,
+        92,
+        93
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF VALIDATE_PATH(path) fails THEN exit WITH error"
+      ],
+      "references": []
+    },
+    {
+      "block": "HANDLE_AUTO_DETECTED_FILE_BACKUP",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "ON error EXIT WITH archive error handler code"
+      ],
+      "references": []
+    },
+    {
+      "block": "HANDLE_AUTO_DETECTED_DIRECTORY_ARCHIVE",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "ON error EXIT WITH archive error handler code"
+      ],
+      "references": []
+    },
+    {
+      "block": "NEW_ROOT_COMMAND",
+      "branch_lines": [
+        171,
+        172,
+        173,
+        180,
+        181,
+        183
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXECUTE_WITH_AUTO_DETECTION",
+      "branch_lines": [
+        193,
+        195
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_PATH_TYPE_DETECTION",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_BACKWARD_COMPAT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

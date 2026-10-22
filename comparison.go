@@ -145,7 +145,7 @@ type DiffResult struct {
 	Deleted  []string
 }
 
-// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted by name (oldest first).
+// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted ascending by name (oldest first).
 func findMatchingIncrementalArchives(archiveDir string, baseFullArchive *Archive) ([]Archive, error) {
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
@@ -190,9 +190,13 @@ func findMatchingIncrementalArchives(archiveDir string, baseFullArchive *Archive
 	return matchingIncrementals, nil
 }
 
-// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full zip snapshot, overlay each matching incremental zip in chronological order by RelativePath, return merged DirectorySnapshot.
+// ReconstructArchiveState uses default full-anchored effective state reconstruction.
 func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
-	// Find most recent full archive
+	return ReconstructArchiveStateWithMode(archiveDir, IncrementalAnchorModeFull)
+}
+
+// - [IMPL-INCREMENTAL_ANCHOR_MODE] [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_ANCHOR_MODE] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-INCREMENTAL_ANCHOR_MODE] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full snapshot; overlay matching incrementals per mode (full: latest only; chained: all in name order).
+func ReconstructArchiveStateWithMode(archiveDir string, mode IncrementalAnchorMode) (*DirectorySnapshot, error) {
 	latestFullArchive, err := findLatestFullArchive(archiveDir)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find full archive: %w", err)
@@ -202,7 +206,6 @@ func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Found latest full archive: %s (mod time: %v)\n", latestFullArchive.Name, latestFullArchive.CreationTime)
 	}
 
-	// Load full archive snapshot
 	fullSnapshot, err := CreateArchiveSnapshot(latestFullArchive.Path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load full archive snapshot: %w", err)
@@ -223,16 +226,26 @@ func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 		return fullSnapshot, nil
 	}
 
-	if debug {
-		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Applying %d incremental archives for base %s\n", len(incrementalArchives), latestFullArchive.Name)
+	toApply := incrementalArchives
+	if mode == IncrementalAnchorModeFull {
+		toApply = incrementalArchives[len(incrementalArchives)-1:]
 	}
 
+	if debug {
+		fmt.Fprintf(os.Stderr, "DEBUG: ReconstructArchiveState - Applying %d incremental archives for base %s (mode=%s)\n", len(toApply), latestFullArchive.Name, mode)
+	}
+
+	return overlayIncrementalsOnSnapshot(fullSnapshot, toApply)
+}
+
+// - [IMPL-INCREMENTAL_ANCHOR_MODE] [IMPL-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-INCREMENTAL_ANCHOR_MODE] [REQ-DIFF_COMMAND] — How: merge incremental zip snapshots onto full map by RelativePath.
+func overlayIncrementalsOnSnapshot(fullSnapshot *DirectorySnapshot, incrementals []Archive) (*DirectorySnapshot, error) {
 	fullMap := make(map[string]FileInfo)
 	for _, file := range fullSnapshot.Files {
 		fullMap[file.RelativePath] = file
 	}
 
-	for _, incremental := range incrementalArchives {
+	for _, incremental := range incrementals {
 		incrementalSnapshot, err := CreateArchiveSnapshot(incremental.Path)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load incremental archive snapshot %s: %w", incremental.Path, err)
@@ -252,13 +265,11 @@ func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 		}
 	}
 
-	// Convert map back to slice and sort
 	reconstructedFiles := make([]FileInfo, 0, len(fullMap))
 	for _, file := range fullMap {
 		reconstructedFiles = append(reconstructedFiles, file)
 	}
 
-	// Sort by relative path for consistency
 	sort.Slice(reconstructedFiles, func(i, j int) bool {
 		return reconstructedFiles[i].RelativePath < reconstructedFiles[j].RelativePath
 	})

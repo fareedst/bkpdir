@@ -1,0 +1,51 @@
+IMPL-ZERO_BREAKING:
+  code_locations:
+    files: []
+    functions: []
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  implementation_approach:
+    details:
+      - Behavioral verification at each extraction step
+      - Comprehensive test coverage before and after extraction
+      - Existing tests must continue to pass without modification
+    summary: |-
+      Ensure extraction steps preserve existing application behavior by keeping tests green, maintaining coverage, and verifying behavior at each step.
+      INPUT: extraction step, existing test suite, behavioral baselines
+      OUTPUT: unchanged user-facing behavior after each extraction increment
+      DATA: test results, coverage reports, verification checkpoints
+      Canonical behavior: tied-project/implementation-decisions/IMPL-ZERO_BREAKING-pseudocode.md
+  metadata:
+    author: AI Agent
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+  name: Zero-Breaking-Change Extraction
+  rationale:
+    benefits:
+      - Confidence in extraction correctness
+      - Existing tests continue to pass without modification
+      - User-facing behavior unchanged
+    problems_solved:
+      - Loss of confidence in extraction process
+      - Regression in existing functionality
+      - Risk of breaking existing application during extraction
+    why: Maintains confidence in extraction process and preserves existing functionality
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_PRINCIPLES
+    see_also:
+      - IMPL-INTERFACE_DRIVEN
+      - IMPL-LAYERED_EXTRACTION
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations: []
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []

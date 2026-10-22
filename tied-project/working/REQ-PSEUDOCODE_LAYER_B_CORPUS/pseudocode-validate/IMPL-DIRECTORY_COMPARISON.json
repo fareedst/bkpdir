@@ -1,0 +1,241 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "CREATE_DIRECTORY_SNAPSHOT",
+      "line": 18,
+      "token_refs": [
+        "ARCH-ARCHIVE_FORMAT",
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP",
+        "REQ-INCREMENTAL_DUPLICATE_PREVENTION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FILEOPS_CREATE_DIRECTORY_SNAPSHOT",
+      "line": 41,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CREATE_ARCHIVE_SNAPSHOT",
+      "line": 65,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "COMPARE_SNAPSHOTS",
+      "line": 82,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_DIRECTORY_IDENTICAL_TO_ARCHIVE",
+      "line": 100,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FIND_MOST_RECENT_ARCHIVE",
+      "line": 118,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CHECK_FOR_IDENTICAL_ARCHIVE",
+      "line": 136,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_DIRECTORY_TREE_SUMMARY",
+      "line": 156,
+      "token_refs": [
+        "ARCH-DIRECTORY_COMPARISON",
+        "IMPL-DIRECTORY_COMPARISON",
+        "REQ-DIFF_COMMAND",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_ARCHIVE_TREE_SUMMARY",
+      "line": 175,
+      "token_refs": [
+        "IMPL-DIRECTORY_COMPARISON"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "CREATE_DIRECTORY_SNAPSHOT",
+      "branch_lines": [],
+      "failure_modes": [
+        "FAILURE_MODES: unreadable path or broken Readlink propagate walk error"
+      ],
+      "references": []
+    },
+    {
+      "block": "FILEOPS_CREATE_DIRECTORY_SNAPSHOT",
+      "branch_lines": [
+        51,
+        52,
+        53,
+        54
+      ],
+      "failure_modes": [
+        "FAILURE_MODES: unreadable path or broken Readlink propagate walk error"
+      ],
+      "references": []
+    },
+    {
+      "block": "CREATE_ARCHIVE_SNAPSHOT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "COMPARE_SNAPSHOTS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_DIRECTORY_IDENTICAL_TO_ARCHIVE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FIND_MOST_RECENT_ARCHIVE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CHECK_FOR_IDENTICAL_ARCHIVE",
+      "branch_lines": [
+        145
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_DIRECTORY_TREE_SUMMARY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_ARCHIVE_TREE_SUMMARY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

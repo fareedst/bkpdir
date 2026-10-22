@@ -1,0 +1,12 @@
+feat(tied): Layer B corpus wave W2 (2 formal IMPLs)
+
+[REQ-PSEUDOCODE_LAYER_B_CORPUS] [REQ-PSEUDOCODE_FORMAL_VERIFICATION]
+[IMPL-CONFIGURABLE_STRINGS] [IMPL-CONFIG_DISPLAY_FLATTENING]
+[ARCH-SPEC_DSL_AND_ORACLE]
+
+W2 sidecars pass Layer B full mode; brownfield tests lock COVER-001/002 for
+error formats and flat config display. No runtime production changes.
+
+Machine close-out: gate allowed; envelope blocking_gaps=0 (5 advisory inquiry).
+Process: W2 verification manifest; pre-commit close-out receipt in working evidence.
+Adversarial: advisory UNRESOLVED/warn on verification ledger (review-gated).

@@ -440,6 +440,7 @@ func TestIncrementalSkipRequiresFullIncrementalChain_REQ_INCREMENTAL_DUPLICATE_P
 	originalStdout := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
+	cfg.IncrementalAnchorMode = "chained"
 	err = createIncrementalArchive(IncrementalArchiveConfig{
 		Config:  cfg,
 		Context: context.Background(),

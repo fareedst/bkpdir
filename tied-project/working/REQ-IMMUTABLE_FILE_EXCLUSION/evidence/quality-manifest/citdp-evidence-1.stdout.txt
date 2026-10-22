@@ -1,0 +1,2 @@
+PASS
+ok  	bkpdir	0.170s

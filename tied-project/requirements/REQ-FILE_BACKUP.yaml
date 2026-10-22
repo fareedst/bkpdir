@@ -1,0 +1,44 @@
+REQ-FILE_BACKUP:
+  architecture: tied-project/architecture-decisions/ARCH-RESOURCE_MANAGEMENT.yaml
+  category: Functional
+  description: Create backups of single files with comparison. Detect identical backups. List backups for specific files. File operations use atomic operations and context support.
+  implementation: tied-project/implementation-decisions/IMPL-ATOMIC_OPS.yaml; tied-project/implementation-decisions/IMPL-CONTEXT_OPS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: File Backup Requirements
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Provides individual file backup capability with comparison and listing
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: Atomic operations prevent corruption
+    - criterion: Backup listing sorted by creation time
+    - criterion: File backups created with timestamp and note
+    - criterion: Identical file detection available
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-RESOURCE_MANAGEMENT
+    code_annotations:
+      - REQ-FILE_BACKUP
+    implementation:
+      - IMPL-ATOMIC_OPS
+      - IMPL-CONTEXT_OPS
+    tests: []
+  validation_criteria:
+    - method: tied-project/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied-project/implementation-decisions/IMPL-TESTING.yaml

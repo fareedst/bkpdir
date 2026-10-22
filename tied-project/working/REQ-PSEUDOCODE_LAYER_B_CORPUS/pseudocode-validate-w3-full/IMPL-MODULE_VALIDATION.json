@@ -1,0 +1,140 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "IDENTIFY_MODULES",
+      "line": 18,
+      "token_refs": [
+        "ARCH-MODULE_VALIDATION",
+        "IMPL-MODULE_VALIDATION",
+        "REQ-MODULE_VALIDATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEVELOP_INDEPENDENTLY",
+      "line": 39,
+      "token_refs": [
+        "ARCH-MODULE_VALIDATION",
+        "IMPL-MODULE_VALIDATION",
+        "REQ-MODULE_VALIDATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_INDEPENDENTLY",
+      "line": 62,
+      "token_refs": [
+        "ARCH-MODULE_VALIDATION",
+        "IMPL-MODULE_VALIDATION",
+        "REQ-MODULE_VALIDATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DOCUMENT_VALIDATION",
+      "line": 85,
+      "token_refs": [
+        "ARCH-MODULE_VALIDATION",
+        "IMPL-MODULE_VALIDATION",
+        "REQ-MODULE_VALIDATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "INTEGRATE_AFTER_VALIDATION",
+      "line": 105,
+      "token_refs": [
+        "ARCH-MODULE_VALIDATION",
+        "IMPL-MODULE_VALIDATION",
+        "REQ-MODULE_VALIDATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "IDENTIFY_MODULES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEVELOP_INDEPENDENTLY",
+      "branch_lines": [],
+      "failure_modes": [
+        "- STEP T001: Run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration",
+        "- - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration.",
+        "STEP T001: Run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration",
+        "- [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration."
+      ],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_INDEPENDENTLY",
+      "branch_lines": [
+        75
+      ],
+      "failure_modes": [
+        "# [IMPL-MODULE_VALIDATION][ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] How: run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration.",
+        "- VERIFY error paths and cleanup",
+        "VERIFY error paths and cleanup"
+      ],
+      "references": []
+    },
+    {
+      "block": "DOCUMENT_VALIDATION",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "INTEGRATE_AFTER_VALIDATION",
+      "branch_lines": [
+        117
+      ],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

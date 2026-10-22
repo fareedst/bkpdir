@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-IMPL_DIR = REPO / "tied/implementation-decisions"
+IMPL_DIR = REPO / "tied-project/implementation-decisions"
 
 SKIP_TOKENS = {
     "IMPL-LIST_FORMAT_SAFETY",

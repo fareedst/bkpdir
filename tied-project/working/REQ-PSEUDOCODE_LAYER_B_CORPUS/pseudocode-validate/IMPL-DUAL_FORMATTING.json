@@ -1,0 +1,220 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "FORMAT_CREATED_ARCHIVE_PRINTF",
+      "line": 18,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_LIST_ARCHIVE_DUAL_MODE",
+      "line": 36,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_CONFIG_VALUE_PRINTF",
+      "line": 55,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_PROVIDER_INTERFACES",
+      "line": 73,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TEMPLATE_FORMATTER_PLACEHOLDERS",
+      "line": 91,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_WITH_TEMPLATE",
+      "line": 109,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXTRACT_PATTERN_DATA",
+      "line": 129,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "SIMPLE_PLACEHOLDER_REPLACE",
+      "line": 148,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DUAL_FORMATTING",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PRINT_WITH_DELAYED_ROUTING",
+      "line": 166,
+      "token_refs": [
+        "IMPL-DUAL_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "FORMAT_CREATED_ARCHIVE_PRINTF",
+      "branch_lines": [
+        31,
+        34
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_LIST_ARCHIVE_DUAL_MODE",
+      "branch_lines": [
+        44,
+        45
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_CONFIG_VALUE_PRINTF",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_PROVIDER_INTERFACES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TEMPLATE_FORMATTER_PLACEHOLDERS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_WITH_TEMPLATE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXTRACT_PATTERN_DATA",
+      "branch_lines": [
+        137
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "SIMPLE_PLACEHOLDER_REPLACE",
+      "branch_lines": [
+        164
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PRINT_WITH_DELAYED_ROUTING",
+      "branch_lines": [
+        174
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

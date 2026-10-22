@@ -1,0 +1,135 @@
+IMPL-CUSTOMIZABLE_FORMAT_STRINGS:
+  code_locations:
+    files:
+      - description: DefaultConfig — default format strings using
+        path: config.go
+      - description: FormatListArchive, FormatListBackup — template-placeholder detection and routing
+        path: formatter.go
+      - description: formatListArchiveSimple — simplified list formatting with
+        path: formatter_adapter_simple.go
+      - description: formatTemplate, FormatWithPlaceholders —
+        path: formatter.go
+      - description: FormatWithPlaceholders —
+        path: pkg/formatter/ai_core_formatter.go
+      - description: ReplacePlaceholders — simple
+        path: pkg/formatter/placeholder_replace.go
+      - description: Template processing with
+        path: pkg/formatter/template.go
+      - description: ValidateFormatString, getExpectedPlaceholders, extractPlaceholders, validateAllFormatStrings — validation pipeline
+        path: config.go
+    functions:
+      - description: Iterates all Config format fields and collects validation warnings
+        file: config.go
+        name: validateAllFormatStrings
+      - description: Regex extraction of %s/%d and
+        file: config.go
+        name: extractPlaceholders
+      - description: Replaces
+        file: formatter.go
+        name: OutputFormatter.formatTemplate
+      - description: Returns the set of allowed placeholders (printf + template) per field name
+        file: config.go
+        name: getExpectedPlaceholders
+      - description: Same
+        file: formatter.go
+        name: TemplateFormatter.FormatWithPlaceholders
+      - description: Validates one format field against its expected placeholders; returns warnings
+        file: config.go
+        name: ValidateFormatString
+  cross_references:
+    - ARCH-CONFIG_SYSTEM
+    - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+    - ARCH-OUTPUT_FORMATTING
+    - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+  description: |-
+    Format string validation and #{} placeholder syntax for user-customizable output.
+    Migrated all placeholders from %{...} to #{...} to avoid conflicts with Go's fmt package.
+    FormatListArchive and FormatListBackup support template-style (#{name}) placeholders;
+    validation runs at config load time with non-fatal warnings.
+  implementation_approach:
+    details:
+      - All placeholder syntax changed from %{key} to
+      - extractPlaceholders uses regex to find both printf (%s) and template (#{...}) placeholders
+      - getExpectedPlaceholders defines allowed placeholders per format field
+      - validateAllFormatStrings iterates all config fields and collects warnings
+      - ValidateFormatString validates individual fields against expected placeholder lists
+      - Validation integrated into LoadConfig and LoadConfigWithInheritance (non-fatal stderr warnings)
+    summary: |-
+      Validate configurable format and template strings against per-field placeholder rules, warn on unexpected placeholders during config load, and render #{key} and mixed printf templates with safe defaults. Brief example configuration file demonstrates common customization patterns; documentation is complete, accurate, and tested.
+      INPUT: fieldName, formatString, cfg format fields, data map
+      OUTPUT: warning strings, rendered message text
+      DATA: placeholderMap, regex extractors, known default placeholders
+      Canonical behavior: tied-project/implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: User-Customizable Format Strings Implementation
+  rationale:
+    benefits:
+      - Load-time validation warns about unexpected placeholders
+      - Simple string replacement (strings.ReplaceAll) keeps implementation maintainable
+      - Single placeholder syntax (#{...}) throughout the codebase eliminates ambiguity
+    problems_solved:
+      - fmt.Sprintf misinterpreting %{...} placeholders as format verbs
+      - No feedback when users specify invalid placeholders
+      - Users receiving %!(EXTRA ...) in output when using template placeholders
+    why: |-
+      Go's fmt package interprets %{...} as the start of a format verb, causing %!(EXTRA ...) errors.
+      Migrating to #{...} eliminates this conflict while keeping placeholders distinct from printf verbs.
+      Validation at load time prevents user mistakes without blocking configuration loading.
+  related_decisions:
+    composed_with: []
+    depends_on:
+      - IMPL-LIST_FORMAT_SAFETY
+    see_also:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - ARCH-OUTPUT_FORMATTING
+      - IMPL-CONFIG_STRUCT
+      - IMPL-DUAL_FORMATTING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CONFIG_SYSTEM
+      - ARCH-CUSTOMIZABLE_FORMAT_STRINGS
+      - ARCH-OUTPUT_FORMATTING
+    code_annotations:
+      - IMPL-CUSTOMIZABLE_FORMAT_STRINGS
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    requirements:
+      - REQ-CUSTOMIZABLE_FORMAT_STRINGS
+    tests:
+      - description: Confirms validation warnings are printed to stderr during config load
+        file: config_test.go
+        name: TestFormatStringValidationWarnings_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      - description: Ensures default
+        file: config_test.go
+        name: TestDefaultFormatStrings_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      - description: Tests
+        file: formatter_test.go
+        name: TestTemplateFormatter/CustomTemplateHandling
+      - description: Tests
+        file: formatter_test.go
+        name: TestTemplateFormatter/ListOutputWithSizeHuman
+      - description: Tests extraction-based formatting with template placeholders
+        file: formatter_test.go
+        name: TestTemplateFormatter/FormatListArchiveWithExtraction_TemplatePlaceholders
+      - description: Tests mixed printf + template placeholder format strings
+        file: formatter_test.go
+        name: TestTemplateFormatter/FormatListArchive_MixedPlaceholders
+      - description: Validates correct and unexpected placeholder detection across format fields
+        file: config_test.go
+        name: TestFormatStringValidation_REQ_CUSTOMIZABLE_FORMAT_STRINGS
+      - description: Verifies custom format strings load correctly from YAML configuration
+        file: config_test.go
+        name: TestCustomFormatStringsLoad_REQ_CUSTOMIZABLE_FORMAT_STRINGS

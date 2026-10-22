@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"bkpdir/internal/validation"
+	"bkpdir/pkg/clioutput"
 
 	"github.com/spf13/cobra"
 )
@@ -386,8 +387,5 @@ func main() {
 		sessionID = fmt.Sprintf("cli-%d", time.Now().Unix())
 	}
 
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "❌ Error: %v\n", err)
-		os.Exit(1)
-	}
+	clioutput.ExecuteRoot(rootCmd, os.Args[1:])
 }

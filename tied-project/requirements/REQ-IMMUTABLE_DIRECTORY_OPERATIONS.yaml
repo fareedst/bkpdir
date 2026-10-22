@@ -1,0 +1,46 @@
+REQ-IMMUTABLE_DIRECTORY_OPERATIONS:
+  architecture: tied-project/architecture-decisions/ARCH-FILE_OPERATIONS.yaml
+  category: Functional
+  description: 'Directory operation rules are fundamental and must not be altered:'
+  implementation: tied-project/implementation-decisions/IMPL-FILE_OPERATIONS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Directory Operations Requirements (Immutable)
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: These file operation rules are fundamental behaviors that users depend on. Changing them would break existing functionality.
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: All directory operations use platform-independent paths
+    - criterion: All operations are atomic
+    - criterion: Archive directories are created automatically
+    - criterion: Directory structure is maintained in archives
+    - criterion: File permissions and modification times are preserved
+    - criterion: Paths are displayed relative to current directory
+    - criterion: Special files are handled correctly
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    code_annotations:
+      - REQ-IMMUTABLE_DIRECTORY_OPERATIONS
+    implementation:
+      - IMPL-FILE_OPERATIONS
+    tests: []
+  validation_criteria:
+    - method: Directory operation tests verify all requirements. Breaking changes require major version bump.

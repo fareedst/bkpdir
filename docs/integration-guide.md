@@ -4,7 +4,7 @@
 
 ## Normative traceability (TIED)
 
-Package boundaries and extraction rationale: [ARCH-PACKAGE_EXTRACTION](../tied/architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml), [ARCH-SYSTEM_COMPONENTS](../tied/architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml). Interdependency map (table + SVG): [package-interdependency-mapping.md](package-interdependency-mapping.md). Requirement: [REQ-EXTRACT_008_INTERDEP_MAPPING](../tied/requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml).
+Package boundaries and extraction rationale: [ARCH-PACKAGE_EXTRACTION](../tied-project/architecture-decisions/ARCH-PACKAGE_EXTRACTION.yaml), [ARCH-SYSTEM_COMPONENTS](../tied-project/architecture-decisions/ARCH-SYSTEM_COMPONENTS.yaml). Interdependency map (table + SVG): [package-interdependency-mapping.md](package-interdependency-mapping.md). Requirement: [REQ-EXTRACT_008_INTERDEP_MAPPING](../tied-project/requirements/REQ-EXTRACT_008_INTERDEP_MAPPING.yaml).
 
 ## 🎯 Overview
 

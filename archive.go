@@ -603,10 +603,11 @@ func CreateFullArchiveWithCleanup(cfg *Config, note string, dryRun bool) error {
 
 // - [IMPL-DATA_MODELS] [ARCH-SYSTEM_COMPONENTS] [REQ-CODE_QUALITY] [REQ-FILE_BACKUP] — How: group Config, note, dry-run flag, and context for incremental archive API entry.
 type IncrementalArchiveConfig struct {
-	Config  *Config
-	Note    string
-	DryRun  bool
-	Context context.Context
+	Config        *Config
+	Note          string
+	DryRun        bool
+	Context       context.Context
+	CLIAnchorMode string
 }
 
 // CreateIncrementalArchive creates an incremental archive without context (backward compatibility)
@@ -620,11 +621,16 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 	return createIncrementalArchive(config)
 }
 
-// - [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: reconstruct archive state, CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
+// - [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: ReconstructArchiveState (full + incremental chain), CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
 func createIncrementalArchive(config IncrementalArchiveConfig) error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
+	}
+
+	anchorMode, err := config.Config.EffectiveIncrementalAnchorMode(config.CLIAnchorMode)
+	if err != nil {
+		return NewArchiveError(err.Error(), config.Config.StatusConfigError)
 	}
 
 	// REFACTOR-005: See architecture.md - Structure Optimization [DECISION:maintenance]
@@ -635,8 +641,8 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 		return err
 	}
 
-	// Reconstruct archive state (full + incremental chain) and check for changes
-	reconstructedState, err := ReconstructArchiveState(archiveDir)
+	// Reconstruct effective archived state for skip detection (mode-dependent).
+	reconstructedState, err := ReconstructArchiveStateWithMode(archiveDir, anchorMode)
 	var modifiedFiles []string
 
 	if err != nil {
@@ -658,30 +664,38 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 			return nil
 		}
 	} else {
-		// Calculate diff against reconstructed state
-		diff, err := CalculateDiff(cwd, reconstructedState, archiveConfig.GetExcludePatterns())
+		skipDiff, err := CalculateDiff(cwd, reconstructedState, archiveConfig.GetExcludePatterns())
 		if err != nil {
 			return err
 		}
 
-		// If no changes detected, skip archive creation
-		if len(diff.Added) == 0 && len(diff.Modified) == 0 && len(diff.Deleted) == 0 {
+		if len(skipDiff.Added) == 0 && len(skipDiff.Modified) == 0 && len(skipDiff.Deleted) == 0 {
 			formatter := NewOutputFormatter(config.Config)
 			formatter.PrintIncrementalSkippedNoChanges()
 			return nil
 		}
 
-		// Convert diff result to modified files list for backward compatibility
-		// Only include added and modified files (deleted files don't exist, so can't be archived)
-		// Deleted files are tracked as changes but shouldn't be added to the archive
-		modifiedFiles = make([]string, 0, len(diff.Added)+len(diff.Modified))
-		modifiedFiles = append(modifiedFiles, diff.Added...)
-		modifiedFiles = append(modifiedFiles, diff.Modified...)
-		// Note: diff.Deleted files are changes that trigger archive creation,
-		// but they don't exist so they can't be added to the archive
+		contentBaseline := reconstructedState
+		if anchorMode == IncrementalAnchorModeFull {
+			latestFullArchive, err2 := findLatestFullArchive(archiveDir)
+			if err2 != nil {
+				return err2
+			}
+			contentBaseline, err2 = CreateArchiveSnapshot(latestFullArchive.Path)
+			if err2 != nil {
+				return err2
+			}
+		}
+
+		contentDiff, err := CalculateDiff(cwd, contentBaseline, archiveConfig.GetExcludePatterns())
+		if err != nil {
+			return err
+		}
+
+		modifiedFiles = make([]string, 0, len(contentDiff.Added)+len(contentDiff.Modified))
+		modifiedFiles = append(modifiedFiles, contentDiff.Added...)
+		modifiedFiles = append(modifiedFiles, contentDiff.Modified...)
 		if len(modifiedFiles) == 0 {
-			// Deletion-only diffs cannot be encoded in an incremental zip; creating one would
-			// overwrite the latest incremental with an empty archive and break chain reconstruction.
 			formatter := NewOutputFormatter(config.Config)
 			formatter.PrintIncrementalSkippedNoChanges()
 			return nil
@@ -699,6 +713,7 @@ func createIncrementalArchive(config IncrementalArchiveConfig) error {
 	if err != nil {
 		return err
 	}
+	archivePath = resolveIncrementalArchivePath(archivePath)
 
 	if config.DryRun {
 		printDryRunInfoWithInterface(modifiedFiles, archivePath, archiveConfig)
@@ -923,7 +938,6 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 		return err
 	}
 
-	// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: OracleZipEntryPath normalizes zip member names for cross-platform archives.
 	hdr.Name = entryName
 	hdr.Method = zip.Deflate
 	w, err := zipw.CreateHeader(hdr)
@@ -958,7 +972,7 @@ func addFileToZip(sourceDir, rel string, zipw *zip.Writer) error {
 	return nil
 }
 
-// - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] — How: write one entry with Deflate header, copying file content or symlink target and honoring skip_broken_symlinks.
+// - [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: normalize rel to OracleZipEntryPath for zip member name, then write one Deflate entry copying file content or symlink target and honoring skip_broken_symlinks.
 func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg ArchiveConfigInterface) error {
 	entryName := specmodel.OracleZipEntryPath(rel)
 	abs := filepath.Join(sourceDir, filepath.FromSlash(entryName))
@@ -972,7 +986,6 @@ func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg Archive
 		return err
 	}
 
-	// [IMPL-ZIP_FORMAT] [ARCH-ARCHIVE_FORMAT] [REQ-FILE_BACKUP] [REQ-IMMUTABLE_PLATFORM_COMPATIBILITY] — How: OracleZipEntryPath normalizes zip member names for cross-platform archives.
 	hdr.Name = entryName
 	hdr.Method = zip.Deflate
 	w, err := zipw.CreateHeader(hdr)
@@ -1030,11 +1043,33 @@ func addFileToZipWithConfig(sourceDir, rel string, zipw *zip.Writer, cfg Archive
 // CreateIncrementalArchiveWithContext creates an incremental archive with context support
 func CreateIncrementalArchiveWithContext(
 	ctx context.Context, cfg *Config, note string, dryRun bool) error {
+	return CreateIncrementalArchiveWithContextAndMode(ctx, cfg, note, dryRun, "")
+}
+
+// - [IMPL-INCREMENTAL_ANCHOR_MODE] [ARCH-INCREMENTAL_ANCHOR_MODE] [REQ-INCREMENTAL_ANCHOR_MODE] — How: delegate to createIncrementalArchive with optional CLI anchor mode override.
+func CreateIncrementalArchiveWithContextAndMode(
+	ctx context.Context, cfg *Config, note string, dryRun bool, cliAnchorMode string) error {
 	config := IncrementalArchiveConfig{
-		Config:  cfg,
-		Note:    note,
-		DryRun:  dryRun,
-		Context: ctx,
+		Config:        cfg,
+		Note:          note,
+		DryRun:        dryRun,
+		Context:       ctx,
+		CLIAnchorMode: cliAnchorMode,
 	}
 	return createIncrementalArchive(config)
+}
+
+// - [IMPL-INCREMENTAL_ANCHOR_MODE] [IMPL-ZIP_FORMAT] [ARCH-INCREMENTAL_ANCHOR_MODE] [REQ-INCREMENTAL_ANCHOR_MODE] [REQ-IMMUTABLE_ARCHIVE_NAMING] — How: append -seqN before .zip when candidate path already exists.
+func resolveIncrementalArchivePath(candidate string) string {
+	if _, err := os.Stat(candidate); os.IsNotExist(err) {
+		return candidate
+	}
+	base := strings.TrimSuffix(candidate, ".zip")
+	for seq := 2; seq < 10000; seq++ {
+		tryPath := fmt.Sprintf("%s-seq%d.zip", base, seq)
+		if _, err := os.Stat(tryPath); os.IsNotExist(err) {
+			return tryPath
+		}
+	}
+	return candidate
 }

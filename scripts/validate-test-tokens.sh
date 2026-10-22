@@ -6,6 +6,10 @@
 
 set -euo pipefail
 
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$PROJECT_ROOT/scripts/_cli_operator_output_standard.inc.sh"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -34,10 +38,11 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --help)
-            echo "Usage: $0 [--strict] [--fix] [--verbose]"
-            echo "  --strict   Enable strict validation mode"
-            echo "  --fix      Attempt to fix common token issues"
-            echo "  --verbose  Enable verbose output"
+            _cli_out_emit_usage \
+                "Usage: $0 [--strict] [--fix] [--verbose]" \
+                "  --strict   Enable strict validation mode" \
+                "  --fix      Attempt to fix common token issues" \
+                "  --verbose  Enable verbose output"
             exit 0
             ;;
         *)

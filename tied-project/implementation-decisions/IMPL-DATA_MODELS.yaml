@@ -1,0 +1,98 @@
+IMPL-DATA_MODELS:
+  code_locations:
+    files:
+      - archive.go
+      - archive_test.go
+      - backup.go
+      - backup_test.go
+    functions:
+      - Archive
+      - ArchiveConfig
+      - ArchiveConfigInterface
+      - ArchiveCreationOptions
+      - ArchiveFormatterInterface
+      - Backup
+      - BackupConfigInterface
+      - BackupFormatterInterface
+      - BackupInfo
+      - BackupOptions
+      - ConfigToArchiveConfigAdapter
+      - ConfigToBackupConfigAdapter
+      - IncrementalArchiveConfig
+      - OutputFormatterToArchiveFormatterAdapter
+      - OutputFormatterToBackupFormatterAdapter
+  cross_references:
+    - ARCH-SYSTEM_COMPONENTS
+    - REQ-CODE_QUALITY
+    - REQ-FILE_BACKUP
+  description: Comprehensive data structures for archive and backup operations providing structured data representation, type safety, serialization and persistence support, and testing/validation facilitation
+  implementation_approach:
+    details:
+      - Archive struct with Name, Path, CreationTime, IsIncremental, GitBranch, GitHash, Note, BaseArchive fields
+      - ArchiveConfig struct with Prefix, Timestamp, GitBranch, GitHash, GitIsClean, ShowGitDirtyStatus, Note, IsGit, IsIncremental, BaseName fields
+      - ArchiveConfigInterface and ArchiveFormatterInterface for dependency abstraction
+      - ArchiveCreationOptions struct with Context, CWD, Path, Files, Config, ResourceMgr fields
+      - Backup struct with Name, Path, CreationTime, SourceFile, Note fields
+      - BackupConfigInterface and BackupFormatterInterface for dependency abstraction
+      - BackupInfo struct with Name, Path, CreationTime, Size fields
+      - BackupOptions struct with Context, Config, Formatter, FilePath, Note, DryRun fields
+      - ConfigToArchiveConfigAdapter adapts Config to ArchiveConfigInterface
+      - ConfigToBackupConfigAdapter adapts Config to BackupConfigInterface
+      - IncrementalArchiveConfig struct with Config, Note, DryRun, Context fields
+    summary: |-
+      Type-safe archive and backup domain models with configuration and formatter interfaces plus adapters that decouple operations from concrete Config and OutputFormatter types.
+      INPUT: Config, OutputFormatter, operation parameters
+      OUTPUT: structured value objects and interface contracts for archive/backup pipelines
+      DATA: Archive, ArchiveConfig, Backup, BackupInfo, adapter structs
+      Canonical behavior: tied-project/implementation-decisions/IMPL-DATA_MODELS-pseudocode.md
+  metadata:
+    author: AI Agent
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+  name: Data Models
+  rationale:
+    benefits:
+      - Facilitates testing and validation
+      - Structured data representation
+      - Supports serialization and persistence
+      - Type safety
+    problems_solved:
+      - Difficulty testing and validating operation parameters
+      - Lack of type safety in archive and backup operations
+      - Unstructured data passing between functions
+    why: Operations need structured data representation for type safety, serialization, and testability
+  related_decisions:
+    depends_on: []
+    see_also:
+      - IMPL-ATOMIC_OPS
+      - IMPL-CONTEXT_OPS
+      - IMPL-FILE_OPERATIONS
+      - IMPL-ZIP_FORMAT
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-SYSTEM_COMPONENTS
+    code_annotations:
+      - ARCH-SYSTEM_COMPONENTS
+      - IMPL-DATA_MODELS
+      - REQ-CODE_QUALITY
+      - REQ-FILE_BACKUP
+    requirements:
+      - REQ-CODE_QUALITY
+      - REQ-FILE_BACKUP
+    tests:
+      - TestCheckForIdenticalFileBackup
+      - TestCreateFileBackup
+      - TestCreateFileBackupWithContext
+      - TestCreateFullArchive
+      - TestCreateIncremental
+      - TestGenerateArchiveName
+      - TestGenerateBackupName
+      - TestIncrementalArchiveDirectoryStructure
+      - TestListFileBackups
+      - TestListFileBackupsEnhanced_WithLimit
+      - TestSkipBrokenSymlinks

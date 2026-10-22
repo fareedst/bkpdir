@@ -644,6 +644,9 @@ func TestContextualOperation_Cleanup(t *testing.T) {
 	}
 }
 
+// SPEC-ID: IMPL-CONFIGURABLE_STRINGS::HANDLE_ARCHIVE_ERROR
+// STEP T001: CLASSIFY errno-style errors and print via formatter Format methods
+// STEP T002: RETURN matching cfg status code or generic failure
 // - [IMPL-CONFIGURABLE_STRINGS] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: classify errno-style errors, print via formatter Format* methods using cfg strings, and return matching cfg status codes.
 func TestHandleArchiveError(t *testing.T) {
 	cfg := DefaultConfig()
@@ -654,36 +657,42 @@ func TestHandleArchiveError(t *testing.T) {
 		name           string
 		err            error
 		expectedStatus int
+		failureMode    string
 	}{
 		{
-			name:           "nil error",
+			name:           "COVER001 nil err success POST",
 			err:            nil,
 			expectedStatus: 0,
 		},
 		{
-			name:           "ArchiveError",
+			name:           "COVER002 structured ArchiveError status",
 			err:            NewArchiveError("test error", 42),
 			expectedStatus: 42,
+			failureMode:    "structured ArchiveError or BackupError status",
 		},
 		{
-			name:           "disk full error",
+			name:           "COVER002 StatusDiskFull",
 			err:            errors.New("no space left on device"),
 			expectedStatus: cfg.StatusDiskFull,
+			failureMode:    "StatusDiskFull",
 		},
 		{
-			name:           "permission error",
+			name:           "COVER002 StatusPermissionDenied",
 			err:            errors.New("permission denied"),
 			expectedStatus: cfg.StatusPermissionDenied,
+			failureMode:    "StatusPermissionDenied",
 		},
 		{
-			name:           "directory not found error",
+			name:           "COVER002 StatusDirectoryNotFound",
 			err:            errors.New("no such file or directory"),
 			expectedStatus: cfg.StatusDirectoryNotFound,
+			failureMode:    "StatusDirectoryNotFound",
 		},
 		{
-			name:           "generic error",
+			name:           "COVER002 generic exit 1",
 			err:            errors.New("some other error"),
 			expectedStatus: 1,
+			failureMode:    "generic exit 1",
 		},
 	}
 
@@ -691,7 +700,7 @@ func TestHandleArchiveError(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			status := HandleArchiveError(tt.err, cfg, formatter)
 			if status != tt.expectedStatus {
-				t.Errorf("HandleArchiveError() = %d, want %d", status, tt.expectedStatus)
+				t.Errorf("HandleArchiveError(%s) = %d, want %d", tt.failureMode, status, tt.expectedStatus)
 			}
 		})
 	}

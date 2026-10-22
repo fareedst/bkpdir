@@ -16,7 +16,7 @@ _formal_spec_registry_root() {
 _formal_spec_registry_py() {
   local root
   root="$(_formal_spec_registry_root)"
-  FORMAL_SPEC_REGISTRY_PATH="${FORMAL_SPEC_REGISTRY_PATH:-$root/tied/spec/formal-spec-registry.yaml}" \
+  FORMAL_SPEC_REGISTRY_PATH="${FORMAL_SPEC_REGISTRY_PATH:-$root/tied-project/spec/formal-spec-registry.yaml}" \
     python3 "$root/scripts/formal_spec_registry.py" "$@"
 }
 

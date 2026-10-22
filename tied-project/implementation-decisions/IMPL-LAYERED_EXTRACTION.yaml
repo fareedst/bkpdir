@@ -1,0 +1,54 @@
+IMPL-LAYERED_EXTRACTION:
+  code_locations:
+    files: []
+    functions: []
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  implementation_approach:
+    details:
+      - Each layer builds on previous layers without circular references
+      - Framework layer third (cli)
+      - Infrastructure layer first (config, errors)
+      - Patterns layer last (processing)
+      - Utilities layer second (formatter, git)
+    summary: |-
+      Extract packages in dependency order: infrastructure first, then utilities, framework, and patterns last, with no circular references between layers.
+      INPUT: packages to extract, layer assignment per package
+      OUTPUT: four stable layers with acyclic dependencies
+      DATA: layer order, package dependency graph
+      Canonical behavior: tied-project/implementation-decisions/IMPL-LAYERED_EXTRACTION-pseudocode.md
+  metadata:
+    author: AI Agent
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+  name: Layered Extraction Approach
+  rationale:
+    benefits:
+      - Clear dependency hierarchy
+      - Each layer builds on stable previous layers
+      - No circular references between layers
+    problems_solved:
+      - Circular dependency risk during extraction
+      - Unclear extraction ordering
+      - Unstable foundation when extracting higher-level components first
+    why: Prevents circular dependencies and ensures stable foundation for extracted components
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_PRINCIPLES
+    see_also:
+      - IMPL-INTERFACE_DRIVEN
+      - IMPL-LARGE_FILE_CHALLENGE
+      - IMPL-ZERO_BREAKING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations: []
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []

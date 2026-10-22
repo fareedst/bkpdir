@@ -1,0 +1,263 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "DEFAULT_CONFIG",
+      "line": 18,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXECUTE_GIT_COMMAND",
+      "line": 36,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_REPOSITORY",
+      "line": 55,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_BRANCH",
+      "line": 73,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_SHORT_HASH",
+      "line": 90,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_WORKING_DIRECTORY_CLEAN",
+      "line": 107,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_INFO",
+      "line": 125,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_INFO_WITH_STATUS",
+      "line": 144,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_SUBMODULE",
+      "line": 164,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_SUBMODULES",
+      "line": 182,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_CLI",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LEGACY_IS_GIT_REPOSITORY_WRAPPER",
+      "line": 199,
+      "token_refs": [
+        "IMPL-GIT_CLI"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "DEFAULT_CONFIG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXECUTE_GIT_COMMAND",
+      "branch_lines": [],
+      "failure_modes": [
+        "- [IMPL-GIT_CLI] [ARCH-GIT_INTEGRATION] [REQ-GIT_INTEGRATION] — How: git rev-parse --is-inside-work-tree equals true without error."
+      ],
+      "references": []
+    },
+    {
+      "block": "IS_REPOSITORY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_BRANCH",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_SHORT_HASH",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_WORKING_DIRECTORY_CLEAN",
+      "branch_lines": [
+        120
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_INFO",
+      "branch_lines": [
+        133,
+        140
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_INFO_WITH_STATUS",
+      "branch_lines": [
+        153,
+        154
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_SUBMODULE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_SUBMODULES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LEGACY_IS_GIT_REPOSITORY_WRAPPER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

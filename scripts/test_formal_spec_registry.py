@@ -8,7 +8,7 @@ from pathlib import Path
 from formal_spec_registry import count_tokens, iter_tokens
 
 FIXTURE = Path(__file__).resolve().parent / "testdata/formal_spec_registry/quoted_and_unquoted.yaml"
-REPO_REGISTRY = Path(__file__).resolve().parent.parent / "tied/spec/formal-spec-registry.yaml"
+REPO_REGISTRY = Path(__file__).resolve().parent.parent / "tied-project/spec/formal-spec-registry.yaml"
 
 
 class FormalSpecRegistryTest(unittest.TestCase):

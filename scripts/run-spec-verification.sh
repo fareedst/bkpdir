@@ -15,13 +15,13 @@ echo "DEBUG: D15 redundant IMPL banner audit"
 python3 scripts/strip_redundant_impl_banners.py --fail-on-redundant
 
 echo "DEBUG: specctl validate"
-go run ./cmd/specctl validate tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl validate tied-project/implementation-decisions/*-pseudocode.md
 
 echo "DEBUG: specctl matrix (report)"
-go run ./cmd/specctl matrix tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl matrix tied-project/implementation-decisions/*-pseudocode.md
 
 echo "DEBUG: specctl matrix --check-coverage (formal_spec only)"
-go run ./cmd/specctl matrix --check-coverage tied/implementation-decisions/*-pseudocode.md
+go run ./cmd/specctl matrix --check-coverage tied-project/implementation-decisions/*-pseudocode.md
 
 echo "DEBUG: specctl check-leads (all formal_spec registry sidecars)"
 REGISTRY_COUNT="$(formal_spec_registry_count)"
@@ -32,7 +32,7 @@ fi
 FORMAL_SIDECARS=()
 while IFS= read -r token; do
   [[ -z "$token" ]] && continue
-  path="tied/implementation-decisions/${token}-pseudocode.md"
+  path="tied-project/implementation-decisions/${token}-pseudocode.md"
   if [[ -f "$path" ]]; then
     FORMAL_SIDECARS+=("$path")
   fi
@@ -46,8 +46,22 @@ go run ./cmd/specctl check-leads "${FORMAL_SIDECARS[@]}"
 echo "DEBUG: go test spec conformance"
 go test ./internal/specparse/... ./internal/specmodel/... ./test/specconformance/... -count=1
 
+if [[ "${RUN_LAYER_B:-}" == "1" || "${RUN_LAYER_B_IF_CHANGED:-}" == "1" ]]; then
+  echo "DEBUG: Layer B CI enforcement (RUN_LAYER_B=${RUN_LAYER_B:-0} RUN_LAYER_B_IF_CHANGED=${RUN_LAYER_B_IF_CHANGED:-0})"
+  lb_args=()
+  if [[ "${RUN_LAYER_B_IF_CHANGED:-}" == "1" && "${RUN_LAYER_B:-}" != "1" ]]; then
+    lb_args+=(--if-changed)
+  fi
+  if [[ "${RUN_LAYER_B:-}" == "1" && "${RUN_LAYER_B_WAVE:-}" =~ ^[wW][0-3]$ ]]; then
+    lb_args+=(--wave "$(echo "$RUN_LAYER_B_WAVE" | tr '[:upper:]' '[:lower:]')")
+  fi
+  "$ROOT/scripts/run-layer-b-ci-enforcement.sh" "${lb_args[@]}"
+elif git diff --name-only HEAD 2>/dev/null | grep -qE '\-pseudocode\.md$'; then
+  echo "DEBUG: changed sidecars detected — optional Layer B (RUN_LAYER_B=1 or RUN_LAYER_B_IF_CHANGED=1)"
+fi
+
 if [[ "${RUN_LAYER_C:-}" == "1" ]]; then
-  echo "DEBUG: Layer C pseudocode_analyze (Tier A; set RUN_LAYER_C=1)"
+  echo "DEBUG: Layer C pseudocode_analyze (set LAYER_C_WAVE=w0|w1|…; default w0)"
   "$ROOT/scripts/run_layer_c_gate.sh"
 elif git diff --name-only HEAD 2>/dev/null | grep -qE '\-pseudocode\.md$'; then
   echo "DEBUG: changed sidecars detected — optional Layer C (set RUN_LAYER_C=1 to enforce)"

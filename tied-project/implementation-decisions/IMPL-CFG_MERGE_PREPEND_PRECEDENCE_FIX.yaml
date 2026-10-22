@@ -1,0 +1,111 @@
+IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX:
+  after: Tests expect file1's value to be preserved (correct CFG-001 behavior)
+  after_fix:
+    - '`!archive_dir_path` in file2: Respects file1''s value ✅'
+    - '`+archive_dir_path` in file2: Respects file1''s value ✅'
+    - '`^archive_dir_path` in file2: Respects file1''s value ✅'
+    - '`archive_dir_path` (no prefix) in file2: Respects file1''s value ✅'
+  before: Tests accepted either file1 or file2 value (masking the bug)
+  before_fix:
+    - '`!archive_dir_path` in file2: Correctly respected file1''s value ✅'
+    - '`+archive_dir_path` in file2: Overrode file1''s value ❌'
+    - '`^archive_dir_path` in file2: Overrode file1''s value ❌'
+    - '`archive_dir_path` (no prefix) in file2: Correctly respected file1''s value ✅'
+  change: Updated `TestAllStrategiesWithPrecedenceFields` tests to expect earlier file precedence for `+` and `^` prefixes.
+  code_location: '`config_test.go`, `TestAllStrategiesWithPrecedenceFields` function, lines ~5617-5665'
+  code_locations:
+    files:
+      - description: Merge strategy application functions with precedence enforcement for scalar fields
+        path: config.go
+    functions:
+      - description: Applies merge (+) strategy; checks precedence for scalar/precedence fields via getFieldMergeBehavior and explicitlySetFields
+        file: config.go
+        name: applyMerge
+      - description: Applies override strategy with shouldPreserve logic respecting earlier file precedence
+        file: config.go
+        name: applyOverride
+      - description: Applies prepend (^) strategy; checks precedence for scalar/precedence fields before falling back to setConfigField
+        file: config.go
+        name: applyPrepend
+      - description: Dispatches to strategy-specific apply functions passing inheritContext, defaultCfg, and explicitlySetFields
+        file: config.go
+        name: applyMergeOperation
+  code_markers: |-
+    `applyMerge`, `applyPrepend`, `applyMergeOperation`
+    `// CFG-001 + CFG-005: For scalar/precedence fields with +/^ prefix, respect earlier file precedence`
+    `getFieldMergeBehavior`, `MergeBehaviorPrecedence`
+  cross-references:
+    - '[ARCH-CFG_001] - Configuration Discovery Architecture'
+    - '[ARCH-CFG_005] - Layered Configuration Inheritance Architecture'
+    - '[IMPL-CFG_MERGE_BEHAVIOR_REGISTRY] - Field-Level Merge Behavior Registry'
+    - '[IMPL-CFG_MIXED_MODE_MERGE_FIX] - Mixed-Mode Merge Strategy Fix'
+    - '[REQ-CFG_001] - Configuration Discovery (earlier file precedence)'
+    - '[REQ-CONFIGURATION] - Configuration Management'
+  cross_references:
+    - ARCH-CFG_001
+    - ARCH-CFG_005
+    - REQ-CFG_001
+    - REQ-CONFIGURATION
+  implementation_approach:
+    details: []
+    summary: |-
+      Ensures merge and prepend strategies respect CFG-001 earlier-file precedence for scalar fields registered as MergeBehaviorPrecedence when processing sequential config files (non-inheritance context).
+      INPUT: result config, field key, operation value, dstValue, inheritContext, defaultCfg, explicitlySetFields
+      OUTPUT: updated result config field or preserved dstValue
+      DATA: mergeOperation strategy, fieldMergeBehaviors registry, default vs dst comparison
+      Canonical behavior: tied-project/implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX-pseudocode.md
+  key_changes: '#### 1. Updated `applyMerge()` Function Signature'
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Merge and Prepend Strategy Precedence Fix
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Bug fix: `+` and `^` prefixes on scalar/precedence fields (e.g., `+archive_dir_path`, `^archive_dir_path`) were bypassing precedence checks
+      Per CFG-001 and implementation decision [IMPL-CFG_MERGE_BEHAVIOR_REGISTRY], explicit prefixes should "work as normal, but precedence still applies for sequential files"
+      `applyMerge()` and `applyPrepend()` were designed for arrays and fell back to `setConfigField()` for scalars without checking precedence
+      This violated CFG-001 requirement that earlier files take precedence over later files
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    supersedes: []
+  status: Active
+  test_coverage:
+    - '`TestAllStrategiesWithPrecedenceFields/merge_strategy (+)` - Validates `+` prefix respects precedence'
+    - '`TestAllStrategiesWithPrecedenceFields/no prefix` - Validates no prefix respects precedence (already working)'
+    - '`TestAllStrategiesWithPrecedenceFields/prepend_strategy (^)` - Validates `^` prefix respects precedence'
+    - '`TestAllStrategiesWithPrecedenceFields/replace_strategy (!)` - Validates `!` prefix respects precedence (already working)'
+  traceability:
+    architecture:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+    code_annotations:
+      - ARCH-CFG_001
+      - ARCH-CFG_005
+      - IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    requirements:
+      - REQ-CFG_001
+      - REQ-CONFIGURATION
+    tests:
+      - TestAllStrategiesWithPrecedenceFields/merge_strategy_(+)
+      - TestAllStrategiesWithPrecedenceFields/no_prefix
+      - TestAllStrategiesWithPrecedenceFields/prepend_strategy_(^)
+      - TestAllStrategiesWithPrecedenceFields/replace_strategy_(!)

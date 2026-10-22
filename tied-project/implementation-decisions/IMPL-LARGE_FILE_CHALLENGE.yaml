@@ -1,0 +1,54 @@
+IMPL-LARGE_FILE_CHALLENGE:
+  code_locations:
+    files:
+      - formatter.go
+    functions: []
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  implementation_approach:
+    details:
+      - Extract ANSI support as separate package
+      - Extract output collector as separate package
+      - Extract printf formatter as separate package
+      - Extract template engine as separate package
+      - Maintain interface compatibility throughout extraction
+    summary: |-
+      Decomposes oversized formatter.go into focused packages (templates, printf, output collector, ANSI) while preserving public interfaces used by the CLI.
+      INPUT: monolithic formatter.go responsibilities
+      OUTPUT: extracted packages with unchanged adapter surfaces
+      DATA: interface contracts, test coverage for extracted units
+      Canonical behavior: tied-project/implementation-decisions/IMPL-LARGE_FILE_CHALLENGE-pseudocode.md
+  metadata:
+    author: AI Agent
+    created: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+  name: Large File Decomposition Challenge
+  rationale:
+    benefits:
+      - Focused packages with single responsibilities
+      - Improved maintainability and comprehension
+      - Reusable components extracted from monolith
+    problems_solved:
+      - Complex file hindering code comprehension
+      - Large monolithic file difficult to maintain
+      - Rich functionality locked in single file preventing reuse
+    why: formatter.go at 1675 lines is large and complex, indicating rich functionality perfect for reuse but needing careful decomposition
+  related_decisions:
+    depends_on:
+      - IMPL-EXTRACTION_CHALLENGES
+    see_also:
+      - IMPL-INTERFACE_DRIVEN
+      - IMPL-LAYERED_EXTRACTION
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations: []
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []

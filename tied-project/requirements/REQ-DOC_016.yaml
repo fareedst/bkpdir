@@ -1,0 +1,45 @@
+REQ-DOC_016:
+  architecture: tied-project/architecture-decisions/ARCH-TOKEN_SYSTEM.yaml
+  category: Functional
+  description: Establish comprehensive token-based traceability for features, architecture decisions, and implementation consistency as a core AI-first principle. Every feature, architecture decision, and implementation must be traced through documentation, source code, tests, and validation layers.
+  implementation: tied-project/implementation-decisions/IMPL-TOKEN_SYSTEM.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: AI-First Comprehensive Token System Requirements
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Ensures complete traceability from specification to implementation to testing
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: 100% token coverage in source code and tests
+    - criterion: AI assistant effectiveness >95% feature navigation accuracy using tokens
+    - criterion: Automated validation integration with existing systems
+    - criterion: Complete feature traceability from specification to implementation
+    - criterion: Cross-layer consistency with token validation passing
+  status: Planned
+  traceability:
+    architecture: []
+    code_annotations:
+      - REQ-DOC_016
+    implementation: []
+    tests: []
+  validation_criteria:
+    - method: AI assistant navigation accuracy testing
+    - method: Automated validation integration testing
+    - method: tied-project/architecture-decisions/ARCH-TOKEN_SYSTEM.yaml; tied-project/implementation-decisions/IMPL-TOKEN_SYSTEM.yaml
+    - method: Token consistency validation across all layers

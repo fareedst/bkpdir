@@ -1,0 +1,871 @@
+{
+  "schema": "corpus-layer-b-gap-report.v1",
+  "corpus_token_count": 73,
+  "metrics": [
+    {
+      "token": "IMPL-ATOMIC_OPS",
+      "path": "tied-project/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 12,
+      "post_true_count": 12,
+      "error_step_names": [
+        "E001"
+      ],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-AUTO_DETECTION",
+      "path": "tied-project/implementation-decisions/IMPL-AUTO_DETECTION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-BACKWARD_COMPAT",
+      "path": "tied-project/implementation-decisions/IMPL-BACKWARD_COMPAT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_006",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_006-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 7,
+      "post_true_count": 7,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_HIERARCHY_PRESERVATION",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_HIERARCHY_PRESERVATION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_INHERITANCE_PATH_RESOLUTION",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_INHERITANCE_PATH_RESOLUTION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_MERGE_BEHAVIOR_REGISTRY",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_MERGE_BEHAVIOR_REGISTRY-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_MIXED_MODE_MERGE_FIX",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_MIXED_MODE_MERGE_FIX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_PRECEDENCE_FIX",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_PRECEDENCE_FIX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_QUOTED_KEY_PREFIX",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_QUOTED_KEY_PREFIX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CLI_FRAMEWORK",
+      "path": "tied-project/implementation-decisions/IMPL-CLI_FRAMEWORK-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CODE_STYLE",
+      "path": "tied-project/implementation-decisions/IMPL-CODE_STYLE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONFIG_DISPLAY_FLATTENING",
+      "path": "tied-project/implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONFIG_OUTPUT_GROUPING",
+      "path": "tied-project/implementation-decisions/IMPL-CONFIG_OUTPUT_GROUPING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONFIG_SCHEMA_FLEX",
+      "path": "tied-project/implementation-decisions/IMPL-CONFIG_SCHEMA_FLEX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONFIG_STRUCT",
+      "path": "tied-project/implementation-decisions/IMPL-CONFIG_STRUCT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 4,
+      "post_true_count": 4,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONFIGURABLE_STRINGS",
+      "path": "tied-project/implementation-decisions/IMPL-CONFIGURABLE_STRINGS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONTEXT_OPS",
+      "path": "tied-project/implementation-decisions/IMPL-CONTEXT_OPS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CUSTOMIZABLE_FORMAT_STRINGS",
+      "path": "tied-project/implementation-decisions/IMPL-CUSTOMIZABLE_FORMAT_STRINGS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DATA_MODELS",
+      "path": "tied-project/implementation-decisions/IMPL-DATA_MODELS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DELAYED_OUTPUT",
+      "path": "tied-project/implementation-decisions/IMPL-DELAYED_OUTPUT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DEPENDENCY_MGMT",
+      "path": "tied-project/implementation-decisions/IMPL-DEPENDENCY_MGMT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DIFF_COMMAND",
+      "path": "tied-project/implementation-decisions/IMPL-DIFF_COMMAND-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DIRECTORY_COMPARISON",
+      "path": "tied-project/implementation-decisions/IMPL-DIRECTORY_COMPARISON-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DOC_ENHANCEMENT",
+      "path": "tied-project/implementation-decisions/IMPL-DOC_ENHANCEMENT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DUAL_FORMATTING",
+      "path": "tied-project/implementation-decisions/IMPL-DUAL_FORMATTING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXCLUDE_MERGE_FIX",
+      "path": "tied-project/implementation-decisions/IMPL-EXCLUDE_MERGE_FIX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXCLUSION_PATTERNS",
+      "path": "tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md",
+      "grammar_version": "v2",
+      "active_procedures": 2,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXTRACT_008_DOC_MIGRATION",
+      "path": "tied-project/implementation-decisions/IMPL-EXTRACT_008_DOC_MIGRATION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXTRACTION_CHALLENGES",
+      "path": "tied-project/implementation-decisions/IMPL-EXTRACTION_CHALLENGES-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXTRACTION_PRINCIPLES",
+      "path": "tied-project/implementation-decisions/IMPL-EXTRACTION_PRINCIPLES-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-FILE_OPERATIONS",
+      "path": "tied-project/implementation-decisions/IMPL-FILE_OPERATIONS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 13,
+      "post_true_count": 13,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-FILE_STATISTICS",
+      "path": "tied-project/implementation-decisions/IMPL-FILE_STATISTICS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-FILE_STATISTICS_TEMPLATE_FIX",
+      "path": "tied-project/implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-GIT_CLI",
+      "path": "tied-project/implementation-decisions/IMPL-GIT_CLI-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-GIT_DIRTY_CONFIG",
+      "path": "tied-project/implementation-decisions/IMPL-GIT_DIRTY_CONFIG-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-INCREMENTAL_DUPLICATE_PREVENTION",
+      "path": "tied-project/implementation-decisions/IMPL-INCREMENTAL_DUPLICATE_PREVENTION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-INTERFACE_DRIVEN",
+      "path": "tied-project/implementation-decisions/IMPL-INTERFACE_DRIVEN-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-INTERFACE_FIRST",
+      "path": "tied-project/implementation-decisions/IMPL-INTERFACE_FIRST-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-LARGE_FILE_CHALLENGE",
+      "path": "tied-project/implementation-decisions/IMPL-LARGE_FILE_CHALLENGE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-LARGE_FILE_DECOMP",
+      "path": "tied-project/implementation-decisions/IMPL-LARGE_FILE_DECOMP-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-LAYERED_EXTRACTION",
+      "path": "tied-project/implementation-decisions/IMPL-LAYERED_EXTRACTION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-LIST_FORMAT_SAFETY",
+      "path": "tied-project/implementation-decisions/IMPL-LIST_FORMAT_SAFETY-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-LIST_LIMIT",
+      "path": "tied-project/implementation-decisions/IMPL-LIST_LIMIT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-MCP_FEEDBACK_TOOLS",
+      "path": "tied-project/implementation-decisions/IMPL-MCP_FEEDBACK_TOOLS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-MODULE_VALIDATION",
+      "path": "tied-project/implementation-decisions/IMPL-MODULE_VALIDATION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-PACKAGE_EXTRACTION",
+      "path": "tied-project/implementation-decisions/IMPL-PACKAGE_EXTRACTION-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-PROCESSING_PATTERNS",
+      "path": "tied-project/implementation-decisions/IMPL-PROCESSING_PATTERNS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": true
+    },
+    {
+      "token": "IMPL-REFACTOR_PREP",
+      "path": "tied-project/implementation-decisions/IMPL-REFACTOR_PREP-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-RESOURCE_MANAGER",
+      "path": "tied-project/implementation-decisions/IMPL-RESOURCE_MANAGER-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-SEMANTIC_CROSS_REF",
+      "path": "tied-project/implementation-decisions/IMPL-SEMANTIC_CROSS_REF-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-SPEC_CTL",
+      "path": "tied-project/implementation-decisions/IMPL-SPEC_CTL-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-STDD_VIS_ASSETS",
+      "path": "tied-project/implementation-decisions/IMPL-STDD_VIS_ASSETS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-STDD_VIS_DATA_PIPELINE",
+      "path": "tied-project/implementation-decisions/IMPL-STDD_VIS_DATA_PIPELINE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-STRUCTURED_ERRORS",
+      "path": "tied-project/implementation-decisions/IMPL-STRUCTURED_ERRORS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_CFG_005_P1",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_CFG_005_P1-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_COVERAGE",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_COVERAGE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_DEFAULT_STRATEGY_EDGES",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_DEFAULT_STRATEGY_EDGES-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_EMPTY_STRING_HANDLING",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_EMPTY_STRING_HANDLING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_EXCLUDE_MERGE",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_EXCLUDE_MERGE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_PREPEND_ORDERING",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_PREPEND_ORDERING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TEST_UNICODE_HANDLING",
+      "path": "tied-project/implementation-decisions/IMPL-TEST_UNICODE_HANDLING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TESTING",
+      "path": "tied-project/implementation-decisions/IMPL-TESTING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TESTING_COMPLEXITY",
+      "path": "tied-project/implementation-decisions/IMPL-TESTING_COMPLEXITY-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TIED_FILES",
+      "path": "tied-project/implementation-decisions/IMPL-TIED_FILES-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TOKEN_COVERAGE_AUDIT",
+      "path": "tied-project/implementation-decisions/IMPL-TOKEN_COVERAGE_AUDIT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TOKEN_MIGRATION_COMPLETE",
+      "path": "tied-project/implementation-decisions/IMPL-TOKEN_MIGRATION_COMPLETE-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TOKEN_SYSTEM",
+      "path": "tied-project/implementation-decisions/IMPL-TOKEN_SYSTEM-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-TRACEABILITY",
+      "path": "tied-project/implementation-decisions/IMPL-TRACEABILITY-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-ZERO_BREAKING",
+      "path": "tied-project/implementation-decisions/IMPL-ZERO_BREAKING-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-ZIP_FORMAT",
+      "path": "tied-project/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 9,
+      "post_true_count": 8,
+      "error_step_names": [],
+      "async_in_scope": false
+    }
+  ],
+  "pilot_tokens": [
+    "IMPL-ATOMIC_OPS",
+    "IMPL-CFG_006",
+    "IMPL-CLI_FRAMEWORK",
+    "IMPL-CONFIG_STRUCT",
+    "IMPL-DATA_MODELS",
+    "IMPL-DIFF_COMMAND",
+    "IMPL-DOC_ENHANCEMENT",
+    "IMPL-EXCLUSION_PATTERNS",
+    "IMPL-EXTRACTION_PRINCIPLES",
+    "IMPL-FILE_OPERATIONS",
+    "IMPL-ZIP_FORMAT"
+  ],
+  "pilot_metrics": [
+    {
+      "token": "IMPL-ATOMIC_OPS",
+      "path": "tied-project/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 12,
+      "post_true_count": 12,
+      "error_step_names": [
+        "E001"
+      ],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CFG_006",
+      "path": "tied-project/implementation-decisions/IMPL-CFG_006-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 7,
+      "post_true_count": 7,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CLI_FRAMEWORK",
+      "path": "tied-project/implementation-decisions/IMPL-CLI_FRAMEWORK-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-CONFIG_STRUCT",
+      "path": "tied-project/implementation-decisions/IMPL-CONFIG_STRUCT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 4,
+      "post_true_count": 4,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DATA_MODELS",
+      "path": "tied-project/implementation-decisions/IMPL-DATA_MODELS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DIFF_COMMAND",
+      "path": "tied-project/implementation-decisions/IMPL-DIFF_COMMAND-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-DOC_ENHANCEMENT",
+      "path": "tied-project/implementation-decisions/IMPL-DOC_ENHANCEMENT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXCLUSION_PATTERNS",
+      "path": "tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md",
+      "grammar_version": "v2",
+      "active_procedures": 2,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-EXTRACTION_PRINCIPLES",
+      "path": "tied-project/implementation-decisions/IMPL-EXTRACTION_PRINCIPLES-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 0,
+      "post_true_count": 0,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-FILE_OPERATIONS",
+      "path": "tied-project/implementation-decisions/IMPL-FILE_OPERATIONS-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 13,
+      "post_true_count": 13,
+      "error_step_names": [],
+      "async_in_scope": false
+    },
+    {
+      "token": "IMPL-ZIP_FORMAT",
+      "path": "tied-project/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md",
+      "grammar_version": null,
+      "active_procedures": 0,
+      "pre_true_count": 9,
+      "post_true_count": 8,
+      "error_step_names": [],
+      "async_in_scope": false
+    }
+  ],
+  "aggregates": {
+    "grammar_v2_count": 1,
+    "pre_true_total": 45,
+    "post_true_total": 44,
+    "async_in_scope_count": 1
+  }
+}

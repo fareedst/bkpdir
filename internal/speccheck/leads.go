@@ -29,7 +29,7 @@ func LeadScanDirPaths(repoRoot string) []string {
 // LoadLeadCheckSkip reads impl tokens exempt from literal block-lead Go sync.
 func LoadLeadCheckSkip(repoRoot string) map[string]bool {
 	out := make(map[string]bool)
-	path := filepath.Join(repoRoot, "tied", "spec", "coverage-waivers.yaml")
+	path := filepath.Join(repoRoot, "tied-project", "spec", "coverage-waivers.yaml")
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return out

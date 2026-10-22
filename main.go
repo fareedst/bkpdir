@@ -26,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
+	"bkpdir/pkg/clioutput"
 	"bkpdir/pkg/formatter"
 )
 
@@ -65,10 +66,11 @@ var (
 )
 
 var (
-	dryRun     bool
-	note       string
-	showConfig bool
-	debug      bool // SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Global debug flag
+	dryRun                  bool
+	note                    string
+	showConfig              bool
+	debug                   bool // SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Global debug flag
+	incrementalAnchorModeCLI string
 )
 
 // - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return true only when mode is a regular file.
@@ -397,8 +399,13 @@ func main() {
 	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// DECISION-REF: DEC-002
 	// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
-	if err := executeWithAutoDetection(newRootCommand(), os.Args[1:]); err != nil {
-		fmt.Println(err)
+	// [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] [ARCH-BKPDIR_CLI_OUTPUT_STANDARD] [REQ-BKPDIR_CLI_OUTPUT_STANDARD]
+	peeled, flags := clioutput.PeelTextureArgs(os.Args[1:])
+	policy := clioutput.ResolvePolicy(flags)
+	root := newRootCommand()
+	clioutput.ApplyToRoot(root, policy)
+	if err := executeWithAutoDetection(root, peeled); err != nil {
+		clioutput.PrintExecError(err)
 		os.Exit(1)
 	}
 }
@@ -1047,13 +1054,14 @@ If the directory is identical to the most recent archive, no new archive is crea
 				archiveNote = args[0]
 			}
 
-			if err := CreateIncrementalArchiveWithContext(ctx, cfg, archiveNote, dryRun); err != nil {
+			if err := CreateIncrementalArchiveWithContextAndMode(ctx, cfg, archiveNote, dryRun, incrementalAnchorModeCLI); err != nil {
 				exitCode := HandleArchiveError(err, cfg, formatter)
 				os.Exit(exitCode)
 			}
 		},
 	}
 	cmd.Flags().StringVar(&note, "note", "", "Add a note to the archive name")
+	cmd.Flags().StringVar(&incrementalAnchorModeCLI, "incremental-anchor-mode", "", "Incremental anchor mode: full (default) or chained")
 	return cmd
 }
 
@@ -1111,8 +1119,14 @@ If no incremental archive exists, compares against the full archive only.`,
 				os.Exit(exitCode)
 			}
 
+			anchorMode, err := cfg.EffectiveIncrementalAnchorMode(incrementalAnchorModeCLI)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(cfg.StatusConfigError)
+			}
+
 			// Handle case where no archives exist
-			reconstructedState, err := ReconstructArchiveState(archiveDir)
+			reconstructedState, err := ReconstructArchiveStateWithMode(archiveDir, anchorMode)
 			if err != nil {
 				// Check if error is "No archives found" or "No full archive found"
 				if strings.Contains(err.Error(), "No archives found") || strings.Contains(err.Error(), "No full archive found") {
@@ -1149,6 +1163,7 @@ If no incremental archive exists, compares against the full archive only.`,
 			formatter.PrintDiffResult(diff)
 		},
 	}
+	cmd.Flags().StringVar(&incrementalAnchorModeCLI, "incremental-anchor-mode", "", "Incremental anchor mode: full (default) or chained")
 	return cmd
 }
 

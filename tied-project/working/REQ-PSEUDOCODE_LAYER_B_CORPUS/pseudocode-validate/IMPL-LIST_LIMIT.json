@@ -1,0 +1,154 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "REGISTER_LIMIT_FLAG",
+      "line": 18,
+      "token_refs": [
+        "ARCH-LIST_LIMIT",
+        "IMPL-LIST_LIMIT",
+        "REQ-LIST_LIMIT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "HANDLE_LIST_COMMAND",
+      "line": 35,
+      "token_refs": [
+        "ARCH-LIST_LIMIT",
+        "IMPL-LIST_LIMIT",
+        "REQ-LIST_LIMIT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LIST_ARCHIVES_ENHANCED",
+      "line": 55,
+      "token_refs": [
+        "ARCH-LIST_LIMIT",
+        "IMPL-LIST_LIMIT",
+        "REQ-LIST_LIMIT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "HANDLE_LIST_FILE_BACKUPS_COMMAND",
+      "line": 83,
+      "token_refs": [
+        "ARCH-LIST_LIMIT",
+        "IMPL-LIST_LIMIT",
+        "REQ-LIST_LIMIT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LIST_FILE_BACKUPS_ENHANCED",
+      "line": 103,
+      "token_refs": [
+        "ARCH-LIST_LIMIT",
+        "IMPL-LIST_LIMIT",
+        "REQ-LIST_LIMIT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "COMMAND_HANDLER_LIST",
+      "line": 130,
+      "token_refs": [
+        "IMPL-LIST_LIMIT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "REGISTER_LIMIT_FLAG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "HANDLE_LIST_COMMAND",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LIST_ARCHIVES_ENHANCED",
+      "branch_lines": [
+        65,
+        68,
+        70,
+        72
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "HANDLE_LIST_FILE_BACKUPS_COMMAND",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LIST_FILE_BACKUPS_ENHANCED",
+      "branch_lines": [
+        113,
+        116,
+        117,
+        119
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "COMMAND_HANDLER_LIST",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

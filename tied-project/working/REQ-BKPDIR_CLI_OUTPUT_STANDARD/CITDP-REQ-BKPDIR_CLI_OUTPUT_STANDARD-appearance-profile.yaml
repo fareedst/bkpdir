@@ -1,0 +1,60 @@
+CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD-appearance-profile:
+  record_identity:
+    change_request_id: REQ-BKPDIR_CLI_OUTPUT_STANDARD
+    slice_id: appearance-profile-2026-10
+    title: Operator help appearance profile (decorated TTY + plain fallback)
+    recorded_at: '2026-10-22'
+    parent_citdp: tied-project/citdp/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml
+  change_definition:
+    current_behavior: |
+      Stream contract is implemented: help routes to policy help writer on stderr by default;
+      plain mode selects Cobra plainHelpTemplate but does not apply working-spec ANSI layout;
+      shell include strips ANSI when plain but does not centralize section/rule/command-row helpers.
+    desired_behavior: |
+      Post-process Cobra-generated help through RenderHelp when not plain; plain path emits
+      spec §4 ASCII layout without ESC; shell help uses shared profile helpers on the seven
+      adopted scripts; contract suite unchanged and green.
+    non_goals:
+      - New REQ/ARCH/IMPL tokens for colors or ANSI
+      - cmd/cli-template adoption
+      - Shell argv peeling or full Go acceptance matrix in shell
+      - stderr diagnostic or failure-text cleanup
+      - Changing default help destination or specctl machine stdout
+    success_criteria:
+      - Decorated profile tests pass with injected TTY on selected help writer
+      - Plain, NO_COLOR, and non-TTY paths contain no ESC sequences in help output
+      - Existing contract test selectors pass without modification to stream assertions
+      - IMPL sidecar RENDER_HELP validated; tied_validate_consistency pass after LEAP sync
+    unchanged_behavior: |
+      Stream contract matrix (help dest, stdout empty on default help, peel order, fleet routing,
+      machine output formats, execution error stderr, specctl matrix lines).
+  impact_analysis:
+    modules_or_boundaries:
+      - pkg/clioutput/help_render.go (new)
+      - pkg/clioutput/cobra.go
+      - pkg/clioutput/cobra_profile_test.go or help_render_test.go
+      - main_cli_composition_test.go (profile cases only)
+      - scripts/_cli_operator_output_standard.inc.sh
+      - seven scripts listed in build-handoff.md
+    tied_tokens_affected:
+      - REQ-BKPDIR_CLI_OUTPUT_STANDARD
+      - ARCH-BKPDIR_CLI_OUTPUT_STANDARD
+      - IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE
+  risk_analysis:
+    adversarial_inquiry:
+      depth_tier: minimal
+      gate_policy: advisory
+      research_profile: none
+      assurance_profile: baseline-functional
+      rationale: |
+        Profile-only presentation on local CLI; same eligibility as parent CITDP;
+        no new auth/network/persistence surface.
+      counterexamples:
+        - Contract test starts asserting ANSI and breaks on profile tweak
+        - CaptureHelp double ApplyToRoot produces duplicated or nested help output
+        - Shell pipe test falsely claimed as proof of TTY decoration
+      falsification_questions:
+        - Would contract tests still pass if RenderHelp panicked on empty input?
+        - Does fleet binary help skip RenderHelp when invoked via ExecuteRoot?
+  test_strategy_ref: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/test-strategy-appearance-profile.md
+  tracker_ref: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/agent-req-implementation-checklist-appearance-profile.yaml

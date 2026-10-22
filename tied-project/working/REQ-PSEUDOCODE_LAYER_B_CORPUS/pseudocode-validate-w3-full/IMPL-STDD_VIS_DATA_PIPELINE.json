@@ -1,0 +1,107 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "INGEST_SOURCES",
+      "line": 18,
+      "token_refs": [
+        "ARCH-STDD_VIS_FLOW",
+        "IMPL-STDD_VIS_DATA_PIPELINE",
+        "REQ-MODULE_VALIDATION",
+        "REQ-STDD_VIS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NORMALIZE_GRAPH",
+      "line": 38,
+      "token_refs": [
+        "ARCH-STDD_VIS_FLOW",
+        "IMPL-STDD_VIS_DATA_PIPELINE",
+        "REQ-MODULE_VALIDATION",
+        "REQ-STDD_VIS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXPORT_ARTIFACTS",
+      "line": 58,
+      "token_refs": [
+        "ARCH-STDD_VIS_FLOW",
+        "IMPL-STDD_VIS_DATA_PIPELINE",
+        "REQ-MODULE_VALIDATION",
+        "REQ-STDD_VIS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PIPELINE_VALIDATION",
+      "line": 78,
+      "token_refs": [
+        "ARCH-STDD_VIS_FLOW",
+        "IMPL-STDD_VIS_DATA_PIPELINE",
+        "REQ-MODULE_VALIDATION",
+        "REQ-STDD_VIS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "INGEST_SOURCES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NORMALIZE_GRAPH",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXPORT_ARTIFACTS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PIPELINE_VALIDATION",
+      "branch_lines": [],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

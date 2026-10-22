@@ -1,0 +1,90 @@
+# L0 merge gate + fail-closed Layer B on changed formal sidecars (Path B).
+# Branch protection (sponsor): require only job l0-spec until pull_request.paths match all merges;
+# see docs/markscope/spec-verification.md § Branch protection.
+# [REQ-PSEUDOCODE_FORMAL_VERIFICATION] [IMPL-SPEC_CTL]
+name: spec-verification
+
+on:
+  pull_request:
+    paths:
+      - "tied-project/implementation-decisions/**"
+      - "pkg/**"
+      - "internal/**"
+      - "cmd/**"
+      - "scripts/**"
+      - "test/specconformance/**"
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      run_layer_b_wave:
+        description: "Optional full wave Layer B enforce (w0–w3); leave empty for changed-only"
+        required: false
+        type: choice
+        options:
+          - ""
+          - w0
+          - w1
+          - w2
+          - w3
+
+jobs:
+  l0-spec:
+    name: L0 specctl + conformance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: L0 verification (no TIED MCP)
+        run: SKIP_TIED_MCP=1 scripts/run-spec-verification.sh
+
+  layer-b-enforce:
+    name: Layer B enforce (fail-closed)
+    runs-on: ubuntu-latest
+    needs: l0-spec
+    if: >-
+      github.event_name == 'workflow_dispatch' && inputs.run_layer_b_wave != '' ||
+      github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Build TIED MCP
+        run: bash scripts/ci/setup-tied-mcp.sh
+      - name: Plan Layer B enforcement
+        id: plan
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ inputs.run_layer_b_wave }}" ]]; then
+            python3 scripts/layer_b_ci_enforcement.py --mode wave --wave "${{ inputs.run_layer_b_wave }}" --dry-run --json | tee /tmp/layer-b-plan.json
+          else
+            RUN_LAYER_B_IF_CHANGED=1 scripts/run-layer-b-ci-enforcement.sh --dry-run | tee /tmp/layer-b-plan.json
+          fi
+          count="$(python3 -c 'import json; print(len(json.load(open("/tmp/layer-b-plan.json"))["enforce_tokens"]))')"
+          echo "token_count=$count" >> "$GITHUB_OUTPUT"
+      - name: Layer B pseudocode_validate (full enforce)
+        if: steps.plan.outputs.token_count != '0'
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ inputs.run_layer_b_wave }}" ]]; then
+            RUN_LAYER_B=1 RUN_LAYER_B_WAVE="${{ inputs.run_layer_b_wave }}" scripts/run-layer-b-ci-enforcement.sh
+          else
+            RUN_LAYER_B_IF_CHANGED=1 scripts/run-layer-b-ci-enforcement.sh --if-changed
+          fi
+      - name: No Layer B tokens in diff
+        if: steps.plan.outputs.token_count == '0'
+        run: echo "DEBUG: no enforce_in_ci sidecar changes — Layer B skipped"

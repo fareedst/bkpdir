@@ -1,0 +1,131 @@
+IMPL-FILE_OPERATIONS:
+  code_locations:
+    files:
+      - description: Directory traversal with exclusion, depth limits, symlinks, hidden files
+        path: pkg/fileops/traversal.go
+      - description: Package entry point with version constants
+        path: pkg/fileops/fileops.go
+      - description: Path validation with security checking (traversal, suspicious patterns)
+        path: pkg/fileops/validation.go
+    functions:
+      - description: Basic directory walk with default options, delegates to WalkWithOptions
+        file: pkg/fileops/traversal.go
+        name: DefaultTraverser.Walk
+      - description: Checks for path traversal (..) and suspicious patterns (~, $, null, control chars)
+        file: pkg/fileops/validation.go
+        name: PathValidator.IsSecurePath
+      - description: Configurable directory walk — validates root, builds exclusion matcher, delegates to walkRecursive
+        file: pkg/fileops/traversal.go
+        name: DefaultTraverser.WalkWithOptions
+      - description: Creates a DefaultTraverser with no initial exclusion patterns
+        file: pkg/fileops/traversal.go
+        name: NewTraverser
+      - description: Creates a DefaultTraverser with pre-configured exclusion patterns
+        file: pkg/fileops/traversal.go
+        name: NewTraverserWithPatterns
+      - description: Creates a PathValidator instance
+        file: pkg/fileops/validation.go
+        name: NewPathValidator
+      - description: Package-level convenience — checks existence via default PathValidator
+        file: pkg/fileops/validation.go
+        name: ValidateExistence
+      - description: Package-level convenience — checks readability via default PathValidator
+        file: pkg/fileops/validation.go
+        name: ValidateReadable
+      - description: Package-level convenience — checks writability via default PathValidator
+        file: pkg/fileops/validation.go
+        name: ValidateWritable
+      - description: Package-level convenience — creates ephemeral traverser and walks
+        file: pkg/fileops/traversal.go
+        name: Walk
+      - description: Package-level convenience — creates traverser with exclusion options
+        file: pkg/fileops/traversal.go
+        name: WalkWithExclusions
+      - description: Package-level convenience — lists files via default traverser
+        file: pkg/fileops/traversal.go
+        name: ListFiles
+      - description: Package-level convenience — lists files with exclusion patterns
+        file: pkg/fileops/traversal.go
+        name: ListFilesWithExclusions
+      - description: Package-level convenience — security check via default PathValidator
+        file: pkg/fileops/validation.go
+        name: IsSecurePath
+      - description: Package-level convenience — validates via default PathValidator
+        file: pkg/fileops/validation.go
+        name: ValidatePath
+      - description: Recursive traversal with depth limit, exclusion, hidden-file, and symlink handling
+        file: pkg/fileops/traversal.go
+        name: DefaultTraverser.walkRecursive
+      - description: Returns file list via ListFilesWithExclusions with no patterns
+        file: pkg/fileops/traversal.go
+        name: DefaultTraverser.ListFiles
+      - description: Validates path exists via os.Stat after ValidatePath
+        file: pkg/fileops/validation.go
+        name: PathValidator.ValidateExistence
+      - description: Validates path is non-empty, secure, and well-formed
+        file: pkg/fileops/validation.go
+        name: PathValidator.ValidatePath
+      - description: Validates path is readable by attempting os.Open
+        file: pkg/fileops/validation.go
+        name: PathValidator.ValidateReadable
+      - description: Validates writability — directories via temp file, files via O_WRONLY
+        file: pkg/fileops/validation.go
+        name: PathValidator.ValidateWritable
+      - description: Walks directory collecting regular file paths with exclusion patterns
+        file: pkg/fileops/traversal.go
+        name: DefaultTraverser.ListFilesWithExclusions
+  cross_references:
+    - ARCH-FILE_OPERATIONS
+    - REQ-RELIABILITY
+  implementation_approach:
+    details: []
+    summary: |-
+      pkg/fileops provides secure path validation and directory traversal with exclusions, depth limits, symlink policy, and file listing helpers.
+      INPUT: root path, TraversalOptions, exclude patterns
+      OUTPUT: visitor callbacks, file path lists, validation errors
+      DATA: DefaultTraverser, PathValidator, PatternMatcher
+      Canonical behavior: tied-project/implementation-decisions/IMPL-FILE_OPERATIONS-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: File Operations Implementation
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Prevents data corruption
+      Enhances security
+      Supports complex traversal scenarios
+      Enables efficient file comparison
+  related_decisions:
+    composed_with:
+      - IMPL-ATOMIC_OPS
+      - IMPL-EXCLUSION_PATTERNS
+    depends_on: []
+    see_also:
+      - ARCH-FILE_OPERATIONS
+      - IMPL-ATOMIC_OPS
+      - IMPL-DIRECTORY_COMPARISON
+      - IMPL-EXCLUSION_PATTERNS
+      - REQ-RELIABILITY
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-FILE_OPERATIONS
+    code_annotations:
+      - ARCH-FILE_OPERATIONS
+      - IMPL-FILE_OPERATIONS
+      - REQ-RELIABILITY
+    requirements:
+      - REQ-RELIABILITY
+    tests: []

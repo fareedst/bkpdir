@@ -1,0 +1,22 @@
+fix(fileops): match multi-segment exclude dirs at any depth
+
+Multi-segment directory patterns (e.g. .venv/lib/) now match at any
+depth; leading / keeps backup-root-only semantics. Breaking for configs
+that relied on root-only multi-segment without a slash.
+
+[REQ-IMMUTABLE_FILE_EXCLUSION] [REQ-CONFIGURATION]
+[ARCH-EXCLUSION_PATTERNS] [IMPL-EXCLUSION_PATTERNS]
+
+Completion signals: close_out gate allowed; envelope blocking_gaps=0;
+process_grade B (thin_ledger advisory).
+
+Staging map:
+- exclude_test.go
+- pkg/fileops/exclusion.go
+- CHANGELOG.md
+- docs/user/specification.md
+- docs/configuration-troubleshooting.md
+- tied-project/citdp/CITDP-EXCLUDE-MULTI-SEG-ANY-DEPTH.yaml
+- tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+- tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md
+- tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/

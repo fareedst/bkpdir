@@ -1,0 +1,104 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "maintain_cross_document_consistency",
+      "line": 20,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-DOC_ENHANCEMENT",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "validate_documentation_consistency",
+      "line": 45,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-DOC_ENHANCEMENT",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "define_behavioral_contracts",
+      "line": 69,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-DOC_ENHANCEMENT",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "analyze_change_impact",
+      "line": 93,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-DOC_ENHANCEMENT",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "maintain_cross_document_consistency",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "validate_documentation_consistency",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "define_behavioral_contracts",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "analyze_change_impact",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

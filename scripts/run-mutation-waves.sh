@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 THRESHOLD="${MUTATION_SCORE_THRESHOLD:-70}"
-REGISTRY="${ROOT}/tied/spec/mutation-wave-registry.yaml"
+REGISTRY="${ROOT}/tied-project/spec/mutation-wave-registry.yaml"
 
 if ! command -v go-mutesting >/dev/null 2>&1; then
   echo "WARNING: go-mutesting not installed — all waves skipped (INFRA-MUTATION-TOOL)"

@@ -11,7 +11,7 @@ This document captures **all** changes introduced to make the `bkpdir` TIED clie
 
 **Diff scope:** one commit, parent → `db66a3b7` (six paths touched; see [Changed files](#changed-files)).
 
-**TIED YAML:** this commit does **not** modify `tied/` indexes or detail files. Porting is documentation + Go CLI + one composition test only.
+**TIED YAML:** this commit does **not** modify `tied-project/` indexes or detail files. Porting is documentation + Go CLI + one composition test only.
 
 **Binary artifact:** the commit adds `bkpdir.exe` (~9.5 MB). That file is a **local build output**. On another clone, prefer `go build -o bkpdir.exe .` instead of copying the binary. Omit `bkpdir.exe` from git when merging unless you explicitly want a checked-in Windows binary.
 

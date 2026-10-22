@@ -1,0 +1,16 @@
+ARCH-BKPDIR_CLI_OUTPUT_STANDARD:
+  decision: "Centralize stream routing in pkg/clioutput; keep appearance profile replaceable behind one adapter."
+  description: "Policy/profile boundary, Cobra adapter, auto-detection peel seam, shell adapter boundary, conformance harness."
+  name: "CLI operator output architecture"
+  related_decisions:
+    depends_on:
+      - "ARCH-AUTO_DETECTION"
+      - "ARCH-CLI_FRAMEWORK"
+    related_to: []
+  requirements_addressed:
+    - "REQ-BKPDIR_CLI_OUTPUT_STANDARD"
+  traceability:
+    implementation:
+      - "IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE"
+    requirements:
+      - "REQ-BKPDIR_CLI_OUTPUT_STANDARD"

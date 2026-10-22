@@ -1,0 +1,13 @@
+IMPL-INCREMENTAL_ANCHOR_MODE:
+  essence_pseudocode_path: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE-pseudocode.md
+  metadata:
+    created:
+      author: AI agent
+      date: '2026-10-21'
+  name: Incremental Anchor Mode Implementation
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-INCREMENTAL_ANCHOR_MODE
+    requirements:
+      - REQ-INCREMENTAL_ANCHOR_MODE

@@ -1,0 +1,144 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "TABLE_DRIVEN_UNIT_TESTS",
+      "line": 18,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TESTING",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TESTUTIL_FILESYSTEM",
+      "line": 39,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TESTING",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TESTUTIL_FIXTURES",
+      "line": 57,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TESTING",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TESTUTIL_ASSERTIONS",
+      "line": 77,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TESTING",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "INTERNAL_SCENARIO_HELPERS",
+      "line": 97,
+      "token_refs": [
+        "IMPL-TESTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "TABLE_DRIVEN_UNIT_TESTS",
+      "branch_lines": [
+        26,
+        27,
+        28,
+        30
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TESTUTIL_FILESYSTEM",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TESTUTIL_FIXTURES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TESTUTIL_ASSERTIONS",
+      "branch_lines": [],
+      "failure_modes": [
+        "STEP T001: Simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths",
+        "- [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths."
+      ],
+      "references": []
+    },
+    {
+      "block": "INTERNAL_SCENARIO_HELPERS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 29
+    }
+  ],
+  "leakage": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 29,
+      "pattern": "function_kw"
+    }
+  ]
+}

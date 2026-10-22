@@ -1,0 +1,20 @@
+feat(cli): appearance profile for operator help output
+
+Deliver RenderHelp post-processing for Cobra help (decorated TTY vs plain)
+behind [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] without changing the stream
+contract. Adds profile tests and shell profile helpers; updates TIED sidecar,
+CITDP success criteria, and close-out evidence for REQ-BKPDIR_CLI_OUTPUT_STANDARD.
+
+Completion signals: close_out allowed, envelope blocking gaps 0, reconcile A.
+
+Tokens: REQ-BKPDIR_CLI_OUTPUT_STANDARD, ARCH-BKPDIR_CLI_OUTPUT_STANDARD,
+IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE
+
+Staging map:
+- pkg/clioutput/cobra.go, help_render.go, *_test.go, testdata/
+- shell_cli_output_profile_test.go
+- scripts/_cli_operator_output_standard.inc.sh
+- tied-project/implementation-decisions/IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE*
+- tied-project/citdp/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml
+- tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/**
+- CHANGELOG.md

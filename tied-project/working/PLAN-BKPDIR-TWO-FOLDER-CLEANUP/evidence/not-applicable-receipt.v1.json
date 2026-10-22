@@ -1,0 +1,14 @@
+{
+  "schema_version": "not-applicable-receipt.v1",
+  "request_token": "PLAN-BKPDIR-TWO-FOLDER-CLEANUP",
+  "artifact_kind": "adversarial_inquiry",
+  "depth_tier": "minimal",
+  "phases": [
+    "close_out",
+    "pre_implementation",
+    "verification"
+  ],
+  "reason": "Hygiene-only layout cleanup; sub-adversarial-inquiry-pass not_applicable at minimal depth_tier per tracker",
+  "generated_at": "2026-10-21T20:40:00.000Z",
+  "source": "close-out"
+}

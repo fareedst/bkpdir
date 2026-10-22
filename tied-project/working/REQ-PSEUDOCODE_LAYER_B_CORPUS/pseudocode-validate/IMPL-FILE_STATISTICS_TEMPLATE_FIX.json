@@ -1,0 +1,103 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "FORMAT_CREATED_ARCHIVE_WITH_STATS",
+      "line": 18,
+      "token_refs": [
+        "ARCH-FILE_STATISTICS",
+        "IMPL-FILE_STATISTICS_TEMPLATE_FIX",
+        "REQ-OUT_002",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_INCREMENTAL_CREATED_WITH_STATS",
+      "line": 38,
+      "token_refs": [
+        "ARCH-FILE_STATISTICS",
+        "IMPL-FILE_STATISTICS_TEMPLATE_FIX",
+        "REQ-OUT_002",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PRINT_CREATED_ARCHIVE_WITH_STATS",
+      "line": 55,
+      "token_refs": [
+        "ARCH-FILE_STATISTICS",
+        "IMPL-FILE_STATISTICS_TEMPLATE_FIX",
+        "REQ-OUT_002",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PRINT_INCREMENTAL_CREATED_WITH_STATS",
+      "line": 72,
+      "token_refs": [
+        "IMPL-FILE_STATISTICS_TEMPLATE_FIX"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "FORMAT_CREATED_ARCHIVE_WITH_STATS",
+      "branch_lines": [
+        28
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_INCREMENTAL_CREATED_WITH_STATS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PRINT_CREATED_ARCHIVE_WITH_STATS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PRINT_INCREMENTAL_CREATED_WITH_STATS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "build_feature_reference_blocks",
+      "line": 18,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-SEMANTIC_CROSS_REF",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "validate_link_integrity",
+      "line": 43,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-SEMANTIC_CROSS_REF",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "enforce_cross_reference_consistency",
+      "line": 68,
+      "token_refs": [
+        "ARCH-DOCUMENTATION_ARCHITECTURE",
+        "IMPL-SEMANTIC_CROSS_REF",
+        "REQ-DOC_001"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "build_feature_reference_blocks",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "validate_link_integrity",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "enforce_cross_reference_consistency",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

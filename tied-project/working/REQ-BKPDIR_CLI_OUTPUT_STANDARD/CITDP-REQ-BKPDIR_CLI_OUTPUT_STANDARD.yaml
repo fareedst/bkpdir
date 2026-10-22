@@ -1,0 +1,119 @@
+CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD:
+  record_identity:
+    change_request_id: REQ-BKPDIR_CLI_OUTPUT_STANDARD
+    slice_id: REQ-BKPDIR_CLI_OUTPUT_STANDARD
+    title: bkpdir operator output standard (stream contract + replaceable profile)
+    recorded_at: '2026-10-22'
+  change_definition:
+    current_behavior: |
+      bkpdir and most repo CLIs follow Cobra defaults (help commonly on stdout);
+      auto-detection bypasses Cobra; main prints execution errors with fmt.Println (stdout);
+      formatters flush to real os.Stdout/os.Stderr; shell scripts emit usage ad hoc.
+    desired_behavior: |
+      One durable stream contract across adopted Go binaries and shell scripts:
+      machine data on stdout; default help and diagnostics on stderr; explicit stdout help;
+      plain/decorated profile behind one replaceable seam; shared conformance harness;
+      Cobra and auto-detection share policy resolution.
+    non_goals:
+      - Promote bkpdir profile into tied-bundle methodology yet
+      - Build stdd Node cli-output-policy.mjs
+      - Refactor all OutputCollector writers without conformance evidence
+      - Resolve pre-existing auto-detect -n note vs root list -n semantics
+      - Add help surfaces to tools that have none today
+    success_criteria:
+      - Acceptance matrix cases 1–7 pass for bkpdir and each adopted binary/script
+      - Cross-tool conformance suite green in CI or documented local gate
+      - Profile suite: decorated TTY help via RenderHelp; plain/non-TTY/NO_COLOR paths contain no ESC
+      - tied_validate_consistency and pseudocode validation pass for new R+A+I chain
+      - bkpdir-cli.md documents standard terms, profile link, stderr-default migration
+    unchanged_behavior: |
+      Archive/list/diff/backup machine output semantics; immutable global option meanings
+      except documented stderr-default help migration; specctl matrix/check-leads stdout lines.
+  impact_analysis:
+    modules_or_boundaries:
+      - main.go
+      - main_cli_composition_test.go
+      - pkg/clioutput (new)
+      - pkg/formatter/collector.go (coupling review only)
+      - cmd/token-suggester
+      - cmd/cli-template
+      - cmd/ai-validation
+      - cmd/realtime-validator
+      - cmd/specctl (usage alignment, stdout machine paths preserved)
+      - scripts/_cli_operator_output_standard.inc.sh (new)
+      - scripts with usage()/--help (seven listed in plan)
+    tied_tokens_affected:
+      - REQ-BKPDIR_CLI_OUTPUT_STANDARD
+      - ARCH-BKPDIR_CLI_OUTPUT_STANDARD
+      - IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE
+    tied_tokens_cross_reference_only:
+      - REQ-USABILITY
+      - REQ-IMMUTABLE_GLOBAL_OPTIONS
+      - IMPL-CLI_FRAMEWORK
+      - IMPL-AUTO_DETECTION
+      - IMPL-DELAYED_OUTPUT
+    stdd_reference_only:
+      - REQ-TIED_CLI_OPERATOR_OUTPUT_TEXTURE
+      - ARCH-TIED_CLI_OPERATOR_OUTPUT_TEXTURE
+      - IMPL-TIED_BUILD_COMMANDS_HOW_TEXTURE
+  risk_analysis:
+    adversarial_inquiry:
+      depth_tier: minimal
+      gate_policy: advisory
+      research_profile: none
+      assurance_profile: baseline-functional
+      rationale: |
+        Local CLI stream routing and help presentation; no auth, network, or persistence;
+        no external untrusted input beyond normal argv/env. Integrated inquiry triggers
+        (§7 eligibility) do not apply; stderr-default help is a documented costly choice.
+      counterexamples:
+        - Composition tests buffer Cobra SetOut while pkg/formatter still writes help text to os.Stdout
+        - Auto-detect path peels argv after Cobra already consumed global texture flags
+        - Shell scripts duplicate profile ANSI rules instead of sourcing one include
+      falsification_questions:
+        - Would subprocess contract tests pass if only root help changed but subcommand help stayed on stdout?
+        - Does empty stdout on --help hold when TIED_CLI_HELP_STDOUT=1 and a usage error follows on the same invocation?
+      disconfirming_observations:
+        - main.go line 402 still uses fmt.Println for execute errors (stdout today)
+        - bkpdir-cli.md still states Help coverage N/A until vocabulary step completes
+      evidence_references:
+        - tied-project/working/CLI-OPERATOR-OUTPUT-TEXTURE/spec.md
+        - tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/test-strategy.md
+        - main_cli_composition_test.go
+    costly_choices:
+      - id: COSTLY-STDERR-DEFAULT-HELP
+        detail: Pipelines that relied on `bkpdir --help | …` must use 2>&1 or --stdout / TIED_CLI_HELP_STDOUT=1
+        mitigation: Release notes, bkpdir-cli.md migration, explicit stdout override in contract tests
+      - id: COSTLY-NO-N-REPURPOSE
+        detail: Global texture flags must not reuse -n (list limit vs auto-detect note)
+        mitigation: Peel texture globals before auto-detect; document in profile tests
+    reversible_choices:
+      - pkg/clioutput vs thin pkg/cli facade (pick smallest seam at integration)
+      - Profile version string in IMPL evidence only
+    counterexamples:
+      - Subprocess test passes while in-process formatter still writes help to stdout
+      - Cobra path stderr-default but auto-detect still prints usage to stdout
+      - Shell include copied per-script instead of one shared adapter
+  test_strategy:
+    contract_suite:
+      - Default help → exit 0, empty stdout, help on stderr
+      - Explicit stdout help → help on stdout, success stderr empty
+      - Usage/unknown flag → empty stdout, stderr diagnostic, non-zero exit
+      - Machine command → data stdout, diagnostics stderr
+      - Cobra vs auto-detect policy parity
+      - Help does not read piped stdin
+    profile_suite:
+      - Plain triggers (--plain, TIED_CLI_PLAIN, NO_COLOR, non-TTY writer)
+      - Decorated TTY snapshot cases (ANSI, rules, columns) — profile tests only
+    layers:
+      - RED unit tests for policy resolver and conformance harness
+      - RED profile/renderer unit tests
+      - RED composition tests (main_cli_composition_test.go separate buffers)
+      - Subprocess contract test per adopted Go binary
+      - Shell contract test vs shared matrix
+    regression:
+      - go test ./...
+      - Existing specctl behavior for matrix/check-leads stdout unchanged
+  leap_feedback:
+    record_status: not_started
+    divergences_from_analysis: none

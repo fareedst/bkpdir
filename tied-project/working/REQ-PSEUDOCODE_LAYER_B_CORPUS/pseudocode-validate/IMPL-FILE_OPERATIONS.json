@@ -1,0 +1,325 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "NEW_TRAVERSER",
+      "line": 20,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEW_TRAVERSER_WITH_PATTERNS",
+      "line": 36,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WALK",
+      "line": 52,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WALK_WITH_EXCLUSIONS",
+      "line": 69,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WALK_WITH_OPTIONS",
+      "line": 87,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WALK_RECURSIVE",
+      "line": 106,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LIST_FILES",
+      "line": 127,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LIST_FILES_WITH_EXCLUSIONS",
+      "line": 143,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_PATH",
+      "line": 160,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_EXISTENCE",
+      "line": 179,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_READABLE",
+      "line": 197,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_WRITABLE",
+      "line": 215,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_SECURE_PATH",
+      "line": 233,
+      "token_refs": [
+        "ARCH-FILE_OPERATIONS",
+        "IMPL-FILE_OPERATIONS",
+        "REQ-RELIABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "NEW_TRAVERSER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEW_TRAVERSER_WITH_PATTERNS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WALK",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WALK_WITH_EXCLUSIONS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WALK_WITH_OPTIONS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WALK_RECURSIVE",
+      "branch_lines": [
+        113,
+        115,
+        116,
+        117,
+        118
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LIST_FILES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LIST_FILES_WITH_EXCLUSIONS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_PATH",
+      "branch_lines": [
+        168,
+        169
+      ],
+      "failure_modes": [
+        "OUTPUT: nil | ERROR",
+        "IF path empty THEN error",
+        "IF NOT IsSecurePath(path) THEN error unsafe path"
+      ],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_EXISTENCE",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: nil | ERROR",
+        "Stat path OR return does-not-exist error"
+      ],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_READABLE",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: nil | ERROR",
+        "Open for read OR return not-readable error"
+      ],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_WRITABLE",
+      "branch_lines": [
+        223,
+        224
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_SECURE_PATH",
+      "branch_lines": [
+        241
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

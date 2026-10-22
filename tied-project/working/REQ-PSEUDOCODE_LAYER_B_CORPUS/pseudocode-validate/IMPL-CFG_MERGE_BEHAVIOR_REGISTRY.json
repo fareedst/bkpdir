@@ -1,0 +1,60 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "GET_FIELD_MERGE_BEHAVIOR",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CFG_001",
+        "ARCH-CFG_005",
+        "IMPL-CFG_MERGE_BEHAVIOR_REGISTRY",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "APPLY_REPLACE",
+      "line": 37,
+      "token_refs": [
+        "IMPL-CFG_MERGE_BEHAVIOR_REGISTRY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "GET_FIELD_MERGE_BEHAVIOR",
+      "branch_lines": [
+        26
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "APPLY_REPLACE",
+      "branch_lines": [
+        45
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

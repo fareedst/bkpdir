@@ -1,0 +1,43 @@
+REQ-MAINTAINABILITY:
+  architecture: tied-project/architecture-decisions/ARCH-CODE_ORGANIZATION.yaml
+  category: Functional
+  description: Code must follow Go standards. Documentation must be comprehensive. Tests must be maintainable. Configuration system must be extensible.
+  implementation: tied-project/implementation-decisions/IMPL-CODE_STYLE.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Maintainability Requirements
+  priority: P1
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Ensures long-term maintainability and evolution
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: Code follows Go conventions
+    - criterion: Configuration system supports new fields automatically
+    - criterion: Documentation is complete and up-to-date
+    - criterion: Tests are easy to understand and modify
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations:
+      - REQ-MAINTAINABILITY
+    implementation:
+      - IMPL-CODE_STYLE
+    tests: []
+  validation_criteria:
+    - method: tied-project/architecture-decisions/ARCH-TESTING_STRATEGY.yaml; tied-project/implementation-decisions/IMPL-TESTING.yaml

@@ -160,10 +160,10 @@ func blockCovered(b specparse.Block, goRefs map[string]bool) bool {
 
 var reToken = regexp.MustCompile(`\[(REQ|ARCH|IMPL)-[^\]]+\]`)
 
-// LoadWaivers reads tied/spec/coverage-waivers.yaml.
+// LoadWaivers reads tied-project/spec/coverage-waivers.yaml.
 func LoadWaivers(repoRoot string) map[string]bool {
 	out := make(map[string]bool)
-	path := filepath.Join(repoRoot, "tied", "spec", "coverage-waivers.yaml")
+	path := filepath.Join(repoRoot, "tied-project", "spec", "coverage-waivers.yaml")
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return out

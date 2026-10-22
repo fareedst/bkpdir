@@ -1,0 +1,31 @@
+ci(spec): fail-closed Layer B on changed sidecars
+
+Add GitHub Actions spec-verification workflow (L0 + advisory layer-b-enforce),
+TIED MCP clone/build for CI, diff-driven enforcement against
+layer-b-wave-registry enforce_in_ci waves, and unit tests for the enforcer.
+
+REQ-PSEUDOCODE_LAYER_B_CORPUS Phase 5 Path B. Machine close-out pass;
+envelope 0 blocking / 5 advisory gaps. Branch protection: require L0 only
+until Layer B job is promoted to required.
+
+Staging map:
+- .github/workflows/spec-verification.yml
+- scripts/ci/setup-tied-mcp.sh
+- scripts/layer_b_ci_enforcement.py
+- scripts/run-layer-b-ci-enforcement.sh
+- scripts/test_layer_b_ci_enforcement.py
+- scripts/run-spec-verification.sh
+- scripts/run-pseudocode-layer-b-batch.sh
+- scripts/run_layer_c_gate.sh
+- docs/markscope/spec-verification.md
+- tied-project/spec/layer-b-wave-registry.yaml
+- CHANGELOG.md
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/phase5-ci-handoff.md
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-phase5.json
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/git-hygiene-receipt-2026-10-21-phase5.md
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/traceable-commit-evidence-phase5.md
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/proposed-commit-message.txt
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-close-out-handoff.md
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-corpus-handoff.md
+- tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-w3-postcommit.json

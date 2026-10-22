@@ -1,0 +1,28 @@
+ARCH-INCREMENTAL_ANCHOR_MODE:
+  decision: "Dual incremental anchor modes with full as default"
+  incremental_anchor_mode_chained:
+    effective_state: "Full archive plus every matching incremental applied in ascending name order"
+    inc_zip_contents: "Delta since prior effective archived state"
+  incremental_anchor_mode_full:
+    effective_state: "Full archive plus latest matching incremental overlay only"
+    inc_zip_contents: "Cumulative delta versus latest full snapshot"
+  incremental_path_disambiguation: "When generated incremental path exists, append -seqN before .zip per [REQ-IMMUTABLE_ARCHIVE_NAMING]; implemented by resolveIncrementalArchivePath in archive.go"
+  integration_points:
+    - "archive.go createIncrementalArchive and resolveIncrementalArchivePath"
+    - "comparison.go ReconstructArchiveStateWithMode"
+    - "main.go inc and diff commands"
+  metadata:
+    created:
+      author: "AI agent"
+      date: "2026-10-21"
+    last_updated:
+      author: "AI agent"
+      date: "2026-10-21"
+      reason: "Cross-link immutable naming for -seqN suffix"
+  name: "Incremental Anchor Mode Architecture"
+  status: "Active"
+  traceability:
+    implementation:
+      - "IMPL-INCREMENTAL_ANCHOR_MODE"
+    requirements:
+      - "REQ-INCREMENTAL_ANCHOR_MODE"

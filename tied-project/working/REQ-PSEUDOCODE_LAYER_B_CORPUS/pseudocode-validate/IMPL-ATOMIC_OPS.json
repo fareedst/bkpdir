@@ -1,0 +1,341 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "NEWATOMICWRITER",
+      "line": 27,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITER_WRITE",
+      "line": 51,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITER_WRITESTRING",
+      "line": 70,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITER_COMMIT",
+      "line": 91,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITER_ROLLBACK",
+      "line": 113,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITER_CLOSE",
+      "line": 132,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITER_CLEANUP",
+      "line": 151,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICCOPY",
+      "line": 170,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITEFILE",
+      "line": 193,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ATOMICWRITESTRING",
+      "line": 212,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "RESOURCE_ATOMICWRITEFILE",
+      "line": 228,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+      "line": 245,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-ATOMIC_OPS",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "NEWATOMICWRITER",
+      "branch_lines": [
+        35,
+        44
+      ],
+      "failure_modes": [
+        "OUTPUT: AtomicWriter | ERROR",
+        "IF VALIDATE_PATH(targetPath) fails THEN RETURN ERROR",
+        "ERROR E001: RETURN ERROR \"writer is closed\""
+      ],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITER_WRITE",
+      "branch_lines": [
+        59,
+        60
+      ],
+      "failure_modes": [
+        "OUTPUT: success | ERROR",
+        "IF writer.closed THEN RETURN ERROR \"writer is closed\"",
+        "IF writer.temp handle missing THEN RETURN ERROR"
+      ],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITER_WRITESTRING",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: success | ERROR",
+        "ERROR E001: RETURN ERROR \"already committed\"",
+        "- [IMPL-ATOMIC_OPS] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TESTING_STRATEGY] [REQ-RESOURCE_MANAGEMENT] — How: close temp handle then ATOMIC_RENAME temp to target; cleanup temp on failure; mark committed and closed."
+      ],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITER_COMMIT",
+      "branch_lines": [
+        99,
+        101
+      ],
+      "failure_modes": [
+        "OUTPUT: success | ERROR",
+        "IF writer.committed THEN RETURN ERROR \"already committed\"",
+        "IF ATOMIC_RENAME(writer.tempPath, writer.targetPath) fails THEN CLEANUP(writer); RETURN ERROR",
+        "ERROR E001: RETURN ERROR \"cannot rollback after commit\""
+      ],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITER_ROLLBACK",
+      "branch_lines": [
+        121,
+        127
+      ],
+      "failure_modes": [
+        "OUTPUT: success | ERROR",
+        "IF writer.committed THEN RETURN ERROR \"cannot rollback after commit\""
+      ],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITER_CLOSE",
+      "branch_lines": [
+        139,
+        140
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITER_CLEANUP",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ATOMICCOPY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITEFILE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ATOMICWRITESTRING",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "RESOURCE_ATOMICWRITEFILE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "RESOURCE_ATOMICWRITEFILEWITHCONTEXT",
+      "branch_lines": [
+        254,
+        257,
+        259
+      ],
+      "failure_modes": [
+        "OUTPUT: success | ERROR",
+        "IF ctx cancelled THEN RETURN cancellation ERROR",
+        "IF ctx cancelled THEN RETURN cancellation ERROR",
+        "IF ctx cancelled THEN RETURN cancellation ERROR"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

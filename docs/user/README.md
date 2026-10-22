@@ -9,7 +9,7 @@ This folder contains user-facing documentation for the BkpDir application.
 ## Related Documentation
 
 - **Developer / AI context**: [docs/context/README.md](../context/README.md)
-- **TIED (REQ/ARCH/IMPL)**: [tied/](../../tied/) — indexes and `tied/requirements/`, `tied/architecture-decisions/`, `tied/implementation-decisions/`
+- **TIED (REQ/ARCH/IMPL)**: [tied-project/](../../tied-project/) — indexes and `tied-project/requirements/`, `tied-project/architecture-decisions/`, `tied-project/implementation-decisions/`
 
 ---
 

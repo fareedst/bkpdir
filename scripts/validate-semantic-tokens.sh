@@ -188,7 +188,7 @@ generate_validation_report() {
 **Project**: BkpDir
 **Validation Script**: validate-semantic-tokens.sh
 
-**Canonical registry**: \`tied/semantic-tokens.yaml\` (indexes and detail YAML under \`tied/\`). **\`project-tokens.yaml\`** is a short pointer only, not a token matrix.
+**Canonical registry**: \`tied-project/semantic-tokens.yaml\` (indexes and detail YAML under \`tied-project/\`). **\`project-tokens.yaml\`** is a short pointer only, not a token matrix.
 
 ## Validation Summary
 

@@ -1,0 +1,53 @@
+IMPL-EXTRACTION_PRINCIPLES:
+  code_locations:
+    files: []
+    functions: []
+  cross_references:
+    - ARCH-CODE_ORGANIZATION
+    - REQ-MAINTAINABILITY
+  decision: Extract in dependency order - core utilities first, then higher-level components
+  design_note: Each layer builds on previous layers without circular references
+  implementation: Infrastructure (config, errors) → Utilities (formatter, git) → Framework (cli) → Patterns (processing)
+  implementation_approach:
+    details: []
+    summary: |-
+      Plan module extraction in strict dependency order so each layer validates and tests independently before the next layer moves.
+      INPUT: module dependency graph, extraction_layers ordered list
+      OUTPUT: extraction schedule with validated layer boundaries
+      DATA: layer deps, interface boundaries per module
+      Canonical behavior: tied-project/implementation-decisions/IMPL-EXTRACTION_PRINCIPLES-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Extraction Principles and Design Decisions
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: Prevents circular dependencies and ensures stable foundation
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-CODE_ORGANIZATION
+      - REQ-MAINTAINABILITY
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-CODE_ORGANIZATION
+    code_annotations:
+      - ARCH-CODE_ORGANIZATION
+      - IMPL-EXTRACTION_PRINCIPLES
+      - REQ-MAINTAINABILITY
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []

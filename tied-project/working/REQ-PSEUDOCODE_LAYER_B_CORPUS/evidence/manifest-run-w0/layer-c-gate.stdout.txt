@@ -1,0 +1,13 @@
+DEBUG: Layer C analyze IMPL-ATOMIC_OPS -> /Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis/IMPL-ATOMIC_OPS-layer-c.json
+PASS IMPL-ATOMIC_OPS Layer C gate
+DEBUG: Layer C analyze IMPL-CONFIG_STRUCT -> /Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis/IMPL-CONFIG_STRUCT-layer-c.json
+PASS IMPL-CONFIG_STRUCT Layer C gate
+DEBUG: Layer C analyze IMPL-CFG_006 -> /Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis/IMPL-CFG_006-layer-c.json
+PASS IMPL-CFG_006 Layer C gate
+DEBUG: Layer C analyze IMPL-FILE_OPERATIONS -> /Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis/IMPL-FILE_OPERATIONS-layer-c.json
+PASS IMPL-FILE_OPERATIONS Layer C gate
+DEBUG: Layer C analyze IMPL-ZIP_FORMAT -> /Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis/IMPL-ZIP_FORMAT-layer-c.json
+PASS IMPL-ZIP_FORMAT Layer C gate
+DEBUG: Layer C analyze IMPL-EXCLUSION_PATTERNS -> /Users/fareed/Documents/dev/go/bkpdir/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis/IMPL-EXCLUSION_PATTERNS-layer-c.json
+PASS IMPL-EXCLUSION_PATTERNS Layer C gate
+DIAGNOSTIC: Layer C gate passed for 6 Tier A sidecars

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Re-baseline logic_level and req_audit_pass from run_impl_logic_audit gates (no mark-complete).
 
-Updates tied/docs/impl-pseudocode-improvement-queue.yaml and impl-pseudocode-sync-checklist.yaml
+Updates tied-bundle/docs/impl-pseudocode-improvement-queue.yaml and impl-pseudocode-sync-checklist.yaml
 from live audit results and oracle-registry targets. [REQ-PSEUDOCODE_FORMAL_VERIFICATION]
 """
 from __future__ import annotations
@@ -14,8 +14,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
-ORACLE_REG = REPO / "tied/spec/oracle-registry.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
+ORACLE_REG = REPO / "tied-project/spec/oracle-registry.yaml"
 
 sys.path.insert(0, str(REPO / "scripts"))
 from impl_pseudocode_remediation import load_checklist_tokens  # noqa: E402

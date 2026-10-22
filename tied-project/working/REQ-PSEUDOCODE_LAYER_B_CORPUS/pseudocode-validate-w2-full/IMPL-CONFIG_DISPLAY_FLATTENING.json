@@ -1,0 +1,109 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "reflectConfigFields",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "IMPL-CONFIG_DISPLAY_FLATTENING",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GetAllConfigValuesWithSources",
+      "line": 40,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "IMPL-CONFIG_DISPLAY_FLATTENING",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "determineFieldCategory",
+      "line": 61,
+      "token_refs": [
+        "ARCH-CFG_006",
+        "IMPL-CFG_006",
+        "IMPL-CONFIG_DISPLAY_FLATTENING",
+        "REQ-CFG_006"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "mergeGitSettings",
+      "line": 79,
+      "token_refs": [
+        "IMPL-CONFIG_DISPLAY_FLATTENING"
+      ],
+      "contract_fields": [
+        "DATA_TRANSITION",
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "reflectConfigFields",
+      "branch_lines": [
+        28,
+        30
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GetAllConfigValuesWithSources",
+      "branch_lines": [
+        51
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "determineFieldCategory",
+      "branch_lines": [
+        69
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "mergeGitSettings",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

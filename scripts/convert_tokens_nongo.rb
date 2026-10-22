@@ -65,7 +65,7 @@ def process_file(filepath)
 end
 
 puts DRY_RUN ? "DRY RUN - no files will be modified" : "LIVE RUN - files will be modified"
-puts "(Skipping tied/ directory - those files already use hyphen format)"
+puts "(Skipping tied-project/ directory - those files already use hyphen format)"
 puts ""
 
 files = target_files

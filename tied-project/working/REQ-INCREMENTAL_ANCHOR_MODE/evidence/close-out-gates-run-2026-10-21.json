@@ -1,0 +1,31 @@
+{
+  "schema_version": "close-out-gates-run.v1",
+  "generated_at": "2026-10-21T21:22:00-07:00",
+  "request_token": "REQ-INCREMENTAL_ANCHOR_MODE",
+  "change_request_id": "INCREMENTAL-ANCHOR-MODE",
+  "phase": "verification",
+  "gate_validate": {
+    "pre_implementation": {
+      "allowed": true,
+      "receipt_path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/gates/pre_implementation-2026-10-22T04-21-35-114Z.json"
+    },
+    "verification": {
+      "allowed": true,
+      "receipt_path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/gates/verification-2026-10-22T04-21-35-529Z.json"
+    }
+  },
+  "envelope_validate": {
+    "ok": true,
+    "fail_on_error_gaps": true,
+    "path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/request-evidence-envelope.v1.json"
+  },
+  "tests": {
+    "command": "go test -count=1 -run 'TestIncremental|TestReconstruct|TestIncCommand|TestCalculateDiff|IncrementalAnchor|Disambiguation' .",
+    "log_path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/verification-go-test-2026-10-21.txt",
+    "exit_code": 0
+  },
+  "tied_validate_consistency": {
+    "ok": true,
+    "date": "2026-10-21"
+  }
+}

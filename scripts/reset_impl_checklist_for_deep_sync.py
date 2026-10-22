@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-CHECKLIST = REPO / "tied/docs/impl-pseudocode-sync-checklist.yaml"
+CHECKLIST = REPO / "tied-bundle/docs/impl-pseudocode-sync-checklist.yaml"
 
 PILOT_COMPLETE = {
     "IMPL-LIST_FORMAT_SAFETY",
@@ -20,7 +20,7 @@ HEADER = """# IMPL Pseudocode Sync Checklist (canonical template)
 #
 # Process tokens: [PROC-IMPL_CODE_TEST_SYNC], [PROC-PSEUDOCODE_VALIDATION], [PROC-IMPL_PSEUDOCODE_TOKENS]
 # Workflow: Track C (brownfield) — tests/code → sidecar → literal block-lead sync
-# Reference: tied/docs/pseudocode-writing-and-validation.md § Track C
+# Reference: tied-bundle/docs/pseudocode-writing-and-validation.md § Track C
 #
 # Per-token status:
 #   pending | in_progress | sidecar_migrated | manual_deep_sync | comments_synced | validated

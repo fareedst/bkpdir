@@ -60,6 +60,8 @@ type Config struct {
 	IncludeGitInfo     bool     `yaml:"include_git_info"`      // Legacy - use Git.IncludeInfo
 	ShowGitDirtyStatus bool     `yaml:"show_git_dirty_status"` // Legacy - use Git.ShowDirtyStatus
 	SkipBrokenSymlinks bool     `yaml:"skip_broken_symlinks"`
+	// [REQ-INCREMENTAL_ANCHOR_MODE] full (default) or chained incremental semantics
+	IncrementalAnchorMode string `yaml:"incremental_anchor_mode"`
 
 	// CFG-005: See specification.md - Configuration Inheritance [DECISION:core-functionality] Core inheritance functionality
 	// Inherit specifies configuration files to inherit from
@@ -247,7 +249,8 @@ func DefaultConfig() *Config {
 		ExcludePatterns:    nil,
 		IncludeGitInfo:     false,
 		ShowGitDirtyStatus: true,
-		SkipBrokenSymlinks: false,
+		SkipBrokenSymlinks:      false,
+		IncrementalAnchorMode: "full",
 
 		// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
 		Git: DefaultGitConfig(),
@@ -752,6 +755,23 @@ func mergeBasicSettings(dst, src *Config, inheritContext bool, defaultCfg *Confi
 		_, explicitlySetByEarlier := explicitlySetFields["skip_broken_symlinks"]
 		if !explicitlySetByEarlier && explicitlySetInSrc && src.SkipBrokenSymlinks != defaultCfg.SkipBrokenSymlinks {
 			dst.SkipBrokenSymlinks = src.SkipBrokenSymlinks
+		}
+	}
+	if inheritContext {
+		_, explicitlySetByEarlier := explicitlySetFields["incremental_anchor_mode"]
+		_, explicitlySetInSrc := rawSrcMap["incremental_anchor_mode"]
+		if !explicitlySetByEarlier {
+			if explicitlySetInSrc {
+				dst.IncrementalAnchorMode = src.IncrementalAnchorMode
+			} else if src.IncrementalAnchorMode != defaultCfg.IncrementalAnchorMode {
+				dst.IncrementalAnchorMode = src.IncrementalAnchorMode
+			}
+		}
+	} else {
+		_, explicitlySetInSrc := rawSrcMap["incremental_anchor_mode"]
+		_, explicitlySetByEarlier := explicitlySetFields["incremental_anchor_mode"]
+		if !explicitlySetByEarlier && explicitlySetInSrc && src.IncrementalAnchorMode != defaultCfg.IncrementalAnchorMode {
+			dst.IncrementalAnchorMode = src.IncrementalAnchorMode
 		}
 	}
 	// GIT-005: See specification.md - Git Configuration Integration [DECISION:maintenance]
@@ -1328,6 +1348,11 @@ func getBasicConfigValues(cfg, defaultCfg *Config, getSource func(interface{}, i
 			Name:   "skip_broken_symlinks",
 			Value:  boolToString(cfg.SkipBrokenSymlinks),
 			Source: getSource(cfg.SkipBrokenSymlinks, defaultCfg.SkipBrokenSymlinks),
+		},
+		{
+			Name:   "incremental_anchor_mode",
+			Value:  cfg.IncrementalAnchorMode,
+			Source: getSource(cfg.IncrementalAnchorMode, defaultCfg.IncrementalAnchorMode),
 		},
 	}
 }
@@ -2938,6 +2963,10 @@ func setConfigField(cfg *Config, key string, value interface{}) error {
 		if b, ok := value.(bool); ok {
 			cfg.SkipBrokenSymlinks = b
 		}
+	case "incremental_anchor_mode":
+		if s, ok := value.(string); ok {
+			cfg.IncrementalAnchorMode = s
+		}
 	case "status_created_archive":
 		if i, ok := value.(int); ok {
 			cfg.StatusCreatedArchive = i
@@ -2961,7 +2990,8 @@ func isKnownConfigField(key string) bool {
 		"exclude_patterns":       true,
 		"include_git_info":       true,
 		"backup_dir_path":        true,
-		"skip_broken_symlinks":   true,
+		"skip_broken_symlinks":        true,
+		"incremental_anchor_mode":     true,
 		"status_created_archive": true,
 		"status_disk_full":       true,
 	}
@@ -2983,6 +3013,8 @@ func getDefaultValueForKey(key string, defaultCfg *Config) interface{} {
 		return defaultCfg.BackupDirPath
 	case "skip_broken_symlinks":
 		return defaultCfg.SkipBrokenSymlinks
+	case "incremental_anchor_mode":
+		return defaultCfg.IncrementalAnchorMode
 	case "status_created_archive":
 		return defaultCfg.StatusCreatedArchive
 	case "status_disk_full":

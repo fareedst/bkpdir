@@ -1,0 +1,88 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "applyMergeOperation",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CFG_001",
+        "ARCH-CFG_005",
+        "IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX",
+        "REQ-CFG_001",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "applyMerge",
+      "line": 40,
+      "token_refs": [
+        "ARCH-CFG_001",
+        "ARCH-CFG_005",
+        "IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX",
+        "REQ-CFG_001",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "applyPrepend",
+      "line": 61,
+      "token_refs": [
+        "IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "applyMergeOperation",
+      "branch_lines": [
+        38
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "applyMerge",
+      "branch_lines": [
+        48,
+        49
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "applyPrepend",
+      "branch_lines": [
+        69,
+        70
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

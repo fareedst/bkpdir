@@ -1,0 +1,79 @@
+IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
+  code_locations:
+    files:
+      - "archive.go"
+      - "config.go"
+      - "formatter.go"
+    functions:
+      - "CalculateDiff"
+      - "createIncrementalArchive"
+      - "findLatestFullArchive"
+      - "FormatIncrementalSkippedNoChanges"
+      - "PrintIncrementalSkippedNoChanges"
+      - "ReconstructArchiveState"
+  cross_references:
+    - "ARCH-INCREMENTAL_DUPLICATE_PREVENTION"
+    - "IMPL-DIFF_COMMAND"
+    - "REQ-DIFF_COMMAND"
+    - "REQ-INCREMENTAL_DUPLICATE_PREVENTION"
+    - "REQ-OUTPUT_FORMATTING"
+  description: "Reuse diff command analysis to prevent duplicate incremental archives. Compares cwd to mode-aware reconstructed state from ReconstructArchiveStateWithMode (full: latest inc overlay; chained: ordered chain)."
+  implementation_approach:
+    details:
+      - "Display appropriate message using format strings"
+      - "Exclude patterns respected via archiveConfig.GetExcludePatterns()"
+      - "Fallback to old behavior when reconstruction fails (backward compatibility)"
+      - "Reuse CalculateDiff() function from diff command implementation"
+      - "Skip incremental archive creation if no changes detected"
+      - "Use diff result to determine if changes exist"
+      - "Use findLatestFullArchive() with name-based sorting"
+      - "Use ReconstructArchiveStateWithMode() for effective state per incremental_anchor_mode"
+    summary: "Skip creating incremental archives when reconstructed archive state (per incremental_anchor_mode and IMPL-DIFF_COMMAND) matches the working tree for archivable changes, using diff command primitives and a configurable skip message. Deletion-only diffs skip as well (incremental zips cannot record tombstones)."
+  metadata:
+    author: "AI Agent"
+    created: "2026-03-12"
+    last_updated:
+      author: "AI agent"
+      date: "2026-10-21"
+      reason: "LEAP — ReconstructArchiveStateWithMode for skip baseline"
+  name: "Incremental Archive Duplicate Prevention"
+  rationale:
+    benefits:
+      - "Clear user feedback when archive creation is skipped"
+      - "Compares against reconstructed state for accuracy"
+      - "Consistency by using same comparison logic as diff command"
+      - "Name-based archive sorting consistent with diff command"
+      - "Prevents code duplication"
+    problems_solved:
+      - "Code duplication for change detection"
+      - "Duplicate incremental archives created when no changes exist"
+      - "Inconsistent comparison logic between diff and archive creation"
+    why: "Creating duplicate incremental archives wastes storage and creates confusion when no actual changes exist"
+  related_decisions:
+    depends_on:
+      - "IMPL-DIFF_COMMAND"
+    see_also:
+      - "IMPL-DIRECTORY_COMPARISON"
+    supersedes: []
+  status: "Active"
+  traceability:
+    architecture:
+      - "ARCH-INCREMENTAL_DUPLICATE_PREVENTION"
+    code_annotations:
+      - "archive.go: createIncrementalArchive — core function with duplicate prevention via ReconstructArchiveState + CalculateDiff"
+      - "archive.go: findLatestFullArchive — name-based sorting for archive selection"
+      - "config.go: FormatIncrementalSkippedNoChanges field and default format string"
+      - "formatter.go: FormatIncrementalSkippedNoChanges — returns configurable skip message"
+      - "formatter.go: PrintIncrementalSkippedNoChanges — prints skip message to stdout or collector"
+    requirements:
+      - "REQ-DIFF_COMMAND"
+      - "REQ-INCREMENTAL_DUPLICATE_PREVENTION"
+      - "REQ-OUTPUT_FORMATTING"
+    tests:
+      - "TestIncCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION"
+      - "TestIncCommandNoFullArchive_REQ_INCREMENTAL_DUPLICATE_PREVENTION"
+      - "TestIncCommandWithNoteFlag_REQ_INCREMENTAL_DUPLICATE_PREVENTION"
+      - "TestIncrementalArchiveProceedWithChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION"
+      - "TestIncrementalArchiveProceedWithNewFile_REQ_INCREMENTAL_DUPLICATE_PREVENTION"
+      - "TestIncrementalArchiveSkipNoChanges_REQ_INCREMENTAL_DUPLICATE_PREVENTION"
+      - "TestIncrementalArchiveSkipWithFullOnly_REQ_INCREMENTAL_DUPLICATE_PREVENTION"

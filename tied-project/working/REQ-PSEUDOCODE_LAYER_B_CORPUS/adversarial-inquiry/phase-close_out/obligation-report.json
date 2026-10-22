@@ -1,0 +1,42 @@
+{
+  "canonicalMutation": false,
+  "findings": [],
+  "graph": {
+    "edges": [
+      {
+        "from": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-005",
+        "kind": "criterion_constraint",
+        "to": "constraint:ARCH-SPEC_DSL_AND_ORACLE"
+      },
+      {
+        "from": "constraint:ARCH-SPEC_DSL_AND_ORACLE",
+        "kind": "constraint_block",
+        "to": "IMPL-SPEC_CTL#W0#LAYER_B_CLOSEOUT"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "constraint:ARCH-SPEC_DSL_AND_ORACLE",
+        "kind": "constraint"
+      },
+      {
+        "id": "IMPL-SPEC_CTL#W0#LAYER_B_CLOSEOUT",
+        "kind": "block",
+        "revision": "layer-b-w0-close-out-v2"
+      },
+      {
+        "id": "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-005",
+        "kind": "criterion",
+        "revision": "layer-b-w0-close-out-v2"
+      }
+    ],
+    "projectId": "/Users/fareed/Documents/dev/go/bkpdir"
+  },
+  "projectId": "/Users/fareed/Documents/dev/go/bkpdir",
+  "proofBoundaries": [],
+  "readOnly": true,
+  "schemaVersion": "adversarial-inquiry-report.v1",
+  "scope": [
+    "REQ-PSEUDOCODE_FORMAL_VERIFICATION#PFV-005"
+  ]
+}

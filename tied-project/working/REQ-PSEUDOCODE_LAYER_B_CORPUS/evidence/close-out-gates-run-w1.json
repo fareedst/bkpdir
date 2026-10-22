@@ -1,0 +1,225 @@
+{
+  "phase": "close_out",
+  "depth_tier": "integrated",
+  "activation_collect": {
+    "skipped": false,
+    "reason": "collect",
+    "run_id": "layer-b-corpus-20261021-close-v2"
+  },
+  "reconcile": {
+    "ok": true,
+    "report": {
+      "request_token": "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
+      "findings": [
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/close_out-2026-10-21T22-27-27-799Z.json",
+            "stored_tracker_hash": "sha256:0352b57d0e8509d87dac8317a817fec25e563f9e6c23364c081908dcb20e51a2",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:e6dbef236590a1ebe4ff587f8a2801d4d0993aec62377896948793932011c5e1",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/close_out-2026-10-21T22-30-45-757Z.json",
+            "stored_tracker_hash": "sha256:3d34dd88ec375b3c5438a4a54eaccfee7db89649a0a4d26c7d5857ae8c27bd98",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:56588e1877205dabfb539dae4a42dfd8e747cf6f0de5c7f9293fab9791ba28d3",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T20-56-29-587Z.json",
+            "stored_tracker_hash": "sha256:6d51b9c07c72ba1ce508ce86868e2e2bd617c8ff0eead5a27b24696216d4d396",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:c6ca4da9c12a598f47e54f07b22af6df70095ccb9dabfced9fa424fb9150808b",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-07-44-599Z.json",
+            "stored_tracker_hash": "sha256:72730de3ccd85b69962e24882a6456116df90fdb9fbb7acf1b3df9df07d46ac5",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-07-50-656Z.json",
+            "stored_tracker_hash": "sha256:72730de3ccd85b69962e24882a6456116df90fdb9fbb7acf1b3df9df07d46ac5",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:f40863de6d93d1f5ee88a5fd920e4a5393da3db22cab6ede0156779bead7cea8",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-08-04-046Z.json",
+            "stored_tracker_hash": "sha256:72730de3ccd85b69962e24882a6456116df90fdb9fbb7acf1b3df9df07d46ac5",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:f40863de6d93d1f5ee88a5fd920e4a5393da3db22cab6ede0156779bead7cea8",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/verification-2026-10-21T21-34-22-243Z.json",
+            "stored_tracker_hash": "sha256:6942b121f6a948886b1e22712c6c1950ea49fed9960f226739bc362209532ecd",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:f40863de6d93d1f5ee88a5fd920e4a5393da3db22cab6ede0156779bead7cea8",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_receipt": "/Users/fareed/Documents/dev/go/bkpdir/tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/verification-2026-10-21T21-34-30-684Z.json",
+            "stored_tracker_hash": "sha256:6942b121f6a948886b1e22712c6c1950ea49fed9960f226739bc362209532ecd",
+            "current_tracker_hash": "sha256:7acbeb68d6f881448332898692d1d5af35d92e0a89c0c2c856a0d6c710c39cf1",
+            "stored_citdp_hash": "sha256:f40863de6d93d1f5ee88a5fd920e4a5393da3db22cab6ede0156779bead7cea8",
+            "current_citdp_hash": "sha256:9b083b8c95d6da755a9bb1fac4d268a0277935c0729bb961f5fa83c8f224f5c9"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 1,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T20-56-29-587Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 2,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-07-44-599Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 3,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-07-50-656Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 4,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-08-04-046Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 5,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/verification-2026-10-21T21-34-22-243Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 6,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/verification-2026-10-21T21-34-30-684Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        },
+        {
+          "code": "gate_without_current_evidence",
+          "detail": {
+            "gate_decided_line": 32,
+            "artifact_ref": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/close_out-2026-10-21T22-27-27-799Z.json",
+            "error": "missing_gate_receipt_file"
+          }
+        }
+      ],
+      "ledger_rows": 35,
+      "read_only": true,
+      "process_grade": {
+        "score": 88,
+        "band": "B",
+        "dimensions": [
+          {
+            "name": "tracker_integrity",
+            "score": 100,
+            "weight": 0.3,
+            "gap_codes": []
+          },
+          {
+            "name": "verification_manifest",
+            "score": 100,
+            "weight": 0.25,
+            "gap_codes": []
+          },
+          {
+            "name": "hash_alignment",
+            "score": 40,
+            "weight": 0.2,
+            "gap_codes": [
+              "evidence_stale"
+            ]
+          },
+          {
+            "name": "ledger_correlation",
+            "score": 100,
+            "weight": 0.15,
+            "gap_codes": []
+          },
+          {
+            "name": "typed_evidence_refs",
+            "score": 100,
+            "weight": 0.1
+          }
+        ],
+        "gap_codes": [
+          "evidence_stale"
+        ]
+      }
+    }
+  },
+  "quality_manifest": {
+    "ok": false,
+    "skipped": true,
+    "reason": "no_citdp_commands"
+  },
+  "evidence_chain_profile": {
+    "ok": false,
+    "skipped": true,
+    "reason": "no_psa_reports"
+  },
+  "merged_decision": {
+    "allowed": true,
+    "gate_allowed": true,
+    "envelope_ok": true,
+    "blocking": false
+  },
+  "gate": {
+    "allowed": true,
+    "blocking": false,
+    "diagnostics": [],
+    "evidence_hydrated": true,
+    "hydration_diagnostics": []
+  },
+  "envelope": {
+    "ok": true,
+    "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json",
+    "blocking_gap_count": 0,
+    "advisory_gap_count": 5,
+    "diagnostics": []
+  }
+}

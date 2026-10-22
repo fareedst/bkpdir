@@ -1,0 +1,58 @@
+{
+  "schema_version": "request-evidence-envelope.v1",
+  "envelope_meta": {
+    "generated_at": "2026-10-21T19:37:38.255Z",
+    "generator": "request_evidence_envelope_build",
+    "revision": 1
+  },
+  "identity": {
+    "request_token": "REQ-IMMUTABLE_FILE_EXCLUSION",
+    "project_id": "453495ab14512f89",
+    "depth_tier": "minimal",
+    "gate_policy": "advisory",
+    "methodology_snapshot_id": "3.0.0"
+  },
+  "runs": [],
+  "artifacts": [
+    {
+      "kind": "checklist_tracker",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/agent-req-implementation-checklist.yaml",
+      "content_hash": "sha256:99388c26ce482c5bed6db0749acd5fad1df7caae4d6e94577ca0b03d529aeb62",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "tracker_disposition_only"
+      ]
+    },
+    {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/evidence/not-applicable-receipt.v1.json",
+      "content_hash": "sha256:461bef8c2ca2f9a2f72e447a9edd17dcc55023fe3e044edffe175fef6dada678",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "request_evidence_envelope",
+      "schema_version": "request-evidence-envelope.v1",
+      "path": "tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/evidence/request-evidence-envelope.v1.json",
+      "content_hash": "sha256:603aabb595d84fa599a934abcd4345c736a1e034efddc0e4a955940e676cb083",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    }
+  ],
+  "cross_links": {
+    "tracker_path": "tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/agent-req-implementation-checklist.yaml",
+    "tracker_hash": "sha256:74b4d9d6820afb2447f1732f3cac346ddcec37933ed00075488c5fb73bd28f27",
+    "citdp_path": null,
+    "evidence_chain_profile_path": null
+  },
+  "gaps": []
+}

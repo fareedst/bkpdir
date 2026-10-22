@@ -24,7 +24,7 @@ func TestArchiveNaming_Oracle(t *testing.T) {
 }
 
 func TestZipEntryPath_Oracle(t *testing.T) {
-	if got := specmodel.OracleZipEntryPath(`tied\foo.yaml`); got != "tied/foo.yaml" {
+	if got := specmodel.OracleZipEntryPath(`nested\foo.yaml`); got != "nested/foo.yaml" {
 		t.Fatalf("OracleZipEntryPath backslash: got %q", got)
 	}
 	if got := specmodel.OracleZipEntryPath("./a/b"); got != "a/b" {

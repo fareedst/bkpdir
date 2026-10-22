@@ -64,7 +64,7 @@ def build_projected_summary(token: str, contract_lines: list[str]) -> str:
             lines_out.append(s)
         if len(lines_out) >= 5:
             break
-    pointer = f"Canonical behavior: tied/implementation-decisions/{token}-pseudocode.md"
+    pointer = f"Canonical behavior: tied-project/implementation-decisions/{token}-pseudocode.md"
     if pointer not in lines_out:
         lines_out.append(pointer)
     return "\n".join(lines_out[:8])

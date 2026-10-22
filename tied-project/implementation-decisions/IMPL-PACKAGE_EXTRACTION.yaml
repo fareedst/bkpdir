@@ -1,0 +1,79 @@
+IMPL-PACKAGE_EXTRACTION:
+  after_extraction:
+    - Components expose clean interfaces
+    - External dependencies only (standard library, third-party)
+    - No internal package dependencies
+  before_extraction:
+    - Define interfaces for all component dependencies
+    - 'Example: `ArchiveConfigInterface`, `ArchiveFormatterInterface` for archive operations'
+    - 'Example: `ConfigProvider`, `ConfigMerger` for config package'
+  code_locations:
+    files: []
+    functions: []
+  code_markers: '`EXTRACT-*` tokens, interface definitions, wrapper functions'
+  cross_references:
+    - ARCH-PACKAGE_EXTRACTION
+    - REQ-MAINTAINABILITY
+  implementation_approach:
+    details: []
+    summary: |-
+      Phased extraction of root packages into pkg/ with legacy type aliases and wrapper functions preserving CLI compatibility.
+      INPUT: phase package list, source root files
+      OUTPUT: pkg/<package>/ modules, root aliases and wrappers
+      DATA: interface definitions, import path updates, deprecation comments
+      Canonical behavior: tied-project/implementation-decisions/IMPL-PACKAGE_EXTRACTION-pseudocode.md
+  legacy_type_aliases: |-
+    ```go
+    type FileInfo = fileops.FileInfo
+    type DirectorySnapshot = fileops.DirectorySnapshot
+    type PatternMatcher = fileops.PatternMatcher
+    ```
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Package Extraction Implementation
+  phase_1: Foundation Components (No Dependencies)
+  phase_2: Interface-Dependent Components
+  phase_3: Framework Layer
+  phase_4: Pattern Layer
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Enables clean component boundaries
+      Prevents circular dependencies
+      Maintains backward compatibility
+      Supports gradual migration
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-PACKAGE_EXTRACTION
+    code_annotations:
+      - ARCH-PACKAGE_EXTRACTION
+      - IMPL-PACKAGE_EXTRACTION
+      - REQ-MAINTAINABILITY
+    requirements:
+      - REQ-MAINTAINABILITY
+    tests: []
+  wrapper_functions: |-
+    ```go
+    func CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
+        return fileops.CreateDirectorySnapshot(rootPath, excludePatterns)
+    }
+    ```

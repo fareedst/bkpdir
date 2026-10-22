@@ -1,0 +1,89 @@
+IMPL-AUTO_DETECTION:
+  code_locations:
+    files:
+      - main.go
+      - main_cli_composition_test.go
+      - main_test.go
+    functions:
+      - executeWithAutoDetection
+      - handleAutoDetectedCommand
+      - handleAutoDetectedDirectoryArchive
+      - handleAutoDetectedFileBackup
+      - isDirectory
+      - isFile
+      - newRootCommand
+      - validatePath
+  cross_references:
+    - ARCH-AUTO_DETECTION
+    - REQ-USABILITY
+  description: Path type detection with command routing logic enabling intuitive CLI usage where users can pass a file or directory path directly instead of using explicit subcommands
+  implementation_approach:
+    details:
+      - executeWithAutoDetection(rootCmd, args) takes argv without the program name; calls rootCmd.SetArgs(args) before rootCmd.Execute when dispatching to Cobra; main passes os.Args[1:]; filters known commands/flags; on auto-detect path extracts global flags (--dry-run, --note), then delegates to handleAutoDetectedCommand
+      - handleAutoDetectedCommand routes to handleAutoDetectedFileBackup or handleAutoDetectedDirectoryArchive based on path type
+      - handleAutoDetectedDirectoryArchive changes to target dir, loads config, calls CreateFullArchiveWithContext
+      - handleAutoDetectedFileBackup loads config, creates BackupOptions, calls CreateFileBackupEnhanced
+      - isFile(path) and isDirectory(path) use os.Stat to classify path type
+      - newRootCommand() builds the production Cobra tree (flags, subcommands, root Run); main and tests use the same wiring
+      - validatePath(path) checks existence and accessibility with specific error messages
+    summary: |-
+      When the user passes a filesystem path as the first argument (not a known subcommand or global flag), classify the path and route to file backup or directory archive without requiring explicit subcommands.
+      INPUT: argv without program name, root CLI command tree
+      OUTPUT: executed backup/archive or standard Cobra dispatch
+      DATA: path, dry-run flag, note text, known command and flag lists
+      Canonical behavior: tied-project/implementation-decisions/IMPL-AUTO_DETECTION-pseudocode.md
+  known_commands_bypass:
+    - 'Explicit commands: create, config, template, full, inc, list, backup, version, diff, help'
+    - 'Global flags: --config, --dry-run, -d, --list'
+    - 'Help flags: --help, -h, --version, -v'
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: AI agent
+  name: Auto-Detection Implementation
+  rationale:
+    benefits:
+      - Backward compatibility with explicit commands preserved
+      - Graceful error handling for nonexistent or unsupported paths
+      - Intuitive CLI usage (bkpdir ./file.txt or bkpdir ./dir/)
+    problems_solved:
+      - Users must remember subcommand names for common operations
+      - Verbose CLI invocation for simple file backup or directory archive
+    why: Improves user experience by allowing direct path arguments instead of requiring explicit subcommands, reduces command verbosity, maintains backward compatibility with existing commands
+  related_decisions:
+    composed_with: []
+    depends_on:
+      - IMPL-CLI_FRAMEWORK
+    see_also:
+      - ARCH-AUTO_DETECTION
+      - IMPL-DATA_MODELS
+      - REQ-USABILITY
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-AUTO_DETECTION
+    code_annotations:
+      - ARCH-AUTO_DETECTION
+      - IMPL-AUTO_DETECTION
+      - REQ-USABILITY
+    requirements:
+      - REQ-USABILITY
+    tests:
+      - TestComposition_DiffViaExecuteWithAutoDetection_REQ_DIFF_COMMAND
+      - TestComposition_ExecuteWithAutoDetection_KnownSubcommandHelp_REQ_USABILITY
+      - TestComposition_ExecuteWithAutoDetection_PathArg_FileDryRun_REQ_USABILITY
+      - TestComposition_NewRootCommand_Subcommands_REQ_USABILITY
+      - TestComposition_RootListAndLimit_REQ_LIST_LIMIT
+      - TestComposition_RootPersistentConfigFlag_REQ_CONFIGURATION
+      - TestMain_Integration_CLI015_AutoDetection
+      - TestMain_Integration_CLI015_BackwardCompatibility
+      - TestMain_Integration_CLI015_EdgeCases

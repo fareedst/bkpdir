@@ -1,0 +1,55 @@
+IMPL-SEMANTIC_CROSS_REF:
+  code_locations:
+    files: []
+    functions: []
+  code_markers: LinkingEngine implementation, automated link validation
+  cross_references:
+    - ARCH-DOCUMENTATION_ARCHITECTURE
+    - REQ-DOC_001
+  implementation_approach:
+    details: []
+    summary: |-
+      Link requirements, architecture, implementation, tests, and code through semantic tokens with validated bi-directional references for LLM-friendly navigation.
+      INPUT: semantic token registry, decision YAML indexes, code and doc mentions
+      OUTPUT: feature reference blocks, link integrity report, consistency report
+      DATA: forward_links, backward_links, sibling_links, cross_reference fields
+      Canonical behavior: tied-project/implementation-decisions/IMPL-SEMANTIC_CROSS_REF-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: Semantic Cross-Referencing Strategy
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      LLMs benefit from rich cross-references to understand relationships
+      Bi-directional links prevent orphaned references
+      Standardized format ensures consistency across documents
+      Forward/backward/sibling links provide comprehensive navigation
+  related_decisions:
+    composed_with: []
+    depends_on: []
+    see_also:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - REQ-DOC_001
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+    code_annotations:
+      - ARCH-DOCUMENTATION_ARCHITECTURE
+      - IMPL-SEMANTIC_CROSS_REF
+      - REQ-DOC_001
+    requirements:
+      - REQ-DOC_001
+    tests: []

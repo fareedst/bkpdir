@@ -1,0 +1,77 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "merge_basic_settings_with_preservation",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "ARCH-STDD_VIS_FLOW",
+        "IMPL-CFG_HIERARCHY_PRESERVATION",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "apply_override_with_preservation",
+      "line": 49,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "ARCH-STDD_VIS_FLOW",
+        "IMPL-CFG_HIERARCHY_PRESERVATION",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "merge_basic_settings_with_preservation",
+      "branch_lines": [
+        30,
+        31,
+        33,
+        34,
+        35,
+        38,
+        39
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "apply_override_with_preservation",
+      "branch_lines": [
+        59,
+        61,
+        63,
+        65
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "EXTRACT_PHASE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-PACKAGE_EXTRACTION",
+        "IMPL-PACKAGE_EXTRACTION",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MAINTAIN_LEGACY_COMPATIBILITY",
+      "line": 40,
+      "token_refs": [
+        "IMPL-PACKAGE_EXTRACTION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "EXTRACT_PHASE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MAINTAIN_LEGACY_COMPATIBILITY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (import_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 9
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (import_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 50
+    }
+  ],
+  "leakage": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (import_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 9,
+      "pattern": "import_kw"
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (import_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 50,
+      "pattern": "import_kw"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "GENERATE_FULL_ARCHIVE_NAME_FROM_CONFIG",
+      "line": 18,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_DIRTY_CONFIG",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+      "line": 37,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_DIRTY_CONFIG",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GENERATE_FULL_ARCHIVE_NAME",
+      "line": 56,
+      "token_refs": [
+        "ARCH-GIT_INTEGRATION",
+        "IMPL-GIT_DIRTY_CONFIG",
+        "REQ-GIT_INTEGRATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MERGE_SHOW_GIT_DIRTY_STATUS",
+      "line": 75,
+      "token_refs": [
+        "IMPL-GIT_DIRTY_CONFIG"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "GENERATE_FULL_ARCHIVE_NAME_FROM_CONFIG",
+      "branch_lines": [
+        27
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GENERATE_INCREMENTAL_ARCHIVE_NAME",
+      "branch_lines": [
+        46
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GENERATE_FULL_ARCHIVE_NAME",
+      "branch_lines": [
+        65
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MERGE_SHOW_GIT_DIRTY_STATUS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

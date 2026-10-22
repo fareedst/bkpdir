@@ -1,0 +1,45 @@
+REQ-IMMUTABLE_FILE_EXCLUSION:
+  architecture: tied-project/architecture-decisions/ARCH-EXCLUSION_PATTERNS.yaml
+  category: Functional
+  description: 'File exclusion requirements are mandatory and must be preserved:'
+  implementation: tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: MCP converter
+      date: '2026-03-12'
+      reason: Converted from monolithic
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: File Exclusion Requirements (Immutable)
+  priority: P0
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: These exclusion requirements are mandatory behaviors that users depend on. Changing them would break existing configurations.
+  related_requirements:
+    depends_on: []
+    related_to: []
+    supersedes: []
+  satisfaction_criteria:
+    - criterion: Default system file exclusions are applied
+    - criterion: Directories can be excluded
+    - criterion: Doublestar glob patterns are supported
+    - criterion: Exclusion patterns are configurable
+    - criterion: Pattern matching is case-sensitive
+    - criterion: Pattern precedence rules are followed
+  status: Implemented
+  traceability:
+    architecture:
+      - ARCH-EXCLUSION_PATTERNS
+    code_annotations:
+      - REQ-IMMUTABLE_FILE_EXCLUSION
+    implementation:
+      - IMPL-EXCLUSION_PATTERNS
+    tests: []
+  validation_criteria:
+    - method: File exclusion tests verify all requirements. Breaking changes require major version bump.

@@ -13,7 +13,7 @@ import (
 // - [IMPL-DOC_ENHANCEMENT] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: traverse dependency graph from registry cross-refs to list impacted docs, code, and tests for a proposed token change.
 func TestSpecctl_OracleValidateAtomicSidecar(t *testing.T) {
 	root := repoRoot(t)
-	errs, warns, err := specmodel.OracleSpecctlValidatePath(root, "tied/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md")
+	errs, warns, err := specmodel.OracleSpecctlValidatePath(root, "tied-project/implementation-decisions/IMPL-ATOMIC_OPS-pseudocode.md")
 	if err != nil {
 		t.Fatal(err)
 	}

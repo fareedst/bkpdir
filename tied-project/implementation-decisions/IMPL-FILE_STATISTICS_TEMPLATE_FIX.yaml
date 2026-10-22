@@ -1,0 +1,87 @@
+IMPL-FILE_STATISTICS_TEMPLATE_FIX:
+  code_locations:
+    files:
+      - formatter.go
+      - pkg/formatter/formatter.go
+    functions:
+      - DefaultOutputFormatter.buildStatsTemplateData (pkg/formatter/formatter.go)
+      - DefaultOutputFormatter.FormatCreatedArchiveWithStats (pkg/formatter/formatter.go)
+      - DefaultOutputFormatter.FormatIncrementalCreatedWithStats (pkg/formatter/formatter.go)
+      - DefaultOutputFormatter.PrintCreatedArchiveWithStats (pkg/formatter/formatter.go)
+      - DefaultOutputFormatter.PrintIncrementalCreatedWithStats (pkg/formatter/formatter.go)
+      - OutputFormatter.FormatCreatedArchiveWithStats (formatter.go)
+      - OutputFormatter.FormatIncrementalCreatedWithStats (formatter.go)
+      - OutputFormatter.PrintCreatedArchiveWithStats (formatter.go)
+      - OutputFormatter.PrintIncrementalCreatedWithStats (formatter.go)
+      - OutputFormatter.TemplateCreatedArchiveWithStats (formatter.go)
+      - OutputFormatter.TemplateIncrementalCreatedWithStats (formatter.go)
+  code_markers: |-
+    `formatter.go` line ~1424: Direct placeholder replacement loop in `FormatCreatedArchiveWithStats`
+    `formatter.go` line ~1462: Final safety check with data map lookup first
+    `formatter.go` line ~1504: Direct placeholder replacement loop in `FormatIncrementalCreatedWithStats`
+    `pkg/formatter/formatter.go`: `FormatCreatedArchiveWithStats` and `FormatIncrementalCreatedWithStats` delegation
+  cross-references: '[ARCH-FILE_STATISTICS], [REQ-OUT_002], [REQ-OUTPUT_FORMATTING], [IMPL-FILE_STATISTICS]'
+  cross_references:
+    - ARCH-FILE_STATISTICS
+    - REQ-OUT_002
+    - REQ-OUTPUT_FORMATTING
+  implementation_approach:
+    details: []
+    summary: |-
+      Enhance created and incremental archive messages by gathering FileStatInfo and substituting #{path}, #{size_human}, #{mtime}, and related placeholders in detailed template format strings with safe fallbacks.
+      INPUT: archive file path, cfg template strings
+      OUTPUT: formatted message with stats or fallback to basic printf format
+      DATA: TemplateCreatedArchiveDetailed, GatherFileStatInfo map
+      Canonical behavior: tied-project/implementation-decisions/IMPL-FILE_STATISTICS_TEMPLATE_FIX-pseudocode.md
+  metadata:
+    created:
+      author: MCP converter
+      date: '2026-03-12'
+    last_updated:
+      author: AI agent
+      date: '2026-09-20'
+      reason: probe
+    last_validated:
+      date: '2026-03-12'
+      result: pass
+      validator: MCP converter
+  name: File Statistics Template Processing Fix
+  rationale:
+    benefits: []
+    problems_solved: []
+    why: |-
+      Fixed critical bug where `AIFormatterAdapter` was bypassing template processing
+      Simplified template processing to use direct placeholder replacement (same approach as `formatListArchiveSimple`)
+      More reliable than complex `formatTemplate` function which had issues with Go's `text/template` internal `fmt` usage
+      Ensures consistent behavior between `OutputFormatter` and `AIFormatterAdapter`
+      Final safety check now correctly checks data map first before using defaults
+  related_decisions:
+    composed_with: []
+    depends_on:
+      - IMPL-FILE_STATISTICS
+    see_also:
+      - ARCH-FILE_STATISTICS
+      - IMPL-DUAL_FORMATTING
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    supersedes: []
+  status: Active
+  traceability:
+    architecture:
+      - ARCH-FILE_STATISTICS
+    code_annotations:
+      - ARCH-FILE_STATISTICS
+      - IMPL-FILE_STATISTICS_TEMPLATE_FIX
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    requirements:
+      - REQ-OUT_002
+      - REQ-OUTPUT_FORMATTING
+    tests:
+      - formatter_stats_test.go::TestBackwardCompatibilityFormatStrings_REQ_OUT_002
+      - formatter_stats_test.go::TestFormatCreatedArchiveWithStats_REQ_OUT_002
+      - formatter_stats_test.go::TestFormatCreatedArchiveWithStatsAllPlaceholders_REQ_OUT_002
+      - formatter_stats_test.go::TestFormatCreatedArchiveWithStatsErrorHandling_REQ_OUT_002
+      - formatter_stats_test.go::TestFormatIncrementalCreatedWithStats_REQ_OUT_002
+      - formatter_stats_test.go::TestPrintCreatedArchiveWithStats_REQ_OUT_002
+      - formatter_stats_test.go::TestPrintIncrementalCreatedWithStats_REQ_OUT_002

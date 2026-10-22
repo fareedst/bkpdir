@@ -10,8 +10,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
-QUEUE = REPO / "tied/docs/impl-pseudocode-improvement-queue.yaml"
-ORACLE_REG = REPO / "tied/spec/oracle-registry.yaml"
+QUEUE = REPO / "tied-bundle/docs/impl-pseudocode-improvement-queue.yaml"
+ORACLE_REG = REPO / "tied-project/spec/oracle-registry.yaml"
 
 
 def pkg_for_impl(impl: str) -> list[str]:

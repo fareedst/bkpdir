@@ -1,0 +1,66 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "structured_extraction",
+      "line": 19,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TOKEN_SYSTEM",
+        "IMPL-TOKEN_SYSTEM",
+        "REQ-DOC_016",
+        "REQ-GOV_REGISTRY_COMPLETENESS",
+        "REQ-IMMUTABLE_DIRECTORY_OPERATIONS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "cross_link_synthesis",
+      "line": 42,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "ARCH-TOKEN_SYSTEM",
+        "IMPL-TOKEN_SYSTEM",
+        "REQ-DOC_016",
+        "REQ-GOV_REGISTRY_COMPLETENESS",
+        "REQ-IMMUTABLE_DIRECTORY_OPERATIONS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "structured_extraction",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "cross_link_synthesis",
+      "branch_lines": [
+        55
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

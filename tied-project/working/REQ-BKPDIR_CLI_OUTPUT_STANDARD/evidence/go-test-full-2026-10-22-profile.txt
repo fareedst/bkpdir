@@ -1,0 +1,24 @@
+ok  	bkpdir	9.838s
+?   	bkpdir/cmd/ai-validation	[no test files]
+?   	bkpdir/cmd/realtime-validator	[no test files]
+?   	bkpdir/cmd/specctl	[no test files]
+ok  	bkpdir/cmd/token-suggester	0.265s
+?   	bkpdir/docs/examples/pipeline-example/example-code	[no test files]
+ok  	bkpdir/internal/speccheck	0.375s
+ok  	bkpdir/internal/specmodel	0.593s
+ok  	bkpdir/internal/specmodel/contract	0.701s
+ok  	bkpdir/internal/specparse	0.815s
+ok  	bkpdir/internal/testutil	16.862s
+ok  	bkpdir/internal/validation	1.068s
+ok  	bkpdir/pkg/cli	1.256s
+ok  	bkpdir/pkg/clioutput	1.035s
+ok  	bkpdir/pkg/config	1.263s
+ok  	bkpdir/pkg/errors	1.809s
+ok  	bkpdir/pkg/git	2.664s
+ok  	bkpdir/pkg/processing	2.016s
+ok  	bkpdir/pkg/resources	1.591s
+ok  	bkpdir/test/metrics	2.036s
+ok  	bkpdir/test/performance	1.922s
+ok  	bkpdir/test/scenarios	1.473s
+ok  	bkpdir/test/specconformance	1.882s
+ok  	bkpdir/tools	1.908s

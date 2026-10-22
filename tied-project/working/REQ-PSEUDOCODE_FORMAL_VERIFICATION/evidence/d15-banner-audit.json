@@ -1,0 +1,16 @@
+[
+  {
+    "path": "archive.go",
+    "redundant_banner_count": 2,
+    "tokens": [
+      "ZIP_FORMAT"
+    ]
+  },
+  {
+    "path": "exclude_test.go",
+    "redundant_banner_count": 1,
+    "tokens": [
+      "EXCLUSION_PATTERNS"
+    ]
+  }
+]

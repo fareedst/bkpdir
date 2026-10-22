@@ -13,11 +13,11 @@ import yaml
 
 REPO = Path(__file__).resolve().parents[1]
 REQ_DIRS = (
-    REPO / "tied/requirements",
-    REPO / "tied/methodology/requirements",
+    REPO / "tied-project/requirements",
+    REPO / "tied-bundle/requirements",
 )
-SCOPE_REG = REPO / "tied/spec/req-criteria-scope-registry.yaml"
-IMPL_DECISION_DIR = REPO / "tied/implementation-decisions"
+SCOPE_REG = REPO / "tied-project/spec/req-criteria-scope-registry.yaml"
+IMPL_DECISION_DIR = REPO / "tied-project/implementation-decisions"
 
 STOP_WORDS = frozenset(
     """
@@ -267,7 +267,7 @@ def coverage_corpus_for_req(blocks: list[dict], req_token: str, h1_text: str, fu
 
 def is_meta_validation_criterion(text: str) -> bool:
     lower = text.lower()
-    if ".yaml" in lower or ".yml" in lower or lower.startswith("tied/"):
+    if ".yaml" in lower or ".yml" in lower or lower.startswith("tied-project/"):
         return True
     if "benchmark" in lower and "performance validation" in lower:
         return True

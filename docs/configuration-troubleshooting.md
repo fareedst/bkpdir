@@ -681,6 +681,16 @@ If you encounter issues not covered in this guide:
    BKPDIR_DEBUG=true bkpdir config
    ```
 
+### Issue: Nested multi-segment exclude patterns (e.g. `.venv/lib/`)
+
+**Symptoms:** A pattern like `.venv/lib/` in `exclude_patterns` does not exclude `tools/myapp/.venv/lib/...` (older builds only matched from the backup root).
+
+**Expected behavior (current):** Multi-segment directory patterns without a leading `/` match at any depth. `.venv/lib/` excludes files under `lib/` inside any `.venv` directory segment; it does **not** exclude `.venv/bin/` unless you also list `.venv/` or a broader pattern.
+
+**Root-only multi-segment:** Prefix the pattern with `/` (e.g. `/demo/batches/`) to exclude only paths starting at the backup root.
+
+**Workaround on older versions:** Use `.venv/` for the whole virtualenv, or `**/.venv/lib/` where supported.
+
 Remember: The CFG-006 system is designed to be self-diagnosing. Use the powerful configuration inspection capabilities to understand and resolve issues quickly.
 
 ---

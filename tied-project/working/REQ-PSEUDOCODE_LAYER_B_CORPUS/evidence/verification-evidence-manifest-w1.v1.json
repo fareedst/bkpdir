@@ -1,0 +1,74 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "layer-b-corpus-w1-ver",
+  "commit": "2e5986df600d5001a58d4d4abf62ee175a5a620f",
+  "environment": {
+    "date": "2026-10-21",
+    "os": "darwin"
+  },
+  "command_results": [
+    {
+      "id": "layer-b-w1-full",
+      "command": [
+        "bash",
+        "scripts/run-pseudocode-layer-b-batch.sh",
+        "--mode",
+        "full",
+        "--wave",
+        "w1",
+        "--enforce"
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": [
+        "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate/IMPL-AUTO_DETECTION.json"
+      ]
+    },
+    {
+      "id": "full-corpus-l0",
+      "command": ["bash", "scripts/run-spec-verification.sh"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    },
+    {
+      "id": "go-test-specconformance-w1",
+      "command": [
+        "go",
+        "test",
+        "./test/specconformance/...",
+        "./internal/specmodel/...",
+        "./internal/specparse/...",
+        "-count=1"
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed"
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "w1-layer-b-full",
+      "attribute": "LayerBMinimumGating",
+      "applicability": "applicable",
+      "rationale": "38 W1 registry tokens pass pseudocode_validate full mode",
+      "evidence_method": "script",
+      "command_or_test": "run-pseudocode-layer-b-batch.sh --mode full --wave w1 --enforce",
+      "result": "passed",
+      "owner": "agent"
+    },
+    {
+      "id": "w1-l0-full-registry",
+      "attribute": "L0SpecctlRegression",
+      "applicability": "applicable",
+      "rationale": "Full 73/73 formal_spec check-leads green after W1 sidecar sync",
+      "evidence_method": "script",
+      "command_or_test": "run-spec-verification.sh",
+      "result": "passed",
+      "owner": "agent"
+    }
+  ],
+  "wave": "w1",
+  "token_count": 38
+}

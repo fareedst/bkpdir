@@ -1,0 +1,66 @@
+execution_evidence:
+  request: REQ-IMMUTABLE_FILE_EXCLUSION
+steps:
+  - slug: session-bootstrap
+    disposition: completed
+  - slug: translate-sponsor-intent
+    disposition: completed
+  - slug: change-definition
+    disposition: completed
+  - slug: impact-discovery
+    disposition: completed
+  - slug: risk-assessment
+    disposition: completed
+  - slug: test-strategy
+    disposition: completed
+  - slug: catalog-pseudocode-contracts
+    disposition: completed
+  - slug: resolve-pseudocode
+    disposition: completed
+  - slug: apply-token-comments
+    disposition: completed
+  - slug: gate-pseudocode-validation
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS-pseudocode.md
+  - slug: persist-implementation-records
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/implementation-decisions/IMPL-EXCLUSION_PATTERNS.yaml
+  - slug: author-requirement
+    disposition: not_applicable
+    rationale: Bug fix; REQ-IMMUTABLE_FILE_EXCLUSION already exists.
+  - slug: sub-adversarial-inquiry-pass
+    disposition: not_applicable
+    policy: minimal-depth-no-inquiry
+    rationale: depth_tier minimal per CITDP-EXCLUDE-MULTI-SEG-ANY-DEPTH.
+  - slug: unit-test-red
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: exclude_test.go
+  - slug: unit-test-green
+    disposition: completed
+    evidence_refs:
+      - kind: command_evidence
+        claimed_success: true
+        exit_code: 0
+  - slug: sync-tied-stack
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/citdp/CITDP-EXCLUDE-MULTI-SEG-ANY-DEPTH.yaml
+  - slug: verification-gate
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/verification-summary.md
+  - slug: traceable-commit
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/evidence/traceable-commit-evidence.md
+      - kind: file_path
+        path: tied-project/working/REQ-IMMUTABLE_FILE_EXCLUSION/evidence/proposed-commit-message.txt

@@ -15,10 +15,12 @@ NC='\033[0m' # No Color
 # Configuration
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_NAME="token-navigate"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$PROJECT_ROOT/scripts/_cli_operator_output_standard.inc.sh"
 
 # Usage information
 usage() {
-    cat << EOF
+    _cli_out_write_heredoc << EOF
 ${BLUE}[REQ-DOC_016] Token Navigation Tool${NC}
 
 Usage: $SCRIPT_NAME <command> [options]
@@ -130,7 +132,7 @@ trace_token() {
     
     # Requirements layer
     echo -e "${GREEN}[1] Requirements Layer:${NC}"
-    grep -rn "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied/requirements.yaml" 2>/dev/null | \
+    grep -rn "\[REQ[:\-]${token}\]" --include="*.md" --include="*.yaml" "${PROJECT_ROOT}/tied-project/requirements.yaml" 2>/dev/null | \
         head -5 | sed 's|^|  |' || echo "  Not found in requirements.yaml"
     
     echo ""
