@@ -1726,6 +1726,20 @@ ARCH-GIT_INTEGRATION:
     requirements:
       - REQ-GIT_INTEGRATION
     tests: []
+ARCH-INCREMENTAL_ANCHOR_MODE:
+  decision: Dual incremental anchor modes; default full-anchored cumulative incrementals
+  detail_file: architecture-decisions/ARCH-INCREMENTAL_ANCHOR_MODE.yaml
+  metadata:
+    created:
+      author: AI agent
+      date: '2026-10-21'
+  name: Incremental Anchor Mode Architecture
+  status: Active
+  traceability:
+    requirements:
+      - REQ-INCREMENTAL_ANCHOR_MODE
+    implementation:
+      - IMPL-INCREMENTAL_ANCHOR_MODE
 ARCH-INCREMENTAL_DUPLICATE_PREVENTION:
   alternatives_considered:
     - cons: []

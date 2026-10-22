@@ -2049,6 +2049,19 @@ IMPL-GIT_DIRTY_CONFIG:
       reason: "Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])"
   name: "Configurable Git Dirty Status"
   status: "Active"
+IMPL-INCREMENTAL_ANCHOR_MODE:
+  cross_references:
+    - ARCH-INCREMENTAL_ANCHOR_MODE
+    - REQ-INCREMENTAL_ANCHOR_MODE
+  description: Mode-aware reconstruction, cumulative inc file lists, resolveIncrementalArchivePath
+  detail_file: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml
+  essence_pseudocode_path: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE-pseudocode.md
+  metadata:
+    last_updated:
+      date: '2026-10-21'
+      reason: Initial full-anchored incrementals
+  name: Incremental Anchor Mode
+  status: Active
 IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
   cross_references:
     - "ARCH-INCREMENTAL_DUPLICATE_PREVENTION"

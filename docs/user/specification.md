@@ -366,13 +366,16 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 - All output uses configurable printf-style format strings or template-based formatting for consistency and customization
 
 ### 2. Create Incremental Archive
-- Creates an incremental ZIP archive containing only files changed since the last full archive
+- Creates an incremental ZIP archive of files that differ from the latest **full** archive (default **full-anchored** mode)
 - Usage: `bkpdir inc [NOTE]`
 - Requires an existing full archive as a base
+- Configuration `incremental_anchor_mode`: `full` (default) or `chained`. Flag `--incremental-anchor-mode` on `inc` and `diff` overrides config for that invocation.
+  - **full**: each incremental zip contains every path that differs from the latest full snapshot; skip/diff effective state uses the full archive plus the **latest** matching incremental only.
+  - **chained**: each incremental zip is a delta since the prior effective state; skip/diff merges **all** matching incrementals in name order (legacy behavior).
 - Archive naming format: `BASENAME_update=YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip`
   - BASENAME is the name of the base full archive
   - Timestamp and Git info follow the same format as full archives
-- Only includes files modified since the base archive creation time
+  - If that path already exists, `-seqN` is inserted before `.zip` (for example `...-12-01-seq2.zip`)
 - Reports success using the same formatting configuration as full archives
 - Exits with `status_created_archive` status code on success
 

@@ -1,0 +1,57 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "incremental-anchor-mode-20261021",
+  "commit": "pending",
+  "environment": {
+    "go": "1.22+"
+  },
+  "command_results": [
+    {
+      "id": "anchor-mode-go-test",
+      "command": [
+        "go",
+        "test",
+        "-count=1",
+        "-run",
+        "TestIncremental|TestReconstruct|TestIncCommand|TestCalculateDiff|IncrementalAnchor|Disambiguation",
+        "."
+      ],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": [
+        "working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/verification-go-test-2026-10-21.txt"
+      ]
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "incremental-anchor-mode-regression",
+      "attribute": "regression",
+      "applicability": "applicable",
+      "rationale": "Full vs chained reconstruction, cumulative inc, path disambiguation",
+      "evidence_method": "go test",
+      "command_or_test": "TestIncrementalAnchor*",
+      "threshold": "exit 0",
+      "result": "passed"
+    }
+  ],
+  "covered_tokens": [
+    "REQ-INCREMENTAL_ANCHOR_MODE",
+    "REQ-INCREMENTAL_DUPLICATE_PREVENTION",
+    "REQ-DIFF_COMMAND",
+    "IMPL-INCREMENTAL_ANCHOR_MODE",
+    "IMPL-INCREMENTAL_DUPLICATE_PREVENTION",
+    "IMPL-DIFF_COMMAND"
+  ],
+  "proof_boundaries": [
+    "command_exit_code",
+    "test_log_artifact"
+  ],
+  "human_decisions": {
+    "stored_separately": true,
+    "references": [
+      "working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/minimal-inquiry-waiver.md"
+    ]
+  }
+}

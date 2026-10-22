@@ -1886,6 +1886,19 @@ REQ-IMMUTABLE_TESTING_INFRASTRUCTURE:
     tests: []
   validation_criteria:
     - method: Testing infrastructure tests verify all requirements. Breaking changes require major version bump.
+REQ-INCREMENTAL_ANCHOR_MODE:
+  architecture: tied-project/architecture-decisions/ARCH-INCREMENTAL_ANCHOR_MODE.yaml
+  category: Functional
+  description: Full-anchored incremental archives by default; optional chained mode; -seqN path disambiguation
+  detail_file: requirements/REQ-INCREMENTAL_ANCHOR_MODE.yaml
+  implementation: tied-project/implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml
+  metadata:
+    created:
+      author: AI agent
+      date: '2026-10-21'
+  name: Incremental Anchor Mode
+  priority: P1
+  status: Implemented
 REQ-INCREMENTAL_DUPLICATE_PREVENTION:
   architecture: tied-project/architecture-decisions/ARCH-INCREMENTAL_DUPLICATE_PREVENTION.yaml
   category: Functional

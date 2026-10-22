@@ -2380,6 +2380,23 @@ REQ-IMMUTABLE_TESTING_INFRASTRUCTURE:
   source_index: requirements.yaml
   status: Active
   type: REQ
+REQ-INCREMENTAL_ANCHOR_MODE:
+  category: Functional
+  description: Full-anchored default incrementals; chained opt-in; -seqN path disambiguation
+  detail_file: requirements/REQ-INCREMENTAL_ANCHOR_MODE.yaml
+  metadata:
+    last_updated: '2026-10-21'
+ARCH-INCREMENTAL_ANCHOR_MODE:
+  category: Architecture
+  detail_file: architecture-decisions/ARCH-INCREMENTAL_ANCHOR_MODE.yaml
+  metadata:
+    last_updated: '2026-10-21'
+IMPL-INCREMENTAL_ANCHOR_MODE:
+  category: Implementation
+  detail_file: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml
+  essence_pseudocode_path: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE-pseudocode.md
+  metadata:
+    last_updated: '2026-10-21'
 REQ-INCREMENTAL_DUPLICATE_PREVENTION:
   category: Functional
   cross_references: []

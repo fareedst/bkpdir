@@ -1,0 +1,82 @@
+record_identity:
+  change_request_id: INCREMENTAL-ANCHOR-MODE
+  title: Full-anchored incremental archives (default) with chained opt-in
+  recorded_at: "2026-10-21"
+change_definition:
+  current_behavior: |
+    bkpdir inc compares the working tree to ReconstructArchiveState, which merges the latest
+    full archive with every matching _update= incremental in name order (chained deltas). Each
+    new inc zip contains only paths that differ from that chained effective state. Skip when
+    diff against chained state is empty. Incremental names use minute-resolution timestamps;
+    two inc runs in the same minute target the same path (overwrite risk).
+  desired_behavior: |
+    Default incremental_anchor_mode full: each inc zip lists every file that differs from the
+    latest full snapshot (cumulative vs full). Skip and diff use effective state = full plus
+    overlay of the latest matching incremental only (valid when incs are cumulative). Optional
+    incremental_anchor_mode chained preserves today's merge-all-incrementals behavior for
+    legacy archive sets. Config key incremental_anchor_mode (full|chained); inc and diff accept
+    --incremental-anchor-mode override. When the resolved incremental path already exists,
+    append -seqN before .zip until unused (same-minute disambiguation).
+  non_goals:
+    - Sub-second timestamp format change for archive names
+    - Automatic detection of chained vs full-anchored archives on disk
+    - Mixed-mode reconstruction in one archive directory without explicit config
+  success_criteria:
+    - Second bkpdir inc after two file changes (sponsor log pattern) includes all paths changed vs full in dry-run under default config
+    - chained mode passes existing TestIncrementalSkipRequiresFullIncrementalChain and multi-incremental reconstruction tests unchanged
+    - Same-minute two inc creates two distinct files via -seqN suffix
+    - docs/user/specification.md and vocab aligned with default full-anchored semantics
+    - TIED REQ/ARCH/IMPL LEAP complete; tied_validate_consistency pass
+  unchanged_behavior: |
+    Full archive creation, exclude patterns, git naming segments, deletion-only skip (no empty zip),
+    incremental basename still derived from latest full archive name.
+impact_analysis:
+  modules_or_boundaries:
+    - comparison.go (ReconstructArchiveState, incremental selection)
+    - archive.go (createIncrementalArchive, path disambiguation)
+    - config.go (incremental_anchor_mode)
+    - main.go (inc/diff flags)
+    - incremental_duplicate_prevention_test.go, diff_command_test.go, inc_diff_integration_test.go
+  tied_tokens_affected:
+    - REQ-INCREMENTAL_ANCHOR_MODE (new)
+    - REQ-INCREMENTAL_DUPLICATE_PREVENTION
+    - REQ-DIFF_COMMAND
+    - ARCH-INCREMENTAL_ANCHOR_MODE (new)
+    - ARCH-INCREMENTAL_DUPLICATE_PREVENTION
+    - ARCH-DIFF_COMMAND
+    - IMPL-INCREMENTAL_ANCHOR_MODE (new)
+    - IMPL-INCREMENTAL_DUPLICATE_PREVENTION
+    - IMPL-DIFF_COMMAND
+risk_analysis:
+  adversarial_inquiry:
+    depth_tier: minimal
+    prior_depth_tier: null
+    gate_policy: advisory
+    research_profile: none
+    assurance_profile: baseline-functional
+    rationale: |
+      Local filesystem archive logic; no auth, network, or external persistence. Regression
+      covered by existing incremental and diff tests plus new mode-specific cases.
+    eligibility_triggers_matched: []
+    counterexamples:
+      - "Archive dir with legacy chained incs under default full mode mis-reconstructs until user sets chained or new full — documented migration"
+    falsification_questions:
+      - "If file list still uses chained baseline under default full, second inc omits first changed file — new integration test from sponsor log"
+    disconfirming_observations:
+      - "None observed during RED/green cycle; TestIncrementalAnchorModeSecondIncCumulativeVsFull covers sponsor falsification question."
+    evidence_references:
+      - tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/CITDP-INCREMENTAL-ANCHOR-MODE.yaml
+test_strategy:
+  summary: RED tests per mode; then config + reconstruction + disambiguation; run incremental/diff test subset and tied_validate_consistency.
+  unit:
+    - TestIncrementalAnchorModeSecondIncCumulativeVsFull (new)
+    - TestIncrementalArchivePathDisambiguationSameMinute (new)
+    - TestIncrementalSkipRequiresFullIncrementalChain_REQ_INCREMENTAL_DUPLICATE_PREVENTION (chained cfg only)
+    - TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND (split full vs chained expectations)
+  integration:
+    - TestIncCommandIntegration_REQ_INCREMENTAL_DUPLICATE_PREVENTION (both modes where applicable)
+    - go test -run 'TestIncremental|TestReconstruct|TestIncCommand|TestCalculateDiff|IncrementalAnchor|Disambiguation' .
+completion_criteria:
+  activation:
+    run_id: incremental-anchor-mode-plan-20261021
+    request_token: REQ-INCREMENTAL_ANCHOR_MODE

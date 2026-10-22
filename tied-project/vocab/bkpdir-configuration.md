@@ -52,6 +52,7 @@
 | `include_git_info` | bool | legacy | Prefer `git.include_info` |
 | `show_git_dirty_status` | bool | legacy | Prefer `git.show_dirty_status` |
 | `skip_broken_symlinks` | bool | — | Traversal behavior |
+| `incremental_anchor_mode` | string | `full` | `full` (cumulative vs latest full) or `chained` (legacy layered incrementals) |
 | `inherit` | list | — | Explicit inheritance file paths |
 | `git` | map | — | Nested Git block; see git glossary |
 | `backup_dir_path` | string | — | File backup storage |

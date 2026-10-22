@@ -1,0 +1,104 @@
+{
+  "schema_version": "request-evidence-envelope.v1",
+  "envelope_meta": {
+    "generated_at": "2026-10-22T04:21:41.107Z",
+    "generator": "request_evidence_envelope_build",
+    "revision": 1
+  },
+  "identity": {
+    "request_token": "REQ-INCREMENTAL_ANCHOR_MODE",
+    "project_id": "453495ab14512f89",
+    "depth_tier": "minimal",
+    "gate_policy": "advisory",
+    "methodology_snapshot_id": "3.0.0"
+  },
+  "runs": [
+    {
+      "run_id": "incremental-anchor-mode-20261021",
+      "phase": "verification",
+      "started_at": "2026-10-22T04:21:35.529Z",
+      "generator": "tied_checklist_gate_validate"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "checklist_tracker",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/agent-req-implementation-checklist.yaml",
+      "content_hash": "sha256:b3c2c0af5afa109a12771d588eabb38ee42d4ba628684f781f4abeba657f1a73",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "tracker_disposition_only"
+      ]
+    },
+    {
+      "kind": "request_evidence_envelope",
+      "schema_version": "request-evidence-envelope.v1",
+      "path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/request-evidence-envelope.v1.json",
+      "content_hash": "sha256:8d08b34d63fa7736a90997cd09cc03ea8dd47240bfceb897155d7c4a0f9065ec",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/minimal-inquiry-waiver.md",
+      "content_hash": "sha256:1e3e1c19fd7b5da5fbf219d652dcc05bb209c87f784be4fafe52b344a070ba90",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/verification-go-test-2026-10-21.txt",
+      "content_hash": "sha256:b021dbd9d91987b170f002f5540aff64dec3c8ef8a3c391509650419bf7d682a",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "verification_evidence_manifest",
+      "schema_version": "verification-evidence-manifest.v1",
+      "path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/evidence/verification-evidence-manifest.v1.json",
+      "content_hash": "sha256:6f3bbe310b1061905a1f85b43cc69da8a37f18076214b979c8e195b937db49a8",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    }
+  ],
+  "cross_links": {
+    "tracker_path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/agent-req-implementation-checklist.yaml",
+    "tracker_hash": "sha256:3540f4f5f5358862f4a71bb156cb92a7207a10aa78a3c4281621b2b07c8f9ddb",
+    "citdp_path": "tied-project/working/REQ-INCREMENTAL_ANCHOR_MODE/CITDP-INCREMENTAL-ANCHOR-MODE.yaml",
+    "evidence_chain_profile_path": null
+  },
+  "gaps": [
+    {
+      "code": "thin_ledger",
+      "artifact_kind": null,
+      "phase": null,
+      "detail": "No adherence ledger with outcome_verified rows for completed slugs",
+      "severity": "warn",
+      "source": "ledger-correlation"
+    },
+    {
+      "code": "tracker_dual_write",
+      "artifact_kind": null,
+      "phase": null,
+      "detail": "execution_evidence.completed slugs without matching non-pending step dispositions (post-hoc gate pass; advisory)",
+      "severity": "warn",
+      "source": "dual-write-detector"
+    }
+  ]
+}

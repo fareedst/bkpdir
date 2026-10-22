@@ -65,10 +65,11 @@ var (
 )
 
 var (
-	dryRun     bool
-	note       string
-	showConfig bool
-	debug      bool // SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Global debug flag
+	dryRun                  bool
+	note                    string
+	showConfig              bool
+	debug                   bool // SEMANTIC-TOKEN: DEBUG-OUTPUT [AI-FIRST] Global debug flag
+	incrementalAnchorModeCLI string
 )
 
 // - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return true only when mode is a regular file.
@@ -1047,13 +1048,14 @@ If the directory is identical to the most recent archive, no new archive is crea
 				archiveNote = args[0]
 			}
 
-			if err := CreateIncrementalArchiveWithContext(ctx, cfg, archiveNote, dryRun); err != nil {
+			if err := CreateIncrementalArchiveWithContextAndMode(ctx, cfg, archiveNote, dryRun, incrementalAnchorModeCLI); err != nil {
 				exitCode := HandleArchiveError(err, cfg, formatter)
 				os.Exit(exitCode)
 			}
 		},
 	}
 	cmd.Flags().StringVar(&note, "note", "", "Add a note to the archive name")
+	cmd.Flags().StringVar(&incrementalAnchorModeCLI, "incremental-anchor-mode", "", "Incremental anchor mode: full (default) or chained")
 	return cmd
 }
 
@@ -1111,8 +1113,14 @@ If no incremental archive exists, compares against the full archive only.`,
 				os.Exit(exitCode)
 			}
 
+			anchorMode, err := cfg.EffectiveIncrementalAnchorMode(incrementalAnchorModeCLI)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(cfg.StatusConfigError)
+			}
+
 			// Handle case where no archives exist
-			reconstructedState, err := ReconstructArchiveState(archiveDir)
+			reconstructedState, err := ReconstructArchiveStateWithMode(archiveDir, anchorMode)
 			if err != nil {
 				// Check if error is "No archives found" or "No full archive found"
 				if strings.Contains(err.Error(), "No archives found") || strings.Contains(err.Error(), "No full archive found") {
@@ -1149,6 +1157,7 @@ If no incremental archive exists, compares against the full archive only.`,
 			formatter.PrintDiffResult(diff)
 		},
 	}
+	cmd.Flags().StringVar(&incrementalAnchorModeCLI, "incremental-anchor-mode", "", "Incremental anchor mode: full (default) or chained")
 	return cmd
 }
 

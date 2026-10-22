@@ -188,8 +188,8 @@ func TestReconstructArchiveStateMultipleFullAndIncremental_REQ_DIFF_COMMAND(t *t
 		t.Fatalf("Failed to create second new incremental archive: %v", err)
 	}
 
-	// Reconstruct state - should use new full archive + second new incremental
-	reconstructed, err := ReconstructArchiveState(archiveDir)
+	// Reconstruct state - chained mode merges all incrementals for the latest full base
+	reconstructed, err := ReconstructArchiveStateWithMode(archiveDir, IncrementalAnchorModeChained)
 	if err != nil {
 		t.Fatalf("ReconstructArchiveState failed: %v", err)
 	}

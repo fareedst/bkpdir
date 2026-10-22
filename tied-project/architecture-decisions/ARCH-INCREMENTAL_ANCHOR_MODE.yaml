@@ -1,0 +1,23 @@
+ARCH-INCREMENTAL_ANCHOR_MODE:
+  decision: Dual incremental anchor modes with full as default
+  incremental_anchor_mode_chained:
+    effective_state: Full archive plus every matching incremental applied in ascending name order
+    inc_zip_contents: Delta since prior effective archived state
+  incremental_anchor_mode_full:
+    effective_state: Full archive plus latest matching incremental overlay only
+    inc_zip_contents: Cumulative delta versus latest full snapshot
+  integration_points:
+    - comparison.go ReconstructArchiveStateWithMode
+    - archive.go createIncrementalArchive and resolveIncrementalArchivePath
+    - main.go inc and diff commands
+  metadata:
+    created:
+      author: AI agent
+      date: '2026-10-21'
+  name: Incremental Anchor Mode Architecture
+  status: Active
+  traceability:
+    requirements:
+      - REQ-INCREMENTAL_ANCHOR_MODE
+    implementation:
+      - IMPL-INCREMENTAL_ANCHOR_MODE
