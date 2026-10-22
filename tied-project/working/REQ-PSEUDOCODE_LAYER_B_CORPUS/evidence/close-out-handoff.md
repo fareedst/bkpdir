@@ -1,7 +1,7 @@
 # Close-out handoff — REQ-PSEUDOCODE_LAYER_B_CORPUS (W1 wave)
 
 **Run ID:** `layer-b-corpus-w1-close` (wave); inquiry pairing `layer-b-corpus-20261021-close-v2`  
-**Commit SHA:** `6c78b95283210e67a946d2d05ed749e0933f348b`  
+**Commit SHA:** `db5fb43913c8d615da7a12c84275bf4d86a87e95`  
 **Scope:** W1 — 38 Layer B–enforced sidecars + L0 full-registry green + lead-sync Go comments.
 
 ### Completion signals
@@ -13,7 +13,7 @@
 ### CITDP / tracker
 
 - **Working:** `CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml`, `agent-req-implementation-checklist.yaml` (`operator_evidence.status: w1_slice_close_out`)
-- **Persist on commit:** `tied-project/citdp/CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml`
+- **Persisted CITDP:** `tied-project/citdp/CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml` (in commit above)
 
 ### Remaining risks
 

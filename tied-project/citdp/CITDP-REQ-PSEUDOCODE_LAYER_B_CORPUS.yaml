@@ -1,6 +1,6 @@
 CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS:
   change_definition:
-    current_behavior: "All 73 formal_spec IMPL sidecars pass L0 specctl; W0+W1 Layer B waves complete for 44 tokens; W2–W3 remain."
+    current_behavior: "All 73 formal_spec IMPL sidecars pass L0 specctl; W0+W1+W2 Layer B waves complete for 46 tokens; W3 remains."
     desired_behavior: "Each wave-enforced IMPL passes Layer B minimum_gating_rules at verification-gate."
     non_goals:
       - "Bulk constraint-enforced-v2 fleet promotion in one pass"
@@ -9,22 +9,39 @@ CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS:
       - "L0 full registry green"
       - "run-pseudocode-layer-b-batch.sh wave --enforce"
       - "W1 38 tokens Layer B full"
+      - "W2 CONFIGURABLE_STRINGS + CONFIG_DISPLAY_FLATTENING Layer B full"
     unchanged_behavior: "bkpdir runtime unless wave LEAPs behavior."
   completion_criteria:
     inquiry_run_ids:
       close_out: "layer-b-corpus-20261021-close-v2"
-      verification: "layer-b-corpus-w1-ver"
+      pre_implementation: "layer-b-corpus-20261021-pre"
+      verification: "layer-b-corpus-w2-ver"
     w1_wave:
       gate_evidence: "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w1-verification-gate.md"
+      manifest: "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w1.v1.json"
       run_id: "layer-b-corpus-w1-close"
+    w2_wave:
+      gate_evidence: "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w2-verification-gate.md"
+      inquiry_activation_run_id: "layer-b-corpus-20261021-ver"
+      manifest: "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w2.v1.json"
+      run_id: "layer-b-corpus-w2-ver"
   evidence:
-    manifest_reference: "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w1.v1.json"
+    manifest_reference: "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w2.v1.json"
+    proof_boundaries:
+      - "executable_behavior"
+      - "sidecar_contract_precision"
+      - "tooling_automation"
+      - "traceability_structure"
   impact_analysis:
     modules_or_boundaries:
-      - "scripts/run-pseudocode-layer-b-batch.sh"
-      - "tied-project/implementation-decisions/*-pseudocode.md"
+      - "config_pseudocode_w2_test.go"
+      - "errors_test.go"
+      - "tied-project/implementation-decisions/IMPL-CONFIGURABLE_STRINGS-pseudocode.md"
+      - "tied-project/implementation-decisions/IMPL-CONFIG_DISPLAY_FLATTENING-pseudocode.md"
     tied_tokens_affected:
       - "ARCH-SPEC_DSL_AND_ORACLE"
+      - "IMPL-CONFIGURABLE_STRINGS"
+      - "IMPL-CONFIG_DISPLAY_FLATTENING"
       - "IMPL-SPEC_CTL"
       - "REQ-PSEUDOCODE_FORMAL_VERIFICATION"
   leap_feedback:
@@ -45,6 +62,7 @@ CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS:
     residual_risk:
       expiry: "2027-03-31"
       owner: "sponsor"
-      summary: "W2–W3 Layer B waves"
+      summary: "W3 Layer B wave; L0 D15 redundant banners in pkg/fileops/comparison.go"
   test_strategy:
     regression: "SKIP_TIED_MCP=1 scripts/run-spec-verification.sh"
+    unit: "go test -run TestIMPL_CONFIG|TestHandleArchiveError"

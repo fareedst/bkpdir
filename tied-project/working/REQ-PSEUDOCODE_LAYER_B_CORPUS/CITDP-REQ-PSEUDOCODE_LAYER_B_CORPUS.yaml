@@ -9,7 +9,7 @@ change_definition:
     tracking; procedure-level contracts often use PRE/POST true; Grammar-Version v2 on one sidecar only.
   desired_behavior: >-
     Each wave-enforced IMPL passes Layer B minimum_gating_rules at verification-gate (pseudocode_validate
-    full mode). W1 complete (38 tokens); W2–W3 remain. L0 full registry green after W1 lead sync.
+    full mode). W1 complete (38 tokens); W2 complete (2 tokens); W3 remains. L0 full registry green after W1 lead sync.
   non_goals:
     - Bulk constraint-enforced-v2 or constraint_flow fleet promotion in one pass
     - Rewriting runtime behavior without LEAP and RED tests
@@ -85,11 +85,16 @@ completion_criteria:
     phase: close_out
   inquiry_run_ids:
     pre_implementation: layer-b-corpus-20261021-pre
-    verification: layer-b-corpus-w1-ver
+    verification: layer-b-corpus-w2-ver
     close_out: layer-b-corpus-20261021-close-v2
   w1_wave:
     run_id: layer-b-corpus-w1-close
     manifest: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w1.v1.json
+  w2_wave:
+    run_id: layer-b-corpus-w2-ver
+    manifest: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w2.v1.json
+    gate_evidence: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w2-verification-gate.md
+    inquiry_activation_run_id: layer-b-corpus-20261021-ver
   checklist_gate:
     close_out_receipt: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/close_out-2026-10-21T22-30-45-757Z.json
 leap_feedback:

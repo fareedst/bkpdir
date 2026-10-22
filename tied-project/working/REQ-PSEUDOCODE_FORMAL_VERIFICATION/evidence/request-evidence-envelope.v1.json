@@ -1,9 +1,9 @@
 {
   "schema_version": "request-evidence-envelope.v1",
   "envelope_meta": {
-    "generated_at": "2026-09-20T18:45:06.803Z",
-    "generator": "request_evidence_envelope_build",
-    "revision": 1
+    "generated_at": "2026-10-22T02:13:23.339Z",
+    "generator": "request_evidence_envelope_patch",
+    "revision": 17
   },
   "identity": {
     "request_token": "REQ-PSEUDOCODE_FORMAL_VERIFICATION",
@@ -20,10 +20,22 @@
       "generator": "request_evidence_envelope_build"
     },
     {
+      "run_id": "layer-b-corpus-w2-pre",
+      "phase": "pre_implementation",
+      "started_at": null,
+      "generator": "tied_adversarial_inquiry_run"
+    },
+    {
       "run_id": "run-pre_implementation",
       "phase": "pre_implementation",
       "started_at": null,
       "generator": "request_evidence_envelope_build"
+    },
+    {
+      "run_id": "layer-b-corpus-w2-ver",
+      "phase": "verification",
+      "started_at": null,
+      "generator": "tied_adversarial_inquiry_run"
     },
     {
       "run_id": "run-verification",
@@ -47,9 +59,31 @@
     {
       "kind": "adversarial_inquiry_gate",
       "schema_version": "adversarial-inquiry-gate.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/gate-result.json",
+      "content_hash": "sha256:5822af649d681989781735a4f716c674e3e6b510253245f130aefd41aa2fd607",
+      "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "gate_decision_only"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_gate",
+      "schema_version": "adversarial-inquiry-gate.v1",
       "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/gate-result.json",
       "content_hash": "sha256:24e42ded0495a173e689e75064d167499f24e599743552b5675b3301f0de9aa4",
       "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "gate_decision_only"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_gate",
+      "schema_version": "adversarial-inquiry-gate.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-verification/gate-result.json",
+      "content_hash": "sha256:5822af649d681989781735a4f716c674e3e6b510253245f130aefd41aa2fd607",
+      "phase": "verification",
       "status": "present",
       "proof_boundaries": [
         "gate_decision_only"
@@ -79,10 +113,32 @@
     },
     {
       "kind": "adversarial_inquiry_ledger",
+      "schema_version": "adversarial-inquiry-finding.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/finding-ledger.jsonl",
+      "content_hash": "sha256:2e569a7dd4c31ed99114e440ace3c1977f9515e3a34f5e39b1fd38b7308871b4",
+      "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "gate_decision_only"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_ledger",
       "schema_version": null,
       "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/finding-ledger.jsonl",
       "content_hash": "sha256:5e2cdf7d56bb9730d5fcb178593f46c41c7818e95624e53f004b3b97bc5b7d0c",
       "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "gate_decision_only"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_ledger",
+      "schema_version": "adversarial-inquiry-finding.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-verification/finding-ledger.jsonl",
+      "content_hash": "sha256:b4173bb78fd75b41a957ba1f4fa7f2224fd2ea43b92b7672b354da67a7c86945",
+      "phase": "verification",
       "status": "present",
       "proof_boundaries": [
         "gate_decision_only"
@@ -113,9 +169,31 @@
     {
       "kind": "adversarial_inquiry_obligation",
       "schema_version": "adversarial-inquiry-report.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/obligation-report.json",
+      "content_hash": "sha256:e89788751dbbc7941ca75b58c8f8b8d9c3e79119cdfbe43cafa8a3cba0bea995",
+      "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "gate_decision_only"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_obligation",
+      "schema_version": "adversarial-inquiry-report.v1",
       "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/obligation-report.json",
       "content_hash": "sha256:0e5c90fbb35d97de0258086c421b875af2dc0355da02d70d3d45a28197ad95f9",
       "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "gate_decision_only"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_obligation",
+      "schema_version": "adversarial-inquiry-report.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-verification/obligation-report.json",
+      "content_hash": "sha256:e89788751dbbc7941ca75b58c8f8b8d9c3e79119cdfbe43cafa8a3cba0bea995",
+      "phase": "verification",
       "status": "present",
       "proof_boundaries": [
         "gate_decision_only"
@@ -146,9 +224,31 @@
     {
       "kind": "adversarial_inquiry_provenance",
       "schema_version": "adversarial-inquiry-provenance.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/evidence-provenance.json",
+      "content_hash": "sha256:05b9c862f85f6b0a7f208af3cd66fa5ade5fd2505f472bcb589a09a17d12cfdd",
+      "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "provenance_identity"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_provenance",
+      "schema_version": "adversarial-inquiry-provenance.v1",
       "path": "working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-pre_implementation/evidence-provenance.json",
       "content_hash": "sha256:c93d9096f9a53dc52f6ef9b6a7893f2b061fba23025be9565a76287699378a79",
       "phase": "pre_implementation",
+      "status": "present",
+      "proof_boundaries": [
+        "provenance_identity"
+      ]
+    },
+    {
+      "kind": "adversarial_inquiry_provenance",
+      "schema_version": "adversarial-inquiry-provenance.v1",
+      "path": "tied-bundle/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/adversarial-inquiry/phase-verification/evidence-provenance.json",
+      "content_hash": "sha256:2a1d72628790e69fd9484527d7f1df14f0220ade17da67ce958aa98524c5ce5b",
+      "phase": "verification",
       "status": "present",
       "proof_boundaries": [
         "provenance_identity"
