@@ -1,0 +1,12 @@
+feat(cli): stderr-default help and stream contract
+
+Adopt REQ-BKPDIR_CLI_OUTPUT_STANDARD via pkg/clioutput: default help and
+diagnostics on stderr, explicit stdout help, shared peel/policy for Cobra and
+auto-detect; fleet binaries and seven shell scripts aligned; contract tests
+stable under full go test ./...
+
+REQ-BKPDIR_CLI_OUTPUT_STANDARD ARCH-BKPDIR_CLI_OUTPUT_STANDARD
+IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE
+
+Machine close-out: pass (close_out gate + envelope blocking 0).
+Process contract: pass. Adherence ledger: pass (minimal depth).

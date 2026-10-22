@@ -7,6 +7,8 @@ cd "$ROOT"
 TIED_CLI="${TIED_CLI:-$ROOT/.cursor/skills/tied-yaml/scripts/tied-cli.sh}"
 export TIED_BASE_PATH="${TIED_BASE_PATH:-$ROOT/tied-project}"
 export TIED_METHODOLOGY_BUNDLE_PATH="${TIED_METHODOLOGY_BUNDLE_PATH:-$ROOT/tied-bundle}"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$ROOT/scripts/_cli_operator_output_standard.inc.sh"
 
 MODE="structural"
 OUT_DIR="${LAYER_B_REPORT_DIR:-$ROOT/tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate}"
@@ -15,8 +17,19 @@ declare -a ENFORCE=()
 ENFORCE_ALL=0
 
 usage() {
-  echo "usage: run-pseudocode-layer-b-batch.sh [--mode structural|full] [--out-dir PATH] [--token IMPL-…]… [--enforce IMPL-…]… [--wave w0|w1|w2|w3]" >&2
+  _cli_out_write_heredoc <<'EOF'
+usage: run-pseudocode-layer-b-batch.sh [--mode structural|full] [--out-dir PATH] [--token IMPL-…]… [--enforce IMPL-…]… [--wave w0|w1|w2|w3]
+EOF
+}
+
+usage_error() {
+  usage
   exit 2
+}
+
+show_help() {
+  usage
+  exit 0
 }
 
 while [[ $# -gt 0 ]]; do
@@ -58,13 +71,13 @@ PY
       fi
       TOKENS+=("${_wave_tokens[@]}")
       ;;
-    -h|--help) usage ;;
-    *) echo "unknown arg: $1" >&2; usage ;;
+    -h|--help) show_help ;;
+    *) echo "unknown arg: $1" >&2; usage_error ;;
   esac
 done
 
 if [[ ${#TOKENS[@]} -eq 0 ]]; then
-  usage
+  usage_error
 fi
 
 if [[ "$MODE" != "structural" && "$MODE" != "full" ]]; then

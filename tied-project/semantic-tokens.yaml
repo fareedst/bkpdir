@@ -37,6 +37,9 @@ ARCH-AUTO_DETECTION:
   source_index: "architecture-decisions.yaml"
   status: "Active"
   type: "ARCH"
+ARCH-BKPDIR_CLI_OUTPUT_STANDARD:
+  description: "Policy/profile boundary for CLI operator output"
+  type: "ARCH"
 ARCH-BUILD_DISTRIBUTION:
   category: "Architecture"
   cross_references:
@@ -705,6 +708,9 @@ IMPL-BACKWARD_COMPAT:
   name: "Maintain Backward Compatibility"
   source_index: "implementation-decisions.yaml"
   status: "Active"
+  type: "IMPL"
+IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE:
+  description: "pkg/clioutput conformance implementation"
   type: "IMPL"
 IMPL-CFG_006:
   cross_references:
@@ -1844,6 +1850,9 @@ PROC-YAML_DB_OPERATIONS:
   source_index: "processes.md"
   status: "Active"
   type: "PROC"
+REQ-BKPDIR_CLI_OUTPUT_STANDARD:
+  description: "CLI operator output stream standard for bkpdir fleet"
+  type: "REQ"
 REQ-CFG_001:
   category: "Core Functional"
   cross_references:

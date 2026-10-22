@@ -1,0 +1,21 @@
+IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE:
+  architecture_decisions:
+    - "ARCH-BKPDIR_CLI_OUTPUT_STANDARD"
+  code_locations:
+    files:
+      - "main.go"
+      - "pkg/clioutput/cobra.go"
+      - "pkg/clioutput/peel.go"
+      - "pkg/clioutput/policy.go"
+  description: "pkg/clioutput policy, profile adapter, renderer, Cobra ApplyToRoot, peel seam, conformance tests."
+  essence_pseudocode_path: "tied-project/implementation-decisions/IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE-pseudocode.md"
+  name: "CLI output conformance implementation"
+  requirements_implemented:
+    - "REQ-BKPDIR_CLI_OUTPUT_STANDARD"
+  traceability:
+    architecture:
+      - "ARCH-BKPDIR_CLI_OUTPUT_STANDARD"
+    code_annotations:
+      - "IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE"
+    requirements:
+      - "REQ-BKPDIR_CLI_OUTPUT_STANDARD"

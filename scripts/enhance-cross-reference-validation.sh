@@ -13,6 +13,8 @@ NC='\033[0m' # No Color
 
 # Project root directory
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$PROJECT_ROOT/scripts/_cli_operator_output_standard.inc.sh"
 
 # Logging functions
 log_info() {
@@ -33,7 +35,7 @@ log_error() {
 
 # Usage information
 show_usage() {
-    cat << EOF
+    _cli_out_write_heredoc << EOF
 Usage: $0 [options]
 
 Enhanced cross-reference validation for completeness and traceability.

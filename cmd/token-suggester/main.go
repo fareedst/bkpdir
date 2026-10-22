@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"bkpdir/pkg/clioutput"
+
 	"github.com/spf13/cobra"
 )
 
@@ -312,8 +314,6 @@ func init() {
 // DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
 func main() {
 	// DOC-010: See ai-decision-framework.md - Documentation Standards [DECISION:validation]
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "❌ Error: %v\n", err)
-		os.Exit(1)
-	}
+	// [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] [REQ-BKPDIR_CLI_OUTPUT_STANDARD]
+	clioutput.ExecuteRoot(rootCmd, os.Args[1:])
 }

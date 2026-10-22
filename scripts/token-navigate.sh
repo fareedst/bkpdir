@@ -15,10 +15,12 @@ NC='\033[0m' # No Color
 # Configuration
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT_NAME="token-navigate"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$PROJECT_ROOT/scripts/_cli_operator_output_standard.inc.sh"
 
 # Usage information
 usage() {
-    cat << EOF
+    _cli_out_write_heredoc << EOF
 ${BLUE}[REQ-DOC_016] Token Navigation Tool${NC}
 
 Usage: $SCRIPT_NAME <command> [options]

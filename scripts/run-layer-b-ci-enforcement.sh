@@ -4,6 +4,8 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$ROOT/scripts/_cli_operator_output_standard.inc.sh"
 
 BATCH="$ROOT/scripts/run-pseudocode-layer-b-batch.sh"
 PLANNER="$ROOT/scripts/layer_b_ci_enforcement.py"
@@ -23,9 +25,20 @@ wave=""
 dry_run=0
 
 usage() {
-  echo "usage: run-layer-b-ci-enforcement.sh [--if-changed|--wave wN] [--dry-run]" >&2
-  echo "  env: RUN_LAYER_B=1 RUN_LAYER_B_WAVE=w0|w1|w2|w3 RUN_LAYER_B_IF_CHANGED=1" >&2
+  _cli_out_write_heredoc <<'EOF'
+usage: run-layer-b-ci-enforcement.sh [--if-changed|--wave wN] [--dry-run]
+  env: RUN_LAYER_B=1 RUN_LAYER_B_WAVE=w0|w1|w2|w3 RUN_LAYER_B_IF_CHANGED=1
+EOF
+}
+
+usage_error() {
+  usage
   exit 2
+}
+
+show_help() {
+  usage
+  exit 0
 }
 
 while [[ $# -gt 0 ]]; do
@@ -33,13 +46,13 @@ while [[ $# -gt 0 ]]; do
     --if-changed) planner_mode="if_changed"; shift ;;
     --wave)
       wave="$(echo "${2:-}" | tr '[:upper:]' '[:lower:]')"
-      [[ "$wave" =~ ^w[0-3]$ ]] || usage
+      [[ "$wave" =~ ^w[0-3]$ ]] || usage_error
       planner_mode="wave"
       shift 2
       ;;
     --dry-run) dry_run=1; shift ;;
-    -h|--help) usage ;;
-    *) echo "unknown arg: $1" >&2; usage ;;
+    -h|--help) show_help ;;
+    *) echo "unknown arg: $1" >&2; usage_error ;;
   esac
 done
 

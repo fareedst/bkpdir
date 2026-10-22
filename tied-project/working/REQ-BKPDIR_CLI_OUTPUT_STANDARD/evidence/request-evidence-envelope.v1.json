@@ -1,0 +1,388 @@
+{
+  "schema_version": "request-evidence-envelope.v1",
+  "envelope_meta": {
+    "generated_at": "2026-10-22T06:13:57.716Z",
+    "generator": "request_evidence_envelope_build",
+    "revision": 1
+  },
+  "identity": {
+    "request_token": "REQ-BKPDIR_CLI_OUTPUT_STANDARD",
+    "project_id": "453495ab14512f89",
+    "depth_tier": "minimal",
+    "gate_policy": "advisory",
+    "methodology_snapshot_id": "3.0.0"
+  },
+  "runs": [],
+  "artifacts": [
+    {
+      "kind": "checklist_tracker",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/agent-req-implementation-checklist.yaml",
+      "content_hash": "sha256:9ddf01efc67fe05f32766b058f95a09d98267919e90afce4ea58e97dd3ef899d",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "tracker_disposition_only"
+      ]
+    },
+    {
+      "kind": "citdp_record",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml",
+      "content_hash": "sha256:3d68d1e9074bfda33553f61c2ab73deeeee0f91a821eca1029e38e263cecc90c",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "citdp_snapshot_only"
+      ]
+    },
+    {
+      "kind": "not_applicable_receipt",
+      "schema_version": "not-applicable-receipt.v1",
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/not-applicable-receipt.v1.json",
+      "content_hash": "sha256:8ee040192c3aaa1aba88fcab7a3293c0a84f57d845194a560abdae29a2cd87ef",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "request_evidence_envelope",
+      "schema_version": "request-evidence-envelope.v1",
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/request-evidence-envelope.v1.json",
+      "content_hash": "sha256:01323dd13e9c85a9b2cd3ab31e8b839004b830243b1e609e5a27cccc053c067b",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/apply-token-comments-evidence.md",
+      "content_hash": "sha256:d4869355e658f3861cc5da92ae95228b1aaa0ab7e97848c8151c67348ab8b26b",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/author-architecture-evidence.md",
+      "content_hash": "sha256:a1893c8f9ec7a8b76c26ee9439603c3a02cfc7c06dd6bc124f79f3afba407713",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/author-requirement-evidence.md",
+      "content_hash": "sha256:4f78b2c17a5ea35fb729f8ec2db35a188b5d5caf44ab2bc0eb1d17888adedd2e",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/build-handoff.md",
+      "content_hash": "sha256:c32d57456f5a8b78743eb69c6af37194eef7f624d258cc0f9290e613455be100",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/catalog-pseudocode-contracts-evidence.md",
+      "content_hash": "sha256:84fc51a8739d34e54f5c8b24783f2ed44eb1292b649bccaecb50b351f50f7d1d",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/change-definition-evidence.md",
+      "content_hash": "sha256:dcc759f0ee5dc4bd10fdc7de3fd9bc3e6072479971af4538dace0f1818846767",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/close-out-gates-run.json",
+      "content_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/composition-integration-evidence.md",
+      "content_hash": "sha256:423b6a4848acf9a757a381561e3f51eae88abbb60f245cd16885d386b0fce14e",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/gate-pseudocode-validation-evidence.md",
+      "content_hash": "sha256:9bf0a0c99b01838ef09a463947e302923a73763875564e1d5ee43b2ece3455c4",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/gitignore-close-out-hygiene-evidence.md",
+      "content_hash": "sha256:20a1e3f897a2d7a8d9e9ca236d04435acaa8b27fba31f098d6b72dc31f1f9f8f",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/gitignore-close-out-hygiene.md",
+      "content_hash": "sha256:20a1e3f897a2d7a8d9e9ca236d04435acaa8b27fba31f098d6b72dc31f1f9f8f",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/go-test-full-2026-10-22.txt",
+      "content_hash": "sha256:eb50444a985d985433367bf8a28b6c8a53eee5cd911a2791122c01555b960131",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/impact-discovery-evidence.md",
+      "content_hash": "sha256:b37d4e6bc207a65595938026f7ea6db6f20e3164f052b70de78a2a40b3354466",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/persist-citdp-record-evidence.md",
+      "content_hash": "sha256:5ef931d2a1287ae65754b0f13632f62ff99e97eb1657b3122adf725cd4f44f2b",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/persist-implementation-records-evidence.md",
+      "content_hash": "sha256:7bd30aacbc95129a43055befebe168643ac372b3eb9f709233aa35a7a16dfe7b",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/resolve-pseudocode-evidence.md",
+      "content_hash": "sha256:a92e9eb5e99c9f18f7b0a67d98435c35ec6bc4270e9ecf203ec9befc89a917cf",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/risk-assessment-evidence.md",
+      "content_hash": "sha256:594a107568ce32a79dcc679228db08ee2d2ebb8c0cc490551373d660723b7f40",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/session-bootstrap-evidence.md",
+      "content_hash": "sha256:51a0f5aa231472183ee24fe56b12ba051ad8feaf4e96821c6c2d3f3a42352c3d",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sub-pseudocode-validation-pass-evidence.md",
+      "content_hash": "sha256:884fd92aa2c2f3bdf049cd56510f373ad0ecdd4ca98684d93ba8a795132d3fc3",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sub-vocabulary-sync-evidence.md",
+      "content_hash": "sha256:f7f806f061b2c303237bc10ec28a694d7e0eb49033b5f2ca75223fa1d8ed9662",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sub-yaml-edit-loop-evidence.md",
+      "content_hash": "sha256:3524cc7813d523f904e6d80acb24b642a2498595754e04ac3ad28a1a2a8e75c3",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/sync-tied-stack-evidence.md",
+      "content_hash": "sha256:03fa114564540a5e76b1f4d954f8245925d6d349ff1000e564be18104daa02ca",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/test-strategy-evidence.md",
+      "content_hash": "sha256:3b5bfe6e7ff8ce73b8ab82dce29f5d24719ca2c8c13d02b3217b69b60d47014a",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/three-way-alignment-unit-evidence.md",
+      "content_hash": "sha256:f9f6d18704ca648d04ad3e399e14b4dd8a8a2386536bc88a95fa56392c657b0c",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/translate-sponsor-intent-evidence.md",
+      "content_hash": "sha256:3aa293d10344260a5f8dd1b435d286efdedd77b58151ec08c15ca236ee6ba25f",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/unit-refactor-evidence.md",
+      "content_hash": "sha256:83685add55ea15c2e907b97533bf9bc04eaed3917b903db552f3927e9a932e08",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/unit-test-green-evidence.md",
+      "content_hash": "sha256:260cd2747ff303863ee0cfcc700a59db03eec684ebb7e2555e4df39924809ffb",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/unit-test-red-evidence.md",
+      "content_hash": "sha256:4ca15c3ac1d7f03623f6ccb45e6a4671a2a460bd259fe3401b7ad2a02ccec42e",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "verification_evidence_manifest",
+      "schema_version": "verification-evidence-manifest.v1",
+      "path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/verification-evidence-manifest.v1.json",
+      "content_hash": "sha256:6a0d2603b224d29d6ab90e3e95758fa7594cb5c825d3238bcad85341ca4c8b2e",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "artifact_presence_only"
+      ]
+    }
+  ],
+  "cross_links": {
+    "tracker_path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/agent-req-implementation-checklist.yaml",
+    "tracker_hash": "sha256:25ed5bb12e099c7b00d16e668426306f67b02a39f8ddef9692494ce0ff232718",
+    "citdp_path": "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml",
+    "evidence_chain_profile_path": null
+  },
+  "gaps": []
+}

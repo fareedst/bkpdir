@@ -45,6 +45,7 @@ var (
 func TestMain(m *testing.M) {
 	// Enable debug output by default for tests to show diagnostic information
 	debug = true
+	cacheModuleRootForTests()
 
 	// Run all tests
 	exitCode := m.Run()

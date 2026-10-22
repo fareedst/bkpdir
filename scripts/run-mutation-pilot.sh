@@ -4,13 +4,15 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+# shellcheck source=scripts/_cli_operator_output_standard.inc.sh
+source "$ROOT/scripts/_cli_operator_output_standard.inc.sh"
 
 THRESHOLD="${MUTATION_SCORE_THRESHOLD:-70}"
 MUTEST_INSTALL="github.com/avito-tech/go-mutesting/cmd/go-mutesting@latest"
 WAVE="${MUTATION_WAVE:-all}"
 
 usage() {
-  cat <<EOF
+  _cli_out_write_heredoc <<EOF
 Usage: run-mutation-pilot.sh [options]
 
 Environment:

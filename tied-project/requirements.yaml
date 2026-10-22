@@ -1,3 +1,13 @@
+REQ-BKPDIR_CLI_OUTPUT_STANDARD:
+  architecture: "tied-project/architecture-decisions/ARCH-BKPDIR_CLI_OUTPUT_STANDARD.yaml"
+  category: "Functional"
+  cross_references: "[REQ-USABILITY], [REQ-IMMUTABLE_GLOBAL_OPTIONS]"
+  description: "Machine output on stdout; human help and diagnostics on stderr by default; explicit stdout help selection; Cobra and auto-detection parity; shared conformance across adopted tools."
+  detail_file: "requirements/REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml"
+  implementation: "tied-project/implementation-decisions/IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE.yaml"
+  name: "CLI operator output standard"
+  priority: "P1"
+  status: "Implemented"
 REQ-CFG_001:
   category: "Functional"
   cross_references:

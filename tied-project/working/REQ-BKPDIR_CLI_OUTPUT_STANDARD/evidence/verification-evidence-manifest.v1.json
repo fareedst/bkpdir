@@ -1,0 +1,50 @@
+{
+  "schema_version": "verification-evidence-manifest.v1",
+  "run_id": "cli-output-ver-20261022",
+  "commit": "98f4ad48704bfa377667ff0621060d9059c21590",
+  "environment": { "go": "module bkpdir" },
+  "command_results": [
+    {
+      "id": "cli-output-go-test-full",
+      "command": ["go", "test", "-vet=off", "./...", "-count=1"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": [
+        "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/go-test-full-2026-10-22.txt"
+      ]
+    },
+    {
+      "id": "cli-output-contract-subset",
+      "command": ["go", "test", "-vet=off", ".", "-count=1", "-run", "CLIOutput|ShellCLI|FleetCLI|Composition_ExecuteWithAutoDetection_KnownSubcommandHelp"],
+      "cwd": "/Users/fareed/Documents/dev/go/bkpdir",
+      "exit_code": 0,
+      "result": "passed",
+      "artifacts": []
+    }
+  ],
+  "quality_rows": [
+    {
+      "id": "cli-stream-contract-regression",
+      "attribute": "regression",
+      "applicability": "applicable",
+      "rationale": "REQ-BKPDIR_CLI_OUTPUT_STANDARD stream contract + fleet/shell harness",
+      "evidence_method": "go test",
+      "command_or_test": "CLIOutput|ShellCLI|FleetCLI",
+      "threshold": "exit 0",
+      "result": "passed"
+    }
+  ],
+  "covered_tokens": [
+    "REQ-BKPDIR_CLI_OUTPUT_STANDARD",
+    "ARCH-BKPDIR_CLI_OUTPUT_STANDARD",
+    "IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE"
+  ],
+  "proof_boundaries": ["command_exit_code", "test_log_artifact"],
+  "human_decisions": {
+    "stored_separately": true,
+    "references": [
+      "tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/build-handoff.md"
+    ]
+  }
+}

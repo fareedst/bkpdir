@@ -151,6 +151,15 @@ IMPL-BACKWARD_COMPAT:
       reason: "Sidecar-canonical projection sync ([REQ-PSEUDOCODE_FORMAL_VERIFICATION])"
   name: "Maintain Backward Compatibility"
   status: "Active"
+IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE:
+  architecture:
+    - "ARCH-BKPDIR_CLI_OUTPUT_STANDARD"
+  cross_references: "[REQ-BKPDIR_CLI_OUTPUT_STANDARD], [ARCH-BKPDIR_CLI_OUTPUT_STANDARD], [IMPL-CLI_FRAMEWORK], [IMPL-AUTO_DETECTION]"
+  detail_file: "implementation-decisions/IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE.yaml"
+  name: "CLI output conformance implementation"
+  requirements:
+    - "REQ-BKPDIR_CLI_OUTPUT_STANDARD"
+  status: "Active"
 IMPL-CFG_006:
   archive_structure: "```go\ntype Archive struct {\n    Name               string\n    Path               string\n    CreationTime       time.Time\n    IsIncremental      bool\n    GitBranch          string\n    GitHash            string\n    Note               string\n    BaseArchive        string\n}\n```"
   backup_structure: "```go\ntype Backup struct {\n    Name         string\n    Path         string\n    CreationTime time.Time\n    SourceFile   string\n    Note         string\n}\n\ntype BackupInfo struct {\n    Name         string\n    Path         string\n    CreationTime time.Time\n    Size         int64\n}\n\ntype BackupOptions struct {\n    Context   context.Context\n    Config    *Config\n    Formatter *OutputFormatter\n    FilePath  string\n    Note      string\n    DryRun    bool\n}\n```"
@@ -2051,17 +2060,17 @@ IMPL-GIT_DIRTY_CONFIG:
   status: "Active"
 IMPL-INCREMENTAL_ANCHOR_MODE:
   cross_references:
-    - ARCH-INCREMENTAL_ANCHOR_MODE
-    - REQ-INCREMENTAL_ANCHOR_MODE
-  description: Mode-aware reconstruction, cumulative inc file lists, resolveIncrementalArchivePath
-  detail_file: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml
-  essence_pseudocode_path: implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE-pseudocode.md
+    - "ARCH-INCREMENTAL_ANCHOR_MODE"
+    - "REQ-INCREMENTAL_ANCHOR_MODE"
+  description: "Mode-aware reconstruction, cumulative inc file lists, resolveIncrementalArchivePath"
+  detail_file: "implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml"
+  essence_pseudocode_path: "implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE-pseudocode.md"
   metadata:
     last_updated:
-      date: '2026-10-21'
-      reason: Initial full-anchored incrementals
-  name: Incremental Anchor Mode
-  status: Active
+      date: "2026-10-21"
+      reason: "Initial full-anchored incrementals"
+  name: "Incremental Anchor Mode"
+  status: "Active"
 IMPL-INCREMENTAL_DUPLICATE_PREVENTION:
   cross_references:
     - "ARCH-INCREMENTAL_DUPLICATE_PREVENTION"

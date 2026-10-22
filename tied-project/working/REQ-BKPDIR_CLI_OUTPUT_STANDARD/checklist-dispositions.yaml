@@ -1,0 +1,62 @@
+execution_evidence:
+  request: REQ-BKPDIR_CLI_OUTPUT_STANDARD
+  envelope_path: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/evidence/request-evidence-envelope.v1.json
+  completed:
+    - session-bootstrap
+    - translate-sponsor-intent
+    - change-definition
+    - impact-discovery
+    - risk-assessment
+    - test-strategy
+    - author-requirement
+    - author-architecture
+    - catalog-pseudocode-contracts
+    - resolve-pseudocode
+    - apply-token-comments
+    - gate-pseudocode-validation
+    - sync-tied-stack
+steps:
+  - slug: session-bootstrap
+    disposition: completed
+  - slug: translate-sponsor-intent
+    disposition: completed
+  - slug: change-definition
+    disposition: completed
+  - slug: impact-discovery
+    disposition: completed
+  - slug: risk-assessment
+    disposition: completed
+  - slug: test-strategy
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/working/REQ-BKPDIR_CLI_OUTPUT_STANDARD/test-strategy.md
+  - slug: author-requirement
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/requirements/REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml
+  - slug: author-architecture
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/architecture-decisions/ARCH-BKPDIR_CLI_OUTPUT_STANDARD.yaml
+  - slug: catalog-pseudocode-contracts
+    disposition: completed
+  - slug: resolve-pseudocode
+    disposition: completed
+  - slug: apply-token-comments
+    disposition: completed
+  - slug: gate-pseudocode-validation
+    disposition: completed
+    evidence_refs:
+      - kind: file_path
+        path: tied-project/implementation-decisions/IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE-pseudocode.md
+  - slug: sync-tied-stack
+    disposition: completed
+  - slug: sub-adversarial-inquiry-pass
+    disposition: not_applicable
+    policy: minimal-depth-no-inquiry
+    rationale: CLI stream routing only; depth_tier minimal per CITDP-REQ-BKPDIR_CLI_OUTPUT_STANDARD.yaml.
+  - slug: unit-test-red
+    disposition: pending

@@ -26,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
+	"bkpdir/pkg/clioutput"
 	"bkpdir/pkg/formatter"
 )
 
@@ -398,8 +399,13 @@ func main() {
 	// CFG-001: See specification.md - Configuration Discovery [DECISION:discovery]
 	// DECISION-REF: DEC-002
 	// CLI-015: See specification.md - CLI Auto-Detection [DECISION:maintenance]
-	if err := executeWithAutoDetection(newRootCommand(), os.Args[1:]); err != nil {
-		fmt.Println(err)
+	// [IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE] [ARCH-BKPDIR_CLI_OUTPUT_STANDARD] [REQ-BKPDIR_CLI_OUTPUT_STANDARD]
+	peeled, flags := clioutput.PeelTextureArgs(os.Args[1:])
+	policy := clioutput.ResolvePolicy(flags)
+	root := newRootCommand()
+	clioutput.ApplyToRoot(root, policy)
+	if err := executeWithAutoDetection(root, peeled); err != nil {
+		clioutput.PrintExecError(err)
 		os.Exit(1)
 	}
 }

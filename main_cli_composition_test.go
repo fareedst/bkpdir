@@ -12,6 +12,8 @@ import (
 	"strings"
 	"testing"
 
+	"bkpdir/pkg/clioutput"
+
 	"github.com/spf13/cobra"
 )
 
@@ -37,14 +39,18 @@ func TestComposition_NewRootCommand_Subcommands_REQ_USABILITY(t *testing.T) {
 // - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: first token template routes through Cobra Execute and emits help output.
 func TestComposition_ExecuteWithAutoDetection_KnownSubcommandHelp_REQ_USABILITY(t *testing.T) {
 	root := newRootCommand()
-	var out bytes.Buffer
-	root.SetOut(&out)
-	root.SetErr(&out)
+	var stdout, stderr bytes.Buffer
+	policy := clioutput.ResolvePolicy(clioutput.PeeledFlags{}, clioutput.WithWriters(&stdout, &stderr), clioutput.WithTTYFunc(func(io.Writer) bool { return true }))
+	clioutput.ApplyToRoot(root, policy)
 	if err := executeWithAutoDetection(root, []string{"template", "--help"}); err != nil {
 		t.Fatalf("executeWithAutoDetection: %v", err)
 	}
-	if !strings.Contains(out.String(), "template") && !strings.Contains(out.String(), "Generate") {
-		t.Errorf("expected template help output, got: %q", out.String())
+	if stdout.Len() != 0 {
+		t.Errorf("expected empty stdout on default help, got: %q", stdout.String())
+	}
+	help := stderr.String()
+	if !strings.Contains(help, "template") && !strings.Contains(help, "Generate") {
+		t.Errorf("expected template help on stderr, got: %q", help)
 	}
 }
 

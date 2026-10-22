@@ -1,0 +1,24 @@
+REQ-BKPDIR_CLI_OUTPUT_STANDARD:
+  description: "Durable stream contract for operator help and diagnostics in bkpdir and adopted repo CLIs."
+  name: "CLI operator output standard"
+  priority: "P1"
+  related_requirements:
+    depends_on:
+      - "REQ-USABILITY"
+    related_to:
+      - "REQ-DEBUG_OUTPUT_CONTROL"
+      - "REQ-IMMUTABLE_GLOBAL_OPTIONS"
+  satisfaction_criteria:
+    - criterion: "Cobra and auto-detection paths resolve the same policy"
+    - criterion: "Default successful help leaves stdout empty and writes help to stderr"
+    - criterion: "Explicit stdout help writes help to stdout with empty stderr on success"
+    - criterion: "Help path does not consume stdin"
+    - criterion: "Normal machine command output remains on stdout"
+    - criterion: "Usage and execution errors write to stderr with empty stdout"
+  traceability:
+    architecture:
+      - "ARCH-BKPDIR_CLI_OUTPUT_STANDARD"
+    code_annotations:
+      - "REQ-BKPDIR_CLI_OUTPUT_STANDARD"
+    implementation:
+      - "IMPL-BKPDIR_CLI_OUTPUT_CONFORMANCE"
