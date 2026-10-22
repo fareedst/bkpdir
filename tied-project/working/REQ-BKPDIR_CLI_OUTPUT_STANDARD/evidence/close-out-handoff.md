@@ -1,7 +1,7 @@
 # Close-out handoff — REQ-BKPDIR_CLI_OUTPUT_STANDARD
 
 **Run ID:** `cli-output-profile-close-20261022`  
-**Feature commit SHA:** *(filled post-commit)*  
+**Feature commit SHA:** `c448e4f` (appearance profile on branch `chore/tied-two-folder-cleanup`)  
 **Scope:** Stream contract + appearance profile (`RenderHelp`, profile tests, shell profile helpers).
 
 ### Completion signals

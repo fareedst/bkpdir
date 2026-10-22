@@ -1,7 +1,7 @@
 {
   "schema_version": "verification-evidence-manifest.v1",
   "run_id": "cli-output-profile-ver-20261022",
-  "commit": "working-tree-pre-commit",
+  "commit": "c448e4f",
   "environment": { "go": "module bkpdir" },
   "command_results": [
     {
