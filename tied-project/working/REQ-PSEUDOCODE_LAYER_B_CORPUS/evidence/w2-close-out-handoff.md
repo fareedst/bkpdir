@@ -1,7 +1,7 @@
 # Close-out handoff — REQ-PSEUDOCODE_LAYER_B_CORPUS (W2 wave)
 
 **Run ID:** `layer-b-corpus-w2-ver` (verification); inquiry pairing `layer-b-corpus-20261021-close-v2` (close_out)  
-**Commit SHA:** `0917c76a49e6c8e0d8d085341ebc53880b42331e`  
+**Commit SHA:** `f8608c1daf867f238e1505035114b609fb36a847`  
 **Scope:** W2 — 2 Tier B formal sidecars + brownfield COVER tests; no production LEAP.
 
 ### Completion signals
