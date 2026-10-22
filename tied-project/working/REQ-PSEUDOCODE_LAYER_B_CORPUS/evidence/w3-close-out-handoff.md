@@ -34,5 +34,5 @@
 ### Remaining risks
 
 - ~~L0 D15 redundant banners (`comparison.go`)~~ — fixed `ed88dc9`
-- Phase 5 CI Path B — see [`phase5-ci-handoff.md`](phase5-ci-handoff.md) (uncommitted on branch)
+- Phase 5 CI Path B — see [`phase5-ci-handoff.md`](phase5-ci-handoff.md) (commit `8c62f67…`)
 - Grammar-Version v2 on touch; improvement queue under `tied-bundle/docs/`

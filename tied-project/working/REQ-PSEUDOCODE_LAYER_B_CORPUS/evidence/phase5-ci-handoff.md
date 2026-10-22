@@ -82,7 +82,7 @@ RUN_LAYER_B_IF_CHANGED=1 scripts/run-layer-b-ci-enforcement.sh --if-changed
 
 ## Close-out (Phase 5 commit)
 
-**Commit:** _(filled post-commit)_  
+**Commit:** `8c62f674` (full: `8c62f674…` — run `git rev-parse HEAD` on branch)  
 **Evidence:** `close-out-gates-run-phase5.json`, `traceable-commit-evidence-phase5.md`, `git-hygiene-receipt-2026-10-21-phase5.md`
 
 ### Completion signals
