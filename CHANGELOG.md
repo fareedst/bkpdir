@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Layer B W3 corpus wave (`REQ-PSEUDOCODE_LAYER_B_CORPUS`)**: 27 Tier C `lead_check_skip` sidecars pass Layer B full mode (contract hydration only; no runtime LEAP). Completes W0–W3 coverage for all 73 formal_spec tokens in `layer-b-wave-registry.yaml`. Working evidence `w3-verification-gate.md`, `w3-close-out-handoff.md`.
 - **Layer B W2 corpus wave (`REQ-PSEUDOCODE_LAYER_B_CORPUS`)**: `IMPL-CONFIGURABLE_STRINGS` and `IMPL-CONFIG_DISPLAY_FLATTENING` pass Layer B full mode; brownfield COVER tests in `config_pseudocode_w2_test.go` and `errors_test.go`. Working evidence `w2-verification-gate.md`, `w2-close-out-handoff.md`.
 - **Layer B W1 corpus wave (`REQ-PSEUDOCODE_LAYER_B_CORPUS`)**: 38 oracle/Tier-A sidecars pass Layer B `pseudocode_validate` full mode; `layer-b-wave-registry.yaml`; enriched `enrich_tier_a_procedure_contracts.py --wave`; batch driver `--enforce-all` fix. Full 73/73 L0 `check-leads` green; working evidence `w1-verification-gate.md`.
 - **Layer B W0 corpus slice (`REQ-PSEUDOCODE_LAYER_B_CORPUS`)**: Six W0 IMPL sidecars uplifted toward Layer B `minimum_gating_rules`; `scripts/run-pseudocode-layer-b-batch.sh`, `scripts/audit_corpus_layer_b_gaps.py`, and tests; Layer C gate includes `IMPL-EXCLUSION_PATTERNS`. Working evidence under `tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/`.

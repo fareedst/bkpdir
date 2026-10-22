@@ -16,6 +16,16 @@ STEP T001: derive minimal interfaces from consumer call sites and document contr
 - [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: derive minimal interfaces from consumer call sites and document contracts before moving implementation code.
 
 PROCEDURE design_package_interfaces():
+  # [IMPL-INTERFACE_FIRST][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: derive minimal interfaces from consumer call sites and document contracts before moving implementation code.
+  Contract:
+    INPUT: consumer call sites, target packages for extraction
+    OUTPUT: minimal interfaces, concrete implementations, versioned evolution path
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each module targeted for extraction:
     ANALYZE consumer call sites to determine required methods
     DEFINE minimal interface with only methods consumers actually call
@@ -31,6 +41,18 @@ STEP T001: implement concrete types in provider packages and wire them at the co
 - [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: implement concrete types in provider packages and wire them at the composition root only.
 
 PROCEDURE implement_against_interfaces():
+  # [IMPL-INTERFACE_FIRST][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: implement concrete types in provider packages and wire them at the composition root only.
+  Contract:
+    INPUT: consumer call sites, target packages for extraction
+    OUTPUT: minimal interfaces, concrete implementations, versioned evolution path
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+    TERMINATION: total
+
+
   FOR each defined interface:
     CREATE concrete implementation in provider module
     VERIFY implementation satisfies interface contract through validation checks
@@ -45,6 +67,16 @@ STEP T001: test each extracted package with mocks so unit tests avoid real downs
 - [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: test each extracted package with mocks so unit tests avoid real downstream dependencies.
 
 PROCEDURE enable_independent_testing():
+  # [IMPL-INTERFACE_FIRST][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: test each extracted package with mocks so unit tests avoid real downstream dependencies.
+  Contract:
+    INPUT: consumer call sites, target packages for extraction
+    OUTPUT: minimal interfaces, concrete implementations, versioned evolution path
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each extracted module:
     GENERATE mock implementations of consumed interfaces
     WRITE unit tests using mocks without real external IO dependencies
@@ -59,6 +91,15 @@ STEP T001: evolve APIs via additive interfaces or v2 types with adapters instead
 - [IMPL-INTERFACE_FIRST] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: evolve APIs via additive interfaces or v2 types with adapters instead of breaking existing consumers.
 
 PROCEDURE version_interface_evolution():
+  # [IMPL-INTERFACE_FIRST][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: evolve APIs via additive interfaces or v2 types with adapters instead of breaking existing consumers.
+  Contract:
+    INPUT: consumer call sites, target packages for extraction
+    OUTPUT: minimal interfaces, concrete implementations, versioned evolution path
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   WHEN interface change is needed:
     IF change is additive THEN
       EXTEND via embedding or new interface type

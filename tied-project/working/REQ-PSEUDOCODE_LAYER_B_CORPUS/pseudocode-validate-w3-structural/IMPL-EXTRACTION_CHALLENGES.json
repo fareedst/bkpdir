@@ -1,0 +1,92 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "extract_test_utilities",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-EXTRACTION_CHALLENGES",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "create_package_specific_tests",
+      "line": 40,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "ARCH-CONFIG_SYSTEM",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-EXTRACTION_CHALLENGES",
+        "REQ-CONFIGURATION",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "resolve_config_coupling",
+      "line": 67,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-EXTRACTION_CHALLENGES",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "extract_test_utilities",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "create_package_specific_tests",
+      "branch_lines": [
+        49,
+        55
+      ],
+      "failure_modes": [
+        "- WRITE edge-case tests for error paths",
+        "WRITE edge-case tests for error paths"
+      ],
+      "references": []
+    },
+    {
+      "block": "resolve_config_coupling",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

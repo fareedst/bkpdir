@@ -1,0 +1,81 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "define_interfaces_before_extraction",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-REFACTOR_PREP",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "decompose_large_files",
+      "line": 44,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-REFACTOR_PREP",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "analyze_and_cleanup_dependencies",
+      "line": 69,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-REFACTOR_PREP",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "define_interfaces_before_extraction",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "decompose_large_files",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "analyze_and_cleanup_dependencies",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

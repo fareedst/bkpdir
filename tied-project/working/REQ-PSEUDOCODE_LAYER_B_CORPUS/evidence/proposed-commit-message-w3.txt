@@ -1,0 +1,3 @@
+feat(tied): W3 Layer B corpus — 27 lead_check_skip sidecars
+
+Complete REQ-PSEUDOCODE_LAYER_B_CORPUS wave W3 with Layer B full enforce on all Tier C doc/process IMPLs (contract blocks only; no runtime LEAP). Adds verification/close-out evidence and completes W0–W3 registry coverage (73 formal sidecars).

@@ -1,0 +1,87 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "identify_component_boundaries",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-LARGE_FILE_DECOMP",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "extract_with_interface_compat",
+      "line": 43,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-LARGE_FILE_DECOMP",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "verify_decomposition_with_tests",
+      "line": 68,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-LARGE_FILE_DECOMP",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "identify_component_boundaries",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "extract_with_interface_compat",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "verify_decomposition_with_tests",
+      "branch_lines": [],
+      "failure_modes": [
+        "- ADD focused tests for public API and error paths",
+        "ADD focused tests for public API and error paths"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

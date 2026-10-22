@@ -16,6 +16,15 @@ STEP T001: extract shared test utilities first, add package-focused tests, and k
 - [IMPL-TESTING_COMPLEXITY] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: extract shared test utilities first, add package-focused tests, and keep root integration tests green after package extraction.
 
 PROCEDURE testing_complexity_challenge():
+  # [IMPL-TESTING_COMPLEXITY][ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] How: extract shared test utilities first, add package-focused tests, and keep root integration tests green after package extraction.
+  Contract:
+    INPUT: monolithic test helpers and package boundaries
+    OUTPUT: pkg/*_test.go coverage plus unchanged root integration suite
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   EXTRACT test utilities to pkg/testutil
   ADD focused tests per extracted package
   RUN full integration suite to confirm no regressions

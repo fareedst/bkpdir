@@ -17,6 +17,16 @@ STEP T002: INTEGRATE automated validation with existing tied_validate_consistenc
 - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] — How: parse legacy token YAML groups and emit normalized JSON with descriptions, status, and source paths per category.
 
 PROCEDURE structured_extraction():
+  # [IMPL-TOKEN_SYSTEM][ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] [REQ-GOV_REGISTRY_COMPLETENESS] How: parse legacy token YAML groups and emit normalized JSON with descriptions, status, and source paths per category.
+  Contract:
+    INPUT: project-tokens.yaml, source trees, semantic token registry
+    OUTPUT: normalized JSON artifacts, semantic-tokens.md tables, pointer stubs
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   PARSE project-tokens.yaml
   FOR EACH group IN actions, features, semantic_tokens:
     EMIT normalized JSON artifact
@@ -30,6 +40,16 @@ STEP T001: resolve canonical REQ/ARCH/IMPL references for each legacy token and 
 - [IMPL-TOKEN_SYSTEM] [ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] — How: resolve canonical REQ/ARCH/IMPL references for each legacy token and flag gaps when links are missing.
 
 PROCEDURE cross_link_synthesis():
+  # [IMPL-TOKEN_SYSTEM][ARCH-RESOURCE_MANAGEMENT] [ARCH-TOKEN_SYSTEM] [REQ-GOV_REGISTRY_COMPLETENESS] [REQ-IMMUTABLE_DIRECTORY_OPERATIONS] How: resolve canonical REQ/ARCH/IMPL references for each legacy token and flag gaps when links are missing.
+  Contract:
+    INPUT: project-tokens.yaml, source trees, semantic token registry
+    OUTPUT: normalized JSON artifacts, semantic-tokens.md tables, pointer stubs
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR EACH legacy_token:
     MAP identifiers to STDD tokens via prefix heuristics
     IF missing REQ/ARCH/IMPL link THEN OPEN tracking gap

@@ -18,6 +18,16 @@ STEP T001: EXECUTE PROCEDURE maintain_cross_document_consistency
 NOTE (DOC-ONLY): embed semantic tokens inline and replicate critical REQ/ARCH/IMPL context so each document layer stays self-contained with registry links.
 
 PROCEDURE maintain_cross_document_consistency():
+  # [IMPL-DOC_ENHANCEMENT][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: embed semantic tokens inline and replicate critical REQ/ARCH/IMPL context so each document layer stays self-contained with registry links.
+  Contract:
+    INPUT: documentation set, semantic token registry, proposed token changes
+    OUTPUT: updated docs, validation reports, impact summaries
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR EACH document:
     INLINE tokens at references
     REPLICATE linked context across layers
@@ -33,6 +43,15 @@ STEP T001: EXECUTE PROCEDURE validate_documentation_consistency
 NOTE (DOC-ONLY): verify tokens in code and tests exist in the registry with bidirectional links and no orphans.
 
 PROCEDURE validate_documentation_consistency():
+  # [IMPL-DOC_ENHANCEMENT][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: verify tokens in code and tests exist in the registry with bidirectional links and no orphans.
+  Contract:
+    INPUT: documentation set, semantic token registry, proposed token changes
+    OUTPUT: updated docs, validation reports, impact summaries
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   CHECK code tokens in registry
   CHECK test tokens reference valid REQ/ARCH/IMPL
   CHECK bidirectional cross-references
@@ -48,6 +67,16 @@ STEP T001: EXECUTE PROCEDURE define_behavioral_contracts
 NOTE (DOC-ONLY): document input/output and invariants per feature and bind each contract to requirement tokens.
 
 PROCEDURE define_behavioral_contracts():
+  # [IMPL-DOC_ENHANCEMENT][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: document input/output and invariants per feature and bind each contract to requirement tokens.
+  Contract:
+    INPUT: documentation set, semantic token registry, proposed token changes
+    OUTPUT: updated docs, validation reports, impact summaries
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR EACH feature:
     RECORD inputs, outputs, invariants
     LINK contracts to REQ tokens
@@ -62,6 +91,16 @@ STEP T001: EXECUTE PROCEDURE analyze_change_impact
 NOTE (DOC-ONLY): traverse dependency graph from registry cross-refs to list impacted docs, code, and tests for a proposed token change.
 
 PROCEDURE analyze_change_impact():
+  # [IMPL-DOC_ENHANCEMENT][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: traverse dependency graph from registry cross-refs to list impacted docs, code, and tests for a proposed token change.
+  Contract:
+    INPUT: documentation set, semantic token registry, proposed token changes
+    OUTPUT: updated docs, validation reports, impact summaries
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   graph = build from semantic_token_registry
   FOR EACH proposed change:
     TRACE affected tokens

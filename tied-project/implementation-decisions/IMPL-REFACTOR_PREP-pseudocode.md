@@ -16,6 +16,16 @@ STEP T001: replace direct struct coupling with interfaces at every boundary befo
 - [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: replace direct struct coupling with interfaces at every boundary before moving code into new packages.
 
 PROCEDURE define_interfaces_before_extraction():
+  # [IMPL-REFACTOR_PREP][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: replace direct struct coupling with interfaces at every boundary before moving code into new packages.
+  Contract:
+    INPUT: components targeted for extraction, dependency graph, large source files
+    OUTPUT: interface boundaries, decomposed files, acyclic dependency layers
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each component targeted for extraction:
     IDENTIFY inbound dependencies (callers of this component)
     IDENTIFY outbound dependencies (callees of this component)
@@ -32,6 +42,16 @@ STEP T001: split oversized files by responsibility while preserving package-leve
 - [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: split oversized files by responsibility while preserving package-level API behavior.
 
 PROCEDURE decompose_large_files():
+  # [IMPL-REFACTOR_PREP][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: split oversized files by responsibility while preserving package-level API behavior.
+  Contract:
+    INPUT: components targeted for extraction, dependency graph, large source files
+    OUTPUT: interface boundaries, decomposed files, acyclic dependency layers
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each source_file exceeding complexity threshold:
     IDENTIFY distinct responsibilities within the file
     SPLIT into focused files with one responsibility per file
@@ -47,6 +67,16 @@ STEP T001: break mutual dependency clusters with interfaces or lower-layer share
 - [IMPL-REFACTOR_PREP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: break mutual dependency clusters with interfaces or lower-layer shared code before extraction.
 
 PROCEDURE analyze_and_cleanup_dependencies():
+  # [IMPL-REFACTOR_PREP][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: break mutual dependency clusters with interfaces or lower-layer shared code before extraction.
+  Contract:
+    INPUT: components targeted for extraction, dependency graph, large source files
+    OUTPUT: interface boundaries, decomposed files, acyclic dependency layers
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   BUILD dependency_graph of current codebase
   IDENTIFY clusters of mutual dependencies
   FOR each circular dependency cluster:

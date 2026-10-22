@@ -16,6 +16,16 @@ STEP T001: emit per-token reference blocks aggregating forward, backward, and si
 - [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: emit per-token reference blocks aggregating forward, backward, and sibling links across documentation layers.
 
 PROCEDURE build_feature_reference_blocks():
+  # [IMPL-SEMANTIC_CROSS_REF][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: emit per-token reference blocks aggregating forward, backward, and sibling links across documentation layers.
+  Contract:
+    INPUT: semantic token registry, decision YAML indexes, code and doc mentions
+    OUTPUT: feature reference blocks, link integrity report, consistency report
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each feature_token in semantic_token_registry:
     COLLECT forward_links from this token to dependent tokens
     COLLECT backward_links from upstream tokens to this token
@@ -31,6 +41,16 @@ STEP T001: verify every cross-reference resolves to registered tokens with recip
 - [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: verify every cross-reference resolves to registered tokens with reciprocal links.
 
 PROCEDURE validate_link_integrity():
+  # [IMPL-SEMANTIC_CROSS_REF][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: verify every cross-reference resolves to registered tokens with reciprocal links.
+  Contract:
+    INPUT: semantic token registry, decision YAML indexes, code and doc mentions
+    OUTPUT: feature reference blocks, link integrity report, consistency report
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each link in all_cross_reference_links:
     CHECK source_token exists in semantic_token_registry
     CHECK target_token exists in semantic_token_registry
@@ -46,6 +66,16 @@ STEP T001: compare declared cross_references in YAML indexes to actual token men
 - [IMPL-SEMANTIC_CROSS_REF] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] — How: compare declared cross_references in YAML indexes to actual token mentions in linked code, tests, and docs.
 
 PROCEDURE enforce_cross_reference_consistency():
+  # [IMPL-SEMANTIC_CROSS_REF][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_001] How: compare declared cross_references in YAML indexes to actual token mentions in linked code, tests, and docs.
+  Contract:
+    INPUT: semantic token registry, decision YAML indexes, code and doc mentions
+    OUTPUT: feature reference blocks, link integrity report, consistency report
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each decision_file in requirements, architecture, implementation:
     EXTRACT declared cross_references from YAML
     EXTRACT actual token mentions from linked code and test files

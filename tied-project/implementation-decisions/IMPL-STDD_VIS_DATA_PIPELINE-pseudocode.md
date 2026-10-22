@@ -16,6 +16,15 @@ STEP T001: Load token registry and markdown indexes plus sampled code/test ancho
 - [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: load token registry and markdown indexes plus sampled code/test anchors as pipeline inputs.
 
 PROCEDURE INGEST_SOURCES():
+  # [IMPL-STDD_VIS_DATA_PIPELINE][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: load token registry and markdown indexes plus sampled code/test anchors as pipeline inputs.
+  Contract:
+    INPUT: semantic-tokens.md, requirements/architecture/implementation docs, code/test anchors
+    OUTPUT: docs/data/stdd-trace.json, docs/data/stdd-samples.csv
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   READ semantic-tokens.md and REQ/ARCH/IMPL indexes
   SAMPLE code and test anchor references
 
@@ -27,6 +36,15 @@ STEP T001: Classify nodes by token type and emit directed edges for documented c
 - [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: classify nodes by token type and emit directed edges for documented cross-references.
 
 PROCEDURE NORMALIZE_GRAPH(sources):
+  # [IMPL-STDD_VIS_DATA_PIPELINE][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: classify nodes by token type and emit directed edges for documented cross-references.
+  Contract:
+    INPUT: semantic-tokens.md, requirements/architecture/implementation docs, code/test anchors
+    OUTPUT: docs/data/stdd-trace.json, docs/data/stdd-samples.csv
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   CREATE nodes with type, status, sample refs
   EMIT edges for each documented cross-reference
 
@@ -38,6 +56,15 @@ STEP T001: Write stdd-trace.json graph and stdd-samples.csv chain samples for do
 - [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: write stdd-trace.json graph and stdd-samples.csv chain samples for downstream visual modules.
 
 PROCEDURE EXPORT_ARTIFACTS(graph):
+  # [IMPL-STDD_VIS_DATA_PIPELINE][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: write stdd-trace.json graph and stdd-samples.csv chain samples for downstream visual modules.
+  Contract:
+    INPUT: semantic-tokens.md, requirements/architecture/implementation docs, code/test anchors
+    OUTPUT: docs/data/stdd-trace.json, docs/data/stdd-samples.csv
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   WRITE docs/data/stdd-trace.json
   WRITE docs/data/stdd-samples.csv with sample chains
 
@@ -49,6 +76,17 @@ STEP T001: Schema-check exports, compare node counts to token registry, and spot
 - [IMPL-STDD_VIS_DATA_PIPELINE] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: schema-check exports, compare node counts to token registry, and spot-check two sample chains.
 
 PROCEDURE PIPELINE_VALIDATION(exports):
+  # [IMPL-STDD_VIS_DATA_PIPELINE][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: schema-check exports, compare node counts to token registry, and spot-check two sample chains.
+  Contract:
+    INPUT: semantic-tokens.md, requirements/architecture/implementation docs, code/test anchors
+    OUTPUT: docs/data/stdd-trace.json, docs/data/stdd-samples.csv
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   VALIDATE JSON schema
   ASSERT node counts consistent with registry
   SPOT-CHECK two REQ→CODE chains

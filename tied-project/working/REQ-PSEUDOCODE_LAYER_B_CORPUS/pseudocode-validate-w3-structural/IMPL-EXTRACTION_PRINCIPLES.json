@@ -1,0 +1,35 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "plan_extraction_order",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-EXTRACTION_PRINCIPLES",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "plan_extraction_order",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

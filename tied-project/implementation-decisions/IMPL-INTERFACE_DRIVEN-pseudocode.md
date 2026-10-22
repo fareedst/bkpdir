@@ -16,6 +16,15 @@ STEP T001: map call sites in main, pkg, and tests to the minimal method set each
 - [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: map call sites in main, pkg, and tests to the minimal method set each consumer needs.
 
 PROCEDURE discover_consumer_surface(provider_pkg, consumer_roots):
+  # [IMPL-INTERFACE_DRIVEN][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: map call sites in main, pkg, and tests to the minimal method set each consumer needs.
+  Contract:
+    INPUT: provider package, consumer roots (main, pkg, tests)
+    OUTPUT: interface definitions, wiring at composition root, mock-backed unit tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   FOR EACH reference FROM consumer_roots TO provider_pkg:
     RECORD method name and argument shapes
   END FOR
@@ -29,6 +38,15 @@ STEP T001: declare consumer-side interfaces with documentation linked to maintai
 - [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: declare consumer-side interfaces with documentation linked to maintainability requirements.
 
 PROCEDURE define_interface_in_consumer(name, methods):
+  # [IMPL-INTERFACE_DRIVEN][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: declare consumer-side interfaces with documentation linked to maintainability requirements.
+  Contract:
+    INPUT: provider package, consumer roots (main, pkg, tests)
+    OUTPUT: interface definitions, wiring at composition root, mock-backed unit tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   DEFINE interface named name with methods
   DOCUMENT each method with API documentation linking [REQ-MAINTAINABILITY]
 
@@ -40,6 +58,18 @@ STEP T001: wire concrete provider types into composition root only after compile
 - [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: wire concrete provider types into composition root only after compile-time interface satisfaction checks.
 
 PROCEDURE implement_and_register(root_wire):
+  # [IMPL-INTERFACE_DRIVEN][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: wire concrete provider types into composition root only after compile-time interface satisfaction checks.
+  Contract:
+    INPUT: provider package, consumer roots (main, pkg, tests)
+    OUTPUT: interface definitions, wiring at composition root, mock-backed unit tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+    TERMINATION: total
+
+
   FOR EACH interface I required by root_wire:
     INSTANTIATE concrete type T from provider package
     ASSERT T satisfies I at compile time
@@ -54,6 +84,16 @@ STEP T001: substitute fakes at each interface boundary so unit tests avoid live 
 - [IMPL-INTERFACE_DRIVEN] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: substitute fakes at each interface boundary so unit tests avoid live filesystem and version-control dependencies.
 
 PROCEDURE verify_with_mocks():
+  # [IMPL-INTERFACE_DRIVEN][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: substitute fakes at each interface boundary so unit tests avoid live filesystem and version-control dependencies.
+  Contract:
+    INPUT: provider package, consumer roots (main, pkg, tests)
+    OUTPUT: interface definitions, wiring at composition root, mock-backed unit tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR EACH module with external dependencies:
     SUBSTITUTE mock implementations in unit test files
     RUN unit test suite without live filesystem or version-control dependencies where possible

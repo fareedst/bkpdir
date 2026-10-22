@@ -16,6 +16,17 @@ STEP T001: extract template engine, printf formatter, output collector, and ANSI
 - [IMPL-LARGE_FILE_CHALLENGE] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: extract template engine, printf formatter, output collector, and ANSI helpers into separate packages and keep Default* adapters delegating to new modules.
 
 PROCEDURE large_file_decomposition():
+  # [IMPL-LARGE_FILE_CHALLENGE][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: extract template engine, printf formatter, output collector, and ANSI helpers into separate packages and keep Default* adapters delegating to new modules.
+  Contract:
+    INPUT: monolithic formatter.go responsibilities
+    OUTPUT: extracted packages with unchanged adapter surfaces
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   EXTRACT template engine package
   EXTRACT printf formatter package
   EXTRACT output collector package

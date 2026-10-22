@@ -1,0 +1,109 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "extract_infrastructure_layer",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-LAYERED_EXTRACTION",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "extract_utilities_layer",
+      "line": 39,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-LAYERED_EXTRACTION",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "extract_framework_layer",
+      "line": 62,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-LAYERED_EXTRACTION",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "extract_patterns_layer",
+      "line": 85,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-LAYERED_EXTRACTION",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "extract_infrastructure_layer",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "extract_utilities_layer",
+      "branch_lines": [],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    },
+    {
+      "block": "extract_framework_layer",
+      "branch_lines": [],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    },
+    {
+      "block": "extract_patterns_layer",
+      "branch_lines": [],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

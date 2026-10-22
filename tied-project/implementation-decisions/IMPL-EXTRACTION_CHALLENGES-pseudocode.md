@@ -16,6 +16,15 @@ STEP T001: move shared builders, fixtures, and assertions into testutil before s
 - [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] — How: move shared builders, fixtures, and assertions into testutil before splitting production packages.
 
 PROCEDURE extract_test_utilities():
+  # [IMPL-EXTRACTION_CHALLENGES][ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] How: move shared builders, fixtures, and assertions into testutil before splitting production packages.
+  Contract:
+    INPUT: shared test helpers, extracted packages, config structs
+    OUTPUT: testutil package, package-scoped tests, ConfigProvider adapters
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   IDENTIFY shared test helpers used across multiple test files
   MOVE helpers to testutil package or package-internal test helpers
   UPDATE dependency references in all consuming test files
@@ -29,6 +38,18 @@ STEP T001: give each extracted package focused unit tests with mocked dependenci
 - [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] — How: give each extracted package focused unit tests with mocked dependencies at its public API.
 
 PROCEDURE create_package_specific_tests():
+  # [IMPL-EXTRACTION_CHALLENGES][ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] How: give each extracted package focused unit tests with mocked dependencies at its public API.
+  Contract:
+    INPUT: shared test helpers, extracted packages, config structs
+    OUTPUT: testutil package, package-scoped tests, ConfigProvider adapters
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - WRITE edge-case tests for error paths
+    TERMINATION: total
+
+
   FOR each extracted_package:
     WRITE unit tests for public API surface
     WRITE edge-case tests for error paths
@@ -44,6 +65,16 @@ STEP T001: replace direct config struct imports with per-package ConfigProvider 
 - [IMPL-EXTRACTION_CHALLENGES] [ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: replace direct config struct imports with per-package ConfigProvider interfaces and root adapters.
 
 PROCEDURE resolve_config_coupling():
+  # [IMPL-EXTRACTION_CHALLENGES][ARCH-CODE_ORGANIZATION] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] How: replace direct config struct imports with per-package ConfigProvider interfaces and root adapters.
+  Contract:
+    INPUT: shared test helpers, extracted packages, config structs
+    OUTPUT: testutil package, package-scoped tests, ConfigProvider adapters
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each extracted package:
     DEFINE ConfigProvider interface with minimal method set for that package
     IMPLEMENT adapter in root package that wraps full Config struct

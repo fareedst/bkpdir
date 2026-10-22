@@ -16,6 +16,16 @@ STEP T001: map cohesive responsibilities in the large file to extractable compon
 - [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: map cohesive responsibilities in the large file to extractable components with clear inputs and outputs.
 
 PROCEDURE identify_component_boundaries(large_file):
+  # [IMPL-LARGE_FILE_DECOMP][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: map cohesive responsibilities in the large file to extractable components with clear inputs and outputs.
+  Contract:
+    INPUT: large source file, component boundaries, existing test suite
+    OUTPUT: smaller files or packages, preserved public API, improved test coverage
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   SCAN large_file for cohesive groups (formatting, collection, templates, errors)
   FOR each group:
     DEFINE public surface and dependencies on other groups
@@ -31,6 +41,16 @@ STEP T001: move each component to its own file or package while preserving exist
 - [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: move each component to its own file or package while preserving existing call signatures at the root.
 
 PROCEDURE extract_with_interface_compat(decomposition_map):
+  # [IMPL-LARGE_FILE_DECOMP][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: move each component to its own file or package while preserving existing call signatures at the root.
+  Contract:
+    INPUT: large source file, component boundaries, existing test suite
+    OUTPUT: smaller files or packages, preserved public API, improved test coverage
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each component in dependency order:
     MOVE implementation to separate file or package
     PRESERVE exported names and signatures used by callers
@@ -46,6 +66,18 @@ STEP T001: add or extend unit tests for previously untested surfaces until decom
 - [IMPL-LARGE_FILE_DECOMP] [ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] — How: add or extend unit tests for previously untested surfaces until decomposition steps keep coverage stable.
 
 PROCEDURE verify_decomposition_with_tests():
+  # [IMPL-LARGE_FILE_DECOMP][ARCH-CODE_ORGANIZATION] [ARCH-TESTING_STRATEGY] [REQ-MAINTAINABILITY] How: add or extend unit tests for previously untested surfaces until decomposition steps keep coverage stable.
+  Contract:
+    INPUT: large source file, component boundaries, existing test suite
+    OUTPUT: smaller files or packages, preserved public API, improved test coverage
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - ADD focused tests for public API and error paths
+    TERMINATION: total
+
+
   FOR each extracted component:
     ADD focused tests for public API and error paths
     RUN existing integration tests unchanged

@@ -1,0 +1,43 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "VALIDATE",
+      "line": 22,
+      "token_refs": [
+        "ARCH-SPEC_DSL_AND_ORACLE",
+        "IMPL-SPEC_CTL",
+        "REQ-PSEUDOCODE_FORMAL_VERIFICATION"
+      ],
+      "contract_fields": [
+        "DATA_TRANSITION",
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "VALIDATE",
+      "branch_lines": [
+        31,
+        38,
+        45
+      ],
+      "failure_modes": [
+        "- RETURN failure IF any error severity",
+        "RETURN failure IF any error severity"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

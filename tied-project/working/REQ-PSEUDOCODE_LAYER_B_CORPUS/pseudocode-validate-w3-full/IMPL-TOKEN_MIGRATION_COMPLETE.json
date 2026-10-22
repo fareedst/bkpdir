@@ -1,0 +1,104 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "ARCHIVE_MIGRATION_ARTIFACTS",
+      "line": 18,
+      "token_refs": [
+        "ARCH-TOKEN_SYSTEM",
+        "IMPL-TOKEN_MIGRATION_COMPLETE",
+        "REQ-CODE_QUALITY",
+        "REQ-DOC_016"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GENERATE_TOKEN_INVENTORY",
+      "line": 37,
+      "token_refs": [
+        "ARCH-TOKEN_SYSTEM",
+        "IMPL-TOKEN_MIGRATION_COMPLETE",
+        "REQ-CODE_QUALITY",
+        "REQ-DOC_016"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "RENDER_TOKEN_TABLES",
+      "line": 57,
+      "token_refs": [
+        "ARCH-TOKEN_SYSTEM",
+        "IMPL-TOKEN_MIGRATION_COMPLETE",
+        "REQ-CODE_QUALITY",
+        "REQ-DOC_016"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_TRACEABILITY",
+      "line": 77,
+      "token_refs": [
+        "ARCH-TOKEN_SYSTEM",
+        "IMPL-TOKEN_MIGRATION_COMPLETE",
+        "REQ-CODE_QUALITY",
+        "REQ-DOC_016"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "ARCHIVE_MIGRATION_ARTIFACTS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GENERATE_TOKEN_INVENTORY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "RENDER_TOKEN_TABLES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_TRACEABILITY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -16,6 +16,15 @@ STEP T001: Render swimlane or Sankey-style diagram with REQ/ARCH/IMPL/TEST/CODE 
 - [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: render swimlane or Sankey-style diagram with REQ/ARCH/IMPL/TEST/CODE lanes and dominant token labels.
 
 PROCEDURE LAYERED_FLOW_DIAGRAM(graph):
+  # [IMPL-STDD_VIS_ASSETS][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: render swimlane or Sankey-style diagram with REQ/ARCH/IMPL/TEST/CODE lanes and dominant token labels.
+  Contract:
+    INPUT: normalized STDD graph snapshot
+    OUTPUT: docs/images/stdd-trace-flow.svg, docs/images/stdd-trace-timeline.gif or mp4
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   ASSIGN nodes to lanes by token type
   DRAW edges for cross-references
   EMPHASIZE token badges and status colors
@@ -28,6 +37,15 @@ STEP T001: Produce stepwise frames from requirement through architecture, implem
 - [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: produce stepwise frames from requirement through architecture, implementation, tests, and code with visible token badges.
 
 PROCEDURE TIMELINE_ANIMATION(graph):
+  # [IMPL-STDD_VIS_ASSETS][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: produce stepwise frames from requirement through architecture, implementation, tests, and code with visible token badges.
+  Contract:
+    INPUT: normalized STDD graph snapshot
+    OUTPUT: docs/images/stdd-trace-flow.svg, docs/images/stdd-trace-timeline.gif or mp4
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   ORDER sample chains chronologically
   RENDER frames showing token progression
   EXPORT gif or mp4 to docs/images/
@@ -40,6 +58,17 @@ STEP T001: Review checklist verifies token prominence, color map alignment, and 
 - [IMPL-STDD_VIS_ASSETS] [ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] — How: review checklist verifies token prominence, color map alignment, and edge correctness against registry.
 
 PROCEDURE VISUAL_VALIDATION(assets):
+  # [IMPL-STDD_VIS_ASSETS][ARCH-STDD_VIS_FLOW] [REQ-STDD_VIS] [REQ-MODULE_VALIDATION] How: review checklist verifies token prominence, color map alignment, and edge correctness against registry.
+  Contract:
+    INPUT: normalized STDD graph snapshot
+    OUTPUT: docs/images/stdd-trace-flow.svg, docs/images/stdd-trace-timeline.gif or mp4
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   CHECK token labels readable and dominant
   VERIFY edge endpoints match registry cross-refs
   SPOT-CHECK two sample REQ→CODE chains

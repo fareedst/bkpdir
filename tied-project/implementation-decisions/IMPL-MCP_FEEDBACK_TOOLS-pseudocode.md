@@ -16,6 +16,15 @@ STEP T001: Resolve optional basePath to {base}/feedback.yaml defaulting to tied-
 - [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — How: resolve optional basePath to {base}/feedback.yaml defaulting to tied-project/feedback.yaml.
 
 PROCEDURE GET_FEEDBACK_PATH(basePath):
+  # [IMPL-MCP_FEEDBACK_TOOLS][ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] How: resolve optional basePath to {base}/feedback.yaml defaulting to tied-project/feedback.yaml.
+  Contract:
+    INPUT: basePath, entry type/title/description, export format
+    OUTPUT: feedback.yaml updates, markdown or JSON export strings
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   IF basePath provided THEN RETURN join(basePath, "feedback.yaml")
   RETURN default tied feedback path
 
@@ -27,6 +36,15 @@ STEP T001: Read feedback YAML or return empty entries structure when file is mis
 - [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — How: read feedback YAML or return empty entries structure when file is missing.
 
 PROCEDURE LOAD_FEEDBACK(basePath):
+  # [IMPL-MCP_FEEDBACK_TOOLS][ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] How: read feedback YAML or return empty entries structure when file is missing.
+  Contract:
+    INPUT: basePath, entry type/title/description, export format
+    OUTPUT: feedback.yaml updates, markdown or JSON export strings
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   path = GET_FEEDBACK_PATH(basePath)
   IF file missing THEN RETURN { entries: [] }
   PARSE yaml INTO FeedbackFile
@@ -40,6 +58,15 @@ STEP T001: Validate type/title/description, assign id and created_at, append ent
 - [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — How: validate type/title/description, assign id and created_at, append entry, write feedback.yaml.
 
 PROCEDURE APPEND_ENTRY(params):
+  # [IMPL-MCP_FEEDBACK_TOOLS][ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] How: validate type/title/description, assign id and created_at, append entry, write feedback.yaml.
+  Contract:
+    INPUT: basePath, entry type/title/description, export format
+    OUTPUT: feedback.yaml updates, markdown or JSON export strings
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   VALIDATE required fields
   id = GENERATE timestamp-based id
   APPEND entry TO feedback.entries
@@ -53,6 +80,15 @@ STEP T001: Format all entries as markdown report or JSON string for MCP export t
 - [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — How: format all entries as markdown report or JSON string for MCP export tool.
 
 PROCEDURE EXPORT_ENTRIES(entries, format):
+  # [IMPL-MCP_FEEDBACK_TOOLS][ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] How: format all entries as markdown report or JSON string for MCP export tool.
+  Contract:
+    INPUT: basePath, entry type/title/description, export format
+    OUTPUT: feedback.yaml updates, markdown or JSON export strings
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   IF format == markdown THEN RETURN exportMarkdown(entries)
   RETURN exportJson(entries)
 
@@ -64,6 +100,15 @@ STEP T001: Parse tied_feedback_add args, call appendEntry, return ok/id/created_
 - [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — How: parse tied_feedback_add args, call appendEntry, return ok/id/created_at and optional markdown snippet.
 
 PROCEDURE MCP_HANDLER_ADD(args):
+  # [IMPL-MCP_FEEDBACK_TOOLS][ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] How: parse tied_feedback_add args, call appendEntry, return ok/id/created_at and optional markdown snippet.
+  Contract:
+    INPUT: basePath, entry type/title/description, export format
+    OUTPUT: feedback.yaml updates, markdown or JSON export strings
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   PARSE args INTO entry params
   result = APPEND_ENTRY(params)
   RETURN MCP success envelope with optional report_snippet
@@ -76,5 +121,14 @@ STEP T001: Load entries then return exportMarkdown or exportJson string from tie
 - [IMPL-MCP_FEEDBACK_TOOLS] [ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] — How: load entries then return exportMarkdown or exportJson string from tied_feedback_export handler.
 
 PROCEDURE MCP_HANDLER_EXPORT(args):
+  # [IMPL-MCP_FEEDBACK_TOOLS][ARCH-FEEDBACK_STORAGE] [REQ-FEEDBACK_TO_TIED] How: load entries then return exportMarkdown or exportJson string from tied_feedback_export handler.
+  Contract:
+    INPUT: basePath, entry type/title/description, export format
+    OUTPUT: feedback.yaml updates, markdown or JSON export strings
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   entries = LOAD_FEEDBACK(args.basePath).entries
   RETURN EXPORT_ENTRIES(entries, args.format)

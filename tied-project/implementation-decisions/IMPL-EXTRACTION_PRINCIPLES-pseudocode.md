@@ -16,6 +16,16 @@ STEP T001: schedule modules only after their declared layer dependencies and int
 - [IMPL-EXTRACTION_PRINCIPLES] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: schedule modules only after their declared layer dependencies and interface boundaries validate.
 
 PROCEDURE plan_extraction_order():
+  # [IMPL-EXTRACTION_PRINCIPLES][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: schedule modules only after their declared layer dependencies and interface boundaries validate.
+  Contract:
+    INPUT: module dependency graph, extraction_layers ordered list
+    OUTPUT: extraction schedule with validated layer boundaries
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR layer in extraction_layers ascending:
     FOR module in layer.modules:
       VALIDATE module has no dependencies outside declared layer deps

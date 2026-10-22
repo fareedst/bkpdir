@@ -1,0 +1,112 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "provide_type_aliases",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-BACKWARD_COMPAT",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "provide_wrapper_functions",
+      "line": 42,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-BACKWARD_COMPAT",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "isolate_via_interfaces",
+      "line": 66,
+      "token_refs": [
+        "ARCH-CODE_ORGANIZATION",
+        "IMPL-BACKWARD_COMPAT",
+        "REQ-MAINTAINABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "provide_type_aliases",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "provide_wrapper_functions",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "isolate_via_interfaces",
+      "branch_lines": [],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 53
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 55
+    }
+  ],
+  "leakage": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 53,
+      "pattern": "function_kw"
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 55,
+      "pattern": "function_kw"
+    }
+  ]
+}

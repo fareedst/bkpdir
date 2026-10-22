@@ -18,6 +18,15 @@ STEP T003: NOTE performance implications where coupling may introduce overhead; 
 - [IMPL-EXTRACT_008_DOC_MIGRATION] [ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] — How: record REQ/ARCH/IMPL in indexes, publish canonical interdependency mapping doc, delete working-plan and preservation copies.
 
 PROCEDURE extract_008_documentation_migration():
+  # [IMPL-EXTRACT_008_DOC_MIGRATION][ARCH-EXTRACT_008_INTERDEP] [REQ-EXTRACT_008_INTERDEP_MAPPING] How: record REQ/ARCH/IMPL in indexes, publish canonical interdependency mapping doc, delete working-plan and preservation copies.
+  Contract:
+    INPUT: working-plan-extract-008 content, template doc locations
+    OUTPUT: registry entries, docs/package-interdependency-mapping.md, decommissioned working plan
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   RECORD REQ-EXTRACT_008_INTERDEP_MAPPING in requirements index
   RECORD ARCH-EXTRACT_008_INTERDEP in architecture index
   RECORD IMPL-EXTRACT_008_DOC_MIGRATION in implementation index

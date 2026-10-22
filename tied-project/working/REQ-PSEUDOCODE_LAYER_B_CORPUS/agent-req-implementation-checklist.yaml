@@ -88,15 +88,16 @@ execution_evidence:
         exit_code: 0
     Legacy string paths remain accepted; generic prose (e.g. "tests passed") is rejected as unresolved_evidence_ref.
   operator_evidence:
-    status: w2_slice_close_out
+    status: w3_slice_close_out
     depth_tier: integrated
     gate_policy: advisory
     phase_runs:
       pre_implementation: layer-b-corpus-20261021-pre
-      verification: layer-b-corpus-w2-ver
+      verification: layer-b-corpus-w3-ver
       close_out: layer-b-corpus-20261021-close-v2
       w1_close_wave: layer-b-corpus-w1-close
       w2_structural: layer-b-corpus-w2-structural
+      w3_structural: layer-b-corpus-w3-structural
     w1_wave:
       manifest: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w1.v1.json
       gate_evidence: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w1-verification-gate.md
@@ -114,6 +115,14 @@ execution_evidence:
       gate_evidence: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w2-verification-gate.md
       inquiry_activation_run_id: layer-b-corpus-20261021-ver
       session_handoff: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w2-corpus-handoff.md
+    w3_wave:
+      tokens: tied-project/spec/layer-b-wave-registry.yaml waves.w3
+      structural_baseline: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/gate-pseudocode-validation-w3-structural.md
+      layer_b_reports_dir: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate-w3-full
+      manifest: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w3.v1.json
+      gate_evidence: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-verification-gate.md
+      inquiry_activation_run_id: layer-b-corpus-20261021-ver
+      session_handoff: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-corpus-handoff.md
   request: REQ-PSEUDOCODE_LAYER_B_CORPUS
   slice: REQ-PSEUDOCODE_LAYER_B_CORPUS
   parent_request: REQ-PSEUDOCODE_FORMAL_VERIFICATION

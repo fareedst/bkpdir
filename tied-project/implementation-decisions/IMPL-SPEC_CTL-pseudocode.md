@@ -20,6 +20,18 @@ POST: exit code 0 IFF no error-severity findings
 - [IMPL-SPEC_CTL] [ARCH-SPEC_DSL_AND_ORACLE] [REQ-PSEUDOCODE_FORMAL_VERIFICATION] — How: parse each file and fail on PARSE/SHAPE/RESOLVE errors; optional CRIT-001 via run_impl_logic_audit.py --req-criteria-strict; L4 mutation pilot and contract eval documented in scripts (not global CI).
 
 PROCEDURE VALIDATE(paths):
+  # [IMPL-SPEC_CTL][ARCH-SPEC_DSL_AND_ORACLE] [REQ-PSEUDOCODE_FORMAL_VERIFICATION] How: parse each file and fail on PARSE/SHAPE/RESOLVE errors; optional CRIT-001 via run_impl_logic_audit.py --req-criteria-strict; L4 mutation pilot and contract eval documented in scripts (not global CI).
+  Contract:
+    INPUT: sidecar paths, repo root, formal_spec registry
+    OUTPUT: exit code 0 or diagnostic report
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - RETURN failure IF any error severity
+    DATA_TRANSITION: parsed sidecar AST and diagnostic list updated in memory for the validate run
+
+
   FOR path IN paths:
     doc = PARSE(path)
     EMIT diagnostics FROM validateDocument(doc)

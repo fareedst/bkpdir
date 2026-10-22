@@ -16,6 +16,16 @@ STEP T001: for sequential files, override a field only when source is explicit a
 - [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: for sequential files, override a field only when source is explicit and no earlier file already set it.
 
 PROCEDURE merge_basic_settings_with_preservation(dst, src, inherit_context):
+  # [IMPL-CFG_HIERARCHY_PRESERVATION][ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] How: for sequential files, override a field only when source is explicit and no earlier file already set it.
+  Contract:
+    INPUT: dst config, src config, inherit_context, field name
+    OUTPUT: merged config with correct precedence per merge mode
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each field in basic_settings:
     IF inherit_context THEN
       IF src.field is explicitly set THEN
@@ -37,6 +47,15 @@ STEP T001: preserve dst when field was set by an earlier file or differs from co
 - [IMPL-CFG_HIERARCHY_PRESERVATION] [ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: preserve dst when field was set by an earlier file or differs from compiled default; otherwise apply src.
 
 PROCEDURE apply_override_with_preservation(dst, src, field):
+  # [IMPL-CFG_HIERARCHY_PRESERVATION][ARCH-CONFIG_SYSTEM] [ARCH-STDD_VIS_FLOW] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] How: preserve dst when field was set by an earlier file or differs from compiled default; otherwise apply src.
+  Contract:
+    INPUT: dst config, src config, inherit_context, field name
+    OUTPUT: merged config with correct precedence per merge mode
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   IF field was explicitly set by an earlier config file THEN
     PRESERVE dst.field
   ELSE IF dst.field differs from compiled default THEN

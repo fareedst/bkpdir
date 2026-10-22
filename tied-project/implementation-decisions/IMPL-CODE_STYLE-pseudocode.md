@@ -21,6 +21,17 @@ DATA NAMING_RULES:
   acronyms: preserve case (e.g. HTTPServer, xmlParser)
 
 PROCEDURE VALIDATE_NAMING(symbol):
+  # [IMPL-CODE_STYLE][REQ-CODE_QUALITY] How: enforce UpperCamelCase for public symbols and lowerCamelCase for internal symbols.
+  Contract:
+    INPUT: source files, public symbols
+    OUTPUT: pass/fail validation results
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   IF symbol.is_public THEN ASSERT name matches UpperCamelCase
   ELSE ASSERT name matches lowerCamelCase
   RETURN pass OR fail
@@ -39,6 +50,15 @@ DATA FORMATTING_RULES:
   standard: repository formatting profile
 
 PROCEDURE VALIDATE_FORMATTING(file):
+  # [IMPL-CODE_STYLE][REQ-CODE_QUALITY] How: apply project-standard formatting and lint rules on each file.
+  Contract:
+    INPUT: source files, public symbols
+    OUTPUT: pass/fail validation results
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   RUN formatter ON file
   RUN linter ON file
   RETURN lint results
@@ -57,6 +77,17 @@ DATA DOCUMENTATION_RULES:
   examples: test suites contain usage examples
 
 PROCEDURE VALIDATE_DOCUMENTATION(module):
+  # [IMPL-CODE_STYLE][REQ-CODE_QUALITY] How: require module-level and public-symbol doc comments; inline comments only for non-obvious logic.
+  Contract:
+    INPUT: source files, public symbols
+    OUTPUT: pass/fail validation results
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   FOR EACH public symbol IN module:
     ASSERT doc comment exists
   ASSERT module-level comment exists

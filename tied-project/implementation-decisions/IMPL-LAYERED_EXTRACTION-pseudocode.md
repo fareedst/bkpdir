@@ -16,6 +16,15 @@ STEP T001: extract config and errors packages first as the foundation for all hi
 - [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: extract config and errors packages first as the foundation for all higher layers.
 
 PROCEDURE extract_infrastructure_layer():
+  # [IMPL-LAYERED_EXTRACTION][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: extract config and errors packages first as the foundation for all higher layers.
+  Contract:
+    INPUT: packages to extract, layer assignment per package
+    OUTPUT: four stable layers with acyclic dependencies
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   EXTRACT config and errors into infrastructure packages
   VALIDATE no infrastructure package depends on utilities, framework, or patterns
   VALIDATE higher layers may depend on infrastructure only through public APIs
@@ -28,6 +37,17 @@ STEP T001: extract formatter and git helpers after infrastructure is stable
 - [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: extract formatter and git helpers after infrastructure is stable.
 
 PROCEDURE extract_utilities_layer():
+  # [IMPL-LAYERED_EXTRACTION][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: extract formatter and git helpers after infrastructure is stable.
+  Contract:
+    INPUT: packages to extract, layer assignment per package
+    OUTPUT: four stable layers with acyclic dependencies
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   EXTRACT formatter and git utilities
   ASSERT utilities depend only on infrastructure and core runtime libraries
   VALIDATE utilities do not depend on framework or patterns packages
@@ -40,6 +60,17 @@ STEP T001: extract CLI framework components once utilities and infrastructure ar
 - [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: extract CLI framework components once utilities and infrastructure are in place.
 
 PROCEDURE extract_framework_layer():
+  # [IMPL-LAYERED_EXTRACTION][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: extract CLI framework components once utilities and infrastructure are in place.
+  Contract:
+    INPUT: packages to extract, layer assignment per package
+    OUTPUT: four stable layers with acyclic dependencies
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   EXTRACT CLI framework package
   ASSERT framework depends on infrastructure and utilities, not patterns
   VALIDATE CLI wiring compiles with extracted dependencies
@@ -52,6 +83,17 @@ STEP T001: extract processing patterns last so each layer builds on stable lower
 - [IMPL-LAYERED_EXTRACTION] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: extract processing patterns last so each layer builds on stable lower layers without cycles.
 
 PROCEDURE extract_patterns_layer():
+  # [IMPL-LAYERED_EXTRACTION][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: extract processing patterns last so each layer builds on stable lower layers without cycles.
+  Contract:
+    INPUT: packages to extract, layer assignment per package
+    OUTPUT: four stable layers with acyclic dependencies
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   EXTRACT processing patterns package
   ASSERT patterns depend on infrastructure, utilities, and framework
   VALIDATE dependency graph has no cycles across all four layers

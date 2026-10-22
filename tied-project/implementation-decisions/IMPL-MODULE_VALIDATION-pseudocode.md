@@ -16,6 +16,15 @@ STEP T001: Document module boundaries, public interfaces, contracts, dependencie
 - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: document module boundaries, public interfaces, contracts, dependencies, and validation criteria before coding.
 
 PROCEDURE IDENTIFY_MODULES():
+  # [IMPL-MODULE_VALIDATION][ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] How: document module boundaries, public interfaces, contracts, dependencies, and validation criteria before coding.
+  Contract:
+    INPUT: module spec, interfaces, dependency contracts
+    OUTPUT: validated module, documented limitations, integration tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   LIST modules and responsibilities
   DOCUMENT interfaces and dependency graph
   DEFINE validation criteria per module
@@ -28,6 +37,18 @@ STEP T001: Implement each module with dependency injection so it can run without
 - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: implement each module with dependency injection so it can run without unrelated production wiring.
 
 PROCEDURE DEVELOP_INDEPENDENTLY(module):
+  # [IMPL-MODULE_VALIDATION][ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] How: implement each module with dependency injection so it can run without unrelated production wiring.
+  Contract:
+    INPUT: module spec, interfaces, dependency contracts
+    OUTPUT: validated module, documented limitations, integration tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - STEP T001: Run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration
+      - - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration.
+
+
   INJECT dependencies via interfaces
   IMPLEMENT module logic in isolation
 
@@ -39,6 +60,17 @@ STEP T001: Run unit tests with mocked dependencies, contract tests, edge cases, 
 - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration.
 
 PROCEDURE VALIDATE_INDEPENDENTLY(module):
+  # [IMPL-MODULE_VALIDATION][ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] How: run unit tests with mocked dependencies, contract tests, edge cases, and error handling before integration.
+  Contract:
+    INPUT: module spec, interfaces, dependency contracts
+    OUTPUT: validated module, documented limitations, integration tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - VERIFY error paths and cleanup
+
+
   WRITE unit tests with mocks
   RUN contract and edge-case tests
   VERIFY error paths and cleanup
@@ -51,6 +83,15 @@ STEP T001: Record passed tests, known limitations, and assumptions in module val
 - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: record passed tests, known limitations, and assumptions in module validation documentation.
 
 PROCEDURE DOCUMENT_VALIDATION(module):
+  # [IMPL-MODULE_VALIDATION][ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] How: record passed tests, known limitations, and assumptions in module validation documentation.
+  Contract:
+    INPUT: module spec, interfaces, dependency contracts
+    OUTPUT: validated module, documented limitations, integration tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   RECORD test results and coverage
   LIST limitations and assumptions
 
@@ -62,6 +103,17 @@ STEP T001: Wire modules together only after independent validation passes and ad
 - [IMPL-MODULE_VALIDATION] [ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] — How: wire modules together only after independent validation passes and add integration tests for combined behavior.
 
 PROCEDURE INTEGRATE_AFTER_VALIDATION(modules):
+  # [IMPL-MODULE_VALIDATION][ARCH-MODULE_VALIDATION] [REQ-MODULE_VALIDATION] How: wire modules together only after independent validation passes and add integration tests for combined behavior.
+  Contract:
+    INPUT: module spec, interfaces, dependency contracts
+    OUTPUT: validated module, documented limitations, integration tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+
+
   IF any module validation failed THEN STOP
   ADD integration tests for combined flows
   WIRE production composition

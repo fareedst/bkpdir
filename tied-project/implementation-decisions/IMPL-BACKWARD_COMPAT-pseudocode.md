@@ -16,6 +16,16 @@ STEP T001: re-export moved types at original locations so existing imports compi
 - [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: re-export moved types at original locations so existing imports compile without change.
 
 PROCEDURE provide_type_aliases():
+  # [IMPL-BACKWARD_COMPAT][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: re-export moved types at original locations so existing imports compile without change.
+  Contract:
+    INPUT: extracted package symbols, root package consumers
+    OUTPUT: unchanged compile-time API at root; isolated extracted modules
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each type T moved to extracted package pkg:
     DECLARE legacy type alias at original location that maps T to pkg.T
     ADD deprecation comment pointing to pkg.T
@@ -30,6 +40,16 @@ STEP T001: delegate moved functions through root wrappers that preserve original
 - [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: delegate moved functions through root wrappers that preserve original signatures.
 
 PROCEDURE provide_wrapper_functions():
+  # [IMPL-BACKWARD_COMPAT][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: delegate moved functions through root wrappers that preserve original signatures.
+  Contract:
+    INPUT: extracted package symbols, root package consumers
+    OUTPUT: unchanged compile-time API at root; isolated extracted modules
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR each function F moved to extracted package pkg:
     CREATE wrapper at original location that calls pkg.F with same parameters and returns
     PRESERVE original function signature exactly
@@ -44,6 +64,18 @@ STEP T001: ensure extracted packages depend only on declared interfaces, not roo
 - [IMPL-BACKWARD_COMPAT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: ensure extracted packages depend only on declared interfaces, not root application code.
 
 PROCEDURE isolate_via_interfaces():
+  # [IMPL-BACKWARD_COMPAT][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: ensure extracted packages depend only on declared interfaces, not root application code.
+  Contract:
+    INPUT: extracted package symbols, root package consumers
+    OUTPUT: unchanged compile-time API at root; isolated extracted modules
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+    TERMINATION: total
+
+
   FOR each extracted package:
     ASSERT dependencies are limited to runtime core modules and declared packages
     ASSERT package does not depend on root-level application code

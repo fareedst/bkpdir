@@ -16,6 +16,15 @@ STEP T001: Extract and archive legacy migration documents under docs/governance 
 - [IMPL-TOKEN_MIGRATION_COMPLETE] [ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] — How: extract and archive legacy migration documents under docs/governance for historical reference.
 
 PROCEDURE ARCHIVE_MIGRATION_ARTIFACTS():
+  # [IMPL-TOKEN_MIGRATION_COMPLETE][ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] How: extract and archive legacy migration documents under docs/governance for historical reference.
+  Contract:
+    INPUT: legacy token artifacts, project token stubs
+    OUTPUT: updated semantic-tokens.md tables, archived governance docs, validation reports
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   MOVE legacy token docs TO docs/governance archive
 
 ## GENERATE_TOKEN_INVENTORY
@@ -26,6 +35,15 @@ STEP T001: Run token_inventory.py to produce canonical token JSON used by downst
 - [IMPL-TOKEN_MIGRATION_COMPLETE] [ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] — How: run token_inventory.py to produce canonical token JSON used by downstream render scripts.
 
 PROCEDURE GENERATE_TOKEN_INVENTORY():
+  # [IMPL-TOKEN_MIGRATION_COMPLETE][ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] How: run token_inventory.py to produce canonical token JSON used by downstream render scripts.
+  Contract:
+    INPUT: legacy token artifacts, project token stubs
+    OUTPUT: updated semantic-tokens.md tables, archived governance docs, validation reports
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   RUN token_inventory.py
   OUTPUT token JSON registry snapshot
 
@@ -37,6 +55,15 @@ STEP T001: Run render_token_tables.py to regenerate semantic-tokens.md tables fr
 - [IMPL-TOKEN_MIGRATION_COMPLETE] [ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] — How: run render_token_tables.py to regenerate semantic-tokens.md tables from inventory JSON.
 
 PROCEDURE RENDER_TOKEN_TABLES():
+  # [IMPL-TOKEN_MIGRATION_COMPLETE][ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] How: run render_token_tables.py to regenerate semantic-tokens.md tables from inventory JSON.
+  Contract:
+    INPUT: legacy token artifacts, project token stubs
+    OUTPUT: updated semantic-tokens.md tables, archived governance docs, validation reports
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   RUN render_token_tables.py
   UPDATE semantic-tokens.md tables
 
@@ -48,6 +75,15 @@ STEP T001: EXECUTE PROCEDURE VALIDATE_TRACEABILITY
 - [IMPL-TOKEN_MIGRATION_COMPLETE] [ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] — How: run validate-token-traceability.sh and token-coverage-analysis.sh expecting full coverage before replacing project-tokens.yaml stub.
 
 PROCEDURE VALIDATE_TRACEABILITY():
+  # [IMPL-TOKEN_MIGRATION_COMPLETE][ARCH-TOKEN_SYSTEM] [REQ-CODE_QUALITY] [REQ-DOC_016] How: run validate-token-traceability.sh and token-coverage-analysis.sh expecting full coverage before replacing project-tokens.yaml stub.
+  Contract:
+    INPUT: legacy token artifacts, project token stubs
+    OUTPUT: updated semantic-tokens.md tables, archived governance docs, validation reports
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   RUN validate-token-traceability.sh
   RUN token-coverage-analysis.sh expecting 100% coverage
   REPLACE project-tokens.yaml WITH pointer stub

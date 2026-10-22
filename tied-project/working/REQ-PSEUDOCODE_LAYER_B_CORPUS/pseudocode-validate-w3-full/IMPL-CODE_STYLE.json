@@ -1,0 +1,85 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "VALIDATE_NAMING",
+      "line": 23,
+      "token_refs": [
+        "IMPL-CODE_STYLE",
+        "REQ-CODE_QUALITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_FORMATTING",
+      "line": 52,
+      "token_refs": [
+        "IMPL-CODE_STYLE",
+        "REQ-CODE_QUALITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_DOCUMENTATION",
+      "line": 79,
+      "token_refs": [
+        "IMPL-CODE_STYLE",
+        "REQ-CODE_QUALITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "VALIDATE_NAMING",
+      "branch_lines": [
+        35,
+        36
+      ],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_FORMATTING",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_DOCUMENTATION",
+      "branch_lines": [],
+      "failure_modes": [
+        "- precondition or validation failure stops progression"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

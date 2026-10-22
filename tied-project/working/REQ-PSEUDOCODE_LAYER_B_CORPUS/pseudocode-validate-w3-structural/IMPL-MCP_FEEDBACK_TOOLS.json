@@ -1,0 +1,150 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "GET_FEEDBACK_PATH",
+      "line": 18,
+      "token_refs": [
+        "ARCH-FEEDBACK_STORAGE",
+        "IMPL-MCP_FEEDBACK_TOOLS",
+        "REQ-FEEDBACK_TO_TIED"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LOAD_FEEDBACK",
+      "line": 38,
+      "token_refs": [
+        "ARCH-FEEDBACK_STORAGE",
+        "IMPL-MCP_FEEDBACK_TOOLS",
+        "REQ-FEEDBACK_TO_TIED"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "APPEND_ENTRY",
+      "line": 60,
+      "token_refs": [
+        "ARCH-FEEDBACK_STORAGE",
+        "IMPL-MCP_FEEDBACK_TOOLS",
+        "REQ-FEEDBACK_TO_TIED"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXPORT_ENTRIES",
+      "line": 82,
+      "token_refs": [
+        "ARCH-FEEDBACK_STORAGE",
+        "IMPL-MCP_FEEDBACK_TOOLS",
+        "REQ-FEEDBACK_TO_TIED"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MCP_HANDLER_ADD",
+      "line": 102,
+      "token_refs": [
+        "ARCH-FEEDBACK_STORAGE",
+        "IMPL-MCP_FEEDBACK_TOOLS",
+        "REQ-FEEDBACK_TO_TIED"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MCP_HANDLER_EXPORT",
+      "line": 123,
+      "token_refs": [
+        "ARCH-FEEDBACK_STORAGE",
+        "IMPL-MCP_FEEDBACK_TOOLS",
+        "REQ-FEEDBACK_TO_TIED"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "GET_FEEDBACK_PATH",
+      "branch_lines": [
+        28
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LOAD_FEEDBACK",
+      "branch_lines": [
+        49
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "APPEND_ENTRY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXPORT_ENTRIES",
+      "branch_lines": [
+        92
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MCP_HANDLER_ADD",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MCP_HANDLER_EXPORT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

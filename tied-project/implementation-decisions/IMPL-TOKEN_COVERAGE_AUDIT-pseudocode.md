@@ -16,6 +16,18 @@ STEP T001: Scan each module file for REQ/ARCH/IMPL comments and record missing e
 - [IMPL-TOKEN_COVERAGE_AUDIT] [ARCH-TOKEN_SYSTEM] [REQ-DOC_016] — How: scan each module file for REQ/ARCH/IMPL comments and record missing expected tokens.
 
 PROCEDURE AUDIT_MODULE_COVERAGE(module):
+  # [IMPL-TOKEN_COVERAGE_AUDIT][ARCH-TOKEN_SYSTEM] [REQ-DOC_016] How: scan each module file for REQ/ARCH/IMPL comments and record missing expected tokens.
+  Contract:
+    INPUT: module file lists, expected token sets per module
+    OUTPUT: coverage report, added annotations in source and tests
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    FAILURE_MODES:
+      - precondition or validation failure stops progression
+    TERMINATION: total
+
+
   FOR EACH file IN module.files:
     SCAN for [REQ-*], [ARCH-*], [IMPL-*] comments
     COMPARE found tokens TO module.expected_tokens

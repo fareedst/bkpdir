@@ -16,6 +16,16 @@ STEP T001: EXECUTE PROCEDURE enforce_dependency_rules
 - [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: for each package compare actual imports against allowed_deps for its layer and report out-of-layer imports with path context.
 
 PROCEDURE enforce_dependency_rules():
+  # [IMPL-DEPENDENCY_MGMT][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: for each package compare actual imports against allowed_deps for its layer and report out-of-layer imports with path context.
+  Contract:
+    INPUT: package source trees, dependency hierarchy manifest
+    OUTPUT: violation reports and tidy go.mod graphs
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR EACH package:
     actual = parse imports from Go sources
     allowed = dependency_hierarchy[package.layer]
@@ -29,6 +39,15 @@ STEP T001: Pin module versions in go.mod and run go mod tidy to keep the depende
 - [IMPL-DEPENDENCY_MGMT] [ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] — How: pin module versions in go.mod and run go mod tidy to keep the dependency graph consistent after extractions.
 
 PROCEDURE version_with_go_modules():
+  # [IMPL-DEPENDENCY_MGMT][ARCH-CODE_ORGANIZATION] [REQ-MAINTAINABILITY] How: pin module versions in go.mod and run go mod tidy to keep the dependency graph consistent after extractions.
+  Contract:
+    INPUT: package source trees, dependency hierarchy manifest
+    OUTPUT: violation reports and tidy go.mod graphs
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+
+
   EACH extracted package maintains go.mod (or sub-module path)
   PIN versions in require directives
   RUN go mod tidy to validate graph

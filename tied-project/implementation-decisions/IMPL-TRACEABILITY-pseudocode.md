@@ -16,6 +16,16 @@ STEP T001: hash interface signatures plus documented behavioral contracts to ass
 - [IMPL-TRACEABILITY] [ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] — How: hash interface signatures plus documented behavioral contracts to assign stable feature fingerprints linked to semantic tokens.
 
 PROCEDURE generate_feature_fingerprints():
+  # [IMPL-TRACEABILITY][ARCH-DOCUMENTATION_ARCHITECTURE] [REQ-DOC_003] How: hash interface signatures plus documented behavioral contracts to assign stable feature fingerprints linked to semantic tokens.
+  Contract:
+    INPUT: tracked features, code interfaces, semantic_token_registry cross_references
+    OUTPUT: fingerprint store, contract definitions, dependency graph with cycle report
+    PRE: prerequisites for this process step are satisfied
+    POST: step outputs match the documented How intent
+    EFFECTS: process documentation; runtime unchanged unless a separate LEAP slice applies
+    TERMINATION: total
+
+
   FOR EACH feature:
     EXTRACT signatures and contracts
     STORE fingerprint with linked tokens
