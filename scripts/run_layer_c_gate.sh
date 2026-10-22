@@ -1,25 +1,44 @@
 #!/usr/bin/env bash
-# Layer C pseudocode_analyze gate for Tier A runtime sidecars (opt-in).
+# Layer C pseudocode_analyze gate (opt-in); tokens from layer-b-wave-registry.yaml.
 # [REQ-PSEUDOCODE_FORMAL_VERIFICATION] [IMPL-SPEC_CTL]
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 export TIED_BASE_PATH="${TIED_BASE_PATH:-$ROOT/tied-project}"
 TIED_CLI="$ROOT/.cursor/skills/tied-yaml/scripts/tied-cli.sh"
-OUT_DIR="${LAYER_C_REPORT_DIR:-$ROOT/working/REQ-PSEUDOCODE_FORMAL_VERIFICATION/tied-canon/pseudocode-analysis}"
+OUT_DIR="${LAYER_C_REPORT_DIR:-$ROOT/tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-analysis-layer-c}"
+REGISTRY="${LAYER_B_WAVE_REGISTRY:-$ROOT/tied-project/spec/layer-b-wave-registry.yaml}"
 mkdir -p "$OUT_DIR"
 
-TIER_A=(
-  IMPL-ATOMIC_OPS
-  IMPL-CONFIG_STRUCT
-  IMPL-CFG_006
-  IMPL-FILE_OPERATIONS
-  IMPL-ZIP_FORMAT
-  IMPL-EXCLUSION_PATTERNS
+LAYER_C_WAVE="${LAYER_C_WAVE:-w0}"
+LAYER_C_WAVE="$(echo "$LAYER_C_WAVE" | tr '[:upper:]' '[:lower:]')"
+
+mapfile -t TOKENS < <(
+  python3 - <<PY
+import sys, yaml
+from pathlib import Path
+reg = yaml.safe_load(Path("$REGISTRY").read_text())
+waves = reg.get("waves") or {}
+wave = "$LAYER_C_WAVE"
+if wave == "all":
+    seen = []
+    for w in ("w0", "w1", "w2", "w3"):
+        for t in (waves.get(w) or {}).get("tokens") or []:
+            if t not in seen:
+                seen.append(t)
+    tokens = seen
+else:
+    tokens = list((waves.get(wave) or {}).get("tokens") or [])
+    if not tokens:
+        print(f"DIAGNOSTIC: wave {wave} has no tokens", file=sys.stderr)
+        sys.exit(2)
+for t in tokens:
+    print(t)
+PY
 )
 
 fail=0
-for token in "${TIER_A[@]}"; do
+for token in "${TOKENS[@]}"; do
   sidecar="tied-project/implementation-decisions/${token}-pseudocode.md"
   [[ -f "$sidecar" ]] || continue
   report="$OUT_DIR/${token}-layer-c.json"
@@ -72,4 +91,4 @@ if [[ "$fail" -ne 0 ]]; then
   echo "DIAGNOSTIC: Layer C gate failed (see reports under $OUT_DIR)"
   exit 1
 fi
-echo "DIAGNOSTIC: Layer C gate passed for ${#TIER_A[@]} Tier A sidecars"
+echo "DIAGNOSTIC: Layer C gate passed for ${#TOKENS[@]} sidecar(s) (wave=$LAYER_C_WAVE)"

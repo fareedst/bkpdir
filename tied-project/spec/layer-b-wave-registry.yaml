@@ -2,7 +2,7 @@ schema: layer-b-wave-registry.v1
 waves:
   w0:
     description: Pilot Tier A + EXCLUSION_PATTERNS (W0 close-out complete)
-    enforce_in_ci: optional
+    enforce_in_ci: true
     tokens:
     - IMPL-ATOMIC_OPS
     - IMPL-CONFIG_STRUCT
@@ -13,7 +13,7 @@ waves:
   w1:
     description: Tier A/L3 oracle runtime IMPLs (38 tokens, mutually exclusive with
       w2/w3)
-    enforce_in_ci: false
+    enforce_in_ci: true
     tokens:
     - IMPL-AUTO_DETECTION
     - IMPL-CFG_INHERITANCE_PATH_RESOLUTION
@@ -55,13 +55,13 @@ waves:
     - IMPL-TEST_UNICODE_HANDLING
   w2:
     description: Tier B formal IMPLs without oracle (2 tokens)
-    enforce_in_ci: false
+    enforce_in_ci: true
     tokens:
     - IMPL-CONFIGURABLE_STRINGS
     - IMPL-CONFIG_DISPLAY_FLATTENING
   w3:
     description: Tier C lead_check_skip doc/process (27 tokens)
-    enforce_in_ci: false
+    enforce_in_ci: true
     tokens:
     - IMPL-BACKWARD_COMPAT
     - IMPL-CFG_HIERARCHY_PRESERVATION

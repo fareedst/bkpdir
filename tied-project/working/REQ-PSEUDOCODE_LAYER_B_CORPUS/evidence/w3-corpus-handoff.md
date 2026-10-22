@@ -1,10 +1,11 @@
-# Continuation handoff — W3 corpus (verification complete)
+# Continuation handoff — W3 corpus (close-out complete)
 
 **Parent slice:** `REQ-PSEUDOCODE_LAYER_B_CORPUS`  
 **Prior close-out:** W2 — [`w2-close-out-handoff.md`](w2-close-out-handoff.md) (commit `f8608c1…`)  
 **Wave map:** [`w1-w3-corpus-handoff.md`](w1-w3-corpus-handoff.md)  
 **Tracker:** `operator_evidence.status: w3_slice_close_out` — [`../agent-req-implementation-checklist.yaml`](../agent-req-implementation-checklist.yaml)  
-**Close-out:** [`w3-close-out-handoff.md`](w3-close-out-handoff.md)
+
+**Close-out:** [`w3-close-out-handoff.md`](w3-close-out-handoff.md) (feature commit `9adc16b…`)
 
 ## W3 scope (27 IMPLs)
 
@@ -30,10 +31,9 @@ TIED_BASE_PATH="$PWD/tied-project" scripts/run-pseudocode-layer-b-batch.sh \
 TIED_BASE_PATH="$PWD/tied-project" .cursor/skills/tied-yaml/scripts/tied-cli.sh tied_validate_consistency
 ```
 
-## Next
+## Next (post–W3)
 
-- **W3 close-out** — envelope sync + `close_out` gate (new run_id; do not reuse W2 post-commit receipts)
-- **Corpus complete** — W0–W3 covers all 73 `formal_spec` sidecars in wave registry; optional W4 / CI `RUN_LAYER_B` expansion per plan
+- **Corpus Layer B waves done** — W0–W3 = 73/73 registry tokens; optional CI `RUN_LAYER_B` fleet enforce, Grammar-Version v2 on touch, D15 banner hygiene
 
 ## Remaining risks
 

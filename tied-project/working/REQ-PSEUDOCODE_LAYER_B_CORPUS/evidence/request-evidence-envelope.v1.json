@@ -1,7 +1,7 @@
 {
   "schema_version": "request-evidence-envelope.v1",
   "envelope_meta": {
-    "generated_at": "2026-10-22T02:32:30.512Z",
+    "generated_at": "2026-10-22T03:30:21.421Z",
     "generator": "request_evidence_envelope_build",
     "revision": 1
   },
@@ -224,7 +224,7 @@
       "kind": "request_evidence_envelope",
       "schema_version": "request-evidence-envelope.v1",
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json",
-      "content_hash": "sha256:0f6787350dfadf5613d000904f0301384522ebdacf2f1a193b47c4fda0b4cd61",
+      "content_hash": "sha256:5d1ffdcef1ab21e0ea96694094ef9e077506b49a221ed5e626f4b7cfb82bde42",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -247,6 +247,17 @@
       "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-envelope-pass.md",
       "content_hash": "sha256:d6980703de649833afd34be1ddb69ff676ed1a76272ae136c5a919a65d945dea",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-phase5.json",
+      "content_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -300,8 +311,19 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-w3-postcommit.json",
+      "content_hash": "sha256:69414962fdbaf977e2dc3a2dfcb57484eaa0c4975689a3be0e1422c4ddefe3c4",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/close-out-gates-run-w3-precommit.json",
-      "content_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "content_hash": "sha256:69414962fdbaf977e2dc3a2dfcb57484eaa0c4975689a3be0e1422c4ddefe3c4",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -399,6 +421,17 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/git-hygiene-receipt-2026-10-21-w3.md",
+      "content_hash": "sha256:f8fba9b63a69b016bb7ace65d892f8bb786c1c7af8e0f6f24375f2fbd8aa5a0e",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/git-hygiene-receipt-2026-10-21.md",
       "content_hash": "sha256:c9f2f29319f98a93f28aa25964031f16354202f473ff14c1eeeaf2d34f6d78bc",
       "phase": null,
@@ -432,6 +465,17 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/phase5-ci-handoff.md",
+      "content_hash": "sha256:454dea814c392bfefc8cc0ba531b059cfc79e7b7969d97ab04bfff842d93ae07",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/proposed-commit-message-close-out-w2.txt",
       "content_hash": "sha256:7e3df41c129f4066e120b4ecde323c15757b29bbba6174e9f1b44f2dbe7b90cb",
       "phase": null,
@@ -445,6 +489,17 @@
       "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/proposed-commit-message-w2.txt",
       "content_hash": "sha256:f85c8ce960b7afa86a2c20cbebe7bfb95867aa52afa56e1ff67b970642c0ab73",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/proposed-commit-message-w3.txt",
+      "content_hash": "sha256:a457bed69a51119f696a004ba8eec2c893f743c235adcfe52c9ac3c73c51156e",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -478,6 +533,17 @@
       "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/traceable-commit-evidence-w2.md",
       "content_hash": "sha256:27cd452e6feca65c60b45f820ca2091b5d66141875232f73f7ec172954d93c53",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/traceable-commit-evidence-w3.md",
+      "content_hash": "sha256:62d844b7c31323d41524ca2ca30faea30ec948378ea69aabe05c6c94f21f1985",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -597,8 +663,19 @@
     {
       "kind": "unknown",
       "schema_version": null,
+      "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-close-out-handoff.md",
+      "content_hash": "sha256:c1238f82f35db122cc89159f16ca1a374b93b4d228a7d808417ed7831a0fb4a7",
+      "phase": null,
+      "status": "present",
+      "proof_boundaries": [
+        "discovery_only"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-corpus-handoff.md",
-      "content_hash": "sha256:bbd2c29780966f90864ae0a798e5d6c07b19e4fc87e060001c6c4bfdb9013cd7",
+      "content_hash": "sha256:8908f7663cf03f466d4f1be1ab963858dedc998882d441d87f3d3f73ed6bf96f",
       "phase": null,
       "status": "present",
       "proof_boundaries": [
@@ -609,7 +686,7 @@
       "kind": "unknown",
       "schema_version": null,
       "path": "tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w3-verification-gate.md",
-      "content_hash": "sha256:f72a8c27c35982a147a6d270928a5509ceac57fc90095a5779d6d80d2f13d6e9",
+      "content_hash": "sha256:a4774ce485dc95bb2348efdd2b37bfdccad9bdbf0d809ae722c10fd681633451",
       "phase": null,
       "status": "present",
       "proof_boundaries": [

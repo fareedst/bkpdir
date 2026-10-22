@@ -145,6 +145,33 @@ SKIP_TIED_MCP=1 scripts/run-spec-verification.sh
 
 Pipeline: `specctl validate` → `matrix` → `matrix --check-coverage` → `check-leads` → `go test` spec packages → **`spec-corpus-status.sh`** (includes `req audit pass` row).
 
+### GitHub Actions (Phase 5 — Path B)
+
+Workflow [`.github/workflows/spec-verification.yml`](../../.github/workflows/spec-verification.yml):
+
+| Job | When | What |
+|-----|------|------|
+| **l0-spec** | PR / push / manual | `SKIP_TIED_MCP=1 scripts/run-spec-verification.sh` |
+| **layer-b-enforce** | PR + manual wave dispatch | Clones [fareedst/tied](https://github.com/fareedst/tied.git), builds MCP (`scripts/ci/setup-tied-mcp.sh`), **fail-closed** `pseudocode_validate` for changed sidecars in `enforce_in_ci` waves |
+
+CI uses the TIED store’s `tied-bundle` for methodology (`TIED_METHODOLOGY_BUNDLE_PATH`), not client symlinked `tied-bundle/`. Override clone with `TIED_GIT_URL` / `TIED_GIT_REF` when running `setup-tied-mcp.sh` locally.
+
+Local equivalents: `bash scripts/ci/setup-tied-mcp.sh && RUN_LAYER_B_IF_CHANGED=1 scripts/run-layer-b-ci-enforcement.sh --if-changed`; fleet wave: `RUN_LAYER_B=1 RUN_LAYER_B_WAVE=w3 scripts/run-layer-b-ci-enforcement.sh --wave w3`.
+
+#### Branch protection (sponsor policy)
+
+Until `pull_request.paths` in the workflow matches every merge pattern you use, configure **`main`** protection with **one** required status check:
+
+| Required now | Do not require yet |
+|--------------|-------------------|
+| **spec-verification / L0 specctl + conformance** (job id `l0-spec`) | **spec-verification / Layer B enforce (fail-closed)** (job id `layer-b-enforce`) |
+
+Pick the exact label from the GitHub dropdown after a green PR run; labels use the workflow `name:` plus each job’s display `name:`.
+
+**Path filter caveat:** the workflow runs on PRs only when files change under `tied-project/implementation-decisions/**`, `pkg/**`, `internal/**`, `cmd/**`, `scripts/**`, or `test/specconformance/**`. PRs that touch only other paths (for example `docs/` or `tied-project/working/`) do **not** run this workflow, so a required L0 check will not appear and merge can block. That is acceptable while most merges touch gated paths; fix by widening `paths`, splitting L0 into a pathless workflow, or using merge exceptions for out-of-scope PRs.
+
+**Later:** when path coverage aligns (or L0 runs on all PRs), add **Layer B enforce** as a required check so fail-closed sidecar validation is merge-blocking.
+
 For logic drift after code changes: `python3 scripts/run_impl_logic_audit.py --batch all` before merge.
 
 ### Release / TIED-complete check
@@ -251,8 +278,10 @@ go run ./cmd/specctl matrix --check-coverage tied-project/implementation-decisio
 |----------|--------|
 | `SKIP_TIED_MCP=1` | `run-spec-verification.sh` does not call `validate-tied-mcp.sh` |
 | `MUTATION_SCORE_THRESHOLD=80` | Mutation pilot pass threshold (default `70`) |
-| `RUN_LAYER_C=1` | `run-spec-verification.sh` runs Tier A `pseudocode_analyze` gate (`scripts/run_layer_c_gate.sh`) |
-| `RUN_LAYER_B=1` | Optional Layer B batch: `scripts/run-pseudocode-layer-b-batch.sh --wave w0` (MCP `pseudocode_validate`; use `--enforce` for fail-closed wave tokens) |
+| `RUN_LAYER_C=1` | `run-spec-verification.sh` runs `pseudocode_analyze` gate (`scripts/run_layer_c_gate.sh`; wave via `LAYER_C_WAVE=w0\|w1\|w2\|w3\|all`, default `w0`) |
+| `RUN_LAYER_B=1` | Layer B full enforce: all **changed** sidecar tokens (`scripts/run-layer-b-ci-enforcement.sh`), or one wave when `RUN_LAYER_B_WAVE=w0\|w1\|w2\|w3` |
+| `RUN_LAYER_B_IF_CHANGED=1` | Layer B enforce only for changed sidecars whose wave has `enforce_in_ci: true` in `tied-project/spec/layer-b-wave-registry.yaml` |
+| `LAYER_B_DIFF_BASE` | Git base ref for changed-sidecar detection (PR CI sets `origin/$GITHUB_BASE_REF` when available) |
 | `RUN_L4_PILOT=1` | `spec-corpus-status.sh` runs L4 pilot section (mutation + optional REQ strict) |
 | `RUN_L4_REQ_STRICT=1` | With `RUN_L4_PILOT=1`, run `--req-criteria-scoped` CRIT-001 audit |
 | `MUTATION_WAVE=0`–`4` / `all` | Wave filter for `run-mutation-pilot.sh` (see `tied-project/spec/mutation-wave-registry.yaml`) |

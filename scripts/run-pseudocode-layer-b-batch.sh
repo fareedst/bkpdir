@@ -6,6 +6,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 TIED_CLI="${TIED_CLI:-$ROOT/.cursor/skills/tied-yaml/scripts/tied-cli.sh}"
 export TIED_BASE_PATH="${TIED_BASE_PATH:-$ROOT/tied-project}"
+export TIED_METHODOLOGY_BUNDLE_PATH="${TIED_METHODOLOGY_BUNDLE_PATH:-$ROOT/tied-bundle}"
 
 MODE="structural"
 OUT_DIR="${LAYER_B_REPORT_DIR:-$ROOT/tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate}"

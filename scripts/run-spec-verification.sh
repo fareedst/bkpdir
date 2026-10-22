@@ -46,8 +46,22 @@ go run ./cmd/specctl check-leads "${FORMAL_SIDECARS[@]}"
 echo "DEBUG: go test spec conformance"
 go test ./internal/specparse/... ./internal/specmodel/... ./test/specconformance/... -count=1
 
+if [[ "${RUN_LAYER_B:-}" == "1" || "${RUN_LAYER_B_IF_CHANGED:-}" == "1" ]]; then
+  echo "DEBUG: Layer B CI enforcement (RUN_LAYER_B=${RUN_LAYER_B:-0} RUN_LAYER_B_IF_CHANGED=${RUN_LAYER_B_IF_CHANGED:-0})"
+  lb_args=()
+  if [[ "${RUN_LAYER_B_IF_CHANGED:-}" == "1" && "${RUN_LAYER_B:-}" != "1" ]]; then
+    lb_args+=(--if-changed)
+  fi
+  if [[ "${RUN_LAYER_B:-}" == "1" && "${RUN_LAYER_B_WAVE:-}" =~ ^[wW][0-3]$ ]]; then
+    lb_args+=(--wave "$(echo "$RUN_LAYER_B_WAVE" | tr '[:upper:]' '[:lower:]')")
+  fi
+  "$ROOT/scripts/run-layer-b-ci-enforcement.sh" "${lb_args[@]}"
+elif git diff --name-only HEAD 2>/dev/null | grep -qE '\-pseudocode\.md$'; then
+  echo "DEBUG: changed sidecars detected — optional Layer B (RUN_LAYER_B=1 or RUN_LAYER_B_IF_CHANGED=1)"
+fi
+
 if [[ "${RUN_LAYER_C:-}" == "1" ]]; then
-  echo "DEBUG: Layer C pseudocode_analyze (Tier A; set RUN_LAYER_C=1)"
+  echo "DEBUG: Layer C pseudocode_analyze (set LAYER_C_WAVE=w0|w1|…; default w0)"
   "$ROOT/scripts/run_layer_c_gate.sh"
 elif git diff --name-only HEAD 2>/dev/null | grep -qE '\-pseudocode\.md$'; then
   echo "DEBUG: changed sidecars detected — optional Layer C (set RUN_LAYER_C=1 to enforce)"
