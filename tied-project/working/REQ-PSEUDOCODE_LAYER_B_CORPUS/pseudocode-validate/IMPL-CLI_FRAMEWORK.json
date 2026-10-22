@@ -1,0 +1,620 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "NEWCOMMANDBUILDER",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCOMMANDBUILDER_NEWCOMMAND",
+      "line": 36,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCOMMANDBUILDER_WITHHANDLER",
+      "line": 57,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCOMMANDBUILDER_WITHSUBCOMMANDS",
+      "line": 75,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWROOTCOMMANDBUILDER",
+      "line": 93,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTROOTCOMMANDBUILDER_NEWROOTCOMMAND",
+      "line": 112,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTROOTCOMMANDBUILDER_BUILDCOMMAND",
+      "line": 133,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTROOTCOMMANDBUILDER_WITHGLOBALFLAGS",
+      "line": 154,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWCLIAPP",
+      "line": 173,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLIAPP_ADDCOMMAND",
+      "line": 197,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLIAPP_EXECUTE",
+      "line": 218,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLIAPP_EXECUTEWITHCONTEXT",
+      "line": 240,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTFLAGMANAGER_ADDFLAGS",
+      "line": 262,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTFLAGMANAGER_ADDGLOBALFLAGS",
+      "line": 284,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCONTEXTMANAGER_CREATE",
+      "line": 307,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCONTEXTMANAGER_WITHTIMEOUT",
+      "line": 328,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTCONTEXTMANAGER_HANDLESIGNALS",
+      "line": 347,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "NEWCANCELLABLEOPERATION",
+      "line": 370,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WITHSIGNALHANDLING",
+      "line": 389,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTDRYRUNMANAGER_EXECUTE",
+      "line": 409,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTVERSIONMANAGER_FORMATVERSION",
+      "line": 431,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "DEFAULTVERSIONMANAGER_CREATEVERSIONCOMMAND",
+      "line": 451,
+      "token_refs": [
+        "ARCH-CLI_FRAMEWORK",
+        "IMPL-CLI_FRAMEWORK",
+        "REQ-IMMUTABLE_CLI_COMMANDS",
+        "REQ-USABILITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "NEWCOMMANDBUILDER",
+      "branch_lines": [
+        26
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCOMMANDBUILDER_NEWCOMMAND",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCOMMANDBUILDER_WITHHANDLER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCOMMANDBUILDER_WITHSUBCOMMANDS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWROOTCOMMANDBUILDER",
+      "branch_lines": [
+        101,
+        102
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTROOTCOMMANDBUILDER_NEWROOTCOMMAND",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTROOTCOMMANDBUILDER_BUILDCOMMAND",
+      "branch_lines": [
+        142
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTROOTCOMMANDBUILDER_WITHGLOBALFLAGS",
+      "branch_lines": [
+        162,
+        163
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWCLIAPP",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CLIAPP_ADDCOMMAND",
+      "branch_lines": [
+        205,
+        207
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CLIAPP_EXECUTE",
+      "branch_lines": [
+        227,
+        229
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "RETURN error(\"root command is required\")",
+        "PROPAGATE execute error to caller",
+        "STEP T001: RUN root WITH signal-handled context AND exit non-zero ON error",
+        "- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root with signal-handled context on command; exit non-zero on error."
+      ],
+      "references": []
+    },
+    {
+      "block": "CLIAPP_EXECUTEWITHCONTEXT",
+      "branch_lines": [
+        252
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF Execute fails THEN write error to stderr AND exit 1"
+      ],
+      "references": []
+    },
+    {
+      "block": "DEFAULTFLAGMANAGER_ADDFLAGS",
+      "branch_lines": [
+        270,
+        271,
+        272,
+        273,
+        274
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTFLAGMANAGER_ADDGLOBALFLAGS",
+      "branch_lines": [
+        293,
+        295
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "RETURN error(\"command is required\")"
+      ],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCONTEXTMANAGER_CREATE",
+      "branch_lines": [
+        315,
+        317
+      ],
+      "failure_modes": [
+        "STEP T001: PARSE duration string OR return cancel-only context ON parse failure",
+        "- [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: parse duration string; on parse failure return cancel-only context without timeout."
+      ],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCONTEXTMANAGER_WITHTIMEOUT",
+      "branch_lines": [
+        336,
+        337
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTCONTEXTMANAGER_HANDLESIGNALS",
+      "branch_lines": [
+        360
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWCANCELLABLEOPERATION",
+      "branch_lines": [
+        379
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WITHSIGNALHANDLING",
+      "branch_lines": [
+        405
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTDRYRUNMANAGER_EXECUTE",
+      "branch_lines": [
+        417,
+        421
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTVERSIONMANAGER_FORMATVERSION",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "DEFAULTVERSIONMANAGER_CREATEVERSIONCOMMAND",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 366
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 368
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 463
+    }
+  ],
+  "leakage": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 366,
+      "pattern": "function_kw"
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 368,
+      "pattern": "function_kw"
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (function_kw) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 463,
+      "pattern": "function_kw"
+    }
+  ]
+}

@@ -17,6 +17,13 @@ STEP T002: CONTINUE incremental creation with modified file list
 - [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: ReconstructArchiveState (full + incremental chain), CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
 
 PROCEDURE CREATE_INCREMENTAL_ARCHIVE(config):
+  # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] — Layer B procedure token link
+Contract:
+INPUT: config
+OUTPUT: result of CREATE_INCREMENTAL_ARCHIVE
+PRE: true
+POST: true
+EFFECTS: pure
   archiveDir = prepareArchiveDirectory(...)
   reconstructedState, err = ReconstructArchiveState(archiveDir)
   IF err: FALLBACK collectModifiedFiles from latest full archive
@@ -37,5 +44,12 @@ STEP T001: FORMAT skip message AND emit via collector or stdout
 - [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: format cfg.FormatIncrementalSkippedNoChanges and emit via delayed collector or stdout.
 
 PROCEDURE PRINT_INCREMENTAL_SKIPPED_NO_CHANGES(formatter):
+  # [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] — Layer B procedure token link
+Contract:
+INPUT: formatter
+OUTPUT: result of PRINT_INCREMENTAL_SKIPPED_NO_CHANGES
+PRE: true
+POST: true
+EFFECTS: pure
   message = cfg.FormatIncrementalSkippedNoChanges
   IF collector THEN AddStdout(message) ELSE print message

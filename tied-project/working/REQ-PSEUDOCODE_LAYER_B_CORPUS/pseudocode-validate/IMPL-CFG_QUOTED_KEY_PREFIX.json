@@ -1,0 +1,59 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "processKeys",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-CFG_QUOTED_KEY_PREFIX",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "extractStrategy",
+      "line": 39,
+      "token_refs": [
+        "IMPL-CFG_QUOTED_KEY_PREFIX"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "processKeys",
+      "branch_lines": [
+        29
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "extractStrategy",
+      "branch_lines": [
+        48
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

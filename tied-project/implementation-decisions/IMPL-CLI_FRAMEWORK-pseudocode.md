@@ -16,6 +16,13 @@ STEP T001: CONSTRUCT DefaultCommandBuilder WITH non-nil FlagManager defaulting w
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultCommandBuilder with a non-nil FlagManager (defaulting when nil).
 
 PROCEDURE NEWCOMMANDBUILDER(flagMgr):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: flagMgr
+OUTPUT: result of NEWCOMMANDBUILDER
+PRE: true
+POST: true
+EFFECTS: pure
   IF flagMgr == nil THEN flagMgr = NEWFLAGMANAGER()
   RETURN DefaultCommandBuilder{flagManager: flagMgr}
 
@@ -27,6 +34,13 @@ STEP T001: CREATE subcommand WITH use, short, AND long description fields
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create a subcommand with use, short, and long description fields.
 
 PROCEDURE DEFAULTCOMMANDBUILDER_NEWCOMMAND(name, short, long):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: name, short, long
+OUTPUT: result of DEFAULTCOMMANDBUILDER_NEWCOMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   DECLARE cmd as empty command object
   SET cmd.Use = name
   SET cmd.Short = short
@@ -41,6 +55,13 @@ STEP T001: ATTACH RunE handler TO command AND return command for fluent chaining
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: attach RunE handler to command and return command for fluent chaining.
 
 PROCEDURE DEFAULTCOMMANDBUILDER_WITHHANDLER(cmd, handler):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: cmd, handler
+OUTPUT: result of DEFAULTCOMMANDBUILDER_WITHHANDLER
+PRE: true
+POST: true
+EFFECTS: pure
   SET cmd.RunE = handler
   RETURN cmd
 
@@ -52,6 +73,13 @@ STEP T001: REGISTER each child command ON parent AND return parent
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: register each child command on parent and return parent.
 
 PROCEDURE DEFAULTCOMMANDBUILDER_WITHSUBCOMMANDS(parent, children):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: parent, children
+OUTPUT: result of DEFAULTCOMMANDBUILDER_WITHSUBCOMMANDS
+PRE: true
+POST: true
+EFFECTS: pure
   FOR EACH child IN children: parent.AddCommand(child)
   RETURN parent
 
@@ -63,6 +91,13 @@ STEP T001: CONSTRUCT DefaultRootCommandBuilder WITH default flag AND version man
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: construct DefaultRootCommandBuilder with default flag and version managers when nil.
 
 PROCEDURE NEWROOTCOMMANDBUILDER(flagMgr, versionMgr):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: flagMgr, versionMgr
+OUTPUT: result of NEWROOTCOMMANDBUILDER
+PRE: true
+POST: true
+EFFECTS: pure
   IF flagMgr == nil THEN flagMgr = NEWFLAGMANAGER()
   IF versionMgr == nil THEN versionMgr = NEWVERSIONMANAGER()
   RETURN DefaultRootCommandBuilder{flagManager: flagMgr, versionManager: versionMgr}
@@ -75,6 +110,13 @@ STEP T001: BUILD root command FROM AppInfo WITH formatted version AND help defau
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: build root command from AppInfo with formatted version, version template, and help when invoked without subcommand.
 
 PROCEDURE DEFAULTROOTCOMMANDBUILDER_NEWROOTCOMMAND(info):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: info
+OUTPUT: result of DEFAULTROOTCOMMANDBUILDER_NEWROOTCOMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   cmd = command with Use=info.Name, Short=info.Short, Long=info.Long
   SET cmd.Version = versionManager.FormatVersion(info.Build)
   SET cmd version template from versionManager.CreateVersionTemplate(info.Build)
@@ -89,6 +131,13 @@ STEP T001: MATERIALIZE command FROM CommandTemplate WITH handler, prerun, postru
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: materialize command from CommandTemplate including handler, prerun, postrun, flags, and subcommands.
 
 PROCEDURE DEFAULTROOTCOMMANDBUILDER_BUILDCOMMAND(template):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: template
+OUTPUT: result of DEFAULTROOTCOMMANDBUILDER_BUILDCOMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   cmd = command from template name, short, long, example
   IF template.Handler SET RunE; IF PreRun SET PreRunE; IF PostRun SET PostRunE
   flagManager.AddFlags(cmd, template.FlagSet)
@@ -103,6 +152,13 @@ STEP T001: ADD persistent help AND verbose flags VIA provided OR embedded FlagMa
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: add persistent help and verbose flags via provided or embedded FlagManager.
 
 PROCEDURE DEFAULTROOTCOMMANDBUILDER_WITHGLOBALFLAGS(cmd, flagMgr):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: cmd, flagMgr
+OUTPUT: result of DEFAULTROOTCOMMANDBUILDER_WITHGLOBALFLAGS
+PRE: true
+POST: true
+EFFECTS: pure
   IF flagMgr != nil THEN flagMgr.AddGlobalFlags(cmd)
   ELSE embedded flagManager.AddGlobalFlags(cmd)
   RETURN cmd
@@ -115,6 +171,13 @@ STEP T001: WIRE all managers AND builders THEN create root command FROM AppInfo
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: wire all managers and builders then create root command from AppInfo.
 
 PROCEDURE NEWCLIAPP(info):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: info
+OUTPUT: result of NEWCLIAPP
+PRE: true
+POST: true
+EFFECTS: pure
   versionMgr = NEWVERSIONMANAGER()
   flagMgr = NEWFLAGMANAGER()
   rootBuilder = NEWROOTCOMMANDBUILDER(flagMgr, versionMgr)
@@ -132,6 +195,13 @@ STEP T001: ATTACH subcommand TO application root WHEN non-nil
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: attach subcommand to application root.
 
 PROCEDURE CLIAPP_ADDCOMMAND(cmd):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: cmd
+OUTPUT: result of CLIAPP_ADDCOMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   IF cmd == nil THEN
     RETURN
   END IF
@@ -146,6 +216,14 @@ STEP T001: EXECUTE root command WITHOUT extra signal context AND propagate error
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root command without extra signal context.
 
 PROCEDURE CLIAPP_EXECUTE():
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: context for CLIAPP_EXECUTE
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrCliappExecute
   IF app.RootCommand == nil THEN
     RETURN error("root command is required")
   END IF
@@ -160,6 +238,14 @@ STEP T001: RUN root WITH signal-handled context AND exit non-zero ON error
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: run root with signal-handled context on command; exit non-zero on error.
 
 PROCEDURE CLIAPP_EXECUTEWITHCONTEXT():
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: context for CLIAPP_EXECUTEWITHCONTEXT
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrCliappExecutewithcontext
   ctx, cancel = WITHSIGNALHANDLING(nil)
   DEFER cancel()
   SET root command context to ctx
@@ -174,6 +260,13 @@ STEP T001: REGISTER dry-run, note, config, incremental, AND list flags WHEN Flag
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: register dry-run, note, config, incremental, and list flags when FlagSet pointers are non-nil.
 
 PROCEDURE DEFAULTFLAGMANAGER_ADDFLAGS(cmd, flagSet):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: cmd, flagSet
+OUTPUT: result of DEFAULTFLAGMANAGER_ADDFLAGS
+PRE: true
+POST: true
+EFFECTS: pure
   IF flagSet.DryRun != nil THEN AddDryRunFlag(cmd, flagSet.DryRun)
   IF flagSet.Note != nil THEN AddNoteFlag(cmd, flagSet.Note)
   IF flagSet.Config != nil THEN AddConfigFlag(cmd, flagSet.Config)
@@ -189,6 +282,14 @@ STEP T001: REGISTER persistent help AND verbose bool flags ON command
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: add persistent help and verbose flags to command.
 
 PROCEDURE DEFAULTFLAGMANAGER_ADDGLOBALFLAGS(cmd):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: cmd
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrDefaultflagmanagerAddglobalflags
   IF cmd == nil THEN
     RETURN error("command is required")
   END IF
@@ -204,6 +305,13 @@ STEP T001: RETURN cancellable child context defaulting parent TO background
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: return cancellable child context defaulting parent to background.
 
 PROCEDURE DEFAULTCONTEXTMANAGER_CREATE(parent):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: parent
+OUTPUT: result of DEFAULTCONTEXTMANAGER_CREATE
+PRE: true
+POST: true
+EFFECTS: pure
   IF parent == nil THEN
     SET parent = BACKGROUND_CONTEXT()
   END IF
@@ -218,6 +326,13 @@ STEP T001: PARSE duration string OR return cancel-only context ON parse failure
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: parse duration string; on parse failure return cancel-only context without timeout.
 
 PROCEDURE DEFAULTCONTEXTMANAGER_WITHTIMEOUT(parent, timeout):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: parent, timeout
+OUTPUT: result of DEFAULTCONTEXTMANAGER_WITHTIMEOUT
+PRE: true
+POST: true
+EFFECTS: pure
   IF parent == nil THEN parent = BACKGROUND
   IF PARSE_DURATION(timeout) fails THEN RETURN WithCancel(parent)
   RETURN WithTimeout(parent, duration)
@@ -230,6 +345,14 @@ STEP T001: LISTEN for INT AND TERM AND invoke cancel WHEN signal received
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: listen for interrupt/terminate and invoke cancel when signal received.
 
 PROCEDURE DEFAULTCONTEXTMANAGER_HANDLESIGNALS(cancel):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: cancel
+OUTPUT: result of DEFAULTCONTEXTMANAGER_HANDLESIGNALS
+PRE: true
+POST: true
+EFFECTS: pure
+TERMINATION: total after handler registration completes
   CREATE buffered signal channel with capacity 1
   REGISTER channel for INT and TERM notifications
   START background listener:
@@ -245,6 +368,13 @@ STEP T001: WRAP function AS operation returning canceled WHEN Cancel was called
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: wrap function as operation that returns canceled when Cancel was called.
 
 PROCEDURE NEWCANCELLABLEOPERATION(op):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: op
+OUTPUT: result of NEWCANCELLABLEOPERATION
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN SimpleCancellableOperation{operation: op, cancelled: false}
   ON Execute: IF cancelled RETURN Canceled; ELSE RUN op(ctx)
   ON Cancel: SET cancelled = true
@@ -257,6 +387,13 @@ STEP T001: CREATE cancelable context that cancels ON INT, TERM, OR parent done
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create cancelable context that cancels on INT/TERM or parent done.
 
 PROCEDURE WITHSIGNALHANDLING(parent):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: parent
+OUTPUT: result of WITHSIGNALHANDLING
+PRE: true
+POST: true
+EFFECTS: pure
   ctx, cancel = WithCancel(parent)
   NOTIFY on INT and TERM
   ON signal OR ctx.Done: cancel()
@@ -270,6 +407,13 @@ STEP T001: LOG Describe output WHEN DryRun ELSE run operation Execute
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: log Describe output when DryRun; otherwise run operation Execute.
 
 PROCEDURE DEFAULTDRYRUNMANAGER_EXECUTE(ctx, op):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: ctx, op
+OUTPUT: result of DEFAULTDRYRUNMANAGER_EXECUTE
+PRE: true
+POST: true
+EFFECTS: pure
   IF ctx.DryRun THEN
     description = op.Describe()
     CALL Log(ctx, description)
@@ -285,6 +429,13 @@ STEP T001: FORMAT version, build date, AND platform INTO display string
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: format version, build date, and platform into display string.
 
 PROCEDURE DEFAULTVERSIONMANAGER_FORMATVERSION(info):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: info
+OUTPUT: result of DEFAULTVERSIONMANAGER_FORMATVERSION
+PRE: true
+POST: true
+EFFECTS: pure
   READ versionValue from info.Version
   READ buildDate from info.Date
   READ targetPlatform from info.Platform
@@ -298,6 +449,13 @@ STEP T001: CREATE version subcommand that prints FormatVersion ON run
 - [IMPL-CLI_FRAMEWORK] [ARCH-CLI_FRAMEWORK] [REQ-USABILITY] [REQ-IMMUTABLE_CLI_COMMANDS] — How: create version subcommand that prints FormatVersion on run.
 
 PROCEDURE DEFAULTVERSIONMANAGER_CREATEVERSIONCOMMAND(info):
+  # [IMPL-CLI_FRAMEWORK] — Layer B procedure token link
+Contract:
+INPUT: info
+OUTPUT: result of DEFAULTVERSIONMANAGER_CREATEVERSIONCOMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   DECLARE cmd as empty command object
   SET cmd.Use = "version"
   SET cmd.Short = "Display version information"

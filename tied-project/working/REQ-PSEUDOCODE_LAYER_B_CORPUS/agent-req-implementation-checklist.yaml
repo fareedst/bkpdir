@@ -51,10 +51,12 @@ entry_points:
 execution_evidence:
   close_out_evidence:
     date: '2026-10-21'
-    deferred: []
+    deferred:
+      - W2-W3 corpus waves (plan impl_pseudocode_modernization)
     gates:
       pre_implementation: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/pre_implementation-2026-10-21T21-08-04-046Z.json
       verification: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/verification-2026-10-21T21-34-22-243Z.json
+      close_out: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/close_out-2026-10-21T22-30-45-757Z.json
     master_checklist: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/agent-req-implementation-checklist.yaml
   completed:
     - session-bootstrap
@@ -70,6 +72,8 @@ execution_evidence:
     - unit-test-green
     - verification-gate
     - traceable-commit
+    - gitignore-close-out-hygiene
+    - persist-citdp-record
   envelope_path: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json
   evidence_refs_format: |
     Typed evidence_refs for completed dispositions (RESOLVE_EVIDENCE_REFS at write time):
@@ -88,13 +92,17 @@ execution_evidence:
         exit_code: 0
     Legacy string paths remain accepted; generic prose (e.g. "tests passed") is rejected as unresolved_evidence_ref.
   operator_evidence:
-    status: in_progress
+    status: w1_slice_close_out
     depth_tier: integrated
     gate_policy: advisory
     phase_runs:
       pre_implementation: layer-b-corpus-20261021-pre
-      verification: layer-b-corpus-20261021-ver
-      close_out: layer-b-corpus-20261021-close
+      verification: layer-b-corpus-w1-ver
+      close_out: layer-b-corpus-20261021-close-v2
+      w1_close_wave: layer-b-corpus-w1-close
+    w1_wave:
+      manifest: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w1.v1.json
+      gate_evidence: working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/w1-verification-gate.md
   request: REQ-PSEUDOCODE_LAYER_B_CORPUS
   slice: REQ-PSEUDOCODE_LAYER_B_CORPUS
   parent_request: REQ-PSEUDOCODE_FORMAL_VERIFICATION
@@ -1954,6 +1962,7 @@ steps:
       - tied-bundle/docs/processes.md § [PROC-CITDP] step 8
       - tied-bundle/docs/processes.md § [PROC-YAML_DB_OPERATIONS]
     slug: persist-citdp-record
+    disposition: completed
     tasks:
       - CALL sub-yaml-edit-loop on the record file.
       - >-
@@ -1996,7 +2005,10 @@ steps:
       retry_count: '0'
       returned_from: []
       state_history: []
-      status: pending
+      status: completed
+      evidence_refs:
+        - kind: file_path
+          path: tied-project/citdp/CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml
   - flow:
       branches: []
       calls: []
@@ -2009,6 +2021,7 @@ steps:
       - tied-bundle/docs/processes.md § [PROC-GITIGNORE_CLOSE_OUT]
       - tools/bundled-prompt-type-skills/prompt-shared/gitignore-close-out-hygiene.md
     slug: gitignore-close-out-hygiene
+    disposition: completed
     tasks:
       - Apply [PROC-GITIGNORE_CLOSE_OUT] per gitignore-close-out-hygiene.md.
       - >-
@@ -2024,7 +2037,10 @@ steps:
       retry_count: '0'
       returned_from: []
       state_history: []
-      status: pending
+      status: completed
+      evidence_refs:
+        - kind: file_path
+          path: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/git-hygiene-receipt-2026-10-21.md
   - flow:
       branches: []
       calls:

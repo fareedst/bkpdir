@@ -1,0 +1,243 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "test_multiple_inheritance_sources",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_relative_path_inheritance",
+      "line": 44,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_home_directory_expansion",
+      "line": 70,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_missing_inheritance_file",
+      "line": 97,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_invalid_yaml_handling",
+      "line": 123,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_deep_inheritance_chain",
+      "line": 150,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_type_mismatch_handling",
+      "line": 176,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_null_value_handling",
+      "line": 202,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-TEST_CFG_005_P1",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "test_whitespace_string_handling",
+      "line": 228,
+      "token_refs": [
+        "IMPL-TEST_CFG_005_P1"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "test_multiple_inheritance_sources",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "test_relative_path_inheritance",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "test_home_directory_expansion",
+      "branch_lines": [],
+      "failure_modes": [
+        "STEP T001: missing inherit target returns a clear error without partial silent merge",
+        "- [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: missing inherit target returns a clear error without partial silent merge."
+      ],
+      "references": []
+    },
+    {
+      "block": "test_missing_inheritance_file",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "DEFINE baseline child field that should not be reported as fully merged on failure",
+        "VERIFY load operation returns an explicit \"missing inheritance file\" error",
+        "VERIFY error identifies the unresolved path for diagnosis",
+        "STEP T001: malformed YAML in the inheritance chain surfaces parse error and does not produce a merged config",
+        "- [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: malformed YAML in the inheritance chain surfaces parse error and does not produce a merged config."
+      ],
+      "references": []
+    },
+    {
+      "block": "test_invalid_yaml_handling",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "VERIFY parser error is returned and classified as invalid YAML input",
+        "VERIFY merged configuration is not produced on parse failure"
+      ],
+      "references": []
+    },
+    {
+      "block": "test_deep_inheritance_chain",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "test_type_mismatch_handling",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "test_null_value_handling",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "test_whitespace_string_handling",
+      "branch_lines": [
+        239
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

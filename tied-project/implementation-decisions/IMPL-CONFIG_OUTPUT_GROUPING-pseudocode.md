@@ -16,6 +16,13 @@ STEP T001: MAP field name patterns to Importance level
 - [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] — How: map archive and backup dir paths to critical, key toggles to high, format/template/status names to low, otherwise medium.
 
 PROCEDURE GET_FIELD_IMPORTANCE(name, category):
+  # [IMPL-CONFIG_OUTPUT_GROUPING] — Layer B procedure token link
+Contract:
+INPUT: name, category
+OUTPUT: result of GET_FIELD_IMPORTANCE
+PRE: true
+POST: true
+EFFECTS: pure
   IF name IN {archive_dir_path, backup_dir_path} THEN RETURN ImportanceCritical
   IF name IN {use_current_dir_name, use_current_dir_name_for_files, git.enabled} THEN RETURN ImportanceHigh
   IF name CONTAINS "format" OR "template" THEN RETURN ImportanceLow
@@ -31,6 +38,13 @@ STEP T002: PRINT section headers and formatted field rows
 - [IMPL-CONFIG_OUTPUT_GROUPING] [ARCH-CONFIG_OUTPUT_GROUPING] [REQ-CONFIG_OUTPUT_GROUPING] — How: bucket values by category, sort categories by CategoryPriority, sort fields by importance then name, print sources header and section headers.
 
 PROCEDURE DISPLAY_CONFIG_GROUPED(values, showSources):
+  # [IMPL-CONFIG_OUTPUT_GROUPING] — Layer B procedure token link
+Contract:
+INPUT: values, showSources
+OUTPUT: result of DISPLAY_CONFIG_GROUPED
+PRE: true
+POST: true
+EFFECTS: pure
   categories = GROUP values BY FieldInfo.Category
   sortedCategories = SORT category keys BY CategoryPriority (unknown = 999) THEN alphabetically
   PRINT expanded configuration search paths header

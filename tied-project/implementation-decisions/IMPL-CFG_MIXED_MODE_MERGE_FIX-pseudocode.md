@@ -16,6 +16,13 @@ STEP T001: EXECUTE PROCEDURE applyMergeStrategies
 - [IMPL-CFG_MIXED_MODE_MERGE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: process prefixed keys into operations, honor explicit prefixes over accumulate defaults, and apply each operation via applyMergeOperation with registry-driven behavior.
 
 PROCEDURE applyMergeStrategies(dst, src, inheritContext, rawSrcMap, initialDefaultCfg, explicitlySetFields, excludeUnprefixedReplacesBuiltinDefaults):
+  # [IMPL-CFG_MIXED_MODE_MERGE_FIX] — Layer B procedure token link
+Contract:
+INPUT: dst, src, inheritContext, rawSrcMap, initialDefaultCfg, explicitlySetFields, excludeUnprefixedReplacesBuiltinDefaults
+OUTPUT: result of APPLYMERGESTRATEGIES
+PRE: true
+POST: true
+EFFECTS: pure
   processed = processor.processKeys(srcMap from rawSrcMap or configToMap(src))
   BUILD hasExplicitPrefix from rawSrcMap keys (quoted keys stripped)
   FOR EACH key, operation IN processed.operations:

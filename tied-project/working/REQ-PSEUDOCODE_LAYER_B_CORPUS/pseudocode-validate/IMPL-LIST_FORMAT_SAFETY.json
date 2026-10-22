@@ -1,0 +1,161 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "FORMAT_LIST_ARCHIVE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-LIST_FORMAT_SAFETY",
+        "REQ-OUT_002"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_LIST_BACKUP",
+      "line": 49,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-LIST_FORMAT_SAFETY",
+        "REQ-OUT_002"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_LIST_ARCHIVE_WITH_EXTRACTION",
+      "line": 86,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-LIST_FORMAT_SAFETY",
+        "REQ-OUT_002"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_LIST_ARCHIVE_SIMPLE",
+      "line": 121,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-LIST_FORMAT_SAFETY",
+        "REQ-OUT_002"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_WITH_CONTEXT",
+      "line": 152,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-LIST_FORMAT_SAFETY",
+        "REQ-OUT_002"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "FORMAT_LIST_ARCHIVE",
+      "branch_lines": [
+        27,
+        30,
+        32,
+        34,
+        36,
+        37,
+        39
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_LIST_BACKUP",
+      "branch_lines": [
+        58,
+        61,
+        63,
+        71,
+        73,
+        74,
+        76
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_LIST_ARCHIVE_WITH_EXTRACTION",
+      "branch_lines": [
+        100,
+        102,
+        103,
+        105,
+        106,
+        108,
+        109,
+        111
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "GATHER file stats into data with safe defaults on error"
+      ],
+      "references": []
+    },
+    {
+      "block": "FORMAT_LIST_ARCHIVE_SIMPLE",
+      "branch_lines": [
+        131,
+        133,
+        135,
+        136,
+        138,
+        140,
+        142
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_WITH_CONTEXT",
+      "branch_lines": [
+        161
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -17,6 +17,14 @@ STEP T002: EMIT statistics compatible with legacy format strings for inc and ful
 - [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: stat path and populate FileStatInfo with name, size, human size, mtime, mode, and type.
 
 PROCEDURE GATHER_FILE_STAT_INFO(path):
+  # [IMPL-FILE_STATISTICS] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrGatherFileStatInfo
   info, err = OS.Stat(path)
   IF err: RETURN error
   RETURN FileStatInfo{Path, Name, Size, formatHumanSize(Size), MTime, Mode, getFileType(info)}
@@ -29,6 +37,13 @@ STEP T001: SCALE bytes to TB/GB/MB/KB/B display string
 - [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: scale bytes to TB/GB/MB/KB/B with one decimal for large units.
 
 PROCEDURE FORMAT_HUMAN_SIZE(size):
+  # [IMPL-FILE_STATISTICS] — Layer B procedure token link
+Contract:
+INPUT: size
+OUTPUT: result of FORMAT_HUMAN_SIZE
+PRE: true
+POST: true
+EFFECTS: pure
   IF size >= TB: RETURN sprintf("%.1fTB", size/TB)
   ELIF size >= GB: RETURN sprintf("%.1fGB", size/GB)
   ELIF size >= MB: RETURN sprintf("%.1fMB", size/MB)
@@ -43,6 +58,13 @@ STEP T001: CLASSIFY file type from os.FileMode bits
 - [IMPL-FILE_STATISTICS] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: classify regular, directory, symlink, device, pipe, socket, or other from mode bits.
 
 PROCEDURE GET_FILE_TYPE(info):
+  # [IMPL-FILE_STATISTICS] — Layer B procedure token link
+Contract:
+INPUT: info
+OUTPUT: result of GET_FILE_TYPE
+PRE: true
+POST: true
+EFFECTS: pure
   IF regular: RETURN "regular"
   IF directory: RETURN "directory"
   IF symlink/device/pipe/socket bits: RETURN matching label

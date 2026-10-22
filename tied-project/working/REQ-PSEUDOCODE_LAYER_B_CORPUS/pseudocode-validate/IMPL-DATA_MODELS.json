@@ -1,0 +1,354 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "ARCHIVE_CONFIG",
+      "line": 18,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ARCHIVE",
+      "line": 35,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ARCHIVE_CONFIG_INTERFACE",
+      "line": 52,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ARCHIVE_CREATION_OPTIONS",
+      "line": 69,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ARCHIVE_FORMATTER_INTERFACE",
+      "line": 86,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CONFIG_TO_ARCHIVE_CONFIG_ADAPTER",
+      "line": 103,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "OUTPUT_FORMATTER_TO_ARCHIVE_FORMATTER_ADAPTER",
+      "line": 121,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "INCREMENTAL_ARCHIVE_CONFIG",
+      "line": 138,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BACKUP_CONFIG_INTERFACE",
+      "line": 155,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BACKUP_FORMATTER_INTERFACE",
+      "line": 172,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CONFIG_TO_BACKUP_CONFIG_ADAPTER",
+      "line": 189,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "OUTPUT_FORMATTER_TO_BACKUP_FORMATTER_ADAPTER",
+      "line": 206,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BACKUP_INFO",
+      "line": 223,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BACKUP",
+      "line": 240,
+      "token_refs": [
+        "ARCH-SYSTEM_COMPONENTS",
+        "IMPL-DATA_MODELS",
+        "REQ-CODE_QUALITY",
+        "REQ-FILE_BACKUP"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BACKUP_OPTIONS",
+      "line": 257,
+      "token_refs": [
+        "IMPL-DATA_MODELS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "ARCHIVE_CONFIG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ARCHIVE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ARCHIVE_CONFIG_INTERFACE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ARCHIVE_CREATION_OPTIONS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ARCHIVE_FORMATTER_INTERFACE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CONFIG_TO_ARCHIVE_CONFIG_ADAPTER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "OUTPUT_FORMATTER_TO_ARCHIVE_FORMATTER_ADAPTER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "INCREMENTAL_ARCHIVE_CONFIG",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "BACKUP_CONFIG_INTERFACE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "BACKUP_FORMATTER_INTERFACE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CONFIG_TO_BACKUP_CONFIG_ADAPTER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "OUTPUT_FORMATTER_TO_BACKUP_FORMATTER_ADAPTER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "BACKUP_INFO",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "BACKUP",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "BACKUP_OPTIONS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

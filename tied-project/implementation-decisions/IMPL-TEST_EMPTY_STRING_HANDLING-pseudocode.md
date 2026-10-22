@@ -16,6 +16,13 @@ STEP T001: verify empty-string archive_dir_path merges with later files and late
 - [IMPL-TEST_EMPTY_STRING_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_001] [REQ-CFG_005] — How: verify empty-string archive_dir_path merges with later files and later non-empty values override per CFG-001 precedence.
 
 PROCEDURE TestEmptyStringHandling():
+  # [IMPL-TEST_EMPTY_STRING_HANDLING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTEMPTYSTRINGHANDLING
+OUTPUT: result of TESTEMPTYSTRINGHANDLING
+PRE: true
+POST: true
+EFFECTS: pure
   subtest first file empty second file value -> expect second value
   subtest both empty -> expect empty string retained
   subtest empty then non-empty override paths

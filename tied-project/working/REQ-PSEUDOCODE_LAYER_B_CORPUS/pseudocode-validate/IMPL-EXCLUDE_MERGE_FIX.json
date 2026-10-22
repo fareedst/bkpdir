@@ -1,0 +1,110 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "APPLY_MERGE_STRATEGIES_EXCLUDE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-EXCLUDE_MERGE_FIX",
+        "IMPL-EXCLUDE_MERGE_FIX",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION",
+        "REQ-TEST_EXCLUDE_MERGE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "APPLY_MERGE_DEDUPE",
+      "line": 38,
+      "token_refs": [
+        "ARCH-EXCLUDE_MERGE_FIX",
+        "IMPL-EXCLUDE_MERGE_FIX",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION",
+        "REQ-TEST_EXCLUDE_MERGE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "SET_CONFIG_FIELD",
+      "line": 58,
+      "token_refs": [
+        "ARCH-EXCLUDE_MERGE_FIX",
+        "IMPL-EXCLUDE_MERGE_FIX",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION",
+        "REQ-TEST_EXCLUDE_MERGE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_KNOWN_CONFIG_FIELD",
+      "line": 77,
+      "token_refs": [
+        "IMPL-EXCLUDE_MERGE_FIX"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "APPLY_MERGE_STRATEGIES_EXCLUDE",
+      "branch_lines": [
+        27
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "APPLY_MERGE_DEDUPE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "SET_CONFIG_FIELD",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "ON unknown key: RETURN error"
+      ],
+      "references": []
+    },
+    {
+      "block": "IS_KNOWN_CONFIG_FIELD",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -17,6 +17,13 @@ STEP T002: APPLY environment overrides and VALIDATE schema
 - [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: clone defaultConfig, merge each existing search-path YAML file, apply environment overrides, then validate schema.
 
 PROCEDURE GENERIC_CONFIG_LOAD(root, defaultConfig):
+  # [IMPL-CONFIG_SCHEMA_FLEX] — Layer B procedure token link
+Contract:
+INPUT: root, defaultConfig
+OUTPUT: result of GENERIC_CONFIG_LOAD
+PRE: true
+POST: true
+EFFECTS: pure
   config = CLONE(defaultConfig)
   FOR EACH path IN GetConfigSearchPaths():
     expanded = ExpandPath(path)
@@ -33,6 +40,13 @@ STEP T001: DELEGATE to GenericConfigLoader and type-assert to Config
 - [IMPL-CONFIG_SCHEMA_FLEX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: delegate to GenericConfigLoader with DefaultConfig() then type-assert to *Config or fall back to defaults.
 
 PROCEDURE CONFIG_ADAPTER_LOAD(root):
+  # [IMPL-CONFIG_SCHEMA_FLEX] — Layer B procedure token link
+Contract:
+INPUT: root
+OUTPUT: result of CONFIG_ADAPTER_LOAD
+PRE: true
+POST: true
+EFFECTS: pure
   genericCfg = loader.LoadConfig(root, DefaultConfig())
   IF genericCfg is *Config THEN RETURN genericCfg
   RETURN DefaultConfig()

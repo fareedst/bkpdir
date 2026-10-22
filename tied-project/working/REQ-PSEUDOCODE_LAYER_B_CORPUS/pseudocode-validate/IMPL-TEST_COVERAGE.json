@@ -1,0 +1,156 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "TEST_OUTPUT_COLLECTOR",
+      "line": 18,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TEST_COVERAGE",
+        "REQ-CODE_QUALITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TEST_DELAYED_OUTPUT_MODE",
+      "line": 40,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TEST_COVERAGE",
+        "REQ-CODE_QUALITY",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TEST_TEMPLATE_FORMATTER",
+      "line": 60,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TEST_COVERAGE",
+        "REQ-CODE_QUALITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TEST_ERROR_AND_DEFAULT_FORMATTER",
+      "line": 79,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TEST_COVERAGE",
+        "REQ-CODE_QUALITY",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TEST_FILE_STATS_AND_COMPAT",
+      "line": 98,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TEST_COVERAGE",
+        "REQ-CODE_QUALITY"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TEST_INTERFACE_COMPLIANCE",
+      "line": 117,
+      "token_refs": [
+        "IMPL-TEST_COVERAGE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "TEST_OUTPUT_COLLECTOR",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "collector.AddStderr(\"error line\", \"error\")"
+      ],
+      "references": []
+    },
+    {
+      "block": "TEST_DELAYED_OUTPUT_MODE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TEST_TEMPLATE_FORMATTER",
+      "branch_lines": [],
+      "failure_modes": [
+        "STEP T001: Verify default format strings and error template methods include path and error type labels",
+        "- [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify default format strings and error template methods include path and error type labels."
+      ],
+      "references": []
+    },
+    {
+      "block": "TEST_ERROR_AND_DEFAULT_FORMATTER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TEST_FILE_STATS_AND_COMPAT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TEST_INTERFACE_COMPLIANCE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

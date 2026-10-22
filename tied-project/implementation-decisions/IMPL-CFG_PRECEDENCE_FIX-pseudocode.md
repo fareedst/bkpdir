@@ -17,6 +17,13 @@ STEP T002: RECORD every raw key in explicitlySetFields after each merge
 - [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: walk search paths in order; first file uses inheritContext true; record every raw key in explicitlySetFields after each merge.
 
 PROCEDURE LOAD_CONFIG_FALLBACK(root):
+  # [IMPL-CFG_PRECEDENCE_FIX] — Layer B procedure token link
+Contract:
+INPUT: root
+OUTPUT: result of LOAD_CONFIG_FALLBACK
+PRE: true
+POST: true
+EFFECTS: pure
   cfg = DEFAULT_CONFIG
   explicitlySetFields = empty map
   fileProcessed = false
@@ -38,6 +45,13 @@ STEP T001: DELEGATE to category merge helpers with explicitlySetFields
 - [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: delegate to category merge helpers passing explicitlySetFields for precedence-aware scalar merges.
 
 PROCEDURE MERGE_CONFIGS(dst, src, inheritContext, explicitlySetFields):
+  # [IMPL-CFG_PRECEDENCE_FIX] — Layer B procedure token link
+Contract:
+INPUT: dst, src, inheritContext, explicitlySetFields
+OUTPUT: result of MERGE_CONFIGS
+PRE: true
+POST: true
+EFFECTS: pure
   MERGE_BASIC_SETTINGS(dst, src, inheritContext, explicitlySetFields)
   MERGE_FILE_BACKUP_SETTINGS(...)
   MERGE_STATUS_CODES(...)
@@ -55,6 +69,13 @@ STEP T002: INHERITANCE mode allows child override when src differs from default
 - [IMPL-CFG_PRECEDENCE_FIX] [ARCH-CONFIG_SYSTEM] [REQ-CONFIGURATION] — How: sequential mode only writes fields present in rawSrcMap and not already in explicitlySetFields; inheritance mode allows child overrides when src differs from default.
 
 PROCEDURE MERGE_BASIC_SETTINGS(dst, src, inheritContext, rawSrcMap, explicitlySetFields):
+  # [IMPL-CFG_PRECEDENCE_FIX] — Layer B procedure token link
+Contract:
+INPUT: dst, src, inheritContext, rawSrcMap, explicitlySetFields
+OUTPUT: result of MERGE_BASIC_SETTINGS
+PRE: true
+POST: true
+EFFECTS: pure
   IF inheritContext THEN
     FOR EACH scalar: IF src differs from default THEN dst = src
   ELSE

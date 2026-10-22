@@ -1,17 +1,10 @@
-feat(pseudocode): W0 Layer B corpus wave and batch driver
+feat(tied): close out Layer B corpus wave W1 (38 IMPLs)
 
-Modernize six W0 IMPL sidecars toward Layer B minimum_gating_rules at
-verification-gate; add corpus gap audit and pseudocode_validate batch
-driver with tests; expand Layer C gate to include IMPL-EXCLUSION_PATTERNS.
+[REQ-PSEUDOCODE_LAYER_B_CORPUS] [REQ-PSEUDOCODE_FORMAL_VERIFICATION]
+[ARCH-SPEC_DSL_AND_ORACLE] [IMPL-SPEC_CTL]
 
-Completion signals (REQ-PSEUDOCODE_LAYER_B_CORPUS):
-- Machine close-out: envelope fail_on_error_gaps pass (0 blocking); close_out gate receipt
-- Process contract: W0 verification evidence manifest + reconcile band A
-- Adherence ledger: gate-ledger outcome_verified rows for completed slugs
+W1 oracle/Tier-A sidecars pass Layer B full mode; L0 check-leads green on
+full registry; wave registry and batch --enforce fix included.
 
-Advisory: 6 inquiry finding_unresolved warns (gate_policy advisory).
-
-REQ-PSEUDOCODE_FORMAL_VERIFICATION REQ-PSEUDOCODE_LAYER_B_CORPUS
-ARCH-SPEC_DSL_AND_ORACLE IMPL-SPEC_CTL
-IMPL-ATOMIC_OPS IMPL-CONFIG_STRUCT IMPL-CFG_006 IMPL-FILE_OPERATIONS
-IMPL-ZIP_FORMAT IMPL-EXCLUSION_PATTERNS
+Machine close-out: gate allowed; envelope blocking_gaps=0 (advisory warns remain).
+Process: W1 verification manifest + reconcile band B (hash_alignment stale on prior receipts).

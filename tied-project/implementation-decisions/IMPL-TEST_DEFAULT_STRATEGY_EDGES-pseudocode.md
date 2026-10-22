@@ -16,6 +16,13 @@ STEP T001: assert =default strategy applies only when destination field is zero 
 - [IMPL-TEST_DEFAULT_STRATEGY_EDGES] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] — How: assert =default strategy applies only when destination field is zero value for strings, arrays, and bools across sequential files.
 
 PROCEDURE TestDefaultStrategyEdgeCases():
+  # [IMPL-TEST_DEFAULT_STRATEGY_EDGES] — Layer B procedure token link
+Contract:
+INPUT: context for TESTDEFAULTSTRATEGYEDGECASES
+OUTPUT: result of TESTDEFAULTSTRATEGYEDGECASES
+PRE: true
+POST: true
+EFFECTS: pure
   FOR subtests covering zero vs non-zero strings, arrays, and bools:
     CREATE file1 and file2 with =field defaults
     LoadConfig via BKPDIR_CONFIG=file1:file2

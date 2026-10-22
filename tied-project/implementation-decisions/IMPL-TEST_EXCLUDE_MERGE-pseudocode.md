@@ -16,6 +16,13 @@ STEP T001: verify exclude_patterns merge order across sequential files and inher
 - [IMPL-TEST_EXCLUDE_MERGE] [ARCH-TEST_EXCLUDE_MERGE] [REQ-TEST_EXCLUDE_MERGE] [REQ-CONFIGURATION] [REQ-CFG_006] — How: verify exclude_patterns merge order across sequential files and inheritance with expected deduplicated slice and config source labels.
 
 PROCEDURE TestExcludePatternsMerge_REQ_TEST_EXCLUDE_MERGE():
+  # [IMPL-TEST_EXCLUDE_MERGE] — Layer B procedure token link
+Contract:
+INPUT: context for TESTEXCLUDEPATTERNSMERGE
+OUTPUT: result of TESTEXCLUDEPATTERNSMERGE
+PRE: true
+POST: true
+EFFECTS: pure
   subtest first file replaces built-ins when unprefixed
   subtest sequential plus inheritance chain ordering
   ASSERT expected pattern order and source attribution

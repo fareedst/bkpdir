@@ -1,0 +1,92 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "LOAD_CONFIG_WITH_INHERITANCE",
+      "line": 19,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MERGE_BASIC_SETTINGS",
+      "line": 48,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "APPLY_OVERRIDE",
+      "line": 71,
+      "token_refs": [
+        "IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "LOAD_CONFIG_WITH_INHERITANCE",
+      "branch_lines": [
+        30,
+        37
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MERGE_BASIC_SETTINGS",
+      "branch_lines": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "APPLY_OVERRIDE",
+      "branch_lines": [
+        79
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

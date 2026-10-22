@@ -16,6 +16,14 @@ STEP T001: FILTER non-incremental archives AND return latest by name
 - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: list archives, filter non-incremental, sort by name ascending, return latest full Archive.
 
 PROCEDURE FIND_LATEST_FULL_ARCHIVE(archiveDir):
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: archiveDir
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrFindLatestFullArchive
   fullArchives = FILTER ListArchives WHERE NOT IsIncremental
   SORT BY Name; RETURN last entry OR error if empty
 
@@ -27,6 +35,13 @@ STEP T001: FILTER incrementals by base prefix AND return all matches sorted by n
 - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted ascending by name (oldest first).
 
 PROCEDURE FIND_MATCHING_INCREMENTAL_ARCHIVES(archiveDir, baseFull):
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: archiveDir, baseFull
+OUTPUT: result of FIND_MATCHING_INCREMENTAL_ARCHIVES
+PRE: true
+POST: true
+EFFECTS: pure
   matching = FILTER incrementals WITH prefix baseName + "_update="
   SORT BY Name ascending; RETURN matching slice OR empty
 
@@ -38,6 +53,13 @@ STEP T001: LOAD full zip snapshot AND overlay each incremental in chain order
 - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full zip snapshot, overlay each matching incremental zip in name order; later entries override earlier by RelativePath; return merged DirectorySnapshot.
 
 PROCEDURE RECONSTRUCT_ARCHIVE_STATE(archiveDir):
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: archiveDir
+OUTPUT: result of RECONSTRUCT_ARCHIVE_STATE
+PRE: true
+POST: true
+EFFECTS: pure
   fullSnapshot = CreateArchiveSnapshot(latestFull.Path)
   incrementals = FIND_MATCHING_INCREMENTAL_ARCHIVES(archiveDir, latestFull)
   IF incrementals empty: RETURN fullSnapshot
@@ -56,6 +78,13 @@ STEP T001: SNAPSHOT cwd AND classify added, modified, deleted file paths
 - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] — How: snapshot cwd, compare file maps by path/size/hash; classify added, modified, deleted (files only).
 
 PROCEDURE CALCULATE_DIFF(cwd, reconstructed, excludePatterns):
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: cwd, reconstructed, excludePatterns
+OUTPUT: result of CALCULATE_DIFF
+PRE: true
+POST: true
+EFFECTS: pure
   current = CreateDirectorySnapshot(cwd, excludePatterns)
   BUILD currentMap and reconstructedMap (non-dir files only)
   added = paths in current not in reconstructed
@@ -71,6 +100,13 @@ STEP T001: LOAD config, reconstruct state, calculate diff, AND print result
 - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [REQ-CONTEXT_SUPPORT] [REQ-DIFF_COMMAND] — How: load config, reconstruct state, handle no-archive gracefully, CalculateDiff, PrintDiffResult with context cancellation checks.
 
 PROCEDURE DIFF_CMD():
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: context for DIFF_CMD
+OUTPUT: result of DIFF_CMD
+PRE: true
+POST: true
+EFFECTS: pure
   cfg = LoadConfig; archiveDir = prepareArchiveDirectory
   state = ReconstructArchiveState OR PrintNoArchivesFound on empty
   diff = CalculateDiff; formatter.PrintDiffResult(diff)
@@ -83,6 +119,13 @@ STEP T001: EMIT no-changes header OR per-category added/modified/deleted lines
 - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] [REQ-DIFF_COMMAND] — How: use cfg FormatDiff* strings for no-changes header and per-category file lines.
 
 PROCEDURE FORMAT_DIFF_RESULT(diff):
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: diff
+OUTPUT: result of FORMAT_DIFF_RESULT
+PRE: true
+POST: true
+EFFECTS: pure
   IF empty diff: RETURN FormatDiffNoChanges
   EMIT FormatDiffChanges + FormatDiffAdded/Modified/Deleted per path
 
@@ -94,4 +137,11 @@ STEP T001: FORMAT diff AND route through delayed collector or stdout
 - [IMPL-DIFF_COMMAND] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [REQ-OUTPUT_FORMATTING] [REQ-DIFF_COMMAND] — How: format diff then route through delayed collector or stdout.
 
 PROCEDURE PRINT_DIFF_RESULT(diff):
+  # [IMPL-DIFF_COMMAND] — Layer B procedure token link
+Contract:
+INPUT: diff
+OUTPUT: result of PRINT_DIFF_RESULT
+PRE: true
+POST: true
+EFFECTS: pure
   message = FORMAT_DIFF_RESULT(diff); print or AddStdout

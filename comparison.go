@@ -145,7 +145,7 @@ type DiffResult struct {
 	Deleted  []string
 }
 
-// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted by name (oldest first).
+// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: select incrementals whose name prefix matches base full archive _update= pattern; return all matches sorted ascending by name (oldest first).
 func findMatchingIncrementalArchives(archiveDir string, baseFullArchive *Archive) ([]Archive, error) {
 	archives, err := ListArchives(archiveDir)
 	if err != nil {
@@ -190,7 +190,7 @@ func findMatchingIncrementalArchives(archiveDir string, baseFullArchive *Archive
 	return matchingIncrementals, nil
 }
 
-// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full zip snapshot, overlay each matching incremental zip in chronological order by RelativePath, return merged DirectorySnapshot.
+// - [IMPL-DIFF_COMMAND] [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-CLI_COMMANDS] [ARCH-DIFF_COMMAND] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: load full zip snapshot, overlay each matching incremental zip in name order; later entries override earlier by RelativePath; return merged DirectorySnapshot.
 func ReconstructArchiveState(archiveDir string) (*DirectorySnapshot, error) {
 	// Find most recent full archive
 	latestFullArchive, err := findLatestFullArchive(archiveDir)

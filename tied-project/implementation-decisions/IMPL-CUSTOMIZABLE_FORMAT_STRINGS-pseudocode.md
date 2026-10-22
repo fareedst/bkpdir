@@ -17,6 +17,13 @@ STEP T002: EMIT helpful validation error messages when placeholders are invalid
 - [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — How: compare extracted placeholders to getExpectedPlaceholders and emit non-fatal warnings for unknown tokens.
 
 PROCEDURE VALIDATE_FORMAT_STRING(fieldName, formatString):
+  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — Layer B procedure token link
+Contract:
+INPUT: fieldName, formatString
+OUTPUT: result of VALIDATE_FORMAT_STRING
+PRE: true
+POST: true
+EFFECTS: pure
   expected = GET_EXPECTED_PLACEHOLDERS(fieldName)
   IF expected empty THEN RETURN nil
   found = EXTRACT_PLACEHOLDERS(formatString)
@@ -31,6 +38,13 @@ STEP T001: RETURN allowed placeholders from placeholderMap for fieldName
 - [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — How: return allowed printf or template placeholders per Config field name from placeholderMap.
 
 PROCEDURE GET_EXPECTED_PLACEHOLDERS(fieldName):
+  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — Layer B procedure token link
+Contract:
+INPUT: fieldName
+OUTPUT: result of GET_EXPECTED_PLACEHOLDERS
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN placeholderMap[fieldName]  # e.g. FormatListArchive allows #{path}, #{size_human}, ...
 
 ## EXTRACT_PLACEHOLDERS
@@ -41,6 +55,13 @@ STEP T001: COLLECT printf verbs AND #{name} template tokens via regex
 - [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — How: regex-collect %[sdvfbtxX] verbs and #{name} template tokens from a format string.
 
 PROCEDURE EXTRACT_PLACEHOLDERS(formatString):
+  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — Layer B procedure token link
+Contract:
+INPUT: formatString
+OUTPUT: result of EXTRACT_PLACEHOLDERS
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN printfMatches + templateMatches
 
 ## VALIDATE_ALL_FORMAT_STRINGS
@@ -51,6 +72,13 @@ STEP T001: ITERATE Format* and Template* fields AND aggregate warnings
 - [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — How: iterate all Format* and Template* cfg fields and aggregate ValidateFormatString warnings.
 
 PROCEDURE VALIDATE_ALL_FORMAT_STRINGS(cfg):
+  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — Layer B procedure token link
+Contract:
+INPUT: cfg
+OUTPUT: result of VALIDATE_ALL_FORMAT_STRINGS
+PRE: true
+POST: true
+EFFECTS: pure
   warnings = []
   FOR EACH (fieldName, value) IN cfg format fields:
     APPEND warnings FROM VALIDATE_FORMAT_STRING(fieldName, value)
@@ -65,6 +93,13 @@ STEP T002: EXECUTE Go text/template WHEN {{.}} patterns remain
 - [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — How: replace #{key} from data, apply known defaults, handle residual %s with path/time, strip remaining #{...} before optional Go template pass.
 
 PROCEDURE FORMAT_TEMPLATE(templateStr, data):
+  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — Layer B procedure token link
+Contract:
+INPUT: templateStr, data
+OUTPUT: result of FORMAT_TEMPLATE
+PRE: true
+POST: true
+EFFECTS: pure
   result = REPLACE ALL #{key} FROM data
   FILL known defaults for #{size_human}, #{size}, #{mtime}
   IF %s remains: substitute path/name then creation_time
@@ -80,4 +115,11 @@ STEP T002: VERIFY example configuration files work as documented when loaded
 - [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-CUSTOMIZABLE_FORMAT_STRINGS] [ARCH-OUTPUT_FORMATTING] [REQ-CUSTOMIZABLE_FORMAT_STRINGS] — How: after YAML merge print validateAllFormatStrings warnings to stderr without failing load.
 
 PROCEDURE LOAD_CONFIG_VALIDATION_HOOK(cfg):
+  # [IMPL-CUSTOMIZABLE_FORMAT_STRINGS] — Layer B procedure token link
+Contract:
+INPUT: cfg
+OUTPUT: result of LOAD_CONFIG_VALIDATION_HOOK
+PRE: true
+POST: true
+EFFECTS: pure
   FOR w IN VALIDATE_ALL_FORMAT_STRINGS(cfg): PRINT w to stderr

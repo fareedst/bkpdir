@@ -1,0 +1,56 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "TestUnicodeHandling",
+      "line": 18,
+      "token_refs": [
+        "ARCH-TESTING_STRATEGY",
+        "IMPL-TEST_UNICODE_HANDLING",
+        "REQ-CFG_001",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "TestSpecialCharactersInPaths",
+      "line": 37,
+      "token_refs": [
+        "IMPL-TEST_UNICODE_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "TestUnicodeHandling",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "TestSpecialCharactersInPaths",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

@@ -9,8 +9,7 @@ change_definition:
     tracking; procedure-level contracts often use PRE/POST true; Grammar-Version v2 on one sidecar only.
   desired_behavior: >-
     Each wave-enforced IMPL passes Layer B minimum_gating_rules at verification-gate (pseudocode_validate
-    full mode), Layer C pseudocode_analyze gate_mode on changed sidecars, and integrated adversarial
-    inquiry artifacts per wave; L0 remains regression guard throughout migration.
+    full mode). W1 complete (38 tokens); W2–W3 remain. L0 full registry green after W1 lead sync.
   non_goals:
     - Bulk constraint-enforced-v2 or constraint_flow fleet promotion in one pass
     - Rewriting runtime behavior without LEAP and RED tests
@@ -19,6 +18,7 @@ change_definition:
     - Phase 0 corpus-layer-b-gap-report quantifies dominant SHAPE/COVER/CONTRACT failures on pilot 10
     - run-pseudocode-layer-b-batch.sh reproducible with wave-scoped --enforce
     - W0 tokens pass verification-gate Layer B full + L0 green after sponsor TIED pass
+    - W1 registry tokens (38) pass Layer B full at verification-gate; L0 full registry green
   unchanged_behavior: bkpdir backup/archive/config runtime semantics unless a wave explicitly LEAPs behavior.
 impact_analysis:
   modules_or_boundaries:
@@ -54,7 +54,7 @@ risk_analysis:
     disconfirming_observations:
       - "Pilot pseudocode_validate passes on legacy ATOMIC_OPS without sidecar edits — target bar too low"
   residual_risk:
-    summary: Multi-wave drift between queue registry and formal_spec list if waves desync
+    summary: W2–W3 Layer B waves and optional Layer C expansion beyond W0 six tokens
     owner: sponsor
     expiry: "2027-03-31"
   quality_profiles:
@@ -81,13 +81,18 @@ evidence:
     - working/REQ-PSEUDOCODE_LAYER_B_CORPUS/adversarial-inquiry/phase-pre_implementation/
 completion_criteria:
   activation:
-    run_id: layer-b-corpus-20261021-pre
-    phase: pre_implementation
+    run_id: layer-b-corpus-20261021-close-v2
+    phase: close_out
   inquiry_run_ids:
     pre_implementation: layer-b-corpus-20261021-pre
-    verification: layer-b-corpus-20261021-ver
-    close_out: layer-b-corpus-20261021-close
+    verification: layer-b-corpus-w1-ver
+    close_out: layer-b-corpus-20261021-close-v2
+  w1_wave:
+    run_id: layer-b-corpus-w1-close
+    manifest: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/verification-evidence-manifest-w1.v1.json
+  checklist_gate:
+    close_out_receipt: tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/close_out-2026-10-21T22-30-45-757Z.json
 leap_feedback:
-  record_status: pending
+  record_status: applied
   divergences_from_analysis: none
   tied_stack_updates_required: []

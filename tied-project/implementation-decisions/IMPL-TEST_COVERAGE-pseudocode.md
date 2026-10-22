@@ -16,6 +16,14 @@ STEP T001: Verify AddStdout/AddStderr/Clear/GetMessages track delayed output by 
 - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify AddStdout/AddStderr/Clear/GetMessages track delayed output by destination.
 
 PROCEDURE TEST_OUTPUT_COLLECTOR():
+  # [IMPL-TEST_COVERAGE] — Layer B procedure token link
+Contract:
+INPUT: context for TEST_OUTPUT_COLLECTOR
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrTestOutputCollector
   collector = NewOutputCollector()
   collector.AddStdout("info line", "info")
   collector.AddStderr("error line", "error")
@@ -30,6 +38,13 @@ STEP T001: Verify formatter with collector buffers PrintCreatedArchive and Print
 - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify formatter with collector buffers PrintCreatedArchive and PrintError until flush.
 
 PROCEDURE TEST_DELAYED_OUTPUT_MODE():
+  # [IMPL-TEST_COVERAGE] — Layer B procedure token link
+Contract:
+INPUT: context for TEST_DELAYED_OUTPUT_MODE
+OUTPUT: result of TEST_DELAYED_OUTPUT_MODE
+PRE: true
+POST: true
+EFFECTS: pure
   formatter = NewDefaultOutputFormatterWithCollector(cfg, collector)
   ASSERT IsDelayedMode true
   formatter.PrintCreatedArchive(path); formatter.PrintError(err)
@@ -43,6 +58,13 @@ STEP T001: Validate #{placeholder} replacement, list extraction, and mixed %s/#{
 - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING] — How: validate #{placeholder} replacement, list extraction, and mixed %s/#{...} format strings.
 
 PROCEDURE TEST_TEMPLATE_FORMATTER():
+  # [IMPL-TEST_COVERAGE] — Layer B procedure token link
+Contract:
+INPUT: context for TEST_TEMPLATE_FORMATTER
+OUTPUT: result of TEST_TEMPLATE_FORMATTER
+PRE: true
+POST: true
+EFFECTS: pure
   FormatListArchiveWithExtraction returns filename in output
   FormatWithPlaceholders replaces #{path} and #{branch}
   FormatListArchive leaves no unprocessed #{...} patterns
@@ -55,6 +77,13 @@ STEP T001: Verify default format strings and error template methods include path
 - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: verify default format strings and error template methods include path and error type labels.
 
 PROCEDURE TEST_ERROR_AND_DEFAULT_FORMATTER():
+  # [IMPL-TEST_COVERAGE] — Layer B procedure token link
+Contract:
+INPUT: context for TEST_ERROR_AND_DEFAULT_FORMATTER
+OUTPUT: result of TEST_ERROR_AND_DEFAULT_FORMATTER
+PRE: true
+POST: true
+EFFECTS: pure
   FormatCreatedArchive contains path and label
   FormatDiskFullError and permission errors include original err text
   custom cfg format strings override defaults
@@ -67,6 +96,13 @@ STEP T001: Assert FormatCreatedArchiveWithStats and Print*WithStats include size
 - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] [REQ-OUTPUT_FORMATTING] — How: assert FormatCreatedArchiveWithStats and Print*WithStats include size placeholders and basic methods remain compatible.
 
 PROCEDURE TEST_FILE_STATS_AND_COMPAT():
+  # [IMPL-TEST_COVERAGE] — Layer B procedure token link
+Contract:
+INPUT: context for TEST_FILE_STATS_AND_COMPAT
+OUTPUT: result of TEST_FILE_STATS_AND_COMPAT
+PRE: true
+POST: true
+EFFECTS: pure
   FormatCreatedArchiveWithStats includes path and human size
   PrintCreatedArchiveWithStats writes expected stdout
   FormatCreatedArchive basic path still works alongside stats methods
@@ -79,6 +115,13 @@ STEP T001: Assert DefaultOutputFormatter, DefaultTemplateFormatter, and DefaultP
 - [IMPL-TEST_COVERAGE] [ARCH-TESTING_STRATEGY] [REQ-CODE_QUALITY] — How: assert DefaultOutputFormatter, DefaultTemplateFormatter, and DefaultPatternExtractor satisfy their interfaces.
 
 PROCEDURE TEST_INTERFACE_COMPLIANCE():
+  # [IMPL-TEST_COVERAGE] — Layer B procedure token link
+Contract:
+INPUT: context for TEST_INTERFACE_COMPLIANCE
+OUTPUT: result of TEST_INTERFACE_COMPLIANCE
+PRE: true
+POST: true
+EFFECTS: pure
   ASSERT types implement OutputFormatterInterface
   ASSERT types implement TemplateFormatterInterface
   ASSERT types implement PatternExtractorInterface

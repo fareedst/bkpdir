@@ -1,0 +1,191 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "NEW_CONTEXTUAL_OPERATION",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CONTEXT_SUPPORT",
+        "IMPL-CONTEXT_OPS",
+        "REQ-CONTEXT_SUPPORT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_CANCELLED",
+      "line": 35,
+      "token_refs": [
+        "ARCH-CONTEXT_SUPPORT",
+        "IMPL-CONTEXT_OPS",
+        "REQ-CONTEXT_SUPPORT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CHECK_CONTEXT_AND_CLEANUP",
+      "line": 55,
+      "token_refs": [
+        "ARCH-CONTEXT_SUPPORT",
+        "IMPL-CONTEXT_OPS",
+        "REQ-CONTEXT_SUPPORT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WITH_RESOURCE_MANAGER",
+      "line": 76,
+      "token_refs": [
+        "ARCH-CONTEXT_SUPPORT",
+        "IMPL-CONTEXT_OPS",
+        "REQ-CONTEXT_SUPPORT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WITH_OPERATION_ID",
+      "line": 94,
+      "token_refs": [
+        "ARCH-CONTEXT_SUPPORT",
+        "IMPL-CONTEXT_OPS",
+        "REQ-CONTEXT_SUPPORT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_OPERATION_ID",
+      "line": 111,
+      "token_refs": [
+        "IMPL-CONTEXT_OPS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "NEW_CONTEXTUAL_OPERATION",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_CANCELLED",
+      "branch_lines": [
+        45
+      ],
+      "failure_modes": [
+        "- [IMPL-CONTEXT_OPS] [ARCH-CONTEXT_SUPPORT] [REQ-CONTEXT_SUPPORT] — How: when ctx.Err() is set, run CleanupWithPanicRecovery and combine cleanup failure with context error."
+      ],
+      "references": []
+    },
+    {
+      "block": "CHECK_CONTEXT_AND_CLEANUP",
+      "branch_lines": [
+        63,
+        65
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WITH_RESOURCE_MANAGER",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WITH_OPERATION_ID",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_OPERATION_ID",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 31
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 33
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 44
+    }
+  ],
+  "leakage": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 31,
+      "pattern": "sql_select"
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 33,
+      "pattern": "sql_select"
+    },
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 44,
+      "pattern": "sql_select"
+    }
+  ]
+}

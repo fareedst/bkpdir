@@ -1,0 +1,301 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "NEW_OUTPUT_COLLECTOR",
+      "line": 18,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ADD_STDOUT",
+      "line": 35,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ADD_STDERR",
+      "line": 52,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_MESSAGES",
+      "line": 69,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FLUSH_ALL",
+      "line": 87,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FLUSH_STDOUT",
+      "line": 105,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FLUSH_STDERR",
+      "line": 122,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLEAR",
+      "line": 139,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "IS_DELAYED_MODE",
+      "line": 156,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_COLLECTOR",
+      "line": 173,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "SET_COLLECTOR",
+      "line": 190,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PRINT_ROUTING",
+      "line": 208,
+      "token_refs": [
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-DELAYED_OUTPUT",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEW_OUTPUT_FORMATTER_WITH_COLLECTOR",
+      "line": 225,
+      "token_refs": [
+        "IMPL-DELAYED_OUTPUT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "NEW_OUTPUT_COLLECTOR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ADD_STDOUT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ADD_STDERR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_MESSAGES",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FLUSH_ALL",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FLUSH_STDOUT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FLUSH_STDERR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CLEAR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "IS_DELAYED_MODE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_COLLECTOR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "SET_COLLECTOR",
+      "branch_lines": [
+        203,
+        204
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PRINT_ROUTING",
+      "branch_lines": [
+        216
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEW_OUTPUT_FORMATTER_WITH_COLLECTOR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

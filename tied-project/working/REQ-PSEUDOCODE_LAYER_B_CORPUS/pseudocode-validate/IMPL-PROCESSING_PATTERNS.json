@@ -1,0 +1,258 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "PIPELINE_EXECUTE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXECUTE_STAGE_WITH_RETRIES",
+      "line": 43,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE",
+        "TERMINATION"
+      ]
+    },
+    {
+      "name": "CONCURRENT_PROCESS",
+      "line": 67,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "WORKER_RUN",
+      "line": 89,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PROCESS_TASK",
+      "line": 111,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NAMING_GENERATE_NAME",
+      "line": 131,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NAMING_PARSE_NAME",
+      "line": 150,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEW_PIPELINE",
+      "line": 172,
+      "token_refs": [
+        "ARCH-PROCESSING_PATTERNS",
+        "IMPL-PROCESSING_PATTERNS",
+        "REQ-PERFORMANCE"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEW_CONCURRENT_PROCESSOR",
+      "line": 189,
+      "token_refs": [
+        "IMPL-PROCESSING_PATTERNS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "PIPELINE_EXECUTE",
+      "branch_lines": [
+        28,
+        29,
+        31
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXECUTE_STAGE_WITH_RETRIES",
+      "branch_lines": [
+        54,
+        56,
+        57
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "RETURN failure result with last error"
+      ],
+      "references": []
+    },
+    {
+      "block": "CONCURRENT_PROCESS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "WORKER_RUN",
+      "branch_lines": [
+        100
+      ],
+      "failure_modes": [
+        "STEP T001: Check cancellation then invoke processFunc and record TaskResult with duration and error state",
+        "- [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: check cancellation then invoke processFunc and record TaskResult with duration and error state."
+      ],
+      "references": []
+    },
+    {
+      "block": "PROCESS_TASK",
+      "branch_lines": [],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "RETURN TaskResult with duration, success flag, and error"
+      ],
+      "references": []
+    },
+    {
+      "block": "NAMING_GENERATE_NAME",
+      "branch_lines": [],
+      "failure_modes": [
+        "STEP T001: Match filename against registered regex and return NameComponents or unsupported-pattern error",
+        "- [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: match filename against registered regex and return NameComponents or unsupported-pattern error."
+      ],
+      "references": []
+    },
+    {
+      "block": "NAMING_PARSE_NAME",
+      "branch_lines": [
+        160,
+        162
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF regex missing THEN ERROR unsupported pattern",
+        "IF no matches THEN ERROR name does not match pattern"
+      ],
+      "references": []
+    },
+    {
+      "block": "NEW_PIPELINE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEW_CONCURRENT_PROCESSOR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 99
+    }
+  ],
+  "leakage": [
+    {
+      "severity": "warning",
+      "code": "HOST_SYNTAX_LEAK",
+      "message": "Host syntax leakage (sql_select) in pseudo-code; use DATA example or // leakage-ok: comment.",
+      "line": 99,
+      "pattern": "sql_select"
+    }
+  ]
+}

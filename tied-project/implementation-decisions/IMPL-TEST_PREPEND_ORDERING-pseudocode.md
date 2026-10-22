@@ -16,6 +16,13 @@ STEP T001: verify ^prepend places source exclude_patterns before destination pat
 - [IMPL-TEST_PREPEND_ORDERING] [ARCH-TESTING_STRATEGY] [REQ-CONFIGURATION] [REQ-CFG_005] [REQ-CFG_001] — How: verify ^prepend places source exclude_patterns before destination patterns in inheritance and sequential chains preserving order.
 
 PROCEDURE TestPrependStrategyOrdering():
+  # [IMPL-TEST_PREPEND_ORDERING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTPREPENDSTRATEGYORDERING
+OUTPUT: result of TESTPREPENDSTRATEGYORDERING
+PRE: true
+POST: true
+EFFECTS: pure
   subtest inheritance parent then child prepend
   subtest sequential multiple prepend operations
   ASSERT source segments appear before earlier destination segments

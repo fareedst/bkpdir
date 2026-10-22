@@ -16,6 +16,13 @@ STEP T001: Execute pipeline stages sequentially with context cancellation, retri
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: execute pipeline stages sequentially with context cancellation, retries, and progress tracking.
 
 PROCEDURE PIPELINE_EXECUTE(ctx, input):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: ctx, input
+OUTPUT: result of PIPELINE_EXECUTE
+PRE: true
+POST: true
+EFFECTS: pure
   initialize_execution(startTime)
   FOR EACH stage IN stages:
     IF ctx cancelled THEN RETURN handle_cancellation
@@ -34,6 +41,15 @@ STEP T001: Retry each stage up to max_retries with delay between failures until 
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: retry each stage up to max_retries with delay between failures until success or cancellation.
 
 PROCEDURE EXECUTE_STAGE_WITH_RETRIES(ctx, stage, input, output):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: ctx, stage, input, output
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrExecuteStageWithRetries
+TERMINATION: bounded by configured max retries
   FOR attempt = 0 TO max_retries:
     IF ctx cancelled THEN RETURN cancelled result
     err = stage.Execute(ctx, input, output)
@@ -49,6 +65,13 @@ STEP T001: Initialize worker pool, submit items via task channel, collect result
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: initialize worker pool, submit items via task channel, collect results from result channel.
 
 PROCEDURE CONCURRENT_PROCESS(ctx, items):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: ctx, items
+OUTPUT: result of CONCURRENT_PROCESS
+PRE: true
+POST: true
+EFFECTS: pure
   initialize_processing(ctx, len(items))
   start_workers()
   submit_tasks(items)
@@ -64,6 +87,14 @@ STEP T001: Worker loop reads tasks from queue until closed or context cancelled,
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: worker loop reads tasks from queue until closed or context cancelled, dispatching each to processTask.
 
 PROCEDURE WORKER_RUN():
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: context for WORKER_RUN
+OUTPUT: result of WORKER_RUN
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrWorkerRun
   LOOP:
     SELECT ctx.Done OR task FROM task_queue:
       IF queue closed OR cancelled THEN RETURN
@@ -78,6 +109,14 @@ STEP T001: Check cancellation then invoke processFunc and record TaskResult with
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: check cancellation then invoke processFunc and record TaskResult with duration and error state.
 
 PROCEDURE PROCESS_TASK(task):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: task
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrProcessTask
   CHECK context cancellation
   output, err = processFunc(task.context, task.item)
   RETURN TaskResult with duration, success flag, and error
@@ -90,6 +129,14 @@ STEP T001: Assemble archive or backup name from prefix, timestamp, git info, inc
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: assemble archive or backup name from prefix, timestamp, git info, incremental marker, and note.
 
 PROCEDURE NAMING_GENERATE_NAME(template):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: template
+OUTPUT: result of NAMING_GENERATE_NAME
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrNamingGenerateName
   BUILD parts from prefix, timestamp, git branch/hash/dirty, incremental base, note
   RETURN join(parts, "-")
 
@@ -101,6 +148,14 @@ STEP T001: Match filename against registered regex and return NameComponents or 
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: match filename against registered regex and return NameComponents or unsupported-pattern error.
 
 PROCEDURE NAMING_PARSE_NAME(name, pattern):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: name, pattern
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrNamingParseName
   regex = patterns[pattern]
   IF regex missing THEN ERROR unsupported pattern
   matches = regex.FindStringSubmatch(name)
@@ -115,6 +170,13 @@ STEP T001: Construct Pipeline with stop_on_error, max_retries=3, and retry_delay
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: construct Pipeline with stop_on_error, max_retries=3, and retry_delay=1s defaults.
 
 PROCEDURE NEW_PIPELINE(name):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: name
+OUTPUT: result of NEW_PIPELINE
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN Pipeline(name, stop_on_error=true, max_stage_retries=3, retry_delay=1s)
 
 ## NEW_CONCURRENT_PROCESSOR
@@ -125,5 +187,12 @@ STEP T001: Construct ConcurrentProcessor with NumCPU workers and buffered task/r
 - [IMPL-PROCESSING_PATTERNS] [ARCH-PROCESSING_PATTERNS] [REQ-PERFORMANCE] — How: construct ConcurrentProcessor with NumCPU workers and buffered task/result channels.
 
 PROCEDURE NEW_CONCURRENT_PROCESSOR(processFunc):
+  # [IMPL-PROCESSING_PATTERNS] — Layer B procedure token link
+Contract:
+INPUT: processFunc
+OUTPUT: result of NEW_CONCURRENT_PROCESSOR
+PRE: true
+POST: true
+EFFECTS: pure
   worker_count = runtime.NumCPU()
   RETURN ConcurrentProcessor(worker_count, batch_size=100, buffered channels)

@@ -1,0 +1,64 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "CREATE_INCREMENTAL_ARCHIVE",
+      "line": 19,
+      "token_refs": [
+        "ARCH-INCREMENTAL_DUPLICATE_PREVENTION",
+        "IMPL-DIFF_COMMAND",
+        "IMPL-INCREMENTAL_DUPLICATE_PREVENTION",
+        "REQ-DIFF_COMMAND",
+        "REQ-INCREMENTAL_DUPLICATE_PREVENTION",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "PRINT_INCREMENTAL_SKIPPED_NO_CHANGES",
+      "line": 46,
+      "token_refs": [
+        "IMPL-INCREMENTAL_DUPLICATE_PREVENTION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "CREATE_INCREMENTAL_ARCHIVE",
+      "branch_lines": [
+        29,
+        30,
+        32,
+        34
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "PRINT_INCREMENTAL_SKIPPED_NO_CHANGES",
+      "branch_lines": [
+        55
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

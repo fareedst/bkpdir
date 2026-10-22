@@ -16,6 +16,13 @@ STEP T001: Format Message alone or Message WITH underlying Err when present
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: format Message alone or Message WITH underlying Err when present.
 
 PROCEDURE ARCHIVEERROR_ERROR(e):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: e
+OUTPUT: result of ARCHIVEERROR_ERROR
+PRE: true
+POST: true
+EFFECTS: pure
   IF e.Err != nil THEN RETURN FORMAT(message, underlying)
   RETURN e.Message
 
@@ -27,6 +34,14 @@ STEP T001: Return wrapped Err for errors.Is/As chains
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: return wrapped Err for errors.Is/As chains.
 
 PROCEDURE ARCHIVEERROR_UNWRAP(e):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: e
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrArchiveerrorUnwrap
   IF e == nil THEN
     RETURN nil
   END IF
@@ -40,6 +55,13 @@ STEP T001: Mirror ArchiveError Error formatting for backup operations
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: mirror ArchiveError Error formatting for backup operations.
 
 PROCEDURE BACKUPERROR_ERROR(e):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: e
+OUTPUT: result of BACKUPERROR_ERROR
+PRE: true
+POST: true
+EFFECTS: pure
   IF e.Err != nil THEN RETURN FORMAT(message, underlying)
   RETURN e.Message
 
@@ -51,6 +73,13 @@ STEP T001: Construct ArchiveError with message and status code only
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct ArchiveError with message and status code only.
 
 PROCEDURE NEWARCHIVEERROR(message, statusCode):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: message, statusCode
+OUTPUT: result of NEWARCHIVEERROR
+PRE: true
+POST: true
+EFFECTS: pure
   DECLARE result as ArchiveError
   SET result.Message = message
   SET result.StatusCode = statusCode
@@ -65,6 +94,13 @@ STEP T001: Construct ArchiveError with message, status code, and underlying Err
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct ArchiveError with message, status code, and underlying Err.
 
 PROCEDURE NEWARCHIVEERRORWITHCAUSE(message, statusCode, err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: message, statusCode, err
+OUTPUT: result of NEWARCHIVEERRORWITHCAUSE
+PRE: true
+POST: true
+EFFECTS: pure
   DECLARE result as ArchiveError
   SET result.Message = message
   SET result.StatusCode = statusCode
@@ -80,6 +116,13 @@ STEP T001: Construct ArchiveError with message, status, operation, path, and opt
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct ArchiveError with message, status, operation, path, and optional Err.
 
 PROCEDURE NEWARCHIVEERRORWITHCONTEXT(message, statusCode, operation, path, err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: message, statusCode, operation, path, err
+OUTPUT: result of NEWARCHIVEERRORWITHCONTEXT
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN ArchiveError{Message, StatusCode, Operation: operation, Path: path, Err: err}
 
 ## NEWBACKUPERROR
@@ -90,6 +133,13 @@ STEP T001: Construct BackupError with message and status code only
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct BackupError with message and status code only.
 
 PROCEDURE NEWBACKUPERROR(message, statusCode):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: message, statusCode
+OUTPUT: result of NEWBACKUPERROR
+PRE: true
+POST: true
+EFFECTS: pure
   DECLARE result as BackupError
   SET result.Message = message
   SET result.StatusCode = statusCode
@@ -104,6 +154,13 @@ STEP T001: Construct BackupError with message, status code, and underlying Err
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct BackupError with message, status code, and underlying Err.
 
 PROCEDURE NEWBACKUPERRORWITHCAUSE(message, statusCode, err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: message, statusCode, err
+OUTPUT: result of NEWBACKUPERRORWITHCAUSE
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN BackupError{Message, StatusCode, Err: err}
 
 ## NEWBACKUPERRORWITHCONTEXT
@@ -114,6 +171,14 @@ STEP T001: Construct BackupError with message, status, operation, path, and opti
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: construct BackupError with message, status, operation, path, and optional Err.
 
 PROCEDURE NEWBACKUPERRORWITHCONTEXT(message, statusCode, operation, path, err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: message, statusCode, operation, path, err
+OUTPUT: result of NEWBACKUPERRORWITHCONTEXT
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrBackupWithContext
   RETURN BackupError{Message, StatusCode, Operation: operation, Path: path, Err: err}
 
 ## ISDISKFULLERROR
@@ -124,6 +189,14 @@ STEP T001: Match disk-space substrings in error text OR path error with OS no-sp
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match disk-space substrings in error text OR path error with OS no-space/quota/large-file codes.
 
 PROCEDURE ISDISKFULLERROR(err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: err
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrIsdiskfullerror
   IF err == nil THEN RETURN false
   lowered = ToLower(err.Error())
   RETURN matches disk-full patterns OR pathErr has ENOSPC/EDQUOT/EFBIG
@@ -136,6 +209,14 @@ STEP T001: Match permission-denied substrings OR path error with EACCES/EPERM
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match permission-denied substrings OR path error with EACCES/EPERM.
 
 PROCEDURE ISPERMISSIONERROR(err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: err
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrIspermissionerror
   IF err == nil THEN RETURN false
   lowered = ToLower(err.Error())
   RETURN matches permission patterns OR pathErr has EACCES/EPERM
@@ -148,6 +229,14 @@ STEP T001: Match directory-not-found substrings OR path error with ENOENT
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match directory-not-found substrings OR path error with ENOENT.
 
 PROCEDURE ISDIRECTORYNOTFOUNDERROR(err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: err
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrIsdirectorynotfounderror
   IF err == nil THEN RETURN false
   lowered = ToLower(err.Error())
   RETURN matches not-found patterns OR pathErr has ENOENT
@@ -160,6 +249,14 @@ STEP T001: Route ApplicationError or classified errors to formatter and configur
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: route ApplicationError or classified errors to formatter and configured status codes.
 
 PROCEDURE HANDLEERROR(err, cfg, formatter):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: err, cfg, formatter
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrHandleerror
   IF err == nil THEN RETURN 0
   IF ApplicationError THEN RETURN HandleApplicationError
   IF ISDISKFULLERROR THEN print disk full; RETURN status disk_full OR 1
@@ -176,6 +273,14 @@ STEP T001: Map error to ErrorCategory via disk, permission, filesystem, network 
 - [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: map error to ErrorCategory via disk, permission, filesystem, network detectors.
 
 PROCEDURE CLASSIFYERROR(err):
+  # [IMPL-STRUCTURED_ERRORS] — Layer B procedure token link
+Contract:
+INPUT: err
+OUTPUT: result of CLASSIFYERROR
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrClassifyError
   IF err == nil THEN RETURN Unknown
   IF ISDISKFULLERROR THEN RETURN DiskSpace
   IF ISPERMISSIONERROR THEN RETURN Permission

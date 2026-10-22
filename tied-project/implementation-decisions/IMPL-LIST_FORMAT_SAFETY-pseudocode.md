@@ -16,6 +16,13 @@ STEP T001: Route template placeholders before printf and return plain format whe
 - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: route template placeholders before printf and return plain format when no verbs.
 
 PROCEDURE FORMAT_LIST_ARCHIVE(path, creationTime):
+  # [IMPL-LIST_FORMAT_SAFETY] — Layer B procedure token link
+Contract:
+INPUT: path, creationTime
+OUTPUT: result of FORMAT_LIST_ARCHIVE
+PRE: true
+POST: true
+EFFECTS: pure
   formatStr = cfg.FormatListArchive
   IF CONTAINS(formatStr, "#{") THEN
     data = BUILD_DATA_MAP(path, creationTime)
@@ -40,6 +47,13 @@ STEP T001: Mirror FORMAT_LIST_ARCHIVE guard pattern using cfg.FormatListBackup
 - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: mirror FORMAT_LIST_ARCHIVE guard pattern using cfg.FormatListBackup.
 
 PROCEDURE FORMAT_LIST_BACKUP(path, creationTime):
+  # [IMPL-LIST_FORMAT_SAFETY] — Layer B procedure token link
+Contract:
+INPUT: path, creationTime
+OUTPUT: result of FORMAT_LIST_BACKUP
+PRE: true
+POST: true
+EFFECTS: pure
   formatStr = cfg.FormatListBackup
   IF CONTAINS(formatStr, "#{") THEN
     data = BUILD_DATA_MAP(path, creationTime)
@@ -70,6 +84,14 @@ STEP T001: Priority-based format selection with extraction data and guarded prin
 - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: priority-based format selection with extraction data and guarded printf.
 
 PROCEDURE FORMAT_LIST_ARCHIVE_WITH_EXTRACTION(archivePath, creationTime):
+  # [IMPL-LIST_FORMAT_SAFETY] — Layer B procedure token link
+Contract:
+INPUT: archivePath, creationTime
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrFormatListArchiveWithExtraction
   data = EXTRACT_ARCHIVE_FILENAME_DATA(archivePath)
   data["path"] = archivePath
   data["creation_time"] = creationTime
@@ -97,6 +119,13 @@ STEP T001: Simplified adapter path always gathers stats and selects format by pr
 - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: simplified adapter path always gathers stats and selects format by priority.
 
 PROCEDURE FORMAT_LIST_ARCHIVE_SIMPLE(cfg, formatter, archivePath, creationTime):
+  # [IMPL-LIST_FORMAT_SAFETY] — Layer B procedure token link
+Contract:
+INPUT: cfg, formatter, archivePath, creationTime
+OUTPUT: result of FORMAT_LIST_ARCHIVE_SIMPLE
+PRE: true
+POST: true
+EFFECTS: pure
   data = MAP with path=archivePath and creation_time=creationTime
   statInfo, err = GATHER_FILE_STAT_INFO(archivePath)
   IF err == nil THEN
@@ -121,6 +150,13 @@ STEP T001: Route FormatTypeList through template detection before printf guards
 - [IMPL-LIST_FORMAT_SAFETY] [ARCH-OUTPUT_FORMATTING] [REQ-OUT_002] — How: guard list FormatWithContext branch with template detection before printf.
 
 PROCEDURE FORMAT_WITH_CONTEXT(ctx):
+  # [IMPL-LIST_FORMAT_SAFETY] — Layer B procedure token link
+Contract:
+INPUT: ctx
+OUTPUT: result of FORMAT_WITH_CONTEXT
+PRE: true
+POST: true
+EFFECTS: pure
   SWITCH ctx.FormatType
   CASE FormatTypeList:
     APPLY template and printf guards before formatting list output

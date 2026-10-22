@@ -1,56 +1,20 @@
 {
   "provenance": {
-    "adapter": "go-test",
-    "adapterDiagnostics": [],
     "blockScope": [
-      "ATOMICCOPY",
-      "ATOMICWRITEFILE",
-      "ATOMICWRITER_CLEANUP",
-      "ATOMICWRITER_CLOSE",
-      "ATOMICWRITER_COMMIT",
-      "ATOMICWRITER_ROLLBACK",
-      "ATOMICWRITER_WRITE",
-      "ATOMICWRITER_WRITESTRING",
-      "ATOMICWRITESTRING",
-      "NEWATOMICWRITER",
-      "RESOURCE_ATOMICWRITEFILE",
-      "RESOURCE_ATOMICWRITEFILEWITHCONTEXT"
+      "W0_LAYER_B_CLOSEOUT"
     ],
     "command": "tied_adversarial_inquiry_run",
-    "manifest": {
-      "ignoreRules": [],
-      "languages": [
-        "go"
-      ],
-      "projectRoot": "/Users/fareed/Documents/dev/go/bkpdir",
-      "testClassifiers": [
-        "go-test"
-      ],
-      "tiedBasePath": "/Users/fareed/Documents/dev/go/bkpdir/tied-project",
-      "version": "mode-b-fixture"
-    },
-    "mode": "project",
+    "mode": "close_out_structural",
     "phase": "close_out",
-    "primaryBlock": "ATOMICCOPY",
+    "primaryBlock": "W0_LAYER_B_CLOSEOUT",
     "proofBoundaries": [
       "traceability_structure",
-      "semantic_fidelity"
+      "tooling_automation",
+      "sidecar_contract_precision"
     ],
     "request_token": "REQ-PSEUDOCODE_LAYER_B_CORPUS",
-    "run_id": "layer-b-corpus-20261021-close",
+    "run_id": "layer-b-corpus-20261021-close-v2",
     "scopeMode": "criterion",
-    "sourceRevisions": {
-      "architecture": "6bae58d93e7612da",
-      "architectureDetail": "b0b8929f7f1c4177",
-      "implementation": "6e43176fde9e3226",
-      "implementationDetail": "f189c73c1437fea5",
-      "implementationPseudocode": "2410f42af7d74bd3",
-      "production": "2841966fa269bbbe",
-      "requirementDetail": "b995c41ddb870806",
-      "requirements": "51e7885ed8a549bb",
-      "semanticTokens": "f6ef29c350595a5b",
-      "test": "0f08868376ea9653"
-    },
     "tool_version": "1.0.0"
   },
   "schemaVersion": "adversarial-inquiry-provenance.v1"

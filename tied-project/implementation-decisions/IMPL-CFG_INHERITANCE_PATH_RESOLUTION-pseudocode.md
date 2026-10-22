@@ -16,6 +16,14 @@ STEP T001: EXPAND tilde to home and environment variables in path
 - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: expand tilde-prefixed paths to home directory and expand environment variables in path text.
 
 PROCEDURE EXPAND_PATH(path):
+  # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrExpandPath
   IF path empty THEN ERROR
   IF path starts with "~/ THEN JOIN home directory with remainder
   RETURN EXPAND_ENV(path)
@@ -28,6 +36,13 @@ STEP T001: EXPAND path then return absolute or join with base directory
 - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: expand path then return absolute clean path or join with base directory of parent config file.
 
 PROCEDURE RESOLVE_PATH(path, basePath):
+  # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] — Layer B procedure token link
+Contract:
+INPUT: path, basePath
+OUTPUT: result of RESOLVE_PATH
+PRE: true
+POST: true
+EFFECTS: pure
   expanded = EXPAND_PATH(path)
   IF expanded is absolute THEN RETURN CLEAN(expanded)
   IF basePath empty THEN RETURN expanded
@@ -43,6 +58,14 @@ STEP T002: RECURSE inherit parents then APPEND file to chain
 - [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: resolve path, detect circular visit, load inherit list, recurse parents with parent directory as base, append file to chain.
 
 PROCEDURE BUILD_CHAIN_RECURSIVE(configPath, basePath, chain):
+  # [IMPL-CFG_INHERITANCE_PATH_RESOLUTION] — Layer B procedure token link
+Contract:
+INPUT: configPath, basePath, chain
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrBuildChainRecursive
   resolved = RESOLVE_PATH(configPath, basePath)
   IF resolved in chain.visited THEN ERROR circular dependency
   MARK visited, VALIDATE file exists

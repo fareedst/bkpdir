@@ -1,0 +1,96 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "EXPAND_PATH",
+      "line": 18,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-CFG_INHERITANCE_PATH_RESOLUTION",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "RESOLVE_PATH",
+      "line": 38,
+      "token_refs": [
+        "ARCH-CFG_005",
+        "IMPL-CFG_INHERITANCE_PATH_RESOLUTION",
+        "REQ-CFG_005",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BUILD_CHAIN_RECURSIVE",
+      "line": 60,
+      "token_refs": [
+        "IMPL-CFG_INHERITANCE_PATH_RESOLUTION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "EXPAND_PATH",
+      "branch_lines": [
+        27,
+        28
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF path empty THEN ERROR"
+      ],
+      "references": []
+    },
+    {
+      "block": "RESOLVE_PATH",
+      "branch_lines": [
+        47,
+        48,
+        49
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "BUILD_CHAIN_RECURSIVE",
+      "branch_lines": [
+        70
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF resolved in chain.visited THEN ERROR circular dependency"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

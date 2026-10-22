@@ -620,7 +620,7 @@ func CreateIncrementalArchive(cfg *Config, note string, dryRun bool) error {
 	return createIncrementalArchive(config)
 }
 
-// - [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: reconstruct archive state, CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
+// - [IMPL-INCREMENTAL_DUPLICATE_PREVENTION] [IMPL-DIFF_COMMAND] [ARCH-INCREMENTAL_DUPLICATE_PREVENTION] [ARCH-DIFF_COMMAND] [REQ-DIFF_COMMAND] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] [REQ-OUTPUT_FORMATTING] — How: ReconstructArchiveState (full + incremental chain), CalculateDiff against cwd, skip creation and print skip message when diff has no added/modified/deleted entries.
 func createIncrementalArchive(config IncrementalArchiveConfig) error {
 	cwd, err := os.Getwd()
 	if err != nil {

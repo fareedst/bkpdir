@@ -1,20 +1,19 @@
-# traceable-commit evidence — REQ-PSEUDOCODE_LAYER_B_CORPUS
+# Traceable commit — W1 close-out
 
-**Date:** 2026-10-21
+**Date:** 2026-10-21  
+**Wave:** W1 (38 tokens)
 
-## Vocab VALIDATE
+## Gates
 
-Immature-client deferral: slice reuses existing bkpdir domain vocab; no new glossary terms introduced in this wave beyond formal spec / Layer B tooling labels already in TIED tokens.
+- `run-close-out-gates.mjs --envelope-blocking --sync-dispositions --reconcile` → `merged_decision.allowed: true`
+- Envelope: `request-evidence-envelope.v1.json` → `blocking_gap_count: 0`, `advisory_gap_count: 5`
+- Gate receipt (hydrated): `gates/close_out-2026-10-21T22-30-45-757Z.json` (inquiry run_id `layer-b-corpus-20261021-close-v2`)
 
-## Gate refs
+## Hygiene
 
-- Envelope: `tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json`
-- Close-out envelope pass: `evidence/close-out-envelope-pass.md`
-- Hygiene: `evidence/git-hygiene-receipt-2026-10-21.md`
-- W0 verification: `evidence/w0-verification-gate.md`
+- `evidence/git-hygiene-receipt-2026-10-21-w1.md` (preview only)
 
-## Tests (pre-commit)
+## Verification
 
-- `go test ./test/specconformance/... ./internal/specparse/...`
-- `python3 scripts/test_run_pseudocode_layer_b_batch.py`
-- `python3 scripts/test_audit_corpus_layer_b_gaps.py`
+- `evidence/w1-verification-gate.md`
+- `evidence/verification-evidence-manifest-w1.v1.json`

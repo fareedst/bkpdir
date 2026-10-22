@@ -16,6 +16,13 @@ STEP T001: DELEGATE to fileops.CreateDirectorySnapshot with exclude patterns
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: delegate to fileops.CreateDirectorySnapshot with exclusion patterns applied during walk.
 
 PROCEDURE CREATE_DIRECTORY_SNAPSHOT(root, excludePatterns):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: root, excludePatterns
+OUTPUT: result of CREATE_DIRECTORY_SNAPSHOT
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN fileops.CreateDirectorySnapshot(root, excludePatterns)
 
 ## FILEOPS_CREATE_DIRECTORY_SNAPSHOT
@@ -32,6 +39,14 @@ EFFECTS: Symlink-to-directory entries no longer fail diff/inc snapshot creation
 FAILURE_MODES: unreadable path or broken Readlink propagate walk error
 
 PROCEDURE FILEOPS_CREATE_DIRECTORY_SNAPSHOT(root, excludePatterns):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: root, excludePatterns
+OUTPUT: result of FILEOPS_CREATE_DIRECTORY_SNAPSHOT
+PRE: root path exists and is readable
+POST: DirectorySnapshot lists RelativePath, Size, ModTime, IsDir, Hash for every non-excluded walk entry
+EFFECTS: Symlink-to-directory entries no longer fail diff/inc snapshot creation
+FAILURE_MODES: unreadable path or broken Readlink propagate walk error
   FOR EACH path IN Walk(root):
     IF excluded THEN SkipDir or CONTINUE
     IF IsDir THEN record metadata only
@@ -48,6 +63,13 @@ STEP T001: DELEGATE to fileops.CreateArchiveSnapshot for zip members
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: delegate to fileops.CreateArchiveSnapshot to enumerate zip member files with metadata.
 
 PROCEDURE CREATE_ARCHIVE_SNAPSHOT(archivePath):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: archivePath
+OUTPUT: result of CREATE_ARCHIVE_SNAPSHOT
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN fileops.CreateArchiveSnapshot(archivePath)
 
 ## COMPARE_SNAPSHOTS
@@ -58,6 +80,13 @@ STEP T001: DELEGATE equality check to fileops.CompareSnapshots
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: delegate equality check of two DirectorySnapshot values to fileops.CompareSnapshots.
 
 PROCEDURE COMPARE_SNAPSHOTS(a, b):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: a, b
+OUTPUT: result of COMPARE_SNAPSHOTS
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN fileops.CompareSnapshots(a, b)
 
 ## IS_DIRECTORY_IDENTICAL_TO_ARCHIVE
@@ -69,6 +98,13 @@ STEP T002: COMPARE snapshots for structural equality
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-PERFORMANCE] — How: build dir and archive snapshots with exclusions and compare for full structural equality.
 
 PROCEDURE IS_DIRECTORY_IDENTICAL_TO_ARCHIVE(dir, archive, excludePatterns):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: dir, archive, excludePatterns
+OUTPUT: result of IS_DIRECTORY_IDENTICAL_TO_ARCHIVE
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN fileops.IsDirectoryIdenticalToArchive(dir, archive, excludePatterns)
 
 ## FIND_MOST_RECENT_ARCHIVE
@@ -80,6 +116,13 @@ STEP T002: SORT by name AND return last entry path
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: list archives, keep full archives only, sort by name, return path of last entry.
 
 PROCEDURE FIND_MOST_RECENT_ARCHIVE(archiveDir):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: archiveDir
+OUTPUT: result of FIND_MOST_RECENT_ARCHIVE
+PRE: true
+POST: true
+EFFECTS: pure
   fullArchives = FILTER NOT incremental; SORT Name; RETURN last.Path
 
 ## CHECK_FOR_IDENTICAL_ARCHIVE
@@ -91,6 +134,13 @@ STEP T002: IS_DIRECTORY_IDENTICAL_TO_ARCHIVE against cwd
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: FindMostRecentArchive then IsDirectoryIdenticalToArchive against cwd.
 
 PROCEDURE CHECK_FOR_IDENTICAL_ARCHIVE(dir, archiveDir, excludePatterns):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: dir, archiveDir, excludePatterns
+OUTPUT: result of CHECK_FOR_IDENTICAL_ARCHIVE
+PRE: true
+POST: true
+EFFECTS: pure
   recent = FIND_MOST_RECENT_ARCHIVE
   IF none: RETURN false
   RETURN IS_DIRECTORY_IDENTICAL_TO_ARCHIVE(dir, recent, excludePatterns)
@@ -104,6 +154,13 @@ STEP T002: EMIT header AND list each RelativePath and Size
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: build human-readable directory listing from CreateDirectorySnapshot for diagnostics.
 
 PROCEDURE GET_DIRECTORY_TREE_SUMMARY(dirPath, excludePatterns):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: dirPath, excludePatterns
+OUTPUT: result of GET_DIRECTORY_TREE_SUMMARY
+PRE: true
+POST: true
+EFFECTS: pure
   snapshot = CREATE_DIRECTORY_SNAPSHOT(dirPath, excludePatterns)
   EMIT header with path and file count; LIST each RelativePath and Size
 
@@ -116,5 +173,12 @@ STEP T002: EMIT header AND list each RelativePath and Size
 - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] — How: build human-readable file listing from CreateArchiveSnapshot for diagnostics and tests.
 
 PROCEDURE GET_ARCHIVE_TREE_SUMMARY(archivePath):
+  # [IMPL-DIRECTORY_COMPARISON] — Layer B procedure token link
+Contract:
+INPUT: archivePath
+OUTPUT: result of GET_ARCHIVE_TREE_SUMMARY
+PRE: true
+POST: true
+EFFECTS: pure
   snapshot = CREATE_ARCHIVE_SNAPSHOT(archivePath)
   EMIT header with path and file count; LIST each RelativePath and Size

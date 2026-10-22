@@ -16,6 +16,13 @@ STEP T001: STAT path and return true when mode is regular file
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return true only when mode is a regular file.
 
 PROCEDURE IS_FILE(path):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of IS_FILE
+PRE: true
+POST: true
+EFFECTS: pure
   info, err = STAT(path)
   IF err != nil THEN RETURN false
   RETURN info mode is regular file
@@ -28,6 +35,13 @@ STEP T001: STAT path and return true when entry is directory
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return true only when entry is a directory.
 
 PROCEDURE IS_DIRECTORY(path):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of IS_DIRECTORY
+PRE: true
+POST: true
+EFFECTS: pure
   info, err = STAT(path)
   IF err != nil THEN RETURN false
   RETURN info is directory
@@ -40,6 +54,14 @@ STEP T001: STAT path and map errors to not-exist, permission, or generic failure
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: STAT path and return specific errors for not-exist, permission denied, or other access failures.
 
 PROCEDURE VALIDATE_PATH(path):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrValidatePath
   _, err = STAT(path)
   IF err == nil THEN RETURN success
   IF not-exist THEN RETURN error "path does not exist"
@@ -55,6 +77,14 @@ STEP T002: ROUTE file to file backup OR directory to archive OR unsupported exit
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: require path arg, validate accessibility, route file to file backup handler else directory archive else unsupported type exit.
 
 PROCEDURE HANDLE_AUTO_DETECTED_COMMAND(args):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: args
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrHandleAutoDetectedCommand
   IF len(args) == 0 THEN exit "no path provided"
   path = args[0]
   IF VALIDATE_PATH(path) fails THEN exit WITH error
@@ -72,6 +102,14 @@ STEP T003: INVOKE CreateFileBackupEnhanced with dry-run
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: load config from cwd, build formatter, resolve note from global flag or second arg, invoke enhanced file backup with dry-run.
 
 PROCEDURE HANDLE_AUTO_DETECTED_FILE_BACKUP(args):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: args
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrHandleAutoDetectedFileBackup
   ctx = BACKGROUND_CONTEXT
   cwd = GET_WORKING_DIRECTORY
   cfg = LOAD_CONFIG(cwd)
@@ -91,6 +129,14 @@ STEP T003: INVOKE CreateFullArchiveWithContext with dry-run
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: chdir to target directory, load config from dot, resolve note, run full archive with context and restore cwd on exit.
 
 PROCEDURE HANDLE_AUTO_DETECTED_DIRECTORY_ARCHIVE(args):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: args
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrHandleAutoDetectedDirectoryArchive
   ctx = BACKGROUND_CONTEXT
   dirPath = args[0]
   originalDir = GET_WORKING_DIRECTORY
@@ -111,6 +157,13 @@ STEP T002: root Run dispatches config, list, auto-detect, or help
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: build production root with persistent flags and subcommands; root Run dispatches config/list flags or auto-detect when positional args present.
 
 PROCEDURE NEW_ROOT_COMMAND():
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: context for NEW_ROOT_COMMAND
+OUTPUT: result of NEW_ROOT_COMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   root = CREATE root command WITH version template and examples
   REGISTER persistent flags dry-run, config, list, limit, debug
   ADD subcommands create, config, template, full, inc, list, diff, backup, version
@@ -130,6 +183,13 @@ STEP T002: ELSE parse global flags and HANDLE_AUTO_DETECTED_COMMAND
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: bypass Cobra when first token is not known command/flag; parse global dry-run and note from argv; else SetArgs and Execute.
 
 PROCEDURE EXECUTE_WITH_AUTO_DETECTION(rootCmd, args):
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: rootCmd, args
+OUTPUT: result of EXECUTE_WITH_AUTO_DETECTION
+PRE: true
+POST: true
+EFFECTS: pure
   IF len(args) == 0 THEN SetArgs and Execute root; RETURN
   firstArg = args[0]
   IF firstArg in knownCommands OR globalFlags OR starts with "-" THEN SetArgs and Execute; RETURN
@@ -143,6 +203,13 @@ PROCEDURE EXECUTE_WITH_AUTO_DETECTION(rootCmd, args):
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: integration test validates validatePath, isFile, and isDirectory for file, directory, missing, and absolute paths.
 
 PROCEDURE EMBEDDED_MINITEST_PATH_TYPE_DETECTION():
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: context for EMBEDDED_MINITEST_PATH_TYPE_DETECTION
+OUTPUT: result of EMBEDDED_MINITEST_PATH_TYPE_DETECTION
+PRE: true
+POST: true
+EFFECTS: pure
   FOR EACH fixture path EXPECT validatePath and type detection match expectedOp
 
 ## EMBEDDED_MINITEST_BACKWARD_COMPAT
@@ -150,6 +217,13 @@ PROCEDURE EMBEDDED_MINITEST_PATH_TYPE_DETECTION():
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: explicit backup, create, and full subcommands still execute via Cobra without auto-detect path routing.
 
 PROCEDURE EMBEDDED_MINITEST_BACKWARD_COMPAT():
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: context for EMBEDDED_MINITEST_BACKWARD_COMPAT
+OUTPUT: result of EMBEDDED_MINITEST_BACKWARD_COMPAT
+PRE: true
+POST: true
+EFFECTS: pure
   FOR EACH explicit command argv EXECUTE test root AND EXPECT success
 
 ## EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS
@@ -157,6 +231,13 @@ PROCEDURE EMBEDDED_MINITEST_BACKWARD_COMPAT():
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: production newRootCommand registers fixed subcommand set matching composition contract.
 
 PROCEDURE EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS():
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: context for EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS
+OUTPUT: result of EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS
+PRE: true
+POST: true
+EFFECTS: pure
   ASSERT sorted subcommand names equal expected list
 
 ## EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND
@@ -164,6 +245,13 @@ PROCEDURE EMBEDDED_MINITEST_COMPOSITION_SUBCOMMANDS():
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: first token template routes through Cobra Execute and emits help output.
 
 PROCEDURE EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND():
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: context for EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND
+OUTPUT: result of EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND
+PRE: true
+POST: true
+EFFECTS: pure
   executeWithAutoDetection(root, ["template", "--help"]) EXPECT help text
 
 ## EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN
@@ -171,4 +259,11 @@ PROCEDURE EMBEDDED_MINITEST_COMPOSITION_KNOWN_SUBCOMMAND():
 - [IMPL-AUTO_DETECTION] [ARCH-AUTO_DETECTION] [REQ-USABILITY] — How: path-first argv with dry-run exercises auto-detect file backup without writing archives.
 
 PROCEDURE EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN():
+  # [IMPL-AUTO_DETECTION] — Layer B procedure token link
+Contract:
+INPUT: context for EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN
+OUTPUT: result of EMBEDDED_MINITEST_COMPOSITION_PATH_FILE_DRYRUN
+PRE: true
+POST: true
+EFFECTS: pure
   executeWithAutoDetection(root, ["f.txt", "--dry-run"]) EXPECT success in temp workspace

@@ -1,15 +1,23 @@
-# Close-out handoff — REQ-PSEUDOCODE_LAYER_B_CORPUS (W0)
+# Close-out handoff — REQ-PSEUDOCODE_LAYER_B_CORPUS (W1 wave)
 
-**Commit SHA:** _(filled post-commit)_
+**Run ID:** `layer-b-corpus-w1-close` (wave); inquiry pairing `layer-b-corpus-20261021-close-v2`  
+**Commit SHA:** `6c78b95283210e67a946d2d05ed749e0933f348b`  
+**Scope:** W1 — 38 Layer B–enforced sidecars + L0 full-registry green + lead-sync Go comments.
 
 ### Completion signals
 
-- **Machine close-out:** pass — `close_out` merged `allowed: true`; envelope `blocking_gap_count: 0` at `tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json`
-- **Process contract:** pass — verification manifest + W0 gate evidence; reconcile band A
-- **Adherence ledger:** pass — `tied-bundle/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/gates/ledger.jsonl` outcome_verified rows for completed slugs
+- **Machine close-out:** pass — `run-close-out-gates.mjs --envelope-blocking` → `merged_decision.allowed: true`; envelope `blocking_gap_count: 0` at `tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/evidence/request-evidence-envelope.v1.json` (summary `close-out-gates-run-w1.json`).
+- **Process contract:** pass with note — W1 manifest `verification-evidence-manifest-w1.v1.json`; reconcile **band B** (score 88) on `hash_alignment` / stale prior gate receipts vs current Tracker/CITDP hashes; not a machine block under advisory policy.
+- **Adherence ledger:** pass with note — same reconcile findings as W0; ledger rows present; new close_out receipt mirror deferred to post-commit gate re-run if sponsor requires hash-fresh receipts.
+
+### CITDP / tracker
+
+- **Working:** `CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml`, `agent-req-implementation-checklist.yaml` (`operator_evidence.status: w1_slice_close_out`)
+- **Persist on commit:** `tied-project/citdp/CITDP-REQ-PSEUDOCODE_LAYER_B_CORPUS.yaml`
 
 ### Remaining risks
 
-- Full 73/73 L0 TRACE-002 debt outside W0 scope
-- W1–W3 corpus waves not started
-- Advisory inquiry `finding_unresolved` warns (6) under `gate_policy: advisory`
+- **W2–W3** (29 IMPLs) per `layer-b-wave-registry.yaml`
+- W1 contracts largely mechanical (`PRE: true` / `POST: true` where H2 silent); deepen per-IMPL in later waves
+- Envelope **5** advisory gaps (inquiry finding_unresolved under advisory policy)
+- Layer C gate still W0 six tokens unless expanded

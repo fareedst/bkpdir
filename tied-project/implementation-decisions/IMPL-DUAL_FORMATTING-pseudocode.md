@@ -16,6 +16,13 @@ STEP T001: SPRINTF cfg.FormatCreatedArchive WITH path
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: sprintf cfg.FormatCreatedArchive with path for simple archive-created messages.
 
 PROCEDURE FORMAT_CREATED_ARCHIVE_PRINTF(path):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of FORMAT_CREATED_ARCHIVE_PRINTF
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN sprintf(cfg.FormatCreatedArchive, path)
 
 ## FORMAT_LIST_ARCHIVE_DUAL_MODE
@@ -27,6 +34,13 @@ STEP T002: ELIF contains % THEN sprintf WITH path and creationTime
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: if format contains #{ use formatTemplate with GatherFileStatInfo data; elif contains % use sprintf; else return literal format string.
 
 PROCEDURE FORMAT_LIST_ARCHIVE_DUAL_MODE(path, creationTime):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: path, creationTime
+OUTPUT: result of FORMAT_LIST_ARCHIVE_DUAL_MODE
+PRE: true
+POST: true
+EFFECTS: pure
   IF CONTAINS(formatStr, "#{"): BUILD data map WITH stats; RETURN formatTemplate
   IF CONTAINS(formatStr, "%"): RETURN sprintf WITH path and creationTime
   RETURN formatStr unchanged
@@ -39,6 +53,13 @@ STEP T001: SPRINTF cfg.FormatConfigValue WITH name, value, source
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: sprintf cfg.FormatConfigValue with name, value, and source fields.
 
 PROCEDURE FORMAT_CONFIG_VALUE_PRINTF(name, value, source):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: name, value, source
+OUTPUT: result of FORMAT_CONFIG_VALUE_PRINTF
+PRE: true
+POST: true
+EFFECTS: pure
   RETURN sprintf(cfg.FormatConfigValue, name, value, source)
 
 ## FORMAT_PROVIDER_INTERFACES
@@ -50,6 +71,13 @@ STEP T002: DECLARE FormatterInterface AND TemplateFormatterInterface
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: declare FormatProvider, OutputDestination, PatternExtractor, FormatterInterface, and TemplateFormatterInterface contracts for extraction and delayed output.
 
 PROCEDURE FORMAT_PROVIDER_INTERFACES():
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: context for FORMAT_PROVIDER_INTERFACES
+OUTPUT: result of FORMAT_PROVIDER_INTERFACES
+PRE: true
+POST: true
+EFFECTS: pure
   DEFINE interfaces for format/template/pattern operations and IsDelayedMode/SetCollector
 
 ## TEMPLATE_FORMATTER_PLACEHOLDERS
@@ -61,6 +89,13 @@ STEP T002: HANDLE residual %s AND optional Go text/template
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: TemplateFormatter.FormatWithPlaceholders replaces #{key} from data with defaults for missing stat fields.
 
 PROCEDURE TEMPLATE_FORMATTER_PLACEHOLDERS(format, data):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: format, data
+OUTPUT: result of TEMPLATE_FORMATTER_PLACEHOLDERS
+PRE: true
+POST: true
+EFFECTS: pure
   REPLACE #{key}; APPLY known defaults; HANDLE residual %s; optional Go text/template when no #{ remain
 
 ## FORMAT_WITH_TEMPLATE
@@ -72,6 +107,13 @@ STEP T002: DELEGATE to FormatWithPlaceholders on template string
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: compile regex pattern, extract named submatches into data map, delegate to FormatWithPlaceholders on template string.
 
 PROCEDURE FORMAT_WITH_TEMPLATE(input, pattern, tmplStr):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: input, pattern, tmplStr
+OUTPUT: result of FORMAT_WITH_TEMPLATE
+PRE: true
+POST: true
+EFFECTS: pure
   matches = REGEX_FIND_SUBMATCH(pattern, input)
   BUILD data FROM named groups
   RETURN FormatWithPlaceholders(tmplStr, data)
@@ -85,6 +127,13 @@ STEP T002: STORE named capture groups IN result map
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: compile configured regex and return map of named capture groups from input text.
 
 PROCEDURE EXTRACT_PATTERN_DATA(pattern, text):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: pattern, text
+OUTPUT: result of EXTRACT_PATTERN_DATA
+PRE: true
+POST: true
+EFFECTS: pure
   IF compile fails THEN RETURN empty map
   FOR EACH named submatch: STORE in result map
   RETURN result
@@ -97,6 +146,13 @@ STEP T001: FOR EACH key IN data REPLACE #{key} WITH value
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: replace every #{key} in formatStr with data map values; leave unknown placeholders unchanged.
 
 PROCEDURE SIMPLE_PLACEHOLDER_REPLACE(formatStr, data):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: formatStr, data
+OUTPUT: result of SIMPLE_PLACEHOLDER_REPLACE
+PRE: true
+POST: true
+EFFECTS: pure
   FOR EACH key IN data: REPLACE #{key} WITH value
   RETURN result
 
@@ -108,4 +164,11 @@ STEP T001: FORMAT message THEN route via collector OR immediate print
 - [IMPL-DUAL_FORMATTING] [ARCH-OUTPUT_FORMATTING] [REQ-OUTPUT_FORMATTING] — How: Print* methods format message then AddStdout when collector attached else immediate print.
 
 PROCEDURE PRINT_WITH_DELAYED_ROUTING(message):
+  # [IMPL-DUAL_FORMATTING] — Layer B procedure token link
+Contract:
+INPUT: message
+OUTPUT: result of PRINT_WITH_DELAYED_ROUTING
+PRE: true
+POST: true
+EFFECTS: pure
   IF collector: AddStdout ELSE immediate print

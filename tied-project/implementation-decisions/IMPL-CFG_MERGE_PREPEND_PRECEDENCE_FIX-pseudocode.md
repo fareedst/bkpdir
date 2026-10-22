@@ -16,6 +16,13 @@ STEP T001: Dispatch override, merge, prepend, replace, and default handlers for 
 - [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — How: dispatch override, merge, prepend, replace, and default handlers for one processed key.
 
 PROCEDURE applyMergeOperation(result, key, operation, dstValue, originalDstValue, inheritContext, defaultCfg, explicitlySetFields):
+  # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] — Layer B procedure token link
+Contract:
+INPUT: result, key, operation, dstValue, originalDstValue, inheritContext, defaultCfg, explicitlySetFields
+OUTPUT: result of APPLYMERGEOPERATION
+PRE: true
+POST: true
+EFFECTS: pure
   SWITCH operation.strategy:
     "override" -> applyOverride(...)
     "merge"    -> applyMerge(...)
@@ -31,6 +38,13 @@ STEP T001: EXECUTE PROCEDURE applyMerge
 - [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — How: when + merge hits a non-array MergeBehaviorPrecedence field in sequential loading, keep dstValue if an earlier file already set it or dst differs from default.
 
 PROCEDURE applyMerge(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
+  # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] — Layer B procedure token link
+Contract:
+INPUT: result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields
+OUTPUT: result of APPLYMERGE_SCALAR_PRECEDENCE
+PRE: true
+POST: true
+EFFECTS: pure
   IF value is not array AND getFieldMergeBehavior(key) == MergeBehaviorPrecedence AND NOT inheritContext AND dstValue != nil THEN
     IF dstValue differs from default OR explicitlySetFields[key] OR earlier files processed THEN
       RETURN setConfigField(result, key, dstValue)
@@ -45,6 +59,13 @@ STEP T001: EXECUTE PROCEDURE applyPrepend
 - [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] [ARCH-CFG_001] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CONFIGURATION] — How: when ^ prepend hits a non-array MergeBehaviorPrecedence field sequentially, preserve dstValue under the same earlier-file rules as applyMerge scalars.
 
 PROCEDURE applyPrepend(result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields):
+  # [IMPL-CFG_MERGE_PREPEND_PRECEDENCE_FIX] — Layer B procedure token link
+Contract:
+INPUT: result, key, value, dstValue, inheritContext, defaultCfg, explicitlySetFields
+OUTPUT: result of APPLYPREPEND
+PRE: true
+POST: true
+EFFECTS: pure
   IF value is not array AND getFieldMergeBehavior(key) == MergeBehaviorPrecedence AND NOT inheritContext AND dstValue != nil THEN
     IF dstValue differs from default OR explicitlySetFields[key] OR earlier files processed THEN
       RETURN setConfigField(result, key, dstValue)

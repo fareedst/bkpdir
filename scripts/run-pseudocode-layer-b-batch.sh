@@ -11,9 +11,10 @@ MODE="structural"
 OUT_DIR="${LAYER_B_REPORT_DIR:-$ROOT/tied-project/working/REQ-PSEUDOCODE_LAYER_B_CORPUS/pseudocode-validate}"
 declare -a TOKENS=()
 declare -a ENFORCE=()
+ENFORCE_ALL=0
 
 usage() {
-  echo "usage: run-pseudocode-layer-b-batch.sh [--mode structural|full] [--out-dir PATH] [--token IMPL-…]… [--enforce IMPL-…]… [--wave w0]" >&2
+  echo "usage: run-pseudocode-layer-b-batch.sh [--mode structural|full] [--out-dir PATH] [--token IMPL-…]… [--enforce IMPL-…]… [--wave w0|w1|w2|w3]" >&2
   exit 2
 }
 
@@ -22,19 +23,39 @@ while [[ $# -gt 0 ]]; do
     --mode) MODE="${2:-}"; shift 2 ;;
     --out-dir) OUT_DIR="${2:-}"; shift 2 ;;
     --token) TOKENS+=("${2:-}"); shift 2 ;;
-    --enforce) ENFORCE+=("${2:-}"); shift 2 ;;
+    --enforce)
+      if [[ $# -ge 2 && -n "${2:-}" && "${2:-}" != --* ]]; then
+        ENFORCE+=("${2}"); shift 2
+      else
+        ENFORCE_ALL=1; shift
+      fi
+      ;;
     --wave)
       wave="${2:-}"
       shift 2
-      if [[ "$wave" == "w0" || "$wave" == "W0" ]]; then
-        TOKENS+=(
-          IMPL-ATOMIC_OPS IMPL-CONFIG_STRUCT IMPL-CFG_006
-          IMPL-FILE_OPERATIONS IMPL-ZIP_FORMAT IMPL-EXCLUSION_PATTERNS
-        )
-      else
-        echo "DIAGNOSTIC: unknown --wave $wave (only w0 defined)" >&2
+      wave_lc="$(echo "$wave" | tr '[:upper:]' '[:lower:]')"
+      registry="$ROOT/tied-project/spec/layer-b-wave-registry.yaml"
+      if [[ ! -f "$registry" ]]; then
+        echo "DIAGNOSTIC: missing wave registry $registry" >&2
         exit 2
       fi
+      mapfile -t _wave_tokens < <(python3 - <<PY
+import sys, yaml
+from pathlib import Path
+reg = yaml.safe_load(Path("$registry").read_text())
+w = reg.get("waves", {}).get("$wave_lc", {})
+tokens = w.get("tokens") or []
+if not tokens:
+    print("DIAGNOSTIC: wave $wave_lc has no tokens in registry", file=sys.stderr)
+    sys.exit(2)
+for t in tokens:
+    print(t)
+PY
+)
+      if [[ ${#_wave_tokens[@]} -eq 0 ]]; then
+        exit 2
+      fi
+      TOKENS+=("${_wave_tokens[@]}")
       ;;
     -h|--help) usage ;;
     *) echo "unknown arg: $1" >&2; usage ;;
@@ -64,6 +85,9 @@ fi
 
 is_enforced() {
   local t="$1"
+  if [[ "$ENFORCE_ALL" -eq 1 ]]; then
+    return 0
+  fi
   for e in "${ENFORCE[@]}"; do
     [[ "$e" == "$t" ]] && return 0
   done

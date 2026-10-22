@@ -16,6 +16,13 @@ STEP T001: load config with Unicode archive paths and exclude_patterns and asser
 - [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: load config with Unicode archive paths and exclude_patterns and assert values round-trip unchanged after merge with defaults.
 
 PROCEDURE TestUnicodeHandling():
+  # [IMPL-TEST_UNICODE_HANDLING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTUNICODEHANDLING
+OUTPUT: result of TESTUNICODEHANDLING
+PRE: true
+POST: true
+EFFECTS: pure
   WRITE .bkpdir.yml with emoji and CJK paths and patterns
   LoadConfig
   ASSERT ArchiveDirPath and each ExcludePatterns entry unchanged
@@ -28,6 +35,13 @@ STEP T001: load config from directories whose paths contain spaces or Unicode wi
 - [IMPL-TEST_UNICODE_HANDLING] [ARCH-TESTING_STRATEGY] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: load config from directories whose paths contain spaces or Unicode without corrupting merged field values.
 
 PROCEDURE TestSpecialCharactersInPaths():
+  # [IMPL-TEST_UNICODE_HANDLING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTSPECIALCHARACTERSINPATHS
+OUTPUT: result of TESTSPECIALCHARACTERSINPATHS
+PRE: true
+POST: true
+EFFECTS: pure
   subtests with spaced paths, Unicode directory names, and combined
   LoadConfig from each directory layout
   ASSERT expected archive_dir_path and exclude_patterns

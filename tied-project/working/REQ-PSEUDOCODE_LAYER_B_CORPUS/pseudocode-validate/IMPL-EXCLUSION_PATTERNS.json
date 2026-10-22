@@ -5,7 +5,7 @@
   "blocks": [
     {
       "name": "MATCHES_DIRECTORY_PATTERN",
-      "line": 17,
+      "line": 20,
       "token_refs": [
         "ARCH-EXCLUSION_PATTERNS",
         "IMPL-EXCLUSION_PATTERNS",
@@ -21,7 +21,7 @@
     },
     {
       "name": "PATH_UNDER_DIR_PREFIX_ANY_DEPTH",
-      "line": 48,
+      "line": 54,
       "token_refs": [
         "ARCH-EXCLUSION_PATTERNS",
         "IMPL-EXCLUSION_PATTERNS",
@@ -41,9 +41,9 @@
     {
       "block": "MATCHES_DIRECTORY_PATTERN",
       "branch_lines": [
-        26,
         29,
-        31
+        32,
+        34
       ],
       "failure_modes": [],
       "references": []
@@ -51,10 +51,10 @@
     {
       "block": "PATH_UNDER_DIR_PREFIX_ANY_DEPTH",
       "branch_lines": [
-        56,
-        58,
-        61,
-        63
+        62,
+        64,
+        67,
+        69
       ],
       "failure_modes": [],
       "references": []

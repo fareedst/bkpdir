@@ -1,0 +1,83 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "LOAD_CONFIG_FALLBACK",
+      "line": 19,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CFG_PRECEDENCE_FIX",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MERGE_CONFIGS",
+      "line": 47,
+      "token_refs": [
+        "ARCH-CONFIG_SYSTEM",
+        "IMPL-CFG_PRECEDENCE_FIX",
+        "REQ-CONFIGURATION"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "MERGE_BASIC_SETTINGS",
+      "line": 71,
+      "token_refs": [
+        "IMPL-CFG_PRECEDENCE_FIX"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "LOAD_CONFIG_FALLBACK",
+      "branch_lines": [
+        31
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MERGE_CONFIGS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "MERGE_BASIC_SETTINGS",
+      "branch_lines": [
+        79,
+        80,
+        81,
+        82
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

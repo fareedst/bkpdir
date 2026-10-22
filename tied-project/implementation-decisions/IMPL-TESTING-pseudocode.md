@@ -16,6 +16,13 @@ STEP T001: Express unit tests as struct slices with name/input/want fields and t
 - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: express unit tests as struct slices with name/input/want fields and t.Run subtests per case.
 
 PROCEDURE TABLE_DRIVEN_UNIT_TESTS():
+  # [IMPL-TESTING] — Layer B procedure token link
+Contract:
+INPUT: context for TABLE_DRIVEN_UNIT_TESTS
+OUTPUT: result of TABLE_DRIVEN_UNIT_TESTS
+PRE: true
+POST: true
+EFFECTS: pure
   FOR EACH test case IN cases:
     t.Run(case.name, func(t):
       SETUP inputs from case
@@ -30,6 +37,13 @@ STEP T001: Provide CreateTempDir and CreateTempFile with t.Cleanup registration 
 - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: provide CreateTempDir and CreateTempFile with t.Cleanup registration for isolated filesystem tests.
 
 PROCEDURE TESTUTIL_FILESYSTEM():
+  # [IMPL-TESTING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTUTIL_FILESYSTEM
+OUTPUT: result of TESTUTIL_FILESYSTEM
+PRE: true
+POST: true
+EFFECTS: pure
   CreateTempDir(t, prefix) -> MkdirTemp + t.Cleanup RemoveAll
   CreateTempFile(t, dir, name, content) -> WriteFile + t.Cleanup Remove
 
@@ -41,6 +55,13 @@ STEP T001: Build reusable git repos, archives, backups, and config fixtures for 
 - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: build reusable git repos, archives, backups, and config fixtures for integration tests.
 
 PROCEDURE TESTUTIL_FIXTURES():
+  # [IMPL-TESTING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTUTIL_FIXTURES
+OUTPUT: result of TESTUTIL_FIXTURES
+PRE: true
+POST: true
+EFFECTS: pure
   CreateTestGitRepo(t, dir) -> init repo with commits
   CreateTestArchive(t, dir, files) -> zip fixture
   CreateTestBackup(t, path) -> timestamped backup file
@@ -54,6 +75,14 @@ STEP T001: Centralize AssertNoTempFiles, AssertArchiveContents, and output captu
 - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: centralize AssertNoTempFiles, AssertArchiveContents, and output capture helpers for tests.
 
 PROCEDURE TESTUTIL_ASSERTIONS():
+  # [IMPL-TESTING] — Layer B procedure token link
+Contract:
+INPUT: context for TESTUTIL_ASSERTIONS
+OUTPUT: result of TESTUTIL_ASSERTIONS
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrTestAssertionFailed
   AssertNoTempFiles(t, dir) -> verify cleanup
   AssertArchiveContents(t, zipPath, expected) -> read zip entries
   CaptureOutput(t, fn) -> redirect stdout/stderr during fn
@@ -66,6 +95,13 @@ STEP T001: Simulate disk space, permissions, corruption, and error injection in 
 - [IMPL-TESTING] [ARCH-TESTING_STRATEGY] [REQ-RELIABILITY] — How: simulate disk space, permissions, corruption, and error injection in internal/testutil for stress paths.
 
 PROCEDURE INTERNAL_SCENARIO_HELPERS():
+  # [IMPL-TESTING] — Layer B procedure token link
+Contract:
+INPUT: context for INTERNAL_SCENARIO_HELPERS
+OUTPUT: result of INTERNAL_SCENARIO_HELPERS
+PRE: true
+POST: true
+EFFECTS: pure
   SimulateDiskFull(t, path)
   SimulatePermissionDenied(t, path)
   InjectArchiveCorruption(t, zipPath)

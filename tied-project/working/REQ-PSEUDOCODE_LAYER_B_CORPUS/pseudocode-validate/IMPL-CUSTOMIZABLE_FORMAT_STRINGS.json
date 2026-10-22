@@ -1,0 +1,152 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "VALIDATE_FORMAT_STRING",
+      "line": 19,
+      "token_refs": [
+        "ARCH-CUSTOMIZABLE_FORMAT_STRINGS",
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-CUSTOMIZABLE_FORMAT_STRINGS",
+        "REQ-CUSTOMIZABLE_FORMAT_STRINGS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_EXPECTED_PLACEHOLDERS",
+      "line": 40,
+      "token_refs": [
+        "ARCH-CUSTOMIZABLE_FORMAT_STRINGS",
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-CUSTOMIZABLE_FORMAT_STRINGS",
+        "REQ-CUSTOMIZABLE_FORMAT_STRINGS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "EXTRACT_PLACEHOLDERS",
+      "line": 57,
+      "token_refs": [
+        "ARCH-CUSTOMIZABLE_FORMAT_STRINGS",
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-CUSTOMIZABLE_FORMAT_STRINGS",
+        "REQ-CUSTOMIZABLE_FORMAT_STRINGS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "VALIDATE_ALL_FORMAT_STRINGS",
+      "line": 74,
+      "token_refs": [
+        "ARCH-CUSTOMIZABLE_FORMAT_STRINGS",
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-CUSTOMIZABLE_FORMAT_STRINGS",
+        "REQ-CUSTOMIZABLE_FORMAT_STRINGS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_TEMPLATE",
+      "line": 95,
+      "token_refs": [
+        "ARCH-CUSTOMIZABLE_FORMAT_STRINGS",
+        "ARCH-OUTPUT_FORMATTING",
+        "IMPL-CUSTOMIZABLE_FORMAT_STRINGS",
+        "REQ-CUSTOMIZABLE_FORMAT_STRINGS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "LOAD_CONFIG_VALIDATION_HOOK",
+      "line": 117,
+      "token_refs": [
+        "IMPL-CUSTOMIZABLE_FORMAT_STRINGS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "VALIDATE_FORMAT_STRING",
+      "branch_lines": [
+        28
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_EXPECTED_PLACEHOLDERS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "EXTRACT_PLACEHOLDERS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "VALIDATE_ALL_FORMAT_STRINGS",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "FORMAT_TEMPLATE",
+      "branch_lines": [
+        105,
+        107
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "LOAD_CONFIG_VALIDATION_HOOK",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

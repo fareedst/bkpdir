@@ -1,0 +1,183 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "ADD_RESOURCE",
+      "line": 18,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-RESOURCE_MANAGER",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ADD_TEMP_FILE",
+      "line": 37,
+      "token_refs": [
+        "IMPL-RESOURCE_MANAGER"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ADD_TEMP_DIR",
+      "line": 46,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-RESOURCE_MANAGER",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "REMOVE_RESOURCE",
+      "line": 63,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-RESOURCE_MANAGER",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLEANUP",
+      "line": 84,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-RESOURCE_MANAGER",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLEANUP_WITH_PANIC_RECOVERY",
+      "line": 107,
+      "token_refs": [
+        "ARCH-RESOURCE_MANAGEMENT",
+        "IMPL-RESOURCE_MANAGER",
+        "REQ-CONTEXT_SUPPORT",
+        "REQ-RESOURCE_MANAGEMENT"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLEANUP_WITH_CONTEXT",
+      "line": 125,
+      "token_refs": [
+        "IMPL-RESOURCE_MANAGER"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "caller": "ADD_TEMP_FILE",
+      "callee": "ADD_RESOURCE",
+      "line": 45
+    },
+    {
+      "caller": "ADD_TEMP_DIR",
+      "callee": "ADD_RESOURCE",
+      "line": 54
+    }
+  ],
+  "coverage": [
+    {
+      "block": "ADD_RESOURCE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ADD_TEMP_FILE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ADD_TEMP_DIR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "REMOVE_RESOURCE",
+      "branch_lines": [],
+      "failure_modes": [
+        "STEP T001: Invoke Cleanup on every tracked resource, retain last error, then clear the slice",
+        "- [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: invoke Cleanup on every tracked resource, retain last error, then clear the slice."
+      ],
+      "references": []
+    },
+    {
+      "block": "CLEANUP",
+      "branch_lines": [
+        95
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CLEANUP_WITH_PANIC_RECOVERY",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "CLEANUP_WITH_CONTEXT",
+      "branch_lines": [
+        133,
+        136
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

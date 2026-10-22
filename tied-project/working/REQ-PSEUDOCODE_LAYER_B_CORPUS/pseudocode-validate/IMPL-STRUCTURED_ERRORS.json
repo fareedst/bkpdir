@@ -1,0 +1,384 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "ARCHIVEERROR_ERROR",
+      "line": 18,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ARCHIVEERROR_UNWRAP",
+      "line": 36,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "BACKUPERROR_ERROR",
+      "line": 57,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWARCHIVEERROR",
+      "line": 75,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWARCHIVEERRORWITHCAUSE",
+      "line": 96,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWARCHIVEERRORWITHCONTEXT",
+      "line": 118,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWBACKUPERROR",
+      "line": 135,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWBACKUPERRORWITHCAUSE",
+      "line": 156,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "NEWBACKUPERRORWITHCONTEXT",
+      "line": 173,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ISDISKFULLERROR",
+      "line": 191,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ISPERMISSIONERROR",
+      "line": 211,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "ISDIRECTORYNOTFOUNDERROR",
+      "line": 231,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "HANDLEERROR",
+      "line": 251,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "CLASSIFYERROR",
+      "line": 275,
+      "token_refs": [
+        "ARCH-ERROR_HANDLING",
+        "IMPL-STRUCTURED_ERRORS",
+        "REQ-ERROR_HANDLING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "ARCHIVEERROR_ERROR",
+      "branch_lines": [
+        26
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "ARCHIVEERROR_UNWRAP",
+      "branch_lines": [
+        45,
+        47
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "RETURN underlying error stored in e.Err",
+        "STEP T001: Mirror ArchiveError Error formatting for backup operations",
+        "- [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: mirror ArchiveError Error formatting for backup operations."
+      ],
+      "references": []
+    },
+    {
+      "block": "BACKUPERROR_ERROR",
+      "branch_lines": [
+        65
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWARCHIVEERROR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWARCHIVEERRORWITHCAUSE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWARCHIVEERRORWITHCONTEXT",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWBACKUPERROR",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWBACKUPERRORWITHCAUSE",
+      "branch_lines": [],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "NEWBACKUPERRORWITHCONTEXT",
+      "branch_lines": [],
+      "failure_modes": [
+        "STEP T001: Match disk-space substrings in error text OR path error with OS no-space/quota/large-file codes",
+        "- [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match disk-space substrings in error text OR path error with OS no-space/quota/large-file codes."
+      ],
+      "references": []
+    },
+    {
+      "block": "ISDISKFULLERROR",
+      "branch_lines": [
+        200
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "lowered = ToLower(err.Error())",
+        "STEP T001: Match permission-denied substrings OR path error with EACCES/EPERM",
+        "- [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match permission-denied substrings OR path error with EACCES/EPERM."
+      ],
+      "references": []
+    },
+    {
+      "block": "ISPERMISSIONERROR",
+      "branch_lines": [
+        220
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "lowered = ToLower(err.Error())",
+        "STEP T001: Match directory-not-found substrings OR path error with ENOENT",
+        "- [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: match directory-not-found substrings OR path error with ENOENT."
+      ],
+      "references": []
+    },
+    {
+      "block": "ISDIRECTORYNOTFOUNDERROR",
+      "branch_lines": [
+        240
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "lowered = ToLower(err.Error())"
+      ],
+      "references": []
+    },
+    {
+      "block": "HANDLEERROR",
+      "branch_lines": [
+        260,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "ELSE print generic error; RETURN 1",
+        "STEP T001: Map error to ErrorCategory via disk, permission, filesystem, network detectors",
+        "- [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: map error to ErrorCategory via disk, permission, filesystem, network detectors."
+      ],
+      "references": []
+    },
+    {
+      "block": "CLASSIFYERROR",
+      "branch_lines": [
+        284,
+        285,
+        286,
+        287,
+        288
+      ],
+      "failure_modes": [
+        "## EMBEDDED_MINITEST: archive error string",
+        "- [IMPL-STRUCTURED_ERRORS] [ARCH-ERROR_HANDLING] [REQ-ERROR_HANDLING] — How: verify ArchiveError.Error with and without underlying cause.",
+        "## EMBEDDED_MINITEST: pkg handle error"
+      ],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

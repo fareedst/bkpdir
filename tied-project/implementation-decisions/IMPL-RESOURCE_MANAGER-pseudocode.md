@@ -16,6 +16,13 @@ STEP T001: Append a Resource to the tracked slice under write lock for later cle
 - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: append a Resource to the tracked slice under write lock for later cleanup.
 
 PROCEDURE ADD_RESOURCE(rm, resource):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm, resource
+OUTPUT: result of ADD_RESOURCE
+PRE: true
+POST: true
+EFFECTS: pure
   LOCK rm.mutex
   APPEND resource TO rm.resources
   UNLOCK rm.mutex
@@ -28,8 +35,22 @@ STEP T001: Wrap AddResource with TempFile or TempDir for common temp path regist
 - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: wrap AddResource with TempFile or TempDir for common temp path registration.
 
 PROCEDURE ADD_TEMP_FILE(rm, path):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm, path
+OUTPUT: result of ADD_TEMP_RESOURCES
+PRE: true
+POST: true
+EFFECTS: pure
   CALL ADD_RESOURCE(rm, TempFile{path})
 PROCEDURE ADD_TEMP_DIR(rm, path):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm, path
+OUTPUT: result of ADD_TEMP_RESOURCES
+PRE: true
+POST: true
+EFFECTS: pure
   CALL ADD_RESOURCE(rm, TempDir{path})
 
 ## REMOVE_RESOURCE
@@ -40,6 +61,14 @@ STEP T001: Remove matching resource from tracking by String() identity without i
 - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: remove matching resource from tracking by String() identity without invoking Cleanup.
 
 PROCEDURE REMOVE_RESOURCE(rm, resource):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm, resource
+OUTPUT: result of REMOVE_RESOURCE
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrRemoveResource
   LOCK rm.mutex
   FIND index WHERE resources[i].String() == resource.String()
   REMOVE element at index
@@ -53,6 +82,13 @@ STEP T001: Invoke Cleanup on every tracked resource, retain last error, then cle
 - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: invoke Cleanup on every tracked resource, retain last error, then clear the slice.
 
 PROCEDURE CLEANUP(rm):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm
+OUTPUT: result of CLEANUP
+PRE: true
+POST: true
+EFFECTS: pure
   LOCK rm.mutex
   FOR EACH resource IN rm.resources:
     err = resource.Cleanup()
@@ -69,6 +105,13 @@ STEP T001: Defer recover around CLEANUP and convert panics into returned errors
 - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] — How: defer recover around CLEANUP and convert panics into returned errors.
 
 PROCEDURE CLEANUP_WITH_PANIC_RECOVERY(rm):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm
+OUTPUT: result of CLEANUP_WITH_PANIC_RECOVERY
+PRE: true
+POST: true
+EFFECTS: pure
   DEFER recover panic INTO err
   RETURN CLEANUP(rm)
 
@@ -80,6 +123,13 @@ STEP T001: Return ctx.Err() immediately or between resources when context is can
 - [IMPL-RESOURCE_MANAGER] [ARCH-RESOURCE_MANAGEMENT] [REQ-RESOURCE_MANAGEMENT] [REQ-CONTEXT_SUPPORT] — How: return ctx.Err() immediately or between resources when context is cancelled during cleanup.
 
 PROCEDURE CLEANUP_WITH_CONTEXT(rm, ctx):
+  # [IMPL-RESOURCE_MANAGER] — Layer B procedure token link
+Contract:
+INPUT: rm, ctx
+OUTPUT: result of CLEANUP_WITH_CONTEXT
+PRE: true
+POST: true
+EFFECTS: pure
   IF ctx.Err() != nil THEN RETURN ctx.Err()
   LOCK rm.mutex
   FOR EACH resource IN rm.resources:

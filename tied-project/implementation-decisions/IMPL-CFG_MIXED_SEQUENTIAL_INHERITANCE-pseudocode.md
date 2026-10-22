@@ -17,6 +17,13 @@ STEP T002: TRACK explicitlySetFields for single-file chains only
 - [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: for each search path build inheritance chain, merge files in order, track explicitlySetFields only for single-file chains.
 
 PROCEDURE LOAD_CONFIG_WITH_INHERITANCE(root):
+  # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] — Layer B procedure token link
+Contract:
+INPUT: root
+OUTPUT: result of LOAD_CONFIG_WITH_INHERITANCE
+PRE: true
+POST: true
+EFFECTS: pure
   finalCfg = DEFAULT_CONFIG
   explicitlySetFields = empty map
   FOR EACH searchPath IN discovery order:
@@ -39,6 +46,13 @@ STEP T001: APPLY inheritance or sequential precedence using explicitlySetFields
 - [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: in inheritance context skip precedence scalars when earlier sequential file set field; in sequential context skip when explicitlySetFields or dst differs from default.
 
 PROCEDURE MERGE_BASIC_SETTINGS(dst, src, inheritContext, explicitlySetFields, rawSrcMap):
+  # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] — Layer B procedure token link
+Contract:
+INPUT: dst, src, inheritContext, explicitlySetFields, rawSrcMap
+OUTPUT: result of MERGE_BASIC_SETTINGS
+PRE: true
+POST: true
+EFFECTS: pure
   FOR EACH precedence scalar field:
     IF inheritContext THEN
       IF explicitlySetFields[field] THEN SKIP
@@ -55,6 +69,13 @@ STEP T001: PRESERVE dst when earlier sequential file set key OR apply new value
 - [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: preserve dst when earlier sequential file set key or sequential dst differs from default; inheritance only checks explicitlySetFields.
 
 PROCEDURE APPLY_OVERRIDE(result, key, value, dstValue, inheritContext, explicitlySetFields):
+  # [IMPL-CFG_MIXED_SEQUENTIAL_INHERITANCE] — Layer B procedure token link
+Contract:
+INPUT: result, key, value, dstValue, inheritContext, explicitlySetFields
+OUTPUT: result of APPLY_OVERRIDE
+PRE: true
+POST: true
+EFFECTS: pure
   IF shouldPreserve(dstValue, default, explicitlySetFields, inheritContext) THEN
     RETURN setConfigField(result, key, dstValue)
   RETURN setConfigField(result, key, value)

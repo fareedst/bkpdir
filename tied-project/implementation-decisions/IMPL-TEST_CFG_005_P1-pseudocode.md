@@ -16,6 +16,13 @@ STEP T001: child inheriting parent1 and parent2 merges accumulate exclude_patter
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: child inheriting parent1 and parent2 merges accumulate exclude_patterns from both parents plus child + prefix while child overrides precedence archive_dir_path.
 
 PROCEDURE test_multiple_inheritance_sources():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTMULTIPLEINHERITANCESOURCES
+OUTPUT: result of TESTMULTIPLEINHERITANCESOURCES
+PRE: true
+POST: true
+EFFECTS: pure
   SETUP:
     CREATE parent1 with exclude_patterns [".git", "node_modules"] and archive_dir_path "/archives/p1"
     CREATE parent2 with exclude_patterns ["tmp"] and archive_dir_path "/archives/p2"
@@ -35,6 +42,13 @@ STEP T001: inherit directives using ../base.yml and ./sibling.yml resolve relati
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: inherit directives using ../base.yml and ./sibling.yml resolve relative to the child config file directory.
 
 PROCEDURE test_relative_path_inheritance():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTRELATIVEPATHINHERITANCE
+OUTPUT: result of TESTRELATIVEPATHINHERITANCE
+PRE: true
+POST: true
+EFFECTS: pure
   SETUP:
     CREATE directory tree with child at "configs/env/child.yml"
     CREATE parent files at "../base.yml" and "./sibling.yml" relative to child location
@@ -54,6 +68,14 @@ STEP T001: tilde in inherit path expands to user home directory and loads the re
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: tilde in inherit path expands to user home directory and loads the referenced parent config.
 
 PROCEDURE test_home_directory_expansion():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTHOMEDIRECTORYEXPANSION
+OUTPUT: result of TESTHOMEDIRECTORYEXPANSION
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrTestHomeDirectoryExpansion
   SETUP:
     CREATE parent config file under simulated user home directory
     CREATE child config whose inherit path starts with "~/" and targets that parent
@@ -73,6 +95,14 @@ STEP T001: missing inherit target returns a clear error without partial silent m
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: missing inherit target returns a clear error without partial silent merge.
 
 PROCEDURE test_missing_inheritance_file():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTMISSINGINHERITANCEFILE
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrTestmissinginheritancefile
   SETUP:
     CREATE child config referencing one existing parent and one missing parent path
     DEFINE baseline child field that should not be reported as fully merged on failure
@@ -91,6 +121,14 @@ STEP T001: malformed YAML in the inheritance chain surfaces parse error and does
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: malformed YAML in the inheritance chain surfaces parse error and does not produce a merged config.
 
 PROCEDURE test_invalid_yaml_handling():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTINVALIDYAMLHANDLING
+OUTPUT: ERROR | success
+PRE: true
+POST: true
+EFFECTS: pure
+FAILURE_MODES: ErrTestinvalidyamlhandling
   SETUP:
     CREATE parent config containing malformed YAML syntax
     CREATE child config that inherits from malformed parent
@@ -110,6 +148,13 @@ STEP T001: twelve-level inherit chain still loads and applies child overrides at
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: twelve-level inherit chain still loads and applies child overrides at the leaf.
 
 PROCEDURE test_deep_inheritance_chain():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTDEEPINHERITANCECHAIN
+OUTPUT: result of TESTDEEPINHERITANCECHAIN
+PRE: true
+POST: true
+EFFECTS: pure
   SETUP:
     CREATE 12-level inheritance chain where each level adds one traceable field
     CREATE leaf child that overrides one inherited value
@@ -129,6 +174,13 @@ STEP T001: parent array with child scalar (or incompatible types) errors or reje
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: parent array with child scalar (or incompatible types) errors or rejects merge per CFG-005 rules.
 
 PROCEDURE test_type_mismatch_handling():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTTYPEMISMATCHHANDLING
+OUTPUT: result of TESTTYPEMISMATCHHANDLING
+PRE: true
+POST: true
+EFFECTS: pure
   SETUP:
     CREATE parent config with list value for target field
     CREATE child config with scalar value for same field under merge-inherit path
@@ -148,6 +200,13 @@ STEP T001: explicit null YAML values merge without panics and preserve intended 
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: explicit null YAML values merge without panics and preserve intended field nil semantics.
 
 PROCEDURE test_null_value_handling():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTNULLVALUEHANDLING
+OUTPUT: result of TESTNULLVALUEHANDLING
+PRE: true
+POST: true
+EFFECTS: pure
   SETUP:
     CREATE parent config with non-null values for nullable fields
     CREATE child config that sets selected inherited fields to null
@@ -167,6 +226,13 @@ STEP T001: whitespace-only and padded string config values load and merge withou
 - [IMPL-TEST_CFG_005_P1] [ARCH-CFG_005] [REQ-CFG_001] [REQ-CFG_005] [REQ-CONFIGURATION] — How: whitespace-only and padded string config values load and merge without unintended trimming unless specified.
 
 PROCEDURE test_whitespace_string_handling():
+  # [IMPL-TEST_CFG_005_P1] — Layer B procedure token link
+Contract:
+INPUT: context for TESTWHITESPACESTRINGHANDLING
+OUTPUT: result of TESTWHITESPACESTRINGHANDLING
+PRE: true
+POST: true
+EFFECTS: pure
   SETUP:
     CREATE parent and child configs with whitespace-only strings and padded strings
     DEFINE fields with explicit trim policy and fields with preserve policy

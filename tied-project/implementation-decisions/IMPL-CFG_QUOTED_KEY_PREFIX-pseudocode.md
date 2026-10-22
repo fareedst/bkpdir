@@ -16,6 +16,13 @@ STEP T001: Two-pass scan prefers explicit-prefix keys over duplicate unprefixed 
 - [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: two-pass scan prefers explicit-prefix keys over duplicate unprefixed entries when building operations per cleanKey.
 
 PROCEDURE processKeys(config map):
+  # [IMPL-CFG_QUOTED_KEY_PREFIX] — Layer B procedure token link
+Contract:
+INPUT: config map
+OUTPUT: result of PROCESSKEYS
+PRE: true
+POST: true
+EFFECTS: pure
   PASS 1: record explicitPrefixKeys for keys whose cleaned form starts with ! + ^ =
   PASS 2: FOR EACH key, value:
     strategy, cleanKey = extractStrategy(key)
@@ -30,6 +37,13 @@ STEP T001: EXECUTE PROCEDURE extractStrategy
 - [IMPL-CFG_QUOTED_KEY_PREFIX] [ARCH-CFG_005] [REQ-CFG_005] [REQ-CONFIGURATION] — How: strip YAML quotes then map leading ! + ^ = to override merge prepend replace default strategies and return strategy plus base field name.
 
 PROCEDURE extractStrategy(key):
+  # [IMPL-CFG_QUOTED_KEY_PREFIX] — Layer B procedure token link
+Contract:
+INPUT: key
+OUTPUT: result of EXTRACTSTRATEGY
+PRE: true
+POST: true
+EFFECTS: pure
   cleanKey = strip surrounding quotes from key
   IF first char is merge prefix THEN RETURN strategy name and key without prefix
   RETURN "override" and cleanKey

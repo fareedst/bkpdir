@@ -1,0 +1,92 @@
+{
+  "schema_version": "layer-b-pseudocode-validator.v1",
+  "ok": true,
+  "proof_boundary": "Structural pseudo-code shape, token linkage, and dependency diagnostics only; behavioral test coverage remains separate.",
+  "blocks": [
+    {
+      "name": "GATHER_FILE_STAT_INFO",
+      "line": 19,
+      "token_refs": [
+        "ARCH-FILE_STATISTICS",
+        "IMPL-FILE_STATISTICS",
+        "REQ-OUT_002",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "FORMAT_HUMAN_SIZE",
+      "line": 39,
+      "token_refs": [
+        "ARCH-FILE_STATISTICS",
+        "IMPL-FILE_STATISTICS",
+        "REQ-OUT_002",
+        "REQ-OUTPUT_FORMATTING"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    },
+    {
+      "name": "GET_FILE_TYPE",
+      "line": 60,
+      "token_refs": [
+        "IMPL-FILE_STATISTICS"
+      ],
+      "contract_fields": [
+        "EFFECTS",
+        "FAILURE_MODES",
+        "INPUT",
+        "OUTPUT",
+        "POST",
+        "PRE"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "coverage": [
+    {
+      "block": "GATHER_FILE_STAT_INFO",
+      "branch_lines": [
+        29
+      ],
+      "failure_modes": [
+        "OUTPUT: ERROR | success",
+        "IF err: RETURN error"
+      ],
+      "references": []
+    },
+    {
+      "block": "FORMAT_HUMAN_SIZE",
+      "branch_lines": [
+        47
+      ],
+      "failure_modes": [],
+      "references": []
+    },
+    {
+      "block": "GET_FILE_TYPE",
+      "branch_lines": [
+        68,
+        69,
+        70
+      ],
+      "failure_modes": [],
+      "references": []
+    }
+  ],
+  "diagnostics": [],
+  "leakage": []
+}

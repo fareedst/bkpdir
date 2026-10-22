@@ -51,9 +51,8 @@ func NewComparer() Comparer {
 	return &DefaultComparer{}
 }
 
-// CreateDirectorySnapshot creates a snapshot of the given directory
+// - [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON] [ARCH-ARCHIVE_FORMAT] [REQ-DIFF_COMMAND] [REQ-FILE_BACKUP] [REQ-INCREMENTAL_DUPLICATE_PREVENTION] — How: walk applies ShouldExcludeFile; regular files hash file bytes; symlinks hash Readlink target bytes (same as zip symlink entries) without following the link.
 func (c *DefaultComparer) CreateDirectorySnapshot(rootPath string, excludePatterns []string) (*DirectorySnapshot, error) {
-	// [IMPL-DIRECTORY_COMPARISON] [ARCH-DIRECTORY_COMPARISON]
 	var files []FileInfo
 
 	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {

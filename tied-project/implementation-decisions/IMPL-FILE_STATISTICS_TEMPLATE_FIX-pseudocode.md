@@ -16,6 +16,13 @@ STEP T001: GATHER FileStatInfo AND replace #{key} placeholders OR fallback
 - [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: GatherFileStatInfo, build data map, replace #{key} in TemplateCreatedArchiveDetailed, fall back on error or leftover placeholders.
 
 PROCEDURE FORMAT_CREATED_ARCHIVE_WITH_STATS(path):
+  # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of FORMAT_CREATED_ARCHIVE_WITH_STATS
+PRE: true
+POST: true
+EFFECTS: pure
   statInfo = GatherFileStatInfo(path) OR RETURN FormatCreatedArchive
   REPLACE placeholders in TemplateCreatedArchiveDetailed FROM data
   IF still #{ in result: RETURN FormatCreatedArchive
@@ -29,6 +36,13 @@ STEP T001: MIRROR created variant using incremental templates and fallback
 - [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: same as created variant using TemplateIncrementalCreatedDetailed and FormatIncrementalCreated fallback.
 
 PROCEDURE FORMAT_INCREMENTAL_CREATED_WITH_STATS(path):
+  # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of FORMAT_INCREMENTAL_CREATED_WITH_STATS
+PRE: true
+POST: true
+EFFECTS: pure
   MIRROR FORMAT_CREATED_ARCHIVE_WITH_STATS with incremental templates
 
 ## PRINT_CREATED_ARCHIVE_WITH_STATS
@@ -39,6 +53,13 @@ STEP T001: FORMAT with stats AND route print via collector or stdout
 - [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: format with stats then Print via collector or stdout.
 
 PROCEDURE PRINT_CREATED_ARCHIVE_WITH_STATS(path):
+  # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of PRINT_CREATED_ARCHIVE_WITH_STATS
+PRE: true
+POST: true
+EFFECTS: pure
   message = FORMAT_CREATED_ARCHIVE_WITH_STATS(path); ROUTE print
 
 ## PRINT_INCREMENTAL_CREATED_WITH_STATS
@@ -49,4 +70,11 @@ STEP T001: FORMAT incremental with stats AND route print via collector or stdout
 - [IMPL-FILE_STATISTICS_TEMPLATE_FIX] [ARCH-FILE_STATISTICS] [REQ-OUT_002] [REQ-OUTPUT_FORMATTING] — How: format incremental with stats then Print via collector or stdout.
 
 PROCEDURE PRINT_INCREMENTAL_CREATED_WITH_STATS(path):
+  # [IMPL-FILE_STATISTICS_TEMPLATE_FIX] — Layer B procedure token link
+Contract:
+INPUT: path
+OUTPUT: result of PRINT_INCREMENTAL_CREATED_WITH_STATS
+PRE: true
+POST: true
+EFFECTS: pure
   message = FORMAT_INCREMENTAL_CREATED_WITH_STATS(path); ROUTE print
