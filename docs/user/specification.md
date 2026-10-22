@@ -375,7 +375,7 @@ Linting, error handling, and resource rules are specified in TIED (e.g. [REQ-IMM
 - Archive naming format: `BASENAME_update=YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip`
   - BASENAME is the name of the base full archive
   - Timestamp and Git info follow the same format as full archives
-  - If that path already exists, `-seqN` is inserted before `.zip` (for example `...-12-01-seq2.zip`)
+  - If that path already exists, `-seqN` is inserted before `.zip` (for example `...-12-01-seq2.zip`). This optional disambiguator is part of the fixed archive naming contract (same `_update=` and minute timestamp; `N` ≥ 2 until an unused name is found).
 - Reports success using the same formatting configuration as full archives
 - Exits with `status_created_archive` status code on success
 

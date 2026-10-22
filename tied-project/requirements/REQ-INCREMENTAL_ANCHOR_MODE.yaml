@@ -1,36 +1,37 @@
 REQ-INCREMENTAL_ANCHOR_MODE:
-  architecture: tied-project/architecture-decisions/ARCH-INCREMENTAL_ANCHOR_MODE.yaml
-  category: Functional
-  cross-references: '[REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-DIFF_COMMAND], [REQ-CONFIGURATION], [REQ-IMMUTABLE_ARCHIVE_NAMING]'
-  description: |
-    Default incremental archives are full-anchored: each inc zip contains every file path that differs from the latest full archive snapshot, and skip/diff effective state reconstruction overlays only the latest matching incremental on that full base. Optional chained mode preserves legacy behavior where each inc is a delta since the prior effective state and all matching incrementals merge in name order. Configuration key incremental_anchor_mode accepts full (default) or chained; inc and diff commands accept --incremental-anchor-mode override. When a generated incremental path already exists, append -seqN before .zip until unused.
-  implementation: tied-project/implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml
+  architecture: "tied-project/architecture-decisions/ARCH-INCREMENTAL_ANCHOR_MODE.yaml"
+  category: "Functional"
+  cross-references: "[REQ-INCREMENTAL_DUPLICATE_PREVENTION], [REQ-DIFF_COMMAND], [REQ-CONFIGURATION], [REQ-IMMUTABLE_ARCHIVE_NAMING]"
+  description: "Default incremental archives are full-anchored: each inc zip contains every file path that differs from the latest full archive snapshot, and skip/diff effective state reconstruction overlays only the latest matching incremental on that full base. Optional chained mode preserves legacy behavior where each inc is a delta since the prior effective state and all matching incrementals merge in name order. Configuration key incremental_anchor_mode accepts full (default) or chained; inc and diff commands accept --incremental-anchor-mode override. When a generated incremental path already exists, append -seqN before .zip until unused.\n"
+  implementation: "tied-project/implementation-decisions/IMPL-INCREMENTAL_ANCHOR_MODE.yaml"
   metadata:
     created:
-      author: AI agent
-      date: '2026-10-21'
+      author: "AI agent"
+      date: "2026-10-21"
     last_updated:
-      author: AI agent
-      date: '2026-10-21'
-      reason: Initial implementation
-  name: Incremental Anchor Mode
-  priority: P1
+      author: "AI agent"
+      date: "2026-10-21"
+      reason: "Initial implementation"
+  name: "Incremental Anchor Mode"
+  priority: "P1"
   related_requirements:
     depends_on:
-      - REQ-CONFIGURATION
-      - REQ-DIFF_COMMAND
-      - REQ-INCREMENTAL_DUPLICATE_PREVENTION
-    related_to: []
+      - "REQ-CONFIGURATION"
+      - "REQ-DIFF_COMMAND"
+      - "REQ-INCREMENTAL_DUPLICATE_PREVENTION"
+    related_to:
+      - "REQ-IMMUTABLE_ARCHIVE_NAMING"
+    supersedes: []
   satisfaction_criteria:
-    - criterion: Default incremental_anchor_mode is full
-    - criterion: Full mode inc zip contents diff against latest full snapshot only
-    - criterion: Chained mode preserves merge-all-incrementals reconstruction and chained deltas
-    - criterion: resolveIncrementalArchivePath assigns -seqN when target exists
-  status: Implemented
+    - criterion: "Chained mode preserves merge-all-incrementals reconstruction and chained deltas"
+    - criterion: "Default incremental_anchor_mode is full"
+    - criterion: "Full mode inc zip contents diff against latest full snapshot only"
+    - criterion: "resolveIncrementalArchivePath assigns -seqN when target exists"
+  status: "Implemented"
   traceability:
     architecture:
-      - ARCH-INCREMENTAL_ANCHOR_MODE
+      - "ARCH-INCREMENTAL_ANCHOR_MODE"
     code_annotations:
-      - REQ-INCREMENTAL_ANCHOR_MODE
+      - "REQ-INCREMENTAL_ANCHOR_MODE"
     implementation:
-      - IMPL-INCREMENTAL_ANCHOR_MODE
+      - "IMPL-INCREMENTAL_ANCHOR_MODE"

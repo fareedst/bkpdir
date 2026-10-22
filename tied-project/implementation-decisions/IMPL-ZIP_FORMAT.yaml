@@ -1,84 +1,80 @@
 IMPL-ZIP_FORMAT:
   code_locations:
     files:
-      - archive.go
-      - archive_test.go
+      - "archive.go"
+      - "archive_test.go"
     functions:
-      - addFilesToZip
-      - addFilesToZipWithConfig
-      - addFileToZip
-      - addFileToZipWithConfig
-      - checkContextCancellation
-      - collectFilesToArchive
-      - collectFilesToArchiveWithInterface
-      - createAndVerifyArchive
-      - createAndVerifyIncrementalArchive
-      - createArchiveFromEntry
-      - CreateArchiveWithContext
-      - CreateFullArchive
-      - CreateFullArchiveWithCleanup
-      - CreateFullArchiveWithContext
-      - CreateIncrementalArchive
-      - createIncrementalArchive
-      - CreateIncrementalArchiveWithContext
-      - createZipArchiveWithContext
-      - createZipArchiveWithContextAndConfig
-      - GenerateArchiveName
-      - GenerateArchiveNameWithInterface
-      - GenerateFullArchiveName
-      - generateFullArchiveNameFromConfig
-      - generateIncrementalArchiveName
-      - ListArchives
-  code_markers: '`archive/zip` imports, `*.zip` file extensions'
+      - "addFilesToZip"
+      - "addFilesToZipWithConfig"
+      - "addFileToZip"
+      - "addFileToZipWithConfig"
+      - "checkContextCancellation"
+      - "collectFilesToArchive"
+      - "collectFilesToArchiveWithInterface"
+      - "createAndVerifyArchive"
+      - "createAndVerifyIncrementalArchive"
+      - "createArchiveFromEntry"
+      - "CreateArchiveWithContext"
+      - "CreateFullArchive"
+      - "CreateFullArchiveWithCleanup"
+      - "CreateFullArchiveWithContext"
+      - "CreateIncrementalArchive"
+      - "createIncrementalArchive"
+      - "CreateIncrementalArchiveWithContext"
+      - "createZipArchiveWithContext"
+      - "createZipArchiveWithContextAndConfig"
+      - "GenerateArchiveName"
+      - "GenerateArchiveNameWithInterface"
+      - "GenerateFullArchiveName"
+      - "generateFullArchiveNameFromConfig"
+      - "generateIncrementalArchiveName"
+      - "ListArchives"
+      - "resolveIncrementalArchivePath"
+  code_markers: "`archive/zip` imports, `*.zip` file extensions"
   cross_references:
-    - ARCH-ARCHIVE_FORMAT
+    - "ARCH-ARCHIVE_FORMAT"
   implementation_approach:
     details: []
-    summary: |-
-      Creates and lists ZIP archives with atomic temp-file writes, deflate compression, exclusion-aware file collection, and git-aware naming.
-      INPUT: context, Config, note, dryRun flag, archive directory paths
-      OUTPUT: zip file on disk, Archive metadata list
-      DATA: file paths relative to cwd, ArchiveConfig adapters, ResourceManager temp files
-      Canonical behavior: tied-project/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md
+    summary: "Creates and lists ZIP archives with atomic temp-file writes, deflate compression, exclusion-aware file collection, and git-aware naming.\nINPUT: context, Config, note, dryRun flag, archive directory paths\nOUTPUT: zip file on disk, Archive metadata list\nDATA: file paths relative to cwd, ArchiveConfig adapters, ResourceManager temp files\nCanonical behavior: tied-project/implementation-decisions/IMPL-ZIP_FORMAT-pseudocode.md"
   metadata:
     created:
-      author: MCP converter
-      date: '2026-03-12'
+      author: "MCP converter"
+      date: "2026-03-12"
     last_updated:
-      author: AI agent
-      date: '2026-09-20'
-      reason: probe
+      author: "AI agent"
+      date: "2026-10-21"
+      reason: "LEAP — resolveIncrementalArchivePath traceability for -seqN naming"
     last_validated:
-      date: '2026-03-12'
-      result: pass
-      validator: MCP converter
-  name: ZIP Archive Format Implementation
+      date: "2026-03-12"
+      result: "pass"
+      validator: "MCP converter"
+  name: "ZIP Archive Format Implementation"
   rationale:
     benefits: []
     problems_solved: []
-    why: |-
-      Cross-platform compatibility
-      Built-in compression
-      Wide tool support
-      Standard library support in Go
+    why: "Cross-platform compatibility\nBuilt-in compression\nWide tool support\nStandard library support in Go"
   related_decisions:
     composed_with: []
     depends_on: []
     see_also:
-      - ARCH-ARCHIVE_FORMAT
+      - "ARCH-ARCHIVE_FORMAT"
     supersedes: []
-  status: Active
+  status: "Active"
   traceability:
     architecture:
-      - ARCH-ARCHIVE_FORMAT
+      - "ARCH-ARCHIVE_FORMAT"
     code_annotations:
-      - ARCH-ARCHIVE_FORMAT
-      - IMPL-ZIP_FORMAT
+      - "ARCH-ARCHIVE_FORMAT"
+      - "IMPL-ZIP_FORMAT"
+      - "REQ-IMMUTABLE_ARCHIVE_NAMING"
     requirements:
-      - REQ-FILE_BACKUP
+      - "REQ-FILE_BACKUP"
+      - "REQ-IMMUTABLE_ARCHIVE_NAMING"
+      - "REQ-INCREMENTAL_ANCHOR_MODE"
     tests:
-      - TestCreateFullArchive
-      - TestCreateIncremental
-      - TestGenerateArchiveName
-      - TestIncrementalArchiveDirectoryStructure
-      - TestSkipBrokenSymlinks
+      - "TestCreateFullArchive"
+      - "TestCreateIncremental"
+      - "TestGenerateArchiveName"
+      - "TestIncrementalArchiveDirectoryStructure"
+      - "TestIncrementalArchivePathDisambiguationSameMinute_REQ_INCREMENTAL_ANCHOR_MODE"
+      - "TestSkipBrokenSymlinks"

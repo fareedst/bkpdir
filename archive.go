@@ -1059,7 +1059,7 @@ func CreateIncrementalArchiveWithContextAndMode(
 	return createIncrementalArchive(config)
 }
 
-// - [IMPL-INCREMENTAL_ANCHOR_MODE] [ARCH-INCREMENTAL_ANCHOR_MODE] [REQ-INCREMENTAL_ANCHOR_MODE] — How: append -seqN before .zip when candidate path already exists.
+// - [IMPL-INCREMENTAL_ANCHOR_MODE] [IMPL-ZIP_FORMAT] [ARCH-INCREMENTAL_ANCHOR_MODE] [REQ-INCREMENTAL_ANCHOR_MODE] [REQ-IMMUTABLE_ARCHIVE_NAMING] — How: append -seqN before .zip when candidate path already exists.
 func resolveIncrementalArchivePath(candidate string) string {
 	if _, err := os.Stat(candidate); os.IsNotExist(err) {
 		return candidate

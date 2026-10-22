@@ -1,42 +1,46 @@
 REQ-IMMUTABLE_ARCHIVE_NAMING:
-  architecture: tied-project/architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml
-  category: Functional
-  description: 'Archive naming convention is fixed and must not be modified. Format: `{prefix}-{timestamp}-{git_info}-{note}.zip`'
-  implementation: tied-project/implementation-decisions/IMPL-ZIP_FORMAT.yaml
+  architecture: "tied-project/architecture-decisions/ARCH-ARCHIVE_FORMAT.yaml"
+  category: "Functional"
+  cross-references: "[REQ-INCREMENTAL_ANCHOR_MODE]"
+  description: "Archive naming convention is fixed; breaking changes require a major version bump.\n\nFull archive: `[PREFIX-]YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip`.\n\nIncremental archive: `BASENAME_update=YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip` where BASENAME is the base full archive basename without `.zip`.\n\nOptional collision disambiguation ([REQ-INCREMENTAL_ANCHOR_MODE]): when the generated incremental path already exists on disk, bkpdir inserts `-seqN` immediately before `.zip` (N starts at 2 and increments until an unused path is found), for example `proj-2026-01-01-12-00_update=2026-01-01-12-01-seq2.zip`. The `_update=` marker and minute-resolution timestamp are unchanged; `-seqN` is not a user note segment and applies only when the candidate incremental filename collides."
+  implementation: "tied-project/implementation-decisions/IMPL-ZIP_FORMAT.yaml"
   metadata:
     created:
-      author: MCP converter
-      date: '2026-03-12'
+      author: "MCP converter"
+      date: "2026-03-12"
     last_updated:
-      author: MCP converter
-      date: '2026-03-12'
-      reason: Converted from monolithic
+      author: "AI agent"
+      date: "2026-10-21"
+      reason: "LEAP — document optional -seqN incremental path disambiguator"
     last_validated:
-      date: '2026-03-12'
-      result: pass
-      validator: MCP converter
-  name: Archive Naming Convention (Immutable)
-  priority: P0
+      date: "2026-03-12"
+      result: "pass"
+      validator: "MCP converter"
+  name: "Archive Naming Convention (Immutable)"
+  priority: "P0"
   rationale:
     benefits: []
     problems_solved: []
-    why: Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations.
+    why: "Users and scripts depend on this naming convention. Changing it would break existing workflows and integrations."
   related_requirements:
     depends_on: []
-    related_to: []
+    related_to:
+      - "REQ-INCREMENTAL_ANCHOR_MODE"
     supersedes: []
   satisfaction_criteria:
-    - criterion: All components (prefix, timestamp, git_info, note) are correctly formatted
-    - criterion: Archive names follow the exact format specified
-    - criterion: Default prefix is "bkp" when not specified
-  status: Implemented
+    - criterion: "All components (prefix, timestamp, git_info, note) are correctly formatted"
+    - criterion: "Archive names follow the exact format specified"
+    - criterion: "Default prefix is \"bkp\" when not specified"
+    - criterion: "Incremental names include the _update= marker and reuse base full-archive naming segments"
+    - criterion: "When the generated incremental path exists, the resolved name inserts -seqN before .zip with N >= 2 until unused"
+  status: "Implemented"
   traceability:
     architecture:
-      - ARCH-ARCHIVE_FORMAT
+      - "ARCH-ARCHIVE_FORMAT"
     code_annotations:
-      - REQ-IMMUTABLE_ARCHIVE_NAMING
+      - "REQ-IMMUTABLE_ARCHIVE_NAMING"
     implementation:
-      - IMPL-ZIP_FORMAT
+      - "IMPL-ZIP_FORMAT"
     tests: []
   validation_criteria:
-    - method: Archive naming tests verify format compliance. Breaking changes require major version bump.
+    - method: "Archive naming tests verify format compliance. Breaking changes require major version bump."

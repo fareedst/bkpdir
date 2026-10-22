@@ -8,6 +8,8 @@
 
 Default **full-anchored incremental**: each `bkpdir inc` zip lists paths that differ from the latest **full** snapshot; skip/diff effective state = full + **latest** `_update=` only. **Chained** mode (`incremental_anchor_mode: chained`) preserves legacy merge-all-incrementals behavior. Same-minute collisions use optional `-seqN` before `.zip`.
 
+**Commit:** `f32c3fc`
+
 ## Implementation status (committed this slice)
 
 | Plan todo | Status |
@@ -45,7 +47,7 @@ TIED_BASE_PATH="$PWD/tied-project" .cursor/skills/tied-yaml/scripts/tied-cli.sh 
 ## Costly choices (recorded)
 
 - **Default `full`** — users with legacy chained-only archive sets must set `incremental_anchor_mode: chained` or take a new full (documented in user spec).
-- **`-seqN` suffix** — extension to immutable naming; LEAP note on `[REQ-IMMUTABLE_ARCHIVE_NAMING]` if detail text not yet updated.
+- **`-seqN` suffix** — documented in `[REQ-IMMUTABLE_ARCHIVE_NAMING]` (LEAP 2026-10-21); vocab grammar and user spec cross-linked.
 
 ## Parallel track — corpus tail (unchanged priority)
 

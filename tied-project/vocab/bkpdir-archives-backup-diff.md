@@ -46,6 +46,14 @@ Incremental archive pattern:
 BASENAME_update=YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip
 ```
 
+When that path already exists, bkpdir may append an optional **incremental path disambiguator** immediately before `.zip`:
+
+```text
+...[=NOTE]-seqN.zip
+```
+
+`N` is an integer ≥ 2, chosen by scanning until an unused filename is found (see [REQ-IMMUTABLE_ARCHIVE_NAMING](../requirements/REQ-IMMUTABLE_ARCHIVE_NAMING.yaml) and [REQ-INCREMENTAL_ANCHOR_MODE](../requirements/REQ-INCREMENTAL_ANCHOR_MODE.yaml)).
+
 | Token | Meaning |
 |-------|---------|
 | `PREFIX-` | Optional directory name prefix when `use_current_dir_name` |
@@ -53,6 +61,7 @@ BASENAME_update=YYYY-MM-DD-hh-mm[=BRANCH=HASH][=NOTE].zip
 | `=BRANCH=HASH` | Git branch and short hash when Git info enabled |
 | `=NOTE` | User note from `--note` or positional arg |
 | `_update=` | Incremental marker substring |
+| `-seqN` | Optional collision suffix before `.zip` (not a user note); omitted when the first candidate path is free |
 | `-dirty` | Appended when repo dirty and dirty status enabled |
 
 File backup pattern:
