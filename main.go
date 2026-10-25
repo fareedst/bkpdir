@@ -54,7 +54,7 @@ Git-aware archive naming, and archive verification.`
 
 // Version information
 const (
-	appVersion     = "1.7.2"
+	appVersion     = "1.8.0"
 	appDescription = "Directory archiving and file backup tool with Git integration"
 )
 

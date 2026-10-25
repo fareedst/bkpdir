@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-10-24
+
 ### Added
 
 - **CLI operator output standard (`REQ-BKPDIR_CLI_OUTPUT_STANDARD`)**: Shared stream contract via `pkg/clioutput/` (default help on stderr, `--stdout` / `TIED_CLI_HELP_STDOUT=1` override, execution errors on stderr); wired into `bkpdir`, fleet Cobra tools, and seven shell scripts via `scripts/_cli_operator_output_standard.inc.sh`. **Appearance profile:** `RenderHelp` post-processes Cobra help (decorated TTY vs plain); shell `_cli_out_profile_*` helpers in the shared include; profile tests separate from stream contract suite. `cmd/cli-template` not yet adopted.
